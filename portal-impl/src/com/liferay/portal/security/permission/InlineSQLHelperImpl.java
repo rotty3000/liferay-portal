@@ -76,12 +76,12 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		}
 
 		for (long groupId : groupIds) {
-			if (!isEnabled(groupId)) {
-				return false;
+			if (isEnabled(groupId)) {
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	public String replacePermissionCheck(
@@ -250,10 +250,18 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		primKeysSQL.append(")");
 
 		if (groupIds.length > 1) {
+			int pos = classPKField.indexOf(StringPool.PERIOD);
+			String groupIdField = classPKField.substring(0, pos);
+			groupIdField = groupIdField.concat(".groupId");
+
 			for (long groupId : groupIds) {
-				primKeysSQL.append(" OR RP.primKey = '");
+				primKeysSQL.append(" OR (RP.primKey = '");
 				primKeysSQL.append(groupId);
-				primKeysSQL.append("'");
+				primKeysSQL.append("' AND ");
+				primKeysSQL.append(groupIdField);
+				primKeysSQL.append(" = '");
+				primKeysSQL.append(groupId);
+				primKeysSQL.append("')");
 			}
 		}
 
