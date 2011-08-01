@@ -199,27 +199,6 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 
 		permissionJoin += CustomSQLUtil.get(JOIN_RESOURCE_PERMISSION);
 
-		StringBundler ownerSQL = new StringBundler(5);
-
-		long userId = getUserId();
-
-		if (permissionChecker.isSignedIn()) {
-			ownerSQL.append(" OR ");
-
-			if (Validator.isNotNull(userIdField)) {
-				ownerSQL.append("(");
-				ownerSQL.append(userIdField);
-				ownerSQL.append(" = ");
-				ownerSQL.append(userId);
-				ownerSQL.append(")");
-			}
-			else {
-				ownerSQL.append("(ResourcePermission.ownerId = ");
-				ownerSQL.append(userId);
-				ownerSQL.append(")");
-			}
-		}
-
 		StringBundler sb = new StringBundler();
 
 		sb.append("(InlineSQLResourcePermission.scope = ");
@@ -228,6 +207,8 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		sb.append("InlineSQLResourcePermission.primKey = CAST_TEXT(");
 		sb.append(classPKField);
 		sb.append(") AND (");
+
+		long userId = getUserId();
 
 		for (int j = 0; j < groupIds.length; j++) {
 			long groupId = groupIds[j];
@@ -256,6 +237,23 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 					sb.append(roleIds[i]);
 				}
 
+				if (permissionChecker.isSignedIn()) {
+					sb.append(" OR ");
+
+					if (Validator.isNotNull(userIdField)) {
+						sb.append("(");
+						sb.append(userIdField);
+						sb.append(" = ");
+						sb.append(userId);
+						sb.append(")");
+					}
+					else {
+						sb.append("(InlineSQLResourcePermission.ownerId = ");
+						sb.append(userId);
+						sb.append(")");
+					}
+				}
+
 				sb.append(") AND ");
 			}
 
@@ -273,13 +271,11 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 			new String[] {
 				"[$CLASS_NAME$]",
 				"[$COMPANY_ID$]",
-				"OR [$OWNER_CHECK$]",
 				"[$PRIM_KEYS$]"
 			},
 			new String[] {
 				className,
 				String.valueOf(permissionChecker.getCompanyId()),
-				ownerSQL.toString(),
 				sb.toString()
 			});
 
