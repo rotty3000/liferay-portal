@@ -250,6 +250,12 @@ public class EditRolePermissionsAction extends PortletAction {
 					groupId, companyId, selResource, scope,
 					String.valueOf(role.getCompanyId()), roleId, actionId);
 			}
+			else if (scope == ResourceConstants.SCOPE_DEFAULTS) {
+				ResourcePermissionServiceUtil.addResourcePermission(
+					groupId, companyId, selResource, scope,
+					String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID),
+					roleId, actionId);
+			}
 			else if (scope == ResourceConstants.SCOPE_GROUP_TEMPLATE) {
 				ResourcePermissionServiceUtil.addResourcePermission(
 					groupId, companyId, selResource,
@@ -380,6 +386,9 @@ public class EditRolePermissionsAction extends PortletAction {
 			String selResource = entry.getKey();
 			List<String> actions = entry.getValue();
 
+			boolean setAsDefaults = ParamUtil.getBoolean(
+				actionRequest, "setAsDefaults_" + selResource);
+
 			actions = ListUtil.sort(
 				actions, new ActionComparator(themeDisplay.getLocale()));
 
@@ -395,7 +404,10 @@ public class EditRolePermissionsAction extends PortletAction {
 
 				int scope = ResourceConstants.SCOPE_COMPANY;
 
-				if ((role.getType() == RoleConstants.TYPE_ORGANIZATION) ||
+				if (setAsDefaults) {
+					scope = ResourceConstants.SCOPE_DEFAULTS;
+				}
+				else if ((role.getType() == RoleConstants.TYPE_ORGANIZATION) ||
 					(role.getType() == RoleConstants.TYPE_PROVIDER) ||
 					(role.getType() == RoleConstants.TYPE_SITE)) {
 

@@ -31,6 +31,15 @@ curActions = ListUtil.sort(curActions, new ActionComparator(locale));
 
 List guestUnsupportedActions = ResourceActionsUtil.getResourceGuestUnsupportedActions(curPortletResource, curModelResource);
 
+String curResource = null;
+
+if (Validator.isNull(curModelResource)) {
+	curResource = curPortletResource;
+}
+else {
+	curResource = curModelResource;
+}
+
 List<String> headerNames = new ArrayList<String>();
 
 headerNames.add("action");
@@ -59,15 +68,6 @@ for (int i = 0; i < results.size(); i++) {
 
 	if (role.getName().equals(RoleConstants.GUEST) && guestUnsupportedActions.contains(actionId)) {
 		continue;
-	}
-
-	String curResource = null;
-
-	if (Validator.isNull(curModelResource)) {
-		curResource = curPortletResource;
-	}
-	else {
-		curResource = curModelResource;
 	}
 
 	String target = curResource + actionId;
@@ -137,3 +137,7 @@ for (int i = 0; i < results.size(); i++) {
 %>
 
 <liferay-ui:search-iterator searchContainer="<%= searchContainer %>" paginate="<%= false %>" />
+
+<br />
+
+<aui:input helpMessage="set-as-defaults-help" inlineLabel="right" label="set-as-defaults" name='<%= "setAsDefaults_" + curResource  %>' type="checkbox" />

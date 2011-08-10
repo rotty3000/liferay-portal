@@ -39,6 +39,7 @@ import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.security.permission.PermissionsListFilter;
 import com.liferay.portal.security.permission.PermissionsListFilterFactory;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.ResourceLocalServiceBaseImpl;
 import com.liferay.portal.util.PropsValues;
@@ -930,6 +931,11 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		List<String> actionIds = null;
 
+		Role role = roleLocalService.getRole(companyId, RoleConstants.OWNER);
+
+		ResourcePermission defaultPermission = getDefaultPermissions(
+			companyId, resource, role);
+
 		if (portletActions) {
 			actionIds = ResourceActionsUtil.getPortletResourceActions(
 				resource.getName());
@@ -942,8 +948,6 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 			filterOwnerActions(resource.getName(), actionIds);
 		}
-
-		Role role = roleLocalService.getRole(companyId, RoleConstants.OWNER);
 
 		if (resourceBlockLocalService.isSupported(resource.getName())) {
 			if (permissionedModel == null) {
@@ -1042,6 +1046,21 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 				itr.remove();
 			}
 		}
+	}
+
+	protected ResourcePermission getDefaultPermissions(
+		long companyId, Resource resource, Role role) {
+
+		try {
+			return ResourcePermissionLocalServiceUtil.getResourcePermission(
+				companyId, resource.getName(), ResourceConstants.SCOPE_DEFAULTS,
+				String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID),
+				role.getRoleId());
+		}
+		catch (Exception e) {
+		}
+
+		return null;
 	}
 
 	protected long getGroupId(AuditedModel auditedModel) {

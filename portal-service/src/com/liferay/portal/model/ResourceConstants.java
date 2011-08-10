@@ -23,6 +23,8 @@ public class ResourceConstants {
 
 	public static final long PRIMKEY_DNE = -1;
 
+	public static final int SCOPE_DEFAULTS = 5;
+
 	public static final int SCOPE_INDIVIDUAL = 4;
 
 	public static final int SCOPE_GROUP = 2;
