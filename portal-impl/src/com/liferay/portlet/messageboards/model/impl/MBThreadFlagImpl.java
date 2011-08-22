@@ -12,17 +12,14 @@
  * details.
  */
 
-package com.liferay.portlet.messageboards.model;
+package com.liferay.portlet.messageboards.model.impl;
 
 /**
- * @author Alexander Chow
+ * @author Brian Wing Shun Chan
  */
-public class MBMessageFlagConstants {
+public class MBThreadFlagImpl extends MBThreadFlagBaseImpl {
 
-	public static final int ANSWER_FLAG = 3;
-
-	public static final int READ_FLAG = 1;
-
-	public static final int QUESTION_FLAG = 2;
+	public MBThreadFlagImpl() {
+	}
 
 }

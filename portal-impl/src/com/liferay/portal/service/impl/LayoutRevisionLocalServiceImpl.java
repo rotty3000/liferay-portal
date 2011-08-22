@@ -529,7 +529,7 @@ public class LayoutRevisionLocalServiceImpl
 		}
 
 		if (parentLayoutRevision != null) {
-			return parentLayoutRevision.getParentLayoutRevisionId();
+			return parentLayoutRevision.getLayoutRevisionId();
 		}
 
 		return LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID;

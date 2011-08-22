@@ -74,7 +74,9 @@ public class UpgradeImageGallery extends UpgradeProcess {
 			sb.append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
 			sb.append("?, ?, ?, ?, ?, ?, ?, ?)");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			ps.setString(1, uuid);
 			ps.setLong(2, fileEntryId);
@@ -138,7 +140,9 @@ public class UpgradeImageGallery extends UpgradeProcess {
 			sb.append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ");
 			sb.append("?, ?, ?, ?, ?, ?, ?, ?)");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			ps.setLong(1, fileVersionId);
 			ps.setLong(2, groupId);
@@ -194,7 +198,9 @@ public class UpgradeImageGallery extends UpgradeProcess {
 			sb.append("parentFolderId, name, description, lastPostDate) ");
 			sb.append("values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			ps.setString(1, uuid);
 			ps.setLong(2, folderId);
@@ -516,7 +522,9 @@ public class UpgradeImageGallery extends UpgradeProcess {
 			sb.append("' where name = 'com.liferay.portlet.imagegallery.");
 			sb.append("model.IGImage'");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			ps.executeUpdate();
 		}

@@ -246,9 +246,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 							message = message.toEscapedModel();
 
-							boolean readThread = MBMessageFlagLocalServiceUtil.hasReadFlag(themeDisplay.getUserId(), thread);
-
-							row.setBold(!readThread);
+							row.setBold(!MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUserId(), thread));
 							row.setObject(new Object[] {message});
 							row.setRestricted(!MBMessagePermission.contains(permissionChecker, message, ActionKeys.VIEW));
 							%>
@@ -446,9 +444,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 
 					message = message.toEscapedModel();
 
-					boolean readThread = MBMessageFlagLocalServiceUtil.hasReadFlag(themeDisplay.getUserId(), thread);
-
-					row.setBold(!readThread);
+					row.setBold(!MBThreadFlagLocalServiceUtil.hasThreadFlag(themeDisplay.getUserId(), thread));
 					row.setObject(new Object[] {message});
 					row.setRestricted(!MBMessagePermission.contains(permissionChecker, message, ActionKeys.VIEW));
 					%>

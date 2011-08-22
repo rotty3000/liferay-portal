@@ -17,7 +17,6 @@ package com.liferay.portal.security.auth;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -32,8 +31,7 @@ public class DefaultFullNameGenerator implements FullNameGenerator {
 	public String getFullName(
 		String firstName, String middleName, String lastName) {
 
-		String fullName = buildFullName(
-			firstName, middleName, lastName, false);
+		String fullName = buildFullName(firstName, middleName, lastName, false);
 
 		if (fullName.length() <= UserConstants.FULL_NAME_MAX_LENGTH) {
 			return fullName;
@@ -85,10 +83,6 @@ public class DefaultFullNameGenerator implements FullNameGenerator {
 					middleName += name[i].trim();
 				}
 			}
-		}
-		else {
-			firstName = GetterUtil.getString(firstName, lastName);
-			lastName = firstName;
 		}
 
 		return new String[] {firstName, middleName, lastName};

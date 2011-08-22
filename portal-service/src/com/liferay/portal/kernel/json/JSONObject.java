@@ -26,9 +26,15 @@ public interface JSONObject {
 
 	public boolean getBoolean(String key);
 
+	public boolean getBoolean(String key, boolean defaultValue);
+
 	public double getDouble(String key);
 
+	public double getDouble(String key, double defaultValue);
+
 	public int getInt(String key);
+
+	public int getInt(String key, int defaultValue);
 
 	public JSONArray getJSONArray(String key);
 
@@ -36,7 +42,11 @@ public interface JSONObject {
 
 	public long getLong(String key);
 
+	public long getLong(String key, long defaultValue);
+
 	public String getString(String key);
+
+	public String getString(String key, String defaultValue);
 
 	public boolean has(String key);
 

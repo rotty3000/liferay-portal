@@ -42,17 +42,18 @@ import com.liferay.portlet.messageboards.model.MBBan;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
-import com.liferay.portlet.messageboards.model.MBMessageFlag;
 import com.liferay.portlet.messageboards.model.MBThread;
+import com.liferay.portlet.messageboards.model.MBThreadFlag;
 import com.liferay.portlet.messageboards.service.MBBanLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
-import com.liferay.portlet.messageboards.service.MBMessageFlagLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.MBThreadFlagLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.persistence.MBBanUtil;
 import com.liferay.portlet.messageboards.service.persistence.MBCategoryUtil;
-import com.liferay.portlet.messageboards.service.persistence.MBMessageFlagUtil;
 import com.liferay.portlet.messageboards.service.persistence.MBMessageUtil;
+import com.liferay.portlet.messageboards.service.persistence.MBThreadFlagUtil;
+import com.liferay.portlet.messageboards.service.persistence.MBThreadUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 	@Override
 	public PortletDataHandlerControl[] getExportControls() {
 		return new PortletDataHandlerControl[] {
-			_categoriesAndMessages, _attachments, _messageFlags, _userBans,
+			_categoriesAndMessages, _attachments, _threadFlags, _userBans,
 			_ratings, _tags
 		};
 	}
@@ -82,7 +83,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 	@Override
 	public PortletDataHandlerControl[] getImportControls() {
 		return new PortletDataHandlerControl[] {
-			_categoriesAndMessages, _attachments, _messageFlags, _userBans,
+			_categoriesAndMessages, _attachments, _threadFlags, _userBans,
 			_ratings, _tags
 		};
 	}
@@ -136,7 +137,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		Element categoriesElement = rootElement.addElement("categories");
 		Element messagesElement = rootElement.addElement("messages");
-		Element messageFlagsElement = rootElement.addElement("message-flags");
+		Element threadFlagsElement = rootElement.addElement("thread-flags");
 		Element userBansElement = rootElement.addElement("user-bans");
 
 		List<MBCategory> categories = MBCategoryUtil.findByGroupId(
@@ -145,7 +146,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		for (MBCategory category : categories) {
 			exportCategory(
 				portletDataContext, categoriesElement, messagesElement,
-				messageFlagsElement, category);
+				threadFlagsElement, category);
 		}
 
 		List<MBMessage> messages = MBMessageUtil.findByG_C(
@@ -155,7 +156,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		for (MBMessage message : messages) {
 			exportMessage(
 				portletDataContext, categoriesElement, messagesElement,
-				messageFlagsElement, message);
+				threadFlagsElement, message);
 		}
 
 		if (portletDataContext.getBooleanParameter(_NAMESPACE, "user-bans")) {
@@ -216,23 +217,23 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 
 		if (portletDataContext.getBooleanParameter(
-				_NAMESPACE, "message-flags")) {
+				_NAMESPACE, "thread-flags")) {
 
-			Element messageFlagsElement = rootElement.element("message-flags");
+			Element threadFlagsElement = rootElement.element("thread-flags");
 
-			for (Element messageFlagElement :
-					messageFlagsElement.elements("message-flag")) {
+			for (Element threadFlagElement :
+					threadFlagsElement.elements("thread-flag")) {
 
-				String path = messageFlagElement.attributeValue("path");
+				String path = threadFlagElement.attributeValue("path");
 
 				if (!portletDataContext.isPathNotProcessed(path)) {
 					continue;
 				}
 
-				MBMessageFlag messageFlag =
-					(MBMessageFlag)portletDataContext.getZipEntryAsObject(path);
+				MBThreadFlag threadFlag =
+					(MBThreadFlag)portletDataContext.getZipEntryAsObject(path);
 
-				importMessageFlag(portletDataContext, messageFlag);
+				importThreadFlag(portletDataContext, threadFlag);
 			}
 		}
 
@@ -282,7 +283,7 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 
 	protected void exportCategory(
 			PortletDataContext portletDataContext, Element categoriesElement,
-			Element messagesElement, Element messageFlagsElement,
+			Element messagesElement, Element threadFlagsElement,
 			MBCategory category)
 		throws Exception {
 
@@ -308,13 +309,13 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		for (MBMessage message : messages) {
 			exportMessage(
 				portletDataContext, categoriesElement, messagesElement,
-				messageFlagsElement, message);
+				threadFlagsElement, message);
 		}
 	}
 
 	protected void exportMessage(
 			PortletDataContext portletDataContext, Element categoriesElement,
-			Element messagesElement, Element messageFlagsElement,
+			Element messagesElement, Element threadFlagsElement,
 			MBMessage message)
 		throws Exception {
 
@@ -331,71 +332,54 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		String path = getMessagePath(portletDataContext, message);
 
-		if (portletDataContext.isPathNotProcessed(path)) {
-			Element messageElement = messagesElement.addElement("message");
-
-			message.setPriority(message.getPriority());
-
-			if (portletDataContext.getBooleanParameter(
-					_NAMESPACE, "attachments") &&
-				message.isAttachments()) {
-
-				for (String attachment : message.getAttachmentsFiles()) {
-					int pos = attachment.lastIndexOf(CharPool.FORWARD_SLASH);
-
-					String name = attachment.substring(pos + 1);
-					String binPath = getMessageAttachementBinPath(
-						portletDataContext, message, name);
-
-					Element attachmentElement = messageElement.addElement(
-						"attachment");
-
-					attachmentElement.addAttribute("name", name);
-					attachmentElement.addAttribute("bin-path", binPath);
-
-					byte[] bytes = DLStoreUtil.getFileAsBytes(
-						portletDataContext.getCompanyId(),
-						CompanyConstants.SYSTEM, attachment);
-
-					portletDataContext.addZipEntry(binPath, bytes);
-				}
-
-				message.setAttachmentsDir(message.getAttachmentsDir());
-			}
-
-			if (portletDataContext.getBooleanParameter(
-					_NAMESPACE, "message-flags")) {
-
-				List<MBMessageFlag> messageFlags =
-					MBMessageFlagUtil.findByMessageId(message.getMessageId());
-
-				for (MBMessageFlag messageFlag : messageFlags) {
-					exportMessageFlag(
-						portletDataContext, messageFlagsElement, messageFlag);
-				}
-			}
-
-			portletDataContext.addClassedModel(
-				messageElement, path, message, _NAMESPACE);
-		}
-	}
-
-	protected void exportMessageFlag(
-			PortletDataContext portletDataContext, Element messageFlagsElement,
-			MBMessageFlag messageFlag)
-		throws Exception {
-
-		String path = getMessageFlagPath(portletDataContext, messageFlag);
-
 		if (!portletDataContext.isPathNotProcessed(path)) {
 			return;
 		}
 
-		Element messageFlagElement = messageFlagsElement.addElement(
-			"message-flag");
+		Element messageElement = messagesElement.addElement("message");
+
+		message.setPriority(message.getPriority());
+
+		if (portletDataContext.getBooleanParameter(_NAMESPACE, "attachments") &&
+			message.isAttachments()) {
+
+			for (String attachment : message.getAttachmentsFiles()) {
+				int pos = attachment.lastIndexOf(CharPool.FORWARD_SLASH);
+
+				String name = attachment.substring(pos + 1);
+				String binPath = getMessageAttachementBinPath(
+					portletDataContext, message, name);
+
+				Element attachmentElement = messageElement.addElement(
+					"attachment");
+
+				attachmentElement.addAttribute("name", name);
+				attachmentElement.addAttribute("bin-path", binPath);
+
+				byte[] bytes = DLStoreUtil.getFileAsBytes(
+					portletDataContext.getCompanyId(), CompanyConstants.SYSTEM,
+					attachment);
+
+				portletDataContext.addZipEntry(binPath, bytes);
+			}
+
+			message.setAttachmentsDir(message.getAttachmentsDir());
+		}
+
+		if (portletDataContext.getBooleanParameter(
+				_NAMESPACE, "thread-flags")) {
+
+			List<MBThreadFlag> threadFlags = MBThreadFlagUtil.findByThreadId(
+				message.getThreadId());
+
+			for (MBThreadFlag threadFlag : threadFlags) {
+				exportThreadFlag(
+					portletDataContext, threadFlagsElement, threadFlag);
+			}
+		}
 
 		portletDataContext.addClassedModel(
-			messageFlagElement, path, messageFlag, _NAMESPACE);
+			messageElement, path, message, _NAMESPACE);
 	}
 
 	protected void exportParentCategory(
@@ -424,6 +408,24 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 			portletDataContext.addClassedModel(
 				categoryElement, path, category, _NAMESPACE);
 		}
+	}
+
+	protected void exportThreadFlag(
+			PortletDataContext portletDataContext, Element threadFlagsElement,
+			MBThreadFlag threadFlag)
+		throws Exception {
+
+		String path = getThreadFlagPath(portletDataContext, threadFlag);
+
+		if (!portletDataContext.isPathNotProcessed(path)) {
+			return;
+		}
+
+		Element threadFlagElement = threadFlagsElement.addElement(
+			"thread-flag");
+
+		portletDataContext.addClassedModel(
+			threadFlagElement, path, threadFlag, _NAMESPACE);
 	}
 
 	protected List<ObjectValuePair<String, File>> getAttachments(
@@ -550,20 +552,6 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		return sb.toString();
 	}
 
-	protected String getMessageFlagPath(
-		PortletDataContext portletDataContext, MBMessageFlag messageFlag) {
-
-		StringBundler sb = new StringBundler(4);
-
-		sb.append(
-			portletDataContext.getPortletPath(PortletKeys.MESSAGE_BOARDS));
-		sb.append("/message-flags/");
-		sb.append(messageFlag.getMessageFlagId());
-		sb.append(".xml");
-
-		return sb.toString();
-	}
-
 	protected String getMessagePath(
 		PortletDataContext portletDataContext, MBMessage message) {
 
@@ -573,6 +561,20 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 			portletDataContext.getPortletPath(PortletKeys.MESSAGE_BOARDS));
 		sb.append("/messages/");
 		sb.append(message.getMessageId());
+		sb.append(".xml");
+
+		return sb.toString();
+	}
+
+	protected String getThreadFlagPath(
+		PortletDataContext portletDataContext, MBThreadFlag threadFlag) {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(
+			portletDataContext.getPortletPath(PortletKeys.MESSAGE_BOARDS));
+		sb.append("/thread-flags/");
+		sb.append(threadFlag.getThreadFlagId());
 		sb.append(".xml");
 
 		return sb.toString();
@@ -812,24 +814,22 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 	}
 
-	protected void importMessageFlag(
-			PortletDataContext portletDataContext, MBMessageFlag flag)
+	protected void importThreadFlag(
+			PortletDataContext portletDataContext, MBThreadFlag threadFlag)
 		throws Exception {
 
-		long userId = portletDataContext.getUserId(flag.getUserUuid());
+		long userId = portletDataContext.getUserId(threadFlag.getUserUuid());
 
 		Map<Long, Long> messagePKs =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				MBMessage.class);
 
-		long messageId = MapUtil.getLong(
-			messagePKs, flag.getMessageId(), flag.getMessageId());
+		long threadId = MapUtil.getLong(
+			messagePKs, threadFlag.getThreadId(), threadFlag.getThreadId());
 
-		MBMessage message = MBMessageUtil.findByPrimaryKey(messageId);
+		MBThread thread = MBThreadUtil.findByPrimaryKey(threadId);
 
-		MBThread thread = message.getThread();
-
-		MBMessageFlagLocalServiceUtil.addReadFlags(userId, thread);
+		MBThreadFlagLocalServiceUtil.addThreadFlag(userId, thread);
 	}
 
 	private static final boolean _ALWAYS_EXPORTABLE = true;
@@ -846,14 +846,14 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		new PortletDataHandlerBoolean(
 			_NAMESPACE, "categories-and-messages", true, true);
 
-	private static PortletDataHandlerBoolean _messageFlags =
-		new PortletDataHandlerBoolean(_NAMESPACE, "message-flags");
-
 	private static PortletDataHandlerBoolean _ratings =
 		new PortletDataHandlerBoolean(_NAMESPACE, "ratings");
 
 	private static PortletDataHandlerBoolean _tags =
 		new PortletDataHandlerBoolean(_NAMESPACE, "tags");
+
+	private static PortletDataHandlerBoolean _threadFlags =
+		new PortletDataHandlerBoolean(_NAMESPACE, "thread-flags");
 
 	private static PortletDataHandlerBoolean _userBans =
 		new PortletDataHandlerBoolean(_NAMESPACE, "user-bans");

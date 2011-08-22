@@ -62,7 +62,9 @@ public class UpgradeUserName extends UpgradeProcess {
 			sb.append(tableName);
 			sb.append(".userName = ''");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			rs = ps.executeQuery();
 

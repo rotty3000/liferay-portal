@@ -49,7 +49,9 @@ public class UpgradeSubscription extends UpgradeProcess {
 			sb.append("classNameId, classPK, frequency) values (?, ?, ?, ?, ");
 			sb.append("?, ?, ?, ?, ?)");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			ps.setLong(1, subscriptionId);
 			ps.setLong(2, companyId);
@@ -97,7 +99,9 @@ public class UpgradeSubscription extends UpgradeProcess {
 			sb.append("(classNameId != 0) and (parentMessageId != 0) ");
 			sb.append("group by userId, userName, classNameId, classPK");
 
-			ps = con.prepareStatement(sb.toString());
+			String sql = sb.toString();
+
+			ps = con.prepareStatement(sql);
 
 			rs = ps.executeQuery();
 
