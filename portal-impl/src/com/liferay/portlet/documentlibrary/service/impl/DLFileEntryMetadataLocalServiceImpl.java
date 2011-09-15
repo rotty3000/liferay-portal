@@ -27,6 +27,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,31 @@ public class DLFileEntryMetadataLocalServiceImpl
 			fileEntryId, fileVersionId);
 	}
 
+	public Map<String, Fields> getFileEntryMetadataFields(
+		long fileEntryTypeId, long fileVersionId, long ddmStructureId)
+		throws PortalException, SystemException {
+
+		Map<String, Fields> fieldsMap = new HashMap<String, Fields>();
+		List<DDMStructure> ddmStructures = null;
+
+		if (fileEntryTypeId > 0) {
+			DLFileEntryType dlFileEntryType =
+				dlFileEntryTypeLocalService.getFileEntryType(fileEntryTypeId);
+
+			ddmStructures = dlFileEntryType.getDDMStructures();
+
+			for (DDMStructure ddmStructure : ddmStructures) {
+				DLFileEntryMetadata dlFileEntryMetadata =
+					dlFileEntryMetadataLocalService.getFileEntryMetadata(
+						ddmStructure.getStructureId(), fileVersionId);
+				Fields fields =
+					StorageEngineUtil.getFields(dlFileEntryMetadata.getDDMStorageId());
+				fieldsMap.put(ddmStructure.getStructureKey(), fields);
+			}
+		}
+		return fieldsMap;
+	}
+	
 	public void updateFileEntryMetadata(
 			long companyId, List<DDMStructure> ddmStructures,
 			long fileEntryTypeId, long fileEntryId, long fileVersionId,
