@@ -315,7 +315,7 @@ public class DLStoreIndexer extends BaseIndexer {
 			document.addKeyword("extension", dlFileEntry.getExtension());
 			document.addKeyword(
 				"fileEntryTypeId", dlFileEntry.getFileEntryTypeId());
-			document.addKeyword("path", fileModel.getFileName());
+			document.addKeyword("path", dlFileEntry.getTitle());
 			document.addKeyword("repositoryId", fileModel.getRepositoryId());
 
 			ExpandoBridge expandoBridge =
