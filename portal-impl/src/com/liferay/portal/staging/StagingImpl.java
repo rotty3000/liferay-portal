@@ -1239,7 +1239,7 @@ public class StagingImpl implements Staging {
 			ServiceContextThreadLocal.getServiceContext();
 
 		if (stagingType == StagingConstants.TYPE_NOT_STAGED) {
-			if (liveGroup.hasStagingGroup()) {
+			if (liveGroup.hasStagingGroup() || liveGroup.isStagedRemotely()) {
 				disableStaging(
 					portletRequest, scopeGroup, liveGroup, serviceContext);
 			}
