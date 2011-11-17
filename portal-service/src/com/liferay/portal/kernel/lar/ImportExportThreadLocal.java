@@ -37,6 +37,10 @@ public class ImportExportThreadLocal {
 		return false;
 	}
 
+	public static boolean isDownloadableLARExportInProcess() {
+		return _downloadableLARExportInProcess.get();
+	}
+
 	public static boolean isLayoutExportInProcess() {
 		return _layoutExportInProcess.get();
 	}
@@ -51,6 +55,10 @@ public class ImportExportThreadLocal {
 
 	public static boolean isPortletImportInProcess() {
 		return _portletImportInProcess.get();
+	}
+
+	public static void setDownloadableLARExportInProcess(boolean inProcess) {
+		_downloadableLARExportInProcess.set(inProcess);
 	}
 
 	public static void setLayoutExportInProcess(boolean inProcess) {
@@ -69,6 +77,10 @@ public class ImportExportThreadLocal {
 		_portletImportInProcess.set(inProcess);
 	}
 
+	private static ThreadLocal<Boolean> _downloadableLARExportInProcess =
+		new AutoResetThreadLocal<Boolean>(
+			ImportExportThreadLocal.class + "._downloadableLARExportInProcess",
+			false);
 	private static ThreadLocal<Boolean> _layoutExportInProcess =
 		new AutoResetThreadLocal<Boolean>(
 			ImportExportThreadLocal.class + "._layoutExportInProcess", false);
