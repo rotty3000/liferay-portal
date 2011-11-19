@@ -150,8 +150,15 @@ public class DynamicCSSUtil {
 		}
 
 		parsedContent = StringUtil.replace(
-			parsedContent, "@theme_image_path@",
-			_getThemeImagesPath(request, themeDisplay, theme));
+			parsedContent,
+			new String[] {
+				"@portal_ctx@",
+				"@theme_image_path@"
+			},
+			new String[] {
+				PortalUtil.getPathContext(),
+				_getThemeImagesPath(request, themeDisplay, theme)
+			});
 
 		return parsedContent;
 	}
