@@ -389,6 +389,13 @@ public class DocumentImpl implements Document {
 			field.setTokenized(true);
 
 			_fields.put(name, field);
+
+			String[] sortableTextFields = PropsUtil.getArray(
+				PropsKeys.LUCENE_SORTABLE_TEXT_FIELDS);
+
+			if (ArrayUtil.contains(sortableTextFields, name)) {
+				addKeyword(name.concat("sortable"), value);
+			}
 		}
 	}
 
