@@ -20,6 +20,7 @@ import com.liferay.portal.LayoutImportException;
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.PortletIdException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.lar.ImportExportThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -236,9 +237,13 @@ public class ExportImportAction extends EditConfigurationAction {
 				}
 			}
 
+			ImportExportThreadLocal.setDownloadableLARExportInProcess(true);
+
 			File file = LayoutServiceUtil.exportPortletInfoAsFile(
 				plid, groupId, portlet.getPortletId(),
 				actionRequest.getParameterMap(), startDate, endDate);
+
+			ImportExportThreadLocal.setDownloadableLARExportInProcess(false);
 
 			HttpServletRequest request = PortalUtil.getHttpServletRequest(
 				actionRequest);
