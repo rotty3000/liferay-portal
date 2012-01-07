@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.repository.model.FileVersion;
 
 import java.io.InputStream;
 
+import java.util.Properties;
+
 /**
  * @author Sergio González
  */
@@ -40,6 +42,8 @@ public interface PDFProcessor {
 
 	public long getPreviewFileSize(FileVersion fileVersion, int index)
 		throws Exception;
+
+	public Properties getResourceLimits() throws Exception;
 
 	public InputStream getThumbnailAsStream(
 			FileVersion fileVersion, int thumbnailIndex)
