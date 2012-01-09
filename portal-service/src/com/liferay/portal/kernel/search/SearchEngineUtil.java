@@ -23,7 +23,9 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +49,35 @@ public class SearchEngineUtil {
 
 	public static final String SYSTEM_ENGINE_ID = "SYSTEM_ENGINE";
 
+        
+        
+        private static String inferSearchEngineId(String uid) {
+            //TODO get the searchEngineId from a uid. 
+            return SYSTEM_ENGINE_ID;
+        }
+        
+        private static String inferSearchEngineId(Document document) {           
+            Indexer indexer = IndexerRegistryUtil.getIndexer(document.get("entryClassName"));
+            String searchEngineId = indexer.getSearchEngineId();
+            _log.debug("SearchEngineId for ["+indexer.getClass()+"] is: " + searchEngineId);
+            return searchEngineId;
+        }
+        
+        private static String inferSearchEngineId(Collection<Document> documents) {
+            if(documents.size()>0)
+                return inferSearchEngineId(documents.iterator().next());
+            else
+                return SYSTEM_ENGINE_ID;
+        }
+        
+        /**
+	 * @deprecated Use {@link
+	 *             addDocument(String searchEngineId, long companyId, Document document)}.
+	 */
 	public static void addDocument(long companyId, Document document)
 		throws SearchException {
 
-		addDocument(SYSTEM_ENGINE_ID, companyId, document);
+		addDocument(inferSearchEngineId(document), companyId, document);
 	}
 
 	public static void addDocument(
@@ -79,11 +106,15 @@ public class SearchEngineUtil {
 		indexWriter.addDocument(searchContext, document);
 	}
 
-	public static void addDocuments(
+        /**
+	 * @deprecated Use {@link 
+         *     addDocuments(String searchEngineId, long companyId,Collection<Document> documents)}.
+	 */
+        public static void addDocuments(
 			long companyId, Collection<Document> documents)
 		throws SearchException {
-
-		addDocuments(SYSTEM_ENGINE_ID, companyId, documents);
+            addDocuments(inferSearchEngineId(documents), companyId, documents);
+        
 	}
 
 	public static void addDocuments(
@@ -118,11 +149,16 @@ public class SearchEngineUtil {
 	public static void addSearchEngine(SearchEngine searchEngine) {
 		_searchEngines.put(searchEngine.getName(), searchEngine);
 	}
-
-	public static void deleteDocument(long companyId, String uid)
+        
+        /**
+	 * @deprecated Use {@link 
+         *     deleteDocument(String searchEngineId, long companyId, String uid)}.
+	 */
+        public static void deleteDocument(long companyId, String uid)
 		throws SearchException {
 
-		deleteDocument(SYSTEM_ENGINE_ID, companyId, uid);
+                //TODO might be valid prototype if delete accours in all searchEngines???
+		deleteDocument(inferSearchEngineId(uid), companyId, uid);
 	}
 
 	public static void deleteDocument(
@@ -145,9 +181,14 @@ public class SearchEngineUtil {
 		indexWriter.deleteDocument(searchContext, uid);
 	}
 
-	public static void deleteDocuments(long companyId, Collection<String> uids)
+        /**
+	 * @deprecated Use {@link 
+         *     deleteDocuments(String searchEngineId, long companyId, Collection<String> uids)}.
+	 */
+        public static void deleteDocuments(long companyId, Collection<String> uids)
 		throws SearchException {
 
+            //TODO inferSearchEngineId(document) with UID... 
 		deleteDocuments(SYSTEM_ENGINE_ID, companyId, uids);
 	}
 
@@ -171,9 +212,14 @@ public class SearchEngineUtil {
 		indexWriter.deleteDocuments(searchContext, uids);
 	}
 
-	public static void deletePortletDocuments(long companyId, String portletId)
+        /**
+	 * @deprecated Use {@link 
+         *     deletePortletDocuments(String searchEngineId, long companyId, String portletId)}.
+	 */
+        public static void deletePortletDocuments(long companyId, String portletId)
 		throws SearchException {
 
+            //TODO inferSearchEngineId(document) with portletId
 		deletePortletDocuments(SYSTEM_ENGINE_ID, companyId, portletId);
 	}
 
@@ -216,7 +262,11 @@ public class SearchEngineUtil {
 			new String[assetEntryClassNames.size()]);
 	}
 
-	public static SearchEngine getSearchEngine() {
+      /**
+	 * @deprecated Search Engine Selection needs a Document, UID or Portlet ID. use {@link 
+         *     inferSearchEngineId(Document document)}.
+	 */
+        public static SearchEngine getSearchEngine() {
 		return getSearchEngine(SYSTEM_ENGINE_ID);
 	}
 
@@ -246,14 +296,15 @@ public class SearchEngineUtil {
 		return _searchEngines.remove(searchEngineName);
 	}
 
+        @Deprecated
 	public static Hits search(
 			long companyId, long[] groupIds, long userId, String className,
 			Query query, int start, int end)
 		throws SearchException {
 
+                //TODO should get the searchEngineID based on what? 
 		SearchContext searchContext = new SearchContext();
-
-		searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
+                searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
 
 		if (userId > 0) {
 			query = _searchPermissionChecker.getPermissionQuery(
@@ -264,14 +315,15 @@ public class SearchEngineUtil {
 			companyId, query, SortFactoryUtil.getDefaultSorts(), start, end);
 	}
 
+        @Deprecated
 	public static Hits search(
 			long companyId, long[] groupIds, long userId, String className,
 			Query query, Sort sort, int start, int end)
 		throws SearchException {
 
+                //TODO should get the searchEngineID based on what?
 		SearchContext searchContext = new SearchContext();
-
-		searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
+                searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
 
 		if (userId > 0) {
 			query = _searchPermissionChecker.getPermissionQuery(
@@ -280,14 +332,15 @@ public class SearchEngineUtil {
 
 		return search(companyId, query, sort, start, end);
 	}
-
+        
+        @Deprecated
 	public static Hits search(
 			long companyId, long[] groupIds, long userId, String className,
 			Query query, Sort[] sorts, int start, int end)
 		throws SearchException {
-
+                
+                //TODO should get the searchEngineID based on what? 
 		SearchContext searchContext = new SearchContext();
-
 		searchContext.setSearchEngineId(SearchEngineUtil.SYSTEM_ENGINE_ID);
 
 		if (userId > 0) {
@@ -297,13 +350,15 @@ public class SearchEngineUtil {
 
 		return search(companyId, query, sorts, start, end);
 	}
-
+        
+        @Deprecated
 	public static Hits search(long companyId, Query query, int start, int end)
 		throws SearchException {
 
 		return search(SYSTEM_ENGINE_ID, companyId, query, start, end);
 	}
-
+        
+        @Deprecated
 	public static Hits search(
 			long companyId, Query query, Sort sort, int start, int end)
 		throws SearchException {
@@ -311,6 +366,7 @@ public class SearchEngineUtil {
 		return search(SYSTEM_ENGINE_ID, companyId, query, sort, start, end);
 	}
 
+        @Deprecated
 	public static Hits search(
 			long companyId, Query query, Sort[] sorts, int start, int end)
 		throws SearchException {
@@ -389,10 +445,14 @@ public class SearchEngineUtil {
 		_indexReadOnly = indexReadOnly;
 	}
 
-	public static void updateDocument(long companyId, Document document)
+        /**
+	 * @deprecated Use {@link 
+         *     updateDocument(String searchEngineId, long companyId, Document document)}.
+	 */	
+        public static void updateDocument(long companyId, Document document)
 		throws SearchException {
 
-		updateDocument(SYSTEM_ENGINE_ID, companyId, document);
+		updateDocument(inferSearchEngineId(document), companyId, document);
 	}
 
 	public static void updateDocument(
@@ -421,18 +481,21 @@ public class SearchEngineUtil {
 		indexWriter.updateDocument(searchContext, document);
 	}
 
-	public static void updateDocuments(
+        /**
+	 * @deprecated Use {@link 
+         *     updateDocuments(String searchEngineId, long companyId,Collection<Document> documents)}.
+	 */	
+        public static void updateDocuments(
 			long companyId, Collection<Document> documents)
 		throws SearchException {
-
-		updateDocuments(SYSTEM_ENGINE_ID, companyId, documents);
+		updateDocuments(inferSearchEngineId(documents), companyId, documents);
 	}
 
 	public static void updateDocuments(
 			String searchEngineId, long companyId,
 			Collection<Document> documents)
 		throws SearchException {
-
+            
 		if (isIndexReadOnly() || (documents == null) || documents.isEmpty()) {
 			return;
 		}
@@ -479,8 +542,19 @@ public class SearchEngineUtil {
 		_excludedEntryClassNames.addAll(excludedEntryClassNames);
 	}
 
-	public void setSearchEngine(SearchEngine searchEngine) {
-		_searchEngines.put(SYSTEM_ENGINE_ID, searchEngine);
+        @Deprecated
+        public void setSearchEngine(SearchEngine searchEngine) {
+            //TODO Might need some vodoo in case no engines is specified. 
+            _searchEngines.put(SYSTEM_ENGINE_ID, searchEngine);
+	}
+                
+	public void setSearchEngine(String searchEngineId, SearchEngine searchEngine) {
+            if(_searchEngines.containsKey(searchEngineId)){
+                //TODO throw execption like "SearchEngineAllreadyRegistered"
+            } else {
+                _searchEngines.put(searchEngineId, searchEngine);
+
+            }
 	}
 
 	public void setSearchEngines(Map<String, SearchEngine> searchEngines) {

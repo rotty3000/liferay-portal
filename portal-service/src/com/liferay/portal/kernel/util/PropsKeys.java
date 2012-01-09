@@ -431,6 +431,8 @@ public interface PropsKeys {
 
 	public static final String DEFAULT_ADMIN_SCREEN_NAME = "default.admin.screen.name";
 
+        public static final String DEFAULT_SEARCH_ENGINE_ID = "default.search.engine.id";
+
 	public static final String DEFAULT_GUEST_PUBLIC_LAYOUT_COLUMN = "default.guest.public.layout.column-";
 
 	public static final String DEFAULT_GUEST_PUBLIC_LAYOUT_FRIENDLY_URL = "default.guest.public.layout.friendly.url";

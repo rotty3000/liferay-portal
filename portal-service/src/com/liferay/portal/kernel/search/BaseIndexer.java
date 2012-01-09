@@ -80,6 +80,10 @@ public abstract class BaseIndexer implements Indexer {
 
 	public static final int INDEX_FILTER_SEARCH_LIMIT = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
+        
+        public static final String DEFAULT_SEARCH_ENGINE_ID = GetterUtil.getString(
+		PropsUtil.get(PropsKeys.DEFAULT_SEARCH_ENGINE_ID));
+
 
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
@@ -198,7 +202,7 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	public String getSearchEngineId() {
-		return SearchEngineUtil.SYSTEM_ENGINE_ID;
+            return DEFAULT_SEARCH_ENGINE_ID;
 	}
 
 	public String getSortField(String orderByCol) {
