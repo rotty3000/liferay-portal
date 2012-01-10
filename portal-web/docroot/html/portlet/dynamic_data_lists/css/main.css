@@ -24,23 +24,24 @@
 
 	.yui3-datatable-liner {
 		min-height: 17px;
-		padding: 1px 10px;
 	}
 
 	.yui3-datatable-scrollable .yui3-datatable-bd {
 		background-color: #F2F2F2;
 	}
 
-	tr.yui3-datatable-odd {
-		background-color: #FFF;
+	tr {
+		&.yui3-datatable-even, &.yui3-datatable-odd {
+			td {
+				background-color: #FFF;
 
-		td.yui3-datatable-asc, td.yui3-datatable-desc {
-			background-color: #EDF5FF;
-		}
+				&.yui3-datatable-asc, &.yui3-datatable-desc {
+					background-color: #EDF5FF;
+				}
 
-		td.yui3-datatable-asc, td.yui3-datatable-desc {
-			&.aui-datatable-cell-selected {
-				background-color: #6688EE;
+				&.aui-datatable-cell-selected {
+					background-color: #68E;
+				}
 			}
 		}
 	}

@@ -112,12 +112,12 @@ public class JournalFeedLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addFeedResources(
-				feed, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				feed, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addFeedResources(

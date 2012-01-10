@@ -3,6 +3,11 @@
 
 <routes>
 	<route>
+		<pattern></pattern>
+		<implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
+		<implicit-parameter name="struts_action">/software_catalog/view</implicit-parameter>
+	</route>
+	<route>
 		<pattern>/framework_versions/new</pattern>
 		<implicit-parameter name="p_p_lifecycle">0</implicit-parameter>
 		<implicit-parameter name="p_p_state">normal</implicit-parameter>

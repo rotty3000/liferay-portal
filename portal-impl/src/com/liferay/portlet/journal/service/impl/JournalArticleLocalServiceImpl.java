@@ -254,12 +254,12 @@ public class JournalArticleLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addArticleResources(
-				article, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				article, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addArticleResources(

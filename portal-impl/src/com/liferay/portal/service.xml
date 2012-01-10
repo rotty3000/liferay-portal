@@ -688,6 +688,14 @@
 			<finder-column name="layoutSetBranchId" />
 			<finder-column name="status" />
 		</finder>
+		<finder name="H_P" return-type="Collection">
+			<finder-column name="head" />
+			<finder-column name="plid" />
+		</finder>
+		<finder name="P_NotS" return-type="Collection">
+			<finder-column name="plid" />
+			<finder-column name="status" comparator="!=" />
+		</finder>
 		<finder name="L_L_P" return-type="Collection" where="status != 5">
 			<finder-column name="layoutSetBranchId" />
 			<finder-column name="layoutBranchId" />
@@ -1472,7 +1480,7 @@
 		<!-- Finder methods -->
 
 		<finder name="ServletContextName" return-type="Release">
-			<finder-column name="servletContextName" />
+			<finder-column name="servletContextName" case-sensitive="false" />
 		</finder>
 	</entity>
 	<entity name="Repository" uuid="true" local-service="true" remote-service="true">

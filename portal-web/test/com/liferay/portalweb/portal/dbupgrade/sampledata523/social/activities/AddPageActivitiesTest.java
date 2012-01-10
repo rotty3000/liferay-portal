@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class AddPageActivitiesTest extends BaseTestCase {
 	public void testAddPageActivities() throws Exception {
 		selenium.open("/web/joebloggs/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -83,5 +84,6 @@ public class AddPageActivitiesTest extends BaseTestCase {
 		selenium.clickAt("link=Activities Page",
 			RuntimeVariables.replace("Activities Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 	}
 }

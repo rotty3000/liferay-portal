@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class AddPageTest extends BaseTestCase {
 	public void testAddPage() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("//nav[@id='navigation']",
 			RuntimeVariables.replace("Navigation"));
 
@@ -86,5 +87,6 @@ public class AddPageTest extends BaseTestCase {
 		selenium.clickAt("link=Sample Icefaces IPC Ajax Push Test Page",
 			RuntimeVariables.replace("Sample Icefaces IPC Ajax Push Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 	}
 }

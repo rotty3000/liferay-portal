@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class AssertLockFolderDocumentTest extends BaseTestCase {
 	public void testAssertLockFolderDocument() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -43,6 +44,7 @@ public class AssertLockFolderDocumentTest extends BaseTestCase {
 		selenium.clickAt("link=Documents and Media Test Page",
 			RuntimeVariables.replace("Documents and Media Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("DL Folder Name"),
 			selenium.getText(
 				"//a[contains(@class,'document-link')]/span[@class='entry-title']"));
@@ -70,12 +72,14 @@ public class AssertLockFolderDocumentTest extends BaseTestCase {
 		assertEquals(RuntimeVariables.replace("DL Folder Name"),
 			selenium.getText("//li[@class='folder selected']/a"));
 		assertTrue(selenium.isVisible("//img[@class='locked-icon']"));
-		assertEquals(RuntimeVariables.replace("DL Folder Document Title"),
+		assertEquals(RuntimeVariables.replace(
+				"DL Folder Document Title (Draft)"),
 			selenium.getText(
 				"//a[contains(@class,'document-link')]/span[@class='entry-title']"));
 		selenium.clickAt("//a[contains(@class,'document-link')]/span[@class='entry-title']",
-			RuntimeVariables.replace("DL Folder Document Title"));
+			RuntimeVariables.replace("DL Folder Document Title (Draft)"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"You now have an indefinite lock on this document. No one else can edit this document until you unlock it. This lock will never expire."),
 			selenium.getText(
@@ -84,6 +88,7 @@ public class AssertLockFolderDocumentTest extends BaseTestCase {
 			selenium.getText("//button[2]"));
 		selenium.clickAt("//button[2]", RuntimeVariables.replace("Edit"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"You now have an indefinite lock on this document. No one else can edit this document until you unlock it. This lock will never expire."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

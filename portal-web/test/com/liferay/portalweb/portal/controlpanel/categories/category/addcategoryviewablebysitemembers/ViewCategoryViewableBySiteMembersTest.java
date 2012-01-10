@@ -24,6 +24,7 @@ public class ViewCategoryViewableBySiteMembersTest extends BaseTestCase {
 	public void testViewCategoryViewableBySiteMembers()
 		throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,9 +45,11 @@ public class ViewCategoryViewableBySiteMembersTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Categories",
 			RuntimeVariables.replace("Categories"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -93,7 +96,23 @@ public class ViewCategoryViewableBySiteMembersTest extends BaseTestCase {
 			selenium.getText("//div[@class='view-category']/div[2]"));
 		selenium.clickAt("//input[@id='updateCategoryPermissions']",
 			RuntimeVariables.replace("Permissions"));
-		selenium.waitForPageToLoad("30000");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible("//tr[3]/td[6]/input")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
 		assertFalse(selenium.isChecked("//tr[3]/td[6]/input"));
 		assertTrue(selenium.isChecked("//tr[4]/td[6]/input"));
 		assertFalse(selenium.isChecked("//tr[5]/td[6]/input"));

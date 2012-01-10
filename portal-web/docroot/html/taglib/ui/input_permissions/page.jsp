@@ -14,6 +14,13 @@
  */
 --%>
 
+<%--
+
+Do not update the logic in this JSP without also updating
+ServiceContext#deriveDefaultPermissions(long, String).
+
+--%>
+
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%@ page import="com.liferay.portal.servlet.taglib.ui.InputPermissionsParamsTagUtil" %>

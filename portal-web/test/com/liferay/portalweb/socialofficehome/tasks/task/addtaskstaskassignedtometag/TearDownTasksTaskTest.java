@@ -28,6 +28,7 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 			switch (label) {
 			case 1:
 				selenium.open("/user/joebloggs/home/");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -49,12 +50,14 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 				selenium.clickAt("//div/div/div/div[1]/ul/li[5]/a",
 					RuntimeVariables.replace("Tasks"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertEquals(RuntimeVariables.replace("Tasks"),
 					selenium.getText(
 						"//div[2]/div/div/div/section/header/h1/span[2]"));
 				selenium.clickAt("link=I Have Created",
 					RuntimeVariables.replace("I Have Created"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean showCompleted1Checked = selenium.isChecked(
 						"//td[1]/input");
@@ -111,6 +114,7 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 				selenium.clickAt("link=I Have Created",
 					RuntimeVariables.replace("I Have Created"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean showCompleted2Checked = selenium.isChecked(
 						"//td[1]/input");
@@ -167,6 +171,7 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 				selenium.clickAt("link=I Have Created",
 					RuntimeVariables.replace("I Have Created"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean showCompleted3Checked = selenium.isChecked(
 						"//td[1]/input");
@@ -223,6 +228,7 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 				selenium.clickAt("link=I Have Created",
 					RuntimeVariables.replace("I Have Created"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean showCompleted4Checked = selenium.isChecked(
 						"//td[1]/input");
@@ -279,6 +285,7 @@ public class TearDownTasksTaskTest extends BaseTestCase {
 				selenium.clickAt("link=I Have Created",
 					RuntimeVariables.replace("I Have Created"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean showCompleted5Checked = selenium.isChecked(
 						"//td[1]/input");

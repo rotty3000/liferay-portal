@@ -66,18 +66,23 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		ClassedModel classedModel = (ClassedModel)auditedModel;
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addResources(
 				auditedModel.getCompanyId(), getGroupId(auditedModel),
 				auditedModel.getUserId(), classedModel.getModelClassName(),
 				String.valueOf(classedModel.getPrimaryKeyObj()), false,
-				serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions(),
+				serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions(),
 				getPermissionedModel(auditedModel));
 		}
 		else {
+			if (serviceContext.isDeriveDefaultPermissions()) {
+				serviceContext.deriveDefaultPermissions(
+					getGroupId(auditedModel), classedModel.getModelClassName());
+			}
+
 			addModelResources(
 				auditedModel.getCompanyId(), getGroupId(auditedModel),
 				auditedModel.getUserId(), classedModel.getModelClassName(),

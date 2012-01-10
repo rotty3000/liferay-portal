@@ -69,6 +69,14 @@ public class DDLUtil {
 			uploadPortletRequest, ddmStructureId, ddmTemplateId);
 	}
 
+	public static void getRecordFileUpload(
+			HttpServletRequest request, HttpServletResponse response,
+			DDLRecord record, String fieldName)
+		throws Exception {
+
+		getDDL().sendRecordFileUpload(request, response, record, fieldName);
+	}
+
 	public static String getRecordFileUploadPath(DDLRecord record) {
 		return getDDL().getRecordFileUploadPath(record);
 	}
@@ -79,22 +87,30 @@ public class DDLUtil {
 		return getDDL().getRecordJSONObject(record);
 	}
 
+	public static JSONObject getRecordJSONObject(
+			DDLRecord record, boolean latestRecordVersion)
+		throws Exception {
+
+		return getDDL().getRecordJSONObject(record, latestRecordVersion);
+	}
+
 	public static JSONArray getRecordSetJSONArray(DDLRecordSet recordSet)
 		throws Exception {
 
 		return getDDL().getRecordSetJSONArray(recordSet);
 	}
 
-	public static JSONArray getRecordsJSONArray(DDLRecordSet recordSet)
-		throws Exception {
-
-		return getDDL().getRecordsJSONArray(recordSet);
-	}
-
 	public static JSONArray getRecordsJSONArray(List<DDLRecord> records)
 		throws Exception {
 
 		return getDDL().getRecordsJSONArray(records);
+	}
+
+	public static JSONArray getRecordsJSONArray(
+			List<DDLRecord> records, boolean latestRecordVersion)
+		throws Exception {
+
+		return getDDL().getRecordsJSONArray(records, latestRecordVersion);
 	}
 
 	public static String getTemplateContent(
@@ -106,14 +122,6 @@ public class DDLUtil {
 		return getDDL().getTemplateContent(
 			ddmTemplateId, recordSet, themeDisplay, renderRequest,
 			renderResponse);
-	}
-
-	public static void getRecordFileUpload(
-			HttpServletRequest request, HttpServletResponse response,
-			DDLRecord record, String fieldName)
-		throws Exception {
-
-		getDDL().sendRecordFileUpload(request, response, record, fieldName);
 	}
 
 	public static void sendRecordFileUpload(
@@ -138,6 +146,16 @@ public class DDLUtil {
 
 		return getDDL().updateRecord(
 			uploadPortletRequest, recordId, recordSetId, mergeFields);
+	}
+
+	public static DDLRecord updateRecord(
+			UploadPortletRequest uploadPortletRequest, long recordId,
+			long recordSetId, boolean mergeFields, boolean checkPermission)
+		throws Exception {
+
+		return getDDL().updateRecord(
+			uploadPortletRequest, recordId, recordSetId, mergeFields,
+			checkPermission);
 	}
 
 	public static void uploadRecordFieldFile(

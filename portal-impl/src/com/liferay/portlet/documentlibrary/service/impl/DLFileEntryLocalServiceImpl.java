@@ -1108,29 +1108,6 @@ public class DLFileEntryLocalServiceImpl
 		return lockVerified;
 	}
 
-	protected void addFileEntryResources(
-			long fileEntryId, boolean addGroupPermissions,
-			boolean addGuestPermissions)
-		throws PortalException, SystemException {
-
-		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
-			fileEntryId);
-
-		addFileEntryResources(
-			dlFileEntry, addGroupPermissions, addGuestPermissions);
-	}
-
-	protected void addFileEntryResources(
-			long fileEntryId, String[] groupPermissions,
-			String[] guestPermissions)
-		throws PortalException, SystemException {
-
-		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
-			fileEntryId);
-
-		addFileEntryResources(dlFileEntry, groupPermissions, guestPermissions);
-	}
-
 	protected DLFileVersion addFileVersion(
 			User user, DLFileEntry dlFileEntry, Date modifiedDate,
 			String extension, String mimeType, String title, String description,

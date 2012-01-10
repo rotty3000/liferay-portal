@@ -123,11 +123,9 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 	}
 
 	List<DDLRecord> records = DDLRecordLocalServiceUtil.getRecords(recordSet.getRecordSetId(), status, 0, 1000, null);
-
-	int totalEmptyRecords = Math.max(recordSet.getMinDisplayRows(), records.size());
 	%>
 
-	var records = <%= DDLUtil.getRecordsJSONArray(records) %>;
+	var records = <%= DDLUtil.getRecordsJSONArray(records, !editable) %>;
 
 	records.sort(
 		function(a, b) {
@@ -135,7 +133,7 @@ DDMStructure ddmStructure = recordSet.getDDMStructure();
 		}
 	);
 
-	var recordset = Liferay.SpreadSheet.buildEmptyRecords(<%= totalEmptyRecords %>, keys);
+	var recordset = Liferay.SpreadSheet.buildEmptyRecords(<%= Math.max(recordSet.getMinDisplayRows(), records.size()) %>, keys);
 
 	A.Array.each(
 		records,

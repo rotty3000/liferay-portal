@@ -24,6 +24,7 @@ public class DeleteSaveAsDraftBlogsEntryDetailsTest extends BaseTestCase {
 	public void testDeleteSaveAsDraftBlogsEntryDetails()
 		throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,6 +45,7 @@ public class DeleteSaveAsDraftBlogsEntryDetailsTest extends BaseTestCase {
 		selenium.clickAt("link=Blogs Test Page",
 			RuntimeVariables.replace("Blogs Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Draft"),
 			selenium.getText("//div[@class='entry-content']/h3"));
 		assertEquals(RuntimeVariables.replace("Blogs Entry Title"),
@@ -54,6 +56,7 @@ public class DeleteSaveAsDraftBlogsEntryDetailsTest extends BaseTestCase {
 			selenium.getText("//td[3]/span/a/span"));
 		selenium.click(RuntimeVariables.replace("//td[3]/span/a/span"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertTrue(selenium.getConfirmation()
 						   .matches("^Are you sure you want to delete this[\\s\\S]$"));
 

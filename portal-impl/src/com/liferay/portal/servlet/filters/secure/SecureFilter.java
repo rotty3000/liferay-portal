@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ProtectedServletRequest;
-import com.liferay.portal.kernel.servlet.ServletRequestUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -89,23 +88,25 @@ public class SecureFilter extends BasePortalFilter {
 	}
 
 	protected boolean isAccessAllowed(HttpServletRequest request) {
-		String remoteAddr = request.getRemoteAddr();
-		String serverIp = PortalUtil.getComputerAddress();
-
-		if ((_hostsAllowed.size() > 0) &&
-			(!_hostsAllowed.contains(remoteAddr))) {
-
-			if ((serverIp.equals(remoteAddr)) &&
-				(_hostsAllowed.contains(_SERVER_IP))) {
-
-				return true;
-			}
-
-			return false;
-		}
-		else {
+		if (_hostsAllowed.isEmpty()) {
 			return true;
 		}
+
+		String remoteAddr = request.getRemoteAddr();
+
+		if (_hostsAllowed.contains(remoteAddr)) {
+			return true;
+		}
+
+		String computerAddress = PortalUtil.getComputerAddress();
+
+		if (computerAddress.equals(remoteAddr) &&
+			_hostsAllowed.contains(_SERVER_IP)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -152,7 +153,7 @@ public class SecureFilter extends BasePortalFilter {
 			StringBundler redirectURL = new StringBundler(5);
 
 			redirectURL.append(Http.HTTPS_WITH_SLASH);
-			redirectURL.append(ServletRequestUtil.getServerName(request));
+			redirectURL.append(request.getServerName());
 			redirectURL.append(request.getServletPath());
 
 			String queryString = request.getQueryString();

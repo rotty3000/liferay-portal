@@ -55,7 +55,7 @@
 
 		<unzip
 			dest="${tstamp.value}"
-			src="${jar.file}.jar"
+			src="${project.dir}/lib/portal/${jar.file}.jar"
 		/>
 
 		<jar
@@ -80,7 +80,7 @@
 		<delete dir="src" />
 		<mkdir dir="src" />
 
-		<unjar src="${jar.file}.jar" dest="src" />
+		<unjar src="${project.dir}/lib/portal/${jar.file}.jar" dest="src" />
 
 		<antcall target="build-common-java.javadoc" />
 	</target>

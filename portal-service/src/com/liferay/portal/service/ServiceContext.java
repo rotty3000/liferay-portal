@@ -22,12 +22,19 @@ import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.PortletPreferencesIds;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.security.permission.ResourceActionsUtil;
+import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -69,8 +76,8 @@ public class ServiceContext implements Cloneable, Serializable {
 	public Object clone() {
 		ServiceContext serviceContext = new ServiceContext();
 
-		serviceContext.setAddGroupPermissions(getAddGroupPermissions());
-		serviceContext.setAddGuestPermissions(getAddGuestPermissions());
+		serviceContext.setAddGroupPermissions(isAddGroupPermissions());
+		serviceContext.setAddGuestPermissions(isAddGuestPermissions());
 		serviceContext.setAssetCategoryIds(getAssetCategoryIds());
 		serviceContext.setAssetEntryVisible(isAssetEntryVisible());
 		serviceContext.setAssetLinkEntryIds(getAssetLinkEntryIds());
@@ -106,6 +113,59 @@ public class ServiceContext implements Cloneable, Serializable {
 	}
 
 	/**
+	 * Derive default permissions based on the logic found in
+	 * portal-web/docroot/html/taglib/ui/input_permissions/page.jsp. Do not
+	 * update this logic updating the logic in the JSP.
+	 */
+	public void deriveDefaultPermissions(long repositoryId, String modelName)
+		throws PortalException, SystemException {
+
+		long parentGroupId = PortalUtil.getParentGroupId(repositoryId);
+
+		Group parentGroup = GroupLocalServiceUtil.getGroup(parentGroupId);
+
+		Role defaultGroupRole = RoleLocalServiceUtil.getDefaultGroupRole(
+			parentGroupId);
+
+		List<String> groupPermissions = new ArrayList<String>();
+		List<String> guestPermissions = new ArrayList<String>();
+
+		String[] roleNames = {RoleConstants.GUEST, defaultGroupRole.getName()};
+
+		List<String> supportedActions =
+			ResourceActionsUtil.getModelResourceActions(modelName);
+		List<String> groupDefaultActions =
+			ResourceActionsUtil.getModelResourceGroupDefaultActions(modelName);
+		List<String> guestDefaultActions =
+			ResourceActionsUtil.getModelResourceGuestDefaultActions(modelName);
+		List<String> guestUnsupportedActions =
+			ResourceActionsUtil.getModelResourceGuestUnsupportedActions(
+				modelName);
+
+		for (String roleName : roleNames) {
+			for (String action: supportedActions) {
+				if (roleName.equals(RoleConstants.GUEST) &&
+					!guestUnsupportedActions.contains(action) &&
+					guestDefaultActions.contains(action) &&
+					parentGroup.hasPublicLayouts()) {
+
+					guestPermissions.add(action);
+				}
+				else if (roleName.equals(defaultGroupRole.getName()) &&
+						 groupDefaultActions.contains(action)) {
+
+					groupPermissions.add(action);
+				}
+			}
+		}
+
+		setGroupPermissions(
+			groupPermissions.toArray(new String[groupPermissions.size()]));
+		setGuestPermissions(
+			guestPermissions.toArray(new String[guestPermissions.size()]));
+	}
+
+	/**
 	 * Returns <code>true</code> if this service context is being passed as a
 	 * parameter to a method which manipulates a resource to which default group
 	 * permissions apply.
@@ -114,36 +174,10 @@ public class ServiceContext implements Cloneable, Serializable {
 	 *             a parameter to a method which manipulates a resource to which
 	 *             default community permissions apply; <code>false</code>
 	 *             otherwise
-	 * @deprecated As of 6.1, renamed to {@link #getAddGroupPermissions()}
+	 * @deprecated As of 6.1, renamed to {@link #isAddGroupPermissions()}
 	 */
 	public boolean getAddCommunityPermissions() {
-		return getAddGroupPermissions();
-	}
-
-	/**
-	 * Returns <code>true</code> if this service context is being passed as a
-	 * parameter to a method which manipulates a resource to which default guest
-	 * permissions apply.
-	 *
-	 * @return <code>true</code> if this service context is being passed as a
-	 *         parameter to a method which manipulates a resource to which
-	 *         default guest permissions apply; <code>false</code> otherwise
-	 */
-	public boolean getAddGuestPermissions() {
-		return _addGuestPermissions;
-	}
-
-	/**
-	 * Returns <code>true</code> if this service context is being passed as a
-	 * parameter to a method which manipulates a resource to which default group
-	 * permissions apply.
-	 *
-	 * @return <code>true</code> if this service context is being passed as a
-	 *         parameter to a method which manipulates a resource to which
-	 *         default group permissions apply; <code>false</code> otherwise
-	 */
-	public boolean getAddGroupPermissions() {
-		return _addGroupPermissions;
+		return isAddGroupPermissions();
 	}
 
 	/**
@@ -569,6 +603,32 @@ public class ServiceContext implements Cloneable, Serializable {
 		return _workflowAction;
 	}
 
+	/**
+	 * Returns <code>true</code> if this service context is being passed as a
+	 * parameter to a method which manipulates a resource to which default group
+	 * permissions apply.
+	 *
+	 * @return <code>true</code> if this service context is being passed as a
+	 *         parameter to a method which manipulates a resource to which
+	 *         default group permissions apply; <code>false</code> otherwise
+	 */
+	public boolean isAddGroupPermissions() {
+		return _addGroupPermissions;
+	}
+
+	/**
+	 * Returns <code>true</code> if this service context is being passed as a
+	 * parameter to a method which manipulates a resource to which default guest
+	 * permissions apply.
+	 *
+	 * @return <code>true</code> if this service context is being passed as a
+	 *         parameter to a method which manipulates a resource to which
+	 *         default guest permissions apply; <code>false</code> otherwise
+	 */
+	public boolean isAddGuestPermissions() {
+		return _addGuestPermissions;
+	}
+
 	public boolean isAssetEntryVisible() {
 		return _assetEntryVisible;
 	}
@@ -605,6 +665,10 @@ public class ServiceContext implements Cloneable, Serializable {
 		else {
 			return false;
 		}
+	}
+
+	public boolean isDeriveDefaultPermissions() {
+		return _deriveDefaultPermissions;
 	}
 
 	/**
@@ -789,6 +853,10 @@ public class ServiceContext implements Cloneable, Serializable {
 	 */
 	public void setCurrentURL(String currentURL) {
 		_currentURL = currentURL;
+	}
+
+	public void setDeriveDefaultPermissions(boolean deriveDefaultPermissions) {
+		_deriveDefaultPermissions = deriveDefaultPermissions;
 	}
 
 	/**
@@ -1052,6 +1120,7 @@ public class ServiceContext implements Cloneable, Serializable {
 	private long _companyId;
 	private Date _createDate;
 	private String _currentURL;
+	private boolean _deriveDefaultPermissions;
 	private Map<String, Serializable> _expandoBridgeAttributes;
 	private String[] _groupPermissions;
 	private String[] _guestPermissions;

@@ -24,6 +24,7 @@ import com.liferay.portal.service.RepositoryLocalService;
 import com.liferay.portal.service.RepositoryService;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalService;
@@ -113,14 +114,20 @@ public abstract class LiferayRepositoryBase extends LiferayBase {
 			DLFileEntry dlFileEntry, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			dlFileEntryLocalService.addFileEntryResources(
-				dlFileEntry, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				dlFileEntry, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
+			if (serviceContext.isDeriveDefaultPermissions()) {
+				serviceContext.deriveDefaultPermissions(
+					dlFileEntry.getRepositoryId(),
+					DLFileEntryConstants.getClassName());
+			}
+
 			dlFileEntryLocalService.addFileEntryResources(
 				dlFileEntry, serviceContext.getGroupPermissions(),
 				serviceContext.getGuestPermissions());

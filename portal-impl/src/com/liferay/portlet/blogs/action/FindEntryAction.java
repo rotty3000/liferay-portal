@@ -21,6 +21,8 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 
+import javax.portlet.PortletURL;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -78,6 +80,16 @@ public class FindEntryAction extends FindAction {
 			PortletKeys.BLOGS_ADMIN, PortletKeys.BLOGS,
 			PortletKeys.BLOGS_AGGREGATOR
 		};
+	}
+
+	@Override
+	protected void setPrimaryKeyParameter(
+			PortletURL portletURL, long primaryKey)
+		throws Exception {
+
+		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(primaryKey);
+
+		portletURL.setParameter("urlTitle", entry.getUrlTitle());
 	}
 
 }

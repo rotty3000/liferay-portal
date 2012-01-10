@@ -24,6 +24,7 @@ public class Guest_ViewWebContentVersion2CompletedTest extends BaseTestCase {
 	public void testGuest_ViewWebContentVersion2Completed()
 		throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,6 +45,7 @@ public class Guest_ViewWebContentVersion2CompletedTest extends BaseTestCase {
 		selenium.clickAt("link=Web Content Display Test Page",
 			RuntimeVariables.replace("Web Content Display Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("WC Web Content Content Edit"),
 			selenium.getText("//div[@class='journal-content-article']/p"));
 	}

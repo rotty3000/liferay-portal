@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class AddProducerHWTest extends BaseTestCase {
 	public void testAddProducerHW() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -42,13 +43,17 @@ public class AddProducerHWTest extends BaseTestCase {
 
 		selenium.clickAt("link=Control Panel", RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=WSRP", RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Producers", RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("//input[@value='Add Producer']",
 			RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.type("_1_WAR_wsrpportlet_name",
 			RuntimeVariables.replace("Hello World Producer Name"));
 		selenium.addSelection("_1_WAR_wsrpportlet_availablePortletIds",
@@ -78,6 +83,7 @@ public class AddProducerHWTest extends BaseTestCase {
 			selenium.getText("_1_WAR_wsrpportlet_currentPortletIds"));
 		selenium.clickAt("//input[@value='Save']", RuntimeVariables.replace(""));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//section/div/div/div/div[1]"));

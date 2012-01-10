@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class ViewVocabularyViewableByAnyoneTest extends BaseTestCase {
 	public void testViewVocabularyViewableByAnyone() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -43,9 +44,11 @@ public class ViewVocabularyViewableByAnyoneTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Categories",
 			RuntimeVariables.replace("Categories"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Vocabulary Name"),
 			selenium.getText("//span[@class='vocabulary-item']/a"));
 		selenium.clickAt("//a[@class='vocabulary-item-actions-trigger']",
@@ -73,7 +76,23 @@ public class ViewVocabularyViewableByAnyoneTest extends BaseTestCase {
 			selenium.getText("//textarea[@id='_147_description_en_US']"));
 		selenium.clickAt("//input[@value='Permissions']",
 			RuntimeVariables.replace("Permissions"));
-		selenium.waitForPageToLoad("30000");
+
+		for (int second = 0;; second++) {
+			if (second >= 90) {
+				fail("timeout");
+			}
+
+			try {
+				if (selenium.isVisible("//tr[3]/td[5]/input")) {
+					break;
+				}
+			}
+			catch (Exception e) {
+			}
+
+			Thread.sleep(1000);
+		}
+
 		assertTrue(selenium.isChecked("//tr[3]/td[5]/input"));
 		assertTrue(selenium.isChecked("//tr[4]/td[5]/input"));
 		assertFalse(selenium.isChecked("//tr[5]/td[5]/input"));

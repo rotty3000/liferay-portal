@@ -42,6 +42,7 @@ public class ScreengrabAddApplicationTest extends BaseTestCase {
 
 		selenium.click(RuntimeVariables.replace("link=Test Page 8"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.click("link=Add Application");
 
 		for (int second = 0;; second++) {

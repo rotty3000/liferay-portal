@@ -66,12 +66,12 @@ public class SCFrameworkVersionLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addFrameworkVersionResources(
-				frameworkVersion, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				frameworkVersion, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addFrameworkVersionResources(

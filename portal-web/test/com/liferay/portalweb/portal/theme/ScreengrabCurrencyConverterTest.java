@@ -42,6 +42,7 @@ public class ScreengrabCurrencyConverterTest extends BaseTestCase {
 
 		selenium.click(RuntimeVariables.replace("link=Test Page 5"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {

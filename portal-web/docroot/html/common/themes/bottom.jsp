@@ -110,7 +110,6 @@ StringBundler pageBottomSB = (StringBundler)request.getAttribute(WebKeys.PAGE_BO
 			<%= GetterUtil.getString(layoutTypeSettings.getProperty("javascript")) %>
 		// ]]>
 	</script>
-
 </c:if>
 
 <c:if test="<%= PropsValues.MONITORING_PORTAL_REQUEST %>">

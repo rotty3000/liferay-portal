@@ -29,6 +29,7 @@ public class RememberMeLoginTest extends BaseTestCase {
 			case 1:
 				selenium.setTimeout("180000");
 				selenium.open("/web/guest/home/");
+				loadRequiredJavaScriptModules();
 
 				boolean NotSignedOut = selenium.isElementPresent(
 						"link=Sign Out");
@@ -41,6 +42,7 @@ public class RememberMeLoginTest extends BaseTestCase {
 
 				selenium.click(RuntimeVariables.replace("link=Sign Out"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 2:
 				selenium.type("_58_login",
@@ -68,6 +70,7 @@ public class RememberMeLoginTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Sign In']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -89,6 +92,7 @@ public class RememberMeLoginTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"link=Session Expiration Test Page"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 100:
 				label = -1;

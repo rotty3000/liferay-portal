@@ -528,6 +528,10 @@
 			margin: 0 auto;
 		}
 
+		.sync-notification {
+			border-top-width: 1px;
+		}
+
 		.lfr-app-column-view-content {
 			background-color: #FAFAFA;
 		}
@@ -836,8 +840,16 @@
 
 .ie6, .ie7 {
 	.portlet-document-library, .portlet-document-library-display {
-		.document-display-style.display-descriptive {
+		.document-display-style.display-descriptive, .document-info {
 			zoom: 1;
+		}
+	}
+}
+
+.ie7 {
+	.portlet-document-library {
+		.lfr-actions .lfr-trigger strong {
+			min-width: 0px;
 		}
 	}
 }

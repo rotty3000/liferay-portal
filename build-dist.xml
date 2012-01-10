@@ -1599,12 +1599,7 @@ sh startWebLogic.sh</echo>
 			/>
 			<zipfileset
 				dir="lib/portal"
-				includes="axis.jar,commons-discovery.jar,commons-logging.jar,jaxrpc.jar,saaj-api.jar,saaj-impl.jar,wsdl4j.jar"
-				prefix="liferay-portal-client-${lp.version}"
-			/>
-			<zipfileset
-				dir="portal-client"
-				includes="portal-client.jar"
+				includes="axis.jar,commons-discovery.jar,commons-logging.jar,jaxrpc.jar,portal-client.jar,saaj-api.jar,saaj-impl.jar,wsdl4j.jar"
 				prefix="liferay-portal-client-${lp.version}"
 			/>
 		</zip>
@@ -1790,6 +1785,7 @@ sh startWebLogic.sh</echo>
 		<zip destfile="dist/liferay-portal-src-${lp.version}.zip">
 			<zipfileset
 				dir="${lp.source.dir}"
+				excludes="portal-web/test/com/**,portal-web/test-ant-templates/**"
 				prefix="liferay-portal-src-${lp.version}"
 			/>
 		</zip>

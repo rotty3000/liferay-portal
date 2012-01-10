@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class ViewMessageAssignedToMeGuestTest extends BaseTestCase {
 	public void testViewMessageAssignedToMeGuest() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -43,6 +44,7 @@ public class ViewMessageAssignedToMeGuestTest extends BaseTestCase {
 		selenium.clickAt("link=Asset Publisher Page",
 			RuntimeVariables.replace("Asset Publisher Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertFalse(selenium.isTextPresent("Message Boards Message Subject"));
 		assertFalse(selenium.isTextPresent("Message Boards Message"));
 	}

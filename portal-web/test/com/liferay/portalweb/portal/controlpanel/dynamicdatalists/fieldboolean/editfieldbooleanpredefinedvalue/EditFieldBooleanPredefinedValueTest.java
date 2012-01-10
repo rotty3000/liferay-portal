@@ -24,6 +24,7 @@ public class EditFieldBooleanPredefinedValueTest extends BaseTestCase {
 	public void testEditFieldBooleanPredefinedValue() throws Exception {
 		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,9 +45,11 @@ public class EditFieldBooleanPredefinedValueTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Dynamic Data Lists",
 			RuntimeVariables.replace("Dynamic Data Lists"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -132,6 +135,7 @@ public class EditFieldBooleanPredefinedValueTest extends BaseTestCase {
 		selenium.click(RuntimeVariables.replace(
 				"//div[@class='lfr-component lfr-menu-list']/ul/li[1]/a"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Boolean"),
 			selenium.getText(
@@ -159,10 +163,10 @@ public class EditFieldBooleanPredefinedValueTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Predefined Value"),
-			selenium.getText("//tr[7]/td[1]/div"));
+			selenium.getText("//tr[5]/td[1]/div"));
 		assertEquals(RuntimeVariables.replace("No"),
-			selenium.getText("//tr[7]/td[2]/div"));
-		selenium.doubleClickAt("//tr[7]/td[2]/div",
+			selenium.getText("//tr[5]/td[2]/div"));
+		selenium.doubleClickAt("//tr[5]/td[2]/div",
 			RuntimeVariables.replace("No"));
 
 		for (int second = 0;; second++) {
@@ -186,12 +190,13 @@ public class EditFieldBooleanPredefinedValueTest extends BaseTestCase {
 		selenium.clickAt("//button[@type='submit']",
 			RuntimeVariables.replace("Save"));
 		assertEquals(RuntimeVariables.replace("Yes"),
-			selenium.getText("//tr[7]/td[2]/div"));
+			selenium.getText("//tr[5]/td[2]/div"));
 		assertTrue(selenium.isChecked(
 				"//div[@class='aui-diagram-builder-drop-container']/div[1]/div/input"));
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

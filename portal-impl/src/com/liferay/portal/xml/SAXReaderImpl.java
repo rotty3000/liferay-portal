@@ -313,32 +313,6 @@ public class SAXReaderImpl implements SAXReader {
 		return createXPath(xPathExpression, namespaceContextMap);
 	}
 
-	public List<Node> selectNodes(
-		String xPathFilterExpression, List<Node> nodes) {
-
-		return toNewNodes(
-			DocumentHelper.selectNodes(
-				xPathFilterExpression, toOldNodes(nodes)));
-	}
-
-	public List<Node> selectNodes(String xPathFilterExpression, Node node) {
-		NodeImpl nodeImpl = (NodeImpl)node;
-
-		return toNewNodes(
-			DocumentHelper.selectNodes(
-				xPathFilterExpression, nodeImpl.getWrappedNode()));
-	}
-
-	public void sort(List<Node> nodes, String xPathExpression) {
-		DocumentHelper.sort(toOldNodes(nodes), xPathExpression);
-	}
-
-	public void sort(
-		List<Node> nodes, String xPathExpression, boolean distinct) {
-
-		DocumentHelper.sort(toOldNodes(nodes), xPathExpression, distinct);
-	}
-
 	public Document read(File file) throws DocumentException {
 		return read(file, false);
 	}
@@ -487,6 +461,32 @@ public class SAXReaderImpl implements SAXReader {
 		return read(new URL(url), validate);
 	}
 
+	public List<Node> selectNodes(
+		String xPathFilterExpression, List<Node> nodes) {
+
+		return toNewNodes(
+			DocumentHelper.selectNodes(
+				xPathFilterExpression, toOldNodes(nodes)));
+	}
+
+	public List<Node> selectNodes(String xPathFilterExpression, Node node) {
+		NodeImpl nodeImpl = (NodeImpl)node;
+
+		return toNewNodes(
+			DocumentHelper.selectNodes(
+				xPathFilterExpression, nodeImpl.getWrappedNode()));
+	}
+
+	public void sort(List<Node> nodes, String xPathExpression) {
+		DocumentHelper.sort(toOldNodes(nodes), xPathExpression);
+	}
+
+	public void sort(
+		List<Node> nodes, String xPathExpression, boolean distinct) {
+
+		DocumentHelper.sort(toOldNodes(nodes), xPathExpression, distinct);
+	}
+
 	protected org.dom4j.io.SAXReader getSAXReader(boolean validate) {
 		org.dom4j.io.SAXReader reader = null;
 
@@ -500,17 +500,13 @@ public class SAXReaderImpl implements SAXReader {
 			reader.setEntityResolver(new EntityResolver());
 
 			reader.setFeature(_FEATURES_DYNAMIC, validate);
+			reader.setFeature(_FEATURES_EXTERNAL_GENERAL_ENTITIES, validate);
+			reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
+			reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
 			reader.setFeature(_FEATURES_VALIDATION, validate);
 			reader.setFeature(_FEATURES_VALIDATION_SCHEMA, validate);
 			reader.setFeature(
 				_FEATURES_VALIDATION_SCHEMA_FULL_CHECKING, validate);
-
-			if (!validate) {
-				reader.setFeature(
-					_FEATURES_EXTERNAL_GENERAL_ENTITIES, validate);
-				reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
-				reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
-			}
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {

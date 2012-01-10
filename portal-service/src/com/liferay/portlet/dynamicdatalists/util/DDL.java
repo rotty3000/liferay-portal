@@ -59,6 +59,10 @@ public interface DDL {
 
 	public JSONObject getRecordJSONObject(DDLRecord record) throws Exception;
 
+	public JSONObject getRecordJSONObject(
+			DDLRecord record, boolean latestRecordVersion)
+		throws Exception;
+
 	public JSONArray getRecordSetJSONArray(DDLRecordSet recordSet)
 		throws Exception;
 
@@ -66,6 +70,10 @@ public interface DDL {
 		throws Exception;
 
 	public JSONArray getRecordsJSONArray(List<DDLRecord> records)
+		throws Exception;
+
+	public JSONArray getRecordsJSONArray(
+			List<DDLRecord> records, boolean latestRecordVersion)
 		throws Exception;
 
 	public String getTemplateContent(
@@ -91,6 +99,11 @@ public interface DDL {
 	public DDLRecord updateRecord(
 			UploadPortletRequest uploadPortletRequest, long recordId,
 			long recordSetId, boolean mergeFields)
+		throws Exception;
+
+	public DDLRecord updateRecord(
+			UploadPortletRequest uploadPortletRequest, long recordId,
+			long recordSetId, boolean mergeFields, boolean checkPermission)
 		throws Exception;
 
 	public void uploadRecordFieldFile(

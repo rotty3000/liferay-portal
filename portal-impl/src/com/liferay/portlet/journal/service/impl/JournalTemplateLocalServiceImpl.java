@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
@@ -135,12 +136,12 @@ public class JournalTemplateLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addTemplateResources(
-				template, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				template, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addTemplateResources(
@@ -314,10 +315,22 @@ public class JournalTemplateLocalServiceImpl
 	public void deleteTemplate(JournalTemplate template)
 		throws PortalException, SystemException {
 
-		if (journalArticlePersistence.countByG_C_T(
-				template.getGroupId(), 0, template.getTemplateId()) > 0) {
+		Group companyGroup = groupLocalService.getCompanyGroup(
+			template.getCompanyId());
 
-			throw new RequiredTemplateException();
+		if (template.getGroupId() == companyGroup.getGroupId()) {
+			if (journalArticlePersistence.countByTemplateId(
+					template.getTemplateId()) > 0) {
+
+				throw new RequiredTemplateException();
+			}
+		}
+		else {
+			if (journalArticlePersistence.countByG_C_T(
+					template.getGroupId(), 0, template.getTemplateId()) > 0) {
+
+				throw new RequiredTemplateException();
+			}
 		}
 
 		// WebDAVProps

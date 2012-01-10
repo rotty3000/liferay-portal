@@ -24,6 +24,7 @@ public class Member_AssertCannotAccessOptionsTest extends BaseTestCase {
 	public void testMember_AssertCannotAccessOptions()
 		throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,6 +45,7 @@ public class Member_AssertCannotAccessOptionsTest extends BaseTestCase {
 		selenium.clickAt("link=Document Library Permissions Page",
 			RuntimeVariables.replace("Document Library Permissions Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertFalse(selenium.isElementPresent("//span[@title='Options']"));
 	}
 }

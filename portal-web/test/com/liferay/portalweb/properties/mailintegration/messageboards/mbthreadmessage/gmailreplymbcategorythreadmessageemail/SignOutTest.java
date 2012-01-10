@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class SignOutTest extends BaseTestCase {
 	public void testSignOut() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -42,6 +43,7 @@ public class SignOutTest extends BaseTestCase {
 
 		selenium.click(RuntimeVariables.replace("link=Sign Out"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertTrue(selenium.isVisible("//input[@id='_58_login']"));
 		assertTrue(selenium.isVisible("//input[@id='_58_password']"));
 		assertTrue(selenium.isVisible("//input[@id='_58_rememberMeCheckbox']"));

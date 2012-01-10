@@ -26,6 +26,11 @@ public class PropsUtil_IW {
 		PropsUtil.addProperties(properties);
 	}
 
+	public void addProperties(
+		com.liferay.portal.kernel.util.UnicodeProperties unicodeProperties) {
+		PropsUtil.addProperties(unicodeProperties);
+	}
+
 	public boolean contains(java.lang.String key) {
 		return PropsUtil.contains(key);
 	}

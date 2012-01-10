@@ -21,12 +21,12 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @author Brian Wing Shun Chan
  */
 public class DLFolderFinderUtil {
-	public static int countF_FE_FS_ByG_F_S(long groupId, long folderId,
+	public static int countF_FE_FS_ByG_F_S_M_M(long groupId, long folderId,
 		int status, java.lang.String[] mimeTypes, boolean includeMountFolders)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
-				   .countF_FE_FS_ByG_F_S(groupId, folderId, status, mimeTypes,
-			includeMountFolders);
+				   .countF_FE_FS_ByG_F_S_M_M(groupId, folderId, status,
+			mimeTypes, includeMountFolders);
 	}
 
 	public static int countFE_ByG_F_S(long groupId, long folderId, int status)
@@ -34,11 +34,12 @@ public class DLFolderFinderUtil {
 		return getFinder().countFE_ByG_F_S(groupId, folderId, status);
 	}
 
-	public static int filterCountF_FE_FS_ByG_F_S(long groupId, long folderId,
-		int status, java.lang.String[] mimeTypes, boolean includeMountFolders)
+	public static int filterCountF_FE_FS_ByG_F_S_M_M(long groupId,
+		long folderId, int status, java.lang.String[] mimeTypes,
+		boolean includeMountFolders)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
-				   .filterCountF_FE_FS_ByG_F_S(groupId, folderId, status,
+				   .filterCountF_FE_FS_ByG_F_S_M_M(groupId, folderId, status,
 			mimeTypes, includeMountFolders);
 	}
 
@@ -47,13 +48,21 @@ public class DLFolderFinderUtil {
 		return getFinder().filterCountFE_ByG_F_S(groupId, folderId, status);
 	}
 
-	public static java.util.List<java.lang.Object> filterFindF_FE_FS_ByG_F_S(
+	public static int filterCountFE_FS_ByG_F_S_M(long groupId, long folderId,
+		int status, java.lang.String[] mimeTypes)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder()
+				   .filterCountFE_FS_ByG_F_S_M(groupId, folderId, status,
+			mimeTypes);
+	}
+
+	public static java.util.List<java.lang.Object> filterFindF_FE_FS_ByG_F_S_M_M(
 		long groupId, long folderId, int status, java.lang.String[] mimeTypes,
 		boolean includeMountFolders, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
-				   .filterFindF_FE_FS_ByG_F_S(groupId, folderId, status,
+				   .filterFindF_FE_FS_ByG_F_S_M_M(groupId, folderId, status,
 			mimeTypes, includeMountFolders, start, end, obc);
 	}
 
@@ -65,14 +74,14 @@ public class DLFolderFinderUtil {
 			end);
 	}
 
-	public static java.util.List<java.lang.Object> findF_FE_FS_ByG_F_S(
+	public static java.util.List<java.lang.Object> findF_FE_FS_ByG_F_S_M_M(
 		long groupId, long folderId, int status, java.lang.String[] mimeTypes,
 		boolean includeMountFolders, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
-				   .findF_FE_FS_ByG_F_S(groupId, folderId, status, mimeTypes,
-			includeMountFolders, start, end, obc);
+				   .findF_FE_FS_ByG_F_S_M_M(groupId, folderId, status,
+			mimeTypes, includeMountFolders, start, end, obc);
 	}
 
 	public static java.util.List<java.lang.Object> findFE_FS_ByG_F_S(

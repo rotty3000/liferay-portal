@@ -110,6 +110,10 @@ public class Validator_IW {
 		return Validator.isHex(s);
 	}
 
+	public boolean isHostName(java.lang.String name) {
+		return Validator.isHostName(name);
+	}
+
 	public boolean isHTML(java.lang.String s) {
 		return Validator.isHTML(s);
 	}

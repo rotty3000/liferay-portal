@@ -28,6 +28,7 @@ public class AddTemplateExpandoTest extends BaseTestCase {
 			switch (label) {
 			case 1:
 				selenium.open("/web/guest/home/");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -48,28 +49,36 @@ public class AddTemplateExpandoTest extends BaseTestCase {
 				selenium.clickAt("link=Control Panel",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Communities",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.type("_134_name",
 					RuntimeVariables.replace("Expando Web Content Community"));
 				selenium.clickAt("//input[@value='Search']",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("//tr[@class='portlet-section-body results-row']/td[1]/a",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Control Panel",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Web Content",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Templates", RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("//input[@value='Add Template']",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.type("_15_newTemplateId",
 					RuntimeVariables.replace("test_expando"));
 				selenium.type("_15_name",
@@ -142,6 +151,7 @@ public class AddTemplateExpandoTest extends BaseTestCase {
 				selenium.clickAt("//input[@value='Save']",
 					RuntimeVariables.replace(""));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.isTextPresent(
 						"Your request processed successfully."));
 				assertEquals(RuntimeVariables.replace("TEST_EXPANDO"),

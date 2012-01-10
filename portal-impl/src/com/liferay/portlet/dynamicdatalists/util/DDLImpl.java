@@ -171,6 +171,13 @@ public class DDLImpl implements DDL {
 	}
 
 	public JSONObject getRecordJSONObject(DDLRecord record) throws Exception {
+		return getRecordJSONObject(record, false);
+	}
+
+	public JSONObject getRecordJSONObject(
+			DDLRecord record, boolean latestRecordVersion)
+		throws Exception {
+
 		DDLRecordSet recordSet = record.getRecordSet();
 
 		DDMStructure ddmStructure = recordSet.getDDMStructure();
@@ -184,7 +191,14 @@ public class DDLImpl implements DDL {
 		jsonObject.put("displayIndex", record.getDisplayIndex());
 		jsonObject.put("recordId", record.getRecordId());
 
-		Fields fields = record.getFields();
+		DDLRecordVersion recordVersion = record.getRecordVersion();
+
+		if (latestRecordVersion) {
+			recordVersion = record.getLatestRecordVersion();
+		}
+
+		Fields fields = StorageEngineUtil.getFields(
+			recordVersion.getDDMStorageId());
 
 		Iterator<Field> itr = fields.iterator();
 
@@ -268,7 +282,7 @@ public class DDLImpl implements DDL {
 	public JSONArray getRecordsJSONArray(DDLRecordSet recordSet)
 		throws Exception {
 
-		return getRecordsJSONArray(recordSet.getRecords());
+		return getRecordsJSONArray(recordSet.getRecords(), false);
 	}
 
 	public JSONArray getRecordsJSONArray(List<DDLRecord> records)
@@ -278,6 +292,22 @@ public class DDLImpl implements DDL {
 
 		for (DDLRecord record : records) {
 			JSONObject jsonObject = getRecordJSONObject(record);
+
+			jsonArray.put(jsonObject);
+		}
+
+		return jsonArray;
+	}
+
+	public JSONArray getRecordsJSONArray(
+			List<DDLRecord> records, boolean latestRecordVersion)
+		throws Exception {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (DDLRecord record : records) {
+			JSONObject jsonObject = getRecordJSONObject(
+				record, latestRecordVersion);
 
 			jsonArray.put(jsonObject);
 		}
@@ -395,6 +425,15 @@ public class DDLImpl implements DDL {
 			long recordSetId, boolean mergeFields)
 		throws Exception {
 
+		return updateRecord(
+			uploadPortletRequest, recordId, recordSetId, mergeFields, true);
+	}
+
+	public DDLRecord updateRecord(
+			UploadPortletRequest uploadPortletRequest, long recordId,
+			long recordSetId, boolean mergeFields, boolean checkPermission)
+		throws Exception {
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)uploadPortletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
@@ -416,16 +455,33 @@ public class DDLImpl implements DDL {
 			uploadPortletRequest);
 
 		if (record != null) {
-			record = DDLRecordServiceUtil.updateRecord(
-				recordId, majorVersion,
-				DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields, mergeFields,
-				serviceContext);
+			if (checkPermission) {
+				record = DDLRecordServiceUtil.updateRecord(
+					recordId, majorVersion,
+					DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields,
+					mergeFields, serviceContext);
+			}
+			else {
+				record = DDLRecordLocalServiceUtil.updateRecord(
+					themeDisplay.getUserId(), recordId, majorVersion,
+					DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields,
+					mergeFields, serviceContext);
+			}
 		}
 		else {
-			record = DDLRecordServiceUtil.addRecord(
-				themeDisplay.getScopeGroupId(), recordSetId,
-				DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields,
-				serviceContext);
+			if (checkPermission) {
+				record = DDLRecordServiceUtil.addRecord(
+					themeDisplay.getScopeGroupId(), recordSetId,
+					DDLRecordConstants.DISPLAY_INDEX_DEFAULT, fields,
+					serviceContext);
+			}
+			else {
+				record = DDLRecordLocalServiceUtil.addRecord(
+					themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+					recordSetId, DDLRecordConstants.DISPLAY_INDEX_DEFAULT,
+					fields, serviceContext);
+			}
+
 		}
 
 		uploadRecordFieldFiles(record, uploadPortletRequest, serviceContext);

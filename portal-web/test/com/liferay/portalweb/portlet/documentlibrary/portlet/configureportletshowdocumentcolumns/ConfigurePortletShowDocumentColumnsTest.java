@@ -24,6 +24,7 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 	public void testConfigurePortletShowDocumentColumns()
 		throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,6 +45,7 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 		selenium.clickAt("link=Documents and Media Test Page",
 			RuntimeVariables.replace("Documents and Media Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Options"),
 			selenium.getText("//span[@title='Options']/ul/li/strong/a"));
@@ -140,10 +142,12 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"You have successfully updated the setup."),
 			selenium.getText("//div[@class='portlet-msg-success']"));
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -164,6 +168,7 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 		selenium.clickAt("link=Documents and Media Test Page",
 			RuntimeVariables.replace("Documents and Media Test Page"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("//button[@title='Icon View']",
 			RuntimeVariables.replace("Icon View"));
 
@@ -199,7 +204,7 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 			try {
 				if (RuntimeVariables.replace("DL Folder Name")
 										.equals(selenium.getText(
-								"//span[@id='_20_breadcrumb']/ul/li[2]/span/a"))) {
+								"//div[@class='document-library-breadcrumb']/ul/li[2]/span/a"))) {
 					break;
 				}
 			}
@@ -209,6 +214,9 @@ public class ConfigurePortletShowDocumentColumnsTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
+		assertEquals(RuntimeVariables.replace("DL Folder Name"),
+			selenium.getText(
+				"//div[@class='document-library-breadcrumb']/ul/li[2]/span/a"));
 		selenium.clickAt("//button[@title='List View']",
 			RuntimeVariables.replace("List View"));
 

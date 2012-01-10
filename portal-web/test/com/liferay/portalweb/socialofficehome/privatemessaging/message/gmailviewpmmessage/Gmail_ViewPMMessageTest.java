@@ -103,6 +103,7 @@ public class Gmail_ViewPMMessageTest extends BaseTestCase {
 				selenium.clickAt("//input[@id='signIn']",
 					RuntimeVariables.replace("Sign In"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				Thread.sleep(5000);
 
 				for (int second = 0;; second++) {

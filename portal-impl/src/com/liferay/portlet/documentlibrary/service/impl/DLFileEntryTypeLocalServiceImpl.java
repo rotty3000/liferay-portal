@@ -94,12 +94,12 @@ public class DLFileEntryTypeLocalServiceImpl
 		dlFileEntryTypePersistence.addDDMStructures(
 			fileEntryTypeId, ddmStructureIds);
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addFileEntryTypeResources(
-				dlFileEntryType, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				dlFileEntryType, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addFileEntryTypeResources(

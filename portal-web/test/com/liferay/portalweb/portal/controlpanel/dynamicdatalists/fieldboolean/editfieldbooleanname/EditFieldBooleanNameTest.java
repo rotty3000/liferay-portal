@@ -24,6 +24,7 @@ public class EditFieldBooleanNameTest extends BaseTestCase {
 	public void testEditFieldBooleanName() throws Exception {
 		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,9 +45,11 @@ public class EditFieldBooleanNameTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Dynamic Data Lists",
 			RuntimeVariables.replace("Dynamic Data Lists"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -132,6 +135,7 @@ public class EditFieldBooleanNameTest extends BaseTestCase {
 		selenium.click(RuntimeVariables.replace(
 				"//div[@class='lfr-component lfr-menu-list']/ul/li[1]/a"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Boolean"),
 			selenium.getText(
@@ -157,9 +161,9 @@ public class EditFieldBooleanNameTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Name"),
-			selenium.getText("//tr[6]/td[1]/div"));
-		assertTrue(selenium.isPartialText("//tr[6]/td[2]/div", "checkbox"));
-		selenium.doubleClickAt("//tr[6]/td[2]/div",
+			selenium.getText("//tr[4]/td[1]/div"));
+		assertTrue(selenium.isPartialText("//tr[4]/td[2]/div", "checkbox"));
+		selenium.doubleClickAt("//tr[4]/td[2]/div",
 			RuntimeVariables.replace("checkbox"));
 
 		for (int second = 0;; second++) {
@@ -204,6 +208,7 @@ public class EditFieldBooleanNameTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

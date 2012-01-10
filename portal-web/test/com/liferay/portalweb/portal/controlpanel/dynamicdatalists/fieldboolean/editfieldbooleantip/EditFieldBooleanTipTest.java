@@ -24,6 +24,7 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 	public void testEditFieldBooleanTip() throws Exception {
 		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,9 +45,11 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Dynamic Data Lists",
 			RuntimeVariables.replace("Dynamic Data Lists"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -132,6 +135,7 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 		selenium.click(RuntimeVariables.replace(
 				"//div[@class='lfr-component lfr-menu-list']/ul/li[1]/a"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		Thread.sleep(5000);
 		assertEquals(RuntimeVariables.replace("Boolean"),
 			selenium.getText(
@@ -159,10 +163,10 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Tip"),
-			selenium.getText("//tr[8]/td[1]/div"));
+			selenium.getText("//tr[6]/td[1]/div"));
 		assertEquals(RuntimeVariables.replace(""),
-			selenium.getText("//tr[8]/td[2]/div"));
-		selenium.doubleClickAt("//tr[8]/td[2]/div", RuntimeVariables.replace(""));
+			selenium.getText("//tr[6]/td[2]/div"));
+		selenium.doubleClickAt("//tr[6]/td[2]/div", RuntimeVariables.replace(""));
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -186,7 +190,7 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 		selenium.clickAt("//button[@type='submit']",
 			RuntimeVariables.replace("Save"));
 		assertEquals(RuntimeVariables.replace("Boolean Field Tip Edited"),
-			selenium.getText("//tr[8]/td[2]/div"));
+			selenium.getText("//tr[6]/td[2]/div"));
 		assertTrue(selenium.isVisible("//a[@class='aui-form-builder-icon-tip']"));
 		selenium.mouseOver("//a[@class='aui-form-builder-icon-tip']");
 		assertEquals(RuntimeVariables.replace("Boolean Field Tip Edited"),
@@ -195,6 +199,7 @@ public class EditFieldBooleanTipTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

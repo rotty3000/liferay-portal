@@ -75,7 +75,7 @@ public class LayoutBranchLocalServiceImpl
 			layoutRevisionPersistence.findByPrimaryKey(layoutRevisionId);
 
 		validate(
-			layoutRevision.getLayoutSetBranchId(), layoutRevision.getPlid(),
+			0, layoutRevision.getLayoutSetBranchId(), layoutRevision.getPlid(),
 			name);
 
 		LayoutBranch layoutBranch = addLayoutBranch(
@@ -86,13 +86,13 @@ public class LayoutBranchLocalServiceImpl
 			layoutBranch.getUserId(), layoutRevision.getLayoutSetBranchId(),
 			layoutBranch.getLayoutBranchId(),
 			LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID, false,
-			layoutRevision.getPlid(), layoutRevision.isPrivateLayout(),
-			layoutRevision.getName(), layoutRevision.getTitle(),
-			layoutRevision.getDescription(), layoutRevision.getKeywords(),
-			layoutRevision.getRobots(), layoutRevision.getTypeSettings(),
-			layoutRevision.getIconImage(), layoutRevision.getIconImageId(),
-			layoutRevision.getThemeId(), layoutRevision.getColorSchemeId(),
-			layoutRevision.getWapThemeId(),
+			layoutRevision.getPlid(), layoutRevision.getLayoutRevisionId(),
+			layoutRevision.isPrivateLayout(), layoutRevision.getName(),
+			layoutRevision.getTitle(), layoutRevision.getDescription(),
+			layoutRevision.getKeywords(), layoutRevision.getRobots(),
+			layoutRevision.getTypeSettings(), layoutRevision.getIconImage(),
+			layoutRevision.getIconImageId(), layoutRevision.getThemeId(),
+			layoutRevision.getColorSchemeId(), layoutRevision.getWapThemeId(),
 			layoutRevision.getWapColorSchemeId(), layoutRevision.getCss(),
 			serviceContext);
 
@@ -164,6 +164,7 @@ public class LayoutBranchLocalServiceImpl
 			layoutBranchPersistence.findByPrimaryKey(layoutBranchId);
 
 		validate(
+			layoutBranch.getLayoutBranchId(),
 			layoutBranch.getLayoutSetBranchId(), layoutBranch.getPlid(), name);
 
 		layoutBranch.setName(name);
@@ -174,7 +175,8 @@ public class LayoutBranchLocalServiceImpl
 		return layoutBranch;
 	}
 
-	protected void validate(long layoutSetBranchId, long plid, String name)
+	protected void validate(
+			long layoutBranchId, long layoutSetBranchId, long plid, String name)
 		throws PortalException, SystemException {
 
 		if (Validator.isNull(name) || (name.length() < 4)) {
@@ -188,10 +190,13 @@ public class LayoutBranchLocalServiceImpl
 		}
 
 		try {
-			layoutBranchPersistence.findByL_P_N(layoutSetBranchId, plid, name);
+			LayoutBranch layoutBranch = layoutBranchPersistence.findByL_P_N(
+				layoutSetBranchId, plid, name);
 
-			throw new LayoutBranchNameException(
-				LayoutBranchNameException.DUPLICATE);
+			if (layoutBranch.getLayoutBranchId() != layoutBranchId) {
+				throw new LayoutBranchNameException(
+					LayoutBranchNameException.DUPLICATE);
+			}
 		}
 		catch (NoSuchLayoutBranchException nsbe) {
 		}

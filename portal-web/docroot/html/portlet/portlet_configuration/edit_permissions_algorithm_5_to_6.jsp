@@ -220,7 +220,11 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 				Layout resourceLayout = LayoutLocalServiceUtil.getLayout(GetterUtil.getLong(resourcePrimKey));
 
 				if (resourceLayout.isPrivateLayout()) {
-					itr.remove();
+					Group resourceLayoutGroup = resourceLayout.getGroup();
+
+					if (!resourceLayoutGroup.isLayoutSetPrototype()) {
+						itr.remove();
+					}
 				}
 			}
 
@@ -233,7 +237,11 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 					Layout resourceLayout = LayoutLocalServiceUtil.getLayout(resourcePlid);
 
 					if (resourceLayout.isPrivateLayout()) {
-						itr.remove();
+						Group resourceLayoutGroup = resourceLayout.getGroup();
+
+						if (!resourceLayoutGroup.isLayoutSetPrototype()) {
+							itr.remove();
+						}
 					}
 				}
 			}

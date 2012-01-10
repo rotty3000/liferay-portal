@@ -167,6 +167,8 @@ AUI.add(
 					}
 				},
 
+				CSS_PREFIX: '',
+
 				DATATYPE_VALIDATOR: {
 					'date': 'date',
 					'double': 'number',
@@ -176,7 +178,7 @@ AUI.add(
 
 				EXTENDS: A.DataTable.Base,
 
-				NAME: 'spreadsheet',
+				NAME: A.DataTable.Base.NAME,
 
 				TYPE_EDITOR: {
 					'checkbox': A.CheckboxCellEditor,
@@ -275,6 +277,10 @@ AUI.add(
 									var type = field.type;
 
 									if ((type === 'radio') || (type === 'select')) {
+										if (!Lang.isArray(item)) {
+											item = AArray(item);
+										}
+
 										item = JSON.stringify(item);
 									}
 								}

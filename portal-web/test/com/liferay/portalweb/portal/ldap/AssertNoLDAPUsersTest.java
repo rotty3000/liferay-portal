@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class AssertNoLDAPUsersTest extends BaseTestCase {
 	public void testAssertNoLDAPUsers() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -43,17 +44,21 @@ public class AssertNoLDAPUsersTest extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		System.out.println("Now testing LDAP integration...");
 		selenium.click(RuntimeVariables.replace("link=Users and Organizations"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Search All Users",
 			RuntimeVariables.replace("Search All Users"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.type("//input[@name='_125_keywords']",
 			RuntimeVariables.replace("jane"));
 		selenium.clickAt("//input[@value='Search']",
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("No users were found."),
 			selenium.getText("//div[@class='portlet-msg-info']"));
 		selenium.type("//input[@name='_125_keywords']",
@@ -61,6 +66,7 @@ public class AssertNoLDAPUsersTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Search']",
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("No users were found."),
 			selenium.getText("//div[@class='portlet-msg-info']"));
 		selenium.type("//input[@name='_125_keywords']",
@@ -68,6 +74,7 @@ public class AssertNoLDAPUsersTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Search']",
 			RuntimeVariables.replace("Search"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("No users were found."),
 			selenium.getText("//div[@class='portlet-msg-info']"));
 	}

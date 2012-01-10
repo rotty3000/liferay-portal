@@ -181,7 +181,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			File file, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (file == null || !file.exists() || (file.length() == 0)) {
+		if ((file == null) || !file.exists() || (file.length() == 0)) {
 			return addFileEntry(
 				repositoryId, folderId, sourceFileName, mimeType, title,
 				description, changeLog, null, 0, serviceContext);
@@ -889,6 +889,27 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		Repository repository = getRepository(repositoryId);
 
 		return repository.getFileEntriesAndFileShortcutsCount(folderId, status);
+	}
+
+	/**
+	 * Returns the number of file entries and shortcuts in the folder.
+	 *
+	 * @param  repositoryId the primary key of the repository
+	 * @param  folderId the primary key of the folder
+	 * @param  status the workflow status
+	 * @param  mimeTypes allowed media types
+	 * @return the number of file entries and shortcuts in the folder
+	 * @throws PortalException if the folder ould not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int getFileEntriesAndFileShortcutsCount(
+			long repositoryId, long folderId, int status, String[] mimeTypes)
+			throws PortalException, SystemException {
+
+		Repository repository = getRepository(repositoryId);
+
+		return repository.getFileEntriesAndFileShortcutsCount(
+			folderId, status, mimeTypes);
 	}
 
 	/**
@@ -2202,7 +2223,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			boolean majorVersion, File file, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (file == null || !file.exists() || (file.length() == 0)) {
+		if ((file == null) || !file.exists() || (file.length() == 0)) {
 			return updateFileEntry(
 				fileEntryId, sourceFileName, mimeType, title, description,
 				changeLog, majorVersion, null, 0, serviceContext);

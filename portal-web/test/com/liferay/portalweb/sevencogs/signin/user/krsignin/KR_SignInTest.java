@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class KR_SignInTest extends BaseTestCase {
 	public void testKR_SignIn() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -45,6 +46,7 @@ public class KR_SignInTest extends BaseTestCase {
 		selenium.clickAt("xPath=(//a[@class='express_login'])[4]",
 			RuntimeVariables.replace("Login as Kendra."));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Kendra Regular"),
 			selenium.getText("//a[contains(@class,'user-fullname')]"));
 		assertEquals(RuntimeVariables.replace(

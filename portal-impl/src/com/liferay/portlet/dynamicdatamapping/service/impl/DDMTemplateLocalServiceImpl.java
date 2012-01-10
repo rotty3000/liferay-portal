@@ -77,12 +77,12 @@ public class DDMTemplateLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addTemplateResources(
-				template, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				template, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addTemplateResources(

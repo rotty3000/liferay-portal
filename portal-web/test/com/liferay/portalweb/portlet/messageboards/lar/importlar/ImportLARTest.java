@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class ImportLARTest extends BaseTestCase {
 	public void testImportLAR() throws Exception {
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("//div[@id='dockbar']",
 			RuntimeVariables.replace("Dockbar"));
 
@@ -32,7 +33,8 @@ public class ImportLARTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isElementPresent("//div[4]/div/ul/li[6]/a")) {
+				if (selenium.isElementPresent(
+							"//a[@title='Manage Site Content']")) {
 					break;
 				}
 			}
@@ -42,8 +44,8 @@ public class ImportLARTest extends BaseTestCase {
 			Thread.sleep(1000);
 		}
 
-		selenium.clickAt("//div[4]/div/ul/li[6]/a",
-			RuntimeVariables.replace("Manage Content"));
+		selenium.clickAt("//a[@title='Manage Site Content']",
+			RuntimeVariables.replace("Site Content"));
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -67,6 +69,7 @@ public class ImportLARTest extends BaseTestCase {
 		selenium.clickAt("//ul[@class='category-portlets']/li[6]/a",
 			RuntimeVariables.replace("Message Boards"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Options"),
 			selenium.getText(
 				"//div[2]/div/div/div/div/div/div/section/header/menu/span/ul/li/strong/a"));
@@ -79,7 +82,8 @@ public class ImportLARTest extends BaseTestCase {
 			}
 
 			try {
-				if (selenium.isVisible("//a[@id='_162_xafr']")) {
+				if (selenium.isVisible(
+							"//li[@class='portlet-export-import portlet-export-import-icon last']/a")) {
 					break;
 				}
 			}
@@ -90,12 +94,15 @@ public class ImportLARTest extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Export / Import"),
-			selenium.getText("//a[@id='_162_xafr']"));
-		selenium.clickAt("//a[@id='_162_xafr']",
+			selenium.getText(
+				"//li[@class='portlet-export-import portlet-export-import-icon last']/a"));
+		selenium.clickAt("//li[@class='portlet-export-import portlet-export-import-icon last']/a",
 			RuntimeVariables.replace("Export / Import"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.click(RuntimeVariables.replace("link=Import"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.type("//input[@id='_86_importFileName']",
 			RuntimeVariables.replace(
 				"L:\\portal\\build\\portal-web\\test\\com\\liferay\\portalweb\\portlet\\messageboards\\lar\\importlar\\dependencies\\Message_Boards-Selenium.portlet.lar"));
@@ -113,6 +120,7 @@ public class ImportLARTest extends BaseTestCase {
 		selenium.clickAt("//input[@value='Import']",
 			RuntimeVariables.replace("Import"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

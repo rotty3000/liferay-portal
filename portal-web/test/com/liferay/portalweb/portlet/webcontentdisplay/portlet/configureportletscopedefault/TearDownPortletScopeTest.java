@@ -28,6 +28,7 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 			switch (label) {
 			case 1:
 				selenium.open("/web/guest/home/");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -48,6 +49,7 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 				selenium.clickAt("link=Welcome",
 					RuntimeVariables.replace("Welcome"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean page1Present = selenium.isElementPresent(
 						"link=Web Content Display Test Page");
@@ -61,6 +63,7 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 				selenium.clickAt("link=Web Content Display Test Page",
 					RuntimeVariables.replace("Web Content Display Test Page"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertEquals(RuntimeVariables.replace("Options"),
 					selenium.getText("//strong/a"));
 				Thread.sleep(5000);
@@ -108,11 +111,13 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 
 				selenium.clickAt("link=Scope", RuntimeVariables.replace("Scope"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.select("//select[@id='_86_scopeType']",
 					RuntimeVariables.replace("label=Default"));
 				selenium.clickAt("//input[@value='Save']",
 					RuntimeVariables.replace("Save"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 2:
 
@@ -128,6 +133,7 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 				selenium.clickAt("link=Web Content Display Test Page2",
 					RuntimeVariables.replace("Web Content Display Test Page2"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertEquals(RuntimeVariables.replace("Options"),
 					selenium.getText("//strong/a"));
 				Thread.sleep(5000);
@@ -175,11 +181,13 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 
 				selenium.clickAt("link=Scope", RuntimeVariables.replace("Scope"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.select("//select[@id='_86_scopeType']",
 					RuntimeVariables.replace("label=Default"));
 				selenium.clickAt("//input[@value='Save']",
 					RuntimeVariables.replace("Save"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 3:
 
@@ -195,6 +203,7 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 				selenium.clickAt("link=Web Content Display Test Page3",
 					RuntimeVariables.replace("Web Content Display Test Page3"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertEquals(RuntimeVariables.replace("Options"),
 					selenium.getText("//strong/a"));
 				Thread.sleep(5000);
@@ -242,11 +251,13 @@ public class TearDownPortletScopeTest extends BaseTestCase {
 
 				selenium.clickAt("link=Scope", RuntimeVariables.replace("Scope"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.select("//select[@id='_86_scopeType']",
 					RuntimeVariables.replace("label=Default"));
 				selenium.clickAt("//input[@value='Save']",
 					RuntimeVariables.replace("Save"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 4:
 			case 100:

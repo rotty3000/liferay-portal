@@ -28,6 +28,7 @@ public class TearDownDLDocumentTest extends BaseTestCase {
 			switch (label) {
 			case 1:
 				selenium.open("/web/guest/home/");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -49,6 +50,7 @@ public class TearDownDLDocumentTest extends BaseTestCase {
 				selenium.clickAt("link=Documents and Media Test Page",
 					RuntimeVariables.replace("Documents and Media Test Page"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("//button[@title='Icon View']",
 					RuntimeVariables.replace("Icon View"));
 
@@ -59,7 +61,7 @@ public class TearDownDLDocumentTest extends BaseTestCase {
 
 					try {
 						if (selenium.isVisible(
-									"//button[@title='Icon View' and contains(@class,'aui-buttonitem-focused')]")) {
+									"//button[contains(@class,'aui-state-active') and @title='Icon View']")) {
 							break;
 						}
 					}
@@ -68,6 +70,9 @@ public class TearDownDLDocumentTest extends BaseTestCase {
 
 					Thread.sleep(1000);
 				}
+
+				assertTrue(selenium.isVisible(
+						"//button[contains(@class,'aui-state-active') and @title='Icon View']"));
 
 				boolean dmlDocumentPresent = selenium.isElementPresent(
 						"//div[1]/a/span[1]/img");
@@ -110,11 +115,15 @@ public class TearDownDLDocumentTest extends BaseTestCase {
 				assertEquals(RuntimeVariables.replace("Delete"),
 					selenium.getText(
 						"//div[@class='lfr-component lfr-menu-list']/ul/li[5]/a"));
-				selenium.clickAt("//div[@class='lfr-component lfr-menu-list']/ul/li[5]/a",
-					RuntimeVariables.replace("Delete"));
+				selenium.click(RuntimeVariables.replace(
+						"//div[@class='lfr-component lfr-menu-list']/ul/li[5]/a"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected entries[\\s\\S]$"));
+				assertEquals(RuntimeVariables.replace(
+						"Your request completed successfully."),
+					selenium.getText("//div[@class='portlet-msg-success']"));
 
 			case 2:
 				assertEquals(RuntimeVariables.replace(

@@ -269,7 +269,9 @@ public class Validator {
 	public static boolean isChar(char c) {
 		int x = c;
 
-		if ((x >= _CHAR_BEGIN) && (x <= _CHAR_END)) {
+		if (((x >= _CHAR_LOWER_CASE_BEGIN) && (x <= _CHAR_LOWER_CASE_END)) ||
+			((x >= _CHAR_UPPER_CASE_BEGIN) && (x <= _CHAR_UPPER_CASE_END))) {
+
 			return true;
 		}
 
@@ -495,6 +497,38 @@ public class Validator {
 	public static boolean isHex(String s) {
 		if (isNull(s)) {
 			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns <code>true</code> if the string is a valid host name.
+	 *
+	 * @param  name the string to check
+	 * @return <code>true</code> if the string is a valid host name;
+	 *         <code>false</code> otherwise
+	 */
+	public static boolean isHostName(String name) {
+		if (isNull(name)) {
+			return false;
+		}
+
+		char[] nameCharArray = name.toCharArray();
+
+		if ((nameCharArray[0] == CharPool.DASH) ||
+			(nameCharArray[0] == CharPool.PERIOD) ||
+			(nameCharArray[nameCharArray.length - 1] == CharPool.DASH)) {
+
+			return false;
+		}
+
+		for (char c : nameCharArray) {
+			if (!isChar(c) && !isDigit(c) && (c != CharPool.DASH) &&
+				(c != CharPool.PERIOD)) {
+
+				return false;
+			}
 		}
 
 		return true;
@@ -963,9 +997,13 @@ public class Validator {
 		}
 	}
 
-	private static final int _CHAR_BEGIN = 65;
+	private static final int _CHAR_LOWER_CASE_BEGIN = 97;
 
-	private static final int _CHAR_END = 122;
+	private static final int _CHAR_LOWER_CASE_END = 122;
+
+	private static final int _CHAR_UPPER_CASE_BEGIN = 65;
+
+	private static final int _CHAR_UPPER_CASE_END = 90;
 
 	private static final int _DIGIT_BEGIN = 48;
 

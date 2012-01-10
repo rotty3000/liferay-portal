@@ -18,6 +18,7 @@ import com.liferay.portal.cache.ehcache.EhcacheConfigurationUtil;
 import com.liferay.portal.cache.ehcache.ModifiableEhcacheWrapper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.net.URL;
@@ -174,6 +175,12 @@ public class LiferayEhcacheRegionFactory extends EhCacheRegionFactory {
 			manager = new CacheManager(configuration);
 
 			mbeanRegistrationHelper.registerMBean(manager, properties);
+
+			_mBeanRegisteringPortalLifecycle =
+				new MBeanRegisteringPortalLifecycle(manager);
+
+			_mBeanRegisteringPortalLifecycle.registerPortalLifecycle(
+				PortalLifecycle.METHOD_INIT);
 		}
 		catch (net.sf.ehcache.CacheException ce) {
 			throw new CacheException(ce);
@@ -249,5 +256,7 @@ public class LiferayEhcacheRegionFactory extends EhCacheRegionFactory {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		LiferayEhcacheRegionFactory.class);
+
+	private MBeanRegisteringPortalLifecycle _mBeanRegisteringPortalLifecycle;
 
 }

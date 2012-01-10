@@ -214,9 +214,9 @@ public class JSONWebServiceActionParameters {
 
 	private ServiceContext _mergeServiceContext(ServiceContext serviceContext) {
 		_serviceContext.setAddGroupPermissions(
-			serviceContext.getAddGroupPermissions());
+			serviceContext.isAddGroupPermissions());
 		_serviceContext.setAddGuestPermissions(
-			serviceContext.getAddGuestPermissions());
+			serviceContext.isAddGuestPermissions());
 
 		if (serviceContext.getAssetCategoryIds() != null) {
 			_serviceContext.setAssetCategoryIds(

@@ -51,7 +51,79 @@ AUI.add(
 				return item;
 			},
 
-			addMenu: function(options) {
+			addMessage: function(message, messageId) {
+				var instance = this;
+
+				var messages = instance.messages;
+
+				if (!instance.messageList) {
+					instance.messageList = [];
+					instance.messageIdList = [];
+				}
+
+				messages.show();
+
+				if (!messageId) {
+					messageId = A.guid();
+				}
+
+				instance.messageList.push(message);
+				instance.messageIdList.push(messageId);
+
+				var currentBody = messages.get('bodyContent');
+
+				message = instance._createMessage(message, messageId);
+
+				messages.setStdModContent('body', message, 'after');
+
+				var messagesContainer = messages.get('boundingBox');
+
+				var action = 'removeClass';
+
+				if (instance.messageList.length > 1) {
+					action = 'addClass';
+				}
+
+				messagesContainer[action]('multiple-messages');
+
+				return messageId;
+			},
+
+			clearMessages: function(event) {
+				var instance = this;
+
+				instance.messages.set('bodyContent', ' ');
+
+				instance.messageList = [];
+				instance.messageIdList = [];
+			},
+
+			setMessage: function(message, messageId) {
+				var instance = this;
+
+				var messages = instance.messages;
+
+				if (!messageId) {
+					messageId = A.guid();
+				}
+
+				instance.messageList = [message];
+				instance.messageIdList = [messageId];
+
+				messages.show();
+
+				message = instance._createMessage(message, messageId);
+
+				messages.set('bodyContent', message);
+
+				var messagesContainer = messages.get('boundingBox');
+
+				messagesContainer.removeClass('multiple-messages');
+
+				return messageId;
+			},
+
+			_addMenu: function(options) {
 				var instance = this;
 
 				var menu;
@@ -92,7 +164,7 @@ AUI.add(
 								next: 'down:40',
 								previous: 'down:38'
 							}
-						 }
+						}
 					);
 
 					var focusManager = contentBox.focusManager;
@@ -171,126 +243,6 @@ AUI.add(
 				return menu;
 			},
 
-			addMessage: function(message, messageId) {
-				var instance = this;
-
-				var messages = instance.messages;
-
-				if (!instance.messageList) {
-					instance.messageList = [];
-					instance.messageIdList = [];
-				}
-
-				messages.show();
-
-				if (!messageId) {
-					messageId = A.guid();
-				}
-
-				instance.messageList.push(message);
-				instance.messageIdList.push(messageId);
-
-				var currentBody = messages.get('bodyContent');
-
-				message = instance._createMessage(message, messageId);
-
-				messages.setStdModContent('body', message, 'after');
-
-				var messagesContainer = messages.get('boundingBox');
-
-				var action = 'removeClass';
-
-				if (instance.messageList.length > 1) {
-					action = 'addClass';
-				}
-
-				messagesContainer[action]('multiple-messages');
-
-				return messageId;
-			},
-
-			addUnderlay: function(options) {
-				var instance = this;
-
-				var autoShow = true;
-
-				var underlay;
-				var name = options.name;
-
-				if (name) {
-					autoShow = options.visible !== false;
-
-					underlay = instance[name];
-
-					if (!underlay) {
-						delete options.name;
-
-						options.zIndex = instance.underlayZIndex++;
-
-						options.align = options.align || {
-							node: instance.dockBar,
-							points: ['tl', 'bl']
-						};
-
-						underlay = new instance.Underlay(options);
-
-						underlay.render(instance.dockBar);
-
-						var ioOptions = options.io;
-
-						if (ioOptions) {
-							ioOptions.loadingMask = {
-								background: 'transparent'
-							};
-
-							underlay.plug(A.Plugin.IO, ioOptions);
-						}
-
-						instance[name] = underlay;
-					}
-
-					if (autoShow && underlay && underlay instanceof A.Overlay) {
-						underlay.show();
-					}
-				}
-
-				return underlay;
-			},
-
-			clearMessages: function(event) {
-				var instance = this;
-
-				instance.messages.set('bodyContent', ' ');
-
-				instance.messageList = [];
-				instance.messageIdList = [];
-			},
-
-			setMessage: function(message, messageId) {
-				var instance = this;
-
-				var messages = instance.messages;
-
-				if (!messageId) {
-					messageId = A.guid();
-				}
-
-				instance.messageList = [message];
-				instance.messageIdList = [messageId];
-
-				messages.show();
-
-				message = instance._createMessage(message, messageId);
-
-				messages.set('bodyContent', message);
-
-				var messagesContainer = messages.get('boundingBox');
-
-				messagesContainer.removeClass('multiple-messages');
-
-				return messageId;
-			},
-
 			_createCustomizationMask: function(column) {
 				var instance = this;
 
@@ -353,7 +305,87 @@ AUI.add(
 				return '<div class="dockbar-message ' + cssClass + '" id="' + messageId + '">' + message + '</div>';
 			},
 
-			_init: function() {
+			_openWindow: function(config, item) {
+				if (item) {
+					A.mix(
+						config,
+						{
+							id: item.guid(),
+							title: item.attr('title'),
+							uri: item.attr('href')
+						}
+					);
+				}
+
+				Util.openWindow(config);
+			},
+
+			_toggleAppShortcut: function(item, force) {
+				var instance = this;
+
+				item.toggleClass('lfr-portlet-used', force);
+
+				instance._addContentNode.focusManager.refresh();
+			},
+
+			_updateMenu: function(event, item) {
+				var instance = this;
+
+				var menuButtons = instance.dockBar._menuButtons;
+				var lastButtonIndex = menuButtons.size();
+				var index = menuButtons.indexOf(item);
+
+				if (index > -1) {
+					var button;
+
+					if (event.isKey('LEFT') && index > 0) {
+						button = menuButtons.item(--index);
+					}
+					else if (event.isKey('RIGHT') && (index < lastButtonIndex)) {
+						button = menuButtons.item(++index);
+					}
+
+					if (button) {
+						if (event.isKeyInRange('LEFT', 'DOWN')) {
+							event.halt();
+						}
+
+						var MenuManager = Dockbar.MenuManager;
+
+						MenuManager.hideAll();
+
+						button.focus();
+					}
+				}
+			}
+		};
+
+		Liferay.provide(
+			Dockbar,
+			'addMenu',
+			function(options) {
+				var instance = this;
+
+				instance._addMenu(options);
+			},
+			['aui-overlay-context', 'node-focusmanager']
+		);
+
+		Liferay.provide(
+			Dockbar,
+			'addUnderlay',
+			function(options) {
+				var instance = this;
+
+				instance._addUnderlay(options);
+			},
+			['liferay-dockbar-underlay']
+		);
+
+		Liferay.provide(
+			Dockbar,
+			'_init',
+			function() {
 				var instance = this;
 
 				var dockBar = instance.dockBar;
@@ -405,7 +437,7 @@ AUI.add(
 
 				instance._toolbarItems = {};
 
-				var messages = instance.addUnderlay(
+				var messages = instance._addUnderlay(
 					{
 						align: {
 							node: instance.dockBar,
@@ -435,7 +467,7 @@ AUI.add(
 
 				messages.closeTool.on('click', instance.clearMessages, instance);
 
-				var addContent = instance.addMenu(
+				var addContent = instance._addMenu(
 					{
 						boundingBox: '#' + namespace + 'addContentContainer',
 						name: 'addContent',
@@ -506,7 +538,7 @@ AUI.add(
 					);
 				}
 
-				var manageContent = instance.addMenu(
+				var manageContent = instance._addMenu(
 					{
 						boundingBox: '#' + namespace + 'manageContentContainer',
 						name: 'manageContent',
@@ -514,7 +546,7 @@ AUI.add(
 					}
 				);
 
-				instance.addMenu(
+				instance._addMenu(
 					{
 						boundingBox: '#' + namespace + 'mySitesContainer',
 						name: 'mySites',
@@ -525,7 +557,7 @@ AUI.add(
 				var userOptionsContainer = A.one('#' + namespace + 'userOptionsContainer');
 
 				if (userOptionsContainer) {
-					instance.addMenu(
+					instance._addMenu(
 						{
 							boundingBox: userOptionsContainer,
 							name: 'userOptions',
@@ -535,7 +567,7 @@ AUI.add(
 				}
 
 				if (BODY.hasClass('staging') || BODY.hasClass('live-view')) {
-					instance.addMenu(
+					instance._addMenu(
 						{
 							boundingBox: '#' + namespace + 'stagingContainer',
 							name: 'staging',
@@ -559,7 +591,7 @@ AUI.add(
 									BODY.toggleClass('lfr-has-sidebar', visible);
 								};
 
-								addApplication = instance.addUnderlay(
+								addApplication = instance._addUnderlay(
 									{
 										after: {
 											render: function(event) {
@@ -644,12 +676,23 @@ AUI.add(
 
 						var columns = A.all('.portlet-column .portlet-dropzone:not(.portlet-dropzone-disabled)');
 
-						BODY.delegate('click', instance._onChangeCustomization, '.layout-customizable-checkbox', instance);
+						var customizationsHandle;
 
 						manageCustomizationLink.on(
 							'click',
 							function(event) {
 								event.halt();
+
+								if (!customizationsHandle) {
+									customizationsHandle = BODY.delegate('click', instance._onChangeCustomization, '.layout-customizable-checkbox', instance);
+								}
+								else {
+									customizationsHandle.detach();
+
+									customizationsHandle = null;
+								}
+
+								manageContent.hide();
 
 								columns.each(
 									function(item, index, collection) {
@@ -728,8 +771,26 @@ AUI.add(
 					'.aui-toolbar a'
 				);
 			},
+			['aui-io-request', 'aui-overlay-context', 'liferay-dockbar-underlay', 'node-focusmanager']
+		);
 
-			_onChangeCustomization: function(event) {
+		Liferay.provide(
+			Dockbar,
+			'_loadAddApplications',
+			function(event, id, obj) {
+				var contentBox = Dockbar.addApplication.get('contentBox');
+
+				LayoutConfiguration._dialogBody = contentBox;
+
+				LayoutConfiguration._loadContent();
+			},
+			['liferay-layout-configuration']
+		);
+
+		Liferay.provide(
+			Dockbar,
+			'_onChangeCustomization',
+			function(event) {
 				var instance = this;
 
 				var checkbox = event.currentTarget;
@@ -762,136 +823,13 @@ AUI.add(
 					}
 				);
 			},
-
-			_openWindow: function(config, item) {
-				if (item) {
-					A.mix(
-						config,
-						{
-							id: item.guid(),
-							title: item.attr('title'),
-							uri: item.attr('href')
-						}
-					);
-				}
-
-				Util.openWindow(config);
-			},
-
-			_toggleAppShortcut: function(item, force) {
-				var instance = this;
-
-				item.toggleClass('lfr-portlet-used', force);
-
-				instance._addContentNode.focusManager.refresh();
-			},
-
-			_updateMenu: function(event, item) {
-				var instance = this;
-
-				var menuButtons = instance.dockBar._menuButtons;
-				var lastButtonIndex = menuButtons.size();
-				var index = menuButtons.indexOf(item);
-
-				if (index > -1) {
-					var button;
-
-					if (event.isKey('LEFT') && index > 0) {
-						button = menuButtons.item(--index);
-					}
-					else if (event.isKey('RIGHT') && (index < lastButtonIndex)) {
-						button = menuButtons.item(++index);
-					}
-
-					if (button) {
-						if (event.isKeyInRange('LEFT', 'DOWN')) {
-							event.halt();
-						}
-
-						var MenuManager = Dockbar.MenuManager;
-
-						MenuManager.hideAll();
-
-						button.focus();
-					}
-				}
-			}
-		};
-
-		var Underlay = A.Component.create(
-			{
-				ATTRS: {
-					bodyContent: {
-						value: A.Node.create('<div style="height: 100px"></div>')
-					},
-					className: {
-						lazyAdd: false,
-						setter: function(value) {
-							var instance = this;
-
-							instance.get('boundingBox').addClass(value);
-						},
-						value: null
-					}
-				},
-
-				EXTENDS: A.OverlayBase,
-
-				NAME: 'underlay',
-
-				prototype: {
-					initializer: function() {
-						var instance = this;
-
-						Dockbar.UnderlayManager.register(instance);
-					},
-
-					renderUI: function() {
-						var instance = this;
-
-						Underlay.superclass.renderUI.apply(instance, arguments);
-
-						var closeTool = new A.ButtonItem('close');
-
-						closeTool.render(instance.get('boundingBox'));
-
-						closeTool.get('contentBox').addClass('aui-underlay-close');
-
-						instance.set('headerContent', closeTool.get('boundingBox'));
-
-						instance.closeTool = closeTool;
-					},
-
-					bindUI: function() {
-						var instance = this;
-
-						Underlay.superclass.bindUI.apply(instance, arguments);
-
-						instance.closeTool.on('click', instance.hide, instance);
-					}
-				}
-			}
-		);
-
-		Dockbar.Underlay = Underlay;
-
-		Liferay.provide(
-			Dockbar,
-			'_loadAddApplications',
-			function(event, id, obj) {
-				var contentBox = Dockbar.addApplication.get('contentBox');
-
-				LayoutConfiguration._dialogBody = contentBox;
-
-				LayoutConfiguration._loadContent();
-			},
-			['liferay-layout-configuration']
+			['aui-io-request']
 		);
 
 		Liferay.Dockbar = Dockbar;
 	},
 	'',
 	{
-		requires: ['aui-button-item', 'aui-io-plugin', 'aui-io-request', 'aui-overlay-context', 'aui-overlay-manager', 'event-touch', 'node-focusmanager']
+		requires: ['aui-node', 'event-touch']
 	}
 );

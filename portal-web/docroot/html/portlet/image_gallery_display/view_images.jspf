@@ -135,7 +135,15 @@
 
 					<%
 					int curFoldersCount = DLAppServiceUtil.getFoldersCount(curFolder.getRepositoryId(), curFolder.getFolderId());
-					int curImagesCount = DLAppServiceUtil.getFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), WorkflowConstants.STATUS_APPROVED);
+
+					int curImagesCount = 0;
+
+					if (mediaGalleryMimeTypes != null) {
+						curImagesCount = DLAppServiceUtil.getFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), WorkflowConstants.STATUS_APPROVED, mediaGalleryMimeTypes);
+					}
+					else {
+						curImagesCount = DLAppServiceUtil.getFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), WorkflowConstants.STATUS_APPROVED);
+					}
 
 					String folderImageSrc = themeDisplay.getPathThemeImages() + "/file_system/large/folder_empty.png";
 

@@ -74,6 +74,7 @@ public class Gmail_ViewMBThreadMessageGmailMailingListTest extends BaseTestCase 
 				selenium.clickAt("//a[@id='button']",
 					RuntimeVariables.replace("Sign in to Gmail"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 3:
 			case 4:
@@ -94,6 +95,7 @@ public class Gmail_ViewMBThreadMessageGmailMailingListTest extends BaseTestCase 
 					RuntimeVariables.replace(
 						"Sign out and sign in as a different user"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 			case 5:
 
@@ -137,6 +139,7 @@ public class Gmail_ViewMBThreadMessageGmailMailingListTest extends BaseTestCase 
 				selenium.clickAt("//input[@id='signIn']",
 					RuntimeVariables.replace("Sign In"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				Thread.sleep(5000);
 				selenium.close();
 				selenium.selectWindow("null");
@@ -154,7 +157,8 @@ public class Gmail_ViewMBThreadMessageGmailMailingListTest extends BaseTestCase 
 					}
 
 					try {
-						if (selenium.isVisible("//td/a/span")) {
+						if (selenium.isVisible(
+									"//div[@title='My groups']/a/span")) {
 							break;
 						}
 					}
@@ -165,8 +169,8 @@ public class Gmail_ViewMBThreadMessageGmailMailingListTest extends BaseTestCase 
 				}
 
 				assertEquals(RuntimeVariables.replace("My groups"),
-					selenium.getText("//td/a/span"));
-				selenium.click("//td/a/span");
+					selenium.getText("//div[@title='My groups']/a/span"));
+				selenium.click("//div[@title='My groups']/a/span");
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {

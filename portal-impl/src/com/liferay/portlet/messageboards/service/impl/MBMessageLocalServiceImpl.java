@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
@@ -354,12 +355,12 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			if (user.isDefaultUser()) {
 				addMessageResources(message, true, true);
 			}
-			else if (serviceContext.getAddGroupPermissions() ||
-					 serviceContext.getAddGuestPermissions()) {
+			else if (serviceContext.isAddGroupPermissions() ||
+					 serviceContext.isAddGuestPermissions()) {
 
 				addMessageResources(
-					message, serviceContext.getAddGroupPermissions(),
-					serviceContext.getAddGuestPermissions());
+					message, serviceContext.isAddGroupPermissions(),
+					serviceContext.isAddGuestPermissions());
 			}
 			else {
 				addMessageResources(
@@ -1931,12 +1932,27 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		String subject = message.getSubject();
 
-		if (subject.indexOf(subjectPrefix) == -1) {
+		if (!subjectPrefix.contains("[$MESSAGE_SUBJECT$]")) {
 			subject = subjectPrefix.trim() + " " + subject.trim();
 		}
 
 		if (Validator.isNotNull(signature)) {
 			body += "\n--\n" + signature;
+		}
+
+		String messageBody = message.getBody();
+
+		boolean htmlFormat = MBUtil.getEmailHtmlFormat(preferences);
+
+		if (htmlFormat) {
+			try {
+				messageBody = BBCodeTranslatorUtil.getHTML(messageBody);
+			}
+			catch (Exception e) {
+				_log.error(
+					"Could not parse message " + message.getMessageId() +
+						" " + e.getMessage());
+			}
 		}
 
 		String inReplyTo = null;
@@ -1955,16 +1971,16 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		subscriptionSenderPrototype.setBody(body);
 		subscriptionSenderPrototype.setBulk(true);
 		subscriptionSenderPrototype.setCompanyId(message.getCompanyId());
+		subscriptionSenderPrototype.setContextAttribute(
+			"[$MESSAGE_BODY$]", messageBody, false);
 		subscriptionSenderPrototype.setContextAttributes(
 			"[$CATEGORY_NAME$]", categoryName, "[$MAILING_LIST_ADDRESS$]",
-			mailingListAddress, "[$MESSAGE_BODY$]", message.getBody(),
-			"[$MESSAGE_ID$]", message.getMessageId(), "[$MESSAGE_SUBJECT$]",
-			message.getSubject(), "[$MESSAGE_URL$]", messageURL,
-			"[$MESSAGE_USER_ADDRESS$]", emailAddress, "[$MESSAGE_USER_NAME$]",
-			fullName);
+			mailingListAddress, "[$MESSAGE_ID$]", message.getMessageId(),
+			"[$MESSAGE_SUBJECT$]", message.getSubject(), "[$MESSAGE_URL$]",
+			messageURL, "[$MESSAGE_USER_ADDRESS$]", emailAddress,
+			"[$MESSAGE_USER_NAME$]", fullName);
 		subscriptionSenderPrototype.setFrom(fromAddress, fromName);
-		subscriptionSenderPrototype.setHtmlFormat(
-			MBUtil.getEmailHtmlFormat(preferences));
+		subscriptionSenderPrototype.setHtmlFormat(htmlFormat);
 		subscriptionSenderPrototype.setInReplyTo(inReplyTo);
 		subscriptionSenderPrototype.setMailId(
 			MBUtil.MESSAGE_POP_PORTLET_PREFIX, message.getCategoryId(),
@@ -1973,7 +1989,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		subscriptionSenderPrototype.setReplyToAddress(mailingListAddress);
 		subscriptionSenderPrototype.setScopeGroupId(message.getGroupId());
 		subscriptionSenderPrototype.setServiceContext(serviceContext);
-		subscriptionSenderPrototype.setSubject(subject);
+		subscriptionSenderPrototype.setSubject(message.getSubject());
 		subscriptionSenderPrototype.setUserId(message.getUserId());
 
 		SubscriptionSender subscriptionSender =

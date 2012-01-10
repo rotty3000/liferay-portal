@@ -24,6 +24,7 @@ public class EditFieldRadioOptionsUTF8Test extends BaseTestCase {
 	public void testEditFieldRadioOptionsUTF8() throws Exception {
 		selenium.selectFrame("relative=top");
 		selenium.open("/web/guest/home/");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -44,9 +45,11 @@ public class EditFieldRadioOptionsUTF8Test extends BaseTestCase {
 		selenium.clickAt("link=Control Panel",
 			RuntimeVariables.replace("Control Panel"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		selenium.clickAt("link=Dynamic Data Lists",
 			RuntimeVariables.replace("Dynamic Data Lists"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 
 		for (int second = 0;; second++) {
 			if (second >= 90) {
@@ -132,6 +135,7 @@ public class EditFieldRadioOptionsUTF8Test extends BaseTestCase {
 		selenium.click(RuntimeVariables.replace(
 				"//div[@class='lfr-component lfr-menu-list']/ul/li[1]/a"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Radio"),
 			selenium.getText(
 				"//div[@class='aui-diagram-builder-drop-container']/div[8]/div/label"));
@@ -156,8 +160,8 @@ public class EditFieldRadioOptionsUTF8Test extends BaseTestCase {
 		}
 
 		assertEquals(RuntimeVariables.replace("Options"),
-			selenium.getText("//tr[9]/td[1]/div"));
-		selenium.doubleClickAt("//tr[9]/td[1]/div",
+			selenium.getText("//tr[8]/td[1]/div"));
+		selenium.doubleClickAt("//tr[8]/td[1]/div",
 			RuntimeVariables.replace("Options"));
 
 		for (int second = 0;; second++) {
@@ -189,10 +193,11 @@ public class EditFieldRadioOptionsUTF8Test extends BaseTestCase {
 			RuntimeVariables.replace("Save"));
 		assertEquals(RuntimeVariables.replace(
 				"\u308a\u3093\u3054, \u30d0\u30ca\u30ca, \u30af\u30e9\u30f3\u30d9\u30ea\u30fc"),
-			selenium.getText("//tr[9]/td[2]/div"));
+			selenium.getText("//tr[8]/td[2]/div"));
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace(
 				"Your request completed successfully."),
 			selenium.getText("//div[@class='portlet-msg-success']"));

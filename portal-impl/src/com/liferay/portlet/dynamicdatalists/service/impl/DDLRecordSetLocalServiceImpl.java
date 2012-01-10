@@ -82,12 +82,12 @@ public class DDLRecordSetLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addRecordSetResources(
-				recordSet, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				recordSet, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addRecordSetResources(

@@ -28,6 +28,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 			switch (label) {
 			case 1:
 				selenium.open("/web/guest/home/");
+				loadRequiredJavaScriptModules();
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -48,9 +49,11 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.clickAt("link=Control Panel",
 					RuntimeVariables.replace("Control Panel"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Web Content",
 					RuntimeVariables.replace("Web Content"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.isPartialText("//div/span/ul/li/strong/a",
 						"Scope: Default"));
 				selenium.clickAt("//div/span/ul/li/strong/a",
@@ -59,6 +62,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 					selenium.getText("//a"));
 				selenium.clickAt("//a", RuntimeVariables.replace("Default"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean defaultScopeWebContentPresent = selenium.isElementPresent(
 						"_15_rowIds");
@@ -74,11 +78,13 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected web content[\\s\\S]$"));
 				selenium.clickAt("link=Templates",
 					RuntimeVariables.replace("Templates"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean templatePresent = selenium.isElementPresent(
 						"_15_rowIds");
@@ -94,6 +100,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected templates[\\s\\S]$"));
 
@@ -101,6 +108,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.clickAt("link=Structures",
 					RuntimeVariables.replace("Structures"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean structurePresent = selenium.isElementPresent(
 						"_15_rowIds");
@@ -116,6 +124,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected structures[\\s\\S]$"));
 
@@ -131,6 +140,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.clickAt("//li[2]/a",
 					RuntimeVariables.replace("Web Content Display Test Page2"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean page2ScopeWebContentPresent = selenium.isElementPresent(
 						"_15_rowIds");
@@ -146,11 +156,13 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected web content[\\s\\S]$"));
 				selenium.clickAt("link=Templates",
 					RuntimeVariables.replace("Templates"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean template2Present = selenium.isElementPresent(
 						"_15_rowIds");
@@ -166,6 +178,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected templates[\\s\\S]$"));
 
@@ -173,6 +186,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.clickAt("link=Structures",
 					RuntimeVariables.replace("Structures"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 
 				boolean structure2Present = selenium.isElementPresent(
 						"_15_rowIds");
@@ -188,6 +202,7 @@ public class TearDownScopeWebContentTest extends BaseTestCase {
 				selenium.click(RuntimeVariables.replace(
 						"//input[@value='Delete']"));
 				selenium.waitForPageToLoad("30000");
+				loadRequiredJavaScriptModules();
 				assertTrue(selenium.getConfirmation()
 								   .matches("^Are you sure you want to delete the selected structures[\\s\\S]$"));
 

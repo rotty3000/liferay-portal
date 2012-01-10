@@ -210,12 +210,13 @@ AUI.add(
 
 						folderPaginator.on('changeRequest', instance._onFolderPaginatorChangeRequest, instance);
 
-						Liferay.on(instance._dataRetrieveFailure, instance._onDataRetrieveFailure, instance);
-						Liferay.on(instance._eventDataRequest, instance._onDataRequest, instance);
-						Liferay.on(instance._eventDataRetrieveSuccess, instance._onDataRetrieveSuccess, instance);
-						Liferay.on(instance._eventPageLoaded, instance._onPageLoaded, instance);
-
-						Liferay.after(instance._eventDataRequest, instance._afterDataRequest, instance);
+						var eventHandles = [
+							Liferay.after(instance._eventDataRequest, instance._afterDataRequest, instance),
+							Liferay.on(instance._dataRetrieveFailure, instance._onDataRetrieveFailure, instance),
+							Liferay.on(instance._eventDataRequest, instance._onDataRequest, instance),
+							Liferay.on(instance._eventDataRetrieveSuccess, instance._onDataRetrieveSuccess, instance),
+							Liferay.on(instance._eventPageLoaded, instance._onPageLoaded, instance)
+						];
 
 						var folderContainer = instance.byId(STR_FOLDER_CONTAINER);
 
@@ -239,9 +240,10 @@ AUI.add(
 							formatSelectorNS(instance.NS, '#documentContainer a[data-folder=true], #breadcrumbContainer a')
 						);
 
-						History.after('stateChange', instance._afterStateChange, instance);
-
-						Liferay.on('showTab', instance._onShowTab, instance);
+						eventHandles.push(
+							History.after('stateChange', instance._afterStateChange, instance),
+							Liferay.on('showTab', instance._onShowTab, instance)
+						);
 
 						documentLibraryContainer.plug(A.LoadingMask);
 
@@ -251,6 +253,8 @@ AUI.add(
 
 						instance._entryPaginator = entryPaginator;
 						instance._folderPaginator = folderPaginator;
+
+						instance._eventHandles = eventHandles;
 
 						instance._initHover();
 
@@ -264,7 +268,22 @@ AUI.add(
 
 						instance._repositoriesData = {};
 
+						eventHandles.push(Liferay.on(config.portletId + ':portletRefreshed', A.bind(instance.destructor, instance)));
+
 						instance._restoreState();
+					},
+
+					destructor: function() {
+						var instance = this;
+
+						instance._entryPaginator.destroy();
+						instance._folderPaginator.destroy();
+						instance._listView.destroy();
+						instance._ddHandler.destroy();
+
+						A.Array.invoke(instance._eventHandles, 'detach');
+
+						instance._documentLibraryContainer.purge(true);
 					},
 
 					_addHistoryState: function(data) {
@@ -365,7 +384,7 @@ AUI.add(
 						AObject.each(
 							state,
 							function(item, index, collection) {
-								if (index.indexOf(namespace) == 0) {
+								if (index.indexOf(namespace) === 0) {
 									requestParams[index] = item;
 								}
 							}
@@ -581,7 +600,7 @@ AUI.add(
 
 						if (TOUCH) {
 							instance._dragTask = A.debounce(
-								function(entryLink){
+								function(entryLink) {
 									if (entryLink) {
 										entryLink.simulate('click');
 									}
@@ -1032,7 +1051,7 @@ AUI.add(
 								AObject.each(
 									initialState,
 									function(item, index, collection) {
-										if (index.indexOf(namespace) == 0) {
+										if (index.indexOf(namespace) === 0) {
 											requestParams[index] = item;
 										}
 									}

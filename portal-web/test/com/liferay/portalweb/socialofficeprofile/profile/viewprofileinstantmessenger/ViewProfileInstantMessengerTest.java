@@ -23,6 +23,7 @@ import com.liferay.portalweb.portal.util.RuntimeVariables;
 public class ViewProfileInstantMessengerTest extends BaseTestCase {
 	public void testViewProfileInstantMessenger() throws Exception {
 		selenium.open("/web/socialofficefriendsn/profile");
+		loadRequiredJavaScriptModules();
 		assertEquals(RuntimeVariables.replace("Profile"),
 			selenium.getText("//nav/ul/li/a/span"));
 		assertEquals(RuntimeVariables.replace("Profile"),

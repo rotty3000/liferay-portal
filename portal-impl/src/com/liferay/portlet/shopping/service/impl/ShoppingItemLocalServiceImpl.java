@@ -171,12 +171,12 @@ public class ShoppingItemLocalServiceImpl
 
 		// Resources
 
-		if (serviceContext.getAddGroupPermissions() ||
-			serviceContext.getAddGuestPermissions()) {
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
 
 			addItemResources(
-				item, serviceContext.getAddGroupPermissions(),
-				serviceContext.getAddGuestPermissions());
+				item, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
 		}
 		else {
 			addItemResources(

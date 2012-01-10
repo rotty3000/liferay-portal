@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portalweb.portal.controlpanel.dynamicdatalists.fieldboolean.editfieldbooleanrequired;
+package com.liferay.portalweb.portlet.activities.portlet.draganddropportletactivities;
 
 import com.liferay.portalweb.portal.BaseTests;
 
@@ -22,15 +22,15 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditFieldBooleanRequiredTests extends BaseTests {
+public class DragAndDropPortletActivitiesTests extends BaseTests {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
-		testSuite.addTestSuite(AddDataDefinitionTest.class);
-		testSuite.addTestSuite(EditFieldBooleanRequiredTest.class);
-		testSuite.addTestSuite(ViewEditFieldBooleanRequiredTest.class);
-		testSuite.addTestSuite(TearDownDataDefinitionTest.class);
+		testSuite.addTestSuite(AddPageActivitiesTest.class);
+		testSuite.addTestSuite(AddPortletActivitiesTest.class);
+		testSuite.addTestSuite(DragAndDropPortletActivitiesTest.class);
+		testSuite.addTestSuite(TearDownMyCommunityPrivatePageTest.class);
 
 		return testSuite;
 	}

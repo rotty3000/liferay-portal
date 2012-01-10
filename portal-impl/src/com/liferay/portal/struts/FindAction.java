@@ -84,8 +84,7 @@ public abstract class FindAction extends Action {
 				portletURL.setParameter("redirect", redirect);
 			}
 
-			portletURL.setParameter(
-				getPrimaryKeyParameterName(), String.valueOf(primaryKey));
+			setPrimaryKeyParameter(portletURL, primaryKey);
 
 			portletURL.setPortletMode(PortletMode.VIEW);
 			portletURL.setWindowState(WindowState.NORMAL);
@@ -179,6 +178,14 @@ public abstract class FindAction extends Action {
 		throws Exception {
 
 		return portletURL;
+	}
+
+	protected void setPrimaryKeyParameter(
+			PortletURL portletURL, long primaryKey)
+		throws Exception {
+
+		portletURL.setParameter(
+			getPrimaryKeyParameterName(), String.valueOf(primaryKey));
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(FindAction.class);

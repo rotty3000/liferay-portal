@@ -83,21 +83,14 @@ public class JavadocFormatter {
 			"limit");
 		CmdLineParser.Option initOption = cmdLineParser.addStringOption(
 			"init");
-		CmdLineParser.Option updateOption = cmdLineParser.addStringOption(
-			"update");
 
 		cmdLineParser.parse(args);
 
 		String limit = (String)cmdLineParser.getOptionValue(limitOption);
 		String init = (String)cmdLineParser.getOptionValue(initOption);
-		String update = (String)cmdLineParser.getOptionValue(updateOption);
 
 		if (Validator.isNotNull(init) && !init.startsWith("$")) {
 			_initializeMissingJavadocs = GetterUtil.getBoolean(init);
-		}
-
-		if (Validator.isNotNull(update) && !update.startsWith("$")) {
-			_updateJavadocs = GetterUtil.getBoolean(update);
 		}
 
 		DirectoryScanner ds = new DirectoryScanner();
@@ -216,8 +209,7 @@ public class JavadocFormatter {
 	}
 
 	private String _addDocletTags(
-		Element parentElement, String[] names, String indent,
-		boolean publicAccess) {
+		Element parentElement, String[] names, String indent) {
 
 		StringBundler sb = new StringBundler();
 
@@ -260,8 +252,6 @@ public class JavadocFormatter {
 
 		String nameIndent = _getSpacesIndent(maxNameLength);
 
-		boolean hasComments = false;
-
 		for (String name : names) {
 			List<Element> elements = parentElement.elements(name);
 
@@ -277,12 +267,8 @@ public class JavadocFormatter {
 					comment = element.getText();
 				}
 
-				if (Validator.isNotNull(comment)) {
-					hasComments = true;
-				}
-
 				if (!name.equals("deprecated") && !_initializeMissingJavadocs &&
-					!_updateJavadocs && Validator.isNull(comment)) {
+					Validator.isNull(comment)) {
 
 					continue;
 				}
@@ -316,14 +302,6 @@ public class JavadocFormatter {
 					sb.append(comment);
 				}
 			}
-		}
-
-		if (!publicAccess && !hasComments) {
-			return null;
-		}
-
-		if (!_initializeMissingJavadocs && !hasComments) {
-			return null;
 		}
 
 		return sb.toString();
@@ -710,9 +688,9 @@ public class JavadocFormatter {
 			new String[] {
 				"author", "version", "see", "since", "serial", "deprecated"
 			},
-			indent + " * ", _hasPublicModifier(javaClass));
+			indent + " * ");
 
-		if (Validator.isNotNull(docletTags)) {
+		if (docletTags.length() > 0) {
 			if (_initializeMissingJavadocs || Validator.isNotNull(comment)) {
 				sb.append(" *\n");
 			}
@@ -863,9 +841,9 @@ public class JavadocFormatter {
 		String docletTags = _addDocletTags(
 			fieldElement,
 			new String[] {"version", "see", "since", "deprecated"},
-			indent + " * ", _hasPublicModifier(javaField));
+			indent + " * ");
 
-		if (Validator.isNotNull(docletTags)) {
+		if (docletTags.length() > 0) {
 			if (_initializeMissingJavadocs || Validator.isNotNull(comment)) {
 				sb.append(indent);
 				sb.append(" *\n");
@@ -878,12 +856,6 @@ public class JavadocFormatter {
 		sb.append(" */\n");
 
 		if (!_initializeMissingJavadocs && Validator.isNull(comment) &&
-			Validator.isNull(docletTags)) {
-
-			return null;
-		}
-
-		if (!_hasPublicModifier(javaField) && Validator.isNull(comment) &&
 			Validator.isNull(docletTags)) {
 
 			return null;
@@ -923,9 +895,9 @@ public class JavadocFormatter {
 				"version", "param", "return", "throws", "see", "since",
 				"deprecated"
 			},
-			indent + " * ", _hasPublicModifier(javaMethod));
+			indent + " * ");
 
-		if (Validator.isNotNull(docletTags)) {
+		if (docletTags.length() > 0) {
 			if (_initializeMissingJavadocs || Validator.isNotNull(comment)) {
 				sb.append(indent);
 				sb.append(" *\n");
@@ -938,12 +910,6 @@ public class JavadocFormatter {
 		sb.append(" */\n");
 
 		if (!_initializeMissingJavadocs && Validator.isNull(comment) &&
-			Validator.isNull(docletTags)) {
-
-			return null;
-		}
-
-		if (!_hasPublicModifier(javaMethod) && Validator.isNull(comment) &&
 			Validator.isNull(docletTags)) {
 
 			return null;
@@ -1043,22 +1009,6 @@ public class JavadocFormatter {
 		else {
 			return false;
 		}
-	}
-
-	private boolean _hasPublicModifier(AbstractJavaEntity abstractJavaEntity) {
-		String[] modifiers = abstractJavaEntity.getModifiers();
-
-		if (modifiers == null) {
-			return false;
-		}
-
-		for (String modifier : modifiers) {
-			if (modifier.equals("public")) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private boolean  _isOverrideMethod(
@@ -1397,6 +1347,5 @@ public class JavadocFormatter {
 	private boolean _initializeMissingJavadocs;
 	private Map<String, Tuple> _javadocxXmlTuples =
 		new HashMap<String, Tuple>();
-	private boolean _updateJavadocs;
 
 }
