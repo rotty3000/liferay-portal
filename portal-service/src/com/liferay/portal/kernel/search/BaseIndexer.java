@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -75,6 +76,7 @@ import javax.portlet.PortletURL;
  * @author Hugo Huijser
  * @author Ryan Park
  * @author Raymond Augé
+ * 
  */
 public abstract class BaseIndexer implements Indexer {
 
@@ -201,8 +203,17 @@ public abstract class BaseIndexer implements Indexer {
 		return _indexerPostProcessors;
 	}
 
-	public String getSearchEngineId() {
-            return DEFAULT_SEARCH_ENGINE_ID;
+	public String getSearchEngineId() {           
+            String searchEngineId = GetterUtil.getString(
+                    PropsUtil.get(PropsKeys.INDEXER_SEARCH_ENGINE.concat(StringPool.PERIOD)
+                    .concat(this.getClass().getName())));
+            if(_log.isDebugEnabled()){
+                _log.debug("searchEngineId for indexer: " + 
+                        this.getClass() + " is " + searchEngineId);
+            }
+            if(searchEngineId == null || searchEngineId.isEmpty())
+                searchEngineId = DEFAULT_SEARCH_ENGINE_ID;
+            return searchEngineId;
 	}
 
 	public String getSortField(String orderByCol) {

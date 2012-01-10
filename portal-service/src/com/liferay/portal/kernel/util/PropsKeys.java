@@ -822,6 +822,8 @@ public interface PropsKeys {
 	public static final String INDEX_SORTABLE_TEXT_FIELDS_TRUNCATED_LENGTH = "index.sortable.text.fields.truncated.length";
 
 	public static final String INDEX_WITH_THREAD = "index.with.thread";
+        
+        public static final String INDEXER_SEARCH_ENGINE = "indexer.search.engine";
 
 	public static final String INVITATION_EMAIL_MAX_RECIPIENTS = "invitation.email.max.recipients";
 
@@ -1724,8 +1726,8 @@ public interface PropsKeys {
 	public static final String SEARCH_CONTAINER_SHOW_PAGINATION_BOTTOM = "search.container.show.pagination.bottom";
 
 	public static final String SEARCH_CONTAINER_SHOW_PAGINATION_TOP = "search.container.show.pagination.top";
-
-	public static final String SERVICE_BUILDER_SERVICE_READ_ONLY_PREFIXES = "service.builder.service.read.only.prefixes";
+        
+      	public static final String SERVICE_BUILDER_SERVICE_READ_ONLY_PREFIXES = "service.builder.service.read.only.prefixes";
 
 	public static final String SERVLET_SERVICE_EVENTS_POST = "servlet.service.events.post";
 

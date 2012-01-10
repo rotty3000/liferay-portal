@@ -23,9 +23,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,18 +46,13 @@ public class SearchEngineUtil {
 	public static final String GENERIC_ENGINE_ID = "GENERIC_ENGINE";
 
 	public static final String SYSTEM_ENGINE_ID = "SYSTEM_ENGINE";
-
-        
-        
-        private static String inferSearchEngineId(String uid) {
-            //TODO get the searchEngineId from a uid. 
-            return SYSTEM_ENGINE_ID;
-        }
         
         private static String inferSearchEngineId(Document document) {           
             Indexer indexer = IndexerRegistryUtil.getIndexer(document.get("entryClassName"));
             String searchEngineId = indexer.getSearchEngineId();
-            _log.debug("SearchEngineId for ["+indexer.getClass()+"] is: " + searchEngineId);
+            if(_log.isDebugEnabled()){
+                _log.debug("SearchEngineId for ["+indexer.getClass()+"] is: " + searchEngineId);
+            }
             return searchEngineId;
         }
         
@@ -157,8 +150,10 @@ public class SearchEngineUtil {
         public static void deleteDocument(long companyId, String uid)
 		throws SearchException {
 
-                //TODO might be valid prototype if delete accours in all searchEngines???
-		deleteDocument(inferSearchEngineId(uid), companyId, uid);
+            //TODO. Dirty fix so delete in unknown searchEngineID goes to all engines. 
+            for(String searchEngineId:_searchEngines.keySet()){
+		deleteDocument(searchEngineId, companyId, uid);
+            }
 	}
 
 	public static void deleteDocument(
@@ -188,8 +183,10 @@ public class SearchEngineUtil {
         public static void deleteDocuments(long companyId, Collection<String> uids)
 		throws SearchException {
 
-            //TODO inferSearchEngineId(document) with UID... 
-		deleteDocuments(SYSTEM_ENGINE_ID, companyId, uids);
+            //TODO. Dirty fix so delete in unknown searchEngineID goes to all engines. 
+            for(String searchEngineId:_searchEngines.keySet()){
+		deleteDocuments(searchEngineId, companyId, uids);
+            }
 	}
 
 	public static void deleteDocuments(
@@ -219,8 +216,10 @@ public class SearchEngineUtil {
         public static void deletePortletDocuments(long companyId, String portletId)
 		throws SearchException {
 
-            //TODO inferSearchEngineId(document) with portletId
-		deletePortletDocuments(SYSTEM_ENGINE_ID, companyId, portletId);
+            //TODO. Dirty fix so delete in unknown searchEngineID goes to all engines. 
+            for(String searchEngineId:_searchEngines.keySet()){
+		deletePortletDocuments(searchEngineId, companyId, portletId);
+            }
 	}
 
 	public static void deletePortletDocuments(
@@ -263,8 +262,8 @@ public class SearchEngineUtil {
 	}
 
       /**
-	 * @deprecated Search Engine Selection needs a Document, UID or Portlet ID. use {@link 
-         *     inferSearchEngineId(Document document)}.
+	 * @deprecated Search Engine Selection needs a searchEngineId. Use {@link 
+         *     getSearchEngine(String searchEngineId)}.
 	 */
         public static SearchEngine getSearchEngine() {
 		return getSearchEngine(SYSTEM_ENGINE_ID);
@@ -292,7 +291,7 @@ public class SearchEngineUtil {
 		return _indexReadOnly;
 	}
 
-	public static SearchEngine removeSearchEngine(String searchEngineName) {
+        public static SearchEngine removeSearchEngine(String searchEngineName) {
 		return _searchEngines.remove(searchEngineName);
 	}
 
