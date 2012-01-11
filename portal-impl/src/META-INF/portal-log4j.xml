@@ -18,10 +18,6 @@
 		</layout>
 	</appender>
         
-        <category name="com.liferay.portal.kernel.search.SearchEngineUtil">
-		<priority value="DEBUG" />
-	</category>       
-
 	<category name="com.ecyrd.jspwiki">
 		<priority value="ERROR" />
 	</category>
