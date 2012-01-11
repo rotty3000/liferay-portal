@@ -78,16 +78,15 @@ import javax.portlet.PortletURL;
  * @author Hugo Huijser
  * @author Ryan Park
  * @author Raymond Augé
- * 
+ *
  */
 public abstract class BaseIndexer implements Indexer {
 
 	public static final int INDEX_FILTER_SEARCH_LIMIT = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
-        
+
 	public static final String INDEX_DEFAULT_SEARCH_ENGINE_ID = GetterUtil.getString(
 		PropsUtil.get(PropsKeys.INDEX_DEFAULT_SEARCH_ENGINE_ID));
-
 
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
@@ -205,17 +204,17 @@ public abstract class BaseIndexer implements Indexer {
 		return _indexerPostProcessors;
 	}
 
-	public String getSearchEngineId() {           
+	public String getSearchEngineId() {
 		String property = PropsKeys.INDEX_DEFAULT_SEARCH_ENGINE_ID.concat(StringPool.PERIOD)
 			.concat(this.getClass().getName());
-            
+
 		String searchEngineId = GetterUtil.getString(PropsUtil.get(property));
-            
-		if(_log.isDebugEnabled()){
+
+		if (_log.isDebugEnabled()) {
 			_log.debug("searchEngineId for indexer: " + this.getClass() + " is " + searchEngineId);
-		}		
-            
-		if(searchEngineId == null || searchEngineId.isEmpty()){
+		}
+
+		if (searchEngineId == null || searchEngineId.isEmpty()) {
 			return INDEX_DEFAULT_SEARCH_ENGINE_ID;
 		} else {
 			return searchEngineId;
