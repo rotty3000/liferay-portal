@@ -24,12 +24,14 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.model.impl.ColorSchemeImpl;
 import com.liferay.portal.model.impl.ThemeImpl;
+import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutSetLocalServiceBaseImpl;
 import com.liferay.portal.util.PrefsPropsUtil;
@@ -81,11 +83,27 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 
 			layoutSet.setLogo(liveLayoutSet.getLogo());
 			layoutSet.setLogoId(liveLayoutSet.getLogoId());
+
+			if (liveLayoutSet.isLogo()) {
+				Image liveLogo = ImageLocalServiceUtil.getImage(
+					liveLayoutSet.getLogoId());
+				
+				long logoId = counterLocalService.increment();
+				
+				ImageLocalServiceUtil.updateImage(
+					logoId, liveLogo.getTextObj(), liveLogo.getType(),
+					liveLogo.getHeight(), liveLogo.getWidth(),
+					liveLogo.getSize());
+				
+				layoutSet.setLogoId(logoId);
+			}
+			
 			layoutSet.setThemeId(liveLayoutSet.getThemeId());
 			layoutSet.setColorSchemeId(liveLayoutSet.getColorSchemeId());
 			layoutSet.setWapThemeId(liveLayoutSet.getWapThemeId());
 			layoutSet.setWapColorSchemeId(liveLayoutSet.getWapColorSchemeId());
 			layoutSet.setCss(liveLayoutSet.getCss());
+			layoutSet.setSettings(liveLayoutSet.getSettings());
 		}
 		else {
 			layoutSet.setThemeId(
@@ -97,6 +115,7 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 			layoutSet.setWapColorSchemeId(
 				ColorSchemeImpl.getDefaultWapColorSchemeId());
 			layoutSet.setCss(StringPool.BLANK);
+			layoutSet.setSettings(StringPool.BLANK);
 		}
 
 		layoutSetPersistence.update(layoutSet, false);
@@ -284,7 +303,7 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 		layoutSetPersistence.update(layoutSet, false);
 	}
 
-	public void updateLogo(
+	public LayoutSet updateLogo(
 			long groupId, boolean privateLayout, boolean logo, File file)
 		throws PortalException, SystemException {
 
@@ -299,17 +318,17 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 			}
 		}
 
-		updateLogo(groupId, privateLayout, logo, is);
+		return updateLogo(groupId, privateLayout, logo, is);
 	}
 
-	public void updateLogo(
+	public LayoutSet updateLogo(
 			long groupId, boolean privateLayout, boolean logo, InputStream is)
 		throws PortalException, SystemException {
 
-		updateLogo(groupId, privateLayout, logo, is, true);
+		return updateLogo(groupId, privateLayout, logo, is, true);
 	}
 
-	public void updateLogo(
+	public LayoutSet updateLogo(
 			long groupId, boolean privateLayout, boolean logo, InputStream is,
 			boolean cleanUpStream)
 		throws PortalException, SystemException {
@@ -329,6 +348,9 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 				layoutSet.setLogoId(logoId);
 			}
 		}
+		else {
+			layoutSet.setLogoId(0);
+		}
 
 		layoutSetPersistence.update(layoutSet, false);
 
@@ -339,6 +361,8 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 		else {
 			imageLocalService.deleteImage(layoutSet.getLogoId());
 		}
+
+		return layoutSet;
 	}
 
 	public LayoutSet updateLookAndFeel(
