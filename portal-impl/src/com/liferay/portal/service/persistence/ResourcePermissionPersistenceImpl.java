@@ -1974,6 +1974,18 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		List<ResourcePermission> list = (List<ResourcePermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourcePermission resourcePermission : list) {
+				if ((companyId != resourcePermission.getCompanyId()) ||
+						!Validator.equals(primKey,
+							resourcePermission.getPrimKey())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
