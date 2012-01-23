@@ -15,8 +15,6 @@
 package com.liferay.portal.upgrade.v6_1_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portal.kernel.upgrade.util.UpgradeTable;
-import com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil;
 import com.liferay.portal.upgrade.v6_1_0.util.BlogsEntryTable;
 
 /**
@@ -36,14 +34,12 @@ public class UpgradeBlogs extends UpgradeProcess {
 		catch (Exception e) {
 		}
 
-		try {
+		if (isSupportsAlterColumnType()) {
 			runSQL("alter_column_type BlogsEntry smallImageURL STRING null");
 		}
-		catch (Exception e) {
-			UpgradeTable upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
+		else {
+			upgradeTable(
 				BlogsEntryTable.TABLE_NAME, BlogsEntryTable.TABLE_COLUMNS);
-
-			upgradeTable.updateTable();
 		}
 	}
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.users.user.searchuserquotes;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SearchUserQuotesTests extends BaseTests {
-
+public class SearchUserQuotesTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUser1Test.class);
 		testSuite.addTestSuite(AddUser2Test.class);
 		testSuite.addTestSuite(AddUser3Test.class);
@@ -39,5 +37,4 @@ public class SearchUserQuotesTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

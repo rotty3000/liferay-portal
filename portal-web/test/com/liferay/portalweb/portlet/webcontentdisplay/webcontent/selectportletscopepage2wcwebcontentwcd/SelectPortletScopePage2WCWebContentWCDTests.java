@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.webcontentdisplay.webcontent.selectportletscopepage2wcwebcontentwcd;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SelectPortletScopePage2WCWebContentWCDTests extends BaseTests {
-
+public class SelectPortletScopePage2WCWebContentWCDTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCD1Test.class);
 		testSuite.addTestSuite(AddPortletWCD1Test.class);
 		testSuite.addTestSuite(AddPageWCD2Test.class);
@@ -36,30 +34,20 @@ public class SelectPortletScopePage2WCWebContentWCDTests extends BaseTests {
 		testSuite.addTestSuite(ConfigurePortletScopeDefaultTest.class);
 		testSuite.addTestSuite(ConfigurePortletScopeCurrentPageTest.class);
 		testSuite.addTestSuite(ConfigurePortletScopePage2Test.class);
-		testSuite.addTestSuite(
-			AddPortletScopeCurrentPageWCWebContentWCDTest.class);
-		testSuite.addTestSuite(
-			SelectPortletScopePage2WCWebContentWCDTest.class);
-		testSuite.addTestSuite(
-			ViewSelectScopePage2WCWebContentNullDefaultTest.class);
-		testSuite.addTestSuite(
-			ViewSelectScopePage2WCWebContentCurrentPageTest.class);
+		testSuite.addTestSuite(AddPortletScopeCurrentPageWCWebContentWCDTest.class);
+		testSuite.addTestSuite(SelectPortletScopePage2WCWebContentWCDTest.class);
+		testSuite.addTestSuite(ViewSelectScopePage2WCWebContentNullDefaultTest.class);
+		testSuite.addTestSuite(ViewSelectScopePage2WCWebContentCurrentPageTest.class);
 		testSuite.addTestSuite(ViewSelectScopePage2WCWebContentPage2Test.class);
-		testSuite.addTestSuite(
-			ViewSelectScopePage2WebContentListDefaultTest.class);
-		testSuite.addTestSuite(
-			ViewSelectScopePage2WebContentListCurrentPageTest.class);
-		testSuite.addTestSuite(
-			ViewSelectScopePage2WebContentListPage2Test.class);
-		testSuite.addTestSuite(
-			ViewScopeCurrentPageWCWebContentListDefaultCPTest.class);
-		testSuite.addTestSuite(
-			ViewScopeCurrentPageWCWebContentListCurrentPageCPTest.class);
+		testSuite.addTestSuite(ViewSelectScopePage2WebContentListDefaultTest.class);
+		testSuite.addTestSuite(ViewSelectScopePage2WebContentListCurrentPageTest.class);
+		testSuite.addTestSuite(ViewSelectScopePage2WebContentListPage2Test.class);
+		testSuite.addTestSuite(ViewScopeCurrentPageWCWebContentListDefaultCPTest.class);
+		testSuite.addTestSuite(ViewScopeCurrentPageWCWebContentListCurrentPageCPTest.class);
 		testSuite.addTestSuite(TearDownPortletScopeTest.class);
 		testSuite.addTestSuite(TearDownScopeWebContentTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

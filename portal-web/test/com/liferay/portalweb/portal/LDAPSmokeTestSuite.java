@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class LDAPSmokeTestSuite extends BaseTests {
+public class LDAPSmokeTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

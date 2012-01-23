@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsSampleJSONTestSuite extends BaseTests {
+public class PluginsSampleJSONTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

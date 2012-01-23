@@ -516,6 +516,16 @@ public class PasswordTrackerPersistenceImpl extends BasePersistenceImpl<Password
 		List<PasswordTracker> list = (List<PasswordTracker>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PasswordTracker passwordTracker : list) {
+				if ((userId != passwordTracker.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

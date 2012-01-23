@@ -681,6 +681,16 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		List<JournalFeed> list = (List<JournalFeed>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalFeed journalFeed : list) {
+				if (!Validator.equals(uuid, journalFeed.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1057,6 +1067,15 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalFeed) {
+			JournalFeed journalFeed = (JournalFeed)result;
+
+			if (!Validator.equals(uuid, journalFeed.getUuid()) ||
+					(groupId != journalFeed.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1203,6 +1222,16 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 
 		List<JournalFeed> list = (List<JournalFeed>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalFeed journalFeed : list) {
+				if ((groupId != journalFeed.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1865,6 +1894,15 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_F,
 					finderArgs, this);
+		}
+
+		if (result instanceof JournalFeed) {
+			JournalFeed journalFeed = (JournalFeed)result;
+
+			if ((groupId != journalFeed.getGroupId()) ||
+					!Validator.equals(feedId, journalFeed.getFeedId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

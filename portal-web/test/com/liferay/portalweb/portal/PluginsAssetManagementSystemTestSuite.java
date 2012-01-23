@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.assetmanagementsystem.AssetManagementSystemTests;
+import com.liferay.portalweb.plugins.assetmanagementsystem.AssetManagementSystemTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsAssetManagementSystemTestSuite extends BaseTests {
+public class PluginsAssetManagementSystemTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AssetManagementSystemTests.suite());
+		testSuite.addTest(AssetManagementSystemTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

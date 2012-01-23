@@ -444,55 +444,43 @@ public class EditGroupAction extends PortletAction {
 				actionRequest, "privateLayoutSetPrototypeId");
 			long publicLayoutSetPrototypeId = ParamUtil.getLong(
 				actionRequest, "publicLayoutSetPrototypeId");
+			boolean privateLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+				actionRequest, "privateLayoutSetPrototypeLinkEnabled");
+			boolean publicLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+				actionRequest, "publicLayoutSetPrototypeLinkEnabled");
 
 			if ((privateLayoutSetPrototypeId == 0) &&
-				(publicLayoutSetPrototypeId == 0)) {
+				(publicLayoutSetPrototypeId == 0) &&
+				!privateLayoutSetPrototypeLinkEnabled &&
+				!publicLayoutSetPrototypeLinkEnabled) {
 
 				long layoutSetPrototypeId = ParamUtil.getLong(
 					actionRequest, "layoutSetPrototypeId");
 				int layoutSetVisibility = ParamUtil.getInteger(
 					actionRequest, "layoutSetVisibility");
+				boolean layoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+					actionRequest, "layoutSetPrototypeLinkEnabled",
+					(layoutSetPrototypeId > 0));
 
 				if (layoutSetVisibility == _LAYOUT_SET_VISIBILITY_PRIVATE) {
 					privateLayoutSetPrototypeId = layoutSetPrototypeId;
+
+					privateLayoutSetPrototypeLinkEnabled =
+						layoutSetPrototypeLinkEnabled;
 				}
 				else {
 					publicLayoutSetPrototypeId = layoutSetPrototypeId;
+
+					publicLayoutSetPrototypeLinkEnabled =
+						layoutSetPrototypeLinkEnabled;
 				}
 			}
 
-			if ((publicLayoutSetPrototypeId > 0) ||
-				(privateLayoutSetPrototypeId > 0)) {
-
-				SitesUtil.applyLayoutSetPrototypes(
-					liveGroup, publicLayoutSetPrototypeId,
-					privateLayoutSetPrototypeId, serviceContext);
-			}
-			else {
-				boolean privateLayoutSetPrototypeLinkEnabled =
-					ParamUtil.getBoolean(
-						serviceContext, "privateLayoutSetPrototypeLinkEnabled");
-
-				if (privateLayoutSetPrototypeLinkEnabled !=
-						privateLayoutSet.isLayoutSetPrototypeLinkEnabled()) {
-
-					LayoutSetServiceUtil.updateLayoutSetPrototypeLinkEnabled(
-						liveGroupId, true,
-						privateLayoutSetPrototypeLinkEnabled);
-				}
-
-				boolean publicLayoutSetPrototypeLinkEnabled =
-					ParamUtil.getBoolean(
-						serviceContext, "publicLayoutSetPrototypeLinkEnabled");
-
-				if (publicLayoutSetPrototypeLinkEnabled !=
-						publicLayoutSet.isLayoutSetPrototypeLinkEnabled()) {
-
-					LayoutSetServiceUtil.updateLayoutSetPrototypeLinkEnabled(
-						liveGroupId, false,
-						publicLayoutSetPrototypeLinkEnabled);
-				}
-			}
+			SitesUtil.updateLayoutSetPrototypesLinks(
+				liveGroup, publicLayoutSetPrototypeId,
+				privateLayoutSetPrototypeId,
+				publicLayoutSetPrototypeLinkEnabled,
+				privateLayoutSetPrototypeLinkEnabled);
 		}
 
 		// Staging

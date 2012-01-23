@@ -34,12 +34,10 @@ import javax.servlet.http.HttpSession;
  */
 public class SessionParameters {
 
-	public static final boolean USE_SESSION_PARAMETERS = GetterUtil.getBoolean(
-		SystemProperties.get(SessionParameters.class.getName()), true);
-
 	public static final String KEY = SessionParameters.class.getName();
 
-	// Servlet Request
+	public static final boolean USE_SESSION_PARAMETERS = GetterUtil.getBoolean(
+		SystemProperties.get(SessionParameters.class.getName()), true);
 
 	public static String get(HttpServletRequest request, String parameter) {
 		return get(request.getSession(), parameter);
@@ -51,6 +49,29 @@ public class SessionParameters {
 		}
 
 		Map<String, String> parameters = _getParameters(session);
+
+		String newParameter = parameters.get(parameter);
+
+		if (newParameter == null) {
+			newParameter =
+				PwdGenerator.getPassword() + StringPool.UNDERLINE + parameter;
+
+			parameters.put(parameter, newParameter);
+		}
+
+		return newParameter;
+	}
+
+	public static String get(PortletRequest portletRequest, String parameter) {
+		return get(portletRequest.getPortletSession(), parameter);
+	}
+
+	public static String get(PortletSession portletSession, String parameter) {
+		if (!USE_SESSION_PARAMETERS) {
+			return parameter;
+		}
+
+		Map<String, String> parameters = _getParameters(portletSession);
 
 		String newParameter = parameters.get(parameter);
 
@@ -81,31 +102,6 @@ public class SessionParameters {
 		}
 
 		return parameters;
-	}
-
-	// Portlet Request
-
-	public static String get(PortletRequest portletRequest, String parameter) {
-		return get(portletRequest.getPortletSession(), parameter);
-	}
-
-	public static String get(PortletSession portletSession, String parameter) {
-		if (!USE_SESSION_PARAMETERS) {
-			return parameter;
-		}
-
-		Map<String, String> parameters = _getParameters(portletSession);
-
-		String newParameter = parameters.get(parameter);
-
-		if (newParameter == null) {
-			newParameter =
-				PwdGenerator.getPassword() + StringPool.UNDERLINE + parameter;
-
-			parameters.put(parameter, newParameter);
-		}
-
-		return newParameter;
 	}
 
 	private static Map<String, String> _getParameters(

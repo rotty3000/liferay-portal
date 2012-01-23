@@ -87,8 +87,16 @@ else if (tabs2.equals("web-content-updated-email")) {
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
+	<%
+	String tabs1Names = "email-from,web-content-added-email,web-content-updated-email";
+
+	if (WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, JournalArticle.class.getName())) {
+		tabs1Names = tabs1Names.concat(",web-content-approval-denied-email,web-content-approval-granted-email,web-content-approval-requested-email,web-content-review-email");
+	}
+	%>
+
 	<liferay-ui:tabs
-		names="email-from,web-content-added-email,web-content-approval-denied-email,web-content-approval-granted-email,web-content-approval-requested-email,web-content-review-email,web-content-updated-email"
+		names="<%= tabs1Names %>"
 		param="tabs2"
 		url="<%= portletURL %>"
 	/>

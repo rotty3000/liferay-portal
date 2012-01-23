@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.rss.RSSTests;
+import com.liferay.portalweb.portlet.rss.RSSTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebRSSTestSuite extends BaseTests {
+public class PortalWebRSSTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(RSSTests.suite());
+		testSuite.addTest(RSSTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

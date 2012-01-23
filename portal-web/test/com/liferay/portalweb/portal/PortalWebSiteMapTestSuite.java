@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.sitemap.SiteMapTests;
+import com.liferay.portalweb.portlet.sitemap.SiteMapTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebSiteMapTestSuite extends BaseTests {
+public class PortalWebSiteMapTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(SiteMapTests.suite());
+		testSuite.addTest(SiteMapTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

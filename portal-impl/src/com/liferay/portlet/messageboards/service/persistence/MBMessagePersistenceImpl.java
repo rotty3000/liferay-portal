@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
@@ -318,6 +319,10 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_C",
 			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByU_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, MBMessageImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
@@ -538,6 +543,13 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
 			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_C_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C_S = new FinderPath(MBMessageModelImpl.ENTITY_CACHE_ENABLED,
+			MBMessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByU_C_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
@@ -1689,6 +1701,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if (!Validator.equals(uuid, mbMessage.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2065,6 +2087,15 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 					finderArgs, this);
 		}
 
+		if (result instanceof MBMessage) {
+			MBMessage mbMessage = (MBMessage)result;
+
+			if (!Validator.equals(uuid, mbMessage.getUuid()) ||
+					(groupId != mbMessage.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -2211,6 +2242,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2870,6 +2911,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((companyId != mbMessage.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3217,6 +3268,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3563,6 +3624,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3907,6 +3978,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4260,6 +4341,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(userId != mbMessage.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4957,6 +5049,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(categoryId != mbMessage.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -5653,6 +5756,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -6348,6 +6462,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((companyId != mbMessage.getCompanyId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -6719,6 +6844,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						(classNameId != mbMessage.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -7075,16 +7211,14 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public List<MBMessage> findByU_C(long userId, long[] classNameIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C;
 			finderArgs = new Object[] { userId, StringUtil.merge(classNameIds) };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C;
 			finderArgs = new Object[] {
 					userId, StringUtil.merge(classNameIds),
 					
@@ -7094,6 +7228,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						!ArrayUtil.contains(classNameIds,
+							mbMessage.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = new StringBundler();
@@ -7248,6 +7394,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((classNameId != mbMessage.getClassNameId()) ||
+						(classPK != mbMessage.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -7621,6 +7778,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId()) ||
+						(parentMessageId != mbMessage.getParentMessageId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -7991,6 +8159,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId()) ||
+						(answer != mbMessage.getAnswer())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -8363,6 +8542,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -8733,6 +8923,17 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((threadId != mbMessage.getThreadId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -9108,6 +9309,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(userId != mbMessage.getUserId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -9840,6 +10053,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(categoryId != mbMessage.getCategoryId()) ||
+						(threadId != mbMessage.getThreadId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -10570,6 +10795,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(categoryId != mbMessage.getCategoryId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -11302,6 +11539,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						(classNameId != mbMessage.getClassNameId()) ||
+						(classPK != mbMessage.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -11694,6 +11943,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						(classNameId != mbMessage.getClassNameId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -12070,18 +12331,16 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	public List<MBMessage> findByU_C_S(long userId, long[] classNameIds,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_S;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_S;
 			finderArgs = new Object[] {
 					userId, StringUtil.merge(classNameIds), status
 				};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_S;
 			finderArgs = new Object[] {
 					userId, StringUtil.merge(classNameIds), status,
 					
@@ -12091,6 +12350,19 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						!ArrayUtil.contains(classNameIds,
+							mbMessage.getClassNameId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = new StringBundler();
@@ -12259,6 +12531,18 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((classNameId != mbMessage.getClassNameId()) ||
+						(classPK != mbMessage.getClassPK()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -12657,6 +12941,19 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(categoryId != mbMessage.getCategoryId()) ||
+						(threadId != mbMessage.getThreadId()) ||
+						(answer != mbMessage.getAnswer())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -13428,6 +13725,19 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((groupId != mbMessage.getGroupId()) ||
+						(categoryId != mbMessage.getCategoryId()) ||
+						(threadId != mbMessage.getThreadId()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -14196,6 +14506,19 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 
 		List<MBMessage> list = (List<MBMessage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMessage mbMessage : list) {
+				if ((userId != mbMessage.getUserId()) ||
+						(classNameId != mbMessage.getClassNameId()) ||
+						(classPK != mbMessage.getClassPK()) ||
+						(status != mbMessage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -15942,7 +16265,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 				userId, StringUtil.merge(classNameIds)
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_C,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C,
 				finderArgs, this);
 
 		if (count == null) {
@@ -16007,8 +16330,8 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C,
+					finderArgs, count);
 
 				closeSession(session);
 			}
@@ -16822,7 +17145,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 				userId, StringUtil.merge(classNameIds), status
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_C_S,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C_S,
 				finderArgs, this);
 
 		if (count == null) {
@@ -16897,7 +17220,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C_S,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_U_C_S,
 					finderArgs, count);
 
 				closeSession(session);
@@ -17434,11 +17757,11 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "mbMessage.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(mbMessage.uuid IS NULL OR mbMessage.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "mbMessage.groupId = ?";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbMessage.groupId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "mbMessage.companyId = ?";
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbMessage.groupId = ? AND mbMessage.categoryId != -1";
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "mbMessage.companyId = ? AND mbMessage.categoryId != -1";
 	private static final String _FINDER_COLUMN_THREADID_THREADID_2 = "mbMessage.threadId = ?";
 	private static final String _FINDER_COLUMN_THREADREPLIES_THREADID_2 = "mbMessage.threadId = ? AND mbMessage.parentMessageId != 0";
-	private static final String _FINDER_COLUMN_USERID_USERID_2 = "mbMessage.userId = ?";
+	private static final String _FINDER_COLUMN_USERID_USERID_2 = "mbMessage.userId = ? AND mbMessage.categoryId != -1";
 	private static final String _FINDER_COLUMN_G_U_GROUPID_2 = "mbMessage.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_USERID_2 = "mbMessage.userId = ? AND (mbMessage.categoryId != -1) AND (mbMessage.anonymous = [$FALSE$])";
 	private static final String _FINDER_COLUMN_G_C_GROUPID_2 = "mbMessage.groupId = ? AND ";
@@ -17446,7 +17769,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "mbMessage.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "mbMessage.status = ? AND mbMessage.categoryId != -1";
 	private static final String _FINDER_COLUMN_C_S_COMPANYID_2 = "mbMessage.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "mbMessage.status = ?";
+	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "mbMessage.status = ? AND mbMessage.categoryId != -1";
 	private static final String _FINDER_COLUMN_U_C_USERID_2 = "mbMessage.userId = ? AND ";
 	private static final String _FINDER_COLUMN_U_C_USERID_5 = "(" +
 		_removeConjunction(_FINDER_COLUMN_U_C_USERID_2) + ")";
@@ -17465,7 +17788,7 @@ public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	private static final String _FINDER_COLUMN_TR_S_STATUS_2 = "mbMessage.status = ? AND mbMessage.parentMessageId != 0";
 	private static final String _FINDER_COLUMN_G_U_S_GROUPID_2 = "mbMessage.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_U_S_USERID_2 = "mbMessage.userId = ? AND ";
-	private static final String _FINDER_COLUMN_G_U_S_STATUS_2 = "mbMessage.status = ?";
+	private static final String _FINDER_COLUMN_G_U_S_STATUS_2 = "mbMessage.status = ? AND mbMessage.categoryId != -1";
 	private static final String _FINDER_COLUMN_G_C_T_GROUPID_2 = "mbMessage.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_T_CATEGORYID_2 = "mbMessage.categoryId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_T_THREADID_2 = "mbMessage.threadId = ?";

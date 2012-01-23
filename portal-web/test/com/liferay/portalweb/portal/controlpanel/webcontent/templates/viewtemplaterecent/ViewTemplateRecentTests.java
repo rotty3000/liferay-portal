@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.webcontent.templates.viewtemplaterecent;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewTemplateRecentTests extends BaseTests {
-
+public class ViewTemplateRecentTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTemplateTest.class);
 		testSuite.addTestSuite(ViewTemplateRecentTest.class);
 		testSuite.addTestSuite(TearDownTemplateTest.class);
 
 		return testSuite;
 	}
-
 }

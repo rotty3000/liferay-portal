@@ -616,6 +616,16 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 		List<UserNotificationEvent> list = (List<UserNotificationEvent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserNotificationEvent userNotificationEvent : list) {
+				if (!Validator.equals(uuid, userNotificationEvent.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -987,6 +997,16 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 		List<UserNotificationEvent> list = (List<UserNotificationEvent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserNotificationEvent userNotificationEvent : list) {
+				if ((userId != userNotificationEvent.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1342,6 +1362,17 @@ public class UserNotificationEventPersistenceImpl extends BasePersistenceImpl<Us
 
 		List<UserNotificationEvent> list = (List<UserNotificationEvent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserNotificationEvent userNotificationEvent : list) {
+				if ((userId != userNotificationEvent.getUserId()) ||
+						(archived != userNotificationEvent.getArchived())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

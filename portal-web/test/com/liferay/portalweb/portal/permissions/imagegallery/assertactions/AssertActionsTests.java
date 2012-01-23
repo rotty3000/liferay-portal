@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.imagegallery.assertactions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AssertActionsTests extends BaseTests {
-
+public class AssertActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(AddPortletTest.class);
 		testSuite.addTestSuite(ConfigureMediaGalleryTest.class);
@@ -49,16 +47,13 @@ public class AssertActionsTests extends BaseTests {
 		testSuite.addTestSuite(SiteAdmin_MoveImageTest.class);
 		testSuite.addTestSuite(SiteAdmin_EditFolderTest.class);
 		testSuite.addTestSuite(SiteAdmin_EditImageTest.class);
-		testSuite.addTestSuite(
-			SiteAdmin_RemoveGuestViewFolderPermissionsTest.class);
-		testSuite.addTestSuite(
-			SiteAdmin_RemoveGuestViewImagePermissionsTest.class);
+		testSuite.addTestSuite(SiteAdmin_RemoveGuestViewFolderPermissionsTest.class);
+		testSuite.addTestSuite(SiteAdmin_RemoveGuestViewImagePermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Guest_AssertCannotViewFolderTest.class);
 		testSuite.addTestSuite(Guest_AssertCannotViewImageTest.class);
 		testSuite.addTestSuite(SiteAdmin_LoginTest.class);
-		testSuite.addTestSuite(
-			SiteAdmin_RemoveGuestViewPortletPermissionsTest.class);
+		testSuite.addTestSuite(SiteAdmin_RemoveGuestViewPortletPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Guest_AssertCannotViewPortletTest.class);
 		testSuite.addTestSuite(SiteAdmin_LoginTest.class);
@@ -100,5 +95,4 @@ public class AssertActionsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

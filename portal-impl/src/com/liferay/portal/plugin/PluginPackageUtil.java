@@ -1316,6 +1316,8 @@ public class PluginPackageUtil {
 
 		_checkRepositories(repositoryURL);
 
+		SearchContext searchContext = new SearchContext();
+
 		Map<String, Serializable> attributes =
 			new HashMap<String, Serializable>();
 
@@ -1325,9 +1327,8 @@ public class PluginPackageUtil {
 		attributes.put("tag", tag);
 		attributes.put("type", type);
 
-		SearchContext searchContext = new SearchContext();
-
 		searchContext.setAttributes(attributes);
+
 		searchContext.setCompanyId(CompanyConstants.SYSTEM);
 		searchContext.setEnd(end);
 		searchContext.setKeywords(keywords);

@@ -102,6 +102,11 @@ public class JavaMD5CacheKeyGenerator extends BaseCacheKeyGenerator {
 		}
 	}
 
+	@Override
+	public boolean isCallingGetCacheKeyThreadSafe() {
+		return _CALLING_GET_CACHE_KEY_THREAD_SAFE;
+	}
+
 	public void setMaxLength(int maxLength) {
 		_maxLength = maxLength;
 	}
@@ -118,6 +123,8 @@ public class JavaMD5CacheKeyGenerator extends BaseCacheKeyGenerator {
 	}
 
 	private static final String _ALGORITHM_MD5 = "MD5";
+
+	private static final boolean _CALLING_GET_CACHE_KEY_THREAD_SAFE = false;
 
 	private static final char[] _HEX_CHARACTERS = {
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',

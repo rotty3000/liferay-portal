@@ -687,6 +687,16 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		List<MBMailingList> list = (List<MBMailingList>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMailingList mbMailingList : list) {
+				if (!Validator.equals(uuid, mbMailingList.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1055,6 +1065,15 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 					finderArgs, this);
 		}
 
+		if (result instanceof MBMailingList) {
+			MBMailingList mbMailingList = (MBMailingList)result;
+
+			if (!Validator.equals(uuid, mbMailingList.getUuid()) ||
+					(groupId != mbMailingList.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1199,6 +1218,16 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 
 		List<MBMailingList> list = (List<MBMailingList>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBMailingList mbMailingList : list) {
+				if ((active != mbMailingList.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1542,6 +1571,15 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof MBMailingList) {
+			MBMailingList mbMailingList = (MBMailingList)result;
+
+			if ((groupId != mbMailingList.getGroupId()) ||
+					(categoryId != mbMailingList.getCategoryId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

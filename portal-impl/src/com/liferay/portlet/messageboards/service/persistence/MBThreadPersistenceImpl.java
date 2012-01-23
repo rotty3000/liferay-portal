@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
@@ -35,6 +36,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -130,6 +132,10 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C",
+			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
+			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_C",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_NOTC = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, MBThreadImpl.class,
@@ -255,6 +261,13 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C_S = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
 			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_C_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C_S = new FinderPath(MBThreadModelImpl.ENTITY_CACHE_ENABLED,
+			MBThreadModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_C_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
@@ -923,6 +936,16 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1581,6 +1604,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					finderArgs, this);
 		}
 
+		if (result instanceof MBThread) {
+			MBThread mbThread = (MBThread)result;
+
+			if ((rootMessageId != mbThread.getRootMessageId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1717,6 +1748,17 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2074,16 +2116,14 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_C(long groupId, long[] categoryIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] { groupId, StringUtil.merge(categoryIds) };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(categoryIds),
 					
@@ -2093,6 +2133,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						!ArrayUtil.contains(categoryIds,
+							mbThread.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = new StringBundler();
@@ -2727,6 +2779,17 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3425,6 +3488,17 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(status != mbThread.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4120,6 +4194,17 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((categoryId != mbThread.getCategoryId()) ||
+						(priority != mbThread.getPriority())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4491,6 +4576,17 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if (!Validator.equals(lastPostDate, mbThread.getLastPostDate()) ||
+						(priority != mbThread.getPriority())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4880,6 +4976,19 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId()) ||
+						!Validator.equals(lastPostDate,
+							mbThread.getLastPostDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -5641,6 +5750,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId()) ||
+						(status != mbThread.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -6017,18 +6138,16 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	public List<MBThread> findByG_C_S(long groupId, long[] categoryIds,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_S;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_C_S;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(categoryIds), status
 				};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_C_S;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(categoryIds), status,
 					
@@ -6038,6 +6157,19 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						!ArrayUtil.contains(categoryIds,
+							mbThread.getCategoryId()) ||
+						(status != mbThread.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = new StringBundler();
@@ -6713,6 +6845,18 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 
 		List<MBThread> list = (List<MBThread>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThread mbThread : list) {
+				if ((groupId != mbThread.getGroupId()) ||
+						(categoryId != mbThread.getCategoryId()) ||
+						(status != mbThread.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -7864,7 +8008,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				groupId, StringUtil.merge(categoryIds)
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_C,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C,
 				finderArgs, this);
 
 		if (count == null) {
@@ -7929,8 +8073,8 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C,
+					finderArgs, count);
 
 				closeSession(session);
 			}
@@ -8641,7 +8785,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 				groupId, StringUtil.merge(categoryIds), status
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_C_S,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C_S,
 				finderArgs, this);
 
 		if (count == null) {
@@ -8716,7 +8860,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_C_S,
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_C_S,
 					finderArgs, count);
 
 				closeSession(session);
@@ -9104,7 +9248,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	private static final String _SQL_SELECT_MBTHREAD_WHERE = "SELECT mbThread FROM MBThread mbThread WHERE ";
 	private static final String _SQL_COUNT_MBTHREAD = "SELECT COUNT(mbThread) FROM MBThread mbThread";
 	private static final String _SQL_COUNT_MBTHREAD_WHERE = "SELECT COUNT(mbThread) FROM MBThread mbThread WHERE ";
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbThread.groupId = ?";
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "mbThread.groupId = ? AND mbThread.categoryId != -1";
 	private static final String _FINDER_COLUMN_ROOTMESSAGEID_ROOTMESSAGEID_2 = "mbThread.rootMessageId = ?";
 	private static final String _FINDER_COLUMN_G_C_GROUPID_2 = "mbThread.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_GROUPID_5 = "(" +
@@ -9120,7 +9264,7 @@ public class MBThreadPersistenceImpl extends BasePersistenceImpl<MBThread>
 	private static final String _FINDER_COLUMN_C_P_PRIORITY_2 = "mbThread.priority = ?";
 	private static final String _FINDER_COLUMN_L_P_LASTPOSTDATE_1 = "mbThread.lastPostDate IS NULL AND ";
 	private static final String _FINDER_COLUMN_L_P_LASTPOSTDATE_2 = "mbThread.lastPostDate = ? AND ";
-	private static final String _FINDER_COLUMN_L_P_PRIORITY_2 = "mbThread.priority = ?";
+	private static final String _FINDER_COLUMN_L_P_PRIORITY_2 = "mbThread.priority = ? AND mbThread.categoryId != -1";
 	private static final String _FINDER_COLUMN_G_C_L_GROUPID_2 = "mbThread.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_L_CATEGORYID_2 = "mbThread.categoryId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_L_LASTPOSTDATE_1 = "mbThread.lastPostDate IS NULL";

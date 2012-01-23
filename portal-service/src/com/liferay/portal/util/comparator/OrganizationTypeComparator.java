@@ -47,7 +47,10 @@ public class OrganizationTypeComparator extends OrderByComparator {
 		int value = typeOrder1 - typeOrder2;
 
 		if (value == 0) {
-			value = organization1.getName().compareTo(organization2.getName());
+			String name1 = organization1.getName();
+			String name2 = organization2.getName();
+
+			value = name1.compareTo(name2);
 		}
 
 		if (_ascending) {

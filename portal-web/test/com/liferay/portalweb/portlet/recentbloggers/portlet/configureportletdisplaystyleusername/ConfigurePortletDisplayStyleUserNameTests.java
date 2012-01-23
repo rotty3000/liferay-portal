@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.recentbloggers.portlet.configureportletdisplaystyleusername;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletDisplayStyleUserNameTests extends BaseTests {
-
+public class ConfigurePortletDisplayStyleUserNameTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageRBTest.class);
 		testSuite.addTestSuite(AddPortletRBTest.class);
 		testSuite.addTestSuite(ConfigurePortletDisplayStyleUserNameTest.class);
@@ -34,5 +32,4 @@ public class ConfigurePortletDisplayStyleUserNameTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.wikipage.viewconfigureportlettitlelistwikipageap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,19 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewConfigurePortletTitleListWikiPageAPTests extends BaseTests {
-
+public class ViewConfigurePortletTitleListWikiPageAPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddWikiPageTest.class);
 		testSuite.addTestSuite(ConfigurePortletDisplayStyleTitleListTest.class);
-		testSuite.addTestSuite(
-			ViewConfigurePortletTitleListWikiPageAPTest.class);
+		testSuite.addTestSuite(ViewConfigurePortletTitleListWikiPageAPTest.class);
 		testSuite.addTestSuite(TearDownWikiNodeTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

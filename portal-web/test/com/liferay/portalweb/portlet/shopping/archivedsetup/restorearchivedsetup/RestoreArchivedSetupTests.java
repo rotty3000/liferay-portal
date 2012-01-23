@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.shopping.archivedsetup.restorearchivedsetup;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RestoreArchivedSetupTests extends BaseTests {
-
+public class RestoreArchivedSetupTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageShoppingTest.class);
 		testSuite.addTestSuite(AddPortletShoppingTest.class);
 		testSuite.addTestSuite(SaveArchivedSetupTest.class);
@@ -40,5 +38,4 @@ public class RestoreArchivedSetupTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

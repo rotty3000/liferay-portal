@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserTracker;
@@ -593,6 +594,16 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 		List<UserTracker> list = (List<UserTracker>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserTracker userTracker : list) {
+				if ((companyId != userTracker.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -931,6 +942,16 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 		List<UserTracker> list = (List<UserTracker>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserTracker userTracker : list) {
+				if ((userId != userTracker.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1268,6 +1289,16 @@ public class UserTrackerPersistenceImpl extends BasePersistenceImpl<UserTracker>
 
 		List<UserTracker> list = (List<UserTracker>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserTracker userTracker : list) {
+				if (!Validator.equals(sessionId, userTracker.getSessionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficeprofile.mycontacts.mycontact.filtermccoworker;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class FilterMCCoworkerTests extends BaseTests {
-
+public class FilterMCCoworkerTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
@@ -53,5 +51,4 @@ public class FilterMCCoworkerTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

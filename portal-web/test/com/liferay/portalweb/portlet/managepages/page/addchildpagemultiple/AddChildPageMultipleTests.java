@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.managepages.page.addchildpagemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddChildPageMultipleTests extends BaseTests {
-
+public class AddChildPageMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(AddChildPage1Test.class);
 		testSuite.addTestSuite(AddChildPage2Test.class);
@@ -35,5 +33,4 @@ public class AddChildPageMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

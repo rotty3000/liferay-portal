@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.shopping.portlet.configureportletacceptedcreditcard;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletAcceptedCreditCardTests extends BaseTests {
-
+public class ConfigurePortletAcceptedCreditCardTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageShoppingTest.class);
 		testSuite.addTestSuite(AddPortletShoppingTest.class);
 		testSuite.addTestSuite(ConfigurePortletAcceptedCreditCardTest.class);
@@ -35,5 +33,4 @@ public class ConfigurePortletAcceptedCreditCardTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

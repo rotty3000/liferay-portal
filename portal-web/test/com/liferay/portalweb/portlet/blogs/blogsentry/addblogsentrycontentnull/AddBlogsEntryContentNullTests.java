@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.blogs.blogsentry.addblogsentrycontentnull;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddBlogsEntryContentNullTests extends BaseTests {
-
+public class AddBlogsEntryContentNullTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageBlogsTest.class);
 		testSuite.addTestSuite(AddPortletBlogsTest.class);
 		testSuite.addTestSuite(AddBlogsEntryContentNullTest.class);
@@ -35,5 +33,4 @@ public class AddBlogsEntryContentNullTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

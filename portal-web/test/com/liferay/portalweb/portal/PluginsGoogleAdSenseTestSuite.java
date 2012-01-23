@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsGoogleAdSenseTestSuite extends BaseTests {
+public class PluginsGoogleAdSenseTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.documentlibrary.image.deletedlsubfolderimageactions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteDLSubfolderImageActionsTests extends BaseTests {
-
+public class DeleteDLSubfolderImageActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageDLTest.class);
 		testSuite.addTestSuite(AddPortletDLTest.class);
 		testSuite.addTestSuite(AddDLFolderTest.class);
@@ -38,5 +36,4 @@ public class DeleteDLSubfolderImageActionsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

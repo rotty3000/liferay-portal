@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.categories.vocabulary.addvocabularyviewablebyanyone;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddVocabularyViewableByAnyoneTests extends BaseTests {
-
+public class AddVocabularyViewableByAnyoneTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddVocabularyViewableByAnyoneTest.class);
 		testSuite.addTestSuite(ViewVocabularyViewableByAnyoneTest.class);
 		testSuite.addTestSuite(TearDownVocabularyTest.class);
 
 		return testSuite;
 	}
-
 }

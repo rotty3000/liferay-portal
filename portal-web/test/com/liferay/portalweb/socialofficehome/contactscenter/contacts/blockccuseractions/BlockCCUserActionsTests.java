@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.contactscenter.contacts.blockccuseractions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class BlockCCUserActionsTests extends BaseTests {
-
+public class BlockCCUserActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_NewPasswordTest.class);
@@ -45,5 +43,4 @@ public class BlockCCUserActionsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

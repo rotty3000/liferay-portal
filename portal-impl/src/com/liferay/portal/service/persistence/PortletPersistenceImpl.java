@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Portlet;
@@ -568,6 +569,16 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 		List<Portlet> list = (List<Portlet>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Portlet portlet : list) {
+				if ((companyId != portlet.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -909,6 +920,15 @@ public class PortletPersistenceImpl extends BasePersistenceImpl<Portlet>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_P,
 					finderArgs, this);
+		}
+
+		if (result instanceof Portlet) {
+			Portlet portlet = (Portlet)result;
+
+			if ((companyId != portlet.getCompanyId()) ||
+					!Validator.equals(portletId, portlet.getPortletId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

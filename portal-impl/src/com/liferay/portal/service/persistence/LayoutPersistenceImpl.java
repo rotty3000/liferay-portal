@@ -1021,6 +1021,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if (!Validator.equals(uuid, layout.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1394,6 +1404,15 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					finderArgs, this);
 		}
 
+		if (result instanceof Layout) {
+			Layout layout = (Layout)result;
+
+			if (!Validator.equals(uuid, layout.getUuid()) ||
+					(groupId != layout.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1539,6 +1558,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2195,6 +2224,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((companyId != layout.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2539,6 +2578,14 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					finderArgs, this);
 		}
 
+		if (result instanceof Layout) {
+			Layout layout = (Layout)result;
+
+			if ((iconImageId != layout.getIconImageId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2676,6 +2723,17 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3378,6 +3436,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					finderArgs, this);
 		}
 
+		if (result instanceof Layout) {
+			Layout layout = (Layout)result;
+
+			if ((groupId != layout.getGroupId()) ||
+					(privateLayout != layout.getPrivateLayout()) ||
+					(layoutId != layout.getLayoutId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -3529,6 +3597,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout()) ||
+						(parentLayoutId != layout.getParentLayoutId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4265,6 +4345,16 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 					finderArgs, this);
 		}
 
+		if (result instanceof Layout) {
+			Layout layout = (Layout)result;
+
+			if ((groupId != layout.getGroupId()) ||
+					(privateLayout != layout.getPrivateLayout()) ||
+					!Validator.equals(friendlyURL, layout.getFriendlyURL())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -4428,6 +4518,18 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 
 		List<Layout> list = (List<Layout>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Layout layout : list) {
+				if ((groupId != layout.getGroupId()) ||
+						(privateLayout != layout.getPrivateLayout()) ||
+						!Validator.equals(type, layout.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -5211,6 +5313,17 @@ public class LayoutPersistenceImpl extends BasePersistenceImpl<Layout>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P_SPLU,
 					finderArgs, this);
+		}
+
+		if (result instanceof Layout) {
+			Layout layout = (Layout)result;
+
+			if ((groupId != layout.getGroupId()) ||
+					(privateLayout != layout.getPrivateLayout()) ||
+					!Validator.equals(sourcePrototypeLayoutUuid,
+						layout.getSourcePrototypeLayoutUuid())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

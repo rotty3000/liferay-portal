@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.wiki.wikipage.changeparentfrontpagechildpagetowikipage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,22 +22,18 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ChangeParentFrontPageChildPageToWikiPageTests extends BaseTests {
-
+public class ChangeParentFrontPageChildPageToWikiPageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddFrontPageTest.class);
 		testSuite.addTestSuite(AddFrontPageChildPageTest.class);
 		testSuite.addTestSuite(AddWikiPageTest.class);
-		testSuite.addTestSuite(
-			ChangeParentFrontPageChildPageToWikiPageTest.class);
+		testSuite.addTestSuite(ChangeParentFrontPageChildPageToWikiPageTest.class);
 		testSuite.addTestSuite(TearDownWikiNodeTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

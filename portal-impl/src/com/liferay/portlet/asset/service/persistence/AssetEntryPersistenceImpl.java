@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -799,6 +800,16 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if ((companyId != assetEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1137,6 +1148,16 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if ((visible != assetEntry.getVisible())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1474,6 +1495,16 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if (!Validator.equals(publishDate, assetEntry.getPublishDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1832,6 +1863,17 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 
 		List<AssetEntry> list = (List<AssetEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetEntry assetEntry : list) {
+				if (!Validator.equals(expirationDate,
+							assetEntry.getExpirationDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2192,6 +2234,15 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 					finderArgs, this);
 		}
 
+		if (result instanceof AssetEntry) {
+			AssetEntry assetEntry = (AssetEntry)result;
+
+			if ((groupId != assetEntry.getGroupId()) ||
+					!Validator.equals(classUuid, assetEntry.getClassUuid())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2342,6 +2393,15 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetEntry) {
+			AssetEntry assetEntry = (AssetEntry)result;
+
+			if ((classNameId != assetEntry.getClassNameId()) ||
+					(classPK != assetEntry.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3052,6 +3112,10 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ASSETCATEGORIES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the asset categories associated with the asset entry.
 	 *
@@ -3129,6 +3193,10 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			Long.class,
 			AssetEntryModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETCATEGORIES_NAME,
 			"getAssetCategoriesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ASSETCATEGORIES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of asset categories associated with the asset entry.
@@ -3528,6 +3596,10 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ASSETTAGS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the asset tags associated with the asset entry.
 	 *
@@ -3605,6 +3677,10 @@ public class AssetEntryPersistenceImpl extends BasePersistenceImpl<AssetEntry>
 			Long.class,
 			AssetEntryModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME,
 			"getAssetTagsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ASSETTAGS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of asset tags associated with the asset entry.

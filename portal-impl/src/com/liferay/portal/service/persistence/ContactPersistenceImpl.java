@@ -534,6 +534,16 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		List<Contact> list = (List<Contact>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Contact contact : list) {
+				if ((companyId != contact.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

@@ -32,10 +32,10 @@ public class CMISConjunction extends CMISJunction {
 
 		List<CMISCriterion> cmisCriterions = list();
 
-		StringBundler sb = new StringBundler(cmisCriterions.size() * 2 - 1);
+		StringBundler sb = new StringBundler(cmisCriterions.size() * 2 + 1);
 
 		if (cmisCriterions.size() > 1) {
-			sb.append("(");
+			sb.append(StringPool.OPEN_PARENTHESIS);
 		}
 
 		for (int i = 0; i < cmisCriterions.size(); i++) {
@@ -49,7 +49,7 @@ public class CMISConjunction extends CMISJunction {
 		}
 
 		if (cmisCriterions.size() > 1) {
-			sb.append(")");
+			sb.append(StringPool.CLOSE_PARENTHESIS);
 		}
 
 		return sb.toString();

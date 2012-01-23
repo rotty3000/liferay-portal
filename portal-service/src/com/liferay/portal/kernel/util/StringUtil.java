@@ -900,12 +900,11 @@ public class StringUtil {
 		}
 
 		if (!exactMatch) {
-			replace(s, oldSubs, newSubs);
+			return replace(s, oldSubs, newSubs);
 		}
-		else {
-			for (int i = 0; i < oldSubs.length; i++) {
-				s = s.replaceAll("\\b" + oldSubs[i] + "\\b" , newSubs[i]);
-			}
+
+		for (int i = 0; i < oldSubs.length; i++) {
+			s = s.replaceAll("\\b" + oldSubs[i] + "\\b" , newSubs[i]);
 		}
 
 		return s;
@@ -1905,8 +1904,8 @@ public class StringUtil {
 		'e', 'f'
 	};
 
-	private static String[] _emptyStringArray = new String[0];
-
 	private static Log _log = LogFactoryUtil.getLog(StringUtil.class);
+
+	private static String[] _emptyStringArray = new String[0];
 
 }

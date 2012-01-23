@@ -269,11 +269,24 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 
 		<li class="user-avatar <%= themeDisplay.isImpersonated() ? "impersonating-user has-submenu" : "" %>" id="<portlet:namespace />userAvatar">
 			<span class="user-links <%= themeDisplay.isImpersonated() ? "menu-button": "" %>">
-				<aui:a cssClass="user-portrait use-dialog" data-controlPanelCategory="<%= PortletCategoryKeys.MY %>" href="<%= themeDisplay.getURLMyAccount().toString() %>" title="manage-my-account">
+
+				<%
+				String controlPanelCategory = StringPool.BLANK;
+				String useDialog = StringPool.BLANK;
+
+				if (!group.isControlPanel()) {
+					controlPanelCategory = PortletCategoryKeys.MY;
+					useDialog = StringPool.SPACE + "use-dialog";
+				}
+				%>
+
+				<aui:a cssClass='<%= "user-portrait" + useDialog %>' data-controlPanelCategory="<%= controlPanelCategory %>" href="<%= themeDisplay.getURLMyAccount().toString() %>" title="manage-my-account">
 					<img alt="<%= HtmlUtil.escape(user.getFullName()) %>" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
 				</aui:a>
 
-				<aui:a cssClass="user-fullname use-dialog" data-controlPanelCategory="<%= PortletCategoryKeys.MY %>" href="<%= themeDisplay.getURLMyAccount().toString() %>" title="manage-my-account"><%= HtmlUtil.escape(user.getFullName()) %></aui:a>
+				<aui:a cssClass='<%= "user-fullname" + useDialog %>' data-controlPanelCategory="<%= controlPanelCategory %>" href="<%= themeDisplay.getURLMyAccount().toString() %>" title="manage-my-account">
+					<%= HtmlUtil.escape(user.getFullName()) %>
+				</aui:a>
 
 				<c:if test="<%= themeDisplay.isShowSignOutIcon() %>">
 					<span class="sign-out">(<aui:a href="<%= themeDisplay.getURLSignOut() %>" label="sign-out" />)</span>
@@ -371,6 +384,17 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/edit.png" />
 
 		<liferay-ui:message key="this-page-has-been-changed-since-the-last-update-from-the-site-template" />
+
+		<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
+			<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
+			<portlet:param name="<%= Constants.CMD %>" value="reset_prototype" />
+			<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+			<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getParentGroupId()) %>" />
+		</liferay-portlet:actionURL>
+
+		<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm">
+			<aui:button name="submit" type="submit" value="reset" />
+		</aui:form>
 	</div>
 </c:if>
 

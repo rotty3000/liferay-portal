@@ -40,4 +40,6 @@ public interface CacheKeyGenerator extends Cloneable {
 
 	public Serializable getCacheKey(StringBundler sb);
 
+	public boolean isCallingGetCacheKeyThreadSafe();
+
 }

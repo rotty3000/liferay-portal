@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.documentlibrary.pagescope;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PageScopeTests extends BaseTests {
-
+public class PageScopeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ViewPage1DLFolder1Test.class);
 		testSuite.addTestSuite(ViewPage1DLFolder1Document1Test.class);
 		testSuite.addTestSuite(ViewPage1DLFolder1Document1Comment1Test.class);
@@ -52,13 +50,11 @@ public class PageScopeTests extends BaseTests {
 		testSuite.addTestSuite(Guest_ViewPage2Folder6Test.class);
 		testSuite.addTestSuite(Guest_ViewPage2Folder7Test.class);
 		testSuite.addTestSuite(SignInTest.class);
-		testSuite.addTestSuite(
-			ViewConfigurePage2PortletEntriesPerPage5Test.class);
+		testSuite.addTestSuite(ViewConfigurePage2PortletEntriesPerPage5Test.class);
 		testSuite.addTestSuite(DownloadPage1DLFolder1Document1Test.class);
 		testSuite.addTestSuite(DownloadPage2DLFolder2Document2Test.class);
 		testSuite.addTestSuite(DownloadPage2DLFolder2Document3Test.class);
 
 		return testSuite;
 	}
-
 }

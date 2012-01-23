@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.addapplication.news.searchrss;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,14 +22,11 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SearchRSSTests extends BaseTests {
-
+public class SearchRSSTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SearchRSSTest.class);
 
 		return testSuite;
 	}
-
 }

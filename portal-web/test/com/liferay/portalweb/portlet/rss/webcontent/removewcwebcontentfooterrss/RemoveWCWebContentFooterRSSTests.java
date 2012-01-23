@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.rss.webcontent.removewcwebcontentfooterrss;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RemoveWCWebContentFooterRSSTests extends BaseTests {
-
+public class RemoveWCWebContentFooterRSSTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageRSSTest.class);
 		testSuite.addTestSuite(AddPortletRSSTest.class);
 		testSuite.addTestSuite(AddWCWebContentTest.class);
@@ -37,5 +35,4 @@ public class RemoveWCWebContentFooterRSSTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

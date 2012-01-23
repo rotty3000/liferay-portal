@@ -619,6 +619,16 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 		List<MDRRuleGroup> list = (List<MDRRuleGroup>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroup mdrRuleGroup : list) {
+				if (!Validator.equals(uuid, mdrRuleGroup.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -987,6 +997,15 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 					finderArgs, this);
 		}
 
+		if (result instanceof MDRRuleGroup) {
+			MDRRuleGroup mdrRuleGroup = (MDRRuleGroup)result;
+
+			if (!Validator.equals(uuid, mdrRuleGroup.getUuid()) ||
+					(groupId != mdrRuleGroup.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1131,6 +1150,16 @@ public class MDRRuleGroupPersistenceImpl extends BasePersistenceImpl<MDRRuleGrou
 
 		List<MDRRuleGroup> list = (List<MDRRuleGroup>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MDRRuleGroup mdrRuleGroup : list) {
+				if ((groupId != mdrRuleGroup.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

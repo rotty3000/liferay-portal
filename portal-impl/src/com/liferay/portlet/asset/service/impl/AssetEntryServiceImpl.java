@@ -70,13 +70,14 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 	public List<AssetEntry> getEntries(AssetEntryQuery entryQuery)
 		throws PortalException, SystemException {
 
-		AssetEntryQuery filteredEntryQuery = setupQuery(entryQuery);
+		AssetEntryQuery filteredEntryQuery = buildFilteredEntryQuery(
+			entryQuery);
 
-		if (isRemovedFilters(entryQuery, filteredEntryQuery)) {
+		if (hasEntryQueryResults(entryQuery, filteredEntryQuery)) {
 			return new ArrayList<AssetEntry>();
 		}
 
-		Object[] results = filterQuery(entryQuery);
+		Object[] results = filterEntryQuery(filteredEntryQuery);
 
 		return (List<AssetEntry>)results[0];
 	}
@@ -84,13 +85,14 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 	public int getEntriesCount(AssetEntryQuery entryQuery)
 		throws PortalException, SystemException {
 
-		AssetEntryQuery filteredEntryQuery = setupQuery(entryQuery);
+		AssetEntryQuery filteredEntryQuery = buildFilteredEntryQuery(
+			entryQuery);
 
-		if (isRemovedFilters(entryQuery, filteredEntryQuery)) {
+		if (hasEntryQueryResults(entryQuery, filteredEntryQuery)) {
 			return 0;
 		}
 
-		Object[] results = filterQuery(entryQuery);
+		Object[] results = filterEntryQuery(filteredEntryQuery);
 
 		return (Integer)results[1];
 	}
@@ -159,6 +161,27 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 			layoutUuid, height, width, priority, sync);
 	}
 
+	protected AssetEntryQuery buildFilteredEntryQuery(
+			AssetEntryQuery entryQuery)
+		throws PortalException, SystemException {
+
+		// Return an entry query with only the category ids and tag ids that the
+		// user has access to
+
+		AssetEntryQuery filteredEntryQuery = new AssetEntryQuery(entryQuery);
+
+		filteredEntryQuery.setAllCategoryIds(
+			filterCategoryIds(entryQuery.getAllCategoryIds()));
+		filteredEntryQuery.setAllTagIds(
+			filterTagIds(entryQuery.getAllTagIds()));
+		filteredEntryQuery.setAnyCategoryIds(
+			filterCategoryIds(entryQuery.getAnyCategoryIds()));
+		filteredEntryQuery.setAnyTagIds(
+			filterTagIds(entryQuery.getAnyTagIds()));
+
+		return filteredEntryQuery;
+	}
+
 	protected long[] filterCategoryIds(long[] categoryIds)
 		throws PortalException, SystemException {
 
@@ -176,24 +199,7 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 			viewableCategoryIds.toArray(new Long[viewableCategoryIds.size()]));
 	}
 
-	protected long[] filterTagIds(long[] tagIds)
-		throws PortalException, SystemException {
-
-		List<Long> viewableTagIds = new ArrayList<Long>();
-
-		for (long tagId : tagIds) {
-			if (AssetTagPermission.contains(
-					getPermissionChecker(), tagId, ActionKeys.VIEW)) {
-
-				viewableTagIds.add(tagId);
-			}
-		}
-
-		return ArrayUtil.toArray(
-			viewableTagIds.toArray(new Long[viewableTagIds.size()]));
-	}
-
-	protected Object[] filterQuery(AssetEntryQuery entryQuery)
+	protected Object[] filterEntryQuery(AssetEntryQuery entryQuery)
 		throws PortalException, SystemException {
 
 		ThreadLocalCache<Object[]> threadLocalCache =
@@ -279,40 +285,69 @@ public class AssetEntryServiceImpl extends AssetEntryServiceBaseImpl {
 		return results;
 	}
 
-	protected boolean isRemovedFilters(
-		AssetEntryQuery entryQuery, AssetEntryQuery filteredEntryQuery) {
+	protected long[] filterTagIds(long[] tagIds)
+		throws PortalException, SystemException {
 
-		if (((entryQuery.getAllCategoryIds().length > 0) &&
-			 (filteredEntryQuery.getAllCategoryIds().length == 0)) ||
-			((entryQuery.getAllTagIds().length > 0) &&
-			 (filteredEntryQuery.getAllTagIds().length == 0)) ||
-			((entryQuery.getAnyCategoryIds().length > 0) &&
-			 (filteredEntryQuery.getAnyCategoryIds().length == 0)) ||
-			((entryQuery.getAnyTagIds().length > 0) &&
-			 (filteredEntryQuery.getAnyTagIds().length == 0))) {
+		List<Long> viewableTagIds = new ArrayList<Long>();
+
+		for (long tagId : tagIds) {
+			if (AssetTagPermission.contains(
+					getPermissionChecker(), tagId, ActionKeys.VIEW)) {
+
+				viewableTagIds.add(tagId);
+			}
+		}
+
+		return ArrayUtil.toArray(
+			viewableTagIds.toArray(new Long[viewableTagIds.size()]));
+	}
+
+	protected boolean hasEntryQueryResults(
+		AssetEntryQuery originalEntryQuery,
+		AssetEntryQuery filteredEntryQuery) {
+
+		if (originalEntryQuery.getAllCategoryIds().length >
+				filteredEntryQuery.getAllCategoryIds().length) {
+
+			// No results will be available if the user must have access to all
+			// category ids, but the user has access to fewer category ids in
+			// the filtered entry query than what was specified in the original
+			// entry query
 
 			return true;
 		}
-		else {
-			return false;
+
+		if (originalEntryQuery.getAllTagIds().length >
+				filteredEntryQuery.getAllTagIds().length) {
+
+			// No results will be available if the user must have access to all
+			// tag ids, but the user has access to fewer tag ids in the filtered
+			// entry query than what was specified in the original entry query
+
+			return true;
 		}
-	}
 
-	protected AssetEntryQuery setupQuery(AssetEntryQuery entryQuery)
-		throws PortalException, SystemException {
+		if ((originalEntryQuery.getAnyCategoryIds().length > 0) &&
+			(filteredEntryQuery.getAnyCategoryIds().length == 0)) {
 
-		AssetEntryQuery filteredEntryQuery = new AssetEntryQuery(entryQuery);
+			// No results will be available if the original entry query
+			// specified at least one category id, but the filtered entry query
+			// shows that the user does not have access to any category ids
 
-		filteredEntryQuery.setAllCategoryIds(
-			filterCategoryIds(entryQuery.getAllCategoryIds()));
-		filteredEntryQuery.setAllTagIds(
-			filterTagIds(entryQuery.getAllTagIds()));
-		filteredEntryQuery.setAnyCategoryIds(
-			filterCategoryIds(entryQuery.getAnyCategoryIds()));
-		filteredEntryQuery.setAnyTagIds(
-			filterTagIds(entryQuery.getAnyTagIds()));
+			return true;
+		}
 
-		return filteredEntryQuery;
+		if ((originalEntryQuery.getAnyTagIds().length > 0) &&
+			(filteredEntryQuery.getAnyTagIds().length == 0)) {
+
+			// No results will be available if the original entry query
+			// specified at least one tag id, but the filtered entry query
+			// shows that the user does not have access to any tag ids
+
+			return true;
+		}
+
+		return false;
 	}
 
 }

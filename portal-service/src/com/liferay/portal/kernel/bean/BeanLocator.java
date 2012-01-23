@@ -14,8 +14,11 @@
 
 package com.liferay.portal.kernel.bean;
 
+import java.util.Map;
+
 /**
  * @author Brian Wing Shun Chan
+ * @author Miguel Pastor
  */
 public interface BeanLocator {
 
@@ -24,6 +27,9 @@ public interface BeanLocator {
 	public String[] getNames();
 
 	public Class<?> getType(String name) throws BeanLocatorException;
+
+	public <T> Map<String, T> locate(Class<T> clazz)
+		throws BeanLocatorException;
 
 	public Object locate(String name) throws BeanLocatorException;
 

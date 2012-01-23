@@ -29,6 +29,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Miguel Pastor
  */
 public class BeanLocatorImpl implements BeanLocator {
 
@@ -56,6 +57,15 @@ public class BeanLocatorImpl implements BeanLocator {
 	public Class<?> getType(String name) {
 		try {
 			return _applicationContext.getType(name);
+		}
+		catch (Exception e) {
+			throw new BeanLocatorException(e);
+		}
+	}
+
+	public <T> Map<String, T> locate(Class<T> clazz) {
+		try {
+			return _applicationContext.getBeansOfType(clazz);
 		}
 		catch (Exception e) {
 			throw new BeanLocatorException(e);

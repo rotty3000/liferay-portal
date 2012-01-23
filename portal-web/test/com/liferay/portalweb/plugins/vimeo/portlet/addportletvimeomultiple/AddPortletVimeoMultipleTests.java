@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.vimeo.portlet.addportletvimeomultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPortletVimeoMultipleTests extends BaseTests {
-
+public class AddPortletVimeoMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageVimeoTest.class);
 		testSuite.addTestSuite(AddPortletVimeo1Test.class);
 		testSuite.addTestSuite(AddPortletVimeo2Test.class);
@@ -35,5 +33,4 @@ public class AddPortletVimeoMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

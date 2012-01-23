@@ -532,6 +532,15 @@ public class WebDAVPropsPersistenceImpl extends BasePersistenceImpl<WebDAVProps>
 					finderArgs, this);
 		}
 
+		if (result instanceof WebDAVProps) {
+			WebDAVProps webDAVProps = (WebDAVProps)result;
+
+			if ((classNameId != webDAVProps.getClassNameId()) ||
+					(classPK != webDAVProps.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 

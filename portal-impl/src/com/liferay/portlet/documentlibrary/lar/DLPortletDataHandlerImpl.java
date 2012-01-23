@@ -1068,8 +1068,8 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 		if (fileEntry == null) {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
-					"Unable to retrieve file: " + fileEntryUuid +
-					" to import file rank.");
+					"Unable to retrieve file " + fileEntryUuid +
+						" to import file rank");
 			}
 
 			return;
@@ -1136,7 +1136,7 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 			if (_log.isWarnEnabled()) {
 				_log.warn(
 					"Unable to fetch file entry {uuid=" + fileEntryUuid +
-						",groupId=" + groupId + "}");
+						", groupId=" + groupId + "}");
 			}
 
 			return;
@@ -1335,7 +1335,7 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 	}
 
-	protected void importRepository(
+	protected static void importRepository(
 			PortletDataContext portletDataContext, Element repositoryElement)
 		throws Exception {
 
@@ -1358,11 +1358,23 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			repositoryPath, repository, _NAMESPACE);
 
-		RepositoryLocalServiceUtil.addRepository(
-			userId, portletDataContext.getScopeGroupId(), classNameId,
-			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, repository.getName(),
-			repository.getDescription(), repository.getPortletId(),
-			repository.getTypeSettingsProperties(), serviceContext);
+		try {
+			RepositoryLocalServiceUtil.addRepository(
+				userId, portletDataContext.getScopeGroupId(), classNameId,
+				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+				repository.getName(), repository.getDescription(),
+				repository.getPortletId(),
+				repository.getTypeSettingsProperties(), serviceContext);
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Unable to connect to repository {name=" +
+						repository.getName() + ",typeSettings=" +
+							repository.getTypeSettingsProperties() + "}",
+					e);
+			}
+		}
 	}
 
 	protected static boolean isDuplicateFileEntry(

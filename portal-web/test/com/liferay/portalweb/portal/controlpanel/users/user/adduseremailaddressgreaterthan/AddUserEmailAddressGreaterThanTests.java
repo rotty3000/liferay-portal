@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.users.user.adduseremailaddressgreaterthan;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddUserEmailAddressGreaterThanTests extends BaseTests {
-
+public class AddUserEmailAddressGreaterThanTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserEmailAddressGreaterThanTest.class);
 		testSuite.addTestSuite(TearDownUserTest.class);
 
 		return testSuite;
 	}
-
 }

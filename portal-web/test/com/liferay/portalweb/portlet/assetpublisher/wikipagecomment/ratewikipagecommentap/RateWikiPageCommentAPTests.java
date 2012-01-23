@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.wikipagecomment.ratewikipagecommentap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,18 +22,15 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RateWikiPageCommentAPTests extends BaseTests {
-
+public class RateWikiPageCommentAPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddWikiPageTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortletDisplayStyleFullContentTest.class);
+		testSuite.addTestSuite(ConfigurePortletDisplayStyleFullContentTest.class);
 		testSuite.addTestSuite(ConfigurePortletEnableCommentsTest.class);
 		testSuite.addTestSuite(ConfigurePortletEnableCommentRatingsTest.class);
 		testSuite.addTestSuite(BeTheFirstWikiPageCommentAPTest.class);
@@ -43,5 +40,4 @@ public class RateWikiPageCommentAPTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

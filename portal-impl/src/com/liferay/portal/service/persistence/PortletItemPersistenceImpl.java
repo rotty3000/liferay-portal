@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PortletItem;
@@ -659,6 +660,17 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletItem portletItem : list) {
+				if ((groupId != portletItem.getGroupId()) ||
+						(classNameId != portletItem.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1025,6 +1037,18 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 
 		List<PortletItem> list = (List<PortletItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletItem portletItem : list) {
+				if ((groupId != portletItem.getGroupId()) ||
+						!Validator.equals(portletId, portletItem.getPortletId()) ||
+						(classNameId != portletItem.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1443,6 +1467,17 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_N_P_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof PortletItem) {
+			PortletItem portletItem = (PortletItem)result;
+
+			if ((groupId != portletItem.getGroupId()) ||
+					!Validator.equals(name, portletItem.getName()) ||
+					!Validator.equals(portletId, portletItem.getPortletId()) ||
+					(classNameId != portletItem.getClassNameId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

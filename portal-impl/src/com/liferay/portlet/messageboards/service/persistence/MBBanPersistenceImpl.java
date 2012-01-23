@@ -636,6 +636,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((groupId != mbBan.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -969,6 +979,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 
 		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((userId != mbBan.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1305,6 +1325,16 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 
 		List<MBBan> list = (List<MBBan>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBBan mbBan : list) {
+				if ((banUserId != mbBan.getBanUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1646,6 +1676,15 @@ public class MBBanPersistenceImpl extends BasePersistenceImpl<MBBan>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_B,
 					finderArgs, this);
+		}
+
+		if (result instanceof MBBan) {
+			MBBan mbBan = (MBBan)result;
+
+			if ((groupId != mbBan.getGroupId()) ||
+					(banUserId != mbBan.getBanUserId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

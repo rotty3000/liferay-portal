@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.blogs.portlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortletTests extends BaseTests {
-
+public class PortletTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SA_AddPortletMemberTest.class);
 		testSuite.addTestSuite(SA_AddPortletRoleTest.class);
 		testSuite.addTestSuite(SA_AssignUserRolesTest.class);
@@ -127,8 +125,7 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(SA_RemovePermissionsEntryPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Portlet_LoginTest.class);
-		testSuite.addTestSuite(
-			Portlet_AssertCannotEditEntryPermissionsTest.class);
+		testSuite.addTestSuite(Portlet_AssertCannotEditEntryPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
 		testSuite.addTestSuite(SA_AllowPermissionsEntryPermissionsTest.class);
@@ -170,5 +167,4 @@ public class PortletTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

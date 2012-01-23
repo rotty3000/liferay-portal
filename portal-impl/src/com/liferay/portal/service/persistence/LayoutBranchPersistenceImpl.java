@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutBranch;
 import com.liferay.portal.model.ModelListener;
@@ -692,6 +693,16 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 		List<LayoutBranch> list = (List<LayoutBranch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutBranch layoutBranch : list) {
+				if ((layoutSetBranchId != layoutBranch.getLayoutSetBranchId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1039,6 +1050,17 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 
 		List<LayoutBranch> list = (List<LayoutBranch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutBranch layoutBranch : list) {
+				if ((layoutSetBranchId != layoutBranch.getLayoutSetBranchId()) ||
+						(plid != layoutBranch.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1408,6 +1430,16 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 					finderArgs, this);
 		}
 
+		if (result instanceof LayoutBranch) {
+			LayoutBranch layoutBranch = (LayoutBranch)result;
+
+			if ((layoutSetBranchId != layoutBranch.getLayoutSetBranchId()) ||
+					(plid != layoutBranch.getPlid()) ||
+					!Validator.equals(name, layoutBranch.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1569,6 +1601,16 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_L_P_M,
 					finderArgs, this);
+		}
+
+		if (result instanceof LayoutBranch) {
+			LayoutBranch layoutBranch = (LayoutBranch)result;
+
+			if ((layoutSetBranchId != layoutBranch.getLayoutSetBranchId()) ||
+					(plid != layoutBranch.getPlid()) ||
+					(master != layoutBranch.getMaster())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

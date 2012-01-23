@@ -189,9 +189,8 @@ public class EditOrganizationAction extends PortletAction {
 		long[] deleteOrganizationIds = StringUtil.split(
 			ParamUtil.getString(actionRequest, "deleteOrganizationIds"), 0L);
 
-		for (int i = 0; i < deleteOrganizationIds.length; i++) {
-			OrganizationServiceUtil.deleteOrganization(
-				deleteOrganizationIds[i]);
+		for (long deleteOrganizationId : deleteOrganizationIds) {
+			OrganizationServiceUtil.deleteOrganization(deleteOrganizationId);
 		}
 	}
 
@@ -258,10 +257,17 @@ public class EditOrganizationAction extends PortletAction {
 			actionRequest, "publicLayoutSetPrototypeId");
 		long privateLayoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "privateLayoutSetPrototypeId");
+		boolean publicLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "publicLayoutSetPrototypeLinkEnabled",
+			(publicLayoutSetPrototypeId > 0));
+		boolean privateLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "privateLayoutSetPrototypeLinkEnabled",
+			(privateLayoutSetPrototypeId > 0));
 
-		SitesUtil.applyLayoutSetPrototypes(
+		SitesUtil.updateLayoutSetPrototypesLinks(
 			organization.getGroup(), publicLayoutSetPrototypeId,
-			privateLayoutSetPrototypeId, serviceContext);
+			privateLayoutSetPrototypeId, publicLayoutSetPrototypeLinkEnabled,
+			privateLayoutSetPrototypeLinkEnabled);
 
 		// Reminder queries
 

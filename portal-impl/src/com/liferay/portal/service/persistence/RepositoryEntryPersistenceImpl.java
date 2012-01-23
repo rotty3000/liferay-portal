@@ -674,6 +674,16 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (RepositoryEntry repositoryEntry : list) {
+				if (!Validator.equals(uuid, repositoryEntry.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1042,6 +1052,15 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 					finderArgs, this);
 		}
 
+		if (result instanceof RepositoryEntry) {
+			RepositoryEntry repositoryEntry = (RepositoryEntry)result;
+
+			if (!Validator.equals(uuid, repositoryEntry.getUuid()) ||
+					(groupId != repositoryEntry.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1192,6 +1211,16 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 
 		List<RepositoryEntry> list = (List<RepositoryEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (RepositoryEntry repositoryEntry : list) {
+				if ((repositoryId != repositoryEntry.getRepositoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1537,6 +1566,15 @@ public class RepositoryEntryPersistenceImpl extends BasePersistenceImpl<Reposito
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_R_M,
 					finderArgs, this);
+		}
+
+		if (result instanceof RepositoryEntry) {
+			RepositoryEntry repositoryEntry = (RepositoryEntry)result;
+
+			if ((repositoryId != repositoryEntry.getRepositoryId()) ||
+					!Validator.equals(mappedId, repositoryEntry.getMappedId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.stagingorganization.blogs;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,57 +22,42 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class BlogsTests extends BaseTests {
-
+public class BlogsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			DefinePermissionsBlogsManagePagesOrganizationUserTest.class);
+		testSuite.addTestSuite(DefinePermissionsBlogsManagePagesOrganizationUserTest.class);
 		testSuite.addTestSuite(AddOrganizationTest.class);
 		testSuite.addTestSuite(AddOrganizationSiteTest.class);
 		testSuite.addTestSuite(AddUserOrganizationUserTest.class);
 		testSuite.addTestSuite(AddUserOrganizationContentReviewerTest.class);
 		testSuite.addTestSuite(AddUserOrganizationAdministratorTest.class);
 		testSuite.addTestSuite(ActivateStagingOrganizationSiteTest.class);
-		testSuite.addTestSuite(
-			ConfigureBlogsEntrySingleApproverOrganizationSiteTest.class);
+		testSuite.addTestSuite(ConfigureBlogsEntrySingleApproverOrganizationSiteTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(OU_LoginTest.class);
 		testSuite.addTestSuite(OU_AddStagedPageOrganizationSiteTest.class);
 		testSuite.addTestSuite(OU_AddStagedPortletOrganizationSiteTest.class);
 		testSuite.addTestSuite(OU_LogoutTest.class);
-		testSuite.addTestSuite(
-			Guest_AssertNoPagePrePublishOrganizationSiteTest.class);
+		testSuite.addTestSuite(Guest_AssertNoPagePrePublishOrganizationSiteTest.class);
 		testSuite.addTestSuite(OA_LoginTest.class);
-		testSuite.addTestSuite(
-			OA_PublishToLiveStagedPageOrganizationSiteTest.class);
+		testSuite.addTestSuite(OA_PublishToLiveStagedPageOrganizationSiteTest.class);
 		testSuite.addTestSuite(OA_LogoutTest.class);
-		testSuite.addTestSuite(
-			Guest_AssertPagePresentOrganizationSiteTest.class);
+		testSuite.addTestSuite(Guest_AssertPagePresentOrganizationSiteTest.class);
 		testSuite.addTestSuite(OU_LoginTest.class);
-		testSuite.addTestSuite(
-			OU_AddStagedBlogsEntryOrganizationSiteTest.class);
+		testSuite.addTestSuite(OU_AddStagedBlogsEntryOrganizationSiteTest.class);
 		testSuite.addTestSuite(OU_LogoutTest.class);
-		testSuite.addTestSuite(
-			Guest_AssertNoBlogsEntryPreApprovalOrganizationSiteTest.class);
+		testSuite.addTestSuite(Guest_AssertNoBlogsEntryPreApprovalOrganizationSiteTest.class);
 		testSuite.addTestSuite(OCR_LoginTest.class);
-		testSuite.addTestSuite(
-			OCR_AssignToMeStagedBlogsEntryOrganizationSiteActionsTest.class);
-		testSuite.addTestSuite(
-			OCR_ApproveStagedBlogsEntryOrganizationSiteActionsTest.class);
+		testSuite.addTestSuite(OCR_AssignToMeStagedBlogsEntryOrganizationSiteActionsTest.class);
+		testSuite.addTestSuite(OCR_ApproveStagedBlogsEntryOrganizationSiteActionsTest.class);
 		testSuite.addTestSuite(OCR_LogoutTest.class);
-		testSuite.addTestSuite(
-			Guest_AssertNoBlogsEntryPrePublishOrganizationSiteTest.class);
+		testSuite.addTestSuite(Guest_AssertNoBlogsEntryPrePublishOrganizationSiteTest.class);
 		testSuite.addTestSuite(OA_LoginTest.class);
-		testSuite.addTestSuite(
-			OA_PublishToLiveStagedBlogsEntryOrganizationSiteTest.class);
+		testSuite.addTestSuite(OA_PublishToLiveStagedBlogsEntryOrganizationSiteTest.class);
 		testSuite.addTestSuite(OA_LogoutTest.class);
-		testSuite.addTestSuite(
-			Guest_AssertBlogsEntryOrganizationSiteTest.class);
+		testSuite.addTestSuite(Guest_AssertBlogsEntryOrganizationSiteTest.class);
 		testSuite.addTestSuite(LoginTest.class);
-		testSuite.addTestSuite(
-			TearDownWorkflowConfigurationOrganizationSiteTest.class);
+		testSuite.addTestSuite(TearDownWorkflowConfigurationOrganizationSiteTest.class);
 		testSuite.addTestSuite(TearDownBlogsEntryOrganizationSiteTest.class);
 		testSuite.addTestSuite(TearDownUserTest.class);
 		testSuite.addTestSuite(TearDownPermissionsTest.class);
@@ -81,5 +66,4 @@ public class BlogsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

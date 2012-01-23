@@ -139,16 +139,16 @@ public class WAIFriendlyURLMapper implements FriendlyURLMapper {
 		return false;
 	}
 
-	private static final boolean _CHECK_MAPPING_WITH_PREFIX = true;
-
-	private static final String _MAPPING = "waiapp";
+	protected Router router;
 
 	private static final String[] _BINARY_EXTENSIONS = new String[] {
 		".css", ".doc", ".gif", ".jpeg", ".jpg", ".js", ".odp", ".png", ".ppt",
 		".tgz", ".xls", ".zip",
 	};
 
-	protected Router router;
+	private static final boolean _CHECK_MAPPING_WITH_PREFIX = true;
+
+	private static final String _MAPPING = "waiapp";
 
 	private String _portletId;
 

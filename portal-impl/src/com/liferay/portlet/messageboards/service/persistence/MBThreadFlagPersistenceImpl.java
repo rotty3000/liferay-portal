@@ -604,6 +604,16 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThreadFlag mbThreadFlag : list) {
+				if ((userId != mbThreadFlag.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -941,6 +951,16 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 
 		List<MBThreadFlag> list = (List<MBThreadFlag>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBThreadFlag mbThreadFlag : list) {
+				if ((threadId != mbThreadFlag.getThreadId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1285,6 +1305,15 @@ public class MBThreadFlagPersistenceImpl extends BasePersistenceImpl<MBThreadFla
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_U_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof MBThreadFlag) {
+			MBThreadFlag mbThreadFlag = (MBThreadFlag)result;
+
+			if ((userId != mbThreadFlag.getUserId()) ||
+					(threadId != mbThreadFlag.getThreadId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

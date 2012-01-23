@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.properties.usersscreennameallownumeric.UsersScreenNameAllowNumericTests;
+import com.liferay.portalweb.properties.usersscreennameallownumeric.UsersScreenNameAllowNumericTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PropertiesUsersScreenNameAllowNumericTestSuite extends BaseTests {
+public class PropertiesUsersScreenNameAllowNumericTestSuite
+	extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(UsersScreenNameAllowNumericTests.suite());
+		testSuite.addTest(UsersScreenNameAllowNumericTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

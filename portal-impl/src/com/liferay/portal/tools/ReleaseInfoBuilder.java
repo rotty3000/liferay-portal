@@ -49,39 +49,43 @@ public class ReleaseInfoBuilder {
 
 			String content = _fileUtil.read(file);
 
-			int x = content.indexOf("String version = \"");
+			int x = content.indexOf("String _VERSION = \"");
+
 			x = content.indexOf("\"", x) + 1;
+
 			int y = content.indexOf("\"", x);
 
 			content =
 				content.substring(0, x) + version +
-				content.substring(y, content.length());
+					content.substring(y, content.length());
 
 			// Get build
 
-			x = content.indexOf("String build = \"");
+			x = content.indexOf("String _BUILD = \"");
 			x = content.indexOf("\"", x) + 1;
+
 			y = content.indexOf("\"", x);
 
 			int build = GetterUtil.getInteger(content.substring(x, y)) + 1;
 
 			content =
 				content.substring(0, x) + build +
-				content.substring(y, content.length());
+					content.substring(y, content.length());
 
 			// Get date
 
-			DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
+			DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
 
-			String date = df.format(new Date());
+			String date = dateFormat.format(new Date());
 
-			x = content.indexOf("String date = \"");
+			x = content.indexOf("String _DATE = \"");
 			x = content.indexOf("\"", x) + 1;
+
 			y = content.indexOf("\"", x);
 
 			content =
 				content.substring(0, x) + date +
-				content.substring(y, content.length());
+					content.substring(y, content.length());
 
 			// Update ReleaseInfo.java
 

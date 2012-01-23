@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PermissionsAnnouncementsTestSuite extends BaseTests {
+public class PermissionsAnnouncementsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

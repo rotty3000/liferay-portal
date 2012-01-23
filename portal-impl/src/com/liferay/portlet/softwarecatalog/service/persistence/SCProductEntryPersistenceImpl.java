@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -697,6 +698,16 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((groupId != scProductEntry.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1358,6 +1369,16 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((companyId != scProductEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1711,6 +1732,17 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 		List<SCProductEntry> list = (List<SCProductEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductEntry scProductEntry : list) {
+				if ((groupId != scProductEntry.getGroupId()) ||
+						(userId != scProductEntry.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2407,6 +2439,16 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_RG_RA,
 					finderArgs, this);
+		}
+
+		if (result instanceof SCProductEntry) {
+			SCProductEntry scProductEntry = (SCProductEntry)result;
+
+			if (!Validator.equals(repoGroupId, scProductEntry.getRepoGroupId()) ||
+					!Validator.equals(repoArtifactId,
+						scProductEntry.getRepoArtifactId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3113,6 +3155,10 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_SCLICENSES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the s c licenses associated with the s c product entry.
 	 *
@@ -3190,6 +3236,10 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			Long.class,
 			SCProductEntryModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME,
 			"getSCLicensesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_SCLICENSES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of s c licenses associated with the s c product entry.

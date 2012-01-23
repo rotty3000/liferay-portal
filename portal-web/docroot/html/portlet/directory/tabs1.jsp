@@ -30,8 +30,8 @@ String backURL = ParamUtil.getString(request, "backURL", redirect);
 %>
 
 <liferay-ui:tabs
+	backURL="<%= backURL %>"
 	names="<%= tabs1Names %>"
 	tabsValues="<%= tabs1Values %>"
 	url="<%= tabs1URL.toString() %>"
-	backURL="<%= backURL %>"
 />

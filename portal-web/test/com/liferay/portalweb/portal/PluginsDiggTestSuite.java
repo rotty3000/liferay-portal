@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.digg.DiggTests;
+import com.liferay.portalweb.plugins.digg.DiggTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsDiggTestSuite extends BaseTests {
+public class PluginsDiggTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(DiggTests.suite());
+		testSuite.addTest(DiggTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

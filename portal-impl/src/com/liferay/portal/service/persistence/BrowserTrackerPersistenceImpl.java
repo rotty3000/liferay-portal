@@ -515,6 +515,14 @@ public class BrowserTrackerPersistenceImpl extends BasePersistenceImpl<BrowserTr
 					finderArgs, this);
 		}
 
+		if (result instanceof BrowserTracker) {
+			BrowserTracker browserTracker = (BrowserTracker)result;
+
+			if ((userId != browserTracker.getUserId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.microblogs.microblogsentry.editmicroblogscontentviewablebycoworkers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditMicroblogsContentViewableByCoworkersTests extends BaseTests {
-
+public class EditMicroblogsContentViewableByCoworkersTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
-		testSuite.addTestSuite(
-			AddMicroblogsContentViewableByCoworkersTest.class);
+		testSuite.addTestSuite(AddMicroblogsContentViewableByCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_NewPasswordTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -44,18 +41,14 @@ public class EditMicroblogsContentViewableByCoworkersTests extends BaseTests {
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ConfirmCCCoworkerRequestTest.class);
-		testSuite.addTestSuite(
-			EditMicroblogsContentViewableByCoworkersTest.class);
-		testSuite.addTestSuite(
-			ViewEditMicroblogsContentViewableByCoworkersTest.class);
+		testSuite.addTestSuite(EditMicroblogsContentViewableByCoworkersTest.class);
+		testSuite.addTestSuite(ViewEditMicroblogsContentViewableByCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewEditMicroblogsContentCoworkersTest.class);
+		testSuite.addTestSuite(SOCo_ViewEditMicroblogsContentCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFo_ViewEditMicroblogsContentCoworkersTest.class);
+		testSuite.addTestSuite(SOFo_ViewEditMicroblogsContentCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -63,5 +56,4 @@ public class EditMicroblogsContentViewableByCoworkersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -657,6 +657,16 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 		List<DDMContent> list = (List<DDMContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMContent ddmContent : list) {
+				if (!Validator.equals(uuid, ddmContent.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1025,6 +1035,15 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 					finderArgs, this);
 		}
 
+		if (result instanceof DDMContent) {
+			DDMContent ddmContent = (DDMContent)result;
+
+			if (!Validator.equals(uuid, ddmContent.getUuid()) ||
+					(groupId != ddmContent.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1169,6 +1188,16 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 
 		List<DDMContent> list = (List<DDMContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMContent ddmContent : list) {
+				if ((groupId != ddmContent.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1507,6 +1536,16 @@ public class DDMContentPersistenceImpl extends BasePersistenceImpl<DDMContent>
 
 		List<DDMContent> list = (List<DDMContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMContent ddmContent : list) {
+				if ((companyId != ddmContent.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

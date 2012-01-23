@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.workflow.resource.defaultconfigurewikipagesingleapprover;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DefaultConfigureWikiPageSingleApproverTests extends BaseTests {
-
+public class DefaultConfigureWikiPageSingleApproverTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			DefaultConfigureWikiPageSingleApproverTest.class);
+		testSuite.addTestSuite(DefaultConfigureWikiPageSingleApproverTest.class);
 		testSuite.addTestSuite(TearDownWorkflowConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

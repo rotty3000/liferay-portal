@@ -571,6 +571,16 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 		List<ShoppingCategory> list = (List<ShoppingCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingCategory shoppingCategory : list) {
+				if ((groupId != shoppingCategory.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1238,6 +1248,17 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 
 		List<ShoppingCategory> list = (List<ShoppingCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingCategory shoppingCategory : list) {
+				if ((groupId != shoppingCategory.getGroupId()) ||
+						(parentCategoryId != shoppingCategory.getParentCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

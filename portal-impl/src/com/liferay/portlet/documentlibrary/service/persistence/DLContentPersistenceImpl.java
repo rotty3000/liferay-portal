@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -722,6 +723,17 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1096,6 +1108,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId()) ||
+						!Validator.equals(path, dlContent.getPath())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1512,6 +1536,18 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 
 		List<DLContent> list = (List<DLContent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLContent dlContent : list) {
+				if ((companyId != dlContent.getCompanyId()) ||
+						(repositoryId != dlContent.getRepositoryId()) ||
+						!Validator.equals(path, dlContent.getPath())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1940,6 +1976,17 @@ public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_R_P_V,
 					finderArgs, this);
+		}
+
+		if (result instanceof DLContent) {
+			DLContent dlContent = (DLContent)result;
+
+			if ((companyId != dlContent.getCompanyId()) ||
+					(repositoryId != dlContent.getRepositoryId()) ||
+					!Validator.equals(path, dlContent.getPath()) ||
+					!Validator.equals(version, dlContent.getVersion())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

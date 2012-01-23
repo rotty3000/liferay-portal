@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.testtransaction.portlet.addportlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPortletTTTests extends BaseTests {
-
+public class AddPortletTTTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTTTest.class);
 		testSuite.addTestSuite(AddPortletTTTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

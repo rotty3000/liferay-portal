@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.workflow.resource.defaultconfigurembmessagesingleapprover;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DefaultConfigureMBMessageSingleApproverTests extends BaseTests {
-
+public class DefaultConfigureMBMessageSingleApproverTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			DefaultConfigureMBMessageSingleApproverTest.class);
+		testSuite.addTestSuite(DefaultConfigureMBMessageSingleApproverTest.class);
 		testSuite.addTestSuite(TearDownWorkflowConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

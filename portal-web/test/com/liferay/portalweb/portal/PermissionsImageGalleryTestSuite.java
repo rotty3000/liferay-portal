@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portal.permissions.imagegallery.ImageGalleryTests;
+import com.liferay.portalweb.portal.permissions.imagegallery.ImageGalleryTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PermissionsImageGalleryTestSuite extends BaseTests {
+public class PermissionsImageGalleryTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(ImageGalleryTests.suite());
+		testSuite.addTest(ImageGalleryTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

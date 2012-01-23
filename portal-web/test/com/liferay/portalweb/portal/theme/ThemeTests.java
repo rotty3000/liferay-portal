@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.theme;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ThemeTests extends BaseTests {
-
+public class ThemeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SelectThemeTest.class);
 		testSuite.addTestSuite(ScreengrabSignInTest.class);
 		testSuite.addTestSuite(ScreengrabCalendarTest.class);
@@ -40,5 +38,4 @@ public class ThemeTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

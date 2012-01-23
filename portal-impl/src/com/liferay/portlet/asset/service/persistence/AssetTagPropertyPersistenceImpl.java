@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -672,6 +673,16 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTagProperty assetTagProperty : list) {
+				if ((companyId != assetTagProperty.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1017,6 +1028,16 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTagProperty assetTagProperty : list) {
+				if ((tagId != assetTagProperty.getTagId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1371,6 +1392,17 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 
 		List<AssetTagProperty> list = (List<AssetTagProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTagProperty assetTagProperty : list) {
+				if ((companyId != assetTagProperty.getCompanyId()) ||
+						!Validator.equals(key, assetTagProperty.getKey())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1764,6 +1796,15 @@ public class AssetTagPropertyPersistenceImpl extends BasePersistenceImpl<AssetTa
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_T_K,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetTagProperty) {
+			AssetTagProperty assetTagProperty = (AssetTagProperty)result;
+
+			if ((tagId != assetTagProperty.getTagId()) ||
+					!Validator.equals(key, assetTagProperty.getKey())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

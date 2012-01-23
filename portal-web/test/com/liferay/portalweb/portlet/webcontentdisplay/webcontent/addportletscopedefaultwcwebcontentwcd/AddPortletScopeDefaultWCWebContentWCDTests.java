@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.webcontentdisplay.webcontent.addportletscopedefaultwcwebcontentwcd;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPortletScopeDefaultWCWebContentWCDTests extends BaseTests {
-
+public class AddPortletScopeDefaultWCWebContentWCDTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCD1Test.class);
 		testSuite.addTestSuite(AddPortletWCD1Test.class);
 		testSuite.addTestSuite(AddPageWCD2Test.class);
@@ -38,22 +36,17 @@ public class AddPortletScopeDefaultWCWebContentWCDTests extends BaseTests {
 		testSuite.addTestSuite(ConfigurePortletScopePage2Test.class);
 		testSuite.addTestSuite(AddPortletScopeDefaultWCWebContentWCDTest.class);
 		testSuite.addTestSuite(ViewScopeDefaultWCWebContentDefaultTest.class);
-		testSuite.addTestSuite(
-			ViewScopeDefaultWCWebContentNullCurrentPageTest.class);
+		testSuite.addTestSuite(ViewScopeDefaultWCWebContentNullCurrentPageTest.class);
 		testSuite.addTestSuite(ViewScopeDefaultWCWebContentNullPage2Test.class);
 		testSuite.addTestSuite(ViewScopeDefaultWebContentListDefaultTest.class);
-		testSuite.addTestSuite(
-			ViewScopeDefaultWebContentListCurrentPageTest.class);
+		testSuite.addTestSuite(ViewScopeDefaultWebContentListCurrentPageTest.class);
 		testSuite.addTestSuite(ViewScopeDefaultWebContentListPage2Test.class);
-		testSuite.addTestSuite(
-			ViewScopeDefaultWCWebContentListDefaultCPTest.class);
-		testSuite.addTestSuite(
-			ViewScopeDefaultWCWebContentListCurrentPageCPTest.class);
+		testSuite.addTestSuite(ViewScopeDefaultWCWebContentListDefaultCPTest.class);
+		testSuite.addTestSuite(ViewScopeDefaultWCWebContentListCurrentPageCPTest.class);
 		testSuite.addTestSuite(TearDownPortletScopeTest.class);
 		testSuite.addTestSuite(TearDownScopeWebContentTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

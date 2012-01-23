@@ -621,6 +621,16 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsChoice pollsChoice : list) {
+				if (!Validator.equals(uuid, pollsChoice.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -991,6 +1001,16 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 		List<PollsChoice> list = (List<PollsChoice>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsChoice pollsChoice : list) {
+				if ((questionId != pollsChoice.getQuestionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1342,6 +1362,15 @@ public class PollsChoicePersistenceImpl extends BasePersistenceImpl<PollsChoice>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_Q_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof PollsChoice) {
+			PollsChoice pollsChoice = (PollsChoice)result;
+
+			if ((questionId != pollsChoice.getQuestionId()) ||
+					!Validator.equals(name, pollsChoice.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -86,7 +86,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 			<aui:input name="randomNamespace" type="hidden" value="<%= randomNamespace %>" />
 			<aui:input name="<%= Constants.CMD %>" type="hidden" />
 			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-			<aui:input name="contentURL" type="hidden" value="<%= PortalUtil.getCanonicalURL(redirect, themeDisplay) %>" />
+			<aui:input name="contentURL" type="hidden" value="<%= PortalUtil.getCanonicalURL(redirect, themeDisplay, layout) %>" />
 			<aui:input name="assetEntryVisible" type="hidden" value="<%= assetEntryVisible %>" />
 			<aui:input name="className" type="hidden" value="<%= className %>" />
 			<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
@@ -377,7 +377,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 														/>
 												</li>
 
-												<c:if test="<%= (message.getUserId() == user.getUserId()) && MBDiscussionPermission.contains(permissionChecker, company.getCompanyId(), scopeGroupId, permissionClassName, permissionClassPK, message.getMessageId(), userId, ActionKeys.UPDATE_DISCUSSION) %>">
+												<c:if test="<%= MBDiscussionPermission.contains(permissionChecker, company.getCompanyId(), scopeGroupId, permissionClassName, permissionClassPK, message.getMessageId(), userId, ActionKeys.UPDATE_DISCUSSION) %>">
 
 													<%
 													String taglibEditURL = "javascript:" + randomNamespace + "showForm('" + randomNamespace + "editForm" + i + "', '" + namespace + randomNamespace + "editReplyBody" + i + "');";
@@ -392,7 +392,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 													</li>
 												</c:if>
 
-												<c:if test="<%= ((message.getUserId() == user.getUserId()) || permissionChecker.isGroupAdmin(scopeGroupId)) && MBDiscussionPermission.contains(permissionChecker, company.getCompanyId(), scopeGroupId, permissionClassName, permissionClassPK, message.getMessageId(), userId, ActionKeys.DELETE_DISCUSSION) %>">
+												<c:if test="<%= MBDiscussionPermission.contains(permissionChecker, company.getCompanyId(), scopeGroupId, permissionClassName, permissionClassPK, message.getMessageId(), userId, ActionKeys.DELETE_DISCUSSION) %>">
 
 													<%
 													String taglibDeleteURL = "javascript:" + randomNamespace + "deleteMessage(" + i + ");";

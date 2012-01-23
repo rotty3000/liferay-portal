@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ServiceComponent;
@@ -583,6 +584,17 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 		List<ServiceComponent> list = (List<ServiceComponent>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ServiceComponent serviceComponent : list) {
+				if (!Validator.equals(buildNamespace,
+							serviceComponent.getBuildNamespace())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -962,6 +974,16 @@ public class ServiceComponentPersistenceImpl extends BasePersistenceImpl<Service
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_BNS_BNU,
 					finderArgs, this);
+		}
+
+		if (result instanceof ServiceComponent) {
+			ServiceComponent serviceComponent = (ServiceComponent)result;
+
+			if (!Validator.equals(buildNamespace,
+						serviceComponent.getBuildNamespace()) ||
+					(buildNumber != serviceComponent.getBuildNumber())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

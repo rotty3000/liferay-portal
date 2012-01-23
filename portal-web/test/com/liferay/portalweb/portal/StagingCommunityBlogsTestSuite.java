@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class StagingCommunityBlogsTestSuite extends BaseTests {
+public class StagingCommunityBlogsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

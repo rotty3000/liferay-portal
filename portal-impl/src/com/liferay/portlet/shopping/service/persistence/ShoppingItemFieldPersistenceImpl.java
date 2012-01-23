@@ -522,6 +522,16 @@ public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<Shoppi
 		List<ShoppingItemField> list = (List<ShoppingItemField>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingItemField shoppingItemField : list) {
+				if ((itemId != shoppingItemField.getItemId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

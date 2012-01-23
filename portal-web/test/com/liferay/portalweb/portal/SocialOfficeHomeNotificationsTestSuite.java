@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginSocialOfficeTests;
-import com.liferay.portalweb.socialofficehome.notifications.NotificationsTests;
+import com.liferay.portalweb.socialofficehome.notifications.NotificationsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SocialOfficeHomeNotificationsTestSuite extends BaseTests {
+public class SocialOfficeHomeNotificationsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginSocialOfficeTests.suite());
-		testSuite.addTest(NotificationsTests.suite());
+		testSuite.addTest(NotificationsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

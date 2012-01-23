@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.users.user.adduserdefaultuserassociationsusergroup;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,21 +22,17 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddUserDefaultUserAssociationsUserGroupTests extends BaseTests {
-
+public class AddUserDefaultUserAssociationsUserGroupTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(EnterDefaultUserAssociationsUserGroupTest.class);
 		testSuite.addTestSuite(AddUserGroupTest.class);
 		testSuite.addTestSuite(AddUserTest.class);
-		testSuite.addTestSuite(
-			AssertDefaultUserAssociationsUserGroupTest.class);
+		testSuite.addTestSuite(AssertDefaultUserAssociationsUserGroupTest.class);
 		testSuite.addTestSuite(TearDownUserTest.class);
 		testSuite.addTestSuite(TearDownUserGroupTest.class);
 		testSuite.addTestSuite(TearDownSettingsConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

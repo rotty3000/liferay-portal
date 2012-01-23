@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.webcontent.lar.importlar;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ImportLARTests extends BaseTests {
-
+public class ImportLARTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ImportLARTest.class);
 		testSuite.addTestSuite(AssertImportLARTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
@@ -35,5 +33,4 @@ public class ImportLARTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

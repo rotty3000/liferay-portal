@@ -855,6 +855,16 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(uuid, journalTemplate.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1231,6 +1241,15 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalTemplate) {
+			JournalTemplate journalTemplate = (JournalTemplate)result;
+
+			if (!Validator.equals(uuid, journalTemplate.getUuid()) ||
+					(groupId != journalTemplate.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1377,6 +1396,16 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if ((groupId != journalTemplate.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2037,6 +2066,17 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(templateId,
+							journalTemplate.getTemplateId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2409,6 +2449,17 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if (!Validator.equals(structureId,
+							journalTemplate.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2780,6 +2831,14 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalTemplate) {
+			JournalTemplate journalTemplate = (JournalTemplate)result;
+
+			if ((smallImageId != journalTemplate.getSmallImageId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2914,6 +2973,16 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof JournalTemplate) {
+			JournalTemplate journalTemplate = (JournalTemplate)result;
+
+			if ((groupId != journalTemplate.getGroupId()) ||
+					!Validator.equals(templateId,
+						journalTemplate.getTemplateId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3071,6 +3140,18 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 
 		List<JournalTemplate> list = (List<JournalTemplate>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalTemplate journalTemplate : list) {
+				if ((groupId != journalTemplate.getGroupId()) ||
+						!Validator.equals(structureId,
+							journalTemplate.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

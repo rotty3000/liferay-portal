@@ -737,6 +737,16 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		List<AssetLink> list = (List<AssetLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetLink assetLink : list) {
+				if ((entryId1 != assetLink.getEntryId1())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1080,6 +1090,16 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 		List<AssetLink> list = (List<AssetLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetLink assetLink : list) {
+				if ((entryId2 != assetLink.getEntryId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1433,6 +1453,17 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 		List<AssetLink> list = (List<AssetLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetLink assetLink : list) {
+				if ((entryId1 != assetLink.getEntryId1()) ||
+						(entryId2 != assetLink.getEntryId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1805,6 +1836,17 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		List<AssetLink> list = (List<AssetLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetLink assetLink : list) {
+				if ((entryId1 != assetLink.getEntryId1()) ||
+						(type != assetLink.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2175,6 +2217,17 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 
 		List<AssetLink> list = (List<AssetLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetLink assetLink : list) {
+				if ((entryId2 != assetLink.getEntryId2()) ||
+						(type != assetLink.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2550,6 +2603,16 @@ public class AssetLinkPersistenceImpl extends BasePersistenceImpl<AssetLink>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_E_E_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetLink) {
+			AssetLink assetLink = (AssetLink)result;
+
+			if ((entryId1 != assetLink.getEntryId1()) ||
+					(entryId2 != assetLink.getEntryId2()) ||
+					(type != assetLink.getType())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

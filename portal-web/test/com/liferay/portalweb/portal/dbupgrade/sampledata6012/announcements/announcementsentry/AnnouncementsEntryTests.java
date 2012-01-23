@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledata6012.announcements.announcementsentry;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AnnouncementsEntryTests extends BaseTests {
-
+public class AnnouncementsEntryTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCommunityAnnouncementsEntryTest.class);
 		testSuite.addTestSuite(AddPageAnnouncementsEntryTest.class);
 		testSuite.addTestSuite(AddPortletAnnouncementsEntryTest.class);
@@ -35,5 +33,4 @@ public class AnnouncementsEntryTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

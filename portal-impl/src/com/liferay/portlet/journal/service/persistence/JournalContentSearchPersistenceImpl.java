@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -875,6 +876,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if (!Validator.equals(articleId,
+							journalContentSearch.getArticleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1247,6 +1259,17 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if ((groupId != journalContentSearch.getGroupId()) ||
+						(privateLayout != journalContentSearch.getPrivateLayout())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1611,6 +1634,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if ((groupId != journalContentSearch.getGroupId()) ||
+						!Validator.equals(articleId,
+							journalContentSearch.getArticleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2004,6 +2039,18 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if ((groupId != journalContentSearch.getGroupId()) ||
+						(privateLayout != journalContentSearch.getPrivateLayout()) ||
+						(layoutId != journalContentSearch.getLayoutId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2392,6 +2439,19 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if ((groupId != journalContentSearch.getGroupId()) ||
+						(privateLayout != journalContentSearch.getPrivateLayout()) ||
+						!Validator.equals(articleId,
+							journalContentSearch.getArticleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2812,6 +2872,20 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 
 		List<JournalContentSearch> list = (List<JournalContentSearch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalContentSearch journalContentSearch : list) {
+				if ((groupId != journalContentSearch.getGroupId()) ||
+						(privateLayout != journalContentSearch.getPrivateLayout()) ||
+						(layoutId != journalContentSearch.getLayoutId()) ||
+						!Validator.equals(portletId,
+							journalContentSearch.getPortletId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3262,6 +3336,20 @@ public class JournalContentSearchPersistenceImpl extends BasePersistenceImpl<Jou
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P_L_P_A,
 					finderArgs, this);
+		}
+
+		if (result instanceof JournalContentSearch) {
+			JournalContentSearch journalContentSearch = (JournalContentSearch)result;
+
+			if ((groupId != journalContentSearch.getGroupId()) ||
+					(privateLayout != journalContentSearch.getPrivateLayout()) ||
+					(layoutId != journalContentSearch.getLayoutId()) ||
+					!Validator.equals(portletId,
+						journalContentSearch.getPortletId()) ||
+					!Validator.equals(articleId,
+						journalContentSearch.getArticleId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

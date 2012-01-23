@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.ViewSampleData6012LatestTests;
+import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.ViewSampleData6012LatestTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,12 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewSampleData6012LatestTestSuite extends BaseTests {
+public class ViewSampleData6012LatestTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
-		testSuite.addTest(ViewSampleData6012LatestTests.suite());
+		testSuite.addTest(ViewSampleData6012LatestTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

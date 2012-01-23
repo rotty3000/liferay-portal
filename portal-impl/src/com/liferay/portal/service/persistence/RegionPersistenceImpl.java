@@ -583,6 +583,16 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((countryId != region.getCountryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -924,6 +934,16 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 
 		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((active != region.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1275,6 +1295,17 @@ public class RegionPersistenceImpl extends BasePersistenceImpl<Region>
 
 		List<Region> list = (List<Region>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Region region : list) {
+				if ((countryId != region.getCountryId()) ||
+						(active != region.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

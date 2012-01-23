@@ -76,34 +76,10 @@ else {
 	assetClassPK = fileEntry.getFileEntryId();
 }
 
-String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(fileEntry.getTitle(), true);
 String webDavUrl = StringPool.BLANK;
 
 if (portletDisplay.isWebDAVEnabled()) {
-	StringBuilder sb = new StringBuilder();
-
-	if (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-		Folder curFolder = DLAppLocalServiceUtil.getFolder(folderId);
-
-		while (true) {
-			sb.insert(0, HttpUtil.encodeURL(curFolder.getName(), true));
-			sb.insert(0, StringPool.SLASH);
-
-			if (curFolder.getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-				break;
-			}
-			else {
-				curFolder = DLAppLocalServiceUtil.getFolder(curFolder.getParentFolderId());
-			}
-		}
-	}
-
-	sb.append(StringPool.SLASH);
-	sb.append(HttpUtil.encodeURL(fileEntry.getTitle(), true));
-
-	Group group = themeDisplay.getScopeGroup();
-
-	webDavUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/api/secure/webdav" + group.getFriendlyURL() + "/document_library" + sb.toString();
+	webDavUrl = DLUtil.getWebDavURL(themeDisplay, folder, fileEntry);
 }
 
 boolean hasAudio = AudioProcessorUtil.hasAudio(fileVersion);
@@ -206,7 +182,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						<%
 						DLFileShortcut dlFileShortcut = null;
 
-						String thumbnailSrc = DLUtil.getThumbnailSrc(fileEntry, dlFileShortcut, themeDisplay);
+						String thumbnailSrc = DLUtil.getThumbnailSrc(fileEntry, fileVersion, dlFileShortcut, themeDisplay);
 
 						if (layoutAssetEntry != null) {
 							AssetEntry incrementAssetEntry = AssetEntryServiceUtil.incrementViewCounter(layoutAssetEntry.getClassName(), assetClassPK);
@@ -499,7 +475,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						<label><liferay-ui:message key="url" /></label>
 
 						<liferay-ui:input-resource
-							url='<%= themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + fileEntry.getUuid() %>'
+							url="<%= DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay, StringPool.BLANK, false, true) %>"
 						/>
 					</div>
 
@@ -819,136 +795,135 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 	var buttonRow = A.one('#<portlet:namespace />fileEntryToolbar');
 
+	var fileEntryToolbarChildren = [];
+
+	<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) %>">
+		fileEntryToolbarChildren.push(
+			{
+				handler: function(event) {
+					location.href = '<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>';
+				},
+				icon: 'download',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>'
+			}
+		);
+	</c:if>
+
+	<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
+		fileEntryToolbarChildren.push(
+			{
+
+				<portlet:renderURL var="editURL">
+					<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
+					<portlet:param name="redirect" value="<%= currentURL %>" />
+					<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+				</portlet:renderURL>
+
+				handler: function(event) {
+					location.href = '<%= editURL.toString() %>';
+				},
+				icon: 'edit',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "edit") %>'
+			},
+			{
+
+				<portlet:renderURL var="moveURL">
+					<portlet:param name="struts_action" value="/document_library/move_file_entry" />
+					<portlet:param name="redirect" value="<%= currentURL %>" />
+					<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+				</portlet:renderURL>
+
+				handler: function(event) {
+					location.href = '<%= moveURL.toString() %>';
+				},
+				icon: 'move',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "move") %>'
+			}
+		);
+
+		<c:if test="<%= !fileEntry.isCheckedOut() %>">
+			fileEntryToolbarChildren.push(
+				{
+
+					handler: function(event) {
+						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+						submitForm(document.<portlet:namespace />fm);
+					},
+					icon: 'lock',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout") %>'
+				}
+			);
+		</c:if>
+
+		<c:if test="<%= fileEntry.isCheckedOut() && fileEntry.hasLock() %>">
+			fileEntryToolbarChildren.push(
+				{
+
+					handler: function(event) {
+						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
+						submitForm(document.<portlet:namespace />fm);
+					},
+					icon: 'undo',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout") %>'
+				},
+				{
+
+					handler: function(event) {
+						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
+						submitForm(document.<portlet:namespace />fm);
+					},
+					icon: 'unlock',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>'
+				}
+			);
+		</c:if>
+	</c:if>
+
+	<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
+		fileEntryToolbarChildren.push(
+			{
+				<liferay-security:permissionsURL
+					modelResource="<%= DLFileEntryConstants.getClassName() %>"
+					modelResourceDescription="<%= fileEntry.getTitle() %>"
+					resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
+					var="permissionsURL"
+				/>
+
+				handler: function(event) {
+					location.href = '<%= permissionsURL.toString() %>';
+				},
+				icon: 'permissions',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>'
+			}
+		);
+	</c:if>
+
+	<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) %>">
+		fileEntryToolbarChildren.push(
+			{
+				<portlet:renderURL var="viewFolderURL">
+					<portlet:param name="struts_action" value="/document_library/view" />
+					<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
+				</portlet:renderURL>
+
+				handler: function(event) {
+					if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this-entry") %>')) {
+						document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
+						document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
+						submitForm(document.<portlet:namespace />fm);
+					}
+				},
+				icon: 'delete',
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>'
+			}
+		);
+	</c:if>
+
 	var fileEntryToolbar = new A.Toolbar(
 		{
 			activeState: false,
 			boundingBox: buttonRow,
-			children: [
-
-				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) %>">
-
-					{
-						handler: function(event) {
-							location.href = '<%= DLUtil.getPreviewURL(fileEntry, fileVersion, themeDisplay, StringPool.BLANK) %>';
-						},
-						icon: 'download',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "download") %>'
-					},
-
-				</c:if>
-
-				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
-					{
-
-						<portlet:renderURL var="editURL">
-							<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
-							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-						</portlet:renderURL>
-
-						handler: function(event) {
-							location.href = '<%= editURL.toString() %>';
-						},
-						icon: 'edit',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "edit") %>'
-					},
-					{
-
-						<portlet:renderURL var="moveURL">
-							<portlet:param name="struts_action" value="/document_library/move_file_entry" />
-							<portlet:param name="redirect" value="<%= currentURL %>" />
-							<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-						</portlet:renderURL>
-
-						handler: function(event) {
-							location.href = '<%= moveURL.toString() %>';
-						},
-						icon: 'move',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "move") %>'
-					},
-
-					<c:if test="<%= !fileEntry.isCheckedOut() %>">
-
-						{
-
-							handler: function(event) {
-								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
-								submitForm(document.<portlet:namespace />fm);
-							},
-							icon: 'lock',
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout") %>'
-						},
-
-					</c:if>
-
-					<c:if test="<%= fileEntry.isCheckedOut() && fileEntry.hasLock() %>">
-
-						{
-
-							handler: function(event) {
-								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
-								submitForm(document.<portlet:namespace />fm);
-							},
-							icon: 'undo',
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout") %>'
-						},
-
-						{
-
-							handler: function(event) {
-								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
-								submitForm(document.<portlet:namespace />fm);
-							},
-							icon: 'unlock',
-							label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>'
-						},
-
-					</c:if>
-				</c:if>
-
-				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
-
-					{
-
-						<liferay-security:permissionsURL
-							modelResource="<%= DLFileEntryConstants.getClassName() %>"
-							modelResourceDescription="<%= fileEntry.getTitle() %>"
-							resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
-							var="permissionsURL"
-						/>
-
-						handler: function(event) {
-							location.href = '<%= permissionsURL.toString() %>';
-						},
-						icon: 'permissions',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>'
-					},
-
-				</c:if>
-
-				<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) %>">
-
-					{
-
-						<portlet:renderURL var="viewFolderURL">
-							<portlet:param name="struts_action" value="/document_library/view" />
-							<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
-						</portlet:renderURL>
-
-						handler: function(event) {
-							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this-entry") %>')) {
-								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
-								document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
-								submitForm(document.<portlet:namespace />fm);
-							}
-						},
-						icon: 'delete',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>'
-					}
-
-				</c:if>
-
-			]
+			children: fileEntryToolbarChildren
 		}
 	).render();
 

@@ -767,6 +767,16 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 		List<DLFileEntryMetadata> list = (List<DLFileEntryMetadata>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileEntryMetadata dlFileEntryMetadata : list) {
+				if (!Validator.equals(uuid, dlFileEntryMetadata.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1136,6 +1146,16 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 		List<DLFileEntryMetadata> list = (List<DLFileEntryMetadata>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileEntryMetadata dlFileEntryMetadata : list) {
+				if ((fileEntryTypeId != dlFileEntryMetadata.getFileEntryTypeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1479,6 +1499,16 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 		List<DLFileEntryMetadata> list = (List<DLFileEntryMetadata>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileEntryMetadata dlFileEntryMetadata : list) {
+				if ((fileEntryId != dlFileEntryMetadata.getFileEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1824,6 +1854,16 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 
 		List<DLFileEntryMetadata> list = (List<DLFileEntryMetadata>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileEntryMetadata dlFileEntryMetadata : list) {
+				if ((fileVersionId != dlFileEntryMetadata.getFileVersionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2174,6 +2214,15 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 					finderArgs, this);
 		}
 
+		if (result instanceof DLFileEntryMetadata) {
+			DLFileEntryMetadata dlFileEntryMetadata = (DLFileEntryMetadata)result;
+
+			if ((DDMStructureId != dlFileEntryMetadata.getDDMStructureId()) ||
+					(fileVersionId != dlFileEntryMetadata.getFileVersionId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2312,6 +2361,15 @@ public class DLFileEntryMetadataPersistenceImpl extends BasePersistenceImpl<DLFi
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_F_V,
 					finderArgs, this);
+		}
+
+		if (result instanceof DLFileEntryMetadata) {
+			DLFileEntryMetadata dlFileEntryMetadata = (DLFileEntryMetadata)result;
+
+			if ((fileEntryId != dlFileEntryMetadata.getFileEntryId()) ||
+					(fileVersionId != dlFileEntryMetadata.getFileVersionId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

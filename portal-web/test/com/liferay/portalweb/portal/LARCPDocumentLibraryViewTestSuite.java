@@ -14,8 +14,8 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.transfersampledatalatest.documentlibrary.DocumentLibraryLARCPTests;
-import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.documentlibrary.DocumentLibraryTests;
+import com.liferay.portalweb.portal.dbupgrade.transfersampledatalatest.documentlibrary.DocumentLibraryLARCPTestPlan;
+import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.documentlibrary.DocumentLibraryTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -24,14 +24,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class LARCPDocumentLibraryViewTestSuite extends BaseTests {
+public class LARCPDocumentLibraryViewTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(DocumentLibraryLARCPTests.suite());
-		testSuite.addTest(DocumentLibraryTests.suite());
+		testSuite.addTest(DocumentLibraryLARCPTestPlan.suite());
+		testSuite.addTest(DocumentLibraryTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

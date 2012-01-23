@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.webcontentdisplay.webcontent.deletethisversionwcwebcontentwcdactions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,21 +22,17 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteThisVersionWCWebContentWCDActionsTests extends BaseTests {
-
+public class DeleteThisVersionWCWebContentWCDActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
 		testSuite.addTestSuite(AddWCWebContentWCDTest.class);
 		testSuite.addTestSuite(EditWCWebContentWCDDetailsTest.class);
-		testSuite.addTestSuite(
-			DeleteThisVersionWCWebContentWCDActionsTest.class);
+		testSuite.addTestSuite(DeleteThisVersionWCWebContentWCDActionsTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

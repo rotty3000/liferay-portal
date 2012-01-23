@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.managepages.page.savepagetypeportlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SavePageTypePortletTests extends BaseTests {
-
+public class SavePageTypePortletTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(SavePageTypePortletTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

@@ -699,6 +699,16 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (EmailAddress emailAddress : list) {
+				if ((companyId != emailAddress.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1044,6 +1054,16 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (EmailAddress emailAddress : list) {
+				if ((userId != emailAddress.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1398,6 +1418,17 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (EmailAddress emailAddress : list) {
+				if ((companyId != emailAddress.getCompanyId()) ||
+						(classNameId != emailAddress.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1773,6 +1804,18 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (EmailAddress emailAddress : list) {
+				if ((companyId != emailAddress.getCompanyId()) ||
+						(classNameId != emailAddress.getClassNameId()) ||
+						(classPK != emailAddress.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2171,6 +2214,19 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 
 		List<EmailAddress> list = (List<EmailAddress>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (EmailAddress emailAddress : list) {
+				if ((companyId != emailAddress.getCompanyId()) ||
+						(classNameId != emailAddress.getClassNameId()) ||
+						(classPK != emailAddress.getClassPK()) ||
+						(primary != emailAddress.getPrimary())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

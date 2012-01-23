@@ -53,6 +53,12 @@ public abstract class BaseCacheKeyGenerator implements CacheKeyGenerator {
 		return cacheKey;
 	}
 
+	public boolean isCallingGetCacheKeyThreadSafe() {
+		return _CALLING_GET_CACHE_KEY_THREAD_SAFE;
+	}
+
 	protected StringBundler keyBundler = new StringBundler();
+
+	private static final boolean _CALLING_GET_CACHE_KEY_THREAD_SAFE = true;
 
 }

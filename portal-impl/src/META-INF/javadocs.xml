@@ -1426,10 +1426,6 @@
 		<comment><![CDATA[]]></comment>
 		<author><![CDATA[Brian Wing Shun Chan]]></author>
 		<method>
-			<name>afterPropertiesSet</name>
-			<comment><![CDATA[]]></comment>
-		</method>
-		<method>
 			<name>addClassName</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -1445,6 +1441,10 @@
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
+		</method>
+		<method>
+			<name>afterPropertiesSet</name>
+			<comment><![CDATA[]]></comment>
 		</method>
 		<method>
 			<name>checkClassNames</name>
@@ -2543,11 +2543,11 @@ by the Search portlet.]]></comment>
 			</throws>
 		</method>
 		<field>
-			<name>_log</name>
+			<name>_DEFAULT_VIRTUAL_HOST</name>
 			<comment><![CDATA[]]></comment>
 		</field>
 		<field>
-			<name>_DEFAULT_VIRTUAL_HOST</name>
+			<name>_log</name>
 			<comment><![CDATA[]]></comment>
 		</field>
 	</javadoc>
@@ -3148,28 +3148,6 @@ through {@link com.liferay.portal.service.CompanyService}.]]></comment>
 		<comment><![CDATA[]]></comment>
 		<author><![CDATA[Brian Wing Shun Chan]]></author>
 		<method>
-			<name>getContact</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>contactId</name>
-				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
 			<name>deleteContact</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -3191,6 +3169,28 @@ through {@link com.liferay.portal.service.CompanyService}.]]></comment>
 				<type>com.liferay.portal.model.Contact</type>
 				<comment><![CDATA[]]></comment>
 			</param>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getContact</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>contactId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
@@ -8792,6 +8792,60 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			</throws>
 		</method>
 		<method>
+			<name>hasLayoutSetPrototypeLayout</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>layoutSetPrototypeId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>layoutUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>hasLayoutSetPrototypeLayout</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>layoutSetPrototypeUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>layoutUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>importLayouts</name>
 			<comment><![CDATA[Imports the layouts from the byte array.]]></comment>
 			<param>
@@ -9690,6 +9744,33 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			</throws>
 		</method>
 		<method>
+			<name>hasLayoutSetPrototypeLayout</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>layoutSetPrototype</name>
+				<type>com.liferay.portal.model.LayoutSetPrototype</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>layoutUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>validate</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -10476,6 +10557,28 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			</throws>
 		</method>
 		<method>
+			<name>fetchLastLayoutRevision</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>plid</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>head</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>getChildLayoutRevisions</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -10560,28 +10663,6 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			<param>
 				<name>plid</name>
 				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>fetchLastLayoutRevision</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>plid</name>
-				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>head</name>
-				<type>boolean</type>
 				<comment><![CDATA[]]></comment>
 			</param>
 			<return>
@@ -13374,31 +13455,70 @@ This method handles the creation of the layout including its resources, metadata
 		</method>
 		<method>
 			<name>updateLayoutSetPrototypeLinkEnabled</name>
-			<comment><![CDATA[]]></comment>
+			<comment><![CDATA[Updates the state of the layout set prototype link.
+
+<p>
+This method can disable the layout set prototype's link by setting <code>layoutSetPrototypeLinkEnabled</code> to <code>false</code>. However, this method can only enable the layout set prototype's link if the layout set prototype's current uuid is not <code>null</code>. Setting the <code>layoutSetPrototypeLinkEnabled</code> to <code>true</code> when the layout set prototype's current uuid is <code>null</code> will have no effect.
+</p>]]></comment>
 			<param>
 				<name>groupId</name>
 				<type>long</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[the primary key of the group]]></comment>
 			</param>
 			<param>
 				<name>privateLayout</name>
 				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[whether the layout set is private to the group]]></comment>
 			</param>
 			<param>
 				<name>layoutSetPrototypeLinkEnabled</name>
 				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[whether the layout set prototype is link enabled]]></comment>
 			</param>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[if a portal exception occurred]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+			<deprecated><![CDATA[As of 6.1, replaced by {@link #updateLayoutSetPrototypeLinkEnabled(long, boolean, boolean, String)}]]></deprecated>
+		</method>
+		<method>
+			<name>updateLayoutSetPrototypeLinkEnabled</name>
+			<comment><![CDATA[Updates the state of the layout set prototype link.]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the group]]></comment>
+			</param>
+			<param>
+				<name>privateLayout</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the layout set is private to the group]]></comment>
+			</param>
+			<param>
+				<name>layoutSetPrototypeLinkEnabled</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the layout set prototype is link enabled]]></comment>
+			</param>
+			<param>
+				<name>layoutSetPrototypeUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the uuid of the layout set prototype to link with]]></comment>
+			</param>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[if a portal exception occurred]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
 			</throws>
 		</method>
 		<method>
@@ -13517,45 +13637,6 @@ This method handles the creation of the layout including its resources, metadata
 				<comment><![CDATA[]]></comment>
 			</param>
 			<param>
-				<name>themeId</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>colorSchemeId</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>css</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>wapTheme</name>
-				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>updateLookAndFeel</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>groupId</name>
-				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
 				<name>privateLayout</name>
 				<type>boolean</type>
 				<comment><![CDATA[]]></comment>
@@ -13583,6 +13664,45 @@ This method handles the creation of the layout including its resources, metadata
 			<return>
 				<comment><![CDATA[]]></comment>
 			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>updateLookAndFeel</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>themeId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>colorSchemeId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>css</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>wapTheme</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -14141,31 +14261,40 @@ This method handles the creation of the layout including its resources, metadata
 		<author><![CDATA[Brian Wing Shun Chan]]></author>
 		<method>
 			<name>updateLayoutSetPrototypeLinkEnabled</name>
-			<comment><![CDATA[]]></comment>
+			<comment><![CDATA[Updates the state of the layout set prototype link.
+
+<p>
+<strong>Important:</strong> Setting <code>layoutSetPrototypeLinkEnabled</code> to <code>true</code> and <code>layoutSetPrototypeUuid</code> to <code>null</code> when the layout set prototype's current uuid is <code>null</code> will result in an <code>IllegalStateException</code>.
+</p>]]></comment>
 			<param>
 				<name>groupId</name>
 				<type>long</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[the primary key of the group]]></comment>
 			</param>
 			<param>
 				<name>privateLayout</name>
 				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[whether the layout set is private to the group]]></comment>
 			</param>
 			<param>
 				<name>layoutSetPrototypeLinkEnabled</name>
 				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[whether the layout set prototype is link enabled]]></comment>
+			</param>
+			<param>
+				<name>layoutSetPrototypeUuid</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the uuid of the layout set prototype to link with]]></comment>
 			</param>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[if a portal exception occurred]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
+				<comment><![CDATA[if a system exception occurred]]></comment>
 			</throws>
 		</method>
 		<method>
@@ -14585,6 +14714,30 @@ This method handles the creation of the layout including its resources, metadata
 			</return>
 		</method>
 		<method>
+			<name>_getThemesCustom</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>themeId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>_getThemesStandard</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>themeId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+		</method>
+		<method>
 			<name>_readLayoutTemplates</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -14615,30 +14768,6 @@ This method handles the creation of the layout including its resources, metadata
 				<type>java.lang.Exception</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
-		</method>
-		<method>
-			<name>_getThemesCustom</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>themeId</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-		</method>
-		<method>
-			<name>_getThemesStandard</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>themeId</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
 		</method>
 		<field>
 			<name>_log</name>
@@ -25171,74 +25300,6 @@ This method does not support resources managed by the resource block system.
 			</throws>
 		</method>
 		<method>
-			<name>getRegions</name>
-			<comment><![CDATA[]]></comment>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>getRegions</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>countryId</name>
-				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>getRegions</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>active</name>
-				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>getRegions</name>
-			<comment><![CDATA[]]></comment>
-			<param>
-				<name>countryId</name>
-				<type>long</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>active</name>
-				<type>boolean</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
 			<name>getRegion</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -25254,6 +25315,74 @@ This method does not support resources managed by the resource block system.
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getRegions</name>
+			<comment><![CDATA[]]></comment>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getRegions</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>countryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getRegions</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>active</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getRegions</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>countryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>active</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
@@ -43810,6 +43939,30 @@ This method handles the creation and bookkeeping of the user including its resou
 			</throws>
 		</method>
 		<method>
+			<name>addUserGroupUsers</name>
+			<comment><![CDATA[Adds the users to the user group.]]></comment>
+			<param>
+				<name>userGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the user group]]></comment>
+			</param>
+			<param>
+				<name>userIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the primary keys of the users]]></comment>
+			</param>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[if a user group or user with the primary could could not be found, or if the current user did not have permission to assign group members]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>addUserWithWorkflow</name>
 			<comment><![CDATA[Adds a user with workflow and additional parameters.
 
@@ -44129,30 +44282,6 @@ This method handles the creation and bookkeeping of the user including its resou
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[if the user's information was invalid, if the creator did not have permission to add users, or if the email address was reserved]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[if a system exception occurred]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>addUserGroupUsers</name>
-			<comment><![CDATA[Adds the users to the user group.]]></comment>
-			<param>
-				<name>userGroupId</name>
-				<type>long</type>
-				<comment><![CDATA[the primary key of the user group]]></comment>
-			</param>
-			<param>
-				<name>userIds</name>
-				<type>long[]</type>
-				<comment><![CDATA[the primary keys of the users]]></comment>
-			</param>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[if a user group or user with the primary could could not be found, or if the current user did not have permission to assign group members]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>
@@ -44522,138 +44651,6 @@ This method handles the creation and bookkeeping of the user including its resou
 			</throws>
 		</method>
 		<method>
-			<name>updateIncompleteUser</name>
-			<comment><![CDATA[Updates a user account that was automatically created when a guest user participated in an action (e.g. posting a comment) and only provided his name and email address.]]></comment>
-			<param>
-				<name>companyId</name>
-				<type>long</type>
-				<comment><![CDATA[the primary key of the user's company]]></comment>
-			</param>
-			<param>
-				<name>autoPassword</name>
-				<type>boolean</type>
-				<comment><![CDATA[whether a password should be automatically generated for the user]]></comment>
-			</param>
-			<param>
-				<name>password1</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's password]]></comment>
-			</param>
-			<param>
-				<name>password2</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's password confirmation]]></comment>
-			</param>
-			<param>
-				<name>autoScreenName</name>
-				<type>boolean</type>
-				<comment><![CDATA[whether a screen name should be automatically generated for the user]]></comment>
-			</param>
-			<param>
-				<name>screenName</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's screen name]]></comment>
-			</param>
-			<param>
-				<name>emailAddress</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's email address]]></comment>
-			</param>
-			<param>
-				<name>facebookId</name>
-				<type>long</type>
-				<comment><![CDATA[the user's facebook ID]]></comment>
-			</param>
-			<param>
-				<name>openId</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's OpenID]]></comment>
-			</param>
-			<param>
-				<name>locale</name>
-				<type>java.util.Locale</type>
-				<comment><![CDATA[the user's locale]]></comment>
-			</param>
-			<param>
-				<name>firstName</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's first name]]></comment>
-			</param>
-			<param>
-				<name>middleName</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's middle name]]></comment>
-			</param>
-			<param>
-				<name>lastName</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's last name]]></comment>
-			</param>
-			<param>
-				<name>prefixId</name>
-				<type>int</type>
-				<comment><![CDATA[the user's name prefix ID]]></comment>
-			</param>
-			<param>
-				<name>suffixId</name>
-				<type>int</type>
-				<comment><![CDATA[the user's name suffix ID]]></comment>
-			</param>
-			<param>
-				<name>male</name>
-				<type>boolean</type>
-				<comment><![CDATA[whether the user is male]]></comment>
-			</param>
-			<param>
-				<name>birthdayMonth</name>
-				<type>int</type>
-				<comment><![CDATA[the user's birthday month (0-based, meaning 0 for January)]]></comment>
-			</param>
-			<param>
-				<name>birthdayDay</name>
-				<type>int</type>
-				<comment><![CDATA[the user's birthday day]]></comment>
-			</param>
-			<param>
-				<name>birthdayYear</name>
-				<type>int</type>
-				<comment><![CDATA[the user's birthday year]]></comment>
-			</param>
-			<param>
-				<name>jobTitle</name>
-				<type>java.lang.String</type>
-				<comment><![CDATA[the user's job title]]></comment>
-			</param>
-			<param>
-				<name>updateUserInformation</name>
-				<type>boolean</type>
-				<comment><![CDATA[whether to update the user's information]]></comment>
-			</param>
-			<param>
-				<name>sendEmail</name>
-				<type>boolean</type>
-				<comment><![CDATA[whether to send the user an email notification about their new account]]></comment>
-			</param>
-			<param>
-				<name>serviceContext</name>
-				<type>com.liferay.portal.service.ServiceContext</type>
-				<comment><![CDATA[the user's service context (optionally <code>null</code>). Can set the expando bridge attributes for the user.]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[the user]]></comment>
-			</return>
-			<throws>
-				<name>PortalException</name>
-				<type>com.liferay.portal.kernel.exception.PortalException</type>
-				<comment><![CDATA[if the user's information was invalid or if the email address was reserved]]></comment>
-			</throws>
-			<throws>
-				<name>SystemException</name>
-				<type>com.liferay.portal.kernel.exception.SystemException</type>
-				<comment><![CDATA[if a system exception occurred]]></comment>
-			</throws>
-		</method>
-		<method>
 			<name>setRoleUsers</name>
 			<comment><![CDATA[Sets the users in the role, removing and adding users to the role as necessary.]]></comment>
 			<param>
@@ -44912,6 +44909,138 @@ This method handles the creation and bookkeeping of the user including its resou
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[if a user with the primary key could not be found or if the current user did not have permission to update the user]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>updateIncompleteUser</name>
+			<comment><![CDATA[Updates a user account that was automatically created when a guest user participated in an action (e.g. posting a comment) and only provided his name and email address.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the user's company]]></comment>
+			</param>
+			<param>
+				<name>autoPassword</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether a password should be automatically generated for the user]]></comment>
+			</param>
+			<param>
+				<name>password1</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's password]]></comment>
+			</param>
+			<param>
+				<name>password2</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's password confirmation]]></comment>
+			</param>
+			<param>
+				<name>autoScreenName</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether a screen name should be automatically generated for the user]]></comment>
+			</param>
+			<param>
+				<name>screenName</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's screen name]]></comment>
+			</param>
+			<param>
+				<name>emailAddress</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's email address]]></comment>
+			</param>
+			<param>
+				<name>facebookId</name>
+				<type>long</type>
+				<comment><![CDATA[the user's facebook ID]]></comment>
+			</param>
+			<param>
+				<name>openId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's OpenID]]></comment>
+			</param>
+			<param>
+				<name>locale</name>
+				<type>java.util.Locale</type>
+				<comment><![CDATA[the user's locale]]></comment>
+			</param>
+			<param>
+				<name>firstName</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's first name]]></comment>
+			</param>
+			<param>
+				<name>middleName</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's middle name]]></comment>
+			</param>
+			<param>
+				<name>lastName</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's last name]]></comment>
+			</param>
+			<param>
+				<name>prefixId</name>
+				<type>int</type>
+				<comment><![CDATA[the user's name prefix ID]]></comment>
+			</param>
+			<param>
+				<name>suffixId</name>
+				<type>int</type>
+				<comment><![CDATA[the user's name suffix ID]]></comment>
+			</param>
+			<param>
+				<name>male</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the user is male]]></comment>
+			</param>
+			<param>
+				<name>birthdayMonth</name>
+				<type>int</type>
+				<comment><![CDATA[the user's birthday month (0-based, meaning 0 for January)]]></comment>
+			</param>
+			<param>
+				<name>birthdayDay</name>
+				<type>int</type>
+				<comment><![CDATA[the user's birthday day]]></comment>
+			</param>
+			<param>
+				<name>birthdayYear</name>
+				<type>int</type>
+				<comment><![CDATA[the user's birthday year]]></comment>
+			</param>
+			<param>
+				<name>jobTitle</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the user's job title]]></comment>
+			</param>
+			<param>
+				<name>updateUserInformation</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether to update the user's information]]></comment>
+			</param>
+			<param>
+				<name>sendEmail</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether to send the user an email notification about their new account]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
+				<comment><![CDATA[the user's service context (optionally <code>null</code>). Can set the expando bridge attributes for the user.]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the user]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[if the user's information was invalid or if the email address was reserved]]></comment>
 			</throws>
 			<throws>
 				<name>SystemException</name>
@@ -73376,6 +73505,85 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 			</throws>
 		</method>
 		<method>
+			<name>search</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>groupIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>includeBasicFileEntryType</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>orderByComparator</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>groupIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>includeBasicFileEntryType</name>
+				<type>boolean</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>updateFileEntryType</name>
 			<comment><![CDATA[]]></comment>
 			<param>
@@ -76781,6 +76989,11 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 			<return>
 				<comment><![CDATA[]]></comment>
 			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>

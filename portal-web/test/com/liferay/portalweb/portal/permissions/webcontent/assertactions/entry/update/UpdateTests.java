@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.update;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class UpdateTests extends BaseTests {
-
+public class UpdateTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddWCEntryTest.class);
 		testSuite.addTestSuite(AddMemberTest.class);
 		testSuite.addTestSuite(AddMemberRoleTest.class);
@@ -50,5 +48,4 @@ public class UpdateTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -17,80 +17,31 @@
 <c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.VIEW) %>">
 
 	<%
-	String fileUrl = themeDisplay.getPortalURL() + themeDisplay.getPathContext() + "/documents/" + themeDisplay.getScopeGroupId() + StringPool.SLASH + folderId + StringPool.SLASH + HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()), true);
-	String webDavUrl = StringPool.BLANK;
-
-	if (portletDisplay.isWebDAVEnabled()) {
-		StringBuilder sb = new StringBuilder();
-
-		if (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-			Folder curFolder = DLAppLocalServiceUtil.getFolder(folderId);
-
-			while (true) {
-				sb.insert(0, HttpUtil.encodeURL(curFolder.getName(), true));
-				sb.insert(0, StringPool.SLASH);
-
-				if (curFolder.getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-					break;
-				}
-				else {
-					curFolder = DLAppLocalServiceUtil.getFolder(curFolder.getParentFolderId());
-				}
-			}
-		}
-
-		sb.append(StringPool.SLASH);
-		sb.append(HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()), true));
-
-		Group group = themeDisplay.getScopeGroup();
-
-		webDavUrl = themeDisplay.getPortalURL() + "/api/secure/webdav" + group.getFriendlyURL() + "/document_library" + sb.toString();
-	}
-
-	String officeDoc = null;
-
-	String curExtension = fileEntry.getExtension();
-
 	if (portletDisplay.isWebDAVEnabled() && BrowserSnifferUtil.isIe(request)) {
+		String webDavUrl = DLUtil.getWebDavURL(themeDisplay, fileEntry.getFolder(), fileEntry);
+
+		String curExtension = fileEntry.getExtension();
+
 		if (curExtension.equalsIgnoreCase("doc") ||
+			curExtension.equalsIgnoreCase("docx") ||
 			curExtension.equalsIgnoreCase("dot") ||
 			curExtension.equalsIgnoreCase("ppt") ||
-			curExtension.equalsIgnoreCase("xls")) {
+			curExtension.equalsIgnoreCase("pptx") ||
+			curExtension.equalsIgnoreCase("xls") ||
+			curExtension.equalsIgnoreCase("xlsx")) {
 
-			officeDoc = "SharePoint.OpenDocuments.1";
-		}
-		else if (curExtension.equalsIgnoreCase("docx") ||
-				 curExtension.equalsIgnoreCase("pptx") ||
-				 curExtension.equalsIgnoreCase("xlsx")) {
-
-			officeDoc = "SharePoint.OpenDocuments.2";
-		}
-	}
-
-	if (officeDoc != null) {
-		String taglibOpenInMSOffice = "javascript:" + liferayPortletResponse.getNamespace() + "openDocument('" + fileUrl + "','" + webDavUrl + "','" + officeDoc + "');";
+			String taglibOnClick = "Liferay.fire('" + liferayPortletResponse.getNamespace() + "openDocument', {webDavUrl: '" + webDavUrl + "'});";
 	%>
 
-		<liferay-ui:icon
-			image="../document_library/msoffice"
-			message="open-in-ms-office"
-			url="<%= taglibOpenInMSOffice %>"
-		/>
+			<liferay-ui:icon
+				image="../document_library/msoffice"
+				message="open-in-ms-office"
+				onClick="<%= taglibOnClick %>"
+				url="javascript:;"
+			/>
 
 	<%
+		}
 	}
 	%>
-
-	<aui:script>
-		function <portlet:namespace />openDocument(fileUrl, webDavUrl, officeDoc) {
-			var officeDoc = new ActiveXObject("<%= officeDoc %>");
-
-			if (officeDoc) {
-				officeDoc.EditDocument(webDavUrl);
-			}
-			else {
-				window.location.href = fileUrl;
-			}
-		}
-	</aui:script>
 </c:if>

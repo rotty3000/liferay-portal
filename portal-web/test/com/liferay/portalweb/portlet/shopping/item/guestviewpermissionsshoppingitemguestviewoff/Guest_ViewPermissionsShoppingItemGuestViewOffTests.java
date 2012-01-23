@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.shopping.item.guestviewpermissionsshoppingitemguestviewoff;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,11 +23,9 @@ import junit.framework.TestSuite;
  * @author Brian Wing Shun Chan
  */
 public class Guest_ViewPermissionsShoppingItemGuestViewOffTests
-	extends BaseTests {
-
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageShoppingTest.class);
 		testSuite.addTestSuite(AddPortletShoppingTest.class);
 		testSuite.addTestSuite(AddShoppingItemTest.class);
@@ -36,13 +34,11 @@ public class Guest_ViewPermissionsShoppingItemGuestViewOffTests
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(PermissionsShoppingItemGuestViewOffTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
-		testSuite.addTestSuite(
-			Guest_ViewPermissionsShoppingItemGuestViewOffTest.class);
+		testSuite.addTestSuite(Guest_ViewPermissionsShoppingItemGuestViewOffTest.class);
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(TearDownShoppingItemTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

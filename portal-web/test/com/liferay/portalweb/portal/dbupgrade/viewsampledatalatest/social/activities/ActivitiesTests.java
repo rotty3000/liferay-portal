@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.social.activities;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ActivitiesTests extends BaseTests {
-
+public class ActivitiesTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ViewActivityBlogsEntryTest.class);
 		testSuite.addTestSuite(ViewActivityMBCategoryThreadMessageTest.class);
 
 		return testSuite;
 	}
-
 }

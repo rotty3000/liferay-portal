@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.notifications.requests.requestccaddascoworker;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RequestCCAddAsCoworkerTests extends BaseTests {
-
+public class RequestCCAddAsCoworkerTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_NewPasswordTest.class);
@@ -39,21 +37,18 @@ public class RequestCCAddAsCoworkerTests extends BaseTests {
 		testSuite.addTestSuite(IgnoreNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewIgnoreNotificationsAddAsCoworkerCCTest.class);
+		testSuite.addTestSuite(SOCo_ViewIgnoreNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SOCo_AddAsCoworkerCCActionsTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ConfirmNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewConfirmNotificationsAddAsCoworkerCCTest.class);
+		testSuite.addTestSuite(SOCo_ViewConfirmNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownSOUserTest.class);
 
 		return testSuite;
 	}
-
 }

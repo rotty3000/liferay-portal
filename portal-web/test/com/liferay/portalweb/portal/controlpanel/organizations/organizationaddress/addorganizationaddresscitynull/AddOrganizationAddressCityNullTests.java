@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.organizations.organizationaddress.addorganizationaddresscitynull;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddOrganizationAddressCityNullTests extends BaseTests {
-
+public class AddOrganizationAddressCityNullTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddOrganizationTest.class);
 		testSuite.addTestSuite(AddOrganizationAddressCityNullTest.class);
 		testSuite.addTestSuite(TearDownTest.class);
 
 		return testSuite;
 	}
-
 }

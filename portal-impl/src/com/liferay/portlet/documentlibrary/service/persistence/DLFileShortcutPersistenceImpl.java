@@ -735,6 +735,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if (!Validator.equals(uuid, dlFileShortcut.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1103,6 +1113,15 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 					finderArgs, this);
 		}
 
+		if (result instanceof DLFileShortcut) {
+			DLFileShortcut dlFileShortcut = (DLFileShortcut)result;
+
+			if (!Validator.equals(uuid, dlFileShortcut.getUuid()) ||
+					(groupId != dlFileShortcut.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1253,6 +1272,16 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((toFileEntryId != dlFileShortcut.getToFileEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1601,6 +1630,17 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((groupId != dlFileShortcut.getGroupId()) ||
+						(folderId != dlFileShortcut.getFolderId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2276,6 +2316,18 @@ public class DLFileShortcutPersistenceImpl extends BasePersistenceImpl<DLFileSho
 
 		List<DLFileShortcut> list = (List<DLFileShortcut>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileShortcut dlFileShortcut : list) {
+				if ((groupId != dlFileShortcut.getGroupId()) ||
+						(folderId != dlFileShortcut.getFolderId()) ||
+						(status != dlFileShortcut.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

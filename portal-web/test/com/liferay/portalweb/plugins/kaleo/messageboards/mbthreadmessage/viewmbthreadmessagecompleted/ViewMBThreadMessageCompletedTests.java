@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.messageboards.mbthreadmessage.viewmbthreadmessagecompleted;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,13 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewMBThreadMessageCompletedTests extends BaseTests {
-
+public class ViewMBThreadMessageCompletedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			ConfigureMBThreadMessageSingleApproverTest.class);
+		testSuite.addTestSuite(ConfigureMBThreadMessageSingleApproverTest.class);
 		testSuite.addTestSuite(AddPageMBTest.class);
 		testSuite.addTestSuite(AddPortletMBTest.class);
 		testSuite.addTestSuite(PostNewMBThreadMessageTest.class);
@@ -44,5 +41,4 @@ public class ViewMBThreadMessageCompletedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

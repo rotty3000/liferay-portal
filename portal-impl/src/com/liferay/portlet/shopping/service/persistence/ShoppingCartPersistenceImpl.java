@@ -611,6 +611,16 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 		List<ShoppingCart> list = (List<ShoppingCart>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingCart shoppingCart : list) {
+				if ((groupId != shoppingCart.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -947,6 +957,16 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 
 		List<ShoppingCart> list = (List<ShoppingCart>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingCart shoppingCart : list) {
+				if ((userId != shoppingCart.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1290,6 +1310,15 @@ public class ShoppingCartPersistenceImpl extends BasePersistenceImpl<ShoppingCar
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_U,
 					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingCart) {
+			ShoppingCart shoppingCart = (ShoppingCart)result;
+
+			if ((groupId != shoppingCart.getGroupId()) ||
+					(userId != shoppingCart.getUserId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

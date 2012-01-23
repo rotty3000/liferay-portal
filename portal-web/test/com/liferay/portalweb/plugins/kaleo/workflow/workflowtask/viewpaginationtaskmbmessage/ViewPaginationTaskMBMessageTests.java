@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.workflow.workflowtask.viewpaginationtaskmbmessage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPaginationTaskMBMessageTests extends BaseTests {
-
+public class ViewPaginationTaskMBMessageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureMBMessageSingleApproverTest.class);
 		testSuite.addTestSuite(AddMBCategoryTest.class);
 		testSuite.addTestSuite(AddMBMessage1Test.class);
@@ -50,16 +48,12 @@ public class ViewPaginationTaskMBMessageTests extends BaseTests {
 		testSuite.addTestSuite(AddMBMessage19Test.class);
 		testSuite.addTestSuite(AddMBMessage20Test.class);
 		testSuite.addTestSuite(AddMBMessage21Test.class);
-		testSuite.addTestSuite(
-			ViewPaginationTaskMBMessage20ItemsPerPageTest.class);
-		testSuite.addTestSuite(
-			ViewPaginationTaskMBMessage10ItemsPerPageTest.class);
-		testSuite.addTestSuite(
-			ViewPaginationTaskMBMessage5ItemsPerPageTest.class);
+		testSuite.addTestSuite(ViewPaginationTaskMBMessage20ItemsPerPageTest.class);
+		testSuite.addTestSuite(ViewPaginationTaskMBMessage10ItemsPerPageTest.class);
+		testSuite.addTestSuite(ViewPaginationTaskMBMessage5ItemsPerPageTest.class);
 		testSuite.addTestSuite(TearDownMBCategoryTest.class);
 		testSuite.addTestSuite(TearDownWorkflowConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

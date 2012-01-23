@@ -535,6 +535,15 @@ public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStat
 					finderArgs, this);
 		}
 
+		if (result instanceof RatingsStats) {
+			RatingsStats ratingsStats = (RatingsStats)result;
+
+			if ((classNameId != ratingsStats.getClassNameId()) ||
+					(classPK != ratingsStats.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 

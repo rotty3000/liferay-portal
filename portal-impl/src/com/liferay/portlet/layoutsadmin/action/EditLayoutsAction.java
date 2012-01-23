@@ -205,6 +205,9 @@ public class EditLayoutsAction extends PortletAction {
 					layoutTypePortlet.resetUserPreferences();
 				}
 			}
+			else if (cmd.equals("reset_prototype")) {
+				SitesUtil.resetPrototype(themeDisplay.getLayout());
+			}
 			else if (cmd.equals("schedule_copy_from_live")) {
 				StagingUtil.scheduleCopyFromLive(actionRequest);
 			}
@@ -483,12 +486,6 @@ public class EditLayoutsAction extends PortletAction {
 			UserPermissionUtil.check(
 				permissionChecker, groupUserId, organizationIds,
 				ActionKeys.UPDATE);
-
-			if (!PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_MODIFIABLE &&
-				!PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_MODIFIABLE) {
-
-				hasPermission = false;
-			}
 		}
 
 		if (!hasPermission) {

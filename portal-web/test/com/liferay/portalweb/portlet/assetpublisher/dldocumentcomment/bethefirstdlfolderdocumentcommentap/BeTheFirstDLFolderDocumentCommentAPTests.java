@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.dldocumentcomment.bethefirstdlfolderdocumentcommentap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,19 +22,16 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class BeTheFirstDLFolderDocumentCommentAPTests extends BaseTests {
-
+public class BeTheFirstDLFolderDocumentCommentAPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(AddPageDLTest.class);
 		testSuite.addTestSuite(AddPortletDLTest.class);
 		testSuite.addTestSuite(AddDLFolderTest.class);
 		testSuite.addTestSuite(AddNewDLFolderDocumentAPActionsTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortletDisplayStyleFullContentTest.class);
+		testSuite.addTestSuite(ConfigurePortletDisplayStyleFullContentTest.class);
 		testSuite.addTestSuite(ConfigurePortletEnableCommentsTest.class);
 		testSuite.addTestSuite(BeTheFirstDLFolderDocumentCommentAPTest.class);
 		testSuite.addTestSuite(TearDownDLDocumentTest.class);
@@ -42,5 +39,4 @@ public class BeTheFirstDLFolderDocumentCommentAPTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

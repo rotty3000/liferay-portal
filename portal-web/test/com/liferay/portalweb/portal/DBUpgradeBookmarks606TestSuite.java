@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.sampledata606.bookmarks.BookmarksTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata606.bookmarks.BookmarksTestPlan;
 import com.liferay.portalweb.portal.dbupgrade.sampledata606.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeBookmarks606TestSuite extends BaseTests {
+public class DBUpgradeBookmarks606TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(BookmarksTests.suite());
+		testSuite.addTest(BookmarksTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

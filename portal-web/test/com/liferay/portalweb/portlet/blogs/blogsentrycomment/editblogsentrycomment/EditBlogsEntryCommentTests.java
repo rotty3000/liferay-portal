@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.blogs.blogsentrycomment.editblogsentrycomment;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditBlogsEntryCommentTests extends BaseTests {
-
+public class EditBlogsEntryCommentTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageBlogsTest.class);
 		testSuite.addTestSuite(AddPortletBlogsTest.class);
 		testSuite.addTestSuite(AddBlogsEntryTest.class);
@@ -37,5 +35,4 @@ public class EditBlogsEntryCommentTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

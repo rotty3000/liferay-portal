@@ -1282,6 +1282,10 @@ public class OrganizationLocalServiceImpl
 		throws SystemException {
 
 		try {
+			SearchContext searchContext = new SearchContext();
+
+			searchContext.setAndSearch(andSearch);
+
 			Map<String, Serializable> attributes =
 				new HashMap<String, Serializable>();
 
@@ -1303,10 +1307,8 @@ public class OrganizationLocalServiceImpl
 			attributes.put("type", type);
 			attributes.put("zip", zip);
 
-			SearchContext searchContext = new SearchContext();
-
-			searchContext.setAndSearch(andSearch);
 			searchContext.setAttributes(attributes);
+
 			searchContext.setCompanyId(companyId);
 			searchContext.setEnd(end);
 
@@ -1316,8 +1318,6 @@ public class OrganizationLocalServiceImpl
 				searchContext.setKeywords(keywords);
 			}
 
-			searchContext.setSorts(new Sort[] {sort});
-
 			QueryConfig queryConfig = new QueryConfig();
 
 			queryConfig.setHighlightEnabled(false);
@@ -1325,6 +1325,7 @@ public class OrganizationLocalServiceImpl
 
 			searchContext.setQueryConfig(queryConfig);
 
+			searchContext.setSorts(new Sort[] {sort});
 			searchContext.setStart(start);
 
 			Indexer indexer = IndexerRegistryUtil.getIndexer(

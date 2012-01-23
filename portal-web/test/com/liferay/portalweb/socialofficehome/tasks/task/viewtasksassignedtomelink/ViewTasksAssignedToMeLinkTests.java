@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.viewtasksassignedtomelink;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewTasksAssignedToMeLinkTests extends BaseTests {
-
+public class ViewTasksAssignedToMeLinkTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTasksTaskAssignedToMeTest.class);
 		testSuite.addTestSuite(ViewTasksAssignedToMeLinkTest.class);
 		testSuite.addTestSuite(TearDownTasksTaskTest.class);
 
 		return testSuite;
 	}
-
 }

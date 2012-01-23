@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.kaleo.pagecomments.PageCommentsTests;
+import com.liferay.portalweb.plugins.kaleo.pagecomments.PageCommentsTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoPageCommentsTestSuite extends BaseTests {
+public class KaleoPageCommentsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(PageCommentsTests.suite());
+		testSuite.addTest(PageCommentsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

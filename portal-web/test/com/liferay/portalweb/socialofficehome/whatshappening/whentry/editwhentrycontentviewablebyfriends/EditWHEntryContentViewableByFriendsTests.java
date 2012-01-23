@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.whatshappening.whentry.editwhentrycontentviewablebyfriends;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditWHEntryContentViewableByFriendsTests extends BaseTests {
-
+public class EditWHEntryContentViewableByFriendsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
 		testSuite.addTestSuite(AddWHEntryContentViewableByFriendsTest.class);
@@ -44,16 +42,13 @@ public class EditWHEntryContentViewableByFriendsTests extends BaseTests {
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ConfirmCCFriendRequestTest.class);
 		testSuite.addTestSuite(EditWHEntryContentViewableByFriendsTest.class);
-		testSuite.addTestSuite(
-			ViewEditWHEntryContentViewableByFriendsTest.class);
+		testSuite.addTestSuite(ViewEditWHEntryContentViewableByFriendsTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFr_ViewEditWHContentViewableByFriendsTest.class);
+		testSuite.addTestSuite(SOFr_ViewEditWHContentViewableByFriendsTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFo_ViewEditWHContentViewableByFriendsTest.class);
+		testSuite.addTestSuite(SOFo_ViewEditWHContentViewableByFriendsTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -61,5 +56,4 @@ public class EditWHEntryContentViewableByFriendsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

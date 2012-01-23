@@ -1017,6 +1017,16 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1362,6 +1372,16 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((plid != layoutRevision.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1716,6 +1736,17 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(head != layoutRevision.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2090,6 +2121,17 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(plid != layoutRevision.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2462,6 +2504,17 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(status != layoutRevision.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2827,6 +2880,17 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((head != layoutRevision.getHead()) ||
+						(plid != layoutRevision.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3198,6 +3262,17 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((plid != layoutRevision.getPlid()) ||
+						(status != layoutRevision.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3575,6 +3650,18 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(layoutBranchId != layoutRevision.getLayoutBranchId()) ||
+						(plid != layoutRevision.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3975,6 +4062,18 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(parentLayoutRevisionId != layoutRevision.getParentLayoutRevisionId()) ||
+						(plid != layoutRevision.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4377,6 +4476,16 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 					finderArgs, this);
 		}
 
+		if (result instanceof LayoutRevision) {
+			LayoutRevision layoutRevision = (LayoutRevision)result;
+
+			if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+					(head != layoutRevision.getHead()) ||
+					(plid != layoutRevision.getPlid())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -4527,6 +4636,18 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 
 		List<LayoutRevision> list = (List<LayoutRevision>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutRevision layoutRevision : list) {
+				if ((layoutSetBranchId != layoutRevision.getLayoutSetBranchId()) ||
+						(plid != layoutRevision.getPlid()) ||
+						(status != layoutRevision.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.filtertasksfilterbyplace;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class FilterTasksFilterByPlaceTests extends BaseTests {
-
+public class FilterTasksFilterByPlaceTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTasksTest.class);
 		testSuite.addTestSuite(AddPortletTasksTest.class);
 		testSuite.addTestSuite(AddTasksTaskAssignedToMeTagPortalTest.class);
@@ -36,5 +34,4 @@ public class FilterTasksFilterByPlaceTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

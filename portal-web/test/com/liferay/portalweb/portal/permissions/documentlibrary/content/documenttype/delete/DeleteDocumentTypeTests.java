@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.documentlibrary.content.documenttype.delete;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteDocumentTypeTests extends BaseTests {
-
+public class DeleteDocumentTypeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddMemberTest.class);
 		testSuite.addTestSuite(AddMemberRoleTest.class);
 		testSuite.addTestSuite(DefineMemberRoleTest.class);
@@ -51,5 +49,4 @@ public class DeleteDocumentTypeTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

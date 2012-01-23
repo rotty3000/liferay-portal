@@ -538,6 +538,15 @@ public class PortalPreferencesPersistenceImpl extends BasePersistenceImpl<Portal
 					finderArgs, this);
 		}
 
+		if (result instanceof PortalPreferences) {
+			PortalPreferences portalPreferences = (PortalPreferences)result;
+
+			if ((ownerId != portalPreferences.getOwnerId()) ||
+					(ownerType != portalPreferences.getOwnerType())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 

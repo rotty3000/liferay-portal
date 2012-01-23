@@ -17,7 +17,7 @@ package com.liferay.portalweb.portal;
 import com.liferay.portalweb.portal.login.LoginTests;
 import com.liferay.portalweb.portal.tags.blogs.BlogsTests;
 import com.liferay.portalweb.portal.tags.tagsadmin.TagsAdminTests;
-import com.liferay.portalweb.portal.tags.wiki.WikiTests;
+import com.liferay.portalweb.portal.tags.wiki.WikiTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class TagsTestSuite extends BaseTests {
+public class TagsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
@@ -33,7 +33,7 @@ public class TagsTestSuite extends BaseTests {
 		testSuite.addTest(LoginTests.suite());
 		testSuite.addTest(BlogsTests.suite());
 		testSuite.addTest(TagsAdminTests.suite());
-		testSuite.addTest(WikiTests.suite());
+		testSuite.addTest(WikiTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

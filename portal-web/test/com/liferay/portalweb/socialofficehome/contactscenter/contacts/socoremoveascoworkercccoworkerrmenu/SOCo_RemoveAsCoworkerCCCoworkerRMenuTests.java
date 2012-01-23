@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.contactscenter.contacts.socoremoveascoworkercccoworkerrmenu;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SOCo_RemoveAsCoworkerCCCoworkerRMenuTests extends BaseTests {
-
+public class SOCo_RemoveAsCoworkerCCCoworkerRMenuTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_NewPasswordTest.class);
@@ -40,13 +38,11 @@ public class SOCo_RemoveAsCoworkerCCCoworkerRMenuTests extends BaseTests {
 		testSuite.addTestSuite(SOCo_SignInTest.class);
 		testSuite.addTestSuite(SOCo_ViewConfirmCCCoworkerRequestTest.class);
 		testSuite.addTestSuite(SOCo_RemoveAsCoworkerCCCoworkerRMenuTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewRemoveAsCoworkerCCCoworkerRMenuTest.class);
+		testSuite.addTestSuite(SOCo_ViewRemoveAsCoworkerCCCoworkerRMenuTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownSOUserTest.class);
 
 		return testSuite;
 	}
-
 }

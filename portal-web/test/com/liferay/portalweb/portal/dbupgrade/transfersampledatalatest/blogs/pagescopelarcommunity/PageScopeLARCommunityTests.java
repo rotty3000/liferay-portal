@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.transfersampledatalatest.blogs.pagescopelarcommunity;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PageScopeLARCommunityTests extends BaseTests {
-
+public class PageScopeLARCommunityTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCustomSiteBlogsPageScopeTest.class);
-		testSuite.addTestSuite(
-			ImportExportCommunityLARBlogsPageScopeTest.class);
+		testSuite.addTestSuite(ImportExportCommunityLARBlogsPageScopeTest.class);
 
 		return testSuite;
 	}
-
 }

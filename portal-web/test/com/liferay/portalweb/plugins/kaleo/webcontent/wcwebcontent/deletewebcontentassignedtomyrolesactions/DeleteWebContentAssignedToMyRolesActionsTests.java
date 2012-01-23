@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontent.wcwebcontent.deletewebcontentassignedtomyrolesactions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,20 +22,16 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteWebContentAssignedToMyRolesActionsTests extends BaseTests {
-
+public class DeleteWebContentAssignedToMyRolesActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddWebContentTest.class);
-		testSuite.addTestSuite(
-			DeleteWebContentAssignedToMyRolesActionsTest.class);
+		testSuite.addTestSuite(DeleteWebContentAssignedToMyRolesActionsTest.class);
 		testSuite.addTestSuite(ViewWebContentDeletedTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
 		testSuite.addTestSuite(TearDownWorkflowConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

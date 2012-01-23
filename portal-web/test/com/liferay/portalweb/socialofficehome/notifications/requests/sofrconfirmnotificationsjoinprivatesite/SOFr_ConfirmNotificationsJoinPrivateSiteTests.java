@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.notifications.requests.sofrconfirmnotificationsjoinprivatesite;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SOFr_ConfirmNotificationsJoinPrivateSiteTests extends BaseTests {
-
+public class SOFr_ConfirmNotificationsJoinPrivateSiteTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(AddSitesSiteTypePrivateTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -40,8 +38,7 @@ public class SOFr_ConfirmNotificationsJoinPrivateSiteTests extends BaseTests {
 		testSuite.addTestSuite(SendMembersInvitationPrivateSiteTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFr_ConfirmNotificationsJoinPrivateSiteTest.class);
+		testSuite.addTestSuite(SOFr_ConfirmNotificationsJoinPrivateSiteTest.class);
 		testSuite.addTestSuite(SOFr_ViewSitesSiteTypePrivateTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
@@ -50,5 +47,4 @@ public class SOFr_ConfirmNotificationsJoinPrivateSiteTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

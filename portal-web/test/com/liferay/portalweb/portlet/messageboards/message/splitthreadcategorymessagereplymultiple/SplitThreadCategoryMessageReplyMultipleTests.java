@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.messageboards.message.splitthreadcategorymessagereplymultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SplitThreadCategoryMessageReplyMultipleTests extends BaseTests {
-
+public class SplitThreadCategoryMessageReplyMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageMBTest.class);
 		testSuite.addTestSuite(AddPortletMBTest.class);
 		testSuite.addTestSuite(AddCategoryTest.class);
@@ -34,12 +32,10 @@ public class SplitThreadCategoryMessageReplyMultipleTests extends BaseTests {
 		testSuite.addTestSuite(AddCategoryMessageReply1Test.class);
 		testSuite.addTestSuite(AddCategoryMessageReply2Test.class);
 		testSuite.addTestSuite(AddCategoryMessageReply2ReplyTest.class);
-		testSuite.addTestSuite(
-			SplitThreadCategoryMessageReplyMultipleTest.class);
+		testSuite.addTestSuite(SplitThreadCategoryMessageReplyMultipleTest.class);
 		testSuite.addTestSuite(TearDownMBCategoryTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

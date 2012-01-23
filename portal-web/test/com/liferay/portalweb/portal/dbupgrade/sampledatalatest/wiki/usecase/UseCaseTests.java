@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledatalatest.wiki.usecase;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class UseCaseTests extends BaseTests {
-
+public class UseCaseTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCustomSiteWikiUseCaseTest.class);
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
@@ -53,10 +51,8 @@ public class UseCaseTests extends BaseTests {
 		testSuite.addTestSuite(ViewRateWikiFrontPageChildPageTest.class);
 		testSuite.addTestSuite(ViewWikiFrontPageChildPageComment1Test.class);
 		testSuite.addTestSuite(ViewWikiFrontPageChildPageComment2Test.class);
-		testSuite.addTestSuite(
-			ViewRateWikiFrontPageChildPageComment1Test.class);
+		testSuite.addTestSuite(ViewRateWikiFrontPageChildPageComment1Test.class);
 
 		return testSuite;
 	}
-
 }

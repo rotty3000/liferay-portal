@@ -16,11 +16,11 @@ package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
 import com.liferay.portalweb.portal.permissions.announcements.AnnouncementsTests;
-import com.liferay.portalweb.portal.permissions.blogs.BlogsTests;
+import com.liferay.portalweb.portal.permissions.blogs.BlogsTestPlan;
 import com.liferay.portalweb.portal.permissions.controlpanel.ControlPanelTests;
-import com.liferay.portalweb.portal.permissions.imagegallery.ImageGalleryTests;
+import com.liferay.portalweb.portal.permissions.imagegallery.ImageGalleryTestPlan;
 import com.liferay.portalweb.portal.permissions.messageboards.MessageBoardsTests;
-import com.liferay.portalweb.portal.permissions.webcontent.WebContentTests;
+import com.liferay.portalweb.portal.permissions.webcontent.WebContentTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -28,7 +28,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PermissionsTestSuite extends BaseTests {
+public class PermissionsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
@@ -36,11 +36,11 @@ public class PermissionsTestSuite extends BaseTests {
 		testSuite.addTest(LoginTests.suite());
 		testSuite.addTest(ControlPanelTests.suite());
 		testSuite.addTest(AnnouncementsTests.suite());
-		testSuite.addTest(BlogsTests.suite());
+		testSuite.addTest(BlogsTestPlan.suite());
 		//testSuite.addTest(DocumentLibraryTests.suite());
-		testSuite.addTest(ImageGalleryTests.suite());
+		testSuite.addTest(ImageGalleryTestPlan.suite());
 		testSuite.addTest(MessageBoardsTests.suite());
-		testSuite.addTest(WebContentTests.suite());
+		testSuite.addTest(WebContentTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.dynamicdatalists.list.deletelist;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteListTests extends BaseTests {
-
+public class DeleteListTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddDataDefinitionTest.class);
 		testSuite.addTestSuite(AddListTest.class);
 		testSuite.addTestSuite(DeleteListTest.class);
@@ -35,5 +33,4 @@ public class DeleteListTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

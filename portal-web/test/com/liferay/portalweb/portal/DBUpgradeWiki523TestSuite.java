@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.dbupgrade.sampledata523.login.LoginTests;
-import com.liferay.portalweb.portal.dbupgrade.sampledata523.wiki.WikiTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata523.wiki.WikiTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeWiki523TestSuite extends BaseTests {
+public class DBUpgradeWiki523TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WikiTests.suite());
+		testSuite.addTest(WikiTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

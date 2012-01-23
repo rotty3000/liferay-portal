@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.myworkflowtasks.workflowtask.approvewebcontentversion2actions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ApproveWebContentVersion2ActionsTests extends BaseTests {
-
+public class ApproveWebContentVersion2ActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddWebContentTest.class);
 		testSuite.addTestSuite(AssignToMeWebContentActionsTest.class);
@@ -40,5 +38,4 @@ public class ApproveWebContentVersion2ActionsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

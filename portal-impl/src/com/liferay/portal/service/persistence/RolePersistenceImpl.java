@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Role;
@@ -759,6 +760,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if ((companyId != role.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1409,6 +1420,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if (!Validator.equals(name, role.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2103,6 +2124,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if (!Validator.equals(subtype, role.getSubtype())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2810,6 +2841,15 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 					finderArgs, this);
 		}
 
+		if (result instanceof Role) {
+			Role role = (Role)result;
+
+			if ((companyId != role.getCompanyId()) ||
+					!Validator.equals(name, role.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -2964,6 +3004,17 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 
 		List<Role> list = (List<Role>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Role role : list) {
+				if ((type != role.getType()) ||
+						!Validator.equals(subtype, role.getSubtype())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3706,6 +3757,16 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof Role) {
+			Role role = (Role)result;
+
+			if ((companyId != role.getCompanyId()) ||
+					(classNameId != role.getClassNameId()) ||
+					(classPK != role.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -4683,6 +4744,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the groups associated with the role.
 	 *
@@ -4758,6 +4823,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			RoleModelImpl.FINDER_CACHE_ENABLED_GROUPS_ROLES, Long.class,
 			RoleModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "getGroupsSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of groups associated with the role.
@@ -5145,6 +5214,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_PERMISSIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the permissions associated with the role.
 	 *
@@ -5221,6 +5294,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			RoleModelImpl.FINDER_CACHE_ENABLED_ROLES_PERMISSIONS, Long.class,
 			RoleModelImpl.MAPPING_TABLE_ROLES_PERMISSIONS_NAME,
 			"getPermissionsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_PERMISSIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of permissions associated with the role.
@@ -5618,6 +5695,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the role.
 	 *
@@ -5693,6 +5774,10 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 			RoleModelImpl.FINDER_CACHE_ENABLED_USERS_ROLES, Long.class,
 			RoleModelImpl.MAPPING_TABLE_USERS_ROLES_NAME, "getUsersSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the role.

@@ -668,6 +668,16 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 		List<SCProductScreenshot> list = (List<SCProductScreenshot>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SCProductScreenshot scProductScreenshot : list) {
+				if ((productEntryId != scProductScreenshot.getProductEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1018,6 +1028,14 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 					finderArgs, this);
 		}
 
+		if (result instanceof SCProductScreenshot) {
+			SCProductScreenshot scProductScreenshot = (SCProductScreenshot)result;
+
+			if ((thumbnailId != scProductScreenshot.getThumbnailId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1146,6 +1164,14 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_FULLIMAGEID,
 					finderArgs, this);
+		}
+
+		if (result instanceof SCProductScreenshot) {
+			SCProductScreenshot scProductScreenshot = (SCProductScreenshot)result;
+
+			if ((fullImageId != scProductScreenshot.getFullImageId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -1283,6 +1309,15 @@ public class SCProductScreenshotPersistenceImpl extends BasePersistenceImpl<SCPr
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_P_P,
 					finderArgs, this);
+		}
+
+		if (result instanceof SCProductScreenshot) {
+			SCProductScreenshot scProductScreenshot = (SCProductScreenshot)result;
+
+			if ((productEntryId != scProductScreenshot.getProductEntryId()) ||
+					(priority != scProductScreenshot.getPriority())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.microblogs.microblogsentry.addmicroblogscontent151character;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddMicroblogsContent151CharacterTests extends BaseTests {
-
+public class AddMicroblogsContent151CharacterTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddMicroblogsContent151CharacterTest.class);
 		testSuite.addTestSuite(ViewMicroblogsContent151CharacterTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
 
 		return testSuite;
 	}
-
 }

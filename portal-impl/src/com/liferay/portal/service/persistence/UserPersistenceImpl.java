@@ -1084,6 +1084,16 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if (!Validator.equals(uuid, user.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1441,6 +1451,16 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1776,6 +1796,14 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					finderArgs, this);
 		}
 
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((contactId != user.getContactId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -1907,6 +1935,16 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if (!Validator.equals(emailAddress, user.getEmailAddress())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2269,6 +2307,14 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					finderArgs, this);
 		}
 
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((portraitId != user.getPortraitId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -2401,6 +2447,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_U,
 					finderArgs, this);
+		}
+
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					(userId != user.getUserId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -2542,6 +2597,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					finderArgs, this);
 		}
 
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					(defaultUser != user.getDefaultUser())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2679,6 +2743,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_SN,
 					finderArgs, this);
+		}
+
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					!Validator.equals(screenName, user.getScreenName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -2833,6 +2906,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					finderArgs, this);
 		}
 
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					!Validator.equals(emailAddress, user.getEmailAddress())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2985,6 +3067,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 					finderArgs, this);
 		}
 
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					(facebookId != user.getFacebookId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -3122,6 +3213,15 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_O,
 					finderArgs, this);
+		}
+
+		if (result instanceof User) {
+			User user = (User)result;
+
+			if ((companyId != user.getCompanyId()) ||
+					!Validator.equals(openId, user.getOpenId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3276,6 +3376,17 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 
 		List<User> list = (List<User>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (User user : list) {
+				if ((companyId != user.getCompanyId()) ||
+						(status != user.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4669,6 +4780,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the groups associated with the user.
 	 *
@@ -4744,6 +4859,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_GROUPS, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME, "getGroupsSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of groups associated with the user.
@@ -5130,6 +5249,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ORGANIZATIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the organizations associated with the user.
 	 *
@@ -5206,6 +5329,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_ORGS, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_ORGS_NAME,
 			"getOrganizationsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ORGANIZATIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of organizations associated with the user.
@@ -5604,6 +5731,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_PERMISSIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the permissions associated with the user.
 	 *
@@ -5680,6 +5811,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_PERMISSIONS, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_PERMISSIONS_NAME,
 			"getPermissionsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_PERMISSIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of permissions associated with the user.
@@ -6077,6 +6212,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ROLES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the roles associated with the user.
 	 *
@@ -6152,6 +6291,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_ROLES, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_ROLES_NAME, "getRolesSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ROLES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of roles associated with the user.
@@ -6536,6 +6679,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_TEAMS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the teams associated with the user.
 	 *
@@ -6610,6 +6757,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_TEAMS, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_TEAMS_NAME, "getTeamsSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_TEAMS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of teams associated with the user.
@@ -6994,6 +7145,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERGROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the user groups associated with the user.
 	 *
@@ -7070,6 +7225,10 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 			UserModelImpl.FINDER_CACHE_ENABLED_USERS_USERGROUPS, Long.class,
 			UserModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME,
 			"getUserGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERGROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of user groups associated with the user.

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.myaccount.timezone.selecttimezonepacificstandardtime;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SelectTimeZonePacificStandardTimeTests extends BaseTests {
-
+public class SelectTimeZonePacificStandardTimeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SelectTimeZonePacificStandardTimeTest.class);
 		testSuite.addTestSuite(TearDownTimeZoneTest.class);
 
 		return testSuite;
 	}
-
 }

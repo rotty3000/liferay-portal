@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.privatemessaging.message.gmailviewpmmessage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Gmail_ViewPMMessageTests extends BaseTests {
-
+public class Gmail_ViewPMMessageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureServerAdministrationMailTest.class);
 		testSuite.addTestSuite(EditPortalInstanceMailDomainTest.class);
 		testSuite.addTestSuite(AddUserSOFriendGmailTest.class);
@@ -49,5 +47,4 @@ public class Gmail_ViewPMMessageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -46,7 +46,7 @@ public class SessionImpl implements Session {
 
 	public void clear() throws ORMException {
 		try {
-			_entityManager.clear();
+			entityManager.clear();
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -59,7 +59,7 @@ public class SessionImpl implements Session {
 
 	public boolean contains(Object object) throws ORMException {
 		try {
-			return _entityManager.contains(object);
+			return entityManager.contains(object);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -88,7 +88,7 @@ public class SessionImpl implements Session {
 
 	public void delete(Object object) throws ORMException {
 		try {
-			_entityManager.remove(_entityManager.merge(object));
+			entityManager.remove(entityManager.merge(object));
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -100,7 +100,7 @@ public class SessionImpl implements Session {
 
 	public void flush() throws ORMException {
 		try {
-			_entityManager.flush();
+			entityManager.flush();
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -109,7 +109,7 @@ public class SessionImpl implements Session {
 
 	public Object get(Class<?> clazz, Serializable id) throws ORMException {
 		try {
-			return _entityManager.find(clazz, id);
+			return entityManager.find(clazz, id);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -120,13 +120,13 @@ public class SessionImpl implements Session {
 		throws ORMException {
 
 		try {
-			Object entity = _entityManager.find(clazz, id);
+			Object entity = entityManager.find(clazz, id);
 
 			javax.persistence.LockModeType lockModeType =
 				LockModeTranslator.translate(lockMode);
 
 			if (lockModeType != null) {
-				_entityManager.lock(entity, lockModeType);
+				entityManager.lock(entity, lockModeType);
 			}
 
 			return entity;
@@ -137,12 +137,12 @@ public class SessionImpl implements Session {
 	}
 
 	public Object getWrappedSession() throws ORMException {
-		return _entityManager;
+		return entityManager;
 	}
 
 	public Object load(Class<?> clazz, Serializable id) throws ORMException {
 		try {
-			return _entityManager.getReference(clazz, id);
+			return entityManager.getReference(clazz, id);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -151,7 +151,7 @@ public class SessionImpl implements Session {
 
 	public Object merge(Object object) throws ORMException {
 		try {
-			return _entityManager.merge(object);
+			return entityManager.merge(object);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -160,7 +160,7 @@ public class SessionImpl implements Session {
 
 	public Serializable save(Object object) throws ORMException {
 		try {
-			_entityManager.persist(object);
+			entityManager.persist(object);
 
 			// Hibernate returns generated idenitfier which is not used
 			// anywhere
@@ -174,7 +174,7 @@ public class SessionImpl implements Session {
 
 	public void saveOrUpdate(Object object) throws ORMException {
 		try {
-			_entityManager.merge(object);
+			entityManager.merge(object);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);
@@ -224,6 +224,9 @@ public class SessionImpl implements Session {
 
 	}
 
+	@PersistenceContext
+	protected EntityManager entityManager;
+
 	private javax.persistence.Query _getExecutableQuery(
 		String queryString, Map<Integer, Object> positionalParameterMap,
 		Map<String, Object> namedParameterMap, boolean strictName,
@@ -234,15 +237,15 @@ public class SessionImpl implements Session {
 
 		if (sqlQuery) {
 			if (entityClass != null) {
-				query = _entityManager.createNativeQuery(
+				query = entityManager.createNativeQuery(
 					queryString, entityClass);
 			}
 			else {
-				query = _entityManager.createNativeQuery(queryString);
+				query = entityManager.createNativeQuery(queryString);
 			}
 		}
 		else {
-			query = _entityManager.createQuery(queryString);
+			query = entityManager.createQuery(queryString);
 		}
 
 		_setParameters(
@@ -317,8 +320,5 @@ public class SessionImpl implements Session {
 			}
 		}
 	}
-
-	@PersistenceContext
-	protected EntityManager _entityManager;
 
 }

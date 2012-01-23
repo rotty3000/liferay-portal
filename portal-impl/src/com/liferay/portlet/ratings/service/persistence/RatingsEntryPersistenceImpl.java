@@ -646,6 +646,17 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (RatingsEntry ratingsEntry : list) {
+				if ((classNameId != ratingsEntry.getClassNameId()) ||
+						(classPK != ratingsEntry.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1014,6 +1025,16 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 					finderArgs, this);
 		}
 
+		if (result instanceof RatingsEntry) {
+			RatingsEntry ratingsEntry = (RatingsEntry)result;
+
+			if ((userId != ratingsEntry.getUserId()) ||
+					(classNameId != ratingsEntry.getClassNameId()) ||
+					(classPK != ratingsEntry.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1162,6 +1183,18 @@ public class RatingsEntryPersistenceImpl extends BasePersistenceImpl<RatingsEntr
 
 		List<RatingsEntry> list = (List<RatingsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (RatingsEntry ratingsEntry : list) {
+				if ((classNameId != ratingsEntry.getClassNameId()) ||
+						(classPK != ratingsEntry.getClassPK()) ||
+						(score != ratingsEntry.getScore())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

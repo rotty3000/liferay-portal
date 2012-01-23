@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontent.wcwebcontent.addwebcontentnoworkflowscopepage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddWebContentNoWorkflowScopePageTests extends BaseTests {
-
+public class AddWebContentNoWorkflowScopePageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
 		testSuite.addTestSuite(ConfigurePortletScopePageTest.class);
@@ -38,5 +36,4 @@ public class AddWebContentNoWorkflowScopePageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

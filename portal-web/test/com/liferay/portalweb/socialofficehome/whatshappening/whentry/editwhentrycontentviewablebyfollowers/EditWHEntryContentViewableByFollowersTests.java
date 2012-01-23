@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.whatshappening.whentry.editwhentrycontentviewablebyfollowers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditWHEntryContentViewableByFollowersTests extends BaseTests {
-
+public class EditWHEntryContentViewableByFollowersTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
 		testSuite.addTestSuite(AddWHEntryContentViewableByFollowersTest.class);
@@ -44,16 +42,13 @@ public class EditWHEntryContentViewableByFollowersTests extends BaseTests {
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ConfirmCCCoworkerRequestTest.class);
 		testSuite.addTestSuite(EditWHEntryContentViewableByFollowersTest.class);
-		testSuite.addTestSuite(
-			ViewEditWHEntryContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(ViewEditWHEntryContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewEditWHContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(SOCo_ViewEditWHContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFo_ViewEditWHContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(SOFo_ViewEditWHContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -61,5 +56,4 @@ public class EditWHEntryContentViewableByFollowersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

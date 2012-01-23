@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.microblogs.microblogsentry.addmicroblogscontentviewablebyeveryone;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,18 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddMicroblogsContentViewableByEveryoneTests extends BaseTests {
-
+public class AddMicroblogsContentViewableByEveryoneTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			AddMicroblogsContentViewableByEveryoneTest.class);
-		testSuite.addTestSuite(
-			ViewMicroblogsEntryContentViewableByEveryoneTest.class);
+		testSuite.addTestSuite(AddMicroblogsContentViewableByEveryoneTest.class);
+		testSuite.addTestSuite(ViewMicroblogsEntryContentViewableByEveryoneTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
 
 		return testSuite;
 	}
-
 }

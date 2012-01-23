@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.VirtualHost;
@@ -554,6 +555,14 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 					finderArgs, this);
 		}
 
+		if (result instanceof VirtualHost) {
+			VirtualHost virtualHost = (VirtualHost)result;
+
+			if (!Validator.equals(hostname, virtualHost.getHostname())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -699,6 +708,15 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_L,
 					finderArgs, this);
+		}
+
+		if (result instanceof VirtualHost) {
+			VirtualHost virtualHost = (VirtualHost)result;
+
+			if ((companyId != virtualHost.getCompanyId()) ||
+					(layoutSetId != virtualHost.getLayoutSetId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -658,6 +658,16 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 		List<MembershipRequest> list = (List<MembershipRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MembershipRequest membershipRequest : list) {
+				if ((groupId != membershipRequest.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1004,6 +1014,16 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 
 		List<MembershipRequest> list = (List<MembershipRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MembershipRequest membershipRequest : list) {
+				if ((userId != membershipRequest.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1360,6 +1380,17 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 
 		List<MembershipRequest> list = (List<MembershipRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MembershipRequest membershipRequest : list) {
+				if ((groupId != membershipRequest.getGroupId()) ||
+						(statusId != membershipRequest.getStatusId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1735,6 +1766,18 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 
 		List<MembershipRequest> list = (List<MembershipRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MembershipRequest membershipRequest : list) {
+				if ((groupId != membershipRequest.getGroupId()) ||
+						(userId != membershipRequest.getUserId()) ||
+						(statusId != membershipRequest.getStatusId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

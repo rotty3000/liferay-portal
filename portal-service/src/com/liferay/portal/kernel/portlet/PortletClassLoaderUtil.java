@@ -16,6 +16,9 @@ package com.liferay.portal.kernel.portlet;
 
 import com.liferay.portal.kernel.servlet.PortletServlet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletContext;
 
 /**
@@ -24,7 +27,9 @@ import javax.servlet.ServletContext;
 public class PortletClassLoaderUtil {
 
 	public static ClassLoader getClassLoader() {
-		return _classLoader;
+		Thread currentThread = Thread.currentThread();
+
+		return _classLoaders.get(currentThread.getId());
 	}
 
 	public static ClassLoader getClassLoader(String portletId) {
@@ -48,14 +53,18 @@ public class PortletClassLoaderUtil {
 	}
 
 	public static void setClassLoader(ClassLoader classLoader) {
-		_classLoader = classLoader;
+		Thread currentThread = Thread.currentThread();
+
+		_classLoaders.put(currentThread.getId(), classLoader);
 	}
 
 	public static void setServletContextName(String servletContextName) {
 		_servletContextName = servletContextName;
 	}
 
-	private static ClassLoader _classLoader;
+	private static Map<Long, ClassLoader> _classLoaders =
+		new HashMap<Long, ClassLoader>();
+
 	private static String _servletContextName;
 
 }

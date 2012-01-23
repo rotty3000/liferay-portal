@@ -769,6 +769,16 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 		List<BookmarksFolder> list = (List<BookmarksFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BookmarksFolder bookmarksFolder : list) {
+				if ((resourceBlockId != bookmarksFolder.getResourceBlockId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1114,6 +1124,16 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 
 		List<BookmarksFolder> list = (List<BookmarksFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BookmarksFolder bookmarksFolder : list) {
+				if (!Validator.equals(uuid, bookmarksFolder.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1491,6 +1511,15 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 					finderArgs, this);
 		}
 
+		if (result instanceof BookmarksFolder) {
+			BookmarksFolder bookmarksFolder = (BookmarksFolder)result;
+
+			if (!Validator.equals(uuid, bookmarksFolder.getUuid()) ||
+					(groupId != bookmarksFolder.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1637,6 +1666,16 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 
 		List<BookmarksFolder> list = (List<BookmarksFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BookmarksFolder bookmarksFolder : list) {
+				if ((groupId != bookmarksFolder.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2240,6 +2279,16 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 		List<BookmarksFolder> list = (List<BookmarksFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BookmarksFolder bookmarksFolder : list) {
+				if ((companyId != bookmarksFolder.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2594,6 +2643,17 @@ public class BookmarksFolderPersistenceImpl extends BasePersistenceImpl<Bookmark
 
 		List<BookmarksFolder> list = (List<BookmarksFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BookmarksFolder bookmarksFolder : list) {
+				if ((groupId != bookmarksFolder.getGroupId()) ||
+						(parentFolderId != bookmarksFolder.getParentFolderId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

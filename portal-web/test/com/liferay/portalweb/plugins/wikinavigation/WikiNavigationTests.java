@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.wikinavigation;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class WikiNavigationTests extends BaseTests {
-
+public class WikiNavigationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(AddPortletPageMenuTest.class);
 		testSuite.addTestSuite(AddPortletTreeMenuTest.class);
@@ -34,5 +32,4 @@ public class WikiNavigationTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

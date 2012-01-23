@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.pagecomments.comment.addcommentmultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddCommentMultipleTests extends BaseTests {
-
+public class AddCommentMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPagePCTest.class);
 		testSuite.addTestSuite(AddPortletPCTest.class);
 		testSuite.addTestSuite(AddComment1Test.class);
@@ -37,5 +35,4 @@ public class AddCommentMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

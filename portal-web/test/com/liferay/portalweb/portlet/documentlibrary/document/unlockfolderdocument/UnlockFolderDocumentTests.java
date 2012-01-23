@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.documentlibrary.document.unlockfolderdocument;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class UnlockFolderDocumentTests extends BaseTests {
-
+public class UnlockFolderDocumentTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageDLTest.class);
 		testSuite.addTestSuite(AddPortletDLTest.class);
 		testSuite.addTestSuite(AddFolderTest.class);
@@ -39,5 +37,4 @@ public class UnlockFolderDocumentTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

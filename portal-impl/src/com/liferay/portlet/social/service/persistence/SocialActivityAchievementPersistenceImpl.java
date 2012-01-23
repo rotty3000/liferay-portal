@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -794,6 +795,16 @@ public class SocialActivityAchievementPersistenceImpl
 		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1141,6 +1152,17 @@ public class SocialActivityAchievementPersistenceImpl
 
 		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(userId != socialActivityAchievement.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1506,6 +1528,18 @@ public class SocialActivityAchievementPersistenceImpl
 
 		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						!Validator.equals(name,
+							socialActivityAchievement.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1896,6 +1930,17 @@ public class SocialActivityAchievementPersistenceImpl
 		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2267,6 +2312,16 @@ public class SocialActivityAchievementPersistenceImpl
 					finderArgs, this);
 		}
 
+		if (result instanceof SocialActivityAchievement) {
+			SocialActivityAchievement socialActivityAchievement = (SocialActivityAchievement)result;
+
+			if ((groupId != socialActivityAchievement.getGroupId()) ||
+					(userId != socialActivityAchievement.getUserId()) ||
+					!Validator.equals(name, socialActivityAchievement.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -2429,6 +2484,18 @@ public class SocialActivityAchievementPersistenceImpl
 
 		List<SocialActivityAchievement> list = (List<SocialActivityAchievement>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityAchievement socialActivityAchievement : list) {
+				if ((groupId != socialActivityAchievement.getGroupId()) ||
+						(userId != socialActivityAchievement.getUserId()) ||
+						(firstInGroup != socialActivityAchievement.getFirstInGroup())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

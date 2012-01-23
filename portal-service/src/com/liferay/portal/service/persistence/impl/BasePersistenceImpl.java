@@ -296,7 +296,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 			query.append(orderByFields[i]);
 
 			if ((i + 1) < orderByFields.length) {
-				if (orderByComparator.isAscending()) {
+				if (orderByComparator.isAscending(orderByFields[i])) {
 					query.append(ORDER_BY_ASC_HAS_NEXT);
 				}
 				else {
@@ -304,7 +304,7 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 				}
 			}
 			else {
-				if (orderByComparator.isAscending()) {
+				if (orderByComparator.isAscending(orderByFields[i])) {
 					query.append(ORDER_BY_ASC);
 				}
 				else {
@@ -359,13 +359,13 @@ public class BasePersistenceImpl<T extends BaseModel<T>>
 
 	protected static final String WHERE_AND = " AND ";
 
-	protected static final String WHERE_LESSER_THAN = " <= ? ";
-
-	protected static final String WHERE_LESSER_THAN_HAS_NEXT = " <= ? AND ";
-
 	protected static final String WHERE_GREATER_THAN = " >= ? ";
 
 	protected static final String WHERE_GREATER_THAN_HAS_NEXT = " >= ? AND ";
+
+	protected static final String WHERE_LESSER_THAN = " <= ? ";
+
+	protected static final String WHERE_LESSER_THAN_HAS_NEXT = " <= ? AND ";
 
 	protected static final String WHERE_OR = " OR ";
 

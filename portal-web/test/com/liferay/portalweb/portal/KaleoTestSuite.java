@@ -14,17 +14,17 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.kaleo.assetpublisher.AssetPublisherTests;
-import com.liferay.portalweb.plugins.kaleo.blogs.BlogsTests;
-import com.liferay.portalweb.plugins.kaleo.messageboards.MessageBoardsTests;
-import com.liferay.portalweb.plugins.kaleo.mysubmissions.MySubmissionsTests;
-import com.liferay.portalweb.plugins.kaleo.myworkflowtasks.MyWorkflowTasksTests;
-import com.liferay.portalweb.plugins.kaleo.pagecomments.PageCommentsTests;
-import com.liferay.portalweb.plugins.kaleo.webcontent.WebContentTests;
-import com.liferay.portalweb.plugins.kaleo.webcontentdisplay.WebContentDisplayTests;
-import com.liferay.portalweb.plugins.kaleo.wiki.WikiTests;
-import com.liferay.portalweb.plugins.kaleo.workflow.WorkflowTests;
-import com.liferay.portalweb.plugins.kaleo.workflowconfiguration.WorkflowConfigurationTests;
+import com.liferay.portalweb.plugins.kaleo.assetpublisher.AssetPublisherTestPlan;
+import com.liferay.portalweb.plugins.kaleo.blogs.BlogsTestPlan;
+import com.liferay.portalweb.plugins.kaleo.messageboards.MessageBoardsTestPlan;
+import com.liferay.portalweb.plugins.kaleo.mysubmissions.MySubmissionsTestPlan;
+import com.liferay.portalweb.plugins.kaleo.myworkflowtasks.MyWorkflowTasksTestPlan;
+import com.liferay.portalweb.plugins.kaleo.pagecomments.PageCommentsTestPlan;
+import com.liferay.portalweb.plugins.kaleo.webcontent.WebContentTestPlan;
+import com.liferay.portalweb.plugins.kaleo.webcontentdisplay.WebContentDisplayTestPlan;
+import com.liferay.portalweb.plugins.kaleo.wiki.WikiTestPlan;
+import com.liferay.portalweb.plugins.kaleo.workflow.WorkflowTestPlan;
+import com.liferay.portalweb.plugins.kaleo.workflowconfiguration.WorkflowConfigurationTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -33,23 +33,23 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoTestSuite extends BaseTests {
+public class KaleoTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AssetPublisherTests.suite());
-		testSuite.addTest(BlogsTests.suite());
-		testSuite.addTest(MessageBoardsTests.suite());
-		testSuite.addTest(MySubmissionsTests.suite());
-		testSuite.addTest(MyWorkflowTasksTests.suite());
-		testSuite.addTest(PageCommentsTests.suite());
-		testSuite.addTest(WebContentTests.suite());
-		testSuite.addTest(WebContentDisplayTests.suite());
-		testSuite.addTest(WikiTests.suite());
-		testSuite.addTest(WorkflowTests.suite());
-		testSuite.addTest(WorkflowConfigurationTests.suite());
+		testSuite.addTest(AssetPublisherTestPlan.suite());
+		testSuite.addTest(BlogsTestPlan.suite());
+		testSuite.addTest(MessageBoardsTestPlan.suite());
+		testSuite.addTest(MySubmissionsTestPlan.suite());
+		testSuite.addTest(MyWorkflowTasksTestPlan.suite());
+		testSuite.addTest(PageCommentsTestPlan.suite());
+		testSuite.addTest(WebContentTestPlan.suite());
+		testSuite.addTest(WebContentDisplayTestPlan.suite());
+		testSuite.addTest(WikiTestPlan.suite());
+		testSuite.addTest(WorkflowTestPlan.suite());
+		testSuite.addTest(WorkflowConfigurationTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

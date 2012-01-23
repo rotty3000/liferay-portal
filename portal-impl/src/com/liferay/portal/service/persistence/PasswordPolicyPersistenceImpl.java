@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PasswordPolicy;
@@ -612,6 +613,15 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 					finderArgs, this);
 		}
 
+		if (result instanceof PasswordPolicy) {
+			PasswordPolicy passwordPolicy = (PasswordPolicy)result;
+
+			if ((companyId != passwordPolicy.getCompanyId()) ||
+					(defaultPolicy != passwordPolicy.getDefaultPolicy())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -749,6 +759,15 @@ public class PasswordPolicyPersistenceImpl extends BasePersistenceImpl<PasswordP
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof PasswordPolicy) {
+			PasswordPolicy passwordPolicy = (PasswordPolicy)result;
+
+			if ((companyId != passwordPolicy.getCompanyId()) ||
+					!Validator.equals(name, passwordPolicy.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

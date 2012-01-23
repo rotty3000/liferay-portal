@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.breadcrumb.portlet.configureportletdisplaystyle1;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletDisplayStyle1Tests extends BaseTests {
-
+public class ConfigurePortletDisplayStyle1Tests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageBreadcrumbTest.class);
 		testSuite.addTestSuite(AddPortletBreadcrumbTest.class);
 		testSuite.addTestSuite(ConfigurePortletDisplayStyle1Test.class);
@@ -35,5 +33,4 @@ public class ConfigurePortletDisplayStyle1Tests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

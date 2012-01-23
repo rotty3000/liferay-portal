@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Release;
@@ -509,6 +510,15 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_SERVLETCONTEXTNAME,
 					finderArgs, this);
+		}
+
+		if (result instanceof Release) {
+			Release release = (Release)result;
+
+			if (!Validator.equals(servletContextName,
+						release.getServletContextName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

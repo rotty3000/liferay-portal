@@ -31,7 +31,6 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.sites.util.SitesUtil;
 
 import java.util.Collection;
@@ -271,16 +270,6 @@ public class PortletPermissionImpl implements PortletPermission {
 
 		if (hasPermission != null) {
 			return hasPermission.booleanValue();
-		}
-
-		if ((layout.isPrivateLayout() &&
-			 !PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_MODIFIABLE) ||
-			(layout.isPublicLayout() &&
-			 !PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_MODIFIABLE)) {
-
-			if (actionId.equals(ActionKeys.CONFIGURATION) && group.isUser()) {
-				return false;
-			}
 		}
 
 		if (actionId.equals(ActionKeys.VIEW) && group.isControlPanel()) {

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.documentlibrary.portlet.view;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewTests extends BaseTests {
-
+public class ViewTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddMemberTest.class);
 		testSuite.addTestSuite(AddMemberRoleTest.class);
 		testSuite.addTestSuite(DefineMemberRoleTest.class);
@@ -53,5 +51,4 @@ public class ViewTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

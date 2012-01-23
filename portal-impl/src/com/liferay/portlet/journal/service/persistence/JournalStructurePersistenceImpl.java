@@ -816,6 +816,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(uuid, journalStructure.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1192,6 +1202,15 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalStructure) {
+			JournalStructure journalStructure = (JournalStructure)result;
+
+			if (!Validator.equals(uuid, journalStructure.getUuid()) ||
+					(groupId != journalStructure.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1338,6 +1357,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if ((groupId != journalStructure.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1999,6 +2028,17 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(structureId,
+							journalStructure.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2374,6 +2414,17 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if (!Validator.equals(parentStructureId,
+							journalStructure.getParentStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2754,6 +2805,16 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalStructure) {
+			JournalStructure journalStructure = (JournalStructure)result;
+
+			if ((groupId != journalStructure.getGroupId()) ||
+					!Validator.equals(structureId,
+						journalStructure.getStructureId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -2910,6 +2971,18 @@ public class JournalStructurePersistenceImpl extends BasePersistenceImpl<Journal
 
 		List<JournalStructure> list = (List<JournalStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalStructure journalStructure : list) {
+				if ((groupId != journalStructure.getGroupId()) ||
+						!Validator.equals(parentStructureId,
+							journalStructure.getParentStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

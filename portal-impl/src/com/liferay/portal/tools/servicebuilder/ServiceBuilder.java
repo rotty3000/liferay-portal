@@ -86,6 +86,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -1490,9 +1491,9 @@ public class ServiceBuilder {
 		JavaParameter[] parameters = method.getParameters();
 
 		for (JavaParameter javaParameter : parameters) {
-			String parameterTypeName =
-				javaParameter.getType().getValue() +
-					_getDimensions(javaParameter.getType());
+			Type type = javaParameter.getType();
+
+			String parameterTypeName = type.getValue() + _getDimensions(type);
 
 			if (parameterTypeName.equals(
 					"com.liferay.portal.kernel.util.UnicodeProperties") ||
@@ -1505,7 +1506,8 @@ public class ServiceBuilder {
 				parameterTypeName.startsWith("java.io") ||
 				//parameterTypeName.startsWith("java.util.List") ||
 				//parameterTypeName.startsWith("java.util.Locale") ||
-				parameterTypeName.startsWith("java.util.Map") ||
+				(parameterTypeName.startsWith("java.util.Map") &&
+					!_isStringLocaleMap(javaParameter)) ||
 				parameterTypeName.startsWith("java.util.Properties") ||
 				parameterTypeName.startsWith("javax")) {
 
@@ -4369,6 +4371,28 @@ public class ServiceBuilder {
 		}
 
 		return false;
+	}
+
+	private boolean _isStringLocaleMap(JavaParameter javaParameter) {
+		Type type = javaParameter.getType();
+
+		Type[] actualArgumentTypes = type.getActualTypeArguments();
+
+		if (actualArgumentTypes.length != 2) {
+			return false;
+		}
+
+		if (!_isTypeValue(actualArgumentTypes[0], Locale.class.getName()) ||
+			!_isTypeValue(actualArgumentTypes[1], String.class.getName())) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean _isTypeValue(Type type, String value) {
+		return value.equals(type.getValue());
 	}
 
 	private List<Entity> _mergeReferenceList(List<Entity> referenceList) {

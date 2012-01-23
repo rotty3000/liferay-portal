@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.WorkflowDefinitionLink;
@@ -672,6 +673,16 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WorkflowDefinitionLink workflowDefinitionLink : list) {
+				if ((companyId != workflowDefinitionLink.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1037,6 +1048,19 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 
 		List<WorkflowDefinitionLink> list = (List<WorkflowDefinitionLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WorkflowDefinitionLink workflowDefinitionLink : list) {
+				if ((companyId != workflowDefinitionLink.getCompanyId()) ||
+						!Validator.equals(workflowDefinitionName,
+							workflowDefinitionLink.getWorkflowDefinitionName()) ||
+						(workflowDefinitionVersion != workflowDefinitionLink.getWorkflowDefinitionVersion())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1482,6 +1506,18 @@ public class WorkflowDefinitionLinkPersistenceImpl extends BasePersistenceImpl<W
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_C_C_C_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof WorkflowDefinitionLink) {
+			WorkflowDefinitionLink workflowDefinitionLink = (WorkflowDefinitionLink)result;
+
+			if ((groupId != workflowDefinitionLink.getGroupId()) ||
+					(companyId != workflowDefinitionLink.getCompanyId()) ||
+					(classNameId != workflowDefinitionLink.getClassNameId()) ||
+					(classPK != workflowDefinitionLink.getClassPK()) ||
+					(typePK != workflowDefinitionLink.getTypePK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

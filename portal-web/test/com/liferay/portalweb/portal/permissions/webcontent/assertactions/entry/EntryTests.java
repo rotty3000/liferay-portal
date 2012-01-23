@@ -14,15 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry;
 
-import com.liferay.portalweb.portal.BaseTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.adddiscussion.AddDiscussionTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.delete.DeleteTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.deletediscussion.DeleteDiscussionTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.expire.ExpireTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.permissions.PermissionsTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.update.UpdateTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.updatediscussion.UpdateDiscussionTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.entry.view.ViewTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -30,21 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EntryTests extends BaseTests {
-
+public class EntryTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
-		testSuite.addTest(AddDiscussionTests.suite());
-		testSuite.addTest(DeleteTests.suite());
-		testSuite.addTest(DeleteDiscussionTests.suite());
-		testSuite.addTest(ExpireTests.suite());
-		testSuite.addTest(PermissionsTests.suite());
-		testSuite.addTest(UpdateTests.suite());
-		testSuite.addTest(UpdateDiscussionTests.suite());
-		testSuite.addTest(ViewTests.suite());
-
 		return testSuite;
 	}
-
 }

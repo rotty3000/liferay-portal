@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.admin;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AdminTests extends BaseTests {
-
+public class AdminTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddServerCategoryTest.class);
 		testSuite.addTestSuite(EditServerCategoryTest.class);
 		testSuite.addTestSuite(BrowseServerTest.class);
@@ -44,5 +42,4 @@ public class AdminTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

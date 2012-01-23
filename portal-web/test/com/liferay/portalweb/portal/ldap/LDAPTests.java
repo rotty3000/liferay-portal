@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.ldap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.StopSeleniumTest;
 
 import junit.framework.Test;
@@ -23,11 +23,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class LDAPTests extends BaseTests {
-
+public class LDAPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AssertNoLDAPUsersTest.class);
 		testSuite.addTestSuite(AssertNoLDAPGroupsTest.class);
 		testSuite.addTestSuite(EnableLDAPTest.class);
@@ -45,10 +43,8 @@ public class LDAPTests extends BaseTests {
 		testSuite.addTestSuite(LoginAdminTest.class);
 		testSuite.addTestSuite(AssertLDAPUsersPresentTest.class);
 		testSuite.addTestSuite(AssertLDAPGroupsPresentTest.class);
-
 		testSuite.addTestSuite(StopSeleniumTest.class);
 
 		return testSuite;
 	}
-
 }

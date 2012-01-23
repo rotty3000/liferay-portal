@@ -447,7 +447,7 @@ public class ServicePreAction extends Action {
 						   permissionChecker, layout, false,
 						   ActionKeys.VIEW)))) {
 
-				if (user.isDefaultUser()) {
+				if (user.isDefaultUser() && group.isControlPanel()) {
 					throw new PrincipalException("User is not authenticated");
 				}
 
@@ -936,18 +936,6 @@ public class ServicePreAction extends Action {
 					themeDisplay.setURLAddContent(
 						"Liferay.LayoutConfiguration.toggle('".concat(
 							PortletKeys.LAYOUT_CONFIGURATION).concat("');"));
-				}
-			}
-
-			if (signedIn) {
-				if (group.isUser()) {
-					if ((layout.isPrivateLayout() &&
-						 !PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_MODIFIABLE) ||
-						(layout.isPublicLayout() &&
-						 !PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_MODIFIABLE)) {
-
-						hasUpdateLayoutPermission = false;
-					}
 				}
 			}
 

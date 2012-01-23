@@ -692,6 +692,16 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 		List<Website> list = (List<Website>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Website website : list) {
+				if ((companyId != website.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1034,6 +1044,16 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 
 		List<Website> list = (List<Website>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Website website : list) {
+				if ((userId != website.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1385,6 +1405,17 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 
 		List<Website> list = (List<Website>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Website website : list) {
+				if ((companyId != website.getCompanyId()) ||
+						(classNameId != website.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1759,6 +1790,18 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 
 		List<Website> list = (List<Website>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Website website : list) {
+				if ((companyId != website.getCompanyId()) ||
+						(classNameId != website.getClassNameId()) ||
+						(classPK != website.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2155,6 +2198,19 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 
 		List<Website> list = (List<Website>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Website website : list) {
+				if ((companyId != website.getCompanyId()) ||
+						(classNameId != website.getClassNameId()) ||
+						(classPK != website.getClassPK()) ||
+						(primary != website.getPrimary())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

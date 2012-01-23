@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.stagingcommunity.documentlibrary.document.publishtolivenowdldocumentnodldock;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,22 +22,18 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PublishToLiveNowDLDocumentNoDLDockTests extends BaseTests {
-
+public class PublishToLiveNowDLDocumentNoDLDockTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddSiteTest.class);
 		testSuite.addTestSuite(AddSitePublicPageDLTest.class);
 		testSuite.addTestSuite(AddSitePublicPagePortletDLTest.class);
 		testSuite.addTestSuite(ActivateSiteStagingLocalLiveNoDLTest.class);
 		testSuite.addTestSuite(AddDLDocumentSiteStagingLocalLiveNoDLTest.class);
 		testSuite.addTestSuite(PublishToLiveNowDLDocumentNoDLDockTest.class);
-		testSuite.addTestSuite(
-			ViewPublishToLiveNowDLDocumentNoDLDockTest.class);
+		testSuite.addTestSuite(ViewPublishToLiveNowDLDocumentNoDLDockTest.class);
 		testSuite.addTestSuite(TearDownSiteTest.class);
 
 		return testSuite;
 	}
-
 }

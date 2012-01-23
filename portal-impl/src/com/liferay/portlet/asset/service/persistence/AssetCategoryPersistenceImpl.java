@@ -979,6 +979,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if (!Validator.equals(uuid, assetCategory.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1355,6 +1365,15 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 					finderArgs, this);
 		}
 
+		if (result instanceof AssetCategory) {
+			AssetCategory assetCategory = (AssetCategory)result;
+
+			if (!Validator.equals(uuid, assetCategory.getUuid()) ||
+					(groupId != assetCategory.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1501,6 +1520,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((groupId != assetCategory.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2167,6 +2196,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2517,6 +2556,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2872,6 +2921,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((groupId != assetCategory.getGroupId()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3572,6 +3632,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
+						!Validator.equals(name, assetCategory.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3968,6 +4039,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4340,6 +4422,17 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 
 		List<AssetCategory> list = (List<AssetCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategory assetCategory : list) {
+				if (!Validator.equals(name, assetCategory.getName()) ||
+						(vocabularyId != assetCategory.getVocabularyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4740,6 +4833,16 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_P_N_V,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetCategory) {
+			AssetCategory assetCategory = (AssetCategory)result;
+
+			if ((parentCategoryId != assetCategory.getParentCategoryId()) ||
+					!Validator.equals(name, assetCategory.getName()) ||
+					(vocabularyId != assetCategory.getVocabularyId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -5908,6 +6011,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ASSETENTRIES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the asset entries associated with the asset category.
 	 *
@@ -5985,6 +6092,10 @@ public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCateg
 			Long.class,
 			AssetCategoryModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETCATEGORIES_NAME,
 			"getAssetEntriesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ASSETENTRIES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of asset entries associated with the asset category.

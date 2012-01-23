@@ -22,7 +22,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsLogosReftaggerTestSuite extends BaseTests {
+public class PluginsLogosReftaggerTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

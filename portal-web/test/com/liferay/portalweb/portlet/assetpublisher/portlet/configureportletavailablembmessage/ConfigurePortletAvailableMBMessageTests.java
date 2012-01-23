@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.portlet.configureportletavailablembmessage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletAvailableMBMessageTests extends BaseTests {
-
+public class ConfigurePortletAvailableMBMessageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(ConfigurePortletAvailableMBMessageTest.class);
@@ -34,5 +32,4 @@ public class ConfigurePortletAvailableMBMessageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

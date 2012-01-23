@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -694,6 +695,16 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 		List<DLFileVersion> list = (List<DLFileVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileVersion dlFileVersion : list) {
+				if ((fileEntryId != dlFileVersion.getFileEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1047,6 +1058,15 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 					finderArgs, this);
 		}
 
+		if (result instanceof DLFileVersion) {
+			DLFileVersion dlFileVersion = (DLFileVersion)result;
+
+			if ((fileEntryId != dlFileVersion.getFileEntryId()) ||
+					!Validator.equals(version, dlFileVersion.getVersion())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1202,6 +1222,17 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 		List<DLFileVersion> list = (List<DLFileVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileVersion dlFileVersion : list) {
+				if ((fileEntryId != dlFileVersion.getFileEntryId()) ||
+						(status != dlFileVersion.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1577,6 +1608,18 @@ public class DLFileVersionPersistenceImpl extends BasePersistenceImpl<DLFileVers
 
 		List<DLFileVersion> list = (List<DLFileVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileVersion dlFileVersion : list) {
+				if ((groupId != dlFileVersion.getGroupId()) ||
+						(folderId != dlFileVersion.getFolderId()) ||
+						(status != dlFileVersion.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

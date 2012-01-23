@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -582,6 +583,16 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 
 		List<AssetTag> list = (List<AssetTag>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTag assetTag : list) {
+				if ((groupId != assetTag.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1246,6 +1257,15 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 					finderArgs, this);
 		}
 
+		if (result instanceof AssetTag) {
+			AssetTag assetTag = (AssetTag)result;
+
+			if ((groupId != assetTag.getGroupId()) ||
+					!Validator.equals(name, assetTag.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1731,6 +1751,10 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ASSETENTRIES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the asset entries associated with the asset tag.
 	 *
@@ -1808,6 +1832,10 @@ public class AssetTagPersistenceImpl extends BasePersistenceImpl<AssetTag>
 			Long.class,
 			AssetTagModelImpl.MAPPING_TABLE_ASSETENTRIES_ASSETTAGS_NAME,
 			"getAssetEntriesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ASSETENTRIES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of asset entries associated with the asset tag.

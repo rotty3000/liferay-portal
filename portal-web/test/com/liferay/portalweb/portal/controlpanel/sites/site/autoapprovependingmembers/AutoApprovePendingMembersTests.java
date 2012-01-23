@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.sites.site.autoapprovependingmembers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AutoApprovePendingMembersTests extends BaseTests {
-
+public class AutoApprovePendingMembersTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddSitesRestrictedTest.class);
 		testSuite.addTestSuite(AddUserTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -45,5 +43,4 @@ public class AutoApprovePendingMembersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

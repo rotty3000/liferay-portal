@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.blogs.scope;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ScopeTests extends BaseTests {
-
+public class ScopeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SA_AddPageTest.class);
 		testSuite.addTestSuite(SA_AddPortletTest.class);
 		testSuite.addTestSuite(SA_AddUserScopeTest.class);
@@ -58,5 +56,4 @@ public class ScopeTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

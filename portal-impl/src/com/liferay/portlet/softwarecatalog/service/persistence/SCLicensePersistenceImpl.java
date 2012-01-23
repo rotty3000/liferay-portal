@@ -573,6 +573,16 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SCLicense scLicense : list) {
+				if ((active != scLicense.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1235,6 +1245,17 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 
 		List<SCLicense> list = (List<SCLicense>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCLicense scLicense : list) {
+				if ((active != scLicense.getActive()) ||
+						(recommended != scLicense.getRecommended())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2302,6 +2323,10 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_SCPRODUCTENTRIES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the s c product entries associated with the s c license.
 	 *
@@ -2379,6 +2404,10 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			Long.class,
 			SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME,
 			"getSCProductEntriesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_SCPRODUCTENTRIES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of s c product entries associated with the s c license.

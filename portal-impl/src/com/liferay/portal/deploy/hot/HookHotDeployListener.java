@@ -214,11 +214,9 @@ public class HookHotDeployListener
 		"layout.types",
 		"layout.user.private.layouts.auto.create",
 		"layout.user.private.layouts.enabled",
-		"layout.user.private.layouts.modifiable",
 		"layout.user.private.layouts.power.user.required",
 		"layout.user.public.layouts.auto.create",
 		"layout.user.public.layouts.enabled",
-		"layout.user.public.layouts.modifiable",
 		"layout.user.public.layouts.power.user.required",
 		"ldap.attrs.transformer.impl",
 		"locales.beta",
@@ -1566,6 +1564,12 @@ public class HookHotDeployListener
 					PropsUtil.getArray(LOCALES).length);
 		}
 
+		for (String key : _PROPS_VALUES_OBSOLETE) {
+			if (_log.isInfoEnabled()) {
+				_log.info("Portal property \"" + key + "\" is obsolete");
+			}
+		}
+
 		resetPortalProperties(servletContextName, portalProperties, true);
 
 		if (portalProperties.containsKey(PropsKeys.AUTH_PUBLIC_PATHS)) {
@@ -2154,7 +2158,7 @@ public class HookHotDeployListener
 			release.getReleaseId(), buildNumber, null, true);
 	}
 
-	private static final String[] _PROPS_KEYS_EVENTS = new String[] {
+	private static final String[] _PROPS_KEYS_EVENTS = {
 		LOGIN_EVENTS_POST,
 		LOGIN_EVENTS_PRE,
 		LOGOUT_EVENTS_POST,
@@ -2163,12 +2167,12 @@ public class HookHotDeployListener
 		SERVLET_SERVICE_EVENTS_PRE
 	};
 
-	private static final String[] _PROPS_KEYS_SESSION_EVENTS = new String[] {
+	private static final String[] _PROPS_KEYS_SESSION_EVENTS = {
 		SERVLET_SESSION_CREATE_EVENTS,
 		SERVLET_SESSION_DESTROY_EVENTS
 	};
 
-	private static final String[] _PROPS_VALUES_BOOLEAN = new String[] {
+	private static final String[] _PROPS_VALUES_BOOLEAN = {
 		"auth.forward.by.last.path",
 		"captcha.check.portal.create_account",
 		"dl.file.entry.drafts.enabled",
@@ -2179,11 +2183,9 @@ public class HookHotDeployListener
 		"layout.template.cache.enabled",
 		"layout.user.private.layouts.auto.create",
 		"layout.user.private.layouts.enabled",
-		"layout.user.private.layouts.modifiable",
 		"layout.user.private.layouts.power.user.required",
 		"layout.user.public.layouts.auto.create",
 		"layout.user.public.layouts.enabled",
-		"layout.user.public.layouts.modifiable",
 		"layout.user.public.layouts.power.user.required",
 		"login.create.account.allow.custom.password",
 		"my.sites.show.private.sites.with.no.layouts",
@@ -2204,62 +2206,65 @@ public class HookHotDeployListener
 		"users.screen.name.always.autogenerate"
 	};
 
-	private static final String[] _PROPS_VALUES_INTEGER = new String[] {
+	private static final String[] _PROPS_VALUES_INTEGER = {
 		"users.image.max.height",
 		"users.image.max.width",
 	};
 
-	private static final String[] _PROPS_VALUES_LONG = new String[] {
+	private static final String[] _PROPS_VALUES_LONG = {
 	};
 
-	private static final String[] _PROPS_VALUES_MERGE_STRING_ARRAY =
-		new String[] {
-			"admin.default.group.names",
-			"admin.default.role.names",
-			"admin.default.user.group.names",
-			"asset.publisher.display.styles",
-			"company.settings.form.configuration",
-			"company.settings.form.identification",
-			"company.settings.form.miscellaneous",
-			"convert.processes",
-			"dockbar.add.portlets",
-			"journal.article.form.add",
-			"journal.article.form.translate",
-			"journal.article.form.update",
-			"layout.form.add",
-			"layout.form.update",
-			"layout.set.form.update",
-			"layout.static.portlets.all",
-			"layout.types",
-			"organizations.form.add.identification",
-			"organizations.form.add.main",
-			"organizations.form.add.miscellaneous",
-			"portlet.add.default.resource.check.whitelist",
-			"portlet.add.default.resource.check.whitelist.actions",
-			"session.phishing.protected.attributes",
-			"sites.form.add.advanced",
-			"sites.form.add.main",
-			"sites.form.add.seo",
-			"sites.form.update.advanced",
-			"sites.form.update.main",
-			"sites.form.update.seo",
-			"users.form.add.identification",
-			"users.form.add.main",
-			"users.form.add.miscellaneous",
-			"users.form.my.account.identification",
-			"users.form.my.account.main",
-			"users.form.my.account.miscellaneous",
-			"users.form.update.identification",
-			"users.form.update.main",
-			"users.form.update.miscellaneous"
-		};
+	private static final String[] _PROPS_VALUES_MERGE_STRING_ARRAY = {
+		"admin.default.group.names",
+		"admin.default.role.names",
+		"admin.default.user.group.names",
+		"asset.publisher.display.styles",
+		"company.settings.form.configuration",
+		"company.settings.form.identification",
+		"company.settings.form.miscellaneous",
+		"convert.processes",
+		"dockbar.add.portlets",
+		"journal.article.form.add",
+		"journal.article.form.translate",
+		"journal.article.form.update",
+		"layout.form.add",
+		"layout.form.update",
+		"layout.set.form.update",
+		"layout.static.portlets.all",
+		"layout.types",
+		"organizations.form.add.identification",
+		"organizations.form.add.main",
+		"organizations.form.add.miscellaneous",
+		"portlet.add.default.resource.check.whitelist",
+		"portlet.add.default.resource.check.whitelist.actions",
+		"session.phishing.protected.attributes",
+		"sites.form.add.advanced",
+		"sites.form.add.main",
+		"sites.form.add.seo",
+		"sites.form.update.advanced",
+		"sites.form.update.main",
+		"sites.form.update.seo",
+		"users.form.add.identification",
+		"users.form.add.main",
+		"users.form.add.miscellaneous",
+		"users.form.my.account.identification",
+		"users.form.my.account.main",
+		"users.form.my.account.miscellaneous",
+		"users.form.update.identification",
+		"users.form.update.main",
+		"users.form.update.miscellaneous"
+	};
 
-	private static final String[] _PROPS_VALUES_OVERRIDE_STRING_ARRAY =
-		new String[] {
-			"locales.beta"
-		};
+	private static final String[] _PROPS_VALUES_OBSOLETE = {
+		"layout.user.private.layouts.modifiable",
+		"layout.user.public.layouts.modifiable"
+	};
 
-	private static final String[] _PROPS_VALUES_STRING = new String[] {
+	private static final String[] _PROPS_VALUES_OVERRIDE_STRING_ARRAY = {
+		"locales.beta"
+	};
+
+	private static final String[] _PROPS_VALUES_STRING = {
 		"default.landing.page.path",
 		"passwords.passwordpolicytoolkit.generator",
 		"passwords.passwordpolicytoolkit.static",

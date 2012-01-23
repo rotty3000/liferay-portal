@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.knowledgebase.knowledgebasesection.portlet.removeportletkbs;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RemovePortletKBSTests extends BaseTests {
-
+public class RemovePortletKBSTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageKBSTest.class);
 		testSuite.addTestSuite(AddPortletKBSTest.class);
 		testSuite.addTestSuite(RemovePortletKBSTest.class);
@@ -34,5 +32,4 @@ public class RemovePortletKBSTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutSetBranch;
 import com.liferay.portal.model.ModelListener;
@@ -638,6 +639,16 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 
 		List<LayoutSetBranch> list = (List<LayoutSetBranch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSetBranch layoutSetBranch : list) {
+				if ((groupId != layoutSetBranch.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1307,6 +1318,17 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 
 		List<LayoutSetBranch> list = (List<LayoutSetBranch>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSetBranch layoutSetBranch : list) {
+				if ((groupId != layoutSetBranch.getGroupId()) ||
+						(privateLayout != layoutSetBranch.getPrivateLayout())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2011,6 +2033,16 @@ public class LayoutSetBranchPersistenceImpl extends BasePersistenceImpl<LayoutSe
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof LayoutSetBranch) {
+			LayoutSetBranch layoutSetBranch = (LayoutSetBranch)result;
+
+			if ((groupId != layoutSetBranch.getGroupId()) ||
+					(privateLayout != layoutSetBranch.getPrivateLayout()) ||
+					!Validator.equals(name, layoutSetBranch.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

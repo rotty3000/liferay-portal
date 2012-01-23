@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.dbupgrade.sampledata523.login.LoginTests;
-import com.liferay.portalweb.portal.dbupgrade.sampledata523.portletpermissions.PortletPermissionsTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata523.portletpermissions.PortletPermissionsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradePortletPermissions523TestSuite extends BaseTests {
+public class DBUpgradePortletPermissions523TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(PortletPermissionsTests.suite());
+		testSuite.addTest(PortletPermissionsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

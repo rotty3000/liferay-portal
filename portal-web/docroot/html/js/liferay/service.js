@@ -525,6 +525,7 @@ Liferay.Service.registerClass(
 		getCategories: true,
 		getCategory: true,
 		getChildCategories: true,
+		getJSONSearch: true,
 		getJSONVocabularyCategories: true,
 		getVocabularyCategories: true,
 		getVocabularyCategoriesCount: true,
@@ -760,6 +761,8 @@ Liferay.Service.registerClass(
 		getFileEntryType: true,
 		getFileEntryTypes: true,
 		getFileEntryTypesCount: true,
+		search: true,
+		searchCount: true,
 		updateFileEntryType: true
 	}
 );

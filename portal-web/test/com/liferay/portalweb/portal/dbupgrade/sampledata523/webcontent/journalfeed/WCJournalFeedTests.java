@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledata523.webcontent.journalfeed;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class WCJournalFeedTests extends BaseTests {
-
+public class WCJournalFeedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCommunityWCJournalFeedTest.class);
 		testSuite.addTestSuite(AddPageWCTest.class);
 		testSuite.addTestSuite(AddPortletWCTest.class);
@@ -36,5 +34,4 @@ public class WCJournalFeedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

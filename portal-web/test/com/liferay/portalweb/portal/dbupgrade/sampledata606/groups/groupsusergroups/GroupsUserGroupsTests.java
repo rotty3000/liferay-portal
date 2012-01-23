@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledata606.groups.groupsusergroups;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,18 +22,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class GroupsUserGroupsTests extends BaseTests {
-
+public class GroupsUserGroupsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserGroupGroupsUserGroupsTest.class);
 		testSuite.addTestSuite(AddCommunityGroupsUserGroupsTest.class);
-		testSuite.addTestSuite(
-			AssignMembersCommunityUserGroupActionsTest.class);
+		testSuite.addTestSuite(AssignMembersCommunityUserGroupActionsTest.class);
 		testSuite.addTestSuite(ViewAssignMembersCommunityUserGroupTest.class);
 
 		return testSuite;
 	}
-
 }

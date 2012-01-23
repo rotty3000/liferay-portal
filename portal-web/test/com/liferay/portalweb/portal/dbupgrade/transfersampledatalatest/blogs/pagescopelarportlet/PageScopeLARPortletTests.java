@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.transfersampledatalatest.blogs.pagescopelarportlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PageScopeLARPortletTests extends BaseTests {
-
+public class PageScopeLARPortletTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCustomSiteBlogsPageScopeTest.class);
 		testSuite.addTestSuite(AddPage1BlogsPageScopeTest.class);
 		testSuite.addTestSuite(AddPage1PortletBlogsPageScopeTest.class);
@@ -35,16 +33,11 @@ public class PageScopeLARPortletTests extends BaseTests {
 		testSuite.addTestSuite(AddPage3BlogsPageScopeTest.class);
 		testSuite.addTestSuite(AddPage3PortletBlogsPageScopeTest.class);
 		testSuite.addTestSuite(ConfigurePortlet1BlogsScopeDefaultTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortlet2BlogsScopeLayoutCurrentPageTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortlet3BlogsScopeLayoutPage2Test.class);
-		testSuite.addTestSuite(
-			ImportExportPortletLARDefaultBlogsPageScopeTest.class);
-		testSuite.addTestSuite(
-			ImportExportPortletLARPage2BlogsPageScopeTest.class);
+		testSuite.addTestSuite(ConfigurePortlet2BlogsScopeLayoutCurrentPageTest.class);
+		testSuite.addTestSuite(ConfigurePortlet3BlogsScopeLayoutPage2Test.class);
+		testSuite.addTestSuite(ImportExportPortletLARDefaultBlogsPageScopeTest.class);
+		testSuite.addTestSuite(ImportExportPortletLARPage2BlogsPageScopeTest.class);
 
 		return testSuite;
 	}
-
 }

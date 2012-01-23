@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginSocialOfficeTests;
-import com.liferay.portalweb.socialofficehome.whatshappening.WhatsHappeningTests;
+import com.liferay.portalweb.socialofficehome.whatshappening.WhatsHappeningTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SocialOfficeHomeWhatsHappeningTestSuite extends BaseTests {
+public class SocialOfficeHomeWhatsHappeningTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginSocialOfficeTests.suite());
-		testSuite.addTest(WhatsHappeningTests.suite());
+		testSuite.addTest(WhatsHappeningTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.microblogs.microblogsentry.editmicroblogscontentviewablebyfriends;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditMicroblogsContentViewableByFriendsTests extends BaseTests {
-
+public class EditMicroblogsContentViewableByFriendsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
 		testSuite.addTestSuite(AddMicroblogsContentViewableByFriendsTest.class);
@@ -43,10 +41,8 @@ public class EditMicroblogsContentViewableByFriendsTests extends BaseTests {
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ConfirmCCFriendRequestTest.class);
-		testSuite.addTestSuite(
-			EditMicroblogsContentViewableByFriendsTest.class);
-		testSuite.addTestSuite(
-			ViewEditMicroblogsContentViewableByFriendsTest.class);
+		testSuite.addTestSuite(EditMicroblogsContentViewableByFriendsTest.class);
+		testSuite.addTestSuite(ViewEditMicroblogsContentViewableByFriendsTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
 		testSuite.addTestSuite(SOFr_ViewEditMicroblogsContentFriendsTest.class);
@@ -60,5 +56,4 @@ public class EditMicroblogsContentViewableByFriendsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

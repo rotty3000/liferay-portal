@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -55,6 +54,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.lar.DLPortletDataHandlerImpl;
 import com.liferay.portlet.documentlibrary.lar.FileEntryUtil;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.journal.FeedTargetLayoutFriendlyUrlException;
 import com.liferay.portlet.journal.NoSuchArticleException;
 import com.liferay.portlet.journal.NoSuchStructureException;
@@ -1293,6 +1293,32 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 	}
 
+	@Override
+	public PortletDataHandlerControl[] getExportControls() {
+		return new PortletDataHandlerControl[] {
+			_articles, _structuresTemplatesAndFeeds, _embeddedAssets, _images,
+			_categories, _comments, _ratings, _tags
+		};
+	}
+
+	@Override
+	public PortletDataHandlerControl[] getImportControls() {
+		return new PortletDataHandlerControl[] {
+			_articles, _structuresTemplatesAndFeeds, _images, _categories,
+			_comments, _ratings, _tags
+		};
+	}
+
+	@Override
+	public boolean isAlwaysExportable() {
+		return _ALWAYS_EXPORTABLE;
+	}
+
+	@Override
+	public boolean isPublishToLiveByDefault() {
+		return PropsValues.JOURNAL_PUBLISH_TO_LIVE_BY_DEFAULT;
+	}
+
 	protected static String exportDLFileEntries(
 			PortletDataContext portletDataContext,
 			Element dlFileEntryTypesElement, Element dlFoldersElement,
@@ -1388,7 +1414,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					if (pathArray.length == 4) {
 						map.put("uuid", new String[] {pathArray[3]});
 					}
-					else if (pathArray.length > 4) {
+					else if (pathArray.length == 5) {
 						map.put("folderId", new String[] {pathArray[3]});
 
 						String name = HttpUtil.decodeURL(pathArray[4]);
@@ -1400,6 +1426,9 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 						}
 
 						map.put("name", new String[] {name});
+					}
+					else if (pathArray.length > 5) {
+						map.put("uuid", new String[] {pathArray[5]});
 					}
 				}
 				else {
@@ -1942,18 +1971,11 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 			String dlReference = "[$dl-reference=" + dlReferencePath + "$]";
 
-			StringBundler sb = new StringBundler(6);
+			String url = DLUtil.getPreviewURL(
+				fileEntry, fileEntry.getFileVersion(), null, StringPool.BLANK,
+				false, false);
 
-			sb.append("/documents/");
-			sb.append(portletDataContext.getScopeGroupId());
-			sb.append(StringPool.SLASH);
-			sb.append(fileEntry.getFolderId());
-			sb.append(StringPool.SLASH);
-			sb.append(
-				HttpUtil.encodeURL(
-					HtmlUtil.unescape(fileEntry.getTitle()), true));
-
-			content = StringUtil.replace(content, dlReference, sb.toString());
+			content = StringUtil.replace(content, dlReference, url);
 		}
 
 		return content;
@@ -2049,32 +2071,6 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 			ArrayUtil.toStringArray(newLinksToLayout.toArray()));
 
 		return content;
-	}
-
-	@Override
-	public PortletDataHandlerControl[] getExportControls() {
-		return new PortletDataHandlerControl[] {
-			_articles, _structuresTemplatesAndFeeds, _embeddedAssets, _images,
-			_categories, _comments, _ratings, _tags
-		};
-	}
-
-	@Override
-	public PortletDataHandlerControl[] getImportControls() {
-		return new PortletDataHandlerControl[] {
-			_articles, _structuresTemplatesAndFeeds, _images, _categories,
-			_comments, _ratings, _tags
-		};
-	}
-
-	@Override
-	public boolean isAlwaysExportable() {
-		return _ALWAYS_EXPORTABLE;
-	}
-
-	@Override
-	public boolean isPublishToLiveByDefault() {
-		return PropsValues.JOURNAL_PUBLISH_TO_LIVE_BY_DEFAULT;
 	}
 
 	@Override
@@ -2243,6 +2239,15 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 	private static Log _log = LogFactoryUtil.getLog(
 		JournalPortletDataHandlerImpl.class);
 
+	private static PortletDataHandlerBoolean _articles =
+		new PortletDataHandlerBoolean(_NAMESPACE, "articles", true, false,
+		new PortletDataHandlerControl[] {
+			JournalPortletDataHandlerImpl._images,
+			JournalPortletDataHandlerImpl._comments,
+			JournalPortletDataHandlerImpl._ratings,
+			JournalPortletDataHandlerImpl._tags
+		});
+
 	private static PortletDataHandlerBoolean _categories =
 		new PortletDataHandlerBoolean(_NAMESPACE, "categories");
 
@@ -2252,8 +2257,15 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 	private static PortletDataHandlerBoolean _embeddedAssets =
 		new PortletDataHandlerBoolean(_NAMESPACE, "embedded-assets");
 
+	private static Pattern _exportLinksToLayoutPattern = Pattern.compile(
+		"\\[([0-9]+)@(public|private\\-[a-z]*)\\]");
+
 	private static PortletDataHandlerBoolean _images =
 		new PortletDataHandlerBoolean(_NAMESPACE, "images");
+
+	private static Pattern _importLinksToLayoutPattern = Pattern.compile(
+		"\\[([0-9]+)@(public|private\\-[a-z]*)@(\\p{XDigit}{8}\\-" +
+		"(?:\\p{XDigit}{4}\\-){3}\\p{XDigit}{12})@([^\\]]*)\\]");
 
 	private static PortletDataHandlerBoolean _ratings =
 		new PortletDataHandlerBoolean(_NAMESPACE, "ratings");
@@ -2264,15 +2276,5 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 	private static PortletDataHandlerBoolean _tags =
 		new PortletDataHandlerBoolean(_NAMESPACE, "tags");
-
-	private static PortletDataHandlerBoolean _articles =
-		new PortletDataHandlerBoolean(_NAMESPACE, "articles", true, false,
-		new PortletDataHandlerControl[] {_images, _comments, _ratings, _tags});
-
-	private static Pattern _exportLinksToLayoutPattern = Pattern.compile(
-		"\\[([0-9]+)@(public|private\\-[a-z]*)\\]");
-	private static Pattern _importLinksToLayoutPattern = Pattern.compile(
-		"\\[([0-9]+)@(public|private\\-[a-z]*)@(\\p{XDigit}{8}\\-" +
-		"(?:\\p{XDigit}{4}\\-){3}\\p{XDigit}{12})@([^\\]]*)\\]");
 
 }

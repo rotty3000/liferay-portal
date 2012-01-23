@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.myworkflowtasks.workflowtask.approvewebcontentscopeglobal;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ApproveWebContentScopeGlobalTests extends BaseTests {
-
+public class ApproveWebContentScopeGlobalTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			ConfigureWebContentSingleApproverScopeGlobalTest.class);
+		testSuite.addTestSuite(ConfigureWebContentSingleApproverScopeGlobalTest.class);
 		testSuite.addTestSuite(AddWebContentScopeGlobalTest.class);
-		testSuite.addTestSuite(
-			AssignToMeWebContentScopeGlobalActionsTest.class);
+		testSuite.addTestSuite(AssignToMeWebContentScopeGlobalActionsTest.class);
 		testSuite.addTestSuite(ApproveWebContentScopeGlobalActionsTest.class);
 		testSuite.addTestSuite(ViewWebContentScopeGlobalCompletedTest.class);
 		testSuite.addTestSuite(TearDownGlobalWebContentTest.class);
@@ -39,5 +35,4 @@ public class ApproveWebContentScopeGlobalTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

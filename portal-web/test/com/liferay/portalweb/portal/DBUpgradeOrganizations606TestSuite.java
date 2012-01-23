@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.dbupgrade.sampledata606.login.LoginTests;
-import com.liferay.portalweb.portal.dbupgrade.sampledata606.organizations.OrganizationsTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata606.organizations.OrganizationsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeOrganizations606TestSuite extends BaseTests {
+public class DBUpgradeOrganizations606TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(OrganizationsTests.suite());
+		testSuite.addTest(OrganizationsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

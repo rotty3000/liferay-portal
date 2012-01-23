@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.webcontentdisplay.webcontent.viewportletshowlocaleswebcontenttemplatewcd;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,11 +23,9 @@ import junit.framework.TestSuite;
  * @author Brian Wing Shun Chan
  */
 public class ViewPortletShowLocalesWebContentTemplateWCDTests
-	extends BaseTests {
-
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
 		testSuite.addTestSuite(AddPageLanguageTest.class);
@@ -37,8 +35,7 @@ public class ViewPortletShowLocalesWebContentTemplateWCDTests
 		testSuite.addTestSuite(AddTemplateLocalizedTest.class);
 		testSuite.addTestSuite(AddWCWebContentTemplateWCDTest.class);
 		testSuite.addTestSuite(LocalizeWCWebContentTemplateWCDTest.class);
-		testSuite.addTestSuite(
-			ViewPortletShowLocalesWebContentTemplateWCDTest.class);
+		testSuite.addTestSuite(ViewPortletShowLocalesWebContentTemplateWCDTest.class);
 		testSuite.addTestSuite(TearDownLanguageTest.class);
 		testSuite.addTestSuite(TearDownPortletSetupTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
@@ -46,5 +43,4 @@ public class ViewPortletShowLocalesWebContentTemplateWCDTests
 
 		return testSuite;
 	}
-
 }

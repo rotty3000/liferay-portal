@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.directory.organizations.viewsuborganization;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewSuborganizationTests extends BaseTests {
-
+public class ViewSuborganizationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageDirectoryTest.class);
 		testSuite.addTestSuite(AddPortletDirectoryTest.class);
 		testSuite.addTestSuite(AddOrganizationTest.class);
@@ -37,5 +35,4 @@ public class ViewSuborganizationTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

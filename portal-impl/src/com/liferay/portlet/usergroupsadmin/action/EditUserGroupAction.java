@@ -25,8 +25,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.auth.PrincipalException;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserGroupServiceUtil;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.util.PortalUtil;
@@ -125,8 +123,8 @@ public class EditUserGroupAction extends PortletAction {
 		long[] deleteUserGroupIds = StringUtil.split(
 			ParamUtil.getString(actionRequest, "deleteUserGroupIds"), 0L);
 
-		for (int i = 0; i < deleteUserGroupIds.length; i++) {
-			UserGroupServiceUtil.deleteUserGroup(deleteUserGroupIds[i]);
+		for (long deleteUserGroupId : deleteUserGroupIds) {
+			UserGroupServiceUtil.deleteUserGroup(deleteUserGroupId);
 		}
 	}
 
@@ -137,9 +135,6 @@ public class EditUserGroupAction extends PortletAction {
 
 		String name = ParamUtil.getString(actionRequest, "name");
 		String description = ParamUtil.getString(actionRequest, "description");
-
-		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			UserGroup.class.getName(), actionRequest);
 
 		UserGroup userGroup = null;
 
@@ -163,10 +158,15 @@ public class EditUserGroupAction extends PortletAction {
 			actionRequest, "publicLayoutSetPrototypeId");
 		long privateLayoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "privateLayoutSetPrototypeId");
+		boolean publicLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "publicLayoutSetPrototypeLinkEnabled");
+		boolean privateLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "privateLayoutSetPrototypeLinkEnabled");
 
-		SitesUtil.applyLayoutSetPrototypes(
+		SitesUtil.updateLayoutSetPrototypesLinks(
 			userGroup.getGroup(), publicLayoutSetPrototypeId,
-			privateLayoutSetPrototypeId, serviceContext);
+			privateLayoutSetPrototypeId, publicLayoutSetPrototypeLinkEnabled,
+			privateLayoutSetPrototypeLinkEnabled);
 	}
 
 }

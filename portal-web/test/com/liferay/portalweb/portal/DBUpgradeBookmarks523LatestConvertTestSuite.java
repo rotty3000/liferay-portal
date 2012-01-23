@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.bookmarks.Bookmarks523LatestTests;
+import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.bookmarks.Bookmarks523LatestTestPlan;
 import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.login.LoginTests;
 import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.serveradministration.executegeneratecustomroles.ExecuteGenerateCustomRolesTests;
 
@@ -24,13 +24,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeBookmarks523LatestConvertTestSuite extends BaseTests {
+public class DBUpgradeBookmarks523LatestConvertTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(Bookmarks523LatestTests.suite());
+		testSuite.addTest(Bookmarks523LatestTestPlan.suite());
 		testSuite.addTest(ExecuteGenerateCustomRolesTests.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);

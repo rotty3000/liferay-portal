@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -751,6 +752,16 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 		List<BlogsStatsUser> list = (List<BlogsStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsStatsUser blogsStatsUser : list) {
+				if ((groupId != blogsStatsUser.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1096,6 +1107,16 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 		List<BlogsStatsUser> list = (List<BlogsStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsStatsUser blogsStatsUser : list) {
+				if ((userId != blogsStatsUser.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1449,6 +1470,15 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 					finderArgs, this);
 		}
 
+		if (result instanceof BlogsStatsUser) {
+			BlogsStatsUser blogsStatsUser = (BlogsStatsUser)result;
+
+			if ((groupId != blogsStatsUser.getGroupId()) ||
+					(userId != blogsStatsUser.getUserId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1591,6 +1621,17 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 		List<BlogsStatsUser> list = (List<BlogsStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsStatsUser blogsStatsUser : list) {
+				if ((groupId != blogsStatsUser.getGroupId()) ||
+						(entryCount != blogsStatsUser.getEntryCount())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1964,6 +2005,17 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 		List<BlogsStatsUser> list = (List<BlogsStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsStatsUser blogsStatsUser : list) {
+				if ((companyId != blogsStatsUser.getCompanyId()) ||
+						(entryCount != blogsStatsUser.getEntryCount())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2335,6 +2387,18 @@ public class BlogsStatsUserPersistenceImpl extends BasePersistenceImpl<BlogsStat
 
 		List<BlogsStatsUser> list = (List<BlogsStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsStatsUser blogsStatsUser : list) {
+				if ((userId != blogsStatsUser.getUserId()) ||
+						!Validator.equals(lastPostDate,
+							blogsStatsUser.getLastPostDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

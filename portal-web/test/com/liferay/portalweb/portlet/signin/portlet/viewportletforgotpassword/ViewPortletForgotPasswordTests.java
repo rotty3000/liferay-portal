@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.signin.portlet.viewportletforgotpassword;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPortletForgotPasswordTests extends BaseTests {
-
+public class ViewPortletForgotPasswordTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageSITest.class);
 		testSuite.addTestSuite(AddPortletSITest.class);
 		testSuite.addTestSuite(LogoutTest.class);
@@ -36,5 +34,4 @@ public class ViewPortletForgotPasswordTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

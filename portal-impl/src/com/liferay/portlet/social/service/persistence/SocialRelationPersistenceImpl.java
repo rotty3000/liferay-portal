@@ -928,6 +928,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if (!Validator.equals(uuid, socialRelation.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1290,6 +1300,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((companyId != socialRelation.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1627,6 +1647,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1966,6 +1996,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId2 != socialRelation.getUserId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2302,6 +2342,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2647,6 +2697,17 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((companyId != socialRelation.getCompanyId()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3012,6 +3073,17 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1()) ||
+						(userId2 != socialRelation.getUserId2())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3375,6 +3447,17 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId1 != socialRelation.getUserId1()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3737,6 +3820,17 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 
 		List<SocialRelation> list = (List<SocialRelation>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRelation socialRelation : list) {
+				if ((userId2 != socialRelation.getUserId2()) ||
+						(type != socialRelation.getType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4104,6 +4198,16 @@ public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRel
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_U1_U2_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof SocialRelation) {
+			SocialRelation socialRelation = (SocialRelation)result;
+
+			if ((userId1 != socialRelation.getUserId1()) ||
+					(userId2 != socialRelation.getUserId2()) ||
+					(type != socialRelation.getType())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

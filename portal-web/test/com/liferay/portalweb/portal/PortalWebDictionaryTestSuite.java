@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.dictionary.DictionaryTests;
+import com.liferay.portalweb.portlet.dictionary.DictionaryTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebDictionaryTestSuite extends BaseTests {
+public class PortalWebDictionaryTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(DictionaryTests.suite());
+		testSuite.addTest(DictionaryTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

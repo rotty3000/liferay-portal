@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.wiki.wikipage.addfrontpagecreoleexternallinks;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddFrontPageCreoleExternalLinksTests extends BaseTests {
-
+public class AddFrontPageCreoleExternalLinksTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddFrontPageCreoleExternalLinksTest.class);
@@ -35,5 +33,4 @@ public class AddFrontPageCreoleExternalLinksTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

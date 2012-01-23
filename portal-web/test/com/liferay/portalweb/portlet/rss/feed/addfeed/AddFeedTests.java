@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.rss.feed.addfeed;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddFeedTests extends BaseTests {
-
+public class AddFeedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageRSSTest.class);
 		testSuite.addTestSuite(AddPortletRSSTest.class);
 		testSuite.addTestSuite(AddFeedTest.class);
@@ -34,5 +32,4 @@ public class AddFeedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

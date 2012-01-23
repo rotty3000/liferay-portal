@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.iframe.IFrameTests;
+import com.liferay.portalweb.portlet.iframe.IFrameTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebIFrameTestSuite extends BaseTests {
+public class PortalWebIFrameTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(IFrameTests.suite());
+		testSuite.addTest(IFrameTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

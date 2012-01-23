@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.vimeo.VimeoTests;
+import com.liferay.portalweb.plugins.vimeo.VimeoTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsVimeoTestSuite extends BaseTests {
+public class PluginsVimeoTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(VimeoTests.suite());
+		testSuite.addTest(VimeoTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

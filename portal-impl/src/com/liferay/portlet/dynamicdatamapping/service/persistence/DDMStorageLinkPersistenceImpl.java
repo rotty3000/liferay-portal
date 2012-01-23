@@ -615,6 +615,16 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStorageLink ddmStorageLink : list) {
+				if (!Validator.equals(uuid, ddmStorageLink.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -977,6 +987,14 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 					finderArgs, this);
 		}
 
+		if (result instanceof DDMStorageLink) {
+			DDMStorageLink ddmStorageLink = (DDMStorageLink)result;
+
+			if ((classPK != ddmStorageLink.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -1104,6 +1122,16 @@ public class DDMStorageLinkPersistenceImpl extends BasePersistenceImpl<DDMStorag
 
 		List<DDMStorageLink> list = (List<DDMStorageLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStorageLink ddmStorageLink : list) {
+				if ((structureId != ddmStorageLink.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

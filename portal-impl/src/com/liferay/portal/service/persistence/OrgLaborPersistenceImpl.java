@@ -527,6 +527,16 @@ public class OrgLaborPersistenceImpl extends BasePersistenceImpl<OrgLabor>
 		List<OrgLabor> list = (List<OrgLabor>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgLabor orgLabor : list) {
+				if ((organizationId != orgLabor.getOrganizationId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

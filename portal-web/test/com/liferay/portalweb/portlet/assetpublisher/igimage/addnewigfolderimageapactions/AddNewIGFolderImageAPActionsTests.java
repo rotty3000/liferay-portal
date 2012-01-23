@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.igimage.addnewigfolderimageapactions;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddNewIGFolderImageAPActionsTests extends BaseTests {
-
+public class AddNewIGFolderImageAPActionsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(AddPageDLTest.class);
@@ -39,5 +37,4 @@ public class AddNewIGFolderImageAPActionsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.wiki.wikipage.addchildpage1childpageduplicatechildpage2;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,24 +22,21 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddChildPage1ChildPageDuplicateChildPage2Tests extends BaseTests {
-
+public class AddChildPage1ChildPageDuplicateChildPage2Tests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddFrontPageTest.class);
 		testSuite.addTestSuite(AddFrontPageChildPage1Test.class);
 		testSuite.addTestSuite(AddFrontPageChildPage2Test.class);
 		testSuite.addTestSuite(AddFrontPageChildPage1ChildPageTest.class);
-		testSuite.addTestSuite(
-			AddChildPage1ChildPageDuplicateChildPage2Test.class);
+		testSuite.addTestSuite(AddChildPage1ChildPageDuplicateChildPage2Test.class);
 		testSuite.addTestSuite(ViewFrontPageChildPage1ChildPageTest.class);
 		testSuite.addTestSuite(TearDownWikiNodeTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

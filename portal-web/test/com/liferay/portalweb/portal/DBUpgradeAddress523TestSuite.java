@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.sampledata523.address.AddressTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata523.address.AddressTestPlan;
 import com.liferay.portalweb.portal.dbupgrade.sampledata523.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeAddress523TestSuite extends BaseTests {
+public class DBUpgradeAddress523TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AddressTests.suite());
+		testSuite.addTest(AddressTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

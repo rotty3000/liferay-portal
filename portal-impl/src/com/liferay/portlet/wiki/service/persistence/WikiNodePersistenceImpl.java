@@ -695,6 +695,16 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		List<WikiNode> list = (List<WikiNode>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiNode wikiNode : list) {
+				if (!Validator.equals(uuid, wikiNode.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1071,6 +1081,15 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 					finderArgs, this);
 		}
 
+		if (result instanceof WikiNode) {
+			WikiNode wikiNode = (WikiNode)result;
+
+			if (!Validator.equals(uuid, wikiNode.getUuid()) ||
+					(groupId != wikiNode.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1216,6 +1235,16 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 
 		List<WikiNode> list = (List<WikiNode>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiNode wikiNode : list) {
+				if ((groupId != wikiNode.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1874,6 +1903,16 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		List<WikiNode> list = (List<WikiNode>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiNode wikiNode : list) {
+				if ((companyId != wikiNode.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2224,6 +2263,15 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof WikiNode) {
+			WikiNode wikiNode = (WikiNode)result;
+
+			if ((groupId != wikiNode.getGroupId()) ||
+					!Validator.equals(name, wikiNode.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.portletpermissions.blogs;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class BlogsTests extends BaseTests {
-
+public class BlogsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(ViewBlogsPortletNullTest.class);
 		testSuite.addTestSuite(SignInTest.class);
@@ -34,5 +32,4 @@ public class BlogsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

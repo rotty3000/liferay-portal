@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.smoke;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SmokeTests extends BaseTests {
-
+public class SmokeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPage1Test.class);
 		testSuite.addTestSuite(AddPage2Test.class);
 		testSuite.addTestSuite(AddPage3Test.class);
@@ -36,5 +34,4 @@ public class SmokeTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

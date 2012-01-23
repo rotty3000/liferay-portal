@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.documentlibrary.portlet.addtopage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddToPageTests extends BaseTests {
-
+public class AddToPageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddMemberTest.class);
 		testSuite.addTestSuite(AddMemberRoleTest.class);
 		testSuite.addTestSuite(DefineMemberRoleTest.class);
@@ -39,6 +37,8 @@ public class AddToPageTests extends BaseTests {
 		testSuite.addTestSuite(Member_AssertCannotAddToPageTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
+		testSuite.addTestSuite(ConfigureServerAdminCleanPermissionsTest.class);
+		testSuite.addTestSuite(AddPermissionSitePageUpdateTest.class);
 		testSuite.addTestSuite(AddPermissionAddToPageTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Member_LoginTest.class);
@@ -51,5 +51,4 @@ public class AddToPageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.clicktasksprogressbar100percentcomplete;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,19 +22,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ClickTasksProgressBar100PercentCompleteTests extends BaseTests {
-
+public class ClickTasksProgressBar100PercentCompleteTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTasksTaskAssignedToMeTest.class);
-		testSuite.addTestSuite(
-			ClickTasksProgressBar100PercentCompleteTest.class);
-		testSuite.addTestSuite(
-			ViewClickTasksProgressBar100PercentCompleteTest.class);
+		testSuite.addTestSuite(ClickTasksProgressBar100PercentCompleteTest.class);
+		testSuite.addTestSuite(ViewClickTasksProgressBar100PercentCompleteTest.class);
 		testSuite.addTestSuite(TearDownTasksTaskTest.class);
 
 		return testSuite;
 	}
-
 }

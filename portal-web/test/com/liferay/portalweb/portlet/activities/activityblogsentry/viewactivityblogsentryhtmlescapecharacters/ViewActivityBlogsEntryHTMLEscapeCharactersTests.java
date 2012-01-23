@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.activities.activityblogsentry.viewactivityblogsentryhtmlescapecharacters;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,20 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewActivityBlogsEntryHTMLEscapeCharactersTests extends BaseTests {
-
+public class ViewActivityBlogsEntryHTMLEscapeCharactersTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageActivitiesTest.class);
 		testSuite.addTestSuite(AddPortletActivitiesTest.class);
 		testSuite.addTestSuite(AddPageBlogsTest.class);
 		testSuite.addTestSuite(AddPortletBlogsTest.class);
 		testSuite.addTestSuite(AddBlogsEntryHTMLEscapeCharactersTest.class);
-		testSuite.addTestSuite(
-			ViewActivityBlogsEntryHTMLEscapeCharactersTest.class);
+		testSuite.addTestSuite(ViewActivityBlogsEntryHTMLEscapeCharactersTest.class);
 		testSuite.addTestSuite(TearDownBlogsEntryTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 		testSuite.addTestSuite(TearDownMyCommunityPrivatePageTest.class);
 
 		return testSuite;
 	}
-
 }

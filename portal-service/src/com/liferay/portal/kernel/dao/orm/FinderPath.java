@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.dao.shard.ShardUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.BaseModel;
 
 import java.io.Serializable;
 
@@ -52,46 +53,54 @@ public class FinderPath {
 		_params = params;
 		_columnBitmask = columnBitmask;
 
+		if (BaseModel.class.isAssignableFrom(_resultClass)) {
+			_cacheKeyGeneratorCacheName =
+				FinderCache.class.getName() + "#BaseModel";
+		}
+		else {
+			_cacheKeyGeneratorCacheName = FinderCache.class.getName();
+		}
+
+		CacheKeyGenerator cacheKeyGenerator =
+			CacheKeyGeneratorUtil.getCacheKeyGenerator(
+				_cacheKeyGeneratorCacheName);
+
+		if (cacheKeyGenerator.isCallingGetCacheKeyThreadSafe()) {
+			_cacheKeyGenerator = cacheKeyGenerator;
+		}
+
 		_initCacheKeyPrefix();
 		_initLocalCacheKeyPrefix();
 	}
 
-	public Serializable encodeCacheKey(Object[] args) {
-		StringBundler sb = new StringBundler(args.length * 2 + 3);
+	public Serializable encodeCacheKey(Object[] arguments) {
+		StringBundler sb = new StringBundler(arguments.length * 2 + 3);
 
 		sb.append(ShardUtil.getCurrentShardName());
 		sb.append(StringPool.PERIOD);
 		sb.append(_cacheKeyPrefix);
 
-		for (Object arg : args) {
+		for (Object arg : arguments) {
 			sb.append(StringPool.PERIOD);
 			sb.append(StringUtil.toHexString(arg));
 		}
 
-		CacheKeyGenerator cacheKeyGenerator =
-			CacheKeyGeneratorUtil.getCacheKeyGenerator(
-				FinderCache.class.getName());
-
-		return cacheKeyGenerator.getCacheKey(sb);
+		return _getCacheKey(sb);
 	}
 
-	public Serializable encodeLocalCacheKey(Object[] args) {
-		StringBundler sb = new StringBundler(args.length * 2 + 3);
+	public Serializable encodeLocalCacheKey(Object[] arguments) {
+		StringBundler sb = new StringBundler(arguments.length * 2 + 3);
 
 		sb.append(ShardUtil.getCurrentShardName());
 		sb.append(StringPool.PERIOD);
 		sb.append(_localCacheKeyPrefix);
 
-		for (Object arg : args) {
+		for (Object arg : arguments) {
 			sb.append(StringPool.PERIOD);
 			sb.append(StringUtil.toHexString(arg));
 		}
 
-		CacheKeyGenerator cacheKeyGenerator =
-			CacheKeyGeneratorUtil.getCacheKeyGenerator(
-				FinderCache.class.getName());
-
-		return cacheKeyGenerator.getCacheKey(sb);
+		return _getCacheKey(sb);
 	}
 
 	public String getCacheName() {
@@ -122,6 +131,38 @@ public class FinderPath {
 		return _finderCacheEnabled;
 	}
 
+	public void setCacheKeyGeneratorCacheName(
+		String cacheKeyGeneratorCacheName) {
+
+		if (cacheKeyGeneratorCacheName == null) {
+			cacheKeyGeneratorCacheName = FinderCache.class.getName();
+		}
+
+		_cacheKeyGeneratorCacheName = cacheKeyGeneratorCacheName;
+
+		CacheKeyGenerator cacheKeyGenerator =
+			CacheKeyGeneratorUtil.getCacheKeyGenerator(
+				cacheKeyGeneratorCacheName);
+
+		if (cacheKeyGenerator.isCallingGetCacheKeyThreadSafe()) {
+			_cacheKeyGenerator = cacheKeyGenerator;
+		}
+		else {
+			_cacheKeyGenerator = null;
+		}
+	}
+
+	private Serializable _getCacheKey(StringBundler sb) {
+		CacheKeyGenerator cacheKeyGenerator = _cacheKeyGenerator;
+
+		if (cacheKeyGenerator == null) {
+			cacheKeyGenerator = CacheKeyGeneratorUtil.getCacheKeyGenerator(
+				_cacheKeyGeneratorCacheName);
+		}
+
+		return cacheKeyGenerator.getCacheKey(sb);
+	}
+
 	private void _initCacheKeyPrefix() {
 		StringBundler sb = new StringBundler(_params.length * 2 + 3);
 
@@ -147,6 +188,8 @@ public class FinderPath {
 
 	private static final String _PARAMS_SEPARATOR = "_P_";
 
+	private CacheKeyGenerator _cacheKeyGenerator;
+	private String _cacheKeyGeneratorCacheName;
 	private String _cacheKeyPrefix;
 	private String _cacheName;
 	private long _columnBitmask;

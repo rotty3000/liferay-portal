@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.blogsaggregator.BlogsAggregatorTests;
+import com.liferay.portalweb.portlet.blogsaggregator.BlogsAggregatorTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebBlogsAggregatorTestSuite extends BaseTests {
+public class PortalWebBlogsAggregatorTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(BlogsAggregatorTests.suite());
+		testSuite.addTest(BlogsAggregatorTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -589,6 +589,16 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		List<WikiPageResource> list = (List<WikiPageResource>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPageResource wikiPageResource : list) {
+				if (!Validator.equals(uuid, wikiPageResource.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -955,6 +965,15 @@ public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPag
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_N_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof WikiPageResource) {
+			WikiPageResource wikiPageResource = (WikiPageResource)result;
+
+			if ((nodeId != wikiPageResource.getNodeId()) ||
+					!Validator.equals(title, wikiPageResource.getTitle())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.notifications.requests.sofrconfirmnotificationsjoinrestrictedsite;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,11 +23,9 @@ import junit.framework.TestSuite;
  * @author Brian Wing Shun Chan
  */
 public class SOFr_ConfirmNotificationsJoinRestrictedSiteTests
-	extends BaseTests {
-
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(AddSitesSiteTypeRestrictedTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -41,8 +39,7 @@ public class SOFr_ConfirmNotificationsJoinRestrictedSiteTests
 		testSuite.addTestSuite(SendMembersInvitationRestrictedSiteTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFr_ConfirmNotificationsJoinRestrictedSiteTest.class);
+		testSuite.addTestSuite(SOFr_ConfirmNotificationsJoinRestrictedSiteTest.class);
 		testSuite.addTestSuite(SOFr_ViewSitesSiteTypeRestrictedTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
@@ -51,5 +48,4 @@ public class SOFr_ConfirmNotificationsJoinRestrictedSiteTests
 
 		return testSuite;
 	}
-
 }

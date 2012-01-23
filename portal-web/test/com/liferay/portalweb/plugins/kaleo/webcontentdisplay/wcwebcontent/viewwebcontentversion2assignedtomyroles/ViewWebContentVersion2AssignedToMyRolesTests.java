@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontentdisplay.wcwebcontent.viewwebcontentversion2assignedtomyroles;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewWebContentVersion2AssignedToMyRolesTests extends BaseTests {
-
+public class ViewWebContentVersion2AssignedToMyRolesTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
@@ -34,11 +32,9 @@ public class ViewWebContentVersion2AssignedToMyRolesTests extends BaseTests {
 		testSuite.addTestSuite(AssignToMeWebContentActionsTest.class);
 		testSuite.addTestSuite(ApproveWebContentActionsTest.class);
 		testSuite.addTestSuite(EditWebContentCompletedActionsTest.class);
-		testSuite.addTestSuite(
-			ViewWebContentVersion2AssignedToMyRolesTest.class);
+		testSuite.addTestSuite(ViewWebContentVersion2AssignedToMyRolesTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
-		testSuite.addTestSuite(
-			Guest_ViewWebContentVersion2AssignedToMyRolesTest.class);
+		testSuite.addTestSuite(Guest_ViewWebContentVersion2AssignedToMyRolesTest.class);
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
@@ -46,5 +42,4 @@ public class ViewWebContentVersion2AssignedToMyRolesTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

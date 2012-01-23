@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.portlet.addportletmultipleap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPortletMultipleAPTests extends BaseTests {
-
+public class AddPortletMultipleAPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAP1Test.class);
 		testSuite.addTestSuite(AddPortletAP2Test.class);
@@ -35,5 +33,4 @@ public class AddPortletMultipleAPTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

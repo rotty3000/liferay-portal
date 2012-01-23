@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -718,6 +719,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 					finderArgs, this);
 		}
 
+		if (result instanceof ShoppingItem) {
+			ShoppingItem shoppingItem = (ShoppingItem)result;
+
+			if ((smallImageId != shoppingItem.getSmallImageId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -848,6 +857,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 					finderArgs, this);
 		}
 
+		if (result instanceof ShoppingItem) {
+			ShoppingItem shoppingItem = (ShoppingItem)result;
+
+			if ((mediumImageId != shoppingItem.getMediumImageId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -976,6 +993,14 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_LARGEIMAGEID,
 					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingItem) {
+			ShoppingItem shoppingItem = (ShoppingItem)result;
+
+			if ((largeImageId != shoppingItem.getLargeImageId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -1115,6 +1140,17 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 
 		List<ShoppingItem> list = (List<ShoppingItem>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingItem shoppingItem : list) {
+				if ((groupId != shoppingItem.getGroupId()) ||
+						(categoryId != shoppingItem.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1810,6 +1846,15 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_S,
 					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingItem) {
+			ShoppingItem shoppingItem = (ShoppingItem)result;
+
+			if ((companyId != shoppingItem.getCompanyId()) ||
+					!Validator.equals(sku, shoppingItem.getSku())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -2511,6 +2556,10 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_SHOPPINGITEMPRICES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the shopping item prices associated with the shopping item.
 	 *
@@ -2588,6 +2637,10 @@ public class ShoppingItemPersistenceImpl extends BasePersistenceImpl<ShoppingIte
 			com.liferay.portlet.shopping.model.impl.ShoppingItemPriceImpl.class,
 			com.liferay.portlet.shopping.service.persistence.ShoppingItemPricePersistenceImpl.FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"getShoppingItemPricesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_SHOPPINGITEMPRICES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of shopping item prices associated with the shopping item.

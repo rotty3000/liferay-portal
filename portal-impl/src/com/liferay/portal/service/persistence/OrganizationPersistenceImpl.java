@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Organization;
@@ -691,6 +692,16 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Organization organization : list) {
+				if ((companyId != organization.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1351,6 +1362,16 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Organization organization : list) {
+				if ((companyId != organization.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2020,6 +2041,17 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 
 		List<Organization> list = (List<Organization>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Organization organization : list) {
+				if ((companyId != organization.getCompanyId()) ||
+						(parentOrganizationId != organization.getParentOrganizationId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2719,6 +2751,15 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof Organization) {
+			Organization organization = (Organization)result;
+
+			if ((companyId != organization.getCompanyId()) ||
+					!Validator.equals(name, organization.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3448,6 +3489,10 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the groups associated with the organization.
 	 *
@@ -3523,6 +3568,10 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			OrganizationModelImpl.FINDER_CACHE_ENABLED_GROUPS_ORGS, Long.class,
 			OrganizationModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME,
 			"getGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of groups associated with the organization.
@@ -3911,6 +3960,10 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the organization.
 	 *
@@ -3986,6 +4039,10 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 			OrganizationModelImpl.FINDER_CACHE_ENABLED_USERS_ORGS, Long.class,
 			OrganizationModelImpl.MAPPING_TABLE_USERS_ORGS_NAME,
 			"getUsersSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the organization.

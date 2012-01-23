@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.dynamicdatalists.fieldradio.editfieldradiooptionsutf8;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditFieldRadioOptionsUTF8Tests extends BaseTests {
-
+public class EditFieldRadioOptionsUTF8Tests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddDataDefinitionTest.class);
 		testSuite.addTestSuite(EditFieldRadioOptionsUTF8Test.class);
 		testSuite.addTestSuite(ViewEditFieldRadioOptionsUTF8Test.class);
@@ -34,5 +32,4 @@ public class EditFieldRadioOptionsUTF8Tests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

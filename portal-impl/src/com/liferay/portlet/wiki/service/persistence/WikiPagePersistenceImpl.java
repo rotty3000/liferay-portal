@@ -1420,6 +1420,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if (!Validator.equals(uuid, wikiPage.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1796,6 +1806,15 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 					finderArgs, this);
 		}
 
+		if (result instanceof WikiPage) {
+			WikiPage wikiPage = (WikiPage)result;
+
+			if (!Validator.equals(uuid, wikiPage.getUuid()) ||
+					(groupId != wikiPage.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1941,6 +1960,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2285,6 +2314,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if (!Validator.equals(format, wikiPage.getFormat())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2664,6 +2703,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+						(nodeId != wikiPage.getNodeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3034,6 +3084,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3429,6 +3490,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3798,6 +3870,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4195,6 +4278,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(redirectTitle,
+							wikiPage.getRedirectTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4590,6 +4685,17 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -4965,6 +5071,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 					finderArgs, this);
 		}
 
+		if (result instanceof WikiPage) {
+			WikiPage wikiPage = (WikiPage)result;
+
+			if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+					(nodeId != wikiPage.getNodeId()) ||
+					(version != wikiPage.getVersion())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -5115,6 +5231,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((resourcePrimKey != wikiPage.getResourcePrimKey()) ||
+						(nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -5509,6 +5637,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((userId != wikiPage.getUserId()) ||
+						(nodeId != wikiPage.getNodeId()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -5902,6 +6042,16 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 					finderArgs, this);
 		}
 
+		if (result instanceof WikiPage) {
+			WikiPage wikiPage = (WikiPage)result;
+
+			if ((nodeId != wikiPage.getNodeId()) ||
+					!Validator.equals(title, wikiPage.getTitle()) ||
+					(version != wikiPage.getVersion())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -6065,6 +6215,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle()) ||
+						(head != wikiPage.getHead())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -6482,6 +6644,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						!Validator.equals(title, wikiPage.getTitle()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -6897,6 +7071,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -7314,6 +7500,18 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -7709,6 +7907,19 @@ public class WikiPagePersistenceImpl extends BasePersistenceImpl<WikiPage>
 
 		List<WikiPage> list = (List<WikiPage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (WikiPage wikiPage : list) {
+				if ((nodeId != wikiPage.getNodeId()) ||
+						(head != wikiPage.getHead()) ||
+						!Validator.equals(parentTitle, wikiPage.getParentTitle()) ||
+						(status != wikiPage.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

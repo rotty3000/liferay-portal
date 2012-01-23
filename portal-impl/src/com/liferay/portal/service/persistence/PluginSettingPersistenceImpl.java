@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PluginSetting;
@@ -596,6 +597,16 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 		List<PluginSetting> list = (List<PluginSetting>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PluginSetting pluginSetting : list) {
+				if ((companyId != pluginSetting.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -946,6 +957,16 @@ public class PluginSettingPersistenceImpl extends BasePersistenceImpl<PluginSett
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_I_T,
 					finderArgs, this);
+		}
+
+		if (result instanceof PluginSetting) {
+			PluginSetting pluginSetting = (PluginSetting)result;
+
+			if ((companyId != pluginSetting.getCompanyId()) ||
+					!Validator.equals(pluginId, pluginSetting.getPluginId()) ||
+					!Validator.equals(pluginType, pluginSetting.getPluginType())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

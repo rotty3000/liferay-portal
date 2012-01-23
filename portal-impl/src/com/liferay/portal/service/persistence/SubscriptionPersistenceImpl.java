@@ -677,6 +677,16 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		List<Subscription> list = (List<Subscription>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Subscription subscription : list) {
+				if ((userId != subscription.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1022,6 +1032,17 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 		List<Subscription> list = (List<Subscription>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Subscription subscription : list) {
+				if ((userId != subscription.getUserId()) ||
+						(classNameId != subscription.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1389,6 +1410,18 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 
 		List<Subscription> list = (List<Subscription>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Subscription subscription : list) {
+				if ((companyId != subscription.getCompanyId()) ||
+						(classNameId != subscription.getClassNameId()) ||
+						(classPK != subscription.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1785,6 +1818,17 @@ public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscriptio
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_U_C_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof Subscription) {
+			Subscription subscription = (Subscription)result;
+
+			if ((companyId != subscription.getCompanyId()) ||
+					(userId != subscription.getUserId()) ||
+					(classNameId != subscription.getClassNameId()) ||
+					(classPK != subscription.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

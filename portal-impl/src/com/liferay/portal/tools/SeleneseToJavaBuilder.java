@@ -49,25 +49,25 @@ public class SeleneseToJavaBuilder {
 	}
 
 	public SeleneseToJavaBuilder(String basedir) throws Exception {
-		DirectoryScanner ds = new DirectoryScanner();
+		DirectoryScanner directoryScanner = new DirectoryScanner();
 
-		ds.setBasedir(basedir);
-		ds.setExcludes(
+		directoryScanner.setBasedir(basedir);
+		directoryScanner.setExcludes(
 			new String[] {
-				"**\\EvaluateLogTest.java", "**\\IterateThemeTest.java",
-				"**\\StopSeleniumTest.java",
+				"**\\EvaluateLogTest.java", "**\\EvaluateUserCSVFileTest.java",
+				"**\\IterateThemeTest.java", "**\\StopSeleniumTest.java",
 				"**\\WaitForSystemShutdownTest.java"
 			});
-		ds.setIncludes(new String[] {"**\\*Test.html", "**\\*Test.java"});
-		/*ds.setIncludes(
+		directoryScanner.setIncludes(
 			new String[] {
-				"**\\liferay\\portalweb\\portal\\login\\*Test.html",
-				"**\\liferay\\portalweb\\portal\\login\\*Test.java"
-			});*/
+				"**\\*Test.html", "**\\*Test.java", "**\\*Tests.html",
+				"**\\*Tests.java", "**\\*TestSuite.java"
+			});
 
-		ds.scan();
+		directoryScanner.scan();
 
-		Set<String> fileNames = SetUtil.fromArray(ds.getIncludedFiles());
+		Set<String> fileNames = SetUtil.fromArray(
+			directoryScanner.getIncludedFiles());
 
 		for (String fileName : fileNames) {
 
@@ -85,9 +85,14 @@ public class SeleneseToJavaBuilder {
 			);*/
 
 			if (fileName.endsWith("Test.html")) {
-				translate(basedir, fileName);
+				translateTestCase(basedir, fileName);
 			}
-			else if (fileName.endsWith("Test.java")) {
+			else if (fileName.endsWith("Tests.html")) {
+				translateTestSuite(basedir, fileName);
+			}
+			else if (fileName.endsWith("Test.java") ||
+					 fileName.endsWith("Tests.java")) {
+
 				if (!fileNames.contains(
 						fileName.substring(0, fileName.length() - 5) +
 							".html")) {
@@ -145,7 +150,9 @@ public class SeleneseToJavaBuilder {
 		return params;
 	}
 
-	protected void translate(String basedir, String fileName) throws Exception {
+	protected void translateTestCase(String basedir, String fileName)
+		throws Exception {
+
 		fileName = StringUtil.replace(
 			fileName, StringPool.BACK_SLASH, StringPool.SLASH);
 
@@ -164,13 +171,13 @@ public class SeleneseToJavaBuilder {
 
 		sb.append("package ");
 		sb.append(testPackagePath);
-		sb.append(";\n\n");
+		sb.append(";\n");
 
 		sb.append("import com.liferay.portal.kernel.util.FileUtil;\n");
 		sb.append("import com.liferay.portal.kernel.util.StringPool;\n");
-		sb.append("import com.liferay.portalweb.portal.BaseTestCase;\n\n");
+		sb.append("import com.liferay.portalweb.portal.BaseTestCase;\n");
 		sb.append(
-			"import com.liferay.portalweb.portal.util.RuntimeVariables;\n\n");
+			"import com.liferay.portalweb.portal.util.RuntimeVariables;\n");
 
 		sb.append("public class ");
 		sb.append(testName);
@@ -1019,15 +1026,127 @@ public class SeleneseToJavaBuilder {
 
 		String content = sb.toString();
 
-		ServiceBuilder.writeFile(new File(testFileName), content);
+		File testFile = new File(testFileName);
+
+		ServiceBuilder.writeFile(testFile, content);
 	}
 
-	private static final String[] _FIX_PARAM_OLD_SUBS = new String[] {
-		"\\\\n", "<br />"
-	};
+	protected void translateTestSuite(String basedir, String fileName)
+		throws Exception {
+
+		fileName = StringUtil.replace(
+			fileName, StringPool.BACK_SLASH, StringPool.SLASH);
+
+		int x = fileName.lastIndexOf(StringPool.SLASH);
+		int y = fileName.indexOf(StringPool.PERIOD);
+
+		String testPackagePath = StringUtil.replace(
+			fileName.substring(0, x), StringPool.SLASH, StringPool.PERIOD);
+		String testName = fileName.substring(x + 1, y);
+		String testFileName =
+			basedir + "/" + fileName.substring(0, y) + ".java";
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("package ");
+		sb.append(testPackagePath);
+		sb.append(";\n");
+
+		sb.append("import com.liferay.portalweb.portal.BaseTestSuite;\n");
+		sb.append("import com.liferay.portalweb.portal.StopSeleniumTest;\n");
+
+		String xml = FileUtil.read(basedir + "/" + fileName);
+
+		x = 0;
+		y = 0;
+
+		while (xml.indexOf("<a href=\"", x) != -1) {
+			x = xml.indexOf("<a href=\"", x) + 9;
+			y = xml.indexOf("\">", x);
+
+			String testCaseName = xml.substring(x, y);
+
+			if (!testCaseName.contains("..")) {
+				continue;
+			}
+
+			int z = fileName.lastIndexOf(StringPool.SLASH);
+
+			String importClassName = fileName.substring(0, z);
+
+			int count = StringUtil.count(testCaseName, "..");
+
+			for (int i = 0; i < count; i++) {
+				z = importClassName.lastIndexOf(StringPool.SLASH);
+
+				importClassName = fileName.substring(0, z);
+			}
+
+			z = testCaseName.lastIndexOf("../", z);
+
+			importClassName +=
+				testCaseName.substring(z + 2, testCaseName.length() -5);
+			importClassName = StringUtil.replace(
+				importClassName, StringPool.SLASH, StringPool.PERIOD);
+
+			sb.append("import ");
+			sb.append(importClassName);
+			sb.append(";\n");
+		}
+
+		sb.append("import junit.framework.Test;\n");
+		sb.append("import junit.framework.TestSuite;\n");
+
+		sb.append("public class ");
+		sb.append(testName);
+		sb.append(" extends BaseTestSuite {");
+
+		sb.append("public static Test suite() {");
+
+		sb.append("TestSuite testSuite = new TestSuite();");
+
+		x = xml.indexOf("</b></td></tr>");
+		y = xml.indexOf("</tbody>");
+
+		xml = xml.substring(x + 15, y);
+
+		x = 0;
+		y = 0;
+
+		while (true) {
+			x = xml.indexOf("\">", x);
+			y = xml.indexOf("</a>", x);
+
+			if ((x == -1) || (y == -1)) {
+				break;
+			}
+
+			String className = xml.substring(x + 2, y);
+
+			x += className.length();
+
+			sb.append("testSuite.addTestSuite(");
+			sb.append(className);
+			sb.append(".class);");
+		}
+
+		sb.append("return testSuite;");
+		sb.append("}");
+		sb.append("}");
+
+		String content = sb.toString();
+
+		File testFile = new File(testFileName);
+
+		ServiceBuilder.writeFile(testFile, content);
+	}
 
 	private static final String[] _FIX_PARAM_NEW_SUBS = new String[] {
 		"\\n", "\\n"
+	};
+
+	private static final String[] _FIX_PARAM_OLD_SUBS = new String[] {
+		"\\\\n", "<br />"
 	};
 
 }

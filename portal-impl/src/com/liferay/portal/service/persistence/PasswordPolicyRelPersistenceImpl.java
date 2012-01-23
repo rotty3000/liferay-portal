@@ -638,6 +638,16 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 		List<PasswordPolicyRel> list = (List<PasswordPolicyRel>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PasswordPolicyRel passwordPolicyRel : list) {
+				if ((passwordPolicyId != passwordPolicyRel.getPasswordPolicyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -986,6 +996,15 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 					finderArgs, this);
 		}
 
+		if (result instanceof PasswordPolicyRel) {
+			PasswordPolicyRel passwordPolicyRel = (PasswordPolicyRel)result;
+
+			if ((classNameId != passwordPolicyRel.getClassNameId()) ||
+					(classPK != passwordPolicyRel.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1134,6 +1153,16 @@ public class PasswordPolicyRelPersistenceImpl extends BasePersistenceImpl<Passwo
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_P_C_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof PasswordPolicyRel) {
+			PasswordPolicyRel passwordPolicyRel = (PasswordPolicyRel)result;
+
+			if ((passwordPolicyId != passwordPolicyRel.getPasswordPolicyId()) ||
+					(classNameId != passwordPolicyRel.getClassNameId()) ||
+					(classPK != passwordPolicyRel.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

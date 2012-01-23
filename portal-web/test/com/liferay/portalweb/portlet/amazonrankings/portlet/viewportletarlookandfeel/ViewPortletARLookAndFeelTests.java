@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.amazonrankings.portlet.viewportletarlookandfeel;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPortletARLookAndFeelTests extends BaseTests {
-
+public class ViewPortletARLookAndFeelTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageARTest.class);
 		testSuite.addTestSuite(AddPortletARTest.class);
 		testSuite.addTestSuite(ViewPortletARLookAndFeelTest.class);
@@ -34,5 +32,4 @@ public class ViewPortletARLookAndFeelTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

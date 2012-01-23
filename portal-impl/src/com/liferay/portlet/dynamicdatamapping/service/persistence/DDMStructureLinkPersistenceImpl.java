@@ -612,6 +612,16 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructureLink ddmStructureLink : list) {
+				if ((classNameId != ddmStructureLink.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -952,6 +962,14 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 					finderArgs, this);
 		}
 
+		if (result instanceof DDMStructureLink) {
+			DDMStructureLink ddmStructureLink = (DDMStructureLink)result;
+
+			if ((classPK != ddmStructureLink.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -1080,6 +1098,16 @@ public class DDMStructureLinkPersistenceImpl extends BasePersistenceImpl<DDMStru
 
 		List<DDMStructureLink> list = (List<DDMStructureLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructureLink ddmStructureLink : list) {
+				if ((structureId != ddmStructureLink.getStructureId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

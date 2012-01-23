@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.ModelListener;
@@ -608,6 +609,14 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 					finderArgs, this);
 		}
 
+		if (result instanceof Company) {
+			Company company = (Company)result;
+
+			if (!Validator.equals(webId, company.getWebId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -746,6 +755,14 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_MX,
 					finderArgs, this);
+		}
+
+		if (result instanceof Company) {
+			Company company = (Company)result;
+
+			if (!Validator.equals(mx, company.getMx())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -888,6 +905,14 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 					finderArgs, this);
 		}
 
+		if (result instanceof Company) {
+			Company company = (Company)result;
+
+			if ((logoId != company.getLogoId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -1013,6 +1038,16 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 
 		List<Company> list = (List<Company>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Company company : list) {
+				if ((system != company.getSystem())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

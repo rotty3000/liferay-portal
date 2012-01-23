@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.dbupgrade.sampledata523.login.LoginTests;
-import com.liferay.portalweb.portal.dbupgrade.sampledata523.messageboards.MessageBoardsTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledata523.messageboards.MessageBoardsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradeMessageBoards523TestSuite extends BaseTests {
+public class DBUpgradeMessageBoards523TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(MessageBoardsTests.suite());
+		testSuite.addTest(MessageBoardsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -734,6 +735,16 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 		List<JournalArticleImage> list = (List<JournalArticleImage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalArticleImage journalArticleImage : list) {
+				if ((groupId != journalArticleImage.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1073,6 +1084,16 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 
 		List<JournalArticleImage> list = (List<JournalArticleImage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalArticleImage journalArticleImage : list) {
+				if ((tempImage != journalArticleImage.getTempImage())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1425,6 +1446,19 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 
 		List<JournalArticleImage> list = (List<JournalArticleImage>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalArticleImage journalArticleImage : list) {
+				if ((groupId != journalArticleImage.getGroupId()) ||
+						!Validator.equals(articleId,
+							journalArticleImage.getArticleId()) ||
+						(version != journalArticleImage.getVersion())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1860,6 +1894,22 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_A_V_E_E_L,
 					finderArgs, this);
+		}
+
+		if (result instanceof JournalArticleImage) {
+			JournalArticleImage journalArticleImage = (JournalArticleImage)result;
+
+			if ((groupId != journalArticleImage.getGroupId()) ||
+					!Validator.equals(articleId,
+						journalArticleImage.getArticleId()) ||
+					(version != journalArticleImage.getVersion()) ||
+					!Validator.equals(elInstanceId,
+						journalArticleImage.getElInstanceId()) ||
+					!Validator.equals(elName, journalArticleImage.getElName()) ||
+					!Validator.equals(languageId,
+						journalArticleImage.getLanguageId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

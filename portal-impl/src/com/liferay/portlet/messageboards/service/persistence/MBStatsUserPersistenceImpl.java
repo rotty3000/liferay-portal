@@ -660,6 +660,16 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 		List<MBStatsUser> list = (List<MBStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBStatsUser mbStatsUser : list) {
+				if ((groupId != mbStatsUser.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1004,6 +1014,16 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 
 		List<MBStatsUser> list = (List<MBStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBStatsUser mbStatsUser : list) {
+				if ((userId != mbStatsUser.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1357,6 +1377,15 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 					finderArgs, this);
 		}
 
+		if (result instanceof MBStatsUser) {
+			MBStatsUser mbStatsUser = (MBStatsUser)result;
+
+			if ((groupId != mbStatsUser.getGroupId()) ||
+					(userId != mbStatsUser.getUserId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1502,6 +1531,18 @@ public class MBStatsUserPersistenceImpl extends BasePersistenceImpl<MBStatsUser>
 
 		List<MBStatsUser> list = (List<MBStatsUser>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBStatsUser mbStatsUser : list) {
+				if ((groupId != mbStatsUser.getGroupId()) ||
+						(userId != mbStatsUser.getUserId()) ||
+						(messageCount != mbStatsUser.getMessageCount())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

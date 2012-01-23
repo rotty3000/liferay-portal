@@ -72,6 +72,9 @@
 					<bean class="com.liferay.portal.cache.key.HashCodeCacheKeyGenerator" />
 				</entry>
 				<entry key="com.liferay.portal.kernel.dao.orm.FinderCache">
+					<bean class="com.liferay.portal.cache.key.SimpleCacheKeyGenerator" />
+				</entry>
+				<entry key="com.liferay.portal.kernel.dao.orm.FinderCache#BaseModel">
 					<bean class="com.liferay.portal.cache.key.HashCodeCacheKeyGenerator" />
 				</entry>
 				<entry key="com.liferay.portal.language.LanguageResources">
@@ -332,6 +335,11 @@
 	<bean id="com.liferay.portal.kernel.util.MultiValueMapFactoryUtil" class="com.liferay.portal.kernel.util.MultiValueMapFactoryUtil">
 		<property name="multiValueMapFactory">
 			<bean class="com.liferay.portal.util.MultiValueMapFactoryImpl" />
+		</property>
+	</bean>
+	<bean id="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil" class="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil">
+		<property name="orderByComparatorFactory">
+			<bean class="com.liferay.portal.util.OrderByComparatorFactoryImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.uuid.PortalUUID" class="com.liferay.portal.uuid.PortalUUIDImpl" />
@@ -652,6 +660,11 @@
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil">
 		<property name="DDMIndexer">
 			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMIndexerImpl" />
+		</property>
+	</bean>
+	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMUtil">
+		<property name="DDM">
+			<bean class="com.liferay.portlet.dynamicdatamapping.util.DDMImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil" class="com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil">

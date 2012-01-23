@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Contains context information about a given API call.
  *
@@ -102,6 +104,7 @@ public class ServiceContext implements Cloneable, Serializable {
 		serviceContext.setPortletPreferencesIds(getPortletPreferencesIds());
 		serviceContext.setRemoteAddr(getRemoteAddr());
 		serviceContext.setRemoteHost(getRemoteHost());
+		serviceContext.setRequest(getRequest());
 		serviceContext.setScopeGroupId(getScopeGroupId());
 		serviceContext.setSignedIn(isSignedIn());
 		serviceContext.setUserDisplayURL(getUserDisplayURL());
@@ -531,6 +534,10 @@ public class ServiceContext implements Cloneable, Serializable {
 	 */
 	public String getRemoteHost() {
 		return _remoteHost;
+	}
+
+	public HttpServletRequest getRequest() {
+		return _request;
 	}
 
 	/**
@@ -1041,6 +1048,16 @@ public class ServiceContext implements Cloneable, Serializable {
 	}
 
 	/**
+	 * Sets the optional request used when instantiating this service context.
+	 * The field is volatile and so will be discarded on serialization.
+	 *
+	 * @param request the request
+	 */
+	public void setRequest(HttpServletRequest request) {
+		_request = request;
+	}
+
+	/**
 	 * Sets the ID of the group corresponding to the current data scope of this
 	 * service context.
 	 *
@@ -1135,6 +1152,7 @@ public class ServiceContext implements Cloneable, Serializable {
 	private PortletPreferencesIds _portletPreferencesIds;
 	private String _remoteAddr;
 	private String _remoteHost;
+	private transient HttpServletRequest _request;
 	private long _scopeGroupId;
 	private boolean _signedIn;
 	private String _userDisplayURL;

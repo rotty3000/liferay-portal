@@ -995,6 +995,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if (!Validator.equals(uuid, socialRequest.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1371,6 +1381,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 					finderArgs, this);
 		}
 
+		if (result instanceof SocialRequest) {
+			SocialRequest socialRequest = (SocialRequest)result;
+
+			if (!Validator.equals(uuid, socialRequest.getUuid()) ||
+					(groupId != socialRequest.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1518,6 +1537,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((companyId != socialRequest.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1864,6 +1893,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2215,6 +2254,16 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((receiverUserId != socialRequest.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2569,6 +2618,17 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2941,6 +3001,17 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((receiverUserId != socialRequest.getReceiverUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3336,6 +3407,18 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 					finderArgs, this);
 		}
 
+		if (result instanceof SocialRequest) {
+			SocialRequest socialRequest = (SocialRequest)result;
+
+			if ((userId != socialRequest.getUserId()) ||
+					(classNameId != socialRequest.getClassNameId()) ||
+					(classPK != socialRequest.getClassPK()) ||
+					(type != socialRequest.getType()) ||
+					(receiverUserId != socialRequest.getReceiverUserId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(7);
 
@@ -3504,6 +3587,20 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((userId != socialRequest.getUserId()) ||
+						(classNameId != socialRequest.getClassNameId()) ||
+						(classPK != socialRequest.getClassPK()) ||
+						(type != socialRequest.getType()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3944,6 +4041,20 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 
 		List<SocialRequest> list = (List<SocialRequest>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialRequest socialRequest : list) {
+				if ((classNameId != socialRequest.getClassNameId()) ||
+						(classPK != socialRequest.getClassPK()) ||
+						(type != socialRequest.getType()) ||
+						(receiverUserId != socialRequest.getReceiverUserId()) ||
+						(status != socialRequest.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -168,6 +169,10 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P",
+			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			MBCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MBCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			MBCategoryModelImpl.FINDER_CACHE_ENABLED, MBCategoryImpl.class,
@@ -707,6 +712,16 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBCategory mbCategory : list) {
+				if (!Validator.equals(uuid, mbCategory.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1083,6 +1098,15 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					finderArgs, this);
 		}
 
+		if (result instanceof MBCategory) {
+			MBCategory mbCategory = (MBCategory)result;
+
+			if (!Validator.equals(uuid, mbCategory.getUuid()) ||
+					(groupId != mbCategory.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1229,6 +1253,16 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBCategory mbCategory : list) {
+				if ((groupId != mbCategory.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1888,6 +1922,16 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBCategory mbCategory : list) {
+				if ((companyId != mbCategory.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2242,6 +2286,17 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBCategory mbCategory : list) {
+				if ((groupId != mbCategory.getGroupId()) ||
+						(parentCategoryId != mbCategory.getParentCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2599,18 +2654,16 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 	public List<MBCategory> findByG_P(long groupId, long[] parentCategoryIds,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = null;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(parentCategoryIds)
 				};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P;
 			finderArgs = new Object[] {
 					groupId, StringUtil.merge(parentCategoryIds),
 					
@@ -2620,6 +2673,18 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 
 		List<MBCategory> list = (List<MBCategory>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (MBCategory mbCategory : list) {
+				if ((groupId != mbCategory.getGroupId()) ||
+						!ArrayUtil.contains(parentCategoryIds,
+							mbCategory.getParentCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = new StringBundler();
@@ -3739,7 +3804,7 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 				groupId, StringUtil.merge(parentCategoryIds)
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P,
 				finderArgs, this);
 
 		if (count == null) {
@@ -3804,8 +3869,8 @@ public class MBCategoryPersistenceImpl extends BasePersistenceImpl<MBCategory>
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P, finderArgs,
-					count);
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P,
+					finderArgs, count);
 
 				closeSession(session);
 			}

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.myworkflowtasks.workflowtask.assigntomewebcontentscopeguest;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,13 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AssignToMeWebContentScopeGuestTests extends BaseTests {
-
+public class AssignToMeWebContentScopeGuestTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			ConfigureWebContentSingleApproverScopeGuestTest.class);
+		testSuite.addTestSuite(ConfigureWebContentSingleApproverScopeGuestTest.class);
 		testSuite.addTestSuite(AddWebContentScopeGuestTest.class);
 		testSuite.addTestSuite(AssignToMeWebContentScopeGuestActionsTest.class);
 		testSuite.addTestSuite(ViewWebContentScopeGuestAssignedToMeTest.class);
@@ -37,5 +34,4 @@ public class AssignToMeWebContentScopeGuestTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

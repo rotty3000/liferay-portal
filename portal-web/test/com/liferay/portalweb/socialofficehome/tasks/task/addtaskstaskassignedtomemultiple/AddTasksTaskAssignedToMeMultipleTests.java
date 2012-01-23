@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.addtaskstaskassignedtomemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddTasksTaskAssignedToMeMultipleTests extends BaseTests {
-
+public class AddTasksTaskAssignedToMeMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTasksTask1AssignedToMeTest.class);
 		testSuite.addTestSuite(AddTasksTask2AssignedToMeTest.class);
 		testSuite.addTestSuite(AddTasksTask3AssignedToMeTest.class);
@@ -35,5 +33,4 @@ public class AddTasksTaskAssignedToMeMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

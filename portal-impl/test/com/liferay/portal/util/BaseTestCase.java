@@ -19,7 +19,9 @@ import com.liferay.portal.kernel.test.TestCase;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.util.PwdGenerator;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 /**
@@ -34,6 +36,20 @@ public class BaseTestCase extends TestCase {
 		}
 
 		InitUtil.initWithSpring();
+	}
+
+	protected Date newDate() throws Exception {
+		return new Date();
+	}
+
+	protected Date newDate(int month, int day, int year) throws Exception {
+		Calendar calendar = new GregorianCalendar();
+
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DATE, day);
+		calendar.set(Calendar.YEAR, year);
+
+		return calendar.getTime();
 	}
 
 	protected Date nextDate() throws Exception {

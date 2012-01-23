@@ -65,6 +65,10 @@
 			var DDM = A.DD.DDM;
 			var Layout = Liferay.Layout;
 
+			var CSS_REPAINT = 'lfr-helper-repaint';
+
+			var FORCE_REPAINT = (Liferay.Browser.isIe() && Liferay.Browser.getMajorVersion() === 9);
+
 			A.mix(
 				LayoutConfiguration,
 				{
@@ -124,6 +128,10 @@
 								}
 							);
 
+							var body = A.getBody();
+
+							var repaintTask = A.debounce(body.toggleClass, 10, body, CSS_REPAINT);
+
 							new A.LiveSearch(
 								{
 									after: {
@@ -140,6 +148,10 @@
 												instance.categoryContainers.show();
 
 												instance.portlets.show();
+											}
+
+											if (FORCE_REPAINT) {
+												repaintTask();
 											}
 										}
 									},

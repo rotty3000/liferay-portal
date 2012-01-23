@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.sitemap.portlet.configureportletrootlayout;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletRootLayoutTests extends BaseTests {
-
+public class ConfigurePortletRootLayoutTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageSMTest.class);
 		testSuite.addTestSuite(AddPortletSMTest.class);
 		testSuite.addTestSuite(AddChildPageTest.class);
@@ -35,5 +33,4 @@ public class ConfigurePortletRootLayoutTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

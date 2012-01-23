@@ -92,10 +92,15 @@ request.setAttribute("view.jsp-showIconLabel", true);
 	</c:if>
 
 	<%
-	AssetEntry incrementAssetEntry = AssetEntryServiceUtil.incrementViewCounter(assetEntry.getClassName(), assetEntry.getClassPK());
 
-	if (incrementAssetEntry != null) {
-		assetEntry = incrementAssetEntry;
+	// Dynamically created asset entries are never persisted so incrementing the view counter breaks
+
+	if (!assetEntry.isNew()) {
+		AssetEntry incrementAssetEntry = AssetEntryServiceUtil.incrementViewCounter(assetEntry.getClassName(), assetEntry.getClassPK());
+
+		if (incrementAssetEntry != null) {
+			assetEntry = incrementAssetEntry;
+		}
 	}
 
 	if (showContextLink) {
@@ -128,7 +133,7 @@ request.setAttribute("view.jsp-showIconLabel", true);
 				displayStyle="<%= socialBookmarksDisplayStyle %>"
 				target="_blank"
 				title="<%= assetEntry.getTitle(locale) %>"
-				url="<%= PortalUtil.getCanonicalURL(viewFullContentURL.toString(), themeDisplay) %>"
+				url="<%= PortalUtil.getCanonicalURL(viewFullContentURL.toString(), themeDisplay, layout) %>"
 			/>
 		</c:if>
 
@@ -157,7 +162,7 @@ request.setAttribute("view.jsp-showIconLabel", true);
 				displayStyle="<%= socialBookmarksDisplayStyle %>"
 				target="_blank"
 				title="<%= assetEntry.getTitle(locale) %>"
-				url="<%= PortalUtil.getCanonicalURL(viewFullContentURL.toString(), themeDisplay) %>"
+				url="<%= PortalUtil.getCanonicalURL(viewFullContentURL.toString(), themeDisplay, layout) %>"
 			/>
 		</c:if>
 

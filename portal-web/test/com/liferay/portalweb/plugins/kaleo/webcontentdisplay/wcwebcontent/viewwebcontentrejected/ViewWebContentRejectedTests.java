@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontentdisplay.wcwebcontent.viewwebcontentrejected;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewWebContentRejectedTests extends BaseTests {
-
+public class ViewWebContentRejectedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
@@ -43,5 +41,4 @@ public class ViewWebContentRejectedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

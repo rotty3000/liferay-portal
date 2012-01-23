@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.login.LoginTests;
-import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.portletpermissions.PortletPermissions523LatestTests;
+import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.portletpermissions.PortletPermissions523LatestTestPlan;
 import com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.serveradministration.viewnogeneratecustomroles.ViewNoGenerateCustomRolesTests;
 
 import junit.framework.Test;
@@ -24,13 +24,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBUpgradePortletPermissions523LatestTestSuite extends BaseTests {
+public class DBUpgradePortletPermissions523LatestTestSuite
+	extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(PortletPermissions523LatestTests.suite());
+		testSuite.addTest(PortletPermissions523LatestTestPlan.suite());
 		testSuite.addTest(ViewNoGenerateCustomRolesTests.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);

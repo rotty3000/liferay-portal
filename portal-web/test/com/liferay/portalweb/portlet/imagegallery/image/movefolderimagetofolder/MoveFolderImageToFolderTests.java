@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.imagegallery.image.movefolderimagetofolder;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class MoveFolderImageToFolderTests extends BaseTests {
-
+public class MoveFolderImageToFolderTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageIGTest.class);
 		testSuite.addTestSuite(AddPortletIGTest.class);
 		testSuite.addTestSuite(AddFolder1Test.class);
@@ -38,5 +36,4 @@ public class MoveFolderImageToFolderTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

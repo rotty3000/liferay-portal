@@ -60,7 +60,7 @@ String panelTreeKey = "panelSelectedPortletsPanelTree";
 				A.Array.removeItem(selectedPortlets, plid);
 			}
 
-			panelSelectedPortletsEl.val( selectedPortlets.join(',') );
+			panelSelectedPortletsEl.val(selectedPortlets.join(','));
 		}
 	};
 

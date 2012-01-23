@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -682,6 +683,16 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 		List<AssetCategoryProperty> list = (List<AssetCategoryProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategoryProperty assetCategoryProperty : list) {
+				if ((companyId != assetCategoryProperty.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1030,6 +1041,16 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 
 		List<AssetCategoryProperty> list = (List<AssetCategoryProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategoryProperty assetCategoryProperty : list) {
+				if ((categoryId != assetCategoryProperty.getCategoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1386,6 +1407,17 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 
 		List<AssetCategoryProperty> list = (List<AssetCategoryProperty>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetCategoryProperty assetCategoryProperty : list) {
+				if ((companyId != assetCategoryProperty.getCompanyId()) ||
+						!Validator.equals(key, assetCategoryProperty.getKey())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1781,6 +1813,15 @@ public class AssetCategoryPropertyPersistenceImpl extends BasePersistenceImpl<As
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_CA_K,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetCategoryProperty) {
+			AssetCategoryProperty assetCategoryProperty = (AssetCategoryProperty)result;
+
+			if ((categoryId != assetCategoryProperty.getCategoryId()) ||
+					!Validator.equals(key, assetCategoryProperty.getKey())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

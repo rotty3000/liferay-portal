@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.addapplication.community.searchmycommunities;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,14 +22,11 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SearchMyCommunitiesTests extends BaseTests {
-
+public class SearchMyCommunitiesTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SearchMyCommunitiesTest.class);
 
 		return testSuite;
 	}
-
 }

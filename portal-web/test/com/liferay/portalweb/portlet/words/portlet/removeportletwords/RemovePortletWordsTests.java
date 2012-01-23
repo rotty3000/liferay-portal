@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.words.portlet.removeportletwords;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RemovePortletWordsTests extends BaseTests {
-
+public class RemovePortletWordsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWordsTest.class);
 		testSuite.addTestSuite(AddPortletWordsTest.class);
 		testSuite.addTestSuite(RemovePortletWordsTest.class);
@@ -34,5 +32,4 @@ public class RemovePortletWordsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.plugins.analogclock.AnalogClockTests;
-import com.liferay.portalweb.plugins.assetmanagementsystem.AssetManagementSystemTests;
+import com.liferay.portalweb.plugins.assetmanagementsystem.AssetManagementSystemTestPlan;
 import com.liferay.portalweb.plugins.biblegateway.BibleGatewayTests;
 import com.liferay.portalweb.plugins.chat.ChatTests;
 import com.liferay.portalweb.plugins.flash.FlashTests;
@@ -24,10 +24,10 @@ import com.liferay.portalweb.plugins.googlemaps.GoogleMapsTests;
 import com.liferay.portalweb.plugins.gospelforasia.GospelForAsiaTests;
 import com.liferay.portalweb.plugins.ipgeocoder.IPGeocoderTests;
 import com.liferay.portalweb.plugins.journalpolice.JournalPoliceTests;
-import com.liferay.portalweb.plugins.mail.MailTests;
+import com.liferay.portalweb.plugins.mail.MailTestPlan;
 import com.liferay.portalweb.plugins.novellcollaboration.NovellCollaborationTests;
 import com.liferay.portalweb.plugins.opensocial.OpenSocialTests;
-import com.liferay.portalweb.plugins.privatemessaging.PrivateMessagingTests;
+import com.liferay.portalweb.plugins.privatemessaging.PrivateMessagingTestPlan;
 import com.liferay.portalweb.plugins.randombibleverse.RandomBibleVerseTests;
 import com.liferay.portalweb.plugins.releasetools.ReleaseToolsTests;
 import com.liferay.portalweb.plugins.rubyconsole.RubyConsoleTests;
@@ -57,14 +57,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Plugins1TestSuite extends BaseTests {
+public class Plugins1TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
 		testSuite.addTest(AnalogClockTests.suite());
-		testSuite.addTest(AssetManagementSystemTests.suite());
+		testSuite.addTest(AssetManagementSystemTestPlan.suite());
 		testSuite.addTest(BibleGatewayTests.suite());
 		testSuite.addTest(ChatTests.suite());
 		testSuite.addTest(FlashTests.suite());
@@ -73,10 +73,10 @@ public class Plugins1TestSuite extends BaseTests {
 		testSuite.addTest(GospelForAsiaTests.suite());
 		testSuite.addTest(IPGeocoderTests.suite());
 		testSuite.addTest(JournalPoliceTests.suite());
-		testSuite.addTest(MailTests.suite());
+		testSuite.addTest(MailTestPlan.suite());
 		testSuite.addTest(NovellCollaborationTests.suite());
 		testSuite.addTest(OpenSocialTests.suite());
-		testSuite.addTest(PrivateMessagingTests.suite());
+		testSuite.addTest(PrivateMessagingTestPlan.suite());
 		testSuite.addTest(RandomBibleVerseTests.suite());
 		testSuite.addTest(ReleaseToolsTests.suite());
 		testSuite.addTest(RubyConsoleTests.suite());

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.blogs.blogsentry.viewportletscopelayoutblogsentry;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,33 +22,24 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPortletScopeLayoutBlogsEntryTests extends BaseTests {
-
+public class ViewPortletScopeLayoutBlogsEntryTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageBlogs1Test.class);
 		testSuite.addTestSuite(AddPortletBlogs1Test.class);
 		testSuite.addTestSuite(AddPageBlogs2Test.class);
 		testSuite.addTestSuite(AddPortletBlogs2Test.class);
-		testSuite.addTestSuite(
-			ConfigurePortletScopeLayoutCurrentPagePage2Test.class);
-		testSuite.addTestSuite(
-			AddPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
+		testSuite.addTestSuite(ConfigurePortletScopeLayoutCurrentPagePage2Test.class);
+		testSuite.addTestSuite(AddPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
 		testSuite.addTestSuite(ViewPortletScopeDefaultBlogsEntryCPTest.class);
 		testSuite.addTestSuite(ViewPortletScopePage2BlogsEntryCPTest.class);
-		testSuite.addTestSuite(
-			ViewPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
-		testSuite.addTestSuite(
-			ViewPortletScopeLayoutDefaultBlogsEntryPage1Test.class);
+		testSuite.addTestSuite(ViewPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
+		testSuite.addTestSuite(ViewPortletScopeLayoutDefaultBlogsEntryPage1Test.class);
 		testSuite.addTestSuite(ConfigurePortletScopeLayoutPage2Page1Test.class);
-		testSuite.addTestSuite(
-			ViewPortletScopeLayoutPage2BlogsEntryPage1Test.class);
-		testSuite.addTestSuite(
-			TearDownPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
+		testSuite.addTestSuite(ViewPortletScopeLayoutPage2BlogsEntryPage1Test.class);
+		testSuite.addTestSuite(TearDownPortletScopeLayoutCurrentPageBlogsEntryPage2Test.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

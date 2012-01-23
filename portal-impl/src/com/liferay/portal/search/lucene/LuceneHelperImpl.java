@@ -55,6 +55,7 @@ import com.liferay.portal.search.lucene.messaging.CleanUpMessageListener;
 import com.liferay.portal.security.auth.TransientTokenUtil;
 import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.util.lucene.KeywordsUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -195,7 +196,14 @@ public class LuceneHelperImpl implements LuceneHelper {
 			QueryParser queryParser = new QueryParser(
 				getVersion(), field, getAnalyzer());
 
-			Query query = queryParser.parse(value);
+			Query query = null;
+
+			try {
+				query = queryParser.parse(value);
+			}
+			catch (Exception e) {
+				query = queryParser.parse(KeywordsUtil.escape(value));
+			}
 
 			BooleanClause.Occur occur = null;
 
@@ -810,6 +818,8 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 	private static final long _BOOTUP_CLUSTER_NODE_RESPONSE_TIMEOUT = 10000;
 
+	private static final long _TRANSIENT_TOKEN_KEEP_ALIVE_TIME = 10000;
+
 	private static Log _log = LogFactoryUtil.getLog(LuceneHelperImpl.class);
 
 	private static MethodKey _createTokenMethodKey =
@@ -818,8 +828,6 @@ public class LuceneHelperImpl implements LuceneHelper {
 	private static MethodKey _getLastGenerationMethodKey =
 		new MethodKey(LuceneHelperUtil.class.getName(), "getLastGeneration",
 		long.class);
-
-	private static final long _TRANSIENT_TOKEN_KEEP_ALIVE_TIME = 10000;
 
 	private Analyzer _analyzer;
 	private Map<Long, IndexAccessor> _indexAccessors =

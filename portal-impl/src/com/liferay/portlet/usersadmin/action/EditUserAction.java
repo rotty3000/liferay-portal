@@ -415,10 +415,15 @@ public class EditUserAction extends PortletAction {
 			actionRequest, "publicLayoutSetPrototypeId");
 		long privateLayoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "privateLayoutSetPrototypeId");
+		boolean publicLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "publicLayoutSetPrototypeLinkEnabled");
+		boolean privateLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "privateLayoutSetPrototypeLinkEnabled");
 
-		SitesUtil.applyLayoutSetPrototypes(
+		SitesUtil.updateLayoutSetPrototypesLinks(
 			user.getGroup(), publicLayoutSetPrototypeId,
-			privateLayoutSetPrototypeId, serviceContext);
+			privateLayoutSetPrototypeId, publicLayoutSetPrototypeLinkEnabled,
+			privateLayoutSetPrototypeLinkEnabled);
 
 		return user;
 	}
@@ -437,7 +442,7 @@ public class EditUserAction extends PortletAction {
 		long[] deleteUserIds = StringUtil.split(
 			ParamUtil.getString(actionRequest, "deleteUserIds"), 0L);
 
-		for (int i = 0; i < deleteUserIds.length; i++) {
+		for (long deleteUserId : deleteUserIds) {
 			if (cmd.equals(Constants.DEACTIVATE) ||
 				cmd.equals(Constants.RESTORE)) {
 
@@ -447,10 +452,10 @@ public class EditUserAction extends PortletAction {
 					status = WorkflowConstants.STATUS_INACTIVE;
 				}
 
-				UserServiceUtil.updateStatus(deleteUserIds[i], status);
+				UserServiceUtil.updateStatus(deleteUserId, status);
 			}
 			else {
-				UserServiceUtil.deleteUser(deleteUserIds[i]);
+				UserServiceUtil.deleteUser(deleteUserId);
 			}
 		}
 	}
@@ -672,10 +677,15 @@ public class EditUserAction extends PortletAction {
 			actionRequest, "publicLayoutSetPrototypeId");
 		long privateLayoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "privateLayoutSetPrototypeId");
+		boolean publicLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "publicLayoutSetPrototypeLinkEnabled");
+		boolean privateLayoutSetPrototypeLinkEnabled = ParamUtil.getBoolean(
+			actionRequest, "privateLayoutSetPrototypeLinkEnabled");
 
-		SitesUtil.applyLayoutSetPrototypes(
+		SitesUtil.updateLayoutSetPrototypesLinks(
 			user.getGroup(), publicLayoutSetPrototypeId,
-			privateLayoutSetPrototypeId, serviceContext);
+			privateLayoutSetPrototypeId, publicLayoutSetPrototypeLinkEnabled,
+			privateLayoutSetPrototypeLinkEnabled);
 
 		Company company = PortalUtil.getCompany(actionRequest);
 

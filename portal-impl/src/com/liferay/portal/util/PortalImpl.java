@@ -821,11 +821,48 @@ public class PortalImpl implements Portal {
 		return actualURL;
 	}
 
-	public String getAlternateURL(
-		HttpServletRequest request, String canonicalURL, Locale locale) {
+	public Locale[] getAlternateLocales(HttpServletRequest request)
+		throws SystemException, PortalException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
+		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
+
+		long mainJournalArticleId = ParamUtil.getLong(request, "p_j_a_id");
+
+		if (mainJournalArticleId > 0) {
+			JournalArticle mainJournalArticle =
+				JournalArticleLocalServiceUtil.getJournalArticle(
+					mainJournalArticleId);
+
+			if (mainJournalArticle != null) {
+				String[] articleLocales =
+					mainJournalArticle.getAvailableLocales();
+
+				if (articleLocales.length > 1) {
+					Locale[] alternateLocales = new Locale[
+						availableLocales.length - articleLocales.length];
+
+					int i = 0;
+
+					for (Locale locale : availableLocales) {
+						if (!ArrayUtil.contains(
+							articleLocales, LocaleUtil.toLanguageId(locale))) {
+
+							alternateLocales[i] = locale;
+
+							i++;
+						}
+					}
+
+					return alternateLocales;
+				}
+			}
+		}
+
+		return availableLocales;
+	}
+
+	public String getAlternateURL(
+		String canonicalURL, ThemeDisplay themeDisplay, Locale locale) {
 
 		LayoutSet layoutSet = themeDisplay.getLayoutSet();
 
@@ -1010,7 +1047,8 @@ public class PortalImpl implements Portal {
 		return userId;
 	}
 
-	public String getCanonicalURL(String completeURL, ThemeDisplay themeDisplay)
+	public String getCanonicalURL(
+			String completeURL, ThemeDisplay themeDisplay, Layout layout)
 		throws PortalException, SystemException {
 
 		completeURL = removeRedirectParameter(completeURL);
@@ -1031,7 +1069,9 @@ public class PortalImpl implements Portal {
 			parametersURL = completeURL.substring(pos);
 		}
 
-		Layout layout = themeDisplay.getLayout();
+		if (layout == null) {
+			layout = themeDisplay.getLayout();
+		}
 
 		String layoutFriendlyURL = StringPool.BLANK;
 
@@ -1627,6 +1667,49 @@ public class PortalImpl implements Portal {
 		return attributes;
 	}
 
+	public Map<String, Serializable> getExpandoBridgeAttributes(
+			ExpandoBridge expandoBridge,
+			UploadPortletRequest uploadPortletRequest)
+		throws PortalException, SystemException {
+
+		Map<String, Serializable> attributes =
+			new HashMap<String, Serializable>();
+
+		List<String> names = new ArrayList<String>();
+
+		Enumeration<String> enu = uploadPortletRequest.getParameterNames();
+
+		while (enu.hasMoreElements()) {
+			String param = enu.nextElement();
+
+			if (param.indexOf("ExpandoAttributeName--") != -1) {
+				String name = ParamUtil.getString(uploadPortletRequest, param);
+
+				names.add(name);
+			}
+		}
+
+		for (String name : names) {
+			int type = expandoBridge.getAttributeType(name);
+
+			UnicodeProperties properties = expandoBridge.getAttributeProperties(
+				name);
+
+			String displayType = GetterUtil.getString(
+				properties.getProperty(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE),
+				ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX);
+
+			Serializable value = getExpandoValue(
+				uploadPortletRequest, "ExpandoAttribute--" + name + "--", type,
+				displayType);
+
+			attributes.put(name, value);
+		}
+
+		return attributes;
+	}
+
 	public Serializable getExpandoValue(
 			PortletRequest portletRequest, String name, int type,
 			String displayType)
@@ -1746,6 +1829,130 @@ public class PortalImpl implements Portal {
 		}
 		else {
 			value = ParamUtil.getString(portletRequest, name);
+		}
+
+		return value;
+	}
+
+	public Serializable getExpandoValue(
+			UploadPortletRequest uploadPortletRequest, String name, int type,
+			String displayType)
+		throws PortalException, SystemException {
+
+		Serializable value = null;
+
+		if (type == ExpandoColumnConstants.BOOLEAN) {
+			value = ParamUtil.getBoolean(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.BOOLEAN_ARRAY) {
+		}
+		else if (type == ExpandoColumnConstants.DATE) {
+			int valueDateMonth = ParamUtil.getInteger(
+				uploadPortletRequest, name + "Month");
+			int valueDateDay = ParamUtil.getInteger(
+				uploadPortletRequest, name + "Day");
+			int valueDateYear = ParamUtil.getInteger(
+				uploadPortletRequest, name + "Year");
+			int valueDateHour = ParamUtil.getInteger(
+				uploadPortletRequest, name + "Hour");
+			int valueDateMinute = ParamUtil.getInteger(
+				uploadPortletRequest, name + "Minute");
+			int valueDateAmPm = ParamUtil.getInteger(
+				uploadPortletRequest, name + "AmPm");
+
+			if (valueDateAmPm == Calendar.PM) {
+				valueDateHour += 12;
+			}
+
+			TimeZone timeZone = null;
+
+			User user = getUser(uploadPortletRequest);
+
+			if (user != null) {
+				timeZone = user.getTimeZone();
+			}
+
+			value = getDate(
+				valueDateMonth, valueDateDay, valueDateYear, valueDateHour,
+				valueDateMinute, timeZone, new ValueDataException());
+		}
+		else if (type == ExpandoColumnConstants.DATE_ARRAY) {
+		}
+		else if (type == ExpandoColumnConstants.DOUBLE) {
+			value = ParamUtil.getDouble(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.DOUBLE_ARRAY) {
+			String[] values = uploadPortletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getDoubleValues(values);
+		}
+		else if (type == ExpandoColumnConstants.FLOAT) {
+			value = ParamUtil.getFloat(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.FLOAT_ARRAY) {
+			String[] values = uploadPortletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getFloatValues(values);
+		}
+		else if (type == ExpandoColumnConstants.INTEGER) {
+			value = ParamUtil.getInteger(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.INTEGER_ARRAY) {
+			String[] values = uploadPortletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getIntegerValues(values);
+		}
+		else if (type == ExpandoColumnConstants.LONG) {
+			value = ParamUtil.getLong(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.LONG_ARRAY) {
+			String[] values = uploadPortletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getLongValues(values);
+		}
+		else if (type == ExpandoColumnConstants.SHORT) {
+			value = ParamUtil.getShort(uploadPortletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.SHORT_ARRAY) {
+			String[] values = uploadPortletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getShortValues(values);
+		}
+		else if (type == ExpandoColumnConstants.STRING_ARRAY) {
+			value = uploadPortletRequest.getParameterValues(name);
+		}
+		else {
+			value = ParamUtil.getString(uploadPortletRequest, name);
 		}
 
 		return value;
@@ -4181,7 +4388,9 @@ public class PortalImpl implements Portal {
 			}
 		}
 
-		if (layout.isTypePanel()) {
+		if (layout.isTypePanel() &&
+			isPanelSelectedPortlet(themeDisplay, portletId)) {
+
 			return true;
 		}
 
@@ -5837,6 +6046,24 @@ public class PortalImpl implements Portal {
 		TicketLocalServiceUtil.updateTicket(ticket, false);
 
 		return true;
+	}
+
+	protected boolean isPanelSelectedPortlet(
+		ThemeDisplay themeDisplay, String portletId) {
+
+		Layout layout = themeDisplay.getLayout();
+
+		String panelSelectedPortlets = layout.getTypeSettingsProperty(
+			"panelSelectedPortlets");
+
+		if (Validator.isNotNull(panelSelectedPortlets)) {
+			String[] panelSelectedPortletsArray = StringUtil.split(
+				panelSelectedPortlets);
+
+			return ArrayUtil.contains(panelSelectedPortletsArray, portletId);
+		}
+
+		return false;
 	}
 
 	protected void notifyPortalPortEventListeners(int portalPort) {

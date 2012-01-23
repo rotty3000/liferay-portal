@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.organizations.organizationaddress.advancedsearchorganizationaddress;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,20 +22,16 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AdvancedSearchOrganizationAddressTests extends BaseTests {
-
+public class AdvancedSearchOrganizationAddressTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddOrganizationTest.class);
 		testSuite.addTestSuite(AddOrganizationAddressTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationAddressCityTest.class);
-		testSuite.addTestSuite(
-			AdvancedSearchOrganizationAddressStreetTest.class);
+		testSuite.addTestSuite(AdvancedSearchOrganizationAddressStreetTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationAddressZipTest.class);
 		testSuite.addTestSuite(TearDownTest.class);
 
 		return testSuite;
 	}
-
 }

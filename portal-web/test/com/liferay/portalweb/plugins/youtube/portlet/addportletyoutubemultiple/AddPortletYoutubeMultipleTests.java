@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.youtube.portlet.addportletyoutubemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPortletYoutubeMultipleTests extends BaseTests {
-
+public class AddPortletYoutubeMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageYoutubeTest.class);
 		testSuite.addTestSuite(AddPortletYoutube1Test.class);
 		testSuite.addTestSuite(AddPortletYoutube2Test.class);
@@ -35,5 +33,4 @@ public class AddPortletYoutubeMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

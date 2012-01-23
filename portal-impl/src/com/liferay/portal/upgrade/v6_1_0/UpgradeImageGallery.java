@@ -356,6 +356,14 @@ public class UpgradeImageGallery extends UpgradeProcess {
 				else {
 					InputStream is = _sourceHook.getImageAsStream(image);
 
+					if (custom1ImageId != imageId) {
+						custom1ImageId = 0;
+					}
+
+					if (custom2ImageId != imageId) {
+						custom2ImageId = 0;
+					}
+
 					ImageProcessorUtil.storeThumbnail(
 						companyId, groupId, fileEntryId, fileVersionId,
 						custom1ImageId, custom2ImageId, is, image.getType());
@@ -545,12 +553,25 @@ public class UpgradeImageGallery extends UpgradeProcess {
 
 				long size = (Long)image[1];
 
-				addDLFileEntry(
-					uuid, imageId, groupId, companyId, userId,
-					userName, userId, userName, createDate, modifiedDate,
-					groupId, folderId, name, extension, mimeType, title,
-					description, StringPool.BLANK, "1.0", size, 0, smallImageId,
-					largeImageId, custom1ImageId, custom2ImageId);
+				try {
+					addDLFileEntry(
+						uuid, imageId, groupId, companyId, userId, userName,
+						userId, userName, createDate, modifiedDate, groupId,
+						folderId, name, extension, mimeType, title, description,
+						StringPool.BLANK, "1.0", size, 0, smallImageId,
+						largeImageId, custom1ImageId, custom2ImageId);
+				}
+				catch (Exception e) {
+					title = title.concat(StringPool.SPACE).concat(
+						String.valueOf(imageId));
+
+					addDLFileEntry(
+						uuid, imageId, groupId, companyId, userId, userName,
+						userId, userName, createDate, modifiedDate, groupId,
+						folderId, name, extension, mimeType, title, description,
+						StringPool.BLANK, "1.0", size, 0, smallImageId,
+						largeImageId, custom1ImageId, custom2ImageId);
+				}
 
 				addDLFileVersion(
 					increment(), groupId, companyId, userId, userName,

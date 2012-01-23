@@ -385,29 +385,53 @@ public class DLUtil {
 		String queryString) {
 
 		return getPreviewURL(
-			fileEntry, fileVersion, themeDisplay, queryString, true);
+			fileEntry, fileVersion, themeDisplay, queryString, true, true);
 	}
 
+	/**
+	 * @deprecated {@link #getPreviewURL(FileEntry, FileVersion, ThemeDisplay,
+	 *             String, boolean, boolean)}
+	 */
 	public static String getPreviewURL(
 		FileEntry fileEntry, FileVersion fileVersion, ThemeDisplay themeDisplay,
 		String queryString, boolean appendToken) {
 
-		StringBundler sb = new StringBundler(13);
+		return getPreviewURL(
+			fileEntry, fileVersion, themeDisplay, queryString, true, true);
+	}
 
-		sb.append(themeDisplay.getPortalURL());
-		sb.append(themeDisplay.getPathContext());
+	public static String getPreviewURL(
+		FileEntry fileEntry, FileVersion fileVersion, ThemeDisplay themeDisplay,
+		String queryString, boolean appendVersion, boolean absoluteURL) {
+
+		StringBundler sb = new StringBundler(15);
+
+		if (absoluteURL) {
+			sb.append(themeDisplay.getPortalURL());
+			sb.append(themeDisplay.getPathContext());
+		}
+
 		sb.append("/documents/");
 		sb.append(fileEntry.getRepositoryId());
 		sb.append(StringPool.SLASH);
 		sb.append(fileEntry.getFolderId());
 		sb.append(StringPool.SLASH);
-		sb.append(
-			HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle()), true));
-		sb.append("?version=");
-		sb.append(fileVersion.getVersion());
+		sb.append(HttpUtil.encodeURL(HtmlUtil.unescape(fileEntry.getTitle())));
+		sb.append(StringPool.SLASH);
+		sb.append(fileEntry.getUuid());
 
-		if (appendToken) {
-			sb.append("&t=");
+		if (appendVersion) {
+			sb.append("?version=");
+			sb.append(fileVersion.getVersion());
+		}
+
+		if (ImageProcessorUtil.isImageSupported(fileVersion)) {
+			if (appendVersion) {
+				sb.append("&t=");
+			}
+			else {
+				sb.append("?t=");
+			}
 
 			Date modifiedDate = fileVersion.getModifiedDate();
 
@@ -418,7 +442,7 @@ public class DLUtil {
 
 		String previewURL = sb.toString();
 
-		if (themeDisplay.isAddSessionIdToURL()) {
+		if ((themeDisplay != null) && (themeDisplay.isAddSessionIdToURL())) {
 			return PortalUtil.getURLWithSessionId(
 				previewURL, themeDisplay.getSessionId());
 		}
@@ -482,11 +506,19 @@ public class DLUtil {
 	}
 
 	public static String getThumbnailSrc(
-			FileEntry fileEntry, DLFileShortcut fileShortcut,
+			FileEntry fileEntry, DLFileShortcut dlFileShortcut,
 			ThemeDisplay themeDisplay)
 		throws Exception {
 
-		FileVersion fileVersion = fileEntry.getFileVersion();
+		return getThumbnailSrc(
+			fileEntry, fileEntry.getFileVersion(), dlFileShortcut,
+			themeDisplay);
+	}
+
+	public static String getThumbnailSrc(
+			FileEntry fileEntry, FileVersion fileVersion,
+			DLFileShortcut dlFileShortcut, ThemeDisplay themeDisplay)
+		throws Exception {
 
 		StringBundler sb = new StringBundler(4);
 
@@ -497,7 +529,7 @@ public class DLUtil {
 
 		String thumbnailSrc = sb.toString();
 
-		if (fileShortcut == null) {
+		if (dlFileShortcut == null) {
 			String thumbnailQueryString = null;
 
 			if (ImageProcessorUtil.hasImages(fileVersion)) {
@@ -512,7 +544,8 @@ public class DLUtil {
 
 			if (Validator.isNotNull(thumbnailQueryString)) {
 				thumbnailSrc = getPreviewURL(
-					fileEntry, fileVersion, themeDisplay, thumbnailQueryString);
+					fileEntry, fileVersion, themeDisplay, thumbnailQueryString,
+					true, true);
 			}
 		}
 
@@ -533,6 +566,43 @@ public class DLUtil {
 		sb.append("px;");
 
 		return sb.toString();
+	}
+
+	public static String getWebDavURL(
+			ThemeDisplay themeDisplay, Folder folder, FileEntry fileEntry)
+		throws PortalException, SystemException {
+
+		StringBuilder sb = new StringBuilder();
+
+		if (folder != null) {
+			Folder curFolder = folder;
+
+			while (true) {
+				sb.insert(0, HttpUtil.encodeURL(curFolder.getName(), true));
+				sb.insert(0, StringPool.SLASH);
+
+				if (curFolder.getParentFolderId() ==
+						DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+
+					break;
+				}
+				else {
+					curFolder = DLAppLocalServiceUtil.getFolder(
+						curFolder.getParentFolderId());
+				}
+			}
+		}
+
+		if (fileEntry != null) {
+			sb.append(StringPool.SLASH);
+			sb.append(HttpUtil.encodeURL(fileEntry.getTitle(), true));
+		}
+
+		Group group = themeDisplay.getScopeGroup();
+
+		return themeDisplay.getPortalURL() + themeDisplay.getPathContext() +
+			"/api/secure/webdav" + group.getFriendlyURL() +
+				"/document_library" + sb.toString();
 	}
 
 	private static long _getDefaultFolderId(HttpServletRequest request)

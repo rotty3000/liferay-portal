@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.viewsampledatalatest.social.relation;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RelationTests extends BaseTests {
-
+public class RelationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SRl_SignInTest.class);
 		testSuite.addTestSuite(SRl_ViewFriendsTest.class);
@@ -35,5 +33,4 @@ public class RelationTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

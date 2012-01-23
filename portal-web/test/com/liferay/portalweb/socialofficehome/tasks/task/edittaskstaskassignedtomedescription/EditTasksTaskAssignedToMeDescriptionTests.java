@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.edittaskstaskassignedtomedescription;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,18 +22,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditTasksTaskAssignedToMeDescriptionTests extends BaseTests {
-
+public class EditTasksTaskAssignedToMeDescriptionTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTasksTaskAssignedToMeTest.class);
 		testSuite.addTestSuite(EditTasksTaskAssignedToMeDescriptionTest.class);
-		testSuite.addTestSuite(
-			ViewEditTasksTaskAssignedToMeDescriptionTest.class);
+		testSuite.addTestSuite(ViewEditTasksTaskAssignedToMeDescriptionTest.class);
 		testSuite.addTestSuite(TearDownTasksTaskTest.class);
 
 		return testSuite;
 	}
-
 }

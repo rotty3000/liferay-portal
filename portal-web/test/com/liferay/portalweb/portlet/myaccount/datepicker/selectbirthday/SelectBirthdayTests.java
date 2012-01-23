@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.myaccount.datepicker.selectbirthday;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SelectBirthdayTests extends BaseTests {
-
+public class SelectBirthdayTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SelectBirthdayTest.class);
 		testSuite.addTestSuite(TearDownBirthdayTest.class);
 
 		return testSuite;
 	}
-
 }

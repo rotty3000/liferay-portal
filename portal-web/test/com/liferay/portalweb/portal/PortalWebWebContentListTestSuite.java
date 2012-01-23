@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.webcontentlist.WebContentListTests;
+import com.liferay.portalweb.portlet.webcontentlist.WebContentListTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebWebContentListTestSuite extends BaseTests {
+public class PortalWebWebContentListTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WebContentListTests.suite());
+		testSuite.addTest(WebContentListTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

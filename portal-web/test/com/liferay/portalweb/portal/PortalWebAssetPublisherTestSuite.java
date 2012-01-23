@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.assetpublisher.AssetPublisherTests;
+import com.liferay.portalweb.portlet.assetpublisher.AssetPublisherTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebAssetPublisherTestSuite extends BaseTests {
+public class PortalWebAssetPublisherTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AssetPublisherTests.suite());
+		testSuite.addTest(AssetPublisherTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

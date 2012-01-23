@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.shopping.item.movecategory1itemtocategory2;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class MoveCategory1ItemToCategory2Tests extends BaseTests {
-
+public class MoveCategory1ItemToCategory2Tests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageShoppingTest.class);
 		testSuite.addTestSuite(AddPortletShoppingTest.class);
 		testSuite.addTestSuite(AddCategory1Test.class);
@@ -38,5 +36,4 @@ public class MoveCategory1ItemToCategory2Tests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

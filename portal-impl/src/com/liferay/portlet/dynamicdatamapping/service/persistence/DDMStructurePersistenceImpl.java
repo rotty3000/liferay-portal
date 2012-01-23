@@ -769,6 +769,16 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 		List<DDMStructure> list = (List<DDMStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructure ddmStructure : list) {
+				if (!Validator.equals(uuid, ddmStructure.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1137,6 +1147,15 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					finderArgs, this);
 		}
 
+		if (result instanceof DDMStructure) {
+			DDMStructure ddmStructure = (DDMStructure)result;
+
+			if (!Validator.equals(uuid, ddmStructure.getUuid()) ||
+					(groupId != ddmStructure.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1281,6 +1300,16 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 		List<DDMStructure> list = (List<DDMStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructure ddmStructure : list) {
+				if ((groupId != ddmStructure.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1915,6 +1944,16 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 		List<DDMStructure> list = (List<DDMStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructure ddmStructure : list) {
+				if ((classNameId != ddmStructure.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2260,6 +2299,16 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 					finderArgs, this);
 		}
 
+		if (result instanceof DDMStructure) {
+			DDMStructure ddmStructure = (DDMStructure)result;
+
+			if ((groupId != ddmStructure.getGroupId()) ||
+					!Validator.equals(structureKey,
+						ddmStructure.getStructureKey())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2416,6 +2465,19 @@ public class DDMStructurePersistenceImpl extends BasePersistenceImpl<DDMStructur
 
 		List<DDMStructure> list = (List<DDMStructure>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDMStructure ddmStructure : list) {
+				if ((groupId != ddmStructure.getGroupId()) ||
+						!Validator.equals(name, ddmStructure.getName()) ||
+						!Validator.equals(description,
+							ddmStructure.getDescription())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

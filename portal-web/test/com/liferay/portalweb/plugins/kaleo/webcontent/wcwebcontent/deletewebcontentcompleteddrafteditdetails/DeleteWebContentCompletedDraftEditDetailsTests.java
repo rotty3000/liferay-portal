@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontent.wcwebcontent.deletewebcontentcompleteddrafteditdetails;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,20 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteWebContentCompletedDraftEditDetailsTests extends BaseTests {
-
+public class DeleteWebContentCompletedDraftEditDetailsTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddWebContentTest.class);
 		testSuite.addTestSuite(AssignToMeWebContentActionsTest.class);
 		testSuite.addTestSuite(ApproveWebContentActionsTest.class);
 		testSuite.addTestSuite(EditWebContentCompletedDraftActionsTest.class);
-		testSuite.addTestSuite(
-			DeleteWebContentCompletedDraftEditDetailsTest.class);
+		testSuite.addTestSuite(DeleteWebContentCompletedDraftEditDetailsTest.class);
 		testSuite.addTestSuite(ViewWebContentCompletedTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
 		testSuite.addTestSuite(TearDownWorkflowConfigurationTest.class);
 
 		return testSuite;
 	}
-
 }

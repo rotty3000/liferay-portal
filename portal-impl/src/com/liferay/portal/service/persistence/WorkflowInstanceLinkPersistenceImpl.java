@@ -559,6 +559,19 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		List<WorkflowInstanceLink> list = (List<WorkflowInstanceLink>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (WorkflowInstanceLink workflowInstanceLink : list) {
+				if ((groupId != workflowInstanceLink.getGroupId()) ||
+						(companyId != workflowInstanceLink.getCompanyId()) ||
+						(classNameId != workflowInstanceLink.getClassNameId()) ||
+						(classPK != workflowInstanceLink.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

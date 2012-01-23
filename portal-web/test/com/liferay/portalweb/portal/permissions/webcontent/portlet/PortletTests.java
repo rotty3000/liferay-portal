@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.webcontent.portlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortletTests extends BaseTests {
-
+public class PortletTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPageWCLTest.class);
 		testSuite.addTestSuite(AddPageWCSTest.class);
@@ -43,12 +41,9 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(LoginUsersTest.class);
 		testSuite.addTestSuite(WCA_LoginTest.class);
-		testSuite.addTestSuite(
-			WCA_AddMemberWCDConfigurationPermissionsTest.class);
-		testSuite.addTestSuite(
-			WCA_AddMemberWCLConfigurationPermissionsTest.class);
-		testSuite.addTestSuite(
-			WCA_AddMemberWCSConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_AddMemberWCDConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_AddMemberWCLConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_AddMemberWCSConfigurationPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Member_LoginTest.class);
 		testSuite.addTestSuite(Member_AssertEditWCDConfigurationTest.class);
@@ -56,12 +51,9 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(Member_AssertEditWCSConfigurationTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(WCA_LoginTest.class);
-		testSuite.addTestSuite(
-			WCA_RemoveMemberWCDConfigurationPermissionsTest.class);
-		testSuite.addTestSuite(
-			WCA_RemoveMemberWCLConfigurationPermissionsTest.class);
-		testSuite.addTestSuite(
-			WCA_RemoveMemberWCSConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_RemoveMemberWCDConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_RemoveMemberWCLConfigurationPermissionsTest.class);
+		testSuite.addTestSuite(WCA_RemoveMemberWCSConfigurationPermissionsTest.class);
 		testSuite.addTestSuite(WCA_RemoveGuestWCDViewPermissionsTest.class);
 		testSuite.addTestSuite(WCA_RemoveGuestWCLViewPermissionsTest.class);
 		testSuite.addTestSuite(WCA_RemoveGuestWCSViewPermissionsTest.class);
@@ -88,5 +80,4 @@ public class PortletTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

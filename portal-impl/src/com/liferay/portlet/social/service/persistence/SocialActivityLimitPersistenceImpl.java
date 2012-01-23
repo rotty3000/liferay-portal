@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -634,6 +635,17 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 		List<SocialActivityLimit> list = (List<SocialActivityLimit>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityLimit socialActivityLimit : list) {
+				if ((classNameId != socialActivityLimit.getClassNameId()) ||
+						(classPK != socialActivityLimit.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1028,6 +1040,20 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_U_C_C_A_A,
 					finderArgs, this);
+		}
+
+		if (result instanceof SocialActivityLimit) {
+			SocialActivityLimit socialActivityLimit = (SocialActivityLimit)result;
+
+			if ((groupId != socialActivityLimit.getGroupId()) ||
+					(userId != socialActivityLimit.getUserId()) ||
+					(classNameId != socialActivityLimit.getClassNameId()) ||
+					(classPK != socialActivityLimit.getClassPK()) ||
+					(activityType != socialActivityLimit.getActivityType()) ||
+					!Validator.equals(activityCounterName,
+						socialActivityLimit.getActivityCounterName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

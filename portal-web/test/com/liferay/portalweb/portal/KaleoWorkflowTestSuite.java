@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.kaleo.workflow.WorkflowTests;
+import com.liferay.portalweb.plugins.kaleo.workflow.WorkflowTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoWorkflowTestSuite extends BaseTests {
+public class KaleoWorkflowTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WorkflowTests.suite());
+		testSuite.addTest(WorkflowTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

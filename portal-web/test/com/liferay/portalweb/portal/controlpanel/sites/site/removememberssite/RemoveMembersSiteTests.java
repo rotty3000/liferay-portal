@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.sites.site.removememberssite;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RemoveMembersSiteTests extends BaseTests {
-
+public class RemoveMembersSiteTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserTest.class);
 		testSuite.addTestSuite(AddSitesTest.class);
 		testSuite.addTestSuite(AssignMembersSitesTest.class);
@@ -38,5 +36,4 @@ public class RemoveMembersSiteTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

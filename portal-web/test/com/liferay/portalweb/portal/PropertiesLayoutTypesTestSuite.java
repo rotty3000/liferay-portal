@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.properties.layouttypes.LayoutTypesTests;
+import com.liferay.portalweb.properties.layouttypes.LayoutTypesTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PropertiesLayoutTypesTestSuite extends BaseTests {
+public class PropertiesLayoutTypesTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(LayoutTypesTests.suite());
+		testSuite.addTest(LayoutTypesTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

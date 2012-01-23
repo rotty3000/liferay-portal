@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.directory.organizations.advancedsearchorganization;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AdvancedSearchOrganizationTests extends BaseTests {
-
+public class AdvancedSearchOrganizationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageDirectoryTest.class);
 		testSuite.addTestSuite(AddPortletDirectoryTest.class);
 		testSuite.addTestSuite(AddOrganizationTest.class);
@@ -37,8 +35,7 @@ public class AdvancedSearchOrganizationTests extends BaseTests {
 		testSuite.addTestSuite(AdvancedSearchOrganizationNameQuotesTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationRegionTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationStreetTest.class);
-		testSuite.addTestSuite(
-			AdvancedSearchOrganizationStreetQuotesTest.class);
+		testSuite.addTestSuite(AdvancedSearchOrganizationStreetQuotesTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationTypeTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationZipTest.class);
 		testSuite.addTestSuite(AdvancedSearchOrganizationZipQuotesTest.class);
@@ -47,5 +44,4 @@ public class AdvancedSearchOrganizationTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

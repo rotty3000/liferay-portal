@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.sites.site.joinsiterestricted;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class JoinSiteRestrictedTests extends BaseTests {
-
+public class JoinSiteRestrictedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddSitesRestrictedTest.class);
 		testSuite.addTestSuite(AddUserTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -45,5 +43,4 @@ public class JoinSiteRestrictedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

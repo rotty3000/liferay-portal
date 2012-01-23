@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -912,6 +913,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((tableId != expandoValue.getTableId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1258,6 +1269,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((columnId != expandoValue.getColumnId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1602,6 +1623,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((rowId != expandoValue.getRowId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1955,6 +1986,17 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((tableId != expandoValue.getTableId()) ||
+						(columnId != expandoValue.getColumnId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2328,6 +2370,17 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((tableId != expandoValue.getTableId()) ||
+						(classPK != expandoValue.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2699,6 +2752,17 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((tableId != expandoValue.getTableId()) ||
+						(rowId != expandoValue.getRowId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3069,6 +3133,15 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					finderArgs, this);
 		}
 
+		if (result instanceof ExpandoValue) {
+			ExpandoValue expandoValue = (ExpandoValue)result;
+
+			if ((columnId != expandoValue.getColumnId()) ||
+					(rowId != expandoValue.getRowId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -3211,6 +3284,17 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((classNameId != expandoValue.getClassNameId()) ||
+						(classPK != expandoValue.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3588,6 +3672,16 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 					finderArgs, this);
 		}
 
+		if (result instanceof ExpandoValue) {
+			ExpandoValue expandoValue = (ExpandoValue)result;
+
+			if ((tableId != expandoValue.getTableId()) ||
+					(columnId != expandoValue.getColumnId()) ||
+					(classPK != expandoValue.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -3738,6 +3832,18 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 
 		List<ExpandoValue> list = (List<ExpandoValue>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoValue expandoValue : list) {
+				if ((tableId != expandoValue.getTableId()) ||
+						(columnId != expandoValue.getColumnId()) ||
+						!Validator.equals(data, expandoValue.getData())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.wiki.wikipage.revertchangeparentwikipagetowikipage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RevertChangeParentWikiPageToWikiPageTests extends BaseTests {
-
+public class RevertChangeParentWikiPageToWikiPageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWikiTest.class);
 		testSuite.addTestSuite(AddPortletWikiTest.class);
 		testSuite.addTestSuite(AddWikiPage1Test.class);
@@ -38,5 +36,4 @@ public class RevertChangeParentWikiPageToWikiPageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -669,6 +670,17 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(activityType != socialActivitySetting.getActivityType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1037,6 +1049,18 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 
 		List<SocialActivitySetting> list = (List<SocialActivitySetting>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivitySetting socialActivitySetting : list) {
+				if ((groupId != socialActivitySetting.getGroupId()) ||
+						(classNameId != socialActivitySetting.getClassNameId()) ||
+						(activityType != socialActivitySetting.getActivityType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1434,6 +1458,17 @@ public class SocialActivitySettingPersistenceImpl extends BasePersistenceImpl<So
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_C_A_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof SocialActivitySetting) {
+			SocialActivitySetting socialActivitySetting = (SocialActivitySetting)result;
+
+			if ((groupId != socialActivitySetting.getGroupId()) ||
+					(classNameId != socialActivitySetting.getClassNameId()) ||
+					(activityType != socialActivitySetting.getActivityType()) ||
+					!Validator.equals(name, socialActivitySetting.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

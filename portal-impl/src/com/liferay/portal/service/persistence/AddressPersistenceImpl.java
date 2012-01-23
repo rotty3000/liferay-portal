@@ -753,6 +753,16 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((companyId != address.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1095,6 +1105,16 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((userId != address.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1446,6 +1466,17 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((companyId != address.getCompanyId()) ||
+						(classNameId != address.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1820,6 +1851,18 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((companyId != address.getCompanyId()) ||
+						(classNameId != address.getClassNameId()) ||
+						(classPK != address.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2216,6 +2259,19 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((companyId != address.getCompanyId()) ||
+						(classNameId != address.getClassNameId()) ||
+						(classPK != address.getClassPK()) ||
+						(mailing != address.getMailing())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2630,6 +2686,19 @@ public class AddressPersistenceImpl extends BasePersistenceImpl<Address>
 
 		List<Address> list = (List<Address>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Address address : list) {
+				if ((companyId != address.getCompanyId()) ||
+						(classNameId != address.getClassNameId()) ||
+						(classPK != address.getClassPK()) ||
+						(primary != address.getPrimary())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

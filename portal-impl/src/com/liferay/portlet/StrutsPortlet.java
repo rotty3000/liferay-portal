@@ -252,15 +252,9 @@ public class StrutsPortlet extends LiferayPortlet {
 		}
 	}
 
-	private PortletRequestProcessor _getPortletRequestProcessor(
-		PortletRequest portletRequest) {
-
-		return (PortletRequestProcessor)getPortletContext().getAttribute(
-			WebKeys.PORTLET_STRUTS_PROCESSOR);
-	}
-
 	protected String aboutAction;
 	protected String configAction;
+	protected boolean copyRequestParameters;
 	protected String editAction;
 	protected String editDefaultsAction;
 	protected String editGuestAction;
@@ -268,7 +262,13 @@ public class StrutsPortlet extends LiferayPortlet {
 	protected String previewAction;
 	protected String printAction;
 	protected String viewAction;
-	protected boolean copyRequestParameters;
+
+	private PortletRequestProcessor _getPortletRequestProcessor(
+		PortletRequest portletRequest) {
+
+		return (PortletRequestProcessor)getPortletContext().getAttribute(
+			WebKeys.PORTLET_STRUTS_PROCESSOR);
+	}
 
 	private PortletConfigImpl _portletConfig;
 

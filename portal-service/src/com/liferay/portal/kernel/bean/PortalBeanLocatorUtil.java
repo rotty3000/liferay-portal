@@ -17,13 +17,45 @@ package com.liferay.portal.kernel.bean;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.util.Map;
+
 /**
  * @author Brian Wing Shun Chan
+ * @author Miguel Pastor
  */
 public class PortalBeanLocatorUtil {
 
 	public static BeanLocator getBeanLocator() {
 		return _beanLocator;
+	}
+
+	public static <T> Map<String, T> locate(Class<T> clazz) {
+		if (_beanLocator == null) {
+			_log.error("BeanLocator is null");
+
+			throw new BeanLocatorException("BeanLocator has not been set");
+		}
+		else {
+			Thread currentThread = Thread.currentThread();
+
+			ClassLoader contextClassLoader =
+				currentThread.getContextClassLoader();
+
+			ClassLoader beanClassLoader = _beanLocator.getClassLoader();
+
+			try {
+				if (contextClassLoader != beanClassLoader) {
+					currentThread.setContextClassLoader(beanClassLoader);
+				}
+
+				return _beanLocator.locate(clazz);
+			}
+			finally {
+				if (contextClassLoader != beanClassLoader) {
+					currentThread.setContextClassLoader(contextClassLoader);
+				}
+			}
+		}
 	}
 
 	public static Object locate(String name) throws BeanLocatorException {

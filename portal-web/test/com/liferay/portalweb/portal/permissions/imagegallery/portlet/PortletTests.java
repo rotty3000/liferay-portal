@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.imagegallery.portlet;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortletTests extends BaseTests {
-
+public class PortletTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(AddPortletTest.class);
 		testSuite.addTestSuite(ConfigureMediaGalleryTest.class);
@@ -52,7 +50,7 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Portlet_LoginTest.class);
 		testSuite.addTestSuite(Portlet_AssertCannotConfigurePortletTest.class);
-		testSuite.addTestSuite(LogoutTest.class);;
+		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
 		testSuite.addTestSuite(SA_AllowConfigurePortletPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
@@ -98,8 +96,7 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(SA_RemoveAddSubfolderPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Portlet_LoginTest.class);
-		testSuite.addTestSuite(
-			Portlet_AssertCannotEditFolderPermissionsTest.class);
+		testSuite.addTestSuite(Portlet_AssertCannotEditFolderPermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
 		testSuite.addTestSuite(SA_AllowPermissionsFolderPermissionsTest.class);
@@ -144,8 +141,7 @@ public class PortletTests extends BaseTests {
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(Portlet_LoginTest.class);
 		testSuite.addTestSuite(Portlet_AssertViewImageTest.class);
-		testSuite.addTestSuite(
-			Portlet_AssertCannotEditImagePermissionsTest.class);
+		testSuite.addTestSuite(Portlet_AssertCannotEditImagePermissionsTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
 		testSuite.addTestSuite(SA_AllowPermissionsImagePermissionsTest.class);
@@ -185,5 +181,4 @@ public class PortletTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

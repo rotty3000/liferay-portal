@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.categories.assettype.addvocabularyassettypemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddVocabularyAssetTypeMultipleTests extends BaseTests {
-
+public class AddVocabularyAssetTypeMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddVocabularyAssetType1Test.class);
 		testSuite.addTestSuite(AddVocabularyAssetType2Test.class);
 		testSuite.addTestSuite(ViewVocabularyAssetTypeMultipleTest.class);
@@ -34,5 +32,4 @@ public class AddVocabularyAssetTypeMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

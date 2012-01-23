@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.categories.vocabulary.addvocabularynamenull;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,16 +22,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddVocabularyNameNullTests extends BaseTests {
-
+public class AddVocabularyNameNullTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddVocabularyNameNullTest.class);
 		testSuite.addTestSuite(ViewVocabularyNameNullTest.class);
 		testSuite.addTestSuite(TearDownVocabularyTest.class);
 
 		return testSuite;
 	}
-
 }

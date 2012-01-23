@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.loancalculator.LoanCalculatorTests;
+import com.liferay.portalweb.portlet.loancalculator.LoanCalculatorTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebLoanCalculatorTestSuite extends BaseTests {
+public class PortalWebLoanCalculatorTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(LoanCalculatorTests.suite());
+		testSuite.addTest(LoanCalculatorTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

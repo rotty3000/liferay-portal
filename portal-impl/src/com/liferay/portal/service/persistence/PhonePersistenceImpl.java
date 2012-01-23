@@ -690,6 +690,16 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1031,6 +1041,16 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 
 		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((userId != phone.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1382,6 +1402,17 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 
 		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1756,6 +1787,18 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 
 		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId()) ||
+						(classPK != phone.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2152,6 +2195,19 @@ public class PhonePersistenceImpl extends BasePersistenceImpl<Phone>
 
 		List<Phone> list = (List<Phone>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Phone phone : list) {
+				if ((companyId != phone.getCompanyId()) ||
+						(classNameId != phone.getClassNameId()) ||
+						(classPK != phone.getClassPK()) ||
+						(primary != phone.getPrimary())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

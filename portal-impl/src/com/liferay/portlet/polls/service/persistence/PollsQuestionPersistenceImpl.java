@@ -629,6 +629,16 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 		List<PollsQuestion> list = (List<PollsQuestion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsQuestion pollsQuestion : list) {
+				if (!Validator.equals(uuid, pollsQuestion.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1005,6 +1015,15 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 					finderArgs, this);
 		}
 
+		if (result instanceof PollsQuestion) {
+			PollsQuestion pollsQuestion = (PollsQuestion)result;
+
+			if (!Validator.equals(uuid, pollsQuestion.getUuid()) ||
+					(groupId != pollsQuestion.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1151,6 +1170,16 @@ public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuest
 
 		List<PollsQuestion> list = (List<PollsQuestion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PollsQuestion pollsQuestion : list) {
+				if ((groupId != pollsQuestion.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

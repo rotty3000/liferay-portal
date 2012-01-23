@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceBlock;
@@ -667,6 +668,17 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceBlock resourceBlock : list) {
+				if ((companyId != resourceBlock.getCompanyId()) ||
+						!Validator.equals(name, resourceBlock.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1057,6 +1069,18 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 
 		List<ResourceBlock> list = (List<ResourceBlock>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceBlock resourceBlock : list) {
+				if ((companyId != resourceBlock.getCompanyId()) ||
+						(groupId != resourceBlock.getGroupId()) ||
+						!Validator.equals(name, resourceBlock.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1477,6 +1501,18 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_G_N_P,
 					finderArgs, this);
+		}
+
+		if (result instanceof ResourceBlock) {
+			ResourceBlock resourceBlock = (ResourceBlock)result;
+
+			if ((companyId != resourceBlock.getCompanyId()) ||
+					(groupId != resourceBlock.getGroupId()) ||
+					!Validator.equals(name, resourceBlock.getName()) ||
+					!Validator.equals(permissionsHash,
+						resourceBlock.getPermissionsHash())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

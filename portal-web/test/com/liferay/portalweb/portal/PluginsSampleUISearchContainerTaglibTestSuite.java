@@ -23,7 +23,8 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsSampleUISearchContainerTaglibTestSuite extends BaseTests {
+public class PluginsSampleUISearchContainerTaglibTestSuite
+	extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();

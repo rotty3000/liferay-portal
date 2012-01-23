@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.messageboards.message.guestviewpermissionsmbthreadmessageguestviewoff;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,28 +22,23 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class
-	Guest_ViewPermissionsMBThreadMessageGuestViewOffTests extends BaseTests {
-
+public class Guest_ViewPermissionsMBThreadMessageGuestViewOffTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageMBTest.class);
 		testSuite.addTestSuite(AddPortletMBTest.class);
 		testSuite.addTestSuite(PostNewMBThreadMessageTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(Guest_ViewMBThreadMessageTest.class);
 		testSuite.addTestSuite(SignInTest.class);
-		testSuite.addTestSuite(
-			PermissionsMBThreadMessageGuestViewOffTest.class);
+		testSuite.addTestSuite(PermissionsMBThreadMessageGuestViewOffTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
-		testSuite.addTestSuite(
-			Guest_ViewPermissionsMBThreadMessageGuestViewOffTest.class);
+		testSuite.addTestSuite(Guest_ViewPermissionsMBThreadMessageGuestViewOffTest.class);
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(TearDownThreadMessageTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

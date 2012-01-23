@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.organizations.organizationservice.addorganizationservicemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddOrganizationServiceMultipleTests extends BaseTests {
-
+public class AddOrganizationServiceMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddOrganizationTest.class);
 		testSuite.addTestSuite(AddOrganizationService1Test.class);
 		testSuite.addTestSuite(AddOrganizationService2Test.class);
@@ -35,5 +33,4 @@ public class AddOrganizationServiceMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

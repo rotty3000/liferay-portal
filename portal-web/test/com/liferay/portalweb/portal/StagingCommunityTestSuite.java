@@ -15,11 +15,11 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.stagingcommunity.assetpublisher.AssetPublisherTests;
+import com.liferay.portalweb.stagingcommunity.assetpublisher.AssetPublisherTestPlan;
 import com.liferay.portalweb.stagingcommunity.blogs.BlogsTests;
-import com.liferay.portalweb.stagingcommunity.documentlibrary.DocumentLibraryTests;
-import com.liferay.portalweb.stagingcommunity.sites.SitesTests;
-import com.liferay.portalweb.stagingcommunity.webcontentdisplay.WebContentDisplayTests;
+import com.liferay.portalweb.stagingcommunity.documentlibrary.DocumentLibraryTestPlan;
+import com.liferay.portalweb.stagingcommunity.sites.SitesTestPlan;
+import com.liferay.portalweb.stagingcommunity.webcontentdisplay.WebContentDisplayTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -27,17 +27,17 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class StagingCommunityTestSuite extends BaseTests {
+public class StagingCommunityTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AssetPublisherTests.suite());
+		testSuite.addTest(AssetPublisherTestPlan.suite());
 		testSuite.addTest(BlogsTests.suite());
-		testSuite.addTest(DocumentLibraryTests.suite());
-		testSuite.addTest(SitesTests.suite());
-		testSuite.addTest(WebContentDisplayTests.suite());
+		testSuite.addTest(DocumentLibraryTestPlan.suite());
+		testSuite.addTest(SitesTestPlan.suite());
+		testSuite.addTest(WebContentDisplayTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

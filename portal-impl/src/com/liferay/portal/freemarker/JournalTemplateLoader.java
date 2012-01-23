@@ -52,8 +52,8 @@ public class JournalTemplateLoader extends FreeMarkerTemplateLoader {
 
 				if (_log.isDebugEnabled()) {
 					_log.debug(
-						"Loading {companyId=" + companyId + ",groupId=" +
-							groupId + ",templateId=" + templateId + "}");
+						"Loading {companyId=" + companyId + ", groupId=" +
+							groupId + ", templateId=" + templateId + "}");
 				}
 
 				JournalTemplate template =

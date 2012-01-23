@@ -525,6 +525,16 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 		List<UserTrackerPath> list = (List<UserTrackerPath>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserTrackerPath userTrackerPath : list) {
+				if ((userTrackerId != userTrackerPath.getUserTrackerId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

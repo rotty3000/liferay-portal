@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.stagingcommunity.blogs;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,13 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class BlogsTests extends BaseTests {
-
+public class BlogsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
-		testSuite.addTestSuite(
-			DefinePermissionsBlogsManagePagesPowerUserTest.class);
+		testSuite.addTestSuite(DefinePermissionsBlogsManagePagesPowerUserTest.class);
 		testSuite.addTestSuite(AddUserPowerUserTest.class);
 		testSuite.addTestSuite(AddUserPortalContentReviewerTest.class);
 		testSuite.addTestSuite(AddUserAdministratorTest.class);
@@ -54,8 +51,7 @@ public class BlogsTests extends BaseTests {
 		testSuite.addTestSuite(PCR_LogoutTest.class);
 		testSuite.addTestSuite(Guest_AssertNoBlogsEntryPrePublishTest.class);
 		testSuite.addTestSuite(Administrator_LoginTest.class);
-		testSuite.addTestSuite(
-			Administrator_PublishToLiveStagedBlogsEntryTest.class);
+		testSuite.addTestSuite(Administrator_PublishToLiveStagedBlogsEntryTest.class);
 		testSuite.addTestSuite(Administrator_LogoutTest.class);
 		testSuite.addTestSuite(Guest_AssertBlogsEntryTest.class);
 		testSuite.addTestSuite(LoginTest.class);
@@ -68,5 +64,4 @@ public class BlogsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

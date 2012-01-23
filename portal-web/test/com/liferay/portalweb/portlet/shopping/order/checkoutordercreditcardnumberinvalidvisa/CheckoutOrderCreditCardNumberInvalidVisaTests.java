@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.shopping.order.checkoutordercreditcardnumberinvalidvisa;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,19 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class CheckoutOrderCreditCardNumberInvalidVisaTests extends BaseTests {
-
+public class CheckoutOrderCreditCardNumberInvalidVisaTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageShoppingTest.class);
 		testSuite.addTestSuite(AddPortletShoppingTest.class);
 		testSuite.addTestSuite(AddCategoryTest.class);
 		testSuite.addTestSuite(AddCategoryItemTest.class);
 		testSuite.addTestSuite(AddToShoppingCartCategoryItemTest.class);
-		testSuite.addTestSuite(
-			CheckoutOrderCreditCardNumberInvalidVisaTest.class);
+		testSuite.addTestSuite(CheckoutOrderCreditCardNumberInvalidVisaTest.class);
 		testSuite.addTestSuite(TearDownCartTest.class);
 		testSuite.addTestSuite(TearDownShoppingCategoryTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

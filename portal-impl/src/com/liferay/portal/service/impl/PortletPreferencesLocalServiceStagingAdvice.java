@@ -41,10 +41,18 @@ public class PortletPreferencesLocalServiceStagingAdvice
 
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
 		try {
-			String methodName = methodInvocation.getMethod().getName();
+			Object[] arguments = methodInvocation.getArguments();
+
+			if (arguments == null) {
+				return methodInvocation.proceed();
+			}
+
+			Method method = methodInvocation.getMethod();
+
+			String methodName = method.getName();
 
 			if (methodName.equals("getPortletPreferences") &&
-				(methodInvocation.getArguments().length == 4)) {
+				(arguments.length == 4)) {
 
 				return getPortletPreferences(methodInvocation);
 			}
@@ -57,9 +65,8 @@ public class PortletPreferencesLocalServiceStagingAdvice
 			else if (methodName.equals("updatePreferences")) {
 				return updatePreferences(methodInvocation);
 			}
-			else {
-				return methodInvocation.proceed();
-			}
+
+			return methodInvocation.proceed();
 		}
 		catch (InvocationTargetException ite) {
 			throw ite.getCause();

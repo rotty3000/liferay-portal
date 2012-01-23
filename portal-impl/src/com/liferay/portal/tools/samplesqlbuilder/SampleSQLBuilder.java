@@ -379,33 +379,6 @@ public class SampleSQLBuilder {
 		processTemplate(_tplWikiPage, context);
 	}
 
-	protected Writer createFileWriter(String fileName) throws IOException {
-		File file = new File(fileName);
-
-		return createFileWriter(file);
-	}
-
-	protected Writer createFileWriter(File file) throws IOException {
-		FileOutputStream fileOutputStream = new FileOutputStream(file);
-
-		Writer writer = new OutputStreamWriter(fileOutputStream);
-
-		return createUnsyncBufferedWriter(writer);
-	}
-
-	protected Writer createUnsyncBufferedWriter(Writer writer) {
-		return new UnsyncBufferedWriter(writer, _WRITER_BUFFER_SIZE) {
-
-			@Override
-			public void flush() {
-
-				// Disable FreeMarker from flushing
-
-			}
-
-		};
-	}
-
 	protected void compressInsertSQL(String insertSQL) throws IOException {
 		String tableName = insertSQL.substring(0, insertSQL.indexOf(' '));
 
@@ -461,6 +434,33 @@ public class SampleSQLBuilder {
 		}
 
 		unsyncBufferedReader.close();
+	}
+
+	protected Writer createFileWriter(String fileName) throws IOException {
+		File file = new File(fileName);
+
+		return createFileWriter(file);
+	}
+
+	protected Writer createFileWriter(File file) throws IOException {
+		FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+		Writer writer = new OutputStreamWriter(fileOutputStream);
+
+		return createUnsyncBufferedWriter(writer);
+	}
+
+	protected Writer createUnsyncBufferedWriter(Writer writer) {
+		return new UnsyncBufferedWriter(writer, _WRITER_BUFFER_SIZE) {
+
+			@Override
+			public void flush() {
+
+				// Disable FreeMarker from flushing
+
+			}
+
+		};
 	}
 
 	protected void generateSQL(final CharPipe charPipe) {
@@ -665,10 +665,10 @@ public class SampleSQLBuilder {
 
 	private static final int _PIPE_BUFFER_SIZE = 16 * 1024 * 1024;
 
-	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
-
 	private static final String _TPL_ROOT =
 		"com/liferay/portal/tools/samplesqlbuilder/dependencies/";
+
+	private static final int _WRITER_BUFFER_SIZE = 16 * 1024;
 
 	private SimpleCounter _counter;
 	private DataFactory _dataFactory;

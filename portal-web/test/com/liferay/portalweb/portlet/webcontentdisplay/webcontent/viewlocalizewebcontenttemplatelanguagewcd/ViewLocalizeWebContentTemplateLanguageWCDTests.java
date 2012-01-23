@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.webcontentdisplay.webcontent.viewlocalizewebcontenttemplatelanguagewcd;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewLocalizeWebContentTemplateLanguageWCDTests extends BaseTests {
-
+public class ViewLocalizeWebContentTemplateLanguageWCDTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
 		testSuite.addTestSuite(AddPageLanguageTest.class);
@@ -35,13 +34,11 @@ public class ViewLocalizeWebContentTemplateLanguageWCDTests extends BaseTests {
 		testSuite.addTestSuite(AddTemplateLocalizedTest.class);
 		testSuite.addTestSuite(AddWCWebContentTemplateWCDTest.class);
 		testSuite.addTestSuite(LocalizeWCWebContentTemplateWCDTest.class);
-		testSuite.addTestSuite(
-			ViewLocalizeWebContentTemplateLanguageWCDTest.class);
+		testSuite.addTestSuite(ViewLocalizeWebContentTemplateLanguageWCDTest.class);
 		testSuite.addTestSuite(TearDownLanguageTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

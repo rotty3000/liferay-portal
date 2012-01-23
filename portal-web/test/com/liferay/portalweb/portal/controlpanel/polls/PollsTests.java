@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.polls;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PollsTests extends BaseTests {
-
+public class PollsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddQuestionTest.class);
 		testSuite.addTestSuite(AddVoteTest.class);
 		testSuite.addTestSuite(ViewQuestionGraphsTest.class);
@@ -42,5 +40,4 @@ public class PollsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

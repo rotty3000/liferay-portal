@@ -633,6 +633,16 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 		List<SCFrameworkVersion> list = (List<SCFrameworkVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SCFrameworkVersion scFrameworkVersion : list) {
+				if ((groupId != scFrameworkVersion.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1296,6 +1306,16 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 		List<SCFrameworkVersion> list = (List<SCFrameworkVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SCFrameworkVersion scFrameworkVersion : list) {
+				if ((companyId != scFrameworkVersion.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1651,6 +1671,17 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 
 		List<SCFrameworkVersion> list = (List<SCFrameworkVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SCFrameworkVersion scFrameworkVersion : list) {
+				if ((groupId != scFrameworkVersion.getGroupId()) ||
+						(active != scFrameworkVersion.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2789,6 +2820,10 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_SCPRODUCTVERSIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the s c product versions associated with the s c framework version.
 	 *
@@ -2866,6 +2901,10 @@ public class SCFrameworkVersionPersistenceImpl extends BasePersistenceImpl<SCFra
 			Long.class,
 			SCFrameworkVersionModelImpl.MAPPING_TABLE_SCFRAMEWORKVERSI_SCPRODUCTVERS_NAME,
 			"getSCProductVersionsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_SCPRODUCTVERSIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of s c product versions associated with the s c framework version.

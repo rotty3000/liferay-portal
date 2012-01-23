@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.activities.microblogsentryactivity.socoviewmicroblogsentryactivitycoworkers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,14 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SOCo_ViewMicroblogsEntryActivityCoworkersTests extends BaseTests {
-
+public class SOCo_ViewMicroblogsEntryActivityCoworkersTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
-		testSuite.addTestSuite(
-			AddMicroblogsContentViewableByCoworkersTest.class);
+		testSuite.addTestSuite(AddMicroblogsContentViewableByCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_NewPasswordTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
@@ -40,8 +38,7 @@ public class SOCo_ViewMicroblogsEntryActivityCoworkersTests extends BaseTests {
 		testSuite.addTestSuite(ConfirmCCCoworkerRequestTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewMicroblogsEntryActivityCoworkersTest.class);
+		testSuite.addTestSuite(SOCo_ViewMicroblogsEntryActivityCoworkersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -49,5 +46,4 @@ public class SOCo_ViewMicroblogsEntryActivityCoworkersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

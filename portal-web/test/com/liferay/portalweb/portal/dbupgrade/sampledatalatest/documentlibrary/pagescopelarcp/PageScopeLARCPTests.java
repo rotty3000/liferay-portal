@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledatalatest.documentlibrary.pagescopelarcp;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,15 +22,12 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PageScopeLARCPTests extends BaseTests {
-
+public class PageScopeLARCPTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ExportLARCPDefaultDLPageScopeTest.class);
 		testSuite.addTestSuite(ExportLARCPPage2DLPageScopeTest.class);
 
 		return testSuite;
 	}
-
 }

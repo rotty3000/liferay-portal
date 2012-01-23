@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.calendar.event.addeventdurationinvalid;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddEventDurationInvalidTests extends BaseTests {
-
+public class AddEventDurationInvalidTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageCalendarTest.class);
 		testSuite.addTestSuite(AddPortletCalendarTest.class);
 		testSuite.addTestSuite(AddEventDurationInvalidTest.class);
@@ -35,5 +33,4 @@ public class AddEventDurationInvalidTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

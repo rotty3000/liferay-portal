@@ -6,8 +6,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 
 import java.rmi.RemoteException;
+
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * <p>
@@ -105,6 +109,8 @@ public class ${entity.name}ServiceSoap {
 
 			${method.name}(
 
+			<#assign localizationMapVariables = "">
+
 			<#list method.parameters as parameter>
 				<#assign parameterTypeName = serviceBuilder.getTypeGenericsName(parameter.type)>
 				<#assign parameterListActualType = serviceBuilder.getListActualTypeArguments(parameter.type)>
@@ -123,7 +129,13 @@ public class ${entity.name}ServiceSoap {
 					<#assign parameterTypeName = parameterEntity.packagePath + ".model." + parameterEntity.name + "Soap">
 				</#if>
 
-				${parameterTypeName} ${parameter.name}
+				<#if parameterTypeName == "java.util.Map<java.util.Locale, java.lang.String>">
+					java.lang.String[] ${parameter.name}LanguageIds, java.lang.String[] ${parameter.name}Values
+
+					<#assign localizationMapVariables = localizationMapVariables + "Map<Locale, String>" + parameter.name + " = LocalizationUtil.getLocalizationMap(" + parameter.name + "LanguageIds, " + parameter.name + "Values);">
+				<#else>
+					${parameterTypeName} ${parameter.name}
+				</#if>
 
 				<#if parameter_has_next>
 					,
@@ -132,6 +144,8 @@ public class ${entity.name}ServiceSoap {
 
 			) throws RemoteException {
 				try {
+		            ${localizationMapVariables}
+
 					<#if returnValueName != "void">
 						${returnTypeGenericsName} returnValue =
 					</#if>

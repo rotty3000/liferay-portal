@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceCode;
@@ -615,6 +616,16 @@ public class ResourceCodePersistenceImpl extends BasePersistenceImpl<ResourceCod
 		List<ResourceCode> list = (List<ResourceCode>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceCode resourceCode : list) {
+				if ((companyId != resourceCode.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -951,6 +962,16 @@ public class ResourceCodePersistenceImpl extends BasePersistenceImpl<ResourceCod
 
 		List<ResourceCode> list = (List<ResourceCode>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceCode resourceCode : list) {
+				if (!Validator.equals(name, resourceCode.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1324,6 +1345,16 @@ public class ResourceCodePersistenceImpl extends BasePersistenceImpl<ResourceCod
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_N_S,
 					finderArgs, this);
+		}
+
+		if (result instanceof ResourceCode) {
+			ResourceCode resourceCode = (ResourceCode)result;
+
+			if ((companyId != resourceCode.getCompanyId()) ||
+					!Validator.equals(name, resourceCode.getName()) ||
+					(scope != resourceCode.getScope())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

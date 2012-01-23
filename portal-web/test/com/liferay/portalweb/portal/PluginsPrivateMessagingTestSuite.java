@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.privatemessaging.PrivateMessagingTests;
+import com.liferay.portalweb.plugins.privatemessaging.PrivateMessagingTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsPrivateMessagingTestSuite extends BaseTests {
+public class PluginsPrivateMessagingTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(PrivateMessagingTests.suite());
+		testSuite.addTest(PrivateMessagingTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.orm.ORMException;
 import java.sql.Connection;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 /**
  * @author Prashant Dighe
@@ -27,17 +28,19 @@ import javax.persistence.EntityManager;
 public class NewSessionImpl extends SessionImpl {
 
 	public NewSessionImpl(EntityManager entityManager) {
-		_entityManager = entityManager;
+		this.entityManager = entityManager;
 
-		_entityManager.getTransaction().begin();
+		EntityTransaction entityTransaction = entityManager.getTransaction();
+
+		entityTransaction.begin();
 	}
 
 	@Override
 	public Connection close() throws ORMException {
 		try {
-			_entityManager.getTransaction().commit();
+			entityManager.getTransaction().commit();
 
-			_entityManager.close();
+			entityManager.close();
 
 			return null;
 		}

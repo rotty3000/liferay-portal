@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.PortletPreferences;
@@ -748,6 +749,16 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletPreferences portletPreferences : list) {
+				if ((plid != portletPreferences.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1094,6 +1105,18 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 
 		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletPreferences portletPreferences : list) {
+				if ((plid != portletPreferences.getPlid()) ||
+						!Validator.equals(portletId,
+							portletPreferences.getPortletId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1487,6 +1510,18 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletPreferences portletPreferences : list) {
+				if ((ownerId != portletPreferences.getOwnerId()) ||
+						(ownerType != portletPreferences.getOwnerType()) ||
+						(plid != portletPreferences.getPlid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1871,6 +1906,19 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 
 		List<PortletPreferences> list = (List<PortletPreferences>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (PortletPreferences portletPreferences : list) {
+				if ((ownerType != portletPreferences.getOwnerType()) ||
+						(plid != portletPreferences.getPlid()) ||
+						!Validator.equals(portletId,
+							portletPreferences.getPortletId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2289,6 +2337,18 @@ public class PortletPreferencesPersistenceImpl extends BasePersistenceImpl<Portl
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_O_O_P_P,
 					finderArgs, this);
+		}
+
+		if (result instanceof PortletPreferences) {
+			PortletPreferences portletPreferences = (PortletPreferences)result;
+
+			if ((ownerId != portletPreferences.getOwnerId()) ||
+					(ownerType != portletPreferences.getOwnerType()) ||
+					(plid != portletPreferences.getPlid()) ||
+					!Validator.equals(portletId,
+						portletPreferences.getPortletId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

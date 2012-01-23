@@ -93,9 +93,21 @@ public class RSSAction extends Action {
 				version, displayStyle, feedURL, entryURL, themeDisplay);
 		}
 		else if (groupId > 0) {
-			String feedURL =
-				themeDisplay.getPortalURL() + themeDisplay.getPathMain() +
-					"/message_boards/find_recent_posts?p_l_id=" + plid;
+			String topLink = ParamUtil.getString(request, "topLink");
+
+			String feedURL = null;
+
+			if (topLink.equals("recent-posts")) {
+				feedURL =
+					themeDisplay.getPortalURL() + themeDisplay.getPathMain() +
+						"/message_boards/find_recent_posts?p_l_id=" + plid;
+			}
+			else {
+				feedURL =
+					themeDisplay.getPortalURL() + themeDisplay.getPathMain() +
+						"/message_boards/find_category?p_l_id=" + plid +
+							"&mbCategoryId=" + categoryId;
+			}
 
 			if (userId > 0) {
 				rss = MBMessageServiceUtil.getGroupMessagesRSS(

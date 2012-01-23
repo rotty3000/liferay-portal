@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.sites.site.searchsitesdirectory;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SearchSitesDirectoryTests extends BaseTests {
-
+public class SearchSitesDirectoryTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddSitesSite1Test.class);
 		testSuite.addTestSuite(AddSitesSite2TypePrivateTest.class);
 		testSuite.addTestSuite(AddSitesSite3TypeRestrictedTest.class);
@@ -35,5 +33,4 @@ public class SearchSitesDirectoryTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

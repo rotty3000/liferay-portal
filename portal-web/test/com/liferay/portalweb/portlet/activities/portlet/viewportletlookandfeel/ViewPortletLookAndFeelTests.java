@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.activities.portlet.viewportletlookandfeel;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPortletLookAndFeelTests extends BaseTests {
-
+public class ViewPortletLookAndFeelTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageActivitiesTest.class);
 		testSuite.addTestSuite(AddPortletActivitiesTest.class);
 		testSuite.addTestSuite(ViewPortletLookAndFeelTest.class);
@@ -34,5 +32,4 @@ public class ViewPortletLookAndFeelTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

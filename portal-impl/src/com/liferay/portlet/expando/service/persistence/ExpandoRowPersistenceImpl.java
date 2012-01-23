@@ -565,6 +565,16 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 		List<ExpandoRow> list = (List<ExpandoRow>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoRow expandoRow : list) {
+				if ((tableId != expandoRow.getTableId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -907,6 +917,15 @@ public class ExpandoRowPersistenceImpl extends BasePersistenceImpl<ExpandoRow>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_T_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof ExpandoRow) {
+			ExpandoRow expandoRow = (ExpandoRow)result;
+
+			if ((tableId != expandoRow.getTableId()) ||
+					(classPK != expandoRow.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

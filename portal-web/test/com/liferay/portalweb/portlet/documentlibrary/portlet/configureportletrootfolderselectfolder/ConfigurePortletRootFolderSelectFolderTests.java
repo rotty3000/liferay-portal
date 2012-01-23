@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.documentlibrary.portlet.configureportletrootfolderselectfolder;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,18 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ConfigurePortletRootFolderSelectFolderTests extends BaseTests {
-
+public class ConfigurePortletRootFolderSelectFolderTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageDLTest.class);
 		testSuite.addTestSuite(AddPortletDLTest.class);
 		testSuite.addTestSuite(AddFolderTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortletRootFolderSelectFolderTest.class);
-		testSuite.addTestSuite(
-			ConfigurePortletRootFolderRemoveFolderTest.class);
+		testSuite.addTestSuite(ConfigurePortletRootFolderSelectFolderTest.class);
+		testSuite.addTestSuite(ConfigurePortletRootFolderRemoveFolderTest.class);
 		testSuite.addTestSuite(TearDownDLConfigurationTest.class);
 		testSuite.addTestSuite(TearDownDLDocumentTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

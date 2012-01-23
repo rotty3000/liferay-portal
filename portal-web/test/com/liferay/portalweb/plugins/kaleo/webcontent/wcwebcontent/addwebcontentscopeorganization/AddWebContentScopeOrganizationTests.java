@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontent.wcwebcontent.addwebcontentscopeorganization;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,23 +22,17 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddWebContentScopeOrganizationTests extends BaseTests {
-
+public class AddWebContentScopeOrganizationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddOrganizationTest.class);
-		testSuite.addTestSuite(
-			ConfigureWebContentSingleApproverScopeOrganizationTest.class);
+		testSuite.addTestSuite(ConfigureWebContentSingleApproverScopeOrganizationTest.class);
 		testSuite.addTestSuite(AddWebContentScopeOrganizationTest.class);
-		testSuite.addTestSuite(
-			ViewWebContentScopeOrganizationAssignedToMyRolesTest.class);
+		testSuite.addTestSuite(ViewWebContentScopeOrganizationAssignedToMyRolesTest.class);
 		testSuite.addTestSuite(TearDownOrganizationWebContentTest.class);
-		testSuite.addTestSuite(
-			TearDownOrganizationWorkflowConfigurationTest.class);
+		testSuite.addTestSuite(TearDownOrganizationWorkflowConfigurationTest.class);
 		testSuite.addTestSuite(TearDownOrganizationTest.class);
 
 		return testSuite;
 	}
-
 }

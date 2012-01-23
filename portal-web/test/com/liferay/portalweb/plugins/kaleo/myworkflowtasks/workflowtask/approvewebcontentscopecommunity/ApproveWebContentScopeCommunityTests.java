@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.myworkflowtasks.workflowtask.approvewebcontentscopecommunity;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,26 +22,19 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ApproveWebContentScopeCommunityTests extends BaseTests {
-
+public class ApproveWebContentScopeCommunityTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCommunityTest.class);
-		testSuite.addTestSuite(
-			ConfigureWebContentSingleApproverScopeCommunityTest.class);
+		testSuite.addTestSuite(ConfigureWebContentSingleApproverScopeCommunityTest.class);
 		testSuite.addTestSuite(AddWebContentScopeCommunityTest.class);
-		testSuite.addTestSuite(
-			AssignToMeWebContentScopeCommunityActionsTest.class);
-		testSuite.addTestSuite(
-			ApproveWebContentScopeCommunityActionsTest.class);
+		testSuite.addTestSuite(AssignToMeWebContentScopeCommunityActionsTest.class);
+		testSuite.addTestSuite(ApproveWebContentScopeCommunityActionsTest.class);
 		testSuite.addTestSuite(ViewWebContentScopeCommunityCompletedTest.class);
 		testSuite.addTestSuite(TearDownCommunityWebContentTest.class);
-		testSuite.addTestSuite(
-			TearDownCommunityWorkflowConfigurationTest.class);
+		testSuite.addTestSuite(TearDownCommunityWorkflowConfigurationTest.class);
 		testSuite.addTestSuite(TearDownCommunityTest.class);
 
 		return testSuite;
 	}
-
 }

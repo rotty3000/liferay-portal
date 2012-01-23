@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbsharding.able;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.StopSeleniumTest;
 
 import junit.framework.Test;
@@ -23,21 +23,17 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DBShardingAbleTests extends BaseTests {
-
+public class DBShardingAbleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(LoginAbleTest.class);
 		testSuite.addTestSuite(AddPageTest.class);
 		testSuite.addTestSuite(AddPortletTest.class);
 		testSuite.addTestSuite(AddCategoryTest.class);
 		testSuite.addTestSuite(AddSubcategoryTest.class);
 		testSuite.addTestSuite(AddMessageTest.class);
-
 		testSuite.addTestSuite(StopSeleniumTest.class);
 
 		return testSuite;
 	}
-
 }

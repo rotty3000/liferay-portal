@@ -549,6 +549,10 @@
 			<finder-column name="repositoryId" />
 		</finder>
 
+		<!-- References -->
+
+		<reference package-path="com.liferay.portal" entity="Repository" />
+
 		<!-- Transactions -->
 
 		<tx-required>getFileDeltaAsStream</tx-required>

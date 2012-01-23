@@ -33,20 +33,20 @@ import com.liferay.portalweb.plugins.socialcoding.SocialCodingTests;
 import com.liferay.portalweb.plugins.socialnetworking.SocialNetworkingTests;
 import com.liferay.portalweb.plugins.stocks.StocksTests;
 import com.liferay.portalweb.plugins.suntouripc.SunTourIPCTests;
-import com.liferay.portalweb.plugins.testclp.TestCLPTests;
+import com.liferay.portalweb.plugins.testclp.TestCLPTestPlan;
 import com.liferay.portalweb.plugins.testdependency.TestDependencyTests;
 import com.liferay.portalweb.plugins.testhook.TestHookTests;
 import com.liferay.portalweb.plugins.testlocalized.TestLocalizedTests;
 import com.liferay.portalweb.plugins.testmisc.TestMiscTests;
 import com.liferay.portalweb.plugins.testworkflow.TestWorkflowTests;
 import com.liferay.portalweb.plugins.todayinchristianhistory.TodayinChristianHistoryTests;
-import com.liferay.portalweb.plugins.todaysevents.TodaysEventsTests;
+import com.liferay.portalweb.plugins.todaysevents.TodaysEventsTestPlan;
 import com.liferay.portalweb.plugins.twitter.TwitterTests;
 import com.liferay.portalweb.plugins.weather.WeatherTests;
 import com.liferay.portalweb.plugins.webform.WebFormTests;
 import com.liferay.portalweb.plugins.westminstercatechism.WestminsterCatechismTests;
 import com.liferay.portalweb.plugins.wikinavigation.WikiNavigationTests;
-import com.liferay.portalweb.plugins.wsrp.WSRPTests;
+import com.liferay.portalweb.plugins.wsrp.WSRPTestPlan;
 import com.liferay.portalweb.plugins.wysiwyg.WysiwygTests;
 import com.liferay.portalweb.portal.login.LoginPlugins2Tests;
 
@@ -56,7 +56,7 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Plugins2TestSuite extends BaseTests {
+public class Plugins2TestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
@@ -82,20 +82,20 @@ public class Plugins2TestSuite extends BaseTests {
 		testSuite.addTest(SocialNetworkingTests.suite());
 		testSuite.addTest(StocksTests.suite());
 		testSuite.addTest(SunTourIPCTests.suite());
-		testSuite.addTest(TestCLPTests.suite());
+		testSuite.addTest(TestCLPTestPlan.suite());
 		testSuite.addTest(TestDependencyTests.suite());
 		testSuite.addTest(TestHookTests.suite());
 		testSuite.addTest(TestLocalizedTests.suite());
 		testSuite.addTest(TestMiscTests.suite());
 		testSuite.addTest(TestWorkflowTests.suite());
 		testSuite.addTest(TodayinChristianHistoryTests.suite());
-		testSuite.addTest(TodaysEventsTests.suite());
+		testSuite.addTest(TodaysEventsTestPlan.suite());
 		testSuite.addTest(TwitterTests.suite());
 		testSuite.addTest(WeatherTests.suite());
 		testSuite.addTest(WebFormTests.suite());
 		testSuite.addTest(WestminsterCatechismTests.suite());
 		testSuite.addTest(WikiNavigationTests.suite());
-		testSuite.addTest(WSRPTests.suite());
+		testSuite.addTest(WSRPTestPlan.suite());
 		testSuite.addTest(WysiwygTests.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);

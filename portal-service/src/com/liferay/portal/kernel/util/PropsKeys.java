@@ -1081,15 +1081,11 @@ public interface PropsKeys {
 
 	public static final String LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED = "layout.user.private.layouts.enabled";
 
-	public static final String LAYOUT_USER_PRIVATE_LAYOUTS_MODIFIABLE = "layout.user.private.layouts.modifiable";
-
 	public static final String LAYOUT_USER_PRIVATE_LAYOUTS_POWER_USER_REQUIRED = "layout.user.private.layouts.power.user.required";
 
 	public static final String LAYOUT_USER_PUBLIC_LAYOUTS_AUTO_CREATE = "layout.user.public.layouts.auto.create";
 
 	public static final String LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = "layout.user.public.layouts.enabled";
-
-	public static final String LAYOUT_USER_PUBLIC_LAYOUTS_MODIFIABLE = "layout.user.public.layouts.modifiable";
 
 	public static final String LAYOUT_USER_PUBLIC_LAYOUTS_POWER_USER_REQUIRED = "layout.user.public.layouts.power.user.required";
 
@@ -1110,6 +1106,8 @@ public interface PropsKeys {
 	public static final String LDAP_BASE_DN = "ldap.base.dn";
 
 	public static final String LDAP_BASE_PROVIDER_URL = "ldap.base.provider.url";
+
+	public static final String LDAP_CONNECTION_PROPERTY_PREFIX = "ldap.connection.";
 
 	public static final String LDAP_CONTACT_CUSTOM_MAPPINGS = "ldap.contact.custom.mappings";
 

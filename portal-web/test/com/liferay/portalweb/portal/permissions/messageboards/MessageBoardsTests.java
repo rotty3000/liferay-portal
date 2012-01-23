@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.messageboards;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class MessageBoardsTests extends BaseTests {
-
+public class MessageBoardsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(SA_AddMATest.class);
 		testSuite.addTestSuite(SA_AddMARoleTest.class);
 		testSuite.addTestSuite(SA_DefineMARoleTest.class);
@@ -66,5 +64,4 @@ public class MessageBoardsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

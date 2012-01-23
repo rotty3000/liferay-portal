@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.kaleo.webcontentdisplay.wcwebcontent.viewwebcontentversion2resubmitted;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewWebContentVersion2ResubmittedTests extends BaseTests {
-
+public class ViewWebContentVersion2ResubmittedTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureWebContentSingleApproverTest.class);
 		testSuite.addTestSuite(AddPageWCDTest.class);
 		testSuite.addTestSuite(AddPortletWCDTest.class);
@@ -39,8 +37,7 @@ public class ViewWebContentVersion2ResubmittedTests extends BaseTests {
 		testSuite.addTestSuite(ResubmitWebContentVersion2ActionsTest.class);
 		testSuite.addTestSuite(ViewWebContentVersion2ResubmittedTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
-		testSuite.addTestSuite(
-			Guest_ViewWebContentVersion2ResubmittedTest.class);
+		testSuite.addTestSuite(Guest_ViewWebContentVersion2ResubmittedTest.class);
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 		testSuite.addTestSuite(TearDownWebContentTest.class);
@@ -48,5 +45,4 @@ public class ViewWebContentVersion2ResubmittedTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

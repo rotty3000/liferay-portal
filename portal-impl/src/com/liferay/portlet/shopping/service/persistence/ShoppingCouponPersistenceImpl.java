@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -572,6 +573,16 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 		List<ShoppingCoupon> list = (List<ShoppingCoupon>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingCoupon shoppingCoupon : list) {
+				if ((groupId != shoppingCoupon.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -916,6 +927,14 @@ public class ShoppingCouponPersistenceImpl extends BasePersistenceImpl<ShoppingC
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_CODE,
 					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingCoupon) {
+			ShoppingCoupon shoppingCoupon = (ShoppingCoupon)result;
+
+			if (!Validator.equals(code, shoppingCoupon.getCode())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

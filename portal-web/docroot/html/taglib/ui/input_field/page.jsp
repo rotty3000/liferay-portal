@@ -28,6 +28,7 @@ String fieldParam = GetterUtil.getString((String)request.getAttribute("liferay-u
 Object defaultValue = request.getAttribute("liferay-ui:input-field:defaultValue");
 boolean disabled = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-field:disabled"));
 Format format = (Format)request.getAttribute("liferay-ui:input-field:format");
+boolean ignoreRequestValue = GetterUtil.getBoolean((String) request.getAttribute("liferay-ui:input-field:ignoreRequestValue"));
 String placeholder = (String)request.getAttribute("liferay-ui:input-field:placeholder");
 
 String type = ModelHintsUtil.getType(model, field);
@@ -54,7 +55,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				fieldParam = field;
 			}
 
-			boolean value = BeanParamUtil.getBoolean(bean, request, field, defaultBoolean);
+			boolean value = BeanPropertiesUtil.getBooleanSilent(bean, field, defaultBoolean);
+
+			if (!ignoreRequestValue) {
+				value = ParamUtil.getBoolean(request, fieldParam, value);
+			}
 			%>
 
 			<liferay-ui:input-checkbox cssClass="<%= cssClass %>" formName="<%= formName %>" param="<%= fieldParam %>" defaultValue="<%= value %>" disabled="<%= disabled %>" />
@@ -99,7 +104,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 
 			boolean updateFromDefaultDelta = false;
 
-			int month = ParamUtil.getInteger(request, fieldParam + "Month", -1);
+			int month = -1;
+
+			if (!ignoreRequestValue) {
+				month = ParamUtil.getInteger(request, fieldParam + "Month", month);
+			}
 
 			if ((month == -1) && (cal != null)) {
 				month = cal.get(Calendar.MONTH);
@@ -119,7 +128,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				monthNullable = GetterUtil.getBoolean(hints.get("month-nullable"), monthNullable);
 			}
 
-			int day = ParamUtil.getInteger(request, fieldParam + "Day", -1);
+			int day = -1;
+
+			if (!ignoreRequestValue) {
+				day = ParamUtil.getInteger(request, fieldParam + "Day", day);
+			}
 
 			if ((day == -1) && (cal != null)) {
 				day = cal.get(Calendar.DATE);
@@ -139,7 +152,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				dayNullable = GetterUtil.getBoolean(hints.get("day-nullable"), dayNullable);
 			}
 
-			int year = ParamUtil.getInteger(request, fieldParam + "Year", -1);
+			int year = -1;
+
+			if (!ignoreRequestValue) {
+				year = ParamUtil.getInteger(request, fieldParam + "Year", year);
+			}
 
 			if ((year == -1) && (cal != null)) {
 				year = cal.get(Calendar.YEAR);
@@ -217,7 +234,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				firstDayOfWeek = cal.getFirstDayOfWeek() - 1;
 			}
 
-			int hour = ParamUtil.getInteger(request, fieldParam + "Hour", -1);
+			int hour = -1;
+
+			if (!ignoreRequestValue) {
+				hour = ParamUtil.getInteger(request, fieldParam + "Hour", hour);
+			}
 
 			if ((hour == -1) && (cal != null)) {
 				hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -227,13 +248,21 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				}
 			}
 
-			int minute = ParamUtil.getInteger(request, fieldParam + "Minute", -1);
+			int minute = -1;
+
+			if (!ignoreRequestValue) {
+				minute = ParamUtil.getInteger(request, fieldParam + "Minute", minute);
+			}
 
 			if ((minute == -1) && (cal != null)) {
 				minute = cal.get(Calendar.MINUTE);
 			}
 
-			int amPm = ParamUtil.getInteger(request, fieldParam + "AmPm", -1);
+			int amPm = -1;
+
+			if (!ignoreRequestValue) {
+				amPm = ParamUtil.getInteger(request, fieldParam + "AmPm", amPm);
+			}
 
 			if ((amPm == -1) && (cal != null)) {
 				amPm = Calendar.AM;
@@ -299,7 +328,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 			}
 
 			if (type.equals("double")) {
-				double doubleValue = BeanParamUtil.getDouble(bean, request, field, GetterUtil.getDouble(defaultString));
+				double doubleValue = BeanPropertiesUtil.getDoubleSilent(bean, field, GetterUtil.getDouble(defaultString));
+
+				if (!ignoreRequestValue) {
+					doubleValue = ParamUtil.getDouble(request, fieldParam, doubleValue);
+				}
 
 				if (format != null) {
 					value = format.format(doubleValue);
@@ -309,7 +342,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				}
 			}
 			else if (type.equals("int")) {
-				int intValue = BeanParamUtil.getInteger(bean, request, field, GetterUtil.getInteger(defaultString));
+				int intValue = BeanPropertiesUtil.getIntegerSilent(bean, field, GetterUtil.getInteger(defaultString));
+
+				if (!ignoreRequestValue) {
+					intValue = ParamUtil.getInteger(request, fieldParam, intValue);
+				}
 
 				if (format != null) {
 					value = format.format(intValue);
@@ -319,7 +356,11 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				}
 			}
 			else if (type.equals("long")) {
-				long longValue = BeanParamUtil.getLong(bean, request, field, GetterUtil.getLong(defaultString));
+				long longValue = BeanPropertiesUtil.getLongSilent(bean, field, GetterUtil.getLong(defaultString));
+
+				if (!ignoreRequestValue) {
+					longValue = ParamUtil.getLong(request, fieldParam, longValue);
+				}
 
 				if (format != null) {
 					value = format.format(longValue);
@@ -331,10 +372,8 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 			else {
 				value = BeanPropertiesUtil.getString(bean, field, defaultString);
 
-				String httpValue = request.getParameter(fieldParam);
-
-				if (httpValue != null) {
-					value = httpValue;
+				if (!ignoreRequestValue) {
+					value = ParamUtil.getString(request, fieldParam, value);
 				}
 			}
 
@@ -378,7 +417,7 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 
 					<c:choose>
 						<c:when test="<%= localized %>">
-							<liferay-ui:input-localized cssClass='<%= cssClass + " lfr-input-text" %>' defaultLanguageId="<%= defaultLanguageId %>" disabled="<%= disabled %>" formName="<%= formName %>" languageId="<%= languageId %>" name="<%= fieldParam %>" style='<%= "max-width: " + displayWidth + (Validator.isDigit(displayWidth) ? "px" : "") + "; " + (upperCase ? "text-transform: uppercase;" : "" ) %>' xml="<%= BeanPropertiesUtil.getString(bean, field) %>" />
+							<liferay-ui:input-localized cssClass='<%= cssClass + " lfr-input-text" %>' defaultLanguageId="<%= defaultLanguageId %>" disabled="<%= disabled %>" formName="<%= formName %>" ignoreRequestValue="<%= ignoreRequestValue %>" languageId="<%= languageId %>" name="<%= fieldParam %>" style='<%= "max-width: " + displayWidth + (Validator.isDigit(displayWidth) ? "px" : "") + "; " + (upperCase ? "text-transform: uppercase;" : "" ) %>' xml="<%= BeanPropertiesUtil.getString(bean, field) %>" />
 						</c:when>
 						<c:otherwise>
 							<input <%= Validator.isNotNull(cssClass) ? "class=\"" + cssClass + " lfr-input-text\"" : StringPool.BLANK %> <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= namespace %><%= fieldParam %>" name="<%= namespace %><%= fieldParam %>" <%= Validator.isNotNull(placeholder) ? "placeholder=\"" + LanguageUtil.get(pageContext, placeholder) + "\"" : StringPool.BLANK %> style="max-width: <%= displayWidth %><%= Validator.isDigit(displayWidth) ? "px" : "" %>; <%= upperCase ? "text-transform: uppercase;" : "" %>" type="<%= secret ? "password" : "text" %>" value="<%= autoEscape ? HtmlUtil.escape(value) : value %>" />
@@ -388,7 +427,7 @@ Map<String, String> hints = ModelHintsUtil.getHints(model, field);
 				<c:otherwise>
 					<c:choose>
 						<c:when test="<%= localized %>">
-							<liferay-ui:input-localized cssClass='<%= cssClass + " lfr-input-text" %>' defaultLanguageId="<%= defaultLanguageId %>" disabled="<%= disabled %>" formName="<%= formName %>" languageId="<%= languageId %>" name="<%= fieldParam %>" onKeyDown='<%= (checkTab ? "Liferay.Util.checkTab(this); " : "") + "Liferay.Util.disableEsc();" %>' style='<%= "height: " + displayHeight + (Validator.isDigit(displayHeight) ? "px" : "" ) + "; " + "max-width: " + displayWidth + (Validator.isDigit(displayWidth) ? "px" : "") +";" %>' type="textarea" wrap="soft" xml="<%= BeanPropertiesUtil.getString(bean, field) %>" />
+							<liferay-ui:input-localized cssClass='<%= cssClass + " lfr-input-text" %>' defaultLanguageId="<%= defaultLanguageId %>" disabled="<%= disabled %>" formName="<%= formName %>" ignoreRequestValue="<%= ignoreRequestValue %>" languageId="<%= languageId %>" name="<%= fieldParam %>" onKeyDown='<%= (checkTab ? "Liferay.Util.checkTab(this); " : "") + "Liferay.Util.disableEsc();" %>' style='<%= "height: " + displayHeight + (Validator.isDigit(displayHeight) ? "px" : "" ) + "; " + "max-width: " + displayWidth + (Validator.isDigit(displayWidth) ? "px" : "") +";" %>' type="textarea" wrap="soft" xml="<%= BeanPropertiesUtil.getString(bean, field) %>" />
 						</c:when>
 						<c:otherwise>
 							<textarea <%= Validator.isNotNull(cssClass) ? "class=\"" + cssClass + " lfr-textarea\"" : StringPool.BLANK %> <%= disabled ? "disabled=\"disabled\"" : "" %> id="<%= namespace %><%= fieldParam %>" name="<%= namespace %><%= fieldParam %>" <%= Validator.isNotNull(placeholder) ? "placeholder=\"" + LanguageUtil.get(pageContext, placeholder) + "\"" : StringPool.BLANK %> style="height: <%= displayHeight %><%= Validator.isDigit(displayHeight) ? "px" : "" %>; max-width: <%= displayWidth %><%= Validator.isDigit(displayWidth) ? "px" : "" %>;" wrap="soft" onKeyDown="<%= checkTab ? "Liferay.Util.checkTab(this); " : "" %> Liferay.Util.disableEsc();"><%= autoEscape ? HtmlUtil.escape(value) : value %></textarea>

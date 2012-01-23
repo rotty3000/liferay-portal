@@ -561,6 +561,16 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 		List<OrgGroupPermission> list = (List<OrgGroupPermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupPermission orgGroupPermission : list) {
+				if ((groupId != orgGroupPermission.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -905,6 +915,16 @@ public class OrgGroupPermissionPersistenceImpl extends BasePersistenceImpl<OrgGr
 
 		List<OrgGroupPermission> list = (List<OrgGroupPermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupPermission orgGroupPermission : list) {
+				if ((permissionId != orgGroupPermission.getPermissionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

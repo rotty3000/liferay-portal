@@ -649,6 +649,16 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(uuid, lock.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1011,6 +1021,16 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		List<Lock> list = (List<Lock>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Lock lock : list) {
+				if (!Validator.equals(expirationDate, lock.getExpirationDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1369,6 +1389,15 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 					finderArgs, this);
 		}
 
+		if (result instanceof Lock) {
+			Lock lock = (Lock)result;
+
+			if (!Validator.equals(className, lock.getClassName()) ||
+					!Validator.equals(key, lock.getKey())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1538,6 +1567,16 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_K_O,
 					finderArgs, this);
+		}
+
+		if (result instanceof Lock) {
+			Lock lock = (Lock)result;
+
+			if (!Validator.equals(className, lock.getClassName()) ||
+					!Validator.equals(key, lock.getKey()) ||
+					!Validator.equals(owner, lock.getOwner())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

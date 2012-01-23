@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.notifications.requests.requestprofileaddasfriend;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RequestProfileAddAsFriendTests extends BaseTests {
-
+public class RequestProfileAddAsFriendTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFriendTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_NewPasswordTest.class);
@@ -39,22 +37,18 @@ public class RequestProfileAddAsFriendTests extends BaseTests {
 		testSuite.addTestSuite(IgnoreNotificationsAddAsFriendProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFr_ViewIgnoreNotificationsAddAsFriendCCTest.class);
+		testSuite.addTestSuite(SOFr_ViewIgnoreNotificationsAddAsFriendCCTest.class);
 		testSuite.addTestSuite(SOFr_AddAsFriendProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
-		testSuite.addTestSuite(
-			ConfirmNotificationsAddAsFriendProfileTest.class);
+		testSuite.addTestSuite(ConfirmNotificationsAddAsFriendProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFr_SignInTest.class);
-		testSuite.addTestSuite(
-			SOFr_ViewConfirmNotificationsAddAsFriendCCTest.class);
+		testSuite.addTestSuite(SOFr_ViewConfirmNotificationsAddAsFriendCCTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownSOUserTest.class);
 
 		return testSuite;
 	}
-
 }

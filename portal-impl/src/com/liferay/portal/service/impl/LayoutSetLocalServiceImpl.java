@@ -204,16 +204,70 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 			layoutSetPrototypeUuid);
 	}
 
+	/**
+	 * Updates the state of the layout set prototype link.
+	 *
+	 * <p>
+	 * This method can disable the layout set prototype's link by setting
+	 * <code>layoutSetPrototypeLinkEnabled</code> to <code>false</code>.
+	 * However, this method can only enable the layout set prototype's link if
+	 * the layout set prototype's current uuid is not <code>null</code>. Setting
+	 * the <code>layoutSetPrototypeLinkEnabled</code> to <code>true</code> when
+	 * the layout set prototype's current uuid is <code>null</code> will have no
+	 * effect.
+	 * </p>
+	 *
+	 * @param      groupId the primary key of the group
+	 * @param      privateLayout whether the layout set is private to the group
+	 * @param      layoutSetPrototypeLinkEnabled whether the layout set
+	 *             prototype is link enabled
+	 * @throws     PortalException if a portal exception occurred
+	 * @throws     SystemException if a system exception occurred
+	 * @deprecated As of 6.1, replaced by {@link
+	 *             #updateLayoutSetPrototypeLinkEnabled(long, boolean, boolean,
+	 *             String)}
+	 */
 	public void updateLayoutSetPrototypeLinkEnabled(
 			long groupId, boolean privateLayout,
 			boolean layoutSetPrototypeLinkEnabled)
 		throws PortalException, SystemException {
 
+		updateLayoutSetPrototypeLinkEnabled(
+			groupId, privateLayout, layoutSetPrototypeLinkEnabled, null);
+	}
+
+	/**
+	 * Updates the state of the layout set prototype link.
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  privateLayout whether the layout set is private to the group
+	 * @param  layoutSetPrototypeLinkEnabled whether the layout set prototype is
+	 *         link enabled
+	 * @param  layoutSetPrototypeUuid the uuid of the layout set prototype to
+	 *         link with
+	 * @throws PortalException if a portal exception occurred
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void updateLayoutSetPrototypeLinkEnabled(
+			long groupId, boolean privateLayout,
+			boolean layoutSetPrototypeLinkEnabled,
+			String layoutSetPrototypeUuid)
+		throws PortalException, SystemException {
+
 		LayoutSet layoutSet = layoutSetPersistence.findByG_P(
 			groupId, privateLayout);
 
+		if (Validator.isNull(layoutSetPrototypeUuid)) {
+			layoutSetPrototypeUuid = layoutSet.getLayoutSetPrototypeUuid();
+		}
+
+		if (Validator.isNull(layoutSetPrototypeUuid)) {
+			layoutSetPrototypeLinkEnabled = false;
+		}
+
 		layoutSet.setLayoutSetPrototypeLinkEnabled(
 			layoutSetPrototypeLinkEnabled);
+		layoutSet.setLayoutSetPrototypeUuid(layoutSetPrototypeUuid);
 
 		layoutSetPersistence.update(layoutSet, false);
 	}
@@ -275,16 +329,6 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 		}
 	}
 
-	public void updateLookAndFeel(
-			long groupId, String themeId, String colorSchemeId, String css,
-			boolean wapTheme)
-		throws PortalException, SystemException {
-
-		updateLookAndFeel(
-			groupId, false, themeId, colorSchemeId, css, wapTheme);
-		updateLookAndFeel(groupId, true, themeId, colorSchemeId, css, wapTheme);
-	}
-
 	public LayoutSet updateLookAndFeel(
 			long groupId, boolean privateLayout, String themeId,
 			String colorSchemeId, String css, boolean wapTheme)
@@ -336,6 +380,16 @@ public class LayoutSetLocalServiceImpl extends LayoutSetLocalServiceBaseImpl {
 		}
 
 		return layoutSet;
+	}
+
+	public void updateLookAndFeel(
+			long groupId, String themeId, String colorSchemeId, String css,
+			boolean wapTheme)
+		throws PortalException, SystemException {
+
+		updateLookAndFeel(
+			groupId, false, themeId, colorSchemeId, css, wapTheme);
+		updateLookAndFeel(groupId, true, themeId, colorSchemeId, css, wapTheme);
 	}
 
 	public LayoutSet updatePageCount(long groupId, boolean privateLayout)

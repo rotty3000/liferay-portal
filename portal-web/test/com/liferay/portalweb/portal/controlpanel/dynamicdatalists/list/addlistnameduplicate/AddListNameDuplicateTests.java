@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.dynamicdatalists.list.addlistnameduplicate;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddListNameDuplicateTests extends BaseTests {
-
+public class AddListNameDuplicateTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddDataDefinitionTest.class);
 		testSuite.addTestSuite(AddListTest.class);
 		testSuite.addTestSuite(AddListNameDuplicateTest.class);
@@ -35,5 +33,4 @@ public class AddListNameDuplicateTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

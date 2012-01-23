@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.kaleo.wiki.WikiTests;
+import com.liferay.portalweb.plugins.kaleo.wiki.WikiTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoWikiTestSuite extends BaseTests {
+public class KaleoWikiTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WikiTests.suite());
+		testSuite.addTest(WikiTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

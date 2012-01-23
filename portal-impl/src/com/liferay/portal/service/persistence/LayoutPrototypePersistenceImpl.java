@@ -615,6 +615,16 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if (!Validator.equals(uuid, layoutPrototype.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1295,6 +1305,16 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if ((companyId != layoutPrototype.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1939,6 +1959,17 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 
 		List<LayoutPrototype> list = (List<LayoutPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutPrototype layoutPrototype : list) {
+				if ((companyId != layoutPrototype.getCompanyId()) ||
+						(active != layoutPrototype.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

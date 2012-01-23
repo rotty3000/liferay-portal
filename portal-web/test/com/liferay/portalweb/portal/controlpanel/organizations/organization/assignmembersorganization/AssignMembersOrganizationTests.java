@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.organizations.organization.assignmembersorganization;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AssignMembersOrganizationTests extends BaseTests {
-
+public class AssignMembersOrganizationTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddOrganizationTest.class);
 		testSuite.addTestSuite(AddUserTest.class);
 		testSuite.addTestSuite(AssignMembersOrganizationTest.class);
@@ -36,5 +34,4 @@ public class AssignMembersOrganizationTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

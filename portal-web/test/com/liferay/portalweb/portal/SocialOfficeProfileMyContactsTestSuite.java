@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginSocialOfficeTests;
-import com.liferay.portalweb.socialofficeprofile.mycontacts.MyContactsTests;
+import com.liferay.portalweb.socialofficeprofile.mycontacts.MyContactsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class SocialOfficeProfileMyContactsTestSuite extends BaseTests {
+public class SocialOfficeProfileMyContactsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginSocialOfficeTests.suite());
-		testSuite.addTest(MyContactsTests.suite());
+		testSuite.addTest(MyContactsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

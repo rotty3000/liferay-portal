@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.hellovelocity.HelloVelocityTests;
+import com.liferay.portalweb.portlet.hellovelocity.HelloVelocityTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebHelloVelocityTestSuite extends BaseTests {
+public class PortalWebHelloVelocityTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(HelloVelocityTests.suite());
+		testSuite.addTest(HelloVelocityTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

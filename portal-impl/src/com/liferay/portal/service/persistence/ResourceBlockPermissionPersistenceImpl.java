@@ -590,6 +590,16 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 		List<ResourceBlockPermission> list = (List<ResourceBlockPermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceBlockPermission resourceBlockPermission : list) {
+				if ((resourceBlockId != resourceBlockPermission.getResourceBlockId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -938,6 +948,15 @@ public class ResourceBlockPermissionPersistenceImpl extends BasePersistenceImpl<
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_R_R,
 					finderArgs, this);
+		}
+
+		if (result instanceof ResourceBlockPermission) {
+			ResourceBlockPermission resourceBlockPermission = (ResourceBlockPermission)result;
+
+			if ((resourceBlockId != resourceBlockPermission.getResourceBlockId()) ||
+					(roleId != resourceBlockPermission.getRoleId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

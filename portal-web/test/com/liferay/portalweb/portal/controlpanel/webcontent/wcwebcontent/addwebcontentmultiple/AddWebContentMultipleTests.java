@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.webcontent.wcwebcontent.addwebcontentmultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddWebContentMultipleTests extends BaseTests {
-
+public class AddWebContentMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddWebContent1Test.class);
 		testSuite.addTestSuite(AddWebContent2Test.class);
 		testSuite.addTestSuite(AddWebContent3Test.class);
@@ -34,5 +32,4 @@ public class AddWebContentMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

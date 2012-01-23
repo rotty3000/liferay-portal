@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
@@ -694,6 +695,16 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingOrder shoppingOrder : list) {
+				if ((groupId != shoppingOrder.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1352,6 +1363,14 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 					finderArgs, this);
 		}
 
+		if (result instanceof ShoppingOrder) {
+			ShoppingOrder shoppingOrder = (ShoppingOrder)result;
+
+			if (!Validator.equals(number, shoppingOrder.getNumber())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1493,6 +1512,14 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_PPTXNID,
 					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingOrder) {
+			ShoppingOrder shoppingOrder = (ShoppingOrder)result;
+
+			if (!Validator.equals(ppTxnId, shoppingOrder.getPpTxnId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -1648,6 +1675,19 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		List<ShoppingOrder> list = (List<ShoppingOrder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ShoppingOrder shoppingOrder : list) {
+				if ((groupId != shoppingOrder.getGroupId()) ||
+						(userId != shoppingOrder.getUserId()) ||
+						!Validator.equals(ppPaymentStatus,
+							shoppingOrder.getPpPaymentStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

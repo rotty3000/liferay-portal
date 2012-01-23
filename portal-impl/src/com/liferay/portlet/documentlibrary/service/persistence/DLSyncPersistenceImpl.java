@@ -34,9 +34,11 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
+import com.liferay.portal.service.persistence.RepositoryPersistence;
 import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -570,6 +572,14 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 					finderArgs, this);
 		}
 
+		if (result instanceof DLSync) {
+			DLSync dlSync = (DLSync)result;
+
+			if ((fileId != dlSync.getFileId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -711,6 +721,18 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 
 		List<DLSync> list = (List<DLSync>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLSync dlSync : list) {
+				if ((companyId != dlSync.getCompanyId()) ||
+						!Validator.equals(modifiedDate, dlSync.getModifiedDate()) ||
+						(repositoryId != dlSync.getRepositoryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1408,6 +1430,8 @@ public class DLSyncPersistenceImpl extends BasePersistenceImpl<DLSync>
 	protected DLFolderPersistence dlFolderPersistence;
 	@BeanReference(type = DLSyncPersistence.class)
 	protected DLSyncPersistence dlSyncPersistence;
+	@BeanReference(type = RepositoryPersistence.class)
+	protected RepositoryPersistence repositoryPersistence;
 	@BeanReference(type = ResourcePersistence.class)
 	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)

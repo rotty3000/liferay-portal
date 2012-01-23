@@ -116,11 +116,11 @@ public class FileCacheOutputStream extends OutputStream {
 
 	private static final String _EXTENSION = ".fcos";
 
-	protected FileInputStream _fis;
-	protected File _tempFile;
-	protected UnsyncBufferedOutputStream _ubos;
-
 	private static Log _log = LogFactoryUtil.getLog(
 		FileCacheOutputStream.class);
+
+	private FileInputStream _fis;
+	private File _tempFile;
+	private UnsyncBufferedOutputStream _ubos;
 
 }

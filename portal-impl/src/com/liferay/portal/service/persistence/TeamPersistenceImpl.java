@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Team;
@@ -577,6 +578,16 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 
 		List<Team> list = (List<Team>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Team team : list) {
+				if ((groupId != team.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1237,6 +1248,15 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 					finderArgs, this);
 		}
 
+		if (result instanceof Team) {
+			Team team = (Team)result;
+
+			if ((groupId != team.getGroupId()) ||
+					!Validator.equals(name, team.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1721,6 +1741,10 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the team.
 	 *
@@ -1796,6 +1820,10 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 			TeamModelImpl.FINDER_CACHE_ENABLED_USERS_TEAMS, Long.class,
 			TeamModelImpl.MAPPING_TABLE_USERS_TEAMS_NAME, "getUsersSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the team.
@@ -2180,6 +2208,10 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERGROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the user groups associated with the team.
 	 *
@@ -2256,6 +2288,10 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 			TeamModelImpl.FINDER_CACHE_ENABLED_USERGROUPS_TEAMS, Long.class,
 			TeamModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME,
 			"getUserGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERGROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of user groups associated with the team.

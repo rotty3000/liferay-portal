@@ -728,6 +728,16 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 		List<AssetVocabulary> list = (List<AssetVocabulary>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetVocabulary assetVocabulary : list) {
+				if (!Validator.equals(uuid, assetVocabulary.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1104,6 +1114,15 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 					finderArgs, this);
 		}
 
+		if (result instanceof AssetVocabulary) {
+			AssetVocabulary assetVocabulary = (AssetVocabulary)result;
+
+			if (!Validator.equals(uuid, assetVocabulary.getUuid()) ||
+					(groupId != assetVocabulary.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1250,6 +1269,16 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 
 		List<AssetVocabulary> list = (List<AssetVocabulary>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetVocabulary assetVocabulary : list) {
+				if ((groupId != assetVocabulary.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1911,6 +1940,16 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 		List<AssetVocabulary> list = (List<AssetVocabulary>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetVocabulary assetVocabulary : list) {
+				if ((companyId != assetVocabulary.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2262,6 +2301,15 @@ public class AssetVocabularyPersistenceImpl extends BasePersistenceImpl<AssetVoc
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetVocabulary) {
+			AssetVocabulary assetVocabulary = (AssetVocabulary)result;
+
+			if ((groupId != assetVocabulary.getGroupId()) ||
+					!Validator.equals(name, assetVocabulary.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

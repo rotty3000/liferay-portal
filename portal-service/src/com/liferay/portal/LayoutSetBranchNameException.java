@@ -23,13 +23,11 @@ public class LayoutSetBranchNameException extends PortalException {
 
 	public static final int DUPLICATE = 1;
 
+	public static final int MASTER = 4;
+
 	public static final int TOO_LONG = 2;
 
 	public static final int TOO_SHORT = 3;
-
-	public static final int MASTER = 4;
-
-	private int _type;
 
 	public LayoutSetBranchNameException(int type) {
 		_type = type;
@@ -38,5 +36,7 @@ public class LayoutSetBranchNameException extends PortalException {
 	public int getType() {
 		return _type;
 	}
+
+	private int _type;
 
 }

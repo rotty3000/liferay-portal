@@ -604,6 +604,16 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		List<MBDiscussion> list = (List<MBDiscussion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (MBDiscussion mbDiscussion : list) {
+				if ((classNameId != mbDiscussion.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -943,6 +953,14 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 					finderArgs, this);
 		}
 
+		if (result instanceof MBDiscussion) {
+			MBDiscussion mbDiscussion = (MBDiscussion)result;
+
+			if ((threadId != mbDiscussion.getThreadId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(2);
 
@@ -1075,6 +1093,15 @@ public class MBDiscussionPersistenceImpl extends BasePersistenceImpl<MBDiscussio
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof MBDiscussion) {
+			MBDiscussion mbDiscussion = (MBDiscussion)result;
+
+			if ((classNameId != mbDiscussion.getClassNameId()) ||
+					(classPK != mbDiscussion.getClassPK())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

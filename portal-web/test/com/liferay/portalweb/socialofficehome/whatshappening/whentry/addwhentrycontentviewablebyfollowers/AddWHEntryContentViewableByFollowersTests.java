@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.whatshappening.whentry.addwhentrycontentviewablebyfollowers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddWHEntryContentViewableByFollowersTests extends BaseTests {
-
+public class AddWHEntryContentViewableByFollowersTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
 		testSuite.addTestSuite(AddWHEntryContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(ViewWHEntryContentViewableByFollowersTest.class);
@@ -36,8 +34,7 @@ public class AddWHEntryContentViewableByFollowersTests extends BaseTests {
 		testSuite.addTestSuite(SOFo_SignInTest.class);
 		testSuite.addTestSuite(SOFo_ViewWHContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SOFo_AddAsFollowerCCActionsTest.class);
-		testSuite.addTestSuite(
-			SOFo_ViewFollowerWHContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(SOFo_ViewFollowerWHContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -45,5 +42,4 @@ public class AddWHEntryContentViewableByFollowersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

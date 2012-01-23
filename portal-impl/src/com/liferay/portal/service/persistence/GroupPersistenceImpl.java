@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ModelListener;
@@ -952,6 +953,16 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		List<Group> list = (List<Group>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Group group : list) {
+				if ((companyId != group.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1295,6 +1306,14 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					finderArgs, this);
 		}
 
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((liveGroupId != group.getLiveGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1429,6 +1448,15 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((companyId != group.getCompanyId()) ||
+					!Validator.equals(name, group.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -1585,6 +1613,15 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					finderArgs, this);
 		}
 
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((companyId != group.getCompanyId()) ||
+					!Validator.equals(friendlyURL, group.getFriendlyURL())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1739,6 +1776,16 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 
 		List<Group> list = (List<Group>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Group group : list) {
+				if ((type != group.getType()) || (active != group.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2114,6 +2161,16 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 					finderArgs, this);
 		}
 
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((companyId != group.getCompanyId()) ||
+					(classNameId != group.getClassNameId()) ||
+					(classPK != group.getClassPK())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(5);
 
@@ -2264,6 +2321,16 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_L_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((companyId != group.getCompanyId()) ||
+					(liveGroupId != group.getLiveGroupId()) ||
+					!Validator.equals(name, group.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -2439,6 +2506,17 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C_L_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof Group) {
+			Group group = (Group)result;
+
+			if ((companyId != group.getCompanyId()) ||
+					(classNameId != group.getClassNameId()) ||
+					(liveGroupId != group.getLiveGroupId()) ||
+					!Validator.equals(name, group.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -3380,6 +3458,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ORGANIZATIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the organizations associated with the group.
 	 *
@@ -3456,6 +3538,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ORGS, Long.class,
 			GroupModelImpl.MAPPING_TABLE_GROUPS_ORGS_NAME,
 			"getOrganizationsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ORGANIZATIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of organizations associated with the group.
@@ -3854,6 +3940,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_PERMISSIONS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the permissions associated with the group.
 	 *
@@ -3930,6 +4020,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_PERMISSIONS, Long.class,
 			GroupModelImpl.MAPPING_TABLE_GROUPS_PERMISSIONS_NAME,
 			"getPermissionsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_PERMISSIONS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of permissions associated with the group.
@@ -4328,6 +4422,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ROLES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the roles associated with the group.
 	 *
@@ -4403,6 +4501,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_ROLES, Long.class,
 			GroupModelImpl.MAPPING_TABLE_GROUPS_ROLES_NAME, "getRolesSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ROLES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of roles associated with the group.
@@ -4788,6 +4890,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERGROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the user groups associated with the group.
 	 *
@@ -4864,6 +4970,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			GroupModelImpl.FINDER_CACHE_ENABLED_GROUPS_USERGROUPS, Long.class,
 			GroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
 			"getUserGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERGROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of user groups associated with the group.
@@ -5259,6 +5369,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the group.
 	 *
@@ -5334,6 +5448,10 @@ public class GroupPersistenceImpl extends BasePersistenceImpl<Group>
 			GroupModelImpl.FINDER_CACHE_ENABLED_USERS_GROUPS, Long.class,
 			GroupModelImpl.MAPPING_TABLE_USERS_GROUPS_NAME, "getUsersSize",
 			new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the group.

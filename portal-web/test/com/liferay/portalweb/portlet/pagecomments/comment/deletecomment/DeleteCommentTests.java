@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.pagecomments.comment.deletecomment;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteCommentTests extends BaseTests {
-
+public class DeleteCommentTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPagePCTest.class);
 		testSuite.addTestSuite(AddPortletPCTest.class);
 		testSuite.addTestSuite(AddCommentTest.class);
@@ -36,5 +34,4 @@ public class DeleteCommentTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

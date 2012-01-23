@@ -505,6 +505,16 @@ public class ImagePersistenceImpl extends BasePersistenceImpl<Image>
 		List<Image> list = (List<Image>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Image image : list) {
+				if ((size != image.getSize())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 

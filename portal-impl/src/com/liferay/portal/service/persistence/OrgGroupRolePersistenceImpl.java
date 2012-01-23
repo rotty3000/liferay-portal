@@ -546,6 +546,16 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupRole orgGroupRole : list) {
+				if ((groupId != orgGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -883,6 +893,16 @@ public class OrgGroupRolePersistenceImpl extends BasePersistenceImpl<OrgGroupRol
 
 		List<OrgGroupRole> list = (List<OrgGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (OrgGroupRole orgGroupRole : list) {
+				if ((roleId != orgGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

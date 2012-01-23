@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.webcontent.assertactions.controlpanel.accessincontrolpanel;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AccessInControlPanelTests extends BaseTests {
-
+public class AccessInControlPanelTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddMemberTest.class);
 		testSuite.addTestSuite(AddMemberRoleTest.class);
 		testSuite.addTestSuite(RemoveRolePowerUserTest.class);
@@ -34,8 +32,7 @@ public class AccessInControlPanelTests extends BaseTests {
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(LoginUsersTest.class);
 		testSuite.addTestSuite(Member_LoginTest.class);
-		testSuite.addTestSuite(
-			Member_AssertCannotAccessInControlPanelTest.class);
+		testSuite.addTestSuite(Member_AssertCannotAccessInControlPanelTest.class);
 		testSuite.addTestSuite(LogoutTest.class);
 		testSuite.addTestSuite(SA_LoginTest.class);
 		testSuite.addTestSuite(AddPermissionAccessInControlPanelTest.class);
@@ -49,5 +46,4 @@ public class AccessInControlPanelTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

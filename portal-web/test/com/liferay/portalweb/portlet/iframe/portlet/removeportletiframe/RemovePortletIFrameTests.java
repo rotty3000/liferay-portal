@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.iframe.portlet.removeportletiframe;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RemovePortletIFrameTests extends BaseTests {
-
+public class RemovePortletIFrameTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageIFrameTest.class);
 		testSuite.addTestSuite(AddPortletIFrameTest.class);
 		testSuite.addTestSuite(RemovePortletIFrameTest.class);
@@ -34,5 +32,4 @@ public class RemovePortletIFrameTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

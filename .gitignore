@@ -167,7 +167,7 @@ _sass_cache_*.css
 /support-tomcat/*.ipr
 /support-tomcat/*.iws
 /support-tomcat/classes
-/support-tomcat/support-tomcat.jar
+/support-tomcat/support-tomcat*.jar
 
 /tools/maven/*.asc
 

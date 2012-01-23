@@ -612,6 +612,16 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTagStats assetTagStats : list) {
+				if ((tagId != assetTagStats.getTagId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -957,6 +967,16 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 
 		List<AssetTagStats> list = (List<AssetTagStats>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AssetTagStats assetTagStats : list) {
+				if ((classNameId != assetTagStats.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1309,6 +1329,15 @@ public class AssetTagStatsPersistenceImpl extends BasePersistenceImpl<AssetTagSt
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_T_C,
 					finderArgs, this);
+		}
+
+		if (result instanceof AssetTagStats) {
+			AssetTagStats assetTagStats = (AssetTagStats)result;
+
+			if ((tagId != assetTagStats.getTagId()) ||
+					(classNameId != assetTagStats.getClassNameId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

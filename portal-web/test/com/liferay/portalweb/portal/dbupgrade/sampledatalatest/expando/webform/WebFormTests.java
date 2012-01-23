@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.dbupgrade.sampledatalatest.expando.webform;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class WebFormTests extends BaseTests {
-
+public class WebFormTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddCommunityExpandoWebFormTest.class);
 		testSuite.addTestSuite(AddPageWFTest.class);
 		testSuite.addTestSuite(AddPortletWFTest.class);
@@ -40,5 +38,4 @@ public class WebFormTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

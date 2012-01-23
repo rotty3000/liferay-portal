@@ -664,6 +664,16 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 		List<DDLRecord> list = (List<DDLRecord>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecord ddlRecord : list) {
+				if (!Validator.equals(uuid, ddlRecord.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1032,6 +1042,15 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 					finderArgs, this);
 		}
 
+		if (result instanceof DDLRecord) {
+			DDLRecord ddlRecord = (DDLRecord)result;
+
+			if (!Validator.equals(uuid, ddlRecord.getUuid()) ||
+					(groupId != ddlRecord.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1177,6 +1196,16 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 
 		List<DDLRecord> list = (List<DDLRecord>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecord ddlRecord : list) {
+				if ((recordSetId != ddlRecord.getRecordSetId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1523,6 +1552,17 @@ public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 
 		List<DDLRecord> list = (List<DDLRecord>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecord ddlRecord : list) {
+				if ((recordSetId != ddlRecord.getRecordSetId()) ||
+						(userId != ddlRecord.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

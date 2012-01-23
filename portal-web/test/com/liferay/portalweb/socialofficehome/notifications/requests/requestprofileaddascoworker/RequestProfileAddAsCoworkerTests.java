@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.notifications.requests.requestprofileaddascoworker;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class RequestProfileAddAsCoworkerTests extends BaseTests {
-
+public class RequestProfileAddAsCoworkerTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOCoworkerTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_NewPasswordTest.class);
@@ -36,26 +34,21 @@ public class RequestProfileAddAsCoworkerTests extends BaseTests {
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(ViewNotificationsAddAsCoworkerProfileTest.class);
-		testSuite.addTestSuite(
-			IgnoreNotificationsAddAsCoworkerProfileTest.class);
+		testSuite.addTestSuite(IgnoreNotificationsAddAsCoworkerProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewIgnoreNotificationsAddAsCoworkerCCTest.class);
+		testSuite.addTestSuite(SOCo_ViewIgnoreNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SOCo_AddAsCoworkerProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
-		testSuite.addTestSuite(
-			ConfirmNotificationsAddAsCoworkerProfileTest.class);
+		testSuite.addTestSuite(ConfirmNotificationsAddAsCoworkerProfileTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOCo_SignInTest.class);
-		testSuite.addTestSuite(
-			SOCo_ViewConfirmNotificationsAddAsCoworkerCCTest.class);
+		testSuite.addTestSuite(SOCo_ViewConfirmNotificationsAddAsCoworkerCCTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownSOUserTest.class);
 
 		return testSuite;
 	}
-
 }

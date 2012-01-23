@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -781,6 +782,17 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		List<SocialActivityCounter> list = (List<SocialActivityCounter>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityCounter socialActivityCounter : list) {
+				if ((classNameId != socialActivityCounter.getClassNameId()) ||
+						(classPK != socialActivityCounter.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1154,6 +1166,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 
 		List<SocialActivityCounter> list = (List<SocialActivityCounter>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivityCounter socialActivityCounter : list) {
+				if ((groupId != socialActivityCounter.getGroupId()) ||
+						(classNameId != socialActivityCounter.getClassNameId()) ||
+						(classPK != socialActivityCounter.getClassPK()) ||
+						(ownerType != socialActivityCounter.getOwnerType())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1588,6 +1613,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 					finderArgs, this);
 		}
 
+		if (result instanceof SocialActivityCounter) {
+			SocialActivityCounter socialActivityCounter = (SocialActivityCounter)result;
+
+			if ((groupId != socialActivityCounter.getGroupId()) ||
+					(classNameId != socialActivityCounter.getClassNameId()) ||
+					(classPK != socialActivityCounter.getClassPK()) ||
+					!Validator.equals(name, socialActivityCounter.getName()) ||
+					(ownerType != socialActivityCounter.getOwnerType()) ||
+					(startPeriod != socialActivityCounter.getStartPeriod())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(7);
 
@@ -1789,6 +1827,19 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_C_C_N_O_E,
 					finderArgs, this);
+		}
+
+		if (result instanceof SocialActivityCounter) {
+			SocialActivityCounter socialActivityCounter = (SocialActivityCounter)result;
+
+			if ((groupId != socialActivityCounter.getGroupId()) ||
+					(classNameId != socialActivityCounter.getClassNameId()) ||
+					(classPK != socialActivityCounter.getClassPK()) ||
+					!Validator.equals(name, socialActivityCounter.getName()) ||
+					(ownerType != socialActivityCounter.getOwnerType()) ||
+					(endPeriod != socialActivityCounter.getEndPeriod())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

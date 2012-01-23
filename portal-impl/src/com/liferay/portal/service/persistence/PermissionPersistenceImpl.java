@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.Permission;
@@ -604,6 +605,16 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 		List<Permission> list = (List<Permission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (Permission permission : list) {
+				if ((resourceId != permission.getResourceId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -947,6 +958,15 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_A_R,
 					finderArgs, this);
+		}
+
+		if (result instanceof Permission) {
+			Permission permission = (Permission)result;
+
+			if (!Validator.equals(actionId, permission.getActionId()) ||
+					(resourceId != permission.getResourceId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -1386,6 +1406,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the groups associated with the permission.
 	 *
@@ -1462,6 +1486,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 			Long.class,
 			PermissionModelImpl.MAPPING_TABLE_GROUPS_PERMISSIONS_NAME,
 			"getGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of groups associated with the permission.
@@ -1851,6 +1879,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_ROLES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the roles associated with the permission.
 	 *
@@ -1927,6 +1959,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 			Long.class,
 			PermissionModelImpl.MAPPING_TABLE_ROLES_PERMISSIONS_NAME,
 			"getRolesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_ROLES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of roles associated with the permission.
@@ -2314,6 +2350,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the permission.
 	 *
@@ -2390,6 +2430,10 @@ public class PermissionPersistenceImpl extends BasePersistenceImpl<Permission>
 			Long.class,
 			PermissionModelImpl.MAPPING_TABLE_USERS_PERMISSIONS_NAME,
 			"getUsersSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the permission.

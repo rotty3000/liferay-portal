@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.amazonrankings.AmazonRankingsTests;
+import com.liferay.portalweb.portlet.amazonrankings.AmazonRankingsTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebAmazonRankingsTestSuite extends BaseTests {
+public class PortalWebAmazonRankingsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(AmazonRankingsTests.suite());
+		testSuite.addTest(AmazonRankingsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

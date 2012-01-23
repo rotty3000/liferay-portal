@@ -659,6 +659,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileRank dlFileRank : list) {
+				if ((userId != dlFileRank.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1004,6 +1014,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileRank dlFileRank : list) {
+				if ((fileEntryId != dlFileRank.getFileEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1358,6 +1378,17 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 
 		List<DLFileRank> list = (List<DLFileRank>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFileRank dlFileRank : list) {
+				if ((groupId != dlFileRank.getGroupId()) ||
+						(userId != dlFileRank.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1733,6 +1764,16 @@ public class DLFileRankPersistenceImpl extends BasePersistenceImpl<DLFileRank>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_U_F,
 					finderArgs, this);
+		}
+
+		if (result instanceof DLFileRank) {
+			DLFileRank dlFileRank = (DLFileRank)result;
+
+			if ((companyId != dlFileRank.getCompanyId()) ||
+					(userId != dlFileRank.getUserId()) ||
+					(fileEntryId != dlFileRank.getFileEntryId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

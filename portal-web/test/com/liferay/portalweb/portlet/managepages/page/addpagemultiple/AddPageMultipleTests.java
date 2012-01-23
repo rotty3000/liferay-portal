@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.managepages.page.addpagemultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddPageMultipleTests extends BaseTests {
-
+public class AddPageMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPage1Test.class);
 		testSuite.addTestSuite(AddPage2Test.class);
 		testSuite.addTestSuite(AddPage3Test.class);
@@ -34,5 +32,4 @@ public class AddPageMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

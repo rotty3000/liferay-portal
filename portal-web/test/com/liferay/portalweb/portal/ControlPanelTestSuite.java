@@ -15,20 +15,20 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.controlpanel.admin.AdminTests;
-import com.liferay.portalweb.portal.controlpanel.blogs.BlogsTests;
+import com.liferay.portalweb.portal.controlpanel.blogs.BlogsTestPlan;
 import com.liferay.portalweb.portal.controlpanel.bookmarks.BookmarksTests;
 import com.liferay.portalweb.portal.controlpanel.calendar.CalendarTests;
 import com.liferay.portalweb.portal.controlpanel.messageboards.MessageBoardsTests;
-import com.liferay.portalweb.portal.controlpanel.organizations.organization.OrganizationTests;
+import com.liferay.portalweb.portal.controlpanel.organizations.organization.OrganizationTestPlan;
 import com.liferay.portalweb.portal.controlpanel.pagetemplates.PageTemplatesTests;
 import com.liferay.portalweb.portal.controlpanel.passwordpolicies.PasswordPoliciesTests;
 import com.liferay.portalweb.portal.controlpanel.polls.PollsTests;
-import com.liferay.portalweb.portal.controlpanel.settings.SettingsTests;
-import com.liferay.portalweb.portal.controlpanel.sites.SitesTests;
+import com.liferay.portalweb.portal.controlpanel.settings.SettingsTestPlan;
+import com.liferay.portalweb.portal.controlpanel.sites.SitesTestPlan;
 import com.liferay.portalweb.portal.controlpanel.usergroup.UserGroupTests;
-import com.liferay.portalweb.portal.controlpanel.users.UsersTests;
+import com.liferay.portalweb.portal.controlpanel.users.UsersTestPlan;
 import com.liferay.portalweb.portal.controlpanel.virtualhosting.VirtualHostingTests;
-import com.liferay.portalweb.portal.controlpanel.webcontent.WebContentTests;
+import com.liferay.portalweb.portal.controlpanel.webcontent.WebContentTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -37,27 +37,27 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ControlPanelTestSuite extends BaseTests {
+public class ControlPanelTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
 		testSuite.addTest(AdminTests.suite());
-		testSuite.addTest(BlogsTests.suite());
+		testSuite.addTest(BlogsTestPlan.suite());
 		testSuite.addTest(BookmarksTests.suite());
 		testSuite.addTest(CalendarTests.suite());
 		testSuite.addTest(MessageBoardsTests.suite());
-		testSuite.addTest(OrganizationTests.suite());
+		testSuite.addTest(OrganizationTestPlan.suite());
 		testSuite.addTest(PageTemplatesTests.suite());
 		testSuite.addTest(PasswordPoliciesTests.suite());
 		testSuite.addTest(PollsTests.suite());
-		testSuite.addTest(SettingsTests.suite());
-		testSuite.addTest(SitesTests.suite());
+		testSuite.addTest(SettingsTestPlan.suite());
+		testSuite.addTest(SitesTestPlan.suite());
 		testSuite.addTest(UserGroupTests.suite());
-		testSuite.addTest(UsersTests.suite());
+		testSuite.addTest(UsersTestPlan.suite());
 		testSuite.addTest(VirtualHostingTests.suite());
-		testSuite.addTest(WebContentTests.suite());
+		testSuite.addTest(WebContentTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

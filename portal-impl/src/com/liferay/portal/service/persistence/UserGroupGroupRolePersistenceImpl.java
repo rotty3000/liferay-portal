@@ -687,6 +687,16 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupGroupRole userGroupGroupRole : list) {
+				if ((userGroupId != userGroupGroupRole.getUserGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1026,6 +1036,16 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupGroupRole userGroupGroupRole : list) {
+				if ((groupId != userGroupGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1364,6 +1384,16 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 
 		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupGroupRole userGroupGroupRole : list) {
+				if ((roleId != userGroupGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1712,6 +1742,17 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 
 		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupGroupRole userGroupGroupRole : list) {
+				if ((userGroupId != userGroupGroupRole.getUserGroupId()) ||
+						(groupId != userGroupGroupRole.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2077,6 +2118,17 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 
 		List<UserGroupGroupRole> list = (List<UserGroupGroupRole>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroupGroupRole userGroupGroupRole : list) {
+				if ((groupId != userGroupGroupRole.getGroupId()) ||
+						(roleId != userGroupGroupRole.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

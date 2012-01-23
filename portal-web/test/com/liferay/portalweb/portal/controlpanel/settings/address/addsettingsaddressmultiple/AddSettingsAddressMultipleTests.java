@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.settings.address.addsettingsaddressmultiple;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddSettingsAddressMultipleTests extends BaseTests {
-
+public class AddSettingsAddressMultipleTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddSettingsAddress1Test.class);
 		testSuite.addTestSuite(AddSettingsAddress2Test.class);
 		testSuite.addTestSuite(AddSettingsAddress3Test.class);
@@ -34,5 +32,4 @@ public class AddSettingsAddressMultipleTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

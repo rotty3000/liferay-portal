@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceAction;
@@ -564,6 +565,16 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		List<ResourceAction> list = (List<ResourceAction>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceAction resourceAction : list) {
+				if (!Validator.equals(name, resourceAction.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -938,6 +949,15 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_N_A,
 					finderArgs, this);
+		}
+
+		if (result instanceof ResourceAction) {
+			ResourceAction resourceAction = (ResourceAction)result;
+
+			if (!Validator.equals(name, resourceAction.getName()) ||
+					!Validator.equals(actionId, resourceAction.getActionId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

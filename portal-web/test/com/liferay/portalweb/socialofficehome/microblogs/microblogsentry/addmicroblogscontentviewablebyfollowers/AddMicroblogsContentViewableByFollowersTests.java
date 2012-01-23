@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.microblogs.microblogsentry.addmicroblogscontentviewablebyfollowers;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,24 +22,19 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddMicroblogsContentViewableByFollowersTests extends BaseTests {
-
+public class AddMicroblogsContentViewableByFollowersTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddUserSOFollowerTest.class);
-		testSuite.addTestSuite(
-			AddMicroblogsContentViewableByFollowersTest.class);
-		testSuite.addTestSuite(
-			ViewMicroblogsEntryContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(AddMicroblogsContentViewableByFollowersTest.class);
+		testSuite.addTestSuite(ViewMicroblogsEntryContentViewableByFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFo_NewPasswordTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOFo_SignInTest.class);
 		testSuite.addTestSuite(SOFo_ViewMicroblogsContentFollowersTest.class);
 		testSuite.addTestSuite(SOFo_AddAsFollowerCCActionsTest.class);
-		testSuite.addTestSuite(
-			SOFo_ViewFollowerMicroblogsContentFollowersTest.class);
+		testSuite.addTestSuite(SOFo_ViewFollowerMicroblogsContentFollowersTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SOSignInTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
@@ -47,5 +42,4 @@ public class AddMicroblogsContentViewableByFollowersTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.categories.category.addcategorytovocabulary;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddCategoryToVocabularyTests extends BaseTests {
-
+public class AddCategoryToVocabularyTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddVocabularyTest.class);
 		testSuite.addTestSuite(AddCategoryToVocabularyTest.class);
 		testSuite.addTestSuite(ViewCategoryToVocabularyTest.class);
@@ -34,5 +32,4 @@ public class AddCategoryToVocabularyTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

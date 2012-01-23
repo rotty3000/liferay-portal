@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.tasks.task.resolvetaskstaskassignedtome;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ResolveTasksTaskAssignedToMeTests extends BaseTests {
-
+public class ResolveTasksTaskAssignedToMeTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddTasksTaskAssignedToMeTest.class);
 		testSuite.addTestSuite(ResolveTasksTaskAssignedToMeTest.class);
 		testSuite.addTestSuite(ViewResolveTasksTaskAssignedToMeTest.class);
@@ -34,5 +32,4 @@ public class ResolveTasksTaskAssignedToMeTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.Country;
 import com.liferay.portal.model.ModelListener;
@@ -604,6 +605,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					finderArgs, this);
 		}
 
+		if (result instanceof Country) {
+			Country country = (Country)result;
+
+			if (!Validator.equals(name, country.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -744,6 +753,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_A2,
 					finderArgs, this);
+		}
+
+		if (result instanceof Country) {
+			Country country = (Country)result;
+
+			if (!Validator.equals(a2, country.getA2())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -888,6 +905,14 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 					finderArgs, this);
 		}
 
+		if (result instanceof Country) {
+			Country country = (Country)result;
+
+			if (!Validator.equals(a3, country.getA3())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1028,6 +1053,16 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 
 		List<Country> list = (List<Country>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (Country country : list) {
+				if ((active != country.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

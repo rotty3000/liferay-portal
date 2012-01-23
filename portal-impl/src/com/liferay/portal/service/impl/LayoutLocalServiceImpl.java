@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -57,6 +56,7 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutReference;
 import com.liferay.portal.model.LayoutSet;
+import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
@@ -81,8 +81,6 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -497,7 +495,7 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6) {
 			List<ResourcePermission> resourcePermissions =
-				resourcePermissionFinder.findByC_P(
+				resourcePermissionPersistence.findByC_P(
 					layout.getCompanyId(), primKey);
 
 			for (ResourcePermission resourcePermission : resourcePermissions) {
@@ -1316,6 +1314,28 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		return hasLayouts(group, privateLayout);
 	}
 
+	public boolean hasLayoutSetPrototypeLayout(
+			long layoutSetPrototypeId, String layoutUuid)
+		throws PortalException, SystemException {
+
+		LayoutSetPrototype layoutSetPrototype =
+			layoutSetPrototypeLocalService.getLayoutSetPrototype(
+				layoutSetPrototypeId);
+
+		return hasLayoutSetPrototypeLayout(layoutSetPrototype, layoutUuid);
+	}
+
+	public boolean hasLayoutSetPrototypeLayout(
+			String layoutSetPrototypeUuid, String layoutUuid)
+		throws PortalException, SystemException {
+
+		LayoutSetPrototype layoutSetPrototype =
+			layoutSetPrototypeLocalService.getLayoutSetPrototypeByUuid(
+				layoutSetPrototypeUuid);
+
+		return hasLayoutSetPrototypeLayout(layoutSetPrototype, layoutUuid);
+	}
+
 	/**
 	 * Imports the layouts from the byte array.
 	 *
@@ -1790,13 +1810,7 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		UnicodeProperties typeSettingsProperties = new UnicodeProperties();
 
-		DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat(
-			PropsValues.INDEX_DATE_FORMAT_PATTERN);
-
 		typeSettingsProperties.fastLoad(typeSettings);
-
-		typeSettingsProperties.setProperty(
-			"modifiedDate", dateFormat.format(now));
 
 		Layout layout = layoutPersistence.findByG_P_L(
 			groupId, privateLayout, layoutId);
@@ -2330,6 +2344,22 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		}
 
 		return parentLayoutId;
+	}
+
+	protected boolean hasLayoutSetPrototypeLayout(
+			LayoutSetPrototype layoutSetPrototype, String layoutUuid)
+		throws PortalException, SystemException {
+
+		Group group = layoutSetPrototype.getGroup();
+
+		Layout layout = layoutPersistence.fetchByUUID_G(
+			layoutUuid, group.getGroupId());
+
+		if (layout != null) {
+			return true;
+		}
+
+		return false;
 	}
 
 	protected void validate(

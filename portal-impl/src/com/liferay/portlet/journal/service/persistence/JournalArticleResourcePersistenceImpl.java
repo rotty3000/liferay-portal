@@ -681,6 +681,16 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 		List<JournalArticleResource> list = (List<JournalArticleResource>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalArticleResource journalArticleResource : list) {
+				if (!Validator.equals(uuid, journalArticleResource.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1051,6 +1061,15 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 					finderArgs, this);
 		}
 
+		if (result instanceof JournalArticleResource) {
+			JournalArticleResource journalArticleResource = (JournalArticleResource)result;
+
+			if (!Validator.equals(uuid, journalArticleResource.getUuid()) ||
+					(groupId != journalArticleResource.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1195,6 +1214,16 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 
 		List<JournalArticleResource> list = (List<JournalArticleResource>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (JournalArticleResource journalArticleResource : list) {
+				if ((groupId != journalArticleResource.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1540,6 +1569,16 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_A,
 					finderArgs, this);
+		}
+
+		if (result instanceof JournalArticleResource) {
+			JournalArticleResource journalArticleResource = (JournalArticleResource)result;
+
+			if ((groupId != journalArticleResource.getGroupId()) ||
+					!Validator.equals(articleId,
+						journalArticleResource.getArticleId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

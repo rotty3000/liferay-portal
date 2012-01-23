@@ -15,6 +15,7 @@
 package com.liferay.taglib.portletext;
 
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -29,6 +30,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class IconPortletTag extends IconTag {
 
+	public void setPortlet(Portlet portlet) {
+		_portlet = portlet;
+	}
+
 	@Override
 	protected void cleanUp() {
 		super.cleanUp();
@@ -41,10 +46,6 @@ public class IconPortletTag extends IconTag {
 		super.setAttributes(request);
 
 		request.setAttribute("liferay-portlet:icon_portlet:portlet", _portlet);
-	}
-
-	public void setPortlet(Portlet portlet) {
-		_portlet = portlet;
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public class IconPortletTag extends IconTag {
 			src = portletDisplay.getURLPortlet();
 		}
 
+		setAlt(StringPool.BLANK);
 		setMessage(message);
 		setSrc(src);
 

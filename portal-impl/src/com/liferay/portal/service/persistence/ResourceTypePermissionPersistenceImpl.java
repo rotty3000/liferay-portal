@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.ResourceTypePermission;
@@ -658,6 +659,16 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceTypePermission resourceTypePermission : list) {
+				if ((roleId != resourceTypePermission.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1008,6 +1019,18 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 
 		List<ResourceTypePermission> list = (List<ResourceTypePermission>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (ResourceTypePermission resourceTypePermission : list) {
+				if ((companyId != resourceTypePermission.getCompanyId()) ||
+						!Validator.equals(name, resourceTypePermission.getName()) ||
+						(roleId != resourceTypePermission.getRoleId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1427,6 +1450,17 @@ public class ResourceTypePermissionPersistenceImpl extends BasePersistenceImpl<R
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_G_N_R,
 					finderArgs, this);
+		}
+
+		if (result instanceof ResourceTypePermission) {
+			ResourceTypePermission resourceTypePermission = (ResourceTypePermission)result;
+
+			if ((companyId != resourceTypePermission.getCompanyId()) ||
+					(groupId != resourceTypePermission.getGroupId()) ||
+					!Validator.equals(name, resourceTypePermission.getName()) ||
+					(roleId != resourceTypePermission.getRoleId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

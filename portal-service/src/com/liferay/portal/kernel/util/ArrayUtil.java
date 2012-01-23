@@ -280,7 +280,7 @@ public class ArrayUtil {
 			length += array.length;
 		}
 
-		Class<?> arraysClass = arrays.getClass();
+		Class<?> arraysClass = arrays[0].getClass();
 
 		T[] newArray = (T[])Array.newInstance(
 			arraysClass.getComponentType(), length);

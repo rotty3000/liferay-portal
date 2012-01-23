@@ -14,10 +14,7 @@
 
 package com.liferay.portalweb.portal.permissions.webcontent.assertactions.controlpanel;
 
-import com.liferay.portalweb.portal.BaseTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.controlpanel.accessincontrolpanel.AccessInControlPanelTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.controlpanel.configuration.ConfigurationTests;
-import com.liferay.portalweb.portal.permissions.webcontent.assertactions.controlpanel.permissions.PermissionsTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -25,16 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ControlPanelTests extends BaseTests {
-
+public class ControlPanelTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
-		testSuite.addTest(AccessInControlPanelTests.suite());
-		testSuite.addTest(ConfigurationTests.suite());
-		testSuite.addTest(PermissionsTests.suite());
-
 		return testSuite;
 	}
-
 }

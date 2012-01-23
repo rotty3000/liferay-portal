@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -594,6 +595,17 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 		List<ExpandoTable> list = (List<ExpandoTable>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (ExpandoTable expandoTable : list) {
+				if ((companyId != expandoTable.getCompanyId()) ||
+						(classNameId != expandoTable.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -960,6 +972,16 @@ public class ExpandoTablePersistenceImpl extends BasePersistenceImpl<ExpandoTabl
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_C_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof ExpandoTable) {
+			ExpandoTable expandoTable = (ExpandoTable)result;
+
+			if ((companyId != expandoTable.getCompanyId()) ||
+					(classNameId != expandoTable.getClassNameId()) ||
+					!Validator.equals(name, expandoTable.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

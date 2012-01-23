@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.imagegallery.image.addfolderimage;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class AddFolderImageTests extends BaseTests {
-
+public class AddFolderImageTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageIGTest.class);
 		testSuite.addTestSuite(AddPortletIGTest.class);
 		testSuite.addTestSuite(ConfigurePortletDisplaySettingsTest.class);
@@ -37,5 +35,4 @@ public class AddFolderImageTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

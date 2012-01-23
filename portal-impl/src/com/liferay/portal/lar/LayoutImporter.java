@@ -673,18 +673,6 @@ public class LayoutImporter {
 		zipReader.close();
 	}
 
-	protected String getLayoutSetPrototype(
-		PortletDataContext portletDataContext, String layoutSetPrototypeUuid) {
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append(portletDataContext.getSourceRootPath());
-		sb.append("/layout-set-prototype/");
-		sb.append(layoutSetPrototypeUuid);
-
-		return sb.toString();
-	}
-
 	protected void fixTypeSettings(Layout layout) throws Exception {
 		if (!layout.isTypeURL()) {
 			return;
@@ -731,6 +719,18 @@ public class LayoutImporter {
 		typeSettings.setProperty(
 			"url",
 			url.substring(0, x) + group.getFriendlyURL() + url.substring(y));
+	}
+
+	protected String getLayoutSetPrototype(
+		PortletDataContext portletDataContext, String layoutSetPrototypeUuid) {
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(portletDataContext.getSourceRootPath());
+		sb.append("/layout-set-prototype/");
+		sb.append(layoutSetPrototypeUuid);
+
+		return sb.toString();
 	}
 
 	protected void importJournalArticle(
@@ -945,12 +945,6 @@ public class LayoutImporter {
 			importedLayout.setPrivateLayout(privateLayout);
 			importedLayout.setLayoutId(layoutId);
 
-			if (layout.isIconImage()) {
-				long iconImageId = CounterLocalServiceUtil.increment();
-
-				importedLayout.setIconImageId(iconImageId);
-			}
-
 			// Resources
 
 			boolean addGroupPermissions = true;
@@ -1120,6 +1114,8 @@ public class LayoutImporter {
 
 		fixTypeSettings(importedLayout);
 
+		importedLayout.setIconImage(false);
+
 		if (layout.isIconImage()) {
 			String iconImagePath = layoutElement.elementText("icon-image-path");
 
@@ -1128,6 +1124,12 @@ public class LayoutImporter {
 
 			if ((iconBytes != null) && (iconBytes.length > 0)) {
 				importedLayout.setIconImage(true);
+
+				if (importedLayout.getIconImageId() == 0) {
+					long iconImageId = CounterLocalServiceUtil.increment();
+
+					importedLayout.setIconImageId(iconImageId);
+				}
 
 				ImageLocalServiceUtil.updateImage(
 					importedLayout.getIconImageId(), iconBytes);

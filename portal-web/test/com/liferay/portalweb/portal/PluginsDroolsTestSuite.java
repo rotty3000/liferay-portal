@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.drools.DroolsTests;
+import com.liferay.portalweb.plugins.drools.DroolsTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsDroolsTestSuite extends BaseTests {
+public class PluginsDroolsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(DroolsTests.suite());
+		testSuite.addTest(DroolsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

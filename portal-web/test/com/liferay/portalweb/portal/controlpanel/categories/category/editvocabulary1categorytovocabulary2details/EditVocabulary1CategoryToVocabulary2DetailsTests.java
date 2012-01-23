@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.controlpanel.categories.category.editvocabulary1categorytovocabulary2details;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,21 +23,16 @@ import junit.framework.TestSuite;
  * @author Brian Wing Shun Chan
  */
 public class EditVocabulary1CategoryToVocabulary2DetailsTests
-	extends BaseTests {
-
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddVocabulary1Test.class);
 		testSuite.addTestSuite(AddVocabulary2Test.class);
 		testSuite.addTestSuite(AddVocabulary1CategoryTest.class);
-		testSuite.addTestSuite(
-			EditVocabulary1CategoryToVocabulary2DetailsTest.class);
-		testSuite.addTestSuite(
-			ViewEditVocabulary1CategoryToVocabulary2DetailsTest.class);
+		testSuite.addTestSuite(EditVocabulary1CategoryToVocabulary2DetailsTest.class);
+		testSuite.addTestSuite(ViewEditVocabulary1CategoryToVocabulary2DetailsTest.class);
 		testSuite.addTestSuite(TearDownVocabularyTest.class);
 
 		return testSuite;
 	}
-
 }

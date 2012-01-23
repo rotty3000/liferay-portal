@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portlet.assetpublisher.mbthreadmessage.viewportlettablembcategorythreadmessageap;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,10 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class ViewPortletTableMBCategoryThreadMessageAPTests extends BaseTests {
-
+public class ViewPortletTableMBCategoryThreadMessageAPTests
+	extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
 		testSuite.addTestSuite(AddPageMBTest.class);
@@ -34,12 +33,10 @@ public class ViewPortletTableMBCategoryThreadMessageAPTests extends BaseTests {
 		testSuite.addTestSuite(AddMBCategoryTest.class);
 		testSuite.addTestSuite(PostNewMBCategoryThreadMessageTest.class);
 		testSuite.addTestSuite(ConfigurePortletDisplayStyleTableTest.class);
-		testSuite.addTestSuite(
-			ViewPortletTableMBCategoryThreadMessageAPTest.class);
+		testSuite.addTestSuite(ViewPortletTableMBCategoryThreadMessageAPTest.class);
 		testSuite.addTestSuite(TearDownMBMessageTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;
 	}
-
 }

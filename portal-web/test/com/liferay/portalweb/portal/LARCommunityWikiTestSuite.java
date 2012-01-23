@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.wiki.WikiLARCommunityTests;
+import com.liferay.portalweb.portal.dbupgrade.sampledatalatest.wiki.WikiLARCommunityTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class LARCommunityWikiTestSuite extends BaseTests {
+public class LARCommunityWikiTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WikiLARCommunityTests.suite());
+		testSuite.addTest(WikiLARCommunityTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

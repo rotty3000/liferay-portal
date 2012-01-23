@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -634,6 +635,16 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecordVersion ddlRecordVersion : list) {
+				if ((recordId != ddlRecordVersion.getRecordId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -979,6 +990,15 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 					finderArgs, this);
 		}
 
+		if (result instanceof DDLRecordVersion) {
+			DDLRecordVersion ddlRecordVersion = (DDLRecordVersion)result;
+
+			if ((recordId != ddlRecordVersion.getRecordId()) ||
+					!Validator.equals(version, ddlRecordVersion.getVersion())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1132,6 +1152,17 @@ public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLReco
 
 		List<DDLRecordVersion> list = (List<DDLRecordVersion>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecordVersion ddlRecordVersion : list) {
+				if ((recordId != ddlRecordVersion.getRecordId()) ||
+						(status != ddlRecordVersion.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

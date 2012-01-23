@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.kaleo.mysubmissions.MySubmissionsTests;
+import com.liferay.portalweb.plugins.kaleo.mysubmissions.MySubmissionsTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class KaleoMySubmissionsTestSuite extends BaseTests {
+public class KaleoMySubmissionsTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(MySubmissionsTests.suite());
+		testSuite.addTest(MySubmissionsTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

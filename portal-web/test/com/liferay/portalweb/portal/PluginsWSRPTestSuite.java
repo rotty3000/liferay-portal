@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal;
 
-import com.liferay.portalweb.plugins.wsrp.WSRPTests;
+import com.liferay.portalweb.plugins.wsrp.WSRPTestPlan;
 import com.liferay.portalweb.portal.login.LoginTests;
 
 import junit.framework.Test;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PluginsWSRPTestSuite extends BaseTests {
+public class PluginsWSRPTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(WSRPTests.suite());
+		testSuite.addTest(WSRPTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.portal.cluster.cluster2;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.portal.StopSeleniumTest;
 
 import junit.framework.Test;
@@ -23,17 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Cluster2bTests extends BaseTests {
-
+public class Cluster2bTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AssertLBFailoverToNodeOneTest.class);
 		testSuite.addTestSuite(AddMBCategoryNodeOneTest.class);
-
 		testSuite.addTestSuite(StopSeleniumTest.class);
 
 		return testSuite;
 	}
-
 }

@@ -1291,6 +1291,16 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if (!Validator.equals(uuid, blogsEntry.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1667,6 +1677,15 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 					finderArgs, this);
 		}
 
+		if (result instanceof BlogsEntry) {
+			BlogsEntry blogsEntry = (BlogsEntry)result;
+
+			if (!Validator.equals(uuid, blogsEntry.getUuid()) ||
+					(groupId != blogsEntry.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1813,6 +1832,16 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2471,6 +2500,16 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2824,6 +2863,17 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(userId != blogsEntry.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3196,6 +3246,18 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3582,6 +3644,17 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3952,6 +4025,15 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 					finderArgs, this);
 		}
 
+		if (result instanceof BlogsEntry) {
+			BlogsEntry blogsEntry = (BlogsEntry)result;
+
+			if ((groupId != blogsEntry.getGroupId()) ||
+					!Validator.equals(urlTitle, blogsEntry.getUrlTitle())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -4107,6 +4189,18 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4833,6 +4927,17 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -5533,6 +5638,18 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -5924,6 +6041,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((companyId != blogsEntry.getCompanyId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -6330,6 +6460,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -7091,6 +7234,18 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -7821,6 +7976,19 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -8586,6 +8754,20 @@ public class BlogsEntryPersistenceImpl extends BasePersistenceImpl<BlogsEntry>
 
 		List<BlogsEntry> list = (List<BlogsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (BlogsEntry blogsEntry : list) {
+				if ((groupId != blogsEntry.getGroupId()) ||
+						(userId != blogsEntry.getUserId()) ||
+						!Validator.equals(displayDate,
+							blogsEntry.getDisplayDate()) ||
+						(status != blogsEntry.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

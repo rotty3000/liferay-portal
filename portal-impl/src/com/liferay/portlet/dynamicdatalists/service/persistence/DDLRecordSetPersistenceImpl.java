@@ -674,6 +674,16 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		List<DDLRecordSet> list = (List<DDLRecordSet>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecordSet ddlRecordSet : list) {
+				if (!Validator.equals(uuid, ddlRecordSet.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1042,6 +1052,15 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 					finderArgs, this);
 		}
 
+		if (result instanceof DDLRecordSet) {
+			DDLRecordSet ddlRecordSet = (DDLRecordSet)result;
+
+			if (!Validator.equals(uuid, ddlRecordSet.getUuid()) ||
+					(groupId != ddlRecordSet.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1186,6 +1205,16 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 
 		List<DDLRecordSet> list = (List<DDLRecordSet>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DDLRecordSet ddlRecordSet : list) {
+				if ((groupId != ddlRecordSet.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1824,6 +1853,16 @@ public class DDLRecordSetPersistenceImpl extends BasePersistenceImpl<DDLRecordSe
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_R,
 					finderArgs, this);
+		}
+
+		if (result instanceof DDLRecordSet) {
+			DDLRecordSet ddlRecordSet = (DDLRecordSet)result;
+
+			if ((groupId != ddlRecordSet.getGroupId()) ||
+					!Validator.equals(recordSetKey,
+						ddlRecordSet.getRecordSetKey())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

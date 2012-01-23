@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserGroup;
@@ -650,6 +651,16 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 		List<UserGroup> list = (List<UserGroup>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroup userGroup : list) {
+				if ((companyId != userGroup.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1315,6 +1326,17 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 
 		List<UserGroup> list = (List<UserGroup>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (UserGroup userGroup : list) {
+				if ((companyId != userGroup.getCompanyId()) ||
+						(parentUserGroupId != userGroup.getParentUserGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2011,6 +2033,15 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 					finderArgs, this);
 		}
 
+		if (result instanceof UserGroup) {
+			UserGroup userGroup = (UserGroup)result;
+
+			if ((companyId != userGroup.getCompanyId()) ||
+					!Validator.equals(name, userGroup.getName())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -2623,6 +2654,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_GROUPS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the groups associated with the user group.
 	 *
@@ -2699,6 +2734,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			Long.class,
 			UserGroupModelImpl.MAPPING_TABLE_GROUPS_USERGROUPS_NAME,
 			"getGroupsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_GROUPS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of groups associated with the user group.
@@ -3087,6 +3126,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_TEAMS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the teams associated with the user group.
 	 *
@@ -3161,6 +3204,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERGROUPS_TEAMS,
 			Long.class, UserGroupModelImpl.MAPPING_TABLE_USERGROUPS_TEAMS_NAME,
 			"getTeamsSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_TEAMS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of teams associated with the user group.
@@ -3547,6 +3594,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_USERS.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the users associated with the user group.
 	 *
@@ -3622,6 +3673,10 @@ public class UserGroupPersistenceImpl extends BasePersistenceImpl<UserGroup>
 			UserGroupModelImpl.FINDER_CACHE_ENABLED_USERS_USERGROUPS,
 			Long.class, UserGroupModelImpl.MAPPING_TABLE_USERS_USERGROUPS_NAME,
 			"getUsersSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_USERS_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of users associated with the user group.

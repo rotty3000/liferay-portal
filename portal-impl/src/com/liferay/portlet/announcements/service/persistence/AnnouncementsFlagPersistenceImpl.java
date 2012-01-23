@@ -589,6 +589,16 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 		List<AnnouncementsFlag> list = (List<AnnouncementsFlag>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsFlag announcementsFlag : list) {
+				if ((entryId != announcementsFlag.getEntryId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -947,6 +957,16 @@ public class AnnouncementsFlagPersistenceImpl extends BasePersistenceImpl<Announ
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_U_E_V,
 					finderArgs, this);
+		}
+
+		if (result instanceof AnnouncementsFlag) {
+			AnnouncementsFlag announcementsFlag = (AnnouncementsFlag)result;
+
+			if ((userId != announcementsFlag.getUserId()) ||
+					(entryId != announcementsFlag.getEntryId()) ||
+					(value != announcementsFlag.getValue())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

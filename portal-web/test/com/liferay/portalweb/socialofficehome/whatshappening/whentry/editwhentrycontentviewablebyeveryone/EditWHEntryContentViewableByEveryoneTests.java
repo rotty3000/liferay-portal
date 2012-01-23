@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.socialofficehome.whatshappening.whentry.editwhentrycontentviewablebyeveryone;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,18 +22,14 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class EditWHEntryContentViewableByEveryoneTests extends BaseTests {
-
+public class EditWHEntryContentViewableByEveryoneTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddWHEntryContentViewableByEveryoneTest.class);
 		testSuite.addTestSuite(EditWHEntryContentViewableByEveryoneTest.class);
-		testSuite.addTestSuite(
-			ViewEditWHEntryContentViewableByEveryoneTest.class);
+		testSuite.addTestSuite(ViewEditWHEntryContentViewableByEveryoneTest.class);
 		testSuite.addTestSuite(TearDownWHEntryContentTest.class);
 
 		return testSuite;
 	}
-
 }

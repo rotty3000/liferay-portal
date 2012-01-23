@@ -619,6 +619,16 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 		List<LayoutSetPrototype> list = (List<LayoutSetPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSetPrototype layoutSetPrototype : list) {
+				if (!Validator.equals(uuid, layoutSetPrototype.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1301,6 +1311,16 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 		List<LayoutSetPrototype> list = (List<LayoutSetPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSetPrototype layoutSetPrototype : list) {
+				if ((companyId != layoutSetPrototype.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1945,6 +1965,17 @@ public class LayoutSetPrototypePersistenceImpl extends BasePersistenceImpl<Layou
 
 		List<LayoutSetPrototype> list = (List<LayoutSetPrototype>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSetPrototype layoutSetPrototype : list) {
+				if ((companyId != layoutSetPrototype.getCompanyId()) ||
+						(active != layoutSetPrototype.getActive())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

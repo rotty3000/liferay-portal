@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.UserIdMapper;
@@ -619,6 +620,16 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		List<UserIdMapper> list = (List<UserIdMapper>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (UserIdMapper userIdMapper : list) {
+				if ((userId != userIdMapper.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -963,6 +974,15 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 					finderArgs, this);
 		}
 
+		if (result instanceof UserIdMapper) {
+			UserIdMapper userIdMapper = (UserIdMapper)result;
+
+			if ((userId != userIdMapper.getUserId()) ||
+					!Validator.equals(type, userIdMapper.getType())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -1113,6 +1133,16 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_T_E,
 					finderArgs, this);
+		}
+
+		if (result instanceof UserIdMapper) {
+			UserIdMapper userIdMapper = (UserIdMapper)result;
+
+			if (!Validator.equals(type, userIdMapper.getType()) ||
+					!Validator.equals(externalUserId,
+						userIdMapper.getExternalUserId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

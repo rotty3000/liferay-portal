@@ -907,6 +907,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if (!Validator.equals(uuid, dlFolder.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1283,6 +1293,15 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					finderArgs, this);
 		}
 
+		if (result instanceof DLFolder) {
+			DLFolder dlFolder = (DLFolder)result;
+
+			if (!Validator.equals(uuid, dlFolder.getUuid()) ||
+					(groupId != dlFolder.getGroupId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(4);
 
@@ -1428,6 +1447,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((groupId != dlFolder.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2087,6 +2116,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((companyId != dlFolder.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2433,6 +2472,14 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 					finderArgs, this);
 		}
 
+		if (result instanceof DLFolder) {
+			DLFolder dlFolder = (DLFolder)result;
+
+			if ((repositoryId != dlFolder.getRepositoryId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2570,6 +2617,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((groupId != dlFolder.getGroupId()) ||
+						(parentFolderId != dlFolder.getParentFolderId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3269,6 +3327,17 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((parentFolderId != dlFolder.getParentFolderId()) ||
+						!Validator.equals(name, dlFolder.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -3667,6 +3736,18 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 
 		List<DLFolder> list = (List<DLFolder>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (DLFolder dlFolder : list) {
+				if ((groupId != dlFolder.getGroupId()) ||
+						(parentFolderId != dlFolder.getParentFolderId()) ||
+						(mountPoint != dlFolder.getMountPoint())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4402,6 +4483,16 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P_N,
 					finderArgs, this);
+		}
+
+		if (result instanceof DLFolder) {
+			DLFolder dlFolder = (DLFolder)result;
+
+			if ((groupId != dlFolder.getGroupId()) ||
+					(parentFolderId != dlFolder.getParentFolderId()) ||
+					!Validator.equals(name, dlFolder.getName())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
@@ -5544,6 +5635,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 
+	static {
+		FINDER_PATH_GET_DLFILEENTRYTYPES.setCacheKeyGeneratorCacheName(null);
+	}
+
 	/**
 	 * Returns an ordered range of all the document library file entry types associated with the document library folder.
 	 *
@@ -5621,6 +5716,10 @@ public class DLFolderPersistenceImpl extends BasePersistenceImpl<DLFolder>
 			Long.class,
 			DLFolderModelImpl.MAPPING_TABLE_DLFILEENTRYTYPES_DLFOLDERS_NAME,
 			"getDLFileEntryTypesSize", new String[] { Long.class.getName() });
+
+	static {
+		FINDER_PATH_GET_DLFILEENTRYTYPES_SIZE.setCacheKeyGeneratorCacheName(null);
+	}
 
 	/**
 	 * Returns the number of document library file entry types associated with the document library folder.

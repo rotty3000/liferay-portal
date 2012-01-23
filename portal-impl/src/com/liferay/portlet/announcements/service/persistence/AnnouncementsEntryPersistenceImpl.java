@@ -684,6 +684,16 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsEntry announcementsEntry : list) {
+				if (!Validator.equals(uuid, announcementsEntry.getUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1388,6 +1398,16 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsEntry announcementsEntry : list) {
+				if ((userId != announcementsEntry.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -2054,6 +2074,17 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsEntry announcementsEntry : list) {
+				if ((classNameId != announcementsEntry.getClassNameId()) ||
+						(classPK != announcementsEntry.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2755,6 +2786,18 @@ public class AnnouncementsEntryPersistenceImpl extends BasePersistenceImpl<Annou
 
 		List<AnnouncementsEntry> list = (List<AnnouncementsEntry>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (AnnouncementsEntry announcementsEntry : list) {
+				if ((classNameId != announcementsEntry.getClassNameId()) ||
+						(classPK != announcementsEntry.getClassPK()) ||
+						(alert != announcementsEntry.getAlert())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;

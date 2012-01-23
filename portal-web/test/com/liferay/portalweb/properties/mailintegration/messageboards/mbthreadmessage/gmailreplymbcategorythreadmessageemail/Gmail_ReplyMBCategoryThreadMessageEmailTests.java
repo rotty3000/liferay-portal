@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.properties.mailintegration.messageboards.mbthreadmessage.gmailreplymbcategorythreadmessageemail;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class Gmail_ReplyMBCategoryThreadMessageEmailTests extends BaseTests {
-
+public class Gmail_ReplyMBCategoryThreadMessageEmailTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(ConfigureServerAdministrationMailTest.class);
 		testSuite.addTestSuite(EditPortalInstanceMailDomainTest.class);
 		testSuite.addTestSuite(AddUserGmailTest.class);
@@ -34,8 +32,7 @@ public class Gmail_ReplyMBCategoryThreadMessageEmailTests extends BaseTests {
 		testSuite.addTestSuite(AssignMembersSiteUserTest.class);
 		testSuite.addTestSuite(AddPageMBTest.class);
 		testSuite.addTestSuite(AddPortletMBTest.class);
-		testSuite.addTestSuite(
-			ConfigureMBPortletEmailFromGmailServerTest.class);
+		testSuite.addTestSuite(ConfigureMBPortletEmailFromGmailServerTest.class);
 		testSuite.addTestSuite(AddMBCategoryTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(Gmail_TearDownEmailTest.class);
@@ -45,8 +42,7 @@ public class Gmail_ReplyMBCategoryThreadMessageEmailTests extends BaseTests {
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(SignInTest.class);
 		testSuite.addTestSuite(PostNewMBCategoryThreadMessageTest.class);
-		testSuite.addTestSuite(
-			Gmail_ReplyMBCategoryThreadMessageEmailTest.class);
+		testSuite.addTestSuite(Gmail_ReplyMBCategoryThreadMessageEmailTest.class);
 		testSuite.addTestSuite(ViewMBCategoryThreadMessageEmailTest.class);
 		testSuite.addTestSuite(Gmail_TearDownEmailTest.class);
 		testSuite.addTestSuite(GmailServer_TearDownEmailTest.class);
@@ -58,5 +54,4 @@ public class Gmail_ReplyMBCategoryThreadMessageEmailTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

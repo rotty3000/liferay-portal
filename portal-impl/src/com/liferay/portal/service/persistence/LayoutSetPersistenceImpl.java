@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.ModelListener;
@@ -618,6 +619,16 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 		List<LayoutSet> list = (List<LayoutSet>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSet layoutSet : list) {
+				if ((groupId != layoutSet.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -962,6 +973,17 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 
 		List<LayoutSet> list = (List<LayoutSet>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (LayoutSet layoutSet : list) {
+				if (!Validator.equals(layoutSetPrototypeUuid,
+							layoutSet.getLayoutSetPrototypeUuid())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -1331,6 +1353,15 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_P,
 					finderArgs, this);
+		}
+
+		if (result instanceof LayoutSet) {
+			LayoutSet layoutSet = (LayoutSet)result;
+
+			if ((groupId != layoutSet.getGroupId()) ||
+					(privateLayout != layoutSet.getPrivateLayout())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {

@@ -15,7 +15,7 @@
 package com.liferay.portalweb.portal;
 
 import com.liferay.portalweb.portal.login.LoginTests;
-import com.liferay.portalweb.portlet.search.SearchTests;
+import com.liferay.portalweb.portlet.search.SearchTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class PortalWebSearchTestSuite extends BaseTests {
+public class PortalWebSearchTestSuite extends BaseTestSuite {
 
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(LoginTests.suite());
-		testSuite.addTest(SearchTests.suite());
+		testSuite.addTest(SearchTestPlan.suite());
 
 		testSuite.addTestSuite(StopSeleniumTest.class);
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portalweb.plugins.mail.message.deletemessagenulldrafts;
 
-import com.liferay.portalweb.portal.BaseTests;
+import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,11 +22,9 @@ import junit.framework.TestSuite;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DeleteMessageNullDraftsTests extends BaseTests {
-
+public class DeleteMessageNullDraftsTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-
 		testSuite.addTestSuite(AddPageMailTest.class);
 		testSuite.addTestSuite(AddPortletMailTest.class);
 		testSuite.addTestSuite(AddMailAccountTest.class);
@@ -36,5 +34,4 @@ public class DeleteMessageNullDraftsTests extends BaseTests {
 
 		return testSuite;
 	}
-
 }

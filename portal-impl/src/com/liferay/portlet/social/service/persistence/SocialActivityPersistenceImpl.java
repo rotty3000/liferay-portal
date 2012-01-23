@@ -989,6 +989,16 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((groupId != socialActivity.getGroupId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1336,6 +1346,16 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((companyId != socialActivity.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
 			StringBundler query = null;
 
@@ -1681,6 +1701,16 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((userId != socialActivity.getUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2028,6 +2058,14 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 					finderArgs, this);
 		}
 
+		if (result instanceof SocialActivity) {
+			SocialActivity socialActivity = (SocialActivity)result;
+
+			if ((mirrorActivityId != socialActivity.getMirrorActivityId())) {
+				result = null;
+			}
+		}
+
 		if (result == null) {
 			StringBundler query = new StringBundler(3);
 
@@ -2157,6 +2195,16 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((classNameId != socialActivity.getClassNameId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2509,6 +2557,16 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((receiverUserId != socialActivity.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -2864,6 +2922,17 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3241,6 +3310,18 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((mirrorActivityId != socialActivity.getMirrorActivityId()) ||
+						(classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -3651,6 +3732,21 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 
 		List<SocialActivity> list = (List<SocialActivity>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SocialActivity socialActivity : list) {
+				if ((groupId != socialActivity.getGroupId()) ||
+						(userId != socialActivity.getUserId()) ||
+						(classNameId != socialActivity.getClassNameId()) ||
+						(classPK != socialActivity.getClassPK()) ||
+						(type != socialActivity.getType()) ||
+						(receiverUserId != socialActivity.getReceiverUserId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
 
 		if (list == null) {
 			StringBundler query = null;
@@ -4136,6 +4232,20 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 		if (retrieveFromCache) {
 			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_G_U_CD_C_C_T_R,
 					finderArgs, this);
+		}
+
+		if (result instanceof SocialActivity) {
+			SocialActivity socialActivity = (SocialActivity)result;
+
+			if ((groupId != socialActivity.getGroupId()) ||
+					(userId != socialActivity.getUserId()) ||
+					(createDate != socialActivity.getCreateDate()) ||
+					(classNameId != socialActivity.getClassNameId()) ||
+					(classPK != socialActivity.getClassPK()) ||
+					(type != socialActivity.getType()) ||
+					(receiverUserId != socialActivity.getReceiverUserId())) {
+				result = null;
+			}
 		}
 
 		if (result == null) {
