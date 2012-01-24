@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ColorScheme;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -54,6 +55,36 @@ public class LayoutSetImpl extends LayoutSetBaseImpl {
 
 	public Group getGroup() throws PortalException, SystemException {
 		return GroupLocalServiceUtil.getGroup(getGroupId());
+	}
+
+	public long getLiveLogoId() {
+		long logoId = 0;
+
+		Group group = null;
+
+		try {
+			group = getGroup();
+
+			if (!group.isStagingGroup()) {
+				return logoId;
+			}
+		}
+		catch (Exception e) {
+			return logoId;
+		}
+
+		Group liveGroup = group.getLiveGroup();
+
+		LayoutSet liveLayoutSet = null;
+
+		if (isPrivateLayout()) {
+			liveLayoutSet = liveGroup.getPrivateLayoutSet();
+		}
+		else {
+			liveLayoutSet = liveGroup.getPublicLayoutSet();
+		}
+
+		return liveLayoutSet.getLogoId();
 	}
 
 	@Override

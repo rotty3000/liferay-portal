@@ -39,6 +39,8 @@ public interface LayoutSet extends LayoutSetModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public long getLiveLogoId();
+
 	public java.lang.String getSettings();
 
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties();
