@@ -1946,10 +1946,7 @@ public class JournalArticleLocalServiceImpl
 			oldArticle = getArticle(groupId, articleId, version);
 			oldVersion = version;
 
-			if (!expired) {
-				incrementVersion = true;
-			}
-			else {
+			if (expired) {
 				return expireArticle(
 					userId, groupId, articleId, version, articleURL,
 					serviceContext);
