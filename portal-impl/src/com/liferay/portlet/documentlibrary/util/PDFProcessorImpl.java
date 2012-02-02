@@ -53,6 +53,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -65,9 +66,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDPage;
 
-import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
-import org.im4java.process.ProcessStarter;
 
 /**
  * @author Alexander Chow
@@ -136,6 +135,18 @@ public class PDFProcessorImpl
 
 		return Initializer._initializedInstance.doGetPreviewFileSize(
 			fileVersion, index);
+	}
+
+	public Properties getResourceLimits() throws Exception {
+		Properties resourceLimits = PrefsPropsUtil.getProperties(
+			PropsKeys.IMAGEMAGICK_RESOURCE_LIMIT, true);
+
+		if (resourceLimits.isEmpty()) {
+			resourceLimits = PropsUtil.getProperties(
+				PropsKeys.IMAGEMAGICK_RESOURCE_LIMIT, true);
+		}
+
+		return resourceLimits;
 	}
 
 	public InputStream getThumbnailAsStream(
@@ -231,12 +242,7 @@ public class PDFProcessorImpl
 		if (isImageMagickEnabled()) {
 			_globalSearchPath = getGlobalSearchPath();
 
-			ProcessStarter.setGlobalSearchPath(_globalSearchPath);
-
-			_convertCmd = new ConvertCmd();
-		}
-		else {
-			_convertCmd = null;
+			_resourceLimits = getResourceLimits();
 		}
 	}
 
@@ -422,20 +428,18 @@ public class PDFProcessorImpl
 			imOperation.addImage(getPreviewTempFilePath(tempFileId, -1));
 		}
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Excecuting command 'convert " + imOperation + "'");
-		}
-
 		if (PropsValues.DL_FILE_ENTRY_PREVIEW_FORK_PROCESS_ENABLED) {
 			ProcessCallable<String> processCallable =
 				new ImageMagickProcessCallable(
-					_globalSearchPath, imOperation.getCmdArgs());
+					_globalSearchPath, _resourceLimits,
+					imOperation.getCmdArgs());
 
 			ProcessExecutor.execute(
 				processCallable, ClassPathUtil.getPortalClassPath());
 		}
 		else {
-			_convertCmd.run(imOperation);
+			LiferayConvertCmd.run(
+				_globalSearchPath, _resourceLimits, imOperation.getCmdArgs());
 		}
 
 		// Store images
@@ -706,24 +710,27 @@ public class PDFProcessorImpl
 		InstancePool.put(PDFProcessorImpl.class.getName(), _instance);
 	}
 
-	private ConvertCmd _convertCmd;
 	private List<Long> _fileVersionIds = new Vector<Long>();
 	private String _globalSearchPath;
+	private Properties _resourceLimits;
 	private boolean _warned;
 
 	private static class ImageMagickProcessCallable
 		implements ProcessCallable<String> {
 
 		public ImageMagickProcessCallable(
-			String globalSearchPath, LinkedList<String> commandArguments) {
+			String globalSearchPath, Properties resourceLimits,
+			LinkedList<String> commandArguments) {
 
 			_globalSearchPath = globalSearchPath;
 			_commandArguments = commandArguments;
+			_resourceLimits = resourceLimits;
 		}
 
 		public String call() throws ProcessException {
 			try {
-				LiferayConvertCmd.run(_globalSearchPath, _commandArguments);
+				LiferayConvertCmd.run(
+					_globalSearchPath, _resourceLimits, _commandArguments);
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);
@@ -734,6 +741,7 @@ public class PDFProcessorImpl
 
 		private LinkedList<String> _commandArguments;
 		private String _globalSearchPath;
+		private Properties _resourceLimits;
 
 	}
 
