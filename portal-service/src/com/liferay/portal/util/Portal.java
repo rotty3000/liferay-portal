@@ -997,6 +997,11 @@ public interface Portal {
 			HttpServletRequest request, Portlet portlet)
 		throws PortalException, SystemException;
 
+	public boolean isCDNDynamicResourcesEnabled(HttpServletRequest request)
+		throws PortalException, SystemException;
+
+	public boolean isCDNDynamicResourcesEnabled(long companyId);
+
 	/**
 	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(User, long)}
 	 */

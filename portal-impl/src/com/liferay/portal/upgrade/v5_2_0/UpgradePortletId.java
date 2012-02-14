@@ -51,8 +51,7 @@ public class UpgradePortletId extends UpgradeProcess {
 	protected String[][] getPortletIdsArray() {
 		return new String[][] {
 			new String[] {
-				"109",
-				"1_WAR_webformportlet"
+				"109", "1_WAR_webformportlet"
 			},
 			new String[] {
 				"google_adsense_portlet_WAR_googleadsenseportlet",
@@ -161,8 +160,7 @@ public class UpgradePortletId extends UpgradeProcess {
 					pos + PortletConstants.LAYOUT_SEPARATOR.length());
 
 				String newPrimKey =
-					plid + PortletConstants.LAYOUT_SEPARATOR +
-						newRootPortletId;
+					plid + PortletConstants.LAYOUT_SEPARATOR + newRootPortletId;
 
 				String oldPortletId = oldRootPortletId;
 				String newPortletId = newRootPortletId ;

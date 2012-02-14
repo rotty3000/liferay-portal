@@ -918,6 +918,12 @@ public abstract class RatingsEntryLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return RatingsEntry.class;
 	}

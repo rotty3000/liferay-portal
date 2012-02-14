@@ -61,8 +61,8 @@ public class SocialRequestLocalServiceImpl
 	 * @throws SystemException if a system exception occurred
 	 */
 	public SocialRequest addRequest(
-			long userId, long groupId, String className, long classPK,
-			int type, String extraData, long receiverUserId)
+			long userId, long groupId, String className, long classPK, int type,
+			String extraData, long receiverUserId)
 		throws PortalException, SystemException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
@@ -382,9 +382,8 @@ public class SocialRequestLocalServiceImpl
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
-		SocialRequest socialRequest =
-			socialRequestPersistence.fetchByU_C_C_T_R(
-				userId, classNameId, classPK, type, receiverUserId);
+		SocialRequest socialRequest = socialRequestPersistence.fetchByU_C_C_T_R(
+			userId, classNameId, classPK, type, receiverUserId);
 
 		if ((socialRequest == null) || (socialRequest.getStatus() != status)) {
 			return false;

@@ -66,16 +66,16 @@ public class DateUtil_IW {
 		return DateUtil.getDaysBetween(startDate, endDate, timeZone);
 	}
 
+	public java.text.DateFormat getISO8601Format() {
+		return DateUtil.getISO8601Format();
+	}
+
 	public java.text.DateFormat getISOFormat() {
 		return DateUtil.getISOFormat();
 	}
 
 	public java.text.DateFormat getISOFormat(java.lang.String text) {
 		return DateUtil.getISOFormat(text);
-	}
-
-	public java.text.DateFormat getISO8601Format() {
-		return DateUtil.getISO8601Format();
 	}
 
 	public java.text.DateFormat getUTCFormat() {

@@ -411,10 +411,15 @@ public class LayoutPermissionImpl implements LayoutPermission {
 					permissionChecker, group.getGroupId(),
 					ActionKeys.MANAGE_LAYOUTS) ||
 				 GroupPermissionUtil.contains(
-					permissionChecker, group.getGroupId(),
-					ActionKeys.UPDATE)) {
+					permissionChecker, group.getGroupId(), ActionKeys.UPDATE)) {
 
 				return true;
+			}
+
+			if (layout.isPrivateLayout() &&
+				!permissionChecker.isGroupMember(group.getGroupId())) {
+
+				return false;
 			}
 		}
 

@@ -889,6 +889,12 @@ public abstract class DDLRecordLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return DDLRecord.class;
 	}

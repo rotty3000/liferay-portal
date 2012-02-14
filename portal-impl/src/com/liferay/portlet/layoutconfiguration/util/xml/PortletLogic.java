@@ -52,13 +52,13 @@ public class PortletLogic extends RuntimeLogic {
 	}
 
 	@Override
-	public String getOpenTag() {
-		return OPEN_TAG;
+	public String getClose1Tag() {
+		return CLOSE_1_TAG;
 	}
 
 	@Override
-	public String getClose1Tag() {
-		return CLOSE_1_TAG;
+	public String getOpenTag() {
+		return OPEN_TAG;
 	}
 
 	@Override
@@ -82,10 +82,10 @@ public class PortletLogic extends RuntimeLogic {
 			_renderResponse, portletId, queryString, false);
 	}
 
-	private ServletContext _servletContext;
-	private HttpServletRequest _request;
-	private HttpServletResponse _response;
 	private RenderRequest _renderRequest;
 	private RenderResponse _renderResponse;
+	private HttpServletRequest _request;
+	private HttpServletResponse _response;
+	private ServletContext _servletContext;
 
 }

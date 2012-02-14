@@ -341,7 +341,6 @@ public class JSONWebServiceActionParameters {
 
 	private Map<String, List<KeyValue<String, Object>>> _innerParameters;
 	private JSONRPCRequest _jsonRpcRequest;
-	private Map<String, String> _parameterTypes;
 	private Map<String, Object> _parameters = new HashMap<String, Object>() {
 
 		@Override
@@ -386,8 +385,8 @@ public class JSONWebServiceActionParameters {
 						new HashMap<String, List<KeyValue<String, Object>>>();
 				}
 
-				List<KeyValue<String, Object>> values =
-					_innerParameters.get(baseName);
+				List<KeyValue<String, Object>> values = _innerParameters.get(
+					baseName);
 
 				if (values == null) {
 					values = new ArrayList<KeyValue<String, Object>>();
@@ -416,6 +415,7 @@ public class JSONWebServiceActionParameters {
 
 	};
 
+	private Map<String, String> _parameterTypes;
 	private ServiceContext _serviceContext;
 
 }

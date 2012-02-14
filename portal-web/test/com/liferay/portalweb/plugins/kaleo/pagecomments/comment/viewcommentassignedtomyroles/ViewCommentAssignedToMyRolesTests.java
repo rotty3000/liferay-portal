@@ -15,6 +15,7 @@
 package com.liferay.portalweb.plugins.kaleo.pagecomments.comment.viewcommentassignedtomyroles;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

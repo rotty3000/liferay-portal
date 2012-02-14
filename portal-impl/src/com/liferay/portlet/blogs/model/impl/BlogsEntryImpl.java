@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 
+import java.util.Date;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Juan Fernández
@@ -37,6 +39,17 @@ public class BlogsEntryImpl extends BlogsEntryBaseImpl {
 		}
 
 		return _smallImageType;
+	}
+
+	public boolean isVisible() {
+		Date displayDate = getDisplayDate();
+
+		if (isApproved() && displayDate.before(new Date())) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public void setSmallImageType(String smallImageType) {

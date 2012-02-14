@@ -29,9 +29,9 @@ public interface Address extends AddressModel, PersistedModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.model.impl.AddressImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public com.liferay.portal.model.Region getRegion();
-
 	public com.liferay.portal.model.Country getCountry();
+
+	public com.liferay.portal.model.Region getRegion();
 
 	public com.liferay.portal.model.ListType getType();
 }

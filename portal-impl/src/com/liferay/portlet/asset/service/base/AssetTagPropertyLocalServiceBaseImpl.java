@@ -1082,6 +1082,12 @@ public abstract class AssetTagPropertyLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return AssetTagProperty.class;
 	}

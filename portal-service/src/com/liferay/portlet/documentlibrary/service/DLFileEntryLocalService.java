@@ -289,14 +289,34 @@ public interface DLFileEntryLocalService extends PersistedModelLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, long, ServiceContext)}
+	*/
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
 		long userId, long fileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
+		long userId, long fileEntryId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, long, String, long,
+	ServiceContext)}
+	*/
+	public com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
 		long userId, long fileEntryId, java.lang.String owner,
 		long expirationTime)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
+		long userId, long fileEntryId, java.lang.String owner,
+		long expirationTime,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

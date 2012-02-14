@@ -26,6 +26,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class InputTimeZoneTag extends IncludeTag {
 
+	public InputTimeZoneTag() {
+		TimeZone timeZone = TimeZoneUtil.getDefault();
+
+		_value = timeZone.getID();
+	}
+
 	public void setCssClass(String cssClass) {
 		_cssClass = cssClass;
 	}
@@ -62,7 +68,10 @@ public class InputTimeZoneTag extends IncludeTag {
 		_displayStyle = TimeZone.LONG;
 		_name = null;
 		_nullable = false;
-		_value = TimeZoneUtil.getDefault().getID();
+
+		TimeZone timeZone = TimeZoneUtil.getDefault();
+
+		_value = timeZone.getID();
 	}
 
 	@Override
@@ -95,6 +104,6 @@ public class InputTimeZoneTag extends IncludeTag {
 	private int _displayStyle = TimeZone.LONG;
 	private String _name;
 	private boolean _nullable;
-	private String _value = TimeZoneUtil.getDefault().getID();
+	private String _value;
 
 }

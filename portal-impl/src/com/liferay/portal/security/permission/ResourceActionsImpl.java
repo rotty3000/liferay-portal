@@ -500,8 +500,8 @@ public class ResourceActionsImpl implements ResourceActions {
 		List<String> actions = null;
 
 		if (Validator.isNull(modelResource)) {
-			actions =
-				getPortletResourceGuestUnsupportedActions(portletResource);
+			actions = getPortletResourceGuestUnsupportedActions(
+				portletResource);
 		}
 		else {
 			actions = getModelResourceGuestUnsupportedActions(modelResource);
@@ -879,7 +879,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			if (_log.isWarnEnabled() && (groupDefaultsElement != null)) {
 				_log.warn(
 					"The community-defaults element is deprecated. Use the " +
-						"site-defaults element instead.");
+						"site-member-defaults element instead.");
 			}
 		}
 
@@ -954,9 +954,8 @@ public class ResourceActionsImpl implements ResourceActions {
 			String portletName = portletNameElement.getTextTrim();
 
 			if (servletContextName != null) {
-				portletName =
-					portletName.concat(PortletConstants.WAR_SEPARATOR).concat(
-						servletContextName);
+				portletName = portletName.concat(
+					PortletConstants.WAR_SEPARATOR).concat(servletContextName);
 			}
 
 			portletName = portal.getJsSafePortletId(portletName);

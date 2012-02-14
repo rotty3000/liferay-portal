@@ -262,10 +262,12 @@ public class PluginSettingWrapper implements PluginSetting,
 	}
 
 	/**
-	* Sets an array of required roles of the plugin.
+	* Returns <code>true</code> if the user has permission to use this plugin
+	*
+	* @return <code>true</code> if the user has permission to use this plugin
 	*/
-	public void setRolesArray(java.lang.String[] rolesArray) {
-		_pluginSetting.setRolesArray(rolesArray);
+	public boolean hasPermission(long userId) {
+		return _pluginSetting.hasPermission(userId);
 	}
 
 	/**
@@ -280,12 +282,10 @@ public class PluginSettingWrapper implements PluginSetting,
 	}
 
 	/**
-	* Returns <code>true</code> if the user has permission to use this plugin
-	*
-	* @return <code>true</code> if the user has permission to use this plugin
+	* Sets an array of required roles of the plugin.
 	*/
-	public boolean hasPermission(long userId) {
-		return _pluginSetting.hasPermission(userId);
+	public void setRolesArray(java.lang.String[] rolesArray) {
+		_pluginSetting.setRolesArray(rolesArray);
 	}
 
 	/**

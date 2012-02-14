@@ -71,10 +71,10 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 		".List2";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
 			ClusterGroupModelImpl.FINDER_CACHE_ENABLED, ClusterGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
 			ClusterGroupModelImpl.FINDER_CACHE_ENABLED, ClusterGroupImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
 			ClusterGroupModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -255,6 +255,8 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 		throws SystemException {
 		clusterGroup = toUnwrappedModel(clusterGroup);
 
+		boolean isNew = clusterGroup.isNew();
+
 		Session session = null;
 
 		try {
@@ -272,6 +274,10 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 		}
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
 
 		EntityCacheUtil.putResult(ClusterGroupModelImpl.ENTITY_CACHE_ENABLED,
 			ClusterGroupImpl.class, clusterGroup.getPrimaryKey(), clusterGroup);
@@ -444,11 +450,11 @@ public class ClusterGroupPersistenceImpl extends BasePersistenceImpl<ClusterGrou
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 

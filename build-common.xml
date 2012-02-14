@@ -268,7 +268,7 @@ ECJ was automatically installed. Please rerun your task.
 .
 
 Please set the environment variable ANT_OPTS to the recommended value of
-"-Xmx1024m -XX:MaxPermSize=256m".
+"-Xmx1024m -XX:MaxPermSize=512m".
 			</fail>
 		</then>
 	</if>
@@ -332,7 +332,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</java>
 	</target>
 
-	<target name="instrument">
+	<target name="instrument-test-coverage">
 		<delete dir="test-coverage" />
 
 		<if>
@@ -364,6 +364,32 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<echo message="${current.time}" />
 	</target>
 
+	<target name="report-test-coverage">
+		<if>
+			<equals arg1="${junit.code.coverage}" arg2="true" />
+			<then>
+				<cobertura-report
+					datafile="test-coverage/cobertura.ser"
+					destdir="test-coverage"
+					format="${junit.cobertura.report.format}"
+				>
+					<fileset dir="${project.dir}/portal-impl/src">
+						<include name="**/*.java" />
+					</fileset>
+					<fileset dir="${project.dir}/portal-service/src">
+						<include name="**/*.java" />
+					</fileset>
+					<fileset dir="${project.dir}/util-java/src">
+						<include name="**/*.java" />
+					</fileset>
+					<fileset dir="${project.dir}/util-taglib/src">
+						<include name="**/*.java" />
+					</fileset>
+				</cobertura-report>
+			</then>
+		</if>
+	</target>
+
 	<target name="setproxy" if="setproxy.proxy.host">
 		<setproxy proxyhost="${setproxy.proxy.host}" proxyport="${setproxy.proxy.port}" />
 	</target>
@@ -373,7 +399,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<delete dir="test-results" />
 
 		<antcall target="compile" />
-		<antcall target="instrument" />
+		<antcall target="instrument-test-coverage" />
 		<antcall target="compile-test" />
 
 		<fileset dir="test-classes" id="test.suite.classes">
@@ -391,10 +417,11 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				<isset property="test.suite.classes.available" />
 			</not>
 			<then>
-				<junit dir="${project.dir}" fork="on" forkmode="once" printsummary="on">
+				<junit dir="${project.dir}" fork="on" forkmode="once" haltonfailure="${junit.halt.on.failure}" printsummary="on">
 					<sysproperty key="net.sourceforge.cobertura.datafile" file="test-coverage/cobertura.ser" />
 					<jvmarg line="${junit.debug.jpda}" />
-					<jvmarg value="-Xmx512m" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
 					<jvmarg value="-Duser.timezone=GMT" />
 					<jvmarg value="-Dexternal-properties=${test.properties}" />
 					<classpath location="test-coverage" />
@@ -407,10 +434,11 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				</junit>
 			</then>
 			<else>
-				<junit dir="${project.dir}" fork="on" forkmode="once" printsummary="on">
+				<junit dir="${project.dir}" fork="on" forkmode="once" haltonfailure="${junit.halt.on.failure}" printsummary="on">
 					<sysproperty key="net.sourceforge.cobertura.datafile" file="test-coverage/cobertura.ser" />
 					<jvmarg line="${junit.debug.jpda}" />
-					<jvmarg value="-Xmx512m" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
 					<jvmarg value="-Duser.timezone=GMT" />
 					<jvmarg value="-Dexternal-properties=${test.properties}" />
 					<classpath location="test-coverage" />
@@ -424,28 +452,10 @@ Please set the environment variable ANT_OPTS to the recommended value of
 			</else>
 		</if>
 
-		<if>
-			<equals arg1="${junit.code.coverage}" arg2="true" />
-			<then>
-				<cobertura-report format="html" datafile="test-coverage/cobertura.ser" destdir="test-coverage" >
-					<fileset dir="${project.dir}/portal-impl/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/portal-service/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/util-java/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/util-taglib/src">
-						<include name="**/*.java" />
-					</fileset>
-				</cobertura-report>
-			</then>
-		</if>
+		<antcall target="report-test-coverage" />
 	</target>
 
-	<target name="test-class" depends="compile,instrument,compile-test" if="class">
+	<target name="test-class" depends="compile,instrument-test-coverage,compile-test" if="class">
 		<junit dir="${project.dir}" fork="on" forkmode="once" outputtoformatters="false" printsummary="on" showoutput="true">
 			<sysproperty key="net.sourceforge.cobertura.datafile" file="test-coverage/cobertura.ser" />
 			<jvmarg line="${junit.debug.jpda}" />
@@ -462,24 +472,6 @@ Please set the environment variable ANT_OPTS to the recommended value of
 			</batchtest>
 		</junit>
 
-		<if>
-			<equals arg1="${junit.code.coverage}" arg2="true" />
-			<then>
-				<cobertura-report format="html" datafile="test-coverage/cobertura.ser" destdir="test-coverage" >
-					<fileset dir="${project.dir}/portal-impl/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/portal-service/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/util-java/src">
-						<include name="**/*.java" />
-					</fileset>
-					<fileset dir="${project.dir}/util-taglib/src">
-						<include name="**/*.java" />
-					</fileset>
-				</cobertura-report>
-			</then>
-		</if>
+		<antcall target="report-test-coverage" />
 	</target>
 </project>

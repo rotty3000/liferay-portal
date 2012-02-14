@@ -54,14 +54,6 @@ public class MethodWrapper implements Serializable {
 		}
 	}
 
-	public String getClassName() {
-		return _className;
-	}
-
-	public String getMethodName() {
-		return _methodName;
-	}
-
 	/**
 	 * @deprecated Use <code>getArguments</code>.
 	 */
@@ -79,6 +71,14 @@ public class MethodWrapper implements Serializable {
 		System.arraycopy(_arguments, 0, arguments, 0, _arguments.length);
 
 		return arguments;
+	}
+
+	public String getClassName() {
+		return _className;
+	}
+
+	public String getMethodName() {
+		return _methodName;
 	}
 
 	@Override
@@ -102,9 +102,9 @@ public class MethodWrapper implements Serializable {
 		return sb.toString();
 	}
 
-	private String _className;
-	private String _methodName;
 	private String[] _argumentClassNames;
 	private Object[] _arguments;
+	private String _className;
+	private String _methodName;
 
 }

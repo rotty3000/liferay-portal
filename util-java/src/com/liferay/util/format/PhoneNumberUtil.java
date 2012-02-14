@@ -14,28 +14,12 @@
 
 package com.liferay.util.format;
 
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstancePool;
-import com.liferay.portal.kernel.util.SystemProperties;
+import com.liferay.portal.kernel.format.PhoneNumberFormatUtil;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author     Brian Wing Shun Chan
+ * @author     Manuel de la Peña
+ * @deprecated Moved to {@link PhoneNumberFormatUtil}
  */
-public class PhoneNumberUtil {
-
-	public static String format(String phoneNumber) {
-		return _format.format(phoneNumber);
-	}
-
-	public static String strip(String phoneNumber) {
-		return _format.strip(phoneNumber);
-	}
-
-	private static PhoneNumberFormat _format =
-		(PhoneNumberFormat)InstancePool.get(PhoneNumberUtil._formatClass);
-
-	private static String _formatClass = GetterUtil.getString(
-		SystemProperties.get(PhoneNumberFormat.class.getName()),
-		USAPhoneNumberFormat.class.getName());
-
+public class PhoneNumberUtil extends PhoneNumberFormatUtil {
 }

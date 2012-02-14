@@ -37,6 +37,9 @@ import com.liferay.portal.kernel.events.InvokerSimpleAction;
 import com.liferay.portal.kernel.events.SessionAction;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.format.PhoneNumberFormat;
+import com.liferay.portal.kernel.format.PhoneNumberFormatUtil;
+import com.liferay.portal.kernel.format.PhoneNumberFormatWrapper;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -49,6 +52,7 @@ import com.liferay.portal.kernel.search.IndexerPostProcessor;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.servlet.DirectServletRegistry;
 import com.liferay.portal.kernel.servlet.LiferayFilter;
+import com.liferay.portal.kernel.servlet.LiferayFilterTracker;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.TryFilter;
 import com.liferay.portal.kernel.servlet.TryFinallyFilter;
@@ -169,117 +173,72 @@ import org.springframework.aop.target.SingletonTargetSource;
 public class HookHotDeployListener
 	extends BaseHotDeployListener implements PropsKeys {
 
-	public static String[] SUPPORTED_PROPERTIES = {
-		"admin.default.group.names",
-		"admin.default.role.names",
-		"admin.default.user.group.names",
-		"asset.publisher.display.styles",
-		"auth.forward.by.last.path",
-		"auth.public.paths",
-		"auto.deploy.listeners",
-		"application.startup.events",
-		"auth.failure",
-		"auth.max.failures",
-		"auth.token.impl",
-		"auth.pipeline.post",
-		"auth.pipeline.pre",
-		"auto.login.hooks",
-		"captcha.check.portal.create_account",
-		"captcha.engine.impl",
+	public static final String[] SUPPORTED_PROPERTIES = {
+		"admin.default.group.names", "admin.default.role.names",
+		"admin.default.user.group.names", "asset.publisher.display.styles",
+		"auth.forward.by.last.path", "auth.public.paths",
+		"auto.deploy.listeners", "application.startup.events", "auth.failure",
+		"auth.max.failures", "auth.token.impl", "auth.pipeline.post",
+		"auth.pipeline.pre", "auto.login.hooks",
+		"captcha.check.portal.create_account", "captcha.engine.impl",
 		"company.settings.form.configuration",
 		"company.settings.form.identification",
 		"company.settings.form.miscellaneous",
-		"control.panel.entry.class.default",
-		"convert.processes",
-		"default.landing.page.path",
-		"dl.file.entry.drafts.enabled",
-		"dl.file.entry.processors",
-		"dl.repository.impl",
-		"dl.store.antivirus.impl",
-		"dl.store.impl",
-		"dockbar.add.portlets",
+		"control.panel.entry.class.default", "convert.processes",
+		"default.landing.page.path", "dl.file.entry.drafts.enabled",
+		"dl.file.entry.processors", "dl.repository.impl",
+		"dl.store.antivirus.impl", "dl.store.impl", "dockbar.add.portlets",
 		"field.enable.com.liferay.portal.model.Contact.birthday",
 		"field.enable.com.liferay.portal.model.Contact.male",
 		"field.enable.com.liferay.portal.model.Organization.status",
-		"hot.deploy.listeners",
-		"javascript.fast.load",
-		"journal.article.form.add",
-		"journal.article.form.translate",
-		"journal.article.form.update",
-		"layout.form.add",
-		"layout.form.update",
-		"layout.set.form.update",
-		"layout.static.portlets.all",
-		"layout.template.cache.enabled",
-		"layout.types",
+		"hot.deploy.listeners", "javascript.fast.load",
+		"journal.article.form.add", "journal.article.form.translate",
+		"journal.article.form.update", "layout.form.add", "layout.form.update",
+		"layout.set.form.update", "layout.static.portlets.all",
+		"layout.template.cache.enabled", "layout.types",
 		"layout.user.private.layouts.auto.create",
 		"layout.user.private.layouts.enabled",
 		"layout.user.private.layouts.power.user.required",
 		"layout.user.public.layouts.auto.create",
 		"layout.user.public.layouts.enabled",
 		"layout.user.public.layouts.power.user.required",
-		"ldap.attrs.transformer.impl",
-		"locales.beta",
-		"login.create.account.allow.custom.password",
-		"login.events.post",
-		"login.events.pre",
-		"logout.events.post",
-		"logout.events.pre",
-		"mail.hook.impl",
-		"my.sites.show.private.sites.with.no.layouts",
+		"ldap.attrs.transformer.impl", "locales.beta",
+		"login.create.account.allow.custom.password", "login.events.post",
+		"login.events.pre", "logout.events.post", "logout.events.pre",
+		"mail.hook.impl", "my.sites.show.private.sites.with.no.layouts",
 		"my.sites.show.public.sites.with.no.layouts",
 		"my.sites.show.user.private.sites.with.no.layouts",
 		"my.sites.show.user.public.sites.with.no.layouts",
-		"organizations.form.add.identification",
-		"organizations.form.add.main",
+		"organizations.form.add.identification", "organizations.form.add.main",
 		"organizations.form.add.miscellaneous",
 		"passwords.passwordpolicytoolkit.generator",
-		"passwords.passwordpolicytoolkit.static",
+		"passwords.passwordpolicytoolkit.static", "phone.number.format.impl",
+		"phone.number.format.international.regexp",
+		"phone.number.format.usa.regexp",
 		"portlet.add.default.resource.check.enabled",
 		"portlet.add.default.resource.check.whitelist",
 		"portlet.add.default.resource.check.whitelist.actions",
-		"sanitizer.impl",
-		"servlet.session.create.events",
-		"servlet.session.destroy.events",
-		"servlet.service.events.post",
-		"servlet.service.events.pre",
-		"session.phishing.protected.attributes",
-		"session.store.password",
-		"sites.form.add.advanced",
-		"sites.form.add.main",
-		"sites.form.add.seo",
-		"sites.form.update.advanced",
-		"sites.form.update.main",
-		"sites.form.update.seo",
-		"social.bookmark.*",
-		"terms.of.use.required",
-		"theme.css.fast.load",
-		"theme.images.fast.load",
-		"theme.jsp.override.enabled",
-		"theme.loader.new.theme.id.on.import",
-		"theme.portlet.decorate.default",
-		"theme.portlet.sharing.default",
-		"theme.shortcut.icon",
-		"upgrade.processes",
+		"sanitizer.impl", "servlet.session.create.events",
+		"servlet.session.destroy.events", "servlet.service.events.post",
+		"servlet.service.events.pre", "session.max.allowed",
+		"session.phishing.protected.attributes", "session.store.password",
+		"sites.form.add.advanced", "sites.form.add.main", "sites.form.add.seo",
+		"sites.form.update.advanced", "sites.form.update.main",
+		"sites.form.update.seo", "social.bookmark.*", "terms.of.use.required",
+		"theme.css.fast.load", "theme.images.fast.load",
+		"theme.jsp.override.enabled", "theme.loader.new.theme.id.on.import",
+		"theme.portlet.decorate.default", "theme.portlet.sharing.default",
+		"theme.shortcut.icon", "upgrade.processes",
 		"user.notification.event.confirmation.enabled",
-		"users.email.address.generator",
-		"users.email.address.required",
-		"users.form.add.identification",
-		"users.form.add.main",
-		"users.form.add.miscellaneous",
-		"users.form.my.account.identification",
-		"users.form.my.account.main",
-		"users.form.my.account.miscellaneous",
-		"users.form.update.identification",
-		"users.form.update.main",
-		"users.form.update.miscellaneous",
-		"users.full.name.generator",
-		"users.full.name.validator",
-		"users.image.max.height",
-		"users.image.max.width",
-		"users.screen.name.always.autogenerate",
-		"users.screen.name.generator",
-		"users.screen.name.validator",
+		"users.email.address.generator", "users.email.address.required",
+		"users.form.add.identification", "users.form.add.main",
+		"users.form.add.miscellaneous", "users.form.my.account.identification",
+		"users.form.my.account.main", "users.form.my.account.miscellaneous",
+		"users.form.update.identification", "users.form.update.main",
+		"users.form.update.miscellaneous", "users.full.name.generator",
+		"users.full.name.validator", "users.image.max.height",
+		"users.image.max.width", "users.screen.name.always.autogenerate",
+		"users.screen.name.generator", "users.screen.name.validator",
 		"value.object.listener.*"
 	};
 
@@ -447,6 +406,14 @@ public class HookHotDeployListener
 			com.liferay.mail.util.HookFactory.setInstance(null);
 		}
 
+		if (portalProperties.containsKey(PropsKeys.PHONE_NUMBER_FORMAT_IMPL)) {
+			PhoneNumberFormatWrapper phoneNumberFormatWrapper =
+				(PhoneNumberFormatWrapper)
+					PhoneNumberFormatUtil.getPhoneNumberFormat();
+
+			phoneNumberFormatWrapper.setPhoneNumberFormat(null);
+		}
+
 		if (portalProperties.containsKey(PropsKeys.SANITIZER_IMPL)) {
 			SanitizerWrapper sanitizerWrapper =
 				(SanitizerWrapper)SanitizerUtil.getSanitizer();
@@ -478,6 +445,25 @@ public class HookHotDeployListener
 				PropsKeys.USERS_SCREEN_NAME_VALIDATOR)) {
 
 			ScreenNameValidatorFactory.setInstance(null);
+		}
+
+		Set<String> liferayFilterClassNames =
+			LiferayFilterTracker.getClassNames();
+
+		for (String liferayFilterClassName : liferayFilterClassNames) {
+			if (!portalProperties.containsKey(liferayFilterClassName)) {
+				continue;
+			}
+
+			boolean filterEnabled = GetterUtil.getBoolean(
+				PropsUtil.get(liferayFilterClassName));
+
+			Set<LiferayFilter> liferayFilters =
+				LiferayFilterTracker.getLiferayFilters(liferayFilterClassName);
+
+			for (LiferayFilter liferayFilter : liferayFilters) {
+				liferayFilter.setFilterEnabled(filterEnabled);
+			}
 		}
 	}
 
@@ -1706,6 +1692,22 @@ public class HookHotDeployListener
 			com.liferay.mail.util.HookFactory.setInstance(mailHook);
 		}
 
+		if (portalProperties.containsKey(PropsKeys.PHONE_NUMBER_FORMAT_IMPL)) {
+			String phoneNumberFormatClassName = portalProperties.getProperty(
+				PropsKeys.PHONE_NUMBER_FORMAT_IMPL);
+
+			PhoneNumberFormat phoneNumberFormat =
+				(PhoneNumberFormat)newInstance(
+					portletClassLoader, PhoneNumberFormat.class,
+					phoneNumberFormatClassName);
+
+			PhoneNumberFormatWrapper phoneNumberFormatWrapper =
+				(PhoneNumberFormatWrapper)
+					PhoneNumberFormatUtil.getPhoneNumberFormat();
+
+			phoneNumberFormatWrapper.setPhoneNumberFormat(phoneNumberFormat);
+		}
+
 		if (portalProperties.containsKey(PropsKeys.SANITIZER_IMPL)) {
 			String sanitizerClassName = portalProperties.getProperty(
 				PropsKeys.SANITIZER_IMPL);
@@ -1784,6 +1786,25 @@ public class HookHotDeployListener
 					screenNameValidatorClassName);
 
 			ScreenNameValidatorFactory.setInstance(screenNameValidator);
+		}
+
+		Set<String> liferayFilterClassNames =
+			LiferayFilterTracker.getClassNames();
+
+		for (String liferayFilterClassName : liferayFilterClassNames) {
+			if (!portalProperties.containsKey(liferayFilterClassName)) {
+				continue;
+			}
+
+			boolean filterEnabled = GetterUtil.getBoolean(
+				portalProperties.getProperty(liferayFilterClassName));
+
+			Set<LiferayFilter> liferayFilters =
+				LiferayFilterTracker.getLiferayFilters(liferayFilterClassName);
+
+			for (LiferayFilter liferayFilter : liferayFilters) {
+				liferayFilter.setFilterEnabled(filterEnabled);
+			}
 		}
 
 		if (unfilteredPortalProperties.containsKey(
@@ -2149,9 +2170,14 @@ public class HookHotDeployListener
 				unfilteredPortalProperties.getProperty(
 					PropsKeys.UPGRADE_PROCESSES));
 
+			boolean indexOnUpgrade = GetterUtil.getBoolean(
+				unfilteredPortalProperties.getProperty(
+					PropsKeys.INDEX_ON_UPGRADE),
+				PropsValues.INDEX_ON_UPGRADE);
+
 			UpgradeProcessUtil.upgradeProcess(
 				release.getBuildNumber(), upgradeProcessClassNames,
-				portletClassLoader);
+				portletClassLoader, indexOnUpgrade);
 		}
 
 		ReleaseLocalServiceUtil.updateRelease(
@@ -2159,28 +2185,22 @@ public class HookHotDeployListener
 	}
 
 	private static final String[] _PROPS_KEYS_EVENTS = {
-		LOGIN_EVENTS_POST,
-		LOGIN_EVENTS_PRE,
-		LOGOUT_EVENTS_POST,
-		LOGOUT_EVENTS_PRE,
-		SERVLET_SERVICE_EVENTS_POST,
+		LOGIN_EVENTS_POST, LOGIN_EVENTS_PRE, LOGOUT_EVENTS_POST,
+		LOGOUT_EVENTS_PRE, SERVLET_SERVICE_EVENTS_POST,
 		SERVLET_SERVICE_EVENTS_PRE
 	};
 
 	private static final String[] _PROPS_KEYS_SESSION_EVENTS = {
-		SERVLET_SESSION_CREATE_EVENTS,
-		SERVLET_SESSION_DESTROY_EVENTS
+		SERVLET_SESSION_CREATE_EVENTS, SERVLET_SESSION_DESTROY_EVENTS
 	};
 
 	private static final String[] _PROPS_VALUES_BOOLEAN = {
-		"auth.forward.by.last.path",
-		"captcha.check.portal.create_account",
+		"auth.forward.by.last.path", "captcha.check.portal.create_account",
 		"dl.file.entry.drafts.enabled",
 		"field.enable.com.liferay.portal.model.Contact.birthday",
 		"field.enable.com.liferay.portal.model.Contact.male",
 		"field.enable.com.liferay.portal.model.Organization.status",
-		"javascript.fast.load",
-		"layout.template.cache.enabled",
+		"javascript.fast.load", "layout.template.cache.enabled",
 		"layout.user.private.layouts.auto.create",
 		"layout.user.private.layouts.enabled",
 		"layout.user.private.layouts.power.user.required",
@@ -2192,22 +2212,17 @@ public class HookHotDeployListener
 		"my.sites.show.public.sites.with.no.layouts",
 		"my.sites.show.user.private.sites.with.no.layouts",
 		"my.sites.show.user.public.sites.with.no.layouts",
-		"portlet.add.default.resource.check.enabled",
-		"session.store.password",
-		"terms.of.use.required",
-		"theme.css.fast.load",
-		"theme.images.fast.load",
-		"theme.jsp.override.enabled",
-		"theme.loader.new.theme.id.on.import",
-		"theme.portlet.decorate.default",
+		"portlet.add.default.resource.check.enabled", "session.store.password",
+		"terms.of.use.required", "theme.css.fast.load",
+		"theme.images.fast.load", "theme.jsp.override.enabled",
+		"theme.loader.new.theme.id.on.import", "theme.portlet.decorate.default",
 		"theme.portlet.sharing.default",
 		"user.notification.event.confirmation.enabled",
-		"users.email.address.required",
-		"users.screen.name.always.autogenerate"
+		"users.email.address.required", "users.screen.name.always.autogenerate"
 	};
 
 	private static final String[] _PROPS_VALUES_INTEGER = {
-		"users.image.max.height",
+		"session.max.allowed", "users.image.max.height",
 		"users.image.max.width",
 	};
 
@@ -2215,43 +2230,27 @@ public class HookHotDeployListener
 	};
 
 	private static final String[] _PROPS_VALUES_MERGE_STRING_ARRAY = {
-		"admin.default.group.names",
-		"admin.default.role.names",
-		"admin.default.user.group.names",
-		"asset.publisher.display.styles",
+		"admin.default.group.names", "admin.default.role.names",
+		"admin.default.user.group.names", "asset.publisher.display.styles",
 		"company.settings.form.configuration",
 		"company.settings.form.identification",
-		"company.settings.form.miscellaneous",
-		"convert.processes",
-		"dockbar.add.portlets",
-		"journal.article.form.add",
-		"journal.article.form.translate",
-		"journal.article.form.update",
-		"layout.form.add",
-		"layout.form.update",
-		"layout.set.form.update",
-		"layout.static.portlets.all",
-		"layout.types",
-		"organizations.form.add.identification",
-		"organizations.form.add.main",
+		"company.settings.form.miscellaneous", "convert.processes",
+		"dockbar.add.portlets", "journal.article.form.add",
+		"journal.article.form.translate", "journal.article.form.update",
+		"layout.form.add", "layout.form.update", "layout.set.form.update",
+		"layout.static.portlets.all", "layout.types",
+		"organizations.form.add.identification", "organizations.form.add.main",
 		"organizations.form.add.miscellaneous",
 		"portlet.add.default.resource.check.whitelist",
 		"portlet.add.default.resource.check.whitelist.actions",
-		"session.phishing.protected.attributes",
-		"sites.form.add.advanced",
-		"sites.form.add.main",
-		"sites.form.add.seo",
-		"sites.form.update.advanced",
-		"sites.form.update.main",
-		"sites.form.update.seo",
-		"users.form.add.identification",
-		"users.form.add.main",
-		"users.form.add.miscellaneous",
-		"users.form.my.account.identification",
-		"users.form.my.account.main",
+		"session.phishing.protected.attributes", "sites.form.add.advanced",
+		"sites.form.add.main", "sites.form.add.seo",
+		"sites.form.update.advanced", "sites.form.update.main",
+		"sites.form.update.seo", "users.form.add.identification",
+		"users.form.add.main", "users.form.add.miscellaneous",
+		"users.form.my.account.identification", "users.form.my.account.main",
 		"users.form.my.account.miscellaneous",
-		"users.form.update.identification",
-		"users.form.update.main",
+		"users.form.update.identification", "users.form.update.main",
 		"users.form.update.miscellaneous"
 	};
 
@@ -2268,7 +2267,8 @@ public class HookHotDeployListener
 		"default.landing.page.path",
 		"passwords.passwordpolicytoolkit.generator",
 		"passwords.passwordpolicytoolkit.static",
-		"theme.shortcut.icon"
+		"phone.number.format.international.regexp",
+		"phone.number.format.usa.regexp", "theme.shortcut.icon"
 	};
 
 	private static Log _log = LogFactoryUtil.getLog(

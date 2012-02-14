@@ -21,15 +21,15 @@ String fieldParamSelection = ParamUtil.getString(request, facet.getFieldName() +
 String fieldParamFrom = ParamUtil.getString(request, facet.getFieldName() + "from");
 String fieldParamTo = ParamUtil.getString(request, facet.getFieldName() + "to");
 
-Calendar cal = Calendar.getInstance(timeZone);
+JSONArray rangesJSONArray = dataJSONObject.getJSONArray("ranges");
 
-Date now = new Date();
+String modifiedLabel = StringPool.BLANK;
 
-cal.setTime(now);
+int index = 0;
 
-DateFormat dateFormat = DateFormatFactoryUtil.getSimpleDateFormat("yyyyMMddHHmmss", timeZone);
-
-String nowString = dateFormat.format(cal.getTime());
+if (fieldParamSelection.equals("0")) {
+	modifiedLabel = LanguageUtil.get(pageContext, "any-time");
+}
 %>
 
 <div class="<%= cssClass %>" data-facetFieldName="<%= facet.getFieldName() %>" id="<%= randomNamespace %>facet">
@@ -43,81 +43,66 @@ String nowString = dateFormat.format(cal.getTime());
 					<img alt="" src='<%= themeDisplay.getPathThemeImages() + "/common/time.png" %>' /><liferay-ui:message key="any-time" />
 				</aui:a>
 			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("1") ? " current-term" : StringPool.BLANK %>">
+
+			<%
+			for (int i = 0; i < rangesJSONArray.length(); i++) {
+				JSONObject rangesJSONObject = rangesJSONArray.getJSONObject(i);
+
+				String label = rangesJSONObject.getString("label");
+				String range = rangesJSONObject.getString("range");
+
+				index = (i + 1);
+
+				if (fieldParamSelection.equals(String.valueOf(index))) {
+					modifiedLabel = LanguageUtil.get(pageContext, label);
+				}
+			%>
+
+				<li class="facet-value<%= fieldParamSelection.equals(String.valueOf(index)) ? " current-term" : StringPool.BLANK %>">
+
+					<%
+					String taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(" + index + ", '" + range + "');";
+					%>
+
+					<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
+						<liferay-ui:message key="<%= label %>" />
+					</aui:a>
+
+					<%
+					TermCollector termCollector = facetCollector.getTermCollector(range);
+					%>
+
+					<c:if test="<%= termCollector != null %>">
+						<span class="frequency">(<%= termCollector.getFrequency() %>)</span>
+					</c:if>
+				</li>
+
+			<%
+			}
+			%>
+
+			<li class="facet-value<%= fieldParamSelection.equals(String.valueOf(index + 1)) ? " current-term" : StringPool.BLANK %>">
 
 				<%
-				cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) - 1);
+				TermCollector termCollector = null;
 
-				String taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(1, '[" + dateFormat.format(cal.getTime()) + " TO " + nowString + "]');";
+				if (fieldParamSelection.equals(String.valueOf(index + 1))) {
+					modifiedLabel = LanguageUtil.get(pageContext, "custom-range");
+
+					termCollector = facetCollector.getTermCollector(fieldParam);
+				}
 				%>
 
-				<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
-					<liferay-ui:message key="past-hour" />
-				</aui:a>
-			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("2") ? " current-term" : StringPool.BLANK %>">
-
-				<%
-				cal.setTime(now);
-
-				cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - 1);
-
-				taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(2, '[" + dateFormat.format(cal.getTime()) + " TO " + nowString + "]');";
-				%>
-
-				<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
-					<liferay-ui:message key="past-24-hours" />
-				</aui:a>
-			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("3") ? " current-term" : StringPool.BLANK %>">
-
-				<%
-				cal.setTime(now);
-
-				cal.set(Calendar.DAY_OF_YEAR, cal.get(Calendar.DAY_OF_YEAR) - 7);
-
-				taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(3, '[" + dateFormat.format(cal.getTime()) + " TO " + nowString + "]');";
-				%>
-
-				<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
-					<liferay-ui:message key="past-week" />
-				</aui:a>
-			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("4") ? " current-term" : StringPool.BLANK %>">
-
-				<%
-				cal.setTime(now);
-
-				cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - 1);
-
-				taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(4, '[" + dateFormat.format(cal.getTime()) + " TO " + nowString + "]');";
-				%>
-
-				<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
-					<liferay-ui:message key="past-month" />
-				</aui:a>
-			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("5") ? " current-term" : StringPool.BLANK %>">
-
-				<%
-				cal.setTime(now);
-
-				cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) - 1);
-
-				taglibSetRange = renderResponse.getNamespace() + facet.getFieldName() + "setRange(5, '[" + dateFormat.format(cal.getTime()) + " TO " + nowString + "]');";
-				%>
-
-				<aui:a href="javascript:;" onClick="<%= taglibSetRange %>">
-					<liferay-ui:message key="past-year" />
-				</aui:a>
-			</li>
-			<li class="facet-value<%= fieldParamSelection.equals("6") ? " current-term" : StringPool.BLANK %>">
-				<aui:a href="javascript:;" onClick='<%= renderResponse.getNamespace() + facet.getFieldName() + "customRange();" %>'>
+				<aui:a href="javascript:;" cssClass='<%= randomNamespace + "custom-range-toggle" %>'>
 					<liferay-ui:message key="custom-range" />&hellip;
 				</aui:a>
+
+				<c:if test="<%= termCollector != null %>">
+					<span class="frequency">(<%= termCollector.getFrequency() %>)</span>
+				</c:if>
 			</li>
 
-			<div class="<%= !fieldParamSelection.equals("6") ? "aui-helper-hidden" : StringPool.BLANK %> modified-custom-range" id="<%= randomNamespace %>custom-range">
+			<div class="<%= !fieldParamSelection.equals(String.valueOf(index + 1)) ? "aui-helper-hidden" : StringPool.BLANK %> modified-custom-range" id="<%= randomNamespace %>custom-range">
 				<div id="<%= randomNamespace %>custom-range-from">
 					<aui:input label="from" name='<%= facet.getFieldName() + "from" %>' size="14" />
 				</div>
@@ -126,7 +111,7 @@ String nowString = dateFormat.format(cal.getTime());
 					<aui:input label="to" name='<%= facet.getFieldName() + "to" %>' size="14" />
 				</div>
 
-				<aui:button onClick='<%= renderResponse.getNamespace() + facet.getFieldName() + "searchCustomRange(6);" %>' value="search" />
+				<aui:button onClick='<%= renderResponse.getNamespace() + facet.getFieldName() + "searchCustomRange(" + (index + 1) + ");" %>' value="search" />
 			</div>
 		</ul>
 	</aui:field-wrapper>
@@ -141,33 +126,9 @@ String nowString = dateFormat.format(cal.getTime());
 	<aui:script use="liferay-token-list">
 
 		<%
-		String modifiedLabel = StringPool.BLANK;
-
-		if (fieldParamSelection.equals("0")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "any-time");
-		}
-		else if (fieldParamSelection.equals("1")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "past-hour");
-		}
-		else if (fieldParamSelection.equals("2")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "past-24-hours");
-		}
-		else if (fieldParamSelection.equals("3")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "past-week");
-		}
-		else if (fieldParamSelection.equals("4")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "past-month");
-		}
-		else if (fieldParamSelection.equals("5")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "past-year");
-		}
-		else if (fieldParamSelection.equals("6")) {
-			modifiedLabel = LanguageUtil.get(pageContext, "custom-range");
-		}
-
 		String tokenLabel = modifiedLabel;
 
-		if (fieldParamSelection.equals("6")) {
+		if (fieldParamSelection.equals(String.valueOf(index + 1))) {
 			String fromDateLabel = fieldParamFrom;
 			String toDateLabel = fieldParamTo;
 
@@ -194,15 +155,6 @@ String nowString = dateFormat.format(cal.getTime());
 			document.<portlet:namespace />fm['<portlet:namespace /><%= facet.getFieldName() %>selection'].value = selection;
 
 			submitForm(document.<portlet:namespace />fm);
-		},
-		['aui-base']
-	);
-
-	Liferay.provide(
-		window,
-		'<portlet:namespace /><%= facet.getFieldName() %>customRange',
-		function() {
-			A.one('#<%= randomNamespace + "custom-range" %>').toggle();
 		},
 		['aui-base']
 	);
@@ -287,4 +239,13 @@ String nowString = dateFormat.format(cal.getTime());
 			trigger: '#<portlet:namespace /><%= facet.getFieldName() %>to'
 		}
 	).render('#<%= randomNamespace %>custom-range-to');
+
+	A.one('.<%= randomNamespace %>custom-range-toggle').on(
+		'click',
+		function(event) {
+			event.halt();
+
+			A.one('#<%= randomNamespace + "custom-range" %>').toggle();
+		}
+	);
 </aui:script>

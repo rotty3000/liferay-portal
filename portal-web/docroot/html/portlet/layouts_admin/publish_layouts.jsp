@@ -108,24 +108,24 @@ try {
 catch (NoSuchLayoutException nsle) {
 }
 
-long[] selectedPlids = new long[0];
+long[] selectedLayoutIds = new long[0];
 
 boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout", tabs1.equals("private-pages"));
 
 if (selPlid > 0) {
-	selectedPlids = new long[] {selPlid};
+	selectedLayoutIds = new long[] {selLayout.getLayoutId()};
 }
 else {
 	treeKey = treeKey + privateLayout;
 
-	selectedPlids = GetterUtil.getLongValues(StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeKey + "SelectedNode"), ','));
+	selectedLayoutIds = GetterUtil.getLongValues(StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeKey + "SelectedNode"), ','));
 }
 
 List results = new ArrayList();
 
-for (int i = 0; i < selectedPlids.length; i++) {
+for (int i = 0; i < selectedLayoutIds.length; i++) {
 	try {
-		results.add(LayoutLocalServiceUtil.getLayout(selectedPlids[i]));
+		results.add(LayoutLocalServiceUtil.getLayout(selGroupId, privateLayout, selectedLayoutIds[i]));
 	}
 	catch (NoSuchLayoutException nsle) {
 	}
@@ -173,6 +173,7 @@ if (selGroup.isStaged() && selGroup.isStagedRemotely()) {
 }
 
 portletURL.setParameter("struts_action", "/layouts_admin/edit_layouts");
+portletURL.setParameter("pagesRedirect", currentURL);
 portletURL.setParameter("groupId", String.valueOf(liveGroupId));
 portletURL.setParameter("private", String.valueOf(privateLayout));
 
@@ -200,6 +201,24 @@ request.setAttribute("edit_pages.jsp-portletURL", portletURL);
 
 response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 %>
+
+<c:if test='<%= SessionMessages.contains(renderRequest, "request_processed") %>'>
+	<div class="portlet-msg-success">
+
+		<%
+		String successMessage = (String)SessionMessages.get(renderRequest, "request_processed");
+		%>
+
+		<c:choose>
+			<c:when test='<%= Validator.isNotNull(successMessage) && !successMessage.equals("request_processed") %>'>
+				<%= successMessage %>
+			</c:when>
+			<c:otherwise>
+				<liferay-ui:message key="your-request-completed-successfully" />
+			</c:otherwise>
+		</c:choose>
+	</div>
+</c:if>
 
 <style type="text/css">
 	#<portlet:namespace />pane th.col-3 {
@@ -233,6 +252,10 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 
 	#<portlet:namespace />exportPagesFm .portlet-data-section legend {
 		font-size: 110%;
+	}
+
+	#<portlet:namespace />exportPagesFm .portlet-data-section .portlet-type-data-section .aui-legend {
+		border-width: 0;
 	}
 </style>
 
@@ -442,15 +465,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 						'form',
 						{
 							id: '<portlet:namespace />exportPagesFm'
-						}
-					);
-
-					dialog.io.detach('success');
-
-					dialog.io.after(
-						'success',
-						function(event){
-							window.location.reload(true);
 						}
 					);
 

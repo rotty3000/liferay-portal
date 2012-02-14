@@ -4032,6 +4032,12 @@ public abstract class PortalPreferencesLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return PortalPreferences.class;
 	}

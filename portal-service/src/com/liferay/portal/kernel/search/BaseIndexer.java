@@ -402,16 +402,121 @@ public abstract class BaseIndexer implements Indexer {
 			new IndexerPostProcessor[indexerPostProcessorsList.size()]);
 	}
 
+	/**
+	 * @deprecated {@link #addSearchLocalizedTerm(BooleanQuery, SearchContext,
+	 *             String, boolean)}
+	 */
 	protected void addLocalizedSearchTerm(
-			BooleanQuery searchQuery, SearchContext searchContext,
-			String field, boolean like)
+			BooleanQuery searchQuery, SearchContext searchContext, String field,
+			boolean like)
 		throws Exception {
 
-		addSearchTerm(searchQuery, searchContext, field, like);
-		addSearchTerm(
-			searchQuery, searchContext,
-			DocumentImpl.getLocalizedName(searchContext.getLocale(), field),
-			like);
+		addSearchLocalizedTerm(searchQuery, searchContext, field, like);
+	}
+
+	protected void addSearchArrayQuery(
+			BooleanQuery searchQuery, SearchContext searchContext, String field)
+		throws Exception {
+
+		if (Validator.isNull(field)) {
+			return;
+		}
+
+		Object fieldValues = searchContext.getAttribute(field);
+
+		if (fieldValues == null) {
+			return;
+		}
+
+		BooleanQuery fieldQuery = null;
+
+		if (fieldValues instanceof int[]) {
+			int[] fieldValuesArray = (int[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (int fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+		else if (fieldValues instanceof Integer[]) {
+			Integer[] fieldValuesArray = (Integer[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (Integer fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+		else if (fieldValues instanceof long[]) {
+			long[] fieldValuesArray = (long[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (long fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+		else if (fieldValues instanceof Long[]) {
+			Long[] fieldValuesArray = (Long[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (Long fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+		else if (fieldValues instanceof short[]) {
+			short[] fieldValuesArray = (short[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (short fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+		else if (fieldValues instanceof Short[]) {
+			Short[] fieldValuesArray = (Short[])fieldValues;
+
+			if (fieldValuesArray.length == 0) {
+				return;
+			}
+
+			fieldQuery = BooleanQueryFactoryUtil.create(searchContext);
+
+			for (Short fieldValue : fieldValuesArray) {
+				fieldQuery.addTerm(field, fieldValue);
+			}
+		}
+
+		if (fieldQuery != null) {
+			if (searchContext.isAndSearch()) {
+				searchQuery.add(fieldQuery, BooleanClauseOccur.MUST);
+			}
+			else {
+				searchQuery.add(fieldQuery, BooleanClauseOccur.SHOULD);
+			}
+		}
 	}
 
 	protected void addSearchAssetCategoryIds(
@@ -469,9 +574,8 @@ public abstract class BaseIndexer implements Indexer {
 			String keywords)
 		throws Exception {
 
-		ExpandoBridge expandoBridge =
-			ExpandoBridgeFactoryUtil.getExpandoBridge(
-				searchContext.getCompanyId(), getClassName(searchContext));
+		ExpandoBridge expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(
+			searchContext.getCompanyId(), getClassName(searchContext));
 
 		Set<String> attributeNames = SetUtil.fromEnumeration(
 			expandoBridge.getAttributeNames());
@@ -525,9 +629,21 @@ public abstract class BaseIndexer implements Indexer {
 		addSearchExpando(searchQuery, searchContext, keywords);
 	}
 
+	protected void addSearchLocalizedTerm(
+			BooleanQuery searchQuery, SearchContext searchContext, String field,
+			boolean like)
+		throws Exception {
+
+		addSearchTerm(searchQuery, searchContext, field, like);
+		addSearchTerm(
+			searchQuery, searchContext,
+			DocumentImpl.getLocalizedName(searchContext.getLocale(), field),
+			like);
+	}
+
 	protected void addSearchTerm(
-			BooleanQuery searchQuery, SearchContext searchContext,
-			String field, boolean like)
+			BooleanQuery searchQuery, SearchContext searchContext, String field,
+			boolean like)
 		throws Exception {
 
 		if (Validator.isNull(field)) {

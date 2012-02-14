@@ -965,6 +965,12 @@ public abstract class ShoppingItemPriceLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return ShoppingItemPrice.class;
 	}

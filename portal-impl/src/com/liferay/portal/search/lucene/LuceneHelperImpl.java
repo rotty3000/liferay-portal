@@ -134,13 +134,13 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 		boolean includesLower = true;
 
-		if (startValue.equals(StringPool.STAR)) {
+		if ((startValue != null) && startValue.equals(StringPool.STAR)) {
 			includesLower = false;
 		}
 
 		boolean includesUpper = true;
 
-		if (endValue.equals(StringPool.STAR)) {
+		if ((endValue != null) && endValue.equals(StringPool.STAR)) {
 			includesUpper = false;
 		}
 
@@ -498,8 +498,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 		}
 
 		ClusterRequest clusterRequest = ClusterRequest.createMulticastRequest(
-			new MethodHandler(_getLastGenerationMethodKey, companyId),
-			true);
+			new MethodHandler(_getLastGenerationMethodKey, companyId), true);
 
 		FutureClusterResponses futureClusterResponses =
 			ClusterExecutorUtil.execute(clusterRequest);

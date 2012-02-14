@@ -71,19 +71,35 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 												<ul>
 
 													<%
+													Set<String> runtimePortletIds = (Set<String>)request.getAttribute(WebKeys.RUNTIME_PORTLET_IDS);
+
 													int j = 0;
 
 													for (int i = 0; i < portlets.size(); i++) {
 														Portlet portlet = portlets.get(i);
 
 														boolean portletInstanceable = portlet.isInstanceable();
+
 														boolean portletUsed = layoutTypePortlet.hasPortletId(portlet.getPortletId());
+
+														if (runtimePortletIds != null) {
+															for (String runtimePortletId : runtimePortletIds) {
+																String portletId = portlet.getPortletId();
+
+																if (runtimePortletId.equals(portletId) ||
+																	runtimePortletId.startsWith(portletId.concat(PortletConstants.INSTANCE_SEPARATOR))) {
+
+																	portletUsed = true;
+																}
+															}
+														}
+
 														boolean portletLocked = (!portletInstanceable && portletUsed);
 
-													if (!PortletPermissionUtil.contains(permissionChecker, layout, portlet.getPortletId(), ActionKeys.ADD_TO_PAGE)) {
-														continue;
-													}
-												%>
+														if (!PortletPermissionUtil.contains(permissionChecker, layout, portlet.getPortletId(), ActionKeys.ADD_TO_PAGE)) {
+															continue;
+														}
+													%>
 
 														<li class="<%= (j == 0) ? "first" : "" %>">
 															<a class="app-shortcut <c:if test="<%= portletLocked %>">lfr-portlet-used</c:if> <c:if test="<%= portletInstanceable %>">lfr-instanceable</c:if>" data-portlet-id="<%= portlet.getPortletId() %>" href="javascript:;" <c:if test="<%= portletLocked %>">tabIndex="-1"</c:if>>
@@ -379,26 +395,28 @@ for (String portletId : PropsValues.DOCKBAR_ADD_PORTLETS) {
 	</c:if>
 </div>
 
-<c:if test="<%= (layoutSet != null) && layoutSet.isLayoutSetPrototypeLinkActive() && SitesUtil.isLayoutModifiedSinceLastMerge(layout) %>">
+<c:if test="<%= (layoutSet != null) && layoutSet.isLayoutSetPrototypeLinkActive() && SitesUtil.isLayoutModifiedSinceLastMerge(layout) && LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout, ActionKeys.UPDATE) %>">
 	<div class="page-customization-bar">
 		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/edit.png" />
 
 		<liferay-ui:message key="this-page-has-been-changed-since-the-last-update-from-the-site-template" />
 
-		<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
-			<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
-			<portlet:param name="<%= Constants.CMD %>" value="reset_prototype" />
-			<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
-			<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getParentGroupId()) %>" />
-		</liferay-portlet:actionURL>
+		<c:if test="<%= GroupPermissionUtil.contains(permissionChecker, layout.getGroupId(), ActionKeys.UPDATE) %>">
+			<liferay-portlet:actionURL portletName="<%= PortletKeys.LAYOUTS_ADMIN %>" var="resetPrototypeURL">
+				<portlet:param name="struts_action" value="/layouts_admin/edit_layouts" />
+				<portlet:param name="<%= Constants.CMD %>" value="reset_prototype" />
+				<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+				<portlet:param name="groupId" value="<%= String.valueOf(themeDisplay.getParentGroupId()) %>" />
+			</liferay-portlet:actionURL>
 
-		<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm">
-			<aui:button name="submit" type="submit" value="reset" />
-		</aui:form>
+			<aui:form action="<%= resetPrototypeURL %>" cssClass="reset-prototype" name="resetFm">
+				<aui:button name="submit" type="submit" value="reset" />
+			</aui:form>
+		</c:if>
 	</div>
 </c:if>
 
-<c:if test="<%= !SitesUtil.isLayoutUpdateable(layout) || (layout.isLayoutPrototypeLinkActive() && !group.hasStagingGroup()) %>">
+<c:if test="<%= (!SitesUtil.isLayoutUpdateable(layout) || (layout.isLayoutPrototypeLinkActive() && !group.hasStagingGroup())) && LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), layout, ActionKeys.UPDATE) %>">
 	<div class="page-customization-bar">
 		<img alt="" class="customized-icon" src="<%= themeDisplay.getPathThemeImages() %>/common/site_icon.png" />
 

@@ -44,13 +44,13 @@ import java.util.List;
 public class AssetEntryFinderImpl
 	extends BasePersistenceImpl<AssetEntry> implements AssetEntryFinder {
 
-	public static String FIND_BY_AND_CATEGORY_IDS =
+	public static final String FIND_BY_AND_CATEGORY_IDS =
 		AssetEntryFinder.class.getName() + ".findByAndCategoryIds";
 
-	public static String FIND_BY_AND_CATEGORY_IDS_TREE =
+	public static final String FIND_BY_AND_CATEGORY_IDS_TREE =
 		AssetEntryFinder.class.getName() + ".findByAndCategoryIdsTree";
 
-	public static String FIND_BY_AND_TAG_IDS =
+	public static final String FIND_BY_AND_TAG_IDS =
 		AssetEntryFinder.class.getName() + ".findByAndTagIds";
 
 	public int countEntries(AssetEntryQuery entryQuery) throws SystemException {
@@ -415,8 +415,7 @@ public class AssetEntryFinderImpl
 		qPos.add(entryQuery.getNotAnyTagIds());
 
 		setDates(
-			qPos, entryQuery.getPublishDate(),
-			entryQuery.getExpirationDate());
+			qPos, entryQuery.getPublishDate(), entryQuery.getExpirationDate());
 
 		qPos.add(entryQuery.getGroupIds());
 		qPos.add(entryQuery.getClassNameIds());
@@ -612,8 +611,8 @@ public class AssetEntryFinderImpl
 		}
 
 		if (expirationDate != null) {
-			Timestamp expirationDate_TS =
-				CalendarUtil.getTimestamp(expirationDate);
+			Timestamp expirationDate_TS = CalendarUtil.getTimestamp(
+				expirationDate);
 
 			qPos.add(expirationDate_TS);
 		}

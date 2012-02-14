@@ -86,61 +86,49 @@ public class BaseResourceImpl implements Resource {
 		_size = size;
 	}
 
- 	public String getHREF() {
-		return _href;
+	public String getClassName() {
+		return _className;
 	}
 
-	public String getDisplayName() {
-		return _displayName;
-	}
-
-	public Lock getLock() {
+	@SuppressWarnings("unused")
+	public InputStream getContentAsStream() throws WebDAVException {
 		return null;
+	}
+
+	public String getContentType() {
+		return ContentTypes.HTTPD_UNIX_DIRECTORY;
 	}
 
 	public String getCreateDate() {
 		return _createDateFormatter.format(_createDate);
 	}
 
- 	public String getModifiedDate() {
-		return _modifiedDateFormatter.format(_modifiedDate);
+	public String getDisplayName() {
+		return _displayName;
 	}
 
-	public long getSize() {
-		return _size;
+	public String getHREF() {
+		return _href;
+	}
+
+	public Lock getLock() {
+		return null;
 	}
 
 	public Object getModel() {
 		return _model;
 	}
 
-	public void setModel(Object model) {
-		_model = model;
+	public String getModifiedDate() {
+		return _modifiedDateFormatter.format(_modifiedDate);
 	}
 
- 	public String getClassName() {
- 		return _className;
- 	}
-
- 	public void setClassName(String className) {
- 		_className = className;
- 	}
-
- 	public long getPrimaryKey() {
- 		return _primaryKey;
- 	}
-
- 	public void setPrimaryKey(long primaryKey) {
- 		_primaryKey = primaryKey;
- 	}
-
-	public String getContentType() {
-		return ContentTypes.HTTPD_UNIX_DIRECTORY;
+	public long getPrimaryKey() {
+		return _primaryKey;
 	}
 
-	@SuppressWarnings("unused")
-	public InputStream getContentAsStream() throws WebDAVException {
-		return null;
+	public long getSize() {
+		return _size;
 	}
 
 	public boolean isCollection() {
@@ -151,6 +139,18 @@ public class BaseResourceImpl implements Resource {
 		return false;
 	}
 
+	public void setClassName(String className) {
+		_className = className;
+	}
+
+	public void setModel(Object model) {
+		_model = model;
+	}
+
+	public void setPrimaryKey(long primaryKey) {
+		_primaryKey = primaryKey;
+	}
+
 	private static Format _createDateFormatter =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
@@ -159,13 +159,13 @@ public class BaseResourceImpl implements Resource {
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
 			"EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
-	private String _href;
-	private String _displayName;
-	private Date _createDate;
-	private Date _modifiedDate;
-	private long _size;
-	private Object _model;
 	private String _className;
+	private Date _createDate;
+	private String _displayName;
+	private String _href;
+	private Object _model;
+	private Date _modifiedDate;
 	private long _primaryKey = -1;
+	private long _size;
 
 }

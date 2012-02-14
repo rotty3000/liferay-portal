@@ -244,11 +244,11 @@ public interface JournalArticleImageLocalService
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void deleteArticleImage(long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
 	public void deleteArticleImage(
 		com.liferay.portlet.journal.model.JournalArticleImage articleImage)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void deleteArticleImage(long articleImageId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void deleteArticleImage(long groupId, java.lang.String articleId,

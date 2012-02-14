@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.upgrade.v5_2_3.util.UserTable;
 
+import java.sql.SQLException;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -25,17 +27,16 @@ public class UpgradeUser extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		if (isSupportsAlterColumnType()) {
+		try {
 			runSQL("alter_column_type User_ greeting VARCHAR(255) null");
 		}
-		else {
+		catch (SQLException sqle) {
 
 			// User_
 
 			upgradeTable(
 				UserTable.TABLE_NAME, UserTable.TABLE_COLUMNS,
-				UserTable.TABLE_SQL_CREATE,
-				UserTable.TABLE_SQL_ADD_INDEXES);
+				UserTable.TABLE_SQL_CREATE, UserTable.TABLE_SQL_ADD_INDEXES);
 		}
 
 		StringBundler sb = new StringBundler(9);

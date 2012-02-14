@@ -7,8 +7,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
 >
-	<bean id="ldapToPortalConverter" class="com.liferay.portal.security.ldap.BaseLDAPToPortalConverter" />
-	<bean id="portalToLDAPConverter" class="com.liferay.portal.security.ldap.BasePortalToLDAPConverter" />
+	<bean id="ldapToPortalConverter" class="com.liferay.portal.security.ldap.DefaultLDAPToPortalConverter" />
+	<bean id="portalToLDAPConverter" class="com.liferay.portal.security.ldap.DefaultPortalToLDAPConverter" />
 	<bean id="com.liferay.portal.security.ldap.PortalLDAPExporterUtil" class="com.liferay.portal.security.ldap.PortalLDAPExporterUtil">
 		<property name="portalLDAPExporter">
 			<bean class="com.liferay.portal.security.ldap.PortalLDAPExporterImpl">

@@ -219,16 +219,16 @@ public class ServiceComponentWrapper implements ServiceComponent,
 		_serviceComponent.persist();
 	}
 
-	public java.lang.String getTablesSQL() {
-		return _serviceComponent.getTablesSQL();
+	public java.lang.String getIndexesSQL() {
+		return _serviceComponent.getIndexesSQL();
 	}
 
 	public java.lang.String getSequencesSQL() {
 		return _serviceComponent.getSequencesSQL();
 	}
 
-	public java.lang.String getIndexesSQL() {
-		return _serviceComponent.getIndexesSQL();
+	public java.lang.String getTablesSQL() {
+		return _serviceComponent.getTablesSQL();
 	}
 
 	/**

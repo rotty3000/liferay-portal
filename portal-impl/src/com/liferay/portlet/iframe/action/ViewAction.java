@@ -17,6 +17,7 @@ package com.liferay.portlet.iframe.action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -50,13 +51,25 @@ public class ViewAction extends PortletAction {
 
 		String src = transformSrc(renderRequest, renderResponse);
 
-		if (Validator.isNull(src)) {
+		if (Validator.isNull(src) || src.equals(Http.HTTP_WITH_SLASH) ||
+			src.equals(Http.HTTPS_WITH_SLASH)) {
+
 			return mapping.findForward("/portal/portlet_not_setup");
 		}
 
 		renderRequest.setAttribute(WebKeys.IFRAME_SRC, src);
 
 		return mapping.findForward("portlet.iframe.view");
+	}
+
+	protected String getPassword(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws PortalException, SystemException {
+
+		PortletPreferences preferences = renderRequest.getPreferences();
+		String password = preferences.getValue("password", StringPool.BLANK);
+
+		return IFrameUtil.getPassword(renderRequest, password);
 	}
 
 	protected String getSrc(
@@ -79,16 +92,6 @@ public class ViewAction extends PortletAction {
 		String userName = preferences.getValue("user-name", StringPool.BLANK);
 
 		return IFrameUtil.getUserName(renderRequest, userName);
-	}
-
-	protected String getPassword(
-			RenderRequest renderRequest, RenderResponse renderResponse)
-		throws PortalException, SystemException {
-
-		PortletPreferences preferences = renderRequest.getPreferences();
-		String password = preferences.getValue("password", StringPool.BLANK);
-
-		return IFrameUtil.getPassword(renderRequest, password);
 	}
 
 	protected String transformSrc(

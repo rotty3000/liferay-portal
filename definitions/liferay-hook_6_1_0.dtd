@@ -29,6 +29,7 @@ auth.pipeline.pre
 auto.login.hooks
 captcha.check.portal.create_account
 captcha.engine.impl
+com.liferay.portal.servlet.filters.*Filter
 company.settings.form.configuration
 company.settings.form.identification
 company.settings.form.miscellaneous
@@ -80,6 +81,9 @@ organizations.form.add.main
 organizations.form.add.miscellaneous
 passwords.passwordpolicytoolkit.generator
 passwords.passwordpolicytoolkit.static
+phone.number.format.impl
+phone.number.format.international.regexp
+phone.number.format.usa.regexp
 portlet.add.default.resource.check.enabled
 portlet.add.default.resource.check.whitelist
 portlet.add.default.resource.check.whitelist.actions
@@ -88,6 +92,7 @@ servlet.session.create.events
 servlet.session.destroy.events
 servlet.service.events.post
 servlet.service.events.pre
+session.max.allowed
 session.phishing.protected.attributes
 session.store.password
 sites.form.add.advanced

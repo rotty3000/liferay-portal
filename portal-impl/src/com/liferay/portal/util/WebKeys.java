@@ -88,6 +88,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String DOCUMENT_LIBRARY_FILE_SHORTCUT = "DOCUMENT_LIBRARY_FILE_SHORTCUT";
 
+	public static final String DOCUMENT_LIBRARY_FILE_SHORTCUTS = "DOCUMENT_LIBRARY_FILE_SHORTCUTS";
+
 	public static final String DOCUMENT_LIBRARY_FILE_VERSION = "DOCUMENT_LIBRARY_FILE_VERSION";
 
 	public static final String DOCUMENT_LIBRARY_FOLDER = "DOCUMENT_LIBRARY_FOLDER";
@@ -361,6 +363,8 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 	public static final String SEL_LAYOUT = "SEL_LAYOUT";
 
 	public static final String SESSION_LISTENER = "SESSION_LISTENER";
+
+	public static final String SESSION_MAX_ALLOWED = "SESSION_MAX_ALLOWED";
 
 	public static final String SETUP_WIZARD_DEFAULT_LOCALE = "SETUP_WIZARD_DEFAULT_LOCALE";
 

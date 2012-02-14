@@ -21,40 +21,40 @@ import java.io.Serializable;
  */
 public class AssetEntryType implements Serializable {
 
-	public long getClassNameId() {
-		return _classNameId;
-	}
-
-	public void setClassNameId(long classNameId) {
-		_classNameId = classNameId;
-	}
-
 	public String getClassName() {
 		return _className;
 	}
 
-	public void setClassName(String className) {
-		_className = className;
+	public long getClassNameId() {
+		return _classNameId;
 	}
 
 	public String getPortletId() {
 		return _portletId;
 	}
 
-	public void setPortletId(String portletId) {
-		_portletId = portletId;
-	}
-
 	public String getPortletTitle() {
 		return _portletTitle;
+	}
+
+	public void setClassName(String className) {
+		_className = className;
+	}
+
+	public void setClassNameId(long classNameId) {
+		_classNameId = classNameId;
+	}
+
+	public void setPortletId(String portletId) {
+		_portletId = portletId;
 	}
 
 	public void setPortletTitle(String portletTitle) {
 		_portletTitle = portletTitle;
 	}
 
-	private long _classNameId;
 	private String _className;
+	private long _classNameId;
 	private String _portletId;
 	private String _portletTitle;
 

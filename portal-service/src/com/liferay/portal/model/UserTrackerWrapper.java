@@ -292,24 +292,24 @@ public class UserTrackerWrapper implements UserTracker,
 		_userTracker.persist();
 	}
 
-	public java.lang.String getFullName() {
-		return _userTracker.getFullName();
+	public void addPath(com.liferay.portal.model.UserTrackerPath path) {
+		_userTracker.addPath(path);
 	}
 
 	public java.lang.String getEmailAddress() {
 		return _userTracker.getEmailAddress();
 	}
 
-	public java.util.List<com.liferay.portal.model.UserTrackerPath> getPaths() {
-		return _userTracker.getPaths();
-	}
-
-	public void addPath(com.liferay.portal.model.UserTrackerPath path) {
-		_userTracker.addPath(path);
+	public java.lang.String getFullName() {
+		return _userTracker.getFullName();
 	}
 
 	public int getHits() {
 		return _userTracker.getHits();
+	}
+
+	public java.util.List<com.liferay.portal.model.UserTrackerPath> getPaths() {
+		return _userTracker.getPaths();
 	}
 
 	/**

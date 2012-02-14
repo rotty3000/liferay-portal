@@ -27,19 +27,19 @@ import java.util.List;
  */
 public interface PermissionCheckerBag extends Serializable {
 
-	public List<Group> getUserGroups();
-
-	public List<Organization> getUserOrgs();
-
-	public List<Group> getUserOrgGroups();
-
-	public List<Group> getUserUserGroupGroups();
-
 	public List<Group> getGroups();
 
 	public long[] getRoleIds();
 
 	public List<Role> getRoles();
+
+	public List<Group> getUserGroups();
+
+	public List<Group> getUserOrgGroups();
+
+	public List<Organization> getUserOrgs();
+
+	public List<Group> getUserUserGroupGroups();
 
 	/**
 	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(PermissionChecker,
@@ -58,6 +58,10 @@ public interface PermissionCheckerBag extends Serializable {
 		throws Exception;
 
 	public boolean isGroupAdmin(
+			PermissionChecker permissionChecker, Group group)
+		throws Exception;
+
+	public boolean isGroupMember(
 			PermissionChecker permissionChecker, Group group)
 		throws Exception;
 

@@ -490,17 +490,20 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * </p>
 	 *
 	 * @param  fileEntryId the file entry to check out
+	 * @param  serviceContext the service context to be applied
 	 * @throws PortalException if the file entry could not be found
 	 * @throws SystemException if a system exception occurred
 	 * @see    #cancelCheckOut(long)
 	 * @see    #checkInFileEntry(long, boolean, String, ServiceContext)
 	 */
-	public void checkOutFileEntry(long fileEntryId)
+	public void checkOutFileEntry(
+			long fileEntryId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
-		FileEntry fileEntry = repository.checkOutFileEntry(fileEntryId);
+		FileEntry fileEntry = repository.checkOutFileEntry(
+			fileEntryId, serviceContext);
 
 		FileVersion fileVersion = fileEntry.getLatestFileVersion();
 
@@ -528,6 +531,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @param  expirationTime the time in milliseconds before the lock expires.
 	 *         If the value is <code>0</code>, the default expiration time will
 	 *         be used from <code>portal.properties>.
+	 * @param  serviceContext the service context to be applied
 	 * @return the file entry
 	 * @throws PortalException if the file entry could not be found
 	 * @throws SystemException if a system exception occurred
@@ -535,13 +539,14 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	 * @see    #checkInFileEntry(long, String)
 	 */
 	public FileEntry checkOutFileEntry(
-			long fileEntryId, String owner, long expirationTime)
+			long fileEntryId, String owner, long expirationTime,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Repository repository = getRepository(0, fileEntryId, 0);
 
 		FileEntry fileEntry = repository.checkOutFileEntry(
-			fileEntryId, owner, expirationTime);
+			fileEntryId, owner, expirationTime, serviceContext);
 
 		FileVersion fileVersion = fileEntry.getLatestFileVersion();
 
@@ -1474,8 +1479,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		return getGroupFileEntries(
-			groupId, userId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-			start, end, new RepositoryModelModifiedDateComparator());
+			groupId, userId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, start,
+			end, new RepositoryModelModifiedDateComparator());
 	}
 
 	/**
@@ -1512,8 +1517,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		return getGroupFileEntries(
-			groupId, userId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-			start, end, obc);
+			groupId, userId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, start,
+			end, obc);
 	}
 
 	/**
@@ -2594,8 +2599,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	protected void deleteFileEntry(
-			long oldFileEntryId, long newFileEntryId,
-			Repository fromRepository, Repository toRepository)
+			long oldFileEntryId, long newFileEntryId, Repository fromRepository,
+			Repository toRepository)
 		throws PortalException, SystemException {
 
 		try {

@@ -151,16 +151,16 @@ public class PortletBagImpl implements PortletBag {
 		return _openSearchInstance;
 	}
 
+	public PermissionPropagator getPermissionPropagatorInstance() {
+		return _permissionPropagatorInstance;
+	}
+
 	public PollerProcessor getPollerProcessorInstance() {
 		return _pollerProcessorInstance;
 	}
 
 	public MessageListener getPopMessageListenerInstance() {
 		return _popMessageListenerInstance;
-	}
-
-	public PermissionPropagator getPermissionPropagatorInstance() {
-		return _permissionPropagatorInstance;
 	}
 
 	public PortletDataHandler getPortletDataHandlerInstance() {
@@ -261,7 +261,7 @@ public class PortletBagImpl implements PortletBag {
 	private SocialRequestInterpreter _socialRequestInterpreterInstance;
 	private URLEncoder _urlEncoderInstance;
 	private WebDAVStorage _webDAVStorageInstance;
-	private Method _xmlRpcMethodInstance;
 	private List<WorkflowHandler> _workflowHandlerInstances;
+	private Method _xmlRpcMethodInstance;
 
 }

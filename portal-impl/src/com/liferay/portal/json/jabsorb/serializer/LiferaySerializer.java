@@ -20,7 +20,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import org.jabsorb.JSONSerializer;
 import org.jabsorb.serializer.AbstractSerializer;
@@ -99,10 +103,22 @@ public class LiferaySerializer extends AbstractSerializer {
 		String fieldName = null;
 
 		try {
+			Set<String> processedFieldNames = new HashSet<String>();
+
 			while (javaClass != null) {
 				Field[] declaredFields = javaClass.getDeclaredFields();
 
 				for (Field field : declaredFields) {
+					fieldName = field.getName();
+
+					// Avoid processing overridden fields of super classes
+
+					if (processedFieldNames.contains(fieldName)) {
+						continue;
+					}
+
+					processedFieldNames.add(fieldName);
+
 					int modifiers = field.getModifiers();
 
 					// Only marshall fields that are not final, static, or
@@ -119,8 +135,6 @@ public class LiferaySerializer extends AbstractSerializer {
 					if (!field.isAccessible()) {
 						field.setAccessible(true);
 					}
-
-					fieldName = field.getName();
 
 					if (fieldName.startsWith("_")) {
 						fieldName = fieldName.substring(1);
@@ -277,10 +291,22 @@ public class LiferaySerializer extends AbstractSerializer {
 		String fieldName = null;
 
 		try {
+			Set<String> processedFieldNames = new HashSet<String>();
+
 			while (javaClass != null) {
 				Field[] fields = javaClass.getDeclaredFields();
 
 				for (Field field : fields) {
+					fieldName = field.getName();
+
+					// Avoid processing overridden fields of super classes
+
+					if (processedFieldNames.contains(fieldName)) {
+						continue;
+					}
+
+					processedFieldNames.add(fieldName);
+
 					int modifiers = field.getModifiers();
 
 					// Only unmarshall fields that are not final, static, or
@@ -298,8 +324,6 @@ public class LiferaySerializer extends AbstractSerializer {
 						field.setAccessible(true);
 					}
 
-					fieldName = field.getName();
-
 					if (fieldName.startsWith("_")) {
 						fieldName = fieldName.substring(1);
 					}
@@ -315,7 +339,8 @@ public class LiferaySerializer extends AbstractSerializer {
 					}
 
 					if (value != null) {
-						field.set(javaClassInstance, value);
+						BeanUtils.copyProperty(
+							javaClassInstance, fieldName, value);
 					}
 				}
 
@@ -330,8 +355,9 @@ public class LiferaySerializer extends AbstractSerializer {
 		return javaClassInstance;
 	}
 
-	private static Class<?>[] _JSON_CLASSES = {JSONObject.class};
+	private static final Class<?>[] _JSON_CLASSES = {JSONObject.class};
 
-	private static Class<?>[] _SERIALIZABLE_CLASSES = {Serializable.class};
+	private static final Class<?>[] _SERIALIZABLE_CLASSES =
+		{Serializable.class};
 
 }

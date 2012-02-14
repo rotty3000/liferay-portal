@@ -41,7 +41,7 @@ public abstract class DoAsUserThread extends Thread {
 			User user = UserLocalServiceUtil.getUserById(_userId);
 
 			PermissionChecker permissionChecker =
-				PermissionCheckerFactoryUtil.create(user, true);
+				PermissionCheckerFactoryUtil.create(user);
 
 			PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
@@ -62,7 +62,7 @@ public abstract class DoAsUserThread extends Thread {
 
 	private static Log _log = LogFactoryUtil.getLog(DoAsUserThread.class);
 
-	private long _userId;
 	private boolean _success;
+	private long _userId;
 
 }

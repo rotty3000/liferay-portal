@@ -35,6 +35,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import java.util.Set;
 
@@ -288,15 +289,14 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 			DataAccess.cleanUp(con, ps, rs);
 		}
 
-		if (isSupportsAlterColumnType()) {
+		try {
 			runSQL("alter_column_type DLFileVersion extraSettings TEXT null");
 			runSQL("alter_column_type DLFileVersion title VARCHAR(255) null");
 			runSQL("alter table DLFileVersion drop column name");
 		}
-		else {
+		catch (SQLException sqle) {
 			upgradeTable(
-				DLFileVersionTable.TABLE_NAME,
-				DLFileVersionTable.TABLE_COLUMNS,
+				DLFileVersionTable.TABLE_NAME, DLFileVersionTable.TABLE_COLUMNS,
 				DLFileVersionTable.TABLE_SQL_CREATE,
 				DLFileVersionTable.TABLE_SQL_ADD_INDEXES);
 		}
@@ -422,8 +422,8 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 			con = DataAccess.getConnection();
 
 			ps = con.prepareStatement(
-				"select fileVersionId, userId, extension, version from " +
-					"DLFileVersion where fileEntryId = " + fileEntryId +
+				"select fileVersionId, userId, extension, mimeType, version " +
+					"from DLFileVersion where fileEntryId = " + fileEntryId +
 						" order by version asc");
 
 			rs = ps.executeQuery();
@@ -432,20 +432,19 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 				long fileVersionId = rs.getLong("fileVersionId");
 				long userId = rs.getLong("userId");
 				String extension = rs.getString("extension");
+				String mimeType = rs.getString("mimeType");
 				String version = rs.getString("version");
 
-				String mimeType = MimeTypesUtil.getContentType(
-					"A." + extension);
-
-				DLFileVersion dlFileVersion = new DLFileVersionImpl();
-
-				dlFileVersion.setFileVersionId(fileVersionId);
-				dlFileVersion.setUserId(userId);
-				dlFileVersion.setFileEntryId(fileEntryId);
-				dlFileVersion.setMimeType(mimeType);
-				dlFileVersion.setVersion(version);
-
 				if (_imageMimeTypes.contains(mimeType)) {
+					DLFileVersion dlFileVersion = new DLFileVersionImpl();
+
+					dlFileVersion.setFileVersionId(fileVersionId);
+					dlFileVersion.setUserId(userId);
+					dlFileVersion.setFileEntryId(fileEntryId);
+					dlFileVersion.setExtension(extension);
+					dlFileVersion.setMimeType(mimeType);
+					dlFileVersion.setVersion(version);
+
 					FileVersion fileVersion = new LiferayFileVersion(
 						dlFileVersion);
 

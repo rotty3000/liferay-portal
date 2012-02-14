@@ -31,6 +31,11 @@ public abstract class BasePortalFilter extends BaseFilter {
 	}
 
 	@Override
+	public void setFilterEnabled(boolean filterEnabled) {
+		_filterEnabled = filterEnabled;
+	}
+
+	@Override
 	protected Log getLog() {
 		return _log;
 	}

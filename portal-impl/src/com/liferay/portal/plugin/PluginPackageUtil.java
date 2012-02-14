@@ -154,14 +154,14 @@ public class PluginPackageUtil {
 		return _instance._getRepository(repositoryURL);
 	}
 
+	public static String[] getRepositoryURLs() throws SystemException {
+		return _instance._getRepositoryURLs();
+	}
+
 	public static String[] getStatusAndInstalledVersion(
 		PluginPackage pluginPackage) {
 
 		return _instance._getStatusAndInstalledVersion(pluginPackage);
-	}
-
-	public static String[] getRepositoryURLs() throws SystemException {
-		return _instance._getRepositoryURLs();
 	}
 
 	public static String[] getSupportedTypes() {
@@ -320,8 +320,8 @@ public class PluginPackageUtil {
 
 		for (int i = 0; i < repositoryURLs.length; i++) {
 			try {
-				RemotePluginPackageRepository repository =
-					_getRepository(repositoryURLs[i]);
+				RemotePluginPackageRepository repository = _getRepository(
+					repositoryURLs[i]);
 
 				pluginPackages.addAll(repository.getPluginPackages());
 			}
@@ -351,8 +351,8 @@ public class PluginPackageUtil {
 		String[] repositoryURLs = _getRepositoryURLs();
 
 		for (int i = 0; i < repositoryURLs.length; i++) {
-			RemotePluginPackageRepository repository =
-				_getRepository(repositoryURLs[i]);
+			RemotePluginPackageRepository repository = _getRepository(
+				repositoryURLs[i]);
 
 			List<PluginPackage> curPluginPackages =
 				repository.findPluginsByGroupIdAndArtifactId(
@@ -418,8 +418,8 @@ public class PluginPackageUtil {
 			String repositoryURL = repositoryURLs[i];
 
 			try {
-				RemotePluginPackageRepository repository =
-					_getRepository(repositoryURL);
+				RemotePluginPackageRepository repository = _getRepository(
+					repositoryURL);
 
 				return repository.findPluginByArtifactURL(url);
 			}

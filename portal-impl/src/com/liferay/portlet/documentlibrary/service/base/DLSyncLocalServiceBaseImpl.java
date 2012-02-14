@@ -1168,6 +1168,12 @@ public abstract class DLSyncLocalServiceBaseImpl implements DLSyncLocalService,
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return DLSync.class;
 	}

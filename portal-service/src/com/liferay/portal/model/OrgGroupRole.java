@@ -29,9 +29,9 @@ public interface OrgGroupRole extends OrgGroupRoleModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.model.impl.OrgGroupRoleImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public boolean containsOrganization(
-		java.util.List<com.liferay.portal.model.Organization> organizations);
-
 	public boolean containsGroup(
 		java.util.List<com.liferay.portal.model.Group> groups);
+
+	public boolean containsOrganization(
+		java.util.List<com.liferay.portal.model.Organization> organizations);
 }

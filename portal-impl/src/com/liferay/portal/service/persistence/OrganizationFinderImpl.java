@@ -45,50 +45,50 @@ import java.util.Map;
 public class OrganizationFinderImpl
 	extends BasePersistenceImpl<Organization> implements OrganizationFinder {
 
-	public static String COUNT_BY_ORGANIZATION_ID =
+	public static final String COUNT_BY_ORGANIZATION_ID =
 		OrganizationFinder.class.getName() + ".countByOrganizationId";
 
-	public static String COUNT_BY_C_PO_N_S_C_Z_R_C =
+	public static final String COUNT_BY_C_PO_N_S_C_Z_R_C =
 		OrganizationFinder.class.getName() + ".countByC_PO_N_S_C_Z_R_C";
 
-	public static String COUNT_BY_C_PO_N_L_S_C_Z_R_C =
+	public static final String COUNT_BY_C_PO_N_L_S_C_Z_R_C =
 		OrganizationFinder.class.getName() + ".countByC_PO_N_L_S_C_Z_R_C";
 
-	public static String FIND_BY_COMPANY_ID =
+	public static final String FIND_BY_COMPANY_ID =
 		OrganizationFinder.class.getName() + ".findByCompanyId";
 
-	public static String FIND_BY_C_PO_N_S_C_Z_R_C =
+	public static final String FIND_BY_C_PO_N_S_C_Z_R_C =
 		OrganizationFinder.class.getName() + ".findByC_PO_N_S_C_Z_R_C";
 
-	public static String FIND_BY_C_PO_N_L_S_C_Z_R_C =
+	public static final String FIND_BY_C_PO_N_L_S_C_Z_R_C =
 		OrganizationFinder.class.getName() + ".findByC_PO_N_L_S_C_Z_R_C";
 
-	public static String JOIN_BY_GROUPS_PERMISSIONS =
+	public static final String JOIN_BY_GROUPS_PERMISSIONS =
 		OrganizationFinder.class.getName() + ".joinByGroupsPermissions";
 
-	public static String JOIN_BY_ORGANIZATIONS_GROUPS =
+	public static final String JOIN_BY_ORGANIZATIONS_GROUPS =
 		OrganizationFinder.class.getName() + ".joinByOrganizationsGroups";
 
-	public static String JOIN_BY_ORGANIZATIONS_PASSWORD_POLICIES =
+	public static final String JOIN_BY_ORGANIZATIONS_PASSWORD_POLICIES =
 		OrganizationFinder.class.getName() +
 			".joinByOrganizationsPasswordPolicies";
 
-	public static String JOIN_BY_ORGANIZATIONS_ROLES =
+	public static final String JOIN_BY_ORGANIZATIONS_ROLES =
 		OrganizationFinder.class.getName() + ".joinByOrganizationsRoles";
 
-	public static String JOIN_BY_ORGANIZATIONS_USERS =
+	public static final String JOIN_BY_ORGANIZATIONS_USERS =
 		OrganizationFinder.class.getName() + ".joinByOrganizationsUsers";
 
-	public static String JOIN_BY_ORG_GROUP_PERMISSION =
+	public static final String JOIN_BY_ORG_GROUP_PERMISSION =
 		OrganizationFinder.class.getName() + ".joinByOrgGroupPermission";
 
-	public static String JOIN_BY_USERS_ORGS =
+	public static final String JOIN_BY_USERS_ORGS =
 		OrganizationFinder.class.getName() + ".joinByUsersOrgs";
 
 	public int countByKeywords(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String keywords,
-			String type, Long regionId, Long countryId,
+			String parentOrganizationIdComparator, String keywords, String type,
+			Long regionId, Long countryId,
 			LinkedHashMap<String, Object> params)
 		throws SystemException {
 
@@ -160,9 +160,9 @@ public class OrganizationFinderImpl
 
 	public int countByC_PO_N_T_S_C_Z_R_C(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String[] names,
-			String type, String[] streets, String[] cities, String[] zips,
-			Long regionId, Long countryId, LinkedHashMap<String, Object> params,
+			String parentOrganizationIdComparator, String[] names, String type,
+			String[] streets, String[] cities, String[] zips, Long regionId,
+			Long countryId, LinkedHashMap<String, Object> params,
 			boolean andOperator)
 		throws SystemException {
 
@@ -204,20 +204,15 @@ public class OrganizationFinderImpl
 				sql, "lower(Organization_.name)", StringPool.LIKE, false,
 				names);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street1)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street1)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street2)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street2)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street3)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street3)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.city)", StringPool.LIKE, false,
-				cities);
+				sql, "lower(Address.city)", StringPool.LIKE, false, cities);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.zip)", StringPool.LIKE, true,
-				zips);
+				sql, "lower(Address.zip)", StringPool.LIKE, true, zips);
 
 			if (regionId == null) {
 				sql = StringUtil.replace(sql, REGION_ID_SQL, StringPool.BLANK);
@@ -352,8 +347,8 @@ public class OrganizationFinderImpl
 
 	public List<Organization> findByKeywords(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String keywords,
-			String type, Long regionId, Long countryId,
+			String parentOrganizationIdComparator, String keywords, String type,
+			Long regionId, Long countryId,
 			LinkedHashMap<String, Object> params, int start, int end,
 			OrderByComparator obc)
 		throws SystemException {
@@ -401,9 +396,9 @@ public class OrganizationFinderImpl
 
 	public List<Organization> findByC_PO_N_T_S_C_Z_R_C(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String[] names,
-			String type, String[] streets, String[] cities, String[] zips,
-			Long regionId, Long countryId, LinkedHashMap<String, Object> params,
+			String parentOrganizationIdComparator, String[] names, String type,
+			String[] streets, String[] cities, String[] zips, Long regionId,
+			Long countryId, LinkedHashMap<String, Object> params,
 			boolean andOperator, int start, int end, OrderByComparator obc)
 		throws SystemException {
 
@@ -447,23 +442,17 @@ public class OrganizationFinderImpl
 		sql = StringUtil.replace(sql, "[$WHERE$]", getWhere(params));
 		sql = sql.concat(StringPool.CLOSE_PARENTHESIS);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Organization_.name)", StringPool.LIKE, false,
-			names);
+			sql, "lower(Organization_.name)", StringPool.LIKE, false, names);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Address.street1)", StringPool.LIKE, true,
-			streets);
+			sql, "lower(Address.street1)", StringPool.LIKE, true, streets);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Address.street2)", StringPool.LIKE, true,
-			streets);
+			sql, "lower(Address.street2)", StringPool.LIKE, true, streets);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Address.street3)", StringPool.LIKE, true,
-			streets);
+			sql, "lower(Address.street3)", StringPool.LIKE, true, streets);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Address.city)", StringPool.LIKE, false,
-			cities);
+			sql, "lower(Address.city)", StringPool.LIKE, false, cities);
 		sql = CustomSQLUtil.replaceKeywords(
-			sql, "lower(Address.zip)", StringPool.LIKE, true,
-			zips);
+			sql, "lower(Address.zip)", StringPool.LIKE, true, zips);
 		sql = StringUtil.replace(
 			sql, "[$PARENT_ORGANIZATION_ID_COMPARATOR$]",
 			parentOrganizationIdComparator);
@@ -573,10 +562,9 @@ public class OrganizationFinderImpl
 
 	protected int countByPermissions(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String[] names,
-			String type, String[] streets, String[] cities, String[] zips,
-			Long regionId, Long countryId, long resourceId, long groupId,
-			boolean andOperator)
+			String parentOrganizationIdComparator, String[] names, String type,
+			String[] streets, String[] cities, String[] zips, Long regionId,
+			Long countryId, long resourceId, long groupId, boolean andOperator)
 		throws SystemException {
 
 		Session session = null;
@@ -652,20 +640,15 @@ public class OrganizationFinderImpl
 				sql, "lower(Organization_.name)", StringPool.LIKE, false,
 				names);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street1)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street1)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street2)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street2)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street3)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street3)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.city)", StringPool.LIKE, false,
-				cities);
+				sql, "lower(Address.city)", StringPool.LIKE, false, cities);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.zip)", StringPool.LIKE, true,
-				zips);
+				sql, "lower(Address.zip)", StringPool.LIKE, true, zips);
 
 			if (regionId == null) {
 				sql = StringUtil.replace(sql, REGION_ID_SQL, StringPool.BLANK);
@@ -736,10 +719,10 @@ public class OrganizationFinderImpl
 
 	protected List<Organization> findByPermissions(
 			long companyId, long parentOrganizationId,
-			String parentOrganizationIdComparator, String[] names,
-			String type, String[] streets, String[] cities, String[] zips,
-			Long regionId, Long countryId, long resourceId, long groupId,
-			boolean andOperator, int start, int end, OrderByComparator obc)
+			String parentOrganizationIdComparator, String[] names, String type,
+			String[] streets, String[] cities, String[] zips, Long regionId,
+			Long countryId, long resourceId, long groupId, boolean andOperator,
+			int start, int end, OrderByComparator obc)
 		throws SystemException {
 
 		Session session = null;
@@ -816,20 +799,15 @@ public class OrganizationFinderImpl
 				sql, "lower(Organization_.name)", StringPool.LIKE, false,
 				names);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street1)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street1)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street2)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street2)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.street3)", StringPool.LIKE, true,
-				streets);
+				sql, "lower(Address.street3)", StringPool.LIKE, true, streets);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.city)", StringPool.LIKE, false,
-				cities);
+				sql, "lower(Address.city)", StringPool.LIKE, false, cities);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Address.zip)", StringPool.LIKE, true,
-				zips);
+				sql, "lower(Address.zip)", StringPool.LIKE, true, zips);
 
 			if (regionId == null) {
 				sql = StringUtil.replace(sql, REGION_ID_SQL, StringPool.BLANK);
@@ -1154,11 +1132,11 @@ public class OrganizationFinderImpl
 		}
 	}
 
-	protected static String COUNTRY_ID_SQL =
+	protected static final String COUNTRY_ID_SQL =
 		"((Organization_.countryId = ?) OR (Address.countryId = ?)) " +
 			"[$AND_OR_CONNECTOR$]";
 
-	protected static String REGION_ID_SQL =
+	protected static final String REGION_ID_SQL =
 		"((Organization_.regionId = ?) OR (Address.regionId = ?)) " +
 			"[$AND_OR_CONNECTOR$]";
 

@@ -25,6 +25,7 @@ import com.liferay.portal.GroupFriendlyURLException;
 import com.liferay.portal.ModelListenerException;
 import com.liferay.portal.NoSuchContactException;
 import com.liferay.portal.NoSuchGroupException;
+import com.liferay.portal.NoSuchOrganizationException;
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.NoSuchTicketException;
 import com.liferay.portal.NoSuchUserException;
@@ -739,16 +740,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Organizations
 
-		boolean indexingEnabled = serviceContext.isIndexingEnabled();
-
-		serviceContext.setIndexingEnabled(false);
-
-		try {
-			updateOrganizations(userId, organizationIds, serviceContext);
-		}
-		finally {
-			serviceContext.setIndexingEnabled(indexingEnabled);
-		}
+		updateOrganizations(userId, organizationIds, false);
 
 		// Roles
 
@@ -785,11 +777,13 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Expando
 
-		user.setExpandoBridgeAttributes(serviceContext);
+		if (serviceContext != null) {
+			user.setExpandoBridgeAttributes(serviceContext);
+		}
 
 		// Indexer
 
-		if (serviceContext.isIndexingEnabled()) {
+		if ((serviceContext == null) || serviceContext.isIndexingEnabled()) {
 			reindex(user);
 		}
 
@@ -801,18 +795,26 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			workflowUserId = defaultUser.getUserId();
 		}
 
-		serviceContext.setAttribute("autoPassword", autoPassword);
-		serviceContext.setAttribute("sendEmail", sendEmail);
+		ServiceContext workflowServiceContext = serviceContext;
+
+		if (workflowServiceContext == null) {
+			workflowServiceContext = new ServiceContext();
+		}
+
+		workflowServiceContext.setAttribute("autoPassword", autoPassword);
+		workflowServiceContext.setAttribute("sendEmail", sendEmail);
 
 		WorkflowHandlerRegistryUtil.startWorkflowInstance(
 			companyId, workflowUserId, User.class.getName(), userId, user,
-			serviceContext);
+			workflowServiceContext);
 
-		String passwordUnencrypted =
-			(String) serviceContext.getAttribute("passwordUnencrypted");
+		if (serviceContext != null) {
+			String passwordUnencrypted =
+				(String)serviceContext.getAttribute("passwordUnencrypted");
 
-		if (Validator.isNotNull(passwordUnencrypted)) {
-			user.setPasswordUnencrypted(passwordUnencrypted);
+			if (Validator.isNotNull(passwordUnencrypted)) {
+				user.setPasswordUnencrypted(passwordUnencrypted);
+			}
 		}
 
 		return user;
@@ -1458,8 +1460,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 			mailService.addUser(
 				user.getCompanyId(), user.getUserId(), mailPassword,
-				user.getFirstName(), user.getMiddleName(),
-				user.getLastName(), user.getEmailAddress());
+				user.getFirstName(), user.getMiddleName(), user.getLastName(),
+				user.getEmailAddress());
 		}
 
 		boolean sendEmail = GetterUtil.getBoolean(
@@ -2929,7 +2931,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			andOperator = true;
 		}
 
-		params.put("keywords", keywords);
+		if (params != null) {
+			params.put("keywords", keywords);
+		}
 
 		return search(
 			companyId, firstName, middleName, lastName, fullName, screenName,
@@ -2979,9 +2983,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	public List<User> search(
 			long companyId, String firstName, String middleName,
-			String lastName, String screenName, String emailAddress,
-			int status, LinkedHashMap<String, Object> params,
-			boolean andSearch, int start, int end, OrderByComparator obc)
+			String lastName, String screenName, String emailAddress, int status,
+			LinkedHashMap<String, Object> params, boolean andSearch, int start,
+			int end, OrderByComparator obc)
 		throws SystemException {
 
 		return userFinder.findByC_FN_MN_LN_SN_EA_S(
@@ -3030,9 +3034,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	public Hits search(
 			long companyId, String firstName, String middleName,
-			String lastName, String screenName, String emailAddress,
-			int status, LinkedHashMap<String, Object> params,
-			boolean andSearch, int start, int end, Sort sort)
+			String lastName, String screenName, String emailAddress, int status,
+			LinkedHashMap<String, Object> params, boolean andSearch, int start,
+			int end, Sort sort)
 		throws SystemException {
 
 		return search(
@@ -3087,9 +3091,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	public int searchCount(
 			long companyId, String firstName, String middleName,
-			String lastName, String screenName, String emailAddress,
-			int status, LinkedHashMap<String, Object> params,
-			boolean andSearch)
+			String lastName, String screenName, String emailAddress, int status,
+			LinkedHashMap<String, Object> params, boolean andSearch)
 		throws SystemException {
 
 		return userFinder.countByC_FN_MN_LN_SN_EA_S(
@@ -3726,38 +3729,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			long userId, long[] newGroupIds, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (newGroupIds == null) {
-			return;
-		}
-
-		List<Group> oldGroups = userPersistence.getGroups(userId);
-
-		List<Long> oldGroupIds = new ArrayList<Long>(oldGroups.size());
-
-		for (Group oldGroup : oldGroups) {
-			long oldGroupId = oldGroup.getGroupId();
-
-			oldGroupIds.add(oldGroupId);
-
-			if (!ArrayUtil.contains(newGroupIds, oldGroupId)) {
-				unsetGroupUsers(
-					oldGroupId, new long[] {userId}, serviceContext);
-			}
-		}
-
-		for (long newGroupId : newGroupIds) {
-			if (!oldGroupIds.contains(newGroupId)) {
-				addGroupUsers(newGroupId, new long[] {userId});
-			}
-		}
-
-		if (serviceContext.isIndexingEnabled()) {
-			Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
-
-			indexer.reindex(new long[] {userId});
-		}
-
-		PermissionCacheUtil.clearCache();
+		updateGroups(
+			userId, newGroupIds, serviceContext,
+			serviceContext.isIndexingEnabled());
 	}
 
 	/**
@@ -3932,12 +3906,18 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			workflowUserId = defaultUser.getUserId();
 		}
 
-		serviceContext.setAttribute("autoPassword", autoPassword);
-		serviceContext.setAttribute("sendEmail", sendEmail);
+		ServiceContext workflowServiceContext = serviceContext;
+
+		if (workflowServiceContext == null) {
+			workflowServiceContext = new ServiceContext();
+		}
+
+		workflowServiceContext.setAttribute("autoPassword", autoPassword);
+		workflowServiceContext.setAttribute("sendEmail", sendEmail);
 
 		WorkflowHandlerRegistryUtil.startWorkflowInstance(
 			companyId, workflowUserId, User.class.getName(), user.getUserId(),
-			user, serviceContext);
+			user, workflowServiceContext);
 
 		return getUserByEmailAddress(companyId, emailAddress);
 	}
@@ -4154,39 +4134,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (newOrganizationIds == null) {
-			return;
-		}
-
-		List<Organization> oldOrganizations = userPersistence.getOrganizations(
-			userId);
-
-		List<Long> oldOrganizationIds = new ArrayList<Long>(
-			oldOrganizations.size());
-
-		for (Organization oldOrganization : oldOrganizations) {
-			long oldOrganizationId = oldOrganization.getOrganizationId();
-
-			oldOrganizationIds.add(oldOrganizationId);
-
-			if (!ArrayUtil.contains(newOrganizationIds, oldOrganizationId)) {
-				unsetOrganizationUsers(oldOrganizationId, new long[] {userId});
-			}
-		}
-
-		for (long newOrganizationId : newOrganizationIds) {
-			if (!oldOrganizationIds.contains(newOrganizationId)) {
-				addOrganizationUsers(newOrganizationId, new long[] {userId});
-			}
-		}
-
-		if (serviceContext.isIndexingEnabled()) {
-			Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
-
-			indexer.reindex(new long[] {userId});
-		}
-
-		PermissionCacheUtil.clearCache();
+		updateOrganizations(
+			userId, newOrganizationIds, serviceContext.isIndexingEnabled());
 	}
 
 	/**
@@ -4726,17 +4675,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Groups and organizations
 
-		boolean indexingEnabled = serviceContext.isIndexingEnabled();
-
-		serviceContext.setIndexingEnabled(false);
-
-		try {
-			updateGroups(userId, groupIds, serviceContext);
-			updateOrganizations(userId, organizationIds, serviceContext);
-		}
-		finally {
-			serviceContext.setIndexingEnabled(indexingEnabled);
-		}
+		updateGroups(userId, groupIds, serviceContext, false);
+		updateOrganizations(userId, organizationIds, false);
 
 		// Roles
 
@@ -4775,7 +4715,9 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Expando
 
-		user.setExpandoBridgeAttributes(serviceContext);
+		if (serviceContext != null) {
+			user.setExpandoBridgeAttributes(serviceContext);
+		}
 
 		// Message boards
 
@@ -4788,7 +4730,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Indexer
 
-		if (serviceContext.isIndexingEnabled()) {
+		if ((serviceContext == null) || serviceContext.isIndexingEnabled()) {
 			Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
 
 			indexer.reindex(user);
@@ -4796,7 +4738,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		// Email address verification
 
-		if (sendEmailAddressVerification) {
+		if ((serviceContext != null) && sendEmailAddressVerification) {
 			sendEmailAddressVerification(user, emailAddress, serviceContext);
 		}
 
@@ -5200,10 +5142,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			searchContext.setCompanyId(companyId);
 			searchContext.setEnd(end);
 
-			String keywords = (String)params.remove("keywords");
+			if (params != null) {
+				String keywords = (String)params.remove("keywords");
 
-			if (Validator.isNotNull(keywords)) {
-				searchContext.setKeywords(keywords);
+				if (Validator.isNotNull(keywords)) {
+					searchContext.setKeywords(keywords);
+				}
 			}
 
 			QueryConfig queryConfig = new QueryConfig();
@@ -5316,6 +5260,84 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		user.setDigest(StringPool.BLANK);
 	}
 
+	protected void updateGroups(
+			long userId, long[] newGroupIds, ServiceContext serviceContext,
+			boolean indexingEnabled)
+		throws PortalException, SystemException {
+
+		if (newGroupIds == null) {
+			return;
+		}
+
+		List<Group> oldGroups = userPersistence.getGroups(userId);
+
+		List<Long> oldGroupIds = new ArrayList<Long>(oldGroups.size());
+
+		for (Group oldGroup : oldGroups) {
+			long oldGroupId = oldGroup.getGroupId();
+
+			oldGroupIds.add(oldGroupId);
+
+			if (!ArrayUtil.contains(newGroupIds, oldGroupId)) {
+				unsetGroupUsers(
+					oldGroupId, new long[] {userId}, serviceContext);
+			}
+		}
+
+		for (long newGroupId : newGroupIds) {
+			if (!oldGroupIds.contains(newGroupId)) {
+				addGroupUsers(newGroupId, new long[] {userId});
+			}
+		}
+
+		if (indexingEnabled) {
+			Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+
+			indexer.reindex(new long[] {userId});
+		}
+
+		PermissionCacheUtil.clearCache();
+	}
+
+	protected void updateOrganizations(
+			long userId, long[] newOrganizationIds, boolean indexingEnabled)
+		throws PortalException, SystemException {
+
+		if (newOrganizationIds == null) {
+			return;
+		}
+
+		List<Organization> oldOrganizations = userPersistence.getOrganizations(
+			userId);
+
+		List<Long> oldOrganizationIds = new ArrayList<Long>(
+			oldOrganizations.size());
+
+		for (Organization oldOrganization : oldOrganizations) {
+			long oldOrganizationId = oldOrganization.getOrganizationId();
+
+			oldOrganizationIds.add(oldOrganizationId);
+
+			if (!ArrayUtil.contains(newOrganizationIds, oldOrganizationId)) {
+				unsetOrganizationUsers(oldOrganizationId, new long[] {userId});
+			}
+		}
+
+		for (long newOrganizationId : newOrganizationIds) {
+			if (!oldOrganizationIds.contains(newOrganizationId)) {
+				addOrganizationUsers(newOrganizationId, new long[] {userId});
+			}
+		}
+
+		if (indexingEnabled) {
+			Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+
+			indexer.reindex(new long[] {userId});
+		}
+
+		PermissionCacheUtil.clearCache();
+	}
+
 	protected void updateUserGroupRoles(
 			User user, long[] groupIds, long[] organizationIds,
 			List<UserGroupRole> userGroupRoles)
@@ -5421,6 +5443,17 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		}
 
 		validateFullName(companyId, firstName, middleName, lastName);
+
+		if (organizationIds != null) {
+			for (long organizationId : organizationIds) {
+				Organization organization =
+					organizationPersistence.fetchByPrimaryKey(organizationId);
+
+				if (organization == null) {
+					throw new NoSuchOrganizationException();
+				}
+			}
+		}
 	}
 
 	protected void validate(

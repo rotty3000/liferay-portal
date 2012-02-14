@@ -569,8 +569,19 @@ public class PortalImpl implements Portal {
 
 		Layout layout = themeDisplay.getLayout();
 
-		addDefaultResource(themeDisplay, layout, portlet, true);
-		addDefaultResource(themeDisplay, layout, portlet, false);
+		long groupId = 0;
+
+		if (layout.isTypeControlPanel()) {
+			groupId = themeDisplay.getScopeGroupId();
+		}
+		else {
+			groupId = getScopeGroupId(layout, portlet.getPortletId());
+		}
+
+		addDefaultResource(
+			themeDisplay.getCompanyId(), groupId, layout, portlet, true);
+		addDefaultResource(
+			themeDisplay.getCompanyId(), groupId, layout, portlet, false);
 	}
 
 	public void addPortletDefaultResource(
@@ -2170,14 +2181,12 @@ public class PortalImpl implements Portal {
 		addPageSubtitle(journalArticle.getTitle(locale), request);
 		addPageDescription(journalArticle.getDescription(locale), request);
 
-		List<AssetTag> assetTags =
-			AssetTagLocalServiceUtil.getTags(
-				JournalArticle.class.getName(), journalArticle.getPrimaryKey());
+		List<AssetTag> assetTags = AssetTagLocalServiceUtil.getTags(
+			JournalArticle.class.getName(), journalArticle.getPrimaryKey());
 
 		if (!assetTags.isEmpty()) {
 			addPageKeywords(
-				ListUtil.toString(assetTags, AssetTag.NAME_ACCESSOR),
-				request);
+				ListUtil.toString(assetTags, AssetTag.NAME_ACCESSOR), request);
 		}
 
 		return layoutActualURL;
@@ -2274,9 +2283,8 @@ public class PortalImpl implements Portal {
 			if (Validator.isNotNull(queryString) &&
 				layoutActualURL.contains(StringPool.QUESTION)) {
 
-				layoutActualURL =
-					layoutActualURL.concat(StringPool.AMPERSAND).concat(
-						queryString);
+				layoutActualURL = layoutActualURL.concat(
+					StringPool.AMPERSAND).concat(queryString);
 			}
 		}
 
@@ -3172,8 +3180,7 @@ public class PortalImpl implements Portal {
 
 				if (friendlyURLMapper.isCheckMappingWithPrefix()) {
 					friendlyURLMapper.populateParams(
-						url.substring(pos + 2), actualParams,
-						requestContext);
+						url.substring(pos + 2), actualParams, requestContext);
 				}
 				else {
 					friendlyURLMapper.populateParams(
@@ -3772,7 +3779,7 @@ public class PortalImpl implements Portal {
 			String minifierType = StringPool.BLANK;
 
 			if (uri.endsWith(".css") || uri.endsWith("css.jsp") ||
-				uri.matches(".*/css/.*\\.jsp")) {
+				(uri.endsWith(".jsp") && uri.contains("/css/"))) {
 
 				if (themeDisplay.isThemeCssFastLoad()) {
 					minifierType = "css";
@@ -4307,8 +4314,7 @@ public class PortalImpl implements Portal {
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.MESSAGEBOARDS.MODEL." +
 				"MBTHREAD$]",
 			"[$CLASS_NAME_ID_COM.LIFERAY.PORTLET.WIKI.MODEL.WIKIPAGE$]",
-			"[$RESOURCE_SCOPE_COMPANY$]",
-			"[$RESOURCE_SCOPE_GROUP$]",
+			"[$RESOURCE_SCOPE_COMPANY$]", "[$RESOURCE_SCOPE_GROUP$]",
 			"[$RESOURCE_SCOPE_GROUP_TEMPLATE$]",
 			"[$RESOURCE_SCOPE_INDIVIDUAL$]",
 			"[$SOCIAL_RELATION_TYPE_BI_COWORKER$]",
@@ -4321,28 +4327,20 @@ public class PortalImpl implements Portal {
 			"[$SOCIAL_RELATION_TYPE_UNI_FOLLOWER$]",
 			"[$SOCIAL_RELATION_TYPE_UNI_PARENT$]",
 			"[$SOCIAL_RELATION_TYPE_UNI_SUBORDINATE$]",
-			"[$SOCIAL_RELATION_TYPE_UNI_SUPERVISOR$]",
-			"[$FALSE$]",
-			"[$TRUE$]"
+			"[$SOCIAL_RELATION_TYPE_UNI_SUPERVISOR$]", "[$FALSE$]", "[$TRUE$]"
 		};
 
 		DB db = DBFactoryUtil.getDB();
 
 		Object[] customSqlValues = new Object[] {
-			getClassNameId(Group.class),
-			getClassNameId(Layout.class),
-			getClassNameId(Organization.class),
-			getClassNameId(Role.class),
-			getClassNameId(User.class),
-			getClassNameId(UserGroup.class),
+			getClassNameId(Group.class), getClassNameId(Layout.class),
+			getClassNameId(Organization.class), getClassNameId(Role.class),
+			getClassNameId(User.class), getClassNameId(UserGroup.class),
 			getClassNameId(BlogsEntry.class),
 			getClassNameId(BookmarksEntry.class),
-			getClassNameId(CalEvent.class),
-			getClassNameId(DLFileEntry.class),
-			getClassNameId(MBMessage.class),
-			getClassNameId(MBThread.class),
-			getClassNameId(WikiPage.class),
-			ResourceConstants.SCOPE_COMPANY,
+			getClassNameId(CalEvent.class), getClassNameId(DLFileEntry.class),
+			getClassNameId(MBMessage.class), getClassNameId(MBThread.class),
+			getClassNameId(WikiPage.class), ResourceConstants.SCOPE_COMPANY,
 			ResourceConstants.SCOPE_GROUP,
 			ResourceConstants.SCOPE_GROUP_TEMPLATE,
 			ResourceConstants.SCOPE_INDIVIDUAL,
@@ -4356,8 +4354,7 @@ public class PortalImpl implements Portal {
 			SocialRelationConstants.TYPE_UNI_FOLLOWER,
 			SocialRelationConstants.TYPE_UNI_PARENT,
 			SocialRelationConstants.TYPE_UNI_SUBORDINATE,
-			SocialRelationConstants.TYPE_UNI_SUPERVISOR,
-			db.getTemplateFalse(),
+			SocialRelationConstants.TYPE_UNI_SUPERVISOR, db.getTemplateFalse(),
 			db.getTemplateTrue()
 		};
 
@@ -4526,6 +4523,26 @@ public class PortalImpl implements Portal {
 		return false;
 	}
 
+	public boolean isCDNDynamicResourcesEnabled(HttpServletRequest request)
+		throws PortalException, SystemException {
+
+		Company company = getCompany(request);
+
+		return isCDNDynamicResourcesEnabled(company.getCompanyId());
+	}
+
+	public boolean isCDNDynamicResourcesEnabled(long companyId) {
+		try {
+			return PrefsPropsUtil.getBoolean(
+				companyId, PropsKeys.CDN_DYNAMIC_RESOURCES_ENABLED,
+				PropsValues.CDN_DYNAMIC_RESOURCES_ENABLED);
+		}
+		catch (SystemException e) {
+		}
+
+		return PropsValues.CDN_DYNAMIC_RESOURCES_ENABLED;
+	}
+
 	/**
 	 * @deprecated As of 6.1, renamed to {@link #isGroupAdmin(User, long)}
 	 */
@@ -4542,7 +4559,7 @@ public class PortalImpl implements Portal {
 
 	public boolean isCompanyAdmin(User user) throws Exception {
 		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user, true);
+			PermissionCheckerFactoryUtil.create(user);
 
 		return permissionChecker.isCompanyAdmin();
 	}
@@ -4649,14 +4666,14 @@ public class PortalImpl implements Portal {
 
 	public boolean isGroupAdmin(User user, long groupId) throws Exception {
 		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user, true);
+			PermissionCheckerFactoryUtil.create(user);
 
 		return permissionChecker.isGroupAdmin(groupId);
 	}
 
 	public boolean isGroupOwner(User user, long groupId) throws Exception {
 		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user, true);
+			PermissionCheckerFactoryUtil.create(user);
 
 		return permissionChecker.isGroupOwner(groupId);
 	}
@@ -4956,10 +4973,9 @@ public class PortalImpl implements Portal {
 				Layout layout = themeDisplay.getLayout();
 
 				if (!layout.isTypeControlPanel() &&
-					!PortletPermissionUtil.contains(
-						themeDisplay.getPermissionChecker(),
-						themeDisplay.getPlid(), portlet.getPortletId(),
-						ActionKeys.ADD_TO_PAGE) &&
+					!LayoutPermissionUtil.contains(
+						themeDisplay.getPermissionChecker(), layout,
+						ActionKeys.UPDATE) &&
 					!PortletPermissionUtil.contains(
 						themeDisplay.getPermissionChecker(),
 						themeDisplay.getPlid(), portlet.getPortletId(),
@@ -5075,11 +5091,11 @@ public class PortalImpl implements Portal {
 			HttpServletResponse response)
 		throws IOException, ServletException {
 
-		if (_log.isInfoEnabled()) {
+		if (_log.isDebugEnabled()) {
 			String currentURL = (String)request.getAttribute(
 				WebKeys.CURRENT_URL);
 
-			_log.info(
+			_log.debug(
 				"Current URL " + currentURL + " generates exception: " +
 					e.getMessage());
 		}
@@ -5089,18 +5105,18 @@ public class PortalImpl implements Portal {
 				_logWebServerServlet.warn(e, e);
 			}
 		}
-		else if ((e instanceof PortalException) && _log.isInfoEnabled()) {
+		else if ((e instanceof PortalException) && _log.isDebugEnabled()) {
 			if ((e instanceof NoSuchLayoutException) ||
 				(e instanceof PrincipalException)) {
 
 				String msg = e.getMessage();
 
 				if (Validator.isNotNull(msg)) {
-					_log.info(msg);
+					_log.debug(msg);
 				}
 			}
 			else {
-				_log.info(e, e);
+				_log.debug(e, e);
 			}
 		}
 		else if ((e instanceof SystemException) && _log.isWarnEnabled()) {
@@ -5479,6 +5495,16 @@ public class PortalImpl implements Portal {
 			boolean portletActions)
 		throws PortalException, SystemException {
 
+		long groupId = getScopeGroupId(layout, portlet.getPortletId());
+
+		addDefaultResource(companyId, groupId, layout, portlet, portletActions);
+	}
+
+	protected void addDefaultResource(
+			long companyId, long groupId, Layout layout, Portlet portlet,
+			boolean portletActions)
+		throws PortalException, SystemException {
+
 		String rootPortletId = portlet.getRootPortletId();
 
 		String portletPrimaryKey = PortletPermissionUtil.getPrimaryKey(
@@ -5493,8 +5519,7 @@ public class PortalImpl implements Portal {
 		}
 		else {
 			name = ResourceActionsUtil.getPortletBaseResource(rootPortletId);
-			primaryKey = String.valueOf(
-				getScopeGroupId(layout, portlet.getPortletId()));
+			primaryKey = String.valueOf(groupId);
 		}
 
 		if (Validator.isNull(name)) {
@@ -5506,8 +5531,8 @@ public class PortalImpl implements Portal {
 				int count =
 					ResourcePermissionLocalServiceUtil.
 						getResourcePermissionsCount(
-							companyId, name,
-							ResourceConstants.SCOPE_INDIVIDUAL, primaryKey);
+							companyId, name, ResourceConstants.SCOPE_INDIVIDUAL,
+							primaryKey);
 
 				if (count == 0) {
 					throw new NoSuchResourceException();
@@ -5515,24 +5540,15 @@ public class PortalImpl implements Portal {
 			}
 			else if (!portlet.isUndeployedPortlet()) {
 				ResourceLocalServiceUtil.getResource(
-					companyId, name,
-					ResourceConstants.SCOPE_INDIVIDUAL, primaryKey);
+					companyId, name, ResourceConstants.SCOPE_INDIVIDUAL,
+					primaryKey);
 			}
 		}
 		catch (NoSuchResourceException nsre) {
 			ResourceLocalServiceUtil.addResources(
-				companyId, layout.getGroupId(), 0, name, primaryKey,
-				portletActions, true, true);
+				companyId, groupId, 0, name, primaryKey, portletActions, true,
+				true);
 		}
-	}
-
-	protected void addDefaultResource(
-			ThemeDisplay themeDisplay, Layout layout, Portlet portlet,
-			boolean portletActions)
-		throws PortalException, SystemException {
-
-		addDefaultResource(
-			themeDisplay.getCompanyId(), layout, portlet, portletActions);
 	}
 
 	protected String buildI18NPath(Locale locale) {
@@ -5731,10 +5747,9 @@ public class PortalImpl implements Portal {
 
 		User realUser = UserLocalServiceUtil.getUserById(
 			realUserIdObj.longValue());
-		boolean checkGuest = true;
 
 		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(realUser, checkGuest);
+			PermissionCheckerFactoryUtil.create(realUser);
 
 		if (doAsUser.isDefaultUser() ||
 			UserPermissionUtil.contains(

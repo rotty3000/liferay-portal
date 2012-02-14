@@ -3765,6 +3765,12 @@ public abstract class OrgLaborServiceBaseImpl extends PrincipalBean
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return OrgLabor.class;
 	}

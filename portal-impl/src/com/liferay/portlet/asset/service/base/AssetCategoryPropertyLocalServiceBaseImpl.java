@@ -1083,6 +1083,12 @@ public abstract class AssetCategoryPropertyLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return AssetCategoryProperty.class;
 	}

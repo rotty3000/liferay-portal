@@ -55,6 +55,14 @@ public class XSLErrorListener implements ErrorListener {
 		throw exception;
 	}
 
+	public int getColumnNumber() {
+		return _columnNumber;
+	}
+
+	public int getLineNumber() {
+		return _lineNumber;
+	}
+
 	public String getLocation() {
 		return _location;
 	}
@@ -65,14 +73,6 @@ public class XSLErrorListener implements ErrorListener {
 
 	public String getMessageAndLocation() {
 		return _message + " " + _location;
-	}
-
-	public int getLineNumber() {
-		return _lineNumber;
-	}
-
-	public int getColumnNumber() {
-		return _columnNumber;
 	}
 
 	public void setLocation(Throwable exception) {
@@ -141,10 +141,10 @@ public class XSLErrorListener implements ErrorListener {
 		throw exception;
 	}
 
+	private int _columnNumber;
+	private int _lineNumber;
 	private Locale _locale;
 	private String _location;
 	private String _message;
-	private int _lineNumber;
-	private int _columnNumber;
 
 }

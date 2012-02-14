@@ -14,8 +14,11 @@
 
 package com.liferay.portlet.documentlibrary.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
+import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
@@ -29,12 +32,15 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
 import java.awt.image.RenderedImage;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import java.util.List;
@@ -52,14 +58,27 @@ public class ImageProcessorImpl
 		return _instance;
 	}
 
+	@Override
 	public void cleanUp(FileEntry fileEntry) {
 		deleteFiles(fileEntry, null);
 	}
 
+	@Override
 	public void cleanUp(FileVersion fileVersion) {
 		String type = _instance.getThumbnailType(fileVersion);
 
 		deleteFiles(fileVersion, type);
+	}
+
+	public void exportGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception {
+
+		exportThumbnails(
+			portletDataContext, fileEntry, fileEntryElement, "image");
+
+		exportPreview(portletDataContext, fileEntry, fileEntryElement);
 	}
 
 	public void generateImages(FileVersion fileVersion) {
@@ -70,29 +89,67 @@ public class ImageProcessorImpl
 		return _instance._imageMimeTypes;
 	}
 
-	public InputStream getThumbnailAsStream(
-			FileVersion fileVersion, int thumbnailIndex)
+	public InputStream getPreviewAsStream(FileVersion fileVersion)
 		throws Exception {
 
-		return _instance.doGetThumbnailAsStream(fileVersion, thumbnailIndex);
+		if (_previewGenerationRequired(fileVersion)) {
+			String type = getPreviewType(fileVersion);
+
+			return _instance.doGetPreviewAsStream(fileVersion, type);
+		}
+
+		return fileVersion.getContentStream(false);
 	}
 
-	public long getThumbnailFileSize(
-			FileVersion fileVersion, int thumbnailIndex)
+	public long getPreviewFileSize(FileVersion fileVersion)
 		throws Exception {
 
-		return _instance.doGetThumbnailFileSize(fileVersion, thumbnailIndex);
+		if (_previewGenerationRequired(fileVersion)) {
+			String type = getPreviewType(fileVersion);
+
+			return _instance.doGetPreviewFileSize(fileVersion, type);
+		}
+
+		return fileVersion.getSize();
+	}
+
+	@Override
+	public String getPreviewType(FileVersion fileVersion) {
+		return _getType(fileVersion);
+	}
+
+	public InputStream getThumbnailAsStream(FileVersion fileVersion, int index)
+		throws Exception {
+
+		return _instance.doGetThumbnailAsStream(fileVersion, index);
+	}
+
+	public long getThumbnailFileSize(FileVersion fileVersion, int index)
+		throws Exception {
+
+		return _instance.doGetThumbnailFileSize(fileVersion, index);
+	}
+
+	@Override
+	public String getThumbnailType(FileVersion fileVersion) {
+		return _getType(fileVersion);
 	}
 
 	public boolean hasImages(FileVersion fileVersion) {
-		if (!PropsValues.DL_FILE_ENTRY_THUMBNAIL_ENABLED) {
+		if (!PropsValues.DL_FILE_ENTRY_PREVIEW_ENABLED &&
+			!PropsValues.DL_FILE_ENTRY_THUMBNAIL_ENABLED) {
+
 			return false;
 		}
 
 		boolean hasImages = false;
 
 		try {
-			hasImages = _instance.hasThumbnails(fileVersion);
+			if (_instance._hasPreview(fileVersion) &&
+				hasThumbnails(fileVersion)) {
+
+				hasImages = true;
+			}
 
 			if (!hasImages && _instance.isSupported(fileVersion)) {
 				_instance._queueGeneration(fileVersion);
@@ -103,6 +160,26 @@ public class ImageProcessorImpl
 		}
 
 		return hasImages;
+	}
+
+	public void importGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			FileEntry importedFileEntry, Element fileEntryElement)
+		throws Exception {
+
+		importThumbnails(
+			portletDataContext, fileEntry, importedFileEntry, fileEntryElement,
+			"image");
+
+		FileVersion importedFileVersion = importedFileEntry.getFileVersion();
+
+		if (!_previewGenerationRequired(importedFileVersion)) {
+			return;
+		}
+
+		importPreview(
+			portletDataContext, fileEntry, importedFileEntry, fileEntryElement,
+			"image", getPreviewType(importedFileVersion));
 	}
 
 	public boolean isImageSupported(FileVersion fileVersion) {
@@ -123,8 +200,8 @@ public class ImageProcessorImpl
 
 	public void storeThumbnail(
 			long companyId, long groupId, long fileEntryId, long fileVersionId,
-			long custom1ImageId, long custom2ImageId,
-			InputStream is, String type)
+			long custom1ImageId, long custom2ImageId, InputStream is,
+			String type)
 		throws Exception {
 
 		_instance._storeThumbnail(
@@ -136,20 +213,23 @@ public class ImageProcessorImpl
 		_instance._queueGeneration(fileVersion);
 	}
 
-	@Override
-	protected String getPreviewType(FileVersion fileVersion) {
-		return null;
-	}
+	protected void exportPreview(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception {
 
-	@Override
-	protected String getThumbnailType(FileVersion fileVersion) {
-		String type = fileVersion.getExtension();
+		FileVersion fileVersion = fileEntry.getFileVersion();
 
-		if (type.equals("jpeg")) {
-			type = "jpg";
+		if (!isSupported(fileVersion) ||
+			!_previewGenerationRequired(fileVersion) ||
+			!_hasPreview(fileVersion)) {
+
+			return;
 		}
 
-		return type;
+		exportPreview(
+			portletDataContext, fileEntry, fileEntryElement, "image",
+			getPreviewType(fileVersion));
 	}
 
 	private ImageProcessorImpl() {
@@ -157,7 +237,9 @@ public class ImageProcessorImpl
 
 	private void _generateImages(FileVersion fileVersion) {
 		try {
-			if (!PropsValues.DL_FILE_ENTRY_THUMBNAIL_ENABLED) {
+			if (!PropsValues.DL_FILE_ENTRY_THUMBNAIL_ENABLED &&
+				!PropsValues.DL_FILE_ENTRY_PREVIEW_ENABLED) {
+
 				return;
 			}
 
@@ -173,7 +255,13 @@ public class ImageProcessorImpl
 				return;
 			}
 
-			storeThumbnailImages(fileVersion, renderedImage);
+			if (!_hasPreview(fileVersion)) {
+				_storePreviewImage(fileVersion, renderedImage);
+			}
+
+			if (!hasThumbnails(fileVersion)) {
+				storeThumbnailImages(fileVersion, renderedImage);
+			}
 		}
 		catch (NoSuchFileEntryException nsfee) {
 		}
@@ -182,6 +270,57 @@ public class ImageProcessorImpl
 		}
 		finally {
 			_fileVersionIds.remove(fileVersion.getFileVersionId());
+		}
+	}
+
+	private String _getType(FileVersion fileVersion) {
+		String type = "png";
+
+		if (fileVersion == null) {
+			return type;
+		}
+
+		String extension = fileVersion.getExtension();
+
+		if (extension.equals("jpeg")) {
+			type = "jpg";
+		}
+		else if (!_previewGenerationRequired(fileVersion)) {
+			type = extension;
+		}
+
+		return type;
+	}
+
+	private boolean _hasPreview(FileVersion fileVersion)
+		throws PortalException, SystemException {
+
+		if (PropsValues.DL_FILE_ENTRY_PREVIEW_ENABLED &&
+			_previewGenerationRequired(fileVersion)) {
+
+			String type = getPreviewType(fileVersion);
+
+			String previewFilePath = getPreviewFilePath(fileVersion, type);
+
+			if (!DLStoreUtil.hasFile(
+					fileVersion.getCompanyId(), REPOSITORY_ID,
+					previewFilePath)) {
+
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean _previewGenerationRequired(FileVersion fileVersion) {
+		String type = fileVersion.getExtension();
+
+		if (type.equals("tiff") || type.equals("tif")) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -207,6 +346,33 @@ public class ImageProcessorImpl
 					DestinationNames.DOCUMENT_LIBRARY_IMAGE_PROCESSOR,
 					fileVersion);
 			}
+		}
+	}
+
+	private void _storePreviewImage(
+			FileVersion fileVersion, RenderedImage renderedImage)
+		throws Exception {
+
+		String type = getPreviewType(fileVersion);
+
+		File file = FileUtil.createTempFile(type);
+
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+
+			try {
+				ImageToolUtil.write(renderedImage, type, fos);
+			}
+			finally {
+				fos.close();
+			}
+
+			addFileToStore(
+				fileVersion.getCompanyId(), PREVIEW_PATH,
+				getPreviewFilePath(fileVersion, type), file);
+		}
+		finally {
+			FileUtil.delete(file);
 		}
 	}
 

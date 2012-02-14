@@ -14,8 +14,10 @@
 
 package com.liferay.portlet.documentlibrary.util;
 
+import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.xml.Element;
 
 import java.io.InputStream;
 
@@ -30,19 +32,37 @@ public interface ImageProcessor {
 
 	public void cleanUp(FileVersion fileVersion);
 
+	public void exportGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception;
+
 	public void generateImages(FileVersion fileVersion);
 
 	public Set<String> getImageMimeTypes();
 
-	public InputStream getThumbnailAsStream(
-			FileVersion fileVersion, int thumbnailIndex)
+	public InputStream getPreviewAsStream(FileVersion fileVersion)
 		throws Exception;
 
-	public long getThumbnailFileSize(
-			FileVersion fileVersion, int thumbnailIndex)
+	public long getPreviewFileSize(FileVersion fileVersion)
 		throws Exception;
+
+	public String getPreviewType(FileVersion fileVersion);
+
+	public InputStream getThumbnailAsStream(FileVersion fileVersion, int index)
+		throws Exception;
+
+	public long getThumbnailFileSize(FileVersion fileVersion, int index)
+		throws Exception;
+
+	public String getThumbnailType(FileVersion fileVersion);
 
 	public boolean hasImages(FileVersion fileVersion);
+
+	public void importGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			FileEntry importedFileEntry, Element fileEntryElement)
+		throws Exception;
 
 	public boolean isImageSupported(FileVersion fileVersion);
 
@@ -52,8 +72,8 @@ public interface ImageProcessor {
 
 	public void storeThumbnail(
 			long companyId, long groupId, long fileEntryId, long fileVersionId,
-			long custom1ImageId, long custom2ImageId,
-			InputStream is, String type)
+			long custom1ImageId, long custom2ImageId, InputStream is,
+			String type)
 		throws Exception;
 
 	public void trigger(FileVersion fileVersion);

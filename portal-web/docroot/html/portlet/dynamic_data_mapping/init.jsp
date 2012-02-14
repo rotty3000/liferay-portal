@@ -38,8 +38,8 @@ page import="com.liferay.portlet.dynamicdatamapping.search.StructureSearchTerms"
 page import="com.liferay.portlet.dynamicdatamapping.search.TemplateDisplayTerms" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.search.TemplateSearch" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.search.TemplateSearchTerms" %><%@
-page import="com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil" %><%@
-page import="com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil" %><%@
+page import="com.liferay.portlet.dynamicdatamapping.service.DDMStructureServiceUtil" %><%@
+page import="com.liferay.portlet.dynamicdatamapping.service.DDMTemplateServiceUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMPermission" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMStructurePermission" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMTemplatePermission" %><%@
@@ -86,3 +86,5 @@ else if (scopeStorageType.equals(DDMTemplateConstants.TEMPLATE_TYPE_LIST)) {
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>
+
+<%@ include file="/html/portlet/dynamic_data_mapping/init-ext.jsp" %>

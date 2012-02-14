@@ -25,15 +25,11 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class PwdGenerator {
 
-	public static String KEY1 = "0123456789";
+	public static final String KEY1 = "0123456789";
 
-	public static String KEY2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String KEY2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	public static String KEY3 = "abcdefghijklmnopqrstuvwxyz";
-
-	public static String getPinNumber() {
-		return _getPassword(KEY1, 4, true);
-	}
+	public static final String KEY3 = "abcdefghijklmnopqrstuvwxyz";
 
 	public static String getPassword() {
 		return getPassword(8);
@@ -51,6 +47,10 @@ public class PwdGenerator {
 		String key, int length, boolean useAllKeys) {
 
 		return _getPassword(key, length, useAllKeys);
+	}
+
+	public static String getPinNumber() {
+		return _getPassword(KEY1, 4, true);
 	}
 
 	private static String _getPassword(

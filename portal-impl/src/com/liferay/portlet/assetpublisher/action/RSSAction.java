@@ -221,8 +221,8 @@ public class RSSAction extends PortletAction {
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 				assetEntry.getClassName());
 
-		AssetRenderer assetRenderer =
-			assetRendererFactory.getAssetRenderer(assetEntry.getClassPK());
+		AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(
+			assetEntry.getClassPK());
 
 		String viewInContextURL = assetRenderer.getURLViewInContext(
 			(LiferayPortletRequest)portletRequest,
@@ -286,9 +286,8 @@ public class RSSAction extends PortletAction {
 		String rssFormatType = RSSUtil.getFormatType(rssFormat);
 		double rssFormatVersion = RSSUtil.getFormatVersion(rssFormat);
 
-		AssetEntryQuery assetEntryQuery =
-			AssetPublisherUtil.getAssetEntryQuery(
-				preferences, new long[] {themeDisplay.getScopeGroupId()});
+		AssetEntryQuery assetEntryQuery = AssetPublisherUtil.getAssetEntryQuery(
+			preferences, new long[] {themeDisplay.getScopeGroupId()});
 
 		if (!anyAssetType) {
 			long[] availableClassNameIds =

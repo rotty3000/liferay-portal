@@ -290,20 +290,20 @@ public class WikiNodeLocalServiceWrapper implements WikiNodeLocalService,
 			addGuestPermissions);
 	}
 
-	public void addNodeResources(com.liferay.portlet.wiki.model.WikiNode node,
-		boolean addGroupPermissions, boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wikiNodeLocalService.addNodeResources(node, addGroupPermissions,
-			addGuestPermissions);
-	}
-
 	public void addNodeResources(long nodeId,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_wikiNodeLocalService.addNodeResources(nodeId, groupPermissions,
 			guestPermissions);
+	}
+
+	public void addNodeResources(com.liferay.portlet.wiki.model.WikiNode node,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_wikiNodeLocalService.addNodeResources(node, addGroupPermissions,
+			addGuestPermissions);
 	}
 
 	public void addNodeResources(com.liferay.portlet.wiki.model.WikiNode node,

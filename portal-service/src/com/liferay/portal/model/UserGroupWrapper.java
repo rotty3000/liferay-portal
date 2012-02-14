@@ -256,16 +256,16 @@ public class UserGroupWrapper implements UserGroup, ModelWrapper<UserGroup> {
 		return _userGroup.getPrivateLayoutsPageCount();
 	}
 
-	public boolean hasPrivateLayouts()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _userGroup.hasPrivateLayouts();
-	}
-
 	public int getPublicLayoutsPageCount()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _userGroup.getPublicLayoutsPageCount();
+	}
+
+	public boolean hasPrivateLayouts()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _userGroup.hasPrivateLayouts();
 	}
 
 	public boolean hasPublicLayouts()

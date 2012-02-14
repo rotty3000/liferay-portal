@@ -132,7 +132,7 @@ public class SybaseDB extends BaseDB {
 				String[] template = buildColumnTypeTokens(line);
 
 				line = StringUtil.replace(
-					"alter table @table@ alter column @old-column@ @type@;",
+					"alter table @table@ modify @old-column@ @type@;",
 					REWORD_TEMPLATE, template);
 			}
 			else if (line.indexOf(DROP_INDEX) != -1) {
@@ -158,17 +158,14 @@ public class SybaseDB extends BaseDB {
 		return sb.toString();
 	}
 
-	protected static String DROP_COLUMN = "drop column";
+	protected static final String DROP_COLUMN = "drop column";
 
 	private static final boolean _SUPPORTS_INLINE_DISTINCT = false;
 
-	private static String[] _SYBASE = {
-		"--", "1", "0",
-		"'19700101'", "getdate()",
-		" image", " image", " int", " datetime",
-		" float", " int", " decimal(20,0)",
-		" varchar(1000)", " text", " varchar",
-		"  identity(1,1)", "go"
+	private static final String[] _SYBASE = {
+		"--", "1", "0", "'19700101'", "getdate()", " image", " image", " int",
+		" datetime", " float", " int", " decimal(20,0)", " varchar(1000)",
+		" text", " varchar", "  identity(1,1)", "go"
 	};
 
 	private static SybaseDB _instance = new SybaseDB();

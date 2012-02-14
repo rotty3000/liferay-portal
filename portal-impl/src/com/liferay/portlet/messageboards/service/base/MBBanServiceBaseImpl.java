@@ -692,6 +692,12 @@ public abstract class MBBanServiceBaseImpl extends PrincipalBean
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return MBBan.class;
 	}

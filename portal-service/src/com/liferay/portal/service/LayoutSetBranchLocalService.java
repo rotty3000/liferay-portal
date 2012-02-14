@@ -276,9 +276,19 @@ public interface LayoutSetBranchLocalService extends PersistedModelLocalService 
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* @deprecated {@link #getUserLayoutSetBranch(long, long, boolean, long, long)}
+	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.model.LayoutSetBranch getUserLayoutSetBranch(
 		long userId, long groupId, boolean privateLayout, long layoutSetBranchId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.LayoutSetBranch getUserLayoutSetBranch(
+		long userId, long groupId, boolean privateLayout, long layoutSetId,
+		long layoutSetBranchId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

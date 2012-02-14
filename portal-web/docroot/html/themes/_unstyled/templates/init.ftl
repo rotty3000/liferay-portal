@@ -26,7 +26,7 @@
 	</#if>
 </#if>
 
-<#assign liferay_dockbar_pinned = sessionClicks.get(request, "liferay_dockbar_pinned", "") />
+<#assign liferay_dockbar_pinned = getterUtil.getBoolean(sessionClicks.get(request, "liferay_dockbar_pinned", ""), false) />
 
 <#if liferay_toggle_controls = "visible">
 	<#assign css_class = css_class + " controls-visible" />
@@ -34,7 +34,7 @@
 	<#assign css_class = css_class + " controls-hidden" />
 </#if>
 
-<#if liferay_dockbar_pinned = "true">
+<#if liferay_dockbar_pinned>
 	<#assign css_class = css_class + " lfr-dockbar-pinned" />
 </#if>
 
@@ -317,7 +317,11 @@
 <#if is_guest_group>
 	<#assign show_site_name = false />
 <#else>
-	<#assign show_site_name = getterUtil.getBoolean(layout.layoutSet.getSettingsProperty("showSiteName"), true) />
+	<#assign show_site_name_supported = getterUtil.getBoolean(theme_settings["show-site-name-supported"]!"", true) />
+
+	<#assign show_site_name_default = getterUtil.getBoolean(theme_settings["show-site-name-default"]!"", show_site_name_supported) />
+
+	<#assign show_site_name = getterUtil.getBoolean(layout.layoutSet.getSettingsProperty("showSiteName"), show_site_name_default) />
 </#if>
 
 <#assign site_logo = company_logo />

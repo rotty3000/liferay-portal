@@ -5488,6 +5488,12 @@ public abstract class GroupLocalServiceBaseImpl implements GroupLocalService,
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return Group.class;
 	}

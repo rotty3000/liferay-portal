@@ -31,6 +31,7 @@ import java.util.List;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Mate Thurzo
  */
 public class BlogsStatsUserLocalServiceImpl
 	extends BlogsStatsUserLocalServiceBaseImpl {
@@ -212,8 +213,13 @@ public class BlogsStatsUserLocalServiceImpl
 				statsUser.setLastPostDate(lastDisplayDate);
 			}
 		}
-		else if (lastDisplayDate.before(lastPostDate)) {
-			statsUser.setLastPostDate(lastDisplayDate);
+		else if (displayDate == null) {
+			if (lastPostDate == null) {
+				statsUser.setLastPostDate(lastDisplayDate);
+			}
+			else if (lastPostDate.before(lastDisplayDate)) {
+				statsUser.setLastPostDate(lastDisplayDate);
+			}
 		}
 
 		blogsStatsUserPersistence.update(statsUser, false);

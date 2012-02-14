@@ -83,11 +83,10 @@ import com.liferay.portlet.documentlibrary.util.AudioProcessor;
 import com.liferay.portlet.documentlibrary.util.AudioProcessorUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.documentlibrary.util.DocumentConversionUtil;
-import com.liferay.portlet.documentlibrary.util.ImageProcessorImpl;
 import com.liferay.portlet.documentlibrary.util.ImageProcessorUtil;
-import com.liferay.portlet.documentlibrary.util.PDFProcessorImpl;
+import com.liferay.portlet.documentlibrary.util.PDFProcessor;
 import com.liferay.portlet.documentlibrary.util.PDFProcessorUtil;
-import com.liferay.portlet.documentlibrary.util.VideoProcessorImpl;
+import com.liferay.portlet.documentlibrary.util.VideoProcessor;
 import com.liferay.portlet.documentlibrary.util.VideoProcessorUtil;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
 import com.liferay.portlet.dynamicdatalists.service.DDLRecordLocalServiceUtil;
@@ -202,7 +201,7 @@ public class WebServerServlet extends HttpServlet {
 				PortalUtil.getUserPassword(request));
 
 			PermissionChecker permissionChecker =
-				PermissionCheckerFactoryUtil.create(user, true);
+				PermissionCheckerFactoryUtil.create(user);
 
 			PermissionThreadLocal.setPermissionChecker(permissionChecker);
 
@@ -286,8 +285,7 @@ public class WebServerServlet extends HttpServlet {
 
 			if (smallImage) {
 				is = ImageProcessorUtil.getThumbnailAsStream(
-					fileEntry.getFileVersion(),
-					ImageProcessorImpl.THUMBNAIL_INDEX_DEFAULT);
+					fileEntry.getFileVersion(), 0);
 			}
 			else {
 				is = fileEntry.getContentStream();
@@ -788,9 +786,11 @@ public class WebServerServlet extends HttpServlet {
 	}
 
 	protected void sendFile(
-			HttpServletRequest request, HttpServletResponse response,
-			User user, String[] pathArray)
+			HttpServletRequest request, HttpServletResponse response, User user,
+			String[] pathArray)
 		throws Exception {
+
+		// Retrieve file details
 
 		FileEntry fileEntry = getFileEntry(pathArray);
 
@@ -821,6 +821,8 @@ public class WebServerServlet extends HttpServlet {
 			fileName += StringPool.PERIOD + extension;
 		}
 
+		// Handle requested conversion
+
 		boolean converted = false;
 
 		String targetExtension = ParamUtil.getString(
@@ -831,6 +833,7 @@ public class WebServerServlet extends HttpServlet {
 		int previewFileIndex = ParamUtil.getInteger(
 			request, "previewFileIndex");
 		boolean audioPreview = ParamUtil.getBoolean(request, "audioPreview");
+		boolean imagePreview = ParamUtil.getBoolean(request, "imagePreview");
 		boolean videoPreview = ParamUtil.getBoolean(request, "videoPreview");
 		int videoThumbnail = ParamUtil.getInteger(request, "videoThumbnail");
 
@@ -839,7 +842,8 @@ public class WebServerServlet extends HttpServlet {
 
 		if ((imageThumbnail > 0) && (imageThumbnail <= 3)) {
 			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(fileVersion.getExtension());
+				StringPool.PERIOD).concat(
+					ImageProcessorUtil.getThumbnailType(fileVersion));
 
 			int thumbnailIndex = imageThumbnail - 1;
 
@@ -852,7 +856,7 @@ public class WebServerServlet extends HttpServlet {
 		}
 		else if ((documentThumbnail > 0) && (documentThumbnail <= 3)) {
 			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(PDFProcessorImpl.THUMBNAIL_TYPE);
+				StringPool.PERIOD).concat(PDFProcessor.THUMBNAIL_TYPE);
 
 			int thumbnailIndex = documentThumbnail - 1;
 
@@ -865,7 +869,7 @@ public class WebServerServlet extends HttpServlet {
 		}
 		else if (previewFileIndex > 0) {
 			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(PDFProcessorImpl.PREVIEW_TYPE);
+				StringPool.PERIOD).concat(PDFProcessor.PREVIEW_TYPE);
 			inputStream = PDFProcessorUtil.getPreviewAsStream(
 				fileVersion, previewFileIndex);
 			contentLength = PDFProcessorUtil.getPreviewFileSize(
@@ -881,6 +885,15 @@ public class WebServerServlet extends HttpServlet {
 
 			converted = true;
 		}
+		else if (imagePreview) {
+			fileName = FileUtil.stripExtension(fileName).concat(
+				StringPool.PERIOD).concat(
+					ImageProcessorUtil.getPreviewType(fileVersion));
+			inputStream = ImageProcessorUtil.getPreviewAsStream(fileVersion);
+			contentLength = ImageProcessorUtil.getPreviewFileSize(fileVersion);
+
+			converted = true;
+		}
 		else if (videoPreview) {
 			String type = ParamUtil.getString(request, "type");
 
@@ -891,49 +904,11 @@ public class WebServerServlet extends HttpServlet {
 			contentLength = VideoProcessorUtil.getPreviewFileSize(
 				fileVersion, type);
 
-			response.setHeader(
-				HttpHeaders.ACCEPT_RANGES,
-				HttpHeaders.ACCEPT_RANGES_BYTES_VALUE);
-
-			List<Range> ranges = null;
-
-			try {
-				ranges = ServletResponseUtil.getRanges(
-					request, response, contentLength);
-			}
-			catch (IOException ioe) {
-				if (_log.isErrorEnabled()) {
-					_log.error(ioe);
-				}
-
-				response.setHeader(
-					HttpHeaders.CONTENT_RANGE, "bytes */" + contentLength);
-
-				response.sendError(
-					HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
-
-				return;
-			}
-
-			if ((ranges != null) && (ranges.size() > 0)) {
-				if (_log.isDebugEnabled()) {
-					_log.debug("Video range requested");
-				}
-
-				String contentType = MimeTypesUtil.getContentType(fileName);
-
-				ServletResponseUtil.write(
-					request, response, fileName, ranges, inputStream,
-					contentLength, contentType);
-
-				return;
-			}
-
 			converted = true;
 		}
 		else if ((videoThumbnail > 0) && (videoThumbnail <= 3)) {
 			fileName = FileUtil.stripExtension(fileName).concat(
-				StringPool.PERIOD).concat(VideoProcessorImpl.THUMBNAIL_TYPE);
+				StringPool.PERIOD).concat(VideoProcessor.THUMBNAIL_TYPE);
 
 			int thumbnailIndex = videoThumbnail - 1;
 
@@ -963,6 +938,8 @@ public class WebServerServlet extends HttpServlet {
 			}
 		}
 
+		// Determine proper content type
+
 		String contentType = null;
 
 		if (converted) {
@@ -972,9 +949,47 @@ public class WebServerServlet extends HttpServlet {
 			contentType = fileVersion.getMimeType();
 		}
 
-		ServletResponseUtil.sendFile(
-			request, response, fileName, inputStream, contentLength,
-			contentType);
+		// Support range HTTP header
+
+		response.setHeader(
+			HttpHeaders.ACCEPT_RANGES, HttpHeaders.ACCEPT_RANGES_BYTES_VALUE);
+
+		List<Range> ranges = null;
+
+		try {
+			ranges = ServletResponseUtil.getRanges(
+				request, response, contentLength);
+		}
+		catch (IOException ioe) {
+			if (_log.isErrorEnabled()) {
+				_log.error(ioe);
+			}
+
+			response.setHeader(
+				HttpHeaders.CONTENT_RANGE, "bytes */" + contentLength);
+
+			response.sendError(
+				HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
+
+			return;
+		}
+
+		if ((ranges == null) || ranges.isEmpty()) {
+			ServletResponseUtil.sendFile(
+				request, response, fileName, inputStream, contentLength,
+				contentType);
+		}
+		else {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Request has range header " +
+						request.getHeader(HttpHeaders.RANGE));
+			}
+
+			ServletResponseUtil.write(
+				request, response, fileName, ranges, inputStream, contentLength,
+				contentType);
+		}
 	}
 
 	protected void sendFile(

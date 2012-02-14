@@ -28,15 +28,15 @@ public class Status {
 		_code = code;
 	}
 
-	public Object getObject() {
-		return _object;
-	}
-
 	public int getCode() {
 		return _code;
 	}
 
-	private Object _object;
+	public Object getObject() {
+		return _object;
+	}
+
 	private int _code;
+	private Object _object;
 
 }

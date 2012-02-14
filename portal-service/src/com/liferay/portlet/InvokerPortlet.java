@@ -32,15 +32,17 @@ public interface InvokerPortlet
 
 	public InvokerPortlet create(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletContext portletContext)
-		throws PortletException;
-
-	public InvokerPortlet create(
-			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
 			PortletConfig portletConfig, PortletContext portletContext,
 			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
 			boolean strutsBridgePortlet)
 		throws PortletException;
+
+	public InvokerPortlet create(
+			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
+			PortletContext portletContext)
+		throws PortletException;
+
+	public Integer getExpCache();
 
 	public Portlet getPortlet();
 
@@ -51,8 +53,6 @@ public interface InvokerPortlet
 	public PortletContext getPortletContext();
 
 	public Portlet getPortletInstance();
-
-	public Integer getExpCache();
 
 	public boolean isCheckAuthToken();
 
@@ -66,14 +66,14 @@ public interface InvokerPortlet
 
 	public void prepare(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletContext portletContext)
+			PortletConfig portletConfig, PortletContext portletContext,
+			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
+			boolean strutsBridgePortlet)
 		throws PortletException;
 
 	public void prepare(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletConfig portletConfig, PortletContext portletContext,
-			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
-			boolean strutsBridgePortlet)
+			PortletContext portletContext)
 		throws PortletException;
 
 	public void setPortletFilters() throws PortletException;

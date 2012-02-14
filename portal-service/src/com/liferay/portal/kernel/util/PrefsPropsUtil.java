@@ -21,11 +21,52 @@ import javax.portlet.PortletPreferences;
  */
 public class PrefsPropsUtil {
 
-	public static int getInteger(long companyId, String key)
+	public static boolean getBoolean(long companyId, String name)
 		throws Exception {
 
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getIntegerMethodKey1, companyId, key);
+			false, _getBooleanMethodKey1, companyId, name);
+
+		if (returnObj != null) {
+			return (Boolean)returnObj;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static boolean getBoolean(
+			long companyId, String name, boolean defaultValue)
+		throws Exception {
+
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getBooleanMethodKey2, companyId, name, defaultValue);
+
+		if (returnObj != null) {
+			return (Boolean)returnObj;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static boolean getBoolean(String name) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getBooleanMethodKey3, name);
+
+		if (returnObj != null) {
+			return (Boolean)returnObj;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static int getInteger(long companyId, String name)
+		throws Exception {
+
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getIntegerMethodKey1, companyId, name);
 
 		if (returnObj != null) {
 			return (Integer)returnObj;
@@ -35,9 +76,11 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static int getInteger(String key) throws Exception {
+	public static int getInteger(long companyId, String name, int defaultValue)
+		throws Exception {
+
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getIntegerMethodKey2, key);
+			false, _getIntegerMethodKey2, companyId, name, defaultValue);
 
 		if (returnObj != null) {
 			return (Integer)returnObj;
@@ -47,11 +90,23 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static long getLong(long companyId, String key)
+	public static int getInteger(String name) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getIntegerMethodKey3, name);
+
+		if (returnObj != null) {
+			return (Integer)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public static long getLong(long companyId, String name)
 		throws Exception {
 
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey1, companyId, key);
+			false, _getLongMethodKey1, companyId, name);
 
 		if (returnObj != null) {
 			return (Long)returnObj;
@@ -61,9 +116,11 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static long getLong(String key) throws Exception {
+	public static long getLong(long companyId, String name, long defaultValue)
+		throws Exception {
+
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey2, key);
+			false, _getLongMethodKey2, companyId, name, defaultValue);
 
 		if (returnObj != null) {
 			return (Long)returnObj;
@@ -73,11 +130,23 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static String getString(long companyId, String key)
+	public static long getLong(String name) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getLongMethodKey3, name);
+
+		if (returnObj != null) {
+			return (Long)returnObj;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public static String getString(long companyId, String name)
 		throws Exception {
 
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringMethodKey1, companyId, key);
+			false, _getStringMethodKey1, companyId, name);
 
 		if (returnObj != null) {
 			return (String)returnObj;
@@ -87,9 +156,24 @@ public class PrefsPropsUtil {
 		}
 	}
 
-	public static String getString(String key) throws Exception {
+	public static String getString(
+			long companyId, String name, String defaultValue)
+		throws Exception {
+
 		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringMethodKey2, key);
+			false, _getStringMethodKey2, companyId, name, defaultValue);
+
+		if (returnObj != null) {
+			return (String)returnObj;
+		}
+		else {
+			return null;
+		}
+	}
+
+	public static String getString(String name) throws Exception {
+		Object returnObj = PortalClassInvoker.invoke(
+			false, _getStringMethodKey3, name);
 
 		if (returnObj != null) {
 			return (String)returnObj;
@@ -197,13 +281,23 @@ public class PrefsPropsUtil {
 	private static final String _CLASS_NAME =
 		"com.liferay.portal.util.PrefsPropsUtil";
 
+	private static MethodKey _getBooleanMethodKey1 = new MethodKey(
+		_CLASS_NAME, "getBoolean", long.class, String.class);
+	private static MethodKey _getBooleanMethodKey2 = new MethodKey(
+		_CLASS_NAME, "getBoolean", long.class, String.class, boolean.class);
+	private static MethodKey _getBooleanMethodKey3 = new MethodKey(
+		_CLASS_NAME, "getBoolean", String.class);
 	private static MethodKey _getIntegerMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getInteger", long.class, String.class);
 	private static MethodKey _getIntegerMethodKey2 = new MethodKey(
+		_CLASS_NAME, "getInteger", long.class, String.class, int.class);
+	private static MethodKey _getIntegerMethodKey3 = new MethodKey(
 		_CLASS_NAME, "getInteger", String.class);
 	private static MethodKey _getLongMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getLong", long.class, String.class);
 	private static MethodKey _getLongMethodKey2 = new MethodKey(
+		_CLASS_NAME, "getLong", long.class, String.class, long.class);
+	private static MethodKey _getLongMethodKey3 = new MethodKey(
 		_CLASS_NAME, "getLong", String.class);
 	private static MethodKey _getStringArrayMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getStringArray", long.class, String.class, String.class);
@@ -224,6 +318,8 @@ public class PrefsPropsUtil {
 	private static MethodKey _getStringMethodKey1 = new MethodKey(
 		_CLASS_NAME, "getString", long.class, String.class);
 	private static MethodKey _getStringMethodKey2 = new MethodKey(
+		_CLASS_NAME, "getString", long.class, String.class, String.class);
+	private static MethodKey _getStringMethodKey3 = new MethodKey(
 		_CLASS_NAME, "getString", String.class);
 
 }

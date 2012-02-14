@@ -370,7 +370,7 @@ public class SubscriptionSender implements Serializable {
 		throws Exception {
 
 		PermissionChecker permissionChecker =
-			PermissionCheckerFactoryUtil.create(user, true);
+			PermissionCheckerFactoryUtil.create(user);
 
 		return SubscriptionPermissionUtil.contains(
 			permissionChecker, subscription.getClassName(),
@@ -471,9 +471,7 @@ public class SubscriptionSender implements Serializable {
 		String processedSubject = StringUtil.replace(
 			mailMessage.getSubject(),
 			new String[] {
-				"[$FROM_ADDRESS$]",
-				"[$FROM_NAME$]",
-				"[$TO_ADDRESS$]",
+				"[$FROM_ADDRESS$]", "[$FROM_NAME$]", "[$TO_ADDRESS$]",
 				"[$TO_NAME$]"
 			},
 			new String[] {
@@ -491,9 +489,7 @@ public class SubscriptionSender implements Serializable {
 		String processedBody = StringUtil.replace(
 			mailMessage.getBody(),
 			new String[] {
-				"[$FROM_ADDRESS$]",
-				"[$FROM_NAME$]",
-				"[$TO_ADDRESS$]",
+				"[$FROM_ADDRESS$]", "[$FROM_NAME$]", "[$TO_ADDRESS$]",
 				"[$TO_NAME$]"
 			},
 			new String[] {

@@ -32,12 +32,12 @@ public abstract class BaseUpgradeColumnImpl implements UpgradeColumn {
 		_oldColumnType = oldColumnType;
 	}
 
-	public Integer getNewColumnType(Integer defaultType) {
-		return defaultType;
-	}
-
 	public String getName() {
 		return _name;
+	}
+
+	public Integer getNewColumnType(Integer defaultType) {
+		return defaultType;
 	}
 
 	public Object getNewValue() {
@@ -81,8 +81,8 @@ public abstract class BaseUpgradeColumnImpl implements UpgradeColumn {
 	}
 
 	private String _name;
+	private Object _newValue;
 	private Integer _oldColumnType;
 	private Object _oldValue;
-	private Object _newValue;
 
 }

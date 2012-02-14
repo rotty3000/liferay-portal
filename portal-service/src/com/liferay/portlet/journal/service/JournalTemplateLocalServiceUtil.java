@@ -293,16 +293,6 @@ public class JournalTemplateLocalServiceUtil {
 			cacheable, smallImage, smallImageURL, smallImageFile, serviceContext);
 	}
 
-	public static void addTemplateResources(long groupId,
-		java.lang.String templateId, boolean addGroupPermissions,
-		boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.addTemplateResources(groupId, templateId, addGroupPermissions,
-			addGuestPermissions);
-	}
-
 	public static void addTemplateResources(
 		com.liferay.portlet.journal.model.JournalTemplate template,
 		boolean addGroupPermissions, boolean addGuestPermissions)
@@ -310,6 +300,25 @@ public class JournalTemplateLocalServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.addTemplateResources(template, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	public static void addTemplateResources(
+		com.liferay.portlet.journal.model.JournalTemplate template,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addTemplateResources(template, groupPermissions, guestPermissions);
+	}
+
+	public static void addTemplateResources(long groupId,
+		java.lang.String templateId, boolean addGroupPermissions,
+		boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addTemplateResources(groupId, templateId, addGroupPermissions,
 			addGuestPermissions);
 	}
 
@@ -321,15 +330,6 @@ public class JournalTemplateLocalServiceUtil {
 		getService()
 			.addTemplateResources(groupId, templateId, groupPermissions,
 			guestPermissions);
-	}
-
-	public static void addTemplateResources(
-		com.liferay.portlet.journal.model.JournalTemplate template,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.addTemplateResources(template, groupPermissions, guestPermissions);
 	}
 
 	public static void checkNewLine(long groupId, java.lang.String templateId)
@@ -348,17 +348,17 @@ public class JournalTemplateLocalServiceUtil {
 			autoTemplateId);
 	}
 
-	public static void deleteTemplate(long groupId, java.lang.String templateId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteTemplate(groupId, templateId);
-	}
-
 	public static void deleteTemplate(
 		com.liferay.portlet.journal.model.JournalTemplate template)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService().deleteTemplate(template);
+	}
+
+	public static void deleteTemplate(long groupId, java.lang.String templateId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteTemplate(groupId, templateId);
 	}
 
 	public static void deleteTemplates(long groupId)

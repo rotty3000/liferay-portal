@@ -15,6 +15,7 @@
 package com.liferay.portal.servlet;
 
 import com.liferay.portal.NoSuchLayoutException;
+import com.liferay.portal.dao.shard.ShardDataSourceTargetSource;
 import com.liferay.portal.events.EventsProcessorUtil;
 import com.liferay.portal.events.StartupAction;
 import com.liferay.portal.kernel.cache.Lifecycle;
@@ -33,6 +34,7 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.InfrastructureUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -57,6 +59,7 @@ import com.liferay.portal.model.PortletFilter;
 import com.liferay.portal.model.PortletURLListener;
 import com.liferay.portal.model.User;
 import com.liferay.portal.plugin.PluginPackageUtil;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
@@ -351,6 +354,8 @@ public class MainServlet extends ActionServlet {
 		}
 
 		servletContext.setAttribute(WebKeys.STARTUP_FINISHED, true);
+
+		ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
 	}
 
 	@Override
@@ -545,8 +550,8 @@ public class MainServlet extends ActionServlet {
 		if (portletReqProcessor == null) {
 			ModuleConfig moduleConfig = getModuleConfig(request);
 
-			portletReqProcessor =
-				PortletRequestProcessor.getInstance(this, moduleConfig);
+			portletReqProcessor = PortletRequestProcessor.getInstance(
+				this, moduleConfig);
 
 			servletContext.setAttribute(
 				WebKeys.PORTLET_STRUTS_PROCESSOR, portletReqProcessor);
@@ -760,10 +765,24 @@ public class MainServlet extends ActionServlet {
 	protected void initCompanies() throws Exception {
 		ServletContext servletContext = getServletContext();
 
-		String[] webIds = PortalInstances.getWebIds();
+		try {
+			String[] webIds = PortalInstances.getWebIds();
 
-		for (int i = 0; i < webIds.length; i++) {
-			PortalInstances.initCompany(servletContext, webIds[i]);
+			for (int i = 0; i < webIds.length; i++) {
+				PortalInstances.initCompany(servletContext, webIds[i]);
+			}
+		}
+		finally {
+			CompanyThreadLocal.setCompanyId(
+				PortalInstances.getDefaultCompanyId());
+
+			ShardDataSourceTargetSource shardDataSourceTargetSource =
+				(ShardDataSourceTargetSource)
+					InfrastructureUtil.getShardDataSourceTargetSource();
+
+			if (shardDataSourceTargetSource != null) {
+				shardDataSourceTargetSource.resetDataSource();
+			}
 		}
 	}
 
@@ -1033,8 +1052,8 @@ public class MainServlet extends ActionServlet {
 		session.setAttribute(Globals.LOCALE_KEY, user.getLocale());
 
 		EventsProcessorUtil.process(
-			PropsKeys.LOGIN_EVENTS_POST, PropsValues.LOGIN_EVENTS_POST,
-			request, response);
+			PropsKeys.LOGIN_EVENTS_POST, PropsValues.LOGIN_EVENTS_POST, request,
+			response);
 
 		return userId;
 	}
@@ -1152,8 +1171,6 @@ public class MainServlet extends ActionServlet {
 			response.addHeader(
 				_LIFERAY_PORTAL_REQUEST_HEADER, ReleaseInfo.getReleaseInfo());
 		}
-
-		ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
 	}
 
 	protected boolean processServicePre(

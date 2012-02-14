@@ -801,6 +801,12 @@ public abstract class FlagsEntryServiceBaseImpl extends PrincipalBean
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	/**
 	 * Performs an SQL query.
 	 *

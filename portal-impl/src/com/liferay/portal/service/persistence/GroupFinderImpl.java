@@ -53,76 +53,76 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GroupFinderImpl
 	extends BasePersistenceImpl<Group> implements GroupFinder {
 
-	public static String COUNT_BY_GROUP_ID =
+	public static final String COUNT_BY_GROUP_ID =
 		GroupFinder.class.getName() + ".countByGroupId";
 
-	public static String COUNT_BY_C_N_D =
+	public static final String COUNT_BY_C_N_D =
 		GroupFinder.class.getName() + ".countByC_N_D";
 
-	public static String FIND_BY_LIVE_GROUPS =
+	public static final String FIND_BY_LIVE_GROUPS =
 		GroupFinder.class.getName() + ".findByLiveGroups";
 
-	public static String FIND_BY_NO_LAYOUTS =
+	public static final String FIND_BY_NO_LAYOUTS =
 		GroupFinder.class.getName() + ".findByNoLayouts";
 
-	public static String FIND_BY_NULL_FRIENDLY_URL =
+	public static final String FIND_BY_NULL_FRIENDLY_URL =
 		GroupFinder.class.getName() + ".findByNullFriendlyURL";
 
-	public static String FIND_BY_SYSTEM =
+	public static final String FIND_BY_SYSTEM =
 		GroupFinder.class.getName() + ".findBySystem";
 
-	public static String FIND_BY_C_C =
+	public static final String FIND_BY_C_C =
 		GroupFinder.class.getName() + ".findByC_C";
 
-	public static String FIND_BY_C_N =
+	public static final String FIND_BY_C_N =
 		GroupFinder.class.getName() + ".findByC_N";
 
-	public static String FIND_BY_C_N_D =
+	public static final String FIND_BY_C_N_D =
 		GroupFinder.class.getName() + ".findByC_N_D";
 
-	public static String JOIN_BY_ACTIVE =
+	public static final String JOIN_BY_ACTIVE =
 		GroupFinder.class.getName() + ".joinByActive";
 
-	public static String JOIN_BY_CREATOR_USER_ID =
+	public static final String JOIN_BY_CREATOR_USER_ID =
 		GroupFinder.class.getName() + ".joinByCreatorUserId";
 
-	public static String JOIN_BY_GROUP_ORG =
+	public static final String JOIN_BY_GROUP_ORG =
 		GroupFinder.class.getName() + ".joinByGroupOrg";
 
-	public static String JOIN_BY_GROUPS_ORGS =
+	public static final String JOIN_BY_GROUPS_ORGS =
 		GroupFinder.class.getName() + ".joinByGroupsOrgs";
 
-	public static String JOIN_BY_GROUPS_ROLES =
+	public static final String JOIN_BY_GROUPS_ROLES =
 		GroupFinder.class.getName() + ".joinByGroupsRoles";
 
-	public static String JOIN_BY_GROUPS_USER_GROUPS =
+	public static final String JOIN_BY_GROUPS_USER_GROUPS =
 		GroupFinder.class.getName() + ".joinByGroupsUserGroups";
 
-	public static String JOIN_BY_LAYOUT_SET =
+	public static final String JOIN_BY_LAYOUT_SET =
 		GroupFinder.class.getName() + ".joinByLayoutSet";
 
-	public static String JOIN_BY_PAGE_COUNT =
+	public static final String JOIN_BY_PAGE_COUNT =
 		GroupFinder.class.getName() + ".joinByPageCount";
 
-	public static String JOIN_BY_ROLE_PERMISSIONS =
+	public static final String JOIN_BY_ROLE_PERMISSIONS =
 		GroupFinder.class.getName() + ".joinByRolePermissions";
 
-	public static String JOIN_BY_ROLE_RESOURCE_PERMISSIONS =
+	public static final String JOIN_BY_ROLE_RESOURCE_PERMISSIONS =
 		GroupFinder.class.getName() + ".joinByRoleResourcePermissions";
 
-	public static String JOIN_BY_ROLE_RESOURCE_TYPE_PERMISSIONS =
+	public static final String JOIN_BY_ROLE_RESOURCE_TYPE_PERMISSIONS =
 		GroupFinder.class.getName() + ".joinByRoleResourceTypePermissions";
 
-	public static String JOIN_BY_SITE =
+	public static final String JOIN_BY_SITE =
 		GroupFinder.class.getName() + ".joinBySite";
 
-	public static String JOIN_BY_TYPE =
+	public static final String JOIN_BY_TYPE =
 		GroupFinder.class.getName() + ".joinByType";
 
-	public static String JOIN_BY_USER_GROUP_ROLE =
+	public static final String JOIN_BY_USER_GROUP_ROLE =
 		GroupFinder.class.getName() + ".joinByUserGroupRole";
 
-	public static String JOIN_BY_USERS_GROUPS =
+	public static final String JOIN_BY_USERS_GROUPS =
 		GroupFinder.class.getName() + ".joinByUsersGroups";
 
 	public int countByG_U(long groupId, long userId, boolean inherit)
@@ -557,8 +557,8 @@ public class GroupFinderImpl
 
 	public List<Group> findByC_C_N_D(
 			long companyId, long[] classNameIds, String name, String realName,
-			String description, LinkedHashMap<String, Object> params,
-			int start, int end, OrderByComparator obc)
+			String description, LinkedHashMap<String, Object> params, int start,
+			int end, OrderByComparator obc)
 		throws SystemException {
 
 		name = StringUtil.lowerCase(name);
@@ -898,8 +898,7 @@ public class GroupFinderImpl
 			return StringUtil.replace(
 				sql,
 				new String[] {
-					"[$JOIN$]",
-					"[$WHERE$]"
+					"[$JOIN$]", "[$WHERE$]"
 				},
 				new String[] {
 					StringPool.BLANK,
@@ -1221,9 +1220,9 @@ public class GroupFinderImpl
 
 	private LinkedHashMap<String, Object> _emptyLinkedHashMap =
 		new LinkedHashMap<String, Object>(0);
-	private Map<String, String> _findByCompanyIdSQLCache =
-		new ConcurrentHashMap<String, String>();
 	private Map<String, String> _findByC_C_N_DSQLCache =
+		new ConcurrentHashMap<String, String>();
+	private Map<String, String> _findByCompanyIdSQLCache =
 		new ConcurrentHashMap<String, String>();
 	private volatile long[] _groupOrganizationClassNameIds;
 	private volatile Map<String, String> _joinMap;

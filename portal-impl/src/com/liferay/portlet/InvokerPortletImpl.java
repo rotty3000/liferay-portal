@@ -133,13 +133,18 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	public InvokerPortlet create(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletContext portletContext)
+			PortletConfig portletConfig, PortletContext portletContext,
+			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
+			boolean strutsBridgePortlet)
 		throws PortletException {
 
 		try {
 			InvokerPortlet invokerPortlet = (InvokerPortlet)clone();
 
-			invokerPortlet.prepare(portletModel, portlet, portletContext);
+			invokerPortlet.prepare(
+				portletModel, portlet, portletConfig, portletContext,
+				checkAuthToken, facesPortlet, strutsPortlet,
+				strutsBridgePortlet);
 
 			return invokerPortlet;
 		}
@@ -153,18 +158,13 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	public InvokerPortlet create(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletConfig portletConfig, PortletContext portletContext,
-			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
-			boolean strutsBridgePortlet)
+			PortletContext portletContext)
 		throws PortletException {
 
 		try {
 			InvokerPortlet invokerPortlet = (InvokerPortlet)clone();
 
-			invokerPortlet.prepare(
-				portletModel, portlet, portletConfig, portletContext,
-				checkAuthToken, facesPortlet, strutsPortlet,
-				strutsBridgePortlet);
+			invokerPortlet.prepare(portletModel, portlet, portletContext);
 
 			return invokerPortlet;
 		}
@@ -204,6 +204,10 @@ public class InvokerPortletImpl implements InvokerPortlet {
 		_destroyable = false;
 	}
 
+	public Integer getExpCache() {
+		return _expCache;
+	}
+
 	public Portlet getPortlet() {
 		return _portlet;
 	}
@@ -223,10 +227,6 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	public Portlet getPortletInstance() {
 		return _portlet;
-	}
-
-	public Integer getExpCache() {
-		return _expCache;
 	}
 
 	public void init(PortletConfig portletConfig) throws PortletException {
@@ -276,6 +276,37 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	public void prepare(
 			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
+			PortletConfig portletConfig, PortletContext portletContext,
+			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
+			boolean strutsBridgePortlet)
+		throws PortletException {
+
+		// From prepare
+
+		_portletModel = portletModel;
+		_portlet = portlet;
+		_portletId = _portletModel.getPortletId();
+		_portletContextImpl = (PortletContextImpl)portletContext;
+		_checkAuthToken = checkAuthToken;
+		_facesPortlet = facesPortlet;
+		_strutsPortlet = strutsPortlet;
+		_strutsBridgePortlet = strutsBridgePortlet;
+		_expCache = portletModel.getExpCache();
+		setPortletFilters();
+
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				"Create instance cache wrapper for " +
+					_portletContextImpl.getPortlet().getPortletId());
+		}
+
+		// From init
+
+		_portletConfigImpl = (PortletConfigImpl)portletConfig;
+	}
+
+	public void prepare(
+			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
 			PortletContext portletContext)
 		throws PortletException {
 
@@ -312,37 +343,6 @@ public class InvokerPortletImpl implements InvokerPortlet {
 			"org.apache.portals.bridges.struts.StrutsPortlet");
 		_expCache = portletModel.getExpCache();
 		setPortletFilters();
-	}
-
-	public void prepare(
-			com.liferay.portal.model.Portlet portletModel, Portlet portlet,
-			PortletConfig portletConfig, PortletContext portletContext,
-			boolean checkAuthToken, boolean facesPortlet, boolean strutsPortlet,
-			boolean strutsBridgePortlet)
-		throws PortletException {
-
- 		// From prepare
-
-		_portletModel = portletModel;
-		_portlet = portlet;
-		_portletId = _portletModel.getPortletId();
-		_portletContextImpl = (PortletContextImpl)portletContext;
-		_checkAuthToken = checkAuthToken;
-		_facesPortlet = facesPortlet;
-		_strutsPortlet = strutsPortlet;
-		_strutsBridgePortlet = strutsBridgePortlet;
-		_expCache = portletModel.getExpCache();
-		setPortletFilters();
-
-		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Create instance cache wrapper for " +
-					_portletContextImpl.getPortlet().getPortletId());
-		}
-
-		// From init
-
-		_portletConfigImpl = (PortletConfigImpl)portletConfig;
 	}
 
 	public void processAction(
@@ -438,8 +438,8 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 			Layout layout = (Layout)renderRequest.getAttribute(WebKeys.LAYOUT);
 
-			Map<String, InvokerPortletResponse> sessionResponses =
-				getResponses(portletSession);
+			Map<String, InvokerPortletResponse> sessionResponses = getResponses(
+				portletSession);
 
 			String sessionResponseId = encodeResponseKey(
 				layout.getPlid(), _portletId,
@@ -767,24 +767,24 @@ public class InvokerPortletImpl implements InvokerPortlet {
 
 	private static Log _log = LogFactoryUtil.getLog(InvokerPortletImpl.class);
 
-	private com.liferay.portal.model.Portlet _portletModel;
-	private String _portletId;
+	private Map<String, List<ActionFilter>> _actionFiltersMap =
+		new HashMap<String, List<ActionFilter>>();
+	private boolean _checkAuthToken;
+	private boolean _destroyable;
+	private Map<String, List<EventFilter>> _eventFiltersMap =
+		new HashMap<String, List<EventFilter>>();
+	private Integer _expCache;
+	private boolean _facesPortlet;
 	private Portlet _portlet;
 	private PortletConfigImpl _portletConfigImpl;
 	private PortletContextImpl _portletContextImpl;
-	private Integer _expCache;
-	private boolean _checkAuthToken;
-	private boolean _destroyable;
-	private boolean _facesPortlet;
-	private boolean _strutsPortlet;
-	private boolean _strutsBridgePortlet;
-	private Map<String, List<ActionFilter>> _actionFiltersMap =
-		new HashMap<String, List<ActionFilter>>();
-	private Map<String, List<EventFilter>> _eventFiltersMap =
-		new HashMap<String, List<EventFilter>>();
+	private String _portletId;
+	private com.liferay.portal.model.Portlet _portletModel;
 	private Map<String, List<RenderFilter>> _renderFiltersMap =
 		new HashMap<String, List<RenderFilter>>();
 	private Map<String, List<ResourceFilter>> _resourceFiltersMap =
 		new HashMap<String, List<ResourceFilter>>();
+	private boolean _strutsBridgePortlet;
+	private boolean _strutsPortlet;
 
 }

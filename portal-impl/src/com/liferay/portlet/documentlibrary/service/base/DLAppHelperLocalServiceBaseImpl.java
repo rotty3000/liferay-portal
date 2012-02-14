@@ -1844,6 +1844,12 @@ public abstract class DLAppHelperLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	/**
 	 * Performs an SQL query.
 	 *

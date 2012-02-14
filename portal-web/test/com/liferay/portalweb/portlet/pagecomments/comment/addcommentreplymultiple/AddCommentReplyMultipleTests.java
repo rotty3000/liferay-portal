@@ -15,6 +15,9 @@
 package com.liferay.portalweb.portlet.pagecomments.comment.addcommentreplymultiple;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.pagecomments.portlet.addportlet.AddPagePCTest;
+import com.liferay.portalweb.portlet.pagecomments.portlet.addportlet.AddPortletPCTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

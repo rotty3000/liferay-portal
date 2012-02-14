@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -76,7 +77,7 @@ public class UploadServletRequestImpl
 	public UploadServletRequestImpl(HttpServletRequest request) {
 		super(request);
 
-		_fileParams = new LinkedHashMap<String, LiferayFileItem[]>();
+		_fileParams = new LinkedHashMap<String, FileItem[]>();
 		_regularParams = new LinkedHashMap<String, List<String>>();
 
 		try {
@@ -94,6 +95,8 @@ public class UploadServletRequestImpl
 
 			for (LiferayFileItem liferayFileItem : liferayFileItemsList) {
 				if (liferayFileItem.isFormField()) {
+					liferayFileItem.setString(request.getCharacterEncoding());
+
 					String fieldName = liferayFileItem.getFieldName();
 
 					if (!_regularParams.containsKey(fieldName)) {
@@ -107,7 +110,7 @@ public class UploadServletRequestImpl
 					continue;
 				}
 
-				LiferayFileItem[] liferayFileItems = _fileParams.get(
+				FileItem[] liferayFileItems = _fileParams.get(
 					liferayFileItem.getFieldName());
 
 				if (liferayFileItems == null) {
@@ -150,8 +153,8 @@ public class UploadServletRequestImpl
 
 	public void cleanUp() {
 		if ((_fileParams != null) && !_fileParams.isEmpty()) {
-			for (LiferayFileItem[] liferayFileItems : _fileParams.values()) {
-				for (LiferayFileItem liferayFileItem : liferayFileItems) {
+			for (FileItem[] liferayFileItems : _fileParams.values()) {
+				for (FileItem liferayFileItem : liferayFileItems) {
 					liferayFileItem.delete();
 				}
 			}
@@ -159,10 +162,10 @@ public class UploadServletRequestImpl
 	}
 
 	public String getContentType(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			return liferayFileItem.getContentType();
 		}
@@ -179,12 +182,12 @@ public class UploadServletRequestImpl
 			return null;
 		}
 
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		File file = null;
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			file = liferayFileItem.getStoreLocation();
 
@@ -219,10 +222,10 @@ public class UploadServletRequestImpl
 
 		InputStream inputStream = null;
 
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			inputStream = getInputStream(liferayFileItem, deleteOnClose);
 		}
@@ -231,10 +234,10 @@ public class UploadServletRequestImpl
 	}
 
 	public String getFileName(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			return liferayFileItem.getFileName();
 		}
@@ -243,13 +246,13 @@ public class UploadServletRequestImpl
 	}
 
 	public String[] getFileNames(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
 			String[] fileNames = new String[liferayFileItems.length];
 
 			for (int i = 0; i < liferayFileItems.length; i++) {
-				LiferayFileItem liferayFileItem = liferayFileItems[i];
+				FileItem liferayFileItem = liferayFileItems[i];
 
 				fileNames[i] = liferayFileItem.getFileName();
 			}
@@ -267,13 +270,13 @@ public class UploadServletRequestImpl
 			return null;
 		}
 
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
 			File[] files = new File[liferayFileItems.length];
 
 			for (int i = 0; i < liferayFileItems.length; i++) {
-				LiferayFileItem liferayFileItem = liferayFileItems[i];
+				FileItem liferayFileItem = liferayFileItems[i];
 
 				if (Validator.isNotNull(liferayFileItem.getFileName())) {
 					files[i] = liferayFileItem.getStoreLocation();
@@ -301,13 +304,13 @@ public class UploadServletRequestImpl
 
 		InputStream[] inputStreams = null;
 
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
 			inputStreams = new InputStream[liferayFileItems.length];
 
 			for (int i = 0; i < liferayFileItems.length; i++) {
-				LiferayFileItem liferayFileItem = liferayFileItems[i];
+				FileItem liferayFileItem = liferayFileItems[i];
 
 				if (Validator.isNotNull(liferayFileItem.getFileName())) {
 					inputStreams[i] = getInputStream(
@@ -320,10 +323,10 @@ public class UploadServletRequestImpl
 	}
 
 	public String getFullFileName(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			return liferayFileItem.getFullFileName();
 		}
@@ -336,7 +339,7 @@ public class UploadServletRequestImpl
 		return _liferayServletRequest.getInputStream();
 	}
 
-	public Map<String, LiferayFileItem[]> getMultipartParameterMap() {
+	public Map<String, FileItem[]> getMultipartParameterMap() {
 		return _fileParams;
 	}
 
@@ -373,14 +376,11 @@ public class UploadServletRequestImpl
 		Enumeration<String> enu = super.getParameterNames();
 
 		while (enu.hasMoreElements()) {
-			String name = enu.nextElement();
-
-			if (!_regularParams.containsKey(name)) {
-				parameterNames.add(name);
-			}
+			parameterNames.add(enu.nextElement());
 		}
 
 		parameterNames.addAll(_regularParams.keySet());
+		parameterNames.addAll(_fileParams.keySet());
 
 		return Collections.enumeration(parameterNames);
 	}
@@ -408,10 +408,10 @@ public class UploadServletRequestImpl
 	}
 
 	public Long getSize(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			return new Long(liferayFileItem.getSize());
 		}
@@ -420,10 +420,10 @@ public class UploadServletRequestImpl
 	}
 
 	public Boolean isFormField(String name) {
-		LiferayFileItem[] liferayFileItems = _fileParams.get(name);
+		FileItem[] liferayFileItems = _fileParams.get(name);
 
 		if ((liferayFileItems != null) && (liferayFileItems.length > 0)) {
-			LiferayFileItem liferayFileItem = liferayFileItems[0];
+			FileItem liferayFileItem = liferayFileItems[0];
 
 			return new Boolean(liferayFileItem.isFormField());
 		}
@@ -432,7 +432,7 @@ public class UploadServletRequestImpl
 	}
 
 	protected InputStream getInputStream(
-			LiferayFileItem liferayFileItem, boolean deleteOnClose)
+			FileItem liferayFileItem, boolean deleteOnClose)
 		throws IOException {
 
 		InputStream inputStream = null;
@@ -454,8 +454,8 @@ public class UploadServletRequestImpl
 
 	private static File _tempDir;
 
+	private Map<String, FileItem[]> _fileParams;
 	private LiferayServletRequest _liferayServletRequest;
-	private Map<String, LiferayFileItem[]> _fileParams;
 	private Map<String, List<String>> _regularParams;
 
 }

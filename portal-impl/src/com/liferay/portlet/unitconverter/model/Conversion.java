@@ -36,38 +36,38 @@ public class Conversion {
 		_toValue = toValue;
 	}
 
-	public int getType() {
-		return _type;
-	}
-
 	public int getFromId() {
 		return _fromId;
-	}
-
-	public int getToId() {
-		return _toId;
 	}
 
 	public double getFromValue() {
 		return _fromValue;
 	}
 
-	public void setFromValue(double fromValue) {
-		_fromValue = fromValue;
+	public int getToId() {
+		return _toId;
 	}
 
 	public double getToValue() {
 		return _toValue;
 	}
 
+	public int getType() {
+		return _type;
+	}
+
+	public void setFromValue(double fromValue) {
+		_fromValue = fromValue;
+	}
+
 	public void setToValue(double toValue) {
 		_toValue = toValue;
 	}
 
-	private int _type;
 	private int _fromId;
-	private int _toId;
 	private double _fromValue;
+	private int _toId;
 	private double _toValue;
+	private int _type;
 
 }

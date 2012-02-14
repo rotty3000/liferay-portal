@@ -2700,7 +2700,7 @@ AUI.add(
 					errorText = Liferay.Language.get('please-enter-a-valid-xsd');
 				}
 				else if (exception.indexOf('DuplicateStructureElementException') > -1) {
-					errorText = Liferay.Language.get('please-enter-unique-structure-field-names-including-the-parent-structure');
+					errorText = Liferay.Language.get('please-enter-unique-structure-field-names-(including-field-names-inherited-from-the-parent-structure)');
 				}
 				else if (exception.indexOf('DuplicateStructureIdException') > -1) {
 					errorText = Liferay.Language.get('please-enter-a-unique-id');
@@ -3352,7 +3352,7 @@ AUI.add(
 
 						if ((type == 'image') && source) {
 							var isLocalized = instance.get('localized');
-							var inputFileName = 'structure_image_' + value + '_' + instance.get('variableName');
+							var inputFileName = instance.portletNamespace + 'structure_image_' + value + '_' + instance.get('variableName');
 							var inputFile = source.one('.journal-article-component-container [type=file]');
 
 							if (isLocalized) {

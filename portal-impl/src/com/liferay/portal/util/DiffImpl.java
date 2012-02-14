@@ -96,9 +96,8 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 				// Lines were deleted from source only.
 
 				_highlightLines(
-					sourceStringList, deletedMarkerStart,
-					deletedMarkerEnd, difference.getDeletedStart(),
-					difference.getDeletedEnd());
+					sourceStringList, deletedMarkerStart, deletedMarkerEnd,
+					difference.getDeletedStart(), difference.getDeletedEnd());
 
 				margin = _calculateMargin(
 					sourceResults, targetResults, difference.getDeletedStart(),
@@ -490,9 +489,8 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 				// Chars were deleted from source only.
 
 				_highlightChars(
-					sourceList, deletedMarkerStart,
-					deletedMarkerEnd, difference.getDeletedStart(),
-					difference.getDeletedEnd());
+					sourceList, deletedMarkerStart, deletedMarkerEnd,
+					difference.getDeletedStart(), difference.getDeletedEnd());
 
 				sourceChanged = true;
 			}
@@ -511,9 +509,8 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 				// Chars were both deleted and added.
 
 				_highlightChars(
-					sourceList, deletedMarkerStart,
-					deletedMarkerEnd, difference.getDeletedStart(),
-					difference.getDeletedEnd());
+					sourceList, deletedMarkerStart, deletedMarkerEnd,
+					difference.getDeletedStart(), difference.getDeletedEnd());
 
 				sourceChanged = true;
 
@@ -584,6 +581,6 @@ public class DiffImpl implements com.liferay.portal.kernel.util.Diff {
 		return sb.toString();
 	}
 
-	private static int _DIFF_MAX_LINE_LENGTH = 5000;
+	private static final int _DIFF_MAX_LINE_LENGTH = 5000;
 
 }

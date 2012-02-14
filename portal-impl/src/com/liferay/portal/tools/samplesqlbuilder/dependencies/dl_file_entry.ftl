@@ -12,7 +12,7 @@ insert into DLFileRank values (${dlFileRank.fileRankId}, ${dlFileRank.groupId}, 
 
 <#assign dlFileVersion = dataFactory.addDLFileVersion(dlFileEntry)>
 
-insert into DLFileVersion values (${dlFileVersion.fileVersionId}, ${dlFileVersion.groupId}, ${dlFileVersion.companyId}, ${dlFileVersion.userId}, '', '${createDate}', '${createDate}', ${dlFileVersion.repositoryId}, ${dlFileEntry.folderId}, ${dlFileVersion.fileEntryId}, '${dlFileVersion.extension}', '${dlFileVersion.mimeType}', '${dlFileVersion.title}','${dlFileEntry.description}', '', '', 0, '1.0', '${dlFileEntrySize}', 0, ${dlFileVersion.userId}, '', '${createDate}');
+insert into DLFileVersion values ('${portalUUIDUtil.generate()}', ${dlFileVersion.fileVersionId}, ${dlFileVersion.groupId}, ${dlFileVersion.companyId}, ${dlFileVersion.userId}, '', '${createDate}', '${createDate}', ${dlFileVersion.repositoryId}, ${dlFileEntry.folderId}, ${dlFileVersion.fileEntryId}, '${dlFileVersion.extension}', '${dlFileVersion.mimeType}', '${dlFileVersion.title}','${dlFileEntry.description}', '', '', 0, '1.0', '${dlFileEntrySize}', 0, ${dlFileVersion.userId}, '', '${createDate}');
 
 <#assign dlSync = dataFactory.addDLSync(dlFileEntry.companyId, dlFileEntry.fileEntryId, dlFileEntry.groupId, dlFileEntry.folderId, false)>
 

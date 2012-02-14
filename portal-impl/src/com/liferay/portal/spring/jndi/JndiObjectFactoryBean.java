@@ -17,7 +17,12 @@ package com.liferay.portal.spring.jndi;
 import com.liferay.portal.kernel.jndi.JNDIUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.util.PropsUtil;
 
+import java.util.Properties;
+
+import javax.naming.Context;
 import javax.naming.InitialContext;
 
 /**
@@ -29,7 +34,12 @@ public class JndiObjectFactoryBean
 	@Override
 	protected Object lookup() {
 		try {
-			return JNDIUtil.lookup(new InitialContext(), getJndiName());
+			Properties properties = PropsUtil.getProperties(
+				PropsKeys.JNDI_ENVIRONMENT, true);
+
+			Context context = new InitialContext(properties);
+
+			return JNDIUtil.lookup(context, getJndiName());
 		}
 		catch (Exception e) {
 			_log.error("Unable to lookup " + getJndiName());

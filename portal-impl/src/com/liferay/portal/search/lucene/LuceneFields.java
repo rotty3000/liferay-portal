@@ -33,48 +33,6 @@ import org.apache.lucene.document.NumericField;
  */
 public class LuceneFields {
 
-	public static String getUID(String portletId, long field1) {
-		return getUID(portletId, String.valueOf(field1));
-	}
-
-	public static String getUID(String portletId, Long field1) {
-		return getUID(portletId, field1.longValue());
-	}
-
-	public static String getUID(String portletId, String field1) {
-		return getUID(portletId, field1, null);
-	}
-
-	public static String getUID(String portletId, long field1, String field2) {
-		return getUID(portletId, String.valueOf(field1), field2);
-	}
-
-	public static String getUID(String portletId, Long field1, String field2) {
-		return getUID(portletId, field1.longValue(), field2);
-	}
-
-	public static String getUID(
-		String portletId, String field1, String field2) {
-
-		return getUID(portletId, field1, field2, null);
-	}
-
-	public static String getUID(
-		String portletId, String field1, String field2, String field3) {
-
-		String uid = portletId + _UID_PORTLET + field1;
-
-		if (field2 != null) {
-			uid += _UID_FIELD + field2;
-		}
-
-		if (field3 != null) {
-			uid += _UID_FIELD + field3;
-		}
-
-		return uid;
-	}
-
 	public static Field getDate(String field) {
 		return getDate(field, new Date());
 	}
@@ -89,14 +47,6 @@ public class LuceneFields {
 				DateTools.dateToString(date, DateTools.Resolution.SECOND),
 				Field.Store.YES, Field.Index.NOT_ANALYZED);
 		}
-	}
-
-	public static Field getFile(String field, InputStream is, String fileExt) {
-		LuceneFileExtractor fileExtractor =
-			(LuceneFileExtractor)InstancePool.get(
-				PropsValues.LUCENE_FILE_EXTRACTOR);
-
-		return fileExtractor.getFile(field, is, fileExt);
 	}
 
 	public static Field getFile(String field, byte[] bytes, String fileExt) {
@@ -115,6 +65,14 @@ public class LuceneFields {
 				PropsValues.LUCENE_FILE_EXTRACTOR);
 
 		return fileExtractor.getFile(field, file, fileExt);
+	}
+
+	public static Field getFile(String field, InputStream is, String fileExt) {
+		LuceneFileExtractor fileExtractor =
+			(LuceneFileExtractor)InstancePool.get(
+				PropsValues.LUCENE_FILE_EXTRACTOR);
+
+		return fileExtractor.getFile(field, is, fileExt);
 	}
 
 	public static Field getKeyword(String field, double keyword) {
@@ -155,6 +113,48 @@ public class LuceneFields {
 
 	public static Field getText(String field, StringBuilder sb) {
 		return getText(field, sb.toString());
+	}
+
+	public static String getUID(String portletId, long field1) {
+		return getUID(portletId, String.valueOf(field1));
+	}
+
+	public static String getUID(String portletId, long field1, String field2) {
+		return getUID(portletId, String.valueOf(field1), field2);
+	}
+
+	public static String getUID(String portletId, Long field1) {
+		return getUID(portletId, field1.longValue());
+	}
+
+	public static String getUID(String portletId, Long field1, String field2) {
+		return getUID(portletId, field1.longValue(), field2);
+	}
+
+	public static String getUID(String portletId, String field1) {
+		return getUID(portletId, field1, null);
+	}
+
+	public static String getUID(
+		String portletId, String field1, String field2) {
+
+		return getUID(portletId, field1, field2, null);
+	}
+
+	public static String getUID(
+		String portletId, String field1, String field2, String field3) {
+
+		String uid = portletId + _UID_PORTLET + field1;
+
+		if (field2 != null) {
+			uid += _UID_FIELD + field2;
+		}
+
+		if (field3 != null) {
+			uid += _UID_FIELD + field3;
+		}
+
+		return uid;
 	}
 
 	private static final String _UID_FIELD = "_FIELD_";

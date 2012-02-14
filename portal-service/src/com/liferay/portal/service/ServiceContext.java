@@ -19,9 +19,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.AuditedModel;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.Role;
@@ -321,6 +323,31 @@ public class ServiceContext implements Cloneable, Serializable {
 	 */
 	public Map<String, Serializable> getExpandoBridgeAttributes() {
 		return _expandoBridgeAttributes;
+	}
+
+	/**
+	 * Returns the date when an <code>aui:form</code> was generated in this
+	 * service context. The form date can be used in detecting situations in
+	 * which an entity has been modified while another client was editing that
+	 * entity. </p>
+	 *
+	 * <p>
+	 * Example:
+	 * </p>
+	 *
+	 * <p>
+	 * Person1 and person2 start editing the same version of a Web Content
+	 * article. Person1 publishes changes to the article first. When person2
+	 * attempts to publish changes to that article, the service implementation
+	 * finds that a modification to that article has already been published some
+	 * time after person2 started editing the article. Since the the article
+	 * modification date was found to be later than the form date for person2,
+	 * person2 could be alerted to the modification and make a backup copy of
+	 * his edits before synchronizing with the published changes by person1.
+	 * </p>
+	 */
+	public Date getFormDate() {
+		return _formDate;
 	}
 
 	/**
@@ -884,6 +911,34 @@ public class ServiceContext implements Cloneable, Serializable {
 	}
 
 	/**
+	 * Sets the date when an <code>aui:form</code> was generated in this service
+	 * context. The form date can be used in detecting situations in which an
+	 * entity has been modified while another client was editing that entity.
+	 * </p>
+	 *
+	 * <p>
+	 * Example:
+	 * </p>
+	 *
+	 * <p>
+	 * Person1 and person2 start editing the same version of a Web Content
+	 * article. Person1 publishes changes to the article first. When person2
+	 * attempts to publish changes to that article, the service implementation
+	 * finds that a modification to that article has already been published some
+	 * time after person2 started editing the article. Since the the article
+	 * modification date was found to be later than the form date for person2,
+	 * person2 could be alerted to the modification and make a backup copy of
+	 * his edits before synchronizing with the published changes by person1.
+	 * </p>
+	 *
+	 * @param formDate the date that an <code>aui:form</code> was generated for
+	 *        this service context (optionally <code>null</code>)
+	 */
+	public void setFormDate(Date formDate) {
+		_formDate = formDate;
+	}
+
+	/**
 	 * Sets an array containing specific group permissions for a resource if
 	 * this service context is being passed as a parameter to a method which
 	 * manipulates the resource.
@@ -1126,6 +1181,26 @@ public class ServiceContext implements Cloneable, Serializable {
 		return LanguageUtil.format(locale, pattern, arguments);
 	}
 
+	public void validateModifiedDate(
+			AuditedModel auditedModel, Class<? extends PortalException> clazz)
+		throws PortalException {
+
+		int value = DateUtil.compareTo(
+			auditedModel.getModifiedDate(), _formDate);
+
+		if (value > 0) {
+			try {
+				throw clazz.newInstance();
+			}
+			catch (IllegalAccessException iae) {
+				throw new RuntimeException(iae);
+			}
+			catch (InstantiationException ie) {
+				throw new RuntimeException(ie);
+			}
+		}
+	}
+
 	private boolean _addGroupPermissions;
 	private boolean _addGuestPermissions;
 	private long[] _assetCategoryIds;
@@ -1139,6 +1214,7 @@ public class ServiceContext implements Cloneable, Serializable {
 	private String _currentURL;
 	private boolean _deriveDefaultPermissions;
 	private Map<String, Serializable> _expandoBridgeAttributes;
+	private Date _formDate;
 	private String[] _groupPermissions;
 	private String[] _guestPermissions;
 	private Map<String, String> _headers;
@@ -1148,6 +1224,7 @@ public class ServiceContext implements Cloneable, Serializable {
 	private String _layoutURL;
 	private Date _modifiedDate;
 	private String _pathMain;
+	private long _plid;
 	private String _portalURL;
 	private PortletPreferencesIds _portletPreferencesIds;
 	private String _remoteAddr;
@@ -1156,9 +1233,8 @@ public class ServiceContext implements Cloneable, Serializable {
 	private long _scopeGroupId;
 	private boolean _signedIn;
 	private String _userDisplayURL;
-	private long _plid;
-	private int _workflowAction = WorkflowConstants.ACTION_PUBLISH;
 	private long _userId;
 	private String _uuid;
+	private int _workflowAction = WorkflowConstants.ACTION_PUBLISH;
 
 }

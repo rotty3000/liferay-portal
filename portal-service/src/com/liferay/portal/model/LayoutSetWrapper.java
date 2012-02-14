@@ -462,11 +462,6 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		_layoutSet.persist();
 	}
 
-	public com.liferay.portal.model.Theme getTheme()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _layoutSet.getTheme();
-	}
-
 	public com.liferay.portal.model.ColorScheme getColorScheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getColorScheme();
@@ -478,12 +473,21 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return _layoutSet.getGroup();
 	}
 
+	public long getLiveLogoId() {
+		return _layoutSet.getLiveLogoId();
+	}
+
 	public com.liferay.portal.kernel.util.UnicodeProperties getSettingsProperties() {
 		return _layoutSet.getSettingsProperties();
 	}
 
 	public java.lang.String getSettingsProperty(java.lang.String key) {
 		return _layoutSet.getSettingsProperty(key);
+	}
+
+	public com.liferay.portal.model.Theme getTheme()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _layoutSet.getTheme();
 	}
 
 	public java.lang.String getThemeSetting(java.lang.String key,
@@ -496,14 +500,14 @@ public class LayoutSetWrapper implements LayoutSet, ModelWrapper<LayoutSet> {
 		return _layoutSet.getVirtualHostname();
 	}
 
-	public com.liferay.portal.model.Theme getWapTheme()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _layoutSet.getWapTheme();
-	}
-
 	public com.liferay.portal.model.ColorScheme getWapColorScheme()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _layoutSet.getWapColorScheme();
+	}
+
+	public com.liferay.portal.model.Theme getWapTheme()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _layoutSet.getWapTheme();
 	}
 
 	public boolean isLayoutSetPrototypeLinkActive() {

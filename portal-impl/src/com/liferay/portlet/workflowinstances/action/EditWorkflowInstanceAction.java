@@ -158,7 +158,7 @@ public class EditWorkflowInstanceAction extends PortletAction {
 
 		if (layoutGroup.isControlPanel() &&
 			(WorkflowInstanceManagerUtil.getWorkflowInstanceCount(
-				companyId, userId, null, null, Boolean.FALSE) == 0)) {
+				companyId, userId, null, null, null) == 0)) {
 
 			return themeDisplay.getURLControlPanel();
 		}

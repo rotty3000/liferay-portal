@@ -20,10 +20,10 @@ package com.liferay.portal.kernel.parsers.bbcode;
  */
 public class BBCodeTranslatorUtil {
 
-	public static String NEW_THREAD_URL = "${newThreadURL}";
+	public static final String NEW_THREAD_URL = "${newThreadURL}";
 
 	public static BBCodeTranslator getBBCodeTranslator() {
-		return _BBCodeTranslator;
+		return _bbCodeTranslator;
 	}
 
 	public static String[] getEmoticonDescriptions() {
@@ -51,9 +51,9 @@ public class BBCodeTranslatorUtil {
 	}
 
 	public void setBBCodeTranslator(BBCodeTranslator bbCodeTranslator) {
-		_BBCodeTranslator = bbCodeTranslator;
+		_bbCodeTranslator = bbCodeTranslator;
 	}
 
-	private static BBCodeTranslator _BBCodeTranslator;
+	private static BBCodeTranslator _bbCodeTranslator;
 
 }

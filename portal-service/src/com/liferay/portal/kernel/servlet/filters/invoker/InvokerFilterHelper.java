@@ -208,9 +208,14 @@ public class InvokerFilterHelper {
 		boolean filterEnabled = true;
 
 		if (filter instanceof LiferayFilter) {
-			LiferayFilter liferayFilter = (LiferayFilter)filter;
 
-			filterEnabled = liferayFilter.isFilterEnabled();
+			// We no longer remove disabled filters because they can be enabled
+			// at runtime by a hook. The performance difference is negligible
+			// since most filters are assumed to be enabled.
+
+			//LiferayFilter liferayFilter = (LiferayFilter)filter;
+
+			//filterEnabled = liferayFilter.isFilterEnabled();
 		}
 
 		if (filterEnabled) {

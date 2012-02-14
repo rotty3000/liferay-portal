@@ -442,6 +442,12 @@ public abstract class AnnouncementsDeliveryServiceBaseImpl extends PrincipalBean
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return AnnouncementsDelivery.class;
 	}

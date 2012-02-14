@@ -55,6 +55,12 @@
 		<copy todir="${project.dir}/portal-web/docroot/WEB-INF/tld">
 			<fileset dir="classes/META-INF" includes="*.tld" />
 		</copy>
+
+		<copy file="classes/META-INF/aui.tld" tofile="${project.dir}/portal-web/docroot/WEB-INF/tld/liferay-aui.tld" />
+
+		<replace file="${project.dir}/portal-web/docroot/WEB-INF/tld/liferay-aui.tld">
+			<replacefilter token="http://alloy.liferay.com/tld/aui" value="http://liferay.com/tld/aui" />
+		</replace>
 	</target>
 
 	<target name="taglibdoc">

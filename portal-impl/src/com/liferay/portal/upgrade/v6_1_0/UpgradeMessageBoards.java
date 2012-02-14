@@ -99,10 +99,10 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 
 			StringBundler sb = new StringBundler(4);
 
-			sb.append("select messageFlag.messageId from MBMessageFlag ");
-			sb.append("messageFlag inner join MBMessage message on ");
-			sb.append("messageFlag.messageId = message.messageId where ");
-			sb.append("message.parentMessageId != 0 and flag = 3");
+			sb.append("select messageFlag.messageId as messageId from ");
+			sb.append("MBMessageFlag messageFlag inner join MBMessage ");
+			sb.append("message on messageFlag.messageId = message.messageId ");
+			sb.append("where message.parentMessageId != 0 and flag = 3");
 
 			String sql = sb.toString();
 
@@ -111,7 +111,7 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				long messageId = rs.getLong("messageFlag.messageId");
+				long messageId = rs.getLong("messageId");
 
 				updateMessageAnswer(messageId, true);
 			}
@@ -207,20 +207,27 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 
 				updateThreadQuestion(threadId, true);
 			}
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
+
+		try {
+			con = DataAccess.getConnection();
 
 			StringBundler sb = new StringBundler(4);
 
-			sb.append("select messageFlag.threadId from MBMessageFlag ");
-			sb.append("messageFlag inner join MBMessage message on ");
-			sb.append("messageFlag.messageId = message.messageId where ");
-			sb.append("message.parentMessageId = 0 and flag = 3");
+			sb.append("select messageFlag.threadId as threadId from ");
+			sb.append("MBMessageFlag messageFlag inner join MBMessage ");
+			sb.append("message on messageFlag.messageId = message.messageId ");
+			sb.append("where message.parentMessageId = 0 and flag = 3");
 
 			ps = con.prepareStatement(sb.toString());
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				long threadId = rs.getLong("messageFlag.threadId");
+				long threadId = rs.getLong("threadId");
 
 				updateThreadQuestion(threadId, true);
 			}
@@ -269,8 +276,7 @@ public class UpgradeMessageBoards extends UpgradeProcess {
 			con = DataAccess.getConnection();
 
 			ps = con.prepareStatement(
-				"update MBThread set question = ? where threadId =" +
-					threadId);
+				"update MBThread set question = ? where threadId =" + threadId);
 
 			ps.setBoolean(1, question);
 

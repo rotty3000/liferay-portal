@@ -200,28 +200,8 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		return addLayout(
 			groupId, privateLayout, parentLayoutId, localeNamesMap,
 			new HashMap<Locale, String>(), new HashMap<Locale, String>(),
-			new HashMap<Locale, String>(), new HashMap<Locale, String>(),
-			type, hidden, friendlyURL, serviceContext);
-	}
-
-	/**
-	 * Deletes the layout with the plid, also deleting the layout's child
-	 * layouts, and associated resources.
-	 *
-	 * @param  plid the primary key of the layout
-	 * @param  serviceContext the service context
-	 * @throws PortalException if the user did not have permission to delete the
-	 *         layout, if a layout with the primary key could not be found , or
-	 *         if some other portal exception occurred
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void deleteLayout(long plid, ServiceContext serviceContext)
-		throws PortalException, SystemException {
-
-		LayoutPermissionUtil.check(
-			getPermissionChecker(), plid, ActionKeys.DELETE);
-
-		layoutLocalService.deleteLayout(plid, serviceContext);
+			new HashMap<Locale, String>(), new HashMap<Locale, String>(), type,
+			hidden, friendlyURL, serviceContext);
 	}
 
 	/**
@@ -248,6 +228,26 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		layoutLocalService.deleteLayout(
 			groupId, privateLayout, layoutId, serviceContext);
+	}
+
+	/**
+	 * Deletes the layout with the plid, also deleting the layout's child
+	 * layouts, and associated resources.
+	 *
+	 * @param  plid the primary key of the layout
+	 * @param  serviceContext the service context
+	 * @throws PortalException if the user did not have permission to delete the
+	 *         layout, if a layout with the primary key could not be found , or
+	 *         if some other portal exception occurred
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void deleteLayout(long plid, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		LayoutPermissionUtil.check(
+			getPermissionChecker(), plid, ActionKeys.DELETE);
+
+		layoutLocalService.deleteLayout(plid, serviceContext);
 	}
 
 	/**
@@ -756,8 +756,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		String jobName = PortalUUIDUtil.generate();
 
 		Trigger trigger = new CronTrigger(
-			jobName, groupName, schedulerStartDate, schedulerEndDate,
-			cronText);
+			jobName, groupName, schedulerStartDate, schedulerEndDate, cronText);
 
 		String command = StringPool.BLANK;
 

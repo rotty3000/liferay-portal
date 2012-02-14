@@ -612,6 +612,7 @@ create table DLFileShortcut (
 );
 
 create table DLFileVersion (
+	uuid_ VARCHAR(75) null,
 	fileVersionId LONG not null primary key,
 	groupId LONG,
 	companyId LONG,
@@ -1017,7 +1018,17 @@ create table LayoutSetBranch (
 	privateLayout BOOLEAN,
 	name VARCHAR(75) null,
 	description STRING null,
-	master BOOLEAN
+	master BOOLEAN,
+	logo BOOLEAN,
+	logoId LONG,
+	themeId VARCHAR(75) null,
+	colorSchemeId VARCHAR(75) null,
+	wapThemeId VARCHAR(75) null,
+	wapColorSchemeId VARCHAR(75) null,
+	css STRING null,
+	settings_ STRING null,
+	layoutSetPrototypeUuid VARCHAR(75) null,
+	layoutSetPrototypeLinkEnabled BOOLEAN
 );
 
 create table LayoutSetPrototype (
@@ -2134,19 +2145,6 @@ create table VirtualHost (
 	companyId LONG,
 	layoutSetId LONG,
 	hostname VARCHAR(75) null
-);
-
-create table Vocabulary (
-	vocabularyId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	name VARCHAR(75) null,
-	description VARCHAR(75) null,
-	folksonomy BOOLEAN
 );
 
 create table WebDAVProps (

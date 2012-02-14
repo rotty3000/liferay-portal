@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.documentlibrary.util;
 
+import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
@@ -23,6 +24,7 @@ import com.liferay.portal.kernel.process.ClassPathUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.process.ProcessExecutor;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.InstancePool;
@@ -32,6 +34,7 @@ import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.log.Log4jLogFactoryImpl;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileVersion;
 import com.liferay.portal.util.PrefsPropsUtil;
@@ -57,10 +60,18 @@ import org.apache.commons.lang.time.StopWatch;
  * @author Mika Koivisto
  */
 public class AudioProcessorImpl
-	extends DefaultPreviewableProcessor implements AudioProcessor {
+	extends DLPreviewableProcessor implements AudioProcessor {
 
 	public static AudioProcessorImpl getInstance() {
 		return _instance;
+	}
+
+	public void exportGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception {
+
+		exportPreview(portletDataContext, fileEntry, fileEntryElement);
 	}
 
 	public void generateAudio(FileVersion fileVersion) throws Exception {
@@ -74,13 +85,13 @@ public class AudioProcessorImpl
 	public InputStream getPreviewAsStream(FileVersion fileVersion)
 		throws Exception {
 
-		return _instance.doGetPreviewAsStream(fileVersion);
+		return _instance.doGetPreviewAsStream(fileVersion, PREVIEW_TYPE);
 	}
 
 	public long getPreviewFileSize(FileVersion fileVersion)
 		throws Exception {
 
-		return _instance.doGetPreviewFileSize(fileVersion);
+		return _instance.doGetPreviewFileSize(fileVersion, PREVIEW_TYPE);
 	}
 
 	public boolean hasAudio(FileVersion fileVersion) {
@@ -98,6 +109,16 @@ public class AudioProcessorImpl
 		}
 
 		return hasAudio;
+	}
+
+	public void importGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			FileEntry importedFileEntry, Element fileEntryElement)
+		throws Exception {
+
+		importPreview(
+			portletDataContext, fileEntry, importedFileEntry, fileEntryElement,
+			"audio", PREVIEW_TYPE);
 	}
 
 	public boolean isAudioSupported(FileVersion fileVersion) {
@@ -128,6 +149,22 @@ public class AudioProcessorImpl
 
 	public void trigger(FileVersion fileVersion) {
 		_instance._queueGeneration(fileVersion);
+	}
+
+	protected void exportPreview(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception {
+
+		FileVersion fileVersion = fileEntry.getFileVersion();
+
+		if (!isSupported(fileVersion)) {
+			return;
+		}
+
+		exportPreview(
+			portletDataContext, fileEntry, fileEntryElement, "audio",
+			PREVIEW_TYPE);
 	}
 
 	@Override

@@ -31,6 +31,14 @@ public class RequestVars {
 		_ancestorLayoutId = ancestorLayoutId;
 	}
 
+	public long getAncestorLayoutId() {
+		return _ancestorLayoutId;
+	}
+
+	public long getAncestorPlid() {
+		return _ancestorPlid;
+	}
+
 	public HttpServletRequest getRequest() {
 		return _request;
 	}
@@ -39,17 +47,9 @@ public class RequestVars {
 		return _themeDisplay;
 	}
 
-	public long getAncestorPlid() {
-		return _ancestorPlid;
-	}
-
-	public long getAncestorLayoutId() {
-		return _ancestorLayoutId;
-	}
-
+	private long _ancestorLayoutId;
+	private long _ancestorPlid;
 	private HttpServletRequest _request;
 	private ThemeDisplay _themeDisplay;
-	private long _ancestorPlid;
-	private long _ancestorLayoutId;
 
 }

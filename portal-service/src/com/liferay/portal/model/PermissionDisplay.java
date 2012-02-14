@@ -78,30 +78,6 @@ public class PermissionDisplay
 		}
 	}
 
-	public Permission getPermission() {
-		return _permission;
-	}
-
-	public Resource getResource() {
-		return _resource;
-	}
-
-	public String getPortletName() {
-		return _portletName;
-	}
-
-	public String getPortletLabel() {
-		return _portletLabel;
-	}
-
-	public String getModelName() {
-		return _modelName;
-	}
-
-	public String getModelLabel() {
-		return _modelLabel;
-	}
-
 	public String getActionId() {
 		return _actionId;
 	}
@@ -110,18 +86,42 @@ public class PermissionDisplay
 		return _actionLabel;
 	}
 
+	public String getModelLabel() {
+		return _modelLabel;
+	}
+
+	public String getModelName() {
+		return _modelName;
+	}
+
+	public Permission getPermission() {
+		return _permission;
+	}
+
+	public String getPortletLabel() {
+		return _portletLabel;
+	}
+
+	public String getPortletName() {
+		return _portletName;
+	}
+
+	public Resource getResource() {
+		return _resource;
+	}
+
 	@Override
 	public int hashCode() {
 		return _portletName.concat(_modelName).concat(_actionId).hashCode();
 	}
 
-	private Permission _permission;
-	private Resource _resource;
-	private String _portletName;
-	private String _portletLabel;
-	private String _modelName;
-	private String _modelLabel;
 	private String _actionId;
 	private String _actionLabel;
+	private String _modelLabel;
+	private String _modelName;
+	private Permission _permission;
+	private String _portletLabel;
+	private String _portletName;
+	private Resource _resource;
 
 }

@@ -272,15 +272,15 @@ public class JournalArticleImageLocalServiceUtil {
 			elInstanceId, elName, languageId);
 	}
 
-	public static void deleteArticleImage(long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteArticleImage(articleImageId);
-	}
-
 	public static void deleteArticleImage(
 		com.liferay.portlet.journal.model.JournalArticleImage articleImage)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getService().deleteArticleImage(articleImage);
+	}
+
+	public static void deleteArticleImage(long articleImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteArticleImage(articleImageId);
 	}
 
 	public static void deleteArticleImage(long groupId,

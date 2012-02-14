@@ -98,6 +98,8 @@ public class PropsValues {
 
 	public static final String AUTH_LOGIN_PORTLET_NAME = PropsUtil.get(PropsKeys.AUTH_LOGIN_PORTLET_NAME);
 
+	public static final boolean AUTH_LOGIN_PROMPT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.AUTH_LOGIN_PROMPT_ENABLED));
+
 	public static final String AUTH_LOGIN_SITE_URL = PropsUtil.get(PropsKeys.AUTH_LOGIN_SITE_URL);
 
 	public static final String AUTH_LOGIN_URL = PropsUtil.get(PropsKeys.AUTH_LOGIN_URL);
@@ -259,6 +261,8 @@ public class PropsValues {
 	public static final String CAS_SERVER_URL = PropsUtil.get(PropsKeys.CAS_SERVER_URL);
 
 	public static final String CAS_SERVICE_URL = PropsUtil.get(PropsKeys.CAS_SERVICE_URL);
+
+	public static final boolean CDN_DYNAMIC_RESOURCES_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.CDN_DYNAMIC_RESOURCES_ENABLED));
 
 	public static final String CDN_HOST_HTTP = PropsUtil.get(PropsKeys.CDN_HOST_HTTP);
 
@@ -1108,6 +1112,8 @@ public class PropsValues {
 
 	public static final boolean PERMISSIONS_INLINE_SQL_CHECK_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_INLINE_SQL_CHECK_ENABLED));
 
+	public static final boolean PERMISSIONS_CHECK_GUEST_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_CHECK_GUEST_ENABLED));
+
 	public static final String PERMISSIONS_LIST_FILTER = PropsUtil.get(PropsKeys.PERMISSIONS_LIST_FILTER);
 
 	public static final boolean PERMISSIONS_OBJECT_BLOCKING_CACHE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_OBJECT_BLOCKING_CACHE));
@@ -1122,7 +1128,13 @@ public class PropsValues {
 
 	public static boolean PERMISSIONS_VIEW_DYNAMIC_INHERITANCE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE));
 
-	public static final String PERSISTENCE_PROVIDER= GetterUtil.getString(PropsUtil.get(PropsKeys.PERSISTENCE_PROVIDER));
+	public static final String PERSISTENCE_PROVIDER = GetterUtil.getString(PropsUtil.get(PropsKeys.PERSISTENCE_PROVIDER));
+
+	public static final String PHONE_NUMBER_FORMAT_IMPL = GetterUtil.getString(PropsUtil.get(PropsKeys.PHONE_NUMBER_FORMAT_IMPL));
+
+	public static String PHONE_NUMBER_FORMAT_INTERNATIONAL_REGEXP = GetterUtil.getString(PropsUtil.get(PropsKeys.PHONE_NUMBER_FORMAT_INTERNATIONAL_REGEXP));
+
+	public static String PHONE_NUMBER_FORMAT_USA_REGEXP = GetterUtil.getString(PropsUtil.get(PropsKeys.PHONE_NUMBER_FORMAT_USA_REGEXP));
 
 	public static final boolean PLUGIN_NOTIFICATIONS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PLUGIN_NOTIFICATIONS_ENABLED));
 
@@ -1287,6 +1299,8 @@ public class PropsValues {
 	public static final boolean SESSION_ENABLE_URL_WITH_SESSION_ID = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SESSION_ENABLE_URL_WITH_SESSION_ID));
 
 	public static final String SESSION_ID_DELIMITER = PropsUtil.get(PropsKeys.SESSION_ID_DELIMITER);
+
+	public static final int SESSION_MAX_ALLOWED = GetterUtil.getInteger(PropsUtil.get(PropsKeys.SESSION_MAX_ALLOWED));
 
 	public static String[] SESSION_PHISHING_PROTECTED_ATTRIBUTES = PropsUtil.getArray(PropsKeys.SESSION_PHISHING_PROTECTED_ATTRIBUTES);
 

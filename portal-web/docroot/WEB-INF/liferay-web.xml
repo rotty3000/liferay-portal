@@ -124,10 +124,6 @@
 	<filter>
 		<filter-name>GZip Filter</filter-name>
 		<filter-class>com.liferay.portal.servlet.filters.gzip.GZipFilter</filter-class>
-		<init-param>
-			<param-name>url-regex-ignore-pattern</param-name>
-			<param-value>^(/c/document_library/get_file|/c/message_boards/get_message_attachment|/c/wiki/get_page_attachment)(\?.*)?$</param-value>
-		</init-param>
 	</filter>
 	<filter>
 		<filter-name>GZip Filter - Theme PNG</filter-name>
@@ -382,6 +378,10 @@
 		<filter-class>com.liferay.portal.servlet.filters.sessionid.SessionIdFilter</filter-class>
 	</filter>
 	<filter>
+		<filter-name>Session Max Allowed Filter</filter-name>
+		<filter-class>com.liferay.portal.servlet.filters.sessionmaxallowed.SessionMaxAllowedFilter</filter-class>
+	</filter>
+	<filter>
 		<filter-name>Sharepoint Filter</filter-name>
 		<filter-class>com.liferay.portal.sharepoint.SharepointFilter</filter-class>
 		<init-param>
@@ -432,10 +432,6 @@
 	<filter>
 		<filter-name>Thread Local Filter</filter-name>
 		<filter-class>com.liferay.portal.servlet.filters.threadlocal.ThreadLocalFilter</filter-class>
-		<init-param>
-			<param-name>url-regex-ignore-pattern</param-name>
-			<param-value>^/html/.+\.(css|gif|html|ico|jpg|js|png)(\?.*)?$</param-value>
-		</init-param>
 	</filter>
 	<filter>
 		<filter-name>Tunnel Servlet Filter</filter-name>
@@ -532,6 +528,12 @@
 	<filter-mapping>
 		<filter-name>Session Id Filter</filter-name>
 		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Session Max Allowed Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>ERROR</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>Audit Filter</filter-name>

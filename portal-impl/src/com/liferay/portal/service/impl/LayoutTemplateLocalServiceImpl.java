@@ -491,8 +491,8 @@ public class LayoutTemplateLocalServiceImpl
 	}
 
 	public void uninstallLayoutTemplates(String themeId) {
-		Map<String, LayoutTemplate> _themesStandard =
-			_getThemesStandard(themeId);
+		Map<String, LayoutTemplate> _themesStandard = _getThemesStandard(
+			themeId);
 
 		for (Map.Entry<String, LayoutTemplate> entry :
 				_themesStandard.entrySet()) {
@@ -601,8 +601,8 @@ public class LayoutTemplateLocalServiceImpl
 
 		if (customEl != null) {
 			readLayoutTemplate(
-				servletContextName, servletContext, layoutTemplateIds,
-				customEl, false, null, pluginPackage);
+				servletContextName, servletContext, layoutTemplateIds, customEl,
+				false, null, pluginPackage);
 		}
 
 		return layoutTemplateIds;

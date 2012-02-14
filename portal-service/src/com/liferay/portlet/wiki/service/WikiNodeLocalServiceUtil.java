@@ -298,6 +298,13 @@ public class WikiNodeLocalServiceUtil {
 			.addNodeResources(nodeId, addGroupPermissions, addGuestPermissions);
 	}
 
+	public static void addNodeResources(long nodeId,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().addNodeResources(nodeId, groupPermissions, guestPermissions);
+	}
+
 	public static void addNodeResources(
 		com.liferay.portlet.wiki.model.WikiNode node,
 		boolean addGroupPermissions, boolean addGuestPermissions)
@@ -305,13 +312,6 @@ public class WikiNodeLocalServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.addNodeResources(node, addGroupPermissions, addGuestPermissions);
-	}
-
-	public static void addNodeResources(long nodeId,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().addNodeResources(nodeId, groupPermissions, guestPermissions);
 	}
 
 	public static void addNodeResources(

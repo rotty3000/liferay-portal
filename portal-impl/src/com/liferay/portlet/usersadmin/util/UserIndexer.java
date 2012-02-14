@@ -103,6 +103,16 @@ public class UserIndexer extends BaseIndexer {
 					continue;
 				}
 
+				Class<?> clazz = value.getClass();
+
+				if (clazz.isArray()) {
+					Object[] values = (Object[])value;
+
+					if (values.length == 0) {
+						continue;
+					}
+				}
+
 				addContextQueryParams(contextQuery, searchContext, key, value);
 			}
 		}
@@ -146,8 +156,8 @@ public class UserIndexer extends BaseIndexer {
 			if (value instanceof Long[]) {
 				Long[] values = (Long[])value;
 
-				BooleanQuery usersOrgsQuery =
-					BooleanQueryFactoryUtil.create(searchContext);
+				BooleanQuery usersOrgsQuery = BooleanQueryFactoryUtil.create(
+					searchContext);
 
 				for (long organizationId : values) {
 					usersOrgsQuery.addTerm("organizationIds", organizationId);

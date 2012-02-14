@@ -383,6 +383,20 @@
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="master" type="boolean" />
+		<field name="logo" type="boolean" />
+		<field name="logoId" type="long" />
+		<field name="themeId" type="String" />
+		<field name="colorSchemeId" type="String" />
+		<field name="wapThemeId" type="String" />
+		<field name="wapColorSchemeId" type="String" />
+		<field name="css" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="settings" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="layoutSetPrototypeUuid" type="String" />
+		<field name="layoutSetPrototypeLinkEnabled" type="boolean" />
 	</model>
 	<model name="com.liferay.portal.model.LayoutSetPrototype">
 		<field name="uuid" type="String" />
@@ -1399,6 +1413,7 @@
 		<field name="statusDate" type="Date" />
 	</model>
 	<model name="com.liferay.portlet.documentlibrary.model.DLFileVersion">
+		<field name="uuid" type="String" />
 		<field name="fileVersionId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />

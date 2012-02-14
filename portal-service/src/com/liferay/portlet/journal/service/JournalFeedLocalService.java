@@ -261,14 +261,20 @@ public interface JournalFeedLocalService extends PersistedModelLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addFeedResources(long feedId, boolean addGroupPermissions,
-		boolean addGuestPermissions)
+	public void addFeedResources(
+		com.liferay.portlet.journal.model.JournalFeed feed,
+		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void addFeedResources(
 		com.liferay.portlet.journal.model.JournalFeed feed,
-		boolean addGroupPermissions, boolean addGuestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void addFeedResources(long feedId, boolean addGroupPermissions,
+		boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -277,9 +283,7 @@ public interface JournalFeedLocalService extends PersistedModelLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addFeedResources(
-		com.liferay.portlet.journal.model.JournalFeed feed,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+	public void deleteFeed(com.liferay.portlet.journal.model.JournalFeed feed)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -288,10 +292,6 @@ public interface JournalFeedLocalService extends PersistedModelLocalService {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void deleteFeed(long groupId, java.lang.String feedId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public void deleteFeed(com.liferay.portlet.journal.model.JournalFeed feed)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

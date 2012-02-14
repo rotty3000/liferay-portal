@@ -294,14 +294,6 @@ public class JournalFeedLocalServiceUtil {
 			targetPortletId, contentField, feedType, feedVersion, serviceContext);
 	}
 
-	public static void addFeedResources(long feedId,
-		boolean addGroupPermissions, boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.addFeedResources(feedId, addGroupPermissions, addGuestPermissions);
-	}
-
 	public static void addFeedResources(
 		com.liferay.portlet.journal.model.JournalFeed feed,
 		boolean addGroupPermissions, boolean addGuestPermissions)
@@ -311,6 +303,22 @@ public class JournalFeedLocalServiceUtil {
 			.addFeedResources(feed, addGroupPermissions, addGuestPermissions);
 	}
 
+	public static void addFeedResources(
+		com.liferay.portlet.journal.model.JournalFeed feed,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().addFeedResources(feed, groupPermissions, guestPermissions);
+	}
+
+	public static void addFeedResources(long feedId,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addFeedResources(feedId, addGroupPermissions, addGuestPermissions);
+	}
+
 	public static void addFeedResources(long feedId,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -318,12 +326,11 @@ public class JournalFeedLocalServiceUtil {
 		getService().addFeedResources(feedId, groupPermissions, guestPermissions);
 	}
 
-	public static void addFeedResources(
-		com.liferay.portlet.journal.model.JournalFeed feed,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+	public static void deleteFeed(
+		com.liferay.portlet.journal.model.JournalFeed feed)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().addFeedResources(feed, groupPermissions, guestPermissions);
+		getService().deleteFeed(feed);
 	}
 
 	public static void deleteFeed(long feedId)
@@ -336,13 +343,6 @@ public class JournalFeedLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService().deleteFeed(groupId, feedId);
-	}
-
-	public static void deleteFeed(
-		com.liferay.portlet.journal.model.JournalFeed feed)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteFeed(feed);
 	}
 
 	public static com.liferay.portlet.journal.model.JournalFeed getFeed(

@@ -28,8 +28,18 @@
 		</operation>
 		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" xmlns:rtns="http://model.documentlibrary.portlet.liferay.com" name="checkOutFileEntry" qname="operNS:checkOutFileEntry" returnQName="checkOutFileEntryReturn" returnType="rtns:DLFileEntrySoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="fileEntryId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
+		</operation>
+		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" xmlns:rtns="http://model.documentlibrary.portlet.liferay.com" name="checkOutFileEntry" qname="operNS:checkOutFileEntry" returnQName="checkOutFileEntryReturn" returnType="rtns:DLFileEntrySoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="fileEntryId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="owner" type="tns:string"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="expirationTime" type="tns:long"></parameter>
+		</operation>
+		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" xmlns:rtns="http://model.documentlibrary.portlet.liferay.com" name="checkOutFileEntry" qname="operNS:checkOutFileEntry" returnQName="checkOutFileEntryReturn" returnType="rtns:DLFileEntrySoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="fileEntryId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="owner" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="expirationTime" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" xmlns:rtns="http://model.documentlibrary.portlet.liferay.com" name="copyFileEntry" qname="operNS:copyFileEntry" returnQName="copyFileEntryReturn" returnType="rtns:DLFileEntrySoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>

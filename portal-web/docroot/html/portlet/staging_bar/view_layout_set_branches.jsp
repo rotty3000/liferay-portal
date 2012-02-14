@@ -19,7 +19,7 @@
 <%
 List<LayoutSetBranch> layoutSetBranches = LayoutSetBranchLocalServiceUtil.getLayoutSetBranches(stagingGroup.getGroupId(), privateLayout);
 
-LayoutSetBranch currentLayoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutSetBranch(themeDisplay.getUserId(), stagingGroup.getGroupId(), privateLayout, 0);
+LayoutSetBranch currentLayoutSetBranch = LayoutSetBranchLocalServiceUtil.getUserLayoutSetBranch(themeDisplay.getUserId(), stagingGroup.getGroupId(), privateLayout, 0, 0);
 
 request.setAttribute("view_layout_set_branches.jsp-currentLayoutSetBranchId", String.valueOf(currentLayoutSetBranch.getLayoutSetBranchId()));
 %>
@@ -125,7 +125,8 @@ request.setAttribute("view_layout_set_branches.jsp-currentLayoutSetBranchId", St
 <aui:script position="inline" use="liferay-staging-branch">
 	Liferay.StagingBar.init(
 		{
-			namespace: '<portlet:namespace />'
+			namespace: '<portlet:namespace />',
+			portletId: '<%= portletDisplay.getId() %>'
 		}
 	);
 </aui:script>

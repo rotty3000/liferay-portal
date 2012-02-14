@@ -15,6 +15,9 @@
 package com.liferay.portalweb.portlet.pollsdisplay.question.selectquestionmultiple;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.pollsdisplay.portlet.addportlet.AddPagePDTest;
+import com.liferay.portalweb.portlet.pollsdisplay.portlet.addportlet.AddPortletPDTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

@@ -235,8 +235,8 @@ public class LanguageImpl implements Language {
 
 				for (int i = 0; i < arguments.length; i++) {
 					if (translateArguments) {
-						formattedArguments[i] =
-							get(pageContext, arguments[i].toString());
+						formattedArguments[i] = get(
+							pageContext, arguments[i].toString());
 					}
 					else {
 						formattedArguments[i] = arguments[i];
@@ -667,7 +667,7 @@ public class LanguageImpl implements Language {
 			}
 		}
 
-		if (value == null) {
+		if ((value == null) || value.equals(key)) {
 			value = defaultValue;
 		}
 

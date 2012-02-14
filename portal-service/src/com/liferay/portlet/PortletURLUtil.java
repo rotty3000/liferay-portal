@@ -48,25 +48,6 @@ import javax.servlet.http.HttpServletRequest;
 public class PortletURLUtil {
 
 	public static PortletURL clone(
-			PortletURL portletURL, MimeResponse mimeResponse)
-		throws PortletException {
-
-		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
-
-		return clone(
-			liferayPortletURL, liferayPortletURL.getLifecycle(), mimeResponse);
-	}
-
-	public static PortletURL clone(
-			PortletURL portletURL, String lifecycle, MimeResponse mimeResponse)
-		throws PortletException {
-
-		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
-
-		return clone(liferayPortletURL, lifecycle, mimeResponse);
-	}
-
-	public static PortletURL clone(
 			LiferayPortletURL liferayPortletURL, String lifecycle,
 			MimeResponse mimeResponse)
 		throws PortletException {
@@ -97,6 +78,25 @@ public class PortletURLUtil {
 		newURLImpl.setParameters(liferayPortletURL.getParameterMap());
 
 		return newURLImpl;
+	}
+
+	public static PortletURL clone(
+			PortletURL portletURL, MimeResponse mimeResponse)
+		throws PortletException {
+
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
+
+		return clone(
+			liferayPortletURL, liferayPortletURL.getLifecycle(), mimeResponse);
+	}
+
+	public static PortletURL clone(
+			PortletURL portletURL, String lifecycle, MimeResponse mimeResponse)
+		throws PortletException {
+
+		LiferayPortletURL liferayPortletURL = (LiferayPortletURL)portletURL;
+
+		return clone(liferayPortletURL, lifecycle, mimeResponse);
 	}
 
 	public static PortletURL getCurrent(
@@ -276,7 +276,7 @@ public class PortletURLUtil {
 
 	private static final int _CURRENT_URL_PARAMETER_THRESHOLD = 32768;
 
-	private static String[] _PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS =
+	private static final String[] _PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS =
 		PropsUtil.getArray(
 			PropsKeys.PORTLET_URL_REFRESH_URL_RESERVED_PARAMETERS);
 

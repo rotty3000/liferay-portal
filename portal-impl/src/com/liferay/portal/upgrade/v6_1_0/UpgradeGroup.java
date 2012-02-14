@@ -24,6 +24,7 @@ import com.liferay.portal.upgrade.v6_1_0.util.GroupTable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Hugo Huijser
@@ -33,14 +34,13 @@ public class UpgradeGroup extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		if (isSupportsAlterColumnType()) {
+		try {
 			runSQL("alter_column_type Group_ name VARCHAR(150) null");
 		}
-		else {
+		catch (SQLException sqle) {
 			upgradeTable(
 				GroupTable.TABLE_NAME, GroupTable.TABLE_COLUMNS,
-				GroupTable.TABLE_SQL_CREATE,
-				GroupTable.TABLE_SQL_ADD_INDEXES);
+				GroupTable.TABLE_SQL_CREATE, GroupTable.TABLE_SQL_ADD_INDEXES);
 		}
 
 		updateName();

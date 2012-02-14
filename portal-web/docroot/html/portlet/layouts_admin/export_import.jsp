@@ -40,30 +40,26 @@ long[] layoutIds = ParamUtil.getLongValues(request, "layoutIds");
 
 String rootNodeName = ParamUtil.getString(request, "rootNodeName");
 
-List portletsList = new ArrayList();
-Set portletIdsSet = new HashSet();
+List<Portlet> portletsList = new ArrayList<Portlet>();
+Set<String> portletIdsSet = new HashSet<String>();
 
-Iterator itr1 = LayoutLocalServiceUtil.getLayouts(liveGroupId, privateLayout).iterator();
-
-while (itr1.hasNext()) {
-	Layout curLayout = (Layout)itr1.next();
-
+for (Layout curLayout : LayoutLocalServiceUtil.getLayouts(liveGroupId, privateLayout)) {
 	if (curLayout.isTypePortlet()) {
 		LayoutTypePortlet curLayoutTypePortlet = (LayoutTypePortlet)curLayout.getLayoutType();
 
-		Iterator itr2 = curLayoutTypePortlet.getPortletIds().iterator();
+		for (String portletId : curLayoutTypePortlet.getPortletIds()) {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), portletId);
 
-		while (itr2.hasNext()) {
-			Portlet curPortlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), (String)itr2.next());
+			if (portlet == null) {
+				continue;
+			}
 
-			if (curPortlet != null) {
-				PortletDataHandler portletDataHandler = curPortlet.getPortletDataHandlerInstance();
+			PortletDataHandler portletDataHandler = portlet.getPortletDataHandlerInstance();
 
-				if ((portletDataHandler != null) && !portletIdsSet.contains(curPortlet.getRootPortletId())) {
-					portletIdsSet.add(curPortlet.getRootPortletId());
+			if ((portletDataHandler != null) && !portletIdsSet.contains(portlet.getRootPortletId())) {
+				portletIdsSet.add(portlet.getRootPortletId());
 
-					portletsList.add(curPortlet);
-				}
+				portletsList.add(portlet);
 			}
 		}
 	}

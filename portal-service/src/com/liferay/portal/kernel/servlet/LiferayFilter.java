@@ -28,4 +28,6 @@ public interface LiferayFilter extends Filter {
 	public boolean isFilterEnabled(
 		HttpServletRequest request, HttpServletResponse response);
 
+	public void setFilterEnabled(boolean filterEnabled);
+
 }

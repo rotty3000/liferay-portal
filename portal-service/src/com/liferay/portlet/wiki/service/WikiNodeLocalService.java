@@ -262,13 +262,13 @@ public interface WikiNodeLocalService extends PersistedModelLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addNodeResources(com.liferay.portlet.wiki.model.WikiNode node,
-		boolean addGroupPermissions, boolean addGuestPermissions)
+	public void addNodeResources(long nodeId,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addNodeResources(long nodeId,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+	public void addNodeResources(com.liferay.portlet.wiki.model.WikiNode node,
+		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

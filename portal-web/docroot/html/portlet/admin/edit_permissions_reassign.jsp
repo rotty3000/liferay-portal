@@ -234,7 +234,7 @@ while (rolesItr.hasNext()) {
 		<liferay-ui:search-container-column-button
 			align="right"
 			href="<%= taglibReassignURL %>"
-			name='<%= LanguageUtil.get(pageContext, "reassign") %>'
+			name="reassign"
 		/>
 	</liferay-ui:search-container-row>
 

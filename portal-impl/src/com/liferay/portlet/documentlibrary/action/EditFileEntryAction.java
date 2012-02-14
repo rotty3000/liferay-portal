@@ -308,8 +308,8 @@ public class EditFileEntryAction extends PortletAction {
 
 		for (String selectedFileName : selectedFileNames) {
 			addMultipleFileEntries(
-				actionRequest, actionResponse, selectedFileName,
-				validFileNames, invalidFileNameKVPs);
+				actionRequest, actionResponse, selectedFileName, validFileNames,
+				invalidFileNameKVPs);
 		}
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
@@ -462,15 +462,19 @@ public class EditFileEntryAction extends PortletAction {
 
 		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
 
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+
 		if (fileEntryId > 0) {
-			DLAppServiceUtil.checkOutFileEntry(fileEntryId);
+			DLAppServiceUtil.checkOutFileEntry(fileEntryId, serviceContext);
 		}
 		else {
 			long[] fileEntryIds = StringUtil.split(
 				ParamUtil.getString(actionRequest, "fileEntryIds"), 0L);
 
 			for (int i = 0; i < fileEntryIds.length; i++) {
-				DLAppServiceUtil.checkOutFileEntry(fileEntryIds[i]);
+				DLAppServiceUtil.checkOutFileEntry(
+					fileEntryIds[i], serviceContext);
 			}
 		}
 	}
@@ -715,9 +719,6 @@ public class EditFileEntryAction extends PortletAction {
 			FileEntry fileEntry = null;
 
 			if (cmd.equals(Constants.ADD)) {
-				if (Validator.isNull(title)) {
-					title = sourceFileName;
-				}
 
 				// Add file entry
 
@@ -735,8 +736,8 @@ public class EditFileEntryAction extends PortletAction {
 
 				fileEntry = DLAppServiceUtil.updateFileEntryAndCheckIn(
 					fileEntryId, sourceFileName, contentType, title,
-					description, changeLog, majorVersion, inputStream,
-					size, serviceContext);
+					description, changeLog, majorVersion, inputStream, size,
+					serviceContext);
 			}
 			else {
 
@@ -744,8 +745,8 @@ public class EditFileEntryAction extends PortletAction {
 
 				fileEntry = DLAppServiceUtil.updateFileEntry(
 					fileEntryId, sourceFileName, contentType, title,
-					description, changeLog, majorVersion, inputStream,
-					size, serviceContext);
+					description, changeLog, majorVersion, inputStream, size,
+					serviceContext);
 			}
 
 			AssetPublisherUtil.addRecentFolderId(

@@ -289,6 +289,10 @@ public abstract class BaseCommandReceiver implements CommandReceiver {
 	protected abstract void getFoldersAndFiles(
 		CommandArgument commandArgument, Document document, Node rootNode);
 
+	protected String getPath(CommandArgument commandArgument) {
+		return StringPool.BLANK;
+	}
+
 	protected void getRootFolders(
 			CommandArgument commandArgument, Document document,
 			Element foldersElement)
@@ -365,10 +369,6 @@ public abstract class BaseCommandReceiver implements CommandReceiver {
 		}
 	}
 
-	protected String getPath(CommandArgument commandArgument) {
-		return StringPool.BLANK;
-	}
-
 	protected String getSize() {
 		return getSize(0);
 	}
@@ -397,8 +397,8 @@ public abstract class BaseCommandReceiver implements CommandReceiver {
 	}
 
 	private Node _createRoot(
-		Document document, String command, String resourceType,
-		String path, String url) {
+		Document document, String command, String resourceType, String path,
+		String url) {
 
 		Element rootElement = document.createElement("Connector");
 

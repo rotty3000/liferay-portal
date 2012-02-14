@@ -15,6 +15,8 @@
 package com.liferay.portalweb.portlet.managepages.page.addchildpagemultiple;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.managepages.page.addpage.AddPageTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

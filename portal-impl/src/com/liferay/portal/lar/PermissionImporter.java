@@ -100,8 +100,7 @@ public class PermissionImporter {
 
 	protected void importGroupRoles(
 			LayoutCache layoutCache, long companyId, long groupId,
-			String resourceName, String entityName,
-			Element parentElement)
+			String resourceName, String entityName, Element parentElement)
 		throws Exception {
 
 		Element entityRolesElement = parentElement.element(
@@ -328,6 +327,11 @@ public class PermissionImporter {
 			}
 
 			if (role == null) {
+				String title = roleElement.attributeValue("title");
+
+				Map<Locale, String> titleMap =
+					LocalizationUtil.getLocalizationMap(title);
+
 				String description = roleElement.attributeValue("description");
 
 				Map<Locale, String> descriptionMap =
@@ -336,7 +340,7 @@ public class PermissionImporter {
 				int type = Integer.valueOf(roleElement.attributeValue("type"));
 
 				role = RoleLocalServiceUtil.addRole(
-					userId, companyId, name, null, descriptionMap, type);
+					userId, companyId, name, titleMap, descriptionMap, type);
 			}
 
 			List<String> actions = getActions(roleElement);
@@ -395,13 +399,18 @@ public class PermissionImporter {
 			}
 
 			if (role == null) {
+				String title = roleElement.attributeValue("title");
+
+				Map<Locale, String> titleMap =
+					LocalizationUtil.getLocalizationMap(title);
+
 				String description = roleElement.attributeValue("description");
 
 				Map<Locale, String> descriptionMap =
 					LocalizationUtil.getLocalizationMap(description);
 
 				role = RoleLocalServiceUtil.addRole(
-					userId, companyId, name, null, descriptionMap, type);
+					userId, companyId, name, titleMap, descriptionMap, type);
 			}
 
 			List<String> actions = getActions(roleElement);
@@ -520,41 +529,6 @@ public class PermissionImporter {
 
 	protected void importPortletRoles(
 			LayoutCache layoutCache, long companyId, long groupId,
-			String portletId, Element rolesElement)
-		throws Exception {
-
-		String resourceName = PortletConstants.getRootPortletId(portletId);
-
-		Portlet portlet = PortletLocalServiceUtil.getPortletById(
-			companyId, resourceName);
-
-		if (portlet == null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(
-					"Do not import portlet roles for " + portletId +
-						" because the portlet does not exist");
-			}
-		}
-		else {
-			importGroupRoles(
-				layoutCache, companyId, groupId, resourceName, "community",
-				rolesElement);
-
-			importUserRoles(
-				layoutCache, companyId, groupId, resourceName, rolesElement);
-
-			importInheritedRoles(
-				layoutCache, companyId, groupId, resourceName,
-				"organization", rolesElement);
-
-			importInheritedRoles(
-				layoutCache, companyId, groupId, resourceName, "user-group",
-				rolesElement);
-		}
-	}
-
-	protected void importPortletRoles(
-			LayoutCache layoutCache, long companyId, long groupId,
 			Element rolesElement)
 		throws Exception {
 
@@ -592,6 +566,41 @@ public class PermissionImporter {
 					layoutCache, companyId, groupId, resourceName, "user-group",
 					portletElement);
 			}
+		}
+	}
+
+	protected void importPortletRoles(
+			LayoutCache layoutCache, long companyId, long groupId,
+			String portletId, Element rolesElement)
+		throws Exception {
+
+		String resourceName = PortletConstants.getRootPortletId(portletId);
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(
+			companyId, resourceName);
+
+		if (portlet == null) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Do not import portlet roles for " + portletId +
+						" because the portlet does not exist");
+			}
+		}
+		else {
+			importGroupRoles(
+				layoutCache, companyId, groupId, resourceName, "community",
+				rolesElement);
+
+			importUserRoles(
+				layoutCache, companyId, groupId, resourceName, rolesElement);
+
+			importInheritedRoles(
+				layoutCache, companyId, groupId, resourceName, "organization",
+				rolesElement);
+
+			importInheritedRoles(
+				layoutCache, companyId, groupId, resourceName, "user-group",
+				rolesElement);
 		}
 	}
 

@@ -67,8 +67,8 @@ public class ExpandoValueServiceImpl extends ExpandoValueServiceBaseImpl {
 	}
 
 	public void addValues(
-			long companyId, String className, String tableName,
-			long classPK, Map<String, Serializable> attributeValues)
+			long companyId, String className, String tableName, long classPK,
+			Map<String, Serializable> attributeValues)
 		throws PortalException, SystemException {
 
 		for (Map.Entry<String, Serializable> entry :
@@ -77,25 +77,6 @@ public class ExpandoValueServiceImpl extends ExpandoValueServiceBaseImpl {
 			addValue(
 				companyId, className, tableName, entry.getKey(), classPK,
 				entry.getValue());
-		}
-	}
-
-	public Serializable getData(
-			long companyId, String className, String tableName,
-			String columnName, long classPK)
-		throws PortalException, SystemException {
-
-		ExpandoColumn column = expandoColumnLocalService.getColumn(
-			companyId, className, tableName, columnName);
-
-		if (ExpandoColumnPermissionUtil.contains(
-				getPermissionChecker(), column, ActionKeys.VIEW)) {
-
-			return expandoValueLocalService.getData(
-				companyId, className, tableName, columnName, classPK);
-		}
-		else {
-			return null;
 		}
 	}
 
@@ -120,6 +101,25 @@ public class ExpandoValueServiceImpl extends ExpandoValueServiceBaseImpl {
 		}
 
 		return attributeValues;
+	}
+
+	public Serializable getData(
+			long companyId, String className, String tableName,
+			String columnName, long classPK)
+		throws PortalException, SystemException {
+
+		ExpandoColumn column = expandoColumnLocalService.getColumn(
+			companyId, className, tableName, columnName);
+
+		if (ExpandoColumnPermissionUtil.contains(
+				getPermissionChecker(), column, ActionKeys.VIEW)) {
+
+			return expandoValueLocalService.getData(
+				companyId, className, tableName, columnName, classPK);
+		}
+		else {
+			return null;
+		}
 	}
 
 	public JSONObject getJSONData(

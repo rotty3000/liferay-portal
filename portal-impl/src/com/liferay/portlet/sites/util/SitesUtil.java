@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
@@ -165,13 +166,12 @@ public class SitesUtil {
 
 		targetLayout = LayoutLocalServiceUtil.updateLayout(
 			targetLayout.getGroupId(), targetLayout.isPrivateLayout(),
-			targetLayout.getLayoutId(),
-			targetLayout.getParentLayoutId(), targetLayout.getNameMap(),
-			targetLayout.getTitleMap(), targetLayout.getDescriptionMap(),
-			targetLayout.getKeywordsMap(), targetLayout.getRobotsMap(),
-			layoutPrototypeLayout.getType(), targetLayout.getHidden(),
-			targetLayout.getFriendlyURL(), targetLayout.getIconImage(), null,
-			serviceContext);
+			targetLayout.getLayoutId(), targetLayout.getParentLayoutId(),
+			targetLayout.getNameMap(), targetLayout.getTitleMap(),
+			targetLayout.getDescriptionMap(), targetLayout.getKeywordsMap(),
+			targetLayout.getRobotsMap(), layoutPrototypeLayout.getType(),
+			targetLayout.getHidden(), targetLayout.getFriendlyURL(),
+			targetLayout.getIconImage(), null, serviceContext);
 
 		targetLayout = LayoutLocalServiceUtil.updateLayout(
 			targetLayout.getGroupId(), targetLayout.isPrivateLayout(),
@@ -208,8 +208,8 @@ public class SitesUtil {
 			ServiceContext serviceContext)
 		throws Exception {
 
-		Map<String, String[]> parameterMap =
-			getLayoutSetPrototypeParameters(serviceContext);
+		Map<String, String[]> parameterMap = getLayoutSetPrototypeParameters(
+			serviceContext);
 
 		parameterMap.put(
 			PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS,
@@ -493,8 +493,8 @@ public class SitesUtil {
 			serviceContext);
 
 		return LayoutLocalServiceUtil.exportLayoutsAsFile(
-			layoutSet.getGroupId(), layoutSet.isPrivateLayout(),
-			null, parameterMap, null, null);
+			layoutSet.getGroupId(), layoutSet.isPrivateLayout(), null,
+			parameterMap, null, null);
 	}
 
 	public static Map<String, String[]> getLayoutSetPrototypeParameters(
@@ -519,11 +519,17 @@ public class SitesUtil {
 			PortletDataHandlerKeys.LAYOUT_SET_PROTOTYPE_LINK_ENABLED,
 			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.LAYOUT_SET_SETTINGS,
+			new String[] {Boolean.FALSE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.LAYOUTS_IMPORT_MODE,
 			new String[] {
 				PortletDataHandlerKeys.
 					LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE
 			});
+		parameterMap.put(
+			PortletDataHandlerKeys.LOGO,
+			new String[] {Boolean.FALSE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.PERFORM_DIRECT_BINARY_IMPORT,
 			new String[] {Boolean.TRUE.toString()});
@@ -572,8 +578,8 @@ public class SitesUtil {
 			parameterMap, layoutSet, serviceContext);
 
 		LayoutServiceUtil.importLayouts(
-			layoutSet.getGroupId(), layoutSet.isPrivateLayout(),
-			parameterMap, inputStream);
+			layoutSet.getGroupId(), layoutSet.isPrivateLayout(), parameterMap,
+			inputStream);
 	}
 
 	public static boolean isLayoutDeleteable(Layout layout) {
@@ -920,6 +926,19 @@ public class SitesUtil {
 		if (mergeFailCount >
 			PropsValues.LAYOUT_SET_PROTOTYPE_MERGE_FAIL_THRESHOLD) {
 
+			if (_log.isWarnEnabled()) {
+				StringBundler sb = new StringBundler(6);
+
+				sb.append("Merge not performed because the fail threshold was");
+				sb.append("reached for layoutSetPrototypeId ");
+				sb.append(layoutSetPrototype.getLayoutSetPrototypeId());
+				sb.append(" and layoutId ");
+				sb.append(layoutSetPrototypeLayoutSet.getLayoutSetId());
+				sb.append(". Update the count in the database to try again.");
+
+				_log.warn(sb.toString());
+			}
+
 			return;
 		}
 
@@ -964,16 +983,17 @@ public class SitesUtil {
 		try {
 			Map<String, String[]> parameterMap = null;
 
+			boolean importData = true;
+
 			if (lastMergeTime > 0) {
-				parameterMap = getLayoutSetPrototypesParameters(false);
+				importData = false;
 			}
-			else {
-				parameterMap = getLayoutSetPrototypesParameters(true);
-			}
+
+			parameterMap = getLayoutSetPrototypesParameters(importData);
 
 			importLayoutSetPrototype(
 				layoutSetPrototype, layoutSet.getGroupId(),
-				layoutSet.isPrivateLayout(), parameterMap);
+				layoutSet.isPrivateLayout(), parameterMap, importData);
 
 			layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
 				layoutSet.getGroupId(), layoutSet.isPrivateLayout());
@@ -1034,7 +1054,7 @@ public class SitesUtil {
 	}
 
 	protected static Map<String, String[]> getLayoutSetPrototypesParameters(
-		boolean firstTime) {
+		boolean importData) {
 
 		Map<String, String[]> parameterMap =
 			new LinkedHashMap<String, String[]>();
@@ -1085,7 +1105,7 @@ public class SitesUtil {
 			PortletDataHandlerKeys.USER_ID_STRATEGY,
 			new String[] {UserIdStrategy.CURRENT_USER_ID});
 
-		if (firstTime) {
+		if (importData) {
 			parameterMap.put(
 				PortletDataHandlerKeys.DATA_STRATEGY,
 				new String[] {PortletDataHandlerKeys.DATA_STRATEGY_MIRROR});
@@ -1110,13 +1130,24 @@ public class SitesUtil {
 
 	protected static void importLayoutSetPrototype(
 			LayoutSetPrototype layoutSetPrototype, long groupId,
-			boolean privateLayout, Map<String, String[]> parameterMap)
+			boolean privateLayout, Map<String, String[]> parameterMap,
+			boolean importData)
 		throws PortalException, SystemException {
 
 		File file = null;
 
-		File cacheFile = new File(
-			_TEMP_DIR.concat(layoutSetPrototype.getUuid()).concat(".lar"));
+		StringBundler sb = new StringBundler(importData ? 4 : 4);
+
+		sb.append(_TEMP_DIR);
+		sb.append(layoutSetPrototype.getUuid());
+
+		if (importData) {
+			sb.append("-data");
+		}
+
+		sb.append(".lar");
+
+		File cacheFile = new File(sb.toString());
 
 		if (cacheFile.exists()) {
 			Date modifiedDate = layoutSetPrototype.getModifiedDate();
@@ -1138,8 +1169,8 @@ public class SitesUtil {
 			Group layoutSetPrototypeGroup = layoutSetPrototype.getGroup();
 
 			file = LayoutLocalServiceUtil.exportLayoutsAsFile(
-				layoutSetPrototypeGroup.getGroupId(), true, null,
-				parameterMap, null, null);
+				layoutSetPrototypeGroup.getGroupId(), true, null, parameterMap,
+				null, null);
 
 			newFile = true;
 		}
@@ -1240,7 +1271,7 @@ public class SitesUtil {
 
 					importLayoutSetPrototype(
 						layoutSetPrototype, groupId, privateLayout,
-						parameterMap);
+						parameterMap, true);
 				}
 			}
 		}

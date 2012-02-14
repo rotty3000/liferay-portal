@@ -97,6 +97,12 @@ public class PortalClassLoaderFilter
 		return true;
 	}
 
+	public void setFilterEnabled(boolean filterEnabled) {
+		if (_liferayFilter != null) {
+			_liferayFilter.setFilterEnabled(filterEnabled);
+		}
+	}
+
 	@Override
 	protected void doPortalDestroy() {
 		Thread currentThread = Thread.currentThread();

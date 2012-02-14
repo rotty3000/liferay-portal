@@ -19,11 +19,12 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 
-import java.io.PrintWriter;
+import java.io.OutputStream;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -79,16 +80,19 @@ public abstract class JSONAction extends Action {
 			return mapping.findForward(ActionConstants.COMMON_REFERER);
 		}
 		else if (Validator.isNotNull(json)) {
+			response.setCharacterEncoding(StringPool.UTF8);
 			response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 			response.setHeader(
 				HttpHeaders.CACHE_CONTROL,
 				HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE);
 
-			PrintWriter printWriter = response.getWriter();
+			OutputStream outputStream = response.getOutputStream();
 
-			printWriter.write(json);
+			byte[] bytes = json.getBytes(StringPool.UTF8);
 
-			printWriter.close();
+			outputStream.write(bytes);
+
+			outputStream.close();
 		}
 
 		return null;
@@ -156,6 +160,6 @@ public abstract class JSONAction extends Action {
 		return true;
 	}
 
-	protected ServletContext _servletContext;
+	private ServletContext _servletContext;
 
 }

@@ -336,6 +336,9 @@ public class DLFileEntryLocalServiceUtil {
 		getService().checkInFileEntry(userId, fileEntryId, lockUuid);
 	}
 
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, long, ServiceContext)}
+	*/
 	public static com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
 		long userId, long fileEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -344,12 +347,36 @@ public class DLFileEntryLocalServiceUtil {
 	}
 
 	public static com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
+		long userId, long fileEntryId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .checkOutFileEntry(userId, fileEntryId, serviceContext);
+	}
+
+	/**
+	* @deprecated {@link #checkOutFileEntry(long, long, String, long,
+	ServiceContext)}
+	*/
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
 		long userId, long fileEntryId, java.lang.String owner,
 		long expirationTime)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .checkOutFileEntry(userId, fileEntryId, owner, expirationTime);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntry checkOutFileEntry(
+		long userId, long fileEntryId, java.lang.String owner,
+		long expirationTime,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .checkOutFileEntry(userId, fileEntryId, owner,
+			expirationTime, serviceContext);
 	}
 
 	public static void convertExtraSettings(java.lang.String[] keys)

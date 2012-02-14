@@ -132,8 +132,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 	public void addResources(
 			long companyId, long groupId, long userId, String name,
-			long primKey, boolean portletActions,
-			boolean addGroupPermissions, boolean addGuestPermissions)
+			long primKey, boolean portletActions, boolean addGroupPermissions,
+			boolean addGuestPermissions)
 		throws PortalException, SystemException {
 
 		addResources(
@@ -143,8 +143,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 	public void addResources(
 			long companyId, long groupId, long userId, String name,
-			String primKey, boolean portletActions,
-			boolean addGroupPermissions, boolean addGuestPermissions)
+			String primKey, boolean portletActions, boolean addGroupPermissions,
+			boolean addGuestPermissions)
 		throws PortalException, SystemException {
 
 		addResources(
@@ -384,10 +384,9 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		PermissionsListFilter permissionsListFilter =
 			PermissionsListFilterFactory.getInstance();
 
-		groupPermissionsList =
-			permissionsListFilter.filterGroupPermissions(
-				companyId, groupId, userId, name, primKey, portletActions,
-				groupPermissionsList);
+		groupPermissionsList = permissionsListFilter.filterGroupPermissions(
+			companyId, groupId, userId, name, primKey, portletActions,
+			groupPermissionsList);
 
 		if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) {
 			Role role = roleLocalService.getDefaultGroupRole(groupId);
@@ -476,10 +475,9 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		PermissionsListFilter permissionsListFilter =
 			PermissionsListFilterFactory.getInstance();
 
-		guestPermissionsList =
-			permissionsListFilter.filterGuestPermissions(
-				companyId, groupId, userId, name, resource.getPrimKey(),
-				portletActions, guestPermissionsList);
+		guestPermissionsList = permissionsListFilter.filterGuestPermissions(
+			companyId, groupId, userId, name, resource.getPrimKey(),
+			portletActions, guestPermissionsList);
 
 		if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) {
 			Role guestRole = roleLocalService.getRole(
@@ -648,10 +646,9 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 				permissionLocalService.getPermissions(
 					companyId, groupPermissions, resource.getResourceId());
 
-			groupPermissionsList =
-				permissionsListFilter.filterGroupPermissions(
-					companyId, groupId, userId, resource.getName(),
-					resource.getPrimKey(), false, groupPermissionsList);
+			groupPermissionsList = permissionsListFilter.filterGroupPermissions(
+				companyId, groupId, userId, resource.getName(),
+				resource.getPrimKey(), false, groupPermissionsList);
 
 			if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) {
 				Role role = roleLocalService.getDefaultGroupRole(groupId);
@@ -708,8 +705,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		filterOwnerActions(resource.getName(), ownerActionIds);
 
-		String[] ownerPermissions =
-			ownerActionIds.toArray(new String[ownerActionIds.size()]);
+		String[] ownerPermissions = ownerActionIds.toArray(
+			new String[ownerActionIds.size()]);
 
 		// Group permissions
 

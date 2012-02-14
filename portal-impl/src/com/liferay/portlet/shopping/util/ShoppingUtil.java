@@ -94,13 +94,6 @@ public class ShoppingUtil {
 	}
 
 	public static double calculateActualSubtotal(
-			Map<ShoppingCartItem, Integer> items)
-		throws PortalException, SystemException {
-
-		return calculateSubtotal(items) - calculateDiscountSubtotal(items);
-	}
-
-	public static double calculateActualSubtotal(
 		List<ShoppingOrderItem> orderItems) {
 
 		double subtotal = 0.0;
@@ -110,6 +103,13 @@ public class ShoppingUtil {
 		}
 
 		return subtotal;
+	}
+
+	public static double calculateActualSubtotal(
+			Map<ShoppingCartItem, Integer> items)
+		throws PortalException, SystemException {
+
+		return calculateSubtotal(items) - calculateDiscountSubtotal(items);
 	}
 
 	public static double calculateAlternativeShipping(
@@ -262,8 +262,8 @@ public class ShoppingUtil {
 			Map<ShoppingCartItem, Integer> items)
 		throws PortalException, SystemException {
 
-		double discount =
-			calculateDiscountSubtotal(items) / calculateSubtotal(items);
+		double discount = calculateDiscountSubtotal(
+			items) / calculateSubtotal(items);
 
 		if (Double.isNaN(discount) || Double.isInfinite(discount)) {
 			discount = 0.0;
@@ -408,8 +408,8 @@ public class ShoppingUtil {
 			}
 
 			if (item.isRequiresShipping()) {
-				ShoppingItemPrice itemPrice =
-					_getItemPrice(item, count.intValue());
+				ShoppingItemPrice itemPrice = _getItemPrice(
+					item, count.intValue());
 
 				if (itemPrice.isUseShippingFormula()) {
 					subtotal +=
@@ -671,20 +671,6 @@ public class ShoppingUtil {
 		return breadcrumbs;
 	}
 
-	public static ShoppingCart getCart(ThemeDisplay themeDisplay) {
-		ShoppingCart cart = new ShoppingCartImpl();
-
-		cart.setGroupId(themeDisplay.getScopeGroupId());
-		cart.setCompanyId(themeDisplay.getCompanyId());
-		cart.setUserId(themeDisplay.getUserId());
-		cart.setItemIds(StringPool.BLANK);
-		cart.setCouponCodes(StringPool.BLANK);
-		cart.setAltShipping(0);
-		cart.setInsure(false);
-
-		return cart;
-	}
-
 	public static ShoppingCart getCart(PortletRequest portletRequest)
 		throws PortalException, SystemException {
 
@@ -741,6 +727,20 @@ public class ShoppingUtil {
 
 			return cart;
 		}
+	}
+
+	public static ShoppingCart getCart(ThemeDisplay themeDisplay) {
+		ShoppingCart cart = new ShoppingCartImpl();
+
+		cart.setGroupId(themeDisplay.getScopeGroupId());
+		cart.setCompanyId(themeDisplay.getCompanyId());
+		cart.setUserId(themeDisplay.getUserId());
+		cart.setItemIds(StringPool.BLANK);
+		cart.setCouponCodes(StringPool.BLANK);
+		cart.setAltShipping(0);
+		cart.setInsure(false);
+
+		return cart;
 	}
 
 	public static int getFieldsQuantitiesPos(
@@ -811,16 +811,6 @@ public class ShoppingUtil {
 		return rowPos;
 	}
 
-	public static long getItemId(String itemId) {
-		int pos = itemId.indexOf(CharPool.PIPE);
-
-		if (pos != -1) {
-			itemId = itemId.substring(0, pos);
-		}
-
-		return GetterUtil.getLong(itemId);
-	}
-
 	public static String getItemFields(String itemId) {
 		int pos = itemId.indexOf(CharPool.PIPE);
 
@@ -830,6 +820,16 @@ public class ShoppingUtil {
 		else {
 			return itemId.substring(pos + 1, itemId.length());
 		}
+	}
+
+	public static long getItemId(String itemId) {
+		int pos = itemId.indexOf(CharPool.PIPE);
+
+		if (pos != -1) {
+			itemId = itemId.substring(0, pos);
+		}
+
+		return GetterUtil.getLong(itemId);
 	}
 
 	public static OrderByComparator getItemOrderByComparator(
@@ -943,18 +943,6 @@ public class ShoppingUtil {
 		return portletURL.toString();
 	}
 
-	public static String getPpPaymentStatus(String ppPaymentStatus) {
-		if ((ppPaymentStatus == null) || (ppPaymentStatus.length() < 2) ||
-			(ppPaymentStatus.equals("checkout"))) {
-
-			return ShoppingOrderConstants.STATUS_CHECKOUT;
-		}
-		else {
-			return Character.toUpperCase(ppPaymentStatus.charAt(0)) +
-				ppPaymentStatus.substring(1, ppPaymentStatus.length());
-		}
-	}
-
 	public static String getPpPaymentStatus(
 		ShoppingOrder order, PageContext pageContext) {
 
@@ -968,6 +956,18 @@ public class ShoppingUtil {
 		}
 
 		return LanguageUtil.get(pageContext, ppPaymentStatus);
+	}
+
+	public static String getPpPaymentStatus(String ppPaymentStatus) {
+		if ((ppPaymentStatus == null) || (ppPaymentStatus.length() < 2) ||
+			(ppPaymentStatus.equals("checkout"))) {
+
+			return ShoppingOrderConstants.STATUS_CHECKOUT;
+		}
+		else {
+			return Character.toUpperCase(ppPaymentStatus.charAt(0)) +
+				ppPaymentStatus.substring(1, ppPaymentStatus.length());
+		}
 	}
 
 	public static boolean isInStock(ShoppingItem item) {
@@ -993,8 +993,8 @@ public class ShoppingUtil {
 	}
 
 	public static boolean isInStock(
-		ShoppingItem item, ShoppingItemField[] itemFields,
-		String[] fieldsArray, Integer orderedQuantity) {
+		ShoppingItem item, ShoppingItemField[] itemFields, String[] fieldsArray,
+		Integer orderedQuantity) {
 
 		if (!item.isFields()) {
 			int stockQuantity = item.getStockQuantity();

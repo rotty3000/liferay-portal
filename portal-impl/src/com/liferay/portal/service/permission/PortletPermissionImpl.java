@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.permission.StagingPermissionUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -31,10 +32,14 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
+import com.liferay.portal.util.PortletCategoryKeys;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.sites.util.SitesUtil;
 
 import java.util.Collection;
 import java.util.List;
+
+import javax.portlet.PortletMode;
 
 /**
  * @author Brian Wing Shun Chan
@@ -201,21 +206,13 @@ public class PortletPermissionImpl implements PortletPermission {
 			return false;
 		}
 
-		boolean value = contains(
-			permissionChecker, groupId, layout, portlet.getPortletId(),
-			actionId, strict);
-
-		if (value) {
+		if (portlet.isSystem() && actionId.equals(ActionKeys.VIEW)) {
 			return true;
 		}
-		else {
-			if (portlet.isSystem() && actionId.equals(ActionKeys.VIEW)) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+
+		return contains(
+			permissionChecker, groupId, layout, portlet.getPortletId(),
+			actionId, strict);
 	}
 
 	public boolean contains(
@@ -410,6 +407,33 @@ public class PortletPermissionImpl implements PortletPermission {
 	public String getPrimaryKey(long plid, String portletId) {
 		return String.valueOf(plid).concat(
 			PortletConstants.LAYOUT_SEPARATOR).concat(portletId);
+	}
+
+	public boolean hasAccessPermission(
+			PermissionChecker permissionChecker, long scopeGroupId,
+			Layout layout, Portlet portlet, PortletMode portletMode)
+		throws PortalException, SystemException {
+
+		if ((layout != null) && layout.isTypeControlPanel()) {
+			String category = portlet.getControlPanelEntryCategory();
+
+			if (Validator.equals(category, PortletCategoryKeys.CONTENT)) {
+				layout = null;
+			}
+		}
+
+		boolean access = contains(
+			permissionChecker, scopeGroupId, layout, portlet, ActionKeys.VIEW);
+
+		if (access && !PropsValues.TCK_URL &&
+			portletMode.equals(PortletMode.EDIT)) {
+
+			access = contains(
+				permissionChecker, scopeGroupId, layout, portlet,
+				ActionKeys.PREFERENCES);
+		}
+
+		return access;
 	}
 
 	public boolean hasLayoutManagerPermission(

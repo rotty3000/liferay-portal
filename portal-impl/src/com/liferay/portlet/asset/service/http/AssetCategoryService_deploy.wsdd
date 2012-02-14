@@ -42,6 +42,14 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="end" type="tns:int"></parameter>
 			<parameter xmlns:tns="http://util.kernel.portal.liferay.com" qname="obc" type="tns:OrderByComparator"></parameter>
 		</operation>
+		<operation xmlns:operNS="urn:http.service.asset.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getJSONSearch" qname="operNS:getJSONSearch" returnQName="getJSONSearchReturn" returnType="rtns:string" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="keywords" type="tns:string"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="vocabularyId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="start" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="end" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://util.kernel.portal.liferay.com" qname="obc" type="tns:OrderByComparator"></parameter>
+		</operation>
 		<operation xmlns:operNS="urn:http.service.asset.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getJSONVocabularyCategories" qname="operNS:getJSONVocabularyCategories" returnQName="getJSONVocabularyCategoriesReturn" returnType="rtns:string" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="name" type="tns:string"></parameter>
@@ -118,7 +126,7 @@
 			<parameter xmlns:tns="urn:http.service.asset.portlet.liferay.com" qname="categoryProperties" type="tns:ArrayOf_xsd_string"></parameter>
 			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
-		<parameter name="allowedMethods" value="addCategory deleteCategories deleteCategory getCategories getCategory getChildCategories getJSONVocabularyCategories getVocabularyCategories getVocabularyCategoriesCount getVocabularyRootCategories moveCategory search updateCategory" />
+		<parameter name="allowedMethods" value="addCategory deleteCategories deleteCategory getCategories getCategory getChildCategories getJSONSearch getJSONVocabularyCategories getVocabularyCategories getVocabularyCategoriesCount getVocabularyRootCategories moveCategory search updateCategory" />
 		<parameter name="className" value="com.liferay.portlet.asset.service.http.AssetCategoryServiceSoap" />
 		<parameter name="schemaUnqualified" value="http://model.asset.portlet.liferay.com,http://model.portal.liferay.com,http://service.portal.liferay.com,http://util.kernel.portal.liferay.com,http://xml.apache.org/xml-soap,urn:http.service.asset.portlet.liferay.com" />
 		<parameter name="typeMappingVersion" value="1.2" />

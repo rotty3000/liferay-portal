@@ -79,43 +79,6 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 	}
 
 	@Override
-	public long[] getRoleIds(long userId, long groupId) {
-		PermissionCheckerBag bag = null;
-
-		try {
-			bag = getUserBag(userId, groupId);
-		}
-		catch (Exception e) {
-		}
-
-		if (bag != null) {
-			if (checkGuest) {
-				Set<Long> roleIds = SetUtil.fromArray(bag.getRoleIds());
-
-				try {
-					PermissionCheckerBag guestBag = getGuestUserBag();
-
-					if (guestBag != null) {
-						for (long roleId : guestBag.getRoleIds()) {
-							roleIds.add(roleId);
-						}
-					}
-				}
-				catch (Exception e) {
-				}
-
-				return ArrayUtil.toArray(
-					roleIds.toArray(new Long[roleIds.size()]));
-			}
-			else {
-				return bag.getRoleIds();
-			}
-		}
-
-		return PermissionChecker.DEFAULT_ROLE_IDS;
-	}
-
-	@Override
 	public List<Long> getGuestResourceBlockIds(
 		long companyId, long groupId, String name, String actionId) {
 
@@ -278,8 +241,8 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		String actionId) {
 
 		try {
-			ResourceBlockIdsBag resourceBlockIdsBag =
-				getResourceBlockIdsBag(companyId, groupId, userId, name);
+			ResourceBlockIdsBag resourceBlockIdsBag = getResourceBlockIdsBag(
+				companyId, groupId, userId, name);
 
 			return ResourceBlockLocalServiceUtil.getResourceBlockIds(
 				resourceBlockIdsBag, name, actionId);
@@ -324,6 +287,43 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 				companyId, userId, groupId, name, checkGuest,
 				resourceBlockIdsBag);
 		}
+	}
+
+	@Override
+	public long[] getRoleIds(long userId, long groupId) {
+		PermissionCheckerBag bag = null;
+
+		try {
+			bag = getUserBag(userId, groupId);
+		}
+		catch (Exception e) {
+		}
+
+		if (bag != null) {
+			if (checkGuest) {
+				Set<Long> roleIds = SetUtil.fromArray(bag.getRoleIds());
+
+				try {
+					PermissionCheckerBag guestBag = getGuestUserBag();
+
+					if (guestBag != null) {
+						for (long roleId : guestBag.getRoleIds()) {
+							roleIds.add(roleId);
+						}
+					}
+				}
+				catch (Exception e) {
+				}
+
+				return ArrayUtil.toArray(
+					roleIds.toArray(new Long[roleIds.size()]));
+			}
+			else {
+				return bag.getRoleIds();
+			}
+		}
+
+		return PermissionChecker.DEFAULT_ROLE_IDS;
 	}
 
 	/**
@@ -663,6 +663,17 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 	}
 
+	public boolean isGroupMember(long groupId) {
+		try {
+			return isGroupMemberImpl(groupId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			return false;
+		}
+	}
+
 	public boolean isGroupOwner(long groupId) {
 		try {
 			return isGroupOwnerImpl(groupId);
@@ -987,8 +998,8 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		if ((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6) &&
 			ResourceBlockLocalServiceUtil.isSupported(name)) {
 
-			ResourceBlockIdsBag resourceBlockIdsBag =
-				getResourceBlockIdsBag(companyId, groupId, getUserId(), name);
+			ResourceBlockIdsBag resourceBlockIdsBag = getResourceBlockIdsBag(
+				companyId, groupId, getUserId(), name);
 
 			boolean value = ResourceBlockLocalServiceUtil.hasPermission(
 				name, GetterUtil.getLong(primKey), actionId,
@@ -1073,6 +1084,31 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		}
 
 		if (bag.isGroupAdmin(this, group)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	protected boolean isGroupMemberImpl(long groupId) throws Exception {
+		if (!signedIn) {
+			return false;
+		}
+
+		if (groupId <= 0) {
+			return false;
+		}
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		PermissionCheckerBag bag = getUserBag(user.getUserId(), groupId);
+
+		if (bag == null) {
+			_log.error("Bag should never be null");
+		}
+
+		if (bag.isGroupMember(this, group)) {
 			return true;
 		}
 		else {

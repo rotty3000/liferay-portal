@@ -162,7 +162,7 @@ public interface JournalArticleFinder {
 		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
-		java.lang.String[] structureIds, java.lang.String[] templateIds,
+		java.lang.String structureId, java.lang.String templateId,
 		java.util.Date displayDateGT, java.util.Date displayDateLT, int status,
 		java.util.Date reviewDate, boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
@@ -173,7 +173,7 @@ public interface JournalArticleFinder {
 		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
-		java.lang.String structureId, java.lang.String templateId,
+		java.lang.String[] structureIds, java.lang.String[] templateIds,
 		java.util.Date displayDateGT, java.util.Date displayDateLT, int status,
 		java.util.Date reviewDate, boolean andOperator, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)

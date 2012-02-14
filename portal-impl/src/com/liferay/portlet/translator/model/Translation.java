@@ -35,12 +35,16 @@ public class Translation implements Serializable {
 		setToText(toText);
 	}
 
-	public String getTranslationId() {
-		return _translationId;
-	}
-
 	public String getFromText() {
 		return _fromText;
+	}
+
+	public String getToText() {
+		return _toText;
+	}
+
+	public String getTranslationId() {
+		return _translationId;
 	}
 
 	public void setFromText(String fromText) {
@@ -51,10 +55,6 @@ public class Translation implements Serializable {
 		}
 	}
 
-	public String getToText() {
-		return _toText;
-	}
-
 	public void setToText(String toText) {
 		try {
 			_toText = new String(toText.getBytes(), StringPool.UTF8);
@@ -63,8 +63,8 @@ public class Translation implements Serializable {
 		}
 	}
 
-	private String _translationId;
 	private String _fromText;
 	private String _toText;
+	private String _translationId;
 
 }

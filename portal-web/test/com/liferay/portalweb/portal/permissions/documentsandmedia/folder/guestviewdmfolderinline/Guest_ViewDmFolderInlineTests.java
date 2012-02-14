@@ -15,13 +15,9 @@
 package com.liferay.portalweb.portal.permissions.documentsandmedia.folder.guestviewdmfolderinline;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddDmFolderTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddPageDmTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddPortletDmTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.SignInTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.SignOutTest;
-import com.liferay.portalweb.utils.TearDownDLDocumentTest;
-import com.liferay.portalweb.utils.TearDownPageTest;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.documentlibrary.portlet.addportlet.AddPageDMTest;
+import com.liferay.portalweb.portlet.documentlibrary.portlet.addportlet.AddPortletDMTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -32,8 +28,8 @@ import junit.framework.TestSuite;
 public class Guest_ViewDmFolderInlineTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-		testSuite.addTestSuite(AddPageDmTest.class);
-		testSuite.addTestSuite(AddPortletDmTest.class);
+		testSuite.addTestSuite(AddPageDMTest.class);
+		testSuite.addTestSuite(AddPortletDMTest.class);
 		testSuite.addTestSuite(AddDmFolderTest.class);
 		testSuite.addTestSuite(PermissionsGuestViewFolderOffTest.class);
 		testSuite.addTestSuite(SignOutTest.class);

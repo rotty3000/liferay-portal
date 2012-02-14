@@ -27,6 +27,7 @@ page import="com.liferay.portal.PortletItemNameException" %><%@
 page import="com.liferay.portal.ResourcePrimKeyException" %><%@
 page import="com.liferay.portal.kernel.lar.PortletDataException" %><%@
 page import="com.liferay.portal.kernel.lar.PortletDataHandler" %><%@
+page import="com.liferay.portal.kernel.lar.PortletDataHandlerBoolean" %><%@
 page import="com.liferay.portal.kernel.lar.PortletDataHandlerControl" %><%@
 page import="com.liferay.portal.kernel.lar.PortletDataHandlerKeys" %><%@
 page import="com.liferay.portal.kernel.lar.UserIdStrategy" %><%@
@@ -51,3 +52,5 @@ Portlet selPortlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>
+
+<%@ include file="/html/portlet/portlet_configuration/init-ext.jsp" %>

@@ -184,8 +184,8 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 	}
 
 	protected void updateLogo(
-			ActionRequest actionRequest, long liveGroupId,
-			long stagingGroupId, boolean privateLayout, boolean hasLogo)
+			ActionRequest actionRequest, long liveGroupId, long stagingGroupId,
+			boolean privateLayout, boolean hasLogo)
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
@@ -210,21 +210,14 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 				inputStream = new ByteArrayFileInputStream(file, 1024);
 			}
 
-			if (inputStream != null) {
-				inputStream.mark(0);
+			long groupId = liveGroupId;
+
+			if (stagingGroupId > 0) {
+				groupId = stagingGroupId;
 			}
 
 			LayoutSetServiceUtil.updateLogo(
-				liveGroupId, privateLayout, useLogo, inputStream, false);
-
-			if (inputStream != null) {
-				inputStream.reset();
-			}
-
-			if (stagingGroupId > 0) {
-				LayoutSetServiceUtil.updateLogo(
-					stagingGroupId, privateLayout, useLogo, inputStream, false);
-			}
+				groupId, privateLayout, useLogo, inputStream, false);
 		}
 		finally {
 			StreamUtil.cleanUp(inputStream);
@@ -250,8 +243,11 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 
 			if (Validator.isNotNull(themeId)) {
 				colorSchemeId = getColorSchemeId(
+					companyId, themeId, colorSchemeId, wapTheme);
+
+				getThemeSettingsProperties(
 					actionRequest, companyId, typeSettingsProperties, device,
-					themeId, colorSchemeId, wapTheme);
+					themeId, wapTheme);
 			}
 
 			long groupId = liveGroupId;
@@ -294,19 +290,14 @@ public class EditLayoutSetAction extends EditLayoutsAction {
 
 		settingsProperties.putAll(typeSettingsProperties);
 
-		boolean showSiteName = ParamUtil.getBoolean(
-			actionRequest, "showSiteName");
-
-		settingsProperties.put("showSiteName", Boolean.toString(showSiteName));
-
-		LayoutSetServiceUtil.updateSettings(
-			liveGroupId, privateLayout, settingsProperties.toString());
+		long groupId = liveGroupId;
 
 		if (stagingGroupId > 0) {
-			LayoutSetServiceUtil.updateSettings(
-				stagingGroupId, privateLayout,
-				typeSettingsProperties.toString());
+			groupId = stagingGroupId;
 		}
+
+		LayoutSetServiceUtil.updateSettings(
+			groupId, privateLayout, settingsProperties.toString());
 	}
 
 }

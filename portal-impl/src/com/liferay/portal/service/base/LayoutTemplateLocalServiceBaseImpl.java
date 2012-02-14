@@ -3765,6 +3765,12 @@ public abstract class LayoutTemplateLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	/**
 	 * Performs an SQL query.
 	 *

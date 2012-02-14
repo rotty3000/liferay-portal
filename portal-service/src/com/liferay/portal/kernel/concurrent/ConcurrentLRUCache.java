@@ -116,6 +116,7 @@ public class ConcurrentLRUCache<K, V> {
 		ValueWrapper valueWrapper = new ValueWrapper(value);
 
 		_writeLock.lock();
+
 		try {
 			if (!_cache.containsKey(key) && (_cache.size() >= _maxSize)) {
 				_cleanUp();

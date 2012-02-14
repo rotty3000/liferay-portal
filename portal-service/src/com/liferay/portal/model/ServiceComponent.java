@@ -29,11 +29,11 @@ public interface ServiceComponent extends ServiceComponentModel, PersistedModel 
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.model.impl.ServiceComponentImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public void setData(java.lang.String data);
-
-	public java.lang.String getTablesSQL();
+	public java.lang.String getIndexesSQL();
 
 	public java.lang.String getSequencesSQL();
 
-	public java.lang.String getIndexesSQL();
+	public java.lang.String getTablesSQL();
+
+	public void setData(java.lang.String data);
 }

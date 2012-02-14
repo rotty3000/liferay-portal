@@ -1158,6 +1158,12 @@ public abstract class DLFileEntryMetadataLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return DLFileEntryMetadata.class;
 	}

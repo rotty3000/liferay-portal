@@ -15,6 +15,7 @@
 package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.image.ImageToolImpl;
+import com.liferay.portal.kernel.image.ImageTool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -297,9 +298,9 @@ public abstract class LiferayConverter {
 
 				thumbnailFile.createNewFile();
 
-				ImageToolImpl imageToolImpl = ImageToolImpl.getInstance();
+				ImageTool imageTool = ImageToolImpl.getInstance();
 
-				RenderedImage renderedImage = imageToolImpl.scale(
+				RenderedImage renderedImage = imageTool.scale(
 					bufferedImage, thumbnailHeight, thumbnailWidth);
 
 				ImageIO.write(
@@ -378,6 +379,22 @@ public abstract class LiferayConverter {
 	}
 
 	protected void flush(
+		IStreamCoder outputIStreamCoder, IContainer outputIContainer,
+		IPacket iPacket) {
+
+		if (outputIStreamCoder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO) {
+			outputIStreamCoder.encodeAudio(iPacket, null, 0);
+		}
+		else {
+			outputIStreamCoder.encodeVideo(iPacket, null, 0);
+		}
+
+		if (iPacket.isComplete()) {
+			outputIContainer.writePacket(iPacket, true);
+		}
+	}
+
+	protected void flush(
 		IStreamCoder[] outputIStreamCoders, IContainer outputIContainer) {
 
 		for (IStreamCoder outputIStreamCoder : outputIStreamCoders) {
@@ -392,22 +409,6 @@ public abstract class LiferayConverter {
 			while (iPacket.isComplete()) {
 				flush(outputIStreamCoder, outputIContainer, iPacket);
 			}
-		}
-	}
-
-	protected void flush(
-		IStreamCoder outputIStreamCoder, IContainer outputIContainer,
-		IPacket iPacket) {
-
-		if (outputIStreamCoder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO) {
-			outputIStreamCoder.encodeAudio(iPacket, null, 0);
-		}
-		else {
-			outputIStreamCoder.encodeVideo(iPacket, null, 0);
-		}
-
-		if (iPacket.isComplete()) {
-			outputIContainer.writePacket(iPacket, true);
 		}
 	}
 

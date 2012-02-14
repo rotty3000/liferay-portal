@@ -271,13 +271,13 @@ public class ClassUtil {
 				}
 			}
 
-			annotationParametersMatcher =
-				_ANNOTATION_PARAMETERS_REGEXP.matcher(s);
+			annotationParametersMatcher = _ANNOTATION_PARAMETERS_REGEXP.matcher(
+				s);
 
 			if (annotationParametersMatcher.matches()) {
 				String annotationName = annotationParametersMatcher.group(1);
-				String annotationParameters =
-					annotationParametersMatcher.group(2);
+				String annotationParameters = annotationParametersMatcher.group(
+					2);
 
 				tokens.add(annotationName.replace("@", ""));
 
@@ -347,8 +347,8 @@ public class ClassUtil {
 		st.wordChars(',',',');
 	}
 
-	private static final Pattern _ANNOTATION_NAME_REGEXP =
-		Pattern.compile("@(\\w+)$");
+	private static final Pattern _ANNOTATION_NAME_REGEXP = Pattern.compile(
+		"@(\\w+)$");
 
 	private static final Pattern _ANNOTATION_PARAMETERS_REGEXP =
 		Pattern.compile("@(\\w+)\\({0,1}\\{{0,1}([^)}]+)\\}{0,1}\\){0,1}");

@@ -51,9 +51,9 @@ public interface ImageTool {
 	public byte[] getBytes(RenderedImage renderedImage, String contentType)
 		throws IOException;
 
-	public ImageBag read(File file) throws IOException;
-
 	public ImageBag read(byte[] bytes) throws IOException;
+
+	public ImageBag read(File file) throws IOException;
 
 	/**
 	 * Scales the image based on the given width with the height calculated to
@@ -77,5 +77,9 @@ public interface ImageTool {
 	 */
 	public RenderedImage scale(
 		RenderedImage renderedImage, int maxHeight, int maxWidth);
+
+	public abstract void write(
+			RenderedImage renderedImage, String contentType, OutputStream os)
+		throws IOException;
 
 }

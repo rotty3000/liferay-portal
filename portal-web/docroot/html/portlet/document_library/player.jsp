@@ -49,7 +49,7 @@ for (String previewFileURL : previewFileURLs) {
 					'mp3': '<%= previewFileURLs[0] %>'
 				},
 				height: 27,
-				url: '<%= themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
+				url: '<%= themeDisplay.getCDNHost() + themeDisplay.getPathJavaScript() %>/misc/video_player/mpw_player.swf',
 				useExpressInstall: true,
 				version: 9
 			}
@@ -57,15 +57,7 @@ for (String previewFileURL : previewFileURLs) {
 	</aui:script>
 </c:if>
 <c:if test="<%= supportedVideo%>">
-	<style type="text/css" media="screen">
-		.aui-video-node {
-			width: 100%;
-			height: 100%;
-		}
-	</style>
 	<aui:script use="aui-base,aui-video">
-		var previewDivObject = A.one('#<portlet:namespace />previewFileContent');
-
 		new A.Video(
 			{
 				boundingBox: '#<portlet:namespace />previewFileContent',
@@ -73,8 +65,6 @@ for (String previewFileURL : previewFileURLs) {
 					allowfullscreen: 'true',
 					bgColor: '#000000'
 				},
-				height: previewDivObject.getStyle('height'),
-
 				<c:if test="<%= Validator.isNotNull(ogvPreviewFileURL) %>">
 					ogvUrl: '<%= ogvPreviewFileURL %>',
 				</c:if>
@@ -82,10 +72,8 @@ for (String previewFileURL : previewFileURLs) {
 				poster: '<%= videoThumbnailURL %>',
 
 				<c:if test="<%= Validator.isNotNull(mp4PreviewFileURL) %>">
-					url: '<%= mp4PreviewFileURL %>',
+					url: '<%= mp4PreviewFileURL %>'
 				</c:if>
-
-				width: previewDivObject.getStyle('width')
 			}
 		).render();
 	</aui:script>

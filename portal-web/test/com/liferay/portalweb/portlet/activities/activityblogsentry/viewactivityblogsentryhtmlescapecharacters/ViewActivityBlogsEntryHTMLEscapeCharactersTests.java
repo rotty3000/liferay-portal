@@ -15,6 +15,12 @@
 package com.liferay.portalweb.portlet.activities.activityblogsentry.viewactivityblogsentryhtmlescapecharacters;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.activities.portlet.addportletactivities.AddPageActivitiesTest;
+import com.liferay.portalweb.portlet.activities.portlet.addportletactivities.AddPortletActivitiesTest;
+import com.liferay.portalweb.portlet.activities.portlet.addportletactivities.TearDownMyCommunityPrivatePageTest;
+import com.liferay.portalweb.portlet.blogs.portlet.addportletblogs.AddPageBlogsTest;
+import com.liferay.portalweb.portlet.blogs.portlet.addportletblogs.AddPortletBlogsTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

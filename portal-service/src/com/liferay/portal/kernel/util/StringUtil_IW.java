@@ -155,6 +155,14 @@ public class StringUtil_IW {
 		return StringUtil.merge(array, delimiter);
 	}
 
+	public java.lang.String merge(char[] array) {
+		return StringUtil.merge(array);
+	}
+
+	public java.lang.String merge(char[] array, java.lang.String delimiter) {
+		return StringUtil.merge(array, delimiter);
+	}
+
 	public java.lang.String merge(java.util.Collection<?> col) {
 		return StringUtil.merge(col);
 	}
@@ -162,14 +170,6 @@ public class StringUtil_IW {
 	public java.lang.String merge(java.util.Collection<?> col,
 		java.lang.String delimiter) {
 		return StringUtil.merge(col, delimiter);
-	}
-
-	public java.lang.String merge(char[] array) {
-		return StringUtil.merge(array);
-	}
-
-	public java.lang.String merge(char[] array, java.lang.String delimiter) {
-		return StringUtil.merge(array, delimiter);
 	}
 
 	public java.lang.String merge(double[] array) {
@@ -388,6 +388,10 @@ public class StringUtil_IW {
 		return StringUtil.split(s, x);
 	}
 
+	public java.lang.String[] split(java.lang.String s, char delimiter) {
+		return StringUtil.split(s, delimiter);
+	}
+
 	public double[] split(java.lang.String s, double x) {
 		return StringUtil.split(s, x);
 	}
@@ -406,10 +410,6 @@ public class StringUtil_IW {
 
 	public short[] split(java.lang.String s, short x) {
 		return StringUtil.split(s, x);
-	}
-
-	public java.lang.String[] split(java.lang.String s, char delimiter) {
-		return StringUtil.split(s, delimiter);
 	}
 
 	public java.lang.String[] split(java.lang.String s,

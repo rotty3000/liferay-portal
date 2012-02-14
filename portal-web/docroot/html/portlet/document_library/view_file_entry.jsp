@@ -197,7 +197,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					</span>
 
 					<span class="user-date">
-						<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {userDisplay.getDisplayURL(themeDisplay), HtmlUtil.escape(fileEntry.getUserName()), fileEntry.getCreateDate().toString()}) %>' />
+						<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {userDisplay.getDisplayURL(themeDisplay), HtmlUtil.escape(fileEntry.getUserName()), dateFormatDateTime.format(fileEntry.getCreateDate())}) %>' />
 					</span>
 
 					<c:if test="<%= fileEntry.isSupportsSocial() %>">
@@ -367,7 +367,11 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 									</c:when>
 									<c:when test="<%= hasAudio || hasVideo %>">
 										<div class="lfr-preview-file lfr-preview-video" id="<portlet:namespace />previewFile">
-											<div class="lfr-preview-file-content lfr-preview-video-content" id="<portlet:namespace />previewFileContent"></div>
+											<div class="lfr-preview-file-content lfr-preview-video-content">
+												<div class="lfr-preview-file-video-current-column">
+													<div id="<portlet:namespace />previewFileContent"></div>
+												</div>
+											</div>
 										</div>
 
 										<liferay-util:include page="/html/portlet/document_library/player.jsp" />
@@ -850,7 +854,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						submitForm(document.<portlet:namespace />fm);
 					},
 					icon: 'lock',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout") %>'
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout[document]") %>'
 				}
 			);
 		</c:if>
@@ -864,7 +868,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						submitForm(document.<portlet:namespace />fm);
 					},
 					icon: 'undo',
-					label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout") %>'
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout[document]") %>'
 				},
 				{
 

@@ -30,6 +30,7 @@ public class UnsyncStringReader extends Reader {
 
 	public UnsyncStringReader(String string) {
 		this.string = string;
+
 		stringLength = string.length();
 	}
 
@@ -43,6 +44,7 @@ public class UnsyncStringReader extends Reader {
 		if (string == null) {
 			throw new IOException("String is null");
 		}
+
 		markIndex = index;
 	}
 

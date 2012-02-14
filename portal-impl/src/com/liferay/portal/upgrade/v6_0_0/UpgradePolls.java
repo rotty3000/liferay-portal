@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.upgrade.v6_0_0.util.PollsChoiceTable;
 import com.liferay.portal.upgrade.v6_0_0.util.PollsQuestionTable;
 
+import java.sql.SQLException;
+
 /**
  * @author Julio Camarero Puras
  */
@@ -25,12 +27,12 @@ public class UpgradePolls extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		if (isSupportsAlterColumnType()) {
+		try {
 			runSQL("alter_column_type PollsChoice description STRING null");
 
 			runSQL("alter_column_type PollsQuestion title STRING null");
 		}
-		else {
+		catch (SQLException sqle) {
 
 			// PollsChoice
 
@@ -42,8 +44,7 @@ public class UpgradePolls extends UpgradeProcess {
 			// PollsQuestion
 
 			upgradeTable(
-				PollsQuestionTable.TABLE_NAME,
-				PollsQuestionTable.TABLE_COLUMNS,
+				PollsQuestionTable.TABLE_NAME, PollsQuestionTable.TABLE_COLUMNS,
 				PollsQuestionTable.TABLE_SQL_CREATE,
 				PollsQuestionTable.TABLE_SQL_ADD_INDEXES);
 		}

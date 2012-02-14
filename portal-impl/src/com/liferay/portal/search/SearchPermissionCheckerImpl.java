@@ -179,8 +179,7 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 		throws Exception {
 
 		Resource resource = ResourceLocalServiceUtil.getResource(
-			companyId, className, ResourceConstants.SCOPE_INDIVIDUAL,
-			classPK);
+			companyId, className, ResourceConstants.SCOPE_INDIVIDUAL, classPK);
 
 		Group group = null;
 
@@ -321,8 +320,8 @@ public class SearchPermissionCheckerImpl implements SearchPermissionChecker {
 			groups.addAll(GroupLocalServiceUtil.getUserGroups(userId, true));
 			groups.addAll(permissionCheckerBag.getGroups());
 
-			userGroupRoles =
-				UserGroupRoleLocalServiceUtil.getUserGroupRoles(userId);
+			userGroupRoles = UserGroupRoleLocalServiceUtil.getUserGroupRoles(
+				userId);
 		}
 		else {
 			groups.addAll(permissionCheckerBag.getGroups());

@@ -210,8 +210,8 @@ public class StripFilterTest extends TestCase {
 
 		stripFilter.processPre(charBuffer, stringWriter);
 
-		assertEquals("pre>", stringWriter.toString());
-		assertEquals(4, charBuffer.position());
+		assertEquals("pre", stringWriter.toString());
+		assertEquals(3, charBuffer.position());
 
 		// Without trailing spaces
 

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ColorScheme;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -42,11 +43,6 @@ public class LayoutSetImpl extends LayoutSetBaseImpl {
 	public LayoutSetImpl() {
 	}
 
-	public Theme getTheme() throws SystemException {
-		return ThemeLocalServiceUtil.getTheme(
-			getCompanyId(), getThemeId(), false);
-	}
-
 	public ColorScheme getColorScheme() throws SystemException {
 		return ThemeLocalServiceUtil.getColorScheme(
 			getCompanyId(), getTheme().getThemeId(), getColorSchemeId(), false);
@@ -54,6 +50,36 @@ public class LayoutSetImpl extends LayoutSetBaseImpl {
 
 	public Group getGroup() throws PortalException, SystemException {
 		return GroupLocalServiceUtil.getGroup(getGroupId());
+	}
+
+	public long getLiveLogoId() {
+		long logoId = 0;
+
+		Group group = null;
+
+		try {
+			group = getGroup();
+
+			if (!group.isStagingGroup()) {
+				return logoId;
+			}
+		}
+		catch (Exception e) {
+			return logoId;
+		}
+
+		Group liveGroup = group.getLiveGroup();
+
+		LayoutSet liveLayoutSet = null;
+
+		if (isPrivateLayout()) {
+			liveLayoutSet = liveGroup.getPrivateLayoutSet();
+		}
+		else {
+			liveLayoutSet = liveGroup.getPublicLayoutSet();
+		}
+
+		return liveLayoutSet.getLogoId();
 	}
 
 	@Override
@@ -85,6 +111,11 @@ public class LayoutSetImpl extends LayoutSetBaseImpl {
 		UnicodeProperties settingsProperties = getSettingsProperties();
 
 		return settingsProperties.getProperty(key);
+	}
+
+	public Theme getTheme() throws SystemException {
+		return ThemeLocalServiceUtil.getTheme(
+			getCompanyId(), getThemeId(), false);
 	}
 
 	public String getThemeSetting(String key, String device)
@@ -149,15 +180,15 @@ public class LayoutSetImpl extends LayoutSetBaseImpl {
 		}
 	}
 
-	public Theme getWapTheme() throws SystemException {
-		return ThemeLocalServiceUtil.getTheme(
-			getCompanyId(), getWapThemeId(), true);
-	}
-
 	public ColorScheme getWapColorScheme() throws SystemException {
 		return ThemeLocalServiceUtil.getColorScheme(
 			getCompanyId(), getWapTheme().getThemeId(), getWapColorSchemeId(),
 			true);
+	}
+
+	public Theme getWapTheme() throws SystemException {
+		return ThemeLocalServiceUtil.getTheme(
+			getCompanyId(), getWapThemeId(), true);
 	}
 
 	public boolean isLayoutSetPrototypeLinkActive() {

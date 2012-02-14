@@ -4020,6 +4020,12 @@ public abstract class LockLocalServiceBaseImpl implements LockLocalService,
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return Lock.class;
 	}

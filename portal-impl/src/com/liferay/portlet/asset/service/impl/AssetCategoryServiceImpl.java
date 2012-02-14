@@ -167,7 +167,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			sb.append(vocabulary.getName());
 			sb.append(names.toArray(new String[names.size()]));
 
-			categoryJSONObject.put("path", vocabulary.getName());
+			categoryJSONObject.put("path", sb.toString());
 
 			jsonArray.put(categoryJSONObject);
 		}
@@ -203,8 +203,8 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 
 		String categoriesJSON = JSONFactoryUtil.looseSerialize(categories);
 
-		JSONArray categoriesJSONArray =
-			JSONFactoryUtil.createJSONArray(categoriesJSON);
+		JSONArray categoriesJSONArray = JSONFactoryUtil.createJSONArray(
+			categoriesJSON);
 
 		jsonObject.put("categories", categoriesJSONArray);
 

@@ -262,24 +262,24 @@ public interface JournalTemplateLocalService extends PersistedModelLocalService 
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addTemplateResources(long groupId, java.lang.String templateId,
-		boolean addGroupPermissions, boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
 	public void addTemplateResources(
 		com.liferay.portlet.journal.model.JournalTemplate template,
 		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addTemplateResources(long groupId, java.lang.String templateId,
+	public void addTemplateResources(
+		com.liferay.portlet.journal.model.JournalTemplate template,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void addTemplateResources(
-		com.liferay.portlet.journal.model.JournalTemplate template,
+	public void addTemplateResources(long groupId, java.lang.String templateId,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void addTemplateResources(long groupId, java.lang.String templateId,
 		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
@@ -294,12 +294,12 @@ public interface JournalTemplateLocalService extends PersistedModelLocalService 
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void deleteTemplate(long groupId, java.lang.String templateId)
+	public void deleteTemplate(
+		com.liferay.portlet.journal.model.JournalTemplate template)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void deleteTemplate(
-		com.liferay.portlet.journal.model.JournalTemplate template)
+	public void deleteTemplate(long groupId, java.lang.String templateId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

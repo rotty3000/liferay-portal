@@ -536,7 +536,7 @@ if (Validator.isNotNull(content)) {
 							for (int i = 0; i < availableLocales.length ; i++) {
 					%>
 
-								<input id= "<portlet:namespace />availableLocales<%= HtmlUtil.escapeAttribute(availableLocales[i]) %>" name="<portlet:namespace />available_locales" type="hidden" value="<%= HtmlUtil.escapeAttribute(availableLocales[i]) %>" />
+								<input id="<portlet:namespace />availableLocales<%= HtmlUtil.escapeAttribute(availableLocales[i]) %>" name="<portlet:namespace />available_locales" type="hidden" value="<%= HtmlUtil.escapeAttribute(availableLocales[i]) %>" />
 
 					<%
 							}
@@ -569,7 +569,7 @@ if (Validator.isNotNull(content)) {
 			</c:choose>
 
 			<c:if test="<%= Validator.isNull(toLanguageId) %>">
-				<aui:input inlineLabel="left" label="searchable" name="indexable" />
+				<aui:input label="searchable" name="indexable" />
 			</c:if>
 		</div>
 	</td>
@@ -595,8 +595,10 @@ if (Validator.isNotNull(content)) {
 	Liferay.provide(
 		window,
 		'<portlet:namespace />postProcessTranslation',
-		function(cmd, newVersion, newLanguageId, newLanguage) {
+		function(formDate, cmd, newVersion, newLanguageId, newLanguage) {
 			var A = AUI();
+
+			document.<portlet:namespace />fm1.<portlet:namespace />formDate.value = formDate;
 
 			var availableTranslationContainer = A.one('#<portlet:namespace />availableTranslationContainer');
 			var availableTranslationsLinks = A.one('#<portlet:namespace />availableTranslationsLinks');
@@ -617,9 +619,13 @@ if (Validator.isNotNull(content)) {
 			if (cmd == '<%= Constants.DELETE_TRANSLATION %>') {
 				var availableLocales = A.one('#<portlet:namespace />availableLocales' + newLanguageId);
 
-				availableLocales.remove();
+				if (availableLocales) {
+					availableLocales.remove();
+				}
 
-				translationLink.remove();
+				if (translationLink) {
+					translationLink.remove();
+				}
 			}
 			else if (!translationLink) {
 				statusNode.removeClass('workflow-status-approved');

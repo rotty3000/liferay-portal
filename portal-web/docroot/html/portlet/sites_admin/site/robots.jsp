@@ -21,6 +21,16 @@ Long liveGroupId = (Long)request.getAttribute("site.liveGroupId");
 
 LayoutSet publicLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(liveGroupId, false);
 
+String publicVirtualHostName = publicLayoutSet.getVirtualHostname();
+
+if (Validator.isNull(publicVirtualHostName) && Validator.isNotNull(PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME) ) {
+	Group defaultGroup = GroupLocalServiceUtil.getGroup(company.getCompanyId(), PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME);
+
+	if (publicLayoutSet.getGroupId() == defaultGroup.getGroupId()) {
+		publicVirtualHostName = company.getVirtualHostname();
+	}
+}
+
 String defaultPublicRobots = RobotsUtil.getRobots(publicLayoutSet);
 
 String publicRobots = ParamUtil.getString(request, "robots", defaultPublicRobots);
@@ -36,7 +46,7 @@ String privateRobots = ParamUtil.getString(request, "robots", defaultPrivateRobo
 
 <aui:fieldset label="public-pages">
 	<c:choose>
-		<c:when test="<%= Validator.isNotNull(publicLayoutSet.getVirtualHostname()) %>">
+		<c:when test="<%= Validator.isNotNull(publicVirtualHostName) %>">
 			<textarea cols="60" name="<portlet:namespace />publicRobots" rows="15"><%= HtmlUtil.escape(publicRobots) %></textarea>
 		</c:when>
 		<c:otherwise>

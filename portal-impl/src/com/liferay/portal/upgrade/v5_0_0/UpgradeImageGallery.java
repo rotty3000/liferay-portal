@@ -52,12 +52,12 @@ public class UpgradeImageGallery extends UpgradeProcess {
 
 		UpgradeColumn imageIdColumn = new TempUpgradeColumnImpl("imageId");
 
-		IGImageNameColumnImpl imageNameColumn =
-			new IGImageNameColumnImpl(imageIdColumn);
+		IGImageNameColumnImpl imageNameColumn = new IGImageNameColumnImpl(
+			imageIdColumn);
 
 		upgradeTable = UpgradeTableFactoryUtil.getUpgradeTable(
-			IGImageTable.TABLE_NAME, IGImageTable.TABLE_COLUMNS,
-			imageIdColumn, imageNameColumn);
+			IGImageTable.TABLE_NAME, IGImageTable.TABLE_COLUMNS, imageIdColumn,
+			imageNameColumn);
 
 		upgradeTable.updateTable();
 	}

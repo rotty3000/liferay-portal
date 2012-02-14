@@ -117,6 +117,10 @@ public class UpgradePermission extends UpgradeProcess {
 		for (ResourcePermission resourcePermission : resourcePermissions) {
 			int scope = resourcePermission.getScope();
 
+			if (!name.equals(resourcePermission.getName())) {
+				continue;
+			}
+
 			if ((scope == ResourceConstants.SCOPE_COMPANY) ||
 				(scope == ResourceConstants.SCOPE_GROUP_TEMPLATE)) {
 
@@ -167,8 +171,7 @@ public class UpgradePermission extends UpgradeProcess {
 	}
 
 	private static final int[] _SCOPES = {
-		ResourceConstants.SCOPE_COMPANY,
-		ResourceConstants.SCOPE_GROUP,
+		ResourceConstants.SCOPE_COMPANY, ResourceConstants.SCOPE_GROUP,
 		ResourceConstants.SCOPE_GROUP_TEMPLATE
 	};
 

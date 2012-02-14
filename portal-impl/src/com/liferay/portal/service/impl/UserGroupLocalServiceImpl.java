@@ -419,6 +419,16 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		return teamPersistence.containsUserGroup(teamId, userGroupId);
 	}
 
+	public List<UserGroup> search(
+			long companyId, String keywords,
+			LinkedHashMap<String, Object> params, int start, int end,
+			OrderByComparator obc)
+		throws SystemException {
+
+		return userGroupFinder.findByKeywords(
+			companyId, keywords, params, start, end, obc);
+	}
+
 	/**
 	 * Returns an ordered range of all the user groups that match the name and
 	 * description.
@@ -456,7 +466,15 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		throws SystemException {
 
 		return userGroupFinder.findByC_N_D(
-			companyId, name, description, params, start, end, obc);
+			companyId, name, description, params, false, start, end, obc);
+	}
+
+	public int searchCount(
+			long companyId, String keywords,
+			LinkedHashMap<String, Object> params)
+		throws SystemException {
+
+		 return userGroupFinder.countByKeywords(companyId, keywords, params);
 	}
 
 	/**
@@ -479,7 +497,7 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		throws SystemException {
 
 		return userGroupFinder.countByC_N_D(
-			companyId, name, description, params);
+			companyId, name, description, params, false);
 	}
 
 	/**
@@ -615,9 +633,15 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 			PortletDataHandlerKeys.DELETE_PORTLET_DATA,
 			new String[] {Boolean.FALSE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.LAYOUT_SET_SETTINGS,
+			new String[] {Boolean.FALSE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.LAYOUTS_IMPORT_MODE,
 			new String[] {PortletDataHandlerKeys.
 				LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE});
+		parameterMap.put(
+			PortletDataHandlerKeys.LOGO,
+			new String[] {Boolean.FALSE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.PERMISSIONS,
 			new String[] {Boolean.TRUE.toString()});

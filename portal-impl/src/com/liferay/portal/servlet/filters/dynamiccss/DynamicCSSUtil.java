@@ -152,8 +152,7 @@ public class DynamicCSSUtil {
 		parsedContent = StringUtil.replace(
 			parsedContent,
 			new String[] {
-				"@portal_ctx@",
-				"@theme_image_path@"
+				"@portal_ctx@", "@theme_image_path@"
 			},
 			new String[] {
 				PortalUtil.getPathContext(),
@@ -173,7 +172,12 @@ public class DynamicCSSUtil {
 			cssThemePath = themeDisplay.getPathThemeCss();
 		}
 		else {
-			String cdnHost = PortalUtil.getCDNHost(request);
+			String cdnHost = StringPool.BLANK;
+
+			if (PortalUtil.isCDNDynamicResourcesEnabled(request)) {
+				cdnHost = PortalUtil.getCDNHost(request);
+			}
+
 			String themeStaticResourcePath = theme.getStaticResourcePath();
 
 			cssThemePath =
@@ -341,10 +345,10 @@ public class DynamicCSSUtil {
 
 	private static Log _log = LogFactoryUtil.getLog(DynamicCSSUtil.class);
 
-	private static Pattern _pluginThemePattern =
-		Pattern.compile("\\/([^\\/]+)-theme\\/", Pattern.CASE_INSENSITIVE);
-	private static Pattern _portalThemePattern =
-		Pattern.compile("themes\\/([^\\/]+)\\/css", Pattern.CASE_INSENSITIVE);
+	private static Pattern _pluginThemePattern = Pattern.compile(
+		"\\/([^\\/]+)-theme\\/", Pattern.CASE_INSENSITIVE);
+	private static Pattern _portalThemePattern = Pattern.compile(
+		"themes\\/([^\\/]+)\\/css", Pattern.CASE_INSENSITIVE);
 	private static RubyExecutor _rubyExecutor = new RubyExecutor();
 	private static String _rubyScript;
 

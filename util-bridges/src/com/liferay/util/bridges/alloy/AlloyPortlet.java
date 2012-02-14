@@ -34,6 +34,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
@@ -140,8 +141,10 @@ public class AlloyPortlet extends GenericPortlet {
 			PortletResponse portletResponse)
 		throws IOException, PortletException {
 
+		PortletContext portletContext = getPortletContext();
+
 		PortletRequestDispatcher portletRequestDispatcher =
-			getPortletContext().getRequestDispatcher(path);
+			portletContext.getRequestDispatcher(path);
 
 		if (portletRequestDispatcher == null) {
 			_log.error(path + " is not a valid include");

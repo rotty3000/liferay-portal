@@ -14,7 +14,10 @@
 
 package com.liferay.portlet.documentlibrary.util;
 
+import com.liferay.portal.kernel.lar.PortletDataContext;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.xml.Element;
 
 import java.io.InputStream;
 
@@ -27,31 +30,33 @@ public interface VideoProcessor {
 
 	public static final String THUMBNAIL_TYPE = "jpg";
 
+	public void exportGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			Element fileEntryElement)
+		throws Exception;
+
 	public void generateVideo(FileVersion fileVersion) throws Exception;
 
-	public InputStream getPreviewAsStream(FileVersion fileVersion)
-		throws Exception;
-
 	public InputStream getPreviewAsStream(FileVersion fileVersion, String type)
-		throws Exception;
-
-	public long getPreviewFileSize(FileVersion fileVersion)
 		throws Exception;
 
 	public long getPreviewFileSize(FileVersion fileVersion, String type)
 		throws Exception;
 
-	public InputStream getThumbnailAsStream(
-			FileVersion fileVersion, int thumbnailIndex)
+	public InputStream getThumbnailAsStream(FileVersion fileVersion, int index)
 		throws Exception;
 
-	public long getThumbnailFileSize(
-			FileVersion fileVersion, int thumbnailIndex)
+	public long getThumbnailFileSize(FileVersion fileVersion, int index)
 		throws Exception;
 
 	public Set<String> getVideoMimeTypes();
 
 	public boolean hasVideo(FileVersion fileVersion);
+
+	public void importGeneratedFiles(
+			PortletDataContext portletDataContext, FileEntry fileEntry,
+			FileEntry importedFileEntry, Element fileEntryElement)
+		throws Exception;
 
 	public boolean isSupported(String mimeType);
 

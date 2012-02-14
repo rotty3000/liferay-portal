@@ -109,6 +109,13 @@ public class LayoutLocalServiceStagingAdvice
 				(Layout)arguments[0], (Boolean)arguments[1],
 				(ServiceContext)arguments[2]);
 		}
+		else if (methodName.equals("getLayouts")) {
+			if (arguments.length == 6) {
+				showIncomplete = (Boolean)arguments[3];
+			}
+
+			return wrapReturnValue(methodInvocation.proceed(), showIncomplete);
+		}
 		else if (methodName.equals("updateLayout") &&
 				 (arguments.length == 15)) {
 
@@ -122,13 +129,6 @@ public class LayoutLocalServiceStagingAdvice
 				(Boolean)arguments[10], (String)arguments[11],
 				(Boolean)arguments[12], (byte[])arguments[13],
 				(ServiceContext)arguments[14]);
-		}
-		else if (methodName.equals("getLayouts")) {
-			if (arguments.length == 6) {
-				showIncomplete = (Boolean)arguments[3];
-			}
-
-			return wrapReturnValue(methodInvocation.proceed(), showIncomplete);
 		}
 		else {
 			try {

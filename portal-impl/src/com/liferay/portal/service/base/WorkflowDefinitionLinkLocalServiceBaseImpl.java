@@ -4036,6 +4036,12 @@ public abstract class WorkflowDefinitionLinkLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return WorkflowDefinitionLink.class;
 	}

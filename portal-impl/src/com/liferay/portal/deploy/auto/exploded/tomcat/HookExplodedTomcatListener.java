@@ -17,6 +17,7 @@ package com.liferay.portal.deploy.auto.exploded.tomcat;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.util.Portal;
 
 import java.io.File;
 
@@ -35,7 +36,14 @@ public class HookExplodedTomcatListener extends BaseExplodedTomcatListener {
 			_log.debug("Invoking deploy for " + file.getPath());
 		}
 
-		File docBaseDir = getDocBaseDir(file, "WEB-INF/liferay-hook.xml");
+		File docBaseDir = getDocBaseDir(
+			file, "WEB-INF/" + Portal.PORTLET_XML_FILE_NAME_STANDARD);
+
+		if (docBaseDir != null) {
+			return;
+		}
+
+		docBaseDir = getDocBaseDir(file, "WEB-INF/liferay-hook.xml");
 
 		if (docBaseDir == null) {
 			return;

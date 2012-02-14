@@ -27,7 +27,7 @@ public class UseCaseTests extends BaseTestSuite {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(AddCustomSiteWikiUseCaseTest.class);
 		testSuite.addTestSuite(AddPageWikiTest.class);
-		testSuite.addTestSuite(AddPortletWikiTest.class);
+		testSuite.addTestSuite(AddPortletWikiSiteTest.class);
 		testSuite.addTestSuite(SaveAsDraftWikiPageContentTest.class);
 		testSuite.addTestSuite(DiscardDraftWikiPageDraftPagesActionsTest.class);
 		testSuite.addTestSuite(AddWikiFrontPageTest.class);

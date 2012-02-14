@@ -4024,6 +4024,12 @@ public abstract class ReleaseLocalServiceBaseImpl implements ReleaseLocalService
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return Release.class;
 	}

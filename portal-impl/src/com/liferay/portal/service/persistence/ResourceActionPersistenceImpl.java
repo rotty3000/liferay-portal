@@ -104,12 +104,12 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 			new String[] { String.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
-			ResourceActionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
-			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
 			ResourceActionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
+			ResourceActionModelImpl.FINDER_CACHE_ENABLED,
+			ResourceActionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ResourceActionModelImpl.ENTITY_CACHE_ENABLED,
 			ResourceActionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
@@ -329,7 +329,6 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		if (isNew || !ResourceActionModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
-
 		else {
 			if ((resourceActionModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME.getColumnBitmask()) != 0) {
@@ -1105,11 +1104,11 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
 			finderArgs = new Object[] { start, end, orderByComparator };
 		}
 
@@ -1565,8 +1564,8 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 	private static final String _FINDER_COLUMN_NAME_NAME_2 = "resourceAction.name = ?";
 	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(resourceAction.name IS NULL OR resourceAction.name = ?)";
 	private static final String _FINDER_COLUMN_N_A_NAME_1 = "resourceAction.name IS NULL AND ";
-	private static final String _FINDER_COLUMN_N_A_NAME_2 = "resourceAction.name = ? AND ";
-	private static final String _FINDER_COLUMN_N_A_NAME_3 = "(resourceAction.name IS NULL OR resourceAction.name = ?) AND ";
+	private static final String _FINDER_COLUMN_N_A_NAME_2 = "lower(resourceAction.name) = lower(CAST_TEXT(?)) AND ";
+	private static final String _FINDER_COLUMN_N_A_NAME_3 = "(resourceAction.name IS NULL OR lower(resourceAction.name) = lower(CAST_TEXT(?))) AND ";
 	private static final String _FINDER_COLUMN_N_A_ACTIONID_1 = "resourceAction.actionId IS NULL";
 	private static final String _FINDER_COLUMN_N_A_ACTIONID_2 = "resourceAction.actionId = ?";
 	private static final String _FINDER_COLUMN_N_A_ACTIONID_3 = "(resourceAction.actionId IS NULL OR resourceAction.actionId = ?)";

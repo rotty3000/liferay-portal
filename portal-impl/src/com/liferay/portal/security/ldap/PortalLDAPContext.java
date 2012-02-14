@@ -14,8 +14,8 @@
 
 package com.liferay.portal.security.ldap;
 
+import com.liferay.portal.kernel.ldap.DummyDirContext;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.util.ldap.DummyDirContext;
 
 import javax.naming.Name;
 import javax.naming.NameNotFoundException;

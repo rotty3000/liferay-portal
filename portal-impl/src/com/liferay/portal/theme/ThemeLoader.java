@@ -37,16 +37,16 @@ import javax.servlet.ServletContext;
  */
 public class ThemeLoader {
 
+	public File getFileStorage() {
+		return _fileStorage;
+	}
+
 	public String getServletContextName() {
 		return _servletContextName;
 	}
 
 	public String getThemesPath() {
 		return _themesPath;
-	}
-
-	public File getFileStorage() {
-		return _fileStorage;
 	}
 
 	public synchronized void loadThemes() {
@@ -177,11 +177,11 @@ public class ThemeLoader {
 
 	private static Log _log = LogFactoryUtil.getLog(ThemeLoader.class);
 
-	private String _servletContextName;
-	private ServletContext _servletContext;
-	private String _themesPath;
 	private File _fileStorage;
-	private boolean _loadFromServletContext = true;
 	private Map<String, Long> _lastModifiedMap = new HashMap<String, Long>();
+	private boolean _loadFromServletContext = true;
+	private ServletContext _servletContext;
+	private String _servletContextName;
+	private String _themesPath;
 
 }

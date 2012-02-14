@@ -69,6 +69,10 @@ public class ThemeDisplay implements Serializable {
 		return _account;
 	}
 
+	public String getCDNDynamicResourcesHost() {
+		return _cdnDynamicResourcesHost;
+	}
+
 	public String getCDNHost() {
 		return _cdnHost;
 	}
@@ -336,6 +340,12 @@ public class ThemeDisplay implements Serializable {
 		return _scopeGroupId;
 	}
 
+	public long getScopeGroupIdOrLiveGroupId()
+		throws PortalException, SystemException {
+
+		return StagingUtil.getLiveGroupId(_scopeGroupId);
+	}
+
 	public String getScopeGroupName() throws PortalException, SystemException {
 		if (_scopeGroup == null) {
 			return StringPool.BLANK;
@@ -343,12 +353,6 @@ public class ThemeDisplay implements Serializable {
 		else {
 			return _scopeGroup.getDescriptiveName();
 		}
-	}
-
-	public long getScopeGroupIdOrLiveGroupId()
-		throws PortalException, SystemException {
-
-		return StagingUtil.getLiveGroupId(_scopeGroupId);
 	}
 
 	public Layout getScopeLayout() throws PortalException, SystemException {
@@ -695,6 +699,10 @@ public class ThemeDisplay implements Serializable {
 		_addSessionIdToURL = addSessionIdToURL;
 	}
 
+	public void setCDNDynamicResourcesHost(String cdnDynamicResourcesHost) {
+		_cdnDynamicResourcesHost = cdnDynamicResourcesHost;
+	}
+
 	public void setCDNHost(String cdnHost) {
 		_cdnHost = cdnHost;
 	}
@@ -853,8 +861,16 @@ public class ThemeDisplay implements Serializable {
 				host + themeStaticResourcePath +
 					colorScheme.getColorSchemeImagesPath());
 
+			String dynamicResourcesHost = getCDNDynamicResourcesHost();
+
+			if (Validator.isNull(dynamicResourcesHost) && isFacebook()) {
+				dynamicResourcesHost = getPortalURL();
+			}
+
 			setPathThemeCss(
-				host + themeStaticResourcePath + theme.getCssPath());
+				dynamicResourcesHost + themeStaticResourcePath +
+					theme.getCssPath());
+
 			setPathThemeImages(
 				host + themeStaticResourcePath + theme.getImagesPath());
 			setPathThemeJavaScript(
@@ -1240,6 +1256,7 @@ public class ThemeDisplay implements Serializable {
 
 	private Account _account;
 	private boolean _addSessionIdToURL;
+	private String _cdnDynamicResourcesHost = StringPool.BLANK;
 	private String _cdnHost = StringPool.BLANK;
 	private ColorScheme _colorScheme;
 	private Company _company;
@@ -1266,8 +1283,8 @@ public class ThemeDisplay implements Serializable {
 	private String _languageId;
 	private Layout _layout;
 	private List<Layout> _layouts;
-	private String _layoutSetLogo = StringPool.BLANK;
 	private LayoutSet _layoutSet;
+	private String _layoutSetLogo = StringPool.BLANK;
 	private LayoutTypePortlet _layoutTypePortlet;
 	private String _lifecycle;
 	private boolean _lifecycleAction;

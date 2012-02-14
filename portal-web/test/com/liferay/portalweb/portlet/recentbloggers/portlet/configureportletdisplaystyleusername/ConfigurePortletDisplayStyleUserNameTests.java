@@ -15,6 +15,9 @@
 package com.liferay.portalweb.portlet.recentbloggers.portlet.configureportletdisplaystyleusername;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.recentbloggers.portlet.addportlet.AddPageRBTest;
+import com.liferay.portalweb.portlet.recentbloggers.portlet.addportlet.AddPortletRBTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

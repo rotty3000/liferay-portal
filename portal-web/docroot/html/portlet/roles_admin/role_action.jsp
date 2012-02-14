@@ -51,7 +51,7 @@ if (name.equals(RoleConstants.GUEST) || name.equals(RoleConstants.OWNER) || name
 	<c:if test="<%= !unassignableRole && RolePermissionUtil.contains(permissionChecker, role.getRoleId(), ActionKeys.PERMISSIONS) %>">
 
 		<%
-		int[] roleTypes = new int[] {role.getType()};
+		int[] roleTypes = {role.getType()};
 
 		if (role.getType() != RoleConstants.TYPE_REGULAR) {
 			roleTypes = new int[] {RoleConstants.TYPE_REGULAR, role.getType()};

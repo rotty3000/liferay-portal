@@ -1006,6 +1006,12 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	/**
 	 * Performs an SQL query.
 	 *

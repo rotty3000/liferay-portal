@@ -164,7 +164,7 @@ List<Group> groups = new ArrayList<Group>(mvp.keySet());
 		<liferay-ui:search-container-column-button
 			align="right"
 			href="<%= taglibMergeURL %>"
-			name='<%= LanguageUtil.get(pageContext, "merge") %>'
+			name="merge"
 		/>
 	</liferay-ui:search-container-row>
 

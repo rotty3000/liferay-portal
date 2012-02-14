@@ -61,8 +61,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 		return dlFileEntryLocalService.addFileEntry(
 			getUserId(), groupId, repositoryId, folderId, sourceFileName,
-			mimeType, title, description, changeLog, fileEntryTypeId,
-			fieldsMap, file, is, size, serviceContext);
+			mimeType, title, description, changeLog, fileEntryTypeId, fieldsMap,
+			file, is, size, serviceContext);
 	}
 
 	public void cancelCheckOut(long fileEntryId)
@@ -108,15 +108,39 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			getUserId(), fileEntryId, lockUuid);
 	}
 
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, ServiceContext)}
+	 */
 	public DLFileEntry checkOutFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
-		return checkOutFileEntry(
-			fileEntryId, null, DLFileEntryImpl.LOCK_EXPIRATION_TIME);
+		return checkOutFileEntry(fileEntryId, new ServiceContext());
 	}
 
 	public DLFileEntry checkOutFileEntry(
+			long fileEntryId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		return checkOutFileEntry(
+			fileEntryId, null, DLFileEntryImpl.LOCK_EXPIRATION_TIME,
+			serviceContext);
+	}
+
+	/**
+	 * @deprecated {@link #checkOutFileEntry(long, String, long,
+	 *             ServiceContext)}
+	 */
+	public DLFileEntry checkOutFileEntry(
 			long fileEntryId, String owner, long expirationTime)
+		throws PortalException, SystemException {
+
+		return checkOutFileEntry(
+			fileEntryId, owner, expirationTime, new ServiceContext());
+	}
+
+	public DLFileEntry checkOutFileEntry(
+			long fileEntryId, String owner, long expirationTime,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		DLFileEntryPermission.check(
@@ -129,7 +153,7 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 		}
 
 		return dlFileEntryLocalService.checkOutFileEntry(
-			getUserId(), fileEntryId, owner, expirationTime);
+			getUserId(), fileEntryId, owner, expirationTime, serviceContext);
 	}
 
 	public DLFileEntry copyFileEntry(
@@ -233,8 +257,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 	}
 
 	public List<DLFileEntry> getFileEntries(
-			long groupId, long folderId, String[] mimeTypes, int start,
-			int end, OrderByComparator obc)
+			long groupId, long folderId, String[] mimeTypes, int start, int end,
+			OrderByComparator obc)
 		throws SystemException {
 
 		List<Long> folderIds = new ArrayList<Long>();

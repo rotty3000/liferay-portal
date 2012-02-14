@@ -1093,6 +1093,12 @@ public abstract class AnnouncementsEntryLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return AnnouncementsEntry.class;
 	}

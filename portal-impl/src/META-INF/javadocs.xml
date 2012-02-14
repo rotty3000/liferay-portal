@@ -69366,6 +69366,39 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
+			<deprecated><![CDATA[{@link #checkOutFileEntry(long, long, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>checkOutFileEntry</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>userId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>fileEntryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 		</method>
 		<method>
 			<name>checkOutFileEntry</name>
@@ -69388,6 +69421,49 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 			<param>
 				<name>expirationTime</name>
 				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<deprecated><![CDATA[{@link #checkOutFileEntry(long, long, String, long, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>checkOutFileEntry</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>userId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>fileEntryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>owner</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>expirationTime</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
 				<comment><![CDATA[]]></comment>
 			</param>
 			<return>
@@ -71046,6 +71122,9 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 				<type>com.liferay.portal.service.ServiceContext</type>
 				<comment><![CDATA[]]></comment>
 			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
 			<throws>
 				<name>PortalException</name>
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
@@ -71655,6 +71734,34 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
+			<deprecated><![CDATA[{@link #checkOutFileEntry(long, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>checkOutFileEntry</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>fileEntryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 		</method>
 		<method>
 			<name>checkOutFileEntry</name>
@@ -71672,6 +71779,44 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 			<param>
 				<name>expirationTime</name>
 				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<deprecated><![CDATA[{@link #checkOutFileEntry(long, String, long, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>checkOutFileEntry</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>fileEntryId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>owner</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>expirationTime</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
 				<comment><![CDATA[]]></comment>
 			</param>
 			<return>
@@ -92897,6 +93042,69 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
 				<comment><![CDATA[]]></comment>
 			</throws>
+			<deprecated><![CDATA[{@link #updateArticleTranslation(long, String, double, Locale, String, String, String, Map, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>updateArticleTranslation</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>articleId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>version</name>
+				<type>double</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>locale</name>
+				<type>java.util.Locale</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>title</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>content</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>images</name>
+				<type>java.util.Map</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 		</method>
 		<method>
 			<name>updateAsset</name>
@@ -95896,6 +96104,69 @@ Due to legacy code, the names of some file entry properties are not intuitive. E
 			<param>
 				<name>images</name>
 				<type>java.util.Map</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>PortalException</name>
+				<type>com.liferay.portal.kernel.exception.PortalException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+			<deprecated><![CDATA[{@link #updateArticleTranslation(long, String, double, Locale, String, String, String, Map, ServiceContext)}]]></deprecated>
+		</method>
+		<method>
+			<name>updateArticleTranslation</name>
+			<comment><![CDATA[]]></comment>
+			<param>
+				<name>groupId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>articleId</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>version</name>
+				<type>double</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>locale</name>
+				<type>java.util.Locale</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>title</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>content</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>images</name>
+				<type>java.util.Map</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>serviceContext</name>
+				<type>com.liferay.portal.service.ServiceContext</type>
 				<comment><![CDATA[]]></comment>
 			</param>
 			<return>

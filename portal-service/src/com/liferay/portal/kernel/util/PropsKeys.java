@@ -123,6 +123,8 @@ public interface PropsKeys {
 
 	public static final String AUTH_LOGIN_PORTLET_NAME = "auth.login.portlet.name";
 
+	public static final String AUTH_LOGIN_PROMPT_ENABLED = "auth.login.prompt.enabled";
+
 	public static final String AUTH_LOGIN_SITE_URL = "auth.login.site.url";
 
 	public static final String AUTH_LOGIN_URL = "auth.login.url";
@@ -322,6 +324,8 @@ public interface PropsKeys {
 	public static final String CAS_SERVER_URL = "cas.server.url";
 
 	public static final String CAS_SERVICE_URL = "cas.service.url";
+
+	public static final String CDN_DYNAMIC_RESOURCES_ENABLED = "cdn.dynamic.resources.enabled";
 
 	public static final String CDN_HOST_HTTP = "cdn.host.http";
 
@@ -878,6 +882,8 @@ public interface PropsKeys {
 	public static final String JDBC_DEFAULT_URL = "jdbc.default.url";
 
 	public static final String JDBC_DEFAULT_USERNAME = "jdbc.default.username";
+
+	public static final String JNDI_ENVIRONMENT = "jndi.environment.";
 
 	public static final String JOURNAL_ARTICLE_CHECK_INTERVAL = "journal.article.check.interval";
 
@@ -1553,6 +1559,8 @@ public interface PropsKeys {
 
 	public static final String PERMISSIONS_INLINE_SQL_CHECK_ENABLED = "permissions.inline.sql.check.enabled";
 
+	public static final String PERMISSIONS_CHECK_GUEST_ENABLED = "permissions.check.guest.enabled";
+
 	public static final String PERMISSIONS_LIST_FILTER = "permissions.list.filter";
 
 	public static final String PERMISSIONS_OBJECT_BLOCKING_CACHE = "permissions.object.blocking.cache";
@@ -1568,6 +1576,12 @@ public interface PropsKeys {
 	public static final String PERMISSIONS_VIEW_DYNAMIC_INHERITANCE = "permissions.view.dynamic.inheritance";
 
 	public static final String PERSISTENCE_PROVIDER = "persistence.provider";
+
+	public static final String PHONE_NUMBER_FORMAT_IMPL = "phone.number.format.impl";
+
+	public static final String PHONE_NUMBER_FORMAT_INTERNATIONAL_REGEXP = "phone.number.format.international.regexp";
+
+	public static final String PHONE_NUMBER_FORMAT_USA_REGEXP = "phone.number.format.usa.regexp";
 
 	public static final String PLUGIN_NOTIFICATIONS_ENABLED = "plugin.notifications.enabled";
 
@@ -1748,6 +1762,8 @@ public interface PropsKeys {
 	public static final String SESSION_ENABLE_URL_WITH_SESSION_ID = "session.enable.url.with.session.id";
 
 	public static final String SESSION_ID_DELIMITER = "session.id.delimiter";
+
+	public static final String SESSION_MAX_ALLOWED = "session.max.allowed";
 
 	public static final String SESSION_PHISHING_PROTECTED_ATTRIBUTES = "session.phishing.protected.attributes";
 

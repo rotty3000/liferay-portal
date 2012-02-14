@@ -263,6 +263,16 @@ public class WebDAVPropsWrapper implements WebDAVProps,
 		_webDAVProps.persist();
 	}
 
+	public void addProp(java.lang.String name, java.lang.String prefix,
+		java.lang.String uri) throws java.lang.Exception {
+		_webDAVProps.addProp(name, prefix, uri);
+	}
+
+	public void addProp(java.lang.String name, java.lang.String prefix,
+		java.lang.String uri, java.lang.String text) throws java.lang.Exception {
+		_webDAVProps.addProp(name, prefix, uri, text);
+	}
+
 	public java.util.Set<com.liferay.portal.kernel.xml.QName> getPropsSet()
 		throws java.lang.Exception {
 		return _webDAVProps.getPropsSet();
@@ -272,16 +282,6 @@ public class WebDAVPropsWrapper implements WebDAVProps,
 		java.lang.String prefix, java.lang.String uri)
 		throws java.lang.Exception {
 		return _webDAVProps.getText(name, prefix, uri);
-	}
-
-	public void addProp(java.lang.String name, java.lang.String prefix,
-		java.lang.String uri) throws java.lang.Exception {
-		_webDAVProps.addProp(name, prefix, uri);
-	}
-
-	public void addProp(java.lang.String name, java.lang.String prefix,
-		java.lang.String uri, java.lang.String text) throws java.lang.Exception {
-		_webDAVProps.addProp(name, prefix, uri, text);
 	}
 
 	public void removeProp(java.lang.String name, java.lang.String prefix,

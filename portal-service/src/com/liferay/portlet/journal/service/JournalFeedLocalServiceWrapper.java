@@ -288,20 +288,29 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService,
 			feedVersion, serviceContext);
 	}
 
-	public void addFeedResources(long feedId, boolean addGroupPermissions,
-		boolean addGuestPermissions)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_journalFeedLocalService.addFeedResources(feedId, addGroupPermissions,
-			addGuestPermissions);
-	}
-
 	public void addFeedResources(
 		com.liferay.portlet.journal.model.JournalFeed feed,
 		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalFeedLocalService.addFeedResources(feed, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	public void addFeedResources(
+		com.liferay.portlet.journal.model.JournalFeed feed,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_journalFeedLocalService.addFeedResources(feed, groupPermissions,
+			guestPermissions);
+	}
+
+	public void addFeedResources(long feedId, boolean addGroupPermissions,
+		boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_journalFeedLocalService.addFeedResources(feedId, addGroupPermissions,
 			addGuestPermissions);
 	}
 
@@ -313,13 +322,10 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService,
 			guestPermissions);
 	}
 
-	public void addFeedResources(
-		com.liferay.portlet.journal.model.JournalFeed feed,
-		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+	public void deleteFeed(com.liferay.portlet.journal.model.JournalFeed feed)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_journalFeedLocalService.addFeedResources(feed, groupPermissions,
-			guestPermissions);
+		_journalFeedLocalService.deleteFeed(feed);
 	}
 
 	public void deleteFeed(long feedId)
@@ -332,12 +338,6 @@ public class JournalFeedLocalServiceWrapper implements JournalFeedLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_journalFeedLocalService.deleteFeed(groupId, feedId);
-	}
-
-	public void deleteFeed(com.liferay.portlet.journal.model.JournalFeed feed)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_journalFeedLocalService.deleteFeed(feed);
 	}
 
 	public com.liferay.portlet.journal.model.JournalFeed getFeed(long feedId)

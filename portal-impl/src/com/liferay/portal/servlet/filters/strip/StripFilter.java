@@ -638,7 +638,7 @@ public class StripFilter extends BasePortalFilter {
 	private static final int[] _MARKER_PRE_CLOSE_NEXTS =
 		KMPSearch.generateNexts(_MARKER_PRE_CLOSE);
 
-	private static final char[] _MARKER_PRE_OPEN = "pre>".toCharArray();
+	private static final char[] _MARKER_PRE_OPEN = "pre".toCharArray();
 
 	private static final String _MARKER_SCRIPT_CLOSE = "</script>";
 

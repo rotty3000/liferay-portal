@@ -48,13 +48,13 @@ public class SearchContainerRowTag<R>
 	@Override
 	public void addParam(String name, String value) {
 		if (name.equals("className")) {
-			_row.setClassName(value);
+			_resultRow.setClassName(value);
 		}
 		else if (name.equals("classHoverName")) {
-			_row.setClassHoverName(value);
+			_resultRow.setClassHoverName(value);
 		}
 		else if (name.equals("restricted")) {
-			_row.setRestricted(GetterUtil.getBoolean(value, false));
+			_resultRow.setRestricted(GetterUtil.getBoolean(value, false));
 		}
 		else {
 			Object obj = pageContext.getAttribute(value);
@@ -63,7 +63,7 @@ public class SearchContainerRowTag<R>
 				obj = value;
 			}
 
-			_row.setParameter(name, obj);
+			_resultRow.setParameter(name, obj);
 		}
 	}
 
@@ -83,8 +83,8 @@ public class SearchContainerRowTag<R>
 			_headerNamesAssigned = true;
 		}
 
-		if (!_row.isSkip()) {
-			_resultRows.add(_row);
+		if (!_resultRow.isSkip()) {
+			_resultRows.add(_resultRow);
 		}
 
 		_rowIndex++;
@@ -105,7 +105,7 @@ public class SearchContainerRowTag<R>
 		_headerNamesAssigned = false;
 		_resultRows = null;
 		_rowIndex = 0;
-		_row = null;
+		_resultRow = null;
 
 		if (!ServerDetector.isResin()) {
 			_bold = false;
@@ -185,7 +185,7 @@ public class SearchContainerRowTag<R>
 	}
 
 	public ResultRow getRow() {
-		return _row;
+		return _resultRow;
 	}
 
 	public String getRowVar() {
@@ -245,7 +245,7 @@ public class SearchContainerRowTag<R>
 	}
 
 	public void setRow(ResultRow row) {
-		_row = row;
+		_resultRow = row;
 	}
 
 	public void setRowVar(String rowVar) {
@@ -279,25 +279,25 @@ public class SearchContainerRowTag<R>
 		if (Validator.isNull(_keyProperty)) {
 			String primaryKey = String.valueOf(model);
 
-			_row = new ResultRow(model, primaryKey, _rowIndex, _bold);
+			_resultRow = new ResultRow(model, primaryKey, _rowIndex, _bold);
 		}
 		else if (isStringKey()) {
 			String primaryKey = BeanPropertiesUtil.getString(
 				model, _keyProperty);
 
-			_row = new ResultRow(model, primaryKey, _rowIndex, _bold);
+			_resultRow = new ResultRow(model, primaryKey, _rowIndex, _bold);
 		}
 		else {
 			Object primaryKey = BeanPropertiesUtil.getObject(
 				model, _keyProperty);
 
-			_row = new ResultRow(
+			_resultRow = new ResultRow(
 				model, String.valueOf(primaryKey), _rowIndex, _bold);
 		}
 
 		pageContext.setAttribute(_indexVar, _rowIndex);
 		pageContext.setAttribute(_modelVar, model);
-		pageContext.setAttribute(_rowVar, _row);
+		pageContext.setAttribute(_rowVar, _resultRow);
 	}
 
 	private boolean _bold;
@@ -309,11 +309,11 @@ public class SearchContainerRowTag<R>
 	private String _keyProperty;
 	private String _modelVar = DEFAULT_MODEL_VAR;
 	private Map<String, String> _orderableHeaders;
-	private List<R> _results;
+	private ResultRow _resultRow;
 	private List<ResultRow> _resultRows;
+	private List<R> _results;
 	private int _rowIndex;
 	private String _rowVar = DEFAULT_ROW_VAR;
-	private ResultRow _row;
 	private boolean _stringKey;
 
 }

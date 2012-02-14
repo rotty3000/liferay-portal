@@ -195,8 +195,8 @@ public class DDMStructureLocalServiceImpl
 	public void deleteStructure(long groupId, String structureKey)
 		throws PortalException, SystemException {
 
-		DDMStructure structure =
-			ddmStructurePersistence.findByG_S(groupId, structureKey);
+		DDMStructure structure = ddmStructurePersistence.findByG_S(
+			groupId, structureKey);
 
 		deleteStructure(structure);
 	}
@@ -273,24 +273,49 @@ public class DDMStructureLocalServiceImpl
 		return ddmStructurePersistence.findByG_N_D(groupId, name, description);
 	}
 
+	/**
+	 * @deprecated {@link #getStructures}
+	 */
 	public List<DDMStructure> getStructureEntries() throws SystemException {
+		return getStructures();
+	}
+
+	/**
+	 * @deprecated {@link #getStructures(long)}
+	 */
+	public List<DDMStructure> getStructureEntries(long groupId)
+		throws SystemException {
+
+		return getStructures(groupId);
+	}
+
+	/**
+	 * @deprecated {@link #getStructures(long, int, int)}
+	 */
+	public List<DDMStructure> getStructureEntries(
+			long groupId, int start, int end)
+		throws SystemException {
+
+		return getStructures(groupId, start, end);
+	}
+
+	public List<DDMStructure> getStructures() throws SystemException {
 		return ddmStructurePersistence.findAll();
 	}
 
-	public List<DDMStructure> getStructureEntries(long groupId)
+	public List<DDMStructure> getStructures(long groupId)
 		throws SystemException {
 
 		return ddmStructurePersistence.findByGroupId(groupId);
 	}
 
-	public List<DDMStructure> getStructureEntries(
-			long groupId, int start, int end)
+	public List<DDMStructure> getStructures(long groupId, int start, int end)
 		throws SystemException {
 
 		return ddmStructurePersistence.findByGroupId(groupId, start, end);
 	}
 
-	public int getStructureEntriesCount(long groupId) throws SystemException {
+	public int getStructuresCount(long groupId) throws SystemException {
 		return ddmStructurePersistence.countByGroupId(groupId);
 	}
 

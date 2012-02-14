@@ -45,6 +45,10 @@ public class StrutsActionAdapter extends BaseStrutsAction {
 		ActionForward actionForward = _action.execute(
 			_actionMapping, _actionForm, request, response);
 
+		if (actionForward == null) {
+			return null;
+		}
+
 		return actionForward.getPath();
 	}
 

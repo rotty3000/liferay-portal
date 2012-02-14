@@ -52,6 +52,11 @@ public class UnsyncBufferedOutputStream extends UnsyncFilterOutputStream {
 	}
 
 	@Override
+	public void write(byte[] bytes) throws IOException {
+		write(bytes, 0, bytes.length);
+	}
+
+	@Override
 	public void write(byte[] bytes, int offset, int length) throws IOException {
 		if (length >= buffer.length) {
 			if (count > 0) {
@@ -77,11 +82,6 @@ public class UnsyncBufferedOutputStream extends UnsyncFilterOutputStream {
 	}
 
 	@Override
-	public void write(byte[] bytes) throws IOException {
-		write(bytes, 0, bytes.length);
-	}
-
-	@Override
 	public void write(int b) throws IOException {
 		if (count >= buffer.length) {
 			outputStream.write(buffer, 0, count);
@@ -95,6 +95,6 @@ public class UnsyncBufferedOutputStream extends UnsyncFilterOutputStream {
 	protected byte[] buffer;
 	protected int count;
 
-	private static int _DEFAULT_BUFFER_SIZE = 8192;
+	private static final int _DEFAULT_BUFFER_SIZE = 8192;
 
 }

@@ -498,12 +498,12 @@ public class AddressWrapper implements Address, ModelWrapper<Address> {
 		_address.persist();
 	}
 
-	public com.liferay.portal.model.Region getRegion() {
-		return _address.getRegion();
-	}
-
 	public com.liferay.portal.model.Country getCountry() {
 		return _address.getCountry();
+	}
+
+	public com.liferay.portal.model.Region getRegion() {
+		return _address.getRegion();
 	}
 
 	public com.liferay.portal.model.ListType getType() {

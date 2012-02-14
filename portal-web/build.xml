@@ -5,7 +5,7 @@
 
 	<property name="war.file" value="${ant.project.name}" />
 
-	<property name="alloy.file" value="alloy-1.0.1.zip" />
+	<property name="alloy.file" value="alloy-1.5.0.zip" />
 
 	<!--
 	When upgrading CKEditor, make sure to delete
@@ -15,7 +15,7 @@
 	<property name="ckeditor.file" value="ckeditor_3.5.3.zip" />
 	<property name="fckeditor.file" value="FCKeditor_2.6.3.zip" />
 	<property name="tinymce.file" value="tinymce_3_2_1.zip" />
-	<property name="vaadin.file" value="vaadin-6.4.10.zip" />
+	<property name="vaadin.file" value="vaadin-6.7.4-liferay.zip" />
 
 	<path id="jspc.common.classpath">
 		<pathelement path="docroot/WEB-INF/classes" />
@@ -647,6 +647,10 @@ var defaultTypes = []]>
 	<target name="build-selenium">
 		<delete dir="test-classes" />
 
+		<!--
+		ant build-selenium -Dminimize=com/liferay/portalweb/portal/util/TearDownPageTest.html -DreportDuplicates=true
+		-->
+
 		<java
 			classname="com.liferay.portal.tools.SeleneseToJavaBuilder"
 			classpathref="project.classpath"
@@ -655,7 +659,7 @@ var defaultTypes = []]>
 			newenvironment="true"
 		>
 			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<arg line="test" />
+			<arg line="--basedir test --minimize ${minimize} --reportDuplicates ${reportDuplicates}" />
 		</java>
 	</target>
 
@@ -1121,6 +1125,7 @@ Please set the property "jdk.6.home" in build.properties.
 					<fileset dir="docroot">
 						<include name="**/*.css" />
 						<include name="**/*.dtd" />
+						<include name="**/*.ftl" />
 						<include name="**/*.gif" />
 						<include name="**/*.jar" />
 						<include name="**/*.jpg" />

@@ -120,6 +120,16 @@ public class ClassPathUtil {
 
 		String path = URLCodec.decodeURL(url.getPath());
 
+		if (_log.isDebugEnabled()) {
+			_log.debug("Path " + path);
+		}
+
+		path = StringUtil.replace(path, CharPool.BACK_SLASH, CharPool.SLASH);
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Decoded path " + path);
+		}
+
 		if (ServerDetector.isWebLogic()) {
 			if (protocol.equals("zip")) {
 				path = "file:".concat(path);
@@ -127,9 +137,6 @@ public class ClassPathUtil {
 		}
 
 		if (ServerDetector.isJBoss()) {
-			path = StringUtil.replace(
-				path, CharPool.BACK_SLASH, CharPool.SLASH);
-
 			if (protocol.equals("vfs")) {
 				int pos = path.indexOf(".jar/");
 
@@ -161,8 +168,8 @@ public class ClassPathUtil {
 				return StringPool.BLANK;
 			}
 
-			String classesDirName =
-				path.substring(0, path.length() - pathOfClass.length());
+			String classesDirName = path.substring(
+				0, path.length() - pathOfClass.length());
 
 			if (!classesDirName.endsWith("/WEB-INF/classes/")) {
 				_log.error(

@@ -15,6 +15,7 @@
 package com.liferay.portalweb.portal.permissions.blogs.assertactions;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

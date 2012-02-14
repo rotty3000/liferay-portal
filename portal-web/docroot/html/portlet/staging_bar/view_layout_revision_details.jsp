@@ -59,7 +59,8 @@ else {
 
 	stagingBar.init(
 		{
-			namespace: '<portlet:namespace />'
+			namespace: '<portlet:namespace />',
+			portletId: '<%= portletDisplay.getId() %>'
 
 			<c:if test="<%= layoutRevision.getStatus() == WorkflowConstants.STATUS_INCOMPLETE %>">
 				, hideHistory: true
@@ -141,7 +142,14 @@ else {
 								{
 									after: {
 										success: function() {
-											Liferay.fire('updatedLayout');
+											<c:choose>
+												<c:when test="<%= layoutRevision.getStatus() == WorkflowConstants.STATUS_INCOMPLETE %>">
+													location.href = '<%= currentURL %>';
+												</c:when>
+												<c:otherwise>
+													Liferay.fire('updatedLayout');
+												</c:otherwise>
+											</c:choose>
 										}
 									}
 								}

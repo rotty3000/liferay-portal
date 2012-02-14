@@ -36,11 +36,6 @@ public interface PluginSetting extends PluginSettingModel, PersistedModel {
 	public void addRole(java.lang.String role);
 
 	/**
-	* Sets a string of ordered comma delimited plugin IDs.
-	*/
-	public void setRoles(java.lang.String roles);
-
-	/**
 	* Returns an array of required roles of the plugin.
 	*
 	* @return an array of required roles of the plugin
@@ -48,9 +43,11 @@ public interface PluginSetting extends PluginSettingModel, PersistedModel {
 	public java.lang.String[] getRolesArray();
 
 	/**
-	* Sets an array of required roles of the plugin.
+	* Returns <code>true</code> if the user has permission to use this plugin
+	*
+	* @return <code>true</code> if the user has permission to use this plugin
 	*/
-	public void setRolesArray(java.lang.String[] rolesArray);
+	public boolean hasPermission(long userId);
 
 	/**
 	* Returns <code>true</code> if the plugin has a role with the specified
@@ -62,9 +59,12 @@ public interface PluginSetting extends PluginSettingModel, PersistedModel {
 	public boolean hasRoleWithName(java.lang.String roleName);
 
 	/**
-	* Returns <code>true</code> if the user has permission to use this plugin
-	*
-	* @return <code>true</code> if the user has permission to use this plugin
+	* Sets a string of ordered comma delimited plugin IDs.
 	*/
-	public boolean hasPermission(long userId);
+	public void setRoles(java.lang.String roles);
+
+	/**
+	* Sets an array of required roles of the plugin.
+	*/
+	public void setRolesArray(java.lang.String[] rolesArray);
 }

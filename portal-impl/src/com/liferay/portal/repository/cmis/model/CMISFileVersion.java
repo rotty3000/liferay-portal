@@ -55,9 +55,11 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundExcept
 public class CMISFileVersion extends CMISModel implements FileVersion {
 
 	public CMISFileVersion(
-		CMISRepository cmisRepository, long fileVersionId, Document document) {
+		CMISRepository cmisRepository, String uuid, long fileVersionId,
+		Document document) {
 
 		_cmisRepository = cmisRepository;
+		_uuid = uuid;
 		_fileVersionId = fileVersionId;
 		_document = document;
 	}
@@ -249,6 +251,10 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 		}
 	}
 
+	public String getUuid() {
+		return _uuid;
+	}
+
 	public String getVersion() {
 		return GetterUtil.getString(_document.getVersionLabel());
 	}
@@ -326,5 +332,6 @@ public class CMISFileVersion extends CMISModel implements FileVersion {
 	private CMISRepository _cmisRepository;
 	private Document _document;
 	private long _fileVersionId;
+	private String _uuid;
 
 }

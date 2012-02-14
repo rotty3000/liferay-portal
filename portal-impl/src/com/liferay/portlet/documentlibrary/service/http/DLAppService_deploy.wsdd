@@ -29,6 +29,7 @@
 		</operation>
 		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" name="checkOutFileEntry" qname="operNS:checkOutFileEntry" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="fileEntryId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://service.portal.liferay.com" qname="serviceContext" type="tns:ServiceContext"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.documentlibrary.portlet.liferay.com" name="deleteFileEntryByTitle" qname="operNS:deleteFileEntryByTitle" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="repositoryId" type="tns:long"></parameter>

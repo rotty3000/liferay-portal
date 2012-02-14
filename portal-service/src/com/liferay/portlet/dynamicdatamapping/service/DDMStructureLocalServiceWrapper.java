@@ -399,26 +399,52 @@ public class DDMStructureLocalServiceWrapper implements DDMStructureLocalService
 		return _ddmStructureLocalService.getStructure(groupId, name, description);
 	}
 
+	/**
+	* @deprecated {@link #getStructures}
+	*/
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ddmStructureLocalService.getStructureEntries();
 	}
 
+	/**
+	* @deprecated {@link #getStructures(long)}
+	*/
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ddmStructureLocalService.getStructureEntries(groupId);
 	}
 
+	/**
+	* @deprecated {@link #getStructures(long, int, int)}
+	*/
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _ddmStructureLocalService.getStructureEntries(groupId, start, end);
 	}
 
-	public int getStructureEntriesCount(long groupId)
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures()
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _ddmStructureLocalService.getStructureEntriesCount(groupId);
+		return _ddmStructureLocalService.getStructures();
+	}
+
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ddmStructureLocalService.getStructures(groupId);
+	}
+
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ddmStructureLocalService.getStructures(groupId, start, end);
+	}
+
+	public int getStructuresCount(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ddmStructureLocalService.getStructuresCount(groupId);
 	}
 
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> search(

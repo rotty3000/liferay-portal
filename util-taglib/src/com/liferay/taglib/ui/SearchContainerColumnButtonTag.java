@@ -17,6 +17,7 @@ package com.liferay.taglib.ui;
 import com.liferay.portal.kernel.dao.search.ButtonSearchEntry;
 import com.liferay.portal.kernel.dao.search.ResultRow;
 import com.liferay.portal.kernel.dao.search.SearchEntry;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -41,10 +42,12 @@ public class SearchContainerColumnButtonTag<R>
 				(SearchContainerRowTag<R>)findAncestorWithClass(
 					this, SearchContainerRowTag.class);
 
-			ResultRow row = searchContainerRowTag.getRow();
+			ResultRow resultRow = searchContainerRowTag.getRow();
 
 			if (index <= -1) {
-				index = row.getEntries().size();
+				List<SearchEntry> searchEntries = resultRow.getEntries();
+
+				index = searchEntries.size();
 			}
 
 			ButtonSearchEntry buttonSearchEntry = new ButtonSearchEntry();
@@ -53,10 +56,10 @@ public class SearchContainerColumnButtonTag<R>
 			buttonSearchEntry.setColspan(getColspan());
 			buttonSearchEntry.setCssClass(getCssClass());
 			buttonSearchEntry.setHref((String)getHref());
-			buttonSearchEntry.setName(getName());
+			buttonSearchEntry.setName(LanguageUtil.get(pageContext, getName()));
 			buttonSearchEntry.setValign(getValign());
 
-			row.addSearchEntry(index, buttonSearchEntry);
+			resultRow.addSearchEntry(index, buttonSearchEntry);
 
 			return EVAL_PAGE;
 		}

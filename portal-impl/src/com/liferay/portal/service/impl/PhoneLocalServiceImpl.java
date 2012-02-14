@@ -17,6 +17,7 @@ package com.liferay.portal.service.impl;
 import com.liferay.portal.PhoneNumberException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.format.PhoneNumberFormatUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Account;
 import com.liferay.portal.model.Contact;
@@ -26,7 +27,6 @@ import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.base.PhoneLocalServiceBaseImpl;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.util.format.PhoneNumberUtil;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -46,12 +46,9 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 		long classNameId = PortalUtil.getClassNameId(className);
 		Date now = new Date();
 
-		number = PhoneNumberUtil.strip(number);
-		extension = PhoneNumberUtil.strip(extension);
-
 		validate(
-			0, user.getCompanyId(), classNameId, classPK, number, typeId,
-			primary);
+			0, user.getCompanyId(), classNameId, classPK, number, extension,
+			typeId, primary);
 
 		long phoneId = counterLocalService.increment();
 
@@ -125,10 +122,7 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 			boolean primary)
 		throws PortalException, SystemException {
 
-		number = PhoneNumberUtil.strip(number);
-		extension = PhoneNumberUtil.strip(extension);
-
-		validate(phoneId, 0, 0, 0, number, typeId, primary);
+		validate(phoneId, 0, 0, 0, number, extension, typeId, primary);
 
 		Phone phone = phonePersistence.findByPrimaryKey(phoneId);
 
@@ -141,34 +135,6 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 		phonePersistence.update(phone, false);
 
 		return phone;
-	}
-
-	protected void validate(
-			long phoneId, long companyId, long classNameId, long classPK,
-			String number, int typeId, boolean primary)
-		throws PortalException, SystemException {
-
-		if (Validator.isNull(number)) {
-			throw new PhoneNumberException();
-		}
-
-		if (phoneId > 0) {
-			Phone phone = phonePersistence.findByPrimaryKey(phoneId);
-
-			companyId = phone.getCompanyId();
-			classNameId = phone.getClassNameId();
-			classPK = phone.getClassPK();
-		}
-
-		if ((classNameId == PortalUtil.getClassNameId(Account.class)) ||
-			(classNameId == PortalUtil.getClassNameId(Contact.class)) ||
-			(classNameId == PortalUtil.getClassNameId(Organization.class))) {
-
-			listTypeService.validate(
-				typeId, classNameId, ListTypeConstants.PHONE);
-		}
-
-		validate(phoneId, companyId, classNameId, classPK, primary);
 	}
 
 	protected void validate(
@@ -193,6 +159,42 @@ public class PhoneLocalServiceImpl extends PhoneLocalServiceBaseImpl {
 				}
 			}
 		}
+	}
+
+	protected void validate(
+			long phoneId, long companyId, long classNameId, long classPK,
+			String number, String extension, int typeId, boolean primary)
+		throws PortalException, SystemException {
+
+		if (!PhoneNumberFormatUtil.validate(number)) {
+			throw new PhoneNumberException();
+		}
+
+		if (Validator.isNotNull(extension)) {
+			for (int i = 0;i < extension.length();i++) {
+				if (!Character.isDigit(extension.charAt(i))) {
+					throw new PhoneNumberException();
+				}
+			}
+		}
+
+		if (phoneId > 0) {
+			Phone phone = phonePersistence.findByPrimaryKey(phoneId);
+
+			companyId = phone.getCompanyId();
+			classNameId = phone.getClassNameId();
+			classPK = phone.getClassPK();
+		}
+
+		if ((classNameId == PortalUtil.getClassNameId(Account.class)) ||
+			(classNameId == PortalUtil.getClassNameId(Contact.class)) ||
+			(classNameId == PortalUtil.getClassNameId(Organization.class))) {
+
+			listTypeService.validate(
+				typeId, classNameId, ListTypeConstants.PHONE);
+		}
+
+		validate(phoneId, companyId, classNameId, classPK, primary);
 	}
 
 }

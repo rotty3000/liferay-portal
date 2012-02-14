@@ -17,6 +17,7 @@ package com.liferay.portlet.journal.action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
@@ -68,7 +69,6 @@ import com.liferay.portlet.journal.util.JournalUtil;
 import java.io.File;
 
 import java.util.Calendar;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -392,13 +392,12 @@ public class EditArticleAction extends PortletAction {
 
 		Map<String, byte[]> images = new HashMap<String, byte[]>();
 
+		Map<String, FileItem[]> multipartParameterMap =
+			uploadPortletRequest.getMultipartParameterMap();
+
 		String imagePrefix = "structure_image_";
 
-		Enumeration<String> enu = uploadPortletRequest.getParameterNames();
-
-		while (enu.hasMoreElements()) {
-			String name = enu.nextElement();
-
+		for (String name : multipartParameterMap.keySet()) {
 			if (name.startsWith(imagePrefix)) {
 				File file = uploadPortletRequest.getFile(name);
 				byte[] bytes = FileUtil.getBytes(file);
@@ -775,7 +774,7 @@ public class EditArticleAction extends PortletAction {
 			else if (cmd.equals(Constants.TRANSLATE)) {
 				article = JournalArticleServiceUtil.updateArticleTranslation(
 					groupId, articleId, version, toLocale, title, description,
-					content, images);
+					content, images, serviceContext);
 			}
 
 			if (!tempOldUrlTitle.equals(article.getUrlTitle())) {

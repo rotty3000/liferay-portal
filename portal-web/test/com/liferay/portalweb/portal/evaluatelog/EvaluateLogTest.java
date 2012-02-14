@@ -71,7 +71,13 @@ public class EvaluateLogTest extends BaseTestCase {
 				}
 
 				if (line.contains(
-					"[MultiThreadedHttpConnectionManager cleanup]")) {
+						"[MultiThreadedHttpConnectionManager cleanup]")) {
+
+					continue;
+				}
+
+				if (line.contains(
+						"[org.python.google.common.base.internal.Finalizer]")) {
 
 					continue;
 				}
@@ -79,7 +85,7 @@ public class EvaluateLogTest extends BaseTestCase {
 
 			// LPS-17639
 
-			if (line.contains("Table \'lportal.lock_\' doesn't exist")) {
+			if (line.contains("Table 'lportal.lock_' doesn't exist")) {
 				continue;
 			}
 

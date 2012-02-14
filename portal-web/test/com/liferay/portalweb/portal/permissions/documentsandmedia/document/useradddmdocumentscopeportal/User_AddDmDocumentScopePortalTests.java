@@ -15,22 +15,9 @@
 package com.liferay.portalweb.portal.permissions.documentsandmedia.document.useradddmdocumentscopeportal;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddPageDmTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddPortletDmTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddRegularRoleTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddUserPasswordTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AddUserTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.AssignMembersRegularRoleUserTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.SignInTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.SignOutTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.User_AddDmDocumentTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.User_NoAddDmDocumentTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.User_SignInTest;
-import com.liferay.portalweb.portal.permissions.documentsandmedia.utils.User_SignOutTest;
-import com.liferay.portalweb.utils.TearDownDLDocumentTest;
-import com.liferay.portalweb.utils.TearDownPageTest;
-import com.liferay.portalweb.utils.TearDownRoleTest;
-import com.liferay.portalweb.utils.TearDownUserTest;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.documentlibrary.portlet.addportlet.AddPageDMTest;
+import com.liferay.portalweb.portlet.documentlibrary.portlet.addportlet.AddPortletDMTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -45,8 +32,8 @@ public class User_AddDmDocumentScopePortalTests extends BaseTestSuite {
 		testSuite.addTestSuite(AddUserPasswordTest.class);
 		testSuite.addTestSuite(AddRegularRoleTest.class);
 		testSuite.addTestSuite(AssignMembersRegularRoleUserTest.class);
-		testSuite.addTestSuite(AddPageDmTest.class);
-		testSuite.addTestSuite(AddPortletDmTest.class);
+		testSuite.addTestSuite(AddPageDMTest.class);
+		testSuite.addTestSuite(AddPortletDMTest.class);
 		testSuite.addTestSuite(DefinePermissionsRoleAddDocumentPortalOffTest.class);
 		testSuite.addTestSuite(SignOutTest.class);
 		testSuite.addTestSuite(User_SignInTest.class);

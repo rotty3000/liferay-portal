@@ -51,7 +51,9 @@ public class RangeFacet extends BaseFacet {
 		if (isStatic() && dataJSONObject.has("ranges")) {
 			JSONArray rangesJSONArray = dataJSONObject.getJSONArray("ranges");
 
-			String rangeString = rangesJSONArray.getString(0);
+			JSONObject rangeJSONObject = rangesJSONArray.getJSONObject(0);
+
+			String rangeString = rangeJSONObject.getString("range");
 
 			String[] range = RangeParserUtil.parserRange(rangeString);
 

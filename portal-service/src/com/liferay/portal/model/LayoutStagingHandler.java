@@ -61,12 +61,12 @@ public class LayoutStagingHandler implements InvocationHandler {
 		return _layoutRevision;
 	}
 
-	public Object invoke(Object proxy, Method method, Object[] args)
+	public Object invoke(Object proxy, Method method, Object[] arguments)
 		throws Throwable {
 
 		try {
 			if (_layoutRevision == null) {
-				return method.invoke(_layout, args);
+				return method.invoke(_layout, arguments);
 			}
 
 			String methodName = method.getName();
@@ -93,7 +93,8 @@ public class LayoutStagingHandler implements InvocationHandler {
 					Class<?> layoutRevisionClass = _layoutRevision.getClass();
 
 					method = layoutRevisionClass.getMethod(
-						methodName, ReflectionUtil.getParameterTypes(args));
+						methodName,
+						ReflectionUtil.getParameterTypes(arguments));
 
 					bean = _layoutRevision;
 				}
@@ -102,7 +103,7 @@ public class LayoutStagingHandler implements InvocationHandler {
 				}
 			}
 
-			return method.invoke(bean, args);
+			return method.invoke(bean, arguments);
 		}
 		catch (InvocationTargetException ite) {
 			throw ite.getTargetException();
@@ -144,16 +145,31 @@ public class LayoutStagingHandler implements InvocationHandler {
 			ServiceContextThreadLocal.getServiceContext();
 
 		if (!serviceContext.isSignedIn()) {
-			return layoutRevision;
+			LayoutRevision lastLayoutRevision = null;
+
+			lastLayoutRevision =
+				LayoutRevisionLocalServiceUtil.fetchLastLayoutRevision(
+					layout.getPlid(), true);
+
+			if (lastLayoutRevision == null) {
+				lastLayoutRevision =
+					LayoutRevisionLocalServiceUtil.fetchLastLayoutRevision(
+						layout.getPlid(), false);
+			}
+
+			return lastLayoutRevision;
 		}
 
 		long layoutSetBranchId = ParamUtil.getLong(
 			serviceContext, "layoutSetBranchId");
 
+		LayoutSet layoutSet = layout.getLayoutSet();
+
 		LayoutSetBranch layoutSetBranch =
 			LayoutSetBranchLocalServiceUtil.getUserLayoutSetBranch(
 				serviceContext.getUserId(), layout.getGroupId(),
-				layout.isPrivateLayout(), layoutSetBranchId);
+				layout.isPrivateLayout(), layoutSet.getLayoutSetId(),
+				layoutSetBranchId);
 
 		layoutSetBranchId = layoutSetBranch.getLayoutSetBranchId();
 
@@ -194,6 +210,15 @@ public class LayoutStagingHandler implements InvocationHandler {
 				}
 			}
 
+			if (layoutRevisionId > 0) {
+				try {
+					return LayoutRevisionLocalServiceUtil.getLayoutRevision(
+						layoutRevisionId);
+				}
+				catch (NoSuchLayoutRevisionException nslre) {
+				}
+			}
+
 			try {
 				return LayoutRevisionLocalServiceUtil.getLayoutRevision(
 					layoutSetBranchId, layout.getPlid(), true);
@@ -209,15 +234,6 @@ public class LayoutStagingHandler implements InvocationHandler {
 				if (!layoutRevisions.isEmpty()) {
 					return layoutRevisions.get(0);
 				}
-			}
-		}
-
-		if (layoutRevisionId > 0) {
-			try {
-				return LayoutRevisionLocalServiceUtil.getLayoutRevision(
-					layoutRevisionId);
-			}
-			catch (NoSuchLayoutRevisionException nslre) {
 			}
 		}
 
@@ -275,8 +291,7 @@ public class LayoutStagingHandler implements InvocationHandler {
 
 	private Object _toEscapedModel() {
 		return ProxyUtil.newProxyInstance(
-			PortalClassLoaderUtil.getClassLoader(),
-			new Class[] {Layout.class},
+			PortalClassLoaderUtil.getClassLoader(), new Class[] {Layout.class},
 			new LayoutStagingHandler(
 				_layout.toEscapedModel(), _layoutRevision.toEscapedModel()));
 	}
@@ -285,9 +300,6 @@ public class LayoutStagingHandler implements InvocationHandler {
 
 	private static Set<String> _layoutRevisionMethodNames =
 		new HashSet<String>();
-
-	private Layout _layout;
-	private LayoutRevision _layoutRevision;
 
 	static {
 		_layoutRevisionMethodNames.add("getColorScheme");
@@ -335,5 +347,8 @@ public class LayoutStagingHandler implements InvocationHandler {
 		_layoutRevisionMethodNames.add("setWapColorSchemeId");
 		_layoutRevisionMethodNames.add("setWapThemeId");
 	}
+
+	private Layout _layout;
+	private LayoutRevision _layoutRevision;
 
 }

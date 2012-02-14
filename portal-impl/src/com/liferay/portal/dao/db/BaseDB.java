@@ -187,25 +187,10 @@ public abstract class BaseDB implements DB {
 		return _SUPPORTS_UPDATE_WITH_INNER_JOIN;
 	}
 
-	public void runSQL(String sql) throws IOException, SQLException {
-		runSQL(new String[] {sql});
-	}
-
 	public void runSQL(Connection con, String sql)
 		throws IOException, SQLException {
 
 		runSQL(con, new String[] {sql});
-	}
-
-	public void runSQL(String[] sqls) throws IOException, SQLException {
-		Connection con = DataAccess.getConnection();
-
-		try {
-			runSQL(con, sqls);
-		}
-		finally {
-			DataAccess.cleanUp(con);
-		}
 	}
 
 	public void runSQL(Connection con, String[] sqls)
@@ -243,6 +228,21 @@ public abstract class BaseDB implements DB {
 		}
 		finally {
 			DataAccess.cleanUp(s);
+		}
+	}
+
+	public void runSQL(String sql) throws IOException, SQLException {
+		runSQL(new String[] {sql});
+	}
+
+	public void runSQL(String[] sqls) throws IOException, SQLException {
+		Connection con = DataAccess.getConnection();
+
+		try {
+			runSQL(con, sqls);
+		}
+		finally {
+			DataAccess.cleanUp(con);
 		}
 	}
 
@@ -949,25 +949,22 @@ public abstract class BaseDB implements DB {
 
 	protected abstract String reword(String data) throws IOException;
 
-	protected static String ALTER_COLUMN_NAME = "alter_column_name ";
+	protected static final String ALTER_COLUMN_NAME = "alter_column_name ";
 
-	protected static String ALTER_COLUMN_TYPE = "alter_column_type ";
+	protected static final String ALTER_COLUMN_TYPE = "alter_column_type ";
 
-	protected static String DROP_INDEX = "drop index";
+	protected static final String DROP_INDEX = "drop index";
 
-	protected static String DROP_PRIMARY_KEY = "drop primary key";
+	protected static final String DROP_PRIMARY_KEY = "drop primary key";
 
-	protected static String[] REWORD_TEMPLATE = {
+	protected static final String[] REWORD_TEMPLATE = {
 		"@table@", "@old-column@", "@new-column@", "@type@", "@nullable@"
 	};
 
-	protected static String[] TEMPLATE = {
-		"##", "TRUE", "FALSE",
-		"'01/01/1970'", "CURRENT_TIMESTAMP",
-		" BLOB", " SBLOB", " BOOLEAN", " DATE",
-		" DOUBLE", " INTEGER", " LONG",
-		" STRING", " TEXT", " VARCHAR",
-		" IDENTITY", "COMMIT_TRANSACTION"
+	protected static final String[] TEMPLATE = {
+		"##", "TRUE", "FALSE", "'01/01/1970'", "CURRENT_TIMESTAMP", " BLOB",
+		" SBLOB", " BOOLEAN", " DATE", " DOUBLE", " INTEGER", " LONG",
+		" STRING", " TEXT", " VARCHAR", " IDENTITY", "COMMIT_TRANSACTION"
 	};
 
 	private static final boolean _SUPPORTS_ALTER_COLUMN_NAME = true;
@@ -988,9 +985,9 @@ public abstract class BaseDB implements DB {
 	private static Pattern _timestampPattern = Pattern.compile(
 		"SPECIFIC_TIMESTAMP_\\d+");
 
+	private boolean _supportsStringCaseSensitiveQuery;
 	private Map<String, String> _templateMap = new HashMap<String, String>();
 	private String _type;
-	private boolean _supportsStringCaseSensitiveQuery;
 
 	static {
 		StringBundler sb = new StringBundler(TEMPLATE.length * 3 - 3);

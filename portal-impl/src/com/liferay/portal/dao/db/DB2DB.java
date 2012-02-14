@@ -73,17 +73,13 @@ public class DB2DB extends BaseDB {
 
 	@Override
 	public void runSQL(String template) throws IOException, SQLException {
-		if (template.startsWith(ALTER_COLUMN_NAME) ||
-			template.startsWith(ALTER_COLUMN_TYPE)) {
-
+		if (template.startsWith(ALTER_COLUMN_NAME)) {
 			String sql = buildSQL(template);
 
 			String[] alterSqls = StringUtil.split(sql, CharPool.SEMICOLON);
 
 			for (String alterSql : alterSqls) {
-				if (!alterSql.startsWith("-- ")) {
-					runSQL(alterSql);
-				}
+				runSQL(alterSql);
 			}
 		}
 		else {
@@ -166,9 +162,6 @@ public class DB2DB extends BaseDB {
 					"alter table @table@ drop column @old-column@",
 					REWORD_TEMPLATE, template);
 			}
-			else if (line.startsWith(ALTER_COLUMN_TYPE)) {
-				line = "-- " + line;
-			}
 			else if (line.indexOf(DROP_INDEX) != -1) {
 				String[] tokens = StringUtil.split(line, ' ');
 
@@ -222,11 +215,9 @@ public class DB2DB extends BaseDB {
 	}
 
 	private static final String[] _DB2 = {
-		"--", "1", "0",
-		"'1970-01-01-00.00.00.000000'", "current timestamp",
-		" blob", " blob", " smallint", " timestamp",
-		" double", " integer", " bigint",
-		" varchar(500)", " clob", " varchar",
+		"--", "1", "0", "'1970-01-01-00.00.00.000000'", "current timestamp",
+		" blob", " blob", " smallint", " timestamp", " double", " integer",
+		" bigint", " varchar(500)", " clob", " varchar",
 		" generated always as identity", "commit"
 	};
 

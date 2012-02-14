@@ -21,6 +21,18 @@
 
 	<property name="selenium.nanny.executable" location="${project.dir}/tools/selenium/selenium_nanny.exe" />
 
+	<trycatch>
+		<try>
+			<taskdef classname="com.liferay.util.ant.FormatTask" classpathref="project.classpath" name="liferay-format" />
+		</try>
+		<catch>
+			<ant antfile="portal-service/build.xml" target="compile" inheritAll="false" />
+			<ant antfile="util-java/build.xml" target="compile" inheritAll="false" />
+
+			<taskdef classname="com.liferay.util.ant.FormatTask" classpathref="project.classpath" name="liferay-format" />
+		</catch>
+	</trycatch>
+
 	<target name="append-ant-script">
 		<loadfile property="template.content" srcfile="portal-web/test-ant-templates/${ant.script.template}">
 			<filterchain>
@@ -45,7 +57,7 @@
 				<isset property="test.ant.script.social.office" />
 				<then>
 					<property name="test.ant.script.plugin.hooks" value="so-hook" />
-					<property name="test.ant.script.plugin.portlets" value="chat-portlet,contacts-portlet,microblogs-portlet,private-messaging-portlet,so-portlet,tasks-portlet,todays-events-portlet,weather-portlet,wysiwyg-portlet" />
+					<property name="test.ant.script.plugin.portlets" value="chat-portlet,contacts-portlet,events-display-portlet,microblogs-portlet,private-messaging-portlet,so-portlet,tasks-portlet,weather-portlet,wysiwyg-portlet" />
 					<property name="test.ant.script.plugin.themes" value="so-theme" />
 				</then>
 			</elseif>
@@ -275,7 +287,7 @@
 	</target>
 
 	<target name="build-test-ant-scripts">
-		<property name="build-test-ant-scripts.version" value="6" />
+		<property name="build-test-ant-scripts.version" value="0" />
 
 		<if>
 			<available file="portal-web/test-ant-scripts/version" />
@@ -373,6 +385,11 @@
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="control-panel-sites" />
 			<param name="test.ant.script.suite" value="ControlPanelSitesTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="control-panel-social-activity" />
+			<param name="test.ant.script.suite" value="ControlPanelSocialActivityTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -558,7 +575,8 @@
 
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="db-sharding-wsrp" />
-			<param name="test.ant.script.plugin.portlets" value="wsrp-portlet" />
+			<param name="test.ant.script.plugin.portlets" value="test-misc-portlet,wsrp-portlet" />
+			<param name="test.ant.script.properties" value="mime.types.content.disposition.inline=pdf" />
 			<param name="test.ant.script.suite" value="PluginsWSRPTestSuite" />
 			<param name="test.ant.script.template" value="ant-script-db-sharding.xml" />
 		</antcall>
@@ -695,6 +713,13 @@
 			<param name="test.ant.script.command" value="kaleo-blogs" />
 			<param name="test.ant.script.plugin.webs" value="kaleo-web" />
 			<param name="test.ant.script.suite" value="KaleoBlogsTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="kaleo-dynamic-data-lists" />
+			<param name="test.ant.script.plugin.portlets" value="kaleo-designer-portlet,kaleo-forms-portlet" />
+			<param name="test.ant.script.plugin.webs" value="kaleo-web" />
+			<param name="test.ant.script.suite" value="KaleoDynamicDataListsTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -888,6 +913,12 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="plugins-ddl-form" />
+			<param name="test.ant.script.plugin.portlets" value="ddl-form-portlet" />
+			<param name="test.ant.script.suite" value="PluginsDDLFormTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="plugins-digg" />
 			<param name="test.ant.script.plugin.portlets" value="digg-portlet" />
 			<param name="test.ant.script.suite" value="PluginsDiggTestSuite" />
@@ -898,6 +929,12 @@
 			<param name="test.ant.script.plugin.portlets" value="sample-drools-portlet" />
 			<param name="test.ant.script.plugin.webs" value="drools-web" />
 			<param name="test.ant.script.suite" value="PluginsDroolsTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="plugins-events-display" />
+			<param name="test.ant.script.plugin.portlets" value="events-display-portlet" />
+			<param name="test.ant.script.suite" value="PluginsEventsDisplayTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -1281,12 +1318,6 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="plugins-todays-events" />
-			<param name="test.ant.script.plugin.portlets" value="todays-events-portlet" />
-			<param name="test.ant.script.suite" value="PluginsTodaysEventsTestSuite" />
-		</antcall>
-
-		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="plugins-twitter" />
 			<param name="test.ant.script.plugin.portlets" value="twitter-portlet" />
 			<param name="test.ant.script.suite" value="PluginsTwitterTestSuite" />
@@ -1324,7 +1355,8 @@
 
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="plugins-wsrp" />
-			<param name="test.ant.script.plugin.portlets" value="wsrp-portlet" />
+			<param name="test.ant.script.plugin.portlets" value="test-misc-portlet,wsrp-portlet" />
+			<param name="test.ant.script.properties" value="mime.types.content.disposition.inline=pdf" />
 			<param name="test.ant.script.suite" value="PluginsWSRPTestSuite" />
 		</antcall>
 
@@ -1779,6 +1811,7 @@
 
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="staging-community-web-content-display" />
+			<param name="test.ant.script.plugin.webs" value="kaleo-web" />
 			<param name="test.ant.script.suite" value="StagingCommunityWebContentDisplayTestSuite" />
 		</antcall>
 
@@ -1877,8 +1910,15 @@
 			<sequential>
 				<if>
 					<or>
+						<contains string="@{java.processes.new.current}" substring="admin-cli.jar" />
+						<contains string="@{java.processes.new.current}" substring="ASMain" />
 						<contains string="@{java.processes.new.current}" substring="Bootstrap" />
+						<contains string="@{java.processes.new.current}" substring="ClientAdmin" />
+						<contains string="@{java.processes.new.current}" substring="gshell-bootstrap.jar" />
+						<contains string="@{java.processes.new.current}" substring="jboss-modules.jar" />
 						<contains string="@{java.processes.new.current}" substring="selenium-server.jar" />
+						<contains string="@{java.processes.new.current}" substring="server.jar" />
+						<contains string="@{java.processes.new.current}" substring="start.jar" />
 					</or>
 					<then>
 						<antcall target="kill-java-process">
@@ -1936,6 +1976,63 @@
 					<param name="vm.host" value="${vm.db.host}" />
 				</antcall>
 			</then>
+		</if>
+	</target>
+
+	<target name="copy-optional-jars">
+		<if>
+			<equals arg1="${db.type}" arg2="db2" />
+			<then>
+				<delete includeemptydirs="true" failonerror="false">
+					<fileset
+						dir="${simple.server.lib.global.dir}"
+						includes="db2*.jar"
+					/>
+				</delete>
+
+				<copy todir="${app.server.lib.global.dir}">
+						<fileset
+							dir="${jdbc.drivers.optional.dir}/db2/8.1.18"
+							includes="*.jar"
+					/>
+				</copy>
+			</then>
+			<elseif>
+				<equals arg1="${db.type}" arg2="oracle-10" />
+				<then>
+					<delete includeemptydirs="true" failonerror="false">
+						<fileset
+							dir="${simple.server.lib.global.dir}"
+							includes="ojdbc*.jar"
+						/>
+					</delete>
+
+					<copy todir="${app.server.lib.global.dir}">
+						<fileset
+							dir="${jdbc.drivers.optional.dir}/oracle/10.2.0.1.0"
+							includes="*.jar"
+						/>
+					</copy>
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${db.type}" arg2="oracle-11" />
+				<then>
+					<delete includeemptydirs="true" failonerror="false">
+						<fileset
+							dir="${simple.server.lib.global.dir}"
+							includes="ojdbc*.jar"
+						/>
+					</delete>
+
+					<copy todir="${app.server.lib.global.dir}">
+						<fileset
+							dir="${jdbc.drivers.optional.dir}/oracle/11.2.0.1.0"
+							includes="*.jar"
+						/>
+					</copy>
+				</then>
+			</elseif>
 		</if>
 	</target>
 
@@ -2053,8 +2150,14 @@
 
 		<antcall target="revert-test-properties" />
 
-		<exec executable="cmd.exe">
-			<arg line="/c svn revert portal-web/docroot/WEB-INF/web.xml" />
+		<liferay-format
+			arguments="portal-web/docroot/WEB-INF/web.xml"
+			message="${scm.revert.command}"
+			property="scm.revert.command.formatted"
+		/>
+
+		<exec executable="${shell.executable}">
+			<arg line="${scm.revert.command.formatted}" />
 		</exec>
 
 		<replace
@@ -2104,8 +2207,14 @@
 		<antcall target="prepare-common" />
 	</target>
 
-	<target name="prepare-oracle">
-		<echo file="test.${user.name}.properties">db.type=oracle</echo>
+	<target name="prepare-oracle-10">
+		<echo file="test.${user.name}.properties">db.type=oracle-10</echo>
+
+		<antcall target="prepare-common" />
+	</target>
+
+	<target name="prepare-oracle-11">
+		<echo file="test.${user.name}.properties">db.type=oracle-11</echo>
 
 		<antcall target="prepare-common" />
 	</target>
@@ -2137,7 +2246,7 @@ tunnel.servlet.hosts.allowed=
 resource.repositories.root=$${user.home}/liferay</echo>
 
 		<if>
-			<equals arg1="${db.type}" arg2="db2" />
+			<contains string="${db.type}" substring="db2" />
 			<then>
 				<echo file="portal-impl/src/portal-ext.properties" append="true">
 
@@ -2146,7 +2255,7 @@ custom.sql.function.isnull=CAST(? AS VARCHAR(32672)) IS NULL
 custom.sql.function.isnotnull=CAST(? AS VARCHAR(32672)) IS NOT NULL</echo>
 			</then>
 			<elseif>
-				<equals arg1="${db.type}" arg2="oracle" />
+				<contains string="${db.type}" substring="oracle" />
 				<then>
 					<echo file="portal-impl/src/portal-ext.properties" append="true">
 
@@ -2157,7 +2266,7 @@ jdbc.default.numHelperThreads=1</echo>
 				</then>
 			</elseif>
 			<elseif>
-				<equals arg1="${db.type}" arg2="sybase" />
+				<contains string="${db.type}" substring="sybase" />
 				<then>
 					<echo file="portal-impl/src/portal-ext.properties" append="true">
 
@@ -2341,7 +2450,8 @@ message.boards.subscribe.by.default=false</echo>
 				<echo file="portal-impl/src/portal-ext.properties" append="true">
 
 upgrade.processes=\
-	com.liferay.portal.upgrade.UpgradeProcess_6_0_12_to_6_1_0</echo>
+	com.liferay.portal.upgrade.UpgradeProcess_6_0_12_to_6_1_0,\
+	com.liferay.portal.upgrade.UpgradeProcess_6_1_1</echo>
 			</then>
 		</if>
 
@@ -2374,8 +2484,14 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 	</target>
 
 	<target name="prepare-portal-properties">
-		<exec executable="cmd.exe">
-			<arg line="/c svn revert portal-impl/src/portal.properties" />
+		<liferay-format
+			arguments="portal-impl/src/portal.properties"
+			message="${scm.revert.command}"
+			property="scm.revert.command.formatted"
+		/>
+
+		<exec executable="${shell.executable}">
+			<arg line="${scm.revert.command.formatted}" />
 		</exec>
 
 		<replace file="portal-impl/src/portal.properties">
@@ -2440,8 +2556,14 @@ svn --username ${svn.username} --password ${svn.password} update -r ${svn.info.r
 		</if>
 	</target>
 
-	<target name="prepare-postgresql">
-		<echo file="test.${user.name}.properties">db.type=postgresql</echo>
+	<target name="prepare-postgresql-8.4">
+		<echo file="test.${user.name}.properties">db.type=postgresql-8.4</echo>
+
+		<antcall target="prepare-common" />
+	</target>
+
+	<target name="prepare-postgresql-9.0">
+		<echo file="test.${user.name}.properties">db.type=postgresql-9.0</echo>
 
 		<antcall target="prepare-common" />
 	</target>
@@ -2597,8 +2719,14 @@ executable ZIP file.
 		</if>
 	</target>
 
-	<target name="prepare-sql-server">
-		<echo file="test.${user.name}.properties">db.type=sql-server</echo>
+	<target name="prepare-sql-server-2005">
+		<echo file="test.${user.name}.properties">db.type=sql-server-2005</echo>
+
+		<antcall target="prepare-common" />
+	</target>
+
+	<target name="prepare-sql-server-2008">
+		<echo file="test.${user.name}.properties">db.type=sql-server-2008</echo>
 
 		<antcall target="prepare-common" />
 	</target>
@@ -2760,19 +2888,28 @@ file.
 								</then>
 							</elseif>
 							<elseif>
-								<equals arg1="${db.type}" arg2="oracle" />
+								<or>
+									<equals arg1="${db.type}" arg2="oracle-10" />
+									<equals arg1="${db.type}" arg2="oracle-11" />
+								</or>
 								<then>
 									<antcall target="rebuild-database-oracle" />
 								</then>
 							</elseif>
 							<elseif>
-								<equals arg1="${db.type}" arg2="postgresql" />
+								<or>
+									<equals arg1="${db.type}" arg2="postgresql-8.4" />
+									<equals arg1="${db.type}" arg2="postgresql-9.0" />
+								</or>
 								<then>
 									<antcall target="rebuild-database-postgresql" />
 								</then>
 							</elseif>
 							<elseif>
-								<equals arg1="${db.type}" arg2="sql-server" />
+								<or>
+									<equals arg1="${db.type}" arg2="sql-server-2005" />
+									<equals arg1="${db.type}" arg2="sql-server-2008" />
+								</or>
 								<then>
 									<antcall target="rebuild-database-sql-server" />
 								</then>
@@ -2822,26 +2959,26 @@ file.
 		<copy file="${sql.dir}${sql.file}" tofile="${sql.file}" />
 
 		<replace file="${sql.file}">
-			<replacefilter token="drop database lportal;" value="drop database ${db.db2.schema};"/>
-			<replacefilter token="create database lportal;" value="create database ${db.db2.schema} pagesize 8192;"/>
-			<replacefilter token="create database lportal pagesize 8192;" value="create database ${db.db2.schema} pagesize 8192;"/>
-			<replacefilter token="connect to lportal;" value="connect to ${db.db2.schema} USER ${db.db2.username} USING ${db.db2.password};"/>
+			<replacefilter token="drop database lportal;" value="drop database ${db.schema};"/>
+			<replacefilter token="create database lportal;" value="create database ${db.schema} pagesize 8192;"/>
+			<replacefilter token="create database lportal pagesize 8192;" value="create database ${db.schema} pagesize 8192;"/>
+			<replacefilter token="connect to lportal;" value="connect to ${db.schema} USER ${db.username} USING ${db.password};"/>
 		</replace>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.db2.host} cmd.exe /c mkdir C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c mkdir C:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${pscp.executable}">
-			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.db2.host}:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.host}:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.db2.host} cmd.exe /c db2cmd /c /w /i /t db2 -f C:\${tstamp.value}\${sql.file} -td;" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c db2cmd /c /w /i /t db2 -f C:\${tstamp.value}\${sql.file} -td;" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.db2.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
 		</exec>
 
 		<delete file="${sql.file}" />
@@ -2888,9 +3025,9 @@ file.
 				<copy file="${sql.dir}${sql.file}" tofile="${sql.file}" />
 
 				<replace file="${sql.file}">
-					<replacefilter token="drop database if exists lportal;" value="drop database if exists ${db.mysql.schema};"/>
-					<replacefilter token="create database lportal character set utf8;" value="create database ${db.mysql.schema} character set utf8;"/>
-					<replacefilter token="use lportal;" value="use ${db.mysql.schema};"/>
+					<replacefilter token="drop database if exists lportal;" value="drop database if exists ${db.schema};"/>
+					<replacefilter token="create database lportal character set utf8;" value="create database ${db.schema} character set utf8;"/>
+					<replacefilter token="use lportal;" value="use ${db.schema};"/>
 				</replace>
 
 				<exec executable="cmd">
@@ -2932,19 +3069,19 @@ file.
 		</tstamp>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.oracle.host} cmd.exe /c mkdir C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c mkdir C:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${pscp.executable}">
-			<arg line="-pw ${vm.password} ${sql.dir}${sql.file} ${vm.username}@${db.oracle.host}:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${sql.dir}${sql.file} ${vm.username}@${db.host}:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.oracle.host} sqlplus system/password @C:\${tstamp.value}\${sql.file} ${db.oracle.username} ${db.oracle.password}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} sqlplus system/password @C:\${tstamp.value}\${sql.file} ${db.username} ${db.password}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.oracle.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
 		</exec>
 	</target>
 
@@ -2980,25 +3117,38 @@ file.
 		<copy file="${sql.dir}${sql.file}" tofile="${sql.file}" />
 
 		<replace file="${sql.file}">
-			<replacefilter token="drop database lportal;" value="drop database ${db.postgresql.schema};"/>
-			<replacefilter token="create database lportal encoding = 'UNICODE';" value="create database ${db.postgresql.schema} encoding = 'UNICODE';"/>
-			<replacefilter token="\c lportal;" value="\c ${db.postgresql.schema};"/>
+			<replacefilter token="drop database lportal;" value="drop database ${db.schema};"/>
+			<replacefilter token="create database lportal encoding = 'UNICODE';" value="create database ${db.schema} encoding = 'UNICODE';"/>
+			<replacefilter token="\c lportal;" value="\c ${db.schema};"/>
 		</replace>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.postgresql.host} cmd.exe /c mkdir C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c mkdir C:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${pscp.executable}">
-			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.postgresql.host}:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.host}:\${tstamp.value}" />
 		</exec>
 
-		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.postgresql.host} C:\Progra~1\PostgreSQL\8.4\bin\psql.exe -U ${db.postgresql.username} -f C:\${tstamp.value}\${sql.file}" />
-		</exec>
+		<if>
+			<equals arg1="${db.type}" arg2="postgresql-8.4" />
+			<then>
+				<exec executable="${plink.executable}">
+					<arg line="-pw ${vm.password} ${vm.username}@${db.host} C:\Progra~1\PostgreSQL\8.4\bin\psql.exe -U ${db.username} -f C:\${tstamp.value}\${sql.file}" />
+				</exec>
+			</then>
+			<elseif>
+				<equals arg1="${db.type}" arg2="postgresql-9.0" />
+				<then>
+					<exec executable="${plink.executable}">
+						<arg line="-pw ${vm.password} ${vm.username}@${db.host} C:\Progra~1\PostgreSQL\9.0\bin\psql.exe -U ${db.username} -f C:\${tstamp.value}\${sql.file}" />
+					</exec>
+				</then>
+			</elseif>
+		</if>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.postgresql.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
 		</exec>
 
 		<delete file="${sql.file}" />
@@ -3036,25 +3186,25 @@ file.
 		<copy file="${sql.dir}${sql.file}" tofile="${sql.file}" />
 
 		<replace file="${sql.file}">
-			<replacefilter token="drop database lportal;" value="drop database ${db.sql-server.schema};"/>
-			<replacefilter token="create database lportal;" value="create database ${db.sql-server.schema};"/>
-			<replacefilter token="use lportal;" value="use ${db.sql-server.schema};"/>
+			<replacefilter token="drop database lportal;" value="drop database ${db.schema};"/>
+			<replacefilter token="create database lportal;" value="create database ${db.schema};"/>
+			<replacefilter token="use lportal;" value="use ${db.schema};"/>
 		</replace>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sql-server.host} cmd.exe /c mkdir C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c mkdir C:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${pscp.executable}">
-			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.sql-server.host}:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.host}:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sql-server.host} osql -n -U ${db.sql-server.username} -P ${db.sql-server.password} -i C:\${tstamp.value}\${sql.file}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} osql -n -U ${db.username} -P ${db.password} -i C:\${tstamp.value}\${sql.file}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sql-server.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
 		</exec>
 
 		<delete file="${sql.file}" />
@@ -3092,26 +3242,26 @@ file.
 		<copy file="${sql.dir}${sql.file}" tofile="${sql.file}" />
 
 		<replace file="${sql.file}">
-			<replacefilter token="use master" value="use master${line.separator}dump transaction master with no_log${line.separator}go${line.separator}if exists (select * from master.dbo.sysdatabases where name = &quot;${db.sybase.schema}&quot;)${line.separator}begin${line.separator}drop database ${db.sybase.schema}${line.separator}end${line.separator}go${line.separator}create database ${db.sybase.schema} on ${db.sybase.device.name} = &quot;250m&quot;${line.separator}go" />
-			<replacefilter token="exec sp_dboption 'lportal', 'allow nulls by default' , true" value="exec sp_dboption '${db.sybase.schema}', 'allow nulls by default' , true"/>
-			<replacefilter token="exec sp_dboption 'lportal', 'select into/bulkcopy/pllsort' , true" value="exec sp_dboption '${db.sybase.schema}', 'select into/bulkcopy/pllsort' , true"/>
-			<replacefilter token="use lportal" value="use ${db.sybase.schema}${line.separator}go"/>
+			<replacefilter token="use master" value="use master${line.separator}dump transaction master with no_log${line.separator}go${line.separator}if exists (select * from master.dbo.sysdatabases where name = &quot;${db.schema}&quot;)${line.separator}begin${line.separator}drop database ${db.schema}${line.separator}end${line.separator}go${line.separator}create database ${db.schema} on ${db.device.name} = &quot;250m&quot;${line.separator}go" />
+			<replacefilter token="exec sp_dboption 'lportal', 'allow nulls by default' , true" value="exec sp_dboption '${db.schema}', 'allow nulls by default' , true"/>
+			<replacefilter token="exec sp_dboption 'lportal', 'select into/bulkcopy/pllsort' , true" value="exec sp_dboption '${db.schema}', 'select into/bulkcopy/pllsort' , true"/>
+			<replacefilter token="use lportal" value="use ${db.schema}${line.separator}go"/>
 		</replace>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sybase.host} cmd.exe /c mkdir C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c mkdir C:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${pscp.executable}">
-			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.sybase.host}:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${sql.file} ${vm.username}@${db.host}:\${tstamp.value}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sybase.host} isql -U ${db.sybase.username} -P ${db.sybase.password} -i C:\${tstamp.value}\${sql.file}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} isql -U ${db.username} -P ${db.password} -i C:\${tstamp.value}\${sql.file}" />
 		</exec>
 
 		<exec executable="${plink.executable}">
-			<arg line="-pw ${vm.password} ${vm.username}@${db.sybase.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
+			<arg line="-pw ${vm.password} ${vm.username}@${db.host} cmd.exe /c rmdir /q /s C:\${tstamp.value}" />
 		</exec>
 
 		<delete file="${sql.file}" />
@@ -3146,12 +3296,24 @@ file.
 	</target>
 
 	<target name="revert-test-properties">
-		<exec executable="cmd.exe">
-			<arg line="/c svn revert portal-impl/test/test-portal-impl.properties" />
+		<liferay-format
+			arguments="portal-impl/test/test-portal-impl.properties"
+			message="${scm.revert.command}"
+			property="scm.revert.command.formatted"
+		/>
+
+		<exec executable="${shell.executable}">
+			<arg line="${scm.revert.command.formatted}" />
 		</exec>
 
-		<exec executable="cmd.exe">
-			<arg line="/c svn revert portal-web/test/test-portal-web.properties" />
+		<liferay-format
+			arguments="portal-web/test/test-portal-web.properties"
+			message="${scm.revert.command}"
+			property="scm.revert.command.formatted"
+		/>
+
+		<exec executable="${shell.executable}">
+			<arg line="${scm.revert.command.formatted}" />
 		</exec>
 	</target>
 
@@ -3201,6 +3363,8 @@ file.
 
 	<target name="run-simple-server">
 		<antcall target="rebuild-database" inheritAll="false" />
+
+		<antcall target="copy-optional-jars" inheritAll="false" />
 
 		<if>
 			<not>
@@ -3348,10 +3512,7 @@ file.
 					<or>
 						<contains string="${simple.server.dir}" substring="glassfish" />
 						<contains string="${simple.server.dir}" substring="jonas" />
-						<isset property="hook.plugins.includes" />
-						<isset property="portlet.plugins.includes" />
-						<isset property="theme.plugins.includes" />
-						<isset property="web.plugins.includes" />
+						<isset property="plugins.deployed" />
 					</or>
 					<then>
 						<sleep seconds="60" />
@@ -3421,6 +3582,8 @@ file.
 
 		<antcall target="revert-test-properties" />
 
+		<ant dir="portal-service" target="test" inheritAll="false" />
+
 		<ant dir="portal-impl" target="test-class" inheritAll="false">
 			<property name="class" value="ServiceTestSuite" />
 		</ant>
@@ -3440,8 +3603,6 @@ file.
 		<ant dir="portal-impl" target="test-class" inheritAll="false">
 			<property name="class" value="MiscTestSuite" />
 		</ant>
-
-		<ant dir="portal-service" target="test" inheritAll="false" />
 
 		<ant dir="sql" target="test-sample-sql" inheritAll="false" />
 

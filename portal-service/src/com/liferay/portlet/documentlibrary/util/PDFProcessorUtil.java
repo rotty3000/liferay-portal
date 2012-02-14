@@ -55,19 +55,16 @@ public class PDFProcessorUtil {
 	}
 
 	public static InputStream getThumbnailAsStream(
-			FileVersion fileVersion, int thumbnailIndex)
+			FileVersion fileVersion, int index)
 		throws Exception {
 
-		return getPDFProcessor().getThumbnailAsStream(
-			fileVersion, thumbnailIndex);
+		return getPDFProcessor().getThumbnailAsStream(fileVersion, index);
 	}
 
-	public static long getThumbnailFileSize(
-			FileVersion fileVersion, int thumbnailIndex)
+	public static long getThumbnailFileSize(FileVersion fileVersion, int index)
 		throws Exception {
 
-		return getPDFProcessor().getThumbnailFileSize(
-			fileVersion, thumbnailIndex);
+		return getPDFProcessor().getThumbnailFileSize(fileVersion, index);
 	}
 
 	public static boolean hasImages(FileVersion fileVersion) {

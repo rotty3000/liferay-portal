@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.SingleVMPoolUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
@@ -55,7 +56,6 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.expando.util.ExpandoConverterUtil;
-import com.liferay.util.ldap.LDAPUtil;
 
 import java.io.Serializable;
 
@@ -847,8 +847,7 @@ public class PortalLDAPImporterImpl implements PortalLDAPImporter {
 	protected User importUser(
 			long companyId, Attributes attributes, Properties userMappings,
 			Properties userExpandoMappings, Properties contactMappings,
-			Properties contactExpandoMappings,
-			String password)
+			Properties contactExpandoMappings, String password)
 		throws Exception {
 
 		LDAPUserTransactionThreadLocal.setOriginatesFromLDAP(true);

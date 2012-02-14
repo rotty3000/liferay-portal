@@ -31,14 +31,7 @@ public class MyWorkflowInstancesControlPanelEntry
 
 		if (WorkflowInstanceManagerUtil.getWorkflowInstanceCount(
 				permissionChecker.getCompanyId(), permissionChecker.getUserId(),
-				null, null, Boolean.FALSE) > 0) {
-
-			return true;
-		}
-
-		if (WorkflowInstanceManagerUtil.getWorkflowInstanceCount(
-				permissionChecker.getCompanyId(), permissionChecker.getUserId(),
-				null, null, Boolean.TRUE) > 0) {
+				null, null, null) > 0) {
 
 			return true;
 		}

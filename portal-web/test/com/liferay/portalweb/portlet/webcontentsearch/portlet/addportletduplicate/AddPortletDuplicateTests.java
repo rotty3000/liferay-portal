@@ -15,6 +15,9 @@
 package com.liferay.portalweb.portlet.webcontentsearch.portlet.addportletduplicate;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
+import com.liferay.portalweb.portal.util.TearDownPageTest;
+import com.liferay.portalweb.portlet.webcontentsearch.portlet.addportlet.AddPageWCSTest;
+import com.liferay.portalweb.portlet.webcontentsearch.portlet.addportlet.AddPortletWCSTest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

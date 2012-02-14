@@ -551,6 +551,12 @@ import javax.sql.DataSource;
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	<#if entity.hasColumns()>
 		protected Class<?> getModelClass() {
 			return ${entity.name}.class;

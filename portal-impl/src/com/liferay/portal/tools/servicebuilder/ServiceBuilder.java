@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ArrayUtil_IW;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -606,9 +607,11 @@ public class ServiceBuilder {
 
 			_portletShortName = _portletShortName.trim();
 
-			if (!Validator.isChar(_portletShortName)) {
-				throw new RuntimeException(
-					"The namespace element must be a valid keyword");
+			for (char c : _portletShortName.toCharArray()) {
+				if (!Validator.isChar(c) && (c != CharPool.UNDERLINE)) {
+					throw new RuntimeException(
+						"The namespace element must be a valid keyword");
+				}
 			}
 
 			_ejbList = new ArrayList<Entity>();
@@ -867,8 +870,26 @@ public class ServiceBuilder {
 		}
 		else {
 			String refPackage = name.substring(0, pos);
-			String refPackageDir = StringUtil.replace(refPackage, ".", "/");
 			String refEntity = name.substring(pos + 1, name.length());
+
+			if (refPackage.equals(_packagePath)) {
+				pos = _ejbList.indexOf(new Entity(refEntity));
+
+				if (pos == -1) {
+					throw new RuntimeException(
+						"Cannot find " + refEntity + " in " +
+							ListUtil.toString(_ejbList, Entity.NAME_ACCESSOR));
+				}
+
+				entity = _ejbList.get(pos);
+
+				_entityPool.put(name, entity);
+
+				return entity;
+			}
+
+			String refPackageDir = StringUtil.replace(refPackage, ".", "/");
+
 			String refFileName =
 				_implDir + "/" + refPackageDir + "/service.xml";
 
@@ -3528,9 +3549,7 @@ public class ServiceBuilder {
 				_createSQLTables(sqlFile, createTableSQL, entity, true);
 
 				_updateSQLFile(
-					"update-6.0.6-6.1.0.sql", createTableSQL, entity);
-				_updateSQLFile(
-					"update-6.0.12-6.1.0.sql", createTableSQL, entity);
+					"update-6.1.0-6.1.1.sql", createTableSQL, entity);
 			}
 		}
 

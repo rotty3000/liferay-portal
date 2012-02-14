@@ -178,14 +178,14 @@ public class OrgGroupRoleWrapper implements OrgGroupRole,
 		return _orgGroupRole.toXmlString();
 	}
 
-	public boolean containsOrganization(
-		java.util.List<com.liferay.portal.model.Organization> organizations) {
-		return _orgGroupRole.containsOrganization(organizations);
-	}
-
 	public boolean containsGroup(
 		java.util.List<com.liferay.portal.model.Group> groups) {
 		return _orgGroupRole.containsGroup(groups);
+	}
+
+	public boolean containsOrganization(
+		java.util.List<com.liferay.portal.model.Organization> organizations) {
+		return _orgGroupRole.containsOrganization(organizations);
 	}
 
 	/**

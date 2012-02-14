@@ -269,15 +269,15 @@ public class JournalArticleImageLocalServiceWrapper
 			groupId, articleId, version, elInstanceId, elName, languageId);
 	}
 
-	public void deleteArticleImage(long articleImageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		_journalArticleImageLocalService.deleteArticleImage(articleImageId);
-	}
-
 	public void deleteArticleImage(
 		com.liferay.portlet.journal.model.JournalArticleImage articleImage)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_journalArticleImageLocalService.deleteArticleImage(articleImage);
+	}
+
+	public void deleteArticleImage(long articleImageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_journalArticleImageLocalService.deleteArticleImage(articleImageId);
 	}
 
 	public void deleteArticleImage(long groupId, java.lang.String articleId,

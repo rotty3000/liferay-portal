@@ -15,10 +15,10 @@
 --%>
 
 <%
-List portletsList = new ArrayList();
-Set portletIdsSet = new HashSet();
+List<Portlet> portletsList = new ArrayList<Portlet>();
+Set<String> portletIdsSet = new HashSet<String>();
 
-List exportLayouts = new ArrayList();
+List<Layout> exportLayouts = new ArrayList<Layout>();
 
 if (selLayout != null) {
 	exportLayouts.add(selLayout);
@@ -30,27 +30,23 @@ else {
 	exportLayouts = LayoutLocalServiceUtil.getLayouts(selGroup.getGroupId(), privateLayout);
 }
 
-Iterator itr1 = exportLayouts.iterator();
-
-while (itr1.hasNext()) {
-	Layout curLayout = (Layout)itr1.next();
-
+for (Layout curLayout : exportLayouts) {
 	if (curLayout.isTypePortlet()) {
 		LayoutTypePortlet curLayoutTypePortlet = (LayoutTypePortlet)curLayout.getLayoutType();
 
-		Iterator itr2 = curLayoutTypePortlet.getPortletIds().iterator();
+		for (String portletId : curLayoutTypePortlet.getPortletIds()) {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), portletId);
 
-		while (itr2.hasNext()) {
-			Portlet curPortlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), (String)itr2.next());
+			if (portlet == null) {
+				continue;
+			}
 
-			if (curPortlet != null) {
-				PortletDataHandler portletDataHandler = curPortlet.getPortletDataHandlerInstance();
+			PortletDataHandler portletDataHandler = portlet.getPortletDataHandlerInstance();
 
-				if ((portletDataHandler != null) && !portletIdsSet.contains(curPortlet.getRootPortletId())) {
-					portletIdsSet.add(curPortlet.getRootPortletId());
+			if ((portletDataHandler != null) && !portletIdsSet.contains(portlet.getRootPortletId())) {
+				portletIdsSet.add(portlet.getRootPortletId());
 
-					portletsList.add(curPortlet);
-				}
+				portletsList.add(portlet);
 			}
 		}
 	}
@@ -72,18 +68,18 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 <div>
 	<ul class="lfr-tree lfr-component">
 		<li class="tree-item">
-			<aui:input inlineLabel="right" label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP %>" type="checkbox" value="<%= true %>" />
+			<aui:input label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP %>" type="checkbox" value="<%= true %>" />
 		</li>
 		<li class="tree-item">
-			<aui:input helpMessage="import-user-preferences-help" inlineLabel="right" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= false %>" />
+			<aui:input helpMessage="import-user-preferences-help" label="user-preferences" name="<%= PortletDataHandlerKeys.PORTLET_USER_PREFERENCES %>" type="checkbox" value="<%= false %>" />
 		</li>
 		<li id="<portlet:namespace />deleteDataOption" class="tree-item" <%= (!selGroup.isStagingGroup() || !localPublishing) ? "style=\"display: none;\"" : "" %>>
-			<aui:input helpMessage="delete-portlet-data-help" inlineLabel="right" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
+			<aui:input helpMessage="delete-portlet-data-help" label="delete-portlet-data-before-importing" name="<%= PortletDataHandlerKeys.DELETE_PORTLET_DATA %>" type="checkbox" />
 		</li>
 		<li class="tree-item">
 			<aui:input name="<%= PortletDataHandlerKeys.PORTLET_DATA_CONTROL_DEFAULT %>" type="hidden" value="false" />
 
-			<aui:input checked="<%= true %>" inlineLabel="right" label="data" name="<%= PortletDataHandlerKeys.PORTLET_DATA %>" type="checkbox" />
+			<aui:input checked="<%= true %>" label="data" name="<%= PortletDataHandlerKeys.PORTLET_DATA %>" type="checkbox" />
 
 			<ul id="<portlet:namespace />portletDataControls">
 				<li class="tree-item">
@@ -92,7 +88,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 
 						<aui:input checked="<%= true %>"  id="rangeLastPublish" label="from-last-publish-date" name="range" type="radio" value="fromLastPublishDate" />
 
-						<aui:input helpMessage="export-date-range-help" id="rangeDateRange" inlineLabel="right" label="date-range" name="range" type="radio" value="dateRange" />
+						<aui:input helpMessage="export-date-range-help" id="rangeDateRange" label="date-range" name="range" type="radio" value="dateRange" />
 
 						<%
 						Calendar today = CalendarFactoryUtil.getCalendar(timeZone, locale);
@@ -182,12 +178,8 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 						<%
 						Set<String> portletDataHandlerClasses = new HashSet<String>();
 
-						itr1 = portletsList.iterator();
-
-						while (itr1.hasNext()) {
-							Portlet curPortlet = (Portlet)itr1.next();
-
-							String portletDataHandlerClass = curPortlet.getPortletDataHandlerClass();
+						for (Portlet portlet : portletsList) {
+							String portletDataHandlerClass = portlet.getPortletDataHandlerClass();
 
 							if (!portletDataHandlerClasses.contains(portletDataHandlerClass)) {
 								portletDataHandlerClasses.add(portletDataHandlerClass);
@@ -196,19 +188,19 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 								continue;
 							}
 
-							PortletDataHandler portletDataHandler = curPortlet.getPortletDataHandlerInstance();
+							PortletDataHandler portletDataHandler = portlet.getPortletDataHandlerInstance();
 
 							try {
 								PortletDataHandlerControl[] controls = portletDataHandler.getExportControls();
 
 								if (controls != null) {
-									String rootPortletId = curPortlet.getRootPortletId();
+									String rootPortletId = portlet.getRootPortletId();
 
 									boolean checked = portletDataHandler.isPublishToLiveByDefault();
 
 									boolean showRenderControls = true;
 
-									if (!liveGroup.isStagedPortlet(curPortlet.getRootPortletId())) {
+									if (!liveGroup.isStagedPortlet(portlet.getRootPortletId())) {
 										showRenderControls = false;
 									}
 
@@ -217,11 +209,11 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 						%>
 
 									<li class="tree-item">
-										<aui:input inlineLabel="right" label="<%= PortalUtil.getPortletTitle(curPortlet, application, locale) %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + rootPortletId %>" type="checkbox" value="<%= checked %>" />
+										<aui:input label="<%= PortalUtil.getPortletTitle(portlet, application, locale) %>" name="<%= PortletDataHandlerKeys.PORTLET_DATA + StringPool.UNDERLINE + rootPortletId %>" type="checkbox" value="<%= checked %>" />
 
 										<ul id="<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA %>_<%= rootPortletId %>Controls">
 											<li class="<%= renderResponse.getNamespace() %>handler-control">
-												<aui:input disabled="<%= !checked %>" inlineLabel="right" label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP + StringPool.UNDERLINE + rootPortletId %>" type="checkbox" value="<%= true %>" />
+												<aui:input disabled="<%= !checked %>" label="setup" name="<%= PortletDataHandlerKeys.PORTLET_SETUP + StringPool.UNDERLINE + rootPortletId %>" type="checkbox" value="<%= true %>" />
 											</li>
 
 											<c:if test="<%= showRenderControls %>">
@@ -242,7 +234,7 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 
 								<li class="tree-item">
 									<div class="portlet-msg-error">
-										<%= PortalUtil.getPortletTitle(curPortlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
+										<%= PortalUtil.getPortletTitle(portlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
 									</div>
 								</li>
 
@@ -250,6 +242,82 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 							}
 						}
 						%>
+
+						</ul>
+					</aui:fieldset>
+				</li>
+				<li class="tree-item">
+					<aui:fieldset cssClass="portlet-data-section" helpMessage="content-metadata-help" label="content-metadata">
+						<aui:input checked="<%= true %>" id="portletMetaDataAll" label="all-metadata" name="<%= PortletDataHandlerKeys.PORTLET_METADATA_ALL %>" type="radio" value="true" />
+
+						<aui:input id="portletMetaDataFilter" label="choose-metadata" name="<%= PortletDataHandlerKeys.PORTLET_METADATA_ALL %>" type="radio" value="false" />
+
+						<ul class="aui-helper-hidden" id="<portlet:namespace />portletMetaDataList">
+
+							<%
+							Set<String> displayedControls = new HashSet<String>();
+							Set<String> portletDataHandlerClasses = new HashSet<String>();
+
+							for (Portlet portlet : portletsList) {
+								String portletDataHandlerClass = portlet.getPortletDataHandlerClass();
+
+								if (!portletDataHandlerClasses.contains(portletDataHandlerClass)) {
+									portletDataHandlerClasses.add(portletDataHandlerClass);
+								}
+								else {
+									continue;
+								}
+
+								PortletDataHandler portletDataHandler = portlet.getPortletDataHandlerInstance();
+
+								try {
+									PortletDataHandlerControl[] metadataControls = portletDataHandler.getExportMetadataControls();
+
+									if (metadataControls.length > 0) {
+										String rootPortletId = portlet.getRootPortletId();
+
+										for (int i = 0; i < metadataControls.length; i++) {
+											if (!displayedControls.contains(metadataControls[i].getControlName())) {
+												displayedControls.add(metadataControls[i].getControlName());
+											}
+											else {
+												continue;
+											}
+
+											PortletDataHandlerBoolean control = (PortletDataHandlerBoolean)metadataControls[i];
+
+											PortletDataHandlerControl[] childrenControls = control.getChildren();
+
+											if ((childrenControls != null) && (childrenControls.length > 0)) {
+												request.setAttribute("render_controls.jsp-controls", childrenControls);
+										%>
+
+												<li class="tree-item">
+													<aui:fieldset cssClass="portlet-type-data-section" label="<%= metadataControls[i].getControlName() %>">
+														<ul id="<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA %>_<%= rootPortletId %>Controls">
+															<liferay-util:include page="/html/portlet/layouts_admin/render_controls.jsp" />
+														</ul>
+													</aui:fieldset>
+												</li>
+
+										<%
+											}
+										}
+									}
+								}
+								catch (PortletDataException pde) {
+							%>
+
+									<li class="tree-item">
+										<div class="portlet-msg-error">
+											<%= PortalUtil.getPortletTitle(portlet, application, locale) %>: <%= LanguageUtil.get(pageContext, "error-initializing-import-controls") %>
+										</div>
+									</li>
+
+							<%
+								}
+							}
+							%>
 
 						</ul>
 					</aui:fieldset>
@@ -264,6 +332,9 @@ portletsList = ListUtil.sort(portletsList, new PortletTitleComparator(applicatio
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeAll','', ['<portlet:namespace />startEndDate']);
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeLastPublish','', ['<portlet:namespace />startEndDate']);
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeLast','', ['<portlet:namespace />startEndDate']);
+
+	Liferay.Util.toggleRadio('<portlet:namespace />portletMetaDataFilter','<portlet:namespace />portletMetaDataList');
+	Liferay.Util.toggleRadio('<portlet:namespace />portletMetaDataAll', '', ['<portlet:namespace />portletMetaDataList']);
 
 	Liferay.Util.toggleBoxes('<portlet:namespace /><%= PortletDataHandlerKeys.PORTLET_DATA %>Checkbox', '<portlet:namespace />portletDataControls');
 

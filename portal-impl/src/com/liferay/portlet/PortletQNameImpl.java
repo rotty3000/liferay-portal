@@ -76,18 +76,6 @@ public class PortletQNameImpl implements PortletQName {
 		return publicRenderParameterName;
 	}
 
-	public QName getQName(String publicRenderParameterName) {
-		if (!publicRenderParameterName.startsWith(
-				PUBLIC_RENDER_PARAMETER_NAMESPACE) &&
-			!publicRenderParameterName.startsWith(
-				REMOVE_PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
-
-			return null;
-		}
-
-		return _qNames.get(publicRenderParameterName);
-	}
-
 	public QName getQName(
 		Element qNameEl, Element nameEl, String defaultNamespace) {
 
@@ -133,6 +121,18 @@ public class PortletQNameImpl implements PortletQName {
 		return SAXReaderUtil.createQName(localPart, namespace);
 	}
 
+	public QName getQName(String publicRenderParameterName) {
+		if (!publicRenderParameterName.startsWith(
+				PUBLIC_RENDER_PARAMETER_NAMESPACE) &&
+			!publicRenderParameterName.startsWith(
+				REMOVE_PUBLIC_RENDER_PARAMETER_NAMESPACE)) {
+
+			return null;
+		}
+
+		return _qNames.get(publicRenderParameterName);
+	}
+
 	public String getRemovePublicRenderParameterName(QName qName) {
 		StringBundler sb = new StringBundler(4);
 
@@ -160,7 +160,7 @@ public class PortletQNameImpl implements PortletQName {
 
 	private static Log _log = LogFactoryUtil.getLog(PortletQNameImpl.class);
 
-	private Map<String, QName> _qNames;
 	private Map<String, String> _identifiers;
+	private Map<String, QName> _qNames;
 
 }

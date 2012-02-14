@@ -165,8 +165,8 @@ public class SetupWizardUtil {
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
-		UnicodeProperties unicodeProperties =
-			PropertiesParamUtil.getProperties(request, _PROPERTIES_PREFIX);
+		UnicodeProperties unicodeProperties = PropertiesParamUtil.getProperties(
+			request, _PROPERTIES_PREFIX);
 
 		unicodeProperties.setProperty(
 			PropsKeys.LIFERAY_HOME,
@@ -461,6 +461,7 @@ public class SetupWizardUtil {
 		HttpSession session = request.getSession();
 
 		session.setAttribute(WebKeys.SETUP_WIZARD_PASSWORD_UPDATED, true);
+		session.setAttribute(WebKeys.USER_ID, user.getUserId());
 	}
 
 	private static void _updateCompany() throws Exception {

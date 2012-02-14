@@ -346,22 +346,45 @@ public interface DDMStructureLocalService extends PersistedModelLocalService {
 		long groupId, java.lang.String name, java.lang.String description)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* @deprecated {@link #getStructures}
+	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* @deprecated {@link #getStructures(long)}
+	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	/**
+	* @deprecated {@link #getStructures(long, int, int)}
+	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructureEntries(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getStructureEntriesCount(long groupId)
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMStructure> getStructures(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getStructuresCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

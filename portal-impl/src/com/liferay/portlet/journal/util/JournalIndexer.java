@@ -125,12 +125,12 @@ public class JournalIndexer extends BaseIndexer {
 		throws Exception {
 
 		addSearchTerm(searchQuery, searchContext, Field.CLASS_PK, false);
-		addLocalizedSearchTerm(
+		addSearchLocalizedTerm(
 			searchQuery, searchContext, Field.CONTENT, false);
-		addLocalizedSearchTerm(
+		addSearchLocalizedTerm(
 			searchQuery, searchContext, Field.DESCRIPTION, false);
 		addSearchTerm(searchQuery, searchContext, Field.ENTRY_CLASS_PK, false);
-		addLocalizedSearchTerm(searchQuery, searchContext, Field.TITLE, false);
+		addSearchLocalizedTerm(searchQuery, searchContext, Field.TITLE, false);
 		addSearchTerm(searchQuery, searchContext, Field.TYPE, false);
 		addSearchTerm(searchQuery, searchContext, Field.USER_NAME, false);
 

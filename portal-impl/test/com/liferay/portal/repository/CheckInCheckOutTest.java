@@ -58,7 +58,10 @@ public class CheckInCheckOutTest extends TestCase {
 	}
 
 	public void testCancelCheckIn() throws Exception {
-		DLAppServiceUtil.checkOutFileEntry(_fileEntry.getFileEntryId());
+		ServiceContext serviceContext = new ServiceContext();
+
+		DLAppServiceUtil.checkOutFileEntry(
+			_fileEntry.getFileEntryId(), serviceContext);
 
 		FileEntry fileEntry = DLAppServiceUtil.getFileEntry(
 			_fileEntry.getFileEntryId());
@@ -77,7 +80,10 @@ public class CheckInCheckOutTest extends TestCase {
 	}
 
 	public void testCheckIn() throws Exception {
-		DLAppServiceUtil.checkOutFileEntry(_fileEntry.getFileEntryId());
+		ServiceContext serviceContext = new ServiceContext();
+
+		DLAppServiceUtil.checkOutFileEntry(
+			_fileEntry.getFileEntryId(), serviceContext);
 
 		FileVersion fileVersion = _fileEntry.getLatestFileVersion();
 
@@ -98,7 +104,10 @@ public class CheckInCheckOutTest extends TestCase {
 	}
 
 	public void testCheckOut() throws Exception {
-		DLAppServiceUtil.checkOutFileEntry(_fileEntry.getFileEntryId());
+		ServiceContext serviceContext = new ServiceContext();
+
+		DLAppServiceUtil.checkOutFileEntry(
+			_fileEntry.getFileEntryId(), serviceContext);
 
 		FileVersion fileVersion = _fileEntry.getLatestFileVersion();
 
@@ -117,7 +126,10 @@ public class CheckInCheckOutTest extends TestCase {
 	}
 
 	public void testUpdateFileEntry2() throws Exception {
-		DLAppServiceUtil.checkOutFileEntry(_fileEntry.getFileEntryId());
+		ServiceContext serviceContext = new ServiceContext();
+
+		DLAppServiceUtil.checkOutFileEntry(
+			_fileEntry.getFileEntryId(), serviceContext);
 
 		FileEntry fileEntry = updateFileEntry(
 			_fileEntry.getFileEntryId(), _serviceContext);
@@ -148,9 +160,8 @@ public class CheckInCheckOutTest extends TestCase {
 			_TEST_CONTENT.getBytes());
 
 		FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-			repositoryId, folderId, fileName,
-			ContentTypes.TEXT_PLAIN, fileName, null, null, inputStream,
-			_TEST_CONTENT.length(), serviceContext);
+			repositoryId, folderId, fileName, ContentTypes.TEXT_PLAIN, fileName,
+			null, null, inputStream, _TEST_CONTENT.length(), serviceContext);
 
 		assertNotNull(fileEntry);
 

@@ -151,7 +151,17 @@ public class DLFileRankLocalServiceImpl extends DLFileRankLocalServiceBaseImpl {
 		if (dlFileRank != null) {
 			dlFileRank.setCreateDate(serviceContext.getCreateDate(null));
 
-			dlFileRankPersistence.update(dlFileRank, false);
+			try {
+				dlFileRankPersistence.update(dlFileRank, false);
+			}
+			catch (Exception e) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Update failed, fetch {companyId=" + companyId +
+							", userId=" + userId + ", fileEntryId=" +
+								fileEntryId + "}");
+				}
+			}
 		}
 		else {
 			dlFileRank = addFileRank(

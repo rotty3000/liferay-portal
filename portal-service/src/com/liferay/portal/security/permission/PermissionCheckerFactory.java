@@ -22,7 +22,6 @@ import com.liferay.portal.model.User;
  */
 public interface PermissionCheckerFactory {
 
-	public PermissionChecker create(User user, boolean checkGuest)
-		throws Exception;
+	public PermissionChecker create(User user) throws Exception;
 
 }

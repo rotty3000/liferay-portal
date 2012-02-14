@@ -31,23 +31,11 @@ public class VideoProcessorUtil {
 		getVideoProcessor().generateVideo(fileVersion);
 	}
 
-	public static InputStream getPreviewAsStream(FileVersion fileVersion)
-		throws Exception {
-
-		return getVideoProcessor().getPreviewAsStream(fileVersion);
-	}
-
 	public static InputStream getPreviewAsStream(
 			FileVersion fileVersion, String type)
 		throws Exception {
 
 		return getVideoProcessor().getPreviewAsStream(fileVersion, type);
-	}
-
-	public static long getPreviewFileSize(FileVersion fileVersion)
-		throws Exception {
-
-		return getVideoProcessor().getPreviewFileSize(fileVersion);
 	}
 
 	public static long getPreviewFileSize(FileVersion fileVersion, String type)
@@ -57,19 +45,16 @@ public class VideoProcessorUtil {
 	}
 
 	public static InputStream getThumbnailAsStream(
-			FileVersion fileVersion, int thumbnailIndex)
+			FileVersion fileVersion, int index)
 		throws Exception {
 
-		return getVideoProcessor().getThumbnailAsStream(
-			fileVersion, thumbnailIndex);
+		return getVideoProcessor().getThumbnailAsStream(fileVersion, index);
 	}
 
-	public static long getThumbnailFileSize(
-			FileVersion fileVersion, int thumbnailIndex)
+	public static long getThumbnailFileSize(FileVersion fileVersion, int index)
 		throws Exception {
 
-		return getVideoProcessor().getThumbnailFileSize(
-			fileVersion, thumbnailIndex);
+		return getVideoProcessor().getThumbnailFileSize(fileVersion, index);
 	}
 
 	public static Set<String> getVideoMimeTypes() {

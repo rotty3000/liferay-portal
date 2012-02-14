@@ -26,7 +26,7 @@
 	#end
 #end
 
-#set ($liferay_dockbar_pinned = $sessionClicks.get($request, "liferay_dockbar_pinned", ""))
+#set ($liferay_dockbar_pinned = $getterUtil.getBoolean($sessionClicks.get($request, "liferay_dockbar_pinned", ""), false))
 
 #if ($liferay_toggle_controls == "visible")
 	#set ($css_class = $css_class + " controls-visible")
@@ -34,7 +34,7 @@
 	#set ($css_class = $css_class + " controls-hidden")
 #end
 
-#if ($liferay_dockbar_pinned == "true")
+#if ($liferay_dockbar_pinned)
 	#set ($css_class = $css_class + " lfr-dockbar-pinned")
 #end
 
@@ -313,7 +313,11 @@
 #if ($is_guest_group)
 	#set ($show_site_name = false)
 #else
-	#set ($show_site_name = $getterUtil.getBoolean($layout.layoutSet.getSettingsProperty("showSiteName"), true))
+	#set ($show_site_name_supported = $getterUtil.getBoolean($theme_settings.getProperty("show-site-name-supported"), true))
+
+	#set ($show_site_name_default = $getterUtil.getBoolean($theme_settings.getProperty("show-site-name-default"), $show_site_name_supported))
+
+	#set ($show_site_name = $getterUtil.getBoolean($layout.layoutSet.getSettingsProperty("showSiteName"), $show_site_name_default))
 #end
 
 #set($site_logo = $company_logo)

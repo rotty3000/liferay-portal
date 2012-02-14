@@ -165,6 +165,28 @@ public class JournalTemplateLocalServiceImpl
 	}
 
 	public void addTemplateResources(
+			JournalTemplate template, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addResources(
+			template.getCompanyId(), template.getGroupId(),
+			template.getUserId(), JournalTemplate.class.getName(),
+			template.getId(), false, addGroupPermissions, addGuestPermissions);
+	}
+
+	public void addTemplateResources(
+			JournalTemplate template, String[] groupPermissions,
+			String[] guestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addModelResources(
+			template.getCompanyId(), template.getGroupId(),
+			template.getUserId(), JournalTemplate.class.getName(),
+			template.getId(), groupPermissions, guestPermissions);
+	}
+
+	public void addTemplateResources(
 			long groupId, String templateId, boolean addGroupPermissions,
 			boolean addGuestPermissions)
 		throws PortalException, SystemException {
@@ -177,18 +199,6 @@ public class JournalTemplateLocalServiceImpl
 	}
 
 	public void addTemplateResources(
-			JournalTemplate template, boolean addGroupPermissions,
-			boolean addGuestPermissions)
-		throws PortalException, SystemException {
-
-		resourceLocalService.addResources(
-			template.getCompanyId(), template.getGroupId(),
-			template.getUserId(), JournalTemplate.class.getName(),
-			template.getId(), false, addGroupPermissions,
-			addGuestPermissions);
-	}
-
-	public void addTemplateResources(
 			long groupId, String templateId, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
@@ -197,17 +207,6 @@ public class JournalTemplateLocalServiceImpl
 			groupId, templateId);
 
 		addTemplateResources(template, groupPermissions, guestPermissions);
-	}
-
-	public void addTemplateResources(
-			JournalTemplate template, String[] groupPermissions,
-			String[] guestPermissions)
-		throws PortalException, SystemException {
-
-		resourceLocalService.addModelResources(
-			template.getCompanyId(), template.getGroupId(),
-			template.getUserId(), JournalTemplate.class.getName(),
-			template.getId(), groupPermissions, guestPermissions);
 	}
 
 	public void checkNewLine(long groupId, String templateId)
@@ -301,17 +300,6 @@ public class JournalTemplateLocalServiceImpl
 		return newTemplate;
 	}
 
-	public void deleteTemplate(long groupId, String templateId)
-		throws PortalException, SystemException {
-
-		templateId = templateId.trim().toUpperCase();
-
-		JournalTemplate template = journalTemplatePersistence.findByG_T(
-			groupId, templateId);
-
-		deleteTemplate(template);
-	}
-
 	public void deleteTemplate(JournalTemplate template)
 		throws PortalException, SystemException {
 
@@ -363,6 +351,17 @@ public class JournalTemplateLocalServiceImpl
 		// Template
 
 		journalTemplatePersistence.remove(template);
+	}
+
+	public void deleteTemplate(long groupId, String templateId)
+		throws PortalException, SystemException {
+
+		templateId = templateId.trim().toUpperCase();
+
+		JournalTemplate template = journalTemplatePersistence.findByG_T(
+			groupId, templateId);
+
+		deleteTemplate(template);
 	}
 
 	public void deleteTemplates(long groupId)
@@ -504,8 +503,7 @@ public class JournalTemplateLocalServiceImpl
 	public int searchCount(
 			long companyId, long[] groupIds, String templateId,
 			String structureId, String structureIdComparator, String name,
-			String description,
-			boolean andOperator)
+			String description, boolean andOperator)
 		throws SystemException {
 
 		return journalTemplateFinder.countByC_G_T_S_N_D(
@@ -608,15 +606,6 @@ public class JournalTemplateLocalServiceImpl
 		}
 	}
 
-	protected void validate(String templateId) throws PortalException {
-		if ((Validator.isNull(templateId)) ||
-			(Validator.isNumber(templateId)) ||
-			(templateId.indexOf(CharPool.SPACE) != -1)) {
-
-			throw new TemplateIdException();
-		}
-	}
-
 	protected void validate(
 			long groupId, String templateId, boolean autoTemplateId,
 			Map<Locale, String> nameMap, String xsl, boolean smallImage,
@@ -689,6 +678,15 @@ public class JournalTemplateLocalServiceImpl
 
 				throw new TemplateSmallImageSizeException();
 			}
+		}
+	}
+
+	protected void validate(String templateId) throws PortalException {
+		if ((Validator.isNull(templateId)) ||
+			(Validator.isNumber(templateId)) ||
+			(templateId.indexOf(CharPool.SPACE) != -1)) {
+
+			throw new TemplateIdException();
 		}
 	}
 

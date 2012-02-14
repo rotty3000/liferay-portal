@@ -155,11 +155,20 @@ public class RepositorySearchQueryBuilderImpl
 
 			searchQuery.add(userNameQuery, BooleanClauseOccur.SHOULD);
 		}
+
+		BooleanQuery contentQuery = BooleanQueryFactoryUtil.create(
+			searchContext);
+
+		addTerm(contentQuery, searchContext, Field.CONTENT, keywords);
+
+		if (contentQuery.hasClauses() && !contains(searchQuery, contentQuery)) {
+			searchQuery.add(contentQuery, BooleanClauseOccur.SHOULD);
+		}
 	}
 
 	protected void addTerm(
-		BooleanQuery booleanQuery, SearchContext searchContext,
-		String field, String value) {
+		BooleanQuery booleanQuery, SearchContext searchContext, String field,
+		String value) {
 
 		if (Validator.isNull(value)) {
 			return;

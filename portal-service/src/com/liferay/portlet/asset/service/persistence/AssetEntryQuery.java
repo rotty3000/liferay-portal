@@ -43,7 +43,7 @@ import javax.portlet.PortletRequest;
  */
 public class AssetEntryQuery {
 
-	public static String[] ORDER_BY_COLUMNS = new String[] {
+	public static final String[] ORDER_BY_COLUMNS = new String[] {
 		"title", "createDate", "modifiedDate", "publishDate", "expirationDate",
 		"priority", "viewCount", "ratings"
 	};
@@ -85,11 +85,13 @@ public class AssetEntryQuery {
 		setAnyTagIds(assetEntryQuery.getAnyTagIds());
 		setClassNameIds(assetEntryQuery.getClassNameIds());
 		setClassTypeIds(assetEntryQuery.getClassTypeIds());
+		setEnablePermissions(assetEntryQuery.isEnablePermissions());
 		setEnd(assetEntryQuery.getEnd());
 		setExcludeZeroViewCount(assetEntryQuery.isExcludeZeroViewCount());
 		setExpirationDate(assetEntryQuery.getExpirationDate());
 		setGroupIds(assetEntryQuery.getGroupIds());
 		setLayout(assetEntryQuery.getLayout());
+		setLinkedAssetEntryId(assetEntryQuery.getLinkedAssetEntryId());
 		setNotAllCategoryIds(assetEntryQuery.getNotAllCategoryIds());
 		setNotAllTagIds(assetEntryQuery.getNotAllTagIds());
 		setNotAnyCategoryIds(assetEntryQuery.getNotAnyCategoryIds());
@@ -504,11 +506,11 @@ public class AssetEntryQuery {
 	private long[] _classNameIds = new long[0];
 	private long[] _classTypeIds = new long[0];
 	private boolean _enablePermissions;
-	private Layout _layout;
 	private int _end = QueryUtil.ALL_POS;
 	private boolean _excludeZeroViewCount;
 	private Date _expirationDate;
 	private long[] _groupIds = new long[0];
+	private Layout _layout;
 	private long _linkedAssetEntryId = 0;
 	private long[] _notAllCategoryIds = new long[0];
 	private long[] _notAllTagIds = new long[0];

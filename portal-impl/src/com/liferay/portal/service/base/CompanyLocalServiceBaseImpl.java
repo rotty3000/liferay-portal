@@ -4024,6 +4024,12 @@ public abstract class CompanyLocalServiceBaseImpl implements CompanyLocalService
 		_beanIdentifier = beanIdentifier;
 	}
 
+	protected ClassLoader getClassLoader() {
+		Class<?> clazz = getClass();
+
+		return clazz.getClassLoader();
+	}
+
 	protected Class<?> getModelClass() {
 		return Company.class;
 	}

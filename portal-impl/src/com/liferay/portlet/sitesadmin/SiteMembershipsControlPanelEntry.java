@@ -28,6 +28,13 @@ import com.liferay.portlet.BaseControlPanelEntry;
  */
 public class SiteMembershipsControlPanelEntry extends BaseControlPanelEntry {
 
+	public boolean isVisible(
+			PermissionChecker permissionChecker, Portlet portlet)
+		throws Exception {
+
+		return false;
+	}
+
 	@Override
 	public boolean isVisible(
 			Portlet portlet, String category, ThemeDisplay themeDisplay)
@@ -43,20 +50,13 @@ public class SiteMembershipsControlPanelEntry extends BaseControlPanelEntry {
 
 		if (scopeGroup.isCompany() || scopeGroup.isUser() ||
 			!GroupPermissionUtil.contains(
-				themeDisplay.getPermissionChecker(),
-				scopeGroup.getGroupId(), ActionKeys.ASSIGN_MEMBERS)) {
+				themeDisplay.getPermissionChecker(), scopeGroup.getGroupId(),
+				ActionKeys.ASSIGN_MEMBERS)) {
 
 			return false;
 		}
 
 		return super.isVisible(portlet, category, themeDisplay);
-	}
-
-	public boolean isVisible(
-			PermissionChecker permissionChecker, Portlet portlet)
-		throws Exception {
-
-		return false;
 	}
 
 }

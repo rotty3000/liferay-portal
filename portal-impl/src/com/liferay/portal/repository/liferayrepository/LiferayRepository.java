@@ -95,8 +95,8 @@ public class LiferayRepository
 		DLFileVersionLocalService dlFileVersionLocalService,
 		DLFileVersionService dlFileVersionService,
 		DLFolderLocalService dlFolderLocalService,
-		DLFolderService dlFolderService, long folderId,
-		long fileEntryId, long fileVersionId) {
+		DLFolderService dlFolderService, long folderId, long fileEntryId,
+		long fileVersionId) {
 
 		super(
 			repositoryLocalService, repositoryService, dlAppHelperLocalService,
@@ -188,21 +188,23 @@ public class LiferayRepository
 		dlFileEntryService.checkInFileEntry(fileEntryId, lockUuid);
 	}
 
-	public FileEntry checkOutFileEntry(long fileEntryId)
+	public FileEntry checkOutFileEntry(
+			long fileEntryId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		DLFileEntry dlFileEntry = dlFileEntryService.checkOutFileEntry(
-			fileEntryId);
+			fileEntryId, serviceContext);
 
 		return new LiferayFileEntry(dlFileEntry);
 	}
 
 	public FileEntry checkOutFileEntry(
-			long fileEntryId, String owner, long expirationTime)
+			long fileEntryId, String owner, long expirationTime,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		DLFileEntry dlFileEntry = dlFileEntryService.checkOutFileEntry(
-			fileEntryId, owner, expirationTime);
+			fileEntryId, owner, expirationTime, serviceContext);
 
 		return new LiferayFileEntry(dlFileEntry);
 	}
@@ -743,8 +745,8 @@ public class LiferayRepository
 	@Override
 	protected void initByFileVersionId(long fileVersionId) {
 		try {
-			DLFileVersion dlFileVersion =
-				dlFileVersionService.getFileVersion(fileVersionId);
+			DLFileVersion dlFileVersion = dlFileVersionService.getFileVersion(
+				fileVersionId);
 
 			initByRepositoryId(dlFileVersion.getRepositoryId());
 		}
