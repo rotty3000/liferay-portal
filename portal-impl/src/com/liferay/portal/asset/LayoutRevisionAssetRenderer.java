@@ -15,11 +15,18 @@
 package com.liferay.portal.asset;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutBranch;
 import com.liferay.portal.model.LayoutRevision;
 import com.liferay.portal.model.LayoutSetBranch;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetBranchLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.model.BaseAssetRenderer;
 
@@ -83,12 +90,46 @@ public class LayoutRevisionAssetRenderer extends BaseAssetRenderer {
 		return _layoutRevision.getHTMLTitle(locale);
 	}
 
+	@Override
+	public String getURLViewInContext(
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse,
+		String noSuchEntryRedirect) {
+
+		try {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)liferayPortletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
+
+			Layout layout = LayoutLocalServiceUtil.getLayout(
+				_layoutRevision.getPlid());
+
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(PortalUtil.getLayoutFriendlyURL(layout, themeDisplay));
+			sb.append("?layoutSetBranchId=");
+			sb.append(_layoutRevision.getLayoutSetBranchId());
+			sb.append("&layoutRevisionId=");
+			sb.append(_layoutRevision.getLayoutRevisionId());
+
+			return sb.toString();
+		}
+		catch (Exception e) {
+			return StringPool.BLANK;
+		}
+	}
+
 	public long getUserId() {
 		return _layoutRevision.getUserId();
 	}
 
 	public String getUuid() {
 		return null;
+	}
+
+	@Override
+	public boolean isPreviewInContext() {
+		return true;
 	}
 
 	public String render(

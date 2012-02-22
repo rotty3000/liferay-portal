@@ -26,6 +26,8 @@
 			<arg value="sample.sql.dl.folder.count=${sample.sql.dl.folder.count}" />
 			<arg value="sample.sql.dl.folder.depth=${sample.sql.dl.folder.depth}" />
 			<arg value="sample.sql.group.count=${sample.sql.group.count}" />
+			<arg value="sample.sql.journal.article.count=${sample.sql.journal.article.count}" />
+			<arg value="sample.sql.journal.article.size=${sample.sql.journal.article.size}" />
 			<arg value="sample.sql.mb.category.count=${sample.sql.mb.category.count}" />
 			<arg value="sample.sql.mb.message.count=${sample.sql.mb.message.count}" />
 			<arg value="sample.sql.mb.thread.count=${sample.sql.mb.thread.count}" />

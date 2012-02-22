@@ -19,6 +19,8 @@
 <%
 String randomId = StringPool.BLANK;
 
+String closeRedirect = ParamUtil.getString(request, "closeRedirect");
+
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 WorkflowTask workflowTask = null;
@@ -55,6 +57,7 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 				<portlet:param name="struts_action" value="/workflow_tasks/edit_workflow_task" />
 				<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.SAVE %>" />
 				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="closeRedirect" value="<%= closeRedirect %>" />
 				<portlet:param name="workflowTaskId" value="<%= StringUtil.valueOf(workflowTask.getWorkflowTaskId()) %>" />
 				<portlet:param name="assigneeUserId" value="<%= StringUtil.valueOf(workflowTask.getAssigneeUserId()) %>" />
 
@@ -83,6 +86,7 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 			<portlet:param name="struts_action" value="/workflow_tasks/edit_workflow_task" />
 			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ASSIGN %>" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="closeRedirect" value="<%= closeRedirect %>" />
 			<portlet:param name="workflowTaskId" value="<%= String.valueOf(workflowTask.getWorkflowTaskId()) %>" />
 			<portlet:param name="assigneeUserId" value="<%= String.valueOf(user.getUserId()) %>" />
 		</portlet:actionURL>
@@ -102,6 +106,7 @@ long[] pooledActorsIds = WorkflowTaskManagerUtil.getPooledActorsIds(company.getC
 			<portlet:param name="struts_action" value="/workflow_tasks/edit_workflow_task" />
 			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ASSIGN %>" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="closeRedirect" value="<%= closeRedirect %>" />
 			<portlet:param name="workflowTaskId" value="<%= String.valueOf(workflowTask.getWorkflowTaskId()) %>" />
 		</portlet:actionURL>
 

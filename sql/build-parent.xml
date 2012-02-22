@@ -170,6 +170,8 @@
 			<arg value="sample.sql.dl.folder.count=1" />
 			<arg value="sample.sql.dl.folder.depth=1" />
 			<arg value="sample.sql.group.count=1" />
+			<arg value="sample.sql.journal.article.count=${sample.sql.journal.article.count}" />
+			<arg value="sample.sql.journal.article.size=${sample.sql.journal.article.size}" />
 			<arg value="sample.sql.mb.category.count=1" />
 			<arg value="sample.sql.mb.message.count=1" />
 			<arg value="sample.sql.mb.thread.count=1" />
