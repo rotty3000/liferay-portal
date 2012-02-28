@@ -40,14 +40,14 @@ public class PortalPreferencesImpl
 	implements Cloneable, PortalPreferences, Serializable {
 
 	public PortalPreferencesImpl() {
-		this(0, 0, 0, Collections.<String, Preference>emptyMap(), false);
+		this(0, 0, 0, null, Collections.<String, Preference>emptyMap(), false);
 	}
 
 	public PortalPreferencesImpl(
-		long companyId, long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType, String xml,
 		Map<String, Preference> preferences, boolean signedIn) {
 
-		super(companyId, ownerId, ownerType, preferences);
+		super(companyId, ownerId, ownerType, xml, preferences);
 
 		_signedIn = signedIn;
 	}
@@ -55,7 +55,7 @@ public class PortalPreferencesImpl
 	@Override
 	public Object clone() {
 		return new PortalPreferencesImpl(
-			getCompanyId(), getOwnerId(), getOwnerType(),
+			getCompanyId(), getOwnerId(), getOwnerType(), getOriginalXML(),
 			getOriginalPreferences(), isSignedIn());
 	}
 

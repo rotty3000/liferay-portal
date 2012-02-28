@@ -115,7 +115,7 @@ public class Duration implements Cloneable, Serializable {
 
 			return other;
 		}
-		catch (CloneNotSupportedException e) {
+		catch (CloneNotSupportedException cnse) {
 			throw new InternalError();
 		}
 	}

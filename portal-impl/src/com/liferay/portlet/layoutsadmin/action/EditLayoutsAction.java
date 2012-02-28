@@ -622,9 +622,9 @@ public class EditLayoutsAction extends PortletAction {
 				return FileUtil.getBytes(inputStream);
 			}
 		}
-		catch (IOException e) {
+		catch (IOException ioe) {
 			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to retrieve icon", e);
+				_log.warn("Unable to retrieve icon", ioe);
 			}
 		}
 

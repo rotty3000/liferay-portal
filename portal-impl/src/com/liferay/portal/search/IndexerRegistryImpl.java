@@ -14,6 +14,9 @@
 
 package com.liferay.portal.search;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.DummyIndexer;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistry;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -35,6 +38,20 @@ public class IndexerRegistryImpl implements IndexerRegistry {
 		return ListUtil.fromMapValues(_indexers);
 	}
 
+	public Indexer nullSafeGetIndexer(String className) {
+		Indexer indexer = _indexers.get(className);
+
+		if (indexer != null) {
+			return indexer;
+		}
+
+		if (_log.isWarnEnabled()) {
+			_log.warn("No indexer found for " + className);
+		}
+
+		return _dummyIndexer;
+	}
+
 	public void register(String className, Indexer indexerInstance) {
 		_indexers.put(className, indexerInstance);
 	}
@@ -43,6 +60,9 @@ public class IndexerRegistryImpl implements IndexerRegistry {
 		_indexers.remove(className);
 	}
 
+	private static Log _log = LogFactoryUtil.getLog(IndexerRegistryImpl.class);
+
+	private Indexer _dummyIndexer = new DummyIndexer();
 	private Map<String, Indexer> _indexers =
 		new ConcurrentHashMap<String, Indexer>();
 

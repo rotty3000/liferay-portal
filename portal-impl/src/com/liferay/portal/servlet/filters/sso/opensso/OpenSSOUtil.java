@@ -146,11 +146,11 @@ public class OpenSSOUtil {
 				_log.debug("Attributes response code " + responseCode);
 			}
 		}
-		catch (MalformedURLException mfue) {
-			_log.error(mfue.getMessage());
+		catch (MalformedURLException murle) {
+			_log.error(murle.getMessage());
 
 			if (_log.isDebugEnabled()) {
-				_log.debug(mfue, mfue);
+				_log.debug(murle, murle);
 			}
 		}
 		catch (IOException ioe) {

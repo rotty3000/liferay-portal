@@ -67,7 +67,7 @@ public class GZipResponse extends HttpServletResponseWrapper {
 				_servletOutputStream.close();
 			}
 		}
-		catch (IOException e) {
+		catch (IOException ioe) {
 		}
 
 		if (_unsyncByteArrayOutputStream != null) {

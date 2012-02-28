@@ -159,7 +159,8 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				false, false, false);
 
 			if (!ImportExportThreadLocal.isImportInProcess()) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+					User.class);
 
 				indexer.reindex(userId);
 			}
@@ -184,7 +185,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 
 		userPersistence.addRoles(userId, roleIds);
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
 
 		indexer.reindex(userId);
 
@@ -1117,7 +1118,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 
 		userPersistence.setRoles(userId, roleIds);
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
 
 		indexer.reindex(userId);
 
@@ -1141,7 +1142,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 
 		userPersistence.removeRoles(userId, roleIds);
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(User.class);
 
 		indexer.reindex(userId);
 
@@ -1290,7 +1291,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				throw new DuplicateRoleException();
 			}
 		}
-		catch (NoSuchRoleException nsge) {
+		catch (NoSuchRoleException nsre) {
 		}
 	}
 

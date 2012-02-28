@@ -63,12 +63,15 @@ public class RemoveRolePermissionViewTest extends BaseTestCase {
 			RuntimeVariables.replace("Define Permissions"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		selenium.select("//select[@id='_128_add-permissions']",
-			RuntimeVariables.replace("label=Web Content"));
+		selenium.typeKeys("//select[@id='_128_add-permissions']",
+			RuntimeVariables.replace("wwwwwwwww"));
+		selenium.keyPress("//select[@id='_128_add-permissions']",
+			RuntimeVariables.replace("\\13"));
 		selenium.waitForPageToLoad("30000");
 		loadRequiredJavaScriptModules();
-		selenium.uncheck(
-			"//input[@value='com.liferay.portlet.journal.model.JournalArticleVIEW']");
+		assertEquals(RuntimeVariables.replace("Web Content"),
+			selenium.getText("//h3"));
+		selenium.uncheck("//input[@value='15VIEW']");
 		selenium.clickAt("//input[@value='Save']",
 			RuntimeVariables.replace("Save"));
 		selenium.waitForPageToLoad("30000");

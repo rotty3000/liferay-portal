@@ -34,10 +34,10 @@
 
 		insert into MBStatsUser (statsUserId, groupId, userId) values (${counter.get()}, ${mbStatsUser.groupId}, ${mbStatsUser.userId});
 
-		${writerUsersCSV.write(user.getScreenName() + "," + userGroup.groupId + ",")}
+		${writerUserCSV.write(user.getScreenName() + "," + userGroup.groupId + ",")}
 
 		<#if (userCounter.value < maxUserCount)>
-			${writerUsersCSV.write("\n")}
+			${writerUserCSV.write("\n")}
 		</#if>
 
 		<#if (lastName_index = 0) && (firstName_index = 0)>
@@ -45,7 +45,7 @@
 		</#if>
 
 		<#if (userCounter.value >= maxUserCount)>
-			${writerUsersCSV.write("\n")}
+			${writerUserCSV.write("\n")}
 
 			<#break>
 		</#if>

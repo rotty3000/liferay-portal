@@ -64,8 +64,8 @@ public class SerializableUtil {
 
 			objectOutputStream.writeObject(object);
 		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
+		catch (IOException ioe) {
+			throw new RuntimeException(ioe);
 		}
 		finally {
 			StreamUtil.cleanUp(objectOutputStream);

@@ -241,6 +241,12 @@ public class ShoppingOrderLocalServiceImpl
 
 		shoppingOrderPersistence.remove(order);
 
+		// Subscriptions
+
+		subscriptionLocalService.deleteSubscriptions(
+			order.getCompanyId(), ShoppingOrder.class.getName(),
+			order.getOrderId());
+
 		// Items
 
 		shoppingOrderItemPersistence.removeByOrderId(order.getOrderId());

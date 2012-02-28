@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -353,6 +354,11 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 		Element messageElement = messagesElement.addElement("message");
 
 		message.setPriority(message.getPriority());
+
+		MBThread thread = message.getThread();
+
+		messageElement.addAttribute(
+			"question", String.valueOf(thread.isQuestion()));
 
 		if (portletDataContext.getBooleanParameter(_NAMESPACE, "attachments") &&
 			message.isAttachments()) {
@@ -802,6 +808,15 @@ public class MBPortletDataHandlerImpl extends BasePortletDataHandler {
 					message.getBody(), message.getFormat(), inputStreamOVPs,
 					message.getAnonymous(), message.getPriority(),
 					message.getAllowPingbacks(), serviceContext);
+			}
+
+			importedMessage.setAnswer(message.getAnswer());
+
+			if (importedMessage.isRoot()) {
+				MBThreadLocalServiceUtil.updateQuestion(
+					importedMessage.getThreadId(),
+					GetterUtil.getBoolean(
+						messageElement.attributeValue("question")));
 			}
 
 			threadPKs.put(message.getThreadId(), importedMessage.getThreadId());

@@ -105,7 +105,7 @@ public class EditFeedAction extends PortletAction {
 				ActionUtil.getFeed(renderRequest);
 			}
 		}
-		catch (NoSuchFeedException nssfe) {
+		catch (NoSuchFeedException nsfe) {
 
 			// Let this slide because the user can manually input a feed id for
 			// a new syndicated feed that does not yet exist.

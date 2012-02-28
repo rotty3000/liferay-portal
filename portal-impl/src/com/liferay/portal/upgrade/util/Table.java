@@ -364,7 +364,7 @@ public class Table {
 			try {
 				value = GetterUtil.getLong(rs.getLong(name));
 			}
-			catch (SQLException e) {
+			catch (SQLException sqle) {
 				value = GetterUtil.getLong(rs.getString(name));
 			}
 		}

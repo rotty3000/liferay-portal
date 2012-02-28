@@ -88,16 +88,16 @@ public class Netlogon {
 					"Unable to authenticate user: " + smbe.getMessage());
 			}
 		}
-		catch (NoSuchAlgorithmException e) {
+		catch (NoSuchAlgorithmException nsae) {
 			throw new NtlmLogonException(
 				"Unable to authenticate due to invalid encryption algorithm",
-				e);
+				nsae);
 		}
-		catch (IOException e) {
+		catch (IOException ioe) {
 			throw new NtlmLogonException(
 				"Unable to authenticate due to communication failure with " +
 					"server",
-				e);
+				ioe);
 		}
 		finally {
 			try {

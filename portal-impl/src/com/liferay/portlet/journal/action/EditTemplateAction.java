@@ -148,7 +148,7 @@ public class EditTemplateAction extends PortletAction {
 				ActionUtil.getTemplate(renderRequest);
 			}
 		}
-		catch (NoSuchTemplateException nsse) {
+		catch (NoSuchTemplateException nste) {
 
 			// Let this slide because the user can manually input a template id
 			// for a new template that does not yet exist.

@@ -83,7 +83,7 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 			for (long groupId : groupIds) {
 				Group group = GroupLocalServiceUtil.getGroup(groupId);
 
-				scopesLeftList.add(new KeyValuePair(_getKey(group), _getName(group, locale)));
+				scopesLeftList.add(new KeyValuePair(_getKey(group, scopeGroupId), _getName(group, locale)));
 			}
 
 			// Right list
@@ -101,11 +101,11 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 					<%
 					for (Group group : groups) {
 						if (Arrays.binarySearch(groupIds, group.getGroupId()) < 0) {
-							scopesRightList.add(new KeyValuePair(_getKey(group), _getName(group, locale)));
+							scopesRightList.add(new KeyValuePair(_getKey(group, scopeGroupId), _getName(group, locale)));
 						}
 					%>
 
-						<aui:option label="<%= _getName(group, locale) %>" selected="<%= (groupIds.length == 1) && (group.getGroupId() == groupIds[0]) %>" value="<%= group.getGroupId() %>" />
+						<aui:option label="<%= _getName(group, locale) %>" selected="<%= (groupIds.length == 1) && (group.getGroupId() == groupIds[0]) %>" value="<%= _getKey(group, scopeGroupId) %>" />
 
 					<%
 					}
@@ -122,13 +122,13 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 
 			<div class="<%= defaultScope ? "aui-helper-hidden" : "" %>" id="<portlet:namespace />scopesBoxes">
 				<liferay-ui:input-move-boxes
-					leftTitle="selected"
-					rightTitle="available"
 					leftBoxName="currentScopeIds"
-					rightBoxName="availableScopeIds"
-					leftReorder="true"
 					leftList="<%= scopesLeftList %>"
+					leftReorder="true"
+					leftTitle="selected"
+					rightBoxName="availableScopeIds"
 					rightList="<%= scopesRightList %>"
+					rightTitle="available"
 				/>
 			</div>
 		</liferay-util:buffer>
@@ -159,7 +159,7 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 
 											<%
 											for (AssetRendererFactory curRendererFactory : AssetRendererFactoryRegistryUtil.getAssetRendererFactories()) {
-												if (curRendererFactory.isSelectable()) {
+												if (curRendererFactory.isSelectable() && (IndexerRegistryUtil.getIndexer(curRendererFactory.getClassName()) != null)) {
 													String taglibURL = "javascript:" + renderResponse.getNamespace() + "selectionForType('" + curRendererFactory.getClassName() + "')";
 												%>
 
@@ -377,13 +377,13 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 
 							<div class="<%= anyAssetType ? "aui-helper-hidden" : "" %>" id="<portlet:namespace />classNamesBoxes">
 								<liferay-ui:input-move-boxes
-									leftTitle="selected"
-									rightTitle="available"
 									leftBoxName="currentClassNameIds"
-									rightBoxName="availableClassNameIds"
-									leftReorder="true"
 									leftList="<%= typesLeftList %>"
+									leftReorder="true"
+									leftTitle="selected"
+									rightBoxName="availableClassNameIds"
 									rightList="<%= typesRightList %>"
+									rightTitle="available"
 								/>
 							</div>
 
@@ -450,13 +450,13 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 
 								<div class="<%= assetSelectedClassTypeIds.length > 1 ? "" : "aui-helper-hidden" %>" id="<portlet:namespace /><%= className %>Boxes">
 									<liferay-ui:input-move-boxes
-										leftTitle="selected"
-										rightTitle="available"
 										leftBoxName='<%= className + "currentClassTypeIds" %>'
-										rightBoxName='<%= className + "availableClassTypeIds" %>'
-										leftReorder="true"
 										leftList="<%= subTypesLeftList %>"
+										leftReorder="true"
+										leftTitle="selected"
+										rightBoxName='<%= className + "availableClassTypeIds" %>'
 										rightList="<%= subTypesRightList %>"
+										rightTitle="available"
 									/>
 								</div>
 							</div>
@@ -848,7 +848,7 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 </c:if>
 
 <%!
-private String _getKey(Group group) throws Exception {
+private String _getKey(Group group, long scopeGroupId) throws Exception {
 	String key = null;
 
 	if (group.isLayout()) {
@@ -856,7 +856,7 @@ private String _getKey(Group group) throws Exception {
 
 		key = "Layout" + StringPool.UNDERLINE + layout.getLayoutId();
 	}
-	else if (group.isLayoutPrototype()) {
+	else if (group.isLayoutPrototype() || (group.getGroupId() == scopeGroupId)) {
 		key = "Group" + StringPool.UNDERLINE + GroupConstants.DEFAULT;
 	}
 	else {

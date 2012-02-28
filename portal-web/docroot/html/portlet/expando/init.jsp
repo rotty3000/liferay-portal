@@ -16,8 +16,7 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portal.service.permission.PortalPermissionUtil" %><%@
-page import="com.liferay.portlet.expando.ColumnNameException" %><%@
+<%@ page import="com.liferay.portlet.expando.ColumnNameException" %><%@
 page import="com.liferay.portlet.expando.ColumnTypeException" %><%@
 page import="com.liferay.portlet.expando.DuplicateColumnNameException" %><%@
 page import="com.liferay.portlet.expando.NoSuchColumnException" %><%@

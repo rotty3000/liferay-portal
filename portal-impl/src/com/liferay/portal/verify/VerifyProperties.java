@@ -189,6 +189,14 @@ public class VerifyProperties extends VerifyProcess {
 	private static final String[] _OBSOLETE_PORTAL_KEYS = new String[] {
 		"auth.max.failures.limit", "cas.validate.url", "commons.pool.enabled",
 		"jbi.workflow.url", "lucene.analyzer",
+		"lucene.store.jdbc.auto.clean.up",
+		"lucene.store.jdbc.auto.clean.up.enabled",
+		"lucene.store.jdbc.auto.clean.up.interval",
+		"lucene.store.jdbc.dialect.db2", "lucene.store.jdbc.dialect.derby",
+		"lucene.store.jdbc.dialect.hsqldb", "lucene.store.jdbc.dialect.jtds",
+		"lucene.store.jdbc.dialect.microsoft",
+		"lucene.store.jdbc.dialect.mysql", "lucene.store.jdbc.dialect.oracle",
+		"lucene.store.jdbc.dialect.postgresql",
 		"message.boards.thread.locking.enabled",
 		"portal.security.manager.enable", "shard.available.names",
 		"webdav.storage.class", "webdav.storage.show.edit.url",
@@ -319,10 +327,6 @@ public class VerifyProperties extends VerifyProcess {
 				"edit_configuration.jsp",
 			"editor.wysiwyg.portal-web.docroot.html.portlet.shopping." +
 				"configuration.jsp"
-		},
-		new String[] {
-			"lucene.store.jdbc.auto.clean.up",
-			"lucene.store.jdbc.auto.clean.up.enabled"
 		},
 		new String[] {
 			"referer.url.domains.allowed", "redirect.url.domains.allowed"

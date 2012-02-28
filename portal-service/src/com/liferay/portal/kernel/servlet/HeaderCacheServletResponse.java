@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
@@ -31,6 +32,30 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 	public HeaderCacheServletResponse(HttpServletResponse response) {
 		super(response);
+	}
+
+	@Override
+	public void addCookie(Cookie cookie) {
+		List<Header> values = _headers.get("cookies");
+
+		if (values == null) {
+			values = new ArrayList<Header>();
+
+			_headers.put("cookies", values);
+		}
+
+		Header header = new Header();
+
+		header.setCookieValue(cookie);
+		header.setType(Header.COOKIE_TYPE);
+
+		if (values.contains(header)) {
+			return;
+		}
+
+		values.add(header);
+
+		super.addCookie(cookie);
 	}
 
 	@Override
@@ -45,8 +70,12 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.DATE_TYPE);
 		header.setDateValue(value);
+		header.setType(Header.DATE_TYPE);
+
+		if (values.contains(header)) {
+			return;
+		}
 
 		values.add(header);
 
@@ -65,8 +94,12 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.STRING_TYPE);
 		header.setStringValue(value);
+		header.setType(Header.STRING_TYPE);
+
+		if (values.contains(header)) {
+			return;
+		}
 
 		values.add(header);
 
@@ -89,8 +122,12 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.INTEGER_TYPE);
 		header.setIntValue(value);
+		header.setType(Header.INTEGER_TYPE);
+
+		if (values.contains(header)) {
+			return;
+		}
 
 		values.add(header);
 
@@ -172,8 +209,8 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.DATE_TYPE);
 		header.setDateValue(value);
+		header.setType(Header.DATE_TYPE);
 
 		values.add(header);
 
@@ -188,8 +225,8 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.STRING_TYPE);
 		header.setStringValue(value);
+		header.setType(Header.STRING_TYPE);
 
 		values.add(header);
 
@@ -208,8 +245,8 @@ public class HeaderCacheServletResponse extends HttpServletResponseWrapper {
 
 		Header header = new Header();
 
-		header.setType(Header.INTEGER_TYPE);
 		header.setIntValue(value);
+		header.setType(Header.INTEGER_TYPE);
 
 		values.add(header);
 

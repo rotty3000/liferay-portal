@@ -14,6 +14,7 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.xml.simple.Element;
 import com.liferay.util.xml.XMLFormatter;
 
 import java.io.IOException;
@@ -33,12 +34,13 @@ import javax.portlet.ValidatorException;
 public abstract class BasePreferencesImpl implements Serializable {
 
 	public BasePreferencesImpl(
-		long companyId, long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType, String xml,
 		Map<String, Preference> preferences) {
 
 		_companyId = companyId;
 		_ownerId = ownerId;
 		_ownerType = ownerType;
+		_originalXML = xml;
 		_originalPreferences = preferences;
 	}
 
@@ -151,7 +153,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 			throw new IllegalArgumentException();
 		}
 
-		value = getXmlSafeValue(value);
+		value = getXMLSafeValue(value);
 
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
 
@@ -178,7 +180,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 			throw new IllegalArgumentException();
 		}
 
-		values = getXmlSafeValues(values);
+		values = getXMLSafeValues(values);
 
 		Map<String, Preference> modifiedPreferences = getModifiedPreferences();
 
@@ -254,23 +256,19 @@ public abstract class BasePreferencesImpl implements Serializable {
 		return _originalPreferences;
 	}
 
-	protected Map<String, Preference> getPreferences() {
-		if (_modifiedPreferences == null) {
-			if (_originalPreferences ==
-					Collections.<String, Preference>emptyMap()) {
-
-				_originalPreferences =
-					new ConcurrentHashMap<String, Preference>();
-			}
-
-			return _originalPreferences;
-		}
-		else {
-			return _modifiedPreferences;
-		}
+	protected String getOriginalXML() {
+		return _originalXML;
 	}
 
-	protected String getXmlSafeValue(String value) {
+	protected Map<String, Preference> getPreferences() {
+		if (_modifiedPreferences != null) {
+			return _modifiedPreferences;
+		}
+
+		return _originalPreferences;
+	}
+
+	protected String getXMLSafeValue(String value) {
 		if (value == null) {
 			return _NULL_VALUE;
 		}
@@ -279,9 +277,9 @@ public abstract class BasePreferencesImpl implements Serializable {
 		}
 	}
 
-	protected String[] getXmlSafeValues(String[] values) {
+	protected String[] getXMLSafeValues(String[] values) {
 		if (values == null) {
-			return new String[] {getXmlSafeValue(null)};
+			return new String[] {getXMLSafeValue(null)};
 		}
 
 		String[] xmlSafeValues = new String[values.length];
@@ -290,11 +288,41 @@ public abstract class BasePreferencesImpl implements Serializable {
 
 		for (int i = 0; i < xmlSafeValues.length; i++) {
 			if (xmlSafeValues[i] == null) {
-				xmlSafeValues[i] = getXmlSafeValue(xmlSafeValues[i]);
+				xmlSafeValues[i] = getXMLSafeValue(xmlSafeValues[i]);
 			}
 		}
 
 		return xmlSafeValues;
+	}
+
+	protected String toXML() {
+		if ((_modifiedPreferences == null) && (_originalXML != null)) {
+			return _originalXML;
+		}
+
+		Map<String, Preference> preferences = getPreferences();
+
+		Element portletPreferencesElement = new Element(
+			"portlet-preferences", false);
+
+		for (Map.Entry<String, Preference> entry : preferences.entrySet()) {
+			Preference preference = entry.getValue();
+
+			Element preferenceElement = portletPreferencesElement.addElement(
+				"preference");
+
+			preferenceElement.addElement("name", preference.getName());
+
+			for (String value : preference.getValues()) {
+				preferenceElement.addElement("value", value);
+			}
+
+			if (preference.isReadOnly()) {
+				preferenceElement.addElement("read-only", Boolean.TRUE);
+			}
+		}
+
+		return portletPreferencesElement.toXMLString();
 	}
 
 	private static final String _NULL_VALUE = "NULL_VALUE";
@@ -302,6 +330,7 @@ public abstract class BasePreferencesImpl implements Serializable {
 	private long _companyId;
 	private Map<String, Preference> _modifiedPreferences;
 	private Map<String, Preference> _originalPreferences;
+	private String _originalXML;
 	private long _ownerId;
 	private int _ownerType;
 

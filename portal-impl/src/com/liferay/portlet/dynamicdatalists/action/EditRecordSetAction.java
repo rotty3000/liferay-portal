@@ -103,7 +103,7 @@ public class EditRecordSetAction extends PortletAction {
 				ActionUtil.getRecordSet(renderRequest);
 			}
 		}
-		catch (NoSuchRecordSetException nsee) {
+		catch (NoSuchRecordSetException nsrse) {
 
 			// Let this slide because the user can manually input an record set
 			// key for a new record set that does not yet exist

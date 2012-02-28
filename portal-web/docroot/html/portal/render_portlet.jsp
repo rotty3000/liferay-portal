@@ -313,7 +313,7 @@ if (portlet.isStatic()) {
 
 // Portlets in a layout linked to a layout prototype cannot be moved
 
-if (Validator.isNotNull(layout.getLayoutPrototypeUuid()) && layout.getLayoutPrototypeLinkEnabled()) {
+if (Validator.isNotNull(layout.getLayoutPrototypeUuid()) && layout.isLayoutPrototypeLinkEnabled()) {
 	showCloseIcon = false;
 	showConfigurationIcon = false;
 	showMoveIcon = false;
@@ -770,6 +770,8 @@ if (portlet.isActive() && portlet.isReady() && access && supportsMimeType) {
 		if (themeDisplay.isFacebook() || themeDisplay.isStateExclusive()) {
 			renderRequestImpl.setAttribute(WebKeys.STRING_SERVLET_RESPONSE, stringResponse);
 		}
+
+		renderResponseImpl.transferHeaders(stringResponse);
 	}
 	catch (UnavailableException ue) {
 		portletException = true;
@@ -917,10 +919,16 @@ if ((layout.isTypePanel() || layout.isTypeControlPanel()) && !portletDisplay.get
 				if (definition != null) {
 					templatePath = StrutsUtil.TEXT_HTML_DIR + definition.getPath();
 				}
+
+				String portletContent = "/portal/portlet_error.jsp";
+
+				if (!access && !portletException) {
+					portletContent = "/portal/portlet_access_denied.jsp";
+				}
 		%>
 
 				<tiles:insert template="<%= templatePath %>" flush="false">
-					<tiles:put name="portlet_content" value="/portal/portlet_error.jsp" />
+					<tiles:put name="portlet_content" value="<%= portletContent %>" />
 				</tiles:insert>
 
 		<%
@@ -1068,8 +1076,10 @@ if (themeDisplay.isStatePopUp()) {
 		<aui:script use="aui-base">
 			var dialog = Liferay.Util.getWindow();
 
+			dialog.detach('<portlet:namespace />hideRefreshDialog|*');
+
 			dialog.on(
-				'visibleChange',
+				'<portlet:namespace />hideRefreshDialog|visibleChange',
 				function(event) {
 					if (!event.newVal && event.src !== 'hideLink') {
 						var refreshWindow = dialog._refreshWindow || Liferay.Util.getTop();

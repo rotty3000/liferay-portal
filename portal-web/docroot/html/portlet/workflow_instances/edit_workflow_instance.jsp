@@ -49,13 +49,13 @@ PortletURL viewFullContentURL = renderResponse.createRenderURL();
 
 viewFullContentURL.setParameter("struts_action", "/workflow_tasks/view_content");
 viewFullContentURL.setParameter("redirect", currentURL);
-viewFullContentURL.setParameter("type", assetRendererFactory.getType());
 
 if (assetEntry != null) {
 	viewFullContentURL.setParameter("assetEntryId", String.valueOf(assetEntry.getEntryId()));
 	viewFullContentURL.setParameter("assetEntryVersionId", String.valueOf(classPK));
 }
 
+viewFullContentURL.setParameter("type", assetRendererFactory.getType());
 viewFullContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
 viewFullContentURL.setParameter("workflowAssetPreview", Boolean.TRUE.toString());
 

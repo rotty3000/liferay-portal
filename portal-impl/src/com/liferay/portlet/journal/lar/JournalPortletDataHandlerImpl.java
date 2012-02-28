@@ -349,7 +349,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 		if ((Validator.isNumber(articleId)) ||
 			(JournalArticleUtil.fetchByG_A_V(
 				portletDataContext.getScopeGroupId(), articleId,
-					JournalArticleConstants.VERSION_DEFAULT) != null)) {
+				JournalArticleConstants.VERSION_DEFAULT) != null)) {
 
 			autoArticleId = true;
 		}
@@ -716,15 +716,15 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					existingArticle.getVersion(), article.getTitleMap(),
 					article.getDescriptionMap(), article.getContent(),
 					article.getType(), parentStructureId, parentTemplateId,
-					existingArticle.getLayoutUuid(), displayDateMonth,
-					displayDateDay, displayDateYear, displayDateHour,
-					displayDateMinute, expirationDateMonth, expirationDateDay,
-					expirationDateYear, expirationDateHour,
-					expirationDateMinute, neverExpire, reviewDateMonth,
-					reviewDateDay, reviewDateYear, reviewDateHour,
-					reviewDateMinute, neverReview, article.isIndexable(),
-					article.isSmallImage(), article.getSmallImageURL(),
-					smallFile, images, articleURL, serviceContext);
+					article.getLayoutUuid(), displayDateMonth, displayDateDay,
+					displayDateYear, displayDateHour, displayDateMinute,
+					expirationDateMonth, expirationDateDay, expirationDateYear,
+					expirationDateHour, expirationDateMinute, neverExpire,
+					reviewDateMonth, reviewDateDay, reviewDateYear,
+					reviewDateHour, reviewDateMinute, neverReview,
+					article.isIndexable(), article.isSmallImage(),
+					article.getSmallImageURL(), smallFile, images, articleURL,
+					serviceContext);
 			}
 		}
 		else {
@@ -2065,11 +2065,11 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 					newLayoutId = layout.getLayoutId();
 				}
 			}
-			catch (SystemException e) {
+			catch (SystemException se) {
 				if (_log.isWarnEnabled()) {
 					_log.warn(
 						"Unable to get layout in group " +
-							portletDataContext.getScopeGroupId(), e);
+							portletDataContext.getScopeGroupId(), se);
 				}
 			}
 
@@ -2186,7 +2186,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		Element articlesElement = rootElement.addElement("articles");
 
-		if (portletDataContext.getBooleanParameter(_NAMESPACE, "articles")) {
+		if (portletDataContext.getBooleanParameter(_NAMESPACE, "web-content")) {
 			List<JournalArticle> articles = JournalArticleUtil.findByGroupId(
 				portletDataContext.getScopeGroupId(), QueryUtil.ALL_POS,
 				QueryUtil.ALL_POS, new ArticleIDComparator(true));
@@ -2244,7 +2244,7 @@ public class JournalPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFeed(portletDataContext, feedElement);
 		}
 
-		if (portletDataContext.getBooleanParameter(_NAMESPACE, "articles")) {
+		if (portletDataContext.getBooleanParameter(_NAMESPACE, "web-content")) {
 			Element articlesElement = rootElement.element("articles");
 
 			List<Element> articleElements = articlesElement.elements("article");

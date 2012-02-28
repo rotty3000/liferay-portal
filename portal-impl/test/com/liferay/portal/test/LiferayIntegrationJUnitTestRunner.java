@@ -41,6 +41,9 @@ public class LiferayIntegrationJUnitTestRunner
 		_testContextHandler = new TestContextHandler(clazz);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Override
 	protected Statement withAfters(
 		FrameworkMethod frameworkMethod, Object instance, Statement statement) {
@@ -53,6 +56,9 @@ public class LiferayIntegrationJUnitTestRunner
 			_testContextHandler);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Override
 	protected Statement withBefores(
 		FrameworkMethod frameworkMethod, Object instance, Statement statement) {

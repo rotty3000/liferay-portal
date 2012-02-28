@@ -528,7 +528,7 @@ public class DLFileEntryLocalServiceImpl
 
 				fieldsMap.put(ddmStructure.getStructureKey(), fields);
 			}
-			catch (NoSuchFileEntryMetadataException nsfme) {
+			catch (NoSuchFileEntryMetadataException nsfeme) {
 			}
 		}
 
@@ -1093,7 +1093,7 @@ public class DLFileEntryLocalServiceImpl
 			if (dlFileVersion.getVersion().equals(
 					DLFileEntryConstants.VERSION_DEFAULT)) {
 
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					DLFileEntry.class);
 
 				indexer.delete(dlFileEntry);
@@ -1358,7 +1358,8 @@ public class DLFileEntryLocalServiceImpl
 
 		// Index
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(DLFileEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			DLFileEntry.class);
 
 		indexer.delete(dlFileEntry);
 	}
@@ -1494,7 +1495,8 @@ public class DLFileEntryLocalServiceImpl
 	}
 
 	protected void reindex(DLFileEntry dlFileEntry) throws SearchException {
-		Indexer indexer = IndexerRegistryUtil.getIndexer(DLFileEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			DLFileEntry.class);
 
 		indexer.reindex(dlFileEntry);
 	}

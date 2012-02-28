@@ -16,6 +16,7 @@ package com.liferay.portal.tools.samplesqlbuilder;
 
 import com.liferay.counter.model.Counter;
 import com.liferay.counter.model.impl.CounterModelImpl;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.KeyValuePair;
@@ -36,6 +37,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.Permission;
+import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceCode;
 import com.liferay.portal.model.ResourceConstants;
@@ -49,12 +51,14 @@ import com.liferay.portal.model.impl.ContactImpl;
 import com.liferay.portal.model.impl.GroupImpl;
 import com.liferay.portal.model.impl.LayoutImpl;
 import com.liferay.portal.model.impl.PermissionImpl;
+import com.liferay.portal.model.impl.PortletPreferencesImpl;
 import com.liferay.portal.model.impl.ResourceCodeImpl;
 import com.liferay.portal.model.impl.ResourceImpl;
 import com.liferay.portal.model.impl.ResourcePermissionImpl;
 import com.liferay.portal.model.impl.RoleImpl;
 import com.liferay.portal.model.impl.UserImpl;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.impl.AssetEntryImpl;
 import com.liferay.portlet.blogs.model.BlogsEntry;
@@ -74,6 +78,12 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFileRankImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileVersionImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.documentlibrary.model.impl.DLSyncImpl;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
+import com.liferay.portlet.dynamicdatalists.model.DDLRecordVersion;
+import com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordImpl;
+import com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordSetImpl;
+import com.liferay.portlet.dynamicdatalists.model.impl.DDLRecordVersionImpl;
 import com.liferay.portlet.dynamicdatamapping.model.DDMContent;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStorageLink;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -82,6 +92,10 @@ import com.liferay.portlet.dynamicdatamapping.model.impl.DDMContentImpl;
 import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStorageLinkImpl;
 import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStructureImpl;
 import com.liferay.portlet.dynamicdatamapping.model.impl.DDMStructureLinkImpl;
+import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.model.JournalArticleResource;
+import com.liferay.portlet.journal.model.impl.JournalArticleImpl;
+import com.liferay.portlet.journal.model.impl.JournalArticleResourceImpl;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBDiscussion;
@@ -117,10 +131,10 @@ import java.util.Map;
 public class DataFactory {
 
 	public DataFactory(
-		String baseDir, int maxGroupsCount, int maxUserToGroupCount,
-		SimpleCounter counter, SimpleCounter dlDateCounter,
-		SimpleCounter permissionCounter, SimpleCounter resourceCounter,
-		SimpleCounter resourceCodeCounter,
+		String baseDir, int maxGroupsCount, int maxJournalArticleSize,
+		int maxUserToGroupCount, SimpleCounter counter,
+		SimpleCounter dlDateCounter, SimpleCounter permissionCounter,
+		SimpleCounter resourceCounter, SimpleCounter resourceCodeCounter,
 		SimpleCounter resourcePermissionCounter,
 		SimpleCounter socialActivityCounter) {
 
@@ -141,6 +155,7 @@ public class DataFactory {
 			initCompany();
 			initDefaultUser();
 			initGroups();
+			initJournalArticle(maxJournalArticleSize);
 			initResourceCodes();
 			initRoles();
 			initUserNames();
@@ -201,6 +216,48 @@ public class DataFactory {
 		contact.setLastName(lastName);
 
 		return contact;
+	}
+
+	public DDLRecord addDDLRecord(
+		long groupId, long companyId, long userId, long ddlRecordSetId) {
+
+		DDLRecord ddlRecord = new DDLRecordImpl();
+
+		ddlRecord.setRecordId(_counter.get());
+		ddlRecord.setGroupId(groupId);
+		ddlRecord.setCompanyId(companyId);
+		ddlRecord.setUserId(userId);
+		ddlRecord.setCreateDate(newCreateDate());
+		ddlRecord.setRecordSetId(ddlRecordSetId);
+
+		return ddlRecord;
+	}
+
+	public DDLRecordSet addDDLRecordSet(
+		long groupId, long companyId, long userId, long ddmStructureId) {
+
+		DDLRecordSet ddlRecordSet = new DDLRecordSetImpl();
+
+		ddlRecordSet.setRecordSetId(_counter.get());
+		ddlRecordSet.setGroupId(groupId);
+		ddlRecordSet.setCompanyId(companyId);
+		ddlRecordSet.setUserId(userId);
+		ddlRecordSet.setDDMStructureId(ddmStructureId);
+
+		return ddlRecordSet;
+	}
+
+	public DDLRecordVersion addDDLRecordVersion(DDLRecord ddlRecord) {
+		DDLRecordVersion ddlRecordVersion = new DDLRecordVersionImpl();
+
+		ddlRecordVersion.setRecordVersionId(_counter.get());
+		ddlRecordVersion.setGroupId(ddlRecord.getGroupId());
+		ddlRecordVersion.setCompanyId(ddlRecord.getCompanyId());
+		ddlRecordVersion.setUserId(ddlRecord.getUserId());
+		ddlRecordVersion.setRecordSetId(ddlRecord.getRecordSetId());
+		ddlRecordVersion.setRecordId(ddlRecord.getRecordId());
+
+		return ddlRecordVersion;
 	}
 
 	public DDMContent addDDMContent(long groupId, long companyId, long userId) {
@@ -385,6 +442,32 @@ public class DataFactory {
 		return group;
 	}
 
+	public JournalArticle addJournalArticle(
+		long resourcePrimKey, long groupId, long companyId, String articleId) {
+
+		JournalArticle journalArticle = new JournalArticleImpl();
+
+		journalArticle.setId(_counter.get());
+		journalArticle.setResourcePrimKey(resourcePrimKey);
+		journalArticle.setGroupId(groupId);
+		journalArticle.setCompanyId(companyId);
+		journalArticle.setArticleId(articleId);
+		journalArticle.setContent(_journalArticleContent);
+
+		return journalArticle;
+	}
+
+	public JournalArticleResource addJournalArticleResource(long groupId) {
+		JournalArticleResource journalArticleResource =
+			new JournalArticleResourceImpl();
+
+		journalArticleResource.setResourcePrimKey(_counter.get());
+		journalArticleResource.setGroupId(groupId);
+		journalArticleResource.setArticleId(String.valueOf(_counter.get()));
+
+		return journalArticleResource;
+	}
+
 	public Layout addLayout(
 		int layoutId, String name, String friendlyURL, String column1,
 		String column2) {
@@ -513,6 +596,21 @@ public class DataFactory {
 		}
 
 		return permissions;
+	}
+
+	public PortletPreferences addPortletPreferences(
+		long ownerId, long plid, String portletId, String preferences) {
+
+		PortletPreferences portletPreferences = new PortletPreferencesImpl();
+
+		portletPreferences.setPortletPreferencesId(_counter.get());
+		portletPreferences.setOwnerId(ownerId);
+		portletPreferences.setOwnerType(PortletKeys.PREFS_OWNER_TYPE_LAYOUT);
+		portletPreferences.setPlid(plid);
+		portletPreferences.setPortletId(portletId);
+		portletPreferences.setPreferences(preferences);
+
+		return portletPreferences;
 	}
 
 	public Resource addResource(String name, String primKey) {
@@ -729,6 +827,10 @@ public class DataFactory {
 		return _simpleDateFormat.format(date);
 	}
 
+	public ClassName getDDLRecordSetClassName() {
+		return _ddlRecordSetClassName;
+	}
+
 	public ClassName getDDMContentClassName() {
 		return _ddmContentClassName;
 	}
@@ -755,6 +857,10 @@ public class DataFactory {
 
 	public Role getGuestRole() {
 		return _guestRole;
+	}
+
+	public ClassName getJournalArticleClassName() {
+		return _journalArticleClassName;
 	}
 
 	public ClassName getMBMessageClassName() {
@@ -837,6 +943,9 @@ public class DataFactory {
 			if (model.equals(BlogsEntry.class.getName())) {
 				_blogsEntryClassName = className;
 			}
+			else if (model.equals(DDLRecordSet.class.getName())) {
+				_ddlRecordSetClassName = className;
+			}
 			else if (model.equals(DDMContent.class.getName())) {
 				_ddmContentClassName = className;
 			}
@@ -845,6 +954,9 @@ public class DataFactory {
 			}
 			else if (model.equals(Group.class.getName())) {
 				_groupClassName = className;
+			}
+			else if (model.equals(JournalArticle.class.getName())) {
+				_journalArticleClassName = className;
 			}
 			else if (model.equals(MBMessage.class.getName())) {
 				_mbMessageClassName = className;
@@ -957,6 +1069,20 @@ public class DataFactory {
 		_groups.add(group);
 
 		_guestGroup = group;
+	}
+
+	public void initJournalArticle(int maxJournalArticleSize) throws Exception {
+		if (maxJournalArticleSize <= 0) {
+			maxJournalArticleSize = 1;
+		}
+
+		char[] chars = new char[maxJournalArticleSize];
+
+		for (int i = 0; i < maxJournalArticleSize; i++) {
+			chars[i] = (char)(CharPool.LOWER_CASE_A + (i % 26));
+		}
+
+		_journalArticleContent = new String(chars);
 	}
 
 	public void initResourceCodes() throws Exception {
@@ -1216,6 +1342,7 @@ public class DataFactory {
 	private Company _company;
 	private SimpleCounter _counter;
 	private List<CounterModelImpl> _counters;
+	private ClassName _ddlRecordSetClassName;
 	private ClassName _ddmContentClassName;
 	private User _defaultUser;
 	private SimpleCounter _dlDateCounter;
@@ -1226,6 +1353,8 @@ public class DataFactory {
 	private Role _guestRole;
 	private Map<String, Long> _individualResourceCodeIds;
 	private Map<Long, String> _individualResourceNames;
+	private ClassName _journalArticleClassName;
+	private String _journalArticleContent;
 	private int _maxGroupsCount;
 	private int _maxUserToGroupCount;
 	private ClassName _mbMessageClassName;

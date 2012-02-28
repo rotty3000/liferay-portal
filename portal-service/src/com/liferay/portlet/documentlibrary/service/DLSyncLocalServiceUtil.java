@@ -259,6 +259,10 @@ public class DLSyncLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* @deprecated {@link #addSync(long, String, long, long, long, String,
+	String, String, String)}
+	*/
 	public static com.liferay.portlet.documentlibrary.model.DLSync addSync(
 		long fileId, java.lang.String fileUuid, long companyId,
 		long repositoryId, long parentFolderId, java.lang.String name,
@@ -269,6 +273,21 @@ public class DLSyncLocalServiceUtil {
 			parentFolderId, name, type, version);
 	}
 
+	public static com.liferay.portlet.documentlibrary.model.DLSync addSync(
+		long fileId, java.lang.String fileUuid, long companyId,
+		long repositoryId, long parentFolderId, java.lang.String name,
+		java.lang.String description, java.lang.String type,
+		java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addSync(fileId, fileUuid, companyId, repositoryId,
+			parentFolderId, name, description, type, version);
+	}
+
+	/**
+	* @deprecated {@link #updateSync(long, long, String, String, String,
+	String)}
+	*/
 	public static com.liferay.portlet.documentlibrary.model.DLSync updateSync(
 		long fileId, long parentFolderId, java.lang.String name,
 		java.lang.String event, java.lang.String version)
@@ -276,6 +295,17 @@ public class DLSyncLocalServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .updateSync(fileId, parentFolderId, name, event, version);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLSync updateSync(
+		long fileId, long parentFolderId, java.lang.String name,
+		java.lang.String description, java.lang.String event,
+		java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateSync(fileId, parentFolderId, name, description,
+			event, version);
 	}
 
 	public static DLSyncLocalService getService() {

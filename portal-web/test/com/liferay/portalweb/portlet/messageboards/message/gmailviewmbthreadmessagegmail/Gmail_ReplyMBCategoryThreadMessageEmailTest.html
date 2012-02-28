@@ -139,14 +139,24 @@
 	<td>Sign In</td>
 </tr>
 <tr>
-	<td>assertText</td>
+	<td>assertPartialText</td>
 	<td>//td[5]/div/span</td>
-	<td>liferay.qa.server.trunk</td>
+	<td>liferay.qa.server</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//td[6]/div/div/div/span</td>
+	<td>MB Message Subject</td>
+</tr>
+<tr>
+	<td>assertPartialText</td>
+	<td>//td[6]/div/div/div/span[2]</td>
+	<td>MB Message Body</td>
 </tr>
 <tr>
 	<td>clickAt</td>
-	<td>//td[5]/div/span</td>
-	<td>liferay.qa.server.trunk</td>
+	<td>//td[6]/div/div/div/span[2]</td>
+	<td>MB Message Body</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -175,17 +185,17 @@
 </tr>
 <tr>
 	<td>waitForVisible</td>
-	<td>//td[2]/div/div/span[1]</td>
+	<td>//td[4]/div/img</td>
 	<td>Reply</td>
 </tr>
 <tr>
-	<td>assertText</td>
-	<td>//td[2]/div/div/span[1]</td>
+	<td>assertVisible</td>
+	<td>//td[4]/div/img</td>
 	<td>Reply</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//td[2]/div/div/span[1]</td>
+	<td>//td[4]/div/img</td>
 	<td>Reply</td>
 </tr>
 <tr>

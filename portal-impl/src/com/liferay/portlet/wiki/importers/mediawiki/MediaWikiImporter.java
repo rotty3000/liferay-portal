@@ -113,11 +113,11 @@ public class MediaWikiImporter implements WikiImporter {
 		catch (DocumentException de) {
 			throw new ImportFilesException("Invalid XML file provided");
 		}
-		catch (IOException de) {
+		catch (IOException ioe) {
 			throw new ImportFilesException("Error reading the files provided");
 		}
-		catch (PortalException e) {
-			throw e;
+		catch (PortalException pe) {
+			throw pe;
 		}
 		catch (Exception e) {
 			throw new PortalException(e);

@@ -165,7 +165,7 @@ public class TaskQueueTest extends TestCase {
 
 			fail();
 		}
-		catch (IllegalArgumentException npe) {
+		catch (IllegalArgumentException iae) {
 		}
 
 		taskQueue = new TaskQueue<Object>(10);

@@ -355,10 +355,9 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 					}
 				}
 
-				serviceContext.setUuid(fileEntry.getUuid());
-
 				serviceContext.setAttribute(
 					"fileVersionUuid", fileVersion.getUuid());
+				serviceContext.setUuid(fileEntry.getUuid());
 
 				importedFileEntry = DLAppLocalServiceUtil.addFileEntry(
 					userId, portletDataContext.getScopeGroupId(), folderId,
@@ -509,8 +508,7 @@ public class DLPortletDataHandlerImpl extends BasePortletDataHandler {
 	public PortletDataHandlerControl[] getExportMetadataControls() {
 		return new PortletDataHandlerControl[] {
 			new PortletDataHandlerBoolean(
-				_NAMESPACE, "folders-and-documents", true,
-				_metadataControls)
+				_NAMESPACE, "folders-and-documents", true, _metadataControls)
 		};
 	}
 

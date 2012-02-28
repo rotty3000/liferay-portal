@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.CustomizedPages;
 import com.liferay.portal.model.Layout;
-import com.liferay.portal.model.impl.LayoutTypePortletImpl;
+import com.liferay.portlet.sites.util.SitesUtil;
 
 import java.io.Writer;
 
@@ -47,8 +47,15 @@ public class CustomizationSettingsProcessor implements ColumnProcessor {
 
 		_layoutTypeSettings = selLayout.getTypeSettingsProperties();
 
-		_templateLayout = LayoutTypePortletImpl.getSourcePrototypeLayout(
-			selLayout);
+		_customizationEnabled = true;
+
+		if (!SitesUtil.isLayoutUpdateable(selLayout)) {
+			_customizationEnabled = false;
+		}
+
+		if (selLayout.isLayoutPrototypeLinkActive()) {
+			_customizationEnabled = false;
+		}
 	}
 
 	public String processColumn(String columnId) throws Exception {
@@ -60,16 +67,9 @@ public class CustomizationSettingsProcessor implements ColumnProcessor {
 
 		String customizableKey = CustomizedPages.namespaceColumnId(columnId);
 
-		boolean templateCustomizable = true;
-
-		if (_templateLayout != null) {
-			templateCustomizable = GetterUtil.getBoolean(
-				_templateLayout.getTypeSettingsProperty(customizableKey));
-		}
-
 		boolean customizable = false;
 
-		if (templateCustomizable) {
+		if (_customizationEnabled) {
 			customizable = GetterUtil.getBoolean(
 				_layoutTypeSettings.getProperty(
 					customizableKey, String.valueOf(false)));
@@ -86,7 +86,7 @@ public class CustomizationSettingsProcessor implements ColumnProcessor {
 		Object inputTag = _inputTagClass.newInstance();
 
 		BeanPropertiesUtil.setProperty(
-			inputTag, "disabled", !templateCustomizable);
+			inputTag, "disabled", !_customizationEnabled);
 		BeanPropertiesUtil.setProperty(inputTag, "label", "customizable");
 		BeanPropertiesUtil.setProperty(
 			inputTag, "name",
@@ -133,17 +133,17 @@ public class CustomizationSettingsProcessor implements ColumnProcessor {
 		"com.liferay.taglib.aui.InputTag", "doStartTag");
 	private static Class<?> _inputTagClass;
 
+	private boolean _customizationEnabled;
 	private UnicodeProperties _layoutTypeSettings;
 	private PageContext _pageContext;
 	private HttpServletRequest _request;
-	private Layout _templateLayout;
 	private Writer _writer;
 
 	static {
 		try {
 			_inputTagClass = Class.forName("com.liferay.taglib.aui.InputTag");
 		}
-		catch (ClassNotFoundException e) {
+		catch (ClassNotFoundException cnfe) {
 		}
 	}
 

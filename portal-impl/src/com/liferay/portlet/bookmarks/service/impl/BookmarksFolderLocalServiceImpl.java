@@ -296,7 +296,7 @@ public class BookmarksFolderLocalServiceImpl
 
 			bookmarksEntryPersistence.update(entry, false);
 
-			Indexer indexer = IndexerRegistryUtil.getIndexer(
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 				BookmarksEntry.class);
 
 			indexer.reindex(entry);

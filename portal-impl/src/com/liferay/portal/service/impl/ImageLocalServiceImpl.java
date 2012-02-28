@@ -65,9 +65,9 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 
 			_defaultSpacer = getImage(is);
 		}
-		catch (Exception ioe) {
+		catch (Exception e) {
 			_log.error(
-				"Unable to configure the default spacer: " + ioe.getMessage());
+				"Unable to configure the default spacer: " + e.getMessage());
 		}
 
 		try {
@@ -80,10 +80,10 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 
 			_defaultCompanyLogo = getImage(is);
 		}
-		catch (Exception ioe) {
+		catch (Exception e) {
 			_log.error(
 				"Unable to configure the default company logo: " +
-					ioe.getMessage());
+					e.getMessage());
 		}
 
 		try {
@@ -96,10 +96,10 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 
 			_defaultOrganizationLogo = getImage(is);
 		}
-		catch (Exception ioe) {
+		catch (Exception e) {
 			_log.error(
 				"Unable to configure the default organization logo: " +
-					ioe.getMessage());
+					e.getMessage());
 		}
 
 		try {
@@ -112,10 +112,10 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 
 			_defaultUserFemalePortrait = getImage(is);
 		}
-		catch (Exception ioe) {
+		catch (Exception e) {
 			_log.error(
 				"Unable to configure the default user female portrait: " +
-					ioe.getMessage());
+					e.getMessage());
 		}
 
 		try {
@@ -128,10 +128,10 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 
 			_defaultUserMalePortrait = getImage(is);
 		}
-		catch (Exception ioe) {
+		catch (Exception e) {
 			_log.error(
 				"Unable to configure the default user male portrait: " +
-					ioe.getMessage());
+					e.getMessage());
 		}
 	}
 

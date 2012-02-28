@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.xml.simple.Element;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -74,15 +73,12 @@ public class PortletPreferencesFactoryImpl
 	public PortletPreferences fromDefaultXML(String xml)
 		throws SystemException {
 
-		PortletPreferencesImpl portletPreferencesImpl =
-			new PortletPreferencesImpl();
-
 		Map<String, Preference> preferencesMap =
-			portletPreferencesImpl.getPreferences();
+			new HashMap<String, Preference>();
 
 		populateMap(xml, preferencesMap);
 
-		return portletPreferencesImpl;
+		return new PortletPreferencesImpl(xml, preferencesMap);
 	}
 
 	public PortletPreferencesImpl fromXML(
@@ -97,7 +93,8 @@ public class PortletPreferencesFactoryImpl
 			populateMap(xml, preferencesMap);
 
 			return new PortletPreferencesImpl(
-				companyId, ownerId, ownerType, plid, portletId, preferencesMap);
+				companyId, ownerId, ownerType, plid, portletId, xml,
+				preferencesMap);
 		}
 		catch (SystemException se) {
 			throw se;
@@ -115,7 +112,7 @@ public class PortletPreferencesFactoryImpl
 			populateMap(xml, preferencesMap);
 
 			return new PortalPreferencesImpl(
-				companyId, ownerId, ownerType, preferencesMap, false);
+				companyId, ownerId, ownerType, xml, preferencesMap, false);
 		}
 		catch (SystemException se) {
 			throw se;
@@ -531,20 +528,14 @@ public class PortletPreferencesFactoryImpl
 		PortalPreferencesImpl portalPreferencesImpl =
 			(PortalPreferencesImpl)portalPreferences;
 
-		Map<String, Preference> preferencesMap =
-			portalPreferencesImpl.getPreferences();
-
-		return toXML(preferencesMap);
+		return portalPreferencesImpl.toXML();
 	}
 
 	public String toXML(PortletPreferences portletPreferences) {
 		PortletPreferencesImpl portletPreferencesImpl =
 			(PortletPreferencesImpl)portletPreferences;
 
-		Map<String, Preference> preferencesMap =
-			portletPreferencesImpl.getPreferences();
-
-		return toXML(preferencesMap);
+		return portletPreferencesImpl.toXML();
 	}
 
 	protected void populateMap(
@@ -636,30 +627,6 @@ public class PortletPreferencesFactoryImpl
 
 		return new Preference(
 			name, values.toArray(new String[values.size()]), readOnly);
-	}
-
-	protected String toXML(Map<String, Preference> preferencesMap) {
-		Element portletPreferencesElement = new Element(
-			"portlet-preferences", false);
-
-		for (Map.Entry<String, Preference> entry : preferencesMap.entrySet()) {
-			Preference preference = entry.getValue();
-
-			Element preferenceElement = portletPreferencesElement.addElement(
-				"preference");
-
-			preferenceElement.addElement("name", preference.getName());
-
-			for (String value : preference.getValues()) {
-				preferenceElement.addElement("value", value);
-			}
-
-			if (preference.isReadOnly()) {
-				preferenceElement.addElement("read-only", Boolean.TRUE);
-			}
-		}
-
-		return portletPreferencesElement.toXMLString();
 	}
 
 }

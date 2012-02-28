@@ -119,10 +119,23 @@ public class UsersAdminUtil {
 		return getUsersAdmin().getAddresses(actionRequest);
 	}
 
+	public static List<Address> getAddresses(
+		ActionRequest actionRequest, List<Address> defaultAddresses) {
+
+		return getUsersAdmin().getAddresses(actionRequest, defaultAddresses);
+	}
+
 	public static List<EmailAddress> getEmailAddresses(
 		ActionRequest actionRequest) {
 
 		return getUsersAdmin().getEmailAddresses(actionRequest);
+	}
+
+	public static List<EmailAddress> getEmailAddresses(
+		ActionRequest actionRequest, List<EmailAddress> defaultEmailAddresses) {
+
+		return getUsersAdmin().getEmailAddresses(
+			actionRequest, defaultEmailAddresses);
 	}
 
 	public static OrderByComparator getGroupOrderByComparator(
@@ -155,6 +168,12 @@ public class UsersAdminUtil {
 
 	public static List<Phone> getPhones(ActionRequest actionRequest) {
 		return getUsersAdmin().getPhones(actionRequest);
+	}
+
+	public static List<Phone> getPhones(
+		ActionRequest actionRequest, List<Phone> defaultPhones) {
+
+		return getUsersAdmin().getPhones(actionRequest, defaultPhones);
 	}
 
 	public static OrderByComparator getRoleOrderByComparator(
@@ -197,6 +216,12 @@ public class UsersAdminUtil {
 
 	public static List<Website> getWebsites(ActionRequest actionRequest) {
 		return getUsersAdmin().getWebsites(actionRequest);
+	}
+
+	public static List<Website> getWebsites(
+		ActionRequest actionRequest, List<Website> defaultWebsites) {
+
+		return getUsersAdmin().getWebsites(actionRequest, defaultWebsites);
 	}
 
 	public static boolean hasUpdateEmailAddress(

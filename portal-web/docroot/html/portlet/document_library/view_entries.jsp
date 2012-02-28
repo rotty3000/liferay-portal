@@ -209,13 +209,26 @@ request.setAttribute("view_entries.jsp-total", String.valueOf(total));
 			<liferay-ui:message key="there-are-no-documents-or-media-files-in-this-folder" />
 		</div>
 	</c:when>
-	<c:when test="<%= System.currentTimeMillis() > 1328126400000L %>">
-		<div class="portlet-msg-info sync-notification">
-			<a href="http://www.liferay.com/products/liferay-sync" target="_blank">
-				<liferay-ui:message key="access-these-files-offline-using-liferay-sync" />
-			</a>
+	<c:otherwise>
+
+		<%
+		boolean showSyncMessage = GetterUtil.getBoolean(SessionClicks.get(request, liferayPortletResponse.getNamespace() + "show-sync-message", "true"));
+
+		String cssClass = StringPool.BLANK;
+
+		if (!showSyncMessage || !PropsValues.DL_SHOW_LIFERAY_SYNC_MESSAGE) {
+			cssClass = "aui-helper-hidden";
+		}
+		%>
+
+		<div class="<%= cssClass %>" id="<portlet:namespace />syncNotification">
+			<div class="lfr-message-info sync-notification" id="<portlet:namespace />syncNotificationContent">
+				<a href="http://www.liferay.com/products/liferay-sync" target="_blank">
+					<liferay-ui:message key="access-these-files-offline-using-liferay-sync" />
+				</a>
+			</div>
 		</div>
-	</c:when>
+	</c:otherwise>
 </c:choose>
 
 <%

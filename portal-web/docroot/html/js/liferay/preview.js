@@ -443,6 +443,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-toolbar']
+		requires: ['aui-base', 'aui-overlay-mask', 'aui-toolbar']
 	}
 );

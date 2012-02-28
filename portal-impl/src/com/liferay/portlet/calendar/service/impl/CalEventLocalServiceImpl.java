@@ -248,7 +248,8 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(CalEvent.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			CalEvent.class);
 
 		indexer.reindex(event);
 
@@ -394,7 +395,8 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(CalEvent.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			CalEvent.class);
 
 		indexer.delete(event);
 
@@ -824,7 +826,8 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(CalEvent.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			CalEvent.class);
 
 		indexer.reindex(event);
 
@@ -1191,6 +1194,10 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 			PortletPreferences preferences =
 				portletPreferencesLocalService.getPreferences(
 					event.getCompanyId(), ownerId, ownerType, plid, portletId);
+
+			if (!CalUtil.getEmailEventReminderEnabled(preferences)) {
+				return;
+			}
 
 			Company company = companyPersistence.findByPrimaryKey(
 				user.getCompanyId());

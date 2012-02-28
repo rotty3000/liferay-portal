@@ -82,6 +82,9 @@ import com.liferay.portlet.admin.util.AdminUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.announcements.model.AnnouncementsEntryConstants;
 import com.liferay.portlet.announcements.model.impl.AnnouncementsDeliveryImpl;
+import com.liferay.portlet.announcements.service.AnnouncementsDeliveryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
+import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
@@ -489,6 +492,21 @@ public class EditUserAction extends PortletAction {
 		return announcementsDeliveries;
 	}
 
+	protected List<AnnouncementsDelivery> getAnnouncementsDeliveries(
+			ActionRequest actionRequest, User user)
+		throws Exception {
+
+		if (actionRequest.getParameter(
+				"announcementsType" + AnnouncementsEntryConstants.TYPES[0] +
+					"Email") == null) {
+
+			return AnnouncementsDeliveryLocalServiceUtil.getUserDeliveries(
+				user.getUserId());
+		}
+
+		return getAnnouncementsDeliveries(actionRequest);
+	}
+
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {
 		String value = portletRequest.getParameter(name);
 
@@ -615,16 +633,34 @@ public class EditUserAction extends PortletAction {
 
 		long[] userGroupIds = getLongArray(
 			actionRequest, "userGroupsSearchContainerPrimaryKeys");
-		List<Address> addresses = UsersAdminUtil.getAddresses(actionRequest);
+		List<Address> addresses = UsersAdminUtil.getAddresses(
+			actionRequest, user.getAddresses());
 		List<EmailAddress> emailAddresses = UsersAdminUtil.getEmailAddresses(
-			actionRequest);
-		List<Phone> phones = UsersAdminUtil.getPhones(actionRequest);
-		List<Website> websites = UsersAdminUtil.getWebsites(actionRequest);
+			actionRequest, user.getEmailAddresses());
+		List<Phone> phones = UsersAdminUtil.getPhones(
+			actionRequest, user.getPhones());
+		List<Website> websites = UsersAdminUtil.getWebsites(
+			actionRequest, user.getWebsites());
 		List<AnnouncementsDelivery> announcementsDeliveries =
-			getAnnouncementsDeliveries(actionRequest);
+			getAnnouncementsDeliveries(actionRequest, user);
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			User.class.getName(), actionRequest);
+
+		if (actionRequest.getParameter("assetCategoryNames") == null ) {
+			long[] assetCategoryIds =
+				AssetCategoryLocalServiceUtil.getCategoryIds(
+					User.class.getName(), user.getUserId());
+
+			serviceContext.setAssetCategoryIds(assetCategoryIds);
+		}
+
+		if (actionRequest.getParameter("assetTagNames") == null ) {
+			String[] assetTagNames = AssetTagLocalServiceUtil.getTagNames(
+				User.class.getName(), user.getUserId());
+
+			serviceContext.setAssetTagNames(assetTagNames);
+		}
 
 		user = UserServiceUtil.updateUser(
 			user.getUserId(), oldPassword, newPassword1, newPassword2,

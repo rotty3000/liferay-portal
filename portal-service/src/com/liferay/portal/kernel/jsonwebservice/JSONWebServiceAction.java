@@ -19,6 +19,8 @@ package com.liferay.portal.kernel.jsonwebservice;
  */
 public interface JSONWebServiceAction {
 
+	public JSONWebServiceActionMapping getJSONWebServiceActionMapping();
+
 	public Object invoke() throws Exception;
 
 }

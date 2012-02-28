@@ -657,7 +657,8 @@ public class LayoutImporter {
 				((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) ||
 				 (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6))) {
 
-				Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+					User.class);
 
 				indexer.reindex(userId);
 			}
@@ -974,7 +975,7 @@ public class LayoutImporter {
 				importedLayout.setLayoutPrototypeUuid(
 					layout.getLayoutPrototypeUuid());
 				importedLayout.setLayoutPrototypeLinkEnabled(
-					layout.getLayoutPrototypeLinkEnabled());
+					layout.isLayoutPrototypeLinkEnabled());
 				importedLayout.setSourcePrototypeLayoutUuid(
 					layout.getSourcePrototypeLayoutUuid());
 			}

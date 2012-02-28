@@ -17,10 +17,13 @@ package com.liferay.portal.jsonwebservice;
 import com.liferay.portal.action.JSONServiceAction;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.util.PropsValues;
+
+import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +73,15 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			JSONWebServiceAction jsonWebServiceAction =
 				JSONWebServiceActionsManagerUtil.getJSONWebServiceAction(
 					request);
+
+			JSONWebServiceActionMapping jsonWebServiceActionMapping =
+				jsonWebServiceAction.getJSONWebServiceActionMapping();
+
+			Method actionMethod = jsonWebServiceActionMapping.getActionMethod();
+
+			checkMethodPublicAccess(
+				request, actionMethod.getName(),
+				PropsValues.JSONWS_WEB_SERVICE_PUBLIC_METHODS);
 
 			Object returnObj = jsonWebServiceAction.invoke();
 

@@ -29,7 +29,7 @@ public class CounterLocalServiceTest extends BaseServiceTestCase {
 		try {
 			PortalServiceUtil.testCounterIncrement_Rollback();
 		}
-		catch (SystemException e) {
+		catch (SystemException se) {
 		}
 
 		assertTrue(nextLong() > counterValue);

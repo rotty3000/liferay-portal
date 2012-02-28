@@ -34,8 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import jodd.util.KeyValue;
 
 /**
- * <a href="ActionParameters.java.html"><b><i>View Source</i></b></a>
- *
  * @author Igor Spasic
  */
 public class JSONWebServiceActionParameters {
@@ -190,7 +188,7 @@ public class JSONWebServiceActionParameters {
 			Object value = null;
 
 			if ((uploadServletRequest != null) &&
-				!uploadServletRequest.isFormField(parameterName)) {
+				(uploadServletRequest.getFileName(parameterName) != null)) {
 
 				value = uploadServletRequest.getFile(parameterName, true);
 			}

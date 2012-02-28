@@ -1118,7 +1118,18 @@ public class SourceFormatter {
 				}
 			}
 
-			String newContent = _formatJavaContent(fileName, content);
+			String oldContent = content;
+			String newContent = StringPool.BLANK;
+
+			for (;;) {
+				newContent = _formatJavaContent(fileName, oldContent);
+
+				if (oldContent.equals(newContent)) {
+					break;
+				}
+
+				oldContent = newContent;
+			}
 
 			if (newContent.contains("$\n */")) {
 				_sourceFormatterHelper.printError(fileName, "*: " + fileName);
@@ -1230,8 +1241,6 @@ public class SourceFormatter {
 	private static String _formatJavaContent(String fileName, String content)
 		throws IOException {
 
-		boolean longLogFactoryUtil = false;
-
 		StringBundler sb = new StringBundler();
 
 		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
@@ -1274,6 +1283,29 @@ public class SourceFormatter {
 				new String[] {
 					"* Copyright (c) 2000-2012 Liferay, Inc."
 				});
+
+			if (line.startsWith(StringPool.SPACE) && !line.startsWith(" *")) {
+				if (!line.startsWith(StringPool.FOUR_SPACES)) {
+					while (line.startsWith(StringPool.SPACE)) {
+						line = StringUtil.replaceFirst(
+							line, StringPool.SPACE, StringPool.BLANK);
+					}
+				}
+				else {
+					int pos = 0;
+
+					String temp = line;
+
+					while (temp.startsWith(StringPool.FOUR_SPACES)) {
+						line = StringUtil.replaceFirst(
+							line, StringPool.FOUR_SPACES, StringPool.TAB);
+
+						pos++;
+
+						temp = line.substring(pos);
+					}
+				}
+			}
 
 			line = _replacePrimitiveWrapperInstantiation(
 				fileName, line, lineCount);
@@ -1467,10 +1499,6 @@ public class SourceFormatter {
 					fileName, "{:" + fileName + " " + lineCount);
 			}
 
-			if (line.endsWith("private static Log _log =")) {
-				longLogFactoryUtil = true;
-			}
-
 			excluded = _lineLengthExclusionsProperties.getProperty(
 				StringUtil.replace(
 					fileName, "\\", "/") + StringPool.AT + lineCount);
@@ -1480,7 +1508,7 @@ public class SourceFormatter {
 					StringUtil.replace(fileName, "\\", "/"));
 			}
 
-			String combinedLines = null;
+			String[] combinedLines = null;
 
 			if ((excluded == null) &&
 				!line.startsWith("import ") && !line.startsWith("package ") &&
@@ -1501,16 +1529,43 @@ public class SourceFormatter {
 							fileName, "> 80: " + fileName + " " + lineCount);
 					}
 					else {
+						int lineTabCount = StringUtil.count(line, StringPool.TAB);
+						int previousLineTabCount = StringUtil.count(
+							previousLine, StringPool.TAB);
+
+						if (previousLine.endsWith(StringPool.COMMA) &&
+							previousLine.contains(
+								StringPool.OPEN_PARENTHESIS) &&
+							!previousLine.contains("for (") &&
+							(lineTabCount > previousLineTabCount)) {
+
+							_sourceFormatterHelper.printError(
+								fileName,
+								"line break: " + fileName + " " + lineCount);
+						}
+
 						combinedLines = _getCombinedLines(
-							trimmedLine, previousLine);
+							trimmedLine, previousLine, lineTabCount,
+							previousLineTabCount);
 					}
 				}
 			}
 
 			if (Validator.isNotNull(combinedLines)) {
-				previousLine = combinedLines;
+				previousLine = combinedLines[0];
 
-				if (line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
+				if (combinedLines.length > 1) {
+					String addedToPreviousLine = combinedLines[1];
+
+					if (Validator.isNotNull(addedToPreviousLine)) {
+						sb.append(previousLine);
+						sb.append("\n");
+
+						previousLine = StringUtil.replaceFirst(
+							line, addedToPreviousLine, StringPool.BLANK);
+					}
+				}
+				else if (line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
 					lineToSkipIfEmpty = lineCount + 1;
 				}
 			}
@@ -1535,13 +1590,6 @@ public class SourceFormatter {
 
 		if (newContent.endsWith("\n")) {
 			newContent = newContent.substring(0, newContent.length() - 1);
-		}
-
-		if (longLogFactoryUtil) {
-			newContent = StringUtil.replace(
-				newContent,
-				"private static Log _log =\n\t\tLogFactoryUtil.getLog(",
-				"private static Log _log = LogFactoryUtil.getLog(\n\t\t");
 		}
 
 		return newContent;
@@ -2155,7 +2203,10 @@ public class SourceFormatter {
 		return line.substring(pos + 1);
 	}
 
-	private static String _getCombinedLines(String line, String previousLine) {
+	private static String[] _getCombinedLines(
+		String line, String previousLine, int lineTabCount,
+		int previousLineTabCount) {
+
 		if (Validator.isNull(previousLine)) {
 			return null;
 		}
@@ -2168,13 +2219,13 @@ public class SourceFormatter {
 				previousLine.endsWith(StringPool.COLON) &&
 				line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
 
-				return previousLine + StringPool.SPACE + line;
+				return new String[] {previousLine + StringPool.SPACE + line};
 			}
 
 			if (previousLine.endsWith(StringPool.EQUAL) &&
 				line.endsWith(StringPool.SEMICOLON)) {
 
-				return previousLine + StringPool.SPACE + line;
+				return new String[] {previousLine + StringPool.SPACE + line};
 			}
 
 			if ((trimmedPreviousLine.startsWith("if ") ||
@@ -2182,7 +2233,106 @@ public class SourceFormatter {
 				(previousLine.endsWith("||") || previousLine.endsWith("&&")) &&
 				line.endsWith(StringPool.OPEN_CURLY_BRACE)) {
 
-				return previousLine + StringPool.SPACE + line;
+				return new String[] {previousLine + StringPool.SPACE + line};
+			}
+		}
+
+		if (previousLine.endsWith(StringPool.EQUAL) &&
+			line.endsWith(StringPool.SEMICOLON)) {
+
+			int pos = line.indexOf(StringPool.DASH);
+
+			if (pos == -1) {
+				pos = line.indexOf(StringPool.PLUS);
+			}
+
+			if (pos == -1) {
+				pos = line.indexOf(StringPool.STAR);
+			}
+
+			if (pos != -1) {
+				String linePart = line.substring(0, pos);
+
+				int openParenthesisCount = StringUtil.count(
+					linePart, StringPool.OPEN_PARENTHESIS);
+				int closeParenthesisCount = StringUtil.count(
+					linePart, StringPool.CLOSE_PARENTHESIS);
+
+				if (openParenthesisCount == closeParenthesisCount) {
+					return null;
+				}
+			}
+
+			int x = line.indexOf(StringPool.OPEN_PARENTHESIS);
+			int y = line.indexOf(StringPool.CLOSE_PARENTHESIS);
+			int z = line.indexOf(StringPool.QUOTE);
+
+			if ((x > 0) && ((x + 1) != y) && ((z == -1) || (z > x))) {
+				if ((line.charAt(x - 1) != CharPool.SPACE) &&
+					(previousLineLength + 1 + x) < 80) {
+
+					String addToPreviousLine  = line.substring(0, x + 1);
+
+					if (addToPreviousLine.contains(StringPool.SPACE)) {
+						return null;
+					}
+
+					return new String[] {
+						previousLine + StringPool.SPACE + addToPreviousLine,
+						addToPreviousLine
+					};
+				}
+			}
+		}
+
+		if (previousLine.endsWith(StringPool.COMMA) &&
+			(previousLineTabCount == lineTabCount) &&
+			!previousLine.contains(StringPool.CLOSE_CURLY_BRACE)) {
+
+			int x = line.indexOf(StringPool.COMMA);
+
+			if (x != -1) {
+				while ((previousLineLength + 1 + x) < 80) {
+					String addToPreviousLine = line.substring(0, x + 1);
+
+					if (_isValidJavaParameter(addToPreviousLine)) {
+						if (line.equals(addToPreviousLine)) {
+							return new String[] {
+								previousLine + StringPool.SPACE +
+									addToPreviousLine
+							};
+						}
+						else {
+							return new String[] {
+								previousLine + StringPool.SPACE +
+									addToPreviousLine,
+								addToPreviousLine + StringPool.SPACE
+							};
+						}
+					}
+
+					String partAfterComma = line.substring(x + 1);
+
+					int pos = partAfterComma.indexOf(StringPool.COMMA);
+
+					if (pos == -1) {
+						break;
+					}
+
+					x = x + pos + 1;
+				}
+			}
+			else if (!line.endsWith(StringPool.OPEN_PARENTHESIS) &&
+					 !line.endsWith(StringPool.PLUS) &&
+					 !line.endsWith(StringPool.PERIOD) &&
+					 (!line.startsWith("new ") ||
+					  !line.endsWith(StringPool.OPEN_CURLY_BRACE)) &&
+					 ((line.length() + previousLineLength) < 80)) {
+
+				return new String[] {
+					previousLine + StringPool.SPACE + line,
+					StringPool.BLANK
+				};
 			}
 		}
 
@@ -2195,7 +2345,7 @@ public class SourceFormatter {
 		}
 
 		if (line.endsWith(StringPool.SEMICOLON)) {
-			return previousLine + line;
+			return new String[] {previousLine + line};
 		}
 
 		if ((line.endsWith(StringPool.OPEN_CURLY_BRACE) ||
@@ -2206,7 +2356,7 @@ public class SourceFormatter {
 			 trimmedPreviousLine.startsWith("protected ") ||
 			 trimmedPreviousLine.startsWith("public "))) {
 
-			return previousLine + line;
+			return new String[] {previousLine + line};
 		}
 
 		return null;
@@ -2568,11 +2718,8 @@ public class SourceFormatter {
 		directoryScanner.setBasedir(basedir);
 
 		String[] excludes = {
-			"**\\InstanceWrapperBuilder.java", "**\\*_IW.java",
-			"**\\PropsKeys.java", "**\\PropsValues.java",
-			"**\\ServiceBuilder.java", "**\\SourceFormatter.java",
-			"**\\WebKeys.java", "**\\bin\\**", "**\\classes\\*",
-			"**\\counter\\service\\**", "**\\jsp\\*",
+			"**\\*_IW.java", "**\\PropsValues.java", "**\\bin\\**",
+			"**\\classes\\*", "**\\counter\\service\\**", "**\\jsp\\*",
 			"**\\model\\impl\\*BaseImpl.java", "**\\model\\impl\\*Model.java",
 			"**\\model\\impl\\*ModelImpl.java", "**\\portal\\service\\**",
 			"**\\portal-client\\**",
@@ -2804,6 +2951,48 @@ public class SourceFormatter {
 			if (javaTermType == type) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	private static boolean _isValidJavaParameter(String javaParameter) {
+		int quoteCount = StringUtil.count(javaParameter, StringPool.QUOTE);
+
+		if ((quoteCount % 2) == 1) {
+			return false;
+		}
+
+		String[] parts = StringUtil.split(javaParameter, CharPool.QUOTE);
+
+		int i = 1;
+
+		while (i < parts.length) {
+			javaParameter = StringUtil.replaceFirst(
+				javaParameter, StringPool.QUOTE + parts[i] + StringPool.QUOTE,
+				StringPool.BLANK);
+
+			i = i + 2;
+		}
+
+		int openParenthesisCount = StringUtil.count(
+			javaParameter, StringPool.OPEN_PARENTHESIS);
+		int closeParenthesisCount = StringUtil.count(
+			javaParameter, StringPool.CLOSE_PARENTHESIS);
+		int lessThanCount = StringUtil.count(
+			javaParameter, StringPool.LESS_THAN);
+		int greaterThanCount = StringUtil.count(
+			javaParameter, StringPool.GREATER_THAN);
+		int openCurlyBraceCount = StringUtil.count(
+			javaParameter, StringPool.OPEN_CURLY_BRACE);
+		int closeCurlyBraceCount = StringUtil.count(
+			javaParameter, StringPool.CLOSE_CURLY_BRACE);
+
+		if ((openParenthesisCount == closeParenthesisCount) &&
+			(lessThanCount == greaterThanCount) &&
+			(openCurlyBraceCount == closeCurlyBraceCount)) {
+
+			return true;
 		}
 
 		return false;

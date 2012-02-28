@@ -69,8 +69,8 @@ public class MulticastTransport extends Thread implements Transport {
 				_socket.leaveGroup(_address);
 				_address = null;
 			}
-			catch (IOException e) {
-				_log.error("Unable to leave group", e);
+			catch (IOException ioe) {
+				_log.error("Unable to leave group", ioe);
 			}
 		}
 
@@ -93,23 +93,27 @@ public class MulticastTransport extends Thread implements Transport {
 				_handler.process(_inboundPacket);
 			}
 		}
-		catch (IOException e) {
-			_log.error("Unable to process ", e);
+		catch (IOException ioe) {
+			_log.error("Unable to process ", ioe);
 
 			_socket.disconnect();
 
 			_connected = false;
 
-			_handler.errorReceived(e);
+			_handler.errorReceived(ioe);
 		}
 	}
 
-	public synchronized void sendMessage(String msg) throws IOException {
-		_outboundPacket.setData(msg.getBytes());
+	public synchronized void sendMessage(byte[] bytes) throws IOException {
+		_outboundPacket.setData(bytes);
 		_outboundPacket.setAddress(_address);
 		_outboundPacket.setPort(_port);
 
 		_socket.send(_outboundPacket);
+	}
+
+	public synchronized void sendMessage(String message) throws IOException {
+		sendMessage(message.getBytes());
 	}
 
 	private static Log _log = LogFactory.getLog(MulticastTransport.class);

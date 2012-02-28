@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.search;
 import com.liferay.portal.NoSuchCountryException;
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.NoSuchRegionException;
+import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -28,6 +29,7 @@ import com.liferay.portal.kernel.search.facet.MultiValueFacet;
 import com.liferay.portal.kernel.search.facet.ScopeFacet;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -64,6 +66,7 @@ import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -76,19 +79,15 @@ import javax.portlet.PortletURL;
  * @author Hugo Huijser
  * @author Ryan Park
  * @author Raymond Augé
- *
  */
 public abstract class BaseIndexer implements Indexer {
 
 	public static final int INDEX_FILTER_SEARCH_LIMIT = GetterUtil.getInteger(
-		PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
-
-	public static final String INDEX_DEFAULT_SEARCH_ENGINE_ID = GetterUtil.getString(
-		PropsUtil.get(PropsKeys.INDEX_DEFAULT_SEARCH_ENGINE_ID));
+			PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
 
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
-			SearchEngineUtil.deleteDocument(companyId, uid);
+			SearchEngineUtil.deleteDocument(getSearchEngineId(), companyId, uid);
 		}
 		catch (SearchException se) {
 			throw se;
@@ -203,20 +202,36 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	public String getSearchEngineId() {
-		String property = PropsKeys.INDEX_DEFAULT_SEARCH_ENGINE_ID.concat(StringPool.PERIOD)
-			.concat(this.getClass().getName());
+		if (_searchEngineId == null) {
+			String searchEngineId = GetterUtil.getString(
+				PropsUtil.get(PropsKeys.INDEX_SEARCH_ENGINE_ID,
+					new Filter(this.getClass().getName())));
 
-		String searchEngineId = GetterUtil.getString(PropsUtil.get(property));
+			// Validate that the specified engine exists
 
-		if (_log.isDebugEnabled()) {
-			_log.debug("searchEngineId for indexer: " + this.getClass() + " is " + searchEngineId);
+			if (Validator.isNotNull(searchEngineId)) {
+				SearchEngine searchEngine = SearchEngineUtil.getSearchEngine(
+					searchEngineId);
+
+				if (searchEngine != null) {
+					_searchEngineId = searchEngineId;
+				}
+			}
+
+			// Fall back to the default engine
+
+			if (_searchEngineId == null) {
+				_searchEngineId = SearchEngineUtil.getDefaultSearchEngineId();
+			}
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"searchEngineId for " + this.getClass() + " is " +
+						searchEngineId);
+			}
 		}
 
-		if (searchEngineId == null || searchEngineId.isEmpty()) {
-			return INDEX_DEFAULT_SEARCH_ENGINE_ID;
-		} else {
-			return searchEngineId;
-		}
+		return _searchEngineId;
 	}
 
 	public String getSortField(String orderByCol) {
@@ -356,6 +371,8 @@ public abstract class BaseIndexer implements Indexer {
 
 	public Hits search(SearchContext searchContext) throws SearchException {
 		try {
+			searchContext.setSearchEngineId(getSearchEngineId());
+
 			BooleanQuery fullQuery = getFullQuery(searchContext);
 
 			fullQuery.setQueryConfig(searchContext.getQueryConfig());
@@ -529,6 +546,55 @@ public abstract class BaseIndexer implements Indexer {
 		multiValueFacet.setStatic(true);
 
 		searchContext.addFacet(multiValueFacet);
+	}
+
+	protected void addSearchAssetCategoryTitles(
+		Document document, String field, List<AssetCategory> assetCategories) {
+
+		Map<Locale, List<String>> assetCategoryTitles =
+			new HashMap<Locale, List<String>>();
+
+		Locale defaultLocale = LocaleUtil.getDefault();
+
+		for (AssetCategory assetCategory : assetCategories) {
+			Map<Locale, String> titleMap = assetCategory.getTitleMap();
+
+			for (Map.Entry<Locale, String> entry : titleMap.entrySet()) {
+				Locale locale = entry.getKey();
+				String title = entry.getValue();
+
+				if (Validator.isNull(title)) {
+					continue;
+				}
+
+				List<String> titles = assetCategoryTitles.get(locale);
+
+				if (titles == null) {
+					titles = new ArrayList<String>();
+
+					assetCategoryTitles.put(locale, titles);
+				}
+
+				titles.add(title);
+			}
+		}
+
+		for (Map.Entry<Locale, List<String>> entry :
+				assetCategoryTitles.entrySet()) {
+
+			Locale locale = entry.getKey();
+			List<String> titles = entry.getValue();
+
+			String[] titlesArray = titles.toArray(new String[0]);
+
+			if (locale.equals(defaultLocale)) {
+				document.addKeyword(field, titlesArray);
+			}
+
+			document.addKeyword(
+				field.concat(StringPool.UNDERLINE).concat(locale.toString()),
+				titlesArray);
+		}
 	}
 
 	protected void addSearchAssetTagNames(
@@ -767,7 +833,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		document.addUID(getPortletId(), field1);
 
-		SearchEngineUtil.deleteDocument(companyId, document.get(Field.UID));
+		SearchEngineUtil.deleteDocument(
+			getSearchEngineId(), companyId, document.get(Field.UID));
 	}
 
 	protected void deleteDocument(long companyId, String field1, String field2)
@@ -777,7 +844,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		document.addUID(getPortletId(), field1, field2);
 
-		SearchEngineUtil.deleteDocument(companyId, document.get(Field.UID));
+		SearchEngineUtil.deleteDocument(
+			getSearchEngineId(), companyId, document.get(Field.UID));
 	}
 
 	protected abstract void doDelete(Object obj) throws Exception;
@@ -906,10 +974,8 @@ public abstract class BaseIndexer implements Indexer {
 
 		document.addKeyword(Field.ASSET_CATEGORY_IDS, assetCategoryIds);
 
-		String[] assetCategoryNames = StringUtil.split(
-			ListUtil.toString(assetCategories, AssetCategory.NAME_ACCESSOR));
-
-		document.addText(Field.ASSET_CATEGORY_NAMES, assetCategoryNames);
+		addSearchAssetCategoryTitles(
+			document, Field.ASSET_CATEGORY_TITLES, assetCategories);
 
 		String[] assetTagNames = AssetTagLocalServiceUtil.getTagNames(
 			className, classPK);
@@ -1075,6 +1141,7 @@ public abstract class BaseIndexer implements Indexer {
 
 	private IndexerPostProcessor[] _indexerPostProcessors =
 		new IndexerPostProcessor[0];
+	private String _searchEngineId;
 	private boolean _stagingAware = true;
 
 }

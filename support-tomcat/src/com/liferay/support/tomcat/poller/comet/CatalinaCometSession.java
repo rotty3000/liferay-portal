@@ -57,8 +57,8 @@ public class CatalinaCometSession extends BaseCometSession {
 		}
 		catch (IllegalStateException ise) {
 		}
-		catch (IOException e) {
-			throw new SystemException(e);
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 	}
 

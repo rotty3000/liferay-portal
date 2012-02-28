@@ -84,7 +84,7 @@ if (Validator.isNull(xsd)) {
 // Bug with dom4j requires you to remove "\r\n" and "  " or else root.elements()
 // and root.content() will return different number of objects
 
-xsd = JS.decodeURIComponent(xsd);
+xsd = JournalUtil.processXMLAttributes(xsd);
 xsd = StringUtil.replace(xsd, StringPool.RETURN_NEW_LINE, StringPool.BLANK);
 xsd = StringUtil.replace(xsd, StringPool.DOUBLE_SPACE, StringPool.BLANK);
 
@@ -239,12 +239,26 @@ int tabIndex = 1;
 	</liferay-ui:panel-container>
 
 	<aui:button-row>
-		<aui:button type="submit" />
 
-		<aui:button onClick='<%= renderResponse.getNamespace() + "saveAndContinueStructure();" %>' value="save-and-continue" />
+		<%
+		boolean hasSavePermission = false;
 
-		<c:if test="<%= structure != null %>">
-			<aui:button onClick='<%= renderResponse.getNamespace() + "saveAndEditDefaultValues();" %>' value="save-and-edit-default-values" />
+		if (structure != null) {
+			hasSavePermission = JournalStructurePermission.contains(permissionChecker, structure, ActionKeys.UPDATE);
+		}
+		else {
+			hasSavePermission = JournalPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_STRUCTURE);
+		}
+		%>
+
+		<c:if test="<%= hasSavePermission %>">
+			<aui:button type="submit" />
+
+			<aui:button onClick='<%= renderResponse.getNamespace() + "saveAndContinueStructure();" %>' value="save-and-continue" />
+
+			<c:if test="<%= structure != null %>">
+				<aui:button onClick='<%= renderResponse.getNamespace() + "saveAndEditDefaultValues();" %>' value="save-and-edit-default-values" />
+			</c:if>
 		</c:if>
 
 		<aui:button href="<%= redirect %>" type="cancel" />

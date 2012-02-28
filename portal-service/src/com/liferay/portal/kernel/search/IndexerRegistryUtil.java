@@ -37,6 +37,14 @@ public class IndexerRegistryUtil {
 		return getIndexerRegistry().getIndexers();
 	}
 
+	public static Indexer nullSafeGetIndexer(Class<?> clazz) {
+		return getIndexerRegistry().nullSafeGetIndexer(clazz.getName());
+	}
+
+	public static Indexer nullSafeGetIndexer(String className) {
+		return getIndexerRegistry().nullSafeGetIndexer(className);
+	}
+
 	public static void register(Indexer indexer) {
 		for (String className : indexer.getClassNames()) {
 			register(className, indexer);

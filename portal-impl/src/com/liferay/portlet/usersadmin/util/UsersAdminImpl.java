@@ -371,10 +371,22 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	public List<Address> getAddresses(ActionRequest actionRequest) {
+		return getAddresses(actionRequest, Collections.<Address>emptyList());
+	}
+
+	public List<Address> getAddresses(
+		ActionRequest actionRequest, List<Address> defaultAddresses) {
+
+		String addressesIndexesString = actionRequest.getParameter(
+			"addressesIndexes");
+
+		if (addressesIndexesString == null) {
+			return defaultAddresses;
+		}
+
 		List<Address> addresses = new ArrayList<Address>();
 
-		int[] addressesIndexes = StringUtil.split(
-			ParamUtil.getString(actionRequest, "addressesIndexes"), 0);
+		int[] addressesIndexes = StringUtil.split(addressesIndexesString, 0);
 
 		int addressPrimary = ParamUtil.getInteger(
 			actionRequest, "addressPrimary");
@@ -436,10 +448,24 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	public List<EmailAddress> getEmailAddresses(ActionRequest actionRequest) {
+		return getEmailAddresses(
+			actionRequest, Collections.<EmailAddress>emptyList());
+	}
+
+	public List<EmailAddress> getEmailAddresses(
+		ActionRequest actionRequest, List<EmailAddress> defaultEmailAddresses) {
+
+		String emailAddressesIndexesString = actionRequest.getParameter(
+			"emailAddressesIndexes");
+
+		if (emailAddressesIndexesString == null) {
+			return defaultEmailAddresses;
+		}
+
 		List<EmailAddress> emailAddresses = new ArrayList<EmailAddress>();
 
 		int[] emailAddressesIndexes = StringUtil.split(
-			ParamUtil.getString(actionRequest, "emailAddressesIndexes"), 0);
+			emailAddressesIndexesString, 0);
 
 		int emailAddressPrimary = ParamUtil.getInteger(
 			actionRequest, "emailAddressPrimary");
@@ -648,10 +674,22 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	public List<Phone> getPhones(ActionRequest actionRequest) {
+		return getPhones(actionRequest, Collections.<Phone>emptyList());
+	}
+
+	public List<Phone> getPhones(
+		ActionRequest actionRequest, List<Phone> defaultPhones) {
+
+		String phonesIndexesString = actionRequest.getParameter(
+			"phonesIndexes");
+
+		if (phonesIndexesString == null) {
+			return defaultPhones;
+		}
+
 		List<Phone> phones = new ArrayList<Phone>();
 
-		int[] phonesIndexes = StringUtil.split(
-			ParamUtil.getString(actionRequest, "phonesIndexes"), 0);
+		int[] phonesIndexes = StringUtil.split(phonesIndexesString, 0);
 
 		int phonePrimary = ParamUtil.getInteger(actionRequest, "phonePrimary");
 
@@ -844,10 +882,22 @@ public class UsersAdminImpl implements UsersAdmin {
 	}
 
 	public List<Website> getWebsites(ActionRequest actionRequest) {
+		return getWebsites(actionRequest, Collections.<Website>emptyList());
+	}
+
+	public List<Website> getWebsites(
+		ActionRequest actionRequest, List<Website> defaultWebsites) {
+
+		String websitesIndexesString = actionRequest.getParameter(
+			"websitesIndexes");
+
+		if (websitesIndexesString == null) {
+			return defaultWebsites;
+		}
+
 		List<Website> websites = new ArrayList<Website>();
 
-		int[] websitesIndexes = StringUtil.split(
-			ParamUtil.getString(actionRequest, "websitesIndexes"), 0);
+		int[] websitesIndexes = StringUtil.split(websitesIndexesString, 0);
 
 		int websitePrimary = ParamUtil.getInteger(
 			actionRequest, "websitePrimary");

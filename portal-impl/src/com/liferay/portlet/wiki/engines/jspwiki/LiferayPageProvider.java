@@ -82,8 +82,8 @@ public class LiferayPageProvider implements WikiPageProvider {
 		try {
 			return getAllPages();
 		}
-		catch (ProviderException e) {
-			_log.error("Could not get changed pages", e);
+		catch (ProviderException pe) {
+			_log.error("Could not get changed pages", pe);
 
 			return Collections.emptyList();
 		}

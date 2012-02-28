@@ -19,7 +19,11 @@ import com.liferay.portal.NoSuchLayoutSetBranchException;
 import com.liferay.portal.RequiredLayoutSetBranchException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.staging.StagingUtil;
+import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Image;
@@ -37,8 +41,11 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutSetBranchLocalServiceBaseImpl;
 
+import java.text.Format;
+
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Raymond Augé
@@ -329,7 +336,8 @@ public class LayoutSetBranchLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@link #getUserLayoutSetBranch(long, long, boolean, long, long)}
+	 * @deprecated {@link #getUserLayoutSetBranch(long, long, boolean, long,
+	 *             long)}
 	 */
 	public LayoutSetBranch getUserLayoutSetBranch(
 			long userId, long groupId, boolean privateLayout,
@@ -377,18 +385,47 @@ public class LayoutSetBranchLocalServiceImpl
 
 		LayoutSetBranch layoutSetBranch =
 			layoutSetBranchPersistence.findByPrimaryKey(layoutSetBranchId);
+		LayoutSetBranch mergeLayoutSetBranch =
+			layoutSetBranchPersistence.findByPrimaryKey(mergeLayoutSetBranchId);
+
+		Locale locale = serviceContext.getLocale();
+
+		Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(
+			locale);
+
+		String nowString = dateFormatDateTime.format(new Date());
+
+		serviceContext.setWorkflowAction(WorkflowConstants.STATUS_DRAFT);
 
 		List<LayoutRevision> layoutRevisions =
 			layoutRevisionLocalService.getLayoutRevisions(
 				mergeLayoutSetBranchId, true);
 
-		serviceContext.setWorkflowAction(WorkflowConstants.ACTION_PUBLISH);
-
 		for (LayoutRevision layoutRevision : layoutRevisions) {
+			String layoutBranchName = getLayoutBranchName(
+				layoutSetBranch.getLayoutSetBranchId(), locale,
+				layoutRevision.getLayoutBranch().getName(),
+				mergeLayoutSetBranch.getName(), layoutRevision.getPlid());
+
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(mergeLayoutSetBranch.getDescription());
+			sb.append(StringPool.SPACE);
+			sb.append(
+				LanguageUtil.format(
+					locale, "merged-from-x-x",
+					new String[] {mergeLayoutSetBranch.getName(), nowString}));
+
+			LayoutBranch layoutBranch =
+				layoutBranchLocalService.addLayoutBranch(
+					layoutSetBranch.getLayoutSetBranchId(),
+					layoutRevision.getPlid(), layoutBranchName, sb.toString(),
+					false, serviceContext);
+
 			layoutRevisionLocalService.addLayoutRevision(
 				layoutRevision.getUserId(),
 				layoutSetBranch.getLayoutSetBranchId(),
-				layoutRevision.getLayoutBranchId(),
+				layoutBranch.getLayoutBranchId(),
 				LayoutRevisionConstants.DEFAULT_PARENT_LAYOUT_REVISION_ID,
 				false, layoutRevision.getPlid(),
 				layoutRevision.getLayoutRevisionId(),
@@ -427,6 +464,42 @@ public class LayoutSetBranchLocalServiceImpl
 		return layoutSetBranch;
 	}
 
+	protected String getLayoutBranchName(
+			long layoutSetBranchId, Locale locale, String mergeBranchName,
+			String mergeLayoutSetBranchName, long plid)
+		throws SystemException {
+
+		LayoutBranch layoutBranch = layoutBranchPersistence.fetchByL_P_N(
+			layoutSetBranchId, plid, mergeBranchName);
+
+		if (layoutBranch == null) {
+			return mergeBranchName;
+		}
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append(LanguageUtil.get(locale, mergeBranchName));
+		sb.append(StringPool.SPACE);
+		sb.append(StringPool.OPEN_PARENTHESIS);
+		sb.append(LanguageUtil.get(locale, mergeLayoutSetBranchName));
+		sb.append(StringPool.CLOSE_PARENTHESIS);
+
+		String layoutBranchName = sb.toString();
+
+		for (int i = 1;; i++) {
+			layoutBranch = layoutBranchPersistence.fetchByL_P_N(
+				layoutSetBranchId, plid, layoutBranchName);
+
+			if (layoutBranch == null) {
+				break;
+			}
+
+			layoutBranchName = sb.toString() + StringPool.SPACE + i;
+		}
+
+		return layoutBranchName;
+	}
+
 	protected void validate(
 			long layoutSetBranchId, long groupId, boolean privateLayout,
 			String name, boolean master)
@@ -452,7 +525,7 @@ public class LayoutSetBranchLocalServiceImpl
 					LayoutSetBranchNameException.DUPLICATE);
 			}
 		}
-		catch (NoSuchLayoutSetBranchException nsbe) {
+		catch (NoSuchLayoutSetBranchException nslsbe) {
 		}
 
 		if (master) {
@@ -467,7 +540,7 @@ public class LayoutSetBranchLocalServiceImpl
 						LayoutSetBranchNameException.MASTER);
 				}
 			}
-			catch (NoSuchLayoutSetBranchException nsbe) {
+			catch (NoSuchLayoutSetBranchException nslsbe) {
 			}
 		}
 	}

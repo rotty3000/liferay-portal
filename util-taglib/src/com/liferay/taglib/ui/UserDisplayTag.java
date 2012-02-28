@@ -34,6 +34,11 @@ public class UserDisplayTag extends TagSupport {
 		try {
 			PortalIncludeUtil.include(pageContext, getEndPage());
 
+			HttpServletRequest request =
+				(HttpServletRequest)pageContext.getRequest();
+
+			request.removeAttribute("liferay-ui:user-display:url");
+
 			return EVAL_PAGE;
 		}
 		catch (Exception e) {

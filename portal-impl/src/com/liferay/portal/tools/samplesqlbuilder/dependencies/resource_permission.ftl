@@ -1,4 +1,4 @@
-<#setting number_format = "0">	
+<#setting number_format = "0">
 
 <#assign resourcePermissions = dataFactory.addResourcePermission(companyId, resourceName, resourcePrimkey)>
 

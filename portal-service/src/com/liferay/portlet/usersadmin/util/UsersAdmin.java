@@ -86,7 +86,13 @@ public interface UsersAdmin {
 
 	public List<Address> getAddresses(ActionRequest actionRequest);
 
+	public List<Address> getAddresses(
+		ActionRequest actionRequest, List<Address> defaultAddresses);
+
 	public List<EmailAddress> getEmailAddresses(ActionRequest actionRequest);
+
+	public List<EmailAddress> getEmailAddresses(
+		ActionRequest actionRequest, List<EmailAddress> defaultEmailAddresses);
 
 	public OrderByComparator getGroupOrderByComparator(
 		String orderByCol, String orderByType);
@@ -103,6 +109,9 @@ public interface UsersAdmin {
 
 	public List<Phone> getPhones(ActionRequest actionRequest);
 
+	public List<Phone> getPhones(
+		ActionRequest actionRequest, List<Phone> defaultPhones);
+
 	public OrderByComparator getRoleOrderByComparator(
 		String orderByCol, String orderByType);
 
@@ -118,6 +127,9 @@ public interface UsersAdmin {
 	public Tuple getUsers(Hits hits) throws PortalException, SystemException;
 
 	public List<Website> getWebsites(ActionRequest actionRequest);
+
+	public List<Website> getWebsites(
+		ActionRequest actionRequest, List<Website> defaultWebsites);
 
 	public boolean hasUpdateEmailAddress(
 			PermissionChecker permissionChecker, User user)

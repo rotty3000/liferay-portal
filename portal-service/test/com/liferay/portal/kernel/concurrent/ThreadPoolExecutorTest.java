@@ -42,7 +42,7 @@ public class ThreadPoolExecutorTest extends TestCase {
 
 			fail();
 		}
-		catch (IllegalArgumentException ise) {
+		catch (IllegalArgumentException iae) {
 		}
 
 		threadPoolExecutor = new ThreadPoolExecutor(
@@ -53,7 +53,7 @@ public class ThreadPoolExecutorTest extends TestCase {
 
 			fail();
 		}
-		catch (IllegalArgumentException ise) {
+		catch (IllegalArgumentException iae) {
 		}
 
 		threadPoolExecutor = new ThreadPoolExecutor(
@@ -64,7 +64,7 @@ public class ThreadPoolExecutorTest extends TestCase {
 
 			fail();
 		}
-		catch (IllegalArgumentException ise) {
+		catch (IllegalArgumentException iae) {
 		}
 
 		threadPoolExecutor = new ThreadPoolExecutor(
@@ -75,7 +75,7 @@ public class ThreadPoolExecutorTest extends TestCase {
 
 			fail();
 		}
-		catch (IllegalArgumentException ise) {
+		catch (IllegalArgumentException iae) {
 		}
 	}
 

@@ -647,8 +647,8 @@ public class DDMStructureLocalServiceImpl
 
 				validate(elements, elNames);
 			}
-			catch (StructureDuplicateElementException fdsee) {
-				throw fdsee;
+			catch (StructureDuplicateElementException sdee) {
+				throw sdee;
 			}
 			catch (StructureXsdException sxe) {
 				throw sxe;

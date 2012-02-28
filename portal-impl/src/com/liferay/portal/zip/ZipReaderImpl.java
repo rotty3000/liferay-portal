@@ -113,8 +113,8 @@ public class ZipReaderImpl implements ZipReader {
 				bytes = FileUtil.getBytes(is);
 			}
 		}
-		catch (IOException e) {
-			_log.error(e, e);
+		catch (IOException ioe) {
+			_log.error(ioe, ioe);
 		}
 
 		return bytes;

@@ -102,7 +102,8 @@ public class BookmarksEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(BookmarksEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			BookmarksEntry.class);
 
 		indexer.reindex(entry);
 
@@ -146,7 +147,8 @@ public class BookmarksEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(BookmarksEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			BookmarksEntry.class);
 
 		indexer.delete(entry);
 	}
@@ -313,7 +315,8 @@ public class BookmarksEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(BookmarksEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			BookmarksEntry.class);
 
 		indexer.reindex(entry);
 

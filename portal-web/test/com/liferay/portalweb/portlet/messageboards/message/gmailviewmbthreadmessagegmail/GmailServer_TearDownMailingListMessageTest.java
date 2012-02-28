@@ -129,8 +129,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isVisible(
-									"//div[@title='My groups']/a/span")) {
+						if (selenium.isVisible("//td/a/span")) {
 							break;
 						}
 					}
@@ -141,8 +140,8 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				}
 
 				assertEquals(RuntimeVariables.replace("My groups"),
-					selenium.getText("//div[@title='My groups']/a/span"));
-				selenium.click("//div[@title='My groups']/a/span");
+					selenium.getText("//td/a/span"));
+				selenium.click("//td/a/span");
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -150,7 +149,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isVisible("link=liferay-mailinglist")) {
+						if (selenium.isVisible("//tr[2]/td/div/div/a")) {
 							break;
 						}
 					}
@@ -160,7 +159,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					Thread.sleep(1000);
 				}
 
-				selenium.click("link=liferay-mailinglist");
+				selenium.click("//tr[2]/td/div/div/a");
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -170,7 +169,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					try {
 						if (RuntimeVariables.replace("liferay-mailinglist")
 												.equals(selenium.getText(
-										"//div/span[2]/span[2]"))) {
+										"//span/span[2]/span"))) {
 							break;
 						}
 					}
@@ -181,11 +180,11 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				}
 
 				assertEquals(RuntimeVariables.replace("liferay-mailinglist"),
-					selenium.getText("//div/span[2]/span[2]"));
+					selenium.getText("//span/span[2]/span"));
 				Thread.sleep(10000);
 
 				boolean MLMessage1Present = selenium.isElementPresent(
-						"//input[@type='checkbox']");
+						"//span[contains(@class,'CheckBox')]/span/span");
 
 				if (!MLMessage1Present) {
 					label = 5;
@@ -193,7 +192,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					continue;
 				}
 
-				selenium.click("//input[@type='checkbox']");
+				selenium.click("//span[contains(@class,'CheckBox')]/span/span");
 				assertEquals(RuntimeVariables.replace("Actions"),
 					selenium.getText("//div/span/span"));
 				selenium.clickAt("//div/span/span",
@@ -242,7 +241,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				Thread.sleep(5000);
 
 				boolean MLMessage2Present = selenium.isElementPresent(
-						"//input[@type='checkbox']");
+						"//span[contains(@class,'CheckBox')]/span/span");
 
 				if (!MLMessage2Present) {
 					label = 6;
@@ -250,7 +249,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					continue;
 				}
 
-				selenium.click("//input[@type='checkbox']");
+				selenium.click("//span[contains(@class,'CheckBox')]/span/span");
 				assertEquals(RuntimeVariables.replace("Actions"),
 					selenium.getText("//div/span/span"));
 				selenium.clickAt("//div/span/span",
@@ -299,7 +298,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				Thread.sleep(5000);
 
 				boolean MLMessage3Present = selenium.isElementPresent(
-						"//input[@type='checkbox']");
+						"//span[contains(@class,'CheckBox')]/span/span");
 
 				if (!MLMessage3Present) {
 					label = 7;
@@ -307,7 +306,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					continue;
 				}
 
-				selenium.click("//input[@type='checkbox']");
+				selenium.click("//span[contains(@class,'CheckBox')]/span/span");
 				assertEquals(RuntimeVariables.replace("Actions"),
 					selenium.getText("//div/span/span"));
 				selenium.clickAt("//div/span/span",
@@ -356,7 +355,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				Thread.sleep(5000);
 
 				boolean MLMessage4Present = selenium.isElementPresent(
-						"//input[@type='checkbox']");
+						"//span[contains(@class,'CheckBox')]/span/span");
 
 				if (!MLMessage4Present) {
 					label = 8;
@@ -364,7 +363,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					continue;
 				}
 
-				selenium.click("//input[@type='checkbox']");
+				selenium.click("//span[contains(@class,'CheckBox')]/span/span");
 				assertEquals(RuntimeVariables.replace("Actions"),
 					selenium.getText("//div/span/span"));
 				selenium.clickAt("//div/span/span",
@@ -413,7 +412,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 				Thread.sleep(5000);
 
 				boolean MLMessage5Present = selenium.isElementPresent(
-						"//input[@type='checkbox']");
+						"//span[contains(@class,'CheckBox')]/span/span");
 
 				if (!MLMessage5Present) {
 					label = 9;
@@ -421,7 +420,7 @@ public class GmailServer_TearDownMailingListMessageTest extends BaseTestCase {
 					continue;
 				}
 
-				selenium.click("//input[@type='checkbox']");
+				selenium.click("//span[contains(@class,'CheckBox')]/span/span");
 				assertEquals(RuntimeVariables.replace("Actions"),
 					selenium.getText("//div/span/span"));
 				selenium.clickAt("//div/span/span",

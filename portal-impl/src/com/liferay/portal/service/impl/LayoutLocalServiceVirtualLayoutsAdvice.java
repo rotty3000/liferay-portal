@@ -26,8 +26,6 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.impl.VirtualLayout;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
@@ -54,12 +52,7 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 	implements MethodInterceptor {
 
 	public Object invoke(MethodInvocation methodInvocation) throws Throwable {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if ((permissionChecker == null) ||
-			MergeLayoutPrototypesThreadLocal.isInProgress()) {
-
+		if (MergeLayoutPrototypesThreadLocal.isInProgress()) {
 			return methodInvocation.proceed();
 		}
 
@@ -79,7 +72,9 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 
 			Layout layout = (Layout)methodInvocation.proceed();
 
-			if (Validator.isNull(layout.getSourcePrototypeLayoutUuid())) {
+			if (Validator.isNull(layout.getLayoutPrototypeUuid()) &&
+				Validator.isNull(layout.getSourcePrototypeLayoutUuid())) {
+
 				return layout;
 			}
 
@@ -91,7 +86,12 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				WorkflowThreadLocal.setEnabled(false);
 
 				SitesUtil.mergeLayoutProtypeLayout(group, layout);
-				SitesUtil.mergeLayoutSetProtypeLayouts(group, layoutSet);
+
+				if (Validator.isNotNull(
+						layout.getSourcePrototypeLayoutUuid())) {
+
+					SitesUtil.mergeLayoutSetProtypeLayouts(group, layoutSet);
+				}
 			}
 			finally {
 				MergeLayoutPrototypesThreadLocal.setInProgress(false);

@@ -132,8 +132,8 @@ public class OrganizationServiceImpl extends OrganizationServiceBaseImpl {
 				Organization.class.getName(), organization.getOrganizationId(),
 				emailAddresses);
 
-			UsersAdminUtil.updateOrgLabors(organization.getOrganizationId(),
-				orgLabors);
+			UsersAdminUtil.updateOrgLabors(
+				organization.getOrganizationId(), orgLabors);
 
 			UsersAdminUtil.updatePhones(
 				Organization.class.getName(), organization.getOrganizationId(),
@@ -144,18 +144,10 @@ public class OrganizationServiceImpl extends OrganizationServiceBaseImpl {
 				websites);
 
 			if (indexingEnabled) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					Organization.class);
 
-				if (parentOrganizationId > 0) {
-					indexer.reindex(
-						new String[] {
-							String.valueOf(organization.getCompanyId())
-						});
-				}
-				else {
-					indexer.reindex(organization);
-				}
+				indexer.reindex(organization);
 			}
 
 			return organization;

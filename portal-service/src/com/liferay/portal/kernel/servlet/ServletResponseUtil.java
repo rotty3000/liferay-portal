@@ -262,7 +262,7 @@ public class ServletResponseUtil {
 			try {
 				inputStream.close();
 			}
-			catch (IOException e) {
+			catch (IOException ioe) {
 			}
 		}
 	}

@@ -59,7 +59,7 @@ public class SystemLogger extends DefaultLogger {
 					line = unsyncBufferedReader.readLine();
 				}
 			}
-			catch (IOException e) {
+			catch (IOException ioe) {
 			}
 
 			String msg = sb.toString();

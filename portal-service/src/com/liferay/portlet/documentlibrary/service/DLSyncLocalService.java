@@ -234,15 +234,37 @@ public interface DLSyncLocalService extends PersistedModelLocalService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
+	/**
+	* @deprecated {@link #addSync(long, String, long, long, long, String,
+	String, String, String)}
+	*/
 	public com.liferay.portlet.documentlibrary.model.DLSync addSync(
 		long fileId, java.lang.String fileUuid, long companyId,
 		long repositoryId, long parentFolderId, java.lang.String name,
 		java.lang.String type, java.lang.String version)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portlet.documentlibrary.model.DLSync addSync(
+		long fileId, java.lang.String fileUuid, long companyId,
+		long repositoryId, long parentFolderId, java.lang.String name,
+		java.lang.String description, java.lang.String type,
+		java.lang.String version)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* @deprecated {@link #updateSync(long, long, String, String, String,
+	String)}
+	*/
 	public com.liferay.portlet.documentlibrary.model.DLSync updateSync(
 		long fileId, long parentFolderId, java.lang.String name,
 		java.lang.String event, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portlet.documentlibrary.model.DLSync updateSync(
+		long fileId, long parentFolderId, java.lang.String name,
+		java.lang.String description, java.lang.String event,
+		java.lang.String version)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

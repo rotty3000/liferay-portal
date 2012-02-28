@@ -342,6 +342,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.search.IndexerRegistryImpl">
+		<priority value="WARN" />
+	</category>
+
 	<category name="com.liferay.portal.search.lucene">
 		<priority value="INFO" />
 	</category>

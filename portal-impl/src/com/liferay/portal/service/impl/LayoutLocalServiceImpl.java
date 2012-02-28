@@ -53,7 +53,6 @@ import com.liferay.portal.lar.PortletImporter;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutReference;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetPrototype;
@@ -249,15 +248,6 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		if (Validator.isNotNull(layoutPrototypeUuid)) {
 			layout.setLayoutPrototypeUuid(layoutPrototypeUuid);
 			layout.setLayoutPrototypeLinkEnabled(layoutPrototypeLinkEnabled);
-
-			LayoutPrototype layoutPrototype =
-				layoutPrototypeLocalService.getLayoutPrototypeByUuid(
-					layoutPrototypeUuid);
-
-			Layout layoutPrototypeLayout = layoutPrototype.getLayout();
-
-			layout.setSourcePrototypeLayoutUuid(
-				layoutPrototypeLayout.getUuid());
 		}
 
 		if (type.equals(LayoutConstants.TYPE_PORTLET)) {
@@ -449,6 +439,11 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		portletPreferencesLocalService.deletePortletPreferences(
 			PortletKeys.PREFS_OWNER_ID_DEFAULT,
 			PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid());
+
+		// Subscriptions
+
+		subscriptionLocalService.deleteSubscriptions(
+			layout.getCompanyId(), Layout.class.getName(), layout.getPlid());
 
 		// Ratings
 
@@ -1428,8 +1423,8 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 			importLayouts(userId, groupId, privateLayout, parameterMap, file);
 		}
-		catch (IOException e) {
-			throw new SystemException(e);
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 	}
 
@@ -1502,8 +1497,8 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 			importPortletInfo(
 				userId, plid, groupId, portletId, parameterMap, file);
 		}
-		catch (IOException e) {
-			throw new SystemException(e);
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 	}
 
@@ -1747,15 +1742,6 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		if (Validator.isNotNull(layoutPrototypeUuid)) {
 			layout.setLayoutPrototypeUuid(layoutPrototypeUuid);
 			layout.setLayoutPrototypeLinkEnabled(layoutPrototypeLinkEnabled);
-
-			LayoutPrototype layoutPrototype =
-				layoutPrototypeLocalService.getLayoutPrototypeByUuid(
-					layoutPrototypeUuid);
-
-			Layout layoutPrototypeLayout = layoutPrototype.getLayout();
-
-			layout.setSourcePrototypeLayoutUuid(
-				layoutPrototypeLayout.getUuid());
 		}
 
 		layoutPersistence.update(layout, false);

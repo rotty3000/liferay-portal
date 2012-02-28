@@ -25,6 +25,8 @@ public interface IndexerRegistry {
 
 	public List<Indexer> getIndexers();
 
+	public Indexer nullSafeGetIndexer(String className);
+
 	public void register(String className, Indexer indexer);
 
 	public void unregister(String className);

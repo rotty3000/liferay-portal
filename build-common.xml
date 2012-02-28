@@ -338,7 +338,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		<if>
 			<equals arg1="${junit.code.coverage}" arg2="true" />
 			<then>
-				<cobertura-instrument datafile="test-coverage/cobertura.ser" todir="test-coverage">
+				<cobertura-instrument datafile="test-coverage/cobertura.ser" maxmemory="512m" todir="test-coverage">
 					<fileset dir="${project.dir}/portal-impl/classes">
 						<include name="**/*.class" />
 					</fileset>

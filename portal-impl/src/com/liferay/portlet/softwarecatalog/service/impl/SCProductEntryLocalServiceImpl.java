@@ -142,7 +142,8 @@ public class SCProductEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(SCProductEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			SCProductEntry.class);
 
 		indexer.reindex(productEntry);
 
@@ -231,6 +232,12 @@ public class SCProductEntryLocalServiceImpl
 			ResourceConstants.SCOPE_INDIVIDUAL,
 			productEntry.getProductEntryId());
 
+		// Subscriptions
+
+		subscriptionLocalService.deleteSubscriptions(
+			productEntry.getCompanyId(), SCProductEntry.class.getName(),
+			productEntry.getProductEntryId());
+
 		// Product screenshots
 
 		scProductScreenshotLocalService.deleteProductScreenshots(
@@ -253,7 +260,8 @@ public class SCProductEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(SCProductEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			SCProductEntry.class);
 
 		indexer.delete(productEntry);
 	}
@@ -443,7 +451,8 @@ public class SCProductEntryLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(SCProductEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			SCProductEntry.class);
 
 		indexer.reindex(productEntry);
 

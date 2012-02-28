@@ -273,9 +273,9 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 				}
 			}
 		}
-		catch (SystemException e) {
+		catch (SystemException se) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(e);
+				_log.warn(se);
 			}
 		}
 

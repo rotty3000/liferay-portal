@@ -479,7 +479,8 @@ public class PortletImporter {
 				((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) ||
 				 (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6))) {
 
-				Indexer indexer = IndexerRegistryUtil.getIndexer(User.class);
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+					User.class);
 
 				indexer.reindex(userId);
 			}

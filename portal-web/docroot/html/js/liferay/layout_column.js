@@ -38,6 +38,10 @@ AUI.add(
 
 							Layout.PORTLET_TOPPER.html(Layout._getPortletTitle(nodeId));
 
+							if (Liferay.Data.isCustomizationView()) {
+								Layout.DEFAULT_LAYOUT_OPTIONS.dropNodes.addClass('customizable');
+							}
+
 							Layout._columnContainer.addClass(CSS_DRAGGING);
 						},
 

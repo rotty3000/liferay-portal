@@ -58,6 +58,7 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 import com.liferay.portlet.journal.NoSuchArticleException;
+import com.liferay.portlet.journal.StructureXsdException;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalStructure;
 import com.liferay.portlet.journal.model.JournalStructureConstants;
@@ -74,6 +75,7 @@ import com.liferay.portlet.journal.util.comparator.ArticleTitleComparator;
 import com.liferay.portlet.journal.util.comparator.ArticleVersionComparator;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.FiniteUniqueStack;
+import com.liferay.util.JS;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -851,6 +853,27 @@ public class JournalUtil {
 		return curContent;
 	}
 
+	public static String processXMLAttributes(String xsd)
+		throws PortalException {
+
+		try {
+			Document document = SAXReaderUtil.read(xsd);
+
+			Element rootElement = document.getRootElement();
+
+			List<Element> elements = new ArrayList<Element>();
+
+			elements.addAll(rootElement.elements());
+
+			_decodeXMLAttributes(elements);
+
+			return document.asXML();
+		}
+		catch (Exception e) {
+			throw new StructureXsdException();
+		}
+	}
+
 	public static void removeArticleLocale(Element element, String languageId)
 		throws PortalException, SystemException {
 
@@ -1018,6 +1041,27 @@ public class JournalUtil {
 			curElementOption.addCDATA(newElementOption.getText());
 
 			curContentElement.add(curElementOption);
+		}
+	}
+
+	private static void _decodeXMLAttributes(List<Element> elements) {
+		for (Element element : elements) {
+			String elName = element.attributeValue("name", StringPool.BLANK);
+			String elType = element.attributeValue("type", StringPool.BLANK);
+
+			if (Validator.isNotNull(elName)) {
+				elName = JS.decodeURIComponent(elName);
+
+				element.addAttribute("name", elName);
+			}
+
+			if (Validator.isNotNull(elType)) {
+				elType = JS.decodeURIComponent(elType);
+
+				element.addAttribute("type", elType);
+			}
+
+			_decodeXMLAttributes(element.elements());
 		}
 	}
 

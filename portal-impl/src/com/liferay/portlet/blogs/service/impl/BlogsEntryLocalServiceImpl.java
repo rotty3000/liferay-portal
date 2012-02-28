@@ -265,6 +265,12 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 		imageLocalService.deleteImage(entry.getSmallImageId());
 
+		// Subscriptions
+
+		subscriptionLocalService.deleteSubscriptions(
+			entry.getCompanyId(), BlogsEntry.class.getName(),
+			entry.getEntryId());
+
 		// Statistics
 
 		blogsStatsUserLocalService.updateStatsUser(
@@ -292,7 +298,8 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(BlogsEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			BlogsEntry.class);
 
 		indexer.delete(entry);
 
@@ -720,7 +727,8 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 		blogsEntryPersistence.update(entry, false);
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(BlogsEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			BlogsEntry.class);
 
 		if (status == WorkflowConstants.STATUS_APPROVED) {
 

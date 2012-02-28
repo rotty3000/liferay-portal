@@ -69,7 +69,7 @@ public class JNDIUtil {
 		try {
 			obj = ctx.lookup(location);
 		}
-		catch (NamingException n1) {
+		catch (NamingException ne1) {
 
 			// java:comp/env/ObjectName to ObjectName
 
@@ -79,13 +79,13 @@ public class JNDIUtil {
 						location, "java:comp/env/", "");
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n1.getMessage());
+						_log.debug(ne1.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 
 					obj = ctx.lookup(newLocation);
 				}
-				catch (NamingException n2) {
+				catch (NamingException ne2) {
 
 					// java:comp/env/ObjectName to java:ObjectName
 
@@ -93,7 +93,7 @@ public class JNDIUtil {
 						location, "comp/env/", "");
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n2.getMessage());
+						_log.debug(ne2.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 
@@ -109,13 +109,13 @@ public class JNDIUtil {
 						location, "java:", "");
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n1.getMessage());
+						_log.debug(ne1.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 
 					obj = ctx.lookup(newLocation);
 				}
-				catch (NamingException n2) {
+				catch (NamingException ne2) {
 
 					// java:ObjectName to java:comp/env/ObjectName
 
@@ -123,7 +123,7 @@ public class JNDIUtil {
 						location, "java:", "java:comp/env/");
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n2.getMessage());
+						_log.debug(ne2.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 
@@ -138,20 +138,20 @@ public class JNDIUtil {
 					String newLocation = "java:" + location;
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n1.getMessage());
+						_log.debug(ne1.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 
 					obj = ctx.lookup(newLocation);
 				}
-				catch (NamingException n2) {
+				catch (NamingException ne2) {
 
 					// ObjectName to java:comp/env/ObjectName
 
 					String newLocation = "java:comp/env/" + location;
 
 					if (_log.isDebugEnabled()) {
-						_log.debug(n2.getMessage());
+						_log.debug(ne2.getMessage());
 						_log.debug("Attempt " + newLocation);
 					}
 

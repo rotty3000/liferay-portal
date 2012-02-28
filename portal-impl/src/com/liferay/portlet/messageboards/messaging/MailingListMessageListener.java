@@ -102,7 +102,7 @@ public class MailingListMessageListener extends BaseMessageListener {
 				try {
 					store.close();
 				}
-				catch (MessagingException e) {
+				catch (MessagingException me) {
 				}
 			}
 		}

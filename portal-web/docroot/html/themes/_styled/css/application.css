@@ -112,8 +112,9 @@
 
 	&.hover td {
 		background: #D3E8F1;
-		border: 1px solid #D3E8F1;
 		border-bottom-color: #D7D7D7;
+		border-left-color: transparent;
+		border-right-color: transparent;
 	}
 }
 
@@ -491,7 +492,7 @@
 
 .aui-menu-content a, .lfr-menu-list li .taglib-icon, .aui-menu-content .disabled, .lfr-actions .lfr-trigger, .lfr-actions .lfr-trigger strong {
 	font-weight: bold;
-	text-shadow: 1px 1px #FFF;
+	text-shadow: 1px 1px 0 0 #FFF;
 }
 
 /* ---------- Toolbar ---------- */
@@ -730,5 +731,9 @@
 		.aui-buttonitem-label {
 			white-space: nowrap;
 		}
+	}
+
+	.results-row.hover td {
+		border-color: #D3E8F1;
 	}
 }

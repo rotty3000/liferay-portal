@@ -163,11 +163,11 @@ public interface PermissionChecker extends Cloneable {
 	public void init(User user);
 
 	/**
-	 * Returns <code>true</code> if guest permissions will be used in
-	 * permission checks.
+	 * Returns <code>true</code> if guest permissions will be used in permission
+	 * checks.
 	 *
-	 * @return <code>true</code> if guest permissions will be used in
-	 *         permission checks; <code>false</code> otherwise
+	 * @return <code>true</code> if guest permissions will be used in permission
+	 *         checks; <code>false</code> otherwise
 	 */
 	public boolean isCheckGuest();
 

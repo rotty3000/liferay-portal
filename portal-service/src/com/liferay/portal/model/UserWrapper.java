@@ -948,6 +948,11 @@ public class UserWrapper implements User, ModelWrapper<User> {
 		return _user.getDisplayURL(themeDisplay);
 	}
 
+	public java.util.List<com.liferay.portal.model.EmailAddress> getEmailAddresses()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _user.getEmailAddresses();
+	}
+
 	public boolean getFemale()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {

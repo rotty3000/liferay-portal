@@ -316,7 +316,7 @@ public class JournalArticleLocalServiceImpl
 
 				// Indexer
 
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					JournalArticle.class);
 
 				indexer.reindex(article);
@@ -414,7 +414,7 @@ public class JournalArticleLocalServiceImpl
 			journalArticlePersistence.update(article, false);
 
 			if (article.isIndexable()) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					JournalArticle.class);
 
 				indexer.delete(article);
@@ -471,8 +471,7 @@ public class JournalArticleLocalServiceImpl
 
 		if (content.indexOf("\\n") != -1) {
 			content = StringUtil.replace(
-				content,
-				new String[] {"\\n", "\\r"},
+				content, new String[] {"\\n", "\\r"},
 				new String[] {"\n", "\r"});
 
 			article.setContent(content);
@@ -1710,7 +1709,7 @@ public class JournalArticleLocalServiceImpl
 			searchContext.setSorts(new Sort[] {sort});
 			searchContext.setStart(start);
 
-			Indexer indexer = IndexerRegistryUtil.getIndexer(
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 				JournalArticle.class);
 
 			return indexer.search(searchContext);
@@ -2094,7 +2093,7 @@ public class JournalArticleLocalServiceImpl
 
 			// Indexer
 
-			Indexer indexer = IndexerRegistryUtil.getIndexer(
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 				JournalArticle.class);
 
 			indexer.reindex(article);
@@ -2439,7 +2438,7 @@ public class JournalArticleLocalServiceImpl
 
 				// Indexer
 
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					JournalArticle.class);
 
 				indexer.reindex(article);
@@ -3238,7 +3237,7 @@ public class JournalArticleLocalServiceImpl
 			 (article.getStatus() == WorkflowConstants.STATUS_APPROVED))) {
 
 			if (article.isIndexable()) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					JournalArticle.class);
 
 				indexer.delete(article);
@@ -3256,7 +3255,7 @@ public class JournalArticleLocalServiceImpl
 			}
 
 			if (article.isIndexable()) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
+				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					JournalArticle.class);
 
 				indexer.reindex(previousApprovedArticle);

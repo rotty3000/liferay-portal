@@ -56,8 +56,8 @@ public class MSNConnector {
 				try {
 					Thread.sleep(100);
 				}
-				catch (InterruptedException e) {
-					_log.warn(e);
+				catch (InterruptedException ie) {
+					_log.warn(ie);
 
 					break;
 				}

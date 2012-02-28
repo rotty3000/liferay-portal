@@ -100,7 +100,8 @@ public class SCProductVersionLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(SCProductEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			SCProductEntry.class);
 
 		indexer.reindex(productEntry);
 
@@ -207,7 +208,8 @@ public class SCProductVersionLocalServiceImpl
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(SCProductEntry.class);
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			SCProductEntry.class);
 
 		indexer.reindex(productEntry);
 

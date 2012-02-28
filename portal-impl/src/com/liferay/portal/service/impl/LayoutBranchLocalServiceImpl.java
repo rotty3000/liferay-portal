@@ -46,6 +46,8 @@ public class LayoutBranchLocalServiceImpl
 		LayoutSetBranch layoutSetBranch =
 			layoutSetBranchPersistence.findByPrimaryKey(layoutSetBranchId);
 
+		validate(0, layoutSetBranchId, plid, name);
+
 		long layoutBranchId = counterLocalService.increment();
 
 		LayoutBranch layoutBranch = layoutBranchPersistence.create(
@@ -73,10 +75,6 @@ public class LayoutBranchLocalServiceImpl
 
 		LayoutRevision layoutRevision =
 			layoutRevisionPersistence.findByPrimaryKey(layoutRevisionId);
-
-		validate(
-			0, layoutRevision.getLayoutSetBranchId(), layoutRevision.getPlid(),
-			name);
 
 		LayoutBranch layoutBranch = addLayoutBranch(
 			layoutRevision.getLayoutSetBranchId(), layoutRevision.getPlid(),
@@ -198,7 +196,7 @@ public class LayoutBranchLocalServiceImpl
 					LayoutBranchNameException.DUPLICATE);
 			}
 		}
-		catch (NoSuchLayoutBranchException nsbe) {
+		catch (NoSuchLayoutBranchException nslbe) {
 		}
 	}
 

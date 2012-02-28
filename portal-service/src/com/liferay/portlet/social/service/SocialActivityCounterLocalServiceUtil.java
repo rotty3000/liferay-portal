@@ -273,6 +273,18 @@ public class SocialActivityCounterLocalServiceUtil {
 			ownerType, currentValue, totalValue, startPeriod, endPeriod);
 	}
 
+	public static com.liferay.portlet.social.model.SocialActivityCounter addActivityCounter(
+		long groupId, long classNameId, long classPK, java.lang.String name,
+		int ownerType, int currentValue, int totalValue, int startPeriod,
+		int endPeriod, long previousActivityCounterId, int periodLength)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addActivityCounter(groupId, classNameId, classPK, name,
+			ownerType, currentValue, totalValue, startPeriod, endPeriod,
+			previousActivityCounterId, periodLength);
+	}
+
 	public static void addActivityCounters(
 		com.liferay.portlet.social.model.SocialActivity activity)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -280,6 +292,9 @@ public class SocialActivityCounterLocalServiceUtil {
 		getService().addActivityCounters(activity);
 	}
 
+	/**
+	* @deprecated {@link #createActivityCounter(long, long, long, String, int, int, int, int, int, long, int)}
+	*/
 	public static com.liferay.portlet.social.model.SocialActivityCounter createActivityCounter(
 		long groupId, long classNameId, long classPK, java.lang.String name,
 		int ownerType, int currentValue, int totalValue, int startPeriod,
@@ -289,6 +304,18 @@ public class SocialActivityCounterLocalServiceUtil {
 		return getService()
 				   .createActivityCounter(groupId, classNameId, classPK, name,
 			ownerType, currentValue, totalValue, startPeriod, endPeriod);
+	}
+
+	public static com.liferay.portlet.social.model.SocialActivityCounter createActivityCounter(
+		long groupId, long classNameId, long classPK, java.lang.String name,
+		int ownerType, int currentValue, int totalValue, int startPeriod,
+		int endPeriod, long previousActivityCounterId, int periodLength)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .createActivityCounter(groupId, classNameId, classPK, name,
+			ownerType, currentValue, totalValue, startPeriod, endPeriod,
+			previousActivityCounterId, periodLength);
 	}
 
 	public static void deleteActivityCounters(
