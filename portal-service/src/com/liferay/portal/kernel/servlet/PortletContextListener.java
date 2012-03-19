@@ -98,6 +98,16 @@ public class PortletContextListener
 
 	@Override
 	protected void doPortalInit() throws Exception {
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader classLoader = null;
+
+		if (_portletClassLoader != currentThread.getContextClassLoader()) {
+			classLoader = currentThread.getContextClassLoader();
+
+			currentThread.setContextClassLoader(_portletClassLoader);
+		}
+
 		HotDeployUtil.fireDeployEvent(
 			new HotDeployEvent(_servletContext, _portletClassLoader));
 
@@ -155,6 +165,11 @@ public class PortletContextListener
 				_log.warn(
 					"Unable to dynamically bind the Liferay data source: " +
 						e.getMessage());
+			}
+		}
+		finally {
+			 if (classLoader != null) {
+				currentThread.setContextClassLoader(classLoader);
 			}
 		}
 	}
