@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="definitions"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/mvc-portlet-support/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/war-artifact-listener/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-api/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-spi/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/src"/>
-	<classpathentry excluding="**/.svn/**|.svn/|integration/|unit/" kind="src" path="portal-impl/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-web/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="support-tomcat/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-bridges/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/integration"/>-->
-	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-taglib/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/development/activation.jar"/>
@@ -46,7 +46,7 @@
 	<classpathentry kind="lib" path="lib/development/jalopy.jar"/>
 	<classpathentry kind="lib" path="lib/development/jargs.jar"/>
 	<classpathentry kind="lib" path="lib/development/jarjar.jar"/>
-	<classpathentry kind="lib" path="lib/development/jasper.jar"/>
+	<classpathentry kind="lib" path="lib/development/jasper.jar" sourcepath="/home/rotty/DOWN/TARBALL-SRC/apache-tomcat-7.0.21-src/java"/>
 	<classpathentry kind="lib" path="lib/development/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="lib/development/jbi_rt.jar"/>
 	<classpathentry kind="lib" path="lib/development/jetty-server.jar"/>
@@ -93,6 +93,8 @@
 	<classpathentry kind="lib" path="lib/development/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="lib/development/xmltask.jar"/>
 	<classpathentry kind="lib" path="lib/global/portlet.jar"/>
+	<classpathentry kind="lib" path="lib/osgi/org.eclipse.osgi.services.jar"/>
+	<classpathentry kind="lib" path="lib/osgi/org.eclipse.osgi.util.jar"/>
 	<classpathentry kind="lib" path="lib/portal/abdera.jar"/>
 	<classpathentry kind="lib" path="lib/portal/alloy-taglib.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ant.jar"/>
@@ -115,7 +117,7 @@
 	<classpathentry kind="lib" path="lib/portal/backport-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/portal/bcmail.jar"/>
 	<classpathentry kind="lib" path="lib/portal/bcprov.jar"/>
-	<classpathentry kind="lib" path="lib/portal/bnd.jar"/>
+	<classpathentry kind="lib" path="lib/portal/biz.aQute.bnd.jar"/>
 	<classpathentry kind="lib" path="lib/portal/bobo-browse.jar"/>
 	<classpathentry kind="lib" path="lib/portal/bsh.jar"/>
 	<classpathentry kind="lib" path="lib/portal/bsf.jar"/>
@@ -153,13 +155,12 @@
 	<classpathentry kind="lib" path="lib/portal/daisydiff.jar"/>
 	<classpathentry kind="lib" path="lib/portal/displaytag.jar"/>
 	<classpathentry kind="lib" path="lib/portal/dom4j.jar"/>
-	<classpathentry kind="lib" path="lib/portal/easyconf.jar"/>
+	<classpathentry kind="lib" path="lib/portal/easyconf.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/easyconf-0.9.5/src/java"/>
 	<classpathentry kind="lib" path="lib/portal/eclipse-core-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/portal/eclipselink.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ecs.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ehcache-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ehcache-jgroupsreplication.jar"/>
-	<classpathentry kind="lib" path="lib/portal/equinox.jar"/>
 	<classpathentry kind="lib" path="lib/portal/fastutil.jar"/>
 	<classpathentry kind="lib" path="lib/portal/flexjson.jar"/>
 	<classpathentry kind="lib" path="lib/portal/fontbox.jar"/>
@@ -233,6 +234,8 @@
 	<classpathentry kind="lib" path="lib/portal/oauth-provider.jar"/>
 	<classpathentry kind="lib" path="lib/portal/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/portal/openid4java.jar"/>
+	<classpathentry kind="lib" path="lib/portal/org.apache.felix.fileinstall.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/org.apache.felix.fileinstall-3.1.10-sources.jar"/>
+	<classpathentry kind="lib" path="lib/portal/org.eclipse.osgi.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/equinox-SDK-3.7.2/plugins/org.eclipse.osgi.source_3.7.2.v20120110-1415.jar"/>
 	<classpathentry kind="lib" path="lib/portal/oro.jar"/>
 	<classpathentry kind="lib" path="lib/portal/pdfbox.jar"/>
 	<classpathentry kind="lib" path="lib/portal/poi.jar"/>
@@ -277,7 +280,7 @@
 	<classpathentry kind="lib" path="lib/portal/stax-ex.jar"/>
 	<classpathentry kind="lib" path="lib/portal/streambuffer.jar"/>
 	<classpathentry kind="lib" path="lib/portal/stringtemplate.jar"/>
-	<classpathentry kind="lib" path="lib/portal/struts.jar"/>
+	<classpathentry kind="lib" path="lib/portal/struts.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/struts-1.2.9-src/src/share"/>
 	<classpathentry kind="lib" path="lib/portal/struts-el.jar"/>
 	<classpathentry kind="lib" path="lib/portal/tagsoup.jar"/>
 	<classpathentry kind="lib" path="lib/portal/tika-core.jar"/>

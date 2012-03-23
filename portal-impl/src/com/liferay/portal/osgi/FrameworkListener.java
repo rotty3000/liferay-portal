@@ -23,41 +23,47 @@ import org.osgi.framework.FrameworkEvent;
 /**
  * @author Raymond Augé
  */
-public class FrameworkListener implements org.osgi.framework.FrameworkListener {
+public class FrameworkListener extends BaseListener
+	implements org.osgi.framework.FrameworkListener {
 
 	public void frameworkEvent(FrameworkEvent frameworkEvent) {
 		try {
 			int type = frameworkEvent.getType();
 
+			Bundle bundle = frameworkEvent.getBundle();
+
+			Log log = LogFactoryUtil.getLog(
+				logFormatBSN(bundle.getSymbolicName()));
+
 			if (type == FrameworkEvent.ERROR) {
-				frameworkEventError(frameworkEvent);
+				frameworkEventError(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.INFO) {
-				frameworkEventInfo(frameworkEvent);
+				frameworkEventInfo(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.PACKAGES_REFRESHED) {
-				frameworkEventPackagesRefreshed(frameworkEvent);
+				frameworkEventPackagesRefreshed(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.STARTED) {
-				frameworkEventStarted(frameworkEvent);
+				frameworkEventStarted(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.STARTLEVEL_CHANGED) {
-				frameworkEventStartLevelChanged(frameworkEvent);
+				frameworkEventStartLevelChanged(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.STOPPED) {
-				frameworkEventStopped(frameworkEvent);
+				frameworkEventStopped(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED) {
-				frameworkEventStoppedBootClasspathModified(frameworkEvent);
+				frameworkEventStoppedBootClasspathModified(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.STOPPED_UPDATE) {
-				frameworkEventStoppedUpdate(frameworkEvent);
+				frameworkEventStoppedUpdate(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.WAIT_TIMEDOUT) {
-				frameworkEventWaitTimedout(frameworkEvent);
+				frameworkEventWaitTimedout(log, frameworkEvent);
 			}
 			else if (type == FrameworkEvent.WARNING) {
-				frameworkEventWarning(frameworkEvent);
+				frameworkEventWarning(log, frameworkEvent);
 			}
 		}
 		catch (Exception e) {
@@ -65,12 +71,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		}
 	}
 
-	protected void frameworkEventError(FrameworkEvent frameworkEvent)
+	protected void frameworkEventError(Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isErrorEnabled()) {
 			return;
@@ -79,12 +81,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		log.error("[ERROR]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventInfo(FrameworkEvent frameworkEvent)
+	protected void frameworkEventInfo(Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -94,12 +92,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 	}
 
 	protected void frameworkEventPackagesRefreshed(
-			FrameworkEvent frameworkEvent)
+			Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -108,12 +102,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		log.info("[PACKAGES_REFRESHED]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventStarted(FrameworkEvent frameworkEvent)
+	protected void frameworkEventStarted(Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -123,12 +113,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 	}
 
 	protected void frameworkEventStartLevelChanged(
-			FrameworkEvent frameworkEvent)
+			Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -137,12 +123,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		log.info("[STARTLEVEL_CHANGED]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventStopped(FrameworkEvent frameworkEvent)
+	protected void frameworkEventStopped(Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -152,12 +134,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 	}
 
 	protected void frameworkEventStoppedBootClasspathModified(
-			FrameworkEvent frameworkEvent)
+			Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -167,12 +145,9 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 			"[STOPPED_BOOTCLASSPATH_MODIFIED]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventStoppedUpdate(FrameworkEvent frameworkEvent)
+	protected void frameworkEventStoppedUpdate(
+			Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -181,12 +156,9 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		log.info("[STOPPED_UPDATE]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventWaitTimedout(FrameworkEvent frameworkEvent)
+	protected void frameworkEventWaitTimedout(
+			Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isInfoEnabled()) {
 			return;
@@ -195,12 +167,8 @@ public class FrameworkListener implements org.osgi.framework.FrameworkListener {
 		log.info("[WAIT_TIMEDOUT]", frameworkEvent.getThrowable());
 	}
 
-	protected void frameworkEventWarning(FrameworkEvent frameworkEvent)
+	protected void frameworkEventWarning(Log log, FrameworkEvent frameworkEvent)
 		throws Exception {
-
-		Bundle bundle = frameworkEvent.getBundle();
-
-		Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
 
 		if (!log.isWarnEnabled()) {
 			return;

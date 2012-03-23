@@ -1259,6 +1259,8 @@ public interface PropsKeys {
 
 	public static final String LIFERAY_LIB_PORTAL_DIR = "liferay.lib.portal.dir";
 
+	public static final String LIFERAY_OSGI_PORTAL_DIR = "liferay.osgi.portal.dir";
+
 	public static final String LIFERAY_WEB_PORTAL_DIR = "liferay.web.portal.dir";
 
 	public static final String LIVE_USERS_ENABLED = "live.users.enabled";
@@ -1571,6 +1573,8 @@ public interface PropsKeys {
 
 	public static final String ORGANIZATIONS_TYPES = "organizations.types";
 
+	public static final String OSGI_AUTO_DEPLOY_DIR = "osgi.auto.deploy.dir";
+
 	public static final String OSGI_ENABLED = "osgi.enabled";
 
 	public static final String OSGI_FRAMEWORK_BEGINNING_START_LEVEL = "osgi.framework.beginning.start.level";
@@ -1584,6 +1588,10 @@ public interface PropsKeys {
 	public static final String OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES = "osgi.system.bundle.export.packages";
 
 	public static final String OSGI_SYSTEM_PACKAGES_EXTRA = "osgi.system.packages.extra";
+
+	public static final String OSGI_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = "osgi.web.extender.default.portlet.packages";
+
+	public static final String OSGI_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = "osgi.web.extender.default.servlet.packages";
 
 	public static final String PASSWORDS_DEFAULT_POLICY_ALLOW_DICTIONARY_WORDS = "passwords.default.policy.allow.dictionary.words";
 

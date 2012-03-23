@@ -20,10 +20,12 @@ import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.zip.ZipReader;
 import com.liferay.portal.kernel.zip.ZipReaderFactoryUtil;
 import com.liferay.portal.osgi.service.OSGiServiceUtil;
+import com.liferay.portal.tools.deploy.BaseDeployer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,6 +51,12 @@ import org.osgi.framework.launch.Framework;
  */
 public class OSGiAutoDeployListener implements AutoDeployListener {
 
+	public OSGiAutoDeployListener() {
+		_baseDeployer = new BaseDeployer();
+
+		_baseDeployer.setAppServerType(ServerDetector.getServerId());
+	}
+
 	public void deploy(File file, String context) throws AutoDeployException {
 		try {
 			doDeploy(file, context);
@@ -56,6 +64,10 @@ public class OSGiAutoDeployListener implements AutoDeployListener {
 		catch (Exception e) {
 			throw new AutoDeployException(e);
 		}
+	}
+
+	public BaseDeployer getBaseDeployer() {
+		return _baseDeployer;
 	}
 
 	protected void cleanUp(ZipReader zipReader, InputStream inputStream) {
@@ -205,5 +217,7 @@ public class OSGiAutoDeployListener implements AutoDeployListener {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		OSGiAutoDeployListener.class);
+
+	private BaseDeployer _baseDeployer;
 
 }

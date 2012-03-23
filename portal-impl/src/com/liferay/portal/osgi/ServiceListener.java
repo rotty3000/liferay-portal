@@ -24,7 +24,8 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Raymond Augé
  */
-public class ServiceListener implements org.osgi.framework.ServiceListener {
+public class ServiceListener extends BaseListener
+	implements org.osgi.framework.ServiceListener {
 
 	public void serviceChanged(ServiceEvent serviceEvent) {
 		try {
@@ -33,7 +34,8 @@ public class ServiceListener implements org.osgi.framework.ServiceListener {
 
 			Bundle bundle = serviceReference.getBundle();
 
-			Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
+			Log log = LogFactoryUtil.getLog(
+				logFormatBSN(bundle.getSymbolicName()));
 
 			if (!log.isInfoEnabled()) {
 				return;

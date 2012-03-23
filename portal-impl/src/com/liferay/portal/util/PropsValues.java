@@ -890,6 +890,8 @@ public class PropsValues {
 
 	public static final String LIFERAY_LIB_PORTAL_DIR = PropsUtil.get(PropsKeys.LIFERAY_LIB_PORTAL_DIR);
 
+	public static final String LIFERAY_OSGI_PORTAL_DIR = PropsUtil.get(PropsKeys.LIFERAY_OSGI_PORTAL_DIR);
+
 	public static final String LIFERAY_WEB_PORTAL_DIR = PropsUtil.get(PropsKeys.LIFERAY_WEB_PORTAL_DIR);
 
 	public static final boolean LIVE_USERS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.LIVE_USERS_ENABLED));
@@ -1130,6 +1132,8 @@ public class PropsValues {
 
 	public static String[] ORGANIZATIONS_TYPES = PropsUtil.getArray(PropsKeys.ORGANIZATIONS_TYPES);
 
+	public static final String OSGI_AUTO_DEPLOY_DIR = PropsUtil.get(PropsKeys.OSGI_AUTO_DEPLOY_DIR);
+
 	public static final boolean OSGI_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.OSGI_ENABLED));
 
 	public static final int OSGI_FRAMEWORK_BEGINNING_START_LEVEL = GetterUtil.getInteger(PropsUtil.get(PropsKeys.OSGI_FRAMEWORK_BEGINNING_START_LEVEL));
@@ -1143,6 +1147,10 @@ public class PropsValues {
 	public static final String[] OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES = PropsUtil.getArray(PropsKeys.OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES);
 
 	public static final String[] OSGI_SYSTEM_PACKAGES_EXTRA = PropsUtil.getArray(PropsKeys.OSGI_SYSTEM_PACKAGES_EXTRA);
+
+	public static final String[] OSGI_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = PropsUtil.getArray(PropsKeys.OSGI_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES);
+
+	public static final String[] OSGI_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = PropsUtil.getArray(PropsKeys.OSGI_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES);
 
 	public static final boolean PASSWORDS_DEFAULT_POLICY_ALLOW_DICTIONARY_WORDS = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PASSWORDS_DEFAULT_POLICY_ALLOW_DICTIONARY_WORDS));
 

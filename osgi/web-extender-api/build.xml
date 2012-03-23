@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<project name="web-extender-api" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${app.server.osgi.portal.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<bndexpand propertyfile="bnd.bnd" />
+
+	<target name="jar" depends="compile">
+		<bnd
+			eclipse="false"
+			exceptions="true"
+			failok="false"
+			output="."
+			sourcepath="src"
+		>
+			<classpath>
+				<pathelement location="classes" />
+			</classpath>
+
+			<bndfiles path="bnd.bnd" />
+		</bnd>
+	</target>
+</project>

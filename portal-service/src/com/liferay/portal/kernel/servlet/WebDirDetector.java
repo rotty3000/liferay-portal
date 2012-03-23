@@ -39,6 +39,20 @@ public class WebDirDetector {
 		return libDir;
 	}
 
+	public static String getOSGiDir(ClassLoader classLoader) {
+		return getOSGiDir(getLibDir(classLoader));
+	}
+
+	public static String getOSGiDir(String libDir) {
+		String osgiDir = libDir;
+
+		if (osgiDir.endsWith("/WEB-INF/lib/")) {
+			osgiDir = osgiDir.replaceAll("/WEB-INF/lib/", "/WEB-INF/osgi/");
+		}
+
+		return osgiDir;
+	}
+
 	public static String getRootDir(ClassLoader classLoader) {
 		return getRootDir(getLibDir(classLoader));
 	}
