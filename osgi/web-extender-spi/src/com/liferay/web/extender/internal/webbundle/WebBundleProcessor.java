@@ -289,9 +289,16 @@ public class WebBundleProcessor {
 			Set<String> packages = dependencyVisitor.getPackages();
 
 			for (String packageName : packages) {
-				packageList.add(
-					packageName.replaceAll(
-						StringPool.SLASH, StringPool.PERIOD));
+				packageName = packageName.replaceAll(
+					StringPool.SLASH, StringPool.PERIOD);
+
+				if (packageName.startsWith("com.sun.") ||
+					packageName.startsWith("sun.")) {
+
+					continue;
+				}
+
+				packageList.add(packageName);
 			}
 		}
 		catch (Exception e) {
@@ -473,7 +480,10 @@ public class WebBundleProcessor {
 		}
 	}
 
-	protected void processJarDependencies(File jarFile) throws IOException {
+	protected void processJarDependencies(
+			File jarFile, List<String> jarProvidedPackages)
+		throws IOException {
+
 		DependencyVisitor dependencyVisitor = new DependencyVisitor();
 
 		ZipFile zipFile = new ZipFile(jarFile);
@@ -497,7 +507,7 @@ public class WebBundleProcessor {
 		Set<String> jarPackages = dependencyVisitor.getGlobals().keySet();
 
 		for (String jarPackage : jarPackages) {
-			_jarProvidedPackages.add(
+			jarProvidedPackages.add(
 				jarPackage.replaceAll(StringPool.SLASH, StringPool.PERIOD));
 		}
 	}
@@ -858,14 +868,13 @@ public class WebBundleProcessor {
 						"WEB-INF/lib" + webContextpath + "-service.jar")) {
 
 				// TODO
-				processJarDependencies(file);
-				//System.out.println(relativePath);
+				processJarDependencies(file, _exportPackages);
 			}
 			else if (relativePath.startsWith("WEB-INF/lib/") &&
 					 relativePath.endsWith(".jar") &&
 					 !ArrayUtil.contains(_EXCLUDED_CLASS_PATHS, relativePath)) {
 
-				processJarDependencies(file);
+				processJarDependencies(file, _jarProvidedPackages);
 			}
 			else if (relativePath.endsWith(".jsp") ||
 					 relativePath.endsWith(".jspf")) {

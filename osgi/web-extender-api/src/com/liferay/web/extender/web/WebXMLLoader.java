@@ -56,7 +56,6 @@ public class WebXMLLoader {
 			loadContext(bundle, root, webXML);
 			loadFilters(bundle, root, webXML);
 			loadServlets(bundle, root, webXML);
-			loadMimeMappings(bundle, root, webXML);
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
@@ -73,7 +72,6 @@ public class WebXMLLoader {
 			loadContext(bundle, root, webXML);
 			loadFilters(bundle, root, webXML);
 			loadServlets(bundle, root, webXML);
-			loadMimeMappings(bundle, root, webXML);
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {

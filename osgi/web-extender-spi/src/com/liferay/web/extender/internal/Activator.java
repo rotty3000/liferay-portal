@@ -24,8 +24,8 @@ import com.liferay.portal.struts.StrutsActionRegistryUtil;
 import com.liferay.web.extender.Constants;
 import com.liferay.web.extender.internal.webbundle.WebBundleURLStreamHandlerService;
 import com.liferay.web.extender.servlet.BundleServletConfig;
+import com.liferay.web.extender.servlet.BundleServletContext;
 
-import java.util.Dictionary;
 import java.util.Hashtable;
 
 import javax.servlet.ServletConfig;
@@ -145,10 +145,8 @@ public class Activator
 
 	protected void checkStartableBundles() {
 		for (Bundle bundle : _bundleContext.getBundles()) {
-			Dictionary<String,String> headers = bundle.getHeaders();
-
-			String servletContextName = headers.get(
-				OSGiConstants.WEB_CONTEXTPATH);
+			String servletContextName =
+				BundleServletContext.getServletContextName(bundle);
 
 			if (Validator.isNotNull(servletContextName)) {
 				try {
@@ -163,10 +161,8 @@ public class Activator
 
 	protected void checkStoppableBundles() {
 		for (final Bundle bundle : _bundleContext.getBundles()) {
-			Dictionary<String,String> headers = bundle.getHeaders();
-
-			String servletContextName = headers.get(
-				OSGiConstants.WEB_CONTEXTPATH);
+			String servletContextName =
+				BundleServletContext.getServletContextName(bundle);
 
 			if (Validator.isNotNull(servletContextName)) {
 				try {

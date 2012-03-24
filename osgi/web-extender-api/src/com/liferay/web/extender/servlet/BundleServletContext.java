@@ -500,7 +500,7 @@ public class BundleServletContext extends LiferayServletContext {
 		try {
 			currentThread.setContextClassLoader(_classLoader);
 
-			Servlet servlet = _servletsMap.remove(alias);
+			Servlet servlet = _servletsMap.get(alias);
 
 			if (servlet == null) {
 				return;
@@ -515,6 +515,8 @@ public class BundleServletContext extends LiferayServletContext {
 			AuthPublicPathRegistry.unregister(sb.toString());
 
 			servlet.destroy();
+
+			_servletsMap.remove(servlet);
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
@@ -529,13 +531,15 @@ public class BundleServletContext extends LiferayServletContext {
 		try {
 			currentThread.setContextClassLoader(_classLoader);
 
-			Filter filter = _filtersMap.remove(filterMapping);
+			Filter filter = _filtersMap.get(filterMapping);
 
 			if (filter == null) {
 				return;
 			}
 
 			filter.destroy();
+
+			_filtersMap.remove(filter);
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
@@ -550,7 +554,7 @@ public class BundleServletContext extends LiferayServletContext {
 		try {
 			currentThread.setContextClassLoader(_classLoader);
 
-			Object listener = _listeners.remove(listenerClassName);
+			Object listener = _listeners.get(listenerClassName);
 
 			if (listener == null) {
 				return;
@@ -580,6 +584,8 @@ public class BundleServletContext extends LiferayServletContext {
 			else if (listener instanceof ServletRequestAttributeListener) {
 				// TODO ServletRequestAttributeListener
 			}
+
+			_listeners.remove(listener);
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
