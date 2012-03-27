@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<project name="osgi-admin-portlet" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+	<property name="javac.destdir" value="docroot/WEB-INF/classes" />
+	<property name="javac.srcdir" value="docroot/WEB-INF/src" />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${app.server.osgi.portal.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<bndexpand propertyfile="bnd.bnd" />
+
+	<target name="jar" depends="compile-java">
+		<bnd
+			eclipse="false"
+			exceptions="true"
+			failok="false"
+			output="."
+			sourcepath="docroot/WEB-INF/src"
+		>
+			<classpath>
+				<pathelement location="docroot/WEB-INF/classes" />
+			</classpath>
+
+			<bndfiles path="bnd.bnd" />
+		</bnd>
+	</target>
+</project>
