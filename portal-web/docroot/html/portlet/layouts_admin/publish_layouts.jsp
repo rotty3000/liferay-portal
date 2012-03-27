@@ -113,9 +113,6 @@ long[] selectedLayoutIds = new long[0];
 boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout", tabs1.equals("private-pages"));
 
 if (selPlid > 0) {
-	selectedLayoutIds = new long[] {selLayout.getLayoutId()};
-}
-else {
 	treeKey = treeKey + privateLayout;
 
 	selectedLayoutIds = GetterUtil.getLongValues(StringUtil.split(SessionTreeJSClicks.getOpenNodes(request, treeKey + "SelectedNode"), ','));
@@ -184,6 +181,7 @@ selectURL.setParameter("struts_action", "/layouts_admin/publish_layouts");
 selectURL.setParameter(Constants.CMD, cmd);
 selectURL.setParameter("pagesRedirect", pagesRedirect);
 selectURL.setParameter("groupId", String.valueOf(stagingGroupId));
+selectURL.setParameter("selPlid", String.valueOf(selPlid));
 selectURL.setParameter("privateLayout", String.valueOf(privateLayout));
 selectURL.setParameter("layoutSetBranchId", String.valueOf(layoutSetBranchId));
 selectURL.setParameter("selectPages", String.valueOf(!selectPages));

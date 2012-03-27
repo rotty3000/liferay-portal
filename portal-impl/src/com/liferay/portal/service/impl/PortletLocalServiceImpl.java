@@ -1364,6 +1364,15 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 				portletElement.elementText("permission-propagator"),
 				portletModel.getPermissionPropagatorClass()));
 
+		List<String> trashHandlerClasses =
+			portletModel.getTrashHandlerClasses();
+
+		for (Element trashHandlerClassElement :
+				portletElement.elements("trash-handler")) {
+
+			trashHandlerClasses.add(trashHandlerClassElement.getText());
+		}
+
 		List<String> workflowHandlerClasses =
 			portletModel.getWorkflowHandlerClasses();
 

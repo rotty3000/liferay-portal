@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.OpenSearch;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.URLEncoder;
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -108,6 +109,7 @@ public class PortletImpl extends PortletBaseImpl {
 		_assetRendererFactoryClasses = new ArrayList<String>();
 		_atomCollectionAdapterClasses = new ArrayList<String>();
 		_customAttributesDisplayClasses = new ArrayList<String>();
+		_trashHandlerClasses = new ArrayList<String>();
 		_workflowHandlerClasses = new ArrayList<String>();
 		_autopropagatedParameters = new LinkedHashSet<String>();
 		_headerPortalCss = new ArrayList<String>();
@@ -152,15 +154,15 @@ public class PortletImpl extends PortletBaseImpl {
 		String controlPanelClass, List<String> assetRendererFactoryClasses,
 		List<String> atomCollectionAdapterClasses,
 		List<String> customAttributesDisplayClasses,
-		String permissionPropagatorClass, List<String> workflowHandlerClasses,
-		String defaultPreferences, String preferencesValidator,
-		boolean preferencesCompanyWide, boolean preferencesUniquePerLayout,
-		boolean preferencesOwnedByGroup, boolean useDefaultTemplate,
-		boolean showPortletAccessDenied, boolean showPortletInactive,
-		boolean actionURLRedirect, boolean restoreCurrentView,
-		boolean maximizeEdit, boolean maximizeHelp, boolean popUpPrint,
-		boolean layoutCacheable, boolean instanceable, boolean remoteable,
-		boolean scopeable, String userPrincipalStrategy,
+		String permissionPropagatorClass, List<String> trashHandlerClasses,
+		List<String> workflowHandlerClasses, String defaultPreferences,
+		String preferencesValidator, boolean preferencesCompanyWide,
+		boolean preferencesUniquePerLayout, boolean preferencesOwnedByGroup,
+		boolean useDefaultTemplate, boolean showPortletAccessDenied,
+		boolean showPortletInactive, boolean actionURLRedirect,
+		boolean restoreCurrentView, boolean maximizeEdit, boolean maximizeHelp,
+		boolean popUpPrint, boolean layoutCacheable, boolean instanceable,
+		boolean remoteable, boolean scopeable, String userPrincipalStrategy,
 		boolean privateRequestAttributes, boolean privateSessionAttributes,
 		Set<String> autopropagatedParameters, int actionTimeout,
 		int renderTimeout, int renderWeight, boolean ajaxable,
@@ -219,6 +221,7 @@ public class PortletImpl extends PortletBaseImpl {
 		_atomCollectionAdapterClasses = atomCollectionAdapterClasses;
 		_customAttributesDisplayClasses = customAttributesDisplayClasses;
 		_permissionPropagatorClass = permissionPropagatorClass;
+		_trashHandlerClasses = trashHandlerClasses;
 		_workflowHandlerClasses = workflowHandlerClasses;
 		_defaultPreferences = defaultPreferences;
 		_preferencesValidator = preferencesValidator;
@@ -352,18 +355,18 @@ public class PortletImpl extends PortletBaseImpl {
 			getControlPanelEntryClass(), getAssetRendererFactoryClasses(),
 			getAtomCollectionAdapterClasses(),
 			getCustomAttributesDisplayClasses(), getPermissionPropagatorClass(),
-			getWorkflowHandlerClasses(), getDefaultPreferences(),
-			getPreferencesValidator(), isPreferencesCompanyWide(),
-			isPreferencesUniquePerLayout(), isPreferencesOwnedByGroup(),
-			isUseDefaultTemplate(), isShowPortletAccessDenied(),
-			isShowPortletInactive(), isActionURLRedirect(),
-			isRestoreCurrentView(), isMaximizeEdit(), isMaximizeHelp(),
-			isPopUpPrint(), isLayoutCacheable(), isInstanceable(),
-			isRemoteable(), isScopeable(), getUserPrincipalStrategy(),
-			isPrivateRequestAttributes(), isPrivateSessionAttributes(),
-			getAutopropagatedParameters(), getActionTimeout(),
-			getRenderTimeout(), getRenderWeight(), isAjaxable(),
-			getHeaderPortalCss(), getHeaderPortletCss(),
+			getTrashHandlerClasses(), getWorkflowHandlerClasses(),
+			getDefaultPreferences(), getPreferencesValidator(),
+			isPreferencesCompanyWide(), isPreferencesUniquePerLayout(),
+			isPreferencesOwnedByGroup(), isUseDefaultTemplate(),
+			isShowPortletAccessDenied(), isShowPortletInactive(),
+			isActionURLRedirect(), isRestoreCurrentView(), isMaximizeEdit(),
+			isMaximizeHelp(), isPopUpPrint(), isLayoutCacheable(),
+			isInstanceable(), isRemoteable(), isScopeable(),
+			getUserPrincipalStrategy(), isPrivateRequestAttributes(),
+			isPrivateSessionAttributes(), getAutopropagatedParameters(),
+			getActionTimeout(), getRenderTimeout(), getRenderWeight(),
+			isAjaxable(), getHeaderPortalCss(), getHeaderPortletCss(),
 			getHeaderPortalJavaScript(), getHeaderPortletJavaScript(),
 			getFooterPortalCss(), getFooterPortletCss(),
 			getFooterPortalJavaScript(), getFooterPortletJavaScript(),
@@ -1659,6 +1662,32 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	public long getTimestamp() {
 		return _timestamp;
+	}
+
+	/**
+	 * Returns the names of the classes that represent trash handlers associated
+	 * with the portlet.
+	 *
+	 * @return the names of the classes that represent trash handlers associated
+	 *         with the portlet
+	 */
+	public List<String> getTrashHandlerClasses() {
+		return _trashHandlerClasses;
+	}
+
+	/**
+	 * Returns the trash handler instances of the portlet.
+	 *
+	 * @return the trash handler instances of the portlet
+	 */
+	public List<TrashHandler> getTrashHandlerInstances() {
+		if (getTrashHandlerClasses().isEmpty()) {
+			return null;
+		}
+
+		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
+
+		return portletBag.getTrashHandlerInstances();
 	}
 
 	/**
@@ -3154,6 +3183,17 @@ public class PortletImpl extends PortletBaseImpl {
 	}
 
 	/**
+	 * Sets the name of the classes that represent trash handlers associated
+	 * to the portlet.
+	 *
+	 * @param trashHandlerClasses the names of the classes that represent
+	 *        trash handlers associated with the portlet
+	 */
+	public void setTrashHandlerClasses(List<String> trashHandlerClasses) {
+		_trashHandlerClasses = trashHandlerClasses;
+	}
+
+	/**
 	 * Set to <code>true</code> if the portlet is an undeployed portlet.
 	 *
 	 * @param undeployedPortlet boolean value for whether the portlet is an
@@ -3744,6 +3784,12 @@ public class PortletImpl extends PortletBaseImpl {
 	 * The timestamp of the portlet.
 	 */
 	private long _timestamp;
+
+	/**
+	 * The names of the classes that represents trash handlers associated with
+	 * the portlet.
+	 */
+	private List<String> _trashHandlerClasses;
 
 	/**
 	 * <code>True</code> if the portlet is an undeployed portlet.

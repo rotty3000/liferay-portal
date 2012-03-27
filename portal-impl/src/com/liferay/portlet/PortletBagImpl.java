@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.OpenSearch;
 import com.liferay.portal.kernel.servlet.URLEncoder;
+import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
 import com.liferay.portal.kernel.workflow.WorkflowHandler;
@@ -70,6 +71,7 @@ public class PortletBagImpl implements PortletBag {
 		List<AtomCollectionAdapter<?>> atomCollectionAdapters,
 		List<CustomAttributesDisplay> customAttributesDisplayInstances,
 		PermissionPropagator permissionPropagatorInstance,
+		List<TrashHandler> trashHandlerInstances,
 		List<WorkflowHandler> workflowHandlerInstances,
 		PreferencesValidator preferencesValidatorInstance,
 		Map<String, ResourceBundle> resourceBundles) {
@@ -95,6 +97,7 @@ public class PortletBagImpl implements PortletBag {
 		_atomCollectionAdapterInstances = atomCollectionAdapters;
 		_customAttributesDisplayInstances = customAttributesDisplayInstances;
 		_permissionPropagatorInstance = permissionPropagatorInstance;
+		_trashHandlerInstances = trashHandlerInstances;
 		_workflowHandlerInstances = workflowHandlerInstances;
 		_preferencesValidatorInstance = preferencesValidatorInstance;
 		_resourceBundles = resourceBundles;
@@ -115,8 +118,9 @@ public class PortletBagImpl implements PortletBag {
 			getAssetRendererFactoryInstances(),
 			getAtomCollectionAdapterInstances(),
 			getCustomAttributesDisplayInstances(),
-			getPermissionPropagatorInstance(), getWorkflowHandlerInstances(),
-			getPreferencesValidatorInstance(), getResourceBundles());
+			getPermissionPropagatorInstance(), getTrashHandlerInstances(),
+			getWorkflowHandlerInstances(), getPreferencesValidatorInstance(),
+			getResourceBundles());
 	}
 
 	public List<AssetRendererFactory> getAssetRendererFactoryInstances() {
@@ -215,6 +219,10 @@ public class PortletBagImpl implements PortletBag {
 		return _socialRequestInterpreterInstance;
 	}
 
+	public List<TrashHandler> getTrashHandlerInstances() {
+		return _trashHandlerInstances;
+	}
+
 	public URLEncoder getURLEncoderInstance() {
 		return _urlEncoderInstance;
 	}
@@ -259,6 +267,7 @@ public class PortletBagImpl implements PortletBag {
 	private ServletContext _servletContext;
 	private SocialActivityInterpreter _socialActivityInterpreterInstance;
 	private SocialRequestInterpreter _socialRequestInterpreterInstance;
+	private List<TrashHandler> _trashHandlerInstances;
 	private URLEncoder _urlEncoderInstance;
 	private WebDAVStorage _webDAVStorageInstance;
 	private List<WorkflowHandler> _workflowHandlerInstances;

@@ -23,8 +23,8 @@ social-activity-interpreter-class?, social-request-interpreter-class?,
 webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
 control-panel-entry-category?, control-panel-entry-weight?,
 control-panel-entry-class?, asset-renderer-factory*, atom-collection-adapter*,
-custom-attributes-display*, permission-propagator?, workflow-handler*,
-preferences-company-wide?, preferences-unique-per-layout?,
+custom-attributes-display*, permission-propagator?, trash-handler*,
+workflow-handler*, preferences-company-wide?, preferences-unique-per-layout?,
 preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
 show-portlet-inactive?, action-url-redirect?, restore-current-view?,
 maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
@@ -395,6 +395,13 @@ com.liferay.portal.security.permission.PermissionPropagator and is called to
 propagate permissions.
 -->
 <!ELEMENT permission-propagator (#PCDATA)>
+
+<!--
+The trash-handler value must be a class that implements
+com.liferay.portal.kernel.trash.TrashHandler and is called to manage trash
+entries.
+-->
+<!ELEMENT trash-handler (#PCDATA)>
 
 <!--
 -->

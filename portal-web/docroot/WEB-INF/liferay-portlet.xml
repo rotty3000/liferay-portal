@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.1.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
 	<portlet>
@@ -241,6 +241,7 @@
 		<atom-collection-adapter>com.liferay.portlet.documentlibrary.atom.FolderAtomCollectionAdapter</atom-collection-adapter>
 		<custom-attributes-display>com.liferay.portlet.documentlibrary.DLFileEntryCustomAttributesDisplay</custom-attributes-display>
 		<custom-attributes-display>com.liferay.portlet.documentlibrary.DLFolderCustomAttributesDisplay</custom-attributes-display>
+		<trash-handler>com.liferay.portlet.documentlibrary.trash.DLFileEntryTrashHandler</trash-handler>
 		<workflow-handler>com.liferay.portlet.documentlibrary.workflow.DLFileEntryWorkflowHandler</workflow-handler>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>

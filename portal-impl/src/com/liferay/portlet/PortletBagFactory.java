@@ -38,6 +38,8 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.OpenSearch;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.URLEncoder;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -228,6 +230,19 @@ public class PortletBagFactory {
 		PermissionPropagator permissionPropagatorInstance =
 			newPermissionPropagator(portlet);
 
+		List<TrashHandler> trashHandlerInstances =
+			new ArrayList<TrashHandler>();
+
+		for (String trashHandlerClass : portlet.getTrashHandlerClasses()) {
+			TrashHandler trashHandlerInstance =
+				(TrashHandler)newInstance(
+					TrashHandler.class, trashHandlerClass);
+
+			trashHandlerInstances.add(trashHandlerInstance);
+
+			TrashHandlerRegistryUtil.register(trashHandlerInstance);
+		}
+
 		List<WorkflowHandler> workflowHandlerInstances =
 			new ArrayList<WorkflowHandler>();
 
@@ -299,8 +314,9 @@ public class PortletBagFactory {
 			webDAVStorageInstance, xmlRpcMethodInstance,
 			controlPanelEntryInstance, assetRendererFactoryInstances,
 			atomCollectionAdapterInstances, customAttributesDisplayInstances,
-			permissionPropagatorInstance, workflowHandlerInstances,
-			preferencesValidatorInstance, resourceBundles);
+			permissionPropagatorInstance, trashHandlerInstances,
+			workflowHandlerInstances, preferencesValidatorInstance,
+			resourceBundles);
 
 		PortletBagPool.put(portlet.getRootPortletId(), portletBag);
 

@@ -260,6 +260,11 @@
 			<bean class="com.liferay.portal.staging.permission.StagingPermissionImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil" class="com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil">
+		<property name="trashHandlerRegistry">
+			<bean class="com.liferay.portal.trash.TrashHandlerRegistryImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil" class="com.liferay.portal.kernel.upgrade.util.UpgradeTableFactoryUtil">
 		<property name="upgradeTableFactory">
 			<bean class="com.liferay.portal.upgrade.util.DefaultUpgradeTableFactoryImpl" />

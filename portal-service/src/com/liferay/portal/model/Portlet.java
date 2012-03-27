@@ -956,6 +956,22 @@ public interface Portlet extends PortletModel, PersistedModel {
 	public long getTimestamp();
 
 	/**
+	* Returns the names of the classes that represent trash handlers associated
+	* with the portlet.
+	*
+	* @return the names of the classes that represent trash handlers associated
+	with the portlet
+	*/
+	public java.util.List<java.lang.String> getTrashHandlerClasses();
+
+	/**
+	* Returns the trash handler instances of the portlet.
+	*
+	* @return the trash handler instances of the portlet
+	*/
+	public java.util.List<com.liferay.portal.kernel.trash.TrashHandler> getTrashHandlerInstances();
+
+	/**
 	* Returns <code>true</code> if the portlet is an undeployed portlet.
 	*
 	* @return <code>true</code> if the portlet is a placeholder of an
@@ -2043,6 +2059,16 @@ public interface Portlet extends PortletModel, PersistedModel {
 	* @param timestamp the timestamp of the portlet
 	*/
 	public void setTimestamp(long timestamp);
+
+	/**
+	* Sets the name of the classes that represent trash handlers associated
+	* to the portlet.
+	*
+	* @param trashHandlerClasses the names of the classes that represent
+	trash handlers associated with the portlet
+	*/
+	public void setTrashHandlerClasses(
+		java.util.List<java.lang.String> trashHandlerClasses);
 
 	/**
 	* Set to <code>true</code> if the portlet is an undeployed portlet.

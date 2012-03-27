@@ -1359,6 +1359,26 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	}
 
 	/**
+	* Returns the names of the classes that represent trash handlers associated
+	* with the portlet.
+	*
+	* @return the names of the classes that represent trash handlers associated
+	with the portlet
+	*/
+	public java.util.List<java.lang.String> getTrashHandlerClasses() {
+		return _portlet.getTrashHandlerClasses();
+	}
+
+	/**
+	* Returns the trash handler instances of the portlet.
+	*
+	* @return the trash handler instances of the portlet
+	*/
+	public java.util.List<com.liferay.portal.kernel.trash.TrashHandler> getTrashHandlerInstances() {
+		return _portlet.getTrashHandlerInstances();
+	}
+
+	/**
 	* Returns <code>true</code> if the portlet is an undeployed portlet.
 	*
 	* @return <code>true</code> if the portlet is a placeholder of an
@@ -2696,6 +2716,18 @@ public class PortletWrapper implements Portlet, ModelWrapper<Portlet> {
 	*/
 	public void setTimestamp(long timestamp) {
 		_portlet.setTimestamp(timestamp);
+	}
+
+	/**
+	* Sets the name of the classes that represent trash handlers associated
+	* to the portlet.
+	*
+	* @param trashHandlerClasses the names of the classes that represent
+	trash handlers associated with the portlet
+	*/
+	public void setTrashHandlerClasses(
+		java.util.List<java.lang.String> trashHandlerClasses) {
+		_portlet.setTrashHandlerClasses(trashHandlerClasses);
 	}
 
 	/**
