@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="definitions"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/mvc-portlet-support/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/osgi-admin-portlet/docroot/WEB-INF/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/war-artifact-listener/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-api/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-spi/src"/>
