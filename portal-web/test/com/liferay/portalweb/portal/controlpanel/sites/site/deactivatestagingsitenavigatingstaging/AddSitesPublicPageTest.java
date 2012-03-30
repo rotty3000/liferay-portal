@@ -29,6 +29,9 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 			case 1:
 				selenium.open("/web/guest/home/");
 				loadRequiredJavaScriptModules();
+				assertEquals(RuntimeVariables.replace("Go to"),
+					selenium.getText("//li[@id='_145_mySites']/a/span"));
+				selenium.mouseOver("//li[@id='_145_mySites']/a/span");
 
 				for (int second = 0;; second++) {
 					if (second >= 90) {
@@ -36,7 +39,7 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isElementPresent("link=Control Panel")) {
+						if (selenium.isVisible("link=Control Panel")) {
 							break;
 						}
 					}
@@ -60,8 +63,9 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
 				assertEquals(RuntimeVariables.replace("Actions"),
-					selenium.getText("//td[7]/span/ul/li/strong/a/span"));
-				selenium.clickAt("//td[7]/span/ul/li/strong/a/span",
+					selenium.getText(
+						"//span[@title='Actions']/ul/li/strong/a/span"));
+				selenium.clickAt("//span[@title='Actions']/ul/li/strong/a/span",
 					RuntimeVariables.replace("Actions"));
 
 				for (int second = 0;; second++) {
@@ -72,7 +76,7 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					try {
 						if (RuntimeVariables.replace("Manage Pages")
 												.equals(selenium.getText(
-										"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"))) {
+										"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"))) {
 							break;
 						}
 					}
@@ -84,9 +88,9 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 
 				assertEquals(RuntimeVariables.replace("Manage Pages"),
 					selenium.getText(
-						"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"));
+						"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"));
 				selenium.click(RuntimeVariables.replace(
-						"//div[@class='lfr-component lfr-menu-list']/ul/li[2]/a"));
+						"//div[@class='lfr-component lfr-menu-list']/ul/li[contains(.,'Manage Pages')]/a"));
 				selenium.waitForPageToLoad("30000");
 				loadRequiredJavaScriptModules();
 				selenium.clickAt("link=Public Pages",
@@ -102,7 +106,8 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					}
 
 					try {
-						if (selenium.isVisible("//input[@id='_156_name_en_US']")) {
+						if (selenium.isVisible(
+									"//input[@name='_156_name_en_US']")) {
 							break;
 						}
 					}
@@ -112,7 +117,7 @@ public class AddSitesPublicPageTest extends BaseTestCase {
 					Thread.sleep(1000);
 				}
 
-				selenium.type("//input[@id='_156_name_en_US']",
+				selenium.type("//input[@name='_156_name_en_US']",
 					RuntimeVariables.replace("Public Page"));
 				selenium.clickAt("//input[@value='Add Page']",
 					RuntimeVariables.replace("Add Page"));

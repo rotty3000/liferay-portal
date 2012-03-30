@@ -14,6 +14,13 @@
 
 package com.liferay.portlet.documentlibrary.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -27,7 +34,6 @@ import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.SearchException;
@@ -35,6 +41,7 @@ import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -51,6 +58,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
+import com.liferay.portlet.bookmarks.service.BookmarksFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryMetadata;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
@@ -257,6 +265,26 @@ public class DLIndexer extends BaseIndexer {
 				DDMIndexerUtil.addAttributes(document, ddmStructure, fields);
 			}
 		}
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(companyId));
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long groupId, long folderId) {
+
+		Property groupIdProperty = PropertyFactoryUtil.forName("groupId");
+
+		dynamicQuery.add(groupIdProperty.eq(groupId));
+
+		Property folderIdProperty = PropertyFactoryUtil.forName("folderId");
+
+		dynamicQuery.add(folderIdProperty.eq(folderId));
 	}
 
 	@Override
@@ -506,33 +534,75 @@ public class DLIndexer extends BaseIndexer {
 			long companyId, long groupId, long dataRepositoryId)
 		throws Exception {
 
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			DLFileEntry.class, PortalClassLoaderUtil.getClassLoader());
+
+		Projection minFileEntryIdProjection = ProjectionFactoryUtil.min(
+			"fileEntryId");
+		Projection maxFileEntryIdProjection = ProjectionFactoryUtil.max(
+			"fileEntryId");
+
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+
+		projectionList.add(minFileEntryIdProjection);
+		projectionList.add(maxFileEntryIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
 		long folderId = DLFolderConstants.getFolderId(
 			groupId, dataRepositoryId);
 
-		int fileEntriesCount = DLFileEntryLocalServiceUtil.getFileEntriesCount(
-			companyId, folderId);
+		addReindexCriteria(dynamicQuery, groupId, folderId);
 
-		int fileEntriesPages = fileEntriesCount / Indexer.DEFAULT_INTERVAL;
+		List<Object[]> results = DLFileEntryLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
-		for (int i = 0; i <= fileEntriesPages; i++) {
-			int fileEntriesStart = (i * Indexer.DEFAULT_INTERVAL);
-			int fileEntriesEnd = fileEntriesStart + Indexer.DEFAULT_INTERVAL;
+		Object[] minAndMaxFileEntryIds = results.get(0);
 
+		if ((minAndMaxFileEntryIds[0] == null) ||
+			(minAndMaxFileEntryIds[1] == null)) {
+
+			return;
+		}
+
+		long minFileEntryId = (Long)minAndMaxFileEntryIds[0];
+		long maxFileEntryId = (Long)minAndMaxFileEntryIds[1];
+
+		long startFileEntryId = minFileEntryId;
+		long endFileEntryId = startFileEntryId + DEFAULT_INTERVAL;
+
+		while (startFileEntryId <= maxFileEntryId) {
 			reindexFileEntries(
-				companyId, groupId, folderId, fileEntriesStart, fileEntriesEnd);
+				companyId, groupId, folderId, startFileEntryId, endFileEntryId);
+
+			startFileEntryId = endFileEntryId;
+			endFileEntryId += DEFAULT_INTERVAL;
 		}
 	}
 
 	protected void reindexFileEntries(
-			long companyId, long groupId, long folderId, int fileEntriesStart,
-			int fileEntriesEnd)
+			long companyId, long groupId, long folderId, long startFileEntryId,
+			long endFileEntryId)
 		throws Exception {
 
-		Collection<Document> documents = new ArrayList<Document>();
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			DLFileEntry.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("fileEntryId");
+
+		dynamicQuery.add(property.ge(startFileEntryId));
+		dynamicQuery.add(property.lt(endFileEntryId));
+
+		addReindexCriteria(dynamicQuery, groupId, folderId);
 
 		List<DLFileEntry> dlFileEntries =
-			DLFileEntryLocalServiceUtil.getFileEntries(
-				groupId, folderId, fileEntriesStart, fileEntriesEnd, null);
+			DLFileEntryLocalServiceUtil.dynamicQuery(dynamicQuery);
+
+		if (dlFileEntries.isEmpty()) {
+			return;
+		}
+
+		Collection<Document> documents = new ArrayList<Document>();
 
 		for (DLFileEntry dlFileEntry : dlFileEntries) {
 			Document document = getDocument(dlFileEntry);
@@ -547,25 +617,64 @@ public class DLIndexer extends BaseIndexer {
 	}
 
 	protected void reindexFolders(long companyId) throws Exception {
-		int folderCount = DLFolderLocalServiceUtil.getCompanyFoldersCount(
-			companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			DLFolder.class, PortalClassLoaderUtil.getClassLoader());
 
-		int folderPages = folderCount / Indexer.DEFAULT_INTERVAL;
+		Projection minFolderIdProjection = ProjectionFactoryUtil.min(
+			"folderId");
+		Projection maxFolderIdProjection = ProjectionFactoryUtil.max(
+			"folderId");
 
-		for (int i = 0; i <= folderPages; i++) {
-			int folderStart = (i * Indexer.DEFAULT_INTERVAL);
-			int folderEnd = folderStart + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexFolders(companyId, folderStart, folderEnd);
+		projectionList.add(minFolderIdProjection);
+		projectionList.add(maxFolderIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = BookmarksFolderLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxFolderIds = results.get(0);
+
+		if ((minAndMaxFolderIds[0] == null) ||
+			(minAndMaxFolderIds[1] == null)) {
+
+			return;
+		}
+
+		long minFolderId = (Long)minAndMaxFolderIds[0];
+		long maxFolderId = (Long)minAndMaxFolderIds[1];
+
+		long startFolderId = minFolderId;
+		long endFolderId = startFolderId + DEFAULT_INTERVAL;
+
+		while (startFolderId <= maxFolderId) {
+			reindexFolders(companyId, startFolderId, endFolderId);
+
+			startFolderId = endFolderId;
+			endFolderId += DEFAULT_INTERVAL;
 		}
 	}
 
 	protected void reindexFolders(
-			long companyId, int folderStart, int folderEnd)
+			long companyId, long startFolderId, long endFolderId)
 		throws Exception {
 
-		List<DLFolder> dlFolders = DLFolderLocalServiceUtil.getCompanyFolders(
-			companyId, folderStart, folderEnd);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			DLFolder.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("folderId");
+
+		dynamicQuery.add(property.ge(startFolderId));
+		dynamicQuery.add(property.lt(endFolderId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<DLFolder> dlFolders = DLFolderLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
 		for (DLFolder dlFolder : dlFolders) {
 			String portletId = PortletKeys.DOCUMENT_LIBRARY;
@@ -582,23 +691,59 @@ public class DLIndexer extends BaseIndexer {
 	}
 
 	protected void reindexRoot(long companyId) throws Exception {
-		int groupCount = GroupLocalServiceUtil.getCompanyGroupsCount(companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			Group.class, PortalClassLoaderUtil.getClassLoader());
 
-		int groupPages = groupCount / Indexer.DEFAULT_INTERVAL;
+		Projection minGroupIdProjection = ProjectionFactoryUtil.min("groupId");
+		Projection maxGroupIdProjection = ProjectionFactoryUtil.max("groupId");
 
-		for (int i = 0; i <= groupPages; i++) {
-			int groupStart = (i * Indexer.DEFAULT_INTERVAL);
-			int groupEnd = groupStart + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexRoot(companyId, groupStart, groupEnd);
+		projectionList.add(minGroupIdProjection);
+		projectionList.add(maxGroupIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = GroupLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxGroupIds = results.get(0);
+
+		if ((minAndMaxGroupIds[0] == null) || (minAndMaxGroupIds[1] == null)) {
+			return;
+		}
+
+		long minGroupId = (Long)minAndMaxGroupIds[0];
+		long maxGroupId = (Long)minAndMaxGroupIds[1];
+
+		long startGroupId = minGroupId;
+		long endGroupId = startGroupId + DEFAULT_INTERVAL;
+
+		while (startGroupId <= maxGroupId) {
+			reindexRoot(companyId, startGroupId, endGroupId);
+
+			startGroupId = endGroupId;
+			endGroupId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexRoot(long companyId, int groupStart, int groupEnd)
+	protected void reindexRoot(
+			long companyId, long startGroupId, long endGroupId)
 		throws Exception {
 
-		List<Group> groups = GroupLocalServiceUtil.getCompanyGroups(
-			companyId, groupStart, groupEnd);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			Group.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("groupId");
+
+		dynamicQuery.add(property.ge(startGroupId));
+		dynamicQuery.add(property.lt(endGroupId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Group> groups = GroupLocalServiceUtil.dynamicQuery(dynamicQuery);
 
 		for (Group group : groups) {
 			String portletId = PortletKeys.DOCUMENT_LIBRARY;

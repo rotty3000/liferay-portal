@@ -45,7 +45,6 @@ import com.liferay.portal.service.persistence.CompanyPersistence;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.ImagePersistence;
 import com.liferay.portal.service.persistence.PortletPreferencesPersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.SubscriptionPersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.WorkflowInstanceLinkPersistence;
@@ -15542,14 +15541,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the journal article that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticle removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchArticleException, SystemException {
 		JournalArticle journalArticle = findByUUID_G(uuid, groupId);
 
-		return remove(journalArticle);
+		remove(journalArticle);
 	}
 
 	/**
@@ -15776,15 +15774,14 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 * @param groupId the group ID
 	 * @param classNameId the class name ID
 	 * @param structureId the structure ID
-	 * @return the journal article that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticle removeByG_C_S(long groupId, long classNameId,
-		String structureId) throws NoSuchArticleException, SystemException {
+	public void removeByG_C_S(long groupId, long classNameId, String structureId)
+		throws NoSuchArticleException, SystemException {
 		JournalArticle journalArticle = findByG_C_S(groupId, classNameId,
 				structureId);
 
-		return remove(journalArticle);
+		remove(journalArticle);
 	}
 
 	/**
@@ -15825,14 +15822,13 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	 * @param groupId the group ID
 	 * @param articleId the article ID
 	 * @param version the version
-	 * @return the journal article that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticle removeByG_A_V(long groupId, String articleId,
-		double version) throws NoSuchArticleException, SystemException {
+	public void removeByG_A_V(long groupId, String articleId, double version)
+		throws NoSuchArticleException, SystemException {
 		JournalArticle journalArticle = findByG_A_V(groupId, articleId, version);
 
-		return remove(journalArticle);
+		remove(journalArticle);
 	}
 
 	/**
@@ -18630,8 +18626,6 @@ public class JournalArticlePersistenceImpl extends BasePersistenceImpl<JournalAr
 	protected ImagePersistence imagePersistence;
 	@BeanReference(type = PortletPreferencesPersistence.class)
 	protected PortletPreferencesPersistence portletPreferencesPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = SubscriptionPersistence.class)
 	protected SubscriptionPersistence subscriptionPersistence;
 	@BeanReference(type = UserPersistence.class)

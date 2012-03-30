@@ -14,6 +14,13 @@
 
 package com.liferay.portlet.usersadmin.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -24,6 +31,7 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Organization;
@@ -185,6 +193,14 @@ public class UserIndexer extends BaseIndexer {
 		else if (key.equals("usersUserGroups")) {
 			contextQuery.addRequiredTerm("userGroupIds", String.valueOf(value));
 		}
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(companyId));
 	}
 
 	@Override
@@ -393,23 +409,59 @@ public class UserIndexer extends BaseIndexer {
 	}
 
 	protected void reindexUsers(long companyId) throws Exception {
-		int count = UserLocalServiceUtil.getCompanyUsersCount(companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			User.class, PortalClassLoaderUtil.getClassLoader());
 
-		int pages = count / UserIndexer.DEFAULT_INTERVAL;
+		Projection minUserIdProjection = ProjectionFactoryUtil.min("userId");
+		Projection maxUserIdProjection = ProjectionFactoryUtil.max("userId");
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * UserIndexer.DEFAULT_INTERVAL);
-			int end = start + UserIndexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexUsers(companyId, start, end);
+		projectionList.add(minUserIdProjection);
+		projectionList.add(maxUserIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = UserLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxUserIds = results.get(0);
+
+		if ((minAndMaxUserIds[0] == null) || (minAndMaxUserIds[1] == null)) {
+			return;
+		}
+
+		long minUserId = (Long)minAndMaxUserIds[0];
+		long maxUserId = (Long)minAndMaxUserIds[1];
+
+		long startUserId = minUserId;
+		long endUserId = startUserId + DEFAULT_INTERVAL;
+
+		while (startUserId <= maxUserId) {
+			reindexUsers(companyId, startUserId, endUserId);
+
+			startUserId = endUserId;
+			endUserId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexUsers(long companyId, int start, int end)
+	protected void reindexUsers(
+			long companyId, long startUserId, long endUserId)
 		throws Exception {
 
-		List<User> users = UserLocalServiceUtil.getCompanyUsers(
-			companyId, start, end);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			User.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("userId");
+
+		dynamicQuery.add(property.ge(startUserId));
+		dynamicQuery.add(property.lt(endUserId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<User> users = UserLocalServiceUtil.dynamicQuery(dynamicQuery);
 
 		if (users.isEmpty()) {
 			return;

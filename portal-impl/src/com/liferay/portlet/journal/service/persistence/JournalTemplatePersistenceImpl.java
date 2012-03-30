@@ -42,7 +42,6 @@ import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.ImagePersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.WebDAVPropsPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -3959,14 +3958,13 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the journal template that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalTemplate removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchTemplateException, SystemException {
 		JournalTemplate journalTemplate = findByUUID_G(uuid, groupId);
 
-		return remove(journalTemplate);
+		remove(journalTemplate);
 	}
 
 	/**
@@ -4010,14 +4008,13 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 * Removes the journal template where smallImageId = &#63; from the database.
 	 *
 	 * @param smallImageId the small image ID
-	 * @return the journal template that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalTemplate removeBySmallImageId(long smallImageId)
+	public void removeBySmallImageId(long smallImageId)
 		throws NoSuchTemplateException, SystemException {
 		JournalTemplate journalTemplate = findBySmallImageId(smallImageId);
 
-		return remove(journalTemplate);
+		remove(journalTemplate);
 	}
 
 	/**
@@ -4025,14 +4022,13 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	 *
 	 * @param groupId the group ID
 	 * @param templateId the template ID
-	 * @return the journal template that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalTemplate removeByG_T(long groupId, String templateId)
+	public void removeByG_T(long groupId, String templateId)
 		throws NoSuchTemplateException, SystemException {
 		JournalTemplate journalTemplate = findByG_T(groupId, templateId);
 
-		return remove(journalTemplate);
+		remove(journalTemplate);
 	}
 
 	/**
@@ -4775,8 +4771,6 @@ public class JournalTemplatePersistenceImpl extends BasePersistenceImpl<JournalT
 	protected GroupPersistence groupPersistence;
 	@BeanReference(type = ImagePersistence.class)
 	protected ImagePersistence imagePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	@BeanReference(type = WebDAVPropsPersistence.class)

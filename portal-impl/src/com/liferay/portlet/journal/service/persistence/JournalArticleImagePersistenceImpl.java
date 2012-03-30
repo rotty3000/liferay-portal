@@ -38,7 +38,6 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ImagePersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -2220,16 +2219,15 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	 * @param elInstanceId the el instance ID
 	 * @param elName the el name
 	 * @param languageId the language ID
-	 * @return the journal article image that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticleImage removeByG_A_V_E_E_L(long groupId,
-		String articleId, double version, String elInstanceId, String elName,
-		String languageId) throws NoSuchArticleImageException, SystemException {
+	public void removeByG_A_V_E_E_L(long groupId, String articleId,
+		double version, String elInstanceId, String elName, String languageId)
+		throws NoSuchArticleImageException, SystemException {
 		JournalArticleImage journalArticleImage = findByG_A_V_E_E_L(groupId,
 				articleId, version, elInstanceId, elName, languageId);
 
-		return remove(journalArticleImage);
+		remove(journalArticleImage);
 	}
 
 	/**
@@ -2640,8 +2638,6 @@ public class JournalArticleImagePersistenceImpl extends BasePersistenceImpl<Jour
 	protected JournalTemplatePersistence journalTemplatePersistence;
 	@BeanReference(type = ImagePersistence.class)
 	protected ImagePersistence imagePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_JOURNALARTICLEIMAGE = "SELECT journalArticleImage FROM JournalArticleImage journalArticleImage";

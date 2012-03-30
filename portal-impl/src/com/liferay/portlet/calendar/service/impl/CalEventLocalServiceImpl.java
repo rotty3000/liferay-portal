@@ -1302,18 +1302,29 @@ public class CalEventLocalServiceImpl extends CalEventLocalServiceBaseImpl {
 	}
 
 	protected void remindUser(
-		CalEvent event, User user, Calendar startDate, Calendar now) {
+		CalEvent event, User user, Calendar startCalendar,
+		Calendar nowCalendar) {
 
-		long diff =
-			(startDate.getTime().getTime() - now.getTime().getTime()) /
-				_CALENDAR_EVENT_CHECK_INTERVAL;
+		Date startDate = startCalendar.getTime();
+
+		long startTime = startDate.getTime();
+
+		Date nowDate = nowCalendar.getTime();
+
+		long nowTime = nowDate.getTime();
+
+		if (startTime < nowTime) {
+			return;
+		}
+
+		long diff = (startTime - nowTime) / _CALENDAR_EVENT_CHECK_INTERVAL;
 
 		if ((diff ==
 				(event.getFirstReminder() / _CALENDAR_EVENT_CHECK_INTERVAL)) ||
 			(diff ==
 				(event.getSecondReminder() / _CALENDAR_EVENT_CHECK_INTERVAL))) {
 
-			remindUser(event, user, startDate);
+			remindUser(event, user, startCalendar);
 		}
 	}
 

@@ -40,7 +40,6 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -2121,14 +2120,13 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the journal feed that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalFeed removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchFeedException, SystemException {
 		JournalFeed journalFeed = findByUUID_G(uuid, groupId);
 
-		return remove(journalFeed);
+		remove(journalFeed);
 	}
 
 	/**
@@ -2148,14 +2146,13 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	 *
 	 * @param groupId the group ID
 	 * @param feedId the feed ID
-	 * @return the journal feed that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalFeed removeByG_F(long groupId, String feedId)
+	public void removeByG_F(long groupId, String feedId)
 		throws NoSuchFeedException, SystemException {
 		JournalFeed journalFeed = findByG_F(groupId, feedId);
 
-		return remove(journalFeed);
+		remove(journalFeed);
 	}
 
 	/**
@@ -2560,8 +2557,6 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 	protected JournalStructurePersistence journalStructurePersistence;
 	@BeanReference(type = JournalTemplatePersistence.class)
 	protected JournalTemplatePersistence journalTemplatePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	@BeanReference(type = ExpandoValuePersistence.class)

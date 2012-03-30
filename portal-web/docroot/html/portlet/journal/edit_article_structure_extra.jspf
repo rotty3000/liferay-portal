@@ -58,7 +58,7 @@
 				<aui:option label="select-box" value="list" />
 				<aui:option label="multi-selection-list" value="multi-list" />
 				<aui:option label="image-uploader" value="image" />
-				<aui:option label="document-library" value="document_library" />
+				<aui:option label="documents-and-media" value="document_library" />
 				<aui:option label="link-to-page" value="link_to_layout" />
 				<aui:option label="selection-break" value="selection_break" />
 			</aui:select>

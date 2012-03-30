@@ -563,8 +563,8 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void mouseDown(String locator) {
-		WebDriverBackedSelenium webDriverBackedSelenium = new WebDriverBackedSelenium(
-			this, getCurrentUrl());
+		WebDriverBackedSelenium webDriverBackedSelenium =
+			new WebDriverBackedSelenium(this, getCurrentUrl());
 
 		webDriverBackedSelenium.mouseDown(locator);
 	}
@@ -582,8 +582,8 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void mouseMove(String locator) {
-		WebDriverBackedSelenium webDriverBackedSelenium = new WebDriverBackedSelenium(
-			this, getCurrentUrl());
+		WebDriverBackedSelenium webDriverBackedSelenium =
+			new WebDriverBackedSelenium(this, getCurrentUrl());
 
 		webDriverBackedSelenium.mouseMove(locator);
 	}
@@ -597,15 +597,15 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void mouseOver(String locator) {
-		WebDriverBackedSelenium webDriverBackedSelenium = new WebDriverBackedSelenium(
-			this, getCurrentUrl());
+		WebDriverBackedSelenium webDriverBackedSelenium =
+			new WebDriverBackedSelenium(this, getCurrentUrl());
 
 		webDriverBackedSelenium.mouseOver(locator);
 	}
 
 	public void mouseUp(String locator) {
-		WebDriverBackedSelenium webDriverBackedSelenium = new WebDriverBackedSelenium(
-			this, getCurrentUrl());
+		WebDriverBackedSelenium webDriverBackedSelenium =
+			new WebDriverBackedSelenium(this, getCurrentUrl());
 
 		webDriverBackedSelenium.mouseUp(locator);
 	}

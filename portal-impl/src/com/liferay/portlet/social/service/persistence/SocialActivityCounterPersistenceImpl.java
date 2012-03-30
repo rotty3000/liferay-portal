@@ -39,7 +39,6 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.LockPersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -2100,16 +2099,15 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 * @param name the name
 	 * @param ownerType the owner type
 	 * @param startPeriod the start period
-	 * @return the social activity counter that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivityCounter removeByG_C_C_N_O_S(long groupId,
-		long classNameId, long classPK, String name, int ownerType,
-		int startPeriod) throws NoSuchActivityCounterException, SystemException {
+	public void removeByG_C_C_N_O_S(long groupId, long classNameId,
+		long classPK, String name, int ownerType, int startPeriod)
+		throws NoSuchActivityCounterException, SystemException {
 		SocialActivityCounter socialActivityCounter = findByG_C_C_N_O_S(groupId,
 				classNameId, classPK, name, ownerType, startPeriod);
 
-		return remove(socialActivityCounter);
+		remove(socialActivityCounter);
 	}
 
 	/**
@@ -2121,16 +2119,15 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	 * @param name the name
 	 * @param ownerType the owner type
 	 * @param endPeriod the end period
-	 * @return the social activity counter that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivityCounter removeByG_C_C_N_O_E(long groupId,
-		long classNameId, long classPK, String name, int ownerType,
-		int endPeriod) throws NoSuchActivityCounterException, SystemException {
+	public void removeByG_C_C_N_O_E(long groupId, long classNameId,
+		long classPK, String name, int ownerType, int endPeriod)
+		throws NoSuchActivityCounterException, SystemException {
 		SocialActivityCounter socialActivityCounter = findByG_C_C_N_O_E(groupId,
 				classNameId, classPK, name, ownerType, endPeriod);
 
-		return remove(socialActivityCounter);
+		remove(socialActivityCounter);
 	}
 
 	/**
@@ -2547,8 +2544,6 @@ public class SocialActivityCounterPersistenceImpl extends BasePersistenceImpl<So
 	protected GroupPersistence groupPersistence;
 	@BeanReference(type = LockPersistence.class)
 	protected LockPersistence lockPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	@BeanReference(type = AssetEntryPersistence.class)

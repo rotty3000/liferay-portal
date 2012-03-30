@@ -14,15 +14,22 @@
 
 package com.liferay.portlet.calendar.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortletKeys;
@@ -56,6 +63,14 @@ public class CalIndexer extends BaseIndexer {
 	@Override
 	public boolean isPermissionAware() {
 		return _PERMISSION_AWARE;
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(companyId));
 	}
 
 	@Override
@@ -130,23 +145,60 @@ public class CalIndexer extends BaseIndexer {
 	}
 
 	protected void reindexEvents(long companyId) throws Exception {
-		int count = CalEventLocalServiceUtil.getCompanyEventsCount(companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CalEvent.class, PortalClassLoaderUtil.getClassLoader());
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+		Projection minEventIdProjection = ProjectionFactoryUtil.min("eventId");
+		Projection maxEventIdProjection = ProjectionFactoryUtil.max("eventId");
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexEvents(companyId, start, end);
+		projectionList.add(minEventIdProjection);
+		projectionList.add(maxEventIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = CalEventLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxEventIds = results.get(0);
+
+		if ((minAndMaxEventIds[0] == null) || (minAndMaxEventIds[1] == null)) {
+			return;
+		}
+
+		long minEventId = (Long)minAndMaxEventIds[0];
+		long maxEventId = (Long)minAndMaxEventIds[1];
+
+		long startEventId = minEventId;
+		long endEventId = startEventId + DEFAULT_INTERVAL;
+
+		while (startEventId <= maxEventId) {
+			reindexEvents(companyId, startEventId, endEventId);
+
+			startEventId = endEventId;
+			endEventId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexEvents(long companyId, int start, int end)
+	protected void reindexEvents(
+			long companyId, long startEventId, long endEventId)
 		throws Exception {
 
-		List<CalEvent> events = CalEventLocalServiceUtil.getCompanyEvents(
-			companyId, start, end);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CalEvent.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("eventId");
+
+		dynamicQuery.add(property.ge(startEventId));
+		dynamicQuery.add(property.lt(endEventId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<CalEvent> events = CalEventLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
 		if (events.isEmpty()) {
 			return;

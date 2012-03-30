@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -1796,15 +1795,14 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the journal article resource that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticleResource removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchArticleResourceException, SystemException {
 		JournalArticleResource journalArticleResource = findByUUID_G(uuid,
 				groupId);
 
-		return remove(journalArticleResource);
+		remove(journalArticleResource);
 	}
 
 	/**
@@ -1825,15 +1823,14 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	 *
 	 * @param groupId the group ID
 	 * @param articleId the article ID
-	 * @return the journal article resource that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public JournalArticleResource removeByG_A(long groupId, String articleId)
+	public void removeByG_A(long groupId, String articleId)
 		throws NoSuchArticleResourceException, SystemException {
 		JournalArticleResource journalArticleResource = findByG_A(groupId,
 				articleId);
 
-		return remove(journalArticleResource);
+		remove(journalArticleResource);
 	}
 
 	/**
@@ -2190,8 +2187,6 @@ public class JournalArticleResourcePersistenceImpl extends BasePersistenceImpl<J
 	protected JournalStructurePersistence journalStructurePersistence;
 	@BeanReference(type = JournalTemplatePersistence.class)
 	protected JournalTemplatePersistence journalTemplatePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_JOURNALARTICLERESOURCE = "SELECT journalArticleResource FROM JournalArticleResource journalArticleResource";

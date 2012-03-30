@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -4383,14 +4382,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 *
 	 * @param columnId the column ID
 	 * @param rowId the row ID
-	 * @return the expando value that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public ExpandoValue removeByC_R(long columnId, long rowId)
+	public void removeByC_R(long columnId, long rowId)
 		throws NoSuchValueException, SystemException {
 		ExpandoValue expandoValue = findByC_R(columnId, rowId);
 
-		return remove(expandoValue);
+		remove(expandoValue);
 	}
 
 	/**
@@ -4413,14 +4411,13 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	 * @param tableId the table ID
 	 * @param columnId the column ID
 	 * @param classPK the class p k
-	 * @return the expando value that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public ExpandoValue removeByT_C_C(long tableId, long columnId, long classPK)
+	public void removeByT_C_C(long tableId, long columnId, long classPK)
 		throws NoSuchValueException, SystemException {
 		ExpandoValue expandoValue = findByT_C_C(tableId, columnId, classPK);
 
-		return remove(expandoValue);
+		remove(expandoValue);
 	}
 
 	/**
@@ -5118,8 +5115,6 @@ public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValu
 	protected ExpandoTablePersistence expandoTablePersistence;
 	@BeanReference(type = ExpandoValuePersistence.class)
 	protected ExpandoValuePersistence expandoValuePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_EXPANDOVALUE = "SELECT expandoValue FROM ExpandoValue expandoValue";

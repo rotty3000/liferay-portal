@@ -14,13 +14,19 @@
 
 package com.liferay.portlet.journal.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
@@ -28,6 +34,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -144,6 +151,28 @@ public class JournalIndexer extends BaseIndexer {
 				addSearchExpando(searchQuery, searchContext, expandoAttributes);
 			}
 		}
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId, double version, int status) {
+
+		addReindexCriteria(dynamicQuery, companyId, status);
+
+		Property property = PropertyFactoryUtil.forName("version");
+
+		dynamicQuery.add(property.eq(version));
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId, int status) {
+
+		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(companyIdProperty.eq(companyId));
+
+		Property statusProperty = PropertyFactoryUtil.forName("status");
+
+		dynamicQuery.add(statusProperty.eq(status));
 	}
 
 	@Override
@@ -337,6 +366,43 @@ public class JournalIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
+	protected List<JournalArticle> getReindexApprovedArticles(
+			long companyId, long startId, long endId)
+		throws Exception {
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			JournalArticle.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("id");
+
+		dynamicQuery.add(property.ge(startId));
+		dynamicQuery.add(property.lt(endId));
+
+		addReindexCriteria(
+			dynamicQuery, companyId, WorkflowConstants.STATUS_APPROVED);
+
+		return JournalArticleLocalServiceUtil.dynamicQuery(dynamicQuery);
+	}
+
+	protected List<JournalArticle> getReindexDraftArticles(
+			long companyId, long startId, long endId)
+		throws Exception {
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			JournalArticle.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("id");
+
+		dynamicQuery.add(property.ge(startId));
+		dynamicQuery.add(property.lt(endId));
+
+		addReindexCriteria(
+			dynamicQuery, companyId, JournalArticleConstants.VERSION_DEFAULT,
+			WorkflowConstants.STATUS_APPROVED);
+
+		return JournalArticleLocalServiceUtil.dynamicQuery(dynamicQuery);
+	}
+
 	protected void indexField(
 		Document document, Element element, String elType, String elIndexType) {
 
@@ -470,36 +536,52 @@ public class JournalIndexer extends BaseIndexer {
 	}
 
 	protected void reindexArticles(long companyId) throws Exception {
-		int count = JournalArticleLocalServiceUtil.getCompanyArticlesCount(
-			companyId, WorkflowConstants.STATUS_APPROVED);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			JournalArticle.class, PortalClassLoaderUtil.getClassLoader());
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+		Projection minIdProjection = ProjectionFactoryUtil.min("id");
+		Projection maxIdProjection = ProjectionFactoryUtil.max("id");
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexArticles(companyId, start, end);
+		projectionList.add(minIdProjection);
+		projectionList.add(maxIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(
+			dynamicQuery, companyId, WorkflowConstants.STATUS_APPROVED);
+
+		List<Object[]> results = JournalArticleLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxIds = results.get(0);
+
+		if ((minAndMaxIds[0] == null) || (minAndMaxIds[1] == null)) {
+			return;
+		}
+
+		long minId = (Long)minAndMaxIds[0];
+		long maxId = (Long)minAndMaxIds[1];
+
+		long startId = minId;
+		long endId = startId + DEFAULT_INTERVAL;
+
+		while (startId <= maxId) {
+			reindexArticles(companyId, startId, endId);
+
+			startId = endId;
+			endId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexArticles(long companyId, int start, int end)
+	protected void reindexArticles(long companyId, long startId, long endId)
 		throws Exception {
 
 		List<JournalArticle> articles = new ArrayList<JournalArticle>();
 
-		List<JournalArticle> approvedArticles =
-			JournalArticleLocalServiceUtil.getCompanyArticles(
-				companyId, WorkflowConstants.STATUS_APPROVED, start, end);
-
-		articles.addAll(approvedArticles);
-
-		List<JournalArticle> draftArticles =
-			JournalArticleLocalServiceUtil.getCompanyArticles(
-				companyId, JournalArticleConstants.VERSION_DEFAULT,
-				WorkflowConstants.STATUS_DRAFT, start, end);
-
-		articles.addAll(draftArticles);
+		articles.addAll(getReindexApprovedArticles(companyId, startId, endId));
+		articles.addAll(getReindexDraftArticles(companyId, startId, endId));
 
 		if (articles.isEmpty()) {
 			return;

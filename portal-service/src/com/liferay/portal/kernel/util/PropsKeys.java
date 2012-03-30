@@ -389,6 +389,8 @@ public interface PropsKeys {
 
 	public static final String COMPANY_SECURITY_STRANGERS_WITH_MX = "company.security.strangers.with.mx";
 
+	public static final String COMPANY_SETTINGS_FORM_AUTHENTICATION = "company.settings.form.authentication";
+
 	public static final String COMPANY_SETTINGS_FORM_CONFIGURATION = "company.settings.form.configuration";
 
 	public static final String COMPANY_SETTINGS_FORM_IDENTIFICATION = "company.settings.form.identification";
@@ -678,6 +680,8 @@ public interface PropsKeys {
 	public static final String EHCACHE_SINGLE_VM_CONFIG_LOCATION = "ehcache.single.vm.config.location";
 
 	public static final String EHCACHE_STATISTICS_ENABLED = "ehcache.statistics.enabled";
+
+	public static final String ENTITY_RESOLVER_DEFINITIONS_PATH = "entity.resolver.definitions.path";
 
 	public static final String FACEBOOK_CONNECT_APP_ID = "facebook.connect.app.id";
 
@@ -1228,6 +1232,10 @@ public interface PropsKeys {
 	public static final String LOGIN_EVENTS_POST = "login.events.post";
 
 	public static final String LOGIN_EVENTS_PRE = "login.events.pre";
+
+	public static final String LOGIN_FORM_NAVIGATION_POST = "login.form.navigation.post";
+
+	public static final String LOGIN_FORM_NAVIGATION_PRE = "login.form.navigation.pre";
 
 	public static final String LOGOUT_EVENTS_POST = "logout.events.post";
 

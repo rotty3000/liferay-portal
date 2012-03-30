@@ -41,7 +41,6 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.SubscriptionPersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -2489,14 +2488,13 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the wiki node that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public WikiNode removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchNodeException, SystemException {
 		WikiNode wikiNode = findByUUID_G(uuid, groupId);
 
-		return remove(wikiNode);
+		remove(wikiNode);
 	}
 
 	/**
@@ -2528,14 +2526,13 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
-	 * @return the wiki node that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public WikiNode removeByG_N(long groupId, String name)
+	public void removeByG_N(long groupId, String name)
 		throws NoSuchNodeException, SystemException {
 		WikiNode wikiNode = findByG_N(groupId, name);
 
-		return remove(wikiNode);
+		remove(wikiNode);
 	}
 
 	/**
@@ -2986,8 +2983,6 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 	protected WikiPageResourcePersistence wikiPageResourcePersistence;
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = SubscriptionPersistence.class)
 	protected SubscriptionPersistence subscriptionPersistence;
 	@BeanReference(type = UserPersistence.class)

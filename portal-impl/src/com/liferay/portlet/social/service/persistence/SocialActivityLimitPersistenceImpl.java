@@ -38,7 +38,6 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -1298,17 +1297,16 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	 * @param classPK the class p k
 	 * @param activityType the activity type
 	 * @param activityCounterName the activity counter name
-	 * @return the social activity limit that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivityLimit removeByG_U_C_C_A_A(long groupId, long userId,
+	public void removeByG_U_C_C_A_A(long groupId, long userId,
 		long classNameId, long classPK, int activityType,
 		String activityCounterName)
 		throws NoSuchActivityLimitException, SystemException {
 		SocialActivityLimit socialActivityLimit = findByG_U_C_C_A_A(groupId,
 				userId, classNameId, classPK, activityType, activityCounterName);
 
-		return remove(socialActivityLimit);
+		remove(socialActivityLimit);
 	}
 
 	/**
@@ -1561,8 +1559,6 @@ public class SocialActivityLimitPersistenceImpl extends BasePersistenceImpl<Soci
 	protected SocialRequestPersistence socialRequestPersistence;
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_SOCIALACTIVITYLIMIT = "SELECT socialActivityLimit FROM SocialActivityLimit socialActivityLimit";

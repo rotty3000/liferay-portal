@@ -1110,12 +1110,6 @@ public class PortalUtil {
 		return getPortal().getSelectedUser(portletRequest, checkPermission);
 	}
 
-	public static ServletContext getServletContext(
-		Portlet portlet, ServletContext servletContext) {
-
-		return getPortal().getServletContext(portlet, servletContext);
-	}
-
 	public static String getSiteLoginURL(ThemeDisplay themeDisplay)
 		throws PortalException, SystemException {
 
@@ -1447,49 +1441,6 @@ public class PortalUtil {
 
 	public static boolean isValidResourceId(String resourceId) {
 		return getPortal().isValidResourceId(resourceId);
-	}
-
-	public static String renderPage(
-			ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, String path, boolean writeOutput)
-		throws IOException, ServletException {
-
-		return getPortal().renderPage(servletContext, request, response, path);
-	}
-
-	public static String renderPortlet(
-			ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, Portlet portlet, String queryString,
-			boolean writeOutput)
-		throws IOException, ServletException {
-
-		return getPortal().renderPortlet(
-			servletContext, request, response, portlet, queryString,
-			writeOutput);
-	}
-
-	public static String renderPortlet(
-			ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, Portlet portlet, String queryString,
-			String columnId, Integer columnPos, Integer columnCount,
-			boolean writeOutput)
-		throws IOException, ServletException {
-
-		return getPortal().renderPortlet(
-			servletContext, request, response, portlet, queryString, columnId,
-			columnPos, columnCount, writeOutput);
-	}
-
-	public static String renderPortlet(
-			ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, Portlet portlet, String queryString,
-			String columnId, Integer columnPos, Integer columnCount,
-			String path, boolean writeOutput)
-		throws IOException, ServletException {
-
-		return getPortal().renderPortlet(
-			servletContext, request, response, portlet, queryString, columnId,
-			columnPos, columnCount, path, writeOutput);
 	}
 
 	public static void resetCDNHosts() {

@@ -30,6 +30,7 @@ auto.login.hooks
 captcha.check.portal.create_account
 captcha.engine.impl
 com.liferay.portal.servlet.filters.*Filter
+company.settings.form.authentication
 company.settings.form.configuration
 company.settings.form.identification
 company.settings.form.miscellaneous
@@ -67,6 +68,8 @@ locales.beta
 login.create.account.allow.custom.password
 login.events.post
 login.events.pre
+login.form.navigation.post
+login.form.navigation.pre
 logout.events.post
 logout.events.pre
 mail.hook.impl

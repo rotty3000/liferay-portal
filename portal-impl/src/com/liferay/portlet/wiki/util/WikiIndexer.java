@@ -14,6 +14,13 @@
 
 package com.liferay.portlet.wiki.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
@@ -23,12 +30,12 @@ import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -103,6 +110,30 @@ public class WikiIndexer extends BaseIndexer {
 
 			contextQuery.add(nodeIdsQuery, BooleanClauseOccur.MUST);
 		}
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(companyId));
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long groupId, long nodeId) {
+
+		Property groupIdProperty = PropertyFactoryUtil.forName("groupId");
+
+		dynamicQuery.add(groupIdProperty.eq(groupId));
+
+		Property nodeIdProperty = PropertyFactoryUtil.forName("nodeId");
+
+		dynamicQuery.add(nodeIdProperty.eq(nodeId));
+
+		Property headProperty = PropertyFactoryUtil.forName("head");
+
+		dynamicQuery.add(headProperty.eq(true));
 	}
 
 	@Override
@@ -236,48 +267,127 @@ public class WikiIndexer extends BaseIndexer {
 	}
 
 	protected void reindexNodes(long companyId) throws Exception {
-		int nodeCount = WikiNodeLocalServiceUtil.getCompanyNodesCount(
-			companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			WikiNode.class, PortalClassLoaderUtil.getClassLoader());
 
-		int nodePages = nodeCount / Indexer.DEFAULT_INTERVAL;
+		Projection minNodeIdProjection = ProjectionFactoryUtil.min("nodeId");
+		Projection maxNodeIdProjection = ProjectionFactoryUtil.max("nodeId");
 
-		for (int i = 0; i <= nodePages; i++) {
-			int nodeStart = (i * Indexer.DEFAULT_INTERVAL);
-			int nodeEnd = nodeStart + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexNodes(companyId, nodeStart, nodeEnd);
+		projectionList.add(minNodeIdProjection);
+		projectionList.add(maxNodeIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = WikiNodeLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxNodeIds = results.get(0);
+
+		if ((minAndMaxNodeIds[0] == null) || (minAndMaxNodeIds[1] == null)) {
+			return;
+		}
+
+		long minNodeId = (Long)minAndMaxNodeIds[0];
+		long maxNodeId = (Long)minAndMaxNodeIds[1];
+
+		long startNodeId = minNodeId;
+		long endNodeId = startNodeId + DEFAULT_INTERVAL;
+
+		while (startNodeId <= maxNodeId) {
+			reindexNodes(companyId, startNodeId, endNodeId);
+
+			startNodeId = endNodeId;
+			endNodeId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexNodes(long companyId, int nodeStart, int nodeEnd)
+	protected void reindexNodes(
+			long companyId, long startNodeId, long endNodeId)
 		throws Exception {
 
-		List<WikiNode> nodes = WikiNodeLocalServiceUtil.getCompanyNodes(
-			companyId, nodeStart, nodeEnd);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			WikiNode.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("nodeId");
+
+		dynamicQuery.add(property.ge(startNodeId));
+		dynamicQuery.add(property.lt(endNodeId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<WikiNode> nodes = WikiNodeLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
 		for (WikiNode node : nodes) {
+			long groupId = node.getGroupId();
 			long nodeId = node.getNodeId();
 
-			int pageCount = WikiPageLocalServiceUtil.getPagesCount(
-				nodeId, true);
+			reindexPages(companyId, groupId, nodeId);
+		}
+	}
 
-			int pagePages = pageCount / Indexer.DEFAULT_INTERVAL;
+	protected void reindexPages(long companyId, long groupId, long nodeId)
+		throws Exception {
 
-			for (int i = 0; i <= pagePages; i++) {
-				int pageStart = (i * Indexer.DEFAULT_INTERVAL);
-				int pageEnd = pageStart + Indexer.DEFAULT_INTERVAL;
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			WikiPage.class, PortalClassLoaderUtil.getClassLoader());
 
-				reindexPages(companyId, nodeId, pageStart, pageEnd);
-			}
+		Projection minPageIdProjection = ProjectionFactoryUtil.min("pageId");
+		Projection maxPageIdProjection = ProjectionFactoryUtil.max("pageId");
+
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
+
+		projectionList.add(minPageIdProjection);
+		projectionList.add(maxPageIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, groupId, nodeId);
+
+		List<Object[]> results = WikiPageLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxPageIds = results.get(0);
+
+		if ((minAndMaxPageIds[0] == null) || (minAndMaxPageIds[1] == null)) {
+			return;
+		}
+
+		long minPageId = (Long)minAndMaxPageIds[0];
+		long maxPageId = (Long)minAndMaxPageIds[1];
+
+		long startPageId = minPageId;
+		long endPageId = startPageId + DEFAULT_INTERVAL;
+
+		while (startPageId <= maxPageId) {
+			reindexPages(companyId, groupId, nodeId, startPageId, endPageId);
+
+			startPageId = endPageId;
+			endPageId += DEFAULT_INTERVAL;
 		}
 	}
 
 	protected void reindexPages(
-			long companyId, long nodeId, int pageStart, int pageEnd)
+			long companyId, long groupId, long nodeId, long startPageId,
+			long endPageId)
 		throws Exception {
 
-		List<WikiPage> pages = WikiPageLocalServiceUtil.getPages(
-			nodeId, true, pageStart, pageEnd);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			WikiPage.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("pageId");
+
+		dynamicQuery.add(property.ge(startPageId));
+		dynamicQuery.add(property.lt(endPageId));
+
+		addReindexCriteria(dynamicQuery, groupId, nodeId);
+
+		List<WikiPage> pages = WikiPageLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
 		if (pages.isEmpty()) {
 			return;

@@ -14,16 +14,23 @@
 
 package com.liferay.portlet.blogs.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -94,6 +101,23 @@ public class BlogsIndexer extends BaseIndexer {
 		if (status != WorkflowConstants.STATUS_ANY) {
 			contextQuery.addRequiredTerm(Field.STATUS, status);
 		}
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(companyIdProperty.eq(companyId));
+
+		Property displayDateProperty = PropertyFactoryUtil.forName(
+			"displayDate");
+
+		dynamicQuery.add(displayDateProperty.lt(new Date()));
+
+		Property statusProperty = PropertyFactoryUtil.forName("status");
+
+		dynamicQuery.add(statusProperty.eq(WorkflowConstants.STATUS_APPROVED));
 	}
 
 	@Override
@@ -172,25 +196,60 @@ public class BlogsIndexer extends BaseIndexer {
 	}
 
 	protected void reindexEntries(long companyId) throws Exception {
-		int count = BlogsEntryLocalServiceUtil.getCompanyEntriesCount(
-			companyId, new Date(), WorkflowConstants.STATUS_APPROVED);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			BlogsEntry.class, PortalClassLoaderUtil.getClassLoader());
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+		Projection minEntryIdProjection = ProjectionFactoryUtil.min("entryId");
+		Projection maxEntryIdProjection = ProjectionFactoryUtil.max("entryId");
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexEntries(companyId, start, end);
+		projectionList.add(minEntryIdProjection);
+		projectionList.add(maxEntryIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = BlogsEntryLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxEntryIds = results.get(0);
+
+		if ((minAndMaxEntryIds[0] == null) || (minAndMaxEntryIds[1] == null)) {
+			return;
+		}
+
+		long minEntryId = (Long)minAndMaxEntryIds[0];
+		long maxEntryId = (Long)minAndMaxEntryIds[1];
+
+		long startEntryId = minEntryId;
+		long endEntryId = startEntryId + DEFAULT_INTERVAL;
+
+		while (startEntryId <= maxEntryId) {
+			reindexEntries(companyId, startEntryId, endEntryId);
+
+			startEntryId = endEntryId;
+			endEntryId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexEntries(long companyId, int start, int end)
+	protected void reindexEntries(
+			long companyId, long startEntryId, long endEntryId)
 		throws Exception {
 
-		List<BlogsEntry> entries = BlogsEntryLocalServiceUtil.getCompanyEntries(
-			companyId, new Date(), WorkflowConstants.STATUS_APPROVED, start,
-			end);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			BlogsEntry.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("entryId");
+
+		dynamicQuery.add(property.ge(startEntryId));
+		dynamicQuery.add(property.lt(endEntryId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<BlogsEntry> entries = BlogsEntryLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
 
 		if (entries.isEmpty()) {
 			return;

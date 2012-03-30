@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -1184,14 +1183,13 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	 * Removes the s c product version where directDownloadURL = &#63; from the database.
 	 *
 	 * @param directDownloadURL the direct download u r l
-	 * @return the s c product version that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SCProductVersion removeByDirectDownloadURL(String directDownloadURL)
+	public void removeByDirectDownloadURL(String directDownloadURL)
 		throws NoSuchProductVersionException, SystemException {
 		SCProductVersion scProductVersion = findByDirectDownloadURL(directDownloadURL);
 
-		return remove(scProductVersion);
+		remove(scProductVersion);
 	}
 
 	/**
@@ -1901,8 +1899,6 @@ public class SCProductVersionPersistenceImpl extends BasePersistenceImpl<SCProdu
 	protected SCProductScreenshotPersistence scProductScreenshotPersistence;
 	@BeanReference(type = SCProductVersionPersistence.class)
 	protected SCProductVersionPersistence scProductVersionPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	protected ContainsSCFrameworkVersion containsSCFrameworkVersion;

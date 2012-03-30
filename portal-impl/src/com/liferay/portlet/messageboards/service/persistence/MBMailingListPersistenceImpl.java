@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -1783,14 +1782,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the message boards mailing list that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public MBMailingList removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = findByUUID_G(uuid, groupId);
 
-		return remove(mbMailingList);
+		remove(mbMailingList);
 	}
 
 	/**
@@ -1810,14 +1808,13 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	 *
 	 * @param groupId the group ID
 	 * @param categoryId the category ID
-	 * @return the message boards mailing list that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public MBMailingList removeByG_C(long groupId, long categoryId)
+	public void removeByG_C(long groupId, long categoryId)
 		throws NoSuchMailingListException, SystemException {
 		MBMailingList mbMailingList = findByG_C(groupId, categoryId);
 
-		return remove(mbMailingList);
+		remove(mbMailingList);
 	}
 
 	/**
@@ -2164,8 +2161,6 @@ public class MBMailingListPersistenceImpl extends BasePersistenceImpl<MBMailingL
 	protected MBThreadPersistence mbThreadPersistence;
 	@BeanReference(type = MBThreadFlagPersistence.class)
 	protected MBThreadFlagPersistence mbThreadFlagPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_MBMAILINGLIST = "SELECT mbMailingList FROM MBMailingList mbMailingList";

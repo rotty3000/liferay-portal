@@ -65,7 +65,6 @@ import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
-import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -79,7 +78,6 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutTemplateLocalServiceUtil;
-import com.liferay.portal.service.PermissionLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
@@ -685,9 +683,7 @@ public class LayoutImporter {
 		}
 
 		if (importPermissions) {
-			if ((userId > 0) &&
-				((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) ||
-				 (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6))) {
+			if (userId > 0) {
 
 				Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
 					User.class);
@@ -1242,30 +1238,11 @@ public class LayoutImporter {
 			Role guestRole = RoleLocalServiceUtil.getRole(
 				importedLayout.getCompanyId(), RoleConstants.GUEST);
 
-			if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5) {
-				Resource resource = layoutCache.getResource(
-					importedLayout.getCompanyId(), groupId, resourceName,
-					ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey, false);
-
-				PermissionLocalServiceUtil.setRolePermissions(
-					guestRole.getRoleId(), new String[] {ActionKeys.VIEW},
-					resource.getResourceId());
-			}
-			else if (PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 6) {
-				ResourcePermissionLocalServiceUtil.setResourcePermissions(
-					importedLayout.getCompanyId(), resourceName,
-					ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey,
-					guestRole.getRoleId(), new String[] {ActionKeys.VIEW});
-			}
-			else {
-				Resource resource = layoutCache.getResource(
-					importedLayout.getCompanyId(), groupId, resourceName,
-					ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey, false);
-
-				PermissionLocalServiceUtil.setGroupPermissions(
-					groupId, new String[] {ActionKeys.VIEW},
-					resource.getResourceId());
-			}
+			ResourcePermissionLocalServiceUtil.setResourcePermissions(
+				importedLayout.getCompanyId(), resourceName,
+				ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey,
+				guestRole.getRoleId(), new String[] {ActionKeys.VIEW});
+			
 		}
 
 		_portletImporter.importPortletData(

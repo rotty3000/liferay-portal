@@ -71,6 +71,17 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		}
 	}
 
+	/**
+	 * @deprecated {@link #forward(ServletRequest, ServletResponse)}
+	 */
+	public void forward(
+			ServletRequest servletRequest, ServletResponse servletResponse,
+			boolean named)
+		throws IOException, ServletException {
+
+		forward(servletRequest, servletResponse);
+	}
+
 	public void include(
 			ServletRequest servletRequest, ServletResponse servletResponse)
 		throws IOException, ServletException {
@@ -85,6 +96,17 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 		else {
 			_requestDispatcher.include(servletRequest, servletResponse);
 		}
+	}
+
+	/**
+	 * @deprecated {@link #include(ServletRequest, ServletResponse)}
+	 */
+	public void include(
+			ServletRequest servletRequest, ServletResponse servletResponse,
+			boolean named)
+		throws IOException, ServletException {
+
+		include(servletRequest, servletResponse);
 	}
 
 	public void invoke(
@@ -157,6 +179,17 @@ public class LiferayRequestDispatcher implements RequestDispatcher {
 			_requestDispatcher.forward(
 				portletServletRequest, portletServletResponse);
 		}
+	}
+
+	/**
+	 * @deprecated {@link #invoke(ServletRequest, ServletResponse, boolean)}
+	 */
+	public void invoke(
+			ServletRequest servletRequest, ServletResponse servletResponse,
+			boolean named, boolean include)
+		throws IOException, ServletException {
+
+		invoke(servletRequest, servletResponse, include);
 	}
 
 	protected HttpServletRequest getPortletServletRequest(

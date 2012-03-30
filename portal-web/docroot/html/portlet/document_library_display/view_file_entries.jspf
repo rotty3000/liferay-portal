@@ -27,7 +27,9 @@
 	<%
 	RowChecker rowChecker = null;
 
-	if (showActions) {
+	boolean showDeleteButton = permissionChecker.hasPermission(scopeGroupId, DLFileEntryConstants.getClassName(), scopeGroupId, ActionKeys.DELETE);
+
+	if (showActions && showDeleteButton) {
 		rowChecker = new RowChecker(renderResponse);
 	}
 	%>
@@ -126,7 +128,7 @@
 
 		</liferay-ui:search-container-row>
 
-		<c:if test="<%= (total > 0) && showActions %>">
+		<c:if test="<%= (total > 0) && showActions && showDeleteButton %>">
 			<aui:button onClick='<%= renderResponse.getNamespace() + "deleteEntries();" %>' value="delete" />
 		</c:if>
 

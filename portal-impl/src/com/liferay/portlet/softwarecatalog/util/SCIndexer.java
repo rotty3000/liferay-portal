@@ -14,18 +14,25 @@
 
 package com.liferay.portlet.softwarecatalog.util;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionList;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -66,6 +73,14 @@ public class SCIndexer extends BaseIndexer {
 
 	public String getPortletId() {
 		return PORTLET_ID;
+	}
+
+	protected void addReindexCriteria(
+		DynamicQuery dynamicQuery, long companyId) {
+
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(companyId));
 	}
 
 	@Override
@@ -207,26 +222,65 @@ public class SCIndexer extends BaseIndexer {
 	}
 
 	protected void reindexProductEntries(long companyId) throws Exception {
-		int count =
-			SCProductEntryLocalServiceUtil.getCompanyProductEntriesCount(
-				companyId);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			SCProductEntry.class, PortalClassLoaderUtil.getClassLoader());
 
-		int pages = count / Indexer.DEFAULT_INTERVAL;
+		Projection minProductEntryIdProjection = ProjectionFactoryUtil.min(
+			"productEntryId");
+		Projection maxProductEntryIdProjection = ProjectionFactoryUtil.max(
+			"productEntryId");
 
-		for (int i = 0; i <= pages; i++) {
-			int start = (i * Indexer.DEFAULT_INTERVAL);
-			int end = start + Indexer.DEFAULT_INTERVAL;
+		ProjectionList projectionList = ProjectionFactoryUtil.projectionList();
 
-			reindexProductEntries(companyId, start, end);
+		projectionList.add(minProductEntryIdProjection);
+		projectionList.add(maxProductEntryIdProjection);
+
+		dynamicQuery.setProjection(projectionList);
+
+		addReindexCriteria(dynamicQuery, companyId);
+
+		List<Object[]> results = SCProductEntryLocalServiceUtil.dynamicQuery(
+			dynamicQuery);
+
+		Object[] minAndMaxProductEntryIds = results.get(0);
+
+		if ((minAndMaxProductEntryIds[0] == null) ||
+			(minAndMaxProductEntryIds[1] == null)) {
+
+			return;
+		}
+
+		long minProductEntryId = (Long)minAndMaxProductEntryIds[0];
+		long maxProductEntryId = (Long)minAndMaxProductEntryIds[1];
+
+		long startProductEntryId = minProductEntryId;
+		long endProductEntryId = startProductEntryId + DEFAULT_INTERVAL;
+
+		while (startProductEntryId <= maxProductEntryId) {
+			reindexProductEntries(
+				companyId, startProductEntryId, endProductEntryId);
+
+			startProductEntryId = endProductEntryId;
+			endProductEntryId += DEFAULT_INTERVAL;
 		}
 	}
 
-	protected void reindexProductEntries(long companyId, int start, int end)
+	protected void reindexProductEntries(
+			long companyId, long startProductEntryId, long endProductEntryId)
 		throws Exception {
 
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			SCProductEntry.class, PortalClassLoaderUtil.getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("productEntryId");
+
+		dynamicQuery.add(property.ge(startProductEntryId));
+		dynamicQuery.add(property.lt(endProductEntryId));
+
+		addReindexCriteria(dynamicQuery, companyId);
+
 		List<SCProductEntry> productEntries =
-			SCProductEntryLocalServiceUtil.getCompanyProductEntries(
-				companyId, start, end);
+			SCProductEntryLocalServiceUtil.dynamicQuery(dynamicQuery);
 
 		if (productEntries.isEmpty()) {
 			return;

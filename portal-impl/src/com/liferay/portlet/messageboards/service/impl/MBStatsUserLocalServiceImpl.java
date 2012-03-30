@@ -16,7 +16,9 @@ package com.liferay.portlet.messageboards.service.impl;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -104,9 +106,13 @@ public class MBStatsUserLocalServiceImpl
 			MBStatsUser.class, MBStatsUserImpl.TABLE_NAME,
 			PortalClassLoaderUtil.getClassLoader());
 
-		dynamicQuery.setProjection(ProjectionFactoryUtil.sum("messageCount"));
+		Projection projection = ProjectionFactoryUtil.sum("messageCount");
 
-		dynamicQuery.add(PropertyFactoryUtil.forName("userId").eq(userId));
+		dynamicQuery.setProjection(projection);
+
+		Property property = PropertyFactoryUtil.forName("userId");
+
+		dynamicQuery.add(property.eq(userId));
 
 		List<Long> results = mbStatsUserLocalService.dynamicQuery(dynamicQuery);
 

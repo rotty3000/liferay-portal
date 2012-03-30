@@ -38,7 +38,6 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.LayoutPersistence;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -4499,14 +4498,13 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	 * Removes the social activity where mirrorActivityId = &#63; from the database.
 	 *
 	 * @param mirrorActivityId the mirror activity ID
-	 * @return the social activity that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivity removeByMirrorActivityId(long mirrorActivityId)
+	public void removeByMirrorActivityId(long mirrorActivityId)
 		throws NoSuchActivityException, SystemException {
 		SocialActivity socialActivity = findByMirrorActivityId(mirrorActivityId);
 
-		return remove(socialActivity);
+		remove(socialActivity);
 	}
 
 	/**
@@ -4595,16 +4593,15 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	 * @param classPK the class p k
 	 * @param type the type
 	 * @param receiverUserId the receiver user ID
-	 * @return the social activity that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialActivity removeByG_U_CD_C_C_T_R(long groupId, long userId,
+	public void removeByG_U_CD_C_C_T_R(long groupId, long userId,
 		long createDate, long classNameId, long classPK, int type,
 		long receiverUserId) throws NoSuchActivityException, SystemException {
 		SocialActivity socialActivity = findByG_U_CD_C_C_T_R(groupId, userId,
 				createDate, classNameId, classPK, type, receiverUserId);
 
-		return remove(socialActivity);
+		remove(socialActivity);
 	}
 
 	/**
@@ -5319,8 +5316,6 @@ public class SocialActivityPersistenceImpl extends BasePersistenceImpl<SocialAct
 	protected GroupPersistence groupPersistence;
 	@BeanReference(type = LayoutPersistence.class)
 	protected LayoutPersistence layoutPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	@BeanReference(type = AssetEntryPersistence.class)

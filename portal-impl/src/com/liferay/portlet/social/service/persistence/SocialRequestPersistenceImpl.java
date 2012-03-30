@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -4546,14 +4545,13 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
-	 * @return the social request that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialRequest removeByUUID_G(String uuid, long groupId)
+	public void removeByUUID_G(String uuid, long groupId)
 		throws NoSuchRequestException, SystemException {
 		SocialRequest socialRequest = findByUUID_G(uuid, groupId);
 
-		return remove(socialRequest);
+		remove(socialRequest);
 	}
 
 	/**
@@ -4628,16 +4626,15 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	 * @param classPK the class p k
 	 * @param type the type
 	 * @param receiverUserId the receiver user ID
-	 * @return the social request that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
-	public SocialRequest removeByU_C_C_T_R(long userId, long classNameId,
-		long classPK, int type, long receiverUserId)
+	public void removeByU_C_C_T_R(long userId, long classNameId, long classPK,
+		int type, long receiverUserId)
 		throws NoSuchRequestException, SystemException {
 		SocialRequest socialRequest = findByU_C_C_T_R(userId, classNameId,
 				classPK, type, receiverUserId);
 
-		return remove(socialRequest);
+		remove(socialRequest);
 	}
 
 	/**
@@ -5411,8 +5408,6 @@ public class SocialRequestPersistenceImpl extends BasePersistenceImpl<SocialRequ
 	protected SocialRelationPersistence socialRelationPersistence;
 	@BeanReference(type = SocialRequestPersistence.class)
 	protected SocialRequestPersistence socialRequestPersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_SOCIALREQUEST = "SELECT socialRequest FROM SocialRequest socialRequest";

@@ -108,6 +108,15 @@ public class DynamicQueryImpl implements DynamicQuery {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		if (_criteria != null) {
+			return _criteria.toString();
+		}
+
+		return super.toString();
+	}
+
 	private Criteria _criteria;
 	private DetachedCriteria _detachedCriteria;
 	private Integer _end;
