@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="definitions"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/log-bridge/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/mvc-portlet-support/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/osgi-admin-portlet/docroot/WEB-INF/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/war-artifact-listener/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-api/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/web-extender-spi/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/|integration/|unit/" kind="src" path="portal-impl/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>

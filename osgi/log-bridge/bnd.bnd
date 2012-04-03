@@ -1,0 +1,13 @@
+Bundle-Activator: com.liferay.log.bridge.LogBridge
+Bundle-Name: Log Bridge
+Bundle-SymbolicName: log-bridge
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 0.0.1
+Import-Package: \
+	com.liferay.portal.kernel.log,\
+	com.liferay.portal.kernel.util,\
+	org.osgi.framework,\
+	org.osgi.service.log,\
+	org.osgi.util.tracker,\
+	*
+Private-Package: com.liferay.log.bridge

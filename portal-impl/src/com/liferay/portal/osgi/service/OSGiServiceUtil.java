@@ -21,17 +21,16 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.osgi.BundleListener;
 import com.liferay.portal.osgi.FrameworkListener;
 import com.liferay.portal.osgi.OSGiConstants;
 import com.liferay.portal.osgi.OSGiException;
-import com.liferay.portal.osgi.ServiceListener;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -217,6 +216,9 @@ public class OSGiServiceUtil {
 		sb.append(PropsValues.OSGI_AUTO_DEPLOY_DIR);
 
 		properties.put("felix.fileinstall.dir", sb.toString());
+		properties.put(
+			"felix.fileinstall.log.level",
+			PropsUtil.get("osgi.deploy.log.level"));
 		properties.put(
 			"felix.fileinstall.tmpdir", System.getProperty("java.io.tmpdir"));
 
@@ -463,17 +465,17 @@ public class OSGiServiceUtil {
 
 		BundleContext bundleContext = _framework.getBundleContext();
 
-		BundleListener bundleListener = new BundleListener();
-
-		bundleContext.addBundleListener(bundleListener);
-
-		FrameworkListener frameworkListener = new FrameworkListener();
-
-		bundleContext.addFrameworkListener(frameworkListener);
-
-		ServiceListener serviceListener = new ServiceListener();
-
-		bundleContext.addServiceListener(serviceListener);
+//		BundleListener bundleListener = new BundleListener();
+//
+//		bundleContext.addBundleListener(bundleListener);
+//
+//		FrameworkListener frameworkListener = new FrameworkListener();
+//
+//		bundleContext.addFrameworkListener(frameworkListener);
+//
+//		ServiceListener serviceListener = new ServiceListener();
+//
+//		bundleContext.addServiceListener(serviceListener);
 
 		_framework.start();
 
