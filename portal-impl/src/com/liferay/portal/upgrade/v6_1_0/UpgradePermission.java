@@ -256,6 +256,10 @@ public class UpgradePermission extends UpgradeProcess {
 
 		Connection con = null;
 		PreparedStatement ps = null;
+		PreparedStatement psCompany = null;
+		PreparedStatement psResource = null;
+		PreparedStatement psResourceCode = null;
+		PreparedStatement psGroup = null;
 		ResultSet rs = null;
 		ResultSet rsCompany = null;
 		ResultSet rsGroups = null;
@@ -266,44 +270,45 @@ public class UpgradePermission extends UpgradeProcess {
 		try {
 			con = DataAccess.getConnection();
 
-			ps = con
+			psCompany = con
 					.prepareStatement("select companyId from Company");
-			rsCompany = ps.executeQuery();
+			rsCompany = psCompany.executeQuery();
 
 			while (rsCompany.next()) {
+				long codeCounter = 0;
 				long companyId = rsCompany.getLong("companyId");
 
-				ps = con
+				psResourceCode = con
 						.prepareStatement("select distinct codeId from ResourceCode "
 											.concat("where companyId = ? ")
 											.concat("and name = ? and scope = ?"));
 
-				ps.setLong(1, companyId);
-				ps.setString(2, name);
-				ps.setInt(3, ResourceConstants.SCOPE_INDIVIDUAL);
+				psResourceCode.setLong(1, companyId);
+				psResourceCode.setString(2, name);
+				psResourceCode.setInt(3, ResourceConstants.SCOPE_INDIVIDUAL);
 
-				rs = ps.executeQuery();
+				rs = psResourceCode.executeQuery();
 				while (rs.next()) {
 					long codeId = rs.getLong("codeId");
 
-					ps = con
+					psGroup = con
 							.prepareStatement("select groupId from Group_ "
 											.concat("where companyId = ?"));
-					ps.setLong(1, companyId);
+					psGroup.setLong(1, companyId);
 
-					rsGroups = ps.executeQuery();
+					rsGroups = psGroup.executeQuery();
 
 					while (rsGroups.next()) {
 						String primKey = Long.toString(rsGroups.getLong("groupId"));
 
-						ps = con
+						psResource = con
 								.prepareStatement("select resourceId from Resource_ "
 											.concat("where codeId = ? and primKey = ?"));
 
-						ps.setLong(1, codeId);
-						ps.setString(2, primKey);
+						psResource.setLong(1, codeId);
+						psResource.setString(2, primKey);
 
-						rsResource = ps.executeQuery();
+						rsResource = psResource.executeQuery();
 						while (rsResource.next()) {
 							long resourceId = rsResource.getLong("resourceId");
 							ps = con
@@ -338,6 +343,8 @@ public class UpgradePermission extends UpgradeProcess {
 								}
 							}
 
+							DataAccess.cleanUp(ps);
+
 							if ((PropsValues.PERMISSIONS_USER_CHECK_ALGORITHM == 5)
 									|| roleName.equals(RoleConstants.ORGANIZATION_USER)
 									|| roleName.equals(RoleConstants.OWNER)
@@ -362,8 +369,8 @@ public class UpgradePermission extends UpgradeProcess {
 										//TODO ask ray -
 									}
 								}
-								//								permissionPersistence.addRole(
-								//									permission.getPermissionId(), role);
+
+								DataAccess.cleanUp(ps);
 							}
 							else {
 								long defaultUserId = UserServiceUtil
@@ -378,19 +385,26 @@ public class UpgradePermission extends UpgradeProcess {
 								if (ps.executeUpdate() < 1) {
 									//TODO ask ray -
 								}
+
+								DataAccess.cleanUp(ps);
 							}
 						}
 
+						DataAccess.cleanUp(psResource);
 					}
 
-					if (_log.isInfoEnabled()) {
-						_log.info("Processed 100 resource blocks for " + name);
+					DataAccess.cleanUp(psGroup);
+
+					if (((++codeCounter % 100) == 0) && _log.isInfoEnabled()) {
+						_log.info("Processed 100 resource codes for " + name);
 					}
 				}
+
+				DataAccess.cleanUp(psResourceCode);
 			}
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(con, psCompany, rsCompany);
 		}
 	}
 

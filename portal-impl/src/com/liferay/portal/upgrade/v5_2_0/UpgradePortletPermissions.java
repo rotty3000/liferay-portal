@@ -14,6 +14,7 @@
 
 package com.liferay.portal.upgrade.v5_2_0;
 
+import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.dao.jdbc.SmartResultSet;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -33,9 +34,11 @@ import com.liferay.portal.util.PropsValues;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Jorge Ferrer
+ * @author Igor Beslic
  */
 public class UpgradePortletPermissions extends UpgradeProcess {
 
@@ -270,46 +273,64 @@ public class UpgradePortletPermissions extends UpgradeProcess {
 
 	protected Resource addResource_1to5(
 			long companyId, String name, int scope, String primKey)
-		throws SystemException {
+		throws SQLException, SystemException {
 		ResourceCode resourceCode = ResourceCodeUtil.fetchByC_N_S(
 				companyId, name, scope);
 
 		long codeId = resourceCode.getCodeId();
-		// TODO put sql version here
 
-		return null;
+		Resource resource = new ResourceImpl();
 
-//		Resource resource = resourcePersistence.fetchByC_P(codeId, primKey);
-//
-//		if (resource == null) {
-//			long resourceId = counterLocalService.increment(
-//				Resource.class.getName());
-//
-//			resource = resourcePersistence.create(resourceId);
-//
-//			resource.setCodeId(codeId);
-//			resource.setPrimKey(primKey);
-//
-//			try {
-//				resourcePersistence.update(resource, false);
-//			}
-//			catch (SystemException se) {
-//				if (_log.isWarnEnabled()) {
-//					_log.warn(
-//						"Add failed, fetch {codeId=" + codeId + ", primKey=" +
-//							primKey + "}");
-//				}
-//
-//				resource = resourcePersistence.fetchByC_P(
-//					codeId, primKey, false);
-//
-//				if (resource == null) {
-//					throw se;
-//				}
-//			}
-//		}
-//
-//		return resource;
+		resource.setCodeId(codeId);
+		resource.setCompanyId(companyId);
+		resource.setName(name);
+		resource.setPrimKey(primKey);
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DataAccess.getConnection();
+
+			ps = con
+					.prepareStatement("select resourceId from Resource_ "
+								.concat("where codeId = ? and primKey = ?"));
+			ps.setLong(1, codeId);
+			ps.setString(2, primKey);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				resource.setResourceId(rs.getLong("resourceId"));
+			}
+			else {
+				resource.setResourceId(
+						CounterLocalServiceUtil
+						.increment("com.liferay.portal.model.Resource"));
+
+				rs.close();
+				ps.close();
+
+				ps = con.prepareStatement("insert into Resource_"
+						.concat(" (resourceId, codeId, primKey)")
+							.concat(" values(?,?,?)"));
+
+				ps.setLong(1, resource.getResourceId());
+				ps.setLong(2, codeId);
+				ps.setString(3, primKey);
+
+				if (ps.executeUpdate() != 1) {
+					throw new SystemException(
+							"Add failed {codeId=" + codeId + ", primKey=" + primKey + "}");
+				}
+			}
+		}
+		finally{
+			DataAccess.cleanUp(con, ps, rs);
+		}
+
+		return resource;
 	}
 
 	protected Resource addResource_6(
