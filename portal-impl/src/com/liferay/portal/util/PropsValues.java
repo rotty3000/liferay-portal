@@ -1144,6 +1144,8 @@ public class PropsValues {
 
 	public static final boolean OSGI_REGISTER_LIFERAY_SERVICES = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.OSGI_REGISTER_LIFERAY_SERVICES));
 
+	public static final boolean OSGI_JAVA_SECURITY_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.OSGI_JAVA_SECURITY_ENABLED));
+
 	public static final String[] OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES = PropsUtil.getArray(PropsKeys.OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES);
 
 	public static final String[] OSGI_SYSTEM_PACKAGES_EXTRA = PropsUtil.getArray(PropsKeys.OSGI_SYSTEM_PACKAGES_EXTRA);

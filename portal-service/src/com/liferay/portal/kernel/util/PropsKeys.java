@@ -1585,6 +1585,8 @@ public interface PropsKeys {
 
 	public static final String OSGI_REGISTER_LIFERAY_SERVICES = "osgi.register.liferay.services";
 
+	public static final String OSGI_JAVA_SECURITY_ENABLED = "osgi.java.security.enabled";
+
 	public static final String OSGI_SYSTEM_BUNDLE_EXPORT_PACKAGES = "osgi.system.bundle.export.packages";
 
 	public static final String OSGI_SYSTEM_PACKAGES_EXTRA = "osgi.system.packages.extra";

@@ -238,7 +238,7 @@
 	<classpathentry kind="lib" path="lib/portal/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/portal/openid4java.jar"/>
 	<classpathentry kind="lib" path="lib/portal/org.apache.felix.fileinstall.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/org.apache.felix.fileinstall-3.1.10-sources.jar"/>
-	<classpathentry kind="lib" path="lib/portal/org.eclipse.osgi.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/equinox-SDK-3.7.2/plugins/org.eclipse.osgi.source_3.7.2.v20120110-1415.jar"/>
+	<classpathentry kind="lib" path="lib/portal/org.eclipse.osgi.jar" sourcepath="/org.eclipse.osgi"/>
 	<classpathentry kind="lib" path="lib/portal/oro.jar"/>
 	<classpathentry kind="lib" path="lib/portal/pdfbox.jar"/>
 	<classpathentry kind="lib" path="lib/portal/poi.jar"/>
