@@ -447,14 +447,14 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 		long creatorUserId = 0;
 
 		try {
-			creatorUserId = getUserId();
+			creatorUserId = getGuestOrUserId();
 		}
 		catch (PrincipalException pe) {
 		}
 
 		checkAddUserPermission(
-			creatorUserId, companyId, emailAddress, organizationIds,
-			serviceContext);
+			creatorUserId, companyId, emailAddress, groupIds, organizationIds,
+			roleIds, userGroupIds, serviceContext);
 
 		return userLocalService.addUserWithWorkflow(
 			creatorUserId, companyId, autoPassword, password1, password2,
@@ -1133,13 +1133,13 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 		long creatorUserId = 0;
 
 		try {
-			creatorUserId = getUserId();
+			creatorUserId = getGuestOrUserId();
 		}
 		catch (PrincipalException pe) {
 		}
 
 		checkAddUserPermission(
-			creatorUserId, companyId, emailAddress, null, serviceContext);
+			creatorUserId, companyId, emailAddress, null, null, null, null, serviceContext);
 
 		return userLocalService.updateIncompleteUser(
 			creatorUserId, companyId, autoPassword, password1, password2,
@@ -1559,10 +1559,41 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 
 	protected void checkAddUserPermission(
 			long creatorUserId, long companyId, String emailAddress,
-			long[] organizationIds, ServiceContext serviceContext)
+			long[] groupIds, long[] organizationIds, long[] roleIds,
+			long[] userGroupIds, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Company company = companyPersistence.findByPrimaryKey(companyId);
+
+		if(groupIds != null){
+			for (long groupId : groupIds) {
+				GroupPermissionUtil.check(
+					getPermissionChecker(), groupId, ActionKeys.ASSIGN_MEMBERS);
+			}
+		}
+
+		if(organizationIds != null){
+			for (long organizationId : organizationIds) {
+				OrganizationPermissionUtil.check(
+					getPermissionChecker(), organizationId,
+					ActionKeys.ASSIGN_MEMBERS);
+			}
+		}
+
+		if(roleIds != null){
+			for (long roleId : roleIds) {
+				RolePermissionUtil.check(
+					getPermissionChecker(), roleId, ActionKeys.ASSIGN_MEMBERS);
+			}
+		}
+
+		if(userGroupIds != null){
+			for (long userGroupId : userGroupIds) {
+				UserGroupPermissionUtil.check(
+					getPermissionChecker(), userGroupId, ActionKeys.ASSIGN_MEMBERS);
+
+			}
+		}
 
 		boolean anonymousUser = GetterUtil.getBoolean(
 			serviceContext.getAttribute("anonymousUser"));
@@ -1580,7 +1611,7 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			}
 		}
 
-		if (creatorUserId == 0) {
+		if (creatorUserId == 0 || creatorUserId == getDefaultUserId(companyId)) {
 			if (!company.isStrangersWithMx() &&
 				company.hasCompanyMx(emailAddress)) {
 
