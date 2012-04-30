@@ -206,9 +206,11 @@ public class OSGiServiceUtil {
 		properties.put(
 			Constants.FRAMEWORK_BUNDLE_PARENT,
 			Constants.FRAMEWORK_BUNDLE_PARENT_APP);
-		properties.put(
-			Constants.FRAMEWORK_SECURITY,
-			String.valueOf(PropsValues.OSGI_JAVA_SECURITY_ENABLED));
+
+		if (PropsValues.OSGI_JAVA_SECURITY_ENABLED) {
+			properties.put(Constants.FRAMEWORK_SECURITY, "osgi");
+		}
+
 		properties.put(
 			Constants.FRAMEWORK_STORAGE, PropsValues.OSGI_FRAMEWORK_STORAGE);
 
