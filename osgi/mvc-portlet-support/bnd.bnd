@@ -7,9 +7,9 @@ Export-Package: \
 Import-Package: \
 	com.liferay.portal.freemarker,\
 	com.liferay.portal.kernel.concurrent,\
-	com.liferay.portal.kernel.freemarker,\
 	com.liferay.portal.kernel.io.unsync,\
 	com.liferay.portal.kernel.log,\
+	com.liferay.portal.kernel.template,\
 	com.liferay.portal.kernel.servlet,\
 	com.liferay.portal.kernel.util,\
 	com.liferay.portal.model,\

@@ -16,11 +16,13 @@ package com.liferay.mvc.freemarker;
 
 import com.liferay.mvc.freemarker.internal.FreeMarkerMVCContextHelper;
 import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.freemarker.FreeMarkerContext;
-import com.liferay.portal.kernel.freemarker.FreeMarkerEngineUtil;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.template.Template;
+import com.liferay.portal.kernel.template.TemplateContextType;
+import com.liferay.portal.kernel.template.TemplateManager;
+import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -43,21 +45,23 @@ import javax.portlet.PortletResponse;
  */
 public class FreeMarkerMVCPortlet extends MVCPortlet {
 
-	protected FreeMarkerContext getFreeMarkerContext(
+	protected Template getFreeMarkerTemplate(
+			String templateId, String templateContent,
 			PortletRequest portletRequest, PortletResponse portletResponse)
 		throws Exception {
 
-		FreeMarkerContext freeMarkerContext =
-			FreeMarkerEngineUtil.getWrappedStandardToolsContext();
+		Template freeMarkerTemplate = TemplateManagerUtil.getTemplate(
+			TemplateManager.FREEMARKER, templateId, templateContent,
+			TemplateContextType.STANDARD);
 
-		freeMarkerContext.put("portletContext", getPortletContext());
-		freeMarkerContext.put(
+		freeMarkerTemplate.put("portletContext", getPortletContext());
+		freeMarkerTemplate.put(
 			"userInfo", portletRequest.getAttribute(PortletRequest.USER_INFO));
 
 		FreeMarkerMVCContextHelper.addPortletJSPTaglibSupport(
-			freeMarkerContext, portletRequest, portletResponse, _templateIds);
+			freeMarkerTemplate, portletRequest, portletResponse, _templateIds);
 
-		return freeMarkerContext;
+		return freeMarkerTemplate;
 	}
 
 	@Override
@@ -75,9 +79,6 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 		}
 		else {
 			try {
-				FreeMarkerContext freeMarkerContext = getFreeMarkerContext(
-					portletRequest, portletResponse);
-
 				Writer writer = null;
 
 				if (portletResponse instanceof MimeResponse) {
@@ -92,16 +93,19 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 
 				// Merge templates
 
-				String template = HttpUtil.URLtoString(resource);
-
 				String templateId = portletResponse.getNamespace() + path;
 
 				if (!_templateIds.contains(templateId)) {
 					_templateIds.add(templateId);
 				}
 
-				FreeMarkerEngineUtil.mergeTemplate(
-					templateId, template, freeMarkerContext, writer);
+				String templateContent = HttpUtil.URLtoString(resource);
+
+				Template freeMarkerTemplate = getFreeMarkerTemplate(
+					templateId, templateContent, portletRequest,
+					portletResponse);
+
+				freeMarkerTemplate.processTemplate(writer);
 			}
 			catch (Exception e) {
 				throw new PortletException(e);
@@ -119,8 +123,11 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 	public void destroy() {
 		super.destroy();
 
+		TemplateManager freeMarkerTemplateManager =
+			TemplateManagerUtil.getTemplateManager(TemplateManager.FREEMARKER);
+
 		for (String templateId : _templateIds) {
-			FreeMarkerEngineUtil.flushTemplate(templateId);
+			freeMarkerTemplateManager.clearCache(templateId);
 		}
 	}
 

@@ -14,11 +14,11 @@
 
 package com.liferay.mvc.freemarker.internal;
 
+import com.liferay.portal.freemarker.FreeMarkerTemplate;
 import com.liferay.portal.freemarker.FreeMarkerTemplateLoader;
-import com.liferay.portal.kernel.freemarker.FreeMarkerContext;
-import com.liferay.portal.kernel.freemarker.FreeMarkerVariablesUtil;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
+import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
@@ -46,10 +46,10 @@ import javax.servlet.http.HttpServletResponse;
 public class FreeMarkerMVCContextHelper {
 
 	public static final String TEMPLATE_REGISTRY_ATTRIBUTE =
-		FreeMarkerContext.class.getName().concat(".templateRegistry");
+		FreeMarkerTemplate.class.getName().concat(".templateRegistry");
 
 	public static void addPortletJSPTaglibSupport(
-			FreeMarkerContext freeMarkerContext, PortletRequest portletRequest,
+			Template freeMarkerTemplate, PortletRequest portletRequest,
 			PortletResponse portletResponse, Set<String> templateRegistry)
 		throws Exception {
 
@@ -58,7 +58,7 @@ public class FreeMarkerMVCContextHelper {
 		HttpServletResponse response = PortalUtil.getHttpServletResponse(
 			portletResponse);
 
-		FreeMarkerVariablesUtil.insertVariables(freeMarkerContext, request);
+		freeMarkerTemplate.prepare(request);
 
 		Portlet portlet = (Portlet)request.getAttribute(WebKeys.RENDER_PORTLET);
 
@@ -76,7 +76,7 @@ public class FreeMarkerMVCContextHelper {
 				TEMPLATE_REGISTRY_ATTRIBUTE, templateRegistry);
 		}
 
-		freeMarkerContext.put(
+		freeMarkerTemplate.put(
 			"fullTemplatesPath",
 			StringPool.SLASH + servletContextName +
 			FreeMarkerTemplateLoader.SERVLET_SEPARATOR);
@@ -84,7 +84,7 @@ public class FreeMarkerMVCContextHelper {
 		TemplateHashModel taglibsFactory =
 			FreeMarkerTaglibFactoryUtil.createTaglibFactory(servletContext);
 
-		freeMarkerContext.put("PortletJspTagLibs", taglibsFactory);
+		freeMarkerTemplate.put("PortletJspTagLibs", taglibsFactory);
 
 		ServletConfig servletConfig =
 			(ServletConfig)portletRequest.getAttribute(
@@ -98,12 +98,12 @@ public class FreeMarkerMVCContextHelper {
 			new ServletContextHashModel(
 				portletServlet, ObjectWrapper.DEFAULT_WRAPPER);
 
-		freeMarkerContext.put("Application", servletContextHashModel);
+		freeMarkerTemplate.put("Application", servletContextHashModel);
 
 		HttpRequestHashModel httpRequestHashModel = new HttpRequestHashModel(
 			request, response, ObjectWrapper.DEFAULT_WRAPPER);
 
-		freeMarkerContext.put("Request", httpRequestHashModel);
+		freeMarkerTemplate.put("Request", httpRequestHashModel);
 	}
 
 }
