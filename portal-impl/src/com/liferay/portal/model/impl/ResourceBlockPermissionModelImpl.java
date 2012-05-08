@@ -30,6 +30,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the ResourceBlockPermission service. Represents a row in the &quot;ResourceBlockPermission&quot; database table, with each column mapped to a property of this class.
  *
@@ -101,6 +104,47 @@ public class ResourceBlockPermissionModelImpl extends BaseModelImpl<ResourceBloc
 
 	public String getModelClassName() {
 		return ResourceBlockPermission.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourceBlockPermissionId",
+			getResourceBlockPermissionId());
+		attributes.put("resourceBlockId", getResourceBlockId());
+		attributes.put("roleId", getRoleId());
+		attributes.put("actionIds", getActionIds());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourceBlockPermissionId = (Long)attributes.get(
+				"resourceBlockPermissionId");
+
+		if (resourceBlockPermissionId != null) {
+			setResourceBlockPermissionId(resourceBlockPermissionId);
+		}
+
+		Long resourceBlockId = (Long)attributes.get("resourceBlockId");
+
+		if (resourceBlockId != null) {
+			setResourceBlockId(resourceBlockId);
+		}
+
+		Long roleId = (Long)attributes.get("roleId");
+
+		if (roleId != null) {
+			setRoleId(roleId);
+		}
+
+		Long actionIds = (Long)attributes.get("actionIds");
+
+		if (actionIds != null) {
+			setActionIds(actionIds);
+		}
 	}
 
 	public long getResourceBlockPermissionId() {

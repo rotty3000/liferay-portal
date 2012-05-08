@@ -83,6 +83,10 @@ public class RepositoryEntryLocalServiceWrapper
 		return _repositoryEntryLocalService.deleteRepositoryEntry(repositoryEntry);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _repositoryEntryLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

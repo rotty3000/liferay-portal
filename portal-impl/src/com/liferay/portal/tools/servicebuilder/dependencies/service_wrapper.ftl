@@ -21,7 +21,7 @@ public class ${entity.name}${sessionTypeName}ServiceWrapper implements ${entity.
 		<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method)>
 			${serviceBuilder.getJavadocComment(method)}
 
-			<#if method.name = "dynamicQuery">
+			<#if method.name = "dynamicQuery" && (method.parameters?size != 0)>
 				@SuppressWarnings("rawtypes")
 			</#if>
 

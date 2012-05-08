@@ -39,6 +39,24 @@ public class AssetTagPropertyServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds an asset tag property.
 	*
 	* @param tagId the primary key of the tag
@@ -128,14 +146,10 @@ public class AssetTagPropertyServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AssetTagPropertyService service) {
-		MethodCache.remove(AssetTagPropertyService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AssetTagPropertyServiceUtil.class,
-			"_service");
-		MethodCache.remove(AssetTagPropertyService.class);
 	}
 
 	private static AssetTagPropertyService _service;

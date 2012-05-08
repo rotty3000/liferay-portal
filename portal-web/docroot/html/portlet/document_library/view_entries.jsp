@@ -300,57 +300,57 @@ for (int i = 0; i < results.size(); i++) {
 					</liferay-util:buffer>
 
 					<%
-					List resultRows = searchContainer.getResultRows();
+						List resultRows = searchContainer.getResultRows();
 
-					ResultRow row = null;
+											ResultRow row = null;
 
-					if (fileShortcut == null) {
-						row = new ResultRow(fileEntry, fileEntry.getFileEntryId(), i);
-					}
-					else {
-						row = new ResultRow(fileShortcut, fileShortcut.getFileShortcutId(), i);
-					}
+											if (fileShortcut == null) {
+												row = new ResultRow(fileEntry, fileEntry.getFileEntryId(), i);
+											}
+											else {
+												row = new ResultRow(fileShortcut, fileShortcut.getFileShortcutId(), i);
+											}
 
-					row.setClassName("document-display-style");
+											row.setClassName("document-display-style");
 
-					Map<String, Object> data = new HashMap<String, Object>();
+											Map<String, Object> data = new HashMap<String, Object>();
 
-					data.put("draggable", DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE));
-					data.put("title", fileEntry.getTitle());
+											data.put("draggable", DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) || DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE));
+											data.put("title", fileEntry.getTitle());
 
-					row.setData(data);
+											row.setData(data);
 
-					for (String columnName : entryColumns) {
-						if (columnName.equals("action")) {
-							row.addJSP("/html/portlet/document_library/file_entry_action.jsp");
-						}
+											for (String columnName : entryColumns) {
+												if (columnName.equals("action")) {
+													row.addJSP("/html/portlet/document_library/file_entry_action.jsp");
+												}
 
-						if (columnName.equals("create-date")) {
-							row.addText(dateFormatDateTime.format(fileEntry.getCreateDate()));
-						}
+												if (columnName.equals("create-date")) {
+													row.addText(dateFormatDateTime.format(fileEntry.getCreateDate()));
+												}
 
-						if (columnName.equals("downloads")) {
-							row.addText(String.valueOf(fileEntry.getReadCount()));
-						}
+												if (columnName.equals("downloads")) {
+													row.addText(String.valueOf(fileEntry.getReadCount()));
+												}
 
-						if (columnName.equals("modified-date")) {
-							row.addText(dateFormatDateTime.format(fileEntry.getModifiedDate()));
-						}
+												if (columnName.equals("modified-date")) {
+													row.addText(dateFormatDateTime.format(fileEntry.getModifiedDate()));
+												}
 
-						if (columnName.equals("name")) {
-							TextSearchEntry folderTitleSearchEntry = new TextSearchEntry();
+												if (columnName.equals("name")) {
+													TextSearchEntry folderTitleSearchEntry = new TextSearchEntry();
 
-							folderTitleSearchEntry.setName(fileEntryTitle);
+													folderTitleSearchEntry.setName(fileEntryTitle);
 
-							row.addSearchEntry(folderTitleSearchEntry);
-						}
+													row.addSearchEntry(folderTitleSearchEntry);
+												}
 
-						if (columnName.equals("size")) {
-							row.addText(TextFormatter.formatKB(fileEntry.getSize(), locale) + "k");
-						}
-					}
+												if (columnName.equals("size")) {
+													row.addText(TextFormatter.formatStorageSize(fileEntry.getSize(), locale));
+												}
+											}
 
-					resultRows.add(row);
+											resultRows.add(row);
 					%>
 
 				</c:otherwise>

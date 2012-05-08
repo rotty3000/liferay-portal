@@ -936,11 +936,10 @@ public class JournalFeedUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(JournalFeedPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(JournalFeedUtil.class,
-			"_persistence");
 	}
 
 	private static JournalFeedPersistence _persistence;

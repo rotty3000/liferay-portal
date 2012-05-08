@@ -1060,11 +1060,10 @@ public class EmailAddressUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(EmailAddressPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(EmailAddressUtil.class,
-			"_persistence");
 	}
 
 	private static EmailAddressPersistence _persistence;

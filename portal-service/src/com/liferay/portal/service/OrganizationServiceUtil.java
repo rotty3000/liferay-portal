@@ -39,6 +39,24 @@ public class OrganizationServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds the organizations to the group.
 	*
 	* @param groupId the primary key of the group
@@ -482,14 +500,10 @@ public class OrganizationServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(OrganizationService service) {
-		MethodCache.remove(OrganizationService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(OrganizationServiceUtil.class,
-			"_service");
-		MethodCache.remove(OrganizationService.class);
 	}
 
 	private static OrganizationService _service;

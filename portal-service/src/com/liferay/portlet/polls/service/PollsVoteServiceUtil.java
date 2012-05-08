@@ -37,6 +37,25 @@ public class PollsVoteServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.polls.service.impl.PollsVoteServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portlet.polls.model.PollsVote addVote(
 		long questionId, long choiceId,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -57,14 +76,10 @@ public class PollsVoteServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PollsVoteService service) {
-		MethodCache.remove(PollsVoteService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PollsVoteServiceUtil.class,
-			"_service");
-		MethodCache.remove(PollsVoteService.class);
 	}
 
 	private static PollsVoteService _service;

@@ -90,6 +90,10 @@ public class WikiPageLocalServiceUtil {
 		return getService().deleteWikiPage(wikiPage);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -745,14 +749,10 @@ public class WikiPageLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(WikiPageLocalService service) {
-		MethodCache.remove(WikiPageLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(WikiPageLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(WikiPageLocalService.class);
 	}
 
 	private static WikiPageLocalService _service;

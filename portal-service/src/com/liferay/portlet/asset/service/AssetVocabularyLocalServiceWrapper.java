@@ -85,6 +85,10 @@ public class AssetVocabularyLocalServiceWrapper
 		return _assetVocabularyLocalService.deleteAssetVocabulary(assetVocabulary);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _assetVocabularyLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

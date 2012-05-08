@@ -827,11 +827,10 @@ public class LayoutSetBranchUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(LayoutSetBranchPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(LayoutSetBranchUtil.class,
-			"_persistence");
 	}
 
 	private static LayoutSetBranchPersistence _persistence;

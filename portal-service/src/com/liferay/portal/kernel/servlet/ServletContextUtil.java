@@ -165,7 +165,7 @@ public class ServletContextUtil {
 
 		if (rootDir == null) {
 			ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
-				PortletServlet.PORTLET_CLASS_LOADER);
+				PluginContextListener.PLUGIN_CLASS_LOADER);
 
 			if (classLoader == null) {
 				classLoader = PortalClassLoaderUtil.getClassLoader();

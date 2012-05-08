@@ -15,7 +15,6 @@
 package com.liferay.portal.tools.deploy;
 
 import com.liferay.portal.kernel.plugin.PluginPackage;
-import com.liferay.portal.kernel.servlet.PortletContextListener;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -113,8 +112,7 @@ public class PortletDeployer extends BaseDeployer {
 	}
 
 	@Override
-	public String getExtraContent(
-			double webXmlVersion, File srcFile, String displayName)
+	public String getExtraContent(File srcFile, String displayName)
 		throws Exception {
 
 		StringBundler sb = new StringBundler();
@@ -152,8 +150,7 @@ public class PortletDeployer extends BaseDeployer {
 			sb.append("</listener>");
 		}
 
-		String extraContent = super.getExtraContent(
-			webXmlVersion, srcFile, displayName);
+		String extraContent = super.getExtraContent(srcFile, displayName);
 
 		sb.append(extraContent);
 
@@ -188,11 +185,6 @@ public class PortletDeployer extends BaseDeployer {
 	}
 
 	@Override
-	public Class<?> getPluginContextListenerClass() {
-		return PortletContextListener.class;
-	}
-
-	@Override
 	public String getPluginType() {
 		return Plugin.TYPE_PORTLET;
 	}
@@ -201,8 +193,6 @@ public class PortletDeployer extends BaseDeployer {
 		throws Exception {
 
 		StringBundler sb = new StringBundler();
-
-		// Add wrappers for portlets
 
 		Document document = SAXReaderUtil.read(portletXML);
 
@@ -241,154 +231,6 @@ public class PortletDeployer extends BaseDeployer {
 			sb.append(portletName);
 			sb.append("/*</url-pattern>");
 			sb.append("</servlet-mapping>");
-		}
-
-		// Make sure there is a company id specified
-
-		document = SAXReaderUtil.read(webXML);
-
-		rootElement = document.getRootElement();
-
-		// Remove deprecated references to SharedServletWrapper
-
-		List<Element> servletElements = rootElement.elements("servlet");
-
-		for (Element servletElement : servletElements) {
-			String icon = servletElement.elementText("icon");
-			String servletName = servletElement.elementText("servlet-name");
-			String displayName = servletElement.elementText("display-name");
-			String description = servletElement.elementText("description");
-			String servletClass = servletElement.elementText("servlet-class");
-			List<Element> initParamElements = servletElement.elements(
-				"init-param");
-			String loadOnStartup = servletElement.elementText(
-				"load-on-startup");
-			String runAs = servletElement.elementText("run-as");
-			List<Element> securityRoleRefElements = servletElement.elements(
-				"security-role-ref");
-
-			if ((servletClass != null) &&
-				servletClass.equals(
-					"com.liferay.portal.servlet.SharedServletWrapper")) {
-
-				sb.append("<servlet>");
-
-				if (icon != null) {
-					sb.append("<icon>");
-					sb.append(icon);
-					sb.append("</icon>");
-				}
-
-				if (servletName != null) {
-					sb.append("<servlet-name>");
-					sb.append(servletName);
-					sb.append("</servlet-name>");
-				}
-
-				if (displayName != null) {
-					sb.append("<display-name>");
-					sb.append(displayName);
-					sb.append("</display-name>");
-				}
-
-				if (description != null) {
-					sb.append("<description>");
-					sb.append(description);
-					sb.append("</description>");
-				}
-
-				for (Element initParamElement : initParamElements) {
-					String paramName = initParamElement.elementText(
-						"param-name");
-					String paramValue = initParamElement.elementText(
-						"param-value");
-
-					if ((paramName != null) &&
-						paramName.equals("servlet-class")) {
-
-						sb.append("<servlet-class>");
-						sb.append(paramValue);
-						sb.append("</servlet-class>");
-					}
-				}
-
-				for (Element initParamElement : initParamElements) {
-					String paramName = initParamElement.elementText(
-						"param-name");
-					String paramValue = initParamElement.elementText(
-						"param-value");
-					String paramDesc = initParamElement.elementText(
-						"description");
-
-					if ((paramName != null) &&
-						!paramName.equals("servlet-class")) {
-
-						sb.append("<init-param>");
-						sb.append("<param-name>");
-						sb.append(paramName);
-						sb.append("</param-name>");
-
-						if (paramValue != null) {
-							sb.append("<param-value>");
-							sb.append(paramValue);
-							sb.append("</param-value>");
-						}
-
-						if (paramDesc != null) {
-							sb.append("<description>");
-							sb.append(paramDesc);
-							sb.append("</description>");
-						}
-
-						sb.append("</init-param>");
-					}
-				}
-
-				if (loadOnStartup != null) {
-					sb.append("<load-on-startup>");
-					sb.append(loadOnStartup);
-					sb.append("</load-on-startup>");
-				}
-
-				if (runAs != null) {
-					sb.append("<run-as>");
-					sb.append(runAs);
-					sb.append("</run-as>");
-				}
-
-				for (Element securityRoleRefElement : securityRoleRefElements) {
-					String roleDesc = securityRoleRefElement.elementText(
-						"description");
-					String roleName = securityRoleRefElement.elementText(
-						"role-name");
-					String roleLink = securityRoleRefElement.elementText(
-						"role-link");
-
-					sb.append("<security-role-ref>");
-
-					if (roleDesc != null) {
-						sb.append("<description>");
-						sb.append(roleDesc);
-						sb.append("</description>");
-					}
-
-					if (roleName != null) {
-						sb.append("<role-name>");
-						sb.append(roleName);
-						sb.append("</role-name>");
-					}
-
-					if (roleLink != null) {
-						sb.append("<role-link>");
-						sb.append(roleLink);
-						sb.append("</role-link>");
-					}
-
-					sb.append("</security-role-ref>");
-				}
-
-				sb.append("</servlet>");
-			}
 		}
 
 		return sb.toString();

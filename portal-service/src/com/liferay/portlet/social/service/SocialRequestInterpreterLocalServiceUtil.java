@@ -153,14 +153,10 @@ public class SocialRequestInterpreterLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SocialRequestInterpreterLocalService service) {
-		MethodCache.remove(SocialRequestInterpreterLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SocialRequestInterpreterLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SocialRequestInterpreterLocalService.class);
 	}
 
 	private static SocialRequestInterpreterLocalService _service;

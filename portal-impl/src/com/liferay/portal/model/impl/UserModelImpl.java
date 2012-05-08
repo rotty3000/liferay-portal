@@ -37,7 +37,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the User service. Represents a row in the &quot;User_&quot; database table, with each column mapped to a property of this class.
@@ -263,6 +265,295 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	public String getModelClassName() {
 		return User.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("userId", getUserId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("defaultUser", getDefaultUser());
+		attributes.put("contactId", getContactId());
+		attributes.put("password", getPassword());
+		attributes.put("passwordEncrypted", getPasswordEncrypted());
+		attributes.put("passwordReset", getPasswordReset());
+		attributes.put("passwordModifiedDate", getPasswordModifiedDate());
+		attributes.put("digest", getDigest());
+		attributes.put("reminderQueryQuestion", getReminderQueryQuestion());
+		attributes.put("reminderQueryAnswer", getReminderQueryAnswer());
+		attributes.put("graceLoginCount", getGraceLoginCount());
+		attributes.put("screenName", getScreenName());
+		attributes.put("emailAddress", getEmailAddress());
+		attributes.put("facebookId", getFacebookId());
+		attributes.put("openId", getOpenId());
+		attributes.put("portraitId", getPortraitId());
+		attributes.put("languageId", getLanguageId());
+		attributes.put("timeZoneId", getTimeZoneId());
+		attributes.put("greeting", getGreeting());
+		attributes.put("comments", getComments());
+		attributes.put("firstName", getFirstName());
+		attributes.put("middleName", getMiddleName());
+		attributes.put("lastName", getLastName());
+		attributes.put("jobTitle", getJobTitle());
+		attributes.put("loginDate", getLoginDate());
+		attributes.put("loginIP", getLoginIP());
+		attributes.put("lastLoginDate", getLastLoginDate());
+		attributes.put("lastLoginIP", getLastLoginIP());
+		attributes.put("lastFailedLoginDate", getLastFailedLoginDate());
+		attributes.put("failedLoginAttempts", getFailedLoginAttempts());
+		attributes.put("lockout", getLockout());
+		attributes.put("lockoutDate", getLockoutDate());
+		attributes.put("agreedToTermsOfUse", getAgreedToTermsOfUse());
+		attributes.put("emailAddressVerified", getEmailAddressVerified());
+		attributes.put("status", getStatus());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Boolean defaultUser = (Boolean)attributes.get("defaultUser");
+
+		if (defaultUser != null) {
+			setDefaultUser(defaultUser);
+		}
+
+		Long contactId = (Long)attributes.get("contactId");
+
+		if (contactId != null) {
+			setContactId(contactId);
+		}
+
+		String password = (String)attributes.get("password");
+
+		if (password != null) {
+			setPassword(password);
+		}
+
+		Boolean passwordEncrypted = (Boolean)attributes.get("passwordEncrypted");
+
+		if (passwordEncrypted != null) {
+			setPasswordEncrypted(passwordEncrypted);
+		}
+
+		Boolean passwordReset = (Boolean)attributes.get("passwordReset");
+
+		if (passwordReset != null) {
+			setPasswordReset(passwordReset);
+		}
+
+		Date passwordModifiedDate = (Date)attributes.get("passwordModifiedDate");
+
+		if (passwordModifiedDate != null) {
+			setPasswordModifiedDate(passwordModifiedDate);
+		}
+
+		String digest = (String)attributes.get("digest");
+
+		if (digest != null) {
+			setDigest(digest);
+		}
+
+		String reminderQueryQuestion = (String)attributes.get(
+				"reminderQueryQuestion");
+
+		if (reminderQueryQuestion != null) {
+			setReminderQueryQuestion(reminderQueryQuestion);
+		}
+
+		String reminderQueryAnswer = (String)attributes.get(
+				"reminderQueryAnswer");
+
+		if (reminderQueryAnswer != null) {
+			setReminderQueryAnswer(reminderQueryAnswer);
+		}
+
+		Integer graceLoginCount = (Integer)attributes.get("graceLoginCount");
+
+		if (graceLoginCount != null) {
+			setGraceLoginCount(graceLoginCount);
+		}
+
+		String screenName = (String)attributes.get("screenName");
+
+		if (screenName != null) {
+			setScreenName(screenName);
+		}
+
+		String emailAddress = (String)attributes.get("emailAddress");
+
+		if (emailAddress != null) {
+			setEmailAddress(emailAddress);
+		}
+
+		Long facebookId = (Long)attributes.get("facebookId");
+
+		if (facebookId != null) {
+			setFacebookId(facebookId);
+		}
+
+		String openId = (String)attributes.get("openId");
+
+		if (openId != null) {
+			setOpenId(openId);
+		}
+
+		Long portraitId = (Long)attributes.get("portraitId");
+
+		if (portraitId != null) {
+			setPortraitId(portraitId);
+		}
+
+		String languageId = (String)attributes.get("languageId");
+
+		if (languageId != null) {
+			setLanguageId(languageId);
+		}
+
+		String timeZoneId = (String)attributes.get("timeZoneId");
+
+		if (timeZoneId != null) {
+			setTimeZoneId(timeZoneId);
+		}
+
+		String greeting = (String)attributes.get("greeting");
+
+		if (greeting != null) {
+			setGreeting(greeting);
+		}
+
+		String comments = (String)attributes.get("comments");
+
+		if (comments != null) {
+			setComments(comments);
+		}
+
+		String firstName = (String)attributes.get("firstName");
+
+		if (firstName != null) {
+			setFirstName(firstName);
+		}
+
+		String middleName = (String)attributes.get("middleName");
+
+		if (middleName != null) {
+			setMiddleName(middleName);
+		}
+
+		String lastName = (String)attributes.get("lastName");
+
+		if (lastName != null) {
+			setLastName(lastName);
+		}
+
+		String jobTitle = (String)attributes.get("jobTitle");
+
+		if (jobTitle != null) {
+			setJobTitle(jobTitle);
+		}
+
+		Date loginDate = (Date)attributes.get("loginDate");
+
+		if (loginDate != null) {
+			setLoginDate(loginDate);
+		}
+
+		String loginIP = (String)attributes.get("loginIP");
+
+		if (loginIP != null) {
+			setLoginIP(loginIP);
+		}
+
+		Date lastLoginDate = (Date)attributes.get("lastLoginDate");
+
+		if (lastLoginDate != null) {
+			setLastLoginDate(lastLoginDate);
+		}
+
+		String lastLoginIP = (String)attributes.get("lastLoginIP");
+
+		if (lastLoginIP != null) {
+			setLastLoginIP(lastLoginIP);
+		}
+
+		Date lastFailedLoginDate = (Date)attributes.get("lastFailedLoginDate");
+
+		if (lastFailedLoginDate != null) {
+			setLastFailedLoginDate(lastFailedLoginDate);
+		}
+
+		Integer failedLoginAttempts = (Integer)attributes.get(
+				"failedLoginAttempts");
+
+		if (failedLoginAttempts != null) {
+			setFailedLoginAttempts(failedLoginAttempts);
+		}
+
+		Boolean lockout = (Boolean)attributes.get("lockout");
+
+		if (lockout != null) {
+			setLockout(lockout);
+		}
+
+		Date lockoutDate = (Date)attributes.get("lockoutDate");
+
+		if (lockoutDate != null) {
+			setLockoutDate(lockoutDate);
+		}
+
+		Boolean agreedToTermsOfUse = (Boolean)attributes.get(
+				"agreedToTermsOfUse");
+
+		if (agreedToTermsOfUse != null) {
+			setAgreedToTermsOfUse(agreedToTermsOfUse);
+		}
+
+		Boolean emailAddressVerified = (Boolean)attributes.get(
+				"emailAddressVerified");
+
+		if (emailAddressVerified != null) {
+			setEmailAddressVerified(emailAddressVerified);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
 	}
 
 	@JSON

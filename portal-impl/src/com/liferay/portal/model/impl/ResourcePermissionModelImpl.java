@@ -34,7 +34,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the ResourcePermission service. Represents a row in the &quot;ResourcePermission&quot; database table, with each column mapped to a property of this class.
@@ -156,6 +158,73 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	public String getModelClassName() {
 		return ResourcePermission.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourcePermissionId", getResourcePermissionId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("name", getName());
+		attributes.put("scope", getScope());
+		attributes.put("primKey", getPrimKey());
+		attributes.put("roleId", getRoleId());
+		attributes.put("ownerId", getOwnerId());
+		attributes.put("actionIds", getActionIds());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourcePermissionId = (Long)attributes.get("resourcePermissionId");
+
+		if (resourcePermissionId != null) {
+			setResourcePermissionId(resourcePermissionId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		Integer scope = (Integer)attributes.get("scope");
+
+		if (scope != null) {
+			setScope(scope);
+		}
+
+		String primKey = (String)attributes.get("primKey");
+
+		if (primKey != null) {
+			setPrimKey(primKey);
+		}
+
+		Long roleId = (Long)attributes.get("roleId");
+
+		if (roleId != null) {
+			setRoleId(roleId);
+		}
+
+		Long ownerId = (Long)attributes.get("ownerId");
+
+		if (ownerId != null) {
+			setOwnerId(ownerId);
+		}
+
+		Long actionIds = (Long)attributes.get("actionIds");
+
+		if (actionIds != null) {
+			setActionIds(actionIds);
+		}
 	}
 
 	@JSON

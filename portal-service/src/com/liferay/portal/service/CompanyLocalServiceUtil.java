@@ -88,6 +88,10 @@ public class CompanyLocalServiceUtil {
 		return getService().deleteCompany(company);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -775,14 +779,10 @@ public class CompanyLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(CompanyLocalService service) {
-		MethodCache.remove(CompanyLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(CompanyLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(CompanyLocalService.class);
 	}
 
 	private static CompanyLocalService _service;

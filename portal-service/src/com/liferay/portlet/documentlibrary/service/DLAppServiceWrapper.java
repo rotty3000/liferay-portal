@@ -32,6 +32,24 @@ public class DLAppServiceWrapper implements DLAppService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _dlAppService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_dlAppService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds a file entry and associated metadata. It is created based on a byte
 	* array.
 	*
@@ -479,6 +497,22 @@ public class DLAppServiceWrapper implements DLAppService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_dlAppService.deleteFileShortcut(fileShortcutId);
+	}
+
+	/**
+	* Deletes the file version. File versions can only be deleted if it is
+	* approved and there are other approved file versions available. This
+	* method is only supported by the Liferay repository.
+	*
+	* @param fileEntryId the primary key of the file entry
+	* @param version the version label of the file version
+	* @throws PortalException if the file version could not be found or invalid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void deleteFileVersion(long fileEntryId, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_dlAppService.deleteFileVersion(fileEntryId, version);
 	}
 
 	/**

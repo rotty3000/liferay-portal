@@ -14,9 +14,6 @@
 
 package com.liferay.portal.kernel.deploy.hot;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 /**
  * @author Raymond Augé
  */
@@ -25,13 +22,6 @@ public interface HotDeploy {
 	public void fireDeployEvent(HotDeployEvent hotDeployEvent);
 
 	public void fireUndeployEvent(HotDeployEvent hotDeployEvent);
-
-	public boolean isMissingDependentServletContext(
-		HotDeployEvent hotDeployEvent);
-
-	public void registerDependentServletContextListener(
-		HotDeployEvent hotDeployEvent, ServletContextEvent servletContextEvent,
-		ServletContextListener servletContextListener);
 
 	public void registerListener(HotDeployListener hotDeployListener);
 

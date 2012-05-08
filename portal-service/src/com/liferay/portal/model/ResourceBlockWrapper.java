@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ResourceBlock}.
@@ -35,6 +38,57 @@ public class ResourceBlockWrapper implements ResourceBlock,
 
 	public String getModelClassName() {
 		return ResourceBlock.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourceBlockId", getResourceBlockId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("name", getName());
+		attributes.put("permissionsHash", getPermissionsHash());
+		attributes.put("referenceCount", getReferenceCount());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourceBlockId = (Long)attributes.get("resourceBlockId");
+
+		if (resourceBlockId != null) {
+			setResourceBlockId(resourceBlockId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String permissionsHash = (String)attributes.get("permissionsHash");
+
+		if (permissionsHash != null) {
+			setPermissionsHash(permissionsHash);
+		}
+
+		Long referenceCount = (Long)attributes.get("referenceCount");
+
+		if (referenceCount != null) {
+			setReferenceCount(referenceCount);
+		}
 	}
 
 	/**

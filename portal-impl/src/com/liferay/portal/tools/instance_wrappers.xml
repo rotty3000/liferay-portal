@@ -2,14 +2,6 @@
 
 <instance-wrappers>
 	<instance-wrapper
-		parent-dir="../portal-impl/src"
-		src-file="com/liferay/portal/util/PrefsPropsUtil.java"
-	/>
-	<instance-wrapper
-		parent-dir="../portal-impl/src"
-		src-file="com/liferay/portal/util/PropsUtil.java"
-	/>
-	<instance-wrapper
 		parent-dir="../portal-service/src"
 		src-file="com/liferay/portal/kernel/util/ArrayUtil.java"
 	/>

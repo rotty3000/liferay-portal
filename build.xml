@@ -237,43 +237,6 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 						</replace>
 					</then>
 				</if>
-
-				<delete>
-					<fileset
-						dir="${app.server.dir}/modules"
-						includes="commons-codec-repackaged.jar"
-					/>
-				</delete>
-
-				<copy todir="${app.server.dir}/modules">
-					<fileset
-						dir="lib/portal"
-						includes="commons-codec.jar"
-					/>
-				</copy>
-
-				<tstamp>
-					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
-				</tstamp>
-
-				<unjar
-					dest="${tstamp.value}"
-					src="${app.server.dir}/modules/jsf-impl.jar"
-				/>
-
-				<if>
-					<available file="${tstamp.value}/META-INF/services/javax.servlet.ServletContainerInitializer" />
-					<then>
-						<delete file="${tstamp.value}/META-INF/services/javax.servlet.ServletContainerInitializer" />
-
-						<zip
-							basedir="${tstamp.value}"
-							destfile="${app.server.dir}/modules/jsf-impl.jar"
-						/>
-					</then>
-				</if>
-
-				<delete dir="${tstamp.value}" />
 			</then>
 		</if>
 
@@ -366,8 +329,8 @@ JAVA_OPTS="$JAVA_OPTS -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Dus
 				</if>
 
 				<replace file="${app.server.instance.dir}/configuration/standalone.xml">
-					<replacetoken><![CDATA[<subsystem xmlns="urn:jboss:domain:web:1.0" default-virtual-server="default-host">]]></replacetoken>
-					<replacevalue><![CDATA[<subsystem xmlns="urn:jboss:domain:web:1.0" default-virtual-server="default-host">
+					<replacetoken><![CDATA[<subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">]]></replacetoken>
+					<replacevalue><![CDATA[<subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">
 						<configuration>
 							<jsp-configuration development="true" />
 						</configuration>]]>

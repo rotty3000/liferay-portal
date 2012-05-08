@@ -1626,11 +1626,10 @@ public class ExpandoValueUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ExpandoValuePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ExpandoValueUtil.class,
-			"_persistence");
 	}
 
 	private static ExpandoValuePersistence _persistence;

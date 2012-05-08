@@ -1,25 +1,29 @@
 package ${packagePath}.service;
 
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodHandler;
-import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.service.Invokable${sessionTypeName}Service;
 
 public class ${entity.name}${sessionTypeName}ServiceClp implements ${entity.name}${sessionTypeName}Service {
 
-	public ${entity.name}${sessionTypeName}ServiceClp(ClassLoaderProxy classLoaderProxy) {
-		_classLoaderProxy = classLoaderProxy;
+	public ${entity.name}${sessionTypeName}ServiceClp(Invokable${sessionTypeName}Service invokable${sessionTypeName}Service) {
+		_invokable${sessionTypeName}Service = invokable${sessionTypeName}Service;
 
 		<#list methods as method>
-			<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method)>
+			<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method) && method.name != "invokeMethod">
 				<#assign parameters = method.parameters>
 
-				_${method.name}MethodKey${method_index} = new MethodKey(_classLoaderProxy.getClassName(), "${method.name}"
+				_methodName${method_index} = "${method.name}";
+
+				_methodParameterTypes${method_index} = new String[] {
 
 				<#list parameters as parameter>
-					, ${serviceBuilder.getLiteralClass(parameter.type)}
+					"${parameter.type}${serviceBuilder.getDimensions(parameter.type.dimensions)}"
+
+					<#if parameter_has_next>
+						,
+					</#if>
 				</#list>
 
-				);
+				};
 			</#if>
 		</#list>
 	}
@@ -29,7 +33,7 @@ public class ${entity.name}${sessionTypeName}ServiceClp implements ${entity.name
 			<#assign returnTypeName = serviceBuilder.getTypeGenericsName(method.returns)>
 			<#assign parameters = method.parameters>
 
-			<#if method.name = "dynamicQuery">
+			<#if method.name = "dynamicQuery" && (method.parameters?size != 0)>
 				@SuppressWarnings("rawtypes")
 			</#if>
 
@@ -58,78 +62,88 @@ public class ${entity.name}${sessionTypeName}ServiceClp implements ${entity.name
 			</#list>
 
 			{
-				<#if returnTypeName != "void">
-					Object returnObj = null;
-				</#if>
-
-				MethodHandler methodHandler = new MethodHandler(_${method.name}MethodKey${method_index}
-
-				<#list parameters as parameter>
-					<#assign parameterTypeName = serviceBuilder.getTypeGenericsName(parameter.type)>
-
-					<#if (parameterTypeName == "boolean") || (parameterTypeName == "double") || (parameterTypeName == "float") || (parameterTypeName == "int") || (parameterTypeName == "long") || (parameterTypeName == "short")>
-						, ${parameter.name}
-					<#else>
-						, ClpSerializer.translateInput(${parameter.name})
-					</#if>
-				</#list>
-
-				);
-
-				try {
+				<#if method.name = "invokeMethod">
+					throw new UnsupportedOperationException();
+				<#else>
 					<#if returnTypeName != "void">
-						returnObj =
+						Object returnObj = null;
 					</#if>
 
-					_classLoaderProxy.invoke(methodHandler);
-				}
-				catch (Throwable t) {
-					<#list method.exceptions as exception>
-						if (t instanceof ${exception.value}) {
-							throw (${exception.value})t;
+					try {
+						<#if returnTypeName != "void">
+							returnObj =
+						</#if>
+
+						_invokable${sessionTypeName}Service.invokeMethod(
+							_methodName${method_index},
+							_methodParameterTypes${method_index},
+
+							new Object[] {
+
+							<#list parameters as parameter>
+								<#assign parameterTypeName = serviceBuilder.getTypeGenericsName(parameter.type)>
+
+								<#if (parameterTypeName == "boolean") || (parameterTypeName == "double") || (parameterTypeName == "float") || (parameterTypeName == "int") || (parameterTypeName == "long") || (parameterTypeName == "short")>
+									${parameter.name}
+								<#else>
+									ClpSerializer.translateInput(${parameter.name})
+								</#if>
+
+								<#if parameter_has_next>
+									,
+								</#if>
+							</#list>
+
+							}
+						);
+					}
+					catch (Throwable t) {
+						t = ClpSerializer.translateThrowable(t);
+
+						<#list method.exceptions as exception>
+							if (t instanceof ${exception.value}) {
+								throw (${exception.value})t;
+							}
+						</#list>
+
+						if (t instanceof RuntimeException) {
+							throw (RuntimeException)t;
 						}
-					</#list>
-
-					if (t instanceof RuntimeException) {
-						throw (RuntimeException)t;
+						else {
+							throw new RuntimeException(t.getClass().getName() + " is not a valid exception");
+						}
 					}
-					else {
-						throw new RuntimeException(t.getClass().getName() + " is not a valid exception");
-					}
-				}
 
-				<#if returnTypeName != "void">
-					<#if returnTypeName == "boolean">
-						return ((Boolean)returnObj).booleanValue();
-					<#elseif returnTypeName == "double">
-						return ((Double)returnObj).doubleValue();
-					<#elseif returnTypeName == "float">
-						return ((Float)returnObj).floatValue();
-					<#elseif returnTypeName == "int">
-						return ((Integer)returnObj).intValue();
-					<#elseif returnTypeName == "long">
-						return ((Long)returnObj).longValue();
-					<#elseif returnTypeName == "short">
-						return ((Short)returnObj).shortValue();
-					<#else>
-						return (${returnTypeName})ClpSerializer.translateOutput(returnObj);
+					<#if returnTypeName != "void">
+						<#if returnTypeName == "boolean">
+							return ((Boolean)returnObj).booleanValue();
+						<#elseif returnTypeName == "double">
+							return ((Double)returnObj).doubleValue();
+						<#elseif returnTypeName == "float">
+							return ((Float)returnObj).floatValue();
+						<#elseif returnTypeName == "int">
+							return ((Integer)returnObj).intValue();
+						<#elseif returnTypeName == "long">
+							return ((Long)returnObj).longValue();
+						<#elseif returnTypeName == "short">
+							return ((Short)returnObj).shortValue();
+						<#else>
+							return (${returnTypeName})ClpSerializer.translateOutput(returnObj);
+						</#if>
 					</#if>
 				</#if>
 			}
 		</#if>
 	</#list>
 
-	public ClassLoaderProxy getClassLoaderProxy() {
-		return _classLoaderProxy;
-	}
-
-	private ClassLoaderProxy _classLoaderProxy;
+	private Invokable${sessionTypeName}Service _invokable${sessionTypeName}Service;
 
 	<#list methods as method>
-		<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method)>
+		<#if !method.isConstructor() && method.isPublic() && serviceBuilder.isCustomMethod(method) && method.name != "invokeMethod">
 			<#assign parameters = method.parameters>
 
-			private MethodKey _${method.name}MethodKey${method_index};
+			private String _methodName${method_index};
+			private String[] _methodParameterTypes${method_index};
 		</#if>
 	</#list>
 

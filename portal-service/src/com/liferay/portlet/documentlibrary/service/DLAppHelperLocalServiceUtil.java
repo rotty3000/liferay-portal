@@ -222,14 +222,10 @@ public class DLAppHelperLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLAppHelperLocalService service) {
-		MethodCache.remove(DLAppHelperLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLAppHelperLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLAppHelperLocalService.class);
 	}
 
 	private static DLAppHelperLocalService _service;

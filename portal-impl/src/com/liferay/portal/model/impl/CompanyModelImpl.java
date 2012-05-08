@@ -34,7 +34,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the Company service. Represents a row in the &quot;Company&quot; database table, with each column mapped to a property of this class.
@@ -156,6 +158,87 @@ public class CompanyModelImpl extends BaseModelImpl<Company>
 
 	public String getModelClassName() {
 		return Company.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("companyId", getCompanyId());
+		attributes.put("accountId", getAccountId());
+		attributes.put("webId", getWebId());
+		attributes.put("key", getKey());
+		attributes.put("mx", getMx());
+		attributes.put("homeURL", getHomeURL());
+		attributes.put("logoId", getLogoId());
+		attributes.put("system", getSystem());
+		attributes.put("maxUsers", getMaxUsers());
+		attributes.put("active", getActive());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		String webId = (String)attributes.get("webId");
+
+		if (webId != null) {
+			setWebId(webId);
+		}
+
+		String key = (String)attributes.get("key");
+
+		if (key != null) {
+			setKey(key);
+		}
+
+		String mx = (String)attributes.get("mx");
+
+		if (mx != null) {
+			setMx(mx);
+		}
+
+		String homeURL = (String)attributes.get("homeURL");
+
+		if (homeURL != null) {
+			setHomeURL(homeURL);
+		}
+
+		Long logoId = (Long)attributes.get("logoId");
+
+		if (logoId != null) {
+			setLogoId(logoId);
+		}
+
+		Boolean system = (Boolean)attributes.get("system");
+
+		if (system != null) {
+			setSystem(system);
+		}
+
+		Integer maxUsers = (Integer)attributes.get("maxUsers");
+
+		if (maxUsers != null) {
+			setMaxUsers(maxUsers);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
 	}
 
 	@JSON

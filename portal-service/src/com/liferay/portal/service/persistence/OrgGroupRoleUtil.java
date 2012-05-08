@@ -557,11 +557,10 @@ public class OrgGroupRoleUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(OrgGroupRolePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(OrgGroupRoleUtil.class,
-			"_persistence");
 	}
 
 	private static OrgGroupRolePersistence _persistence;

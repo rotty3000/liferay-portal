@@ -90,6 +90,10 @@ public class RoleLocalServiceUtil {
 		return getService().deleteRole(role);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -1059,14 +1063,10 @@ public class RoleLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(RoleLocalService service) {
-		MethodCache.remove(RoleLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(RoleLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(RoleLocalService.class);
 	}
 
 	private static RoleLocalService _service;

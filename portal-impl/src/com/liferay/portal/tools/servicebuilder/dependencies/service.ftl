@@ -6,6 +6,8 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.service.Base${sessionTypeName}Service;
+import com.liferay.portal.service.Invokable${sessionTypeName}Service;
 import com.liferay.portal.service.PermissionedModelLocalService;
 import com.liferay.portal.service.PersistedModelLocalService;
 
@@ -45,13 +47,17 @@ import com.liferay.portal.service.PersistedModelLocalService;
 
 @Transactional(isolation = Isolation.PORTAL, rollbackFor = {PortalException.class, SystemException.class})
 public interface ${entity.name}${sessionTypeName}Service
-	<#if (sessionTypeName == "Local") && entity.hasColumns()>
-		extends
+	extends Base${sessionTypeName}Service
 
+	<#if pluginName != "">
+		, Invokable${sessionTypeName}Service
+	</#if>
+
+	<#if (sessionTypeName == "Local") && entity.hasColumns()>
 		<#if entity.isPermissionedModel()>
-			PermissionedModelLocalService
+			, PermissionedModelLocalService
 		<#else>
-			PersistedModelLocalService
+			, PersistedModelLocalService
 		</#if>
 	</#if>
 
@@ -71,7 +77,7 @@ public interface ${entity.name}${sessionTypeName}Service
 		<#if !method.isConstructor() && !method.isStatic() && method.isPublic() && serviceBuilder.isCustomMethod(method) && !serviceBuilder.isDuplicateMethod(method, tempMap)>
 			${serviceBuilder.getJavadocComment(method)}
 
-			<#if method.name = "dynamicQuery">
+			<#if method.name = "dynamicQuery" && (method.parameters?size != 0)>
 				@SuppressWarnings("rawtypes")
 			</#if>
 

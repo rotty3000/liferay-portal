@@ -90,6 +90,10 @@ public class DLSyncLocalServiceUtil {
 		return getService().deleteDLSync(dlSync);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -325,14 +329,10 @@ public class DLSyncLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLSyncLocalService service) {
-		MethodCache.remove(DLSyncLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLSyncLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLSyncLocalService.class);
 	}
 
 	private static DLSyncLocalService _service;

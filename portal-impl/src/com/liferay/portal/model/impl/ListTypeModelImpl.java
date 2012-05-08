@@ -30,7 +30,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the ListType service. Represents a row in the &quot;ListType&quot; database table, with each column mapped to a property of this class.
@@ -137,6 +139,38 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	public String getModelClassName() {
 		return ListType.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("listTypeId", getListTypeId());
+		attributes.put("name", getName());
+		attributes.put("type", getType());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Integer listTypeId = (Integer)attributes.get("listTypeId");
+
+		if (listTypeId != null) {
+			setListTypeId(listTypeId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
 	}
 
 	@JSON

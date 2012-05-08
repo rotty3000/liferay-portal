@@ -32,6 +32,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the JournalArticleImage service. Represents a row in the &quot;JournalArticleImage&quot; database table, with each column mapped to a property of this class.
  *
@@ -112,6 +115,73 @@ public class JournalArticleImageModelImpl extends BaseModelImpl<JournalArticleIm
 
 	public String getModelClassName() {
 		return JournalArticleImage.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("articleImageId", getArticleImageId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("articleId", getArticleId());
+		attributes.put("version", getVersion());
+		attributes.put("elInstanceId", getElInstanceId());
+		attributes.put("elName", getElName());
+		attributes.put("languageId", getLanguageId());
+		attributes.put("tempImage", getTempImage());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long articleImageId = (Long)attributes.get("articleImageId");
+
+		if (articleImageId != null) {
+			setArticleImageId(articleImageId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		String articleId = (String)attributes.get("articleId");
+
+		if (articleId != null) {
+			setArticleId(articleId);
+		}
+
+		Double version = (Double)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
+
+		String elInstanceId = (String)attributes.get("elInstanceId");
+
+		if (elInstanceId != null) {
+			setElInstanceId(elInstanceId);
+		}
+
+		String elName = (String)attributes.get("elName");
+
+		if (elName != null) {
+			setElName(elName);
+		}
+
+		String languageId = (String)attributes.get("languageId");
+
+		if (languageId != null) {
+			setLanguageId(languageId);
+		}
+
+		Boolean tempImage = (Boolean)attributes.get("tempImage");
+
+		if (tempImage != null) {
+			setTempImage(tempImage);
+		}
 	}
 
 	public long getArticleImageId() {

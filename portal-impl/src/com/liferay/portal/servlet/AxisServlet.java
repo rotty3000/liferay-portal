@@ -16,7 +16,7 @@ package com.liferay.portal.servlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
@@ -43,10 +43,10 @@ public class AxisServlet extends com.liferay.util.axis.AxisServlet {
 	public void init(ServletConfig servletConfig) throws ServletException {
 		ServletContext servletContext = servletConfig.getServletContext();
 
-		_portletClassLoader = (ClassLoader)servletContext.getAttribute(
-			PortletServlet.PORTLET_CLASS_LOADER);
+		_pluginClassLoader = (ClassLoader)servletContext.getAttribute(
+			PluginContextListener.PLUGIN_CLASS_LOADER);
 
-		if (_portletClassLoader == null) {
+		if (_pluginClassLoader == null) {
 			super.init(servletConfig);
 		}
 		else {
@@ -56,7 +56,7 @@ public class AxisServlet extends com.liferay.util.axis.AxisServlet {
 				currentThread.getContextClassLoader();
 
 			try {
-				currentThread.setContextClassLoader(_portletClassLoader);
+				currentThread.setContextClassLoader(_pluginClassLoader);
 
 				super.init(servletConfig);
 			}
@@ -93,7 +93,7 @@ public class AxisServlet extends com.liferay.util.axis.AxisServlet {
 				PermissionThreadLocal.setPermissionChecker(permissionChecker);
 			}
 
-			if (_portletClassLoader == null) {
+			if (_pluginClassLoader == null) {
 				super.service(request, response);
 			}
 			else {
@@ -103,7 +103,7 @@ public class AxisServlet extends com.liferay.util.axis.AxisServlet {
 					currentThread.getContextClassLoader();
 
 				try {
-					currentThread.setContextClassLoader(_portletClassLoader);
+					currentThread.setContextClassLoader(_pluginClassLoader);
 
 					super.service(request, response);
 				}
@@ -125,6 +125,6 @@ public class AxisServlet extends com.liferay.util.axis.AxisServlet {
 
 	private static Log _log = LogFactoryUtil.getLog(AxisServlet.class);
 
-	private ClassLoader _portletClassLoader;
+	private ClassLoader _pluginClassLoader;
 
 }

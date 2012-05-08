@@ -1015,11 +1015,10 @@ public class UserGroupGroupRoleUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserGroupGroupRolePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserGroupGroupRoleUtil.class,
-			"_persistence");
 	}
 
 	private static UserGroupGroupRolePersistence _persistence;

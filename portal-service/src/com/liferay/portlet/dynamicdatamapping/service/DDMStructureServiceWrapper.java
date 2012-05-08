@@ -31,6 +31,24 @@ public class DDMStructureServiceWrapper implements DDMStructureService,
 		_ddmStructureService = ddmStructureService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _ddmStructureService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_ddmStructureService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.dynamicdatamapping.model.DDMStructure addStructure(
 		long groupId, long classNameId, java.lang.String structureKey,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,

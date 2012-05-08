@@ -39,6 +39,24 @@ public class GroupServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds a group.
 	*
 	* @param liveGroupId the primary key of the live group
@@ -555,13 +573,10 @@ public class GroupServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(GroupService service) {
-		MethodCache.remove(GroupService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(GroupServiceUtil.class, "_service");
-		MethodCache.remove(GroupService.class);
 	}
 
 	private static GroupService _service;

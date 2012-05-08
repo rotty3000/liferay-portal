@@ -32,6 +32,24 @@ public class PollsQuestionServiceWrapper implements PollsQuestionService,
 		_pollsQuestionService = pollsQuestionService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _pollsQuestionService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_pollsQuestionService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.polls.model.PollsQuestion addQuestion(
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,

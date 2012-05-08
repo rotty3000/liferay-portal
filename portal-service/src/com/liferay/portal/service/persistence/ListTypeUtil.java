@@ -408,10 +408,10 @@ public class ListTypeUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ListTypePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ListTypeUtil.class, "_persistence");
 	}
 
 	private static ListTypePersistence _persistence;

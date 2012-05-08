@@ -92,6 +92,10 @@ public class OrganizationLocalServiceUtil {
 		return getService().deleteOrganization(organization);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -556,6 +560,28 @@ public class OrganizationLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().getUserOrganizations(userId);
+	}
+
+	/**
+	* Returns all the organizations associated with the user. If includeNonUser
+	* is <code>true</code>, the result includes those organizations that are
+	* not directly associated to the user but he is an owner or an
+	* administrator of the organization.
+	*
+	* @param userId the primary key of the user
+	* @param includeIndirectlyAssociated whether to includes organizations
+	that are indirectly associated to the user because he is an owner
+	or an administrator of the organization
+	* @return the organizations associated with the user
+	* @throws PortalException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.model.Organization> getUserOrganizations(
+		long userId, boolean includeIndirectlyAssociated)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getUserOrganizations(userId, includeIndirectlyAssociated);
 	}
 
 	/**
@@ -1268,14 +1294,10 @@ public class OrganizationLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(OrganizationLocalService service) {
-		MethodCache.remove(OrganizationLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(OrganizationLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(OrganizationLocalService.class);
 	}
 
 	private static OrganizationLocalService _service;

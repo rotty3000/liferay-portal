@@ -627,11 +627,10 @@ public class DDMStorageLinkUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DDMStorageLinkPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DDMStorageLinkUtil.class,
-			"_persistence");
 	}
 
 	private static DDMStorageLinkPersistence _persistence;

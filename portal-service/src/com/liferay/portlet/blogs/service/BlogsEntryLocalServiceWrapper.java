@@ -84,6 +84,10 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 		return _blogsEntryLocalService.deleteBlogsEntry(blogsEntry);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _blogsEntryLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -519,7 +523,8 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntries(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntries(long, long, Date,
+	QueryDefinition)}
 	*/
 	public java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getGroupUserEntries(
 		long groupId, long userId, java.util.Date displayDate, int status,
@@ -530,7 +535,8 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntries(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntries(long, long, Date,
+	QueryDefinition)}
 	*/
 	public java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getGroupUserEntries(
 		long groupId, long userId, java.util.Date displayDate, int status,
@@ -549,7 +555,8 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntriesCount(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntriesCount(long, long, Date,
+	QueryDefinition)}
 	*/
 	public int getGroupUserEntriesCount(long groupId, long userId,
 		java.util.Date displayDate, int status)
@@ -601,7 +608,8 @@ public class BlogsEntryLocalServiceWrapper implements BlogsEntryLocalService,
 	}
 
 	/**
-	* @deprecated {@link #getOrganizationEntriesCount(long, Date, QueryDefinition)}
+	* @deprecated {@link #getOrganizationEntriesCount(long, Date,
+	QueryDefinition)}
 	*/
 	public int getOrganizationEntriesCount(long organizationId,
 		java.util.Date displayDate, int status)

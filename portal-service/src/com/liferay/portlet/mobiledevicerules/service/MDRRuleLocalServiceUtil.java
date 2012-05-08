@@ -90,6 +90,10 @@ public class MDRRuleLocalServiceUtil {
 		return getService().deleteMDRRule(mdrRule);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -405,14 +409,10 @@ public class MDRRuleLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MDRRuleLocalService service) {
-		MethodCache.remove(MDRRuleLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MDRRuleLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MDRRuleLocalService.class);
 	}
 
 	private static MDRRuleLocalService _service;

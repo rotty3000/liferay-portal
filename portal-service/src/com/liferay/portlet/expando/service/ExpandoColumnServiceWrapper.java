@@ -32,6 +32,24 @@ public class ExpandoColumnServiceWrapper implements ExpandoColumnService,
 		_expandoColumnService = expandoColumnService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _expandoColumnService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_expandoColumnService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.expando.model.ExpandoColumn addColumn(
 		long tableId, java.lang.String name, int type)
 		throws com.liferay.portal.kernel.exception.PortalException,

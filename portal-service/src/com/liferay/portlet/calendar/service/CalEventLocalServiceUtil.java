@@ -90,6 +90,10 @@ public class CalEventLocalServiceUtil {
 		return getService().deleteCalEvent(calEvent);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -516,14 +520,10 @@ public class CalEventLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(CalEventLocalService service) {
-		MethodCache.remove(CalEventLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(CalEventLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(CalEventLocalService.class);
 	}
 
 	private static CalEventLocalService _service;

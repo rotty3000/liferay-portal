@@ -337,11 +337,10 @@ public class BrowserTrackerUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(BrowserTrackerPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(BrowserTrackerUtil.class,
-			"_persistence");
 	}
 
 	private static BrowserTrackerPersistence _persistence;

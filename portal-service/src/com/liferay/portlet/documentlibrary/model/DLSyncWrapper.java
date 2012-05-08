@@ -16,6 +16,10 @@ package com.liferay.portlet.documentlibrary.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link DLSync}.
@@ -36,6 +40,106 @@ public class DLSyncWrapper implements DLSync, ModelWrapper<DLSync> {
 
 	public String getModelClassName() {
 		return DLSync.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("syncId", getSyncId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("fileId", getFileId());
+		attributes.put("fileUuid", getFileUuid());
+		attributes.put("repositoryId", getRepositoryId());
+		attributes.put("parentFolderId", getParentFolderId());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("event", getEvent());
+		attributes.put("type", getType());
+		attributes.put("version", getVersion());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long syncId = (Long)attributes.get("syncId");
+
+		if (syncId != null) {
+			setSyncId(syncId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long fileId = (Long)attributes.get("fileId");
+
+		if (fileId != null) {
+			setFileId(fileId);
+		}
+
+		String fileUuid = (String)attributes.get("fileUuid");
+
+		if (fileUuid != null) {
+			setFileUuid(fileUuid);
+		}
+
+		Long repositoryId = (Long)attributes.get("repositoryId");
+
+		if (repositoryId != null) {
+			setRepositoryId(repositoryId);
+		}
+
+		Long parentFolderId = (Long)attributes.get("parentFolderId");
+
+		if (parentFolderId != null) {
+			setParentFolderId(parentFolderId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String event = (String)attributes.get("event");
+
+		if (event != null) {
+			setEvent(event);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String version = (String)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
 	}
 
 	/**

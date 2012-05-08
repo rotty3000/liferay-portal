@@ -90,6 +90,10 @@ public class JournalArticleImageLocalServiceUtil {
 		return getService().deleteJournalArticleImage(journalArticleImage);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -347,14 +351,10 @@ public class JournalArticleImageLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(JournalArticleImageLocalService service) {
-		MethodCache.remove(JournalArticleImageLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JournalArticleImageLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(JournalArticleImageLocalService.class);
 	}
 
 	private static JournalArticleImageLocalService _service;

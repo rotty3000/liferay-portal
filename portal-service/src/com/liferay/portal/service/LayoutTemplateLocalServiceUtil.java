@@ -132,14 +132,10 @@ public class LayoutTemplateLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(LayoutTemplateLocalService service) {
-		MethodCache.remove(LayoutTemplateLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(LayoutTemplateLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(LayoutTemplateLocalService.class);
 	}
 
 	private static LayoutTemplateLocalService _service;

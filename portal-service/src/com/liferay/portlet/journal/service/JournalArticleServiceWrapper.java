@@ -32,6 +32,24 @@ public class JournalArticleServiceWrapper implements JournalArticleService,
 		_journalArticleService = journalArticleService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _journalArticleService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_journalArticleService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.journal.model.JournalArticle addArticle(
 		long groupId, long folderId, long classNameId, long classPK,
 		java.lang.String articleId, boolean autoArticleId,

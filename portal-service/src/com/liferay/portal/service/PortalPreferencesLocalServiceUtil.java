@@ -90,6 +90,10 @@ public class PortalPreferencesLocalServiceUtil {
 		return getService().deletePortalPreferences(portalPreferences);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -314,14 +318,10 @@ public class PortalPreferencesLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PortalPreferencesLocalService service) {
-		MethodCache.remove(PortalPreferencesLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PortalPreferencesLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PortalPreferencesLocalService.class);
 	}
 
 	private static PortalPreferencesLocalService _service;

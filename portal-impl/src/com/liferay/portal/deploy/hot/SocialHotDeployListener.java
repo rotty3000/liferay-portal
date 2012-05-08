@@ -82,12 +82,14 @@ public class SocialHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		logRegistration(servletContextName);
+		if (_log.isInfoEnabled()) {
+			_log.info("Registering social for " + servletContextName);
+		}
 
 		List<Object> objects = SocialConfigurationUtil.read(
 			hotDeployEvent.getContextClassLoader(), xmls);
 
-		_vars.put(servletContextName, objects);
+		_objects.put(servletContextName, objects);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -106,7 +108,7 @@ public class SocialHotDeployListener extends BaseHotDeployListener {
 			_log.debug("Invoking undeploy for " + servletContextName);
 		}
 
-		List<Object> objects = (List<Object>)_vars.get(servletContextName);
+		List<Object> objects = (List<Object>)_objects.get(servletContextName);
 
 		if (objects == null) {
 			return;
@@ -150,15 +152,9 @@ public class SocialHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
-	protected void logRegistration(String servletContextName) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Registering social for " + servletContextName);
-		}
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		SocialHotDeployListener.class);
 
-	private static Map<String, Object> _vars = new HashMap<String, Object>();
+	private static Map<String, Object> _objects = new HashMap<String, Object>();
 
 }

@@ -82,7 +82,7 @@ public interface AssetRendererFactory {
 
 	public boolean isSelectable();
 
-	public void setClassNameId(long classNameId);
+	public void setClassName(String className);
 
 	public void setPortletId(String portletId);
 

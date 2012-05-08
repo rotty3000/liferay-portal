@@ -90,6 +90,10 @@ public class ShoppingItemFieldLocalServiceUtil {
 		return getService().deleteShoppingItemField(shoppingItemField);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -281,14 +285,10 @@ public class ShoppingItemFieldLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ShoppingItemFieldLocalService service) {
-		MethodCache.remove(ShoppingItemFieldLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ShoppingItemFieldLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ShoppingItemFieldLocalService.class);
 	}
 
 	private static ShoppingItemFieldLocalService _service;

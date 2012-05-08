@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
+import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.LockLocalService;
 import com.liferay.portal.service.RepositoryEntryLocalService;
 import com.liferay.portal.service.RepositoryLocalService;
@@ -82,8 +83,8 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil
  * @generated
  */
-public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
-	IdentifiableBean {
+public abstract class DLAppLocalServiceBaseImpl extends BaseLocalServiceImpl
+	implements DLAppLocalService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -947,12 +948,6 @@ public abstract class DLAppLocalServiceBaseImpl implements DLAppLocalService,
 	 */
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
-	}
-
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
 	}
 
 	/**

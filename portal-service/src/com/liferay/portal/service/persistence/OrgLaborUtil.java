@@ -413,10 +413,10 @@ public class OrgLaborUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(OrgLaborPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(OrgLaborUtil.class, "_persistence");
 	}
 
 	private static OrgLaborPersistence _persistence;

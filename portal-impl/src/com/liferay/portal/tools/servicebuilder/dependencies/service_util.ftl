@@ -2,9 +2,9 @@ package ${packagePath}.service;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.Invokable${sessionTypeName}Service;
 
 <#if sessionTypeName == "Local">
 /**
@@ -47,7 +47,7 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 		<#if !method.isConstructor() && !method.isStatic() && method.isPublic() && serviceBuilder.isCustomMethod(method)>
 			${serviceBuilder.getJavadocComment(method)}
 
-			<#if method.name = "dynamicQuery">
+			<#if method.name = "dynamicQuery" && (method.parameters?size != 0)>
 				@SuppressWarnings("rawtypes")
 			</#if>
 
@@ -96,22 +96,24 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 	</#list>
 
 	<#if pluginName != "">
+		/**
+		 * @deprecated
+		 */
 		public static void clearService() {
-			_service = null;
 		}
 	</#if>
 
 	public static ${entity.name}${sessionTypeName}Service getService() {
 		if (_service == null) {
 			<#if pluginName != "">
-				Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), ${entity.name}${sessionTypeName}Service.class.getName());
-				ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader");
+				Invokable${sessionTypeName}Service invokable${sessionTypeName}Service = (Invokable${sessionTypeName}Service)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), ${entity.name}${sessionTypeName}Service.class.getName());
 
-				ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object, ${entity.name}${sessionTypeName}Service.class.getName(), portletClassLoader);
-
-				_service = new ${entity.name}${sessionTypeName}ServiceClp(classLoaderProxy);
-
-				ClpSerializer.setClassLoader(portletClassLoader);
+				if (invokable${sessionTypeName}Service instanceof ${entity.name}${sessionTypeName}Service) {
+					_service = (${entity.name}${sessionTypeName}Service)invokable${sessionTypeName}Service;
+				}
+				else {
+					_service = new ${entity.name}${sessionTypeName}ServiceClp(invokable${sessionTypeName}Service);
+				}
 			<#else>
 				_service = (${entity.name}${sessionTypeName}Service)PortalBeanLocatorUtil.locate(${entity.name}${sessionTypeName}Service.class.getName());
 			</#if>
@@ -123,13 +125,10 @@ public class ${entity.name}${sessionTypeName}ServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(${entity.name}${sessionTypeName}Service service) {
-		MethodCache.remove(${entity.name}${sessionTypeName}Service.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(${entity.name}${sessionTypeName}ServiceUtil.class, "_service");
-		MethodCache.remove(${entity.name}${sessionTypeName}Service.class);
 	}
 
 	private static ${entity.name}${sessionTypeName}Service _service;

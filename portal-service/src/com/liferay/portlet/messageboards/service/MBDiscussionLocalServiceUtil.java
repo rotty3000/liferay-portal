@@ -90,6 +90,10 @@ public class MBDiscussionLocalServiceUtil {
 		return getService().deleteMBDiscussion(mbDiscussion);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -303,14 +307,10 @@ public class MBDiscussionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MBDiscussionLocalService service) {
-		MethodCache.remove(MBDiscussionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MBDiscussionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MBDiscussionLocalService.class);
 	}
 
 	private static MBDiscussionLocalService _service;

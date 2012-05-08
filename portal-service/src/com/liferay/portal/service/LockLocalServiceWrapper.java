@@ -79,6 +79,10 @@ public class LockLocalServiceWrapper implements LockLocalService,
 		return _lockLocalService.deleteLock(lock);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _lockLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

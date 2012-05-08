@@ -32,6 +32,24 @@ public class BookmarksFolderServiceWrapper implements BookmarksFolderService,
 		_bookmarksFolderService = bookmarksFolderService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _bookmarksFolderService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_bookmarksFolderService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.bookmarks.model.BookmarksFolder addFolder(
 		long parentFolderId, java.lang.String name,
 		java.lang.String description,

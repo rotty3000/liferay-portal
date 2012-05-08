@@ -50,6 +50,7 @@ page import="com.liferay.portlet.documentlibrary.FileNameException" %><%@
 page import="com.liferay.portlet.documentlibrary.FileShortcutPermissionException" %><%@
 page import="com.liferay.portlet.documentlibrary.FileSizeException" %><%@
 page import="com.liferay.portlet.documentlibrary.FolderNameException" %><%@
+page import="com.liferay.portlet.documentlibrary.InvalidFileVersionException" %><%@
 page import="com.liferay.portlet.documentlibrary.NoSuchDirectoryException" %><%@
 page import="com.liferay.portlet.documentlibrary.NoSuchFileEntryException" %><%@
 page import="com.liferay.portlet.documentlibrary.NoSuchFileException" %><%@
@@ -95,6 +96,8 @@ page import="com.liferay.portlet.dynamicdatamapping.storage.Fields" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.DDMXSDUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.comparator.StructureStructureKeyComparator" %><%@
+page import="com.liferay.portlet.journal.search.FileEntryDisplayTerms" %><%@
+page import="com.liferay.portlet.journal.search.FileEntrySearch" %><%@
 page import="com.liferay.portlet.usersadmin.search.GroupSearch" %>
 
 <%
@@ -135,15 +138,21 @@ if (portletId.equals(PortletKeys.PORTLET_CONFIGURATION)) {
 }
 
 boolean showActions = PrefsParamUtil.getBoolean(preferences, request, "showActions");
+boolean showAssetMetadata = ParamUtil.getBoolean(request, "showAssetMetadata");
 boolean showAddFolderButton = false;
 boolean showFolderMenu = PrefsParamUtil.getBoolean(preferences, request, "showFolderMenu");
+boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 boolean showTabs = PrefsParamUtil.getBoolean(preferences, request, "showTabs");
 
-if (portletId.equals(PortletKeys.DOCUMENT_LIBRARY)) {
+if (portletName.equals(PortletKeys.DOCUMENT_LIBRARY)) {
 	showActions = true;
+	showAssetMetadata = true;
 	showAddFolderButton = true;
 	showFolderMenu = true;
 	showTabs = true;
+}
+else if (portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) || portletName.equals(PortletKeys.DOCUMENT_LIBRARY_DISPLAY)) {
+	showAssetMetadata = true;
 }
 
 boolean enableRelatedAssets = GetterUtil.getBoolean(preferences.getValue("enableRelatedAssets", null), true);

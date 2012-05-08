@@ -37,7 +37,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the Account service. Represents a row in the &quot;Account_&quot; database table, with each column mapped to a property of this class.
@@ -165,6 +167,129 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 	public String getModelClassName() {
 		return Account.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("accountId", getAccountId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("parentAccountId", getParentAccountId());
+		attributes.put("name", getName());
+		attributes.put("legalName", getLegalName());
+		attributes.put("legalId", getLegalId());
+		attributes.put("legalType", getLegalType());
+		attributes.put("sicCode", getSicCode());
+		attributes.put("tickerSymbol", getTickerSymbol());
+		attributes.put("industry", getIndustry());
+		attributes.put("type", getType());
+		attributes.put("size", getSize());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long parentAccountId = (Long)attributes.get("parentAccountId");
+
+		if (parentAccountId != null) {
+			setParentAccountId(parentAccountId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String legalName = (String)attributes.get("legalName");
+
+		if (legalName != null) {
+			setLegalName(legalName);
+		}
+
+		String legalId = (String)attributes.get("legalId");
+
+		if (legalId != null) {
+			setLegalId(legalId);
+		}
+
+		String legalType = (String)attributes.get("legalType");
+
+		if (legalType != null) {
+			setLegalType(legalType);
+		}
+
+		String sicCode = (String)attributes.get("sicCode");
+
+		if (sicCode != null) {
+			setSicCode(sicCode);
+		}
+
+		String tickerSymbol = (String)attributes.get("tickerSymbol");
+
+		if (tickerSymbol != null) {
+			setTickerSymbol(tickerSymbol);
+		}
+
+		String industry = (String)attributes.get("industry");
+
+		if (industry != null) {
+			setIndustry(industry);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String size = (String)attributes.get("size");
+
+		if (size != null) {
+			setSize(size);
+		}
 	}
 
 	@JSON

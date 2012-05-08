@@ -401,10 +401,10 @@ public class ImageUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ImagePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ImageUtil.class, "_persistence");
 	}
 
 	private static ImagePersistence _persistence;

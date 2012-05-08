@@ -35,6 +35,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the AssetLink service. Represents a row in the &quot;AssetLink&quot; database table, with each column mapped to a property of this class.
@@ -115,6 +117,80 @@ public class AssetLinkModelImpl extends BaseModelImpl<AssetLink>
 
 	public String getModelClassName() {
 		return AssetLink.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("linkId", getLinkId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("entryId1", getEntryId1());
+		attributes.put("entryId2", getEntryId2());
+		attributes.put("type", getType());
+		attributes.put("weight", getWeight());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long linkId = (Long)attributes.get("linkId");
+
+		if (linkId != null) {
+			setLinkId(linkId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Long entryId1 = (Long)attributes.get("entryId1");
+
+		if (entryId1 != null) {
+			setEntryId1(entryId1);
+		}
+
+		Long entryId2 = (Long)attributes.get("entryId2");
+
+		if (entryId2 != null) {
+			setEntryId2(entryId2);
+		}
+
+		Integer type = (Integer)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		Integer weight = (Integer)attributes.get("weight");
+
+		if (weight != null) {
+			setWeight(weight);
+		}
 	}
 
 	public long getLinkId() {

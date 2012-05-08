@@ -31,6 +31,24 @@ public class MDRRuleGroupServiceWrapper implements MDRRuleGroupService,
 		_mdrRuleGroupService = mdrRuleGroupService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _mdrRuleGroupService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_mdrRuleGroupService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.mobiledevicerules.model.MDRRuleGroup addRuleGroup(
 		long groupId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,

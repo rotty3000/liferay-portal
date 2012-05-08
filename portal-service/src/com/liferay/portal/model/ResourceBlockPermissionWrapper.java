@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ResourceBlockPermission}.
@@ -36,6 +39,45 @@ public class ResourceBlockPermissionWrapper implements ResourceBlockPermission,
 
 	public String getModelClassName() {
 		return ResourceBlockPermission.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourceBlockPermissionId",
+			getResourceBlockPermissionId());
+		attributes.put("resourceBlockId", getResourceBlockId());
+		attributes.put("roleId", getRoleId());
+		attributes.put("actionIds", getActionIds());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourceBlockPermissionId = (Long)attributes.get(
+				"resourceBlockPermissionId");
+
+		if (resourceBlockPermissionId != null) {
+			setResourceBlockPermissionId(resourceBlockPermissionId);
+		}
+
+		Long resourceBlockId = (Long)attributes.get("resourceBlockId");
+
+		if (resourceBlockId != null) {
+			setResourceBlockId(resourceBlockId);
+		}
+
+		Long roleId = (Long)attributes.get("roleId");
+
+		if (roleId != null) {
+			setRoleId(roleId);
+		}
+
+		Long actionIds = (Long)attributes.get("actionIds");
+
+		if (actionIds != null) {
+			setActionIds(actionIds);
+		}
 	}
 
 	/**

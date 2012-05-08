@@ -19,6 +19,8 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 
 import java.io.Serializable;
 
+import java.util.Map;
+
 /**
  * The base interface for all model classes. This interface should never need to
  * be used directly.
@@ -42,6 +44,8 @@ public interface BaseModel<T>
 	 * @return the expando bridge for this model instance
 	 */
 	public ExpandoBridge getExpandoBridge();
+
+	public Map<String, Object> getModelAttributes();
 
 	/**
 	 * Returns the primary key of this model instance.
@@ -100,6 +104,8 @@ public interface BaseModel<T>
 	 *        )
 	 */
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public void setModelAttributes(Map<String, Object> attributes);
 
 	/**
 	 * Sets whether this model instance does not yet exist in the database.

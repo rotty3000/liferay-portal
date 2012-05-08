@@ -85,6 +85,10 @@ public class PollsQuestionLocalServiceWrapper
 		return _pollsQuestionLocalService.deletePollsQuestion(pollsQuestion);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _pollsQuestionLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

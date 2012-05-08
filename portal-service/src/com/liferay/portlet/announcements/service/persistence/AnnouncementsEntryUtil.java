@@ -1483,11 +1483,10 @@ public class AnnouncementsEntryUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AnnouncementsEntryPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AnnouncementsEntryUtil.class,
-			"_persistence");
 	}
 
 	private static AnnouncementsEntryPersistence _persistence;

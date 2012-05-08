@@ -21,12 +21,14 @@ import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.ImageLocalService;
 import com.liferay.portal.service.ImageService;
 import com.liferay.portal.service.LockLocalService;
@@ -118,7 +120,8 @@ import javax.sql.DataSource;
  * @generated
  */
 public abstract class DLFileEntryLocalServiceBaseImpl
-	implements DLFileEntryLocalService, IdentifiableBean {
+	extends BaseLocalServiceImpl implements DLFileEntryLocalService,
+		IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -175,6 +178,11 @@ public abstract class DLFileEntryLocalServiceBaseImpl
 	public DLFileEntry deleteDLFileEntry(DLFileEntry dlFileEntry)
 		throws SystemException {
 		return dlFileEntryPersistence.remove(dlFileEntry);
+	}
+
+	public DynamicQuery dynamicQuery() {
+		return DynamicQueryFactoryUtil.forClass(DLFileEntry.class,
+			getClassLoader());
 	}
 
 	/**
@@ -1641,12 +1649,6 @@ public abstract class DLFileEntryLocalServiceBaseImpl
 	 */
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
-	}
-
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
 	}
 
 	protected Class<?> getModelClass() {

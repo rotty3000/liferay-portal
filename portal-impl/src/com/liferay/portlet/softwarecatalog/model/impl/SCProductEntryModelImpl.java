@@ -39,7 +39,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the SCProductEntry service. Represents a row in the &quot;SCProductEntry&quot; database table, with each column mapped to a property of this class.
@@ -188,6 +190,129 @@ public class SCProductEntryModelImpl extends BaseModelImpl<SCProductEntry>
 
 	public String getModelClassName() {
 		return SCProductEntry.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("productEntryId", getProductEntryId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("name", getName());
+		attributes.put("type", getType());
+		attributes.put("tags", getTags());
+		attributes.put("shortDescription", getShortDescription());
+		attributes.put("longDescription", getLongDescription());
+		attributes.put("pageURL", getPageURL());
+		attributes.put("author", getAuthor());
+		attributes.put("repoGroupId", getRepoGroupId());
+		attributes.put("repoArtifactId", getRepoArtifactId());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long productEntryId = (Long)attributes.get("productEntryId");
+
+		if (productEntryId != null) {
+			setProductEntryId(productEntryId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String tags = (String)attributes.get("tags");
+
+		if (tags != null) {
+			setTags(tags);
+		}
+
+		String shortDescription = (String)attributes.get("shortDescription");
+
+		if (shortDescription != null) {
+			setShortDescription(shortDescription);
+		}
+
+		String longDescription = (String)attributes.get("longDescription");
+
+		if (longDescription != null) {
+			setLongDescription(longDescription);
+		}
+
+		String pageURL = (String)attributes.get("pageURL");
+
+		if (pageURL != null) {
+			setPageURL(pageURL);
+		}
+
+		String author = (String)attributes.get("author");
+
+		if (author != null) {
+			setAuthor(author);
+		}
+
+		String repoGroupId = (String)attributes.get("repoGroupId");
+
+		if (repoGroupId != null) {
+			setRepoGroupId(repoGroupId);
+		}
+
+		String repoArtifactId = (String)attributes.get("repoArtifactId");
+
+		if (repoArtifactId != null) {
+			setRepoArtifactId(repoArtifactId);
+		}
 	}
 
 	@JSON

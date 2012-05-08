@@ -83,6 +83,10 @@ public class PluginSettingLocalServiceWrapper
 		return _pluginSettingLocalService.deletePluginSetting(pluginSetting);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _pluginSettingLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

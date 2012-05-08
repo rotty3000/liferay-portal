@@ -1239,10 +1239,10 @@ public class AddressUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AddressPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AddressUtil.class, "_persistence");
 	}
 
 	private static AddressPersistence _persistence;

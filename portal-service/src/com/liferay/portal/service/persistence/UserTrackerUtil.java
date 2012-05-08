@@ -702,11 +702,10 @@ public class UserTrackerUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserTrackerPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserTrackerUtil.class,
-			"_persistence");
 	}
 
 	private static UserTrackerPersistence _persistence;

@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.util.PropsValues;
 
 import java.io.InputStream;
 
@@ -44,6 +45,10 @@ import java.util.Map;
 public class JavadocManagerImpl implements JavadocManager {
 
 	public void load(String servletContextName, ClassLoader classLoader) {
+		if (!PropsValues.JAVADOC_MANAGER_ENABLED) {
+			return;
+		}
+
 		if (_log.isInfoEnabled()) {
 			_log.info("Loading Javadocs for \"" + servletContextName + '\"');
 		}
@@ -131,7 +136,7 @@ public class JavadocManagerImpl implements JavadocManager {
 		InputStream inputStream = null;
 
 		try {
-			URL url = classLoader.getResource("META-INF/javadocs.xml");
+			URL url = classLoader.getResource("META-INF/javadocs-rt.xml");
 
 			if (url == null) {
 				return null;

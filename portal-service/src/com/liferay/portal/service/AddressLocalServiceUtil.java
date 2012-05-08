@@ -88,6 +88,10 @@ public class AddressLocalServiceUtil {
 		return getService().deleteAddress(address);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -312,14 +316,10 @@ public class AddressLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AddressLocalService service) {
-		MethodCache.remove(AddressLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AddressLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AddressLocalService.class);
 	}
 
 	private static AddressLocalService _service;

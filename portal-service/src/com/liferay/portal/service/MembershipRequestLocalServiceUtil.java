@@ -90,6 +90,10 @@ public class MembershipRequestLocalServiceUtil {
 		return getService().deleteMembershipRequest(membershipRequest);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -335,14 +339,10 @@ public class MembershipRequestLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MembershipRequestLocalService service) {
-		MethodCache.remove(MembershipRequestLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MembershipRequestLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MembershipRequestLocalService.class);
 	}
 
 	private static MembershipRequestLocalService _service;

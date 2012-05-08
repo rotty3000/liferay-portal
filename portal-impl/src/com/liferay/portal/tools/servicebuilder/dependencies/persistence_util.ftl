@@ -150,10 +150,10 @@ public class ${entity.name}Util {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(${entity.name}Persistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(${entity.name}Util.class, "_persistence");
 	}
 
 	private static ${entity.name}Persistence _persistence;

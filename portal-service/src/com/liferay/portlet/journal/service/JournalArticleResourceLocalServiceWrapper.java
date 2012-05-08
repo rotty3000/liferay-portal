@@ -85,6 +85,10 @@ public class JournalArticleResourceLocalServiceWrapper
 		return _journalArticleResourceLocalService.deleteJournalArticleResource(journalArticleResource);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _journalArticleResourceLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

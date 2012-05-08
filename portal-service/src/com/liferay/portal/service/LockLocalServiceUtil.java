@@ -88,6 +88,10 @@ public class LockLocalServiceUtil {
 		return getService().deleteLock(lock);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -379,14 +383,10 @@ public class LockLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(LockLocalService service) {
-		MethodCache.remove(LockLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(LockLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(LockLocalService.class);
 	}
 
 	private static LockLocalService _service;

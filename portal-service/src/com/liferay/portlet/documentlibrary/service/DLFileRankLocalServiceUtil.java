@@ -90,6 +90,10 @@ public class DLFileRankLocalServiceUtil {
 		return getService().deleteDLFileRank(dlFileRank);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -327,14 +331,10 @@ public class DLFileRankLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLFileRankLocalService service) {
-		MethodCache.remove(DLFileRankLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLFileRankLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLFileRankLocalService.class);
 	}
 
 	private static DLFileRankLocalService _service;

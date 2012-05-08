@@ -37,6 +37,25 @@ public class ClassNameServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.service.impl.ClassNameServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portal.model.ClassName getClassName(
 		long classNameId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -70,14 +89,10 @@ public class ClassNameServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ClassNameService service) {
-		MethodCache.remove(ClassNameService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ClassNameServiceUtil.class,
-			"_service");
-		MethodCache.remove(ClassNameService.class);
 	}
 
 	private static ClassNameService _service;

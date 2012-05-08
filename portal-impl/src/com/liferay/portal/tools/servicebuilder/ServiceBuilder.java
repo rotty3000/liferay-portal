@@ -211,6 +211,7 @@ public class ServiceBuilder {
 				"\t-Dservice.tpl.service=" + _TPL_ROOT + "service.ftl\n"+
 				"\t-Dservice.tpl.service_base_impl=" + _TPL_ROOT + "service_base_impl.ftl\n"+
 				"\t-Dservice.tpl.service_clp=" + _TPL_ROOT + "service_clp.ftl\n"+
+				"\t-Dservice.tpl.service_clp_invoker=" + _TPL_ROOT + "service_clp_invoker.ftl\n"+
 				"\t-Dservice.tpl.service_clp_message_listener=" + _TPL_ROOT + "service_clp_message_listener.ftl\n"+
 				"\t-Dservice.tpl.service_clp_serializer=" + _TPL_ROOT + "service_clp_serializer.ftl\n"+
 				"\t-Dservice.tpl.service_http=" + _TPL_ROOT + "service_http.ftl\n"+
@@ -487,6 +488,8 @@ public class ServiceBuilder {
 		_tplServiceBaseImpl = _getTplProperty(
 			"service_base_impl", _tplServiceBaseImpl);
 		_tplServiceClp = _getTplProperty("service_clp", _tplServiceClp);
+		_tplServiceClpInvoker = _getTplProperty(
+			"service_clp_invoker", _tplServiceClpInvoker);
 		_tplServiceClpMessageListener = _getTplProperty(
 			"service_clp_message_listener", _tplServiceClpMessageListener);
 		_tplServiceClpSerializer = _getTplProperty(
@@ -696,6 +699,8 @@ public class ServiceBuilder {
 							_createServiceUtil(entity, _SESSION_TYPE_LOCAL);
 
 							_createServiceClp(entity, _SESSION_TYPE_LOCAL);
+							_createServiceClpInvoker(
+								entity, _SESSION_TYPE_LOCAL);
 							_createServiceWrapper(entity, _SESSION_TYPE_LOCAL);
 						}
 
@@ -708,6 +713,8 @@ public class ServiceBuilder {
 							_createServiceUtil(entity, _SESSION_TYPE_REMOTE);
 
 							_createServiceClp(entity, _SESSION_TYPE_REMOTE);
+							_createServiceClpInvoker(
+								entity, _SESSION_TYPE_REMOTE);
 							_createServiceWrapper(entity, _SESSION_TYPE_REMOTE);
 
 							if (Validator.isNotNull(_remotingFileName)) {
@@ -730,8 +737,10 @@ public class ServiceBuilder {
 				_createModelHintsXml();
 				_createSpringXml();
 
+				_createExceptions(exceptionList);
+
 				_createServiceClpMessageListener();
-				_createServiceClpSerializer();
+				_createServiceClpSerializer(exceptionList);
 
 				_createJsonJs();
 
@@ -742,8 +751,6 @@ public class ServiceBuilder {
 				_createSQLIndexes();
 				_createSQLTables();
 				_createSQLSequences();
-
-				_createExceptions(exceptionList);
 
 				_createProps();
 				_createSpringBaseXml();
@@ -2019,6 +2026,14 @@ public class ServiceBuilder {
 
 				for (JavaMethod method : methods) {
 					String methodName = method.getName();
+
+					if (methodName.equals("getBeanIdentifier") ||
+						methodName.equals("invokeMethod") ||
+						methodName.equals("setBeanIdentifier")) {
+
+						continue;
+					}
+
 					String returnValue = getReturnType(method);
 
 					boolean badJsonType = false;
@@ -2659,33 +2674,33 @@ public class ServiceBuilder {
 	private void _createService(Entity entity, int sessionType)
 		throws Exception {
 
-		JavaClass javaClass = _getJavaClass(_outputPath + "/service/impl/" + entity.getName() + (sessionType != _SESSION_TYPE_REMOTE ? "Local" : "") + "ServiceImpl.java");
+		JavaClass javaClass = _getJavaClass(
+			_outputPath + "/service/impl/" + entity.getName() +
+				_getSessionTypeName(sessionType) + "ServiceImpl.java");
 
 		JavaMethod[] methods = _getMethods(javaClass);
 
-		if (sessionType == _SESSION_TYPE_LOCAL) {
-			if (javaClass.getSuperClass().getValue().endsWith(
-					entity.getName() + "LocalServiceBaseImpl")) {
+		Type superClass = javaClass.getSuperClass();
 
-				JavaClass parentJavaClass = _getJavaClass(
-					_outputPath + "/service/base/" + entity.getName() +
-						"LocalServiceBaseImpl.java");
+		String superClassValue = superClass.getValue();
 
-				JavaMethod[] parentMethods = parentJavaClass.getMethods();
+		if (superClassValue.endsWith(
+				entity.getName() + _getSessionTypeName(sessionType) +
+					"ServiceBaseImpl")) {
 
-				JavaMethod[] allMethods = new JavaMethod[parentMethods.length + methods.length];
+			JavaClass parentJavaClass = _getJavaClass(
+				_outputPath + "/service/base/" + entity.getName() +
+					_getSessionTypeName(sessionType) + "ServiceBaseImpl.java");
 
-				ArrayUtil.combine(parentMethods, methods, allMethods);
-
-				methods = allMethods;
-			}
+			methods = ArrayUtil.append(
+				parentJavaClass.getMethods(), methods);
 		}
 
 		Map<String, Object> context = _getContext();
 
 		context.put("entity", entity);
 		context.put("methods", methods);
-		context.put("sessionTypeName",_getSessionTypeName(sessionType));
+		context.put("sessionTypeName", _getSessionTypeName(sessionType));
 
 		// Content
 
@@ -2715,7 +2730,10 @@ public class ServiceBuilder {
 	private void _createServiceBaseImpl(Entity entity, int sessionType)
 		throws Exception {
 
-		JavaClass javaClass = _getJavaClass(_outputPath + "/service/impl/" + entity.getName() + (sessionType != _SESSION_TYPE_REMOTE ? "Local" : "") + "ServiceImpl.java");
+		JavaClass javaClass = _getJavaClass(
+			_outputPath + "/service/impl/" + entity.getName() +
+				(sessionType != _SESSION_TYPE_REMOTE ? "Local" : "") +
+					"ServiceImpl.java");
 
 		JavaMethod[] methods = _getMethods(javaClass);
 
@@ -2770,6 +2788,54 @@ public class ServiceBuilder {
 		writeFile(ejbFile, content, _author);
 	}
 
+	private void _createServiceClpInvoker(Entity entity, int sessionType)
+		throws Exception {
+
+		if (Validator.isNull(_pluginName)) {
+			return;
+		}
+
+		JavaClass javaClass = _getJavaClass(
+			_outputPath + "/service/impl/" + entity.getName() +
+				_getSessionTypeName(sessionType) + "ServiceImpl.java");
+
+		JavaMethod[] methods = _getMethods(javaClass);
+
+		Type superClass = javaClass.getSuperClass();
+
+		String superClassValue = superClass.getValue();
+
+		if (superClassValue.endsWith(
+				entity.getName() + _getSessionTypeName(sessionType) +
+					"ServiceBaseImpl")) {
+
+			JavaClass parentJavaClass = _getJavaClass(
+				_outputPath + "/service/base/" + entity.getName() +
+					_getSessionTypeName(sessionType) + "ServiceBaseImpl.java");
+
+			methods = ArrayUtil.append(
+				parentJavaClass.getMethods(), methods);
+		}
+
+		Map<String, Object> context = _getContext();
+
+		context.put("entity", entity);
+		context.put("methods", methods);
+		context.put("sessionTypeName", _getSessionTypeName(sessionType));
+
+		// Content
+
+		String content = _processTemplate(_tplServiceClpInvoker, context);
+
+		// Write file
+
+		File ejbFile = new File(
+			_outputPath + "/service/base/" + entity.getName() +
+				_getSessionTypeName(sessionType) + "ServiceClpInvoker.java");
+
+		writeFile(ejbFile, content);
+	}
+
 	private void _createServiceClpMessageListener() throws Exception {
 		if (Validator.isNull(_pluginName)) {
 			return;
@@ -2792,7 +2858,9 @@ public class ServiceBuilder {
 		writeFile(ejbFile, content);
 	}
 
-	private void _createServiceClpSerializer() throws Exception {
+	private void _createServiceClpSerializer(List<String> exceptions)
+		throws Exception {
+
 		if (Validator.isNull(_pluginName)) {
 			return;
 		}
@@ -2800,6 +2868,7 @@ public class ServiceBuilder {
 		Map<String, Object> context = _getContext();
 
 		context.put("entities", _ejbList);
+		context.put("exceptions", exceptions);
 
 		// Content
 
@@ -4958,6 +5027,8 @@ public class ServiceBuilder {
 	private String _tplService = _TPL_ROOT + "service.ftl";
 	private String _tplServiceBaseImpl = _TPL_ROOT + "service_base_impl.ftl";
 	private String _tplServiceClp = _TPL_ROOT + "service_clp.ftl";
+	private String _tplServiceClpInvoker =
+		_TPL_ROOT + "service_clp_invoker.ftl";
 	private String _tplServiceClpMessageListener =
 		_TPL_ROOT + "service_clp_message_listener.ftl";
 	private String _tplServiceClpSerializer =

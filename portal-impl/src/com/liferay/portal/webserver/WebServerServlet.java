@@ -644,6 +644,14 @@ public class WebServerServlet extends HttpServlet {
 			HttpServletResponse response)
 		throws IOException, ServletException {
 
+		if (!PropsValues.WEB_SERVER_SERVLET_HTTP_STATUS_CODE_STRICT) {
+			PortalUtil.sendError(
+				HttpServletResponse.SC_NOT_FOUND,
+				new NoSuchFileEntryException(t), request, response);
+
+			return;
+		}
+
 		if (!user.isDefaultUser()) {
 			PortalUtil.sendError(
 				HttpServletResponse.SC_UNAUTHORIZED, (Exception)t, request,
@@ -792,9 +800,16 @@ public class WebServerServlet extends HttpServlet {
 
 		// Retrieve file details
 
-		FileEntry fileEntry = getFileEntry(pathArray);
+		FileEntry fileEntry = null;
 
-		if (fileEntry == null) {
+		try {
+			fileEntry = getFileEntry(pathArray);
+		}
+		catch (NoSuchFileEntryException nsfee) {
+			if (user.isDefaultUser()) {
+				throw new PrincipalException();
+			}
+
 			throw new NoSuchFileEntryException();
 		}
 

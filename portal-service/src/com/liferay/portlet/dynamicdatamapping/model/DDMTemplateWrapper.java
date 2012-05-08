@@ -16,6 +16,10 @@ package com.liferay.portlet.dynamicdatamapping.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link DDMTemplate}.
@@ -37,6 +41,134 @@ public class DDMTemplateWrapper implements DDMTemplate,
 
 	public String getModelClassName() {
 		return DDMTemplate.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("templateId", getTemplateId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("classPK", getClassPK());
+		attributes.put("templateKey", getTemplateKey());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("type", getType());
+		attributes.put("mode", getMode());
+		attributes.put("language", getLanguage());
+		attributes.put("script", getScript());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long templateId = (Long)attributes.get("templateId");
+
+		if (templateId != null) {
+			setTemplateId(templateId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Long classPK = (Long)attributes.get("classPK");
+
+		if (classPK != null) {
+			setClassPK(classPK);
+		}
+
+		String templateKey = (String)attributes.get("templateKey");
+
+		if (templateKey != null) {
+			setTemplateKey(templateKey);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String mode = (String)attributes.get("mode");
+
+		if (mode != null) {
+			setMode(mode);
+		}
+
+		String language = (String)attributes.get("language");
+
+		if (language != null) {
+			setLanguage(language);
+		}
+
+		String script = (String)attributes.get("script");
+
+		if (script != null) {
+			setScript(script);
+		}
 	}
 
 	/**
@@ -268,6 +400,24 @@ public class DDMTemplateWrapper implements DDMTemplate,
 	*/
 	public void setClassPK(long classPK) {
 		_ddmTemplate.setClassPK(classPK);
+	}
+
+	/**
+	* Returns the template key of this d d m template.
+	*
+	* @return the template key of this d d m template
+	*/
+	public java.lang.String getTemplateKey() {
+		return _ddmTemplate.getTemplateKey();
+	}
+
+	/**
+	* Sets the template key of this d d m template.
+	*
+	* @param templateKey the template key of this d d m template
+	*/
+	public void setTemplateKey(java.lang.String templateKey) {
+		_ddmTemplate.setTemplateKey(templateKey);
 	}
 
 	/**

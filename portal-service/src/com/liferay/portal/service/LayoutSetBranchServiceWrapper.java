@@ -30,6 +30,24 @@ public class LayoutSetBranchServiceWrapper implements LayoutSetBranchService,
 		_layoutSetBranchService = layoutSetBranchService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _layoutSetBranchService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_layoutSetBranchService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portal.model.LayoutSetBranch addLayoutSetBranch(
 		long groupId, boolean privateLayout, java.lang.String name,
 		java.lang.String description, boolean master,

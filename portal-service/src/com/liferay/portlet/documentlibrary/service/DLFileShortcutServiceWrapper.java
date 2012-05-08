@@ -32,6 +32,24 @@ public class DLFileShortcutServiceWrapper implements DLFileShortcutService,
 		_dlFileShortcutService = dlFileShortcutService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _dlFileShortcutService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_dlFileShortcutService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLFileShortcut addFileShortcut(
 		long groupId, long folderId, long toFileEntryId,
 		com.liferay.portal.service.ServiceContext serviceContext)

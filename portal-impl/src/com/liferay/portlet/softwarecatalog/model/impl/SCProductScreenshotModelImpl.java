@@ -31,6 +31,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the SCProductScreenshot service. Represents a row in the &quot;SCProductScreenshot&quot; database table, with each column mapped to a property of this class.
  *
@@ -109,6 +112,66 @@ public class SCProductScreenshotModelImpl extends BaseModelImpl<SCProductScreens
 
 	public String getModelClassName() {
 		return SCProductScreenshot.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("productScreenshotId", getProductScreenshotId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("productEntryId", getProductEntryId());
+		attributes.put("thumbnailId", getThumbnailId());
+		attributes.put("fullImageId", getFullImageId());
+		attributes.put("priority", getPriority());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long productScreenshotId = (Long)attributes.get("productScreenshotId");
+
+		if (productScreenshotId != null) {
+			setProductScreenshotId(productScreenshotId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long productEntryId = (Long)attributes.get("productEntryId");
+
+		if (productEntryId != null) {
+			setProductEntryId(productEntryId);
+		}
+
+		Long thumbnailId = (Long)attributes.get("thumbnailId");
+
+		if (thumbnailId != null) {
+			setThumbnailId(thumbnailId);
+		}
+
+		Long fullImageId = (Long)attributes.get("fullImageId");
+
+		if (fullImageId != null) {
+			setFullImageId(fullImageId);
+		}
+
+		Integer priority = (Integer)attributes.get("priority");
+
+		if (priority != null) {
+			setPriority(priority);
+		}
 	}
 
 	public long getProductScreenshotId() {

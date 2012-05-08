@@ -1491,10 +1491,10 @@ public class UserGroupUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserGroupPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserGroupUtil.class, "_persistence");
 	}
 
 	private static UserGroupPersistence _persistence;

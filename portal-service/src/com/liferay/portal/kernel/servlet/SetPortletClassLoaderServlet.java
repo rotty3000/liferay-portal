@@ -14,25 +14,11 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author     Brian Wing Shun Chan
+ * @deprecated
  */
 public class SetPortletClassLoaderServlet extends HttpServlet {
-
-	@Override
-	public void init(ServletConfig servletConfig) {
-		ServletContext servletContext = servletConfig.getServletContext();
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader portletClassLoader = currentThread.getContextClassLoader();
-
-		servletContext.setAttribute(
-			PortletServlet.PORTLET_CLASS_LOADER, portletClassLoader);
-	}
-
 }

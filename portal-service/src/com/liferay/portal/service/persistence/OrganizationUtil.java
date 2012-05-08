@@ -1503,11 +1503,10 @@ public class OrganizationUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(OrganizationPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(OrganizationUtil.class,
-			"_persistence");
 	}
 
 	private static OrganizationPersistence _persistence;

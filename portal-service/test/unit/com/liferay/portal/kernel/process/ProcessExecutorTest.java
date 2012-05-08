@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.log.LogWrapper;
 import com.liferay.portal.kernel.process.ProcessExecutor.ProcessContext;
 import com.liferay.portal.kernel.process.ProcessExecutor.ShutdownHook;
 import com.liferay.portal.kernel.process.log.ProcessOutputStream;
-import com.liferay.portal.kernel.test.TestCase;
+import com.liferay.portal.kernel.test.BaseTestCase;
 import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -72,23 +72,7 @@ import java.util.logging.Logger;
 /**
  * @author Shuyang Zhou
  */
-public class ProcessExecutorTest extends TestCase {
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-
-		Class<?> clazz = getClass();
-
-		PortalClassLoaderUtil.setClassLoader(clazz.getClassLoader());
-	}
-
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-
-		PortalClassLoaderUtil.setClassLoader(null);
-	}
+public class ProcessExecutorTest extends BaseTestCase {
 
 	public void testAttach1() throws Exception {
 
@@ -173,7 +157,7 @@ public class ProcessExecutorTest extends TestCase {
 						_log.info(
 							"Subprocess exited. Waited " +
 								(System.currentTimeMillis() - startTime) +
-										" ms");
+									" ms");
 					}
 
 					return;
@@ -219,9 +203,9 @@ public class ProcessExecutorTest extends TestCase {
 				Thread.sleep(10);
 
 				if (!ServerThread.isAlive(childSocket)) {
-
-					_log.info("Subprocess exited. Waited " +
-						(System.currentTimeMillis() - startTime) + " ms");
+					_log.info(
+						"Subprocess exited. Waited " +
+							(System.currentTimeMillis() - startTime) + " ms");
 
 					return;
 				}
@@ -1712,7 +1696,7 @@ public class ProcessExecutorTest extends TestCase {
 			int code = inputStream.read();
 
 			if (code != _CODE_NULL_OUT_OOS) {
-				fail("Failed to null out oos, response code : " + code);
+				fail("Unable to null out OOS because of code " + code);
 			}
 		}
 

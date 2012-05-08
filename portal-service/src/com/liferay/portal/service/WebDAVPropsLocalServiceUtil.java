@@ -90,6 +90,10 @@ public class WebDAVPropsLocalServiceUtil {
 		return getService().deleteWebDAVProps(webDAVProps);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -294,14 +298,10 @@ public class WebDAVPropsLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(WebDAVPropsLocalService service) {
-		MethodCache.remove(WebDAVPropsLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(WebDAVPropsLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(WebDAVPropsLocalService.class);
 	}
 
 	private static WebDAVPropsLocalService _service;

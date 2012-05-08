@@ -39,6 +39,24 @@ public class AssetVocabularyServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* @deprecated
 	*/
 	public static com.liferay.portlet.asset.model.AssetVocabulary addVocabulary(
@@ -195,14 +213,10 @@ public class AssetVocabularyServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AssetVocabularyService service) {
-		MethodCache.remove(AssetVocabularyService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AssetVocabularyServiceUtil.class,
-			"_service");
-		MethodCache.remove(AssetVocabularyService.class);
 	}
 
 	private static AssetVocabularyService _service;

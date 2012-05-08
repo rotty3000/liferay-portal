@@ -92,6 +92,10 @@ public class SubscriptionLocalServiceUtil {
 		return getService().deleteSubscription(subscription);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -353,14 +357,10 @@ public class SubscriptionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SubscriptionLocalService service) {
-		MethodCache.remove(SubscriptionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SubscriptionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SubscriptionLocalService.class);
 	}
 
 	private static SubscriptionLocalService _service;

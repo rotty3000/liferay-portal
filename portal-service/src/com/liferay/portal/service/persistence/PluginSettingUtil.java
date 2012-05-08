@@ -497,11 +497,10 @@ public class PluginSettingUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(PluginSettingPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(PluginSettingUtil.class,
-			"_persistence");
 	}
 
 	private static PluginSettingPersistence _persistence;

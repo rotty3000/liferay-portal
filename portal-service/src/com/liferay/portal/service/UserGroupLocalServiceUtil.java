@@ -92,6 +92,10 @@ public class UserGroupLocalServiceUtil {
 		return getService().deleteUserGroup(userGroup);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -651,14 +655,10 @@ public class UserGroupLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(UserGroupLocalService service) {
-		MethodCache.remove(UserGroupLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(UserGroupLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(UserGroupLocalService.class);
 	}
 
 	private static UserGroupLocalService _service;

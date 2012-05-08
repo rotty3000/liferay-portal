@@ -79,6 +79,10 @@ public class WebsiteLocalServiceWrapper implements WebsiteLocalService,
 		return _websiteLocalService.deleteWebsite(website);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _websiteLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

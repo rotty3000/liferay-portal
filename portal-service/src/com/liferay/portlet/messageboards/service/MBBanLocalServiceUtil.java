@@ -90,6 +90,10 @@ public class MBBanLocalServiceUtil {
 		return getService().deleteMBBan(mbBan);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -337,14 +341,10 @@ public class MBBanLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MBBanLocalService service) {
-		MethodCache.remove(MBBanLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MBBanLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MBBanLocalService.class);
 	}
 
 	private static MBBanLocalService _service;

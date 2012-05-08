@@ -494,11 +494,10 @@ public class AnnouncementsFlagUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AnnouncementsFlagPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AnnouncementsFlagUtil.class,
-			"_persistence");
 	}
 
 	private static AnnouncementsFlagPersistence _persistence;

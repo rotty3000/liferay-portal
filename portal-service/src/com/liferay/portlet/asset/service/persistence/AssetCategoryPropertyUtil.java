@@ -790,11 +790,10 @@ public class AssetCategoryPropertyUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AssetCategoryPropertyPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AssetCategoryPropertyUtil.class,
-			"_persistence");
 	}
 
 	private static AssetCategoryPropertyPersistence _persistence;

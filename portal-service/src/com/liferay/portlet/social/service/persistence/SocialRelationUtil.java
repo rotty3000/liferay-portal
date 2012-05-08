@@ -1826,11 +1826,10 @@ public class SocialRelationUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SocialRelationPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SocialRelationUtil.class,
-			"_persistence");
 	}
 
 	private static SocialRelationPersistence _persistence;

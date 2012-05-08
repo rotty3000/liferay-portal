@@ -416,11 +416,10 @@ public class ShoppingItemPriceUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShoppingItemPricePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShoppingItemPriceUtil.class,
-			"_persistence");
 	}
 
 	private static ShoppingItemPricePersistence _persistence;

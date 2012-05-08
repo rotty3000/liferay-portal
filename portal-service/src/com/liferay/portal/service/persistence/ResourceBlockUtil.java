@@ -684,11 +684,10 @@ public class ResourceBlockUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ResourceBlockPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ResourceBlockUtil.class,
-			"_persistence");
 	}
 
 	private static ResourceBlockPersistence _persistence;

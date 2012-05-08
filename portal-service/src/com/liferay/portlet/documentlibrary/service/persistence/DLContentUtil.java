@@ -858,10 +858,10 @@ public class DLContentUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DLContentPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DLContentUtil.class, "_persistence");
 	}
 
 	private static DLContentPersistence _persistence;

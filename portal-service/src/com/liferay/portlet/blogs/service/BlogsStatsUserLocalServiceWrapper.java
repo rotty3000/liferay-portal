@@ -85,6 +85,10 @@ public class BlogsStatsUserLocalServiceWrapper
 		return _blogsStatsUserLocalService.deleteBlogsStatsUser(blogsStatsUser);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _blogsStatsUserLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

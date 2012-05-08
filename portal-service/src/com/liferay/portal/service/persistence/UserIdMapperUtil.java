@@ -561,11 +561,10 @@ public class UserIdMapperUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserIdMapperPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserIdMapperUtil.class,
-			"_persistence");
 	}
 
 	private static UserIdMapperPersistence _persistence;

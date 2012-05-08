@@ -582,11 +582,10 @@ public class PasswordPolicyRelUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(PasswordPolicyRelPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(PasswordPolicyRelUtil.class,
-			"_persistence");
 	}
 
 	private static PasswordPolicyRelPersistence _persistence;

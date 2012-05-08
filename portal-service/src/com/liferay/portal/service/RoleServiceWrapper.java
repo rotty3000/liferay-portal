@@ -30,6 +30,24 @@ public class RoleServiceWrapper implements RoleService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _roleService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_roleService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds a role. The user is reindexed after role is added.
 	*
 	* @param name the role's name

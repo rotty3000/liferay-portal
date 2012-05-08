@@ -90,6 +90,10 @@ public class SocialRelationLocalServiceUtil {
 		return getService().deleteSocialRelation(socialRelation);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -562,14 +566,10 @@ public class SocialRelationLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SocialRelationLocalService service) {
-		MethodCache.remove(SocialRelationLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SocialRelationLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SocialRelationLocalService.class);
 	}
 
 	private static SocialRelationLocalService _service;

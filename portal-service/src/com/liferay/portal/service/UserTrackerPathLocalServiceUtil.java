@@ -90,6 +90,10 @@ public class UserTrackerPathLocalServiceUtil {
 		return getService().deleteUserTrackerPath(userTrackerPath);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -281,14 +285,10 @@ public class UserTrackerPathLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(UserTrackerPathLocalService service) {
-		MethodCache.remove(UserTrackerPathLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(UserTrackerPathLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(UserTrackerPathLocalService.class);
 	}
 
 	private static UserTrackerPathLocalService _service;

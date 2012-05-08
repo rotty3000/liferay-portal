@@ -721,11 +721,10 @@ public class SCProductVersionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SCProductVersionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SCProductVersionUtil.class,
-			"_persistence");
 	}
 
 	private static SCProductVersionPersistence _persistence;

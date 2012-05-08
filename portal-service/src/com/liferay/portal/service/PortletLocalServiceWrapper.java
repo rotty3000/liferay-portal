@@ -79,6 +79,10 @@ public class PortletLocalServiceWrapper implements PortletLocalService,
 		return _portletLocalService.deletePortlet(portlet);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _portletLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

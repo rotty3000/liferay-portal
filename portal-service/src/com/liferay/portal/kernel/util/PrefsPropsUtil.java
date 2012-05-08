@@ -14,6 +14,10 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.exception.SystemException;
+
+import java.util.Properties;
+
 import javax.portlet.PortletPreferences;
 
 /**
@@ -22,300 +26,364 @@ import javax.portlet.PortletPreferences;
 public class PrefsPropsUtil {
 
 	public static boolean getBoolean(long companyId, String name)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getBooleanMethodKey1, companyId, name);
-
-		if (returnObj != null) {
-			return (Boolean)returnObj;
-		}
-		else {
-			return false;
-		}
+		return getPrefsProps().getBoolean(companyId, name);
 	}
 
 	public static boolean getBoolean(
 			long companyId, String name, boolean defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getBooleanMethodKey2, companyId, name, defaultValue);
-
-		if (returnObj != null) {
-			return (Boolean)returnObj;
-		}
-		else {
-			return false;
-		}
+		return getPrefsProps().getBoolean(companyId, name, defaultValue);
 	}
 
-	public static boolean getBoolean(String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getBooleanMethodKey3, name);
+	public static boolean getBoolean(
+		PortletPreferences preferences, long companyId, String name) {
 
-		if (returnObj != null) {
-			return (Boolean)returnObj;
-		}
-		else {
-			return false;
-		}
+		return getPrefsProps().getBoolean(preferences, companyId, name);
 	}
 
-	public static int getInteger(long companyId, String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getIntegerMethodKey1, companyId, name);
+	public static boolean getBoolean(
+		PortletPreferences preferences, long companyId, String name,
+		boolean defaultValue) {
 
-		if (returnObj != null) {
-			return (Integer)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getBoolean(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static boolean getBoolean(String name) throws SystemException {
+		return getPrefsProps().getBoolean(name);
+	}
+
+	public static boolean getBoolean(String name, boolean defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getBoolean(name, defaultValue);
+	}
+
+	public static String getContent(long companyId, String name)
+		throws SystemException {
+
+		return getPrefsProps().getContent(companyId, name);
+	}
+
+	public static String getContent(
+		PortletPreferences preferences, long companyId, String name) {
+
+		return getPrefsProps().getContent(preferences, companyId, name);
+	}
+
+	public static String getContent(String name) throws SystemException {
+		return getPrefsProps().getContent(name);
+	}
+
+	public static double getDouble(long companyId, String name)
+		throws SystemException {
+
+		return getPrefsProps().getDouble(companyId, name);
+	}
+
+	public static double getDouble(
+			long companyId, String name, double defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getDouble(companyId, name, defaultValue);
+	}
+
+	public static double getDouble(
+		PortletPreferences preferences, long companyId, String name) {
+
+		return getPrefsProps().getDouble(preferences, companyId, name);
+	}
+
+	public static double getDouble(
+		PortletPreferences preferences, long companyId, String name,
+		double defaultValue) {
+
+		return getPrefsProps().getDouble(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static double getDouble(String name) throws SystemException {
+		return getPrefsProps().getDouble(name);
+	}
+
+	public static double getDouble(String name, double defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getDouble(name, defaultValue);
+	}
+
+	public static int getInteger(long companyId, String name)
+		throws SystemException {
+
+		return getPrefsProps().getInteger(companyId, name);
 	}
 
 	public static int getInteger(long companyId, String name, int defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getIntegerMethodKey2, companyId, name, defaultValue);
-
-		if (returnObj != null) {
-			return (Integer)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getInteger(companyId, name, defaultValue);
 	}
 
-	public static int getInteger(String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getIntegerMethodKey3, name);
+	public static int getInteger(
+		PortletPreferences preferences, long companyId, String name) {
 
-		if (returnObj != null) {
-			return (Integer)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getInteger(preferences, companyId, name);
 	}
 
-	public static long getLong(long companyId, String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey1, companyId, name);
+	public static int getInteger(
+		PortletPreferences preferences, long companyId, String name,
+		int defaultValue) {
 
-		if (returnObj != null) {
-			return (Long)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getInteger(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static int getInteger(String name) throws SystemException {
+		return getPrefsProps().getInteger(name);
+	}
+
+	public static int getInteger(String name, int defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getInteger(name, defaultValue);
+	}
+
+	public static long getLong(long companyId, String name)
+		throws SystemException {
+
+		return getPrefsProps().getLong(companyId, name);
 	}
 
 	public static long getLong(long companyId, String name, long defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey2, companyId, name, defaultValue);
-
-		if (returnObj != null) {
-			return (Long)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getLong(companyId, name, defaultValue);
 	}
 
-	public static long getLong(String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getLongMethodKey3, name);
+	public static long getLong(
+		PortletPreferences preferences, long companyId, String name) {
 
-		if (returnObj != null) {
-			return (Long)returnObj;
-		}
-		else {
-			return 0;
-		}
+		return getPrefsProps().getLong(preferences, companyId, name);
+	}
+
+	public static long getLong(
+		PortletPreferences preferences, long companyId, String name,
+		long defaultValue) {
+
+		return getPrefsProps().getLong(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static long getLong(String name) throws SystemException {
+		return getPrefsProps().getLong(name);
+	}
+
+	public static long getLong(String name, long defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getLong(name, defaultValue);
+	}
+
+	public static PortletPreferences getPreferences() throws SystemException {
+		return getPrefsProps().getPreferences();
+	}
+
+	public static PortletPreferences getPreferences(long companyId)
+		throws SystemException {
+
+		return getPrefsProps().getPreferences(companyId);
+	}
+
+	public static PrefsProps getPrefsProps() {
+		return _prefsProps;
+	}
+
+	public static Properties getProperties(
+		PortletPreferences preferences, long companyId, String prefix,
+		boolean removePrefix) {
+
+		return getPrefsProps().getProperties(
+			preferences, companyId, prefix, removePrefix);
+	}
+
+	public static Properties getProperties(String prefix, boolean removePrefix)
+		throws SystemException {
+
+		return getPrefsProps().getProperties(prefix, removePrefix);
+	}
+
+	public static short getShort(long companyId, String name)
+		throws SystemException {
+
+		return getPrefsProps().getShort(companyId, name);
+	}
+
+	public static short getShort(
+			long companyId, String name, short defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getShort(companyId, name, defaultValue);
+	}
+
+	public static short getShort(
+		PortletPreferences preferences, long companyId, String name) {
+
+		return getPrefsProps().getShort(preferences, companyId, name);
+	}
+
+	public static short getShort(
+		PortletPreferences preferences, long companyId, String name,
+		short defaultValue) {
+
+		return getPrefsProps().getShort(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static short getShort(String name) throws SystemException {
+		return getPrefsProps().getShort(name);
+	}
+
+	public static short getShort(String name, short defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getShort(name, defaultValue);
 	}
 
 	public static String getString(long companyId, String name)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringMethodKey1, companyId, name);
-
-		if (returnObj != null) {
-			return (String)returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getString(companyId, name);
 	}
 
 	public static String getString(
 			long companyId, String name, String defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringMethodKey2, companyId, name, defaultValue);
-
-		if (returnObj != null) {
-			return (String)returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getString(companyId, name, defaultValue);
 	}
 
-	public static String getString(String name) throws Exception {
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringMethodKey3, name);
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name) {
 
-		if (returnObj != null) {
-			return (String)returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getString(preferences, companyId, name);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		boolean defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		double defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		int defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		long defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		short defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(
+		PortletPreferences preferences, long companyId, String name,
+		String defaultValue) {
+
+		return getPrefsProps().getString(
+			preferences, companyId, name, defaultValue);
+	}
+
+	public static String getString(String name) throws SystemException {
+		return getPrefsProps().getString(name);
+	}
+
+	public static String getString(String name, String defaultValue)
+		throws SystemException {
+
+		return getPrefsProps().getString(name, defaultValue);
 	}
 
 	public static String[] getStringArray(
 			long companyId, String name, String delimiter)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey1, companyId, name, delimiter);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(companyId, name, delimiter);
 	}
 
 	public static String[] getStringArray(
 			long companyId, String name, String delimiter,
 			String[] defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey2, companyId, name, delimiter,
-			defaultValue);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(
+			companyId, name, delimiter, defaultValue);
 	}
 
 	public static String[] getStringArray(
-			PortletPreferences preferences, long companyId, String name,
-			String delimiter)
-		throws Exception {
+		PortletPreferences preferences, long companyId, String name,
+		String delimiter) {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey3, preferences, companyId, name,
-			delimiter);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(
+			preferences, companyId, name, delimiter);
 	}
 
 	public static String[] getStringArray(
-			PortletPreferences preferences, long companyId, String name,
-			String delimiter, String[] defaultValue)
-		throws Exception {
+		PortletPreferences preferences, long companyId, String name,
+		String delimiter, String[] defaultValue) {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey4, preferences, companyId, name,
-			delimiter, defaultValue);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(
+			preferences, companyId, name, delimiter, defaultValue);
 	}
 
 	public static String[] getStringArray(String name, String delimiter)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey5, name, delimiter);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(name, delimiter);
 	}
 
 	public static String[] getStringArray(
 			String name, String delimiter, String[] defaultValue)
-		throws Exception {
+		throws SystemException {
 
-		Object returnObj = PortalClassInvoker.invoke(
-			false, _getStringArrayMethodKey6, name, delimiter, defaultValue);
-
-		if (returnObj != null) {
-			return (String[])returnObj;
-		}
-		else {
-			return null;
-		}
+		return getPrefsProps().getStringArray(name, delimiter, defaultValue);
 	}
 
-	private static final String _CLASS_NAME =
-		"com.liferay.portal.util.PrefsPropsUtil";
+	public static String getStringFromNames(long companyId, String... names)
+		throws SystemException {
 
-	private static MethodKey _getBooleanMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getBoolean", long.class, String.class);
-	private static MethodKey _getBooleanMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getBoolean", long.class, String.class, boolean.class);
-	private static MethodKey _getBooleanMethodKey3 = new MethodKey(
-		_CLASS_NAME, "getBoolean", String.class);
-	private static MethodKey _getIntegerMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getInteger", long.class, String.class);
-	private static MethodKey _getIntegerMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getInteger", long.class, String.class, int.class);
-	private static MethodKey _getIntegerMethodKey3 = new MethodKey(
-		_CLASS_NAME, "getInteger", String.class);
-	private static MethodKey _getLongMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getLong", long.class, String.class);
-	private static MethodKey _getLongMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getLong", long.class, String.class, long.class);
-	private static MethodKey _getLongMethodKey3 = new MethodKey(
-		_CLASS_NAME, "getLong", String.class);
-	private static MethodKey _getStringArrayMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getStringArray", long.class, String.class, String.class);
-	private static MethodKey _getStringArrayMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getStringArray", long.class, String.class, String.class,
-		String[].class);
-	private static MethodKey _getStringArrayMethodKey3 = new MethodKey(
-		_CLASS_NAME, "getStringArray", PortletPreferences.class, long.class,
-		String.class, String.class);
-	private static MethodKey _getStringArrayMethodKey4 = new MethodKey(
-		_CLASS_NAME, "getStringArray", PortletPreferences.class, long.class,
-		String.class, String.class, String[].class);
-	private static MethodKey _getStringArrayMethodKey5 = new MethodKey(
-		_CLASS_NAME, "getStringArray", String.class, String.class);
-	private static MethodKey _getStringArrayMethodKey6 = new MethodKey(
-		_CLASS_NAME, "getStringArray", String.class, String.class,
-		String[].class);
-	private static MethodKey _getStringMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getString", long.class, String.class);
-	private static MethodKey _getStringMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getString", long.class, String.class, String.class);
-	private static MethodKey _getStringMethodKey3 = new MethodKey(
-		_CLASS_NAME, "getString", String.class);
+		return getPrefsProps().getStringFromNames(companyId, names);
+	}
+
+	public void setPrefsProps(PrefsProps prefsProps) {
+		_prefsProps = prefsProps;
+	}
+
+	private static PrefsProps _prefsProps;
 
 }

@@ -508,10 +508,10 @@ public class DLSyncUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DLSyncPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DLSyncUtil.class, "_persistence");
 	}
 
 	private static DLSyncPersistence _persistence;

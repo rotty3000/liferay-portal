@@ -53,9 +53,6 @@ public class IncludeTag extends AttributesTagSupport {
 	@Override
 	public int doEndTag() throws JspException {
 		try {
-			ServletContext servletContext = getServletContext();
-			HttpServletRequest request = getServletRequest();
-
 			String page = null;
 
 			if (_useCustomPage) {
@@ -108,8 +105,6 @@ public class IncludeTag extends AttributesTagSupport {
 	@Override
 	public int doStartTag() throws JspException {
 		try {
-			ServletContext servletContext = getServletContext();
-
 			String page = getStartPage();
 
 			callSetAttributes();
@@ -133,27 +128,6 @@ public class IncludeTag extends AttributesTagSupport {
 		}
 	}
 
-	@Override
-	public ServletContext getServletContext() {
-		if (Validator.isNull(_portletId)) {
-			return super.getServletContext();
-		}
-
-		String rootPortletId = PortletConstants.getRootPortletId(_portletId);
-
-		PortletBag portletBag = PortletBagPool.get(rootPortletId);
-
-		return portletBag.getServletContext();
-	}
-
-	public void runEndTag() throws JspException {
-		doEndTag();
-	}
-
-	public void runStartTag() throws JspException {
-		doStartTag();
-	}
-
 	public void runTag() throws JspException {
 		doStartTag();
 		doEndTag();
@@ -164,7 +138,13 @@ public class IncludeTag extends AttributesTagSupport {
 	}
 
 	public void setPortletId(String portletId) {
-		_portletId = portletId;
+		if (Validator.isNotNull(portletId)) {
+			String rootPortletId = PortletConstants.getRootPortletId(portletId);
+
+			PortletBag portletBag = PortletBagPool.get(rootPortletId);
+
+			servletContext = portletBag.getServletContext();
+		}
 	}
 
 	public void setStrict(boolean strict) {
@@ -270,19 +250,14 @@ public class IncludeTag extends AttributesTagSupport {
 	}
 
 	protected void include(String page) throws Exception {
-		ServletContext servletContext = getServletContext();
-
 		RequestDispatcher requestDispatcher =
 			DirectRequestDispatcherUtil.getRequestDispatcher(
 				servletContext, page);
 
-		HttpServletRequest request = getServletRequest();
-
 		request.setAttribute(
 			WebKeys.SERVLET_CONTEXT_INCLUDE_FILTER_STRICT, _strict);
 
-		HttpServletResponse response = new PipingServletResponse(
-			pageContext, isTrimNewLines());
+		HttpServletResponse response = new PipingServletResponse(pageContext);
 
 		requestDispatcher.include(request, response);
 
@@ -291,10 +266,6 @@ public class IncludeTag extends AttributesTagSupport {
 
 	protected boolean isCleanUpSetAttributes() {
 		return _CLEAN_UP_SET_ATTRIBUTES;
-	}
-
-	protected boolean isTrimNewLines() {
-		return _TRIM_NEW_LINES;
 	}
 
 	protected int processEndTag() throws Exception {
@@ -317,9 +288,6 @@ public class IncludeTag extends AttributesTagSupport {
 			return false;
 		}
 
-		ServletContext servletContext = getServletContext();
-		HttpServletRequest request = getServletRequest();
-
 		Theme theme = (Theme)request.getAttribute(WebKeys.THEME);
 
 		String portletId = ThemeUtil.getPortletId(request);
@@ -341,8 +309,6 @@ public class IncludeTag extends AttributesTagSupport {
 			include(page);
 		}
 		catch (Exception e) {
-			HttpServletRequest request = getServletRequest();
-
 			String currentURL = (String)request.getAttribute(
 				WebKeys.CURRENT_URL);
 
@@ -359,9 +325,8 @@ public class IncludeTag extends AttributesTagSupport {
 	}
 
 	private void _doIncludeTheme(String page) throws Exception {
-		ServletContext servletContext = getServletContext();
-		HttpServletRequest request = getServletRequest();
-		HttpServletResponse response = getServletResponse();
+		HttpServletResponse response =
+			(HttpServletResponse)pageContext.getResponse();
 
 		Theme theme = (Theme)request.getAttribute(WebKeys.THEME);
 
@@ -375,13 +340,10 @@ public class IncludeTag extends AttributesTagSupport {
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.THEME_JSP_OVERRIDE_ENABLED));
 
-	private static final boolean _TRIM_NEW_LINES = false;
-
 	private static Log _log = LogFactoryUtil.getLog(IncludeTag.class);
 
 	private boolean _calledSetAttributes;
 	private String _page;
-	private String _portletId;
 	private boolean _strict;
 	private TrackedServletRequest _trackedRequest;
 	private boolean _useCustomPage = true;

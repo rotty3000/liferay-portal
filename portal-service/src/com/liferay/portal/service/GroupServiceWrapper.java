@@ -30,6 +30,24 @@ public class GroupServiceWrapper implements GroupService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _groupService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_groupService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds a group.
 	*
 	* @param liveGroupId the primary key of the live group

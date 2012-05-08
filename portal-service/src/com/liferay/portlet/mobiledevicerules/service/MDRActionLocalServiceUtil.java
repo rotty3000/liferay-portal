@@ -90,6 +90,10 @@ public class MDRActionLocalServiceUtil {
 		return getService().deleteMDRAction(mdrAction);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -392,14 +396,10 @@ public class MDRActionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MDRActionLocalService service) {
-		MethodCache.remove(MDRActionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MDRActionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MDRActionLocalService.class);
 	}
 
 	private static MDRActionLocalService _service;

@@ -90,6 +90,10 @@ public class JournalFeedLocalServiceUtil {
 		return getService().deleteJournalFeed(journalFeed);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -448,14 +452,10 @@ public class JournalFeedLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(JournalFeedLocalService service) {
-		MethodCache.remove(JournalFeedLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JournalFeedLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(JournalFeedLocalService.class);
 	}
 
 	private static JournalFeedLocalService _service;

@@ -857,11 +857,10 @@ public class MBMailingListUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBMailingListPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBMailingListUtil.class,
-			"_persistence");
 	}
 
 	private static MBMailingListPersistence _persistence;

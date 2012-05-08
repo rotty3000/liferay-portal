@@ -34,6 +34,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the AssetTagStats service. Represents a row in the &quot;AssetTagStats&quot; database table, with each column mapped to a property of this class.
  *
@@ -107,6 +110,45 @@ public class AssetTagStatsModelImpl extends BaseModelImpl<AssetTagStats>
 
 	public String getModelClassName() {
 		return AssetTagStats.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("tagStatsId", getTagStatsId());
+		attributes.put("tagId", getTagId());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("assetCount", getAssetCount());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long tagStatsId = (Long)attributes.get("tagStatsId");
+
+		if (tagStatsId != null) {
+			setTagStatsId(tagStatsId);
+		}
+
+		Long tagId = (Long)attributes.get("tagId");
+
+		if (tagId != null) {
+			setTagId(tagId);
+		}
+
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Integer assetCount = (Integer)attributes.get("assetCount");
+
+		if (assetCount != null) {
+			setAssetCount(assetCount);
+		}
 	}
 
 	public long getTagStatsId() {

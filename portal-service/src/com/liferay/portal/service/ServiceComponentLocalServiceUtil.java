@@ -90,6 +90,10 @@ public class ServiceComponentLocalServiceUtil {
 		return getService().deleteServiceComponent(serviceComponent);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -311,14 +315,10 @@ public class ServiceComponentLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ServiceComponentLocalService service) {
-		MethodCache.remove(ServiceComponentLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ServiceComponentLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ServiceComponentLocalService.class);
 	}
 
 	private static ServiceComponentLocalService _service;

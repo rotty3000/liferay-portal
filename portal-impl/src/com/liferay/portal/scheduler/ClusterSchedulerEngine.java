@@ -40,7 +40,7 @@ import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
 import com.liferay.portal.kernel.scheduler.TriggerState;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
-import com.liferay.portal.kernel.servlet.PortletContextLifecycleThreadLocal;
+import com.liferay.portal.kernel.servlet.PluginContextLifecycleThreadLocal;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.MethodHandler;
@@ -554,7 +554,7 @@ public class ClusterSchedulerEngine
 
 			return object;
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 			throw new SchedulerException(
 				"Unable to deserialize object from " + string, e);
 		}
@@ -562,7 +562,7 @@ public class ClusterSchedulerEngine
 			try {
 				objectInputStream.close();
 			}
-			catch(Exception e) {
+			catch (Exception e) {
 			}
 		}
 	}
@@ -772,7 +772,7 @@ public class ClusterSchedulerEngine
 		StorageType storageType = getStorageType(groupName);
 
 		if (storageType.equals(StorageType.PERSISTED) ||
-			PortletContextLifecycleThreadLocal.isDestroying()) {
+			PluginContextLifecycleThreadLocal.isDestroying()) {
 
 			SchedulerException schedulerException = new SchedulerException();
 

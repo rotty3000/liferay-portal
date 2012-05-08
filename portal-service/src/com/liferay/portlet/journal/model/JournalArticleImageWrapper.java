@@ -16,6 +16,9 @@ package com.liferay.portlet.journal.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link JournalArticleImage}.
@@ -37,6 +40,71 @@ public class JournalArticleImageWrapper implements JournalArticleImage,
 
 	public String getModelClassName() {
 		return JournalArticleImage.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("articleImageId", getArticleImageId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("articleId", getArticleId());
+		attributes.put("version", getVersion());
+		attributes.put("elInstanceId", getElInstanceId());
+		attributes.put("elName", getElName());
+		attributes.put("languageId", getLanguageId());
+		attributes.put("tempImage", getTempImage());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long articleImageId = (Long)attributes.get("articleImageId");
+
+		if (articleImageId != null) {
+			setArticleImageId(articleImageId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		String articleId = (String)attributes.get("articleId");
+
+		if (articleId != null) {
+			setArticleId(articleId);
+		}
+
+		Double version = (Double)attributes.get("version");
+
+		if (version != null) {
+			setVersion(version);
+		}
+
+		String elInstanceId = (String)attributes.get("elInstanceId");
+
+		if (elInstanceId != null) {
+			setElInstanceId(elInstanceId);
+		}
+
+		String elName = (String)attributes.get("elName");
+
+		if (elName != null) {
+			setElName(elName);
+		}
+
+		String languageId = (String)attributes.get("languageId");
+
+		if (languageId != null) {
+			setLanguageId(languageId);
+		}
+
+		Boolean tempImage = (Boolean)attributes.get("tempImage");
+
+		if (tempImage != null) {
+			setTempImage(tempImage);
+		}
 	}
 
 	/**

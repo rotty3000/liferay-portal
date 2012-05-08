@@ -837,14 +837,10 @@ public class DLAppLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLAppLocalService service) {
-		MethodCache.remove(DLAppLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLAppLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLAppLocalService.class);
 	}
 
 	private static DLAppLocalService _service;

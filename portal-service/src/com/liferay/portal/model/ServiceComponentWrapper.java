@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ServiceComponent}.
@@ -35,6 +38,50 @@ public class ServiceComponentWrapper implements ServiceComponent,
 
 	public String getModelClassName() {
 		return ServiceComponent.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("serviceComponentId", getServiceComponentId());
+		attributes.put("buildNamespace", getBuildNamespace());
+		attributes.put("buildNumber", getBuildNumber());
+		attributes.put("buildDate", getBuildDate());
+		attributes.put("data", getData());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long serviceComponentId = (Long)attributes.get("serviceComponentId");
+
+		if (serviceComponentId != null) {
+			setServiceComponentId(serviceComponentId);
+		}
+
+		String buildNamespace = (String)attributes.get("buildNamespace");
+
+		if (buildNamespace != null) {
+			setBuildNamespace(buildNamespace);
+		}
+
+		Long buildNumber = (Long)attributes.get("buildNumber");
+
+		if (buildNumber != null) {
+			setBuildNumber(buildNumber);
+		}
+
+		Long buildDate = (Long)attributes.get("buildDate");
+
+		if (buildDate != null) {
+			setBuildDate(buildDate);
+		}
+
+		String data = (String)attributes.get("data");
+
+		if (data != null) {
+			setData(data);
+		}
 	}
 
 	/**

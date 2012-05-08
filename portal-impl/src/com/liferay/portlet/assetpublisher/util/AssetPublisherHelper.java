@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.assetpublisher.util;
 
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -25,9 +24,7 @@ import com.liferay.portlet.asset.model.AssetEntry;
 public interface AssetPublisherHelper {
 
 	public String getAssetViewURL(
-			LiferayPortletRequest liferayPortletRequest,
-			LiferayPortletResponse liferayPortletResponse,
-			AssetEntry assetEntry)
-		throws SystemException;
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse, AssetEntry assetEntry);
 
 }

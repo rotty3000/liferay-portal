@@ -868,11 +868,10 @@ public class MDRRuleGroupUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MDRRuleGroupPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MDRRuleGroupUtil.class,
-			"_persistence");
 	}
 
 	private static MDRRuleGroupPersistence _persistence;

@@ -16,11 +16,13 @@ package com.liferay.portlet.trash.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.model.User;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.trash.NoSuchEntryException;
 import com.liferay.portlet.trash.model.TrashEntry;
-import com.liferay.portlet.trash.model.impl.TrashEntryImpl;
+import com.liferay.portlet.trash.model.TrashVersion;
 import com.liferay.portlet.trash.service.base.TrashEntryLocalServiceBaseImpl;
 
 import java.util.Date;
@@ -37,29 +39,35 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 	/**
 	 * Moves an entry to trash.
 	 *
-	 * @param  companyId the primary key of the entry's company
+	 * @param  userId the primary key of the user removing the entity
 	 * @param  groupId the primary key of the entry's group
 	 * @param  className the class name of the entity
 	 * @param  classPK the primary key of the entity
-	 * @param  status the status of the entityy prior to being moved to trash
+	 * @param  status the status of the entity prior to being moved to trash
+	 * @param  versions the primary keys and statuses of any of the entry's
+	 *         versions (e.g., {@link
+	 *         com.liferay.portlet.documentlibrary.model.DLFileVerison})
 	 * @param  typeSettingsProperties the type settings properties
 	 * @return the trashEntry
 	 * @throws SystemException if a system exception occurred
 	 */
 	public TrashEntry addTrashEntry(
-			long companyId, long groupId, String className, long classPK,
-			int status, UnicodeProperties typeSettingsProperties)
-		throws SystemException {
+			long userId, long groupId, String className, long classPK,
+			int status, List<ObjectValuePair<Long, Integer>> versions,
+			UnicodeProperties typeSettingsProperties)
+		throws PortalException, SystemException {
 
+		User user = userPersistence.findByPrimaryKey(userId);
 		long classNameId = PortalUtil.getClassNameId(className);
 
 		long entryId = counterLocalService.increment();
 
-		TrashEntryImpl trashEntry =
-			(TrashEntryImpl)trashEntryPersistence.create(entryId);
+		TrashEntry trashEntry = trashEntryPersistence.create(entryId);
 
 		trashEntry.setGroupId(groupId);
-		trashEntry.setCompanyId(companyId);
+		trashEntry.setCompanyId(user.getCompanyId());
+		trashEntry.setUserId(user.getUserId());
+		trashEntry.setUserName(user.getFullName());
 		trashEntry.setCreateDate(new Date());
 		trashEntry.setClassNameId(classNameId);
 		trashEntry.setClassPK(classPK);
@@ -71,6 +79,25 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 		trashEntry.setStatus(status);
 
 		trashEntryPersistence.update(trashEntry, false);
+
+		if (versions != null) {
+			for (ObjectValuePair<Long, Integer> version : versions) {
+				long versionClassPK = version.getKey();
+				int versionStatus = version.getValue();
+
+				long versionId = counterLocalService.increment();
+
+				TrashVersion trashVersion = trashVersionPersistence.create(
+					versionId);
+
+				trashVersion.setEntryId(entryId);
+				trashVersion.setClassNameId(classNameId);
+				trashVersion.setClassPK(versionClassPK);
+				trashVersion.setStatus(versionStatus);
+
+				trashVersionPersistence.update(trashVersion, false);
+			}
+		}
 
 		return trashEntry;
 	}
@@ -89,10 +116,13 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
-		try {
-			trashEntryPersistence.removeByC_C(classNameId, classPK);
-		}
-		catch (NoSuchEntryException nsee) {
+		TrashEntry trashEntry = trashEntryPersistence.fetchByC_C(
+			classNameId, classPK);
+
+		if (trashEntry != null) {
+			trashVersionPersistence.removeByEntryId(trashEntry.getEntryId());
+
+			trashEntryPersistence.remove(trashEntry);
 		}
 	}
 
@@ -151,6 +181,26 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 	}
 
 	/**
+	 * Returns a range of all the trash entries matching the group ID.
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  start the lower bound of the range of trash entries to return
+	 * @param  end the upper bound of the range of trash entries to return (not
+	 *         inclusive)
+	 * @param  obc the comparator to order the trash entries (optionally
+	 *         <code>null</code>)
+	 * @return the range of matching trash entries ordered by comparator
+	 *         <code>obc</code>
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashEntry> getEntries(
+			long groupId, int start, int end, OrderByComparator obc)
+		throws SystemException {
+
+		return trashEntryPersistence.findByGroupId(groupId, start, end, obc);
+	}
+
+	/**
 	 * Returns the number of trash entries with the group ID.
 	 *
 	 * @param  groupId the primary key of the group
@@ -191,6 +241,17 @@ public class TrashEntryLocalServiceImpl extends TrashEntryLocalServiceBaseImpl {
 		long classNameId = PortalUtil.getClassNameId(className);
 
 		return trashEntryPersistence.findByC_C(classNameId, classPK);
+	}
+
+	/**
+	 * Returns all the trash versions associated with the trash entry.
+	 *
+	 * @param  entryId the primary key of the trash entry
+	 * @return all the trash versions associated with the trash entry
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<TrashVersion> getVersions(long entryId) throws SystemException {
+		return trashEntryPersistence.getTrashVersions(entryId);
 	}
 
 }

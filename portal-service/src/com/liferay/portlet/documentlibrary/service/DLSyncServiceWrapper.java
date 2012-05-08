@@ -31,6 +31,24 @@ public class DLSyncServiceWrapper implements DLSyncService,
 		_dlSyncService = dlSyncService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _dlSyncService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_dlSyncService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLSyncUpdate getDLSyncUpdate(
 		long companyId, long repositoryId, java.util.Date lastAccessDate)
 		throws com.liferay.portal.kernel.exception.PortalException,

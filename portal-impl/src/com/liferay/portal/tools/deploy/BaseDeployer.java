@@ -21,6 +21,10 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.License;
 import com.liferay.portal.kernel.plugin.PluginPackage;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
+import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.servlet.SecurePluginContextListener;
+import com.liferay.portal.kernel.servlet.SecureServlet;
 import com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilter;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -51,6 +55,7 @@ import com.liferay.util.ant.DeleteTask;
 import com.liferay.util.ant.ExpandTask;
 import com.liferay.util.ant.UpToDateTask;
 import com.liferay.util.ant.WarTask;
+import com.liferay.util.xml.DocUtil;
 import com.liferay.util.xml.XMLFormatter;
 
 import java.io.File;
@@ -955,8 +960,7 @@ public class BaseDeployer implements Deployer {
 		return displayName;
 	}
 
-	public String getExtraContent(
-			double webXmlVersion, File srcFile, String displayName)
+	public String getExtraContent(File srcFile, String displayName)
 		throws Exception {
 
 		StringBundler sb = new StringBundler();
@@ -965,30 +969,12 @@ public class BaseDeployer implements Deployer {
 		sb.append(displayName);
 		sb.append("</display-name>");
 
-		if (webXmlVersion < 2.4) {
-			sb.append("<context-param>");
-			sb.append("<param-name>liferay-invoker-enabled</param-name>");
-			sb.append("<param-value>false</param-value>");
-			sb.append("</context-param>");
-		}
-
 		sb.append("<listener>");
 		sb.append("<listener-class>");
 		sb.append("com.liferay.portal.kernel.servlet.");
 		sb.append("SerializableSessionAttributeListener");
 		sb.append("</listener-class>");
 		sb.append("</listener>");
-
-		File serviceXml = new File(srcFile + "/WEB-INF/service.xml");
-
-		if (serviceXml.exists()) {
-			sb.append("<listener>");
-			sb.append("<listener-class>");
-			sb.append("com.liferay.portal.kernel.spring.context.");
-			sb.append("PortletContextLoaderListener");
-			sb.append("</listener-class>");
-			sb.append("</listener>");
-		}
 
 		File serverConfigWsdd = new File(
 			srcFile + "/WEB-INF/server-config.wsdd");
@@ -1006,17 +992,6 @@ public class BaseDeployer implements Deployer {
 			}
 		}
 
-		sb.append("<servlet>");
-		sb.append("<servlet-name>");
-		sb.append("Set Portlet Class Loader Servlet");
-		sb.append("</servlet-name>");
-		sb.append("<servlet-class>");
-		sb.append("com.liferay.portal.kernel.servlet.");
-		sb.append("SetPortletClassLoaderServlet");
-		sb.append("</servlet-class>");
-		sb.append("<load-on-startup>0</load-on-startup>");
-		sb.append("</servlet>");
-
 		boolean hasTaglib = false;
 
 		if (Validator.isNotNull(auiTaglibDTD) ||
@@ -1030,7 +1005,7 @@ public class BaseDeployer implements Deployer {
 			hasTaglib = true;
 		}
 
-		if (hasTaglib && (webXmlVersion > 2.3)) {
+		if (hasTaglib) {
 			sb.append("<jsp-config>");
 		}
 
@@ -1102,7 +1077,7 @@ public class BaseDeployer implements Deployer {
 			sb.append("</taglib>");
 		}
 
-		if (hasTaglib && (webXmlVersion > 2.3)) {
+		if (hasTaglib) {
 			sb.append("</jsp-config>");
 		}
 
@@ -1112,12 +1087,7 @@ public class BaseDeployer implements Deployer {
 	public String getExtraFiltersContent(double webXmlVersion, File srcFile)
 		throws Exception {
 
-		if (webXmlVersion > 2.3) {
-			return getSessionFiltersContent();
-		}
-		else {
-			return StringPool.BLANK;
-		}
+		return getSessionFiltersContent();
 	}
 
 	public String getIgnoreFiltersContent(File srcFile) throws Exception {
@@ -1181,10 +1151,6 @@ public class BaseDeployer implements Deployer {
 		sb.append("</filter-mapping>");
 
 		return sb.toString();
-	}
-
-	public Class<?> getPluginContextListenerClass() {
-		return null;
 	}
 
 	public String getPluginPackageLicensesXml(List<License> licenses) {
@@ -1347,28 +1313,10 @@ public class BaseDeployer implements Deployer {
 				DeployUtil.getResourcePath(
 					"servlet-context-include-filters-web.xml"));
 
-			if (webXmlVersion < 2.4) {
-				int x = servletContextIncludeFiltersContent.indexOf(
-					"<dispatcher>");
-				int y = servletContextIncludeFiltersContent.indexOf(
-					"</filter-mapping>");
-
-				if (x != -1) {
-					if (_log.isWarnEnabled()) {
-						_log.warn("Please update web.xml to at least 2.4");
-					}
-
-					servletContextIncludeFiltersContent =
-						servletContextIncludeFiltersContent.substring(0, x) +
-							servletContextIncludeFiltersContent.substring(y);
-				}
-			}
-
 			return servletContextIncludeFiltersContent;
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public String getSessionFiltersContent() throws Exception {
@@ -1624,6 +1572,61 @@ public class BaseDeployer implements Deployer {
 		}
 	}
 
+	public String secureWebXml(String content) throws Exception {
+		Document document = SAXReaderUtil.read(content);
+
+		Element rootElement = document.getRootElement();
+
+		List<String> listenerClasses = new ArrayList<String>();
+
+		List<Element> listenerElements = rootElement.elements("listener");
+
+		for (Element listenerElement : listenerElements) {
+			String listenerClass = GetterUtil.getString(
+				listenerElement.elementText("listener-class"));
+
+			if (listenerClass.equals(
+					SecurePluginContextListener.class.getName())) {
+
+				continue;
+			}
+
+			listenerClasses.add(listenerClass);
+
+			listenerElement.detach();
+		}
+
+		Element contextParamElement = rootElement.addElement("context-param");
+
+		DocUtil.add(contextParamElement, "param-name", "portalListenerClasses");
+		DocUtil.add(
+			contextParamElement, "param-value",
+			StringUtil.merge(listenerClasses));
+
+		List<Element> servletElements = rootElement.elements("servlet");
+
+		for (Element servletElement : servletElements) {
+			Element servletClassElement = servletElement.element(
+				"servlet-class");
+
+			String servletClass = GetterUtil.getString(
+				servletClassElement.getText());
+
+			if (servletClass.equals(PortletServlet.class.getName())) {
+				continue;
+			}
+
+			servletClassElement.setText(SecureServlet.class.getName());
+
+			Element initParamElement = servletElement.addElement("init-param");
+
+			DocUtil.add(initParamElement, "param-name", "servlet-class");
+			DocUtil.add(initParamElement, "param-value", servletClass);
+		}
+
+		return document.compactString();
+	}
+
 	public void setAppServerType(String appServerType) {
 		this.appServerType = appServerType;
 	}
@@ -1701,23 +1704,23 @@ public class BaseDeployer implements Deployer {
 
 		File geronimoWebXml = new File(srcFile + "/WEB-INF/geronimo-web.xml");
 
-		Document doc = SAXReaderUtil.read(geronimoWebXml);
+		Document document = SAXReaderUtil.read(geronimoWebXml);
 
-		Element root = doc.getRootElement();
+		Element rootElement = document.getRootElement();
 
-		Element environmentEl = root.element("environment");
+		Element environmentElement = rootElement.element("environment");
 
-		Element moduleIdEl = environmentEl.element("moduleId");
+		Element moduleIdElement = environmentElement.element("moduleId");
 
-		Element artifactIdEl = moduleIdEl.element("artifactId");
+		Element artifactIdElement = moduleIdElement.element("artifactId");
 
-		artifactIdEl.setText(displayName);
+		artifactIdElement.setText(displayName);
 
-		Element versionEl = moduleIdEl.element("version");
+		Element versionElement = moduleIdElement.element("version");
 
-		versionEl.setText(pluginPackage.getVersion());
+		versionElement.setText(pluginPackage.getVersion());
 
-		String content = doc.formattedString();
+		String content = document.formattedString();
 
 		FileUtil.write(geronimoWebXml, content);
 
@@ -1751,7 +1754,7 @@ public class BaseDeployer implements Deployer {
 			y = x;
 		}
 		else {
-			if (liferayWebXmlEnabled && (webXmlVersion > 2.3)) {
+			if (liferayWebXmlEnabled) {
 				webXmlFiltersContent = webXmlContent.substring(x, y + 17);
 
 				y = y + 17;
@@ -1760,15 +1763,6 @@ public class BaseDeployer implements Deployer {
 				x = y + 17;
 				y = y + 17;
 			}
-		}
-
-		if (webXmlVersion < 2.4) {
-			webXmlContent =
-				webXmlContent.substring(0, x) +
-					getExtraFiltersContent(webXmlVersion, srcFile) +
-						webXmlContent.substring(y);
-
-			return webXmlContent;
 		}
 
 		String filtersContent =
@@ -1802,6 +1796,8 @@ public class BaseDeployer implements Deployer {
 			PluginPackage pluginPackage)
 		throws Exception {
 
+		// Check version
+
 		String content = FileUtil.read(webXml);
 
 		int x = content.indexOf("<display-name>");
@@ -1814,53 +1810,70 @@ public class BaseDeployer implements Deployer {
 			content = content.substring(0, x) + content.substring(y);
 		}
 
-		double webXmlVersion = 2.3;
+		Document document = SAXReaderUtil.read(content);
 
-		Document webXmlDoc = SAXReaderUtil.read(content);
+		Element rootElement = document.getRootElement();
 
-		Element webXmlRoot = webXmlDoc.getRootElement();
+		double webXmlVersion = GetterUtil.getDouble(
+			rootElement.attributeValue("version"), 2.3);
 
-		webXmlVersion = GetterUtil.getDouble(
-			webXmlRoot.attributeValue("version"), webXmlVersion);
+		if (webXmlVersion <= 2.3) {
+			throw new AutoDeployException(
+				webXml.getName() +
+					" must be updated to the Servlet 2.4 specification");
+		}
+
+		// Plugin context listener
+
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<listener>");
+		sb.append("<listener-class>");
+
+		boolean securityManagerEnabled = false;
+
+		Properties properties = getPluginPackageProperties(srcFile);
+
+		if (properties != null) {
+			securityManagerEnabled = GetterUtil.getBoolean(
+				properties.getProperty("security-manager-enabled"));
+		}
+
+		if (securityManagerEnabled) {
+			sb.append(SecurePluginContextListener.class.getName());
+		}
+		else {
+			sb.append(PluginContextListener.class.getName());
+		}
+
+		sb.append("</listener-class>");
+		sb.append("</listener>");
+
+		String pluginContextListenerContent = sb.toString();
 
 		// Merge content
 
-		String pluginContextListenerContent = StringPool.BLANK;
+		String extraContent = getExtraContent(srcFile, displayName);
 
-		Class<?> pluginContextListenerClass = getPluginContextListenerClass();
+		int pos = content.indexOf("<listener>");
 
-		if (pluginContextListenerClass != null) {
-			StringBundler sb = new StringBundler(5);
-
-			sb.append("<listener>");
-			sb.append("<listener-class>");
-			sb.append(pluginContextListenerClass.getName());
-			sb.append("</listener-class>");
-			sb.append("</listener>");
-
-			pluginContextListenerContent = sb.toString();
+		if (pos == -1) {
+			pos = content.indexOf("</web-app>");
 		}
 
-		String extraContent = getExtraContent(
-			webXmlVersion, srcFile, displayName);
-
-		int pos = content.indexOf("</web-app>");
-
 		String newContent =
-			content.substring(0, pos) + extraContent +
-				pluginContextListenerContent + content.substring(pos);
-
-		// Replace old package names
-
-		newContent = StringUtil.replace(
-			newContent, "com.liferay.portal.shared.",
-			"com.liferay.portal.kernel.");
+			content.substring(0, pos) + pluginContextListenerContent +
+				extraContent + content.substring(pos);
 
 		// Update liferay-web.xml
 
 		newContent = updateLiferayWebXml(webXmlVersion, srcFile, newContent);
 
 		// Update web.xml
+
+		if (securityManagerEnabled) {
+			newContent = secureWebXml(newContent);
+		}
 
 		newContent = WebXMLBuilder.organizeWebXML(newContent);
 

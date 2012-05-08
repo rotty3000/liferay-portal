@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.cache.cluster;
  */
 public enum PortalCacheClusterEventType {
 
-	EVICTED, EXPIRED, PUT, REMOVE, REMOVEALL, UPDATE
+	EVICTED, EXPIRED, PUT, REMOVE, REMOVE_ALL, UPDATE
 
 }

@@ -90,6 +90,10 @@ public class DDMStructureLinkLocalServiceUtil {
 		return getService().deleteDDMStructureLink(ddmStructureLink);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -343,14 +347,10 @@ public class DDMStructureLinkLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DDMStructureLinkLocalService service) {
-		MethodCache.remove(DDMStructureLinkLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DDMStructureLinkLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DDMStructureLinkLocalService.class);
 	}
 
 	private static DDMStructureLinkLocalService _service;

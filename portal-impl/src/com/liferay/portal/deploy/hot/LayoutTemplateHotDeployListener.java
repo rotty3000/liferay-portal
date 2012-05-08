@@ -81,7 +81,9 @@ public class LayoutTemplateHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		logRegistration(servletContextName);
+		if (_log.isInfoEnabled()) {
+			_log.info("Registering layout templates for " + servletContextName);
+		}
 
 		List<ObjectValuePair<String, Boolean>> layoutTemplateIds =
 			LayoutTemplateLocalServiceUtil.init(
@@ -151,12 +153,6 @@ public class LayoutTemplateHotDeployListener extends BaseHotDeployListener {
 					layoutTemplateIds.size() + " layout templates for " +
 						servletContextName + " was unregistered");
 			}
-		}
-	}
-
-	protected void logRegistration(String servletContextName) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Registering layout templates for " + servletContextName);
 		}
 	}
 

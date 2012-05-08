@@ -90,6 +90,10 @@ public class WikiNodeLocalServiceUtil {
 		return getService().deleteWikiNode(wikiNode);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -426,14 +430,10 @@ public class WikiNodeLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(WikiNodeLocalService service) {
-		MethodCache.remove(WikiNodeLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(WikiNodeLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(WikiNodeLocalService.class);
 	}
 
 	private static WikiNodeLocalService _service;

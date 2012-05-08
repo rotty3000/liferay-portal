@@ -610,10 +610,10 @@ public class CompanyUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(CompanyPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(CompanyUtil.class, "_persistence");
 	}
 
 	private static CompanyPersistence _persistence;

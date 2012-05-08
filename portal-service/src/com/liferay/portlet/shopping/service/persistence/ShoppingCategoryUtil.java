@@ -748,11 +748,10 @@ public class ShoppingCategoryUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShoppingCategoryPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShoppingCategoryUtil.class,
-			"_persistence");
 	}
 
 	private static ShoppingCategoryPersistence _persistence;

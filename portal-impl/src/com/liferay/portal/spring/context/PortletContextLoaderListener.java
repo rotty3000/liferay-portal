@@ -17,15 +17,10 @@ package com.liferay.portal.spring.context;
 import com.liferay.portal.bean.BeanLocatorImpl;
 import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.concurrent.LockRegistry;
-import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
-import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
-import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.MethodCache;
-import com.liferay.portal.kernel.util.StringPool;
 
 import java.lang.reflect.Method;
 
@@ -44,17 +39,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @see    PortletContextLoader
  */
 public class PortletContextLoaderListener extends ContextLoaderListener {
-
-	public static String getLockKey(ServletContext servletContext) {
-		String contextPath = ContextPathUtil.getContextPath(servletContext);
-
-		return getLockKey(contextPath);
-	}
-
-	public static String getLockKey(String contextPath) {
-		return PortletContextLoaderListener.class.getName().concat(
-			StringPool.PERIOD).concat(contextPath);
-	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
@@ -91,30 +75,13 @@ public class PortletContextLoaderListener extends ContextLoaderListener {
 
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		HotDeployEvent hotDeployEvent = new HotDeployEvent(
-			servletContext, PortletClassLoaderUtil.getClassLoader());
-
-		if (HotDeployUtil.isMissingDependentServletContext(hotDeployEvent)) {
-			HotDeployUtil.registerDependentServletContextListener(
-				hotDeployEvent, servletContextEvent, this);
-
-			return;
-		}
-
 		Object previousApplicationContext = servletContext.getAttribute(
 			WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
 		servletContext.removeAttribute(
 			WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
-		try {
-			super.contextInitialized(servletContextEvent);
-		}
-		finally {
-			String lockKey = getLockKey(servletContext);
-
-			LockRegistry.freeLock(lockKey, lockKey, true);
-		}
+		super.contextInitialized(servletContextEvent);
 
 		PortletBeanFactoryCleaner.readBeans();
 

@@ -32,6 +32,8 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil_IW;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Randomizer_IW;
 import com.liferay.portal.kernel.util.StaticFieldGetter;
 import com.liferay.portal.kernel.util.StringUtil_IW;
@@ -56,8 +58,6 @@ import com.liferay.portal.theme.NavItem;
 import com.liferay.portal.theme.RequestVars;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PrefsPropsUtil_IW;
-import com.liferay.portal.util.PropsUtil_IW;
 import com.liferay.portal.util.SessionClicks_IW;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portal.webserver.WebServerServletTokenUtil;
@@ -195,11 +195,11 @@ public class TemplateContextHelper {
 
 		// Prefs props util
 
-		variables.put("prefsPropsUtil", PrefsPropsUtil_IW.getInstance());
+		variables.put("prefsPropsUtil", PrefsPropsUtil.getPrefsProps());
 
 		// Props util
 
-		variables.put("propsUtil", PropsUtil_IW.getInstance());
+		variables.put("propsUtil", PropsUtil.getProps());
 
 		// Portlet URL factory
 
@@ -409,7 +409,7 @@ public class TemplateContextHelper {
 						request, themeDisplay, layout.getAncestorPlid(),
 						layout.getAncestorLayoutId());
 				}
-				catch(Exception e) {
+				catch (Exception e) {
 					throw new TemplateException(e);
 				}
 

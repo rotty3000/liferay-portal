@@ -30,6 +30,24 @@ public class MembershipRequestServiceWrapper implements MembershipRequestService
 		_membershipRequestService = membershipRequestService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _membershipRequestService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_membershipRequestService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portal.model.MembershipRequest addMembershipRequest(
 		long groupId, java.lang.String comments,
 		com.liferay.portal.service.ServiceContext serviceContext)

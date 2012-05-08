@@ -270,11 +270,10 @@ public class ClusterGroupUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ClusterGroupPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ClusterGroupUtil.class,
-			"_persistence");
 	}
 
 	private static ClusterGroupPersistence _persistence;

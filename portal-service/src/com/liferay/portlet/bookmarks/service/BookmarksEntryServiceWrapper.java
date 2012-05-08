@@ -32,6 +32,24 @@ public class BookmarksEntryServiceWrapper implements BookmarksEntryService,
 		_bookmarksEntryService = bookmarksEntryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _bookmarksEntryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_bookmarksEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.bookmarks.model.BookmarksEntry addEntry(
 		long groupId, long folderId, java.lang.String name,
 		java.lang.String url, java.lang.String description,

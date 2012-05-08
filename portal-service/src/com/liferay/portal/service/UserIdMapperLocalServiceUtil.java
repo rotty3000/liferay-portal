@@ -90,6 +90,10 @@ public class UserIdMapperLocalServiceUtil {
 		return getService().deleteUserIdMapper(userIdMapper);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -307,14 +311,10 @@ public class UserIdMapperLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(UserIdMapperLocalService service) {
-		MethodCache.remove(UserIdMapperLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(UserIdMapperLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(UserIdMapperLocalService.class);
 	}
 
 	private static UserIdMapperLocalService _service;

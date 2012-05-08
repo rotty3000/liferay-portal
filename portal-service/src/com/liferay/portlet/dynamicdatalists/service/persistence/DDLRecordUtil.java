@@ -1082,10 +1082,10 @@ public class DDLRecordUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DDLRecordPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DDLRecordUtil.class, "_persistence");
 	}
 
 	private static DDLRecordPersistence _persistence;

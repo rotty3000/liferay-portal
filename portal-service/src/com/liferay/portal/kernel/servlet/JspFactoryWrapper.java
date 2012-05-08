@@ -76,7 +76,7 @@ public class JspFactoryWrapper extends JspFactory {
 				String contextPath = ContextPathUtil.getContextPath(
 					servletContext);
 
-				DirectServletRegistry.putServlet(
+				DirectServletRegistryUtil.putServlet(
 					contextPath.concat(servletPath), servlet);
 			}
 		}

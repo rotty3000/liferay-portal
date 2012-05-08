@@ -90,6 +90,10 @@ public class SocialActivityLocalServiceUtil {
 		return getService().deleteSocialActivity(socialActivity);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -1099,14 +1103,10 @@ public class SocialActivityLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SocialActivityLocalService service) {
-		MethodCache.remove(SocialActivityLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SocialActivityLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SocialActivityLocalService.class);
 	}
 
 	private static SocialActivityLocalService _service;

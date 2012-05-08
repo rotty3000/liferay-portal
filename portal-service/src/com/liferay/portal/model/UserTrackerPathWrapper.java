@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link UserTrackerPath}.
@@ -35,6 +39,43 @@ public class UserTrackerPathWrapper implements UserTrackerPath,
 
 	public String getModelClassName() {
 		return UserTrackerPath.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("userTrackerPathId", getUserTrackerPathId());
+		attributes.put("userTrackerId", getUserTrackerId());
+		attributes.put("path", getPath());
+		attributes.put("pathDate", getPathDate());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long userTrackerPathId = (Long)attributes.get("userTrackerPathId");
+
+		if (userTrackerPathId != null) {
+			setUserTrackerPathId(userTrackerPathId);
+		}
+
+		Long userTrackerId = (Long)attributes.get("userTrackerId");
+
+		if (userTrackerId != null) {
+			setUserTrackerId(userTrackerId);
+		}
+
+		String path = (String)attributes.get("path");
+
+		if (path != null) {
+			setPath(path);
+		}
+
+		Date pathDate = (Date)attributes.get("pathDate");
+
+		if (pathDate != null) {
+			setPathDate(pathDate);
+		}
 	}
 
 	/**

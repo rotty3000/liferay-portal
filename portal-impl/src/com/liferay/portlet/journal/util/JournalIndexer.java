@@ -35,10 +35,12 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.Node;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -198,8 +200,7 @@ public class JournalIndexer extends BaseIndexer {
 			defaultLanguageId, article.getContent());
 
 		for (String languageId : languageIds) {
-			String content = extractContent(
-				article.getContentByLocale(languageId));
+			String content = extractContent(article, languageId);
 
 			if (languageId.equals(defaultLanguageId)) {
 				document.addText(Field.CONTENT, content);
@@ -326,14 +327,75 @@ public class JournalIndexer extends BaseIndexer {
 		return _FIELD_NAMESPACE.concat(StringPool.FORWARD_SLASH).concat(name);
 	}
 
-	protected String extractContent(String content) {
+	protected String extractContent(JournalArticle article, String languageId) {
+		String content = article.getContentByLocale(languageId);
+
+		if (Validator.isNotNull(article.getStructureId())) {
+			content = extractDynamicContent(content);
+		}
+		else {
+			content = extractStaticContent(content);
+		}
+
+		content = HtmlUtil.extractText(content);
+
+		return content;
+	}
+
+	protected String extractDynamicContent(Element rootElement) {
+		StringBundler sb = new StringBundler();
+
+		List<Element> dynamicElementElements = rootElement.elements(
+			"dynamic-element");
+
+		for (Element dynamicElementElement : dynamicElementElements) {
+			String type = dynamicElementElement.attributeValue(
+				"type", StringPool.BLANK);
+
+			if (!type.equals("image") && !type.equals("multi-list") &&
+				!type.equals("list") && !type.equals("document_library") &&
+				!type.equals("boolean") && !type.equals("link_to_layout") &&
+				!type.equals("selection_break")) {
+
+				Element dynamicContentElement = dynamicElementElement.element(
+					"dynamic-content");
+
+				if (dynamicContentElement != null) {
+					String dynamicContent = dynamicContentElement.getText();
+
+					sb.append(dynamicContent);
+					sb.append(StringPool.SPACE);
+				}
+			}
+
+			sb.append(extractDynamicContent(dynamicElementElement));
+		}
+
+		return sb.toString();
+	}
+
+	protected String extractDynamicContent(String content) {
+		try {
+			com.liferay.portal.kernel.xml.Document document =
+				SAXReaderUtil.read(content);
+
+			Element rootElement = document.getRootElement();
+
+			return extractDynamicContent(rootElement);
+		}
+		catch (DocumentException de) {
+			_log.error(de);
+		}
+
+		return StringPool.BLANK;
+	}
+
+	protected String extractStaticContent(String content) {
 		content = StringUtil.replace(content, "<![CDATA[", StringPool.BLANK);
 		content = StringUtil.replace(content, "]]>", StringPool.BLANK);
 		content = StringUtil.replace(content, "&amp;", "&");
 		content = StringUtil.replace(content, "&lt;", "<");
 		content = StringUtil.replace(content, "&gt;", ">");
-
-		content = HtmlUtil.extractText(content);
 
 		return content;
 	}

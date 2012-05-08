@@ -84,6 +84,10 @@ public class CalEventLocalServiceWrapper implements CalEventLocalService,
 		return _calEventLocalService.deleteCalEvent(calEvent);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _calEventLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

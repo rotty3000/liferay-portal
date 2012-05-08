@@ -90,6 +90,10 @@ public class SCFrameworkVersionLocalServiceUtil {
 		return getService().deleteSCFrameworkVersion(scFrameworkVersion);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -393,14 +397,10 @@ public class SCFrameworkVersionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SCFrameworkVersionLocalService service) {
-		MethodCache.remove(SCFrameworkVersionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SCFrameworkVersionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SCFrameworkVersionLocalService.class);
 	}
 
 	private static SCFrameworkVersionLocalService _service;

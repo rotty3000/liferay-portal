@@ -83,6 +83,10 @@ public class CounterLocalServiceWrapper implements CounterLocalService,
 		return _counterLocalService.deleteCounter(counter);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _counterLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

@@ -34,7 +34,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the Country service. Represents a row in the &quot;Country&quot; database table, with each column mapped to a property of this class.
@@ -154,6 +156,73 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 
 	public String getModelClassName() {
 		return Country.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("countryId", getCountryId());
+		attributes.put("name", getName());
+		attributes.put("a2", getA2());
+		attributes.put("a3", getA3());
+		attributes.put("number", getNumber());
+		attributes.put("idd", getIdd());
+		attributes.put("zipRequired", getZipRequired());
+		attributes.put("active", getActive());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long countryId = (Long)attributes.get("countryId");
+
+		if (countryId != null) {
+			setCountryId(countryId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String a2 = (String)attributes.get("a2");
+
+		if (a2 != null) {
+			setA2(a2);
+		}
+
+		String a3 = (String)attributes.get("a3");
+
+		if (a3 != null) {
+			setA3(a3);
+		}
+
+		String number = (String)attributes.get("number");
+
+		if (number != null) {
+			setNumber(number);
+		}
+
+		String idd = (String)attributes.get("idd");
+
+		if (idd != null) {
+			setIdd(idd);
+		}
+
+		Boolean zipRequired = (Boolean)attributes.get("zipRequired");
+
+		if (zipRequired != null) {
+			setZipRequired(zipRequired);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
 	}
 
 	@JSON

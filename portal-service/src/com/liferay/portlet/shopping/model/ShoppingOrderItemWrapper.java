@@ -16,6 +16,10 @@ package com.liferay.portlet.shopping.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ShoppingOrderItem}.
@@ -37,6 +41,85 @@ public class ShoppingOrderItemWrapper implements ShoppingOrderItem,
 
 	public String getModelClassName() {
 		return ShoppingOrderItem.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("orderItemId", getOrderItemId());
+		attributes.put("orderId", getOrderId());
+		attributes.put("itemId", getItemId());
+		attributes.put("sku", getSku());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("properties", getProperties());
+		attributes.put("price", getPrice());
+		attributes.put("quantity", getQuantity());
+		attributes.put("shippedDate", getShippedDate());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long orderItemId = (Long)attributes.get("orderItemId");
+
+		if (orderItemId != null) {
+			setOrderItemId(orderItemId);
+		}
+
+		Long orderId = (Long)attributes.get("orderId");
+
+		if (orderId != null) {
+			setOrderId(orderId);
+		}
+
+		String itemId = (String)attributes.get("itemId");
+
+		if (itemId != null) {
+			setItemId(itemId);
+		}
+
+		String sku = (String)attributes.get("sku");
+
+		if (sku != null) {
+			setSku(sku);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String properties = (String)attributes.get("properties");
+
+		if (properties != null) {
+			setProperties(properties);
+		}
+
+		Double price = (Double)attributes.get("price");
+
+		if (price != null) {
+			setPrice(price);
+		}
+
+		Integer quantity = (Integer)attributes.get("quantity");
+
+		if (quantity != null) {
+			setQuantity(quantity);
+		}
+
+		Date shippedDate = (Date)attributes.get("shippedDate");
+
+		if (shippedDate != null) {
+			setShippedDate(shippedDate);
+		}
 	}
 
 	/**

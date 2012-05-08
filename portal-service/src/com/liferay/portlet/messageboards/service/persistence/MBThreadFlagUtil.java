@@ -630,11 +630,10 @@ public class MBThreadFlagUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBThreadFlagPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBThreadFlagUtil.class,
-			"_persistence");
 	}
 
 	private static MBThreadFlagPersistence _persistence;

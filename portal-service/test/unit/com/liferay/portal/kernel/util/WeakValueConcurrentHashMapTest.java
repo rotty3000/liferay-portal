@@ -16,18 +16,14 @@ package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.memory.DummyFinalizeAction;
 import com.liferay.portal.kernel.memory.FinalizeManager;
-import com.liferay.portal.kernel.test.TestCase;
+import com.liferay.portal.kernel.test.BaseTestCase;
 
 /**
  * @author Shuyang Zhou
  */
-public class WeakValueConcurrentHashMapTest extends TestCase {
+public class WeakValueConcurrentHashMapTest extends BaseTestCase {
 
 	public void testAutoRemove() throws Exception{
-		Thread thread = Thread.currentThread();
-
-		PortalClassLoaderUtil.setClassLoader(thread.getContextClassLoader());
-
 		WeakValueConcurrentHashMap<String, Object> weakValueConcurrentHashMap =
 			new WeakValueConcurrentHashMap<String, Object>();
 
@@ -46,8 +42,6 @@ public class WeakValueConcurrentHashMapTest extends TestCase {
 			assertTrue(weakValueConcurrentHashMap.containsKey(testKey));
 		}
 
-		// Release key for gc
-
 		testValue = null;
 
 		startTime = System.currentTimeMillis();
@@ -58,9 +52,6 @@ public class WeakValueConcurrentHashMapTest extends TestCase {
 			Thread.sleep(1);
 
 			if (!FinalizeManager.THREAD_ENABLED) {
-				// Manually trigger cleanup when FianlizeManager's thread is
-				// diabled
-
 				FinalizeManager.register(
 					new Object(), new DummyFinalizeAction());
 			}
@@ -71,8 +62,6 @@ public class WeakValueConcurrentHashMapTest extends TestCase {
 		}
 
 		assertFalse(weakValueConcurrentHashMap.containsKey(testKey));
-
-		PortalClassLoaderUtil.setClassLoader(null);
 	}
 
 }

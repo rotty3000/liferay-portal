@@ -1057,10 +1057,10 @@ public class WebsiteUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(WebsitePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(WebsiteUtil.class, "_persistence");
 	}
 
 	private static WebsitePersistence _persistence;

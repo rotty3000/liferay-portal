@@ -16,7 +16,6 @@ package com.liferay.portal.scheduler.job;
 
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
-import com.liferay.portal.kernel.concurrent.LockRegistry;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -29,11 +28,9 @@ import com.liferay.portal.kernel.scheduler.SchedulerEngineUtil;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
-import com.liferay.portal.spring.context.PortletContextLoaderListener;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -78,64 +75,39 @@ public class MessageSenderJob implements Job {
 			message = (Message)JSONFactoryUtil.deserialize(messageJSON);
 		}
 
-		String contextPath = message.getString(SchedulerEngine.CONTEXT_PATH);
+		message.put(SchedulerEngine.DESTINATION_NAME, destinationName);
 
-		String lockKey = PortletContextLoaderListener.getLockKey(contextPath);
+		Map<String, Object> jobStateMap =
+			(Map<String, Object>)jobDataMap.get(SchedulerEngine.JOB_STATE);
 
-		ReentrantLock executionLock = null;
+		JobState jobState = JobStateSerializeUtil.deserialize(jobStateMap);
 
-		if (lockKey != null) {
-			executionLock = LockRegistry.getLock(lockKey, lockKey);
+		JobKey jobKey = jobDetail.getKey();
 
-			if (executionLock != null) {
-				if (executionLock.hasQueuedThreads()) {
-					return;
-				}
+		if (jobExecutionContext.getNextFireTime() == null) {
+			message.put(SchedulerEngine.DISABLE, true);
 
-				executionLock.lock();
+			StorageType storageType = StorageType.valueOf(
+				jobDataMap.getString(SchedulerEngine.STORAGE_TYPE));
+
+			if (PropsValues.CLUSTER_LINK_ENABLED &&
+				storageType.equals(StorageType.MEMORY_CLUSTERED)) {
+
+				notifyClusterMember(jobKey, storageType);
+			}
+
+			if (storageType.equals(StorageType.PERSISTED)) {
+				Scheduler scheduler = jobExecutionContext.getScheduler();
+
+				scheduler.deleteJob(jobKey);
 			}
 		}
 
-		try {
-			message.put(SchedulerEngine.DESTINATION_NAME, destinationName);
+		message.put(SchedulerEngine.JOB_NAME, jobKey.getName());
+		message.put(SchedulerEngine.JOB_STATE, jobState);
+		message.put(SchedulerEngine.GROUP_NAME, jobKey.getGroup());
 
-			Map<String, Object> jobStateMap =
-				(Map<String, Object>)jobDataMap.get(SchedulerEngine.JOB_STATE);
-
-			JobState jobState = JobStateSerializeUtil.deserialize(jobStateMap);
-
-			JobKey jobKey = jobDetail.getKey();
-
-			if (jobExecutionContext.getNextFireTime() == null) {
-				message.put(SchedulerEngine.DISABLE, true);
-
-				StorageType storageType = StorageType.valueOf(
-					jobDataMap.getString(SchedulerEngine.STORAGE_TYPE));
-
-				if (PropsValues.CLUSTER_LINK_ENABLED &&
-					storageType.equals(StorageType.MEMORY_CLUSTERED)) {
-
-					notifyClusterMember(jobKey, storageType);
-				}
-
-				if (storageType.equals(StorageType.PERSISTED)) {
-					Scheduler scheduler = jobExecutionContext.getScheduler();
-
-					scheduler.deleteJob(jobKey);
-				}
-			}
-
-			message.put(SchedulerEngine.JOB_NAME, jobKey.getName());
-			message.put(SchedulerEngine.JOB_STATE, jobState);
-			message.put(SchedulerEngine.GROUP_NAME, jobKey.getGroup());
-
-			MessageBusUtil.sendMessage(destinationName, message);
-		}
-		finally {
-			if (executionLock != null) {
-				executionLock.unlock();
-			}
-		}
+		MessageBusUtil.sendMessage(destinationName, message);
 	}
 
 	protected void notifyClusterMember(JobKey jobKey, StorageType storageType)

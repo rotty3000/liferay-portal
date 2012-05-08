@@ -37,6 +37,25 @@ public class JournalFolderServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.journal.service.impl.JournalFolderServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portlet.journal.model.JournalFolder addFolder(
 		long groupId, long parentFolderId, java.lang.String name,
 		java.lang.String description,
@@ -147,14 +166,10 @@ public class JournalFolderServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(JournalFolderService service) {
-		MethodCache.remove(JournalFolderService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JournalFolderServiceUtil.class,
-			"_service");
-		MethodCache.remove(JournalFolderService.class);
 	}
 
 	private static JournalFolderService _service;

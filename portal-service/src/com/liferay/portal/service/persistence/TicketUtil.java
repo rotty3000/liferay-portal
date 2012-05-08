@@ -333,10 +333,10 @@ public class TicketUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(TicketPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(TicketUtil.class, "_persistence");
 	}
 
 	private static TicketPersistence _persistence;

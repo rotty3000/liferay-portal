@@ -34,7 +34,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the ResourceBlock service. Represents a row in the &quot;ResourceBlock&quot; database table, with each column mapped to a property of this class.
@@ -148,6 +150,59 @@ public class ResourceBlockModelImpl extends BaseModelImpl<ResourceBlock>
 
 	public String getModelClassName() {
 		return ResourceBlock.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourceBlockId", getResourceBlockId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("name", getName());
+		attributes.put("permissionsHash", getPermissionsHash());
+		attributes.put("referenceCount", getReferenceCount());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourceBlockId = (Long)attributes.get("resourceBlockId");
+
+		if (resourceBlockId != null) {
+			setResourceBlockId(resourceBlockId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String permissionsHash = (String)attributes.get("permissionsHash");
+
+		if (permissionsHash != null) {
+			setPermissionsHash(permissionsHash);
+		}
+
+		Long referenceCount = (Long)attributes.get("referenceCount");
+
+		if (referenceCount != null) {
+			setReferenceCount(referenceCount);
+		}
 	}
 
 	@JSON

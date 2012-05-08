@@ -83,7 +83,7 @@
 	</library>
 	<library>
 		<file-name>development/catalina.jar</file-name>
-		<version>7.0.25</version>
+		<version>7.0.27</version>
 		<project-name>Tomcat</project-name>
 		<project-url>http://tomcat.apache.org</project-url>
 		<licenses>
@@ -305,7 +305,7 @@
 	</library>
 	<library>
 		<file-name>development/jasper.jar</file-name>
-		<version>7.0.25</version>
+		<version>7.0.27</version>
 		<project-name>Tomcat</project-name>
 		<project-url>http://tomcat.apache.org</project-url>
 		<licenses>
@@ -873,7 +873,7 @@
 	</library>
 	<library>
 		<file-name>development/tomcat-coyote.jar</file-name>
-		<version>7.0.25</version>
+		<version>7.0.27</version>
 		<project-name>Tomcat</project-name>
 		<project-url>http://tomcat.apache.org</project-url>
 		<licenses>
@@ -2182,7 +2182,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd.jar</file-name>
-		<version>3.2.8-20111031</version>
+		<version>3.3.3</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2193,7 +2193,7 @@
 	</library>
 	<library>
 		<file-name>portal/jodd-wot.jar</file-name>
-		<version>3.2.8-20111031</version>
+		<version>3.3.3</version>
 		<project-name>Jodd</project-name>
 		<project-url>http://jodd.org</project-url>
 		<licenses>
@@ -2267,6 +2267,21 @@
 				<license-name>Apache License 2.0</license-name>
 			</license>
 		</licenses>
+	</library>
+	<library>
+		<file-name>portal/jsqlparser.jar</file-name>
+		<version>0.7.0</version>
+		<project-name>JSqlParser</project-name>
+		<project-url>http://sourceforge.net/projects/jsqlparser</project-url>
+		<licenses>
+			<license>
+				<license-name>LGPL 2.1</license-name>
+			</license>
+		</licenses>
+		<comments>
+			This was recompiled for compatibility with JDK 5 and repackaged to
+			include net.sf.jsqlparser.test.tablesfinder.TablesNamesFinder.
+		</comments>
 	</library>
 	<library>
 		<file-name>portal/jsr107cache.jar</file-name>
@@ -3087,7 +3102,7 @@
 	</library>
 	<library>
 		<file-name>portal/tomcat-juli.jar</file-name>
-		<version>7.0.25</version>
+		<version>7.0.27</version>
 		<project-name>Tomcat</project-name>
 		<project-url>http://tomcat.apache.org</project-url>
 		<licenses>

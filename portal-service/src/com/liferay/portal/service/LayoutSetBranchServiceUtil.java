@@ -37,6 +37,25 @@ public class LayoutSetBranchServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.service.impl.LayoutSetBranchServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portal.model.LayoutSetBranch addLayoutSetBranch(
 		long groupId, boolean privateLayout, java.lang.String name,
 		java.lang.String description, boolean master,
@@ -94,14 +113,10 @@ public class LayoutSetBranchServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(LayoutSetBranchService service) {
-		MethodCache.remove(LayoutSetBranchService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(LayoutSetBranchServiceUtil.class,
-			"_service");
-		MethodCache.remove(LayoutSetBranchService.class);
 	}
 
 	private static LayoutSetBranchService _service;

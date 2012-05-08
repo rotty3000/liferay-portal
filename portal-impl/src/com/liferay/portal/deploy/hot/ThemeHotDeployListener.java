@@ -83,7 +83,9 @@ public class ThemeHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		logRegistration(servletContextName);
+		if (_log.isInfoEnabled()) {
+			_log.info("Registering themes for " + servletContextName);
+		}
 
 		List<String> themeIds = ThemeLocalServiceUtil.init(
 			servletContextName, servletContext, null, true, xmls,
@@ -91,7 +93,7 @@ public class ThemeHotDeployListener extends BaseHotDeployListener {
 
 		FileTimestampUtil.reset();
 
-		_vars.put(servletContextName, themeIds);
+		_themeIds.put(servletContextName, themeIds);
 
 		if (_log.isInfoEnabled()) {
 			if (themeIds.size() == 1) {
@@ -118,7 +120,7 @@ public class ThemeHotDeployListener extends BaseHotDeployListener {
 			_log.debug("Invoking undeploy for " + servletContextName);
 		}
 
-		List<String> themeIds = _vars.remove(servletContextName);
+		List<String> themeIds = _themeIds.remove(servletContextName);
 
 		if (themeIds != null) {
 			if (_log.isInfoEnabled()) {
@@ -165,16 +167,10 @@ public class ThemeHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
-	protected void logRegistration(String servletContextName) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Registering themes for " + servletContextName);
-		}
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		ThemeHotDeployListener.class);
 
-	private static Map<String, List<String>> _vars =
+	private static Map<String, List<String>> _themeIds =
 		new HashMap<String, List<String>>();
 
 }

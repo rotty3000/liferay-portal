@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.portlet;
 
-import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +41,8 @@ public class PortletClassLoaderUtil {
 
 		ServletContext servletContext = portletBag.getServletContext();
 
-		ClassLoader portletClassLoader =
-			(ClassLoader)servletContext.getAttribute(
-				PortletServlet.PORTLET_CLASS_LOADER);
-
-		return portletClassLoader;
+		return (ClassLoader)servletContext.getAttribute(
+			PluginContextListener.PLUGIN_CLASS_LOADER);
 	}
 
 	public static String getServletContextName() {

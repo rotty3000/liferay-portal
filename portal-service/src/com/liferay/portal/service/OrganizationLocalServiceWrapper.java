@@ -84,6 +84,10 @@ public class OrganizationLocalServiceWrapper implements OrganizationLocalService
 		return _organizationLocalService.deleteOrganization(organization);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _organizationLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -545,6 +549,28 @@ public class OrganizationLocalServiceWrapper implements OrganizationLocalService
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _organizationLocalService.getUserOrganizations(userId);
+	}
+
+	/**
+	* Returns all the organizations associated with the user. If includeNonUser
+	* is <code>true</code>, the result includes those organizations that are
+	* not directly associated to the user but he is an owner or an
+	* administrator of the organization.
+	*
+	* @param userId the primary key of the user
+	* @param includeIndirectlyAssociated whether to includes organizations
+	that are indirectly associated to the user because he is an owner
+	or an administrator of the organization
+	* @return the organizations associated with the user
+	* @throws PortalException if a user with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.model.Organization> getUserOrganizations(
+		long userId, boolean includeIndirectlyAssociated)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _organizationLocalService.getUserOrganizations(userId,
+			includeIndirectlyAssociated);
 	}
 
 	/**

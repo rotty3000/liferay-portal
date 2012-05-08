@@ -876,11 +876,10 @@ public class MembershipRequestUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MembershipRequestPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MembershipRequestUtil.class,
-			"_persistence");
 	}
 
 	private static MembershipRequestPersistence _persistence;

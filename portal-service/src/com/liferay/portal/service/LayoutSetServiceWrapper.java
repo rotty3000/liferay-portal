@@ -30,6 +30,24 @@ public class LayoutSetServiceWrapper implements LayoutSetService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _layoutSetService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_layoutSetService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Updates the state of the layout set prototype link.
 	*
 	* <p>

@@ -34,6 +34,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the SocialActivityAchievement service. Represents a row in the &quot;SocialActivityAchievement&quot; database table, with each column mapped to a property of this class.
  *
@@ -110,6 +113,67 @@ public class SocialActivityAchievementModelImpl extends BaseModelImpl<SocialActi
 
 	public String getModelClassName() {
 		return SocialActivityAchievement.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("activityAchievementId", getActivityAchievementId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("name", getName());
+		attributes.put("firstInGroup", getFirstInGroup());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long activityAchievementId = (Long)attributes.get(
+				"activityAchievementId");
+
+		if (activityAchievementId != null) {
+			setActivityAchievementId(activityAchievementId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long createDate = (Long)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		Boolean firstInGroup = (Boolean)attributes.get("firstInGroup");
+
+		if (firstInGroup != null) {
+			setFirstInGroup(firstInGroup);
+		}
 	}
 
 	public long getActivityAchievementId() {

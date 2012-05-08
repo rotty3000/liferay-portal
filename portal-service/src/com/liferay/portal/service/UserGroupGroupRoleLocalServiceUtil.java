@@ -90,6 +90,10 @@ public class UserGroupGroupRoleLocalServiceUtil {
 		return getService().deleteUserGroupGroupRole(userGroupGroupRole);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -357,14 +361,10 @@ public class UserGroupGroupRoleLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(UserGroupGroupRoleLocalService service) {
-		MethodCache.remove(UserGroupGroupRoleLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(UserGroupGroupRoleLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(UserGroupGroupRoleLocalService.class);
 	}
 
 	private static UserGroupGroupRoleLocalService _service;

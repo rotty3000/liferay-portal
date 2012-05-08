@@ -90,6 +90,10 @@ public class DDLRecordLocalServiceUtil {
 		return getService().deleteDDLRecord(ddlRecord);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -517,14 +521,10 @@ public class DDLRecordLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DDLRecordLocalService service) {
-		MethodCache.remove(DDLRecordLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DDLRecordLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DDLRecordLocalService.class);
 	}
 
 	private static DDLRecordLocalService _service;

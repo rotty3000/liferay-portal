@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.assetpublisher.util;
 
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.Validator;
@@ -31,10 +30,8 @@ import javax.portlet.PortletURL;
 public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 
 	public String getAssetViewURL(
-			LiferayPortletRequest liferayPortletRequest,
-			LiferayPortletResponse liferayPortletResponse,
-			AssetEntry assetEntry)
-		throws SystemException {
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse, AssetEntry assetEntry) {
 
 		PortletURL viewURL = liferayPortletResponse.createRenderURL();
 

@@ -146,7 +146,15 @@
 		<priority value="INFO" />
 	</category>
 
+	<category name="com.liferay.portal.deploy.hot.HotDeployImpl">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.portal.deploy.hot.PluginPackageHotDeployListener">
+		<priority value="ERROR" />
+	</category>
+
+	<category name="com.liferay.portal.deploy.hot.PortletHotDeployListener">
 		<priority value="ERROR" />
 	</category>
 
@@ -286,8 +294,12 @@
 		<priority value="ERROR" />
 	</category>
 
-	<category name="com.liferay.portal.kernel.servlet.PortletContextListener">
-		<priority value="INFO" />
+	<category name="com.liferay.portal.kernel.servlet.PluginContextListener">
+		<priority value="WARN" />
+	</category>
+
+	<category name="com.liferay.portal.kernel.servlet.SecurePluginContextListener">
+		<priority value="ERROR" />
 	</category>
 
 	<category name="com.liferay.portal.kernel.servlet.ServletContextPool">
@@ -304,6 +316,10 @@
 
 	<category name="com.liferay.portal.kernel.util.JavaProps">
 		<priority value="ERROR" />
+	</category>
+
+	<category name="com.liferay.portal.kernel.util.ReferenceRegistry">
+		<priority value="WARN" />
 	</category>
 
 	<category name="com.liferay.portal.kernel.util.ServerDetector">

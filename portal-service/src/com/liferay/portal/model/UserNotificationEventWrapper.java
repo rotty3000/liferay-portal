@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link UserNotificationEvent}.
@@ -36,6 +39,79 @@ public class UserNotificationEventWrapper implements UserNotificationEvent,
 
 	public String getModelClassName() {
 		return UserNotificationEvent.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("userNotificationEventId", getUserNotificationEventId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("type", getType());
+		attributes.put("timestamp", getTimestamp());
+		attributes.put("deliverBy", getDeliverBy());
+		attributes.put("payload", getPayload());
+		attributes.put("archived", getArchived());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long userNotificationEventId = (Long)attributes.get(
+				"userNotificationEventId");
+
+		if (userNotificationEventId != null) {
+			setUserNotificationEventId(userNotificationEventId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		Long timestamp = (Long)attributes.get("timestamp");
+
+		if (timestamp != null) {
+			setTimestamp(timestamp);
+		}
+
+		Long deliverBy = (Long)attributes.get("deliverBy");
+
+		if (deliverBy != null) {
+			setDeliverBy(deliverBy);
+		}
+
+		String payload = (String)attributes.get("payload");
+
+		if (payload != null) {
+			setPayload(payload);
+		}
+
+		Boolean archived = (Boolean)attributes.get("archived");
+
+		if (archived != null) {
+			setArchived(archived);
+		}
 	}
 
 	/**

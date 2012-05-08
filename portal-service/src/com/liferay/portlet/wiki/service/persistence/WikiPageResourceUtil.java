@@ -487,11 +487,10 @@ public class WikiPageResourceUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(WikiPageResourcePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(WikiPageResourceUtil.class,
-			"_persistence");
 	}
 
 	private static WikiPageResourcePersistence _persistence;

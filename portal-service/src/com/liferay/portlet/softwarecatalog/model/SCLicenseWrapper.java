@@ -16,6 +16,9 @@ package com.liferay.portlet.softwarecatalog.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link SCLicense}.
@@ -36,6 +39,57 @@ public class SCLicenseWrapper implements SCLicense, ModelWrapper<SCLicense> {
 
 	public String getModelClassName() {
 		return SCLicense.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("licenseId", getLicenseId());
+		attributes.put("name", getName());
+		attributes.put("url", getUrl());
+		attributes.put("openSource", getOpenSource());
+		attributes.put("active", getActive());
+		attributes.put("recommended", getRecommended());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long licenseId = (Long)attributes.get("licenseId");
+
+		if (licenseId != null) {
+			setLicenseId(licenseId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String url = (String)attributes.get("url");
+
+		if (url != null) {
+			setUrl(url);
+		}
+
+		Boolean openSource = (Boolean)attributes.get("openSource");
+
+		if (openSource != null) {
+			setOpenSource(openSource);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
+
+		Boolean recommended = (Boolean)attributes.get("recommended");
+
+		if (recommended != null) {
+			setRecommended(recommended);
+		}
 	}
 
 	/**

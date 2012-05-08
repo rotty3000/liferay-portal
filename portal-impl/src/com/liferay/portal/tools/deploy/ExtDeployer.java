@@ -14,7 +14,6 @@
 
 package com.liferay.portal.tools.deploy;
 
-import com.liferay.portal.kernel.servlet.ExtContextListener;
 import com.liferay.portal.model.Plugin;
 import com.liferay.portal.util.InitUtil;
 
@@ -49,11 +48,6 @@ public class ExtDeployer extends BaseDeployer {
 
 	public ExtDeployer(List<String> wars, List<String> jars) {
 		super(wars, jars);
-	}
-
-	@Override
-	public Class<?> getPluginContextListenerClass() {
-		return ExtContextListener.class;
 	}
 
 	@Override

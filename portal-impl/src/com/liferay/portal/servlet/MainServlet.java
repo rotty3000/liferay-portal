@@ -41,7 +41,9 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -95,6 +97,8 @@ import com.liferay.util.ContentUtil;
 import com.liferay.util.servlet.EncryptedServletRequest;
 
 import java.io.IOException;
+
+import java.lang.reflect.Field;
 
 import java.util.List;
 import java.util.Locale;
@@ -209,6 +213,17 @@ public class MainServlet extends ActionServlet {
 
 		try {
 			initServletContextPool();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Initialize server detector");
+		}
+
+		try {
+			initServerDetector();
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -905,6 +920,54 @@ public class MainServlet extends ActionServlet {
 					modelName, modelActions);
 			}
 		}
+	}
+
+	protected void initServerDetector() throws Exception {
+		if (ServerDetector.isTomcat()) {
+			initServerDetectorTomcat();
+		}
+	}
+
+	protected void initServerDetectorTomcat() throws Exception {
+		ServletContext servletContext = getServletContext();
+
+		// org.apache.catalina.core.ApplicationContextFacade
+
+		Class<?> applicationContextFacadeClass = servletContext.getClass();
+
+		Field contextField1 = ReflectionUtil.getDeclaredField(
+			applicationContextFacadeClass, "context");
+
+		Object contextValue1 = contextField1.get(servletContext);
+
+		// org.apache.catalina.core.ApplicationContext
+
+		Class<?> applicationContextClass = contextField1.getType();
+
+		Field contextField2 = ReflectionUtil.getDeclaredField(
+			applicationContextClass, "context");
+
+		Object contextValue2 = contextField2.get(contextValue1);
+
+		// org.apache.catalina.core.StandardContext
+
+		Class<?> standardContextClass = contextField2.getType();
+
+		// org.apache.catalina.core.ContainerBase
+
+		Class<?> containerBaseClass = standardContextClass.getSuperclass();
+
+		Field parentField = ReflectionUtil.getDeclaredField(
+			containerBaseClass, "parent");
+
+		Object parentValue = parentField.get(contextValue2);
+
+		Field autoDeployField = ReflectionUtil.getDeclaredField(
+			parentValue.getClass(), "autoDeploy");
+
+		Boolean autoDeployValue = (Boolean)autoDeployField.get(parentValue);
+
+		ServerDetector.setSupportsHotDeploy(autoDeployValue);
 	}
 
 	protected void initServletContextPool() throws Exception {

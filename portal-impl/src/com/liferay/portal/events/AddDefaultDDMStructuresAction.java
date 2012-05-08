@@ -55,7 +55,7 @@ public class AddDefaultDDMStructuresAction
 		addDDMStructures(
 			defaultUserId, group.getGroupId(),
 			PortalUtil.getClassNameId(DDLRecordSet.class),
-			"dynamic-data-list-structures.xml", serviceContext);
+			"dynamic-data-mapping-structures.xml", serviceContext);
 	}
 
 }

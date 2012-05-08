@@ -630,11 +630,10 @@ public class DDMStructureLinkUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DDMStructureLinkPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DDMStructureLinkUtil.class,
-			"_persistence");
 	}
 
 	private static DDMStructureLinkPersistence _persistence;

@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.servlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.InstanceFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
@@ -51,8 +52,8 @@ public class PortalDelegateServlet extends HttpServlet {
 			ClassLoader contextClassLoader =
 				currentThread.getContextClassLoader();
 
-			HttpServlet servlet = (HttpServlet)contextClassLoader.loadClass(
-				servletClass).newInstance();
+			HttpServlet servlet = (HttpServlet)InstanceFactory.newInstance(
+				contextClassLoader, servletClass);
 
 			servlet.init(servletConfig);
 

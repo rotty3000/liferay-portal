@@ -81,6 +81,10 @@ public class GroupLocalServiceWrapper implements GroupLocalService,
 		return _groupLocalService.deleteGroup(group);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _groupLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

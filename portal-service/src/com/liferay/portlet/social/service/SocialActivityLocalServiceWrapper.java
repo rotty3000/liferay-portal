@@ -85,6 +85,10 @@ public class SocialActivityLocalServiceWrapper
 		return _socialActivityLocalService.deleteSocialActivity(socialActivity);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _socialActivityLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

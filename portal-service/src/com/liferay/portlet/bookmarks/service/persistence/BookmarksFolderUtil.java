@@ -1409,11 +1409,10 @@ public class BookmarksFolderUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(BookmarksFolderPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(BookmarksFolderUtil.class,
-			"_persistence");
 	}
 
 	private static BookmarksFolderPersistence _persistence;

@@ -34,6 +34,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the UserTracker service. Represents a row in the &quot;UserTracker&quot; database table, with each column mapped to a property of this class.
@@ -111,6 +113,73 @@ public class UserTrackerModelImpl extends BaseModelImpl<UserTracker>
 
 	public String getModelClassName() {
 		return UserTracker.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("userTrackerId", getUserTrackerId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("sessionId", getSessionId());
+		attributes.put("remoteAddr", getRemoteAddr());
+		attributes.put("remoteHost", getRemoteHost());
+		attributes.put("userAgent", getUserAgent());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long userTrackerId = (Long)attributes.get("userTrackerId");
+
+		if (userTrackerId != null) {
+			setUserTrackerId(userTrackerId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String sessionId = (String)attributes.get("sessionId");
+
+		if (sessionId != null) {
+			setSessionId(sessionId);
+		}
+
+		String remoteAddr = (String)attributes.get("remoteAddr");
+
+		if (remoteAddr != null) {
+			setRemoteAddr(remoteAddr);
+		}
+
+		String remoteHost = (String)attributes.get("remoteHost");
+
+		if (remoteHost != null) {
+			setRemoteHost(remoteHost);
+		}
+
+		String userAgent = (String)attributes.get("userAgent");
+
+		if (userAgent != null) {
+			setUserAgent(userAgent);
+		}
 	}
 
 	public long getUserTrackerId() {

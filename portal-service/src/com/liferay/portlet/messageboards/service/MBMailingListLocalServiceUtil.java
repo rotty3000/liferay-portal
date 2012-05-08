@@ -90,6 +90,10 @@ public class MBMailingListLocalServiceUtil {
 		return getService().deleteMBMailingList(mbMailingList);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -358,14 +362,10 @@ public class MBMailingListLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MBMailingListLocalService service) {
-		MethodCache.remove(MBMailingListLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MBMailingListLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MBMailingListLocalService.class);
 	}
 
 	private static MBMailingListLocalService _service;

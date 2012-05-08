@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.xml;
 
-import java.io.IOException;
-
 /**
  * @author Brian Wing Shun Chan
  */
@@ -25,17 +23,6 @@ public interface Document extends Branch {
 
 	public Document addDocumentType(
 		String name, String publicId, String systemId);
-
-	public String formattedString() throws IOException;
-
-	public String formattedString(String indent) throws IOException;
-
-	public String formattedString(String indent, boolean expandEmptyElements)
-		throws IOException;
-
-	public String formattedString(
-			String indent, boolean expandEmptyElements, boolean trimText)
-		throws IOException;
 
 	public DocumentType getDocumentType();
 

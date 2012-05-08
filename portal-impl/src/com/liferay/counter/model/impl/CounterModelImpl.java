@@ -29,6 +29,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the Counter service. Represents a row in the &quot;Counter&quot; database table, with each column mapped to a property of this class.
  *
@@ -94,6 +97,31 @@ public class CounterModelImpl extends BaseModelImpl<Counter>
 
 	public String getModelClassName() {
 		return Counter.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("name", getName());
+		attributes.put("currentId", getCurrentId());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		Long currentId = (Long)attributes.get("currentId");
+
+		if (currentId != null) {
+			setCurrentId(currentId);
+		}
 	}
 
 	public String getName() {

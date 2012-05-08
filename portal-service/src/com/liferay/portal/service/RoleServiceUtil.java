@@ -39,6 +39,24 @@ public class RoleServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds a role. The user is reindexed after role is added.
 	*
 	* @param name the role's name
@@ -313,13 +331,10 @@ public class RoleServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(RoleService service) {
-		MethodCache.remove(RoleService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(RoleServiceUtil.class, "_service");
-		MethodCache.remove(RoleService.class);
 	}
 
 	private static RoleService _service;

@@ -32,6 +32,24 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _trashEntryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_trashEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Deletes the trash entries with the matching group ID considering
 	* permissions.
 	*
@@ -66,14 +84,18 @@ public class TrashEntryServiceWrapper implements TrashEntryService,
 	* @param start the lower bound of the range of trash entries to return
 	* @param end the upper bound of the range of trash entries to return (not
 	inclusive)
-	* @return the range of matching trash entries
+	* @param obc the comparator to order the trash entries (optionally
+	<code>null</code>)
+	* @return the range of matching trash entries ordered by comparator
+	<code>obc</code>
 	* @throws SystemException if a system exception occurred
 	* @throws PrincipalException if a system exception occurred
 	*/
-	public java.lang.Object[] getEntries(long groupId, int start, int end)
+	public java.lang.Object[] getEntries(long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portal.security.auth.PrincipalException {
-		return _trashEntryService.getEntries(groupId, start, end);
+		return _trashEntryService.getEntries(groupId, start, end, obc);
 	}
 
 	/**

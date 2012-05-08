@@ -90,6 +90,10 @@ public class PasswordTrackerLocalServiceUtil {
 		return getService().deletePasswordTracker(passwordTracker);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -300,14 +304,10 @@ public class PasswordTrackerLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PasswordTrackerLocalService service) {
-		MethodCache.remove(PasswordTrackerLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PasswordTrackerLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PasswordTrackerLocalService.class);
 	}
 
 	private static PasswordTrackerLocalService _service;

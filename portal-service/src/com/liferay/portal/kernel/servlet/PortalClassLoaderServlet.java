@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.servlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
@@ -69,8 +70,8 @@ public class PortalClassLoaderServlet
 			String servletClass = _servletConfig.getInitParameter(
 				"servlet-class");
 
-			_servlet = (HttpServlet)portalClassLoader.loadClass(
-				servletClass).newInstance();
+			_servlet = (HttpServlet)InstanceFactory.newInstance(
+				portalClassLoader, servletClass);
 
 			_servlet.init(_servletConfig);
 		}

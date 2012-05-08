@@ -1121,11 +1121,10 @@ public class SCFrameworkVersionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SCFrameworkVersionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SCFrameworkVersionUtil.class,
-			"_persistence");
 	}
 
 	private static SCFrameworkVersionPersistence _persistence;

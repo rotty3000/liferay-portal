@@ -1192,11 +1192,10 @@ public class SCProductEntryUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SCProductEntryPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SCProductEntryUtil.class,
-			"_persistence");
 	}
 
 	private static SCProductEntryPersistence _persistence;

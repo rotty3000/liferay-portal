@@ -2209,11 +2209,10 @@ public class ResourcePermissionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ResourcePermissionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ResourcePermissionUtil.class,
-			"_persistence");
 	}
 
 	private static ResourcePermissionPersistence _persistence;

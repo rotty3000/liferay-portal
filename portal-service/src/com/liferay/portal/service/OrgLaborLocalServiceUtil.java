@@ -90,6 +90,10 @@ public class OrgLaborLocalServiceUtil {
 		return getService().deleteOrgLabor(orgLabor);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -306,14 +310,10 @@ public class OrgLaborLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(OrgLaborLocalService service) {
-		MethodCache.remove(OrgLaborLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(OrgLaborLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(OrgLaborLocalService.class);
 	}
 
 	private static OrgLaborLocalService _service;

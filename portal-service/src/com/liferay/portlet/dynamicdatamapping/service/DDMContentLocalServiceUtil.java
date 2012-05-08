@@ -90,6 +90,10 @@ public class DDMContentLocalServiceUtil {
 		return getService().deleteDDMContent(ddmContent);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -354,14 +358,10 @@ public class DDMContentLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DDMContentLocalService service) {
-		MethodCache.remove(DDMContentLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DDMContentLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DDMContentLocalService.class);
 	}
 
 	private static DDMContentLocalService _service;

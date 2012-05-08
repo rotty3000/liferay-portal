@@ -14,38 +14,19 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
-import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author     Brian Wing Shun Chan
+ * @deprecated
  */
 public class HookContextListener implements ServletContextListener {
 
-	public void contextDestroyed(ServletContextEvent event) {
-		ServletContext servletContext = event.getServletContext();
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		HotDeployUtil.fireUndeployEvent(
-			new HotDeployEvent(servletContext, contextClassLoader));
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 	}
 
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		ServletContext servletContext = servletContextEvent.getServletContext();
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		HotDeployUtil.fireDeployEvent(
-			new HotDeployEvent(servletContext, contextClassLoader));
 	}
 
 }

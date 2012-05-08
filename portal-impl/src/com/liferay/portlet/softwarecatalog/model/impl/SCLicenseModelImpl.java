@@ -35,7 +35,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the SCLicense service. Represents a row in the &quot;SCLicense&quot; database table, with each column mapped to a property of this class.
@@ -161,6 +163,59 @@ public class SCLicenseModelImpl extends BaseModelImpl<SCLicense>
 
 	public String getModelClassName() {
 		return SCLicense.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("licenseId", getLicenseId());
+		attributes.put("name", getName());
+		attributes.put("url", getUrl());
+		attributes.put("openSource", getOpenSource());
+		attributes.put("active", getActive());
+		attributes.put("recommended", getRecommended());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long licenseId = (Long)attributes.get("licenseId");
+
+		if (licenseId != null) {
+			setLicenseId(licenseId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String url = (String)attributes.get("url");
+
+		if (url != null) {
+			setUrl(url);
+		}
+
+		Boolean openSource = (Boolean)attributes.get("openSource");
+
+		if (openSource != null) {
+			setOpenSource(openSource);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
+
+		Boolean recommended = (Boolean)attributes.get("recommended");
+
+		if (recommended != null) {
+			setRecommended(recommended);
+		}
 	}
 
 	@JSON

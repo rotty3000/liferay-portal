@@ -485,10 +485,10 @@ public class ExpandoRowUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ExpandoRowPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ExpandoRowUtil.class, "_persistence");
 	}
 
 	private static ExpandoRowPersistence _persistence;

@@ -416,11 +416,10 @@ public class UserTrackerPathUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserTrackerPathPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserTrackerPathUtil.class,
-			"_persistence");
 	}
 
 	private static UserTrackerPathPersistence _persistence;

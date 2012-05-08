@@ -16,6 +16,9 @@ package com.liferay.portlet.announcements.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link AnnouncementsDelivery}.
@@ -38,6 +41,64 @@ public class AnnouncementsDeliveryWrapper implements AnnouncementsDelivery,
 
 	public String getModelClassName() {
 		return AnnouncementsDelivery.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("deliveryId", getDeliveryId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("type", getType());
+		attributes.put("email", getEmail());
+		attributes.put("sms", getSms());
+		attributes.put("website", getWebsite());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long deliveryId = (Long)attributes.get("deliveryId");
+
+		if (deliveryId != null) {
+			setDeliveryId(deliveryId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		Boolean email = (Boolean)attributes.get("email");
+
+		if (email != null) {
+			setEmail(email);
+		}
+
+		Boolean sms = (Boolean)attributes.get("sms");
+
+		if (sms != null) {
+			setSms(sms);
+		}
+
+		Boolean website = (Boolean)attributes.get("website");
+
+		if (website != null) {
+			setWebsite(website);
+		}
 	}
 
 	/**

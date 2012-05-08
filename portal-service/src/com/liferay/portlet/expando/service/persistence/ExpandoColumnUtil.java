@@ -888,11 +888,10 @@ public class ExpandoColumnUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ExpandoColumnPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ExpandoColumnUtil.class,
-			"_persistence");
 	}
 
 	private static ExpandoColumnPersistence _persistence;

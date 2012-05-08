@@ -405,10 +405,10 @@ public class ShardUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShardPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShardUtil.class, "_persistence");
 	}
 
 	private static ShardPersistence _persistence;

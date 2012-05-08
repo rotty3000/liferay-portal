@@ -84,6 +84,10 @@ public class PollsChoiceLocalServiceWrapper implements PollsChoiceLocalService,
 		return _pollsChoiceLocalService.deletePollsChoice(pollsChoice);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _pollsChoiceLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

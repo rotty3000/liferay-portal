@@ -90,6 +90,10 @@ public class ClusterGroupLocalServiceUtil {
 		return getService().deleteClusterGroup(clusterGroup);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -287,14 +291,10 @@ public class ClusterGroupLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ClusterGroupLocalService service) {
-		MethodCache.remove(ClusterGroupLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ClusterGroupLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ClusterGroupLocalService.class);
 	}
 
 	private static ClusterGroupLocalService _service;

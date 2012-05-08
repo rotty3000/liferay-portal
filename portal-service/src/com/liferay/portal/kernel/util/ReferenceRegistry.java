@@ -33,11 +33,18 @@ public class ReferenceRegistry {
 		try {
 			Field field = clazz.getDeclaredField(fieldName);
 
-			_referenceEntries.add(new ReferenceEntry(object, field));
+			ReferenceEntry referenceEntry = new ReferenceEntry(object, field);
+
+			_referenceEntries.add(referenceEntry);
+		}
+		catch (SecurityException se) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Not allowed to get field " + fieldName + " for " + clazz);
+			}
 		}
 		catch (Exception e) {
-			_log.error(
-				"Failed the get field " + fieldName + " for class " + clazz, e);
+			_log.error("Unable to get field " + fieldName + " for " + clazz);
 		}
 	}
 
@@ -46,11 +53,15 @@ public class ReferenceRegistry {
 	}
 
 	public static void registerReference(Field field) {
-		_referenceEntries.add(new ReferenceEntry(field));
+		ReferenceEntry referenceEntry = new ReferenceEntry(field);
+
+		_referenceEntries.add(referenceEntry);
 	}
 
 	public static void registerReference(Object object, Field field) {
-		_referenceEntries.add(new ReferenceEntry(object, field));
+		ReferenceEntry referenceEntry = new ReferenceEntry(object, field);
+
+		_referenceEntries.add(referenceEntry);
 	}
 
 	public static void releaseReferences() {

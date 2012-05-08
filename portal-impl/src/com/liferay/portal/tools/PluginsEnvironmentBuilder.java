@@ -107,13 +107,6 @@ public class PluginsEnvironmentBuilder {
 
 		File libDir = new File(propertiesFile.getParent() + "/lib");
 
-		String libDirPath = StringUtil.replace(
-			libDir.getPath(), StringPool.BACK_SLASH, StringPool.SLASH);
-
-		if (libDirPath.contains("/themes/")) {
-			return;
-		}
-
 		File projectDir = new File(propertiesFile.getParent() + "/../..");
 
 		Properties properties = new Properties();
@@ -136,6 +129,9 @@ public class PluginsEnvironmentBuilder {
 		Collections.sort(jars);
 
 		writeEclipseFiles(libDir, projectDir, dependencyJars);
+
+		String libDirPath = StringUtil.replace(
+			libDir.getPath(), StringPool.BACK_SLASH, StringPool.SLASH);
 
 		List<String> ignores = ListUtil.fromFile(
 			libDir.getCanonicalPath() + "/../.gitignore");

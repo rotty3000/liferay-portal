@@ -36,7 +36,7 @@ LinkedHashMap organizationParams = new LinkedHashMap();
 List<Organization> organizations = new ArrayList<Organization>();
 
 if (filterManageableOrganizations) {
-	organizations.addAll(user.getOrganizations());
+	organizations = user.getOrganizations(true);
 }
 
 if (organizationId != OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID) {
@@ -189,7 +189,7 @@ if (filterManageableOrganizations) {
 			<liferay-util:buffer var="organizationsTree">
 
 				<%
-				SearchContainer organizationSearch = new OrganizationSearch(renderRequest, currentURLObj);
+				SearchContainer organizationSearch = new OrganizationSearch(renderRequest, "cur1", currentURLObj);
 
 				organizationSearch.setRowChecker(new RowChecker(renderResponse));
 				%>
@@ -329,10 +329,10 @@ if (filterManageableOrganizations) {
 							String organizationsTitle = null;
 
 							if (Validator.isNotNull(keywords)){
-								organizationsTitle = LanguageUtil.get(pageContext,"organizations");
+								organizationsTitle = LanguageUtil.get(pageContext, "organizations");
 							}
 							else if (organization == null) {
-								organizationsTitle = LanguageUtil.get(pageContext,"top-level-organizations");
+								organizationsTitle = LanguageUtil.get(pageContext, filterManageableOrganizations ? "my-organizations" : "top-level-organizations");
 							}
 							else if (organizationsCount == 1) {
 								organizationsTitle = LanguageUtil.format(pageContext, "x-suborganization", String.valueOf(organizationsCount));

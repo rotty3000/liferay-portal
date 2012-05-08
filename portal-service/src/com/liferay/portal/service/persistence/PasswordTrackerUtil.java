@@ -412,11 +412,10 @@ public class PasswordTrackerUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(PasswordTrackerPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(PasswordTrackerUtil.class,
-			"_persistence");
 	}
 
 	private static PasswordTrackerPersistence _persistence;

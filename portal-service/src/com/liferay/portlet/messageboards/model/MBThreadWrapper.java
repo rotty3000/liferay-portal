@@ -16,6 +16,10 @@ package com.liferay.portlet.messageboards.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link MBThread}.
@@ -36,6 +40,127 @@ public class MBThreadWrapper implements MBThread, ModelWrapper<MBThread> {
 
 	public String getModelClassName() {
 		return MBThread.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("threadId", getThreadId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("categoryId", getCategoryId());
+		attributes.put("rootMessageId", getRootMessageId());
+		attributes.put("rootMessageUserId", getRootMessageUserId());
+		attributes.put("messageCount", getMessageCount());
+		attributes.put("viewCount", getViewCount());
+		attributes.put("lastPostByUserId", getLastPostByUserId());
+		attributes.put("lastPostDate", getLastPostDate());
+		attributes.put("priority", getPriority());
+		attributes.put("question", getQuestion());
+		attributes.put("status", getStatus());
+		attributes.put("statusByUserId", getStatusByUserId());
+		attributes.put("statusByUserName", getStatusByUserName());
+		attributes.put("statusDate", getStatusDate());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long threadId = (Long)attributes.get("threadId");
+
+		if (threadId != null) {
+			setThreadId(threadId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long categoryId = (Long)attributes.get("categoryId");
+
+		if (categoryId != null) {
+			setCategoryId(categoryId);
+		}
+
+		Long rootMessageId = (Long)attributes.get("rootMessageId");
+
+		if (rootMessageId != null) {
+			setRootMessageId(rootMessageId);
+		}
+
+		Long rootMessageUserId = (Long)attributes.get("rootMessageUserId");
+
+		if (rootMessageUserId != null) {
+			setRootMessageUserId(rootMessageUserId);
+		}
+
+		Integer messageCount = (Integer)attributes.get("messageCount");
+
+		if (messageCount != null) {
+			setMessageCount(messageCount);
+		}
+
+		Integer viewCount = (Integer)attributes.get("viewCount");
+
+		if (viewCount != null) {
+			setViewCount(viewCount);
+		}
+
+		Long lastPostByUserId = (Long)attributes.get("lastPostByUserId");
+
+		if (lastPostByUserId != null) {
+			setLastPostByUserId(lastPostByUserId);
+		}
+
+		Date lastPostDate = (Date)attributes.get("lastPostDate");
+
+		if (lastPostDate != null) {
+			setLastPostDate(lastPostDate);
+		}
+
+		Double priority = (Double)attributes.get("priority");
+
+		if (priority != null) {
+			setPriority(priority);
+		}
+
+		Boolean question = (Boolean)attributes.get("question");
+
+		if (question != null) {
+			setQuestion(question);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		Long statusByUserId = (Long)attributes.get("statusByUserId");
+
+		if (statusByUserId != null) {
+			setStatusByUserId(statusByUserId);
+		}
+
+		String statusByUserName = (String)attributes.get("statusByUserName");
+
+		if (statusByUserName != null) {
+			setStatusByUserName(statusByUserName);
+		}
+
+		Date statusDate = (Date)attributes.get("statusDate");
+
+		if (statusDate != null) {
+			setStatusDate(statusDate);
+		}
 	}
 
 	/**

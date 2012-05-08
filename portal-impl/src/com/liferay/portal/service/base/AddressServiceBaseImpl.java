@@ -26,6 +26,7 @@ import com.liferay.portal.service.AccountLocalService;
 import com.liferay.portal.service.AccountService;
 import com.liferay.portal.service.AddressLocalService;
 import com.liferay.portal.service.AddressService;
+import com.liferay.portal.service.BaseServiceImpl;
 import com.liferay.portal.service.BrowserTrackerLocalService;
 import com.liferay.portal.service.CMISRepositoryLocalService;
 import com.liferay.portal.service.ClassNameLocalService;
@@ -215,7 +216,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.AddressServiceUtil
  * @generated
  */
-public abstract class AddressServiceBaseImpl extends PrincipalBean
+public abstract class AddressServiceBaseImpl extends BaseServiceImpl
 	implements AddressService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -3567,12 +3568,6 @@ public abstract class AddressServiceBaseImpl extends PrincipalBean
 	 */
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
-	}
-
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
 	}
 
 	protected Class<?> getModelClass() {

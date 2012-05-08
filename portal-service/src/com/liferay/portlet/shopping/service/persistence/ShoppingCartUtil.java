@@ -627,11 +627,10 @@ public class ShoppingCartUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShoppingCartPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShoppingCartUtil.class,
-			"_persistence");
 	}
 
 	private static ShoppingCartPersistence _persistence;

@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link BrowserTracker}.
@@ -35,6 +38,36 @@ public class BrowserTrackerWrapper implements BrowserTracker,
 
 	public String getModelClassName() {
 		return BrowserTracker.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("browserTrackerId", getBrowserTrackerId());
+		attributes.put("userId", getUserId());
+		attributes.put("browserKey", getBrowserKey());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long browserTrackerId = (Long)attributes.get("browserTrackerId");
+
+		if (browserTrackerId != null) {
+			setBrowserTrackerId(browserTrackerId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long browserKey = (Long)attributes.get("browserKey");
+
+		if (browserKey != null) {
+			setBrowserKey(browserKey);
+		}
 	}
 
 	/**

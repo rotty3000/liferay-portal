@@ -79,6 +79,10 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.deleteAccount(account);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _accountLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

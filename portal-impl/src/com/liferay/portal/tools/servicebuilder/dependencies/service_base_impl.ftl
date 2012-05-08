@@ -7,6 +7,7 @@ import ${beanLocatorUtil};
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -18,9 +19,9 @@ import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.Base${sessionTypeName}ServiceImpl;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistry;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
-import com.liferay.portal.service.base.PrincipalBean;
 
 import java.io.Serializable;
 
@@ -77,7 +78,7 @@ import javax.sql.DataSource;
  * @see ${packagePath}.service.${entity.name}LocalServiceUtil
  * @generated
  */
-	public abstract class ${entity.name}LocalServiceBaseImpl implements ${entity.name}LocalService, IdentifiableBean {
+	public abstract class ${entity.name}LocalServiceBaseImpl extends BaseLocalServiceImpl implements ${entity.name}LocalService, IdentifiableBean {
 
 		/*
 		 * NOTE FOR DEVELOPERS:
@@ -97,7 +98,7 @@ import javax.sql.DataSource;
  * @see ${packagePath}.service.${entity.name}ServiceUtil
  * @generated
  */
-	public abstract class ${entity.name}ServiceBaseImpl extends PrincipalBean implements ${entity.name}Service, IdentifiableBean {
+	public abstract class ${entity.name}ServiceBaseImpl extends BaseServiceImpl implements ${entity.name}Service, IdentifiableBean {
 
 		/*
 		 * NOTE FOR DEVELOPERS:
@@ -179,6 +180,10 @@ import javax.sql.DataSource;
 		@Indexable(type = IndexableType.DELETE)
 		public ${entity.name} delete${entity.name}(${entity.name} ${entity.varName}) throws ${stringUtil.merge(serviceBaseExceptions)} {
 			return ${entity.varName}Persistence.remove(${entity.varName});
+		}
+
+		public DynamicQuery dynamicQuery() {
+			return DynamicQueryFactoryUtil.forClass(${entity.name}.class, getClassLoader());
 		}
 
 		/**
@@ -502,11 +507,14 @@ import javax.sql.DataSource;
 		_beanIdentifier = beanIdentifier;
 	}
 
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
+	<#if pluginName != "">
+		public Object invokeMethod(
+				String name, String[] parameterTypes, Object[] arguments)
+			throws Throwable {
 
-		return clazz.getClassLoader();
-	}
+			return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+		}
+	</#if>
 
 	<#if entity.hasColumns()>
 		protected Class<?> getModelClass() {
@@ -570,5 +578,9 @@ import javax.sql.DataSource;
 	</#if>
 
 	private String _beanIdentifier;
+
+	<#if pluginName != "">
+		private ${entity.name}${sessionTypeName}ServiceClpInvoker _clpInvoker = new ${entity.name}${sessionTypeName}ServiceClpInvoker();
+	</#if>
 
 }

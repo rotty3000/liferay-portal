@@ -90,6 +90,10 @@ public class PortletItemLocalServiceUtil {
 		return getService().deletePortletItem(portletItem);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -314,14 +318,10 @@ public class PortletItemLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PortletItemLocalService service) {
-		MethodCache.remove(PortletItemLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PortletItemLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PortletItemLocalService.class);
 	}
 
 	private static PortletItemLocalService _service;

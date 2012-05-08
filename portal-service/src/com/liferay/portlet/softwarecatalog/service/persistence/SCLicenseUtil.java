@@ -972,10 +972,10 @@ public class SCLicenseUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SCLicensePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SCLicenseUtil.class, "_persistence");
 	}
 
 	private static SCLicensePersistence _persistence;

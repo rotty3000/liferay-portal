@@ -864,11 +864,10 @@ public class UserNotificationEventUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(UserNotificationEventPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(UserNotificationEventUtil.class,
-			"_persistence");
 	}
 
 	private static UserNotificationEventPersistence _persistence;

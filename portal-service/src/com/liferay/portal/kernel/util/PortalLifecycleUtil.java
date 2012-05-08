@@ -25,7 +25,9 @@ public class PortalLifecycleUtil {
 	public static void flushDestroys() {
 		_inFlushDestroys = true;
 
-		for (PortalLifecycle portalLifecycle : _portalLifecyclesDestroy) {
+		for (int i = _portalLifecyclesDestroy.size() - 1; i >= 0; i--) {
+			PortalLifecycle portalLifecycle = _portalLifecyclesDestroy.get(i);
+
 			portalLifecycle.portalDestroy();
 		}
 

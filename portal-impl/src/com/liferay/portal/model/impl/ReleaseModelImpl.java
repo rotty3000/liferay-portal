@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the Release service. Represents a row in the &quot;Release_&quot; database table, with each column mapped to a property of this class.
@@ -108,6 +110,80 @@ public class ReleaseModelImpl extends BaseModelImpl<Release>
 
 	public String getModelClassName() {
 		return Release.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("releaseId", getReleaseId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("servletContextName", getServletContextName());
+		attributes.put("buildNumber", getBuildNumber());
+		attributes.put("buildDate", getBuildDate());
+		attributes.put("verified", getVerified());
+		attributes.put("state", getState());
+		attributes.put("testString", getTestString());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long releaseId = (Long)attributes.get("releaseId");
+
+		if (releaseId != null) {
+			setReleaseId(releaseId);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String servletContextName = (String)attributes.get("servletContextName");
+
+		if (servletContextName != null) {
+			setServletContextName(servletContextName);
+		}
+
+		Integer buildNumber = (Integer)attributes.get("buildNumber");
+
+		if (buildNumber != null) {
+			setBuildNumber(buildNumber);
+		}
+
+		Date buildDate = (Date)attributes.get("buildDate");
+
+		if (buildDate != null) {
+			setBuildDate(buildDate);
+		}
+
+		Boolean verified = (Boolean)attributes.get("verified");
+
+		if (verified != null) {
+			setVerified(verified);
+		}
+
+		Integer state = (Integer)attributes.get("state");
+
+		if (state != null) {
+			setState(state);
+		}
+
+		String testString = (String)attributes.get("testString");
+
+		if (testString != null) {
+			setTestString(testString);
+		}
 	}
 
 	public long getReleaseId() {

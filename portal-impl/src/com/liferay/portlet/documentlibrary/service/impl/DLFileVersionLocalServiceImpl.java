@@ -63,6 +63,12 @@ public class DLFileVersionLocalServiceImpl
 		}
 	}
 
+	public int getFileVersionsCount(long fileEntryId, int status)
+		throws SystemException {
+
+		return dlFileVersionPersistence.countByF_S(fileEntryId, status);
+	}
+
 	public DLFileVersion getLatestFileVersion(
 			long fileEntryId, boolean excludeWorkingCopy)
 		throws PortalException, SystemException {

@@ -823,11 +823,10 @@ public class SubscriptionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SubscriptionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SubscriptionUtil.class,
-			"_persistence");
 	}
 
 	private static SubscriptionPersistence _persistence;

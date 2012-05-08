@@ -16,6 +16,10 @@ package com.liferay.portlet.shopping.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ShoppingItem}.
@@ -37,6 +41,254 @@ public class ShoppingItemWrapper implements ShoppingItem,
 
 	public String getModelClassName() {
 		return ShoppingItem.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("itemId", getItemId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("categoryId", getCategoryId());
+		attributes.put("sku", getSku());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("properties", getProperties());
+		attributes.put("fields", getFields());
+		attributes.put("fieldsQuantities", getFieldsQuantities());
+		attributes.put("minQuantity", getMinQuantity());
+		attributes.put("maxQuantity", getMaxQuantity());
+		attributes.put("price", getPrice());
+		attributes.put("discount", getDiscount());
+		attributes.put("taxable", getTaxable());
+		attributes.put("shipping", getShipping());
+		attributes.put("useShippingFormula", getUseShippingFormula());
+		attributes.put("requiresShipping", getRequiresShipping());
+		attributes.put("stockQuantity", getStockQuantity());
+		attributes.put("featured", getFeatured());
+		attributes.put("sale", getSale());
+		attributes.put("smallImage", getSmallImage());
+		attributes.put("smallImageId", getSmallImageId());
+		attributes.put("smallImageURL", getSmallImageURL());
+		attributes.put("mediumImage", getMediumImage());
+		attributes.put("mediumImageId", getMediumImageId());
+		attributes.put("mediumImageURL", getMediumImageURL());
+		attributes.put("largeImage", getLargeImage());
+		attributes.put("largeImageId", getLargeImageId());
+		attributes.put("largeImageURL", getLargeImageURL());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long itemId = (Long)attributes.get("itemId");
+
+		if (itemId != null) {
+			setItemId(itemId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long categoryId = (Long)attributes.get("categoryId");
+
+		if (categoryId != null) {
+			setCategoryId(categoryId);
+		}
+
+		String sku = (String)attributes.get("sku");
+
+		if (sku != null) {
+			setSku(sku);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String properties = (String)attributes.get("properties");
+
+		if (properties != null) {
+			setProperties(properties);
+		}
+
+		Boolean fields = (Boolean)attributes.get("fields");
+
+		if (fields != null) {
+			setFields(fields);
+		}
+
+		String fieldsQuantities = (String)attributes.get("fieldsQuantities");
+
+		if (fieldsQuantities != null) {
+			setFieldsQuantities(fieldsQuantities);
+		}
+
+		Integer minQuantity = (Integer)attributes.get("minQuantity");
+
+		if (minQuantity != null) {
+			setMinQuantity(minQuantity);
+		}
+
+		Integer maxQuantity = (Integer)attributes.get("maxQuantity");
+
+		if (maxQuantity != null) {
+			setMaxQuantity(maxQuantity);
+		}
+
+		Double price = (Double)attributes.get("price");
+
+		if (price != null) {
+			setPrice(price);
+		}
+
+		Double discount = (Double)attributes.get("discount");
+
+		if (discount != null) {
+			setDiscount(discount);
+		}
+
+		Boolean taxable = (Boolean)attributes.get("taxable");
+
+		if (taxable != null) {
+			setTaxable(taxable);
+		}
+
+		Double shipping = (Double)attributes.get("shipping");
+
+		if (shipping != null) {
+			setShipping(shipping);
+		}
+
+		Boolean useShippingFormula = (Boolean)attributes.get(
+				"useShippingFormula");
+
+		if (useShippingFormula != null) {
+			setUseShippingFormula(useShippingFormula);
+		}
+
+		Boolean requiresShipping = (Boolean)attributes.get("requiresShipping");
+
+		if (requiresShipping != null) {
+			setRequiresShipping(requiresShipping);
+		}
+
+		Integer stockQuantity = (Integer)attributes.get("stockQuantity");
+
+		if (stockQuantity != null) {
+			setStockQuantity(stockQuantity);
+		}
+
+		Boolean featured = (Boolean)attributes.get("featured");
+
+		if (featured != null) {
+			setFeatured(featured);
+		}
+
+		Boolean sale = (Boolean)attributes.get("sale");
+
+		if (sale != null) {
+			setSale(sale);
+		}
+
+		Boolean smallImage = (Boolean)attributes.get("smallImage");
+
+		if (smallImage != null) {
+			setSmallImage(smallImage);
+		}
+
+		Long smallImageId = (Long)attributes.get("smallImageId");
+
+		if (smallImageId != null) {
+			setSmallImageId(smallImageId);
+		}
+
+		String smallImageURL = (String)attributes.get("smallImageURL");
+
+		if (smallImageURL != null) {
+			setSmallImageURL(smallImageURL);
+		}
+
+		Boolean mediumImage = (Boolean)attributes.get("mediumImage");
+
+		if (mediumImage != null) {
+			setMediumImage(mediumImage);
+		}
+
+		Long mediumImageId = (Long)attributes.get("mediumImageId");
+
+		if (mediumImageId != null) {
+			setMediumImageId(mediumImageId);
+		}
+
+		String mediumImageURL = (String)attributes.get("mediumImageURL");
+
+		if (mediumImageURL != null) {
+			setMediumImageURL(mediumImageURL);
+		}
+
+		Boolean largeImage = (Boolean)attributes.get("largeImage");
+
+		if (largeImage != null) {
+			setLargeImage(largeImage);
+		}
+
+		Long largeImageId = (Long)attributes.get("largeImageId");
+
+		if (largeImageId != null) {
+			setLargeImageId(largeImageId);
+		}
+
+		String largeImageURL = (String)attributes.get("largeImageURL");
+
+		if (largeImageURL != null) {
+			setLargeImageURL(largeImageURL);
+		}
 	}
 
 	/**

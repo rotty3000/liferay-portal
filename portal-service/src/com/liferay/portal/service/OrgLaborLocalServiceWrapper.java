@@ -80,6 +80,10 @@ public class OrgLaborLocalServiceWrapper implements OrgLaborLocalService,
 		return _orgLaborLocalService.deleteOrgLabor(orgLabor);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _orgLaborLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

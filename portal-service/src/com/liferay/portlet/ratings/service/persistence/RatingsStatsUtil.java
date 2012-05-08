@@ -346,11 +346,10 @@ public class RatingsStatsUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(RatingsStatsPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(RatingsStatsUtil.class,
-			"_persistence");
 	}
 
 	private static RatingsStatsPersistence _persistence;

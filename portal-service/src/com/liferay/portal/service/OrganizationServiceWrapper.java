@@ -30,6 +30,24 @@ public class OrganizationServiceWrapper implements OrganizationService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _organizationService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_organizationService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds the organizations to the group.
 	*
 	* @param groupId the primary key of the group

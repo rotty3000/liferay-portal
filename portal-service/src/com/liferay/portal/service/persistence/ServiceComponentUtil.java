@@ -494,11 +494,10 @@ public class ServiceComponentUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ServiceComponentPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ServiceComponentUtil.class,
-			"_persistence");
 	}
 
 	private static ServiceComponentPersistence _persistence;

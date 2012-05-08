@@ -15,7 +15,6 @@
 package com.liferay.portal.tools.deploy;
 
 import com.liferay.portal.kernel.plugin.PluginPackage;
-import com.liferay.portal.kernel.servlet.ThemeContextListener;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -93,11 +92,6 @@ public class ThemeDeployer extends BaseDeployer {
 		sb.append(getSpeedFiltersContent(srcFile));
 
 		return sb.toString();
-	}
-
-	@Override
-	public Class<?> getPluginContextListenerClass() {
-		return ThemeContextListener.class;
 	}
 
 	@Override

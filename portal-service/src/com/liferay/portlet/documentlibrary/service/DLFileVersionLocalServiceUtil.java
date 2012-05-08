@@ -90,6 +90,10 @@ public class DLFileVersionLocalServiceUtil {
 		return getService().deleteDLFileVersion(dlFileVersion);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -306,6 +310,11 @@ public class DLFileVersionLocalServiceUtil {
 		return getService().getFileVersions(fileEntryId, status);
 	}
 
+	public static int getFileVersionsCount(long fileEntryId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getFileVersionsCount(fileEntryId, status);
+	}
+
 	public static com.liferay.portlet.documentlibrary.model.DLFileVersion getLatestFileVersion(
 		long fileEntryId, boolean excludeWorkingCopy)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -332,14 +341,10 @@ public class DLFileVersionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLFileVersionLocalService service) {
-		MethodCache.remove(DLFileVersionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLFileVersionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLFileVersionLocalService.class);
 	}
 
 	private static DLFileVersionLocalService _service;

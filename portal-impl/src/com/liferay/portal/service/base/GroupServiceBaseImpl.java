@@ -26,6 +26,7 @@ import com.liferay.portal.service.AccountLocalService;
 import com.liferay.portal.service.AccountService;
 import com.liferay.portal.service.AddressLocalService;
 import com.liferay.portal.service.AddressService;
+import com.liferay.portal.service.BaseServiceImpl;
 import com.liferay.portal.service.BrowserTrackerLocalService;
 import com.liferay.portal.service.CMISRepositoryLocalService;
 import com.liferay.portal.service.ClassNameLocalService;
@@ -270,6 +271,9 @@ import com.liferay.portlet.shopping.service.persistence.ShoppingCouponFinder;
 import com.liferay.portlet.shopping.service.persistence.ShoppingCouponPersistence;
 import com.liferay.portlet.shopping.service.persistence.ShoppingOrderFinder;
 import com.liferay.portlet.shopping.service.persistence.ShoppingOrderPersistence;
+import com.liferay.portlet.social.service.SocialActivitySettingLocalService;
+import com.liferay.portlet.social.service.SocialActivitySettingService;
+import com.liferay.portlet.social.service.persistence.SocialActivitySettingPersistence;
 import com.liferay.portlet.softwarecatalog.service.SCFrameworkVersionLocalService;
 import com.liferay.portlet.softwarecatalog.service.SCFrameworkVersionService;
 import com.liferay.portlet.softwarecatalog.service.SCProductEntryLocalService;
@@ -294,7 +298,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.service.GroupServiceUtil
  * @generated
  */
-public abstract class GroupServiceBaseImpl extends PrincipalBean
+public abstract class GroupServiceBaseImpl extends BaseServiceImpl
 	implements GroupService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -4918,6 +4922,63 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	}
 
 	/**
+	 * Returns the social activity setting local service.
+	 *
+	 * @return the social activity setting local service
+	 */
+	public SocialActivitySettingLocalService getSocialActivitySettingLocalService() {
+		return socialActivitySettingLocalService;
+	}
+
+	/**
+	 * Sets the social activity setting local service.
+	 *
+	 * @param socialActivitySettingLocalService the social activity setting local service
+	 */
+	public void setSocialActivitySettingLocalService(
+		SocialActivitySettingLocalService socialActivitySettingLocalService) {
+		this.socialActivitySettingLocalService = socialActivitySettingLocalService;
+	}
+
+	/**
+	 * Returns the social activity setting remote service.
+	 *
+	 * @return the social activity setting remote service
+	 */
+	public SocialActivitySettingService getSocialActivitySettingService() {
+		return socialActivitySettingService;
+	}
+
+	/**
+	 * Sets the social activity setting remote service.
+	 *
+	 * @param socialActivitySettingService the social activity setting remote service
+	 */
+	public void setSocialActivitySettingService(
+		SocialActivitySettingService socialActivitySettingService) {
+		this.socialActivitySettingService = socialActivitySettingService;
+	}
+
+	/**
+	 * Returns the social activity setting persistence.
+	 *
+	 * @return the social activity setting persistence
+	 */
+	public SocialActivitySettingPersistence getSocialActivitySettingPersistence() {
+		return socialActivitySettingPersistence;
+	}
+
+	/**
+	 * Sets the social activity setting persistence.
+	 *
+	 * @param socialActivitySettingPersistence the social activity setting persistence
+	 */
+	public void setSocialActivitySettingPersistence(
+		SocialActivitySettingPersistence socialActivitySettingPersistence) {
+		this.socialActivitySettingPersistence = socialActivitySettingPersistence;
+	}
+
+	/**
 	 * Returns the s c framework version local service.
 	 *
 	 * @return the s c framework version local service
@@ -5108,12 +5169,6 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	 */
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
-	}
-
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
 	}
 
 	protected Class<?> getModelClass() {
@@ -5639,6 +5694,12 @@ public abstract class GroupServiceBaseImpl extends PrincipalBean
 	protected ShoppingOrderPersistence shoppingOrderPersistence;
 	@BeanReference(type = ShoppingOrderFinder.class)
 	protected ShoppingOrderFinder shoppingOrderFinder;
+	@BeanReference(type = SocialActivitySettingLocalService.class)
+	protected SocialActivitySettingLocalService socialActivitySettingLocalService;
+	@BeanReference(type = SocialActivitySettingService.class)
+	protected SocialActivitySettingService socialActivitySettingService;
+	@BeanReference(type = SocialActivitySettingPersistence.class)
+	protected SocialActivitySettingPersistence socialActivitySettingPersistence;
 	@BeanReference(type = SCFrameworkVersionLocalService.class)
 	protected SCFrameworkVersionLocalService scFrameworkVersionLocalService;
 	@BeanReference(type = SCFrameworkVersionService.class)

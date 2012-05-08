@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ResourceAction}.
@@ -35,6 +38,43 @@ public class ResourceActionWrapper implements ResourceAction,
 
 	public String getModelClassName() {
 		return ResourceAction.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("resourceActionId", getResourceActionId());
+		attributes.put("name", getName());
+		attributes.put("actionId", getActionId());
+		attributes.put("bitwiseValue", getBitwiseValue());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long resourceActionId = (Long)attributes.get("resourceActionId");
+
+		if (resourceActionId != null) {
+			setResourceActionId(resourceActionId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String actionId = (String)attributes.get("actionId");
+
+		if (actionId != null) {
+			setActionId(actionId);
+		}
+
+		Long bitwiseValue = (Long)attributes.get("bitwiseValue");
+
+		if (bitwiseValue != null) {
+			setBitwiseValue(bitwiseValue);
+		}
 	}
 
 	/**

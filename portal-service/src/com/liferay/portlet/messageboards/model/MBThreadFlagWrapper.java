@@ -16,6 +16,10 @@ package com.liferay.portlet.messageboards.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link MBThreadFlag}.
@@ -37,6 +41,43 @@ public class MBThreadFlagWrapper implements MBThreadFlag,
 
 	public String getModelClassName() {
 		return MBThreadFlag.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("threadFlagId", getThreadFlagId());
+		attributes.put("userId", getUserId());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("threadId", getThreadId());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long threadFlagId = (Long)attributes.get("threadFlagId");
+
+		if (threadFlagId != null) {
+			setThreadFlagId(threadFlagId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long threadId = (Long)attributes.get("threadId");
+
+		if (threadId != null) {
+			setThreadId(threadId);
+		}
 	}
 
 	/**

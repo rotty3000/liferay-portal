@@ -32,6 +32,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the UserTrackerPath service. Represents a row in the &quot;UserTrackerPath&quot; database table, with each column mapped to a property of this class.
@@ -103,6 +105,45 @@ public class UserTrackerPathModelImpl extends BaseModelImpl<UserTrackerPath>
 
 	public String getModelClassName() {
 		return UserTrackerPath.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("userTrackerPathId", getUserTrackerPathId());
+		attributes.put("userTrackerId", getUserTrackerId());
+		attributes.put("path", getPath());
+		attributes.put("pathDate", getPathDate());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long userTrackerPathId = (Long)attributes.get("userTrackerPathId");
+
+		if (userTrackerPathId != null) {
+			setUserTrackerPathId(userTrackerPathId);
+		}
+
+		Long userTrackerId = (Long)attributes.get("userTrackerId");
+
+		if (userTrackerId != null) {
+			setUserTrackerId(userTrackerId);
+		}
+
+		String path = (String)attributes.get("path");
+
+		if (path != null) {
+			setPath(path);
+		}
+
+		Date pathDate = (Date)attributes.get("pathDate");
+
+		if (pathDate != null) {
+			setPathDate(pathDate);
+		}
 	}
 
 	public long getUserTrackerPathId() {

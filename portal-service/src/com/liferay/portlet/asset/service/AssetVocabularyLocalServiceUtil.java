@@ -90,6 +90,10 @@ public class AssetVocabularyLocalServiceUtil {
 		return getService().deleteAssetVocabulary(assetVocabulary);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -452,14 +456,10 @@ public class AssetVocabularyLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AssetVocabularyLocalService service) {
-		MethodCache.remove(AssetVocabularyLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AssetVocabularyLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AssetVocabularyLocalService.class);
 	}
 
 	private static AssetVocabularyLocalService _service;

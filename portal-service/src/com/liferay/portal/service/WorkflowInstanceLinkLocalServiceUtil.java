@@ -92,6 +92,10 @@ public class WorkflowInstanceLinkLocalServiceUtil {
 		return getService().deleteWorkflowInstanceLink(workflowInstanceLink);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -370,14 +374,10 @@ public class WorkflowInstanceLinkLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(WorkflowInstanceLinkLocalService service) {
-		MethodCache.remove(WorkflowInstanceLinkLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(WorkflowInstanceLinkLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(WorkflowInstanceLinkLocalService.class);
 	}
 
 	private static WorkflowInstanceLinkLocalService _service;

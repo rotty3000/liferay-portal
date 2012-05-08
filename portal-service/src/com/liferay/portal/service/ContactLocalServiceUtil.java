@@ -88,6 +88,10 @@ public class ContactLocalServiceUtil {
 		return getService().deleteContact(contact);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -326,14 +330,10 @@ public class ContactLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ContactLocalService service) {
-		MethodCache.remove(ContactLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ContactLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ContactLocalService.class);
 	}
 
 	private static ContactLocalService _service;

@@ -16,6 +16,9 @@ package com.liferay.portlet.asset.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link AssetTagStats}.
@@ -37,6 +40,43 @@ public class AssetTagStatsWrapper implements AssetTagStats,
 
 	public String getModelClassName() {
 		return AssetTagStats.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("tagStatsId", getTagStatsId());
+		attributes.put("tagId", getTagId());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("assetCount", getAssetCount());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long tagStatsId = (Long)attributes.get("tagStatsId");
+
+		if (tagStatsId != null) {
+			setTagStatsId(tagStatsId);
+		}
+
+		Long tagId = (Long)attributes.get("tagId");
+
+		if (tagId != null) {
+			setTagId(tagId);
+		}
+
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Integer assetCount = (Integer)attributes.get("assetCount");
+
+		if (assetCount != null) {
+			setAssetCount(assetCount);
+		}
 	}
 
 	/**

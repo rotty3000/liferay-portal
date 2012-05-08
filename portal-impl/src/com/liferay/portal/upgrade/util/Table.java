@@ -175,13 +175,11 @@ public class Table {
 				"Starting backup of " + _tableName + " to " + tempFileName);
 		}
 
-		String selectSQL = getSelectSQL();
-
 		UnsyncBufferedWriter unsyncBufferedWriter = new UnsyncBufferedWriter(
 			new FileWriter(tempFileName));
 
 		try {
-			ps = con.prepareStatement(selectSQL);
+			ps = getSelectPreparedStatement(con);
 
 			rs = ps.executeQuery();
 
@@ -319,6 +317,12 @@ public class Table {
 
 	public int[] getOrder() {
 		return _order;
+	}
+
+	public PreparedStatement getSelectPreparedStatement(Connection con)
+		throws Exception {
+
+		return con.prepareStatement(getSelectSQL());
 	}
 
 	public String getSelectSQL() throws Exception {

@@ -681,11 +681,10 @@ public class SocialActivityLimitUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SocialActivityLimitPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SocialActivityLimitUtil.class,
-			"_persistence");
 	}
 
 	private static SocialActivityLimitPersistence _persistence;

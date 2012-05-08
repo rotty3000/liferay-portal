@@ -14,6 +14,10 @@
 
 package com.liferay.portal.model;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link PasswordPolicy}.
@@ -35,6 +39,240 @@ public class PasswordPolicyWrapper implements PasswordPolicy,
 
 	public String getModelClassName() {
 		return PasswordPolicy.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("passwordPolicyId", getPasswordPolicyId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("defaultPolicy", getDefaultPolicy());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("changeable", getChangeable());
+		attributes.put("changeRequired", getChangeRequired());
+		attributes.put("minAge", getMinAge());
+		attributes.put("checkSyntax", getCheckSyntax());
+		attributes.put("allowDictionaryWords", getAllowDictionaryWords());
+		attributes.put("minAlphanumeric", getMinAlphanumeric());
+		attributes.put("minLength", getMinLength());
+		attributes.put("minLowerCase", getMinLowerCase());
+		attributes.put("minNumbers", getMinNumbers());
+		attributes.put("minSymbols", getMinSymbols());
+		attributes.put("minUpperCase", getMinUpperCase());
+		attributes.put("history", getHistory());
+		attributes.put("historyCount", getHistoryCount());
+		attributes.put("expireable", getExpireable());
+		attributes.put("maxAge", getMaxAge());
+		attributes.put("warningTime", getWarningTime());
+		attributes.put("graceLimit", getGraceLimit());
+		attributes.put("lockout", getLockout());
+		attributes.put("maxFailure", getMaxFailure());
+		attributes.put("lockoutDuration", getLockoutDuration());
+		attributes.put("requireUnlock", getRequireUnlock());
+		attributes.put("resetFailureCount", getResetFailureCount());
+		attributes.put("resetTicketMaxAge", getResetTicketMaxAge());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long passwordPolicyId = (Long)attributes.get("passwordPolicyId");
+
+		if (passwordPolicyId != null) {
+			setPasswordPolicyId(passwordPolicyId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Boolean defaultPolicy = (Boolean)attributes.get("defaultPolicy");
+
+		if (defaultPolicy != null) {
+			setDefaultPolicy(defaultPolicy);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Boolean changeable = (Boolean)attributes.get("changeable");
+
+		if (changeable != null) {
+			setChangeable(changeable);
+		}
+
+		Boolean changeRequired = (Boolean)attributes.get("changeRequired");
+
+		if (changeRequired != null) {
+			setChangeRequired(changeRequired);
+		}
+
+		Long minAge = (Long)attributes.get("minAge");
+
+		if (minAge != null) {
+			setMinAge(minAge);
+		}
+
+		Boolean checkSyntax = (Boolean)attributes.get("checkSyntax");
+
+		if (checkSyntax != null) {
+			setCheckSyntax(checkSyntax);
+		}
+
+		Boolean allowDictionaryWords = (Boolean)attributes.get(
+				"allowDictionaryWords");
+
+		if (allowDictionaryWords != null) {
+			setAllowDictionaryWords(allowDictionaryWords);
+		}
+
+		Integer minAlphanumeric = (Integer)attributes.get("minAlphanumeric");
+
+		if (minAlphanumeric != null) {
+			setMinAlphanumeric(minAlphanumeric);
+		}
+
+		Integer minLength = (Integer)attributes.get("minLength");
+
+		if (minLength != null) {
+			setMinLength(minLength);
+		}
+
+		Integer minLowerCase = (Integer)attributes.get("minLowerCase");
+
+		if (minLowerCase != null) {
+			setMinLowerCase(minLowerCase);
+		}
+
+		Integer minNumbers = (Integer)attributes.get("minNumbers");
+
+		if (minNumbers != null) {
+			setMinNumbers(minNumbers);
+		}
+
+		Integer minSymbols = (Integer)attributes.get("minSymbols");
+
+		if (minSymbols != null) {
+			setMinSymbols(minSymbols);
+		}
+
+		Integer minUpperCase = (Integer)attributes.get("minUpperCase");
+
+		if (minUpperCase != null) {
+			setMinUpperCase(minUpperCase);
+		}
+
+		Boolean history = (Boolean)attributes.get("history");
+
+		if (history != null) {
+			setHistory(history);
+		}
+
+		Integer historyCount = (Integer)attributes.get("historyCount");
+
+		if (historyCount != null) {
+			setHistoryCount(historyCount);
+		}
+
+		Boolean expireable = (Boolean)attributes.get("expireable");
+
+		if (expireable != null) {
+			setExpireable(expireable);
+		}
+
+		Long maxAge = (Long)attributes.get("maxAge");
+
+		if (maxAge != null) {
+			setMaxAge(maxAge);
+		}
+
+		Long warningTime = (Long)attributes.get("warningTime");
+
+		if (warningTime != null) {
+			setWarningTime(warningTime);
+		}
+
+		Integer graceLimit = (Integer)attributes.get("graceLimit");
+
+		if (graceLimit != null) {
+			setGraceLimit(graceLimit);
+		}
+
+		Boolean lockout = (Boolean)attributes.get("lockout");
+
+		if (lockout != null) {
+			setLockout(lockout);
+		}
+
+		Integer maxFailure = (Integer)attributes.get("maxFailure");
+
+		if (maxFailure != null) {
+			setMaxFailure(maxFailure);
+		}
+
+		Long lockoutDuration = (Long)attributes.get("lockoutDuration");
+
+		if (lockoutDuration != null) {
+			setLockoutDuration(lockoutDuration);
+		}
+
+		Boolean requireUnlock = (Boolean)attributes.get("requireUnlock");
+
+		if (requireUnlock != null) {
+			setRequireUnlock(requireUnlock);
+		}
+
+		Long resetFailureCount = (Long)attributes.get("resetFailureCount");
+
+		if (resetFailureCount != null) {
+			setResetFailureCount(resetFailureCount);
+		}
+
+		Long resetTicketMaxAge = (Long)attributes.get("resetTicketMaxAge");
+
+		if (resetTicketMaxAge != null) {
+			setResetTicketMaxAge(resetTicketMaxAge);
+		}
 	}
 
 	/**

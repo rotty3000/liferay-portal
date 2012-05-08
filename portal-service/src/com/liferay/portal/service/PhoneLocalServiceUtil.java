@@ -88,6 +88,10 @@ public class PhoneLocalServiceUtil {
 		return getService().deletePhone(phone);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -307,14 +311,10 @@ public class PhoneLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PhoneLocalService service) {
-		MethodCache.remove(PhoneLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PhoneLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PhoneLocalService.class);
 	}
 
 	private static PhoneLocalService _service;

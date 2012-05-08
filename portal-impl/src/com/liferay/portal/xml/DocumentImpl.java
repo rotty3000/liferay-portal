@@ -18,9 +18,6 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentType;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.Visitor;
-import com.liferay.util.xml.XMLFormatter;
-
-import java.io.IOException;
 
 /**
  * @author Brian Wing Shun Chan
@@ -57,31 +54,6 @@ public class DocumentImpl extends BranchImpl implements Document {
 		org.dom4j.Document document = ((DocumentImpl)obj).getWrappedDocument();
 
 		return _document.equals(document);
-	}
-
-	@Override
-	public String formattedString() throws IOException {
-		return XMLFormatter.toString(_document);
-	}
-
-	@Override
-	public String formattedString(String indent) throws IOException {
-		return XMLFormatter.toString(_document, indent);
-	}
-
-	@Override
-	public String formattedString(String indent, boolean expandEmptyElements)
-		throws IOException {
-
-		return XMLFormatter.toString(_document, indent, expandEmptyElements);
-	}
-
-	public String formattedString(
-			String indent, boolean expandEmptyElements, boolean trimText)
-		throws IOException {
-
-		return XMLFormatter.toString(
-			_document, indent, expandEmptyElements, trimText);
 	}
 
 	public DocumentType getDocumentType() {

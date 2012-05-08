@@ -83,6 +83,10 @@ public class UserTrackerPathLocalServiceWrapper
 		return _userTrackerPathLocalService.deleteUserTrackerPath(userTrackerPath);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _userTrackerPathLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

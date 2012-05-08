@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.xml;
 
-import java.io.IOException;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,13 +43,6 @@ public interface Branch extends Node {
 	public List<Node> content();
 
 	public Element elementByID(String elementID);
-
-	public String formattedString() throws IOException;
-
-	public String formattedString(String indent) throws IOException;
-
-	public String formattedString(String indent, boolean expandEmptyElements)
-		throws IOException;
 
 	public int indexOf(Node node);
 

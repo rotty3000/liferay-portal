@@ -1705,11 +1705,10 @@ public class SocialActivityUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SocialActivityPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SocialActivityUtil.class,
-			"_persistence");
 	}
 
 	private static SocialActivityPersistence _persistence;

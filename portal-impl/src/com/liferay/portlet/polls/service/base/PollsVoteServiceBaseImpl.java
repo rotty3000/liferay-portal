@@ -21,10 +21,10 @@ import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.BaseServiceImpl;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserService;
-import com.liferay.portal.service.base.PrincipalBean;
 import com.liferay.portal.service.persistence.UserFinder;
 import com.liferay.portal.service.persistence.UserPersistence;
 
@@ -54,7 +54,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portlet.polls.service.PollsVoteServiceUtil
  * @generated
  */
-public abstract class PollsVoteServiceBaseImpl extends PrincipalBean
+public abstract class PollsVoteServiceBaseImpl extends BaseServiceImpl
 	implements PollsVoteService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -380,12 +380,6 @@ public abstract class PollsVoteServiceBaseImpl extends PrincipalBean
 	 */
 	public void setBeanIdentifier(String beanIdentifier) {
 		_beanIdentifier = beanIdentifier;
-	}
-
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
 	}
 
 	protected Class<?> getModelClass() {

@@ -633,11 +633,10 @@ public class SCProductScreenshotUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SCProductScreenshotPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SCProductScreenshotUtil.class,
-			"_persistence");
 	}
 
 	private static SCProductScreenshotPersistence _persistence;

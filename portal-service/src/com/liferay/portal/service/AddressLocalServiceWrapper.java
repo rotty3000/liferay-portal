@@ -79,6 +79,10 @@ public class AddressLocalServiceWrapper implements AddressLocalService,
 		return _addressLocalService.deleteAddress(address);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _addressLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

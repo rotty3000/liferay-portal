@@ -130,6 +130,10 @@ public class ServerDetector {
 		return getInstance()._supportsComet;
 	}
 
+	public static boolean isSupportsHotDeploy() {
+		return getInstance()._supportsHotDeploy;
+	}
+
 	public static boolean isTomcat() {
 		return getInstance()._tomcat;
 	}
@@ -140,6 +144,19 @@ public class ServerDetector {
 
 	public static boolean isWebSphere() {
 		return getInstance()._webSphere;
+	}
+
+	public static void setSupportsHotDeploy(boolean supportsHotDeploy) {
+		getInstance()._supportsHotDeploy = supportsHotDeploy;
+
+		if (_log.isInfoEnabled()) {
+			if (supportsHotDeploy) {
+				_log.info("Server supports hot deploy");
+			}
+			else {
+				_log.info("Server does not support hot deploy");
+			}
+		}
 	}
 
 	private boolean _detect(String className) {
@@ -287,6 +304,7 @@ public class ServerDetector {
 	private boolean _resin;
 	private String _serverId;
 	private boolean _supportsComet;
+	private boolean _supportsHotDeploy;
 	private boolean _tomcat;
 	private boolean _webLogic;
 	private boolean _webSphere;

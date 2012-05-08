@@ -487,11 +487,10 @@ public class ResourceActionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ResourceActionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ResourceActionUtil.class,
-			"_persistence");
 	}
 
 	private static ResourceActionPersistence _persistence;

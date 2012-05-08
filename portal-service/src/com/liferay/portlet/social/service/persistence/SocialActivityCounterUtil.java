@@ -826,11 +826,10 @@ public class SocialActivityCounterUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(SocialActivityCounterPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(SocialActivityCounterUtil.class,
-			"_persistence");
 	}
 
 	private static SocialActivityCounterPersistence _persistence;

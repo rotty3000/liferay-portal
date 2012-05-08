@@ -2268,10 +2268,10 @@ public class LayoutUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(LayoutPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(LayoutUtil.class, "_persistence");
 	}
 
 	private static LayoutPersistence _persistence;

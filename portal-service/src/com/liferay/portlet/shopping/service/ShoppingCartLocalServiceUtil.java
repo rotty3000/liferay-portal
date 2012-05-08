@@ -90,6 +90,10 @@ public class ShoppingCartLocalServiceUtil {
 		return getService().deleteShoppingCart(shoppingCart);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -308,14 +312,10 @@ public class ShoppingCartLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ShoppingCartLocalService service) {
-		MethodCache.remove(ShoppingCartLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ShoppingCartLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ShoppingCartLocalService.class);
 	}
 
 	private static ShoppingCartLocalService _service;

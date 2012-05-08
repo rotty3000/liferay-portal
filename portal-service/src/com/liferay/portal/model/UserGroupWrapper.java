@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link UserGroup}.
@@ -34,6 +37,57 @@ public class UserGroupWrapper implements UserGroup, ModelWrapper<UserGroup> {
 
 	public String getModelClassName() {
 		return UserGroup.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("userGroupId", getUserGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("parentUserGroupId", getParentUserGroupId());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("addedByLDAPImport", getAddedByLDAPImport());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long userGroupId = (Long)attributes.get("userGroupId");
+
+		if (userGroupId != null) {
+			setUserGroupId(userGroupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long parentUserGroupId = (Long)attributes.get("parentUserGroupId");
+
+		if (parentUserGroupId != null) {
+			setParentUserGroupId(parentUserGroupId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Boolean addedByLDAPImport = (Boolean)attributes.get("addedByLDAPImport");
+
+		if (addedByLDAPImport != null) {
+			setAddedByLDAPImport(addedByLDAPImport);
+		}
 	}
 
 	/**

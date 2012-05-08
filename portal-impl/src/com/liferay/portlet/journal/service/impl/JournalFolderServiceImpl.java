@@ -28,18 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of the journal article folder remote service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.portlet.journal.service.JournalFolderService} interface.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
- *
  * @author Juan Fernández
- * @see com.liferay.portlet.journal.service.base.JournalFolderServiceBaseImpl
- * @see com.liferay.portlet.journal.service.JournalFolderServiceUtil
  */
 public class JournalFolderServiceImpl
 	extends JournalFolderServiceBaseImpl {

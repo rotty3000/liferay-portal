@@ -133,14 +133,10 @@ public class ThemeLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ThemeLocalService service) {
-		MethodCache.remove(ThemeLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ThemeLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ThemeLocalService.class);
 	}
 
 	private static ThemeLocalService _service;

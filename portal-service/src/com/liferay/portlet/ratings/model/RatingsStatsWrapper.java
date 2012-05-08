@@ -16,6 +16,9 @@ package com.liferay.portlet.ratings.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link RatingsStats}.
@@ -37,6 +40,57 @@ public class RatingsStatsWrapper implements RatingsStats,
 
 	public String getModelClassName() {
 		return RatingsStats.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("statsId", getStatsId());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("classPK", getClassPK());
+		attributes.put("totalEntries", getTotalEntries());
+		attributes.put("totalScore", getTotalScore());
+		attributes.put("averageScore", getAverageScore());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long statsId = (Long)attributes.get("statsId");
+
+		if (statsId != null) {
+			setStatsId(statsId);
+		}
+
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Long classPK = (Long)attributes.get("classPK");
+
+		if (classPK != null) {
+			setClassPK(classPK);
+		}
+
+		Integer totalEntries = (Integer)attributes.get("totalEntries");
+
+		if (totalEntries != null) {
+			setTotalEntries(totalEntries);
+		}
+
+		Double totalScore = (Double)attributes.get("totalScore");
+
+		if (totalScore != null) {
+			setTotalScore(totalScore);
+		}
+
+		Double averageScore = (Double)attributes.get("averageScore");
+
+		if (averageScore != null) {
+			setAverageScore(averageScore);
+		}
 	}
 
 	/**

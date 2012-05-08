@@ -50,7 +50,7 @@ import com.liferay.portal.kernel.sanitizer.SanitizerWrapper;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerPostProcessor;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
-import com.liferay.portal.kernel.servlet.DirectServletRegistry;
+import com.liferay.portal.kernel.servlet.DirectServletRegistryUtil;
 import com.liferay.portal.kernel.servlet.LiferayFilter;
 import com.liferay.portal.kernel.servlet.LiferayFilterTracker;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
@@ -513,7 +513,10 @@ public class HookHotDeployListener
 			return;
 		}
 
-		logRegistration(servletContextName);
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				"Registering extension environment for " + servletContextName);
+		}
 
 		_servletContextNames.add(servletContextName);
 
@@ -950,7 +953,7 @@ public class HookHotDeployListener
 
 		registerClpMessageListeners(servletContext, portletClassLoader);
 
-		DirectServletRegistry.clearServlets();
+		DirectServletRegistryUtil.clearServlets();
 		FileAvailabilityUtil.reset();
 
 		if (_log.isInfoEnabled()) {
@@ -1547,7 +1550,7 @@ public class HookHotDeployListener
 		}
 
 		for (String key : _PROPS_VALUES_OBSOLETE) {
-			if (_log.isInfoEnabled()) {
+			if (_log.isInfoEnabled() && portalProperties.contains(key)) {
 				_log.info("Portal property \"" + key + "\" is obsolete");
 			}
 		}
@@ -1912,12 +1915,6 @@ public class HookHotDeployListener
 			return ProxyUtil.newProxyInstance(
 				portletClassLoader, new Class[] {StrutsPortletAction.class},
 				new ClassLoaderBeanHandler(strutsAction, portletClassLoader));
-		}
-	}
-
-	protected void logRegistration(String servletContextName) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Registering hook for " + servletContextName);
 		}
 	}
 

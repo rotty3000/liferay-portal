@@ -90,6 +90,10 @@ public class AssetTagStatsLocalServiceUtil {
 		return getService().deleteAssetTagStats(assetTagStats);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -399,14 +403,10 @@ public class AssetTagStatsLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AssetTagStatsLocalService service) {
-		MethodCache.remove(AssetTagStatsLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AssetTagStatsLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AssetTagStatsLocalService.class);
 	}
 
 	private static AssetTagStatsLocalService _service;

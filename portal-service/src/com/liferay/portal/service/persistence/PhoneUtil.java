@@ -1052,10 +1052,10 @@ public class PhoneUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(PhonePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(PhoneUtil.class, "_persistence");
 	}
 
 	private static PhonePersistence _persistence;

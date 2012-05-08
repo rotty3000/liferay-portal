@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ClusterGroup}.
@@ -35,6 +38,43 @@ public class ClusterGroupWrapper implements ClusterGroup,
 
 	public String getModelClassName() {
 		return ClusterGroup.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("clusterGroupId", getClusterGroupId());
+		attributes.put("name", getName());
+		attributes.put("clusterNodeIds", getClusterNodeIds());
+		attributes.put("wholeCluster", getWholeCluster());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long clusterGroupId = (Long)attributes.get("clusterGroupId");
+
+		if (clusterGroupId != null) {
+			setClusterGroupId(clusterGroupId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String clusterNodeIds = (String)attributes.get("clusterNodeIds");
+
+		if (clusterNodeIds != null) {
+			setClusterNodeIds(clusterNodeIds);
+		}
+
+		Boolean wholeCluster = (Boolean)attributes.get("wholeCluster");
+
+		if (wholeCluster != null) {
+			setWholeCluster(wholeCluster);
+		}
 	}
 
 	/**

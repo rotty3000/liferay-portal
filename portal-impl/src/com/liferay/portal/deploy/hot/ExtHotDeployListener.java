@@ -112,7 +112,10 @@ public class ExtHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		logRegistration(servletContextName);
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				"Registering extension environment for " + servletContextName);
+		}
 
 		if (ExtRegistry.isRegistered(servletContextName)) {
 			if (_log.isInfoEnabled()) {
@@ -219,13 +222,6 @@ public class ExtHotDeployListener extends BaseHotDeployListener {
 			portalWebDir + "WEB-INF/ext-" + servletContextName + ".xml");
 
 		ExtRegistry.registerExt(servletContext);
-	}
-
-	protected void logRegistration(String servletContextName) {
-		if (_log.isInfoEnabled()) {
-			_log.info(
-				"Registering extension environment for " + servletContextName);
-		}
 	}
 
 	protected void mergeWebXml(String portalWebDir, String pluginWebDir) {

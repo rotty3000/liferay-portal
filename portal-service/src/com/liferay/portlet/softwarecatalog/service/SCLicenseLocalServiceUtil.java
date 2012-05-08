@@ -90,6 +90,10 @@ public class SCLicenseLocalServiceUtil {
 		return getService().deleteSCLicense(scLicense);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -353,14 +357,10 @@ public class SCLicenseLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SCLicenseLocalService service) {
-		MethodCache.remove(SCLicenseLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SCLicenseLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SCLicenseLocalService.class);
 	}
 
 	private static SCLicenseLocalService _service;

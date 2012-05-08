@@ -386,7 +386,7 @@ public class LayoutImporter {
 							getLayoutSetPrototypeByUuidAndCompanyId(
 								layoutSetPrototypeUuid, companyId);
 				}
-				catch(NoSuchLayoutSetPrototypeException nslspe) {
+				catch (NoSuchLayoutSetPrototypeException nslspe) {
 				}
 			}
 
@@ -1393,6 +1393,26 @@ public class LayoutImporter {
 			previousTypeSettingsProperties.setProperty(
 				LayoutTypePortletConstants.LAYOUT_TEMPLATE_ID,
 				layoutTemplateId);
+
+			String nestedColumnIds = newTypeSettingsProperties.getProperty(
+				LayoutTypePortletConstants.NESTED_COLUMN_IDS);
+
+			if (Validator.isNotNull(nestedColumnIds)) {
+				previousTypeSettingsProperties.setProperty(
+					LayoutTypePortletConstants.NESTED_COLUMN_IDS,
+					nestedColumnIds);
+
+				String[] nestedColumnIdsArray = StringUtil.split(
+					nestedColumnIds);
+
+				for (String nestedColumnId : nestedColumnIdsArray) {
+					String nestedColumnValue =
+						newTypeSettingsProperties.getProperty(nestedColumnId);
+
+					previousTypeSettingsProperties.setProperty(
+						nestedColumnId, nestedColumnValue);
+				}
+			}
 
 			LayoutTemplate newLayoutTemplate =
 				LayoutTemplateLocalServiceUtil.getLayoutTemplate(

@@ -93,6 +93,10 @@ public class ResourceBlockPermissionLocalServiceUtil {
 				   .deleteResourceBlockPermission(resourceBlockPermission);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -309,14 +313,10 @@ public class ResourceBlockPermissionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ResourceBlockPermissionLocalService service) {
-		MethodCache.remove(ResourceBlockPermissionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ResourceBlockPermissionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ResourceBlockPermissionLocalService.class);
 	}
 
 	private static ResourceBlockPermissionLocalService _service;

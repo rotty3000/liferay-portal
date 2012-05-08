@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link PluginSetting}.
@@ -35,6 +38,57 @@ public class PluginSettingWrapper implements PluginSetting,
 
 	public String getModelClassName() {
 		return PluginSetting.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("pluginSettingId", getPluginSettingId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("pluginId", getPluginId());
+		attributes.put("pluginType", getPluginType());
+		attributes.put("roles", getRoles());
+		attributes.put("active", getActive());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long pluginSettingId = (Long)attributes.get("pluginSettingId");
+
+		if (pluginSettingId != null) {
+			setPluginSettingId(pluginSettingId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		String pluginId = (String)attributes.get("pluginId");
+
+		if (pluginId != null) {
+			setPluginId(pluginId);
+		}
+
+		String pluginType = (String)attributes.get("pluginType");
+
+		if (pluginType != null) {
+			setPluginType(pluginType);
+		}
+
+		String roles = (String)attributes.get("roles");
+
+		if (roles != null) {
+			setRoles(roles);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
 	}
 
 	/**

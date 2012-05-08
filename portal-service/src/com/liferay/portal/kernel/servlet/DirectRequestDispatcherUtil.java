@@ -62,7 +62,7 @@ public class DirectRequestDispatcherUtil {
 			fullPath = fullPath.substring(0, pos);
 		}
 
-		Servlet servlet = DirectServletRegistry.getServlet(fullPath);
+		Servlet servlet = DirectServletRegistryUtil.getServlet(fullPath);
 
 		if (servlet == null) {
 			if (_log.isDebugEnabled()) {

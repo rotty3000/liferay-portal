@@ -14,7 +14,6 @@
 
 package com.liferay.portal.tools.deploy;
 
-import com.liferay.portal.kernel.servlet.LayoutTemplateContextListener;
 import com.liferay.portal.model.Plugin;
 import com.liferay.portal.util.InitUtil;
 
@@ -49,11 +48,6 @@ public class LayoutTemplateDeployer extends BaseDeployer {
 
 	public LayoutTemplateDeployer(List<String> wars, List<String> jars) {
 		super(wars, jars);
-	}
-
-	@Override
-	public Class<?> getPluginContextListenerClass() {
-		return LayoutTemplateContextListener.class;
 	}
 
 	@Override

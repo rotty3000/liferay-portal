@@ -16,6 +16,10 @@ package com.liferay.portlet.shopping.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ShoppingOrder}.
@@ -37,6 +41,374 @@ public class ShoppingOrderWrapper implements ShoppingOrder,
 
 	public String getModelClassName() {
 		return ShoppingOrder.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("orderId", getOrderId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("number", getNumber());
+		attributes.put("tax", getTax());
+		attributes.put("shipping", getShipping());
+		attributes.put("altShipping", getAltShipping());
+		attributes.put("requiresShipping", getRequiresShipping());
+		attributes.put("insure", getInsure());
+		attributes.put("insurance", getInsurance());
+		attributes.put("couponCodes", getCouponCodes());
+		attributes.put("couponDiscount", getCouponDiscount());
+		attributes.put("billingFirstName", getBillingFirstName());
+		attributes.put("billingLastName", getBillingLastName());
+		attributes.put("billingEmailAddress", getBillingEmailAddress());
+		attributes.put("billingCompany", getBillingCompany());
+		attributes.put("billingStreet", getBillingStreet());
+		attributes.put("billingCity", getBillingCity());
+		attributes.put("billingState", getBillingState());
+		attributes.put("billingZip", getBillingZip());
+		attributes.put("billingCountry", getBillingCountry());
+		attributes.put("billingPhone", getBillingPhone());
+		attributes.put("shipToBilling", getShipToBilling());
+		attributes.put("shippingFirstName", getShippingFirstName());
+		attributes.put("shippingLastName", getShippingLastName());
+		attributes.put("shippingEmailAddress", getShippingEmailAddress());
+		attributes.put("shippingCompany", getShippingCompany());
+		attributes.put("shippingStreet", getShippingStreet());
+		attributes.put("shippingCity", getShippingCity());
+		attributes.put("shippingState", getShippingState());
+		attributes.put("shippingZip", getShippingZip());
+		attributes.put("shippingCountry", getShippingCountry());
+		attributes.put("shippingPhone", getShippingPhone());
+		attributes.put("ccName", getCcName());
+		attributes.put("ccType", getCcType());
+		attributes.put("ccNumber", getCcNumber());
+		attributes.put("ccExpMonth", getCcExpMonth());
+		attributes.put("ccExpYear", getCcExpYear());
+		attributes.put("ccVerNumber", getCcVerNumber());
+		attributes.put("comments", getComments());
+		attributes.put("ppTxnId", getPpTxnId());
+		attributes.put("ppPaymentStatus", getPpPaymentStatus());
+		attributes.put("ppPaymentGross", getPpPaymentGross());
+		attributes.put("ppReceiverEmail", getPpReceiverEmail());
+		attributes.put("ppPayerEmail", getPpPayerEmail());
+		attributes.put("sendOrderEmail", getSendOrderEmail());
+		attributes.put("sendShippingEmail", getSendShippingEmail());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long orderId = (Long)attributes.get("orderId");
+
+		if (orderId != null) {
+			setOrderId(orderId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String number = (String)attributes.get("number");
+
+		if (number != null) {
+			setNumber(number);
+		}
+
+		Double tax = (Double)attributes.get("tax");
+
+		if (tax != null) {
+			setTax(tax);
+		}
+
+		Double shipping = (Double)attributes.get("shipping");
+
+		if (shipping != null) {
+			setShipping(shipping);
+		}
+
+		String altShipping = (String)attributes.get("altShipping");
+
+		if (altShipping != null) {
+			setAltShipping(altShipping);
+		}
+
+		Boolean requiresShipping = (Boolean)attributes.get("requiresShipping");
+
+		if (requiresShipping != null) {
+			setRequiresShipping(requiresShipping);
+		}
+
+		Boolean insure = (Boolean)attributes.get("insure");
+
+		if (insure != null) {
+			setInsure(insure);
+		}
+
+		Double insurance = (Double)attributes.get("insurance");
+
+		if (insurance != null) {
+			setInsurance(insurance);
+		}
+
+		String couponCodes = (String)attributes.get("couponCodes");
+
+		if (couponCodes != null) {
+			setCouponCodes(couponCodes);
+		}
+
+		Double couponDiscount = (Double)attributes.get("couponDiscount");
+
+		if (couponDiscount != null) {
+			setCouponDiscount(couponDiscount);
+		}
+
+		String billingFirstName = (String)attributes.get("billingFirstName");
+
+		if (billingFirstName != null) {
+			setBillingFirstName(billingFirstName);
+		}
+
+		String billingLastName = (String)attributes.get("billingLastName");
+
+		if (billingLastName != null) {
+			setBillingLastName(billingLastName);
+		}
+
+		String billingEmailAddress = (String)attributes.get(
+				"billingEmailAddress");
+
+		if (billingEmailAddress != null) {
+			setBillingEmailAddress(billingEmailAddress);
+		}
+
+		String billingCompany = (String)attributes.get("billingCompany");
+
+		if (billingCompany != null) {
+			setBillingCompany(billingCompany);
+		}
+
+		String billingStreet = (String)attributes.get("billingStreet");
+
+		if (billingStreet != null) {
+			setBillingStreet(billingStreet);
+		}
+
+		String billingCity = (String)attributes.get("billingCity");
+
+		if (billingCity != null) {
+			setBillingCity(billingCity);
+		}
+
+		String billingState = (String)attributes.get("billingState");
+
+		if (billingState != null) {
+			setBillingState(billingState);
+		}
+
+		String billingZip = (String)attributes.get("billingZip");
+
+		if (billingZip != null) {
+			setBillingZip(billingZip);
+		}
+
+		String billingCountry = (String)attributes.get("billingCountry");
+
+		if (billingCountry != null) {
+			setBillingCountry(billingCountry);
+		}
+
+		String billingPhone = (String)attributes.get("billingPhone");
+
+		if (billingPhone != null) {
+			setBillingPhone(billingPhone);
+		}
+
+		Boolean shipToBilling = (Boolean)attributes.get("shipToBilling");
+
+		if (shipToBilling != null) {
+			setShipToBilling(shipToBilling);
+		}
+
+		String shippingFirstName = (String)attributes.get("shippingFirstName");
+
+		if (shippingFirstName != null) {
+			setShippingFirstName(shippingFirstName);
+		}
+
+		String shippingLastName = (String)attributes.get("shippingLastName");
+
+		if (shippingLastName != null) {
+			setShippingLastName(shippingLastName);
+		}
+
+		String shippingEmailAddress = (String)attributes.get(
+				"shippingEmailAddress");
+
+		if (shippingEmailAddress != null) {
+			setShippingEmailAddress(shippingEmailAddress);
+		}
+
+		String shippingCompany = (String)attributes.get("shippingCompany");
+
+		if (shippingCompany != null) {
+			setShippingCompany(shippingCompany);
+		}
+
+		String shippingStreet = (String)attributes.get("shippingStreet");
+
+		if (shippingStreet != null) {
+			setShippingStreet(shippingStreet);
+		}
+
+		String shippingCity = (String)attributes.get("shippingCity");
+
+		if (shippingCity != null) {
+			setShippingCity(shippingCity);
+		}
+
+		String shippingState = (String)attributes.get("shippingState");
+
+		if (shippingState != null) {
+			setShippingState(shippingState);
+		}
+
+		String shippingZip = (String)attributes.get("shippingZip");
+
+		if (shippingZip != null) {
+			setShippingZip(shippingZip);
+		}
+
+		String shippingCountry = (String)attributes.get("shippingCountry");
+
+		if (shippingCountry != null) {
+			setShippingCountry(shippingCountry);
+		}
+
+		String shippingPhone = (String)attributes.get("shippingPhone");
+
+		if (shippingPhone != null) {
+			setShippingPhone(shippingPhone);
+		}
+
+		String ccName = (String)attributes.get("ccName");
+
+		if (ccName != null) {
+			setCcName(ccName);
+		}
+
+		String ccType = (String)attributes.get("ccType");
+
+		if (ccType != null) {
+			setCcType(ccType);
+		}
+
+		String ccNumber = (String)attributes.get("ccNumber");
+
+		if (ccNumber != null) {
+			setCcNumber(ccNumber);
+		}
+
+		Integer ccExpMonth = (Integer)attributes.get("ccExpMonth");
+
+		if (ccExpMonth != null) {
+			setCcExpMonth(ccExpMonth);
+		}
+
+		Integer ccExpYear = (Integer)attributes.get("ccExpYear");
+
+		if (ccExpYear != null) {
+			setCcExpYear(ccExpYear);
+		}
+
+		String ccVerNumber = (String)attributes.get("ccVerNumber");
+
+		if (ccVerNumber != null) {
+			setCcVerNumber(ccVerNumber);
+		}
+
+		String comments = (String)attributes.get("comments");
+
+		if (comments != null) {
+			setComments(comments);
+		}
+
+		String ppTxnId = (String)attributes.get("ppTxnId");
+
+		if (ppTxnId != null) {
+			setPpTxnId(ppTxnId);
+		}
+
+		String ppPaymentStatus = (String)attributes.get("ppPaymentStatus");
+
+		if (ppPaymentStatus != null) {
+			setPpPaymentStatus(ppPaymentStatus);
+		}
+
+		Double ppPaymentGross = (Double)attributes.get("ppPaymentGross");
+
+		if (ppPaymentGross != null) {
+			setPpPaymentGross(ppPaymentGross);
+		}
+
+		String ppReceiverEmail = (String)attributes.get("ppReceiverEmail");
+
+		if (ppReceiverEmail != null) {
+			setPpReceiverEmail(ppReceiverEmail);
+		}
+
+		String ppPayerEmail = (String)attributes.get("ppPayerEmail");
+
+		if (ppPayerEmail != null) {
+			setPpPayerEmail(ppPayerEmail);
+		}
+
+		Boolean sendOrderEmail = (Boolean)attributes.get("sendOrderEmail");
+
+		if (sendOrderEmail != null) {
+			setSendOrderEmail(sendOrderEmail);
+		}
+
+		Boolean sendShippingEmail = (Boolean)attributes.get("sendShippingEmail");
+
+		if (sendShippingEmail != null) {
+			setSendShippingEmail(sendShippingEmail);
+		}
 	}
 
 	/**

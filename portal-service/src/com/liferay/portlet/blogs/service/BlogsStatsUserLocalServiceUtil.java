@@ -90,6 +90,10 @@ public class BlogsStatsUserLocalServiceUtil {
 		return getService().deleteBlogsStatsUser(blogsStatsUser);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -379,14 +383,10 @@ public class BlogsStatsUserLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(BlogsStatsUserLocalService service) {
-		MethodCache.remove(BlogsStatsUserLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(BlogsStatsUserLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(BlogsStatsUserLocalService.class);
 	}
 
 	private static BlogsStatsUserLocalService _service;

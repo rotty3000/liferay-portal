@@ -37,6 +37,25 @@ public class PortletServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.service.impl.PortletServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portal.kernel.json.JSONArray getWARPortlets() {
 		return getService().getWARPortlets();
 	}
@@ -61,13 +80,10 @@ public class PortletServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PortletService service) {
-		MethodCache.remove(PortletService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PortletServiceUtil.class, "_service");
-		MethodCache.remove(PortletService.class);
 	}
 
 	private static PortletService _service;

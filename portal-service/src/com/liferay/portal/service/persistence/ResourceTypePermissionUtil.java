@@ -666,11 +666,10 @@ public class ResourceTypePermissionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ResourceTypePermissionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ResourceTypePermissionUtil.class,
-			"_persistence");
 	}
 
 	private static ResourceTypePermissionPersistence _persistence;

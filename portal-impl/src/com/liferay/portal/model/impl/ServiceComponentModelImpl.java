@@ -31,6 +31,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the ServiceComponent service. Represents a row in the &quot;ServiceComponent&quot; database table, with each column mapped to a property of this class.
  *
@@ -105,6 +108,52 @@ public class ServiceComponentModelImpl extends BaseModelImpl<ServiceComponent>
 
 	public String getModelClassName() {
 		return ServiceComponent.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("serviceComponentId", getServiceComponentId());
+		attributes.put("buildNamespace", getBuildNamespace());
+		attributes.put("buildNumber", getBuildNumber());
+		attributes.put("buildDate", getBuildDate());
+		attributes.put("data", getData());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long serviceComponentId = (Long)attributes.get("serviceComponentId");
+
+		if (serviceComponentId != null) {
+			setServiceComponentId(serviceComponentId);
+		}
+
+		String buildNamespace = (String)attributes.get("buildNamespace");
+
+		if (buildNamespace != null) {
+			setBuildNamespace(buildNamespace);
+		}
+
+		Long buildNumber = (Long)attributes.get("buildNumber");
+
+		if (buildNumber != null) {
+			setBuildNumber(buildNumber);
+		}
+
+		Long buildDate = (Long)attributes.get("buildDate");
+
+		if (buildDate != null) {
+			setBuildDate(buildDate);
+		}
+
+		String data = (String)attributes.get("data");
+
+		if (data != null) {
+			setData(data);
+		}
 	}
 
 	public long getServiceComponentId() {

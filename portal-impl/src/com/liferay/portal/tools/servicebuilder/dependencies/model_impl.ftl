@@ -53,6 +53,7 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -352,6 +353,42 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 	public String getModelClassName() {
 		return ${entity.name}.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		<#list entity.regularColList as column>
+			attributes.put("${column.name}", get${column.methodName}());
+		</#list>
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		<#list entity.regularColList as column>
+			<#if column.isPrimitiveType()>
+				${serviceBuilder.getPrimitiveObj(column.type)}
+			<#else>
+				${column.type}
+			</#if>
+
+			${column.name} =
+
+			<#if column.isPrimitiveType()>
+				(${serviceBuilder.getPrimitiveObj(column.type)})
+			<#else>
+				(${column.type})
+			</#if>
+
+			attributes.get("${column.name}");
+
+			if (${column.name} != null) {
+				set${column.methodName}(${column.name});
+			}
+		</#list>
 	}
 
 	<#list entity.regularColList as column>

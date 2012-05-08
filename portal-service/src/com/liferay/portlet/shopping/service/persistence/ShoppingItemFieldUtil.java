@@ -416,11 +416,10 @@ public class ShoppingItemFieldUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShoppingItemFieldPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShoppingItemFieldUtil.class,
-			"_persistence");
 	}
 
 	private static ShoppingItemFieldPersistence _persistence;

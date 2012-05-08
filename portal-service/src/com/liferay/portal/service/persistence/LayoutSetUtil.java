@@ -638,10 +638,10 @@ public class LayoutSetUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(LayoutSetPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(LayoutSetUtil.class, "_persistence");
 	}
 
 	private static LayoutSetPersistence _persistence;

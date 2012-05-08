@@ -335,10 +335,10 @@ public class ClassNameUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ClassNamePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ClassNameUtil.class, "_persistence");
 	}
 
 	private static ClassNamePersistence _persistence;

@@ -910,11 +910,10 @@ public class ShoppingOrderUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(ShoppingOrderPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(ShoppingOrderUtil.class,
-			"_persistence");
 	}
 
 	private static ShoppingOrderPersistence _persistence;

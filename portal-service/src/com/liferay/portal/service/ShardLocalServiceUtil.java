@@ -88,6 +88,10 @@ public class ShardLocalServiceUtil {
 		return getService().deleteShard(shard);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -284,14 +288,10 @@ public class ShardLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ShardLocalService service) {
-		MethodCache.remove(ShardLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ShardLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ShardLocalService.class);
 	}
 
 	private static ShardLocalService _service;

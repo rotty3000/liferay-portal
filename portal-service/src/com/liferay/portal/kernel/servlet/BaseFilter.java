@@ -16,7 +16,6 @@ package com.liferay.portal.kernel.servlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.servlet.filters.invoker.FilterMapping;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -87,16 +85,9 @@ public abstract class BaseFilter implements LiferayFilter {
 	public void init(FilterConfig filterConfig) {
 		_filterConfig = filterConfig;
 
-		ServletContext servletContext = _filterConfig.getServletContext();
-
-		_invokerEnabled = GetterUtil.get(
-			servletContext.getInitParameter("liferay-invoker-enabled"), true);
-
-		if (!_invokerEnabled) {
-			_filterMapping = new FilterMapping(
-				this, filterConfig, new ArrayList<String>(0),
-				new ArrayList<String>(0));
-		}
+		_filterMapping = new FilterMapping(
+			this, filterConfig, new ArrayList<String>(0),
+			new ArrayList<String>(0));
 
 		LiferayFilterTracker.addLiferayFilter(this);
 	}

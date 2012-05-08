@@ -79,6 +79,10 @@ public class ContactLocalServiceWrapper implements ContactLocalService,
 		return _contactLocalService.deleteContact(contact);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _contactLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

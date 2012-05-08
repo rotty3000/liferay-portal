@@ -6,6 +6,12 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 
+import java.sql.Blob;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link ${entity.name}}.
@@ -27,6 +33,40 @@ public class ${entity.name}Wrapper implements ${entity.name}, ModelWrapper<${ent
 
 	public String getModelClassName() {
 		return ${entity.name}.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		<#list entity.regularColList as column>
+			attributes.put("${column.name}", get${column.methodName}());
+		</#list>
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		<#list entity.regularColList as column>
+			<#if column.isPrimitiveType()>
+				${serviceBuilder.getPrimitiveObj(column.type)}
+			<#else>
+				${column.type}
+			</#if>
+
+			${column.name} =
+
+			<#if column.isPrimitiveType()>
+				(${serviceBuilder.getPrimitiveObj(column.type)})
+			<#else>
+				(${column.type})
+			</#if>
+
+			attributes.get("${column.name}");
+
+			if (${column.name} != null) {
+				set${column.methodName}(${column.name});
+			}
+		</#list>
 	}
 
 	<#list methods as method>

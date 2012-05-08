@@ -783,10 +783,10 @@ public class MDRRuleUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MDRRulePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MDRRuleUtil.class, "_persistence");
 	}
 
 	private static MDRRulePersistence _persistence;

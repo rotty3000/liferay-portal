@@ -38,7 +38,9 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the JournalFeed service. Represents a row in the &quot;JournalFeed&quot; database table, with each column mapped to a property of this class.
@@ -188,6 +190,179 @@ public class JournalFeedModelImpl extends BaseModelImpl<JournalFeed>
 
 	public String getModelClassName() {
 		return JournalFeed.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("id", getId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("feedId", getFeedId());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("type", getType());
+		attributes.put("structureId", getStructureId());
+		attributes.put("templateId", getTemplateId());
+		attributes.put("rendererTemplateId", getRendererTemplateId());
+		attributes.put("delta", getDelta());
+		attributes.put("orderByCol", getOrderByCol());
+		attributes.put("orderByType", getOrderByType());
+		attributes.put("targetLayoutFriendlyUrl", getTargetLayoutFriendlyUrl());
+		attributes.put("targetPortletId", getTargetPortletId());
+		attributes.put("contentField", getContentField());
+		attributes.put("feedType", getFeedType());
+		attributes.put("feedVersion", getFeedVersion());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long id = (Long)attributes.get("id");
+
+		if (id != null) {
+			setId(id);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		String feedId = (String)attributes.get("feedId");
+
+		if (feedId != null) {
+			setFeedId(feedId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String structureId = (String)attributes.get("structureId");
+
+		if (structureId != null) {
+			setStructureId(structureId);
+		}
+
+		String templateId = (String)attributes.get("templateId");
+
+		if (templateId != null) {
+			setTemplateId(templateId);
+		}
+
+		String rendererTemplateId = (String)attributes.get("rendererTemplateId");
+
+		if (rendererTemplateId != null) {
+			setRendererTemplateId(rendererTemplateId);
+		}
+
+		Integer delta = (Integer)attributes.get("delta");
+
+		if (delta != null) {
+			setDelta(delta);
+		}
+
+		String orderByCol = (String)attributes.get("orderByCol");
+
+		if (orderByCol != null) {
+			setOrderByCol(orderByCol);
+		}
+
+		String orderByType = (String)attributes.get("orderByType");
+
+		if (orderByType != null) {
+			setOrderByType(orderByType);
+		}
+
+		String targetLayoutFriendlyUrl = (String)attributes.get(
+				"targetLayoutFriendlyUrl");
+
+		if (targetLayoutFriendlyUrl != null) {
+			setTargetLayoutFriendlyUrl(targetLayoutFriendlyUrl);
+		}
+
+		String targetPortletId = (String)attributes.get("targetPortletId");
+
+		if (targetPortletId != null) {
+			setTargetPortletId(targetPortletId);
+		}
+
+		String contentField = (String)attributes.get("contentField");
+
+		if (contentField != null) {
+			setContentField(contentField);
+		}
+
+		String feedType = (String)attributes.get("feedType");
+
+		if (feedType != null) {
+			setFeedType(feedType);
+		}
+
+		Double feedVersion = (Double)attributes.get("feedVersion");
+
+		if (feedVersion != null) {
+			setFeedVersion(feedVersion);
+		}
 	}
 
 	@JSON

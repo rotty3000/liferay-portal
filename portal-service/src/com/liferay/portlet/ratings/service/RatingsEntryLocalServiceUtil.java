@@ -90,6 +90,10 @@ public class RatingsEntryLocalServiceUtil {
 		return getService().deleteRatingsEntry(ratingsEntry);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -331,14 +335,10 @@ public class RatingsEntryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(RatingsEntryLocalService service) {
-		MethodCache.remove(RatingsEntryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(RatingsEntryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(RatingsEntryLocalService.class);
 	}
 
 	private static RatingsEntryLocalService _service;

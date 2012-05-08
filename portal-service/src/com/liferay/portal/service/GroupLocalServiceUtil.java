@@ -90,6 +90,10 @@ public class GroupLocalServiceUtil {
 		return getService().deleteGroup(group);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -1402,14 +1406,10 @@ public class GroupLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(GroupLocalService service) {
-		MethodCache.remove(GroupLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(GroupLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(GroupLocalService.class);
 	}
 
 	private static GroupLocalService _service;

@@ -16,6 +16,9 @@ package com.liferay.counter.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link Counter}.
@@ -36,6 +39,29 @@ public class CounterWrapper implements Counter, ModelWrapper<Counter> {
 
 	public String getModelClassName() {
 		return Counter.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("name", getName());
+		attributes.put("currentId", getCurrentId());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		Long currentId = (Long)attributes.get("currentId");
+
+		if (currentId != null) {
+			setCurrentId(currentId);
+		}
 	}
 
 	/**

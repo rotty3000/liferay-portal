@@ -6164,11 +6164,10 @@ public class JournalArticleUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(JournalArticlePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(JournalArticleUtil.class,
-			"_persistence");
 	}
 
 	private static JournalArticlePersistence _persistence;

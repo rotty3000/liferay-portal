@@ -33,6 +33,24 @@ public class AssetTagPropertyServiceWrapper implements AssetTagPropertyService,
 	}
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _assetTagPropertyService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_assetTagPropertyService.setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds an asset tag property.
 	*
 	* @param tagId the primary key of the tag

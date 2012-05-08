@@ -769,10 +769,10 @@ public class MBBanUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBBanPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBBanUtil.class, "_persistence");
 	}
 
 	private static MBBanPersistence _persistence;

@@ -46,16 +46,11 @@ for (int j = 0; j < fileEntryColumns.length; j++) {
 			/>
 		</c:when>
 		<c:when test='<%= fileEntryColumn.equals("locked") %>'>
-
-			<%
-			boolean isCheckedOut = fileEntry.isCheckedOut();
-			%>
-
 			<liferay-ui:search-container-column-text
 				href="<%= rowHREF %>"
 				index="<%= j %>"
 				name="<%= fileEntryColumn %>"
-				value='<%= LanguageUtil.get(pageContext, isCheckedOut ? "yes" : "no") %>'
+				value='<%= LanguageUtil.get(pageContext, fileEntry.isCheckedOut() ? "yes" : "no") %>'
 			/>
 		</c:when>
 		<c:when test='<%= fileEntryColumn.equals("name") %>'>
@@ -97,7 +92,7 @@ for (int j = 0; j < fileEntryColumns.length; j++) {
 				href="<%= rowHREF %>"
 				index="<%= j %>"
 				name="<%= fileEntryColumn %>"
-				value='<%= TextFormatter.formatKB(fileEntry.getSize(), locale) + "k" %>'
+				value='<%= TextFormatter.formatStorageSize(fileEntry.getSize(), locale) %>'
 			/>
 		</c:when>
 		<c:when test='<%= fileEntryColumn.equals("tags") %>'>

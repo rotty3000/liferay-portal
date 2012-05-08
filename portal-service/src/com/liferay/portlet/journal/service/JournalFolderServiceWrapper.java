@@ -32,6 +32,24 @@ public class JournalFolderServiceWrapper implements JournalFolderService,
 		_journalFolderService = journalFolderService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _journalFolderService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_journalFolderService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.journal.model.JournalFolder addFolder(
 		long groupId, long parentFolderId, java.lang.String name,
 		java.lang.String description,

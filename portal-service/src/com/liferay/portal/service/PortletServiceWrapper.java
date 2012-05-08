@@ -29,6 +29,24 @@ public class PortletServiceWrapper implements PortletService,
 		_portletService = portletService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _portletService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_portletService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portal.kernel.json.JSONArray getWARPortlets() {
 		return _portletService.getWARPortlets();
 	}

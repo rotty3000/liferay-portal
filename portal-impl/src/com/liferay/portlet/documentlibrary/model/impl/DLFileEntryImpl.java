@@ -173,6 +173,11 @@ public class DLFileEntryImpl extends DLFileEntryBaseImpl {
 			getFileEntryId(), status);
 	}
 
+	public int getFileVersionsCount(int status) throws SystemException {
+		return DLFileVersionLocalServiceUtil.getFileVersionsCount(
+			getFileEntryId(), status);
+	}
+
 	public DLFolder getFolder() {
 		DLFolder dlFolder = null;
 
@@ -202,7 +207,7 @@ public class DLFileEntryImpl extends DLFileEntryBaseImpl {
 
 		if (trusted) {
 			return DLFileVersionLocalServiceUtil.getLatestFileVersion(
-				getFileEntryId(), true);
+				getFileEntryId(), false);
 		}
 		else {
 			return DLFileVersionServiceUtil.getLatestFileVersion(

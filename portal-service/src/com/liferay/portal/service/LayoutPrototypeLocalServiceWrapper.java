@@ -85,6 +85,10 @@ public class LayoutPrototypeLocalServiceWrapper
 		return _layoutPrototypeLocalService.deleteLayoutPrototype(layoutPrototype);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _layoutPrototypeLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

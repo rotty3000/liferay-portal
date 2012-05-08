@@ -1342,11 +1342,10 @@ public class JournalFolderUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(JournalFolderPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(JournalFolderUtil.class,
-			"_persistence");
 	}
 
 	private static JournalFolderPersistence _persistence;

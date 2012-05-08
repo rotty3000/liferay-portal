@@ -32,6 +32,24 @@ public class AssetCategoryServiceWrapper implements AssetCategoryService,
 		_assetCategoryService = assetCategoryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _assetCategoryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_assetCategoryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.asset.model.AssetCategory addCategory(
 		long parentCategoryId,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,

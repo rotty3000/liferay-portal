@@ -32,6 +32,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the BrowserTracker service. Represents a row in the &quot;BrowserTracker&quot; database table, with each column mapped to a property of this class.
  *
@@ -101,6 +104,38 @@ public class BrowserTrackerModelImpl extends BaseModelImpl<BrowserTracker>
 
 	public String getModelClassName() {
 		return BrowserTracker.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("browserTrackerId", getBrowserTrackerId());
+		attributes.put("userId", getUserId());
+		attributes.put("browserKey", getBrowserKey());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long browserTrackerId = (Long)attributes.get("browserTrackerId");
+
+		if (browserTrackerId != null) {
+			setBrowserTrackerId(browserTrackerId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		Long browserKey = (Long)attributes.get("browserKey");
+
+		if (browserKey != null) {
+			setBrowserKey(browserKey);
+		}
 	}
 
 	public long getBrowserTrackerId() {

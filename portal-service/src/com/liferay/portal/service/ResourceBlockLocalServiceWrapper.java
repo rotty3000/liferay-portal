@@ -83,6 +83,10 @@ public class ResourceBlockLocalServiceWrapper
 		return _resourceBlockLocalService.deleteResourceBlock(resourceBlock);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _resourceBlockLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

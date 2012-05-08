@@ -92,6 +92,10 @@ public class LayoutSetPrototypeLocalServiceUtil {
 		return getService().deleteLayoutSetPrototype(layoutSetPrototype);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -342,14 +346,10 @@ public class LayoutSetPrototypeLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(LayoutSetPrototypeLocalService service) {
-		MethodCache.remove(LayoutSetPrototypeLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(LayoutSetPrototypeLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(LayoutSetPrototypeLocalService.class);
 	}
 
 	private static LayoutSetPrototypeLocalService _service;

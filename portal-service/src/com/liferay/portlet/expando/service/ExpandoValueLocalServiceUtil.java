@@ -90,6 +90,10 @@ public class ExpandoValueLocalServiceUtil {
 		return getService().deleteExpandoValue(expandoValue);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -1425,14 +1429,10 @@ public class ExpandoValueLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ExpandoValueLocalService service) {
-		MethodCache.remove(ExpandoValueLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ExpandoValueLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ExpandoValueLocalService.class);
 	}
 
 	private static ExpandoValueLocalService _service;

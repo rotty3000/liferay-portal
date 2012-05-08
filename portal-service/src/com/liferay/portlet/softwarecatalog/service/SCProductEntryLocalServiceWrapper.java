@@ -85,6 +85,10 @@ public class SCProductEntryLocalServiceWrapper
 		return _scProductEntryLocalService.deleteSCProductEntry(scProductEntry);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _scProductEntryLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

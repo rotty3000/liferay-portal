@@ -630,11 +630,10 @@ public class AssetTagStatsUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AssetTagStatsPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AssetTagStatsUtil.class,
-			"_persistence");
 	}
 
 	private static AssetTagStatsPersistence _persistence;

@@ -32,6 +32,24 @@ public class ShoppingCategoryServiceWrapper implements ShoppingCategoryService,
 		_shoppingCategoryService = shoppingCategoryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _shoppingCategoryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_shoppingCategoryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.shopping.model.ShoppingCategory addCategory(
 		long parentCategoryId, java.lang.String name,
 		java.lang.String description,

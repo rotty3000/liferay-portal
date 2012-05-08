@@ -344,11 +344,10 @@ public class WebDAVPropsUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(WebDAVPropsPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(WebDAVPropsUtil.class,
-			"_persistence");
 	}
 
 	private static WebDAVPropsPersistence _persistence;

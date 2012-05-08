@@ -90,6 +90,10 @@ public class BlogsEntryLocalServiceUtil {
 		return getService().deleteBlogsEntry(blogsEntry);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -529,7 +533,8 @@ public class BlogsEntryLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntries(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntries(long, long, Date,
+	QueryDefinition)}
 	*/
 	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getGroupUserEntries(
 		long groupId, long userId, java.util.Date displayDate, int status,
@@ -541,7 +546,8 @@ public class BlogsEntryLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntries(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntries(long, long, Date,
+	QueryDefinition)}
 	*/
 	public static java.util.List<com.liferay.portlet.blogs.model.BlogsEntry> getGroupUserEntries(
 		long groupId, long userId, java.util.Date displayDate, int status,
@@ -562,7 +568,8 @@ public class BlogsEntryLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getGroupUserEntriesCount(long, long, Date, QueryDefinition)}
+	* @deprecated {@link #getGroupUserEntriesCount(long, long, Date,
+	QueryDefinition)}
 	*/
 	public static int getGroupUserEntriesCount(long groupId, long userId,
 		java.util.Date displayDate, int status)
@@ -619,7 +626,8 @@ public class BlogsEntryLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #getOrganizationEntriesCount(long, Date, QueryDefinition)}
+	* @deprecated {@link #getOrganizationEntriesCount(long, Date,
+	QueryDefinition)}
 	*/
 	public static int getOrganizationEntriesCount(long organizationId,
 		java.util.Date displayDate, int status)
@@ -736,14 +744,10 @@ public class BlogsEntryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(BlogsEntryLocalService service) {
-		MethodCache.remove(BlogsEntryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(BlogsEntryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(BlogsEntryLocalService.class);
 	}
 
 	private static BlogsEntryLocalService _service;

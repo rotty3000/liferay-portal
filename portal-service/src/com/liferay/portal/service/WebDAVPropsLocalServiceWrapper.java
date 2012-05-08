@@ -82,6 +82,10 @@ public class WebDAVPropsLocalServiceWrapper implements WebDAVPropsLocalService,
 		return _webDAVPropsLocalService.deleteWebDAVProps(webDAVProps);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _webDAVPropsLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

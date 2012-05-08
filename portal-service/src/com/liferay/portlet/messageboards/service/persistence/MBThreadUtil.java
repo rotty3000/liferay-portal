@@ -2716,10 +2716,10 @@ public class MBThreadUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBThreadPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBThreadUtil.class, "_persistence");
 	}
 
 	private static MBThreadPersistence _persistence;

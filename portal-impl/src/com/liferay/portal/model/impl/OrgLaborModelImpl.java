@@ -33,7 +33,9 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base model implementation for the OrgLabor service. Represents a row in the &quot;OrgLabor&quot; database table, with each column mapped to a property of this class.
@@ -168,6 +170,136 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 	public String getModelClassName() {
 		return OrgLabor.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("orgLaborId", getOrgLaborId());
+		attributes.put("organizationId", getOrganizationId());
+		attributes.put("typeId", getTypeId());
+		attributes.put("sunOpen", getSunOpen());
+		attributes.put("sunClose", getSunClose());
+		attributes.put("monOpen", getMonOpen());
+		attributes.put("monClose", getMonClose());
+		attributes.put("tueOpen", getTueOpen());
+		attributes.put("tueClose", getTueClose());
+		attributes.put("wedOpen", getWedOpen());
+		attributes.put("wedClose", getWedClose());
+		attributes.put("thuOpen", getThuOpen());
+		attributes.put("thuClose", getThuClose());
+		attributes.put("friOpen", getFriOpen());
+		attributes.put("friClose", getFriClose());
+		attributes.put("satOpen", getSatOpen());
+		attributes.put("satClose", getSatClose());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long orgLaborId = (Long)attributes.get("orgLaborId");
+
+		if (orgLaborId != null) {
+			setOrgLaborId(orgLaborId);
+		}
+
+		Long organizationId = (Long)attributes.get("organizationId");
+
+		if (organizationId != null) {
+			setOrganizationId(organizationId);
+		}
+
+		Integer typeId = (Integer)attributes.get("typeId");
+
+		if (typeId != null) {
+			setTypeId(typeId);
+		}
+
+		Integer sunOpen = (Integer)attributes.get("sunOpen");
+
+		if (sunOpen != null) {
+			setSunOpen(sunOpen);
+		}
+
+		Integer sunClose = (Integer)attributes.get("sunClose");
+
+		if (sunClose != null) {
+			setSunClose(sunClose);
+		}
+
+		Integer monOpen = (Integer)attributes.get("monOpen");
+
+		if (monOpen != null) {
+			setMonOpen(monOpen);
+		}
+
+		Integer monClose = (Integer)attributes.get("monClose");
+
+		if (monClose != null) {
+			setMonClose(monClose);
+		}
+
+		Integer tueOpen = (Integer)attributes.get("tueOpen");
+
+		if (tueOpen != null) {
+			setTueOpen(tueOpen);
+		}
+
+		Integer tueClose = (Integer)attributes.get("tueClose");
+
+		if (tueClose != null) {
+			setTueClose(tueClose);
+		}
+
+		Integer wedOpen = (Integer)attributes.get("wedOpen");
+
+		if (wedOpen != null) {
+			setWedOpen(wedOpen);
+		}
+
+		Integer wedClose = (Integer)attributes.get("wedClose");
+
+		if (wedClose != null) {
+			setWedClose(wedClose);
+		}
+
+		Integer thuOpen = (Integer)attributes.get("thuOpen");
+
+		if (thuOpen != null) {
+			setThuOpen(thuOpen);
+		}
+
+		Integer thuClose = (Integer)attributes.get("thuClose");
+
+		if (thuClose != null) {
+			setThuClose(thuClose);
+		}
+
+		Integer friOpen = (Integer)attributes.get("friOpen");
+
+		if (friOpen != null) {
+			setFriOpen(friOpen);
+		}
+
+		Integer friClose = (Integer)attributes.get("friClose");
+
+		if (friClose != null) {
+			setFriClose(friClose);
+		}
+
+		Integer satOpen = (Integer)attributes.get("satOpen");
+
+		if (satOpen != null) {
+			setSatOpen(satOpen);
+		}
+
+		Integer satClose = (Integer)attributes.get("satClose");
+
+		if (satClose != null) {
+			setSatClose(satClose);
+		}
 	}
 
 	@JSON

@@ -15,13 +15,11 @@
 package com.liferay.portal.jcr;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
+import com.liferay.portal.kernel.memory.FinalizeManager;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.util.PropsValues;
-
-import java.io.Closeable;
-import java.io.IOException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,23 +50,38 @@ public class JCRFactoryUtil {
 		}
 
 		if (!PropsValues.JCR_WRAP_SESSION) {
-			return getJCRFactory().createSession(workspaceName);
+			JCRFactory jcrFactory = getJCRFactory();
+
+			return jcrFactory.createSession(workspaceName);
 		}
 
-		CloseableSessionMap closableSessionMap = _closeableSessionMaps.get();
+		Map<String, Session> sessions = _sessions.get();
 
-		if (!closableSessionMap.containsKey(workspaceName)) {
-			Session session = getJCRFactory().createSession(workspaceName);
+		Session session = sessions.get(workspaceName);
 
-			Object sessionProxy = ProxyUtil.newProxyInstance(
-				PortalClassLoaderUtil.getClassLoader(),
-				new Class<?>[] {Closeable.class, Map.class, Session.class},
-				new JCRSessionInvocationHandler(session));
-
-			closableSessionMap.put(workspaceName, (Closeable)sessionProxy);
+		if (session != null) {
+			return session;
 		}
 
-		return (Session)closableSessionMap.get(workspaceName);
+		JCRFactory jcrFactory = getJCRFactory();
+
+		Session jcrSession = jcrFactory.createSession(workspaceName);
+
+		JCRSessionInvocationHandler jcrSessionInvocationHandler =
+			new JCRSessionInvocationHandler(jcrSession);
+
+		Object sessionProxy = ProxyUtil.newProxyInstance(
+			PortalClassLoaderUtil.getClassLoader(),
+			new Class<?>[] {Map.class, Session.class},
+			jcrSessionInvocationHandler);
+
+		FinalizeManager.register(sessionProxy, jcrSessionInvocationHandler);
+
+		session = (Session)sessionProxy;
+
+		sessions.put(workspaceName, session);
+
+		return session;
 	}
 
 	public static JCRFactory getJCRFactory() {
@@ -81,31 +94,27 @@ public class JCRFactoryUtil {
 	}
 
 	public static void initialize() throws RepositoryException {
-		getJCRFactory().initialize();
+		JCRFactory jcrFactory = getJCRFactory();
+
+		jcrFactory.initialize();
 	}
 
 	public static void prepare() throws RepositoryException {
-		getJCRFactory().prepare();
+		JCRFactory jcrFactory = getJCRFactory();
+
+		jcrFactory.prepare();
 	}
 
 	public static void shutdown() {
-		getJCRFactory().shutdown();
+		JCRFactory jcrFactory = getJCRFactory();
+
+		jcrFactory.shutdown();
 	}
 
-	private static ThreadLocal<CloseableSessionMap> _closeableSessionMaps =
-		new AutoResetThreadLocal<CloseableSessionMap>(
-			JCRFactoryUtil.class + "._session", new CloseableSessionMap());
 	private static JCRFactory _jcrFactory;
-
-	private static class CloseableSessionMap extends HashMap<String, Closeable>
-		implements Closeable {
-
-		public void close() throws IOException {
-			for (Closeable closeableSession : values()) {
-				closeableSession.close();
-			}
-		}
-
-	}
+	private static ThreadLocal<Map<String, Session>> _sessions =
+		new AutoResetThreadLocal<Map<String, Session>>(
+			JCRFactoryUtil.class + "._sessions",
+			new HashMap<String, Session>());
 
 }

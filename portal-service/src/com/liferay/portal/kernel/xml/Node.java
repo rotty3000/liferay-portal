@@ -31,6 +31,8 @@ public interface Node extends Serializable {
 
 	public Node asXPathResult(Element parent);
 
+	public String compactString() throws IOException;
+
 	public Node detach();
 
 	public String formattedString() throws IOException;
@@ -38,6 +40,10 @@ public interface Node extends Serializable {
 	public String formattedString(String indent) throws IOException;
 
 	public String formattedString(String indent, boolean expandEmptyElements)
+		throws IOException;
+
+	public String formattedString(
+			String indent, boolean expandEmptyElements, boolean trimText)
 		throws IOException;
 
 	public Document getDocument();

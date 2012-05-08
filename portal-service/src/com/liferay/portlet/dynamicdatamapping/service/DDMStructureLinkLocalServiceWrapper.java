@@ -85,6 +85,10 @@ public class DDMStructureLinkLocalServiceWrapper
 		return _ddmStructureLinkLocalService.deleteDDMStructureLink(ddmStructureLink);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _ddmStructureLinkLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
@@ -30,6 +31,7 @@ import java.lang.reflect.Proxy;
 import java.sql.Blob;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -120,6 +122,40 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		</#if>
 
 		);
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		<#list entity.regularColList as column>
+			attributes.put("${column.name}", get${column.methodName}());
+		</#list>
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		<#list entity.regularColList as column>
+			<#if column.isPrimitiveType()>
+				${serviceBuilder.getPrimitiveObj(column.type)}
+			<#else>
+				${column.type}
+			</#if>
+
+			${column.name} =
+
+			<#if column.isPrimitiveType()>
+				(${serviceBuilder.getPrimitiveObj(column.type)})
+			<#else>
+				(${column.type})
+			</#if>
+
+			attributes.get("${column.name}");
+
+			if (${column.name} != null) {
+				set${column.methodName}(${column.name});
+			}
+		</#list>
 	}
 
 	<#list entity.regularColList as column>
@@ -344,6 +380,14 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 		}
 	</#if>
 
+	public BaseModel<?> get${entity.name}RemoteModel() {
+		return _${entity.varName}RemoteModel;
+	}
+
+	public void set${entity.name}RemoteModel(BaseModel<?> ${entity.varName}RemoteModel) {
+		_${entity.varName}RemoteModel = ${entity.varName}RemoteModel;
+	}
+
 	<#if entity.hasLocalService() && entity.hasColumns()>
 		public void persist() throws SystemException {
 			if (this.isNew()) {
@@ -540,5 +584,7 @@ public class ${entity.name}Clp extends BaseModelImpl<${entity.name}> implements 
 			private String _${column.userUuidName};
 		</#if>
 	</#list>
+
+	private BaseModel<?> _${entity.varName}RemoteModel;
 
 }

@@ -990,11 +990,10 @@ public class PortletPreferencesUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(PortletPreferencesPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(PortletPreferencesUtil.class,
-			"_persistence");
 	}
 
 	private static PortletPreferencesPersistence _persistence;

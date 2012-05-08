@@ -505,6 +505,7 @@ create table DDMTemplate (
 	modifiedDate DATE null,
 	classNameId LONG,
 	classPK LONG,
+	templateKey VARCHAR(75) null,
 	name STRING null,
 	description STRING null,
 	type_ VARCHAR(75) null,
@@ -1982,10 +1983,20 @@ create table TrashEntry (
 	entryId LONG not null primary key,
 	groupId LONG,
 	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
 	createDate DATE null,
 	classNameId LONG,
 	classPK LONG,
 	typeSettings TEXT null,
+	status INTEGER
+);
+
+create table TrashVersion (
+	versionId LONG not null primary key,
+	entryId LONG,
+	classNameId LONG,
+	classPK LONG,
 	status INTEGER
 );
 

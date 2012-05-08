@@ -705,11 +705,10 @@ public class RepositoryEntryUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(RepositoryEntryPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(RepositoryEntryUtil.class,
-			"_persistence");
 	}
 
 	private static RepositoryEntryPersistence _persistence;

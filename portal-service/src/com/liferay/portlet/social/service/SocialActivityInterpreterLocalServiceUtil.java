@@ -111,14 +111,10 @@ public class SocialActivityInterpreterLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SocialActivityInterpreterLocalService service) {
-		MethodCache.remove(SocialActivityInterpreterLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SocialActivityInterpreterLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SocialActivityInterpreterLocalService.class);
 	}
 
 	private static SocialActivityInterpreterLocalService _service;

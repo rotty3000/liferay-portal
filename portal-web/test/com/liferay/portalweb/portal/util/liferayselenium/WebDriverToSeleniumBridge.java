@@ -23,10 +23,12 @@ import com.liferay.portalweb.portal.util.TestPropsValues;
 import com.thoughtworks.selenium.Selenium;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
@@ -41,6 +43,8 @@ public class WebDriverToSeleniumBridge
 
 	public WebDriverToSeleniumBridge(WebDriver webDriver) {
 		super(webDriver);
+
+		initKeys();
 	}
 
 	public void addCustomRequestHeader(String key, String value) {
@@ -61,7 +65,8 @@ public class WebDriverToSeleniumBridge
 		Select select = new Select(getWebElement(locator));
 
 		if (optionLocator.startsWith("index=")) {
-			select.selectByIndex(Integer.parseInt(optionLocator.substring(6)));
+			select.selectByIndex(
+				GetterUtil.getInteger(optionLocator.substring(6)));
 		}
 		else if (optionLocator.startsWith("label=")) {
 			select.selectByVisibleText(optionLocator.substring(6));
@@ -119,7 +124,11 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void check(String locator) {
-		click(locator);
+		WebElement webElement = getWebElement(locator);
+
+		if (!webElement.isSelected()) {
+			webElement.click();
+		}
 	}
 
 	public void chooseCancelOnNextConfirmation() {
@@ -539,7 +548,26 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void keyPress(String locator, String keySequence) {
-		throw new UnsupportedOperationException();
+		Actions actions = new Actions(this);
+
+		WebElement webElement = getWebElement(locator);
+
+		if (locator.startsWith("\\")) {
+			int index = GetterUtil.getInteger(keySequence.substring(1));
+
+			Keys keys = _keysArray[index];
+
+			actions.keyDown(webElement, keys);
+
+			actions.keyUp(webElement, keys);
+
+			actions.build();
+
+			actions.perform();
+		}
+		else {
+			webElement.sendKeys(keySequence);
+		}
 	}
 
 	public void keyPressNative(String keycode) {
@@ -709,7 +737,30 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void selectWindow(String windowID) {
-		throw new UnsupportedOperationException();
+		Set<String> windowHandles = getWindowHandles();
+
+		if (!windowHandles.isEmpty()) {
+			String title = windowID;
+
+			if (title.startsWith("title=")) {
+				title = title.substring(6);
+			}
+
+			for (String windowHandle : windowHandles) {
+				WebDriver.TargetLocator targetLocator = switchTo();
+
+				targetLocator.window(windowHandle);
+
+				if (title.equals(getTitle())) {
+					return;
+				}
+			}
+		}
+		else if (windowID.equals("null")) {
+			WebDriver.TargetLocator targetLocator = switchTo();
+
+			targetLocator.defaultContent();
+		}
 	}
 
 	public void setBrowserLogLevel(String logLevel) {
@@ -786,15 +837,29 @@ public class WebDriverToSeleniumBridge
 	}
 
 	public void type(String locator, String value) {
-		throw new UnsupportedOperationException();
+		WebElement webElement = getWebElement(locator);
+
+		if (webElement.isEnabled()) {
+			webElement.clear();
+
+			webElement.sendKeys(value);
+		}
 	}
 
 	public void typeKeys(String locator, String value) {
-		throw new UnsupportedOperationException();
+		WebElement webElement = getWebElement(locator);
+
+		if (webElement.isEnabled()) {
+			webElement.sendKeys(value);
+		}
 	}
 
 	public void uncheck(String locator) {
-		throw new UnsupportedOperationException();
+		WebElement webElement = getWebElement(locator);
+
+		if (webElement.isSelected()) {
+			webElement.click();
+		}
 	}
 
 	public void useXpathLibrary(String libraryName) {
@@ -885,5 +950,75 @@ public class WebDriverToSeleniumBridge
 			return findElements(By.id(locator));
 		}
 	}
+
+	protected void initKeys() {
+
+		// ASCII to WebDriver
+
+		_keysArray[107] = Keys.ADD;
+		_keysArray[18] = Keys.ALT;
+		_keysArray[40] = Keys.ARROW_DOWN;
+		_keysArray[37] = Keys.ARROW_LEFT;
+		_keysArray[39] = Keys.ARROW_RIGHT;
+		_keysArray[38] = Keys.ARROW_UP;
+		_keysArray[8] = Keys.BACK_SPACE;
+		//keyTable[] = Keys.CANCEL;
+		//keyTable[] = Keys.CLEAR;
+		//keyTable[] = Keys.COMMAND;
+		_keysArray[17] = Keys.CONTROL;
+		_keysArray[110] = Keys.DECIMAL;
+		_keysArray[46] = Keys.DELETE;
+		_keysArray[111] = Keys.DIVIDE;
+		//keyTable[] = Keys.DOWN;
+		//keyTable[] = Keys.END;
+		_keysArray[13] = Keys.ENTER;
+		//keyTable[] = Keys.EQUALS;
+		_keysArray[27] = Keys.ESCAPE;
+		_keysArray[112] = Keys.F1;
+		_keysArray[121] = Keys.F10;
+		_keysArray[122] = Keys.F11;
+		_keysArray[123] = Keys.F12;
+		_keysArray[113] = Keys.F2;
+		_keysArray[114] = Keys.F3;
+		_keysArray[115] = Keys.F4;
+		_keysArray[116] = Keys.F5;
+		_keysArray[117] = Keys.F6;
+		_keysArray[118] = Keys.F7;
+		_keysArray[119] = Keys.F8;
+		_keysArray[120] = Keys.F9;
+		//keyTable[] = Keys.HELP;
+		_keysArray[36] = Keys.HOME;
+		_keysArray[45] = Keys.INSERT;
+		//keyTable[] = Keys.LEFT;
+		//keyTable[] = Keys.LEFT_ALT;
+		//keyTable[] = Keys.LEFT_CONTROL;
+		//keyTable[] = Keys.LEFT_SHIFT;
+		//keyTable[] = Keys.META;
+		//keyTable[] = Keys.NULL;
+		_keysArray[96] = Keys.NUMPAD0;
+		_keysArray[97] = Keys.NUMPAD1;
+		_keysArray[98] = Keys.NUMPAD2;
+		_keysArray[99] = Keys.NUMPAD3;
+		_keysArray[100] = Keys.NUMPAD4;
+		_keysArray[101] = Keys.NUMPAD5;
+		_keysArray[102] = Keys.NUMPAD6;
+		_keysArray[103] = Keys.NUMPAD7;
+		_keysArray[104] = Keys.NUMPAD8;
+		_keysArray[105] = Keys.NUMPAD9;
+		_keysArray[34] = Keys.PAGE_DOWN;
+		_keysArray[33] = Keys.PAGE_UP;
+		_keysArray[19] = Keys.PAUSE;
+		//keyTable[] = Keys.RETURN;
+		//keyTable[] = Keys.RIGHT;
+		//keyTable[] = Keys.SEMICOLON;
+		//keyTable[] = Keys.SEPARATOR;
+		_keysArray[16] = Keys.SHIFT;
+		_keysArray[32] = Keys.SPACE;
+		_keysArray[109] = Keys.SUBTRACT;
+		_keysArray[9] = Keys.TAB;
+		//keyTable[] = Keys.UP;
+	}
+
+	private Keys[] _keysArray = new Keys[128];
 
 }

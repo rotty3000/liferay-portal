@@ -90,6 +90,10 @@ public class ResourceBlockLocalServiceUtil {
 		return getService().deleteResourceBlock(resourceBlock);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -764,14 +768,10 @@ public class ResourceBlockLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(ResourceBlockLocalService service) {
-		MethodCache.remove(ResourceBlockLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(ResourceBlockLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(ResourceBlockLocalService.class);
 	}
 
 	private static ResourceBlockLocalService _service;

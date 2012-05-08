@@ -39,6 +39,24 @@ public class UserGroupServiceUtil {
 	 */
 
 	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	/**
 	* Adds the user groups to the group.
 	*
 	* @param groupId the primary key of the group
@@ -215,14 +233,10 @@ public class UserGroupServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(UserGroupService service) {
-		MethodCache.remove(UserGroupService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(UserGroupServiceUtil.class,
-			"_service");
-		MethodCache.remove(UserGroupService.class);
 	}
 
 	private static UserGroupService _service;

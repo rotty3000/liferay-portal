@@ -1546,11 +1546,10 @@ public class JournalTemplateUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(JournalTemplatePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(JournalTemplateUtil.class,
-			"_persistence");
 	}
 
 	private static JournalTemplatePersistence _persistence;

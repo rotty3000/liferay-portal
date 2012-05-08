@@ -1088,10 +1088,10 @@ public class AssetLinkUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(AssetLinkPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(AssetLinkUtil.class, "_persistence");
 	}
 
 	private static AssetLinkPersistence _persistence;

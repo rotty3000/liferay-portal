@@ -61,6 +61,10 @@ public class PwdToolkitUtil {
 			PasswordPolicy passwordPolicy)
 		throws PortalException, SystemException {
 
+		if (!PwdToolkitUtilThreadLocal.isValidate()) {
+			return;
+		}
+
 		_toolkit.validate(userId, password1, password2, passwordPolicy);
 	}
 

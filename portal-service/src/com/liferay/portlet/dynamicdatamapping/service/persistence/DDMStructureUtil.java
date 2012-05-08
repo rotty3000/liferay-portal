@@ -1495,11 +1495,10 @@ public class DDMStructureUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DDMStructurePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DDMStructureUtil.class,
-			"_persistence");
 	}
 
 	private static DDMStructurePersistence _persistence;

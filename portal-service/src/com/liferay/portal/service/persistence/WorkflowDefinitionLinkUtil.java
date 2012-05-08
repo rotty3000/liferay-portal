@@ -702,11 +702,10 @@ public class WorkflowDefinitionLinkUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(WorkflowDefinitionLinkPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(WorkflowDefinitionLinkUtil.class,
-			"_persistence");
 	}
 
 	private static WorkflowDefinitionLinkPersistence _persistence;

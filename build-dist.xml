@@ -864,49 +864,6 @@ release was successful.</echo>
 				<exclude name="*.bat"/>
 			</fileset>
 		</chmod>
-
-		<replace file="${app.server.glassfish.dir}/osgi/felix/conf/config.properties">
-			<replacetoken><![CDATA[org.xml.sax.helpers ${endorsed-standard-packages}]]></replacetoken>
-			<replacevalue><![CDATA[org.xml.sax.helpers, org.apache.felix.framework ${endorsed-standard-packages}]]></replacevalue>
-		</replace>
-
-		<if>
-			<equals arg1="${app.server.glassfish.version}" arg2="3.1.1" />
-			<then>
-
-				<!-- GLASSFISH-17242 -->
-
-				<zip
-					basedir="tools/servers/glassfish/patches/GLASSFISH-17242/classes"
-					destfile="${app.server.glassfish.dir}/modules/deployment-admin.jar"
-					includes="**/InstanceDeployCommand.class"
-					update="yes"
-				/>
-
-				<zip
-					basedir="tools/servers/glassfish/patches/GLASSFISH-17242/classes"
-					destfile="${app.server.glassfish.dir}/modules/deployment-common.jar"
-					includes="**/Util.class"
-					update="yes"
-				/>
-
-				<zip
-					basedir="tools/servers/glassfish/patches/GLASSFISH-17242/classes"
-					destfile="${app.server.glassfish.dir}/modules/kernel.jar"
-					includes="**/SnifferManagerImpl*.class"
-					update="yes"
-				/>
-
-				<!-- GRIZZLY-1060 -->
-
-				<zip
-					basedir="tools/servers/glassfish/patches/GRIZZLY-1060/classes"
-					destfile="${app.server.glassfish.dir}/modules/grizzly-utils.jar"
-					includes="**/OutputWriter.class"
-					update="yes"
-				/>
-			</then>
-		</if>
 	</target>
 
 	<target name="unzip-jboss">
@@ -944,27 +901,14 @@ release was successful.</echo>
 			</fileset>
 		</chmod>
 
-		<replace file="${app.server.jboss.dir}/modules/javax/activation/api/main/module.xml">
-			<replacetoken><![CDATA[<resources>]]></replacetoken>
-			<replacevalue><![CDATA[
-					<dependencies>
-						<module name="javax.api" />
-						<module name="javax.mail.api">
-							<imports><include path="META-INF" /></imports>
-						</module>
-					</dependencies>
-				<resources>]]>
-			</replacevalue>
-		</replace>
-
 		<replace file="${app.server.jboss.dir}/standalone/configuration/standalone.xml">
 			<replacetoken><![CDATA[enable-welcome-root="true"]]></replacetoken>
 			<replacevalue><![CDATA[enable-welcome-root="false"]]></replacevalue>
 		</replace>
 
 		<replace file="${app.server.jboss.dir}/standalone/configuration/standalone.xml">
-			<replacetoken><![CDATA[<deployment-scanner scan-interval="]]></replacetoken>
-			<replacevalue><![CDATA[<deployment-scanner deployment-timeout="120" scan-interval="]]></replacevalue>
+			<replacetoken><![CDATA[<deployment-scanner ]]></replacetoken>
+			<replacevalue><![CDATA[<deployment-scanner deployment-timeout="120" ]]></replacevalue>
 		</replace>
 
 		<replace file="${app.server.jboss.dir}/standalone/configuration/standalone.xml">

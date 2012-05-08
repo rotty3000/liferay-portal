@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link PasswordPolicyRel}.
@@ -35,6 +38,43 @@ public class PasswordPolicyRelWrapper implements PasswordPolicyRel,
 
 	public String getModelClassName() {
 		return PasswordPolicyRel.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("passwordPolicyRelId", getPasswordPolicyRelId());
+		attributes.put("passwordPolicyId", getPasswordPolicyId());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("classPK", getClassPK());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long passwordPolicyRelId = (Long)attributes.get("passwordPolicyRelId");
+
+		if (passwordPolicyRelId != null) {
+			setPasswordPolicyRelId(passwordPolicyRelId);
+		}
+
+		Long passwordPolicyId = (Long)attributes.get("passwordPolicyId");
+
+		if (passwordPolicyId != null) {
+			setPasswordPolicyId(passwordPolicyId);
+		}
+
+		Long classNameId = (Long)attributes.get("classNameId");
+
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Long classPK = (Long)attributes.get("classPK");
+
+		if (classPK != null) {
+			setClassPK(classPK);
+		}
 	}
 
 	/**

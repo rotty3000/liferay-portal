@@ -862,10 +862,10 @@ public class LockUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(LockPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(LockUtil.class, "_persistence");
 	}
 
 	private static LockPersistence _persistence;

@@ -27,6 +27,7 @@ import com.liferay.portal.model.Ticket;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.pwd.PwdToolkitUtilThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -144,6 +145,21 @@ public class UpdatePasswordAction extends Action {
 		return null;
 	}
 
+	protected boolean isValidatePassword(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+
+		Boolean setupWizardPasswordUpdated = (Boolean)session.getAttribute(
+			WebKeys.SETUP_WIZARD_PASSWORD_UPDATED);
+
+		if ((setupWizardPasswordUpdated != null) &&
+			 setupWizardPasswordUpdated) {
+
+			return false;
+		}
+
+		return true;
+	}
+
 	protected void updatePassword(
 			HttpServletRequest request, HttpServletResponse response,
 			ThemeDisplay themeDisplay, Ticket ticket)
@@ -164,8 +180,19 @@ public class UpdatePasswordAction extends Action {
 		String password2 = request.getParameter("password2");
 		boolean passwordReset = false;
 
-		UserLocalServiceUtil.updatePassword(
-			userId, password1, password2, passwordReset);
+		boolean previousValidate = PwdToolkitUtilThreadLocal.isValidate();
+
+		try {
+			boolean currentValidate = isValidatePassword(request);
+
+			PwdToolkitUtilThreadLocal.setValidate(currentValidate);
+
+			UserLocalServiceUtil.updatePassword(
+				userId, password1, password2, passwordReset);
+		}
+		finally {
+			PwdToolkitUtilThreadLocal.setValidate(previousValidate);
+		}
 
 		if (ticket != null) {
 			TicketLocalServiceUtil.deleteTicket(ticket);

@@ -48,6 +48,7 @@ import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.impl.OrganizationImpl;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -61,9 +62,11 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The implementation of the organization local service.
@@ -183,11 +186,6 @@ public class OrganizationLocalServiceImpl
 
 		userGroupRoleLocalService.addUserGroupRoles(
 			userId, group.getGroupId(), new long[] {role.getRoleId()});
-
-		// User
-
-		userLocalService.addOrganizationUsers(
-			organizationId, new long[] {userId});
 
 		// Resources
 
@@ -667,6 +665,56 @@ public class OrganizationLocalServiceImpl
 
 		return getUserOrganizations(
 			userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	}
+
+	/**
+	 * Returns all the organizations associated with the user. If includeNonUser
+	 * is <code>true</code>, the result includes those organizations that are
+	 * not directly associated to the user but he is an owner or an
+	 * administrator of the organization.
+	 *
+	 * @param  userId the primary key of the user
+	 * @param  includeIndirectlyAssociated whether to includes organizations
+	 *         that are indirectly associated to the user because he is an owner
+	 *         or an administrator of the organization
+	 * @return the organizations associated with the user
+	 * @throws PortalException if a user with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<Organization> getUserOrganizations(
+			long userId, boolean includeIndirectlyAssociated)
+		throws PortalException, SystemException {
+
+		if (!includeIndirectlyAssociated) {
+			return getUserOrganizations(userId);
+		}
+
+		Set<Organization> organizations = new HashSet<Organization>();
+
+		List<UserGroupRole> userGroupRoles =
+			userGroupRoleLocalService.getUserGroupRoles(userId);
+
+		for (UserGroupRole userGroupRole : userGroupRoles) {
+			Role role = userGroupRole.getRole();
+
+			String roleName = role.getName();
+
+			if (roleName.equals(RoleConstants.ORGANIZATION_ADMINISTRATOR) ||
+				roleName.equals(RoleConstants.ORGANIZATION_OWNER)) {
+
+				Group group = userGroupRole.getGroup();
+
+				Organization organization =
+					organizationPersistence.findByPrimaryKey(
+						group.getOrganizationId());
+
+				organizations.add(organization);
+			}
+		}
+
+		organizations.addAll(getUserOrganizations(userId));
+
+		return new ArrayList<Organization>(organizations);
 	}
 
 	/**
@@ -1819,7 +1867,7 @@ public class OrganizationLocalServiceImpl
 				if ((organizationId <= 0) ||
 					(organization.getOrganizationId() != organizationId)) {
 
-					throw new DuplicateOrganizationException();
+					throw new DuplicateOrganizationException(name);
 				}
 			}
 		}

@@ -21,7 +21,9 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 
+import java.util.Collections;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * The base implementation for all model classes. This class should never need
@@ -39,6 +41,10 @@ public abstract class BaseModelImpl<T> implements BaseModel<T> {
 
 	public ExpandoBridge getExpandoBridge() {
 		throw new UnsupportedOperationException();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		return Collections.emptyMap();
 	}
 
 	public boolean isCachedModel() {
@@ -62,6 +68,9 @@ public abstract class BaseModelImpl<T> implements BaseModel<T> {
 
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
 		throw new UnsupportedOperationException();
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
 	}
 
 	public void setNew(boolean n) {

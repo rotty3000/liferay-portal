@@ -779,10 +779,10 @@ public class RegionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(RegionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(RegionUtil.class, "_persistence");
 	}
 
 	private static RegionPersistence _persistence;

@@ -90,6 +90,10 @@ public class PluginSettingLocalServiceUtil {
 		return getService().deletePluginSetting(pluginSetting);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -305,14 +309,10 @@ public class PluginSettingLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PluginSettingLocalService service) {
-		MethodCache.remove(PluginSettingLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PluginSettingLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PluginSettingLocalService.class);
 	}
 
 	private static PluginSettingLocalService _service;

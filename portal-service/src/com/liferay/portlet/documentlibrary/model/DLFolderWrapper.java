@@ -16,6 +16,10 @@ package com.liferay.portlet.documentlibrary.model;
 
 import com.liferay.portal.model.ModelWrapper;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link DLFolder}.
@@ -36,6 +40,129 @@ public class DLFolderWrapper implements DLFolder, ModelWrapper<DLFolder> {
 
 	public String getModelClassName() {
 		return DLFolder.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("folderId", getFolderId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("repositoryId", getRepositoryId());
+		attributes.put("mountPoint", getMountPoint());
+		attributes.put("parentFolderId", getParentFolderId());
+		attributes.put("name", getName());
+		attributes.put("description", getDescription());
+		attributes.put("lastPostDate", getLastPostDate());
+		attributes.put("defaultFileEntryTypeId", getDefaultFileEntryTypeId());
+		attributes.put("overrideFileEntryTypes", getOverrideFileEntryTypes());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long folderId = (Long)attributes.get("folderId");
+
+		if (folderId != null) {
+			setFolderId(folderId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long repositoryId = (Long)attributes.get("repositoryId");
+
+		if (repositoryId != null) {
+			setRepositoryId(repositoryId);
+		}
+
+		Boolean mountPoint = (Boolean)attributes.get("mountPoint");
+
+		if (mountPoint != null) {
+			setMountPoint(mountPoint);
+		}
+
+		Long parentFolderId = (Long)attributes.get("parentFolderId");
+
+		if (parentFolderId != null) {
+			setParentFolderId(parentFolderId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		Date lastPostDate = (Date)attributes.get("lastPostDate");
+
+		if (lastPostDate != null) {
+			setLastPostDate(lastPostDate);
+		}
+
+		Long defaultFileEntryTypeId = (Long)attributes.get(
+				"defaultFileEntryTypeId");
+
+		if (defaultFileEntryTypeId != null) {
+			setDefaultFileEntryTypeId(defaultFileEntryTypeId);
+		}
+
+		Boolean overrideFileEntryTypes = (Boolean)attributes.get(
+				"overrideFileEntryTypes");
+
+		if (overrideFileEntryTypes != null) {
+			setOverrideFileEntryTypes(overrideFileEntryTypes);
+		}
 	}
 
 	/**

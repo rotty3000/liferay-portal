@@ -927,10 +927,10 @@ public class DDMContentUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DDMContentPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DDMContentUtil.class, "_persistence");
 	}
 
 	private static DDMContentPersistence _persistence;

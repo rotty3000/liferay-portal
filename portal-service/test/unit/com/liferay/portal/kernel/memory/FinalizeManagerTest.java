@@ -14,28 +14,20 @@
 
 package com.liferay.portal.kernel.memory;
 
-import com.liferay.portal.kernel.test.TestCase;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.test.BaseTestCase;
 
 /**
  * @author Shuyang Zhou
  */
-public class FinalizeManagerTest extends TestCase {
+public class FinalizeManagerTest extends BaseTestCase {
 
 	public void testRegister() throws InterruptedException {
-		Thread currentThread = Thread.currentThread();
-
-		PortalClassLoaderUtil.setClassLoader(
-			currentThread.getContextClassLoader());
-
 		if (FinalizeManager.THREAD_ENABLED) {
 			registerWithThread();
 		}
 		else {
 			registerWithoutThread();
 		}
-
-		PortalClassLoaderUtil.setClassLoader(null);
 	}
 
 	protected void registerWithoutThread() throws InterruptedException {

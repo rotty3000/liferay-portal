@@ -90,6 +90,10 @@ public class PollsQuestionLocalServiceUtil {
 		return getService().deletePollsQuestion(pollsQuestion);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -405,14 +409,10 @@ public class PollsQuestionLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PollsQuestionLocalService service) {
-		MethodCache.remove(PollsQuestionLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PollsQuestionLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PollsQuestionLocalService.class);
 	}
 
 	private static PollsQuestionLocalService _service;

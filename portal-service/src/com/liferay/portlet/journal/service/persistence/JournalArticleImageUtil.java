@@ -846,11 +846,10 @@ public class JournalArticleImageUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(JournalArticleImagePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(JournalArticleImageUtil.class,
-			"_persistence");
 	}
 
 	private static JournalArticleImagePersistence _persistence;

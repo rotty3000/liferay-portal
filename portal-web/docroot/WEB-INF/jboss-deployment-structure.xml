@@ -10,12 +10,6 @@
 			<module name="javax.mail.api" />
 			<module name="org.apache.xerces" />
 			<module name="org.jboss.modules" />
-			<module name="system" export="false">
-				<imports>
-					<include path="com/sun/jmx"/>
-					<exclude path="/**" />
-				</imports>
-			</module>
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>

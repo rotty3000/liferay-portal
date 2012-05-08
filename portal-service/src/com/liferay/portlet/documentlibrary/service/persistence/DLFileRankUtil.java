@@ -792,10 +792,10 @@ public class DLFileRankUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(DLFileRankPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(DLFileRankUtil.class, "_persistence");
 	}
 
 	private static DLFileRankPersistence _persistence;

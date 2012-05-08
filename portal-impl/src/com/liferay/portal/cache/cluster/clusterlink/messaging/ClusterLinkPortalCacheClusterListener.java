@@ -76,7 +76,7 @@ public class ClusterLinkPortalCacheClusterListener
 				portalCacheClusterEvent.getEventType();
 
 			if (portalCacheClusterEventType.equals(
-					PortalCacheClusterEventType.REMOVEALL)) {
+					PortalCacheClusterEventType.REMOVE_ALL)) {
 
 				ehcache.removeAll(true);
 			}

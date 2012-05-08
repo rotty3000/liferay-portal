@@ -90,6 +90,10 @@ public class DLFileEntryTypeLocalServiceUtil {
 		return getService().deleteDLFileEntryType(dlFileEntryType);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -424,14 +428,10 @@ public class DLFileEntryTypeLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(DLFileEntryTypeLocalService service) {
-		MethodCache.remove(DLFileEntryTypeLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(DLFileEntryTypeLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(DLFileEntryTypeLocalService.class);
 	}
 
 	private static DLFileEntryTypeLocalService _service;

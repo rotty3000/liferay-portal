@@ -270,10 +270,10 @@ public class CounterUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(CounterPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(CounterUtil.class, "_persistence");
 	}
 
 	private static CounterPersistence _persistence;

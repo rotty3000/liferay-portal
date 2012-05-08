@@ -90,6 +90,10 @@ public class RepositoryEntryLocalServiceUtil {
 		return getService().deleteRepositoryEntry(repositoryEntry);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -291,14 +295,10 @@ public class RepositoryEntryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(RepositoryEntryLocalService service) {
-		MethodCache.remove(RepositoryEntryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(RepositoryEntryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(RepositoryEntryLocalService.class);
 	}
 
 	private static RepositoryEntryLocalService _service;

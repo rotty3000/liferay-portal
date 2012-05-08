@@ -90,6 +90,10 @@ public class JournalFolderLocalServiceUtil {
 		return getService().deleteJournalFolder(journalFolder);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -408,14 +412,10 @@ public class JournalFolderLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(JournalFolderLocalService service) {
-		MethodCache.remove(JournalFolderLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(JournalFolderLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(JournalFolderLocalService.class);
 	}
 
 	private static JournalFolderLocalService _service;

@@ -90,6 +90,10 @@ public class BrowserTrackerLocalServiceUtil {
 		return getService().deleteBrowserTracker(browserTracker);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -292,14 +296,10 @@ public class BrowserTrackerLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(BrowserTrackerLocalService service) {
-		MethodCache.remove(BrowserTrackerLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(BrowserTrackerLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(BrowserTrackerLocalService.class);
 	}
 
 	private static BrowserTrackerLocalService _service;

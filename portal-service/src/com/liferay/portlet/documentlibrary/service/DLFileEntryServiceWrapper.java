@@ -31,6 +31,24 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService,
 		_dlFileEntryService = dlFileEntryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _dlFileEntryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_dlFileEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry addFileEntry(
 		long groupId, long repositoryId, long folderId,
 		java.lang.String sourceFileName, java.lang.String mimeType,
@@ -126,6 +144,12 @@ public class DLFileEntryServiceWrapper implements DLFileEntryService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_dlFileEntryService.deleteFileEntry(groupId, folderId, title);
+	}
+
+	public void deleteFileVersion(long fileEntryId, java.lang.String version)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_dlFileEntryService.deleteFileVersion(fileEntryId, version);
 	}
 
 	public com.liferay.portlet.documentlibrary.model.DLFileEntry fetchFileEntryByImageId(

@@ -797,11 +797,10 @@ public class MBStatsUserUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBStatsUserPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBStatsUserUtil.class,
-			"_persistence");
 	}
 
 	private static MBStatsUserPersistence _persistence;

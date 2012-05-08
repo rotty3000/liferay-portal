@@ -90,6 +90,10 @@ public class VirtualHostLocalServiceUtil {
 		return getService().deleteVirtualHost(virtualHost);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -307,14 +311,10 @@ public class VirtualHostLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(VirtualHostLocalService service) {
-		MethodCache.remove(VirtualHostLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(VirtualHostLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(VirtualHostLocalService.class);
 	}
 
 	private static VirtualHostLocalService _service;

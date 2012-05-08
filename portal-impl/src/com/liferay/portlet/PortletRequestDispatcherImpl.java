@@ -281,7 +281,14 @@ public class PortletRequestDispatcherImpl implements PortletRequestDispatcher {
 				pathInfo = pathNoQueryString;
 			}
 
-			requestURI = portletRequest.getContextPath() + pathNoQueryString;
+			String contextPath = portletRequest.getContextPath();
+
+			if (contextPath.equals(StringPool.SLASH)) {
+				requestURI = pathNoQueryString;
+			}
+			else {
+				requestURI = contextPath + pathNoQueryString;
+			}
 		}
 
 		PortletServletRequest portletServletRequest = new PortletServletRequest(

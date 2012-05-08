@@ -29,7 +29,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.process.ClassPathUtil;
-import com.liferay.portal.kernel.servlet.DirectServletRegistry;
+import com.liferay.portal.kernel.servlet.DirectServletRegistryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.CharBufferPool;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
@@ -101,6 +101,13 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		}
 
 		try {
+			DirectServletRegistryUtil.clearServlets();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		try {
 			HotDeployUtil.reset();
 		}
 		catch (Exception e) {
@@ -142,8 +149,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
 		ClassPathUtil.initializeClassPaths(servletContext);
-
-		DirectServletRegistry.clearServlets();
 
 		CacheRegistryUtil.clear();
 		CharBufferPool.cleanUp();

@@ -88,6 +88,10 @@ public class AccountLocalServiceUtil {
 		return getService().deleteAccount(account);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -278,14 +282,10 @@ public class AccountLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AccountLocalService service) {
-		MethodCache.remove(AccountLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AccountLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AccountLocalService.class);
 	}
 
 	private static AccountLocalService _service;

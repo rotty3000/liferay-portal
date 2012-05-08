@@ -90,6 +90,10 @@ public class AnnouncementsEntryLocalServiceUtil {
 		return getService().deleteAnnouncementsEntry(announcementsEntry);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -442,14 +446,10 @@ public class AnnouncementsEntryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AnnouncementsEntryLocalService service) {
-		MethodCache.remove(AnnouncementsEntryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AnnouncementsEntryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AnnouncementsEntryLocalService.class);
 	}
 
 	private static AnnouncementsEntryLocalService _service;

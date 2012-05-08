@@ -1220,11 +1220,10 @@ public class LayoutPrototypeUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(LayoutPrototypePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(LayoutPrototypeUtil.class,
-			"_persistence");
 	}
 
 	private static LayoutPrototypePersistence _persistence;

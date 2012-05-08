@@ -79,6 +79,10 @@ public class ShardLocalServiceWrapper implements ShardLocalService,
 		return _shardLocalService.deleteShard(shard);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _shardLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

@@ -90,6 +90,10 @@ public class AssetEntryLocalServiceUtil {
 		return getService().deleteAssetEntry(assetEntry);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -526,14 +530,10 @@ public class AssetEntryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(AssetEntryLocalService service) {
-		MethodCache.remove(AssetEntryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(AssetEntryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(AssetEntryLocalService.class);
 	}
 
 	private static AssetEntryLocalService _service;

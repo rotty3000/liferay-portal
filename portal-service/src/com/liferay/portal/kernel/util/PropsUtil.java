@@ -15,8 +15,6 @@
 package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.util.Properties;
 
@@ -25,132 +23,44 @@ import java.util.Properties;
  */
 public class PropsUtil {
 
+	public static boolean contains(String key) {
+		return getProps().contains(key);
+	}
+
 	public static String get(String key) {
-		String value = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getMethodKey1, key);
-
-			if (returnObj != null) {
-				value = (String)returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return value;
+		return getProps().get(key);
 	}
 
 	public static String get(String key, Filter filter) {
-		String value = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getMethodKey2, key, filter);
-
-			if (returnObj != null) {
-				value = (String)returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return value;
+		return getProps().get(key, filter);
 	}
 
 	public static String[] getArray(String key) {
-		String[] value = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getArrayMethodKey1, key);
-
-			if (returnObj != null) {
-				value = (String[])returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return value;
+		return getProps().getArray(key);
 	}
 
 	public static String[] getArray(String key, Filter filter) {
-		String[] value = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getArrayMethodKey2, key, filter);
-
-			if (returnObj != null) {
-				value = (String[])returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return value;
+		return getProps().getArray(key, filter);
 	}
 
 	public static Properties getProperties() {
-		Properties properties = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getPropertiesMethodKey1);
-
-			if (returnObj != null) {
-				properties = (Properties)returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return properties;
+		return getProps().getProperties();
 	}
 
 	public static Properties getProperties(
 		String prefix, boolean removePrefix) {
 
-		Properties properties = null;
-
-		try {
-			Object returnObj = PortalClassInvoker.invoke(
-				false, _getPropertiesMethodKey2, prefix, removePrefix);
-
-			if (returnObj != null) {
-				properties = (Properties)returnObj;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return properties;
+		return getProps().getProperties(prefix, removePrefix);
 	}
 
-	private static final String _CLASS_NAME =
-		"com.liferay.portal.util.PropsUtil";
+	public static Props getProps() {
+		return _props;
+	}
 
-	private static Log _log = LogFactoryUtil.getLog(PropsUtil.class);
+	public static void setProps(Props props) {
+		_props = props;
+	}
 
-	private static MethodKey _getArrayMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getArray", String.class);
-	private static MethodKey _getArrayMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getArray", String.class, Filter.class);
-	private static MethodKey _getMethodKey1 = new MethodKey(
-		_CLASS_NAME, "get", String.class);
-	private static MethodKey _getMethodKey2 = new MethodKey(
-		_CLASS_NAME, "get", String.class, Filter.class);
-	private static MethodKey _getPropertiesMethodKey1 = new MethodKey(
-		_CLASS_NAME, "getProperties");
-	private static MethodKey _getPropertiesMethodKey2 = new MethodKey(
-		_CLASS_NAME, "getProperties", String.class, boolean.class);
+	private static Props _props;
 
 }

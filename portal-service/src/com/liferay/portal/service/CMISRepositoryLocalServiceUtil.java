@@ -95,14 +95,10 @@ public class CMISRepositoryLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(CMISRepositoryLocalService service) {
-		MethodCache.remove(CMISRepositoryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(CMISRepositoryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(CMISRepositoryLocalService.class);
 	}
 
 	private static CMISRepositoryLocalService _service;

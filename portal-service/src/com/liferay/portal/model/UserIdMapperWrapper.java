@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link UserIdMapper}.
@@ -35,6 +38,50 @@ public class UserIdMapperWrapper implements UserIdMapper,
 
 	public String getModelClassName() {
 		return UserIdMapper.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("userIdMapperId", getUserIdMapperId());
+		attributes.put("userId", getUserId());
+		attributes.put("type", getType());
+		attributes.put("description", getDescription());
+		attributes.put("externalUserId", getExternalUserId());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long userIdMapperId = (Long)attributes.get("userIdMapperId");
+
+		if (userIdMapperId != null) {
+			setUserIdMapperId(userIdMapperId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String type = (String)attributes.get("type");
+
+		if (type != null) {
+			setType(type);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String externalUserId = (String)attributes.get("externalUserId");
+
+		if (externalUserId != null) {
+			setExternalUserId(externalUserId);
+		}
 	}
 
 	/**

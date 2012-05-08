@@ -1442,7 +1442,7 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 				Contact.class.getName(), user.getContactId(), addresses);
 		}
 
-		if (emailAddress != null) {
+		if (emailAddresses != null) {
 			UsersAdminUtil.updateEmailAddresses(
 				Contact.class.getName(), user.getContactId(), emailAddresses);
 		}
@@ -1914,40 +1914,16 @@ public class UserServiceImpl extends UserServiceBaseImpl {
 			return;
 		}
 
-		List<Organization> organizations =
-			organizationLocalService.getUserOrganizations(
-				permissionChecker.getUserId());
-
 		for (long userId : userIds) {
 			boolean allowed = false;
 
+			List<Organization> organizations =
+				organizationLocalService.getUserOrganizations(userId);
+
 			for (Organization organization : organizations) {
-				boolean manageUsers = OrganizationPermissionUtil.contains(
-					permissionChecker, organization, ActionKeys.MANAGE_USERS);
-				boolean manageSuborganizations =
-					OrganizationPermissionUtil.contains(
+				if (OrganizationPermissionUtil.contains(
 						permissionChecker, organization,
-						ActionKeys.MANAGE_SUBORGANIZATIONS);
-
-				if (!manageUsers && !manageSuborganizations) {
-					continue;
-				}
-
-				boolean inherited = false;
-				boolean includeSpecifiedOrganization = false;
-
-				if (manageUsers && manageSuborganizations) {
-					inherited = true;
-					includeSpecifiedOrganization = true;
-				}
-				else if (!manageUsers && manageSuborganizations) {
-					inherited = true;
-					includeSpecifiedOrganization = false;
-				}
-
-				if (organizationLocalService.hasUserOrganization(
-						userId, organization.getOrganizationId(), inherited,
-						includeSpecifiedOrganization)) {
+						ActionKeys.MANAGE_USERS)) {
 
 					allowed = true;
 

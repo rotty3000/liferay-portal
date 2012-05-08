@@ -16,7 +16,7 @@ package com.liferay.portal.jsonwebservice;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -162,12 +162,11 @@ public class JSONWebServiceServlet extends JSONServlet {
 
 	@Override
 	protected JSONAction getJSONAction(ServletContext servletContext) {
-		ClassLoader portletClassLoader =
-			(ClassLoader)servletContext.getAttribute(
-				PortletServlet.PORTLET_CLASS_LOADER);
+		ClassLoader classLoader = (ClassLoader)servletContext.getAttribute(
+			PluginContextListener.PLUGIN_CLASS_LOADER);
 
 		_jsonWebServiceServiceAction = new JSONWebServiceServiceAction(
-			ContextPathUtil.getContextPath(servletContext), portletClassLoader);
+			ContextPathUtil.getContextPath(servletContext), classLoader);
 
 		_jsonWebServiceServiceAction.setServletContext(servletContext);
 

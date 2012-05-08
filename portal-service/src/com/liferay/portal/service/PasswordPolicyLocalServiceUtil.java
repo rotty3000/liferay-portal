@@ -92,6 +92,10 @@ public class PasswordPolicyLocalServiceUtil {
 		return getService().deletePasswordPolicy(passwordPolicy);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -367,14 +371,10 @@ public class PasswordPolicyLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(PasswordPolicyLocalService service) {
-		MethodCache.remove(PasswordPolicyLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(PasswordPolicyLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(PasswordPolicyLocalService.class);
 	}
 
 	private static PasswordPolicyLocalService _service;

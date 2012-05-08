@@ -85,6 +85,10 @@ public class ShoppingCategoryLocalServiceWrapper
 		return _shoppingCategoryLocalService.deleteShoppingCategory(shoppingCategory);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _shoppingCategoryLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

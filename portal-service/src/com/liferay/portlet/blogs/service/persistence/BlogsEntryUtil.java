@@ -5017,10 +5017,10 @@ public class BlogsEntryUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(BlogsEntryPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(BlogsEntryUtil.class, "_persistence");
 	}
 
 	private static BlogsEntryPersistence _persistence;

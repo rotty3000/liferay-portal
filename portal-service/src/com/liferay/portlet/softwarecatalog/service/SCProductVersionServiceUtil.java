@@ -37,6 +37,25 @@ public class SCProductVersionServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.softwarecatalog.service.impl.SCProductVersionServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
+	}
+
 	public static com.liferay.portlet.softwarecatalog.model.SCProductVersion addProductVersion(
 		long productEntryId, java.lang.String version,
 		java.lang.String changeLog, java.lang.String downloadPageURL,
@@ -102,14 +121,10 @@ public class SCProductVersionServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SCProductVersionService service) {
-		MethodCache.remove(SCProductVersionService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SCProductVersionServiceUtil.class,
-			"_service");
-		MethodCache.remove(SCProductVersionService.class);
 	}
 
 	private static SCProductVersionService _service;

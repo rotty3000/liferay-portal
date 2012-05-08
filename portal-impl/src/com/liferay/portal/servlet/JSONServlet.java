@@ -17,7 +17,7 @@ package com.liferay.portal.servlet;
 import com.liferay.portal.action.JSONServiceAction;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
@@ -45,8 +45,8 @@ public class JSONServlet extends HttpServlet {
 	public void init(ServletConfig servletConfig) {
 		ServletContext servletContext = servletConfig.getServletContext();
 
-		_portletClassLoader = (ClassLoader)servletContext.getAttribute(
-			PortletServlet.PORTLET_CLASS_LOADER);
+		_pluginClassLoader = (ClassLoader)servletContext.getAttribute(
+			PluginContextListener.PLUGIN_CLASS_LOADER);
 
 		_jsonAction = getJSONAction(servletContext);
 	}
@@ -60,7 +60,7 @@ public class JSONServlet extends HttpServlet {
 		try {
 			resolveRemoteUser(request);
 
-			if (_portletClassLoader == null) {
+			if (_pluginClassLoader == null) {
 				_jsonAction.execute(null, null, request, response);
 			}
 			else {
@@ -70,7 +70,7 @@ public class JSONServlet extends HttpServlet {
 					currentThread.getContextClassLoader();
 
 				try {
-					currentThread.setContextClassLoader(_portletClassLoader);
+					currentThread.setContextClassLoader(_pluginClassLoader);
 
 					_jsonAction.execute(null, null, request, response);
 				}
@@ -118,6 +118,6 @@ public class JSONServlet extends HttpServlet {
 	private static Log _log = LogFactoryUtil.getLog(JSONServlet.class);
 
 	private JSONAction _jsonAction;
-	private ClassLoader _portletClassLoader;
+	private ClassLoader _pluginClassLoader;
 
 }

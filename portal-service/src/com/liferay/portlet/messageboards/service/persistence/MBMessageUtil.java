@@ -5449,10 +5449,10 @@ public class MBMessageUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBMessagePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBMessageUtil.class, "_persistence");
 	}
 
 	private static MBMessagePersistence _persistence;

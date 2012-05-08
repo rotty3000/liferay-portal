@@ -35,6 +35,8 @@ import java.io.Serializable;
 import java.sql.Types;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The base model implementation for the MBMailingList service. Represents a row in the &quot;MBMailingList&quot; database table, with each column mapped to a property of this class.
@@ -132,6 +134,199 @@ public class MBMailingListModelImpl extends BaseModelImpl<MBMailingList>
 
 	public String getModelClassName() {
 		return MBMailingList.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("mailingListId", getMailingListId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("categoryId", getCategoryId());
+		attributes.put("emailAddress", getEmailAddress());
+		attributes.put("inProtocol", getInProtocol());
+		attributes.put("inServerName", getInServerName());
+		attributes.put("inServerPort", getInServerPort());
+		attributes.put("inUseSSL", getInUseSSL());
+		attributes.put("inUserName", getInUserName());
+		attributes.put("inPassword", getInPassword());
+		attributes.put("inReadInterval", getInReadInterval());
+		attributes.put("outEmailAddress", getOutEmailAddress());
+		attributes.put("outCustom", getOutCustom());
+		attributes.put("outServerName", getOutServerName());
+		attributes.put("outServerPort", getOutServerPort());
+		attributes.put("outUseSSL", getOutUseSSL());
+		attributes.put("outUserName", getOutUserName());
+		attributes.put("outPassword", getOutPassword());
+		attributes.put("allowAnonymous", getAllowAnonymous());
+		attributes.put("active", getActive());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long mailingListId = (Long)attributes.get("mailingListId");
+
+		if (mailingListId != null) {
+			setMailingListId(mailingListId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long categoryId = (Long)attributes.get("categoryId");
+
+		if (categoryId != null) {
+			setCategoryId(categoryId);
+		}
+
+		String emailAddress = (String)attributes.get("emailAddress");
+
+		if (emailAddress != null) {
+			setEmailAddress(emailAddress);
+		}
+
+		String inProtocol = (String)attributes.get("inProtocol");
+
+		if (inProtocol != null) {
+			setInProtocol(inProtocol);
+		}
+
+		String inServerName = (String)attributes.get("inServerName");
+
+		if (inServerName != null) {
+			setInServerName(inServerName);
+		}
+
+		Integer inServerPort = (Integer)attributes.get("inServerPort");
+
+		if (inServerPort != null) {
+			setInServerPort(inServerPort);
+		}
+
+		Boolean inUseSSL = (Boolean)attributes.get("inUseSSL");
+
+		if (inUseSSL != null) {
+			setInUseSSL(inUseSSL);
+		}
+
+		String inUserName = (String)attributes.get("inUserName");
+
+		if (inUserName != null) {
+			setInUserName(inUserName);
+		}
+
+		String inPassword = (String)attributes.get("inPassword");
+
+		if (inPassword != null) {
+			setInPassword(inPassword);
+		}
+
+		Integer inReadInterval = (Integer)attributes.get("inReadInterval");
+
+		if (inReadInterval != null) {
+			setInReadInterval(inReadInterval);
+		}
+
+		String outEmailAddress = (String)attributes.get("outEmailAddress");
+
+		if (outEmailAddress != null) {
+			setOutEmailAddress(outEmailAddress);
+		}
+
+		Boolean outCustom = (Boolean)attributes.get("outCustom");
+
+		if (outCustom != null) {
+			setOutCustom(outCustom);
+		}
+
+		String outServerName = (String)attributes.get("outServerName");
+
+		if (outServerName != null) {
+			setOutServerName(outServerName);
+		}
+
+		Integer outServerPort = (Integer)attributes.get("outServerPort");
+
+		if (outServerPort != null) {
+			setOutServerPort(outServerPort);
+		}
+
+		Boolean outUseSSL = (Boolean)attributes.get("outUseSSL");
+
+		if (outUseSSL != null) {
+			setOutUseSSL(outUseSSL);
+		}
+
+		String outUserName = (String)attributes.get("outUserName");
+
+		if (outUserName != null) {
+			setOutUserName(outUserName);
+		}
+
+		String outPassword = (String)attributes.get("outPassword");
+
+		if (outPassword != null) {
+			setOutPassword(outPassword);
+		}
+
+		Boolean allowAnonymous = (Boolean)attributes.get("allowAnonymous");
+
+		if (allowAnonymous != null) {
+			setAllowAnonymous(allowAnonymous);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
 	}
 
 	public String getUuid() {

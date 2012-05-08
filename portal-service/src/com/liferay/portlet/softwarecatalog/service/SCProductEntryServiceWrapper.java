@@ -32,6 +32,24 @@ public class SCProductEntryServiceWrapper implements SCProductEntryService,
 		_scProductEntryService = scProductEntryService;
 	}
 
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier() {
+		return _scProductEntryService.getBeanIdentifier();
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_scProductEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
 	public com.liferay.portlet.softwarecatalog.model.SCProductEntry addProductEntry(
 		java.lang.String name, java.lang.String type, java.lang.String tags,
 		java.lang.String shortDescription, java.lang.String longDescription,

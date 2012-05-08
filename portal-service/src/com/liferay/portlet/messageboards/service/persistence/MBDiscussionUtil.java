@@ -559,11 +559,10 @@ public class MBDiscussionUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(MBDiscussionPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(MBDiscussionUtil.class,
-			"_persistence");
 	}
 
 	private static MBDiscussionPersistence _persistence;

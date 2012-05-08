@@ -90,6 +90,10 @@ public class MBThreadFlagLocalServiceUtil {
 		return getService().deleteMBThreadFlag(mbThreadFlag);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -319,14 +323,10 @@ public class MBThreadFlagLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(MBThreadFlagLocalService service) {
-		MethodCache.remove(MBThreadFlagLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(MBThreadFlagLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(MBThreadFlagLocalService.class);
 	}
 
 	private static MBThreadFlagLocalService _service;

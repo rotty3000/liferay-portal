@@ -1092,11 +1092,10 @@ public class BlogsStatsUserUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(BlogsStatsUserPersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(BlogsStatsUserUtil.class,
-			"_persistence");
 	}
 
 	private static BlogsStatsUserPersistence _persistence;

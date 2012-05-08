@@ -79,6 +79,10 @@ public class PhoneLocalServiceWrapper implements PhoneLocalService,
 		return _phoneLocalService.deletePhone(phone);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _phoneLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*

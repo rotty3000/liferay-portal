@@ -84,10 +84,14 @@ public class InitUtil {
 			e.printStackTrace();
 		}
 
+		// Properties
+
+		com.liferay.portal.kernel.util.PropsUtil.setProps(new PropsImpl());
+
 		// Log4J
 
-		if (GetterUtil.getBoolean(SystemProperties.get(
-				"log4j.configure.on.startup"), true)) {
+		if (GetterUtil.getBoolean(
+				SystemProperties.get("log4j.configure.on.startup"), true)) {
 
 			ClassLoader classLoader = InitUtil.class.getClassLoader();
 

@@ -1081,10 +1081,10 @@ public class WikiNodeUtil {
 		return _persistence;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setPersistence(WikiNodePersistence persistence) {
-		_persistence = persistence;
-
-		ReferenceRegistry.registerReference(WikiNodeUtil.class, "_persistence");
 	}
 
 	private static WikiNodePersistence _persistence;

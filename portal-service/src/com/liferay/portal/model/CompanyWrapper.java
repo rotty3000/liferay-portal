@@ -14,6 +14,9 @@
 
 package com.liferay.portal.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * This class is a wrapper for {@link Company}.
@@ -34,6 +37,85 @@ public class CompanyWrapper implements Company, ModelWrapper<Company> {
 
 	public String getModelClassName() {
 		return Company.class.getName();
+	}
+
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("companyId", getCompanyId());
+		attributes.put("accountId", getAccountId());
+		attributes.put("webId", getWebId());
+		attributes.put("key", getKey());
+		attributes.put("mx", getMx());
+		attributes.put("homeURL", getHomeURL());
+		attributes.put("logoId", getLogoId());
+		attributes.put("system", getSystem());
+		attributes.put("maxUsers", getMaxUsers());
+		attributes.put("active", getActive());
+
+		return attributes;
+	}
+
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long accountId = (Long)attributes.get("accountId");
+
+		if (accountId != null) {
+			setAccountId(accountId);
+		}
+
+		String webId = (String)attributes.get("webId");
+
+		if (webId != null) {
+			setWebId(webId);
+		}
+
+		String key = (String)attributes.get("key");
+
+		if (key != null) {
+			setKey(key);
+		}
+
+		String mx = (String)attributes.get("mx");
+
+		if (mx != null) {
+			setMx(mx);
+		}
+
+		String homeURL = (String)attributes.get("homeURL");
+
+		if (homeURL != null) {
+			setHomeURL(homeURL);
+		}
+
+		Long logoId = (Long)attributes.get("logoId");
+
+		if (logoId != null) {
+			setLogoId(logoId);
+		}
+
+		Boolean system = (Boolean)attributes.get("system");
+
+		if (system != null) {
+			setSystem(system);
+		}
+
+		Integer maxUsers = (Integer)attributes.get("maxUsers");
+
+		if (maxUsers != null) {
+			setMaxUsers(maxUsers);
+		}
+
+		Boolean active = (Boolean)attributes.get("active");
+
+		if (active != null) {
+			setActive(active);
+		}
 	}
 
 	/**

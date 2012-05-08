@@ -31,6 +31,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the ClusterGroup service. Represents a row in the &quot;ClusterGroup&quot; database table, with each column mapped to a property of this class.
  *
@@ -98,6 +101,45 @@ public class ClusterGroupModelImpl extends BaseModelImpl<ClusterGroup>
 
 	public String getModelClassName() {
 		return ClusterGroup.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("clusterGroupId", getClusterGroupId());
+		attributes.put("name", getName());
+		attributes.put("clusterNodeIds", getClusterNodeIds());
+		attributes.put("wholeCluster", getWholeCluster());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long clusterGroupId = (Long)attributes.get("clusterGroupId");
+
+		if (clusterGroupId != null) {
+			setClusterGroupId(clusterGroupId);
+		}
+
+		String name = (String)attributes.get("name");
+
+		if (name != null) {
+			setName(name);
+		}
+
+		String clusterNodeIds = (String)attributes.get("clusterNodeIds");
+
+		if (clusterNodeIds != null) {
+			setClusterNodeIds(clusterNodeIds);
+		}
+
+		Boolean wholeCluster = (Boolean)attributes.get("wholeCluster");
+
+		if (wholeCluster != null) {
+			setWholeCluster(wholeCluster);
+		}
 	}
 
 	public long getClusterGroupId() {
