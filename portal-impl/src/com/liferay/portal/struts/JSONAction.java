@@ -66,6 +66,9 @@ public abstract class JSONAction extends Action {
 				json = "var " + instance + "=" + json + ";";
 			}
 		}
+		catch (SecurityException se) {
+			throw se;
+		}
 		catch (Exception e) {
 			PortalUtil.sendError(
 				HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, request,

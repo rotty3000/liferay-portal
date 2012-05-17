@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.RemoteAccessTypeThreadLocal;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
@@ -60,6 +61,8 @@ public class JSONServlet extends HttpServlet {
 		try {
 			resolveRemoteUser(request);
 
+			RemoteAccessTypeThreadLocal.setRemoteAccess(true);
+
 			if (_pluginClassLoader == null) {
 				_jsonAction.execute(null, null, request, response);
 			}
@@ -78,6 +81,9 @@ public class JSONServlet extends HttpServlet {
 					currentThread.setContextClassLoader(contextClassLoader);
 				}
 			}
+		}
+		catch (SecurityException se) {
+			throw new ServletException(se);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
