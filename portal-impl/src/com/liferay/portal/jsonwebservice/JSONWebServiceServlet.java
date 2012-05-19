@@ -24,14 +24,8 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.User;
 import com.liferay.portal.security.RemoteAccessTypeThreadLocal;
-import com.liferay.portal.security.auth.CompanyThreadLocal;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
-import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.servlet.JSONServlet;
-import com.liferay.portal.servlet.UserResolver;
 import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalUtil;
@@ -197,6 +191,7 @@ public class JSONWebServiceServlet extends JSONServlet {
 			request.setAttribute("user", user);
 			request.setAttribute("userId", user.getUserId());
 		}
+
 		*/
 	}
 

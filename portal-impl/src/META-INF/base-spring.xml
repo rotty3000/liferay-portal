@@ -16,10 +16,10 @@
 		<property name="dataSource" ref="liferayDataSource" />
 		<property name="sessionFactory" ref="liferaySessionFactory" />
 	</bean>
-    <bean id="serviceAdvice" class="com.liferay.portal.security.sacl.SACLAdvice">
+    <bean id="serviceAdvice" class="com.liferay.portal.security.sac.SACAdvice">
         <property name="nextMethodInterceptor" ref="asyncAdvice" />
         <property name="serviceAccessControlManager">
-            <bean class="com.liferay.portal.security.sacl.ServiceAccessControlManagerImpl" />
+            <bean class="com.liferay.portal.security.sac.ServiceAccessControlManagerImpl" />
         </property>
    	</bean>
 	<bean id="asyncAdvice" class="com.liferay.portal.messaging.async.AsyncAdvice">

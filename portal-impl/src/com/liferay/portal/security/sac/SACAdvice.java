@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,18 +12,19 @@
  * details.
  */
 
-package com.liferay.portal.security.sacl;
+package com.liferay.portal.security.sac;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.security.MethodSecurity;
 import com.liferay.portal.security.RemoteAccessTypeThreadLocal;
 import com.liferay.portal.security.RemoteMethodAccessType;
-import com.liferay.portal.security.MethodSecurity;
 import com.liferay.portal.spring.aop.AnnotationChainableMethodAdvice;
-import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  *
@@ -32,7 +33,7 @@ import java.lang.reflect.Method;
  * @author Igor Spasic
  * @author Michael C. Han
  */
-public class SACLAdvice extends
+public class SACAdvice extends
 	AnnotationChainableMethodAdvice<MethodSecurity> {
 
 	@Override
@@ -62,7 +63,7 @@ public class SACLAdvice extends
 		return _nullMethodSecurity;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(SACLAdvice.class);
+	private static Log _log = LogFactoryUtil.getLog(SACAdvice.class);
 
 	private static MethodSecurity _nullMethodSecurity =
 		new MethodSecurity() {
