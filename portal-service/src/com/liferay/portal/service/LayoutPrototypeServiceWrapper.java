@@ -63,11 +63,29 @@ public class LayoutPrototypeServiceWrapper implements LayoutPrototypeService,
 		_layoutPrototypeService.deleteLayoutPrototype(layoutPrototypeId);
 	}
 
+	public java.io.File exportLayoutPrototypeAsFile(long layoutPrototypeId,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.util.Date startDate, java.util.Date endDate)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _layoutPrototypeService.exportLayoutPrototypeAsFile(layoutPrototypeId,
+			parameterMap, startDate, endDate);
+	}
+
 	public com.liferay.portal.model.LayoutPrototype getLayoutPrototype(
 		long layoutPrototypeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layoutPrototypeService.getLayoutPrototype(layoutPrototypeId);
+	}
+
+	public void importLayoutPrototype(long groupId,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_layoutPrototypeService.importLayoutPrototype(groupId, parameterMap,
+			file);
 	}
 
 	public java.util.List<com.liferay.portal.model.LayoutPrototype> search(

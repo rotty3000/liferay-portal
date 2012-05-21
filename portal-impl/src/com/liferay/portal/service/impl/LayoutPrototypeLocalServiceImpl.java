@@ -19,8 +19,11 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.lar.LayoutExporter;
+import com.liferay.portal.lar.LayoutImporter;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.ResourceConstants;
@@ -28,6 +31,9 @@ import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutPrototypeLocalServiceBaseImpl;
 
+import java.io.File;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,6 +42,7 @@ import java.util.Map;
  * @author Brian Wing Shun Chan
  * @author Jorge Ferrer
  * @author Vilmos Papp
+ * @author Mate Thurzo
  */
 public class LayoutPrototypeLocalServiceImpl
 	extends LayoutPrototypeLocalServiceBaseImpl {
@@ -135,6 +142,35 @@ public class LayoutPrototypeLocalServiceImpl
 		return deleteLayoutPrototype(layoutPrototype);
 	}
 
+	public File exportLayoutPrototypeAsFile(
+			long layoutPrototypeId, Map<String, String[]> parameterMap,
+			Date startDate, Date endDate)
+		throws PortalException, SystemException {
+
+		try {
+			LayoutPrototype layoutPrototype = getLayoutPrototype(
+				layoutPrototypeId);
+
+			Layout layoutPrototypeLayout = layoutPrototype.getLayout();
+
+			LayoutExporter layoutExporter = new LayoutExporter();
+
+			return layoutExporter.exportLayoutsAsFile(
+				layoutPrototype.getGroupId(), true,
+				new long[] {layoutPrototypeLayout.getLayoutId()}, parameterMap,
+				startDate, endDate);
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (SystemException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+	}
+
 	/**
 	 * @deprecated {@link #getLayoutPrototypeByUuidAndCompanyId(String, long)}
 	 */
@@ -150,6 +186,28 @@ public class LayoutPrototypeLocalServiceImpl
 
 		return layoutPrototypePersistence.findByUuid_C_First(
 			uuid, companyId, null);
+	}
+
+	public void importLayoutPrototype(
+			long userId, long groupId, Map<String, String[]> parameterMap,
+			File file)
+		throws PortalException, SystemException {
+
+		try {
+			LayoutImporter layoutImporter = new LayoutImporter();
+
+			layoutImporter.importLayouts(
+				userId, groupId, true, parameterMap, file);
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (SystemException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	public List<LayoutPrototype> search(

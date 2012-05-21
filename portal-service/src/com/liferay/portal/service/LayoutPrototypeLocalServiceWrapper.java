@@ -274,6 +274,15 @@ public class LayoutPrototypeLocalServiceWrapper
 			companyId, nameMap, description, active);
 	}
 
+	public java.io.File exportLayoutPrototypeAsFile(long layoutPrototypeId,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.util.Date startDate, java.util.Date endDate)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _layoutPrototypeLocalService.exportLayoutPrototypeAsFile(layoutPrototypeId,
+			parameterMap, startDate, endDate);
+	}
+
 	/**
 	* @deprecated {@link #getLayoutPrototypeByUuidAndCompanyId(String, long)}
 	*/
@@ -290,6 +299,15 @@ public class LayoutPrototypeLocalServiceWrapper
 			com.liferay.portal.kernel.exception.SystemException {
 		return _layoutPrototypeLocalService.getLayoutPrototypeByUuidAndCompanyId(uuid,
 			companyId);
+	}
+
+	public void importLayoutPrototype(long userId, long groupId,
+		java.util.Map<java.lang.String, java.lang.String[]> parameterMap,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_layoutPrototypeLocalService.importLayoutPrototype(userId, groupId,
+			parameterMap, file);
 	}
 
 	public java.util.List<com.liferay.portal.model.LayoutPrototype> search(

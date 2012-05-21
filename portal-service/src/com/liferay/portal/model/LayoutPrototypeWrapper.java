@@ -439,6 +439,12 @@ public class LayoutPrototypeWrapper implements LayoutPrototype,
 		return _layoutPrototype.getGroup();
 	}
 
+	public long getGroupId()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _layoutPrototype.getGroupId();
+	}
+
 	public com.liferay.portal.model.Layout getLayout()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {

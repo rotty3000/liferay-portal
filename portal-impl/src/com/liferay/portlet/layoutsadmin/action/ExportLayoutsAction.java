@@ -35,6 +35,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.struts.ActionConstants;
@@ -83,6 +84,8 @@ public class ExportLayoutsAction extends PortletAction {
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
+			boolean layoutPrototypeExport = ParamUtil.getBoolean(
+				actionRequest, "layoutPrototypeExportImport");
 			long groupId = ParamUtil.getLong(actionRequest, "groupId");
 			boolean privateLayout = ParamUtil.getBoolean(
 				actionRequest, "privateLayout");
@@ -172,9 +175,17 @@ public class ExportLayoutsAction extends PortletAction {
 				endDate = now;
 			}
 
-			file = LayoutServiceUtil.exportLayoutsAsFile(
-				groupId, privateLayout, layoutIds,
-				actionRequest.getParameterMap(), startDate, endDate);
+			if (layoutPrototypeExport) {
+				file =
+					LayoutPrototypeLocalServiceUtil.exportLayoutPrototypeAsFile(
+						layoutIds[0], actionRequest.getParameterMap(),
+						startDate, endDate);
+			}
+			else {
+				file = LayoutServiceUtil.exportLayoutsAsFile(
+					groupId, privateLayout, layoutIds,
+					actionRequest.getParameterMap(), startDate, endDate);
+			}
 
 			HttpServletRequest request = PortalUtil.getHttpServletRequest(
 				actionRequest);

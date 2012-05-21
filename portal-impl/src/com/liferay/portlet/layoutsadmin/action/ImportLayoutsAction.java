@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.service.LayoutPrototypeServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.util.PortalUtil;
@@ -58,6 +59,8 @@ public class ImportLayoutsAction extends PortletAction {
 			UploadPortletRequest uploadPortletRequest =
 				PortalUtil.getUploadPortletRequest(actionRequest);
 
+			boolean layoutPrototypeImport = ParamUtil.getBoolean(
+				uploadPortletRequest, "layoutPrototypeExportImport");
 			long groupId = ParamUtil.getLong(uploadPortletRequest, "groupId");
 			boolean privateLayout = ParamUtil.getBoolean(
 				uploadPortletRequest, "privateLayout");
@@ -67,8 +70,15 @@ public class ImportLayoutsAction extends PortletAction {
 				throw new LARFileException("Import file does not exist");
 			}
 
-			LayoutServiceUtil.importLayouts(
-				groupId, privateLayout, actionRequest.getParameterMap(), file);
+			if (layoutPrototypeImport) {
+				LayoutPrototypeServiceUtil.importLayoutPrototype(
+					groupId, actionRequest.getParameterMap(), file);
+			}
+			else {
+				LayoutServiceUtil.importLayouts(
+					groupId, privateLayout, actionRequest.getParameterMap(),
+					file);
+			}
 
 			addSuccessMessage(actionRequest, actionResponse);
 

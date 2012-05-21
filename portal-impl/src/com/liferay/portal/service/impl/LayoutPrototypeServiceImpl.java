@@ -22,10 +22,14 @@ import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.base.LayoutPrototypeServiceBaseImpl;
+import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.service.permission.LayoutPrototypePermissionUtil;
 import com.liferay.portal.service.permission.PortalPermissionUtil;
 
+import java.io.File;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +37,7 @@ import java.util.Map;
 /**
  * @author Brian Wing Shun Chan
  * @author Jorge Ferrer
+ * @author Mate Thurzo
  */
 public class LayoutPrototypeServiceImpl extends LayoutPrototypeServiceBaseImpl {
 
@@ -59,6 +64,21 @@ public class LayoutPrototypeServiceImpl extends LayoutPrototypeServiceBaseImpl {
 		layoutPrototypeLocalService.deleteLayoutPrototype(layoutPrototypeId);
 	}
 
+	public File exportLayoutPrototypeAsFile(
+			long layoutPrototypeId, Map<String, String[]> parameterMap,
+			Date startDate, Date endDate)
+		throws PortalException, SystemException {
+
+		LayoutPrototype layoutPrototype = getLayoutPrototype(layoutPrototypeId);
+
+		GroupPermissionUtil.check(
+			getPermissionChecker(), layoutPrototype.getGroupId(),
+			ActionKeys.EXPORT_IMPORT_LAYOUTS);
+
+		return layoutPrototypeLocalService.exportLayoutPrototypeAsFile(
+			layoutPrototypeId, parameterMap, startDate, endDate);
+	}
+
 	public LayoutPrototype getLayoutPrototype(long layoutPrototypeId)
 		throws PortalException, SystemException {
 
@@ -67,6 +87,17 @@ public class LayoutPrototypeServiceImpl extends LayoutPrototypeServiceBaseImpl {
 
 		return layoutPrototypeLocalService.getLayoutPrototype(
 			layoutPrototypeId);
+	}
+
+	public void importLayoutPrototype(
+			long groupId, Map<String, String[]> parameterMap, File file)
+		throws PortalException, SystemException {
+
+		GroupPermissionUtil.check(
+			getPermissionChecker(), groupId, ActionKeys.EXPORT_IMPORT_LAYOUTS);
+
+		layoutPrototypeLocalService.importLayoutPrototype(
+			getUserId(), groupId, parameterMap, file);
 	}
 
 	public List<LayoutPrototype> search(
