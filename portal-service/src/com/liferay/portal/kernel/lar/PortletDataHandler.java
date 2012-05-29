@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.lar.digest.LarDigest;
+
 import javax.portlet.PortletPreferences;
 
 /**
@@ -28,6 +30,21 @@ import javax.portlet.PortletPreferences;
  * @author Bruno Farache
  */
 public interface PortletDataHandler {
+
+	/**
+	 * Updates the LAR export digest file.
+	 *
+	 * @param portletDataContext
+	 * @param portletId
+	 * @param portletPreferences
+	 * @return
+	 * @throws PortletDataException
+	 */
+	// todo: move LARDigests into service layer
+	public void createLarDigest(
+			LarDigest larDigest, PortletDataContext portletDataContext,
+			String portletId, PortletPreferences portletPreferences)
+		throws PortletDataException;
 
 	/**
 	 * Deletes the data created by the portlet. Can optionally return a modified

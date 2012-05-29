@@ -451,4 +451,12 @@
 	<bean id="com.liferay.portlet.wiki.service.persistence.WikiPageFinder" class="com.liferay.portlet.wiki.service.persistence.WikiPageFinderImpl" parent="basePersistence" />
 	<bean id="com.liferay.portlet.wiki.service.WikiPageResourceLocalService" class="com.liferay.portlet.wiki.service.impl.WikiPageResourceLocalServiceImpl" />
 	<bean id="com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistence" class="com.liferay.portlet.wiki.service.persistence.WikiPageResourcePersistenceImpl" parent="basePersistence" />
+
+	<bean id="com.liferay.portlet.journal.service.persistence.lar.JournalArticleLarPersistence" class="com.liferay.portlet.journal.service.persistence.lar.JournalArticleLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.LayoutLarPersistence" class="com.liferay.portal.service.persistence.lar.LayoutLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.BookmarksEntryLarPersistence" class="com.liferay.portal.service.persistence.lar.BookmarksEntryLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.BookmarksFolderLarPersistence" class="com.liferay.portal.service.persistence.lar.BookmarksFolderLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.PortletLarPersistence" class="com.liferay.portal.service.persistence.lar.PortletLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.ImageLarPersistence" class="com.liferay.portal.service.persistence.lar.ImageLarPersistenceImpl" parent="baseLarPersistence" />
+	<bean id="com.liferay.portal.service.persistence.lar.RoleLarPersistence" class="com.liferay.portal.service.persistence.lar.RoleLarPersistenceImpl" parent="baseLarPersistence" />
 </beans>

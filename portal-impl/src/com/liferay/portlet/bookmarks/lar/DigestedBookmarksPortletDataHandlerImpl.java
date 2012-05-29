@@ -42,12 +42,10 @@ import java.util.Map;
 import javax.portlet.PortletPreferences;
 
 /**
- * @author Jorge Ferrer
- * @author Bruno Farache
- * @author Raymond Augé
- * @author Juan Fernández
+ * @author Daniel Kocsis
  */
-public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
+public class DigestedBookmarksPortletDataHandlerImpl
+	extends BasePortletDataHandler {
 
 	@Override
 	public PortletDataHandlerControl[] getExportControls() {
@@ -90,13 +88,40 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 	}
 
 	@Override
+	protected void doCreateDigest(
+			LarDigest larDigest, PortletDataContext portletDataContext,
+			String portletId, PortletPreferences portletPreferences)
+		throws Exception {
+
+		portletDataContext.addPermissions(
+			"com.liferay.portlet.bookmarks",
+			portletDataContext.getScopeGroupId());
+
+		List<BookmarksFolder> folders = BookmarksFolderUtil.findByGroupId(
+			portletDataContext.getScopeGroupId());
+
+		LarDigest larDigestObj = (LarDigest)larDigest;
+		for (BookmarksFolder folder : folders) {
+			exportFolder(folder, larDigestObj, portletDataContext);
+		}
+
+		List<BookmarksEntry> entries = BookmarksEntryUtil.findByG_F(
+			portletDataContext.getScopeGroupId(),
+			BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+		for (BookmarksEntry entry : entries) {
+			exportEntry(entry, larDigestObj, portletDataContext);
+		}
+	}
+
+	@Override
 	protected PortletPreferences doDeleteData(
 			PortletDataContext portletDataContext, String portletId,
 			PortletPreferences portletPreferences)
 		throws Exception {
 
 		if (!portletDataContext.addPrimaryKey(
-				BookmarksPortletDataHandlerImpl.class, "deleteData")) {
+			BookmarksPortletDataHandlerImpl.class, "deleteData")) {
 
 			BookmarksFolderLocalServiceUtil.deleteFolders(
 				portletDataContext.getScopeGroupId());
@@ -107,45 +132,6 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 
 		return null;
-	}
-
-	@Override
-	protected String doExportData(
-			PortletDataContext portletDataContext, String portletId,
-			PortletPreferences portletPreferences)
-		throws Exception {
-
-		portletDataContext.addPermissions(
-			"com.liferay.portlet.bookmarks",
-			portletDataContext.getScopeGroupId());
-
-		Document document = SAXReaderUtil.createDocument();
-
-		Element rootElement = document.addElement("bookmarks-data");
-
-		rootElement.addAttribute(
-			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
-
-		Element foldersElement = rootElement.addElement("folders");
-		Element entriesElement = rootElement.addElement("entries");
-
-		List<BookmarksFolder> folders = BookmarksFolderUtil.findByGroupId(
-			portletDataContext.getScopeGroupId());
-
-		for (BookmarksFolder folder : folders) {
-			exportFolder(
-				portletDataContext, foldersElement, entriesElement, folder);
-		}
-
-		List<BookmarksEntry> entries = BookmarksEntryUtil.findByG_F(
-			portletDataContext.getScopeGroupId(),
-			BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-
-		for (BookmarksEntry entry : entries) {
-			exportEntry(portletDataContext, null, entriesElement, entry);
-		}
-
-		return document.formattedString();
 	}
 
 	@Override
@@ -221,30 +207,6 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 	}
 
-	protected void exportEntry(
-			PortletDataContext portletDataContext, Element foldersElement,
-			Element entriesElement, BookmarksEntry entry)
-		throws Exception {
-
-		if (!portletDataContext.isWithinDateRange(entry.getModifiedDate())) {
-			return;
-		}
-
-		if (foldersElement != null) {
-			exportParentFolder(
-				portletDataContext, foldersElement, entry.getFolderId());
-		}
-
-		String path = getEntryPath(portletDataContext, entry);
-
-		if (portletDataContext.isPathNotProcessed(path)) {
-			Element entryElement = entriesElement.addElement("entry");
-
-			portletDataContext.addClassedModel(
-				entryElement, path, entry, _NAMESPACE);
-		}
-	}
-
 	protected void exportFolder(
 			BookmarksFolder folder, LarDigest larDigest,
 			PortletDataContext portletDataContext)
@@ -265,38 +227,10 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 		}
 
 		List<BookmarksEntry> entries = BookmarksEntryUtil.findByG_F(
-				folder.getGroupId(), folder.getFolderId());
-
-		for (BookmarksEntry entry : entries) {
-			exportEntry(entry, larDigest, portletDataContext);
-		}
-	}
-
-	protected void exportFolder(
-			PortletDataContext portletDataContext, Element foldersElement,
-			Element entriesElement, BookmarksFolder folder)
-		throws Exception {
-
-		if (portletDataContext.isWithinDateRange(folder.getModifiedDate())) {
-			exportParentFolder(
-				portletDataContext, foldersElement, folder.getParentFolderId());
-
-			String path = getFolderPath(portletDataContext, folder);
-
-			if (portletDataContext.isPathNotProcessed(path)) {
-				Element folderElement = foldersElement.addElement("folder");
-
-				portletDataContext.addClassedModel(
-					folderElement, path, folder, _NAMESPACE);
-			}
-		}
-
-		List<BookmarksEntry> entries = BookmarksEntryUtil.findByG_F(
 			folder.getGroupId(), folder.getFolderId());
 
 		for (BookmarksEntry entry : entries) {
-			exportEntry(
-				portletDataContext, foldersElement, entriesElement, entry);
+			exportEntry(entry, larDigest, portletDataContext);
 		}
 	}
 
@@ -321,30 +255,6 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 				LarDigesterConstants.ACTION_ADD, path,
 				folder.getClass().getName(),
 				StringUtil.valueOf(folder.getFolderId()));
-		}
-	}
-
-	protected void exportParentFolder(
-			PortletDataContext portletDataContext, Element foldersElement,
-			long folderId)
-		throws Exception {
-
-		if (folderId == BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-			return;
-		}
-
-		BookmarksFolder folder = BookmarksFolderUtil.findByPrimaryKey(folderId);
-
-		exportParentFolder(
-			portletDataContext, foldersElement, folder.getParentFolderId());
-
-		String path = getFolderPath(portletDataContext, folder);
-
-		if (portletDataContext.isPathNotProcessed(path)) {
-			Element folderElement = foldersElement.addElement("folder");
-
-			portletDataContext.addClassedModel(
-				folderElement, path, folder, _NAMESPACE);
 		}
 	}
 
@@ -395,12 +305,12 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(entry.getUserUuid());
 
-		Map<Long, Long> folderIds =
+		Map<Long, Long> folderPKs =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				BookmarksFolder.class);
 
 		long folderId = MapUtil.getLong(
-			folderIds, entry.getFolderId(), entry.getFolderId());
+			folderPKs, entry.getFolderId(), entry.getFolderId());
 
 		if ((folderId != BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
 			(folderId == entry.getFolderId())) {
@@ -413,7 +323,7 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, folder);
 
 			folderId = MapUtil.getLong(
-				folderIds, entry.getFolderId(), entry.getFolderId());
+				folderPKs, entry.getFolderId(), entry.getFolderId());
 		}
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
@@ -458,15 +368,15 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long userId = portletDataContext.getUserId(folder.getUserUuid());
 
-		Map<Long, Long> folderIds =
+		Map<Long, Long> folderPKs =
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				BookmarksFolder.class);
 
 		long parentFolderId = MapUtil.getLong(
-			folderIds, folder.getParentFolderId(), folder.getParentFolderId());
+			folderPKs, folder.getParentFolderId(), folder.getParentFolderId());
 
 		if ((parentFolderId !=
-				BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
+			BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) &&
 			(parentFolderId == folder.getParentFolderId())) {
 
 			String path = getImportFolderPath(
@@ -478,7 +388,7 @@ public class BookmarksPortletDataHandlerImpl extends BasePortletDataHandler {
 			importFolder(portletDataContext, path, parentFolder);
 
 			parentFolderId = MapUtil.getLong(
-				folderIds, folder.getParentFolderId(),
+				folderPKs, folder.getParentFolderId(),
 				folder.getParentFolderId());
 		}
 

@@ -65,6 +65,11 @@ public interface PortletDataContext extends Serializable {
 		String className, long classPK, String[] assetTagNames);
 
 	public void addClassedModel(
+			String path, ClassedModel classedModel, String namespace)
+		throws PortalException, SystemException;
+
+	@Deprecated
+	public void addClassedModel(
 			Element element, String path, ClassedModel classedModel,
 			String namespace)
 		throws PortalException, SystemException;
@@ -135,6 +140,8 @@ public interface PortletDataContext extends Serializable {
 	public String[] getAssetTagNames(String className, long classPK);
 
 	public Map<String, String[]> getAssetTagNamesMap();
+
+	public Object getAttribute(String key);
 
 	public boolean getBooleanParameter(String namespace, String name);
 
@@ -256,6 +263,10 @@ public interface PortletDataContext extends Serializable {
 	public boolean isWithinDateRange(Date modifiedDate);
 
 	public void putNotUniquePerLayout(String dataKey);
+
+	public void removeAttribute(String key);
+
+	public void setAttribute(String key, Object value);
 
 	public void setClassLoader(ClassLoader classLoader);
 

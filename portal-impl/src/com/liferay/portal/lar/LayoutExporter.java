@@ -42,6 +42,8 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.zip.ZipWriter;
 import com.liferay.portal.kernel.zip.ZipWriterFactoryUtil;
+import com.liferay.portal.lar.digest.LarDigest;
+import com.liferay.portal.lar.digest.LarDigesterConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
@@ -158,6 +160,149 @@ public class LayoutExporter {
 		LayoutSetLocalServiceUtil.updateSettings(
 			layoutSet.getGroupId(), layoutSet.isPrivateLayout(),
 			settingsProperties.toString());
+	}
+
+	public void createLayoutDigest(
+			LarDigest larDigest, PortletDataContext portletDataContext,
+			Portlet layoutConfigurationPortlet, LayoutCache layoutCache,
+			List<Portlet> portlets, Map<String, Object[]> portletIds,
+			boolean exportPermissions, Layout layout)
+		throws Exception {
+
+		String path = portletDataContext.getLayoutPath(
+			layout.getLayoutId()) + "/layout.xml";
+
+		if (!portletDataContext.isPathNotProcessed(path)) {
+			return;
+		}
+
+		boolean deleteLayout = MapUtil.getBoolean(
+			portletDataContext.getParameterMap(), "delete_" + layout.getPlid());
+
+		if (deleteLayout) {
+			larDigest.write(
+				LarDigesterConstants.ACTION_DELETE, path,
+				layout.getClass().getName(),
+				StringUtil.valueOf(layout.getLayoutId()));
+
+			return;
+		}
+
+		portletDataContext.setPlid(layout.getPlid());
+
+		larDigest.write(
+			LarDigesterConstants.ACTION_ADD, path, layout.getClass().getName(),
+			StringUtil.valueOf(layout.getLayoutId()));
+
+		_portletExporter.createPortletDataDigest(
+			portletDataContext, layoutConfigurationPortlet, layout, null,
+			larDigest);
+
+		if (layout.isTypeArticle()) {
+			return;
+		}
+		else if (layout.isTypeLinkToLayout()) {
+			UnicodeProperties typeSettingsProperties =
+				layout.getTypeSettingsProperties();
+
+			long linkToLayoutId = GetterUtil.getLong(
+				typeSettingsProperties.getProperty(
+					"linkToLayoutId", StringPool.BLANK));
+
+			if (linkToLayoutId > 0) {
+				try {
+					Layout linkedToLayout = LayoutLocalServiceUtil.getLayout(
+						portletDataContext.getScopeGroupId(),
+						layout.isPrivateLayout(), linkToLayoutId);
+
+					createLayoutDigest(
+						larDigest, portletDataContext,
+						layoutConfigurationPortlet, layoutCache, portlets,
+						portletIds, exportPermissions, linkedToLayout);
+				}
+				catch (NoSuchLayoutException nsle) {
+				}
+			}
+		}
+		else if (layout.isTypePortlet()) {
+
+			// Always exportable portlets
+
+			for (Portlet portlet : portlets) {
+				if (portlet.isScopeable() && layout.hasScopeGroup()) {
+					String key = PortletPermissionUtil.getPrimaryKey(
+						layout.getPlid(), portlet.getPortletId());
+
+					portletIds.put(
+						key,
+						new Object[] {
+							portlet.getPortletId(), layout.getPlid(),
+							layout.getScopeGroup().getGroupId(),
+							StringPool.BLANK, layout.getUuid()
+						});
+				}
+			}
+
+			// Layout portlets
+
+			LayoutTypePortlet layoutTypePortlet =
+					(LayoutTypePortlet)layout.getLayoutType();
+
+			for (String portletId : layoutTypePortlet.getPortletIds()) {
+				javax.portlet.PortletPreferences jxPreferences =
+					PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+						layout, portletId);
+
+				String scopeType = GetterUtil.getString(
+					jxPreferences.getValue("lfrScopeType", null));
+				String scopeLayoutUuid = GetterUtil.getString(
+					jxPreferences.getValue("lfrScopeLayoutUuid", null));
+
+				long scopeGroupId = portletDataContext.getScopeGroupId();
+
+				if (Validator.isNotNull(scopeType)) {
+					Group scopeGroup = null;
+
+					if (scopeType.equals("company")) {
+						scopeGroup = GroupLocalServiceUtil.getCompanyGroup(
+							layout.getCompanyId());
+					}
+					else if (scopeType.equals("layout")) {
+						Layout scopeLayout = null;
+
+						scopeLayout = LayoutLocalServiceUtil.
+							fetchLayoutByUuidAndGroupId(
+								scopeLayoutUuid,
+								portletDataContext.getGroupId());
+
+						if (scopeLayout == null) {
+							continue;
+						}
+
+						scopeGroup = scopeLayout.getScopeGroup();
+					}
+					else {
+						throw new IllegalArgumentException(
+							"Scope type " + scopeType + " is invalid");
+					}
+
+					if (scopeGroup != null) {
+						scopeGroupId = scopeGroup.getGroupId();
+					}
+				}
+
+				String key = PortletPermissionUtil.getPrimaryKey(
+					layout.getPlid(), portletId);
+
+				portletIds.put(
+					key,
+					new Object[] {
+						portletId, layout.getPlid(), scopeGroupId, scopeType,
+						scopeLayoutUuid
+					}
+				);
+			}
+		}
 	}
 
 	public byte[] exportLayouts(

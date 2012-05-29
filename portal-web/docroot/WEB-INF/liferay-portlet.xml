@@ -147,7 +147,7 @@
 		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
 		<friendly-url-mapping>journal</friendly-url-mapping>
 		<friendly-url-routes>com/liferay/portlet/journal/journal-friendly-url-routes.xml</friendly-url-routes>
-		<portlet-data-handler-class>com.liferay.portlet.journal.lar.JournalPortletDataHandlerImpl</portlet-data-handler-class>
+		<portlet-data-handler-class>com.liferay.portlet.journal.lar.DigestedJournalPortletDataHandlerImpl</portlet-data-handler-class>
 		<webdav-storage-token>journal</webdav-storage-token>
 		<webdav-storage-class>com.liferay.portlet.journal.webdav.JournalWebDAVStorageImpl</webdav-storage-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
@@ -313,7 +313,7 @@
 		<configuration-action-class>com.liferay.portlet.bookmarks.action.ConfigurationActionImpl</configuration-action-class>
 		<indexer-class>com.liferay.portlet.bookmarks.util.BookmarksIndexer</indexer-class>
 		<open-search-class>com.liferay.portlet.bookmarks.util.BookmarksOpenSearchImpl</open-search-class>
-		<portlet-data-handler-class>com.liferay.portlet.bookmarks.lar.BookmarksPortletDataHandlerImpl</portlet-data-handler-class>
+		<portlet-data-handler-class>com.liferay.portlet.bookmarks.lar.DigestedBookmarksPortletDataHandlerImpl</portlet-data-handler-class>
 		<social-activity-interpreter-class>com.liferay.portlet.bookmarks.social.BookmarksActivityInterpreter</social-activity-interpreter-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>13.0</control-panel-entry-weight>

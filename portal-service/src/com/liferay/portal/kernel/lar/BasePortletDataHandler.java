@@ -14,12 +14,28 @@
 
 package com.liferay.portal.kernel.lar;
 
+import com.liferay.portal.lar.digest.LarDigest;
+
 import javax.portlet.PortletPreferences;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public abstract class BasePortletDataHandler implements PortletDataHandler {
+
+	public void createLarDigest(
+			LarDigest larDigest, PortletDataContext portletDataContext,
+			String portletId, PortletPreferences portletPreferences)
+		throws PortletDataException {
+
+		try {
+			doCreateDigest(
+				larDigest, portletDataContext, portletId, portletPreferences);
+		}
+		catch (Exception e) {
+			throw new PortletDataException(e);
+		}
+	}
 
 	public PortletPreferences deleteData(
 			PortletDataContext portletDataContext, String portletId,
@@ -89,6 +105,14 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 
 	public boolean isPublishToLiveByDefault() {
 		return _PUBLISH_TO_LIVE_BY_DEFAULT;
+	}
+
+	protected void doCreateDigest(
+			LarDigest larDigest, PortletDataContext portletDataContext,
+			String portletId, PortletPreferences portletPreferences)
+		throws Exception {
+
+		return;
 	}
 
 	protected PortletPreferences doDeleteData(
