@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.FrameworkListener;
 import com.liferay.portal.osgi.OSGiConstants;
@@ -219,13 +220,14 @@ public class OSGiServiceUtil {
 		sb.append(PropsValues.LIFERAY_OSGI_PORTAL_DIR);
 		sb.append(StringPool.COMMA);
 		sb.append(PropsValues.OSGI_AUTO_DEPLOY_DIR);
+		//sb.append(PropsValues.AUTO_DEPLOY_DEPLOY_DIR);
 
 		properties.put("felix.fileinstall.dir", sb.toString());
 		properties.put(
 			"felix.fileinstall.log.level",
 			PropsUtil.get("osgi.deploy.log.level"));
 		properties.put(
-			"felix.fileinstall.tmpdir", System.getProperty("java.io.tmpdir"));
+			"felix.fileinstall.tmpdir", SystemProperties.TMP_DIR);
 
 		UniqueList<String> packages = new UniqueList<String>();
 

@@ -21,6 +21,7 @@ Import-Package: \
 	com.liferay.portal.util,\
 	com.liferay.portlet,\
 	com.liferay.portlet.admin,\
+	com.liferay.util.bean,\
 	javax.portlet,\
 	org.osgi.framework,\
 	org.osgi.framework.startlevel,\

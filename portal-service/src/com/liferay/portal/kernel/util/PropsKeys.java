@@ -1583,6 +1583,8 @@ public interface PropsKeys {
 
 	public static final String OSGI_FRAMEWORK_STORAGE = "osgi.framework.storage";
 
+	public static final String OSGI_FRAMEWORK_TMP = "osgi.framework.tmp";
+
 	public static final String OSGI_REGISTER_LIFERAY_SERVICES = "osgi.register.liferay.services";
 
 	public static final String OSGI_JAVA_SECURITY_ENABLED = "osgi.java.security.enabled";

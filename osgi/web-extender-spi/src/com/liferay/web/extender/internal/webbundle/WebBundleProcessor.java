@@ -19,6 +19,7 @@ import com.liferay.portal.deploy.auto.OSGiAutoDeployListener;
 import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
+import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.io.FileFilter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -26,9 +27,11 @@ import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -85,6 +88,10 @@ public class WebBundleProcessor {
 		_systemBundleClassLoader = systemBundleClassLoader;
 		_file = file;
 		_parameterMap = parameterMap;
+
+		_baseDeployer = new BaseDeployer();
+
+		_baseDeployer.setAppServerType(ServerDetector.getServerId());
 	}
 
 	public void process() throws IOException {
@@ -95,9 +102,12 @@ public class WebBundleProcessor {
 			webContextpath = StringPool.SLASH.concat(webContextpath);
 		}
 
-		doAutoDeploy(webContextpath);
+		AutoDeploymentContext autoDeploymentContext =
+			buildAutoDeploymentContext(webContextpath);
 
-		_deployedAppFolder = getDeployDir(webContextpath);
+		doAutoDeploy(autoDeploymentContext);
+
+		_deployedAppFolder = autoDeploymentContext.getDeployDir();
 
 		if ((_deployedAppFolder == null) || !_deployedAppFolder.exists() ||
 			!_deployedAppFolder.isDirectory()) {
@@ -117,6 +127,9 @@ public class WebBundleProcessor {
 		// spec states that this is only true when the Manifest does not contain
 		// a Bundle_SymbolicName header.
 
+		// If it is a bundle it should be "well formed";
+		// we are not doing anything on it
+
 		if (!attributes.containsKey(Constants.BUNDLE_SYMBOLICNAME)) {
 
 			// The order of these operations is important
@@ -129,18 +142,18 @@ public class WebBundleProcessor {
 			processBundleClassPath(attributes);
 			processDeclarativeReferences(attributes);
 			processExportImportPackage(attributes);
-		}
 
-		attributes.putValue(OSGiConstants.WEB_CONTEXTPATH, webContextpath);
+			attributes.putValue(OSGiConstants.WEB_CONTEXTPATH, webContextpath);
 
-		if (!attributes.containsKey(
+			if (!attributes.containsKey(
 				Attributes.Name.MANIFEST_VERSION.toString())) {
 
-			attributes.putValue(
-				Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
-		}
+				attributes.putValue(
+					Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
+			}
 
-		_saveManifest(manifest);
+			_saveManifest(manifest);
+		}
 	}
 
 	public java.io.InputStream getInputStream() throws IOException {
@@ -172,40 +185,30 @@ public class WebBundleProcessor {
 		return new FileInputStream(zipWriter.getFile());
 	}
 
-	protected void doAutoDeploy(String webContextpath) {
+	protected AutoDeploymentContext buildAutoDeploymentContext(String context) {
+
+		AutoDeploymentContext autoDeploymentContext = new AutoDeploymentContext(
+		);
+
+		autoDeploymentContext.setContext(context);
+		autoDeploymentContext.setDestDir(PropsValues.OSGI_FRAMEWORK_TMP);
+		autoDeploymentContext.setFileToDeploy(_file);
+
+		return autoDeploymentContext;
+	}
+
+	protected void doAutoDeploy(AutoDeploymentContext autoDeploymentContext) {
 		List<AutoDeployListener> autoDeployListeners =
 			GlobalStartupAction.getAutoDeployListeners();
 
 		for (AutoDeployListener autoDeployListener : autoDeployListeners) {
-			if (autoDeployListener instanceof OSGiAutoDeployListener) {
-				OSGiAutoDeployListener oSGiAutoDeployListener =
-					(OSGiAutoDeployListener)autoDeployListener;
-
-				_baseDeployer = oSGiAutoDeployListener.getBaseDeployer();
-
-				continue;
-			}
-
 			try {
-				autoDeployListener.deploy(_file, webContextpath);
+				autoDeployListener.deploy(autoDeploymentContext);
 			}
 			catch (AutoDeployException ade) {
 				_log.error(ade);
 			}
 		}
-	}
-
-	protected File getDeployDir(String webContextpath) throws IOException {
-		String deployDir = null;
-
-		try {
-			deployDir = DeployUtil.getAutoDeployDestDir();
-		}
-		catch (Exception e) {
-			throw new IOException(e);
-		}
-
-		return new File(deployDir, webContextpath);
 	}
 
 	protected ClassLoader getSystemBundleClassLoader() {

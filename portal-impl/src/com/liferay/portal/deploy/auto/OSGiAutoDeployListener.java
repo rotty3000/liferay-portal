@@ -18,6 +18,7 @@ import aQute.libg.header.OSGiHeader;
 
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
+import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -48,26 +49,64 @@ import org.osgi.framework.launch.Framework;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class OSGiAutoDeployListener implements AutoDeployListener {
 
-	public OSGiAutoDeployListener() {
-		_baseDeployer = new BaseDeployer();
+	public void deploy(AutoDeploymentContext autoDeploymentContext)
+		throws AutoDeployException {
 
-		_baseDeployer.setAppServerType(ServerDetector.getServerId());
-	}
-
-	public void deploy(File file, String context) throws AutoDeployException {
 		try {
-			doDeploy(file, context);
+			doDeploy(autoDeploymentContext);
 		}
 		catch (Exception e) {
 			throw new AutoDeployException(e);
 		}
 	}
+	protected Manifest getDeploymentHandler(File file) {
+		String fileName = file.getName().toLowerCase();
 
-	public BaseDeployer getBaseDeployer() {
-		return _baseDeployer;
+		if (file.isDirectory() ||
+			(!fileName.endsWith(".jar") && !fileName.endsWith(".war"))) {
+
+			return null;
+		}
+
+		ZipReader zipReader = null;
+
+		InputStream inputStream = null;
+
+		Manifest manifest = null;
+
+		try {
+			zipReader = ZipReaderFactoryUtil.getZipReader(file);
+
+			inputStream = zipReader.getEntryAsInputStream(
+				"/META-INF/MANIFEST.MF");
+
+			if (inputStream == null) {
+				return null;
+			}
+
+			manifest = new Manifest(inputStream);
+
+			Attributes attributes = manifest.getMainAttributes();
+
+			String bundleSymbolicName = attributes.getValue(
+				Constants.BUNDLE_SYMBOLICNAME);
+
+			if (Validator.isNull(bundleSymbolicName)) {
+				return null;
+			}
+		}
+		catch (Exception e) {
+			return null;
+		}
+		finally {
+			cleanUp(zipReader, inputStream);
+		}
+
+		return manifest;
 	}
 
 	protected void cleanUp(ZipReader zipReader, InputStream inputStream) {
@@ -92,7 +131,9 @@ public class OSGiAutoDeployListener implements AutoDeployListener {
 		}
 	}
 
-	protected void doDeploy(File file, String context) throws Exception {
+	protected void doDeploy(AutoDeploymentContext autoDeploymentContext)
+		throws Exception {
+
 		Framework framework = OSGiServiceUtil.getFramework();
 
 		if (framework == null) {
@@ -103,44 +144,18 @@ public class OSGiAutoDeployListener implements AutoDeployListener {
 			return;
 		}
 
-		String fileName = file.getName();
+		File file = autoDeploymentContext.getFileToDeploy();
 
-		fileName = fileName.toLowerCase();
+		Manifest manifest = getDeploymentHandler(file);
 
-		if (file.isDirectory() ||
-			(!fileName.endsWith(".jar") && !fileName.endsWith(".war"))) {
+		if (manifest == null) {
+			_log.debug("The file " + file.getName() + " cannot be handled");
 
 			return;
 		}
 
-		ZipReader zipReader = null;
+		installBundle(framework, file, manifest);
 
-		InputStream inputStream = null;
-
-		try {
-			zipReader = ZipReaderFactoryUtil.getZipReader(file);
-
-			inputStream = zipReader.getEntryAsInputStream(
-				"/META-INF/MANIFEST.MF");
-
-			if (inputStream == null) {
-				return;
-			}
-
-			Manifest manifest = new Manifest(inputStream);
-
-			Attributes attributes = manifest.getMainAttributes();
-
-			String bundleSymbolicName = attributes.getValue(
-				Constants.BUNDLE_SYMBOLICNAME);
-
-			if (Validator.isNotNull(bundleSymbolicName)) {
-				installBundle(framework, file, manifest);
-			}
-		}
-		finally {
-			cleanUp(zipReader, inputStream);
-		}
 	}
 
 	protected Bundle getBundle(Framework framework, Manifest manifest) {
@@ -217,7 +232,5 @@ public class OSGiAutoDeployListener implements AutoDeployListener {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		OSGiAutoDeployListener.class);
-
-	private BaseDeployer _baseDeployer;
 
 }
