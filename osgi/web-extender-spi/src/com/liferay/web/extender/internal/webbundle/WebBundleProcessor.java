@@ -14,8 +14,6 @@
 
 package com.liferay.web.extender.internal.webbundle;
 
-import com.liferay.portal.deploy.DeployUtil;
-import com.liferay.portal.deploy.auto.OSGiAutoDeployListener;
 import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -63,6 +60,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -142,6 +140,7 @@ public class WebBundleProcessor {
 			processBundleClassPath(attributes);
 			processDeclarativeReferences(attributes);
 			processExportImportPackage(attributes);
+ 			processPluginDependencies(attributes);
 
 			attributes.putValue(OSGiConstants.WEB_CONTEXTPATH, webContextpath);
 
@@ -608,6 +607,44 @@ public class WebBundleProcessor {
 		content = DDMXMLUtil.formatXML(liferayPortletXMLDoc);
 
 		FileUtil.write(liferayPortletXMLFile, content);
+	}
+
+	protected void processPluginDependencies(Attributes attributes) {
+		PluginPackage readPluginPackage = _baseDeployer.readPluginPackage(
+			_deployedAppFolder);
+
+		List<String> requiredDeploymentContexts =
+			readPluginPackage.getRequiredDeploymentContext();
+
+		int requiredDeploymentContextsSize = requiredDeploymentContexts.size();
+
+		StringBundler sb = new StringBundler(6*requiredDeploymentContextsSize);
+
+		int i = 0;
+
+		for (; i < requiredDeploymentContextsSize - 1; i++) {
+			sb.append(requiredDeploymentContexts.get(i));
+			sb.append(StringPool.SEMICOLON);
+			sb.append(Constants.BUNDLE_VERSION_ATTRIBUTE);
+			sb.append(StringPool.EQUAL);
+			sb.append(_version);
+			sb.append(StringPool.COMMA);
+		}
+
+		if (i < requiredDeploymentContextsSize) {
+			sb.append(requiredDeploymentContexts.get(i));
+			sb.append(StringPool.SEMICOLON);
+			sb.append(Constants.BUNDLE_VERSION_ATTRIBUTE);
+			sb.append(StringPool.EQUAL);
+			sb.append(_version);
+		}
+
+		String requiredBundles = sb.toString();
+
+		if (Validator.isNotNull(requiredBundles)) {
+			attributes.putValue(Constants.REQUIRE_BUNDLE, sb.toString());
+		}
+
 	}
 
 	protected void processPortletXML(String webContextpath)
