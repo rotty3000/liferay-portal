@@ -143,7 +143,7 @@ public class WebPluginDeployer implements BundleListener {
 			HotDeployUtil.fireDeployEvent(
 				new HotDeployEvent(
 					bundleServletContext,
-					bundleServletContext.getClassLoader()));
+					bundleServletContext.getClassLoader(), false));
 
 			bundleServletContext.open();
 
@@ -174,7 +174,7 @@ public class WebPluginDeployer implements BundleListener {
 			"bundle.classloader");
 
 		HotDeployUtil.fireUndeployEvent(
-			new HotDeployEvent(servletContext, classLoader));
+			new HotDeployEvent(servletContext, classLoader, false));
 
 		destroy(servletContext);
 
