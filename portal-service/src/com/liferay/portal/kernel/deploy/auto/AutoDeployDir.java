@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.IntegerWrapper;
-import com.liferay.portal.kernel.util.ServerDetector;
 
 import java.io.File;
 
