@@ -154,13 +154,13 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		PortletContextBagPool.clear();
 		WebAppPool.clear();
 
-		if (PropsValues.OSGI_ENABLED) {
-			try {
-				OSGiServiceUtil.init();
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+		// Start the OSGI framework
+
+		try {
+			OSGiServiceUtil.init();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
 		}
 
 		PortalContextLoaderLifecycleThreadLocal.setInitializing(true);
@@ -213,16 +213,14 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		clearFilteredPropertyDescriptorsCache(autowireCapableBeanFactory);
 
-		if (PropsValues.OSGI_ENABLED) {
-			try {
-				OSGiServiceUtil.registerContext(servletContext);
-				OSGiServiceUtil.registerContext(applicationContext);
+		try {
+			OSGiServiceUtil.registerContext(servletContext);
+			OSGiServiceUtil.registerContext(applicationContext);
 
-				OSGiServiceUtil.start();
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+			OSGiServiceUtil.start();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
 		}
 	}
 

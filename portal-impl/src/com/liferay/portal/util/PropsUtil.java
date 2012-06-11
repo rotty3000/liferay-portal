@@ -150,6 +150,10 @@ public class PropsUtil {
 			SystemProperties.set(
 				PropsKeys.LIFERAY_LIB_PORTAL_DIR, portalLibDir);
 
+			SystemProperties.set(
+				PropsKeys.LIFERAY_OSGI_PORTAL_DIR,
+				WebDirDetector.getOSGiDir(portalLibDir));
+
 			// Portal web directory
 
 			String portalWebDir = WebDirDetector.getRootDir(portalLibDir);

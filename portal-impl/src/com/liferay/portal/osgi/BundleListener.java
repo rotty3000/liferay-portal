@@ -23,7 +23,8 @@ import org.osgi.framework.BundleEvent;
 /**
  * @author Raymond Augé
  */
-public class BundleListener implements org.osgi.framework.BundleListener {
+public class BundleListener extends BaseListener
+	implements org.osgi.framework.BundleListener {
 
 	public void bundleChanged(BundleEvent bundleEvent) {
 		try {
@@ -31,7 +32,8 @@ public class BundleListener implements org.osgi.framework.BundleListener {
 
 			Bundle bundle = bundleEvent.getBundle();
 
-			Log log = LogFactoryUtil.getLog(bundle.getSymbolicName());
+			Log log = LogFactoryUtil.getLog(
+				logFormatBSN(bundle.getSymbolicName()));
 
 			if (!log.isInfoEnabled()) {
 				return;

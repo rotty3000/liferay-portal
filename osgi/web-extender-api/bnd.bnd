@@ -1,0 +1,27 @@
+Bundle-Name: Web Extender API
+Bundle-SymbolicName: web-extender-api;singleton:=true
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 0.0.1
+Export-Package: \
+	com.liferay.web.extender,\
+	com.liferay.web.extender.definition,\
+	com.liferay.web.extender.servlet,\
+	com.liferay.web.extender.web,\
+	com.liferay.web.extender.web.dependencies
+Import-Package: \
+	com.liferay.portal.apache.bridges.struts,\
+	com.liferay.portal.kernel.deploy.hot,\
+	com.liferay.portal.kernel.exception,\
+	com.liferay.portal.kernel.log,\
+	com.liferay.portal.kernel.servlet,\
+	com.liferay.portal.kernel.util,\
+	com.liferay.portal.osgi,\
+	com.liferay.portal.service,\
+	com.liferay.portal.model,\
+	com.liferay.portal.util,\
+	javax.servlet;version="[3.0.0, 4.0.0)",\
+	javax.servlet.http;version="[3.0.0, 4.0.0)",\
+	org.osgi.framework,\
+	org.osgi.service.http,\
+	*
+Include-Resource: OSGI-INF/src/=src/

@@ -22,6 +22,13 @@
 
 		<ant dir="portal-impl" target="clean" inheritAll="false" />
 
+		<ant dir="osgi/log-bridge" target="clean" inheritAll="false" />
+		<ant dir="osgi/mvc-portlet-support" target="clean" inheritAll="false" />
+		<ant dir="osgi/osgi-admin-portlet" target="clean" inheritAll="false" />
+		<ant dir="osgi/war-artifact-listener" target="clean" inheritAll="false" />
+		<ant dir="osgi/web-extender-api" target="clean" inheritAll="false" />
+		<ant dir="osgi/web-extender-spi" target="clean" inheritAll="false" />
+
 		<ant dir="portal-web" target="clean" inheritAll="false" />
 
 		<ant dir="sql" target="clean" inheritAll="false" />
@@ -181,6 +188,13 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 
 		<ant dir="portal-impl" target="deploy" inheritAll="false" />
 
+		<ant dir="osgi/log-bridge" target="deploy" inheritAll="false" />
+		<ant dir="osgi/mvc-portlet-support" target="deploy" inheritAll="false" />
+		<ant dir="osgi/osgi-admin-portlet" target="deploy" inheritAll="false" />
+		<ant dir="osgi/war-artifact-listener" target="deploy" inheritAll="false" />
+		<ant dir="osgi/web-extender-api" target="deploy" inheritAll="false" />
+		<ant dir="osgi/web-extender-spi" target="deploy" inheritAll="false" />
+
 		<ant dir="portal-web" target="deploy" inheritAll="false" />
 
 		<copy todir="${liferay.home}/data/hsql">
@@ -211,6 +225,10 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 
 		<copy todir="${app.server.lib.portal.dir}">
 			<fileset dir="lib/portal" />
+		</copy>
+
+		<copy todir="${app.server.osgi.portal.dir}">
+			<fileset dir="lib/osgi" />
 		</copy>
 
 		<if>
