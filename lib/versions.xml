@@ -922,6 +922,17 @@
 		</licenses>
 	</library>
 	<library>
+		<file-name>framework/org.eclipse.gemini.mgmt.jar</file-name>
+		<version>1.0.1.RELEASE</version>
+		<project-name>Gemini Management</project-name>
+		<project-url>http://www.eclipse.org/gemini/management/</project-url>
+		<licenses>
+			<license>
+				<license-name>Eclipse Public License 1.0</license-name>
+			</license>
+		</licenses>
+	</library>
+	<library>
 		<file-name>framework/osgi-enterprise.jar</file-name>
 		<version>4.2.0.v201108120515</version>
 		<project-name>OSGi Enterprise Specification</project-name>
