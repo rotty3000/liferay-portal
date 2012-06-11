@@ -55,6 +55,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -510,20 +511,6 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		_framework.init();
 
-		BundleContext bundleContext = _framework.getBundleContext();
-
-		BundleListener bundleListener = new BundleListener();
-
-		bundleContext.addBundleListener(bundleListener);
-
-		FrameworkListener frameworkListener = new FrameworkListener();
-
-		bundleContext.addFrameworkListener(frameworkListener);
-
-		ServiceListener serviceListener = new ServiceListener();
-
-		bundleContext.addServiceListener(serviceListener);
-
 		_framework.start();
 	}
 
@@ -537,7 +524,7 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		frameworkStartLevel.setStartLevel(
 			PropsValues.MODULE_FRAMEWORK_RUNTIME_START_LEVEL,
-			(FrameworkListener[])null);
+			(FrameworkListener)null);
 	}
 
 	private void _stopBundle(long bundleId) throws PortalException {
@@ -598,7 +585,7 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		frameworkStartLevel.setStartLevel(
 			PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL,
-			(FrameworkListener[])null);
+			(FrameworkListener)null);
 	}
 
 	private void _uninstallBundle(long bundleId) throws PortalException {
