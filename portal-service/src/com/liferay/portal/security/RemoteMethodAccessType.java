@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -19,4 +19,5 @@ package com.liferay.portal.security;
  */
 public enum RemoteMethodAccessType {
 	ANONYMOUS, AUTHENTICATED
+
 }

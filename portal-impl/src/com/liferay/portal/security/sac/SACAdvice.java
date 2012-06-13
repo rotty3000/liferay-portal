@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -52,15 +52,15 @@ public class SACAdvice extends
 		return null;
 	}
 
+	@Override
+	public MethodSecurity getNullAnnotation() {
+		return _nullMethodSecurity;
+	}
+
 	public void setServiceAccessControlManager(
 		ServiceAccessControlManagerImpl serviceAccessControlManager) {
 
 		_serviceAccessControlManager = serviceAccessControlManager;
-	}
-
-	@Override
-	public MethodSecurity getNullAnnotation() {
-		return _nullMethodSecurity;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(SACAdvice.class);

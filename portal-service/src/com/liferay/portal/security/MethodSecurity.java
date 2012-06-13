@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -29,6 +29,6 @@ import java.lang.annotation.Target;
 public @interface MethodSecurity {
 
 	RemoteMethodAccessType remoteMethodAccessType()
-	    default RemoteMethodAccessType.AUTHENTICATED;
+		default RemoteMethodAccessType.AUTHENTICATED;
 
 }
