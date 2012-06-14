@@ -148,31 +148,6 @@ public class JSONWebServiceServlet extends JSONServlet {
 		return _jsonWebServiceServiceAction;
 	}
 
-	@Override
-	protected void resolveRemoteUser(HttpServletRequest request)
-		throws Exception {
-/*
-		UserResolver userResolver = new UserResolver(request);
-
-		CompanyThreadLocal.setCompanyId(userResolver.getCompanyId());
-
-		request.setAttribute("companyId", userResolver.getCompanyId());
-
-		User user = userResolver.getUser();
-
-		if (user != null) {
-			PermissionChecker permissionChecker =
-				PermissionCheckerFactoryUtil.create(user);
-
-			PermissionThreadLocal.setPermissionChecker(permissionChecker);
-
-			request.setAttribute("user", user);
-			request.setAttribute("userId", user.getUserId());
-		}
-
-		*/
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		JSONWebServiceServlet.class);
 
