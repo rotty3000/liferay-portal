@@ -63,10 +63,10 @@ String redirect = ParamUtil.getString(request, "redirect");
 				<aui:select label="maximum-entries-to-display" name="preferences--entriesPerPage--">
 
 					<%
-					for (int deltaValue : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
+					for (int pageDeltaValue : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
 					%>
 
-						<aui:option label="<%= deltaValue %>" selected="<%= entriesPerPage == deltaValue %>" />
+						<aui:option label="<%= pageDeltaValue %>" selected="<%= entriesPerPage == pageDeltaValue %>" />
 
 					<%
 					}
@@ -165,6 +165,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 		</liferay-ui:panel>
 
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="documentLibraryDocumentsRatingsPanel" persistState="<%= true %>" title="ratings">
+			<aui:input name="preferences--enableRatings--" type="checkbox" value="<%= enableRatings %>" />
 			<aui:input name="preferences--enableCommentRatings--" type="checkbox" value="<%= enableCommentRatings %>" />
 		</liferay-ui:panel>
 	</liferay-ui:panel-container>

@@ -117,7 +117,7 @@ public class EditCompanyAction extends PortletAction {
 						e.getClass().getName() + nslte.getType());
 				}
 				else {
-					SessionErrors.add(actionRequest, e.getClass().getName(), e);
+					SessionErrors.add(actionRequest, e.getClass(), e);
 				}
 
 				setForward(

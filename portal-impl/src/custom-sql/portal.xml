@@ -4,19 +4,39 @@
 	<sql id="com.liferay.portal.security.permission.InlineSQLHelper.filterByResourceBlockId">
 		<![CDATA[
 			WHERE
-				(resourceBlockId IN ([$USER_RESOURCE_BLOCK_IDS$]))
+				(resourceBlockId IN ([$USER_RESOURCE_BLOCK_ID$]))
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.security.permission.InlineSQLHelper.filterByResourceBlockIdOwner">
 		<![CDATA[
 			WHERE
 				(
-					resourceBlockId IN ([$USER_RESOURCE_BLOCK_IDS$]) OR
+					resourceBlockId IN ([$USER_RESOURCE_BLOCK_ID$]) OR
 					(
 						([$USER_ID_FIELD$] = [$USER_ID$]) AND
-						(resourceBlockId IN ([$OWNER_RESOURCE_BLOCK_IDS$]))
+						(resourceBlockId IN ([$OWNER_RESOURCE_BLOCK_ID$]))
 					)
 				)
+		]]>
+	</sql>
+	<sql id="com.liferay.portal.security.permission.InlineSQLHelper.findByResourceBlockId">
+		<![CDATA[
+			SELECT
+				resourceBlockId
+			FROM
+				ResourceBlock
+			WHERE
+				resourceBlockId IN (
+					SELECT
+						resourceBlockId
+					FROM
+						ResourceBlockPermission
+					WHERE
+						(roleId IN ([$ROLE_ID$]))
+				)
+				AND (resourceBlock.companyId = [$COMPANY_ID$])
+				AND (resourceBlock.groupId = [$GROUP_ID$])
+				AND (resourceBlock.name = '[$RESOURCE_BLOCK_NAME$]')
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.security.permission.InlineSQLHelper.joinResourcePermission">
@@ -658,7 +678,7 @@
 			INNER JOIN
 				ResourceBlockPermission ON
 					(ResourceBlock.resourceBlockId = ResourceBlockPermission.resourceBlockId) AND
-					(ResourceBlockPermission.roleId IN ([$ROLE_IDS$]))
+					(ResourceBlockPermission.roleId IN ([$ROLE_ID$]))
 			WHERE
 				(ResourceBlock.companyId = ?) AND
 				(ResourceBlock.groupId = ?) AND
@@ -1134,7 +1154,7 @@
 			FROM
 				User_
 			WHERE
-				(userId NOT IN(
+				(userId NOT IN (
 					SELECT
 						userId
 					FROM
@@ -1152,7 +1172,7 @@
 			FROM
 				User_
 			WHERE
-				(userId NOT IN(
+				(userId NOT IN (
 					SELECT
 						User_.userId
 					FROM
@@ -1170,7 +1190,7 @@
 			FROM
 				User_
 			WHERE
-				(userId NOT IN(
+				(userId NOT IN (
 					SELECT
 						User_.userId
 					FROM
@@ -1216,7 +1236,7 @@
 	<sql id="com.liferay.portal.service.persistence.UserFinder.joinByNoOrganizations">
 		<![CDATA[
 			WHERE
-				(User_.userId NOT IN(
+				(User_.userId NOT IN (
 					SELECT
 						userId
 					FROM

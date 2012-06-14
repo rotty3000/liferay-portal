@@ -3338,9 +3338,13 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		String passwordResetURL = StringPool.BLANK;
 
 		if (company.isSendPasswordResetLink()) {
-			Date expirationDate = new Date(
-				System.currentTimeMillis() +
-					(passwordPolicy.getResetTicketMaxAge() * 1000));
+			Date expirationDate = null;
+
+			if (passwordPolicy.getResetTicketMaxAge() > 0) {
+				expirationDate = new Date(
+					System.currentTimeMillis() +
+						(passwordPolicy.getResetTicketMaxAge() * 1000));
+			}
 
 			Ticket ticket = ticketLocalService.addTicket(
 				companyId, User.class.getName(), user.getUserId(),
@@ -5091,10 +5095,7 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Authenticate against the User_ table
 
 		if ((authResult == Authenticator.SUCCESS) &&
-			PropsValues.AUTH_PIPELINE_ENABLE_LIFERAY_CHECK &&
-			(!PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_AUTH_ENABLED) ||
-			 PropsValues.LDAP_IMPORT_USER_PASSWORD_ENABLED)) {
+			PropsValues.AUTH_PIPELINE_ENABLE_LIFERAY_CHECK) {
 
 			boolean authenticated = PwdAuthenticator.authenticate(
 				login, password, user.getPassword());
@@ -5656,6 +5657,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			emailAddress.startsWith("postmaster@")) {
 
 			throw new UserEmailAddressException();
+		}
+
+		if (emailAddress.equalsIgnoreCase(
+				PropsValues.MAIL_SESSION_MAIL_POP3_USER)) {
+
+			throw new ReservedUserEmailAddressException();
 		}
 
 		String[] reservedEmailAddresses = PrefsPropsUtil.getStringArray(

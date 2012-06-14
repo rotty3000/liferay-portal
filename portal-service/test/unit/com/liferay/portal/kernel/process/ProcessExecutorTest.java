@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.process.ProcessExecutor.ProcessContext;
 import com.liferay.portal.kernel.process.ProcessExecutor.ShutdownHook;
 import com.liferay.portal.kernel.process.log.ProcessOutputStream;
 import com.liferay.portal.kernel.test.BaseTestCase;
-import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -52,7 +51,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -60,7 +58,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -73,6 +71,21 @@ import java.util.logging.Logger;
  * @author Shuyang Zhou
  */
 public class ProcessExecutorTest extends BaseTestCase {
+
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+
+		ExecutorService executorService = _getExecutorService();
+
+		if (executorService != null) {
+			executorService.shutdownNow();
+
+			executorService.awaitTermination(10, TimeUnit.SECONDS);
+
+			_nullOutExecutorService();
+		}
+	}
 
 	public void testAttach1() throws Exception {
 
@@ -368,8 +381,6 @@ public class ProcessExecutorTest extends BaseTestCase {
 	}
 
 	public void testConcurrentCreateExecutorService() throws Exception {
-		_nullOutExecutorService();
-
 		final AtomicReference<ExecutorService> atomicReference =
 			new AtomicReference<ExecutorService>();
 
@@ -586,6 +597,31 @@ public class ProcessExecutorTest extends BaseTestCase {
 		}
 	}
 
+	public void testExecuteOnDestroy() throws Exception {
+		ExecutorService executorService = _invokeGetExecutorService();
+
+		executorService.shutdownNow();
+
+		boolean result = executorService.awaitTermination(10, TimeUnit.SECONDS);
+
+		assertTrue(result);
+
+		DummyReturnProcessCallable dummyReturnProcessCallable =
+			new DummyReturnProcessCallable();
+
+		try {
+			ProcessExecutor.execute(_classPath, dummyReturnProcessCallable);
+
+			fail();
+		}
+		catch (ProcessException pe) {
+			Throwable throwable = pe.getCause();
+
+			assertEquals(
+				throwable.getClass(), RejectedExecutionException.class);
+		}
+	}
+
 	public void testGetWithTimeout() throws Exception {
 
 		// Success return
@@ -621,16 +657,16 @@ public class ProcessExecutorTest extends BaseTestCase {
 		assertFalse(future.isCancelled());
 		assertFalse(future.isDone());
 
+		future.cancel(true);
+
 		ExecutorService executorService = _getExecutorService();
 
 		executorService.shutdownNow();
 
 		executorService.awaitTermination(10, TimeUnit.SECONDS);
 
-		assertFalse(future.isCancelled());
+		assertTrue(future.isCancelled());
 		assertTrue(future.isDone());
-
-		_nullOutExecutorService();
 	}
 
 	public void testLeadingLog() throws Exception {
@@ -880,52 +916,28 @@ public class ProcessExecutorTest extends BaseTestCase {
 		ReturnWithoutExitProcessCallable returnWithoutExitProcessCallable =
 			new ReturnWithoutExitProcessCallable("Premature return value");
 
-		ProcessExecutor processExecutor = new ProcessExecutor();
-
-		_nullOutExecutorService();
-
 		Future<String> future = ProcessExecutor.execute(
 			_classPath, returnWithoutExitProcessCallable);
 
-		ThreadPoolExecutor threadPoolExecutor =
-			(ThreadPoolExecutor)_getExecutorService();
+		for (int i = 0; i < 10; i++) {
+			try {
+				future.get(1, TimeUnit.SECONDS);
 
-		Field workersField = ReflectionUtil.getDeclaredField(
-			ThreadPoolExecutor.class, "workers");
-
-		Set<?> workers = (Set<?>)workersField.get(threadPoolExecutor);
-
-		assertEquals(1, workers.size());
-
-		Object worker = workers.iterator().next();
-
-		Field threadField = ReflectionUtil.getDeclaredField(
-			worker.getClass(), "thread");
-
-		Thread thread = (Thread)threadField.get(worker);
+				fail();
+			}
+			catch (TimeoutException te) {
+			}
+		}
 
 		Logger logger = _getLogger();
-
-		if (OSDetector.isWindows()) {
-
-			// Wait 10 seconds for the thread to be in a waiting state
-
-			logger.log(
-				Level.WARNING,
-				"Windows does not properly update thread states. This test " +
-					"may fail on slow machines.");
-
-			Thread.sleep(10000);
-		}
-		else {
-			while (thread.getState() != Thread.State.WAITING);
-		}
 
 		Level level = logger.getLevel();
 
 		logger.setLevel(Level.OFF);
 
 		try {
+			ProcessExecutor processExecutor = new ProcessExecutor();
+
 			processExecutor.destroy();
 
 			try {
@@ -940,10 +952,6 @@ public class ProcessExecutorTest extends BaseTestCase {
 				Throwable throwable = ee.getCause();
 
 				assertTrue(throwable instanceof ProcessException);
-
-				throwable = throwable.getCause();
-
-				assertTrue(throwable instanceof InterruptedException);
 			}
 		}
 		finally {
@@ -1497,6 +1505,16 @@ public class ProcessExecutorTest extends BaseTestCase {
 				fileOutputStream.flush();
 
 				System.out.print(_bodyLog);
+
+				System.out.flush();
+
+				// Forcibly restore System.out. This is a necessary protection
+				// for code coverage. Cobertura's collector thread will output
+				// to System.out after the subprocess's main thread has exited.
+				// That information will be captured by the parent unit test
+				// process which will cause an assert failure.
+
+				System.setOut(new PrintStream(fileOutputStream));
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);

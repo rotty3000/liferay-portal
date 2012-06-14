@@ -149,7 +149,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	/**
 	 * Adds a file entry and associated metadata. It is created based on a
-	 * {@link File} object.
+	 * {@link java.io.File} object.
 	 *
 	 * <p>
 	 * This method takes two file names, the <code>sourceFileName</code> and the
@@ -209,7 +209,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	/**
 	 * Adds a file entry and associated metadata. It is created based on a
-	 * {@link InputStream} object.
+	 * {@link java.io.InputStream} object.
 	 *
 	 * <p>
 	 * This method takes two file names, the <code>sourceFileName</code> and the
@@ -2250,7 +2250,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 		FileEntry fileEntry = repository.getFileEntry(fileEntryId);
 
 		DLFileEntryPermission.check(
-			getPermissionChecker(), fileEntry, ActionKeys.UPDATE);
+			getPermissionChecker(), fileEntry, ActionKeys.DELETE);
 
 		dlAppHelperLocalService.restoreFileEntryFromTrash(
 			getUserId(), fileEntry);
@@ -2467,10 +2467,11 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Updates a file entry and associated metadata based on a {@link File}
-	 * object. If the file data is <code>null</code>, then only the associated
-	 * metadata (i.e., <code>title</code>, <code>description</code>, and
-	 * parameters in the <code>serviceContext</code>) will be updated.
+	 * Updates a file entry and associated metadata based on a {@link
+	 * java.io.File} object. If the file data is <code>null</code>, then only
+	 * the associated metadata (i.e., <code>title</code>,
+	 * <code>description</code>, and parameters in the
+	 * <code>serviceContext</code>) will be updated.
 	 *
 	 * <p>
 	 * This method takes two file names, the <code>sourceFileName</code> and the
@@ -2532,7 +2533,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	}
 
 	/**
-	 * Updates a file entry and associated metadata based on an {@link
+	 * Updates a file entry and associated metadata based on an {@link java.io.
 	 * InputStream} object. If the file data is <code>null</code>, then only the
 	 * associated metadata (i.e., <code>title</code>, <code>description</code>,
 	 * and parameters in the <code>serviceContext</code>) will be updated.
@@ -2938,7 +2939,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 
 	protected Repository getRepository(
 			long folderId, ServiceContext serviceContext)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		Repository repository = null;
 
@@ -2955,7 +2956,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	protected FileEntry moveFileEntries(
 			long fileEntryId, long newFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		FileEntry sourceFileEntry = fromRepository.getFileEntry(fileEntryId);
 
@@ -2972,7 +2973,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 	protected Folder moveFolders(
 			long folderId, long parentFolderId, Repository fromRepository,
 			Repository toRepository, ServiceContext serviceContext)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		Folder folder = fromRepository.getFolder(folderId);
 

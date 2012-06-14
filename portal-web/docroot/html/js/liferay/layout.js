@@ -408,6 +408,7 @@ AUI.add(
 			function(options) {
 				var data = {
 					doAsUserId: themeDisplay.getDoAsUserIdEncoded(),
+					p_auth: Liferay.authToken,
 					p_l_id: themeDisplay.getPlid()
 				};
 

@@ -102,7 +102,8 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 	public static long LIVEGROUPID_COLUMN_BITMASK = 32L;
 	public static long NAME_COLUMN_BITMASK = 64L;
 	public static long PARENTGROUPID_COLUMN_BITMASK = 128L;
-	public static long TYPE_COLUMN_BITMASK = 256L;
+	public static long SITE_COLUMN_BITMASK = 256L;
+	public static long TYPE_COLUMN_BITMASK = 512L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -575,7 +576,19 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 	}
 
 	public void setSite(boolean site) {
+		_columnBitmask |= SITE_COLUMN_BITMASK;
+
+		if (!_setOriginalSite) {
+			_setOriginalSite = true;
+
+			_originalSite = _site;
+		}
+
 		_site = site;
+	}
+
+	public boolean getOriginalSite() {
+		return _originalSite;
 	}
 
 	@JSON
@@ -728,6 +741,10 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 		groupModelImpl._setOriginalType = false;
 
 		groupModelImpl._originalFriendlyURL = groupModelImpl._friendlyURL;
+
+		groupModelImpl._originalSite = groupModelImpl._site;
+
+		groupModelImpl._setOriginalSite = false;
 
 		groupModelImpl._originalActive = groupModelImpl._active;
 
@@ -933,6 +950,8 @@ public class GroupModelImpl extends BaseModelImpl<Group> implements GroupModel {
 	private String _friendlyURL;
 	private String _originalFriendlyURL;
 	private boolean _site;
+	private boolean _originalSite;
+	private boolean _setOriginalSite;
 	private boolean _active;
 	private boolean _originalActive;
 	private boolean _setOriginalActive;

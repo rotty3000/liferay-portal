@@ -46,6 +46,7 @@ page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMStruct
 page import="com.liferay.portlet.dynamicdatamapping.service.permission.DDMTemplatePermission" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.storage.StorageType" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.DDMTemplateHelperUtil" %><%@
+page import="com.liferay.portlet.dynamicdatamapping.util.DDMUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.DDMXSDUtil" %>
 
 <%

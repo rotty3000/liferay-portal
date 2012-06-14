@@ -836,7 +836,7 @@ public class PortalImpl implements Portal {
 	}
 
 	public Locale[] getAlternateLocales(HttpServletRequest request)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		Locale[] availableLocales = LanguageUtil.getAvailableLocales();
 
@@ -1811,6 +1811,20 @@ public class PortalImpl implements Portal {
 			}
 
 			value = GetterUtil.getLongValues(values);
+		}
+		else if (type == ExpandoColumnConstants.NUMBER) {
+			value = ParamUtil.getNumber(portletRequest, name);
+		}
+		else if (type == ExpandoColumnConstants.NUMBER_ARRAY) {
+			String[] values = portletRequest.getParameterValues(name);
+
+			if (displayType.equals(
+					ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
+
+				values = StringUtil.splitLines(values[0]);
+			}
+
+			value = GetterUtil.getNumberValues(values);
 		}
 		else if (type == ExpandoColumnConstants.SHORT) {
 			value = ParamUtil.getShort(portletRequest, name);
@@ -3868,6 +3882,37 @@ public class PortalImpl implements Portal {
 		return _allSystemSiteRoles;
 	}
 
+	public String getUniqueElementId(
+		HttpServletRequest request, String elementId) {
+
+		String uniqueElementId = elementId;
+
+		Set<String> uniqueElementIds = (Set<String>)request.getAttribute(
+			WebKeys.UNIQUE_ELEMENT_IDS);
+
+		if (uniqueElementIds == null) {
+			uniqueElementIds = new HashSet<String>();
+
+			request.setAttribute(WebKeys.UNIQUE_ELEMENT_IDS, uniqueElementIds);
+		}
+		else {
+			int i = 1;
+
+			while (uniqueElementIds.contains(uniqueElementId)) {
+				uniqueElementId = elementId.concat(StringPool.UNDERLINE).concat(
+					String.valueOf(i));
+			}
+		}
+
+		uniqueElementIds.add(uniqueElementId);
+
+		return uniqueElementId;
+	}
+
+	public String getUniqueElementId(PortletRequest request, String elementId) {
+		return getUniqueElementId(getHttpServletRequest(request), elementId);
+	}
+
 	public UploadPortletRequest getUploadPortletRequest(
 		PortletRequest portletRequest) {
 
@@ -4058,6 +4103,7 @@ public class PortalImpl implements Portal {
 			strutsAction.equals("/image_gallery_display/edit_image") ||
 			strutsAction.equals("/wiki/edit_page_attachment") ||
 			strutsAction.equals("/wiki_admin/edit_page_attachment") ||
+			strutsAction.equals("/wiki_display/edit_page_attachment") ||
 			actionName.equals("addFile")) {
 
 			try {

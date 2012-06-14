@@ -22,7 +22,9 @@ import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.trash.TrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -52,10 +54,11 @@ public class DLFileEntryAssetRenderer
 	extends BaseAssetRenderer implements TrashRenderer {
 
 	public DLFileEntryAssetRenderer(
-		FileEntry fileEntry, FileVersion fileVersion) {
+		FileEntry fileEntry, FileVersion fileVersion, int type) {
 
 		_fileEntry = fileEntry;
 		_fileVersion = fileVersion;
+		_type = type;
 	}
 
 	public String getAssetRendererFactoryClassName() {
@@ -220,8 +223,15 @@ public class DLFileEntryAssetRenderer
 
 			renderRequest.setAttribute(
 				WebKeys.DOCUMENT_LIBRARY_FILE_ENTRY, _fileEntry);
-			renderRequest.setAttribute(
-				WebKeys.DOCUMENT_LIBRARY_FILE_VERSION, _fileVersion);
+
+			String version = ParamUtil.getString(renderRequest, "version");
+
+			if ((_type == AssetRendererFactory.TYPE_LATEST) ||
+				Validator.isNotNull(version)) {
+
+				renderRequest.setAttribute(
+					WebKeys.DOCUMENT_LIBRARY_FILE_VERSION, _fileVersion);
+			}
 
 			return "/html/portlet/document_library/asset/" + template + ".jsp";
 		}
@@ -232,5 +242,6 @@ public class DLFileEntryAssetRenderer
 
 	private FileEntry _fileEntry;
 	private FileVersion _fileVersion;
+	private int _type;
 
 }

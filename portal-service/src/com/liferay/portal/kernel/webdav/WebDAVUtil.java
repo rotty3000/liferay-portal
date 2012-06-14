@@ -19,6 +19,7 @@ import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -49,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Brian Wing Shun Chan
  * @author Alexander Chow
+ * @author Raymond Augé
  */
 public class WebDAVUtil {
 
@@ -62,7 +64,7 @@ public class WebDAVUtil {
 	public static final String TOKEN_PREFIX = "opaquelocktoken:";
 
 	public static void addStorage(WebDAVStorage storage) {
-		_instance._addStorage(storage);
+		getInstance()._addStorage(storage);
 	}
 
 	public static Namespace createNamespace(String prefix, String uri) {
@@ -82,7 +84,7 @@ public class WebDAVUtil {
 	}
 
 	public static void deleteStorage(WebDAVStorage storage) {
-		_instance._deleteStorage(storage);
+		getInstance()._deleteStorage(storage);
 	}
 
 	public static long getDepth(HttpServletRequest request) {
@@ -214,6 +216,12 @@ public class WebDAVUtil {
 		return groups;
 	}
 
+	public static WebDAVUtil getInstance() {
+		PortalRuntimePermission.checkGetBeanProperty(WebDAVUtil.class);
+
+		return _instance;
+	}
+
 	public static String getLockUuid(HttpServletRequest request)
 		throws WebDAVException {
 
@@ -268,11 +276,11 @@ public class WebDAVUtil {
 	}
 
 	public static WebDAVStorage getStorage(String token) {
-		return _instance._getStorage(token);
+		return getInstance()._getStorage(token);
 	}
 
 	public static Collection<String> getStorageTokens() {
-		return _instance._getStorageTokens();
+		return getInstance()._getStorageTokens();
 	}
 
 	public static long getTimeout(HttpServletRequest request) {
@@ -300,7 +308,7 @@ public class WebDAVUtil {
 	}
 
 	public static boolean isOverwrite(HttpServletRequest request) {
-		return _instance._isOverwrite(request);
+		return getInstance()._isOverwrite(request);
 	}
 
 	private WebDAVUtil() {

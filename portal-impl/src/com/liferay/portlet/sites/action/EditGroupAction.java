@@ -150,7 +150,7 @@ public class EditGroupAction extends PortletAction {
 					 e instanceof RequiredGroupException ||
 					 e instanceof SystemException) {
 
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 
 				if (cmd.equals(Constants.DEACTIVATE) ||
 					cmd.equals(Constants.DELETE) ||
@@ -257,7 +257,7 @@ public class EditGroupAction extends PortletAction {
 	protected String updateCloseRedirect(
 			String closeRedirect, Group group, ThemeDisplay themeDisplay,
 			String oldFriendlyURL, String oldStagingFriendlyURL)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		if (Validator.isNull(closeRedirect) || (group == null)) {
 			return closeRedirect;

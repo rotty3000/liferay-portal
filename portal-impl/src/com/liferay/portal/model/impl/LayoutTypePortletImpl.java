@@ -440,7 +440,7 @@ public class LayoutTypePortletImpl
 			List<String> columns = new ArrayList<String>();
 
 			for (int i = 1; i <= 10; i++) {
-				columns.add("column-" + i);
+				columns.add(LayoutTypePortletConstants.COLUMN_PREFIX + i);
 			}
 
 			layoutTemplate.setColumns(columns);
@@ -1168,6 +1168,32 @@ public class LayoutTypePortletImpl
 
 	public void setPortletIds(String columnId, String portletIds) {
 		setTypeSettingsProperty(columnId, portletIds);
+
+		if (!columnId.startsWith(
+				LayoutTypePortletConstants.RUNTIME_COLUMN_PREFIX)) {
+
+			return;
+		}
+
+		String runtimeColumnIds = getTypeSettingsProperty(
+			LayoutTypePortletConstants.RUNTIME_COLUMN_IDS, StringPool.BLANK);
+
+		int pos = runtimeColumnIds.indexOf(columnId);
+
+		if ((pos == -1) && Validator.isNotNull(portletIds)) {
+			runtimeColumnIds = StringUtil.add(runtimeColumnIds, columnId);
+
+			setTypeSettingsProperty(
+				LayoutTypePortletConstants.RUNTIME_COLUMN_IDS,
+				runtimeColumnIds);
+		}
+		else if ((pos != -1) && Validator.isNull(portletIds)) {
+			runtimeColumnIds = StringUtil.remove(runtimeColumnIds, columnId);
+
+			setTypeSettingsProperty(
+				LayoutTypePortletConstants.RUNTIME_COLUMN_IDS,
+				runtimeColumnIds);
+		}
 	}
 
 	public void setStateMax(String stateMax) {
@@ -1275,6 +1301,7 @@ public class LayoutTypePortletImpl
 
 		columns.addAll(layoutTemplate.getColumns());
 		columns.addAll(getNestedColumns());
+		columns.addAll(getRuntimeColumns());
 
 		return columns;
 	}
@@ -1323,6 +1350,13 @@ public class LayoutTypePortletImpl
 		Layout layout = getLayout();
 
 		return layout.getPlid();
+	}
+
+	protected List<String> getRuntimeColumns() {
+		String runtimePortletIds = getTypeSettingsProperty(
+			LayoutTypePortletConstants.RUNTIME_COLUMN_IDS);
+
+		return ListUtil.fromArray(StringUtil.split(runtimePortletIds));
 	}
 
 	protected String[] getStaticPortletIds(String position)

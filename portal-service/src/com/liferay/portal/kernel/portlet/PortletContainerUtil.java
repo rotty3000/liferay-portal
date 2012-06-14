@@ -14,10 +14,12 @@
 
 package com.liferay.portal.kernel.portlet;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.servlet.TempAttributesServletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Portlet;
@@ -29,14 +31,22 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Shuyang Zhou
+ * @author Raymond Augé
  */
 public class PortletContainerUtil {
+
+	public static PortletContainer getPortletContainer() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			PortletContainerUtil.class);
+
+		return _portletContainer;
+	}
 
 	public static void preparePortlet(
 			HttpServletRequest request, Portlet portlet)
 		throws PortletContainerException {
 
-		_portletContainer.preparePortlet(request, portlet);
+		getPortletContainer().preparePortlet(request, portlet);
 	}
 
 	public static void processAction(
@@ -44,7 +54,7 @@ public class PortletContainerUtil {
 			Portlet portlet)
 		throws PortletContainerException {
 
-		_portletContainer.processAction(request, response, portlet);
+		getPortletContainer().processAction(request, response, portlet);
 	}
 
 	public static void processEvent(
@@ -52,7 +62,7 @@ public class PortletContainerUtil {
 			Portlet portlet, Layout layout, Event event)
 		throws PortletContainerException {
 
-		_portletContainer.processEvent(
+		getPortletContainer().processEvent(
 			request, response, portlet, layout, event);
 	}
 
@@ -61,7 +71,7 @@ public class PortletContainerUtil {
 			Portlet portlet)
 		throws PortletContainerException {
 
-		_portletContainer.render(request, response, portlet);
+		getPortletContainer().render(request, response, portlet);
 	}
 
 	public static void serveResource(
@@ -69,14 +79,16 @@ public class PortletContainerUtil {
 			Portlet portlet)
 		throws PortletContainerException {
 
-		_portletContainer.serveResource(request, response, portlet);
+		getPortletContainer().serveResource(request, response, portlet);
 	}
 
 	public static HttpServletRequest setupOptionalRenderParameters(
 		HttpServletRequest request, String renderPath, String columnId,
 		Integer columnPos, Integer columnCount) {
 
-		if (_LAYOUT_PARALLEL_RENDER_ENABLE || _PORTLET_CONTAINER_RESTRICT) {
+		if ((_LAYOUT_PARALLEL_RENDER_ENABLE && ServerDetector.isTomcat()) ||
+			_PORTLET_CONTAINER_RESTRICT) {
+
 			RestrictPortletServletRequest restrictPortletServletRequest =
 				new RestrictPortletServletRequest(request);
 
@@ -131,7 +143,11 @@ public class PortletContainerUtil {
 	}
 
 	public void setPortletContainer(PortletContainer portletContainer) {
-		if (_LAYOUT_PARALLEL_RENDER_ENABLE || _PORTLET_CONTAINER_RESTRICT) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
+		if ((_LAYOUT_PARALLEL_RENDER_ENABLE && ServerDetector.isTomcat()) ||
+			_PORTLET_CONTAINER_RESTRICT) {
+
 			portletContainer = new RestrictPortletContainerWrapper(
 				portletContainer);
 		}

@@ -40,9 +40,11 @@ import java.util.List;
 
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
+import org.jets3t.service.ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
+import org.jets3t.service.model.StorageObject;
 import org.jets3t.service.security.AWSCredentials;
 
 /**
@@ -80,6 +82,11 @@ public class S3Store extends BaseStore {
 			s3Object.setDataInputStream(is);
 
 			_s3Service.putObject(_s3Bucket, s3Object);
+
+			is.close();
+		}
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
@@ -97,7 +104,8 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId, dirName), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId, dirName),
+				null);
 
 			for (int i = 0; i < s3Objects.length; i++) {
 				S3Object s3Object = s3Objects[i];
@@ -116,7 +124,8 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId, fileName), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
+				null);
 
 			for (int i = 0; i < s3Objects.length; i++) {
 				S3Object s3Object = s3Objects[i];
@@ -158,13 +167,13 @@ public class S3Store extends BaseStore {
 			}
 
 			S3Object s3Object = _s3Service.getObject(
-				_s3Bucket,
+				_s3Bucket.getName(),
 				getKey(companyId, repositoryId, fileName, versionLabel));
 
 			return s3Object.getDataInputStream();
 		}
-		catch (S3ServiceException s3se) {
-			throw new SystemException(s3se);
+		catch (ServiceException se) {
+			throw new SystemException(se);
 		}
 	}
 
@@ -175,7 +184,7 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] searchObjects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId), null);
 
 			for (int i = 0; i < searchObjects.length; i++) {
 				S3Object currentObject = searchObjects[i];
@@ -201,7 +210,8 @@ public class S3Store extends BaseStore {
 			List<String> list = new ArrayList<String>();
 
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId, dirName), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId, dirName),
+				null);
 
 			for (int i = 0; i < s3Objects.length; i++) {
 				S3Object s3Object = s3Objects[i];
@@ -235,14 +245,14 @@ public class S3Store extends BaseStore {
 			String versionLabel = getHeadVersionLabel(
 				companyId, repositoryId, fileName);
 
-			S3Object objectDetails = _s3Service.getObjectDetails(
-				_s3Bucket,
+			StorageObject storageObject = _s3Service.getObjectDetails(
+				_s3Bucket.getName(),
 				getKey(companyId, repositoryId, fileName, versionLabel));
 
-			return objectDetails.getContentLength();
+			return storageObject.getContentLength();
 		}
-		catch (S3ServiceException s3se) {
-			throw new SystemException(s3se);
+		catch (ServiceException se) {
+			throw new SystemException(se);
 		}
 	}
 
@@ -261,7 +271,7 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket,
+				_s3Bucket.getName(),
 				getKey(companyId, repositoryId, fileName, versionLabel), null);
 
 			if (s3Objects.length == 0) {
@@ -288,14 +298,15 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId, fileName), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
+				null);
 
 			for (int i = 0; i < s3Objects.length; i++) {
 				S3Object oldS3Object = s3Objects[i];
 
 				String oldKey = oldS3Object.getKey();
 
-				oldS3Object = _s3Service.getObject(_s3Bucket, oldKey);
+				oldS3Object = _s3Service.getObject(_s3Bucket.getName(), oldKey);
 
 				File tempFile = new File(
 					SystemProperties.get(SystemProperties.TMP_DIR) +
@@ -320,14 +331,16 @@ public class S3Store extends BaseStore {
 				_s3Service.putObject(_s3Bucket, newS3Object);
 				_s3Service.deleteObject(_s3Bucket, oldKey);
 
+				is.close();
+
 				FileUtil.delete(tempFile);
 			}
 		}
 		catch (IOException ioe) {
 			throw new SystemException(ioe);
 		}
-		catch (S3ServiceException s3se) {
-			throw new SystemException(s3se);
+		catch (ServiceException se) {
+			throw new SystemException(se);
 		}
 	}
 
@@ -338,20 +351,23 @@ public class S3Store extends BaseStore {
 
 		try {
 			S3Object[] s3Objects = _s3Service.listObjects(
-				_s3Bucket, getKey(companyId, repositoryId, fileName), null);
+				_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
+				null);
 
 			for (int i = 0; i < s3Objects.length; i++) {
 				S3Object oldS3Object = s3Objects[i];
 
 				String oldKey = oldS3Object.getKey();
 
-				oldS3Object = _s3Service.getObject(_s3Bucket, oldKey);
+				oldS3Object = _s3Service.getObject(_s3Bucket.getName(), oldKey);
 
 				File tempFile = new File(
 					SystemProperties.get(SystemProperties.TMP_DIR) +
 						File.separator + PortalUUIDUtil.generate());
 
 				FileUtil.write(tempFile, oldS3Object.getDataInputStream());
+
+				oldS3Object.closeDataInputStream();
 
 				InputStream is = new FileInputStream(tempFile);
 
@@ -360,7 +376,6 @@ public class S3Store extends BaseStore {
 				int x = oldKey.indexOf(StringPool.SLASH);
 
 				x = oldKey.indexOf(CharPool.SLASH, x + 1);
-
 				x = oldKey.indexOf(CharPool.SLASH, x + 1);
 
 				String newKey = newPrefix + oldKey.substring(x + 1);
@@ -372,14 +387,18 @@ public class S3Store extends BaseStore {
 				_s3Service.putObject(_s3Bucket, newS3Object);
 				_s3Service.deleteObject(_s3Bucket, oldKey);
 
+				newS3Object.closeDataInputStream();
+
+				is.close();
+
 				FileUtil.delete(tempFile);
 			}
 		}
 		catch (IOException ioe) {
 			throw new SystemException(ioe);
 		}
-		catch (S3ServiceException s3se) {
-			throw new SystemException(s3se);
+		catch (ServiceException se) {
+			throw new SystemException(se);
 		}
 	}
 
@@ -397,6 +416,11 @@ public class S3Store extends BaseStore {
 			s3Object.setDataInputStream(is);
 
 			_s3Service.putObject(_s3Bucket, s3Object);
+
+			is.close();
+		}
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
@@ -428,7 +452,8 @@ public class S3Store extends BaseStore {
 		throws PortalException, S3ServiceException {
 
 		S3Object[] s3Objects = _s3Service.listObjects(
-			_s3Bucket, getKey(companyId, repositoryId, fileName), null);
+			_s3Bucket.getName(), getKey(companyId, repositoryId, fileName),
+			null);
 
 		String[] keys = new String[s3Objects.length];
 
@@ -500,7 +525,7 @@ public class S3Store extends BaseStore {
 			throw new S3ServiceException("S3 bucket name is not set");
 		}
 		else {
-			return getS3Service().createBucket(_BUCKET_NAME);
+			return getS3Service().getBucket(_BUCKET_NAME);
 		}
 	}
 

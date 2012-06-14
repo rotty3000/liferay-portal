@@ -24,11 +24,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Image;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
@@ -55,7 +55,7 @@ import java.util.Map;
 public class UpgradeImageGallery extends UpgradeProcess {
 
 	public UpgradeImageGallery() throws Exception {
-		ClassLoader classLoader = PortalClassLoaderUtil.getClassLoader();
+		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
 
 		_sourceHookClassName = FileSystemHook.class.getName();
 

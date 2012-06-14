@@ -490,7 +490,7 @@ public class PortletExporter {
 	protected void exportAssetTag(
 			PortletDataContext portletDataContext, AssetTag assetTag,
 			Element assetTagsElement)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		String path = getAssetTagPath(portletDataContext, assetTag.getTagId());
 
@@ -939,6 +939,10 @@ public class PortletExporter {
 			Layout layout, javax.portlet.PortletPreferences jxPreferences,
 			Element parentElement)
 		throws Exception {
+
+		if (portlet == null) {
+			return;
+		}
 
 		PortletDataHandler portletDataHandler =
 			portlet.getPortletDataHandlerInstance();

@@ -52,6 +52,7 @@ if (!selectableTree) {
 		%>
 
 		OPEN_NODES: '<%= openNodes %>'.split(','),
+		PAGINATION_LIMIT: <%= PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN %>,
 		PREFIX_GROUP_ID: '_groupId_',
 		PREFIX_LAYOUT: '_layout_',
 		PREFIX_LAYOUT_ID: '_layoutId_',
@@ -235,7 +236,14 @@ if (!selectableTree) {
 				}
 			}
 
-			A.Array.each(node.get('children'), TreeUtil.restoreNodeState);
+			var children = node.get('children');
+			var paginator = node.get('paginator');
+
+			var limit = paginator.limit;
+
+			paginator.start = Math.max(children.length - limit, 0);
+
+			A.Array.each(children, TreeUtil.restoreNodeState);
 		},
 
 		restoreSelectedNode: function(node) {
@@ -255,7 +263,12 @@ if (!selectableTree) {
 			A.io.request(
 				updateURL,
 				{
-					data: data
+					data: A.mix(
+						data,
+						{
+							p_auth: Liferay.authToken
+						}
+					)
 				}
 			);
 		},
@@ -394,9 +407,11 @@ if (!selectableTree) {
 						return {
 							groupId: groupId,
 							incomplete: <%= incomplete %>,
-							privateLayout: <%= privateLayout %>,
+							p_auth: Liferay.authToken,
 							parentLayoutId: parentLayoutId,
-							selPlid: '<%= selPlid %>'
+							privateLayout: <%= privateLayout %>,
+							selPlid: '<%= selPlid %>',
+							treeId: '<%= HtmlUtil.escape(treeId) %>'
 						};
 					},
 					method: AUI.defaults.io.method
@@ -434,7 +449,7 @@ if (!selectableTree) {
 				}
 			},
 			paginator: {
-				limit: <%= PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN %>,
+				limit: TreeUtil.PAGINATION_LIMIT,
 				offsetParam: 'start'
 			},
 			type: 'pages'

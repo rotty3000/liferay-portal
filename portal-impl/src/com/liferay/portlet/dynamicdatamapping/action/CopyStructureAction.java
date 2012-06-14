@@ -89,7 +89,7 @@ public class CopyStructureAction extends PortletAction {
 				setForward(actionRequest, "portlet.dynamic_data_mapping.error");
 			}
 			else if (e instanceof StructureNameException) {
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
 			else {
 				throw e;

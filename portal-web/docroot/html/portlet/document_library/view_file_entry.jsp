@@ -67,7 +67,7 @@ if (PrefsPropsUtil.getBoolean(PropsKeys.OPENOFFICE_SERVER_ENABLED, PropsValues.O
 
 long assetClassPK = 0;
 
-if (!fileVersion.isApproved() && !fileVersion.getVersion().equals(DLFileEntryConstants.VERSION_DEFAULT)) {
+if (!fileVersion.isApproved() && !fileVersion.getVersion().equals(DLFileEntryConstants.VERSION_DEFAULT) && !fileVersion.isInTrash()) {
 	assetClassPK = fileVersion.getFileVersionId();
 	title = fileVersion.getTitle();
 	extension = fileVersion.getExtension();
@@ -86,8 +86,6 @@ boolean hasAudio = AudioProcessorUtil.hasAudio(fileVersion);
 boolean hasImages = ImageProcessorUtil.hasImages(fileVersion);
 boolean hasPDFImages = PDFProcessorUtil.hasImages(fileVersion);
 boolean hasVideo = VideoProcessorUtil.hasVideo(fileVersion);
-
-User userDisplay = UserLocalServiceUtil.getUserById(fileEntry.getUserId());
 
 AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.fetchEntry(DLFileEntryConstants.getClassName(), assetClassPK);
 
@@ -200,10 +198,21 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						</span>
 
 						<span class="user-date">
-							<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {userDisplay.getDisplayURL(themeDisplay), HtmlUtil.escape(fileEntry.getUserName()), dateFormatDateTime.format(fileEntry.getCreateDate())}) %>' />
+
+							<%
+							String displayURL = StringPool.BLANK;
+
+							User userDisplay = UserLocalServiceUtil.fetchUser(fileEntry.getUserId());
+
+							if (userDisplay != null) {
+								displayURL = userDisplay.getDisplayURL(themeDisplay);
+							}
+							%>
+
+							<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {displayURL, HtmlUtil.escape(fileEntry.getUserName()), dateFormatDateTime.format(fileEntry.getCreateDate())}) %>' />
 						</span>
 
-						<c:if test="<%= fileEntry.isSupportsSocial() %>">
+						<c:if test="<%= enableRatings && fileEntry.isSupportsSocial() %>">
 							<span class="lfr-asset-ratings">
 								<liferay-ui:ratings
 									className="<%= DLFileEntryConstants.getClassName() %>"
@@ -629,7 +638,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								headerNames.add("date");
 								headerNames.add("size");
 
-								if (showNonApprovedDocuments) {
+								if (showNonApprovedDocuments && !portletId.equals(PortletKeys.TRASH)) {
 									headerNames.add("status");
 								}
 
@@ -675,7 +684,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 									// Status
 
-									if (showNonApprovedDocuments) {
+									if (showNonApprovedDocuments && !portletId.equals(PortletKeys.TRASH)) {
 										row.addText(LanguageUtil.get(pageContext, WorkflowConstants.toLabel(curFileVersion.getStatus())));
 									}
 

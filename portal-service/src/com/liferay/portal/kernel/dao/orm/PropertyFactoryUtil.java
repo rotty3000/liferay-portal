@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.dao.orm;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -24,10 +26,14 @@ public class PropertyFactoryUtil {
 	}
 
 	public static PropertyFactory getPropertyFactory() {
+		PortalRuntimePermission.checkGetBeanProperty(PropertyFactoryUtil.class);
+
 		return _projectionFactory;
 	}
 
 	public void setPropertyFactory(PropertyFactory projectionFactory) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_projectionFactory = projectionFactory;
 	}
 

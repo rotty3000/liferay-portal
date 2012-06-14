@@ -32,57 +32,57 @@ if (orderByType.equals("asc")) {
 <liferay-ui:icon-menu align="left" direction="down" icon="" message="sort-by" showExpanded="<%= false %>" showWhenSingleIcon="<%= false %>">
 
 	<%
-	String taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'title','" + reverseOrderByType + "')";
+	String taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'title','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="title"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'creationDate','" + reverseOrderByType + "')";
+	taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'creationDate','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="create-date"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'modifiedDate','" + reverseOrderByType + "')";
+	taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'modifiedDate','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="modified-date"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'downloads','" + reverseOrderByType + "')";
+	taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'downloads','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="downloads"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'readCount','" + reverseOrderByType + "')";
+	taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'readCount','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="read-count"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 
 	<%
-	taglibUrl = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'size','" + reverseOrderByType + "')";
+	taglibURL = "javascript:" + liferayPortletResponse.getNamespace() + "sortEntries('" + folderId + "', 'size','" + reverseOrderByType + "')";
 	%>
 
 	<liferay-ui:icon
 		message="size"
-		url="<%= taglibUrl %>"
+		url="<%= taglibURL %>"
 	/>
 </liferay-ui:icon-menu>
 

@@ -553,7 +553,13 @@ public class Creole10Parser]]></replacevalue>
 		<java
 			classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"
 			classpathref="project.classpath"
+			fork="true"
+			newenvironment="true"
 		>
+			<jvmarg value="-Xms512m" />
+			<jvmarg value="-Xmx1024m" />
+			<jvmarg value="-Xss2048k" />
+			<jvmarg value="-XX:MaxPermSize=512m" />
 			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<arg value="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger" />
 			<arg value="service.input.file=${service.file}" />
@@ -563,7 +569,6 @@ public class Creole10Parser]]></replacevalue>
 			<arg value="service.spring.file=${basedir}/src/META-INF/portal-spring.xml" />
 			<arg value="service.api.dir=${basedir}/../portal-service/src" />
 			<arg value="service.impl.dir=${basedir}/src" />
-			<arg value="service.json.file=${basedir}/../portal-web/docroot/html/js/liferay/service.js" />
 			<arg value="service.remoting.file=${basedir}/../portal-web/docroot/WEB-INF/remoting-servlet.xml" />
 			<arg value="service.sql.dir=${basedir}/../sql" />
 			<arg value="service.sql.file=portal-tables.sql" />
@@ -1203,6 +1208,7 @@ public class Creole10Parser]]></replacevalue>
 			newenvironment="true"
 		>
 			<jvmarg value="-Xmx512m" />
+			<jvmarg value="-Xss2048k" />
 			<jvmarg value="-Dsource.formatter.excludes=${source.formatter.excludes}" />
 		</java>
 

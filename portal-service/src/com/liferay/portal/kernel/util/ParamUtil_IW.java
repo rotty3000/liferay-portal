@@ -53,6 +53,11 @@ public class ParamUtil_IW {
 		return ParamUtil.get(request, param, defaultValue);
 	}
 
+	public java.lang.Number get(javax.servlet.http.HttpServletRequest request,
+		java.lang.String param, java.lang.Number defaultValue) {
+		return ParamUtil.get(request, param, defaultValue);
+	}
+
 	public short get(javax.servlet.http.HttpServletRequest request,
 		java.lang.String param, short defaultValue) {
 		return ParamUtil.get(request, param, defaultValue);
@@ -91,6 +96,11 @@ public class ParamUtil_IW {
 
 	public long get(javax.portlet.PortletRequest portletRequest,
 		java.lang.String param, long defaultValue) {
+		return ParamUtil.get(portletRequest, param, defaultValue);
+	}
+
+	public java.lang.Number get(javax.portlet.PortletRequest portletRequest,
+		java.lang.String param, java.lang.Number defaultValue) {
 		return ParamUtil.get(portletRequest, param, defaultValue);
 	}
 
@@ -135,6 +145,12 @@ public class ParamUtil_IW {
 
 	public long get(com.liferay.portal.service.ServiceContext serviceContext,
 		java.lang.String param, long defaultValue) {
+		return ParamUtil.get(serviceContext, param, defaultValue);
+	}
+
+	public java.lang.Number get(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.lang.String param, java.lang.Number defaultValue) {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
 
@@ -548,6 +564,74 @@ public class ParamUtil_IW {
 		com.liferay.portal.service.ServiceContext serviceContext,
 		java.lang.String param, long[] defaultValue) {
 		return ParamUtil.getLongValues(serviceContext, param, defaultValue);
+	}
+
+	public java.lang.Number getNumber(
+		javax.servlet.http.HttpServletRequest request, java.lang.String param) {
+		return ParamUtil.getNumber(request, param);
+	}
+
+	public java.lang.Number getNumber(
+		javax.servlet.http.HttpServletRequest request, java.lang.String param,
+		java.lang.Number defaultValue) {
+		return ParamUtil.getNumber(request, param, defaultValue);
+	}
+
+	public java.lang.Number getNumber(
+		javax.portlet.PortletRequest portletRequest, java.lang.String param) {
+		return ParamUtil.getNumber(portletRequest, param);
+	}
+
+	public java.lang.Number getNumber(
+		javax.portlet.PortletRequest portletRequest, java.lang.String param,
+		java.lang.Number defaultValue) {
+		return ParamUtil.getNumber(portletRequest, param, defaultValue);
+	}
+
+	public java.lang.Number getNumber(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.lang.String param) {
+		return ParamUtil.getNumber(serviceContext, param);
+	}
+
+	public java.lang.Number getNumber(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.lang.String param, java.lang.Number defaultValue) {
+		return ParamUtil.getNumber(serviceContext, param, defaultValue);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		javax.servlet.http.HttpServletRequest request, java.lang.String param) {
+		return ParamUtil.getNumberValues(request, param);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		javax.servlet.http.HttpServletRequest request, java.lang.String param,
+		java.lang.Number[] defaultValue) {
+		return ParamUtil.getNumberValues(request, param, defaultValue);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		javax.portlet.PortletRequest portletRequest, java.lang.String param) {
+		return ParamUtil.getNumberValues(portletRequest, param);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		javax.portlet.PortletRequest portletRequest, java.lang.String param,
+		java.lang.Number[] defaultValue) {
+		return ParamUtil.getNumberValues(portletRequest, param, defaultValue);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.lang.String param) {
+		return ParamUtil.getNumberValues(serviceContext, param);
+	}
+
+	public java.lang.Number[] getNumberValues(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.lang.String param, java.lang.Number[] defaultValue) {
+		return ParamUtil.getNumberValues(serviceContext, param, defaultValue);
 	}
 
 	public java.lang.String[] getParameterValues(

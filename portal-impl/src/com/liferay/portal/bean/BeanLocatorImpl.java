@@ -18,9 +18,15 @@ import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.BeanLocatorException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.pacl.PACLConstants;
 import com.liferay.portal.kernel.util.ProxyUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.security.pacl.PACLBeanHandler;
 import com.liferay.portal.service.ResourceService;
+import com.liferay.portal.service.persistence.BasePersistence;
 import com.liferay.portal.service.persistence.ResourcePersistence;
+
+import java.security.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +85,9 @@ public class BeanLocatorImpl implements BeanLocator {
 		try {
 			return doLocate(name);
 		}
+		catch (SecurityException se) {
+			throw se;
+		}
 		catch (Exception e) {
 			Object bean = _deprecatedBeans.get(name);
 
@@ -105,48 +114,87 @@ public class BeanLocatorImpl implements BeanLocator {
 		}
 	}
 
+	public void setPACLServletContextName(String paclServletContextName) {
+		_paclServletContextName = paclServletContextName;
+	}
+
+	public void setPACLWrapPersistence(boolean paclWrapPersistence) {
+		_paclWrapPersistence = paclWrapPersistence;
+	}
+
 	protected Object doLocate(String name) throws Exception {
 		if (_log.isDebugEnabled()) {
 			_log.debug("Locating " + name);
 		}
 
-		if (name.endsWith(VELOCITY_SUFFIX)) {
-			Object bean = _velocityBeans.get(name);
+		if (name.equals("portletClassLoader")) {
+			SecurityManager securityManager = System.getSecurityManager();
 
-			if (bean == null) {
+			if (securityManager != null) {
+				Permission permission = new RuntimePermission(
+					PACLConstants.RUNTIME_PERMISSION_GET_CLASSLOADER.concat(
+						StringPool.PERIOD).concat(_paclServletContextName));
+
+				securityManager.checkPermission(permission);
+			}
+		}
+
+		if (name.endsWith(VELOCITY_SUFFIX)) {
+			Object velocityBean = _velocityBeans.get(name);
+
+			if (velocityBean == null) {
 				String originalName = name.substring(
 					0, name.length() - VELOCITY_SUFFIX.length());
 
-				bean = _applicationContext.getBean(originalName);
+				Object bean = _applicationContext.getBean(originalName);
 
-				Class<?> beanClass = bean.getClass();
-
-				Class<?>[] interfaces = beanClass.getInterfaces();
-
-				List<Class<?>> interfacesList = new ArrayList<Class<?>>();
-
-				for (Class<?> clazz : interfaces) {
-					try {
-						interfacesList.add(
-							_classLoader.loadClass(clazz.getName()));
-					}
-					catch (ClassNotFoundException cnfe) {
-					}
-				}
-
-				bean = ProxyUtil.newProxyInstance(
-					_classLoader,
-					interfacesList.toArray(new Class<?>[interfacesList.size()]),
+				velocityBean = ProxyUtil.newProxyInstance(
+					_classLoader, getInterfaces(bean),
 					new VelocityBeanHandler(bean, _classLoader));
 
-				_velocityBeans.put(name, bean);
+				_velocityBeans.put(name, velocityBean);
 			}
 
-			return bean;
+			return velocityBean;
 		}
-		else {
-			return _applicationContext.getBean(name);
+
+		Object bean = _applicationContext.getBean(name);
+
+		if (_paclWrapPersistence && (bean != null) &&
+			(bean instanceof BasePersistence)) {
+
+			Object paclPersistenceBean = _paclPersistenceBeans.get(name);
+
+			if (paclPersistenceBean != null) {
+				return paclPersistenceBean;
+			}
+
+			paclPersistenceBean = ProxyUtil.newProxyInstance(
+				_classLoader, getInterfaces(bean), new PACLBeanHandler(bean));
+
+			_paclPersistenceBeans.put(name, paclPersistenceBean);
+
+			return paclPersistenceBean;
 		}
+
+		return bean;
+	}
+
+	protected Class<?>[] getInterfaces(Object object) {
+		List<Class<?>> interfaceClasses = new ArrayList<Class<?>>();
+
+		Class<?> clazz = object.getClass();
+
+		for (Class<?> interfaceClass : clazz.getInterfaces()) {
+			try {
+				interfaceClasses.add(
+					_classLoader.loadClass(interfaceClass.getName()));
+			}
+			catch (ClassNotFoundException cnfe) {
+			}
+		}
+
+		return interfaceClasses.toArray(new Class<?>[interfaceClasses.size()]);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(BeanLocatorImpl.class);
@@ -155,6 +203,10 @@ public class BeanLocatorImpl implements BeanLocator {
 	private ClassLoader _classLoader;
 	private Map<String, Object> _deprecatedBeans =
 		new ConcurrentHashMap<String, Object>();
+	private Map<String, Object> _paclPersistenceBeans =
+		new ConcurrentHashMap<String, Object>();
+	private String _paclServletContextName;
+	private boolean _paclWrapPersistence;
 	private Map<String, Object> _velocityBeans =
 		new ConcurrentHashMap<String, Object>();
 

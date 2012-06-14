@@ -337,6 +337,12 @@ public class JournalContentSearchLocalServiceUtil {
 		return getService().getLayoutIdsCount(articleId);
 	}
 
+	public static java.util.List<com.liferay.portlet.journal.model.JournalContentSearch> getPortletContentSearches(
+		java.lang.String portletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPortletContentSearches(portletId);
+	}
+
 	public static com.liferay.portlet.journal.model.JournalContentSearch updateContentSearch(
 		long groupId, boolean privateLayout, long layoutId,
 		java.lang.String portletId, java.lang.String articleId)

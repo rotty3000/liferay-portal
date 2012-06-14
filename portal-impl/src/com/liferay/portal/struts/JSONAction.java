@@ -14,17 +14,28 @@
 
 package com.liferay.portal.struts;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.auth.AuthSettingsUtil;
+import com.liferay.portal.security.auth.AuthTokenUtil;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
 import java.io.OutputStream;
+
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -38,6 +49,8 @@ import org.apache.struts.action.ActionMapping;
 
 /**
  * @author Ming-Gih Lam
+ * @author Brian Wing Shun Chan
+ * @author Tomas Polesovsky
  */
 public abstract class JSONAction extends Action {
 
@@ -57,6 +70,8 @@ public abstract class JSONAction extends Action {
 		String json = null;
 
 		try {
+			checkAuthToken(request);
+
 			json = getJSON(mapping, form, request, response);
 
 			if (Validator.isNotNull(callback)) {
@@ -66,8 +81,12 @@ public abstract class JSONAction extends Action {
 				json = "var " + instance + "=" + json + ";";
 			}
 		}
-		catch (SecurityException se) {
-			throw se;
+		catch (PrincipalException pe) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(pe.getMessage());
+			}
+
+			json = JSONFactoryUtil.serializeException(pe);
 		}
 		catch (Exception e) {
 			PortalUtil.sendError(
@@ -108,6 +127,26 @@ public abstract class JSONAction extends Action {
 
 	public void setServletContext(ServletContext servletContext) {
 		_servletContext = servletContext;
+	}
+
+	protected void checkAuthToken(HttpServletRequest request)
+		throws PortalException {
+
+		String authType = GetterUtil.getString(request.getAuthType());
+
+		if (authType.equals(HttpServletRequest.BASIC_AUTH) ||
+			authType.equals(HttpServletRequest.DIGEST_AUTH)) {
+
+			return;
+		}
+
+		if (PropsValues.AUTH_TOKEN_CHECK_ENABLED &&
+			PropsValues.JSON_SERVICE_AUTH_TOKEN_ENABLED) {
+
+			if (!AuthSettingsUtil.isAccessAllowed(request, _hostsAllowed)) {
+				AuthTokenUtil.check(request);
+			}
+		}
 	}
 
 	protected String getReroutePath() {
@@ -163,6 +202,10 @@ public abstract class JSONAction extends Action {
 		return true;
 	}
 
+	private static Log _log = LogFactoryUtil.getLog(JSONAction.class);
+
+	private Set<String> _hostsAllowed = SetUtil.fromArray(
+		PropsValues.JSON_SERVICE_AUTH_TOKEN_HOSTS_ALLOWED);
 	private ServletContext _servletContext;
 
 }

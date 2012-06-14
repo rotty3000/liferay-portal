@@ -26,6 +26,7 @@ public class AddWCWebContentTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(AddWCWebContentTest.class);
+		testSuite.addTestSuite(ViewWCWebContentTest.class);
 		testSuite.addTestSuite(TearDownWCWebContentTest.class);
 
 		return testSuite;

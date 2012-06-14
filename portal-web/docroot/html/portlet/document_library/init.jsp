@@ -151,7 +151,7 @@ if (portletName.equals(PortletKeys.DOCUMENT_LIBRARY)) {
 	showFolderMenu = true;
 	showTabs = true;
 }
-else if (portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) || portletName.equals(PortletKeys.DOCUMENT_LIBRARY_DISPLAY)) {
+else if (portletName.equals(PortletKeys.MEDIA_GALLERY_DISPLAY) || portletName.equals(PortletKeys.DOCUMENT_LIBRARY_DISPLAY) || portletName.equals(PortletKeys.TRASH)) {
 	showAssetMetadata = true;
 }
 
@@ -178,6 +178,7 @@ else if (!portletId.equals(PortletKeys.DOCUMENT_LIBRARY) && !ArrayUtil.contains(
 	entryColumns = ArrayUtil.append(entryColumns, "action");
 }
 
+boolean enableRatings = GetterUtil.getBoolean(preferences.getValue("enableRatings", null), true);
 boolean enableCommentRatings = GetterUtil.getBoolean(preferences.getValue("enableCommentRatings", null), true);
 
 String ddmResource = portletConfig.getInitParameter("ddm-resource");

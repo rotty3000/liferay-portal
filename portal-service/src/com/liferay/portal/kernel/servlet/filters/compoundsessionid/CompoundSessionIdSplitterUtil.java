@@ -14,12 +14,17 @@
 
 package com.liferay.portal.kernel.servlet.filters.compoundsessionid;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Michael C. Han
  */
 public class CompoundSessionIdSplitterUtil {
 
 	public static CompoundSessionIdSplitter getCompoundSessionIdSplitter() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			CompoundSessionIdSplitterUtil.class);
+
 		return _compoundSessionIdSplitter;
 	}
 
@@ -37,6 +42,8 @@ public class CompoundSessionIdSplitterUtil {
 
 	public void setCompoundSessionIdSplitter(
 		CompoundSessionIdSplitter compoundSessionIdSplitter) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_compoundSessionIdSplitter = compoundSessionIdSplitter;
 	}

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.io.OutputStreamWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedWriter;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
+import com.liferay.portal.kernel.microsofttranslator.MicrosoftTranslatorException;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
@@ -191,22 +192,6 @@ public class LangBuilder {
 		}
 
 		String translationId = "en_" + languageId;
-
-		if (translationId.equals("en_pt_BR")) {
-			translationId = "en_pt";
-		}
-		else if (translationId.equals("en_pt_PT")) {
-			translationId = "en_pt";
-		}
-		else if (translationId.equals("en_zh_CN")) {
-			translationId = "en_zh";
-		}
-		else if (translationId.equals("en_zh_TW")) {
-			translationId = "en_zt";
-		}
-		else if (translationId.equals("en_hi_IN")) {
-			translationId = "en_hi";
-		}
 
 		UnsyncBufferedReader unsyncBufferedReader = new UnsyncBufferedReader(
 			new UnsyncStringReader(content));
@@ -626,13 +611,17 @@ public class LangBuilder {
 			Translation translation = (Translation)wci.convert("");
 
 			toText = translation.getToText();
-
-			if ((toText != null) && toText.contains("Babel Fish")) {
-				toText = null;
-			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			Throwable cause = e.getCause();
+
+			if (cause instanceof MicrosoftTranslatorException) {
+				System.out.println(
+					cause.getClass().getName() + ": " + cause.getMessage());
+			}
+			else {
+				e.printStackTrace();
+			}
 		}
 
 		// Keep trying

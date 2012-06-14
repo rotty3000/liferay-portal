@@ -129,7 +129,7 @@ public class BookmarksUtil {
 		addPortletBreadcrumbEntries(folder, request, renderResponse);
 	}
 
-	public static OrderByComparator getEntriesOrderByComparator(
+	public static OrderByComparator getEntryOrderByComparator(
 		String orderByCol, String orderByType) {
 
 		boolean orderByAsc = false;

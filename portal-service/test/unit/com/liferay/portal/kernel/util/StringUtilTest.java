@@ -24,166 +24,126 @@ import com.liferay.portal.kernel.test.TestCase;
 public class StringUtilTest extends TestCase {
 
 	public void testAppendParentheticalSuffixInteger() throws Exception {
-		String original = "Hello World";
-		String expected = "Hello World (2)";
-
-		String actual = StringUtil.appendParentheticalSuffix(original, 2);
-
-		assertEquals(expected, actual);
-
-		original = "Hello (World)";
-		expected = "Hello (World) (2)";
-
-		actual = StringUtil.appendParentheticalSuffix(original, 2);
-
-		assertEquals(expected, actual);
-
-		original = "Hello World (2)";
-		expected = "Hello World (3)";
-
-		actual = StringUtil.appendParentheticalSuffix(original, 3);
-
-		assertEquals(expected, actual);
-
-		original = "Hello World (2)";
-		expected = "Hello World (2) (4)";
-
-		actual = StringUtil.appendParentheticalSuffix(original, 4);
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Hello World (2)",
+			StringUtil.appendParentheticalSuffix("Hello World", 2));
+		assertEquals(
+			"Hello (World) (2)",
+			StringUtil.appendParentheticalSuffix("Hello (World)", 2));
+		assertEquals(
+			"Hello World (3)",
+			StringUtil.appendParentheticalSuffix("Hello World (2)", 3));
+		assertEquals(
+			"Hello World (2) (4)",
+			StringUtil.appendParentheticalSuffix("Hello World (2)", 4));
 	}
 
 	public void testAppendParentheticalSuffixString() throws Exception {
-		String original = "Hello";
-		String expected = "Hello (World)";
-
-		String actual = StringUtil.appendParentheticalSuffix(original, "World");
-
-		assertEquals(expected, actual);
-
-		original = "Hello (World)";
-		expected = "Hello (World) (Liferay)";
-
-		actual = StringUtil.appendParentheticalSuffix(original, "Liferay");
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Hello (World)",
+			StringUtil.appendParentheticalSuffix("Hello", "World"));
+		assertEquals(
+			"Hello (World) (Liferay)",
+			StringUtil.appendParentheticalSuffix("Hello (World)", "Liferay"));
 	}
 
 	public void testHighlight() throws Exception {
-		String original = "Hello World Liferay";
-		String expected =
-			"<span class=\"highlight\">Hello</span> World " +
-				"<span class=\"highlight\">Liferay</span>";
-
-		String actual = StringUtil.highlight(
-			original, new String[] {"Hello","Liferay"});
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"<span class=\"highlight\">Hello</span> World <span " +
+				"class=\"highlight\">Liferay</span>",
+			StringUtil.highlight(
+				"Hello World Liferay", new String[] {"Hello","Liferay"}));
 	}
 
 	public void testReplaceChar() throws Exception {
-		String original = "127.0.0.1";
-		String expected = "127_0_0_1";
-
-		String actual = StringUtil.replace(original, '.', '_');
-
-		assertEquals(expected, actual);
+		assertEquals("127_0_0_1", StringUtil.replace("127.0.0.1", '.', '_'));
 	}
 
 	public void testReplaceEmptyString() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "Hello World HELLO WORLD Hello World";
-
-		String actual = StringUtil.replace(original, "", "Aloha");
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Hello World HELLO WORLD Hello World",
+			StringUtil.replace(
+				"Hello World HELLO WORLD Hello World", "", "Aloha"));
 	}
 
 	public void testReplaceFirstChar() throws Exception {
-		String original = "127.0.0.1";
-		String expected = "127_0.0.1";
-
-		String actual = StringUtil.replaceFirst(original, '.', '_');
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"127_0.0.1", StringUtil.replaceFirst("127.0.0.1", '.', '_'));
 	}
 
 	public void testReplaceFirstString() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "Aloha World HELLO WORLD Hello World";
-
-		String actual = StringUtil.replaceFirst(original, "Hello", "Aloha");
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Aloha World HELLO WORLD Hello World",
+			StringUtil.replaceFirst(
+				"Hello World HELLO WORLD Hello World", "Hello", "Aloha"));
 	}
 
 	public void testReplaceFirstStringArray() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World HELLO WORLD";
-		String expected = "Aloha World ALOHA WORLD Hello World HELLO WORLD";
-
-		String actual = StringUtil.replaceFirst(
-			original, new String[] {"Hello", "HELLO"},
-			new String[] {"Aloha", "ALOHA"});
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Aloha World ALOHA WORLD Hello World HELLO WORLD",
+			StringUtil.replaceFirst(
+				"Hello World HELLO WORLD Hello World HELLO WORLD",
+				new String[] {"Hello", "HELLO"},
+				new String[] {"Aloha", "ALOHA"}));
 	}
 
 	public void testReplaceLastChar() throws Exception {
-		String original = "127.0.0.1";
-		String expected = "127.0.0_1";
-
-		String actual = StringUtil.replaceLast(original, '.', '_');
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"127.0.0_1", StringUtil.replaceLast("127.0.0.1", '.', '_'));
 	}
 
 	public void testReplaceLastString() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "Hello World HELLO WORLD Aloha World";
-
-		String actual = StringUtil.replaceLast(original, "Hello", "Aloha");
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Hello World HELLO WORLD Aloha World",
+			StringUtil.replaceLast(
+				"Hello World HELLO WORLD Hello World", "Hello", "Aloha"));
 	}
 
 	public void testReplaceLastStringArray() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World HELLO WORLD";
-		String expected = "Hello World HELLO WORLD Aloha World ALOHA WORLD";
-
-		String actual = StringUtil.replaceLast(
-			original, new String[] {"Hello", "HELLO"},
-			new String[] {"Aloha", "ALOHA"});
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Hello World HELLO WORLD Aloha World ALOHA WORLD",
+			StringUtil.replaceLast(
+				"Hello World HELLO WORLD Hello World HELLO WORLD",
+				new String[] {"Hello", "HELLO"},
+				new String[] {"Aloha", "ALOHA"}));
 	}
 
 	public void testReplaceSpaceString() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "HelloWorldHELLOWORLDHelloWorld";
-
-		String actual = StringUtil.replace(original, " ", StringPool.BLANK);
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"HelloWorldHELLOWORLDHelloWorld",
+			StringUtil.replace(
+				"Hello World HELLO WORLD Hello World", " ", StringPool.BLANK));
 	}
 
 	public void testReplaceString() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "Aloha World HELLO WORLD Aloha World";
-
-		String actual = StringUtil.replace(original, "Hello", "Aloha");
-
-		assertEquals(expected, actual);
+		assertEquals(
+			"Aloha World HELLO WORLD Aloha World",
+			StringUtil.replace(
+				"Hello World HELLO WORLD Hello World", "Hello", "Aloha"));
 	}
 
 	public void testReplaceStringArray() throws Exception {
-		String original = "Hello World HELLO WORLD Hello World";
-		String expected = "Aloha World ALOHA WORLD Aloha World";
+		assertEquals(
+			"Aloha World ALOHA WORLD Aloha World",
+			StringUtil.replace(
+				"Hello World HELLO WORLD Hello World",
+				new String[] {"Hello", "HELLO"},
+				new String[] {"Aloha", "ALOHA"}));
+	}
 
-		String actual = StringUtil.replace(
-			original, new String[] {"Hello", "HELLO"},
-			new String[] {"Aloha", "ALOHA"});
-
-		assertEquals(expected, actual);
+	public void testShortenString() {
+		assertEquals(
+			"Hello World HELLO...",
+			StringUtil.shorten("Hello World HELLO WORLD Hello World"));
+		assertEquals("Hi Hello", StringUtil.shorten("Hi Hello", 8));
+		assertEquals("Hello...", StringUtil.shorten("Hello World", 8));
+		assertEquals("Hi...", StringUtil.shorten("Hi Hello World", 8));
+		assertEquals("...", StringUtil.shorten(" Hello World", 8));
+		assertEquals(
+			"HelloWorldHe... etc.",
+			StringUtil.shorten(
+				"HelloWorldHelloWorldHelloWorldHelloWorldHelloWorldHello", 20,
+				"... etc."));
 	}
 
 	public void testSplitLines() {
@@ -237,12 +197,7 @@ public class StringUtilTest extends TestCase {
 	}
 
 	public void testStripChar() {
-		String original = " a b  c   d";
-		String expected = "abcd";
-
-		String actual = StringUtil.strip(original, ' ');
-
-		assertEquals(expected, actual);
+		assertEquals("abcd", StringUtil.strip(" a b  c   d", ' '));
 	}
 
 }

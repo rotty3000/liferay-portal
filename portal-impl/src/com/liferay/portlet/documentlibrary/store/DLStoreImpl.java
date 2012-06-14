@@ -218,6 +218,8 @@ public class DLStoreImpl implements DLStore {
 	public File getFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
+		validate(fileName, false);
+
 		return store.getFile(companyId, repositoryId, fileName);
 	}
 
@@ -226,12 +228,16 @@ public class DLStoreImpl implements DLStore {
 			String versionLabel)
 		throws PortalException, SystemException {
 
+		validate(fileName, false);
+
 		return store.getFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
 	public byte[] getFileAsBytes(
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
+
+		validate(fileName, false);
 
 		return store.getFileAsBytes(companyId, repositoryId, fileName);
 	}
@@ -241,6 +247,8 @@ public class DLStoreImpl implements DLStore {
 			String versionLabel)
 		throws PortalException, SystemException {
 
+		validate(fileName, false);
+
 		return store.getFileAsBytes(
 			companyId, repositoryId, fileName, versionLabel);
 	}
@@ -248,6 +256,8 @@ public class DLStoreImpl implements DLStore {
 	public InputStream getFileAsStream(
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
+
+		validate(fileName, false);
 
 		return store.getFileAsStream(companyId, repositoryId, fileName);
 	}
@@ -257,6 +267,8 @@ public class DLStoreImpl implements DLStore {
 			String versionLabel)
 		throws PortalException, SystemException {
 
+		validate(fileName, false);
+
 		return store.getFileAsStream(
 			companyId, repositoryId, fileName, versionLabel);
 	}
@@ -265,11 +277,17 @@ public class DLStoreImpl implements DLStore {
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
+		if (!isValidName(dirName)) {
+			throw new DirectoryNameException(dirName);
+		}
+
 		return store.getFileNames(companyId, repositoryId, dirName);
 	}
 
 	public long getFileSize(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
+
+		validate(fileName, false);
 
 		return store.getFileSize(companyId, repositoryId, fileName);
 	}
@@ -278,11 +296,17 @@ public class DLStoreImpl implements DLStore {
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
+		if (!isValidName(dirName)) {
+			throw new DirectoryNameException(dirName);
+		}
+
 		return store.hasDirectory(companyId, repositoryId, dirName);
 	}
 
 	public boolean hasFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
+
+		validate(fileName, false);
 
 		return store.hasFile(companyId, repositoryId, fileName);
 	}
@@ -291,6 +315,8 @@ public class DLStoreImpl implements DLStore {
 			long companyId, long repositoryId, String fileName,
 			String versionLabel)
 		throws PortalException, SystemException {
+
+		validate(fileName, false);
 
 		return store.hasFile(companyId, repositoryId, fileName, versionLabel);
 	}

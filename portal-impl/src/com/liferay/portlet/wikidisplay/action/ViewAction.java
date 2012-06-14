@@ -90,7 +90,7 @@ public class ViewAction extends PortletAction {
 			return mapping.findForward("/portal/portlet_not_setup");
 		}
 		catch (PrincipalException pe) {
-			SessionErrors.add(renderRequest, pe.getClass().getName());
+			SessionErrors.add(renderRequest, pe.getClass());
 
 			return mapping.findForward("portlet.wiki_display.error");
 		}

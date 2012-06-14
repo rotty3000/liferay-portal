@@ -281,6 +281,24 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		return journalArticlePersistence.filterFindByG_L(groupId, layoutUuid);
 	}
 
+	public List<JournalArticle> getArticlesByStructureId(
+			long groupId, String structureId, int start, int end,
+			OrderByComparator obc)
+		throws SystemException {
+
+		return journalArticlePersistence.filterFindByG_S(
+			groupId, structureId, start, end, obc);
+	}
+
+	public List<JournalArticle> getArticlesByUserId(
+			long groupId, long userId, int start, int end,
+			OrderByComparator obc)
+		throws SystemException {
+
+		return journalArticlePersistence.filterFindByG_U(
+			groupId, userId, start, end, obc);
+	}
+
 	public int getArticlesCount(long groupId, long folderId)
 		throws SystemException {
 
@@ -291,6 +309,18 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		throws SystemException {
 
 		return journalArticlePersistence.filterCountByG_A(groupId, articleId);
+	}
+
+	public int getArticlesCountByStructureId(long groupId, String structureId)
+		throws SystemException {
+
+		return journalArticlePersistence.filterCountByG_S(groupId, structureId);
+	}
+
+	public int getArticlesCountByUserId(long groupId, long userId)
+		throws SystemException {
+
+		return journalArticlePersistence.filterCountByG_U(groupId, userId);
 	}
 
 	public JournalArticle getDisplayArticleByUrlTitle(

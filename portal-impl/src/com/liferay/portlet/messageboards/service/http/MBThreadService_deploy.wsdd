@@ -15,6 +15,12 @@
 		<operation xmlns:operNS="urn:http.service.messageboards.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getGroupThreadsCount" qname="operNS:getGroupThreadsCount" returnQName="getGroupThreadsCountReturn" returnType="rtns:int" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="userId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="modifiedDate" type="tns:dateTime"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="status" type="tns:int"></parameter>
+		</operation>
+		<operation xmlns:operNS="urn:http.service.messageboards.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getGroupThreadsCount" qname="operNS:getGroupThreadsCount" returnQName="getGroupThreadsCountReturn" returnType="rtns:int" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="userId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="status" type="tns:int"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.messageboards.portlet.liferay.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getGroupThreadsCount" qname="operNS:getGroupThreadsCount" returnQName="getGroupThreadsCountReturn" returnType="rtns:int" soapAction="">
@@ -29,6 +35,14 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="status" type="tns:int"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="subscribed" type="tns:boolean"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="includeAnonymous" type="tns:boolean"></parameter>
+		</operation>
+		<operation xmlns:operNS="urn:http.service.messageboards.portlet.liferay.com" xmlns:rtns="urn:http.service.messageboards.portlet.liferay.com" xmlns:tns2="http://model.messageboards.portlet.liferay.com" name="getGroupThreads" qname="operNS:getGroupThreads" returnQName="getGroupThreadsReturn" returnType="rtns:ArrayOf_tns2_MBThreadSoap" returnItemType="tns2:MBThreadSoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="userId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="modifiedDate" type="tns:dateTime"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="status" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="start" type="tns:int"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="end" type="tns:int"></parameter>
 		</operation>
 		<operation xmlns:operNS="urn:http.service.messageboards.portlet.liferay.com" xmlns:rtns="urn:http.service.messageboards.portlet.liferay.com" xmlns:tns2="http://model.messageboards.portlet.liferay.com" name="getGroupThreads" qname="operNS:getGroupThreads" returnQName="getGroupThreadsReturn" returnType="rtns:ArrayOf_tns2_MBThreadSoap" returnItemType="tns2:MBThreadSoap" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>

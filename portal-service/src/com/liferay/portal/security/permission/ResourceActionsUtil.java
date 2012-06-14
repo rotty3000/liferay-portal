@@ -16,6 +16,7 @@ package com.liferay.portal.security.permission;
 
 import com.liferay.portal.NoSuchResourceActionException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.PasswordPolicy;
@@ -202,6 +203,8 @@ public class ResourceActionsUtil {
 	}
 
 	public static ResourceActions getResourceActions() {
+		PortalRuntimePermission.checkGetBeanProperty(ResourceActionsUtil.class);
+
 		return _resourceActions;
 	}
 
@@ -277,6 +280,8 @@ public class ResourceActionsUtil {
 	}
 
 	public void setResourceActions(ResourceActions resourceActions) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_resourceActions = resourceActions;
 	}
 

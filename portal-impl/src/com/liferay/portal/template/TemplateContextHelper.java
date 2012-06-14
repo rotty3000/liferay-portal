@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.language.UnicodeLanguageUtil;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
-import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.templateparser.TemplateContext;
 import com.liferay.portal.kernel.util.ArrayUtil_IW;
 import com.liferay.portal.kernel.util.DateUtil_IW;
@@ -57,7 +56,6 @@ import com.liferay.portal.service.permission.RolePermissionUtil;
 import com.liferay.portal.service.permission.UserGroupPermissionUtil;
 import com.liferay.portal.service.permission.UserPermissionUtil;
 import com.liferay.portal.theme.NavItem;
-import com.liferay.portal.theme.RequestVars;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.SessionClicks_IW;
@@ -315,8 +313,7 @@ public class TemplateContextHelper {
 	}
 
 	public void prepare(
-			TemplateContext templateContext, HttpServletRequest request)
-		throws TemplateException {
+		TemplateContext templateContext, HttpServletRequest request) {
 
 		// Request
 
@@ -404,19 +401,8 @@ public class TemplateContextHelper {
 			// Navigation items
 
 			if (layout != null) {
-				RequestVars requestVars = null;
-
-				try {
-					requestVars = new RequestVars(
-						request, themeDisplay, layout.getAncestorPlid(),
-						layout.getAncestorLayoutId());
-				}
-				catch (Exception e) {
-					throw new TemplateException(e);
-				}
-
 				List<NavItem> navItems = NavItem.fromLayouts(
-					requestVars, layouts);
+					request, layouts, templateContext);
 
 				templateContext.put("navItems", navItems);
 			}

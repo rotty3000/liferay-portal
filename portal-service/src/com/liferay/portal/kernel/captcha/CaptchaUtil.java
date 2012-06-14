@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.captcha;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.io.IOException;
 
 import javax.portlet.PortletRequest;
@@ -41,6 +43,8 @@ public class CaptchaUtil {
 	}
 
 	public static Captcha getCaptcha() {
+		PortalRuntimePermission.checkGetBeanProperty(CaptchaUtil.class);
+
 		return _captcha;
 	}
 
@@ -55,7 +59,7 @@ public class CaptchaUtil {
 	}
 
 	public static boolean isEnabled(PortletRequest portletRequest)
-		throws CaptchaException{
+		throws CaptchaException {
 
 		return getCaptcha().isEnabled(portletRequest);
 	}
@@ -75,6 +79,8 @@ public class CaptchaUtil {
 	}
 
 	public void setCaptcha(Captcha captcha) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_captcha = captcha;
 	}
 

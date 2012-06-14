@@ -8,7 +8,7 @@
 			FROM
 				BookmarksEntry
 			WHERE
-				(entryId NOT IN(
+				(entryId NOT IN (
 					SELECT
 						classPK
 					FROM

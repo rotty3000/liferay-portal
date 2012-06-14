@@ -14,6 +14,10 @@
 
 package com.liferay.portalweb.plugins.wsrp.helloworld.manageportletconsumerhw;
 
+import com.liferay.portalweb.plugins.wsrp.helloworld.addconsumerhw.AddConsumerHWTest;
+import com.liferay.portalweb.plugins.wsrp.helloworld.addconsumerhw.TearDownConsumerTest;
+import com.liferay.portalweb.plugins.wsrp.helloworld.addproducerhw.AddProducerHWTest;
+import com.liferay.portalweb.plugins.wsrp.helloworld.addproducerhw.TearDownProducerTest;
 import com.liferay.portalweb.portal.BaseTestSuite;
 
 import junit.framework.Test;

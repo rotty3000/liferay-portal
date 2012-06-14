@@ -15,6 +15,7 @@
 package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.io.InputStream;
 
@@ -65,6 +66,8 @@ public class VideoProcessorUtil {
 	}
 
 	public static VideoProcessor getVideoProcessor() {
+		PortalRuntimePermission.checkGetBeanProperty(VideoProcessorUtil.class);
+
 		return _videoProcessor;
 	}
 
@@ -91,6 +94,8 @@ public class VideoProcessorUtil {
 	}
 
 	public void setVideoProcessor(VideoProcessor videoProcessor) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_videoProcessor = videoProcessor;
 	}
 

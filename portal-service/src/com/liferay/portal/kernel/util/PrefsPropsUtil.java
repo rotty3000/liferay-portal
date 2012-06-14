@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.util.Properties;
 
@@ -198,6 +199,8 @@ public class PrefsPropsUtil {
 	}
 
 	public static PrefsProps getPrefsProps() {
+		PortalRuntimePermission.checkGetBeanProperty(PrefsPropsUtil.class);
+
 		return _prefsProps;
 	}
 
@@ -381,6 +384,8 @@ public class PrefsPropsUtil {
 	}
 
 	public void setPrefsProps(PrefsProps prefsProps) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_prefsProps = prefsProps;
 	}
 

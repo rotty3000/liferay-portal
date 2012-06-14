@@ -81,24 +81,24 @@ Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 		<c:when test="<%= (folder == null) || (folder.getModel() instanceof DLFolder) %>">
 
 			<%
-			String taglibUrl = "Liferay.fire('" + renderResponse.getNamespace() + "editFileEntry', {action: '" + Constants.MOVE_TO_TRASH + "'});";
+			String taglibURL = "Liferay.fire('" + renderResponse.getNamespace() + "editFileEntry', {action: '" + Constants.MOVE_TO_TRASH + "'});";
 			%>
 
 			<liferay-ui:icon-delete
 				confirmation="are-you-sure-you-want-to-move-the-selected-entries-to-the-recycle-bin"
 				trash="<%= true %>"
-				url="<%= taglibUrl %>"
+				url="<%= taglibURL %>"
 			/>
 		</c:when>
 		<c:otherwise>
 
 			<%
-			String taglibUrl = "Liferay.fire('" + renderResponse.getNamespace() + "editFileEntry', {action: '" + Constants.DELETE + "'});";
+			String taglibURL = "Liferay.fire('" + renderResponse.getNamespace() + "editFileEntry', {action: '" + Constants.DELETE + "'});";
 			%>
 
 			<liferay-ui:icon-delete
 				confirmation="are-you-sure-you-want-to-delete-the-selected-entries"
-				url="<%= taglibUrl %>"
+				url="<%= taglibURL %>"
 			/>
 		</c:otherwise>
 	</c:choose>
@@ -117,23 +117,23 @@ Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 		<liferay-ui:icon-menu align="left" direction="down" icon="" message="manage" showExpanded="<%= false %>" showWhenSingleIcon="<%= true %>">
 
 			<%
-			String taglibUrl = "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeView()";
+			String taglibURL = "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeView()";
 			%>
 
 			<liferay-ui:icon
 				image="copy"
 				message="document-types"
-				url="<%= taglibUrl %>"
+				url="<%= taglibURL %>"
 			/>
 
 			<%
-			taglibUrl = "javascript:" + renderResponse.getNamespace() + "openDDMStructureView()";
+			taglibURL = "javascript:" + renderResponse.getNamespace() + "openDDMStructureView()";
 			%>
 
 			<liferay-ui:icon
 				image="copy"
 				message="metadata-sets"
-				url="<%= taglibUrl %>"
+				url="<%= taglibURL %>"
 			/>
 		</liferay-ui:icon-menu>
 	</c:if>
@@ -144,7 +144,7 @@ Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 		Liferay.Util.openWindow(
 			{
 				dialog: {
-					width:820
+					width: 820
 				},
 				id: '<portlet:namespace />openFileEntryTypeView',
 				title: '<%= UnicodeLanguageUtil.get(pageContext, "document-types") %>',

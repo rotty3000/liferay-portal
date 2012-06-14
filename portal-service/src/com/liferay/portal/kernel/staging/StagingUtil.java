@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.staging;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.PortletDataContext;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.model.Group;
@@ -170,7 +171,7 @@ public class StagingUtil {
 
 	public static long getRecentLayoutRevisionId(
 			HttpServletRequest request, long layoutSetBranchId, long plid)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		return getStaging().getRecentLayoutRevisionId(
 			request, layoutSetBranchId, plid);
@@ -203,6 +204,8 @@ public class StagingUtil {
 	}
 
 	public static Staging getStaging() {
+		PortalRuntimePermission.checkGetBeanProperty(StagingUtil.class);
+
 		return _staging;
 	}
 
@@ -395,6 +398,8 @@ public class StagingUtil {
 	}
 
 	public void setStaging(Staging staging) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_staging = staging;
 	}
 

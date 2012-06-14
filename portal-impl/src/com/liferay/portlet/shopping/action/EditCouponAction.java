@@ -100,16 +100,14 @@ public class EditCouponAction extends PortletAction {
 						(CouponLimitCategoriesException)e;
 
 					SessionErrors.add(
-						actionRequest, e.getClass().getName(),
-						clce.getCategoryIds());
+						actionRequest, e.getClass(), clce.getCategoryIds());
 				}
 				else if (e instanceof CouponLimitSKUsException) {
 					CouponLimitSKUsException clskue =
 						(CouponLimitSKUsException)e;
 
 					SessionErrors.add(
-						actionRequest, e.getClass().getName(),
-						clskue.getSkus());
+						actionRequest, e.getClass(), clskue.getSkus());
 				}
 				else {
 					SessionErrors.add(actionRequest, e.getClass());

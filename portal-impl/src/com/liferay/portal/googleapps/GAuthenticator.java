@@ -124,13 +124,15 @@ public class GAuthenticator {
 	}
 
 	protected boolean isStale() {
-		if ((_initTime + Time.HOUR) > System.currentTimeMillis()) {
+		if ((_initTime + _EXPIRE_TIME) > System.currentTimeMillis()) {
 			return false;
 		}
 		else {
 			return true;
 		}
 	}
+
+	private static final long _EXPIRE_TIME = Time.HOUR;
 
 	private static Log _log = LogFactoryUtil.getLog(GAuthenticator.class);
 

@@ -14,7 +14,11 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+
 import java.security.Principal;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -27,6 +31,12 @@ public class ProtectedServletRequest extends HttpServletRequestWrapper {
 	public ProtectedServletRequest(
 		HttpServletRequest request, String remoteUser) {
 
+		this(request, remoteUser, null);
+	}
+
+	public ProtectedServletRequest(
+		HttpServletRequest request, String remoteUser, String authType) {
+
 		super(request);
 
 		_remoteUser = remoteUser;
@@ -34,6 +44,30 @@ public class ProtectedServletRequest extends HttpServletRequestWrapper {
 		if (remoteUser != null) {
 			_userPrincipal = new ProtectedPrincipal(remoteUser);
 		}
+
+		_authType = authType;
+	}
+
+	@Override
+	public String getAuthType() {
+		if (_authType == null) {
+			return super.getAuthType();
+		}
+
+		if(HttpServletRequest.BASIC_AUTH.equals(_authType)){
+			return HttpServletRequest.BASIC_AUTH;
+		}
+		if(HttpServletRequest.CLIENT_CERT_AUTH.equals(_authType)){
+			return HttpServletRequest.CLIENT_CERT_AUTH;
+		}
+		if(HttpServletRequest.DIGEST_AUTH.equals(_authType)){
+			return HttpServletRequest.DIGEST_AUTH;
+		}
+		if(HttpServletRequest.FORM_AUTH.equals(_authType)){
+			return HttpServletRequest.FORM_AUTH;
+		}
+
+		return _authType;
 	}
 
 	@Override
@@ -56,6 +90,7 @@ public class ProtectedServletRequest extends HttpServletRequestWrapper {
 		}
 	}
 
+	private String _authType;
 	private String _remoteUser;
 	private Principal _userPrincipal;
 

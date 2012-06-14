@@ -122,7 +122,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			}
 			catch (Exception e) {
 				if (e instanceof AssetTagException) {
-					SessionErrors.add(actionRequest, e.getClass().getName(), e);
+					SessionErrors.add(actionRequest, e.getClass(), e);
 				}
 				else {
 					throw e;

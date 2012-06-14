@@ -296,7 +296,7 @@ public class DLAppHelperLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@Link #getFileShortcuts(long, long, int, boolean)}
+	 * @deprecated {@link #getFileShortcuts(long, long, boolean, int)}
 	 */
 	public List<DLFileShortcut> getFileShortcuts(
 			long groupId, long folderId, int status)
@@ -314,7 +314,7 @@ public class DLAppHelperLocalServiceImpl
 	}
 
 	/**
-	 * @deprecated {@Link #getFileShortcutsCount(long, long, int, boolean)}
+	 * @deprecated {@link #getFileShortcutsCount(long, long, boolean, int)}
 	 */
 	public int getFileShortcutsCount(long groupId, long folderId, int status)
 		throws SystemException {
@@ -353,9 +353,8 @@ public class DLAppHelperLocalServiceImpl
 			dlFileVersionLocalService.getFileVersions(
 				fileEntry.getFileEntryId(), WorkflowConstants.STATUS_ANY);
 
-		dlFileVersions = ListUtil.copy(dlFileVersions);
-
-		Collections.sort(dlFileVersions, new FileVersionVersionComparator());
+		dlFileVersions = ListUtil.sort(
+			dlFileVersions, new FileVersionVersionComparator());
 
 		FileVersion fileVersion = new LiferayFileVersion(dlFileVersions.get(0));
 
@@ -395,7 +394,14 @@ public class DLAppHelperLocalServiceImpl
 				new ObjectValuePair<Long, Integer>();
 
 			fileVersionStatus.setKey(dlFileVersion.getFileVersionId());
-			fileVersionStatus.setValue(dlFileVersion.getStatus());
+
+			int status = dlFileVersion.getStatus();
+
+			if (status == WorkflowConstants.STATUS_PENDING) {
+				status = WorkflowConstants.STATUS_DRAFT;
+			}
+
+			fileVersionStatus.setValue(status);
 
 			fileVersionStatuses.add(fileVersionStatus);
 		}
@@ -880,12 +886,20 @@ public class DLAppHelperLocalServiceImpl
 			if (object instanceof DLFileEntry) {
 				DLFileEntry dlFileEntry = (DLFileEntry)object;
 
-				DLFileVersion dlFileVersion =
-					dlFileVersionLocalService.getLatestFileVersion(
-						dlFileEntry.getFileEntryId(), false);
+				List<DLFileVersion> dlFileVersions =
+					dlFileVersionLocalService.getFileVersions(
+						dlFileEntry.getFileEntryId(),
+						WorkflowConstants.STATUS_ANY);
+
+				dlFileVersions = ListUtil.copy(dlFileVersions);
+
+				Collections.sort(
+					dlFileVersions, new FileVersionVersionComparator());
+
+				DLFileVersion latestDlFileVersion = dlFileVersions.get(0);
 
 				if ((status == WorkflowConstants.STATUS_APPROVED) &&
-					(dlFileVersion.getStatus() ==
+					(latestDlFileVersion.getStatus() ==
 						WorkflowConstants.STATUS_IN_TRASH)) {
 
 					continue;
@@ -894,16 +908,16 @@ public class DLAppHelperLocalServiceImpl
 				// Asset
 
 				if (status == WorkflowConstants.STATUS_APPROVED) {
-					if (dlFileVersion.isApproved()) {
+					if (latestDlFileVersion.isApproved()) {
 						assetEntryLocalService.updateVisible(
 							DLFileEntryConstants.getClassName(),
 							dlFileEntry.getFileEntryId(), true);
 					}
 				}
 				else {
-					assetEntryLocalService.updateVisible(
+					assetEntryLocalService.moveEntryToTrash(
 						DLFileEntryConstants.getClassName(),
-						dlFileEntry.getFileEntryId(), false);
+						dlFileEntry.getFileEntryId());
 				}
 
 				// Social
@@ -943,21 +957,29 @@ public class DLAppHelperLocalServiceImpl
 
 				// Workflow
 
-				if ((status != WorkflowConstants.STATUS_APPROVED) &&
-					dlFileVersion.isPending()) {
+				if (status != WorkflowConstants.STATUS_APPROVED) {
+					for (DLFileVersion dlFileVersion : dlFileVersions) {
+						if (!dlFileVersion.isPending()) {
+							continue;
+						}
 
-					workflowInstanceLinkLocalService.
-						deleteWorkflowInstanceLink(
-							dlFileVersion.getCompanyId(),
-							dlFileVersion.getGroupId(),
-							DLFileEntryConstants.getClassName(),
-							dlFileVersion.getFileVersionId());
+						dlFileVersion.setStatus(WorkflowConstants.STATUS_DRAFT);
+
+						dlFileVersionPersistence.update(dlFileVersion, false);
+
+						workflowInstanceLinkLocalService.
+							deleteWorkflowInstanceLink(
+								dlFileVersion.getCompanyId(),
+								dlFileVersion.getGroupId(),
+								DLFileEntryConstants.getClassName(),
+								dlFileVersion.getFileVersionId());
+					}
 				}
 			}
 			else if (object instanceof DLFolder) {
 				DLFolder dlFolder = (DLFolder)object;
 
-				if (dlFolder.getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
+				if (dlFolder.isInTrash()) {
 					continue;
 				}
 

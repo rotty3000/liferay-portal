@@ -53,7 +53,7 @@ String toolbarItem = ParamUtil.getString(request, "toolbarItem", "view-all");
 					{
 						ddmResource: '<%= ddmResource %>',
 						dialog: {
-							width:820
+							width: 820
 						},
 						storageType: '<%= PropsValues.DYNAMIC_DATA_LISTS_STORAGE_TYPE %>',
 						structureName: 'data-definition',

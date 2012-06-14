@@ -16,6 +16,7 @@ package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.io.InputStream;
 
@@ -47,6 +48,8 @@ public class ImageProcessorUtil {
 	}
 
 	public static ImageProcessor getImageProcessor() {
+		PortalRuntimePermission.checkGetBeanProperty(ImageProcessorUtil.class);
+
 		return _imageProcessor;
 	}
 
@@ -117,6 +120,8 @@ public class ImageProcessorUtil {
 	}
 
 	public void setImageProcessor(ImageProcessor imageProcessor) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_imageProcessor = imageProcessor;
 	}
 

@@ -157,7 +157,7 @@ if (Validator.isNotNull(ddmStructureId)) {
 				classPK: ddmStructureId,
 				ddmResource: '<%= ddmResource %>',
 				dialog: {
-					width:820
+					width: 820
 				},
 				saveCallback: '<portlet:namespace />selectDDMStructure',
 				storageType: '<%= PropsValues.DYNAMIC_DATA_LISTS_STORAGE_TYPE %>',

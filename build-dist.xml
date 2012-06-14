@@ -201,7 +201,6 @@
 		<echo file="app.server.${user.name}.properties">
 			app.server.type=tomcat
 
-			app.server.tomcat.dir=${app.server.parent.dir}/tomcat-6.0.35
 			app.server.tomcat.version=6.0.35
 			app.server.tomcat.zip.url=http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.35/bin/apache-tomcat-6.0.35.zip
 		</echo>
@@ -1111,22 +1110,7 @@ release was successful.</echo>
 			</then>
 		</if>
 
-		<script classpathref="project.classpath" language="beanshell">
-			String appServerTomcatDir = project.getProperty("app.server.tomcat.dir");
-
-			int forwardSlashPos = appServerTomcatDir.lastIndexOf("/");
-			int backSlashPos = appServerTomcatDir.lastIndexOf("\\");
-
-			int pos = forwardSlashPos;
-
-			if ((backSlashPos != -1) &amp;&amp; (backSlashPos > forwardSlashPos)) {
-				pos = backSlashPos;
-			}
-
-			String appServerTomcatDirName = appServerTomcatDir.substring(pos + 1);
-
-			project.setProperty("app.server.tomcat.dir.name", appServerTomcatDirName);
-		</script>
+		<basename file="${app.server.tomcat.dir}" property="app.server.tomcat.dir.name" />
 
 		<unzip
 			dest="${app.server.parent.dir}"
@@ -1152,22 +1136,51 @@ release was successful.</echo>
 	</target>
 
 	<target name="unzip-weblogic">
-		<property name="app.server.weblogic.dir.abs" location="${app.server.weblogic.dir}" />
+		<if>
+			<available file="${app.server.parent.dir}/${app.server.weblogic.custom.zip.name}" />
+			<then>
+				<antcall target="unzip-weblogic-custom" />
+			</then>
+			<else>
+				<antcall target="unzip-weblogic-original" />
+			</else>
+		</if>
+	</target>
 
-		<property name="app.server.weblogic.instance.dir.abs" location="${app.server.weblogic.instance.dir}" />
-
-		<pathconvert property="app.server.weblogic.instance.dir.unix" targetos="unix">
-			<path location="${app.server.weblogic.instance.dir.abs}" />
-		</pathconvert>
-
-		<var name="app.server.weblogic.wlserver.dir" value="${app.server.weblogic.dir.abs}/wlserver" />
-
-		<pathconvert property="app.server.weblogic.wlserver.dir.unix" targetos="unix">
-			<path location="${app.server.weblogic.wlserver.dir}" />
-		</pathconvert>
-
+	<target name="unzip-weblogic-custom">
 		<delete dir="${app.server.weblogic.dir}" />
 
+		<unzip
+			dest="${app.server.weblogic.dir}"
+			src="${app.server.parent.dir}/${app.server.weblogic.custom.zip.name}"
+		/>
+
+		<propertyregex
+			input="${app.server.weblogic.dir.windows}"
+			property="app.server.weblogic.dir.windows.double.slash"
+			regexp="\\" 
+			replace="\\\\\\\\"
+		/>
+
+		<propertyregex
+			input="${app.server.weblogic.dir.windows.double.slash}"
+			property="app.server.weblogic.dir.windows.escaped"
+			regexp=":" 
+			replace="\\\\:"
+		/>
+
+		<replace
+			dir="${app.server.weblogic.dir}"
+			includes="**/*.cmd,**/*.domains,**/*.properties,**/*.sh,**/*.xml"
+		>
+			<replacefilter token="@app.server.weblogic.dir@" value="${app.server.weblogic.dir}" />
+			<replacefilter token="@app.server.weblogic.dir.windows@" value="${app.server.weblogic.dir.windows}" />
+			<replacefilter token="@app.server.weblogic.dir.windows.double.slash@" value="${app.server.weblogic.dir.windows.double.slash}" />
+			<replacefilter token="@app.server.weblogic.dir.windows.escaped@" value="${app.server.weblogic.dir.windows.escaped}" />
+		</replace>
+	</target>
+
+	<target name="unzip-weblogic-original">
 		<if>
 			<not>
 				<available file="${app.server.parent.dir}/${app.server.weblogic.zip.name}" />
@@ -1175,11 +1188,17 @@ release was successful.</echo>
 			<then>
 				<mkdir dir="${app.server.parent.dir}" />
 
-				<echo>Please download the WebLogic zip file from ${app.server.weblogic.zip.url} and
+				<fail>
+.
+
+Please download the WebLogic zip file from ${app.server.weblogic.zip.url} and
 place it here: ${app.server.parent.dir}/${app.server.weblogic.zip.name}. Then
-rerun this task.</echo>
+rerun this task.
+				</fail>
 			</then>
 		</if>
+
+		<delete dir="${app.server.weblogic.dir}" />
 
 		<unzip
 			dest="${app.server.weblogic.dir}"
@@ -1192,7 +1211,7 @@ rerun this task.</echo>
 
 		<mkdir dir="${tstamp.value}" />
 
-		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${app.server.weblogic.wlserver.dir.unix}/common/templates/domains/wls.jar')
+		<echo file="${tstamp.value}/create-weblogic-domain.py">readTemplate('${app.server.weblogic.wlserver.dir}/common/templates/domains/wls.jar')
 
 set('Name', '${app.server.weblogic.instance.name}')
 
@@ -1205,15 +1224,15 @@ cd('/Servers/AdminServer')
 set('ListenAddress', '')
 set('ListenPort', 8080)
 
-writeDomain('${app.server.weblogic.instance.dir.unix}')
+writeDomain('${app.server.weblogic.instance.dir}')
 
 closeTemplate()</echo>
 
 		<if>
 			<os family="windows" />
 			<then>
-				<exec dir="${app.server.weblogic.dir.abs}" executable="cmd">
-					<env key="MW_HOME" value="${app.server.weblogic.dir.abs}" />
+				<exec dir="${app.server.weblogic.dir}" executable="cmd">
+					<env key="MW_HOME" value="${app.server.weblogic.dir.windows}" />
 					<arg value="/c" />
 					<arg value="configure.cmd" />
 				</exec>
@@ -1222,9 +1241,9 @@ closeTemplate()</echo>
 
 set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=256m"
 
-set "MW_HOME=${app.server.weblogic.dir.abs}"
+set "MW_HOME=${app.server.weblogic.dir.windows}"
 
-set "WL_HOME=${app.server.weblogic.wlserver.dir}"
+set "WL_HOME=${app.server.weblogic.wlserver.dir.windows}"
 
 call %WL_HOME%/common/bin/commEnv.cmd
 
@@ -1236,14 +1255,6 @@ set "CLASSPATH=%FMWCONFIG_CLASSPATH%"
 					<arg value="/c" />
 					<arg value="create-weblogic-domain.bat" />
 				</exec>
-
-				<echo file="${app.server.weblogic.instance.dir}/run.bat">@echo off
-
-set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=512m"
-
-set "MW_HOME=${app.server.weblogic.dir.abs}"
-
-call startWebLogic.cmd</echo>
 			</then>
 			<else>
 				<exec dir="${app.server.weblogic.dir}" executable="sh">
@@ -1273,21 +1284,234 @@ ${env.JAVA_HOME}/bin/java weblogic.WLST create-weblogic-domain.py</echo>
 				<exec dir="${tstamp.value}" executable="sh">
 					<arg value="create-weblogic-domain.sh" />
 				</exec>
-
-				<echo file="${app.server.weblogic.instance.dir}/run.sh">#!/bin/sh
-
-export USER_MEM_ARGS="-Xmx1024m -XX:PermSize=512m"
-
-export MW_HOME="${app.server.weblogic.dir}"
-
-sh startWebLogic.sh</echo>
-
-				<chmod
-					file="${app.server.weblogic.instance.dir}/run.sh"
-					perm="744"
-				/>
 			</else>
 		</if>
+
+		<replace file="${app.server.weblogic.instance.dir}/startWebLogic.cmd">
+			<replacetoken><![CDATA[SETLOCAL]]></replacetoken>
+			<replacevalue>
+				<![CDATA[
+					SETLOCAL
+
+					set "USER_MEM_ARGS=-Xmx1024m -XX:PermSize=512m"
+
+					set "MW_HOME=${app.server.weblogic.dir.windows}"
+				]]>
+			</replacevalue>
+		</replace>
+
+		<replace file="${app.server.weblogic.instance.dir}/startWebLogic.cmd">
+			<replacefilter token="$${app.server.weblogic.dir.windows}" value="${app.server.weblogic.dir.windows}" />
+		</replace>
+
+		<replace file="${app.server.weblogic.instance.dir}/startWebLogic.sh">
+			<replacetoken><![CDATA[# Any changes to this script may be lost when adding extensions to this configuration.]]></replacetoken>
+			<replacevalue>
+				<![CDATA[
+					# Any changes to this script may be lost when adding extensions to this configuration.
+
+					export USER_MEM_ARGS="-Xmx1024m -XX:PermSize=512m"
+
+					export MW_HOME="${app.server.weblogic.dir}"
+				]]>
+			</replacevalue>
+		</replace>
+
+		<replace file="${app.server.weblogic.instance.dir}/startWebLogic.sh">
+			<replacefilter token="$${app.server.weblogic.dir}" value="${app.server.weblogic.dir}" />
+		</replace>
+
+		<copy
+			file="${app.server.weblogic.instance.dir}/startWebLogic.cmd"
+			tofile="${app.server.weblogic.instance.dir}/stopWebLogic.cmd"
+		/>
+
+		<replace file="${app.server.weblogic.instance.dir}/stopWebLogic.cmd">
+			<replacefilter token="startWebLogic" value="stopWebLogic" />
+		</replace>
+
+		<copy
+			file="${app.server.weblogic.instance.dir}/startWebLogic.sh"
+			tofile="${app.server.weblogic.instance.dir}/stopWebLogic.sh"
+		/>
+
+		<replace file="${app.server.weblogic.instance.dir}/stopWebLogic.sh">
+			<replacefilter token="startWebLogic" value="stopWebLogic" />
+		</replace>
+
+		<chmod
+			file="${app.server.weblogic.instance.dir}/stopWebLogic.sh"
+			perm="744"
+		/>
+
+		<delete dir="${tstamp.value}" />
+	</target>
+
+	<target name="unzip-websphere">
+		<if>
+			<available file="${app.server.parent.dir}/${app.server.websphere.custom.zip.name}" />
+			<then>
+				<antcall target="unzip-websphere-custom" />
+			</then>
+			<else>
+				<antcall target="unzip-websphere-original" />
+			</else>
+		</if>
+	</target>
+
+	<target name="unzip-websphere-custom">
+		<delete dir="${app.server.websphere.dir}" />
+		<mkdir dir="${app.server.websphere.dir}" />
+
+		<!--<unzip
+			dest="${app.server.websphere.dir}"
+			src="${app.server.parent.dir}/${app.server.websphere.custom.zip.name}"
+		/>-->
+
+		<exec executable="cmd">
+			<arg line="/c 7z x ${app.server.parent.dir}/${app.server.websphere.custom.zip.name} -o${app.server.websphere.dir.windows} -y > nul" />
+		</exec>
+
+		<propertyregex
+			input="${app.server.websphere.dir.windows}"
+			property="app.server.websphere.dir.windows.double.slash"
+			regexp="\\" 
+			replace="\\\\\\\\"
+		/>
+
+		<propertyregex
+			input="${app.server.websphere.dir.windows.double.slash}"
+			property="app.server.websphere.dir.windows.escaped"
+			regexp=":" 
+			replace="\\\\:"
+		/>
+
+		<replace
+			dir="${app.server.websphere.dir}"
+			includes="**/*.bat,**/*.js,**/*.metadata,**/*.properties,**/*.props,**/*.txt,**/*.xml"
+		>
+			<replacefilter token="@app.server.websphere.dir@" value="${app.server.websphere.dir}" />
+			<replacefilter token="@app.server.websphere.dir.windows@" value="${app.server.websphere.dir.windows}" />
+			<replacefilter token="@app.server.websphere.dir.windows.escaped@" value="${app.server.websphere.dir.windows.escaped}" />
+		</replace>
+	</target>
+
+	<target name="unzip-websphere-original">
+		<if>
+			<or>
+				<not>
+					<available file="${app.server.parent.dir}/${app.server.websphere.fix.pack.jdk.name}" />
+				</not>
+				<not>
+					<available file="${app.server.parent.dir}/${app.server.websphere.fix.pack.was.name}" />
+				</not>
+				<not>
+					<available file="${app.server.parent.dir}/${app.server.websphere.update.installer.zip.name}" />
+				</not>
+				<not>
+					<available file="${app.server.parent.dir}/${app.server.websphere.zip.name}" />
+				</not>
+			</or>
+			<then>
+				<mkdir dir="${app.server.parent.dir}" />
+
+				<fail>
+.
+
+Please download ${app.server.websphere.fix.jdk.name},
+${app.server.websphere.fix.pack.was.name},
+${app.server.websphere.update.installer.zip.name}, and
+${app.server.websphere.zip.name} from ${app.server.websphere.zip.url} and put
+them in ${app.server.parent.dir}. Then rerun this task.
+				</fail>
+			</then>
+		</if>
+
+		<delete dir="${app.server.websphere.dir}" />
+
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
+
+		<unzip
+			dest="${tstamp.value}/was"
+			src="${app.server.parent.dir}/${app.server.websphere.zip.name}"
+		/>
+
+		<echo file="${tstamp.value}/was/WAS/liferay-responsefile.txt">
+			-OPT disableOSPrereqChecking="true"
+			-OPT feature="noFeature"
+			-OPT installLocation="${app.server.websphere.dir}"
+			-OPT installType="installNew"
+			-OPT PROF_cellName=liferay-cell
+			-OPT PROF_enableAdminSecurity="false"
+			-OPT PROF_enableService="false"
+			-OPT PROF_isDefault="true"
+			-OPT PROF_isDeveloperServer="true"
+			-OPT PROF_nodeName=liferay-node
+			-OPT PROF_omitAction="defaultAppDeployAndConfig"
+			-OPT PROF_omitAction="deployAdminConsole"
+			-OPT PROF_omitAction="samplesInstallAndConfig"
+			-OPT PROF_portsFile="liferay-portdef.props"
+			-OPT PROF_profileName="liferay"
+			-OPT PROF_winserviceCheck="false"
+			-OPT profileType="standAlone"
+			-OPT silentInstallLicenseAcceptance="true"
+		</echo>
+
+		<echo file="${tstamp.value}/was/WAS/liferay-portdef.props">
+			WC_defaulthost=8080
+		</echo>
+
+		<echo>Installing application server. This may take a few minutes.</echo>
+
+		<exec dir="${tstamp.value}/was/WAS" executable="cmd.exe">
+			<arg line="/c install.exe -options liferay-responsefile.txt -silent" />
+		</exec>
+
+		<replace file="${app.server.websphere.instance.dir}/config/cells/liferay-cell/nodes/liferay-node/servers/server1/server.xml">
+			<replacetoken><![CDATA[disableJIT="false">]]></replacetoken>
+			<replacevalue><![CDATA[disableJIT="false" maximumHeapSize="1024">]]></replacevalue>
+		</replace>
+
+		<unzip
+			dest="${tstamp.value}/updi"
+			src="${app.server.parent.dir}/${app.server.websphere.update.installer.zip.name}"
+		/>
+
+		<echo file="${tstamp.value}/updi/UpdateInstaller/liferay-responsefile.txt">
+			-OPT installLocation="${app.server.websphere.dir}/UpdateInstaller"
+			-OPT silentInstallLicenseAcceptance="true"
+			-OPT skipStartMenu=true
+		</echo>
+
+		<echo>Installing update installer.</echo>
+
+		<exec dir="${tstamp.value}/updi/UpdateInstaller" executable="cmd.exe">
+			<arg line="/c install.exe -options liferay-responsefile.txt -silent" />
+		</exec>
+
+		<echo file="${app.server.websphere.dir}/UpdateInstaller/liferay-responsefile.txt">
+			-W maintenance.package="${app.server.parent.dir}/${app.server.websphere.fix.pack.jdk.name};${app.server.parent.dir}/${app.server.websphere.fix.pack.was.name}"
+			-W product.location="${app.server.websphere.dir}"
+			-W update.type="install"
+		</echo>
+
+		<echo>Installing fix pack.</echo>
+
+		<if>
+			<available file="${app.server.websphere.dir}/UpdateInstaller/update.exe" />
+			<then>
+				<property name="update.executable" value="update.exe" />
+			</then>
+			<else>
+				<property name="update.executable" value="update.bat" />
+			</else>
+		</if>
+
+		<exec dir="${app.server.websphere.dir}/UpdateInstaller" executable="cmd.exe">
+			<arg line="/c ${update.executable} -options liferay-responsefile.txt -silent" />
+		</exec>
 
 		<delete dir="${tstamp.value}" />
 	</target>
@@ -1780,5 +2004,101 @@ sh startWebLogic.sh</echo>
 			<param name="zip.executable.file" value="liferay-portal-tomcat" />
 			<param name="zip.executable.dir" value="${app.server.tomcat.dir}" />
 		</antcall>
+	</target>
+
+	<target name="zip-weblogic-custom">
+		<delete>
+			<fileset dir="${app.server.weblogic.dir}" includes="logs/**" />
+		</delete>
+
+		<propertyregex
+			input="${app.server.parent.dir.windows}"
+			property="app.server.parent.dir.windows.double.slash"
+			regexp="\\" 
+			replace="\\\\\\\\"
+		/>
+
+		<propertyregex
+			input="${app.server.parent.dir.windows.double.slash}"
+			property="app.server.parent.dir.windows.escaped"
+			regexp=":" 
+			replace="\\\\:"
+		/>
+
+		<propertyregex
+			input="${app.server.weblogic.dir.windows}"
+			property="app.server.weblogic.dir.windows.double.slash"
+			regexp="\\" 
+			replace="\\\\\\\\"
+		/>
+
+		<propertyregex
+			input="${app.server.weblogic.dir.windows.double.slash}"
+			property="app.server.weblogic.dir.windows.escaped"
+			regexp=":" 
+			replace="\\\\:"
+		/>
+
+		<replace
+			dir="${app.server.weblogic.dir}"
+			includes="**/*.cmd,**/*.domains,**/*.properties,**/*.sh,**/*.xml"
+		>
+			<replacefilter token="${app.server.parent.dir}/WEBLOG~1.1" value="@app.server.weblogic.dir@" />
+			<replacefilter token="${app.server.parent.dir}/WEBLOG~1.6" value="@app.server.weblogic.dir@" />
+			<replacefilter token="${app.server.parent.dir.windows}\WEBLOG~1.1" value="@app.server.weblogic.dir.windows@" />
+			<replacefilter token="${app.server.parent.dir.windows}\WEBLOG~1.6" value="@app.server.weblogic.dir.windows@" />
+			<replacefilter token="${app.server.parent.dir.windows.double.slash}\\WEBLOG~1.1" value="@app.server.weblogic.dir.windows.double.slash@" />
+			<replacefilter token="${app.server.parent.dir.windows.double.slash}\\WEBLOG~1.6" value="@app.server.weblogic.dir.windows.double.slash@" />
+			<replacefilter token="${app.server.parent.dir.windows.escaped}\\WEBLOG~1.1" value="@app.server.weblogic.dir.windows.escaped@" />
+			<replacefilter token="${app.server.parent.dir.windows.escaped}\\WEBLOG~1.6" value="@app.server.weblogic.dir.windows.escaped@" />
+			<replacefilter token="${app.server.weblogic.dir}" value="@app.server.weblogic.dir@" />
+			<replacefilter token="${app.server.weblogic.dir.windows}" value="@app.server.weblogic.dir.windows@" />
+			<replacefilter token="${app.server.weblogic.dir.windows.escaped}" value="@app.server.weblogic.dir.windows.escaped@" />
+		</replace>
+
+		<zip
+			destfile="${app.server.parent.dir}/${app.server.weblogic.custom.zip.name}"
+		>
+			<zipfileset
+				dir="${app.server.weblogic.dir}"
+			/>
+		</zip>
+	</target>
+
+	<target name="zip-websphere-custom">
+		<delete>
+			<fileset dir="${app.server.websphere.dir}" includes="logs/**" />
+		</delete>
+
+		<propertyregex
+			input="${app.server.websphere.dir.windows}"
+			property="app.server.websphere.dir.windows.double.slash"
+			regexp="\\" 
+			replace="\\\\\\\\"
+		/>
+
+		<propertyregex
+			input="${app.server.websphere.dir.windows.double.slash}"
+			property="app.server.websphere.dir.windows.escaped"
+			regexp=":" 
+			replace="\\\\:"
+		/>
+
+		<replace
+			dir="${app.server.websphere.dir}"
+			includes="**/*.bat,**/*.js,**/*.metadata,**/*.properties,**/*.props,**/*.txt,**/*.xml"
+		>
+			<replacefilter token="${app.server.websphere.dir}" value="@app.server.websphere.dir@" />
+			<replacefilter token="${app.server.websphere.dir.windows}" value="@app.server.websphere.dir.windows@" />
+			<replacefilter token="${app.server.websphere.dir.windows.escaped}" value="@app.server.websphere.dir.windows.escaped@" />
+		</replace>
+
+		<zip
+			destfile="${app.server.parent.dir}/${app.server.websphere.custom.zip.name}"
+		>
+			<zipfileset
+				dir="${app.server.websphere.dir}"
+			/>
+		</zip>
 	</target>
 </project>

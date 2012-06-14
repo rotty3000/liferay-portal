@@ -192,7 +192,7 @@ public class EditFileEntryAction extends PortletAction {
 					DuplicateLockException dle = (DuplicateLockException)e;
 
 					SessionErrors.add(
-						actionRequest, dle.getClass().getName(), dle.getLock());
+						actionRequest, dle.getClass(), dle.getLock());
 				}
 				else {
 					SessionErrors.add(actionRequest, e.getClass());
@@ -251,7 +251,7 @@ public class EditFileEntryAction extends PortletAction {
 			else if (e instanceof AssetCategoryException ||
 					 e instanceof AssetTagException) {
 
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
 			else {
 				throw e;

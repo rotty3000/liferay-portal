@@ -231,15 +231,18 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/core/editor.js">
 							<replacetoken><![CDATA[throw '[CKEDITOR.editor] The instance "' + this.name + '" already exists.';]]></replacetoken>
-							<replacevalue><![CDATA[{
-								var previous = CKEDITOR.instances[ this.name ];
+							<replacevalue>
+								<![CDATA[
+									{
+										var previous = CKEDITOR.instances[ this.name ];
 
-								if ( previous.element.isOffline() || previous.container && previous.container.isOffline() ) {
-									previous.destroy( false );
-								}
-								else {
-									throw '[CKEDITOR.editor] The instance "' + previous.name + '" already exists.';
-								}
+										if ( previous.element.isOffline() || previous.container && previous.container.isOffline() ) {
+											previous.destroy( false );
+										}
+										else {
+											throw '[CKEDITOR.editor] The instance "' + previous.name + '" already exists.';
+										}
+									}
 								]]>
 							</replacevalue>
 						</replace>
@@ -251,9 +254,12 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/core/editor.js">
 							<replacetoken><![CDATA[this.updateElement();]]></replacetoken>
-							<replacevalue><![CDATA[var notDetached = !this.checkDetached();
-											notDetached && !noUpdate && this.updateElement();
-											]]>
+							<replacevalue>
+								<![CDATA[
+									var notDetached = !this.checkDetached();
+
+									notDetached && !noUpdate && this.updateElement();
+								]]>
 							</replacevalue>
 						</replace>
 
@@ -264,18 +270,20 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/core/editor.js">
 							<replacetoken><![CDATA[* Destroys the editor instance]]></replacetoken>
-							<replacevalue><![CDATA[
-								* Check whether the editor UI has been removed from DOM thus
-								* the editor instance is considered to be obsoleted.
-								* @since 3.6.2
-								*/
-								checkDetached : function()
-								{
-									this.element.isOffline() || this.container && this.container.isOffline();
-								},
+							<replacevalue>
+								<![CDATA[
+									* Check whether the editor UI has been removed from DOM thus
+									* the editor instance is considered to be obsoleted.
+									* @since 3.6.2
+									*/
+									checkDetached : function()
+									{
+										this.element.isOffline() || this.container && this.container.isOffline();
+									},
 
-								/**
-								 * Destroys the editor instance]]>
+									/**
+									 * Destroys the editor instance
+								]]>
 							</replacevalue>
 						</replace>
 
@@ -286,16 +294,19 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/core/dom/element.js">
 							<replacetoken><![CDATA[disableContextMenu : function()]]></replacetoken>
-							<replacevalue><![CDATA[/**
-								*  Whether this element is not present in the DOM tree.
-								*/
-								isOffline : function()
-								{
-									var root = this.getDocument().getDocumentElement();
-									return !root.contains( this );
-								},
+							<replacevalue>
+								<![CDATA[
+									/**
+									*  Whether this element is not present in the DOM tree.
+									*/
+									isOffline : function()
+									{
+										var root = this.getDocument().getDocumentElement();
+										return !root.contains( this );
+									},
 
-								disableContextMenu : function()]]>
+									disableContextMenu : function()
+								]]>
 							</replacevalue>
 						</replace>
 
@@ -306,13 +317,28 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/plugins/popup/plugin.js">
 							<replacetoken><![CDATA[popupWindow.resizeTo( width, height );]]></replacetoken>
-							<replacevalue><![CDATA[var ua = navigator.userAgent.toLowerCase();
+							<replacevalue>
+								<![CDATA[
+									var ua = navigator.userAgent.toLowerCase();
 
-								if (ua.indexOf(' chrome/18') == -1) {
-									popupWindow.moveTo(left, top);
-									popupWindow.resizeTo(width, height);
-								}
-							]]>
+									if (ua.indexOf(' chrome/18') == -1) {
+										popupWindow.moveTo(left, top);
+										popupWindow.resizeTo(width, height);
+									}
+								]]>
+							</replacevalue>
+						</replace>
+
+						<replace file="docroot/html/js/editor/ckeditor/_source/plugins/wysiwygarea/plugin.js">
+							<replacetoken><![CDATA[var data = fullPage]]></replacetoken>
+							<replacevalue>
+								<![CDATA[
+									if (!doc) {
+										return null;
+									}
+
+									var data = fullPage
+								]]>
 							</replacevalue>
 						</replace>
 
@@ -323,15 +349,21 @@
 
 						<replace file="docroot/html/js/editor/ckeditor/_source/themes/default/theme.js">
 							<replacetoken><![CDATA[editor.fireOnce( 'themeLoaded' );]]></replacetoken>
-							<replacevalue><![CDATA[editor.on( 'destroy', function()
-								{
-									var container = editor.container,
-									element = editor.element;
-									container && container.clearCustomData();
-									element.clearCustomData();
-								});
+							<replacevalue>
+								<![CDATA[
+									editor.on(
+										'destroy',
+										function()
+										{
+											var container = editor.container,
+											element = editor.element;
+											container && container.clearCustomData();
+											element.clearCustomData();
+										}
+									);
 
-								editor.fireOnce( 'themeLoaded' );]]>
+									editor.fireOnce( 'themeLoaded' );
+								]]>
 							</replacevalue>
 						</replace>
 
@@ -522,22 +554,28 @@
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/dialog/fck_link/fck_link.js">
 					<replacetoken><![CDATA[if ( aMatch ) oEMailParams.Body = decodeURIComponent( aMatch[2] ) ;]]></replacetoken>
-					<replacevalue><![CDATA[if ( aMatch ) {
-			oEMailParams.Body = decodeURIComponent( aMatch[2] ) ;
-			oEMailParams.Body = decodeURIComponent( oEMailParams.Body ) ;
-		}]]>
+					<replacevalue>
+						<![CDATA[
+							if ( aMatch ) {
+								oEMailParams.Body = decodeURIComponent( aMatch[2] ) ;
+								oEMailParams.Body = decodeURIComponent( oEMailParams.Body ) ;
+							}
+						]]>
 					</replacevalue>
 				</replace>
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/dialog/fck_link/fck_link.js">
 					<replacetoken><![CDATA[aParams.push( 'body=' + encodeURIComponent( body ) ) ;]]></replacetoken>
-					<replacevalue><![CDATA[{
-				var encodedBody = encodeURIComponent( body );
+					<replacevalue>
+						<![CDATA[
+							{
+								var encodedBody = encodeURIComponent( body );
 
-				encodedBody = encodedBody.replace(/%/g, '%25');
+								encodedBody = encodedBody.replace(/%/g, '%25');
 
-				aParams.push( 'body=' + encodedBody ) ;
-			}]]>
+								aParams.push( 'body=' + encodedBody ) ;
+							}
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -556,14 +594,16 @@
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/browser.html">
 					<replacetoken><![CDATA[oConnector.CurrentFolder	= '/' ;]]></replacetoken>
-					<replacevalue><![CDATA[oConnector.CurrentFolder	= '/' ;
+					<replacevalue>
+						<![CDATA[
+							oConnector.CurrentFolder	= '/' ;
 
-var currentFolderParam = GetUrlParam( 'currentFolder' ) ;
+							var currentFolderParam = GetUrlParam( 'currentFolder' ) ;
 
-if (currentFolderParam) {
-	oConnector.CurrentFolder = currentFolderParam ;
-}
-]]>
+							if (currentFolderParam) {
+								oConnector.CurrentFolder = currentFolderParam ;
+							}
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -574,31 +614,35 @@ if (currentFolderParam) {
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/browser.html">
 					<replacetoken><![CDATA[function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )]]></replacetoken>
-					<replacevalue><![CDATA[if (oConnector.ResourceType === 'Attachment') {
-	var frmCreateFolderLoadedInterval = window.setInterval(
-		function() {
-			var frmCreateFolder = document.getElementsByName('frmCreateFolder');
+					<replacevalue>
+						<![CDATA[
+							if (oConnector.ResourceType === 'Attachment') {
+								var frmCreateFolderLoadedInterval = window.setInterval(
+									function() {
+										var frmCreateFolder = document.getElementsByName('frmCreateFolder');
 
-			if (frmCreateFolder.length > 0) {
-				window.clearInterval(frmCreateFolderLoadedInterval);
+										if (frmCreateFolder.length > 0) {
+											window.clearInterval(frmCreateFolderLoadedInterval);
 
-				frmCreateFolder = frmCreateFolder[0];
+											frmCreateFolder = frmCreateFolder[0];
 
-				frmCreateFolder.setAttribute('height', '0');
-				frmCreateFolder.setAttribute('style', 'display:none');
-				frmCreateFolder.setAttribute('tabindex', '-1');
-				frmCreateFolder.setAttribute('width', '0');
+											frmCreateFolder.setAttribute('height', '0');
+											frmCreateFolder.setAttribute('style', 'display:none');
+											frmCreateFolder.setAttribute('tabindex', '-1');
+											frmCreateFolder.setAttribute('width', '0');
 
-				var parentNode = frmCreateFolder.parentNode;
+											var parentNode = frmCreateFolder.parentNode;
 
-				parentNode.setAttribute('cols', '0,*,0');
-			}
-		},
-		50
-	);
-}
+											parentNode.setAttribute('cols', '0,*,0');
+										}
+									},
+									50
+								);
+							}
 
-function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )]]></replacevalue>
+							function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
+						]]>
+					</replacevalue>
 				</replace>
 
 				<!-- frmfolders.html -->
@@ -627,8 +671,12 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )]]></repl
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/frmresourceslist.html">
 					<replacetoken><![CDATA[path = path.replace( /'/g, '\\\'') ;]]></replacetoken>
-					<replacevalue><![CDATA[path = path.replace( /'/g, '\\\'') ;
-	path = path.replace( /&#039;/g, '\\\'') ;]]></replacevalue>
+					<replacevalue>
+						<![CDATA[
+							path = path.replace( /'/g, '\\\'') ;
+							path = path.replace( /&#039;/g, '\\\'') ;
+						]]>
+					</replacevalue>
 				</replace>
 
 				<replaceregexp file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/frmresourceslist.html"
@@ -653,11 +701,14 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )]]></repl
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/frmresourcetype.html">
 					<replacetoken><![CDATA[var aTypes = []]></replacetoken>
-					<replacevalue><![CDATA[var customTypes = [
-	['Attachment', 'Attachment']
-];
+					<replacevalue>
+						<![CDATA[
+							var customTypes = [
+								['Attachment', 'Attachment']
+							];
 
-var defaultTypes = []]>
+							var defaultTypes = [
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -668,14 +719,17 @@ var defaultTypes = []]>
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/frmresourcetype.html">
 					<replacetoken><![CDATA[AddSelectOption( oCombo, defaultTypes[i][1], defaultTypes[i][0] ) ;]]></replacetoken>
-					<replacevalue><![CDATA[AddSelectOption( oCombo, defaultTypes[i][1], defaultTypes[i][0] ) ;
-	}
+					<replacevalue>
+						<![CDATA[
+								AddSelectOption( oCombo, defaultTypes[i][1], defaultTypes[i][0] ) ;
+							}
 
-	var len = customTypes.length;
+							var len = customTypes.length;
 
-	for ( i = 0; i < len; i++ ) {
-		if ( customTypes[i][0] == oConnector.ResourceType )
-			AddSelectOption( oCombo, customTypes[i][1], customTypes[i][0] ) ;]]>
+							for ( i = 0; i < len; i++ ) {
+								if ( customTypes[i][0] == oConnector.ResourceType )
+									AddSelectOption( oCombo, customTypes[i][1], customTypes[i][0] ) ;
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -683,30 +737,32 @@ var defaultTypes = []]>
 
 				<replace file="docroot/html/js/editor/fckeditor/editor/filemanager/browser/liferay/frmupload.html">
 					<replacetoken><![CDATA[default :]]></replacetoken>
-					<replacevalue><![CDATA[
-		case 203 :
-			alert( 'An unexpected error occurred.' ) ;
-			break ;
-		case 204 :
-			alert( 'You cannot upload into the root folder.' ) ;
-			break ;
-		case 205:
-			alert( 'Please enter a valid image name.' );
-			break ;
-		case 206:
-			alert( 'Please enter a valid file name.' );
-			break ;
-		case 207:
-			alert( 'You do not have the permission to upload to this folder.' );
-			break ;
-		case 208:
-			alert( 'File size exceeds upload limit.' );
-			break ;
-		case 209:
-			alert( 'An internal server error occured.' );
-			break ;
+					<replacevalue>
+						<![CDATA[
+							case 203 :
+								alert( 'An unexpected error occurred.' ) ;
+								break ;
+							case 204 :
+								alert( 'You cannot upload into the root folder.' ) ;
+								break ;
+							case 205:
+								alert( 'Please enter a valid image name.' );
+								break ;
+							case 206:
+								alert( 'Please enter a valid file name.' );
+								break ;
+							case 207:
+								alert( 'You do not have the permission to upload to this folder.' );
+								break ;
+							case 208:
+								alert( 'File size exceeds upload limit.' );
+								break ;
+							case 209:
+								alert( 'An internal server error occured.' );
+								break ;
 
-		default :]]>
+							default :
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -739,11 +795,14 @@ var defaultTypes = []]>
 
 				<replace file="docroot/html/js/editor/ckeditor/editor/filemanager/browser/liferay/frmresourceslist.html">
 					<replacetoken><![CDATA[window.top.opener.SetUrl( encodeURI( fileUrl ).replace( '#', '%23' ) ) ;]]></replacetoken>
-					<replacevalue><![CDATA[var match = window.top.location.search.match(/(?:[\?&]|&amp;)CKEditorFuncNum=([^&]+)/i);
+					<replacevalue>
+						<![CDATA[
+							var match = window.top.location.search.match(/(?:[\?&]|&amp;)CKEditorFuncNum=([^&]+)/i);
 
-	var funcNum = (match && match.length) ? match[1] : '';
+							var funcNum = (match && match.length) ? match[1] : '';
 
-	window.top.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);]]>
+							window.top.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+						]]>
 					</replacevalue>
 				</replace>
 
@@ -840,6 +899,13 @@ var defaultTypes = []]>
 				</if>
 			</sequential>
 		</for>
+
+		<copy
+			file="docroot/html/themes/_unstyled/images/favicon.ico"
+			overwrite="true"
+			preservelastmodified="true"
+			todir="docroot"
+		/>
 	</target>
 
 	<target name="build-tinymce">

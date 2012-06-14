@@ -131,12 +131,10 @@ if (Validator.isNotNull(structureId)) {
 				<aui:select label="display-per-page" name="preferences--pageDelta--">
 
 					<%
-					String[] pageDeltaValues = PropsUtil.getArray(PropsKeys.JOURNAL_ARTICLES_PAGE_DELTA_VALUES);
-
-					for (int i = 0; i < pageDeltaValues.length; i++) {
+					for (int pageDeltaValue : PropsValues.JOURNAL_ARTICLES_PAGE_DELTA_VALUES) {
 					%>
 
-						<aui:option label="<%= pageDeltaValues[i] %>" selected="<%= pageDelta == GetterUtil.getInteger(pageDeltaValues[i]) %>" />
+						<aui:option label="<%= pageDeltaValue %>" selected="<%= pageDelta == pageDeltaValue %>" />
 
 					<%
 					}

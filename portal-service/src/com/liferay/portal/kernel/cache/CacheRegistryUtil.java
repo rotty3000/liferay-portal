@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.cache;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -28,6 +30,8 @@ public class CacheRegistryUtil {
 	}
 
 	public static CacheRegistry getCacheRegistry() {
+		PortalRuntimePermission.checkGetBeanProperty(CacheRegistryUtil.class);
+
 		return _cacheRegistry;
 	}
 
@@ -44,6 +48,8 @@ public class CacheRegistryUtil {
 	}
 
 	public static void setCacheRegistry(CacheRegistry cacheRegistry) {
+		PortalRuntimePermission.checkSetBeanProperty(CacheRegistryUtil.class);
+
 		_cacheRegistry = cacheRegistry;
 	}
 

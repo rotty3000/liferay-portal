@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.sanitizer;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -26,6 +28,8 @@ import java.util.Map;
 public class SanitizerUtil {
 
 	public static Sanitizer getSanitizer() {
+		PortalRuntimePermission.checkGetBeanProperty(SanitizerUtil.class);
+
 		return _sanitizer;
 	}
 
@@ -129,6 +133,8 @@ public class SanitizerUtil {
 	}
 
 	public void setSanitizer(Sanitizer sanitizer) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_sanitizer = sanitizer;
 	}
 

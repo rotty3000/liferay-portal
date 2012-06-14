@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.lang.reflect.Method;
 
 /**
@@ -22,6 +24,9 @@ import java.lang.reflect.Method;
 public class MethodParametersResolverUtil {
 
 	public static MethodParametersResolver getMethodParametersResolver() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			MethodParametersResolverUtil.class);
+
 		return _methodParametersResolver;
 	}
 
@@ -31,6 +36,8 @@ public class MethodParametersResolverUtil {
 
 	public void setMethodParametersResolver(
 		MethodParametersResolver methodParametersResolver) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_methodParametersResolver = methodParametersResolver;
 	}

@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -46,6 +47,10 @@ import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil;
+import com.liferay.portlet.dynamicdatamapping.util.comparator.StructureModifiedDateComparator;
+import com.liferay.portlet.dynamicdatamapping.util.comparator.StructureNameComparator;
+import com.liferay.portlet.dynamicdatamapping.util.comparator.TemplateModifiedDateComparator;
+import com.liferay.portlet.dynamicdatamapping.util.comparator.TemplateNameComparator;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -57,6 +62,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Eduardo Lundgren
+ * @author Brian Wing Shun Chan
+ * @author Eduardo Garcia
  */
 public class DDMImpl implements DDM {
 
@@ -203,6 +210,48 @@ public class DDMImpl implements DDM {
 		}
 
 		return sb.toString();
+	}
+
+	public OrderByComparator getStructureOrderByComparator(
+		String orderByCol, String orderByType) {
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+
+		if (orderByCol.equals("modified-date")) {
+			orderByComparator = new StructureModifiedDateComparator(orderByAsc);
+		}
+		else if (orderByCol.equals("name")) {
+			orderByComparator = new StructureNameComparator(orderByAsc);
+		}
+
+		return orderByComparator;
+	}
+
+	public OrderByComparator getTemplateOrderByComparator(
+		String orderByCol, String orderByType) {
+
+		boolean orderByAsc = false;
+
+		if (orderByType.equals("asc")) {
+			orderByAsc = true;
+		}
+
+		OrderByComparator orderByComparator = null;
+
+		if (orderByCol.equals("modified-date")) {
+			orderByComparator = new TemplateModifiedDateComparator(orderByAsc);
+		}
+		else if (orderByCol.equals("name")) {
+			orderByComparator = new TemplateNameComparator(orderByAsc);
+		}
+
+		return orderByComparator;
 	}
 
 	public void sendFieldFile(

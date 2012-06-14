@@ -48,7 +48,6 @@ import com.liferay.portal.util.PortalUtil;
 
 import java.io.IOException;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -136,7 +135,7 @@ public class GroupImpl extends GroupBaseImpl {
 		return 0;
 	}
 
-	public Group getParentGroup() throws SystemException, PortalException {
+	public Group getParentGroup() throws PortalException, SystemException {
 		long parentGroupId = getParentGroupId();
 
 		if (parentGroupId <= 0) {
@@ -474,14 +473,12 @@ public class GroupImpl extends GroupBaseImpl {
 
 	protected long getDefaultPlid(boolean privateLayout) {
 		try {
-			List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+			Layout firstLayout = LayoutLocalServiceUtil.fetchFirstLayout(
 				getGroupId(), privateLayout,
-				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, true, 0, 1);
+				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
-			if (layouts.size() > 0) {
-				Layout layout = layouts.get(0);
-
-				return layout.getPlid();
+			if (firstLayout != null) {
+				return firstLayout.getPlid();
 			}
 		}
 		catch (Exception e) {

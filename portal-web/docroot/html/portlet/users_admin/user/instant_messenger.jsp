@@ -39,8 +39,6 @@ Contact selContact = (Contact)request.getAttribute("user.selContact");
 
 			<aui:input label="jabber" name="jabberSn" />
 
-			<aui:input label="msn" name="msnSn" />
-
 			<div class="instant-messenger">
 				<aui:input label="skype" name="skypeSn" />
 
@@ -49,8 +47,10 @@ Contact selContact = (Contact)request.getAttribute("user.selContact");
 				</c:if>
 			</div>
 
+			<aui:input label="windows-live-messenger" name="msnSn" />
+
 			<div class="instant-messenger">
-				<aui:input label="ym" name="ymSn" />
+				<aui:input label="yim" name="ymSn" />
 
 				<c:if test="<%= Validator.isNotNull(selContact.getYmSn()) %>">
 					<img alt="" src="http://opi.yahoo.com/online?u=<%= HtmlUtil.escapeAttribute(selContact.getYmSn()) %>&m=g&t=0" />

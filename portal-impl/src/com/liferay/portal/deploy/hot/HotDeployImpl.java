@@ -20,19 +20,27 @@ import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.deploy.hot.HotDeployListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
+import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
+import com.liferay.portal.security.pacl.PACLPolicy;
+import com.liferay.portal.security.pacl.PACLPolicyManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author Ivica Cardic
@@ -52,6 +60,10 @@ public class HotDeployImpl implements HotDeploy {
 	}
 
 	public void fireDeployEvent(final HotDeployEvent hotDeployEvent) {
+		PortalLifecycleUtil.register(
+			new PACLPortalLifecycle(hotDeployEvent),
+			PortalLifecycle.METHOD_INIT);
+
 		if (_capturePrematureEvents) {
 
 			// Capture events that are fired before the portal initialized
@@ -92,6 +104,8 @@ public class HotDeployImpl implements HotDeploy {
 
 		_deployedServletContextNames.remove(
 			hotDeployEvent.getServletContextName());
+
+		PACLPolicyManager.unregister(hotDeployEvent.getContextClassLoader());
 	}
 
 	public void registerListener(HotDeployListener hotDeployListener) {
@@ -159,7 +173,8 @@ public class HotDeployImpl implements HotDeploy {
 			ClassLoader contextClassLoader = getContextClassLoader();
 
 			try {
-				setContextClassLoader(PortalClassLoaderUtil.getClassLoader());
+				setContextClassLoader(
+					PACLClassLoaderUtil.getPortalClassLoader());
 
 				List<HotDeployEvent> dependentEvents =
 					new ArrayList<HotDeployEvent>(_dependentHotDeployEvents);
@@ -211,9 +226,7 @@ public class HotDeployImpl implements HotDeploy {
 	}
 
 	protected ClassLoader getContextClassLoader() {
-		Thread thread = Thread.currentThread();
-
-		return thread.getContextClassLoader();
+		return PACLClassLoaderUtil.getContextClassLoader();
 	}
 
 	protected String getRequiredServletContextNames(
@@ -237,9 +250,7 @@ public class HotDeployImpl implements HotDeploy {
 	}
 
 	protected void setContextClassLoader(ClassLoader contextClassLoader) {
-		Thread thread = Thread.currentThread();
-
-		thread.setContextClassLoader(contextClassLoader);
+		PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(HotDeployImpl.class);
@@ -248,5 +259,46 @@ public class HotDeployImpl implements HotDeploy {
 	private List<HotDeployEvent> _dependentHotDeployEvents;
 	private Set<String> _deployedServletContextNames;
 	private List<HotDeployListener> _hotDeployListeners;
+
+	private class PACLPortalLifecycle extends BasePortalLifecycle {
+
+		public PACLPortalLifecycle(HotDeployEvent hotDeployEvent) {
+			_servletContext = hotDeployEvent.getServletContext();
+			_classLoader = hotDeployEvent.getContextClassLoader();
+
+			ServletContextPool.put(
+				_servletContext.getServletContextName(), _servletContext);
+		}
+
+		@Override
+		protected void doPortalDestroy() {
+		}
+
+		@Override
+		protected void doPortalInit() throws Exception {
+			Properties properties = null;
+
+			String propertiesString = HttpUtil.URLtoString(
+				_servletContext.getResource(
+					"/WEB-INF/liferay-plugin-package.properties"));
+
+			if (propertiesString != null) {
+				properties = PropertiesUtil.load(propertiesString);
+			}
+			else {
+				properties = new Properties();
+			}
+
+			PACLPolicy paclPolicy = PACLPolicyManager.buildPACLPolicy(
+				_servletContext.getServletContextName(), _classLoader,
+				properties);
+
+			PACLPolicyManager.register(_classLoader, paclPolicy);
+		}
+
+		private ClassLoader _classLoader;
+		private ServletContext _servletContext;
+
+	};
 
 }

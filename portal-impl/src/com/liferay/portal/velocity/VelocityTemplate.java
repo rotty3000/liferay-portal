@@ -70,7 +70,7 @@ public class VelocityTemplate implements Template {
 		return _velocityContext.get(key);
 	}
 
-	public void prepare(HttpServletRequest request) throws TemplateException {
+	public void prepare(HttpServletRequest request) {
 		_templateContextHelper.prepare(this, request);
 	}
 

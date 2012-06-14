@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.dynamicdatamapping.storage.query;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Marcellus Tavares
  */
@@ -32,6 +34,9 @@ public class ConditionFactoryUtil {
 	}
 
 	public static ConditionFactory getConditionFactory() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			ConditionFactoryUtil.class);
+
 		return _conditionFactory;
 	}
 
@@ -68,6 +73,8 @@ public class ConditionFactoryUtil {
 	}
 
 	public void setConditionFactory(ConditionFactory conditionFactory) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_conditionFactory = conditionFactory;
 	}
 

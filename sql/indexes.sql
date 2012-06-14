@@ -299,6 +299,7 @@ create unique index IX_5BDDB872 on Group_ (companyId, friendlyURL);
 create unique index IX_BBCA55B on Group_ (companyId, liveGroupId, name);
 create unique index IX_5AA68501 on Group_ (companyId, name);
 create index IX_5D75499E on Group_ (companyId, parentGroupId);
+create index IX_6C499099 on Group_ (companyId, parentGroupId, site);
 create index IX_16218A38 on Group_ (liveGroupId);
 create index IX_7B590A7A on Group_ (type_, active_);
 
@@ -333,6 +334,7 @@ create index IX_2E207659 on JournalArticle (groupId, structureId);
 create index IX_8DEAE14E on JournalArticle (groupId, templateId);
 create index IX_22882D02 on JournalArticle (groupId, urlTitle);
 create index IX_D2D249E8 on JournalArticle (groupId, urlTitle, status);
+create index IX_D19C1B9F on JournalArticle (groupId, userId);
 create index IX_33F49D16 on JournalArticle (resourcePrimKey);
 create index IX_3E2765FC on JournalArticle (resourcePrimKey, status);
 create index IX_EF9B7028 on JournalArticle (smallImageId);
@@ -359,6 +361,7 @@ create index IX_7CC7D73E on JournalContentSearch (groupId, privateLayout, articl
 create index IX_B3B318DC on JournalContentSearch (groupId, privateLayout, layoutId);
 create index IX_7ACC74C9 on JournalContentSearch (groupId, privateLayout, layoutId, portletId);
 create unique index IX_C3AA93B8 on JournalContentSearch (groupId, privateLayout, layoutId, portletId, articleId);
+create index IX_8DAF8A35 on JournalContentSearch (portletId);
 
 create index IX_35A2DB2F on JournalFeed (groupId);
 create unique index IX_65576CBC on JournalFeed (groupId, feedId);
@@ -368,6 +371,7 @@ create unique index IX_39031F51 on JournalFeed (uuid_, groupId);
 
 create index IX_E6E2725D on JournalFolder (companyId);
 create index IX_742DEC1F on JournalFolder (groupId);
+create index IX_E988689E on JournalFolder (groupId, name);
 create index IX_190483C6 on JournalFolder (groupId, parentFolderId);
 create unique index IX_65026705 on JournalFolder (groupId, parentFolderId, name);
 create index IX_63BDFA69 on JournalFolder (uuid_);

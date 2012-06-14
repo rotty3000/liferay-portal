@@ -43,7 +43,7 @@
 			FROM
 				CalEvent
 			WHERE
-				(eventId NOT IN(
+				(eventId NOT IN (
 					SELECT
 						classPK
 					FROM

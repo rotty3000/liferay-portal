@@ -6,7 +6,7 @@ insert into DLFileEntry values ('${portalUUIDUtil.generate()}', ${dlFileEntry.fi
 
 <#assign dlFileRank = dataFactory.addDLFileRank(dlFileEntry.groupId, dlFileEntry.companyId, dlFileEntry.userId, dlFileEntry.fileEntryId)>
 
-insert into DLFileRank values (${dlFileRank.fileRankId}, ${dlFileRank.groupId}, ${dlFileRank.companyId}, ${dlFileRank.userId}, '${createDate}', ${dlFileRank.fileEntryId});
+insert into DLFileRank values (${dlFileRank.fileRankId}, ${dlFileRank.groupId}, ${dlFileRank.companyId}, ${dlFileRank.userId}, '${createDate}', ${dlFileRank.fileEntryId}, TRUE);
 
 <#assign dlFileVersion = dataFactory.addDLFileVersion(dlFileEntry)>
 

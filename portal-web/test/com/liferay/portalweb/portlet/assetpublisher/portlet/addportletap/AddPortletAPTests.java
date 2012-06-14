@@ -28,6 +28,7 @@ public class AddPortletAPTests extends BaseTestSuite {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(AddPageAPTest.class);
 		testSuite.addTestSuite(AddPortletAPTest.class);
+		testSuite.addTestSuite(ViewPortletAPTest.class);
 		testSuite.addTestSuite(TearDownPageTest.class);
 
 		return testSuite;

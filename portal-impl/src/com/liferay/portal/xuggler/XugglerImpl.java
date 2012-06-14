@@ -16,10 +16,10 @@ package com.liferay.portal.xuggler;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.xuggler.Xuggler;
-import com.liferay.portal.kernel.xuggler.XugglerInstallStatus;
 import com.liferay.portal.util.JarUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
@@ -34,14 +34,13 @@ import com.xuggle.xuggler.IContainer;
 public class XugglerImpl implements Xuggler {
 
 	public void installNativeLibraries(
-			String name, XugglerInstallStatus xugglerInstallStatus)
+			String name, ProgressTracker progressTracker)
 		throws Exception {
 
 		try {
 			String url = PropsValues.XUGGLER_JAR_URL + name;
 
-			JarUtil.downloadAndInstallJar(
-				false, url, name, xugglerInstallStatus);
+			JarUtil.downloadAndInstallJar(false, url, name, progressTracker);
 		}
 		catch (Exception e) {
 			_log.error("Unable to install jar " + name, e);
@@ -115,11 +114,12 @@ public class XugglerImpl implements Xuggler {
 
 		_informAdministrator = false;
 
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(6);
 
 		sb.append("Liferay does not have the Xuggler native libraries ");
 		sb.append("installed. In order to generate video and audio previews, ");
-		sb.append("please follow the instructions for Xuggler at: ");
+		sb.append("please follow the instructions for Xuggler in the Server ");
+		sb.append("Administration control panel at: ");
 		sb.append("http://<server>/group/control_panel/manage/-/server/");
 		sb.append("external-services");
 

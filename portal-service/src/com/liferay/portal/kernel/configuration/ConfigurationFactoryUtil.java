@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.configuration;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -26,11 +28,17 @@ public class ConfigurationFactoryUtil {
 	}
 
 	public static ConfigurationFactory getConfigurationFactory() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			ConfigurationFactoryUtil.class);
+
 		return _configurationFactory;
 	}
 
 	public static void setConfigurationFactory(
 		ConfigurationFactory configurationFactory) {
+
+		PortalRuntimePermission.checkSetBeanProperty(
+			ConfigurationFactoryUtil.class);
 
 		_configurationFactory = configurationFactory;
 	}

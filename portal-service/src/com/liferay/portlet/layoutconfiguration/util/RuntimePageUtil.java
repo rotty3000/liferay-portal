@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.layoutconfiguration.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portlet.layoutconfiguration.util.xml.RuntimeLogic;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ import javax.servlet.jsp.PageContext;
 public class RuntimePageUtil {
 
 	public static RuntimePage getRuntimePage() {
+		PortalRuntimePermission.checkGetBeanProperty(RuntimePageUtil.class);
+
 		return _runtimePage;
 	}
 
@@ -67,6 +70,8 @@ public class RuntimePageUtil {
 	}
 
 	public void setRuntimePage(RuntimePage runtimePage) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_runtimePage = runtimePage;
 	}
 

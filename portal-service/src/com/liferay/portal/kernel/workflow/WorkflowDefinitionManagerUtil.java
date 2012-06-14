@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.workflow;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.io.InputStream;
@@ -26,6 +27,7 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  * @author Marcellus Tavares
  * @author Eduardo Lundgren
+ * @author Raymond Augé
  */
 public class WorkflowDefinitionManagerUtil {
 
@@ -33,14 +35,14 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, long userId, String title, InputStream inputStream)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.deployWorkflowDefinition(
+		return getWorkflowDefinitionManager().deployWorkflowDefinition(
 			companyId, userId, title, inputStream);
 	}
 
 	public static int getActiveWorkflowDefinitionCount(long companyId)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getActiveWorkflowDefinitionCount(
+		return getWorkflowDefinitionManager().getActiveWorkflowDefinitionCount(
 			companyId);
 	}
 
@@ -48,7 +50,7 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, String name)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getActiveWorkflowDefinitionCount(
+		return getWorkflowDefinitionManager().getActiveWorkflowDefinitionCount(
 			companyId, name);
 	}
 
@@ -57,7 +59,7 @@ public class WorkflowDefinitionManagerUtil {
 			OrderByComparator orderByComparator)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getActiveWorkflowDefinitions(
+		return getWorkflowDefinitionManager().getActiveWorkflowDefinitions(
 			companyId, start, end, orderByComparator);
 	}
 
@@ -66,7 +68,7 @@ public class WorkflowDefinitionManagerUtil {
 			OrderByComparator orderByComparator)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getActiveWorkflowDefinitions(
+		return getWorkflowDefinitionManager().getActiveWorkflowDefinitions(
 			companyId, name, start, end, orderByComparator);
 	}
 
@@ -74,7 +76,7 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, String name)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getLatestKaleoDefinition(
+		return getWorkflowDefinitionManager().getLatestKaleoDefinition(
 			companyId, name);
 	}
 
@@ -82,24 +84,28 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, String name, int version)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getWorkflowDefinition(
+		return getWorkflowDefinitionManager().getWorkflowDefinition(
 			companyId, name, version);
 	}
 
 	public static int getWorkflowDefinitionCount(long companyId)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getWorkflowDefinitionCount(companyId);
+		return getWorkflowDefinitionManager().getWorkflowDefinitionCount(
+			companyId);
 	}
 
 	public static int getWorkflowDefinitionCount(long companyId, String name)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getWorkflowDefinitionCount(
+		return getWorkflowDefinitionManager().getWorkflowDefinitionCount(
 			companyId, name);
 	}
 
 	public static WorkflowDefinitionManager getWorkflowDefinitionManager() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			WorkflowDefinitionManagerUtil.class);
+
 		return _workflowDefinitionManager;
 	}
 
@@ -108,7 +114,7 @@ public class WorkflowDefinitionManagerUtil {
 			OrderByComparator orderByComparator)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getWorkflowDefinitions(
+		return getWorkflowDefinitionManager().getWorkflowDefinitions(
 			companyId, start, end, orderByComparator);
 	}
 
@@ -117,7 +123,7 @@ public class WorkflowDefinitionManagerUtil {
 			OrderByComparator orderByComparator)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.getWorkflowDefinitions(
+		return getWorkflowDefinitionManager().getWorkflowDefinitions(
 			companyId, name, start, end, orderByComparator);
 	}
 
@@ -125,7 +131,7 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, long userId, String name, int version)
 		throws WorkflowException {
 
-		_workflowDefinitionManager.undeployWorkflowDefinition(
+		getWorkflowDefinitionManager().undeployWorkflowDefinition(
 			companyId, userId, name, version);
 	}
 
@@ -134,7 +140,7 @@ public class WorkflowDefinitionManagerUtil {
 			boolean active)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.updateActive(
+		return getWorkflowDefinitionManager().updateActive(
 			companyId, userId, name, version, active);
 	}
 
@@ -142,18 +148,20 @@ public class WorkflowDefinitionManagerUtil {
 			long companyId, long userId, String name, int version, String title)
 		throws WorkflowException {
 
-		return _workflowDefinitionManager.updateTitle(
+		return getWorkflowDefinitionManager().updateTitle(
 			companyId, userId, name, version, title);
 	}
 
 	public static void validateWorkflowDefinition(InputStream inputStream)
 		throws WorkflowException {
 
-		_workflowDefinitionManager.validateWorkflowDefinition(inputStream);
+		getWorkflowDefinitionManager().validateWorkflowDefinition(inputStream);
 	}
 
 	public void setWorkflowDefinitionManager(
 		WorkflowDefinitionManager workflowDefinitionManager) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_workflowDefinitionManager = workflowDefinitionManager;
 	}

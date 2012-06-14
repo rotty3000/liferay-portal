@@ -15,6 +15,7 @@
 package com.liferay.portal.deploy.auto;
 
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
+import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -48,12 +49,14 @@ public class LiferayPackageAutoDeployer implements AutoDeployer {
 		}
 	}
 
-	public void autoDeploy(File file, String context)
+	public void autoDeploy(AutoDeploymentContext autoDeploymentContext)
 		throws AutoDeployException {
 
 		ZipFile zipFile = null;
 
 		try {
+			File file = autoDeploymentContext.getFile();
+
 			zipFile = new ZipFile(file);
 
 			Enumeration<? extends ZipEntry> enu = zipFile.entries();

@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.cache.key;
 import com.liferay.portal.kernel.cache.Lifecycle;
 import com.liferay.portal.kernel.cache.ThreadLocalCache;
 import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,9 @@ public class CacheKeyGeneratorUtil {
 	}
 
 	public static CacheKeyGenerator getCacheKeyGenerator(String cacheName) {
+		PortalRuntimePermission.checkGetBeanProperty(
+			CacheKeyGeneratorUtil.class);
+
 		ThreadLocalCache<CacheKeyGenerator> threadLocalCacheKeyGenerators =
 			ThreadLocalCacheManager.getThreadLocalCache(
 				Lifecycle.ETERNAL, CacheKeyGeneratorUtil.class.getName());
@@ -59,11 +63,15 @@ public class CacheKeyGeneratorUtil {
 	public void setCacheKeyGenerators(
 		Map<String, CacheKeyGenerator> cacheKeyGenerators) {
 
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_cacheKeyGenerators = cacheKeyGenerators;
 	}
 
 	public void setDefaultCacheKeyGenerator(
 		CacheKeyGenerator defaultCacheKeyGenerator) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_defaultCacheKeyGenerator = defaultCacheKeyGenerator;
 	}

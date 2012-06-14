@@ -215,6 +215,11 @@
 	<bean id="com.liferay.portal.kernel.metadata.RawMetadataProcessorUtil" class="com.liferay.portal.kernel.metadata.RawMetadataProcessorUtil">
 		   <property name="rawMetadataProcessor" ref="com.liferay.portal.kernel.metadata.RawMetadataProcessor" />
 	</bean>
+	<bean id="com.liferay.portal.kernel.microsofttranslator.MicrosoftTranslatorFactoryUtil" class="com.liferay.portal.kernel.microsofttranslator.MicrosoftTranslatorFactoryUtil">
+		<property name="microsoftTranslatorFactory">
+			<bean class="com.liferay.portal.microsofttranslator.MicrosoftTranslatorFactoryImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.oauth.OAuthFactoryUtil" class="com.liferay.portal.kernel.oauth.OAuthFactoryUtil">
 		<property name="OAuthFactory">
 			<bean class="com.liferay.portal.oauth.OAuthFactoryImpl" />
@@ -250,6 +255,11 @@
 			<bean class="com.liferay.portal.servlet.BrowserSnifferImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil" class="com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil">
+		<property name="directRequestDispatcherFactory">
+			<bean class="com.liferay.portal.servlet.DirectRequestDispatcherFactoryImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.servlet.DirectServletRegistryUtil" class="com.liferay.portal.kernel.servlet.DirectServletRegistryUtil">
 		<property name="directServletRegistry">
 			<bean class="com.liferay.portal.servlet.DirectServletRegistryImpl" />
@@ -273,6 +283,7 @@
 				<entry key="com.liferay.portal.messaging.async.AsyncAdvice" value="defaultDestinationName,nextMethodInterceptor" />
 				<entry key="com.liferay.portal.monitoring.statistics.service.ServiceMonitorAdvice" value="monitoringDestinationName,nextMethodInterceptor" />
 				<entry key="com.liferay.portal.search.IndexableAdvice" value="nextMethodInterceptor" />
+				<entry key="com.liferay.portal.security.pacl.PACLAdvice" value="nextMethodInterceptor" />
 				<entry key="com.liferay.portal.spring.aop.ServiceBeanAutoProxyCreator" value="methodInterceptor" />
 				<entry key="com.liferay.portal.spring.bean.BeanReferenceAnnotationBeanPostProcessor" value="" />
 				<entry key="com.liferay.portal.spring.context.PortletBeanFactoryCleaner" value="" />
@@ -392,7 +403,7 @@
 			<bean class="com.liferay.portal.util.LocalizationImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.util.MethodParameterNamesResolverUtil" class="com.liferay.portal.kernel.util.MethodParametersResolverUtil">
+	<bean id="com.liferay.portal.kernel.util.MethodParametersResolverUtil" class="com.liferay.portal.kernel.util.MethodParametersResolverUtil">
 		<property name="methodParametersResolver">
 			<bean class="com.liferay.portal.util.MethodParametersResolverImpl" />
 		</property>
@@ -598,6 +609,15 @@
 			<bean class="com.liferay.portal.service.persistence.BatchSessionImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.servlet.ThreadLocalFacadeServletRequestWrapperUtil" class="com.liferay.portal.servlet.ThreadLocalFacadeServletRequestWrapperUtil">
+		<property name="stopperClassNames">
+			<set>
+				<value>org.apache.catalina.connector.Request</value>
+				<value>org.apache.catalina.core.ApplicationHttpRequest</value>
+				<value>org.apache.catalina.core.ApplicationRequest</value>
+			</set>
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.struts.StrutsActionRegistryUtil" class="com.liferay.portal.struts.StrutsActionRegistryUtil">
 		<property name="strutsActionRegistry">
 			<bean class="com.liferay.portal.struts.StrutsActionRegistryImpl" />
@@ -649,11 +669,11 @@
 			<bean class="com.liferay.portlet.documentlibrary.store.StoreProxyImpl" />
 		</constructor-arg>
 	</bean>
-    <bean id="com.liferay.portlet.documentlibrary.util.AudioProcessorUtil" class="com.liferay.portlet.documentlibrary.util.AudioProcessorUtil">
-        <property name="audioProcessor">
-            <bean class="com.liferay.portlet.documentlibrary.util.AudioProcessorImpl" factory-method="getInstance" />
-        </property>
-    </bean>
+	<bean id="com.liferay.portlet.documentlibrary.util.AudioProcessorUtil" class="com.liferay.portlet.documentlibrary.util.AudioProcessorUtil">
+		<property name="audioProcessor">
+			<bean class="com.liferay.portlet.documentlibrary.util.AudioProcessorImpl" factory-method="getInstance" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil" class="com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil">
 		<property name="dLProcessorRegistry">
 			<bean class="com.liferay.portlet.documentlibrary.util.DLProcessorRegistryImpl" />
@@ -669,11 +689,11 @@
 			<bean class="com.liferay.portlet.documentlibrary.util.PDFProcessorImpl" factory-method="getInstance" />
 		</property>
 	</bean>
-    <bean id="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorUtil" class="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorUtil">
-        <property name="rawMetadataProcessor">
-            <bean class="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorImpl" factory-method="getInstance" />
-        </property>
-    </bean>
+	<bean id="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorUtil" class="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorUtil">
+		<property name="rawMetadataProcessor">
+			<bean class="com.liferay.portlet.documentlibrary.util.RawMetadataProcessorImpl" factory-method="getInstance" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portlet.documentlibrary.util.VideoProcessorUtil" class="com.liferay.portlet.documentlibrary.util.VideoProcessorUtil">
 		<property name="videoProcessor">
 			<bean class="com.liferay.portlet.documentlibrary.util.VideoProcessorImpl" factory-method="getInstance" />
@@ -689,6 +709,11 @@
 					<bean class="com.liferay.portlet.dynamicdatalists.util.DDLXMLExporter" />
 				</entry>
 			</map>
+		</property>
+	</bean>
+	<bean id="com.liferay.portlet.dynamicdatalists.lar.DDLPortletDataHandlerUtil" class="com.liferay.portlet.dynamicdatalists.lar.DDLPortletDataHandlerUtil">
+		<property name="DDLPortletDataHandler">
+			<bean class="com.liferay.portlet.dynamicdatalists.lar.DDLPortletDataHandlerImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portlet.dynamicdatalists.util.DDLUtil" class="com.liferay.portlet.dynamicdatalists.util.DDLUtil">
@@ -789,7 +814,7 @@
 		</property>
 	</bean>
 	<bean id="com.liferay.portlet.layoutconfiguration.util.RuntimePage" class="com.liferay.portlet.layoutconfiguration.util.RuntimePageImpl" />
-	<bean id="com.liferay.portlet.layoutconfiguration.util.RuntimePagetUtil" class="com.liferay.portlet.layoutconfiguration.util.RuntimePageUtil">
+	<bean id="com.liferay.portlet.layoutconfiguration.util.RuntimePageUtil" class="com.liferay.portlet.layoutconfiguration.util.RuntimePageUtil">
 		<property name="runtimePage" ref="com.liferay.portlet.layoutconfiguration.util.RuntimePage" />
 	</bean>
 	<bean id="com.liferay.portlet.layoutsadmin.util.SitemapUtil" class="com.liferay.portlet.layoutsadmin.util.SitemapUtil">

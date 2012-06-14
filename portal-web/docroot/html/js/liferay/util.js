@@ -1377,6 +1377,7 @@
 				{
 					data: {
 						doAsUserId: params.doAsUserId,
+						p_auth: Liferay.authToken,
 						p_l_id: params.plid,
 						portletId: params.portletId,
 						title: params.title

@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.metadata;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
 import java.io.File;
@@ -51,11 +52,16 @@ public class RawMetadataProcessorUtil {
 	}
 
 	public static RawMetadataProcessor getRawMetadataProcessor() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			RawMetadataProcessorUtil.class);
+
 		return _rawMetadataProcessor;
 	}
 
 	public void setRawMetadataProcessor(
 		RawMetadataProcessor rawMetadataProcessor) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_rawMetadataProcessor = rawMetadataProcessor;
 	}

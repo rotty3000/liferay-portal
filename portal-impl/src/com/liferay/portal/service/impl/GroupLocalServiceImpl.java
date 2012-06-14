@@ -36,7 +36,6 @@ import com.liferay.portal.kernel.spring.aop.Skip;
 import com.liferay.portal.kernel.staging.StagingUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -174,6 +173,8 @@ import java.util.Map;
  */
 public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
+	public static final String ORGANIZATION_NAME_SUFFIX = " LFR_ORGANIZATION";
+
 	/**
 	 * Constructs a group local service.
 	 */
@@ -244,7 +245,7 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 			classPK = groupId;
 		}
 		else if (className.equals(Organization.class.getName())) {
-			name = getOrgGroupName(classPK, name);
+			name = getOrgGroupName(name);
 		}
 		else if (!GroupConstants.USER_PERSONAL_SITE.equals(name)) {
 			name = String.valueOf(classPK);
@@ -571,8 +572,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				RequiredGroupException.SYSTEM_GROUP);
 		}
 
-		if (groupPersistence.countByC_P(
-				group.getCompanyId(), group.getGroupId()) > 0) {
+		if (groupPersistence.countByC_P_S(
+				group.getCompanyId(), group.getGroupId(), true) > 0) {
 
 			throw new RequiredGroupException(
 				String.valueOf(group.getGroupId()),
@@ -2049,7 +2050,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				group.getGroupId(), group.getCompanyId(), name, group.isSite());
 		}
 		else if (className.equals(Organization.class.getName())) {
-			name = getOrgGroupName(classPK, name);
+			Organization organization =
+				organizationPersistence.findByPrimaryKey(classPK);
+
+			name = getOrgGroupName(organization.getName());
 		}
 		else if (!GroupConstants.USER_PERSONAL_SITE.equals(name)) {
 			name = String.valueOf(classPK);
@@ -2342,8 +2346,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		return FriendlyURLNormalizerUtil.normalize(friendlyURL);
 	}
 
-	protected String getOrgGroupName(long classPK, String name) {
-		return classPK + _ORGANIZATION_NAME_DELIMETER + name;
+	protected String getOrgGroupName(String name) {
+		return name + ORGANIZATION_NAME_SUFFIX;
 	}
 
 	protected String getRealName(long companyId, String name)
@@ -2649,8 +2653,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		if (Validator.isNull(name) || Validator.isNumber(name) ||
-			(name.indexOf(CharPool.STAR) != -1) ||
-			(name.indexOf(_ORGANIZATION_NAME_DELIMETER) != -1)) {
+			name.contains(StringPool.STAR) ||
+			name.contains(ORGANIZATION_NAME_SUFFIX)) {
 
 			throw new GroupNameException();
 		}
@@ -2675,9 +2679,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 	}
 
 	protected File publicLARFile;
-
-	private static final String _ORGANIZATION_NAME_DELIMETER =
-		" LFR_ORGANIZATION ";
 
 	private static Log _log = LogFactoryUtil.getLog(
 		GroupLocalServiceImpl.class);

@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.servlet;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import javax.servlet.Servlet;
 
 /**
@@ -26,6 +28,9 @@ public class DirectServletRegistryUtil {
 	}
 
 	public static DirectServletRegistry getDirectServletRegistry() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			DirectServletRegistryUtil.class);
+
 		return _directServletRegistry;
 	}
 
@@ -39,6 +44,8 @@ public class DirectServletRegistryUtil {
 
 	public void setDirectServletRegistry(
 		DirectServletRegistry directServletRegistry) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_directServletRegistry = directServletRegistry;
 	}

@@ -103,6 +103,7 @@ AUI.add(
 								data: {
 									className: instance.get('className'),
 									classPK: instance.get('classPK'),
+									p_auth: Liferay.authToken,
 									p_l_id: themeDisplay.getPlid(),
 									score: score
 								},

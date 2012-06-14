@@ -139,7 +139,7 @@ public class EditMessageAction extends PortletAction {
 			else if (e instanceof AssetCategoryException ||
 					 e instanceof AssetTagException) {
 
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
 			else {
 				throw e;

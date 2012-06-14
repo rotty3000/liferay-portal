@@ -16,7 +16,6 @@ package com.liferay.portal.spring.context;
 
 import com.liferay.portal.bean.BeanLocatorImpl;
 import com.liferay.portal.cache.ehcache.ClearEhcacheThreadUtil;
-import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
@@ -36,11 +35,11 @@ import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.ClearTimerThreadUtil;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.MethodCache;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.portal.osgi.service.OSGiServiceUtil;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.servlet.filters.cache.CacheUtil;
 import com.liferay.portal.util.InitUtil;
@@ -192,12 +191,15 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		ApplicationContext applicationContext =
 			ContextLoader.getCurrentWebApplicationContext();
 
-		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+		ClassLoader portalClassLoader =
+			PACLClassLoaderUtil.getPortalClassLoader();
 
-		BeanLocator beanLocator = new BeanLocatorImpl(
+		BeanLocatorImpl beanLocatorImpl = new BeanLocatorImpl(
 			portalClassLoader, applicationContext);
 
-		PortalBeanLocatorUtil.setBeanLocator(beanLocator);
+		beanLocatorImpl.setPACLWrapPersistence(true);
+
+		PortalBeanLocatorUtil.setBeanLocator(beanLocatorImpl);
 
 		ClassLoader classLoader = portalClassLoader;
 

@@ -23,7 +23,17 @@
 
 	long entryId = ParamUtil.getLong(request, "entryId");
 
-	TrashEntry entry = TrashEntryLocalServiceUtil.getEntry(entryId);
+	String className = ParamUtil.getString(request, "className");
+	long classPK = ParamUtil.getLong(request, "classPK");
+
+	TrashEntry entry = null;
+
+	if (entryId > 0) {
+		entry = TrashEntryLocalServiceUtil.getEntry(entryId);
+	}
+	else if (Validator.isNotNull(className) && (classPK > 0)) {
+		entry = TrashEntryLocalServiceUtil.getEntry(className, classPK);
+	}
 
 	TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(entry.getClassName());
 

@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -44,6 +45,12 @@ import org.springframework.util.ReflectionUtils;
  */
 public class BeanReferenceAnnotationBeanPostProcessor
 	implements BeanFactoryAware, BeanPostProcessor {
+
+	public BeanReferenceAnnotationBeanPostProcessor() {
+		if (_log.isDebugEnabled()) {
+			_log.debug("Creating instance " + this.hashCode());
+		}
+	}
 
 	public void destroy() {
 		_beans.clear();
@@ -72,7 +79,16 @@ public class BeanReferenceAnnotationBeanPostProcessor
 			}
 		}
 
-		_autoInject(bean, beanName, bean.getClass());
+		boolean enabled = PortalSecurityManagerThreadLocal.isEnabled();
+
+		try {
+			PortalSecurityManagerThreadLocal.setEnabled(false);
+
+			_autoInject(bean, beanName, bean.getClass());
+		}
+		finally {
+			PortalSecurityManagerThreadLocal.setEnabled(enabled);
+		}
 
 		return bean;
 	}

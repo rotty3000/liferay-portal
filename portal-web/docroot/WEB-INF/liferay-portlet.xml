@@ -253,7 +253,6 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>
 		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<footer-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/main.js</footer-portlet-javascript>
@@ -455,6 +454,7 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/wiki/css/main.css</header-portlet-css>
+		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-wiki</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
@@ -537,6 +537,7 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/wiki/css/main.css</header-portlet-css>
+		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-wiki</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -745,6 +746,7 @@
 		<portlet-name>84</portlet-name>
 		<icon>/html/icons/announcements.png</icon>
 		<struts-path>announcements</struts-path>
+		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<scheduler-entry>
 			<scheduler-event-listener-class>com.liferay.portlet.announcements.messaging.CheckEntryMessageListener</scheduler-event-listener-class>
 			<trigger>
@@ -818,7 +820,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/layouts_admin/css/main.css</header-portlet-css>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-communities</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 		<system>true</system>
@@ -872,7 +873,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/asset_tag_admin/css/main.css</header-portlet-css>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<footer-portlet-javascript>/html/portlet/asset_tag_admin/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>portlet-asset-tag-admin</css-class-wrapper>
 	</portlet>
@@ -904,8 +904,7 @@
 		<scopeable>false</scopeable>
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
-		<render-weight>25</render-weight>
-		<ajaxable>false</ajaxable>
+		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/asset_publisher/css/main.css</header-portlet-css>
 		<css-class-wrapper>portlet-asset-publisher</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
@@ -1310,7 +1309,6 @@
 		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
 		<friendly-url-mapping>server</friendly-url-mapping>
 		<friendly-url-routes>com/liferay/portlet/admin/admin-server-friendly-url-routes.xml</friendly-url-routes>
-		<poller-processor-class>com.liferay.portlet.admin.poller.AdminPollerProcessor</poller-processor-class>
 		<control-panel-entry-category>server</control-panel-entry-category>
 		<control-panel-entry-weight>1.0</control-panel-entry-weight>
 		<control-panel-entry-class>com.liferay.portlet.admin.OmniadminControlPanelEntry</control-panel-entry-class>
@@ -1447,7 +1445,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/asset_category_admin/css/main.css</header-portlet-css>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<footer-portlet-javascript>/html/portlet/asset_category_admin/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>portlet-asset-category-admin</css-class-wrapper>
 	</portlet>
@@ -1711,7 +1708,6 @@
 		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
 		<header-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</header-portlet-javascript>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-dynamic-data-mapping</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
@@ -1721,6 +1717,7 @@
 		<struts-path>dynamic_data_lists</struts-path>
 		<indexer-class>com.liferay.portlet.dynamicdatalists.util.DDLIndexer</indexer-class>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+		<portlet-data-handler-class>com.liferay.portlet.dynamicdatalists.lar.DDLPortletDataHandlerImpl</portlet-data-handler-class>
 		<control-panel-entry-category>content</control-panel-entry-category>
 		<control-panel-entry-weight>24.0</control-panel-entry-weight>
 		<asset-renderer-factory>com.liferay.portlet.dynamicdatalists.asset.DDLRecordAssetRendererFactory</asset-renderer-factory>
@@ -1732,7 +1729,6 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/dynamic_data_lists/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-dynamic-data-lists</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
@@ -1741,6 +1737,7 @@
 		<struts-path>dynamic_data_list_display</struts-path>
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+		<portlet-data-handler-class>com.liferay.portlet.dynamicdatalists.lar.DDLDisplayPortletDataHandlerImpl</portlet-data-handler-class>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>
 		<instanceable>true</instanceable>
@@ -1750,7 +1747,6 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/dynamic_data_lists/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>dynamic_data_list_display</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -1890,7 +1886,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/html/portlet/social_activity/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/html/portlet/social_activity/js/main.js</header-portlet-javascript>
-		<footer-portal-javascript>/html/js/liferay/service.js</footer-portal-javascript>
 		<css-class-wrapper>portlet-social-activity</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -1921,6 +1916,7 @@
 		<control-panel-entry-weight>30.0</control-panel-entry-weight>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>
+		<scopeable>true</scopeable>
 		<private-request-attributes>false</private-request-attributes>
 		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>

@@ -21,6 +21,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.util.MethodCache;
+import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
+import com.liferay.portal.security.pacl.PACLPolicy;
+import com.liferay.portal.security.pacl.PACLPolicyManager;
 
 import java.lang.reflect.Method;
 
@@ -81,17 +84,33 @@ public class PortletContextLoaderListener extends ContextLoaderListener {
 		servletContext.removeAttribute(
 			WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 
-		super.contextInitialized(servletContextEvent);
+		ClassLoader classLoader = PortletClassLoaderUtil.getClassLoader();
+
+		PACLPolicy previousPACLPolicy =
+			PortalSecurityManagerThreadLocal.getPACLPolicy();
+
+		try {
+			PACLPolicy paclPolicy = PACLPolicyManager.getPACLPolicy(
+				classLoader);
+
+			PortalSecurityManagerThreadLocal.setPACLPolicy(paclPolicy);
+
+			super.contextInitialized(servletContextEvent);
+		}
+		finally {
+			PortalSecurityManagerThreadLocal.setPACLPolicy(previousPACLPolicy);
+		}
 
 		PortletBeanFactoryCleaner.readBeans();
-
-		ClassLoader classLoader = PortletClassLoaderUtil.getClassLoader();
 
 		ApplicationContext applicationContext =
 			WebApplicationContextUtils.getWebApplicationContext(servletContext);
 
-		BeanLocator beanLocator = new BeanLocatorImpl(
+		BeanLocatorImpl beanLocatorImpl = new BeanLocatorImpl(
 			classLoader, applicationContext);
+
+		beanLocatorImpl.setPACLServletContextName(
+			servletContext.getServletContextName());
 
 		try {
 			Class<?> beanLocatorUtilClass = Class.forName(
@@ -102,10 +121,10 @@ public class PortletContextLoaderListener extends ContextLoaderListener {
 				"setBeanLocator", new Class[] {BeanLocator.class});
 
 			setBeanLocatorMethod.invoke(
-				beanLocatorUtilClass, new Object[] {beanLocator});
+				beanLocatorUtilClass, new Object[] {beanLocatorImpl});
 
 			PortletBeanLocatorUtil.setBeanLocator(
-				servletContext.getServletContextName(), beanLocator);
+				servletContext.getServletContextName(), beanLocatorImpl);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

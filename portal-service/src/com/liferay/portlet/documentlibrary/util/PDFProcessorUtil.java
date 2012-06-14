@@ -15,6 +15,7 @@
 package com.liferay.portlet.documentlibrary.util;
 
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.io.InputStream;
 
@@ -32,6 +33,8 @@ public class PDFProcessorUtil {
 	}
 
 	public static PDFProcessor getPDFProcessor() {
+		PortalRuntimePermission.checkGetBeanProperty(PDFProcessorUtil.class);
+
 		return _pdfProcessor;
 	}
 
@@ -88,6 +91,8 @@ public class PDFProcessorUtil {
 	}
 
 	public void setPDFProcessor(PDFProcessor pdfProcessor) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_pdfProcessor = pdfProcessor;
 	}
 

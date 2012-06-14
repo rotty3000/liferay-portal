@@ -18,6 +18,11 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.pacl.PACLConstants;
+import com.liferay.portal.kernel.security.pacl.permission.PortalServicePermission;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
+
+import java.security.Permission;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +35,7 @@ import org.hibernate.criterion.DetachedCriteria;
 public class DynamicQueryFactoryImpl implements DynamicQueryFactory {
 
 	public DynamicQuery forClass(Class<?> clazz) {
-		clazz = getImplClass(clazz);
+		clazz = getImplClass(clazz, null);
 
 		return new DynamicQueryImpl(DetachedCriteria.forClass(clazz));
 	}
@@ -42,7 +47,7 @@ public class DynamicQueryFactoryImpl implements DynamicQueryFactory {
 	}
 
 	public DynamicQuery forClass(Class<?> clazz, String alias) {
-		clazz = getImplClass(clazz);
+		clazz = getImplClass(clazz, null);
 
 		return new DynamicQueryImpl(DetachedCriteria.forClass(clazz, alias));
 	}
@@ -55,34 +60,71 @@ public class DynamicQueryFactoryImpl implements DynamicQueryFactory {
 		return new DynamicQueryImpl(DetachedCriteria.forClass(clazz, alias));
 	}
 
-	protected Class<?> getImplClass(Class<?> clazz) {
-		return getImplClass(clazz, null);
-	}
-
 	protected Class<?> getImplClass(Class<?> clazz, ClassLoader classLoader) {
-		if (!clazz.getName().endsWith("Impl")) {
+		Class<?> implClass = clazz;
+
+		String className = clazz.getName();
+
+		if (!className.endsWith("Impl")) {
+			if (classLoader == null) {
+				classLoader = PACLClassLoaderUtil.getContextClassLoader();
+			}
+
+			Package pkg = clazz.getPackage();
+
 			String implClassName =
-				clazz.getPackage().getName() + ".impl." +
-					clazz.getSimpleName() + "Impl";
+				pkg.getName() + ".impl." + clazz.getSimpleName() + "Impl";
 
-			clazz = _classMap.get(implClassName);
-
-			if (clazz == null) {
-				try {
-					if (classLoader == null) {
-						Thread currentThread = Thread.currentThread();
-
-						classLoader = currentThread.getContextClassLoader();
+			try {
+				implClass = getImplClass(implClassName, classLoader);
+			}
+			catch (Exception e1) {
+				if (classLoader != _portalClassLoader) {
+					try {
+						implClass = getImplClass(
+							implClassName, _portalClassLoader);
 					}
-
-					clazz = classLoader.loadClass(implClassName);
-
-					_classMap.put(implClassName, clazz);
+					catch (Exception e2) {
+						_log.error("Unable find model " + implClassName, e2);
+					}
 				}
-				catch (Exception e) {
-					_log.error("Unable find model " + implClassName, e);
+				else {
+					_log.error("Unable find model " + implClassName, e1);
 				}
 			}
+		}
+
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if (securityManager != null) {
+			Permission permission = new PortalServicePermission(
+				PACLConstants.PORTAL_SERVICE_PERMISSION_DYNAMIC_QUERY,
+				implClass, null);
+
+			securityManager.checkPermission(permission);
+		}
+
+		return implClass;
+	}
+
+	protected Class<?> getImplClass(
+			String implClassName, ClassLoader classLoader)
+		throws ClassNotFoundException {
+
+		Map<String, Class<?>> classes = _classes.get(classLoader);
+
+		if (classes == null) {
+			classes = new HashMap<String, Class<?>>();
+
+			_classes.put(classLoader, classes);
+		}
+
+		Class<?> clazz = classes.get(implClassName);
+
+		if (clazz == null) {
+			clazz = classLoader.loadClass(implClassName);
+
+			classes.put(implClassName, clazz);
 		}
 
 		return clazz;
@@ -91,6 +133,9 @@ public class DynamicQueryFactoryImpl implements DynamicQueryFactory {
 	private static Log _log = LogFactoryUtil.getLog(
 		DynamicQueryFactoryImpl.class);
 
-	private Map<String, Class<?>> _classMap = new HashMap<String, Class<?>>();
+	private Map<ClassLoader, Map<String, Class<?>>> _classes =
+		new HashMap<ClassLoader, Map<String, Class<?>>>();
+	private ClassLoader _portalClassLoader =
+		DynamicQueryFactoryImpl.class.getClassLoader();
 
 }

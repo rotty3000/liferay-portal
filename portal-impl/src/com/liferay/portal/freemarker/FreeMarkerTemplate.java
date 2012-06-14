@@ -75,7 +75,7 @@ public class FreeMarkerTemplate implements Template {
 		return _context.get(key);
 	}
 
-	public void prepare(HttpServletRequest request) throws TemplateException {
+	public void prepare(HttpServletRequest request) {
 		_templateContextHelper.prepare(this, request);
 	}
 

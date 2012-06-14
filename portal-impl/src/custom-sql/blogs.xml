@@ -34,7 +34,7 @@
 					(
 						(Group_.liveGroupId = 0) AND
 						(
-							Group_.groupId NOT IN(
+							Group_.groupId NOT IN (
 								SELECT
 									liveGroupId
 								FROM
@@ -46,7 +46,7 @@
 						(
 							(Group_.classNameId != [$CLASS_NAME_ID_COM.LIFERAY.PORTAL.MODEL.LAYOUT$]) OR
 							(
-								Group_.parentGroupId NOT IN(
+								Group_.parentGroupId NOT IN (
 									SELECT
 										groupId
 									FROM
@@ -90,7 +90,7 @@
 			FROM
 				BlogsEntry
 			WHERE
-				(entryId NOT IN(
+				(entryId NOT IN (
 					SELECT
 						classPK
 					FROM
@@ -138,7 +138,7 @@
 								(
 									(Group_.liveGroupId = 0) AND
 									(
-										Group_.groupId NOT IN(
+										Group_.groupId NOT IN (
 											SELECT
 												liveGroupId
 											FROM
@@ -150,7 +150,7 @@
 									(
 										(Group_.classNameId != [$CLASS_NAME_ID_COM.LIFERAY.PORTAL.MODEL.LAYOUT$]) OR
 										(
-											Group_.parentGroupId NOT IN(
+											Group_.parentGroupId NOT IN (
 												SELECT
 													groupId
 												FROM

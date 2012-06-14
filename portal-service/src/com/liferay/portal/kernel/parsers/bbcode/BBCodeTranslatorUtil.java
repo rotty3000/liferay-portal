@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.parsers.bbcode;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Iliyan Peychev
  * @author Miguel Pastor
@@ -23,6 +25,9 @@ public class BBCodeTranslatorUtil {
 	public static final String NEW_THREAD_URL = "${newThreadURL}";
 
 	public static BBCodeTranslator getBBCodeTranslator() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			BBCodeTranslatorUtil.class);
+
 		return _bbCodeTranslator;
 	}
 
@@ -51,6 +56,8 @@ public class BBCodeTranslatorUtil {
 	}
 
 	public void setBBCodeTranslator(BBCodeTranslator bbCodeTranslator) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_bbCodeTranslator = bbCodeTranslator;
 	}
 

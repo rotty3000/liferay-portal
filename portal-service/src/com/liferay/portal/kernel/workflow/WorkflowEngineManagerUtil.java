@@ -16,35 +16,42 @@ package com.liferay.portal.kernel.workflow;
 
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
 public class WorkflowEngineManagerUtil {
 
 	public static String getKey() {
-		return _workflowEngineManager.getKey();
+		return getWorkflowEngineManager().getKey();
 	}
 
 	public static String getName() {
-		return _workflowEngineManager.getName();
+		return getWorkflowEngineManager().getName();
 	}
 
 	public static Map<String, Object> getOptionalAttributes() {
-		return _workflowEngineManager.getOptionalAttributes();
+		return getWorkflowEngineManager().getOptionalAttributes();
 	}
 
 	public static String getVersion() {
-		return _workflowEngineManager.getVersion();
+		return getWorkflowEngineManager().getVersion();
 	}
 
 	public static WorkflowEngineManager getWorkflowEngineManager() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			WorkflowEngineManagerUtil.class);
+
 		return _workflowEngineManager;
 	}
 
 	public static boolean isDeployed() {
+		getWorkflowEngineManager();
+
 		if (MessageBusUtil.hasMessageListener(
 				DestinationNames.WORKFLOW_ENGINE)) {
 
@@ -57,6 +64,8 @@ public class WorkflowEngineManagerUtil {
 
 	public void setWorkflowEngineManager(
 		WorkflowEngineManager workflowEngineManager) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_workflowEngineManager = workflowEngineManager;
 	}

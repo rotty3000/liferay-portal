@@ -172,6 +172,8 @@
 	<classpathentry kind="lib" path="lib/portal/hessian.jar"/>
 	<classpathentry kind="lib" path="lib/portal/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/portal/htmlparser.jar"/>
+	<classpathentry kind="lib" path="lib/portal/httpclient.jar"/>
+	<classpathentry kind="lib" path="lib/portal/httpcore.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ical4j.jar"/>
 	<classpathentry kind="lib" path="lib/portal/icq.jar"/>
 	<classpathentry kind="lib" path="lib/portal/im4java.jar"/>
@@ -229,6 +231,8 @@
 	<classpathentry kind="lib" path="lib/portal/mimepull.jar"/>
 	<classpathentry kind="lib" path="lib/portal/msnm.jar"/>
 	<classpathentry kind="lib" path="lib/portal/nekohtml.jar"/>
+	<classpathentry kind="lib" path="lib/portal/oauth.jar"/>
+	<classpathentry kind="lib" path="lib/portal/oauth-provider.jar"/>
 	<classpathentry kind="lib" path="lib/portal/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/portal/openid4java.jar"/>
 	<classpathentry kind="lib" path="lib/portal/oro.jar"/>

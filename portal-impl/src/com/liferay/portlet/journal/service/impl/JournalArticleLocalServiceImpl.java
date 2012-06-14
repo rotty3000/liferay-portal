@@ -209,6 +209,10 @@ public class JournalArticleLocalServiceImpl
 		String defaultLanguageId = ParamUtil.getString(
 			serviceContext, "defaultLanguageId");
 
+		if (Validator.isNull(defaultLanguageId)) {
+			defaultLanguageId = LocalizationUtil.getDefaultLocale(content);
+		}
+
 		if (Validator.isNotNull(defaultLanguageId)) {
 			locale = LocaleUtil.fromLanguageId(defaultLanguageId);
 		}
@@ -595,6 +599,12 @@ public class JournalArticleLocalServiceImpl
 		return newArticle;
 	}
 
+	public void deleteArticle(JournalArticle article)
+		throws PortalException, SystemException {
+
+		deleteArticle(article, StringPool.BLANK, null);
+	}
+
 	public void deleteArticle(
 			JournalArticle article, String articleURL,
 			ServiceContext serviceContext)
@@ -610,16 +620,18 @@ public class JournalArticleLocalServiceImpl
 
 		// Email
 
-		PortletPreferences preferences =
-			ServiceContextUtil.getPortletPreferences(serviceContext);
+		if ((serviceContext != null) && Validator.isNotNull(articleURL)) {
+			PortletPreferences preferences =
+				ServiceContextUtil.getPortletPreferences(serviceContext);
 
-		if ((preferences != null) && !article.isApproved() &&
-			isLatestVersion(
-				article.getGroupId(), article.getArticleId(),
-				article.getVersion())) {
+			if ((preferences != null) && !article.isApproved() &&
+				isLatestVersion(
+					article.getGroupId(), article.getArticleId(),
+					article.getVersion())) {
 
-			sendEmail(
-				article, articleURL, preferences, "denied", serviceContext);
+				sendEmail(
+					article, articleURL, preferences, "denied", serviceContext);
+			}
 		}
 
 		// Images
@@ -2072,6 +2084,10 @@ public class JournalArticleLocalServiceImpl
 
 		String defaultLanguageId = ParamUtil.getString(
 			serviceContext, "defaultLanguageId");
+
+		if (Validator.isNull(defaultLanguageId)) {
+			defaultLanguageId = LocalizationUtil.getDefaultLocale(content);
+		}
 
 		if (Validator.isNotNull(defaultLanguageId)) {
 			locale = LocaleUtil.fromLanguageId(defaultLanguageId);

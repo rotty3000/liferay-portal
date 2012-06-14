@@ -49,7 +49,7 @@ public class ResourceBlockFinderImpl
 			String sql = CustomSQLUtil.get(FIND_BY_C_G_N_R);
 
 			sql = StringUtil.replace(
-				sql, "[$ROLE_IDS$]", StringUtil.merge(roleIds));
+				sql, "[$ROLE_ID$]", StringUtil.merge(roleIds));
 
 			SQLQuery q = session.createSQLQuery(sql);
 

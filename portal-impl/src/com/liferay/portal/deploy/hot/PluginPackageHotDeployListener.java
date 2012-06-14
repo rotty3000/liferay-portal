@@ -26,13 +26,14 @@ import com.liferay.portal.kernel.deploy.hot.HotDeployException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.plugin.PluginPackageUtil;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.service.ServiceComponentLocalServiceUtil;
 
 import java.net.URL;
@@ -115,7 +116,14 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 
 		ClassLoader classLoader = hotDeployEvent.getContextClassLoader();
 
-		initServiceComponent(servletContext, classLoader);
+		PortletClassLoaderUtil.setClassLoader(classLoader);
+
+		try {
+			initServiceComponent(servletContext, classLoader);
+		}
+		finally {
+			PortletClassLoaderUtil.setClassLoader(null);
+		}
 
 		registerClpMessageListeners(servletContext, classLoader);
 
@@ -275,15 +283,14 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		ClassLoader aggregateClassLoader =
 			AggregateClassLoader.getAggregateClassLoader(
 				new ClassLoader[] {
-					PortalClassLoaderUtil.getClassLoader(), classLoader
+					PACLClassLoaderUtil.getPortalClassLoader(), classLoader
 				});
 
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		ClassLoader contextClassLoader =
+			PACLClassLoaderUtil.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(aggregateClassLoader);
+			PACLClassLoaderUtil.setContextClassLoader(aggregateClassLoader);
 
 			PortalCacheManager portalCacheManager =
 				(PortalCacheManager)PortalBeanLocatorUtil.locate(
@@ -299,7 +306,7 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 			portalCacheManager.reconfigureCaches(cacheConfigurationURL);
 		}
 		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
+			PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
 		}
 	}
 

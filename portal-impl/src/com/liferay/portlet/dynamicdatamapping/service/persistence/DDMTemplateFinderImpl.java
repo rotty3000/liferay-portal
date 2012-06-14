@@ -171,7 +171,7 @@ public class DDMTemplateFinderImpl
 		if (Validator.isNotNull(keywords)) {
 			names = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
-			languages = CustomSQLUtil.keywords(languages, false);
+			languages = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -231,7 +231,7 @@ public class DDMTemplateFinderImpl
 		if (Validator.isNotNull(keywords)) {
 			names = CustomSQLUtil.keywords(keywords);
 			descriptions = CustomSQLUtil.keywords(keywords, false);
-			languages = CustomSQLUtil.keywords(languages, false);
+			languages = CustomSQLUtil.keywords(keywords, false);
 		}
 		else {
 			andOperator = true;
@@ -323,7 +323,7 @@ public class DDMTemplateFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "mode", StringPool.LIKE, false, modes);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "language", StringPool.LIKE, false, languages);
+				sql, "language", StringPool.LIKE, true, languages);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -421,15 +421,11 @@ public class DDMTemplateFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "mode", StringPool.LIKE, false, modes);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "language", StringPool.LIKE, false, languages);
+				sql, "language", StringPool.LIKE, true, languages);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
 			if (orderByComparator != null) {
-				String orderByFields = StringUtil.merge(
-					orderByComparator.getOrderByFields(), StringPool.COMMA);
-
-				sql = StringUtil.replace(
-					sql, "templateId DESC", orderByFields.concat(" DESC"));
+				sql = CustomSQLUtil.replaceOrderBy(sql, orderByComparator);
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);

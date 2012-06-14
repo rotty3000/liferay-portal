@@ -39,7 +39,7 @@ public class RestrictedTemplate implements Template {
 		return _template.get(key);
 	}
 
-	public void prepare(HttpServletRequest request) throws TemplateException {
+	public void prepare(HttpServletRequest request) {
 		_template.prepare(request);
 	}
 

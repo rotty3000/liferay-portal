@@ -150,7 +150,7 @@ public class CreateAnonymousAccountAction extends PortletAction {
 					 e instanceof ReservedUserEmailAddressException ||
 					 e instanceof UserEmailAddressException) {
 
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
 			else {
 				_log.error("Unable to create anonymous account", e);
@@ -239,6 +239,18 @@ public class CreateAnonymousAccountAction extends PortletAction {
 		SessionMessages.add(request, "user_added", user.getEmailAddress());
 		SessionMessages.add(
 			request, "user_added_password", user.getPasswordUnencrypted());
+	}
+
+	@Override
+	protected void addSuccessMessage(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		String portletId = (String)actionRequest.getAttribute(
+			WebKeys.PORTLET_ID);
+
+		if (!portletId.equals(PortletKeys.FAST_LOGIN)) {
+			super.addSuccessMessage(actionRequest, actionResponse);
+		}
 	}
 
 	@Override

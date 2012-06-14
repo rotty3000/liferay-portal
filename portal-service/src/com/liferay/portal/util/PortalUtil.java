@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
@@ -246,7 +247,7 @@ public class PortalUtil {
 
 	public static String getCanonicalURL(
 			String completeURL, ThemeDisplay themeDisplay, Layout layout)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		return getPortal().getCanonicalURL(completeURL, themeDisplay, layout);
 	}
@@ -464,7 +465,7 @@ public class PortalUtil {
 	public static Serializable getExpandoValue(
 			PortletRequest portletRequest, String name, int type,
 			String displayType)
-		throws PortalException, SystemException{
+		throws PortalException, SystemException {
 
 		return getPortal().getExpandoValue(
 			portletRequest, name, type, displayType);
@@ -810,6 +811,8 @@ public class PortalUtil {
 	}
 
 	public static Portal getPortal() {
+		PortalRuntimePermission.checkGetBeanProperty(PortalUtil.class);
+
 		return _portal;
 	}
 
@@ -1144,6 +1147,16 @@ public class PortalUtil {
 
 	public static String[] getSystemSiteRoles() {
 		return getPortal().getSystemSiteRoles();
+	}
+
+	public static String getUniqueElementId(
+		HttpServletRequest request, String id) {
+
+		return getPortal().getUniqueElementId(request, id);
+	}
+
+	public static String getUniqueElementId(PortletRequest request, String id) {
+		return getPortal().getUniqueElementId(request, id);
 	}
 
 	public static UploadPortletRequest getUploadPortletRequest(
@@ -1567,6 +1580,8 @@ public class PortalUtil {
 	}
 
 	public void setPortal(Portal portal) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_portal = portal;
 	}
 

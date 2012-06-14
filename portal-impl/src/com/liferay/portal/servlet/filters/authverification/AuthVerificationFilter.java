@@ -17,6 +17,7 @@ package com.liferay.portal.servlet.filters.authverification;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ProtectedServletRequest;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -29,6 +30,7 @@ import com.liferay.portal.security.auth.verifier.VerificationResult;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
@@ -122,10 +124,8 @@ public class AuthVerificationFilter extends BasePortalFilter {
 
 				pam.initAuthorizationContext(userId);
 
-				HttpServletRequest protectedRequest =
-					new ProtectedServletRequest(
-						request,
-						String.valueOf(userId));
+				HttpServletRequest protectedRequest = createProtectedRequest(
+					request, authCtx);
 
 				authCtx.setRequest(protectedRequest);
 
@@ -141,6 +141,23 @@ public class AuthVerificationFilter extends BasePortalFilter {
 			}
 		}
 
+	}
+
+	protected HttpServletRequest createProtectedRequest(
+		HttpServletRequest request, AuthenticationContext authCtx) {
+
+		long userId = authCtx.getVerificationResult().getUserId();
+
+		Map<String, Object> authSettings = authCtx.getSettings();
+		String authType = GetterUtil.get(authSettings.get("authtype"),
+			StringPool.BLANK);
+
+		if(StringPool.BLANK.equals(authType)){
+			authType = null;
+		}
+
+		return new ProtectedServletRequest(
+				request, String.valueOf(userId), authType);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

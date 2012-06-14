@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.trash;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.util.List;
 
 /**
@@ -26,6 +28,9 @@ public class TrashHandlerRegistryUtil {
 	}
 
 	public static TrashHandlerRegistry getTrashHandlerRegistry() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			TrashHandlerRegistryUtil.class);
+
 		return _trashHandlerRegistry;
 	}
 
@@ -55,6 +60,8 @@ public class TrashHandlerRegistryUtil {
 
 	public void setTrashHandlerRegistry(
 		TrashHandlerRegistry trashHandlerRegistry) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_trashHandlerRegistry = trashHandlerRegistry;
 	}

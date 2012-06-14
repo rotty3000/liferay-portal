@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.DirectServletRegistry;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
@@ -114,15 +115,17 @@ public class DirectServletRegistryImpl implements DirectServletRegistry {
 			return servlet;
 		}
 
+		boolean enabled = PortalSecurityManagerThreadLocal.isEnabled();
+
 		try {
+			PortalSecurityManagerThreadLocal.setEnabled(false);
+
 			Method method = ReflectionUtil.getDeclaredMethod(
 				servlet.getClass(), "getDependants");
 
 			Collection<String> dependants = null;
 
-			String jasperVersion = JasperVersionDetector.getJasperVersion();
-
-			if (jasperVersion.contains("7.0")) {
+			if (JasperVersionDetector.hasJspServletDependantsMap()) {
 				Map<String, ?> dependantsMap = (Map<String, ?>)method.invoke(
 					servlet);
 
@@ -183,6 +186,9 @@ public class DirectServletRegistryImpl implements DirectServletRegistry {
 		}
 		catch (Exception e) {
 			_log.error(e, e);
+		}
+		finally {
+			PortalSecurityManagerThreadLocal.setEnabled(enabled);
 		}
 
 		return servlet;

@@ -17,6 +17,7 @@ package com.liferay.portal.deploy;
 import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.DeployManager;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
+import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.plugin.PluginPackageUtil;
@@ -33,16 +34,14 @@ import java.util.Properties;
  */
 public class DeployManagerImpl implements DeployManager {
 
-	public void deploy(File file) throws Exception {
-		deploy(file, null);
-	}
+	public void deploy(AutoDeploymentContext autoDeploymentContext)
+		throws Exception {
 
-	public void deploy(File file, String context) throws Exception {
 		List<AutoDeployListener> autoDeployListeners =
 			GlobalStartupAction.getAutoDeployListeners();
 
 		for (AutoDeployListener autoDeployListener : autoDeployListeners) {
-			autoDeployListener.deploy(file, context);
+			autoDeployListener.deploy(autoDeploymentContext);
 		}
 	}
 
@@ -53,7 +52,7 @@ public class DeployManagerImpl implements DeployManager {
 	public String getInstalledDir() throws Exception {
 		if (ServerDetector.isGlassfish()) {
 			File file = new File(
-				System.getProperty("com.sun.aas.instanceRoot"), "applications");
+				System.getProperty("com.sun.aas.instanceRoot"), "autodeploy");
 
 			return file.getAbsolutePath();
 		}

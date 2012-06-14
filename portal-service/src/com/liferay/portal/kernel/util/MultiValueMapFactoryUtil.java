@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -28,11 +30,16 @@ public class MultiValueMapFactoryUtil {
 	}
 
 	public static MultiValueMapFactory getMultiValueMapFactory() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			MultiValueMapFactoryUtil.class);
+
 		return _multiValueMapFactory;
 	}
 
 	public void setMultiValueMapFactory(
 		MultiValueMapFactory multiValueMapFactory) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_multiValueMapFactory = multiValueMapFactory;
 	}

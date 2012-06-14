@@ -27,7 +27,6 @@ import com.liferay.portal.kernel.process.ProcessExecutor;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileComparator;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -35,6 +34,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.util.PwdGenerator;
 import com.liferay.util.ant.ExpandTask;
 
@@ -142,11 +142,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 			}
 		}
 		else {
-			if ((destination.getParentFile() != null) &&
-				!destination.getParentFile().exists()) {
-
-				destination.getParentFile().mkdirs();
-			}
+			mkdirsParentFile(destination);
 
 			StreamUtil.transfer(
 				new FileInputStream(source), new FileOutputStream(destination));
@@ -213,12 +209,25 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	public boolean delete(File file) {
-		if ((file != null) && file.exists()) {
-			return file.delete();
+		if (file != null) {
+			boolean exists = true;
+
+			try {
+				exists = file.exists();
+			}
+			catch (SecurityException se) {
+
+				// We may have the permission to delete a specific file without
+				// having the permission to check if the file exists
+
+			}
+
+			if (exists) {
+				return file.delete();
+			}
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean delete(String file) {
@@ -266,15 +275,15 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	public String extractText(InputStream is, String fileName) {
 		String text = null;
 
-		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+		ClassLoader portalClassLoader =
+			PACLClassLoaderUtil.getPortalClassLoader();
 
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+		ClassLoader contextClassLoader =
+			PACLClassLoaderUtil.getContextClassLoader();
 
 		try {
 			if (contextClassLoader != portalClassLoader) {
-				currentThread.setContextClassLoader(portalClassLoader);
+				PACLClassLoaderUtil.setContextClassLoader(portalClassLoader);
 			}
 
 			Tika tika = new Tika();
@@ -308,7 +317,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		}
 		finally {
 			if (contextClassLoader != portalClassLoader) {
-				currentThread.setContextClassLoader(contextClassLoader);
+				PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
 		}
 
@@ -424,29 +433,23 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	public String getPath(String fullFileName) {
-		int pos = fullFileName.lastIndexOf(CharPool.SLASH);
+		int x = fullFileName.lastIndexOf(CharPool.SLASH);
+		int y = fullFileName.lastIndexOf(CharPool.BACK_SLASH);
 
-		if (pos == -1) {
-			pos = fullFileName.lastIndexOf(CharPool.BACK_SLASH);
-		}
-
-		String shortFileName = fullFileName.substring(0, pos);
-
-		if (Validator.isNull(shortFileName)) {
+		if ((x == -1) && (y == -1)) {
 			return StringPool.SLASH;
 		}
+
+		String shortFileName = fullFileName.substring(0, Math.max(x, y));
 
 		return shortFileName;
 	}
 
 	public String getShortFileName(String fullFileName) {
-		int pos = fullFileName.lastIndexOf(CharPool.SLASH);
+		int x = fullFileName.lastIndexOf(CharPool.SLASH);
+		int y = fullFileName.lastIndexOf(CharPool.BACK_SLASH);
 
-		if (pos == -1) {
-			pos = fullFileName.lastIndexOf(CharPool.BACK_SLASH);
-		}
-
-		String shortFileName = fullFileName.substring(pos + 1);
+		String shortFileName = fullFileName.substring(Math.max(x, y) + 1);
 
 		return shortFileName;
 	}
@@ -737,9 +740,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	public void write(File file, byte[] bytes, int offset, int length)
 		throws IOException {
 
-		if (file.getParent() != null) {
-			mkdirs(file.getParent());
-		}
+		mkdirsParentFile(file);
 
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 
@@ -749,9 +750,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	public void write(File file, InputStream is) throws IOException {
-		if (file.getParent() != null) {
-			mkdirs(file.getParent());
-		}
+		mkdirsParentFile(file);
 
 		StreamUtil.transfer(is, new FileOutputStream(file));
 	}
@@ -771,9 +770,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 			return;
 		}
 
-		if (file.getParent() != null) {
-			mkdirs(file.getParent());
-		}
+		mkdirsParentFile(file);
 
 		if (lazy && file.exists()) {
 			String content = read(file);
@@ -833,6 +830,26 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		throws IOException {
 
 		write(new File(pathName, fileName), s, lazy, append);
+	}
+
+	protected void mkdirsParentFile(File file) {
+		File parentFile = file.getParentFile();
+
+		if (parentFile == null) {
+			return;
+		}
+
+		try {
+			if (!parentFile.exists()) {
+				parentFile.mkdirs();
+			}
+		}
+		catch (SecurityException se) {
+
+			// We may have the permission to write a specific file without
+			// having the permission to check if the parent file exists
+
+		}
 	}
 
 	private static final String[] _SAFE_FILE_NAME_1 = {

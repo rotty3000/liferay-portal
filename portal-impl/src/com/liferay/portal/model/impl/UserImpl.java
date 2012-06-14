@@ -537,31 +537,13 @@ public class UserImpl extends UserBaseImpl {
 
 		List<Group> groups = getMySites(true, max);
 
-		if (groups.size() == 1) {
-			Group group = groups.get(0);
-
-			if (group.isControlPanel()) {
-				return false;
-			}
-			else {
-				return true;
-			}
-		}
-		else if (groups.size() > 1) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return !groups.isEmpty();
 	}
 
 	public boolean hasOrganization() throws PortalException, SystemException {
-		if (getOrganizations().size() > 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		List<Organization> organizations = getOrganizations();
+
+		return !organizations.isEmpty();
 	}
 
 	public boolean hasPrivateLayouts() throws PortalException, SystemException {

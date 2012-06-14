@@ -90,7 +90,7 @@ for (long classNameId : availableClassNameIds) {
 	}
 }
 
-boolean anyAssetType = GetterUtil.getBoolean(preferences.getValue("anyAssetType", Boolean.TRUE.toString()));
+boolean anyAssetType = GetterUtil.getBoolean(preferences.getValue("anyAssetType", null), true);
 
 long[] classNameIds = AssetPublisherUtil.getClassNameIds(preferences, availableClassNameIds);
 
@@ -204,7 +204,7 @@ String orderByColumn1 = GetterUtil.getString(preferences.getValue("orderByColumn
 String orderByColumn2 = GetterUtil.getString(preferences.getValue("orderByColumn2", "title"));
 String orderByType1 = GetterUtil.getString(preferences.getValue("orderByType1", "DESC"));
 String orderByType2 = GetterUtil.getString(preferences.getValue("orderByType2", "ASC"));
-boolean excludeZeroViewCount = GetterUtil.getBoolean(preferences.getValue("excludeZeroViewCount", "0"));
+boolean excludeZeroViewCount = GetterUtil.getBoolean(preferences.getValue("excludeZeroViewCount", null));
 int delta = GetterUtil.getInteger(preferences.getValue("delta", StringPool.BLANK), SearchContainer.DEFAULT_DELTA);
 String paginationType = GetterUtil.getString(preferences.getValue("paginationType", "none"));
 boolean showAvailableLocales = GetterUtil.getBoolean(preferences.getValue("showAvailableLocales", null));
@@ -241,7 +241,7 @@ String socialBookmarksDisplayStyle = preferences.getValue("socialBookmarksDispla
 String socialBookmarksDisplayPosition = preferences.getValue("socialBookmarksDisplayPosition", "bottom");
 
 String defaultMetadataFields = StringPool.BLANK;
-String allMetadataFields = "create-date,modified-date,publish-date,expiration-date,priority,author,view-count,categories,tags,ratings";
+String allMetadataFields = "create-date,modified-date,publish-date,expiration-date,priority,author,view-count,categories,tags";
 
 String[] metadataFields = StringUtil.split(preferences.getValue("metadataFields", defaultMetadataFields));
 

@@ -133,8 +133,9 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 	public static long STRUCTUREID_COLUMN_BITMASK = 1024L;
 	public static long TEMPLATEID_COLUMN_BITMASK = 2048L;
 	public static long URLTITLE_COLUMN_BITMASK = 4096L;
-	public static long UUID_COLUMN_BITMASK = 8192L;
-	public static long VERSION_COLUMN_BITMASK = 16384L;
+	public static long USERID_COLUMN_BITMASK = 8192L;
+	public static long UUID_COLUMN_BITMASK = 16384L;
+	public static long VERSION_COLUMN_BITMASK = 32768L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -574,6 +575,14 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 	}
 
 	public void setUserId(long userId) {
+		_columnBitmask |= USERID_COLUMN_BITMASK;
+
+		if (!_setOriginalUserId) {
+			_setOriginalUserId = true;
+
+			_originalUserId = _userId;
+		}
+
 		_userId = userId;
 	}
 
@@ -583,6 +592,10 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 
 	public void setUserUuid(String userUuid) {
 		_userUuid = userUuid;
+	}
+
+	public long getOriginalUserId() {
+		return _originalUserId;
 	}
 
 	@JSON
@@ -1226,6 +1239,15 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 		}
 	}
 
+	public boolean isInTrash() {
+		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
 			return true;
@@ -1381,6 +1403,10 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 		journalArticleModelImpl._originalCompanyId = journalArticleModelImpl._companyId;
 
 		journalArticleModelImpl._setOriginalCompanyId = false;
+
+		journalArticleModelImpl._originalUserId = journalArticleModelImpl._userId;
+
+		journalArticleModelImpl._setOriginalUserId = false;
 
 		journalArticleModelImpl._originalFolderId = journalArticleModelImpl._folderId;
 
@@ -1850,6 +1876,8 @@ public class JournalArticleModelImpl extends BaseModelImpl<JournalArticle>
 	private boolean _setOriginalCompanyId;
 	private long _userId;
 	private String _userUuid;
+	private long _originalUserId;
+	private boolean _setOriginalUserId;
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;

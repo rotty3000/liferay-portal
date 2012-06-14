@@ -38,8 +38,16 @@ public class HotDeployEvent {
 	public HotDeployEvent(
 		ServletContext servletContext, ClassLoader contextClassLoader) {
 
+		this(servletContext, contextClassLoader, true);
+	}
+
+	public HotDeployEvent(
+		ServletContext servletContext, ClassLoader contextClassLoader,
+		boolean dependencyManagementEnabled) {
+
 		_servletContext = servletContext;
 		_contextClassLoader = contextClassLoader;
+		_dependencyManagementEnabled = dependencyManagementEnabled;
 
 		try {
 			initDependentServletContextNames();
@@ -69,15 +77,21 @@ public class HotDeployEvent {
 		return _servletContext.getServletContextName();
 	}
 
+	public boolean isDependencyManagementEnabled() {
+		return _dependencyManagementEnabled;
+	}
+
 	public void setPluginPackage(PluginPackage pluginPackage) {
 		_pluginPackage = pluginPackage;
 	}
 
 	protected void initDependentServletContextNames() throws IOException {
+		if (!_dependencyManagementEnabled) {
+			return;
+		}
+
 		InputStream is = _servletContext.getResourceAsStream(
 			"/WEB-INF/liferay-plugin-package.properties");
-
-		_dependentServletContextNames = new HashSet<String>();
 
 		if (is != null) {
 			String propertiesString = StringUtil.read(is);
@@ -110,7 +124,8 @@ public class HotDeployEvent {
 	private static Log _log = LogFactoryUtil.getLog(HotDeployEvent.class);
 
 	private ClassLoader _contextClassLoader;
-	private Set<String> _dependentServletContextNames;
+	private boolean _dependencyManagementEnabled = true;
+	private Set<String> _dependentServletContextNames = new HashSet<String>();
 	private PluginPackage _pluginPackage;
 	private ServletContext _servletContext;
 

@@ -271,7 +271,7 @@ public class EditUserAction extends PortletAction {
 						e.getClass().getName() + nslte.getType());
 				}
 				else {
-					SessionErrors.add(actionRequest, e.getClass().getName(), e);
+					SessionErrors.add(actionRequest, e.getClass(), e);
 				}
 
 				if (e instanceof RequiredUserException) {

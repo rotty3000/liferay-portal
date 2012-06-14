@@ -47,7 +47,7 @@
 			FROM
 				WikiPage
 			WHERE
-				(resourcePrimKey NOT IN(
+				(resourcePrimKey NOT IN (
 					SELECT
 						classPK
 					FROM

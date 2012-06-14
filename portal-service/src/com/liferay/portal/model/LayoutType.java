@@ -29,6 +29,8 @@ public interface LayoutType extends Serializable {
 
 	public String getTypeSettingsProperty(String key);
 
+	public String getTypeSettingsProperty(String key, String defaultValue);
+
 	public void setLayout(Layout layout);
 
 	public void setTypeSettingsProperty(String key, String value);

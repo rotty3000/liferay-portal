@@ -78,7 +78,7 @@ public void processAction(
 					 e instanceof CouponStartDateException ||
 					 e instanceof NoSuchCouponException) {
 
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 			}
 			else {
 				throw e;

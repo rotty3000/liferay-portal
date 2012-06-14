@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface Template extends TemplateContext {
 
-	public void prepare(HttpServletRequest request) throws TemplateException;
+	public void prepare(HttpServletRequest request);
 
 	public boolean processTemplate(Writer writer) throws TemplateException;
 

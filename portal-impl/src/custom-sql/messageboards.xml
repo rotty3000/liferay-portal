@@ -93,7 +93,7 @@
 			FROM
 				MBMessage
 			WHERE
-				(messageId NOT IN(
+				(messageId NOT IN (
 					SELECT
 						classPK
 					FROM
@@ -254,7 +254,7 @@
 			FROM
 				MBThread
 			WHERE
-				(threadId NOT IN(
+				(threadId NOT IN (
 					SELECT
 						classPK
 					FROM

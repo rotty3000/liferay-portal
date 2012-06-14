@@ -125,6 +125,14 @@ public class Encryptor {
 	public static String encrypt(Key key, String plainText)
 		throws EncryptorException {
 
+		if (key == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Skip encrypting based on a null key");
+			}
+
+			return plainText;
+		}
+
 		byte[] encryptedBytes = encryptUnencoded(key, plainText);
 
 		return Base64.encode(encryptedBytes);

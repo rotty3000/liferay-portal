@@ -51,6 +51,8 @@ public interface JournalArticle extends JournalArticleModel, PersistedModel {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public java.util.Map<java.util.Locale, java.lang.String> getTitleMap();
+
 	public boolean isTemplateDriven();
 
 	public void setSmallImageType(java.lang.String smallImageType);

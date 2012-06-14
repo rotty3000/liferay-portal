@@ -16,6 +16,7 @@ package com.liferay.portlet.layoutsadmin.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.theme.ThemeDisplay;
 
 /**
@@ -28,6 +29,8 @@ public class SitemapUtil {
 	}
 
 	public static Sitemap getSitemap() {
+		PortalRuntimePermission.checkGetBeanProperty(SitemapUtil.class);
+
 		return _sitemap;
 	}
 
@@ -39,6 +42,8 @@ public class SitemapUtil {
 	}
 
 	public void setSitemap(Sitemap sitemap) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_sitemap = sitemap;
 	}
 

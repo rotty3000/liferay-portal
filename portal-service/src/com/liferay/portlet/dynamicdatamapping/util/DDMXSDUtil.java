@@ -16,6 +16,7 @@ package com.liferay.portlet.dynamicdatamapping.util;
 
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
@@ -33,6 +34,8 @@ import javax.servlet.jsp.PageContext;
 public class DDMXSDUtil {
 
 	public static DDMXSD getDDMXSD() {
+		PortalRuntimePermission.checkGetBeanProperty(DDMXSDUtil.class);
+
 		return _ddmXSD;
 	}
 
@@ -98,6 +101,8 @@ public class DDMXSDUtil {
 	}
 
 	public void setDDMXSD(DDMXSD ddmXSD) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_ddmXSD = ddmXSD;
 	}
 

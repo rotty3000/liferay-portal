@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.xml;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
@@ -114,6 +116,8 @@ public class SAXReaderUtil {
 	}
 
 	public static SAXReader getSAXReader() {
+		PortalRuntimePermission.checkGetBeanProperty(SAXReaderUtil.class);
+
 		return _saxReader;
 	}
 
@@ -203,6 +207,8 @@ public class SAXReaderUtil {
 	}
 
 	public void setSAXReader(SAXReader saxReader) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_saxReader = saxReader;
 	}
 

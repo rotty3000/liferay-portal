@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.servlet.Servlet;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -100,21 +102,20 @@ public class PropsUtil {
 			SystemProperties.set(
 				PropsKeys.DEFAULT_LIFERAY_HOME, _getDefaultLiferayHome());
 
-			// Global lib directory
+			// Global shared lib directory
 
-			String globalLibDir = ClassUtil.getParentPath(
-				ReleaseInfo.class.getClassLoader(),
-				ReleaseInfo.class.getName());
+			String globalSharedLibDir = _getLibDir(Servlet.class);
 
-			int pos = globalLibDir.lastIndexOf(".jar!");
-
-			if (pos == -1) {
-				pos = globalLibDir.lastIndexOf(".jar/");
+			if (_log.isInfoEnabled()) {
+				_log.info("Global shared lib directory " + globalSharedLibDir);
 			}
 
-			pos = globalLibDir.lastIndexOf(CharPool.SLASH, pos);
+			SystemProperties.set(
+				PropsKeys.LIFERAY_LIB_GLOBAL_SHARED_DIR, globalSharedLibDir);
 
-			globalLibDir = globalLibDir.substring(0, pos + 1);
+			// Global lib directory
+
+			String globalLibDir = _getLibDir(ReleaseInfo.class);
 
 			if (_log.isInfoEnabled()) {
 				_log.info("Global lib directory " + globalLibDir);
@@ -125,7 +126,9 @@ public class PropsUtil {
 
 			// Portal lib directory
 
-			ClassLoader classLoader = getClass().getClassLoader();
+			Class<?> clazz = getClass();
+
+			ClassLoader classLoader = clazz.getClassLoader();
 
 			String portalLibDir = WebDirDetector.getLibDir(classLoader);
 
@@ -300,6 +303,23 @@ public class PropsUtil {
 		}
 
 		return defaultLiferayHome;
+	}
+
+	private String _getLibDir(Class<?> clazz) {
+		String path = ClassUtil.getParentPath(
+			clazz.getClassLoader(), clazz.getName());
+
+		int pos = path.lastIndexOf(".jar!");
+
+		if (pos == -1) {
+			pos = path.lastIndexOf(".jar/");
+		}
+
+		pos = path.lastIndexOf(CharPool.SLASH, pos);
+
+		path = path.substring(0, pos + 1);
+
+		return path;
 	}
 
 	private Properties _getProperties() {

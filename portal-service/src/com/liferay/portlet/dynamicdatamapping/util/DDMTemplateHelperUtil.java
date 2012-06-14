@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 
@@ -27,10 +28,15 @@ public class DDMTemplateHelperUtil {
 	}
 
 	public static DDMTemplateHelper getDDMTemplateHelper() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			DDMTemplateHelperUtil.class);
+
 		return _ddmTemplateHelper;
 	}
 
 	public void setDDMTemplateHelper(DDMTemplateHelper ddmTemplateHelper) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_ddmTemplateHelper = ddmTemplateHelper;
 	}
 

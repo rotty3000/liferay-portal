@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.dynamicdatamapping.storage;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.dynamicdatamapping.StorageException;
@@ -106,6 +107,8 @@ public class StorageEngineUtil {
 	}
 
 	public static StorageEngine getStorageEngine() {
+		PortalRuntimePermission.checkGetBeanProperty(StorageEngineUtil.class);
+
 		return _storageEngine;
 	}
 
@@ -140,6 +143,8 @@ public class StorageEngineUtil {
 	}
 
 	public void setStorageEngine(StorageEngine storageEngine) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_storageEngine = storageEngine;
 	}
 

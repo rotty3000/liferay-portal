@@ -57,6 +57,8 @@ import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.ProgressStatusConstants;
+import com.liferay.portal.kernel.util.ProgressTracker;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -66,7 +68,6 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
-import com.liferay.portal.kernel.xuggler.XugglerInstallStatus;
 import com.liferay.portal.kernel.xuggler.XugglerUtil;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.search.lucene.LuceneHelperUtil;
@@ -82,7 +83,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.MaintenanceUtil;
 import com.liferay.portal.util.PortalInstances;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.ShutdownUtil;
@@ -110,9 +110,6 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletSession;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowState;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Level;
 import org.apache.struts.action.ActionForm;
@@ -311,20 +308,20 @@ public class EditServerAction extends PortletAction {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(
-			actionRequest);
+		ProgressTracker progressTracker = new ProgressTracker(
+			actionRequest, WebKeys.XUGGLER_INSTALL_STATUS);
 
-		HttpSession session = request.getSession();
+		progressTracker.addProgress(
+			ProgressStatusConstants.DOWNLOADING, 15, "downloading-xuggler");
+		progressTracker.addProgress(
+			ProgressStatusConstants.COPYING, 70, "copying-xuggler-files");
 
-		XugglerInstallStatus xugglerInstallStatus = new XugglerInstallStatus();
-
-		session.setAttribute(
-			WebKeys.XUGGLER_INSTALL_STATUS, xugglerInstallStatus);
+		progressTracker.initialize();
 
 		String jarName = ParamUtil.getString(actionRequest, "jarName");
 
 		try {
-			XugglerUtil.installNativeLibraries(jarName, xugglerInstallStatus);
+			XugglerUtil.installNativeLibraries(jarName, progressTracker);
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
@@ -340,9 +337,8 @@ public class EditServerAction extends PortletAction {
 
 			writeJSON(actionRequest, actionResponse, jsonObject);
 		}
-		finally {
-			session.removeAttribute(WebKeys.XUGGLER_INSTALL_STATUS);
-		}
+
+		progressTracker.finish();
 	}
 
 	protected void reindex(ActionRequest actionRequest) throws Exception {
@@ -885,19 +881,15 @@ public class EditServerAction extends PortletAction {
 			}
 
 			try {
-				boolean result = _countDownLatch.await(
-					PropsValues.LUCENE_CLUSTER_INDEX_LOADING_SYNC_TIMEOUT,
-					TimeUnit.MILLISECONDS);
+				if (_master) {
+					_countDownLatch.await();
+				}
+				else {
+					boolean result = _countDownLatch.await(
+						PropsValues.LUCENE_CLUSTER_INDEX_LOADING_SYNC_TIMEOUT,
+						TimeUnit.MILLISECONDS);
 
-				if (!result) {
-					if (_master) {
-						_log.error(
-							logPrefix + " timed out. Skip cluster index " +
-								"loading notification.");
-
-						return;
-					}
-					else {
+					if (!result) {
 						_log.error(
 							logPrefix + " timed out. You may need to " +
 								"re-trigger a reindex process.");

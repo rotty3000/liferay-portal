@@ -85,7 +85,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -131,7 +130,6 @@ public class ServiceBuilder {
 		String springShardDataSourceFileName = arguments.get("service.spring.shard.data.source.file");
 		String apiDir = arguments.get("service.api.dir");
 		String implDir = arguments.get("service.impl.dir");
-		String jsonFileName = arguments.get("service.json.file");
 		String remotingFileName = arguments.get("service.remoting.file");
 		String sqlDir = arguments.get("service.sql.dir");
 		String sqlFileName = arguments.get("service.sql.file");
@@ -143,6 +141,8 @@ public class ServiceBuilder {
 		String propsUtil = arguments.get("service.props.util");
 		String pluginName = arguments.get("service.plugin.name");
 		String testDir = arguments.get("service.test.dir");
+		long buildNumber = GetterUtil.getLong(arguments.get("service.build.number"), 1);
+		boolean buildNumberIncrement = GetterUtil.getBoolean(arguments.get("service.build.number.increment"), true);
 
 		try {
 			new ServiceBuilder(
@@ -150,10 +150,11 @@ public class ServiceBuilder {
 				springFileName, springBaseFileName, springClusterFileName,
 				springDynamicDataSourceFileName, springHibernateFileName,
 				springInfrastructureFileName, springShardDataSourceFileName,
-				apiDir, implDir, jsonFileName, remotingFileName, sqlDir,
+				apiDir, implDir, remotingFileName, sqlDir,
 				sqlFileName, sqlIndexesFileName, sqlIndexesPropertiesFileName,
 				sqlSequencesFileName, autoNamespaceTables, beanLocatorUtil,
-				propsUtil, pluginName, testDir);
+				propsUtil, pluginName, testDir, true, buildNumber,
+				buildNumberIncrement);
 		}
 		catch (RuntimeException re) {
 			System.out.println(
@@ -166,7 +167,6 @@ public class ServiceBuilder {
 				"\tservice.spring.file=${basedir}/src/META-INF/portal-spring.xml\n" +
 				"\tservice.api.dir=${basedir}/../portal-service/src\n" +
 				"\tservice.impl.dir=${basedir}/src\n" +
-				"\tservice.json.file=${basedir}/../portal-web/docroot/html/js/liferay/service.js\n" +
 				"\tservice.remoting.file=${basedir}/../portal-web/docroot/WEB-INF/remoting-servlet.xml\n" +
 				"\tservice.sql.dir=${basedir}/../sql\n" +
 				"\tservice.sql.file=portal-tables.sql\n" +
@@ -176,6 +176,8 @@ public class ServiceBuilder {
 				"\tservice.bean.locator.util=com.liferay.portal.kernel.bean.PortalBeanLocatorUtil\n" +
 				"\tservice.props.util=com.liferay.portal.util.PropsUtil\n" +
 				"\tservice.test.dir=${basedir}/test/integration\n" +
+				"\tservice.build.number=1\n" +
+				"\tservice.build.number.increment=true\n" +
 				"\n" +
 				"You can also customize the generated code by overriding the default templates with these optional system properties:\n" +
 				"\n" +
@@ -417,21 +419,21 @@ public class ServiceBuilder {
 		String springDynamicDataSourceFileName, String springHibernateFileName,
 		String springInfrastructureFileName,
 		String springShardDataSourceFileName, String apiDir, String implDir,
-		String jsonFileName, String remotingFileName, String sqlDir,
-		String sqlFileName, String sqlIndexesFileName,
-		String sqlIndexesPropertiesFileName, String sqlSequencesFileName,
-		boolean autoNamespaceTables, String beanLocatorUtil, String propsUtil,
-		String pluginName, String testDir) {
+		String remotingFileName, String sqlDir, String sqlFileName,
+		String sqlIndexesFileName, String sqlIndexesPropertiesFileName,
+		String sqlSequencesFileName, boolean autoNamespaceTables,
+		String beanLocatorUtil, String propsUtil, String pluginName,
+		String testDir) {
 
 		this(
 			fileName, hbmFileName, ormFileName, modelHintsFileName,
 			springFileName, springBaseFileName, springClusterFileName,
 			springDynamicDataSourceFileName, springHibernateFileName,
 			springInfrastructureFileName, springShardDataSourceFileName, apiDir,
-			implDir, jsonFileName, remotingFileName, sqlDir, sqlFileName,
-			sqlIndexesFileName, sqlIndexesPropertiesFileName,
-			sqlSequencesFileName, autoNamespaceTables, beanLocatorUtil,
-			propsUtil, pluginName, testDir, true);
+			implDir, remotingFileName, sqlDir, sqlFileName, sqlIndexesFileName,
+			sqlIndexesPropertiesFileName, sqlSequencesFileName,
+			autoNamespaceTables, beanLocatorUtil, propsUtil, pluginName,
+			testDir, true, 1, true);
 	}
 
 	public ServiceBuilder(
@@ -441,17 +443,17 @@ public class ServiceBuilder {
 		String springDynamicDataSourceFileName, String springHibernateFileName,
 		String springInfrastructureFileName,
 		String springShardDataSourceFileName, String apiDir, String implDir,
-		String jsonFileName, String remotingFileName, String sqlDir,
-		String sqlFileName, String sqlIndexesFileName,
-		String sqlIndexesPropertiesFileName, String sqlSequencesFileName,
-		boolean autoNamespaceTables, String beanLocatorUtil, String propsUtil,
-		String pluginName, String testDir, boolean build) {
+		String remotingFileName, String sqlDir, String sqlFileName,
+		String sqlIndexesFileName, String sqlIndexesPropertiesFileName,
+		String sqlSequencesFileName, boolean autoNamespaceTables,
+		String beanLocatorUtil, String propsUtil, String pluginName,
+		String testDir, boolean build, long buildNumber,
+		boolean buildNumberIncrement) {
 
 		_tplBadAliasNames = _getTplProperty(
 			"bad_alias_names", _tplBadAliasNames);
 		_tplBadColumnNames = _getTplProperty(
 			"bad_column_names", _tplBadColumnNames);
-		_tplBadJsonTypes = _getTplProperty("bad_json_types", _tplBadJsonTypes);
 		_tplBadTableNames = _getTplProperty(
 			"bad_table_names", _tplBadTableNames);
 		_tplBlobModel = _getTplProperty("blob_model", _tplBlobModel);
@@ -518,7 +520,6 @@ public class ServiceBuilder {
 			_badTableNames = _readLines(_tplBadTableNames);
 			_badAliasNames = _readLines(_tplBadAliasNames);
 			_badColumnNames = _readLines(_tplBadColumnNames);
-			_badJsonTypes = _readLines(_tplBadJsonTypes);
 			_hbmFileName = hbmFileName;
 			_ormFileName = ormFileName;
 			_modelHintsFileName = modelHintsFileName;
@@ -531,7 +532,6 @@ public class ServiceBuilder {
 			_springShardDataSourceFileName = springShardDataSourceFileName;
 			_apiDir = apiDir;
 			_implDir = implDir;
-			_jsonFileName = jsonFileName;
 			_remotingFileName = remotingFileName;
 			_sqlDir = sqlDir;
 			_sqlFileName = sqlFileName;
@@ -546,6 +546,8 @@ public class ServiceBuilder {
 			_pluginName = GetterUtil.getString(pluginName);
 			_testDir = testDir;
 			_build = build;
+			_buildNumber = buildNumber;
+			_buildNumberIncrement = buildNumberIncrement;
 
 			String content = _getContent(fileName);
 
@@ -742,8 +744,6 @@ public class ServiceBuilder {
 				_createServiceClpMessageListener();
 				_createServiceClpSerializer(exceptionList);
 
-				_createJsonJs();
-
 				if (Validator.isNotNull(_remotingFileName)) {
 					_createRemotingXml();
 				}
@@ -924,11 +924,11 @@ public class ServiceBuilder {
 				_springFileName, _springBaseFileName, _springClusterFileName,
 				_springDynamicDataSourceFileName, _springHibernateFileName,
 				_springInfrastructureFileName, _springShardDataSourceFileName,
-				_apiDir, _implDir, _jsonFileName, _remotingFileName, _sqlDir,
-				_sqlFileName, _sqlIndexesFileName,
-				_sqlIndexesPropertiesFileName, _sqlSequencesFileName,
-				_autoNamespaceTables, _beanLocatorUtil, _propsUtil, _pluginName,
-				_testDir, false);
+				_apiDir, _implDir, _remotingFileName, _sqlDir, _sqlFileName,
+				_sqlIndexesFileName, _sqlIndexesPropertiesFileName,
+				_sqlSequencesFileName, _autoNamespaceTables, _beanLocatorUtil,
+				_propsUtil, _pluginName, _testDir, false, _buildNumber,
+				_buildNumberIncrement);
 
 			entity = serviceBuilder.getEntity(refEntity);
 
@@ -1983,129 +1983,6 @@ public class ServiceBuilder {
 		}
 	}
 
-	private void _createJsonJs() throws Exception {
-		if (_packagePath.equals("com.liferay.counter")) {
-			return;
-		}
-
-		if (Validator.isNotNull(_pluginName)) {
-			boolean hasRemoteService = false;
-
-			for (int i = 0; i < _ejbList.size(); i++) {
-				Entity entity = _ejbList.get(i);
-
-				if (entity.hasRemoteService()) {
-					hasRemoteService = true;
-
-					break;
-				}
-			}
-
-			if (!hasRemoteService) {
-				return;
-			}
-		}
-
-		StringBundler sb = new StringBundler();
-
-		if (_ejbList.size() > 0) {
-			sb.append(_processTemplate(_tplJsonJs));
-		}
-
-		for (int i = 0; i < _ejbList.size(); i++) {
-			Entity entity = _ejbList.get(i);
-
-			if (entity.hasRemoteService()) {
-				JavaClass javaClass = _getJavaClass(
-					_serviceOutputPath + "/service/" + entity.getName() +
-						"Service.java");
-
-				JavaMethod[] methods = _getMethods(javaClass);
-
-				Set<String> jsonMethods = new LinkedHashSet<String>();
-
-				for (JavaMethod method : methods) {
-					String methodName = method.getName();
-
-					if (methodName.equals("getBeanIdentifier") ||
-						methodName.equals("invokeMethod") ||
-						methodName.equals("setBeanIdentifier")) {
-
-						continue;
-					}
-
-					String returnValue = getReturnType(method);
-
-					boolean badJsonType = false;
-
-					for (JavaParameter parameter : method.getParameters()) {
-						String parameterType = getParameterType(parameter);
-
-						if (_badJsonTypes.contains(parameterType)) {
-							badJsonType = true;
-						}
-					}
-
-					if (method.isPublic() &&
-						!_badJsonTypes.contains(returnValue) && !badJsonType) {
-
-						jsonMethods.add(methodName);
-					}
-				}
-
-				if (jsonMethods.size() > 0) {
-					Map<String, Object> context = _getContext();
-
-					context.put("entity", entity);
-					context.put("methods", jsonMethods);
-
-					sb.append("\n\n");
-					sb.append(_processTemplate(_tplJsonJsMethod, context));
-				}
-			}
-		}
-
-		File jsonFile = new File(_jsonFileName);
-
-		if (!jsonFile.exists()) {
-			FileUtil.write(jsonFile, "");
-		}
-
-		String oldContent = FileUtil.read(jsonFile);
-		String newContent = oldContent;
-
-		int oldBegin = oldContent.indexOf(
-			"Liferay.Service.register(\"Liferay.Service." + _portletShortName);
-
-		int oldEnd = oldContent.lastIndexOf(
-			"Liferay.Service." + _portletShortName);
-
-		oldEnd = oldContent.indexOf(");", oldEnd);
-
-		int newBegin = newContent.indexOf(
-			"Liferay.Service.register(\"Liferay.Service." + _portletShortName);
-
-		int newEnd = newContent.lastIndexOf(
-			"Liferay.Service." + _portletShortName);
-
-		newEnd = newContent.indexOf(");", newEnd);
-
-		if (newBegin == -1) {
-			newContent = oldContent + "\n\n" + sb.toString().trim();
-		}
-		else {
-			newContent =
-				newContent.substring(0, oldBegin) + sb.toString().trim() +
-					newContent.substring(oldEnd + 2);
-		}
-
-		newContent = newContent.trim();
-
-		if (!oldContent.equals(newContent)) {
-			FileUtil.write(jsonFile, newContent);
-		}
-	}
-
 	private void _createModel(Entity entity) throws Exception {
 		Map<String, Object> context = _getContext();
 
@@ -2589,19 +2466,33 @@ public class ServiceBuilder {
 		File propsFile = new File(_implDir + "/service.properties");
 
 		long buildNumber = 1;
+		long buildDate = System.currentTimeMillis();
 
 		if (propsFile.exists()) {
 			Properties properties = PropertiesUtil.load(
 				FileUtil.read(propsFile));
 
-			buildNumber = GetterUtil.getLong(
-				properties.getProperty("build.number")) + 1;
+			if (!_buildNumberIncrement) {
+				buildDate = GetterUtil.getLong(
+					properties.getProperty("build.date"));
+				buildNumber = GetterUtil.getLong(
+					properties.getProperty("build.number"));
+			}
+			else {
+				buildNumber = GetterUtil.getLong(
+					properties.getProperty("build.number")) + 1;
+			}
+		}
+
+		if (!_buildNumberIncrement && (buildNumber < _buildNumber)) {
+			buildNumber = _buildNumber;
+			buildDate = System.currentTimeMillis();
 		}
 
 		Map<String, Object> context = _getContext();
 
-		context.put("buildNumber", new Long(buildNumber));
-		context.put("currentTimeMillis", new Long(System.currentTimeMillis()));
+		context.put("buildNumber", buildNumber);
+		context.put("currentTimeMillis", buildDate);
 
 		String content = _processTemplate(_tplProps, context);
 
@@ -3999,7 +3890,6 @@ public class ServiceBuilder {
 			"springInfrastructureFileName", _springInfrastructureFileName);
 		context.put("apiDir", _apiDir);
 		context.put("implDir", _implDir);
-		context.put("jsonFileName", _jsonFileName);
 		context.put("sqlDir", _sqlDir);
 		context.put("sqlFileName", _sqlFileName);
 		context.put("beanLocatorUtil", _beanLocatorUtil);
@@ -4983,11 +4873,12 @@ public class ServiceBuilder {
 	private boolean _autoNamespaceTables;
 	private Set<String> _badAliasNames;
 	private Set<String> _badColumnNames;
-	private Set<String> _badJsonTypes;
 	private Set<String> _badTableNames;
 	private String _beanLocatorUtil;
 	private String _beanLocatorUtilShortName;
 	private boolean _build;
+	private long _buildNumber;
+	private boolean _buildNumberIncrement;
 	private List<Entity> _ejbList;
 	private Map<String, EntityMapping> _entityMappings;
 	private Map<String, Entity> _entityPool = new HashMap<String, Entity>();
@@ -4995,7 +4886,6 @@ public class ServiceBuilder {
 	private String _implDir;
 	private Map<String, JavaClass> _javaClasses =
 		new HashMap<String, JavaClass>();
-	private String _jsonFileName;
 	private String _modelHintsFileName;
 	private String _ormFileName;
 	private String _outputPath;
@@ -5023,7 +4913,6 @@ public class ServiceBuilder {
 	private String _testOutputPath;
 	private String _tplBadAliasNames = _TPL_ROOT + "bad_alias_names.txt";
 	private String _tplBadColumnNames = _TPL_ROOT + "bad_column_names.txt";
-	private String _tplBadJsonTypes = _TPL_ROOT + "bad_json_types.txt";
 	private String _tplBadTableNames = _TPL_ROOT + "bad_table_names.txt";
 	private String _tplBlobModel = _TPL_ROOT + "blob_model.ftl";
 	private String _tplEjbPk = _TPL_ROOT + "ejb_pk.ftl";

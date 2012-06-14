@@ -26,7 +26,9 @@ public class AddUserTests extends BaseTestSuite {
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
 		testSuite.addTestSuite(AddUserTest.class);
+		testSuite.addTestSuite(ViewUserTest.class);
 		testSuite.addTestSuite(TearDownUserTest.class);
+		testSuite.addTestSuite(ViewUserNoTest.class);
 
 		return testSuite;
 	}

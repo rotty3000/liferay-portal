@@ -197,6 +197,13 @@ public class JournalContentSearchLocalServiceImpl
 		return journalContentSearchPersistence.countByArticleId(articleId);
 	}
 
+	public List<JournalContentSearch> getPortletContentSearches(
+			String portletId)
+		throws SystemException {
+
+		return journalContentSearchPersistence.findByPortletId(portletId);
+	}
+
 	public JournalContentSearch updateContentSearch(
 			long groupId, boolean privateLayout, long layoutId,
 			String portletId, String articleId)

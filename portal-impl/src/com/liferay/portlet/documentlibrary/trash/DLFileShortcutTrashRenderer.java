@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.trash.BaseTrashRenderer;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -50,8 +49,6 @@ public class DLFileShortcutTrashRenderer extends BaseTrashRenderer {
 
 		_fileEntry = DLAppLocalServiceUtil.getFileEntry(
 			fileShortcut.getToFileEntryId());
-
-		_fileVersion = _fileEntry.getFileVersion();
 	}
 
 	@Override
@@ -97,8 +94,6 @@ public class DLFileShortcutTrashRenderer extends BaseTrashRenderer {
 
 			renderRequest.setAttribute(
 				WebKeys.DOCUMENT_LIBRARY_FILE_ENTRY, _fileEntry);
-			renderRequest.setAttribute(
-				WebKeys.DOCUMENT_LIBRARY_FILE_VERSION, _fileVersion);
 
 			return "/html/portlet/document_library/asset/" + template + ".jsp";
 		}
@@ -108,6 +103,5 @@ public class DLFileShortcutTrashRenderer extends BaseTrashRenderer {
 
 	private FileEntry _fileEntry;
 	private DLFileShortcut _fileShortcut;
-	private FileVersion _fileVersion;
 
 }

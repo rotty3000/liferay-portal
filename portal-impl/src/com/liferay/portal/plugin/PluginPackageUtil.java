@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ReleaseInfo;
@@ -987,6 +988,9 @@ public class PluginPackageUtil {
 			properties.getProperty("page-url"));
 		String downloadURL = GetterUtil.getString(
 			properties.getProperty("download-url"));
+		List<String> requiredDeploymentContexts = ListUtil.fromArray(
+			StringUtil.split(
+				properties.getProperty("required-deployment-contexts")));
 
 		PluginPackage pluginPackage = new PluginPackageImpl(moduleId);
 
@@ -1005,6 +1009,7 @@ public class PluginPackageUtil {
 		pluginPackage.setPageURL(pageURL);
 		pluginPackage.setDownloadURL(downloadURL);
 		//pluginPackage.setDeploymentSettings(null);
+		pluginPackage.setRequiredDeploymentContexts(requiredDeploymentContexts);
 
 		return pluginPackage;
 	}

@@ -18,12 +18,14 @@ import com.liferay.portal.action.JSONServiceAction;
 import com.liferay.portal.jsonwebservice.action.JSONWebServiceInvokerAction;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.util.PropsValues;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,10 +97,6 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 		}
 		catch (InvocationTargetException ite) {
 			Throwable cause = ite.getCause();
-
-			if (cause instanceof SecurityException) {
-				throw (SecurityException) cause;
-			}
 
 			_log.error(cause, cause);
 

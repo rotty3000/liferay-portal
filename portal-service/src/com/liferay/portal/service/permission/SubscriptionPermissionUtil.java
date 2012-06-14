@@ -16,6 +16,7 @@ package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 /**
@@ -40,11 +41,16 @@ public class SubscriptionPermissionUtil {
 	}
 
 	public static SubscriptionPermission getSubscriptionPermission() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			SubscriptionPermissionUtil.class);
+
 		return _subscriptionPermission;
 	}
 
 	public void setSubscriptionPermission(
 		SubscriptionPermission subscriptionPermission) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_subscriptionPermission = subscriptionPermission;
 	}

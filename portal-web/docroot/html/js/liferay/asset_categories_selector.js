@@ -21,7 +21,14 @@ AUI.add(
 
 		var TPL_CHECKED = ' checked="checked" ';
 
-		var TPL_INPUT = '<label title="{name}"><input data-categoryId="{categoryId}" type="checkbox" value="{name}" {checked} />{name} {path}</label>';
+		var TPL_INPUT =
+			'<label title="{name}">' +
+				'<span class="lfr-categories-selector-category-name" title="{name}">' +
+					'<input data-categoryId="{categoryId}" type="checkbox" value="{name}" {checked} />' +
+					'{name}' +
+				'</span>' +
+				'<span class="lfr-categories-selector-search-results-path" title="{path}">{path}</span>' +
+			'</label>';
 
 		var TPL_MESSAGE = '<div class="lfr-categories-message">{0}</div>';
 
@@ -223,6 +230,9 @@ AUI.add(
 						var instance = this;
 
 						var data = {};
+
+						data.p_auth = Liferay.authToken;
+
 						var assetId = instance._getTreeNodeAssetId(treeNode);
 						var assetType = instance._getTreeNodeAssetType(treeNode);
 
@@ -247,20 +257,11 @@ AUI.add(
 
 						var vocabularyIds = instance.get('vocabularyIds');
 
-						var serviceParameterTypesGetVocabularies = [
-							'[J'
-						];
-
-						var serviceParameterTypesGetGroupVocabularies = [
-							'[J',
-							'java.lang.String'
-						];
-
 						if (vocabularyIds.length > 0) {
-							Liferay.Service.Asset.AssetVocabulary.getVocabularies(
+							Liferay.Service(
+								'/assetvocabulary/get-vocabularies',
 								{
-									vocabularyIds: vocabularyIds,
-									serviceParameterTypes: A.JSON.stringify(serviceParameterTypesGetVocabularies)
+									vocabularyIds: vocabularyIds
 								},
 								callback
 							);
@@ -272,11 +273,11 @@ AUI.add(
 
 							groupIds.push(themeDisplay.getCompanyGroupId());
 
-							Liferay.Service.Asset.AssetVocabulary.getGroupsVocabularies(
+							Liferay.Service(
+								'/assetvocabulary/get-groups-vocabularies',
 								{
 									groupIds: groupIds,
-									className: className,
-									serviceParameterTypes: A.JSON.stringify(serviceParameterTypesGetGroupVocabularies)
+									className: className
 								},
 								callback
 							);
@@ -475,7 +476,8 @@ AUI.add(
 
 							searchResults.addClass('loading-animation');
 
-							Liferay.Service.Asset.AssetCategory.getJSONSearch(
+							Liferay.Service(
+								'/assetcategory/get-json-search',
 								{
 									groupId: vocabularyGroupIds[0],
 									name: Lang.sub(TPL_SEARCH_QUERY, [searchValue]),

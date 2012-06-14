@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.ldap;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.model.User;
 
 import javax.naming.directory.Attributes;
@@ -23,21 +24,29 @@ import javax.naming.ldap.LdapContext;
  * @author Edward Han
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
 public class PortalLDAPImporterUtil {
 
+	public static PortalLDAPImporter getPortalLDAPImporter() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			PortalLDAPImporterUtil.class);
+
+		return _portalLDAPImporter;
+	}
+
 	public static void importFromLDAP() throws Exception {
-		_portalLDAPImporter.importFromLDAP();
+		getPortalLDAPImporter().importFromLDAP();
 	}
 
 	public static void importFromLDAP(long companyId) throws Exception {
-		_portalLDAPImporter.importFromLDAP(companyId);
+		getPortalLDAPImporter().importFromLDAP(companyId);
 	}
 
 	public static void importFromLDAP(long ldapServerId, long companyId)
 		throws Exception {
 
-		_portalLDAPImporter.importFromLDAP(ldapServerId, companyId);
+		getPortalLDAPImporter().importFromLDAP(ldapServerId, companyId);
 	}
 
 	public static User importLDAPUser(
@@ -45,7 +54,7 @@ public class PortalLDAPImporterUtil {
 			Attributes attributes, String password)
 		throws Exception {
 
-		return _portalLDAPImporter.importLDAPUser(
+		return getPortalLDAPImporter().importLDAPUser(
 			ldapServerId, companyId, ldapContext, attributes, password);
 	}
 
@@ -54,7 +63,7 @@ public class PortalLDAPImporterUtil {
 			String screenName)
 		throws Exception {
 
-		return _portalLDAPImporter.importLDAPUser(
+		return getPortalLDAPImporter().importLDAPUser(
 			ldapServerId, companyId, emailAddress, screenName);
 	}
 
@@ -62,7 +71,7 @@ public class PortalLDAPImporterUtil {
 			long companyId, String emailAddress, String screenName)
 		throws Exception {
 
-		return _portalLDAPImporter.importLDAPUser(
+		return getPortalLDAPImporter().importLDAPUser(
 			companyId, emailAddress, screenName);
 	}
 
@@ -70,11 +79,13 @@ public class PortalLDAPImporterUtil {
 			long companyId, String screenName)
 		throws Exception {
 
-		return _portalLDAPImporter.importLDAPUserByScreenName(
+		return getPortalLDAPImporter().importLDAPUserByScreenName(
 			companyId, screenName);
 	}
 
 	public void setPortalLDAPImporter(PortalLDAPImporter portalLDAPImporter) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_portalLDAPImporter = portalLDAPImporter;
 	}
 

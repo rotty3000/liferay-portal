@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,57 +25,60 @@ import java.util.TreeMap;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
 public class LocaleUtil {
 
 	public static Locale fromLanguageId(String languageId) {
-		return _instance._fromLanguageId(languageId);
+		return getInstance()._fromLanguageId(languageId);
 	}
 
 	public static Locale[] fromLanguageIds(String[] languageIds) {
-		return _instance._fromLanguageIds(languageIds);
+		return getInstance()._fromLanguageIds(languageIds);
 	}
 
 	public static Locale getDefault() {
-		return _instance._getDefault();
+		return getInstance()._getDefault();
 	}
 
 	public static LocaleUtil getInstance() {
+		PortalRuntimePermission.checkGetBeanProperty(LocaleUtil.class);
+
 		return _instance;
 	}
 
 	public static Map<String, String> getISOLanguages(Locale locale) {
-		return _instance._getISOLanguages(locale);
+		return getInstance()._getISOLanguages(locale);
 	}
 
 	public static void setDefault(
 		String userLanguage, String userCountry, String userVariant) {
 
-		_instance._setDefault(userLanguage, userCountry, userVariant);
+		getInstance()._setDefault(userLanguage, userCountry, userVariant);
 	}
 
 	public static String toLanguageId(Locale locale) {
-		return _instance._toLanguageId(locale);
+		return getInstance()._toLanguageId(locale);
 	}
 
 	public static String[] toLanguageIds(Locale[] locales) {
-		return _instance._toLanguageIds(locales);
+		return getInstance()._toLanguageIds(locales);
 	}
 
 	public static String toW3cLanguageId(Locale locale) {
-		return _instance._toW3cLanguageId(locale);
+		return getInstance()._toW3cLanguageId(locale);
 	}
 
 	public static String toW3cLanguageId(String languageId) {
-		return _instance._toW3cLanguageId(languageId);
+		return getInstance()._toW3cLanguageId(languageId);
 	}
 
 	public static String[] toW3cLanguageIds(Locale[] locales) {
-		return _instance._toW3cLanguageIds(locales);
+		return getInstance()._toW3cLanguageIds(locales);
 	}
 
 	public static String[] toW3cLanguageIds(String[] languageIds) {
-		return _instance._toW3cLanguageIds(languageIds);
+		return getInstance()._toW3cLanguageIds(languageIds);
 	}
 
 	private LocaleUtil() {
@@ -177,6 +181,8 @@ public class LocaleUtil {
 
 	private void _setDefault(
 		String userLanguage, String userCountry, String userVariant) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		if (Validator.isNotNull(userLanguage) &&
 			Validator.isNull(userCountry) && Validator.isNull(userVariant)) {

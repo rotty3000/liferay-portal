@@ -255,7 +255,7 @@
 	</target>
 
 	<target name="build-test-ant-scripts">
-		<property name="build-test-ant-scripts.version" value="6" />
+		<property name="build-test-ant-scripts.version" value="1" />
 
 		<if>
 			<available file="portal-web/test-ant-scripts/version" />
@@ -346,6 +346,11 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="control-panel-roles" />
+			<param name="test.ant.script.suite" value="ControlPanelRolesTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="control-panel-settings" />
 			<param name="test.ant.script.suite" value="ControlPanelSettingsTestSuite" />
 		</antcall>
@@ -361,8 +366,8 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="control-panel-user-group" />
-			<param name="test.ant.script.suite" value="ControlPanelUserGroupTestSuite" />
+			<param name="test.ant.script.command" value="control-panel-user-groups" />
+			<param name="test.ant.script.suite" value="ControlPanelUserGroupsTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -1313,6 +1318,12 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="plugins-test-pacl" />
+			<param name="test.ant.script.plugin.portlets" value="chat-portlet,flash-portlet,test-pacl-portlet" />
+			<param name="test.ant.script.suite" value="PluginsTestPACLTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="plugins-test-transaction" />
 			<param name="test.ant.script.plugin.portlets" value="test-transaction-portlet" />
 			<param name="test.ant.script.suite" value="PluginsTestTransactionTestSuite" />
@@ -1450,13 +1461,13 @@
 		</antcall>
 
 		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="portal-web-document-library" />
-			<param name="test.ant.script.suite" value="PortalWebDocumentLibraryTestSuite" />
+			<param name="test.ant.script.command" value="portal-web-documents-and-media" />
+			<param name="test.ant.script.suite" value="PortalWebDocumentsAndMediaTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
-			<param name="test.ant.script.command" value="portal-web-document-library-display" />
-			<param name="test.ant.script.suite" value="PortalWebDocumentLibraryDisplayTestSuite" />
+			<param name="test.ant.script.command" value="portal-web-documents-and-media-display" />
+			<param name="test.ant.script.suite" value="PortalWebDocumentsAndMediaDisplayTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">
@@ -1567,6 +1578,11 @@
 		<antcall target="build-test-ant-script">
 			<param name="test.ant.script.command" value="portal-web-rss" />
 			<param name="test.ant.script.suite" value="PortalWebRSSTestSuite" />
+		</antcall>
+
+		<antcall target="build-test-ant-script">
+			<param name="test.ant.script.command" value="portal-web-security-json" />
+			<param name="test.ant.script.suite" value="PortalWebSecurityJsonTestSuite" />
 		</antcall>
 
 		<antcall target="build-test-ant-script">

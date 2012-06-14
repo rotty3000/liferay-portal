@@ -16,6 +16,7 @@ package com.liferay.portal.kernel.facebook;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import javax.portlet.PortletRequest;
 
@@ -52,6 +53,8 @@ public class FacebookConnectUtil {
 	}
 
 	public static FacebookConnect getFacebookConnect() {
+		PortalRuntimePermission.checkGetBeanProperty(FacebookConnectUtil.class);
+
 		return _facebookConnect;
 	}
 
@@ -85,6 +88,8 @@ public class FacebookConnectUtil {
 	}
 
 	public void setFacebookConnect(FacebookConnect facebookConnect) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_facebookConnect = facebookConnect;
 	}
 

@@ -46,19 +46,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class LayoutsTreeUtil {
 
-	public static List<Layout> getLayouts(
-			HttpServletRequest request, long groupId, boolean privateLayout,
-			long parentLayoutId)
-		throws Exception {
-
-		boolean incomplete = ParamUtil.getBoolean(request, "incomplete", true);
-		int start = ParamUtil.getInteger(request, "start");
-		int end = start + PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN;
-
-		return LayoutLocalServiceUtil.getLayouts(
-			groupId, privateLayout, parentLayoutId, incomplete, start, end);
-	}
-
 	public static String getLayoutsJSON(
 			HttpServletRequest request, long groupId, boolean privateLayout,
 			long parentLayoutId)
@@ -76,9 +63,15 @@ public class LayoutsTreeUtil {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		int start = ParamUtil.getInteger(request, "start");
+		int end = start + PropsValues.LAYOUT_MANAGE_PAGES_INITIAL_CHILDREN;
+
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		List<Layout> layoutAncestors = null;
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+			groupId, privateLayout, parentLayoutId);
 
 		long selPlid = ParamUtil.getLong(request, "selPlid");
 
@@ -86,12 +79,24 @@ public class LayoutsTreeUtil {
 			Layout selLayout = LayoutLocalServiceUtil.getLayout(selPlid);
 
 			layoutAncestors = selLayout.getAncestors();
+
+			layoutAncestors.add(selLayout);
+
+			for (Layout layoutAncestor : layoutAncestors) {
+				int index = layouts.indexOf(layoutAncestor);
+
+				if (index >= end) {
+					end = index + 1;
+
+					break;
+				}
+			}
 		}
 
-		List<Layout> layouts = getLayouts(
-			request, groupId, privateLayout, parentLayoutId);
+		start = Math.min(start, layouts.size());
+		end = Math.min(end, layouts.size());
 
-		for (Layout layout : layouts) {
+		for (Layout layout : layouts.subList(start, end)) {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			if ((layoutAncestors != null) && layoutAncestors.contains(layout) ||

@@ -318,6 +318,24 @@ public class GetterUtil_IW {
 		return GetterUtil.getNumber(value, defaultValue);
 	}
 
+	public java.lang.Number[] getNumberValues(java.lang.Object value) {
+		return GetterUtil.getNumberValues(value);
+	}
+
+	public java.lang.Number[] getNumberValues(java.lang.Object value,
+		java.lang.Number[] defaultValue) {
+		return GetterUtil.getNumberValues(value, defaultValue);
+	}
+
+	public java.lang.Number[] getNumberValues(java.lang.String[] values) {
+		return GetterUtil.getNumberValues(values);
+	}
+
+	public java.lang.Number[] getNumberValues(java.lang.String[] values,
+		java.lang.Number[] defaultValue) {
+		return GetterUtil.getNumberValues(values, defaultValue);
+	}
+
 	public java.lang.Object getObject(java.lang.Object value) {
 		return GetterUtil.getObject(value);
 	}

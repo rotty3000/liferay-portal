@@ -14,24 +14,23 @@
 
 package com.liferay.portal.security.sac;
 
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.MethodSecurity;
-import com.liferay.portal.security.auth.PortalAAManager;
-import com.liferay.portal.security.auth.PortalAAManagerImpl;
 import com.liferay.portal.security.RemoteMethodAccessType;
 import com.liferay.portal.security.auth.AuthSettingsUtil;
 import com.liferay.portal.security.auth.AuthenticationContext;
+import com.liferay.portal.security.auth.PortalAAManager;
+import com.liferay.portal.security.auth.PortalAAManagerImpl;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Tomas Polesovsky
@@ -73,14 +72,8 @@ public class ServiceAccessControlManagerImpl {
 
 		Map<String, Object> properties = authenticationContext.getSettings();
 
-		String hostsAllowedSetting = (String) properties.get("hosts.allowed");
-		if(hostsAllowedSetting == null){
-			return;
-		}
-
-		String[] hostsAllowed = StringUtil.split(hostsAllowedSetting);
-
-		Set<String> hostsAllowedSet = new HashSet(Arrays.asList(hostsAllowed));
+		Set<String> hostsAllowedSet = SetUtil.fromArray(StringUtil.split(
+			GetterUtil.get(properties.get("hosts.allowed"), StringPool.BLANK)));
 
 		HttpServletRequest httpServletRequest =
 			authenticationContext.getHttpServletRequest();

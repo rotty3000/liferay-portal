@@ -104,7 +104,7 @@ public class SecureFilter extends BasePortalFilter {
 
 		if (userId > 0) {
 			request = new ProtectedServletRequest(
-				request, String.valueOf(userId));
+				request, String.valueOf(userId), HttpServletRequest.BASIC_AUTH);
 		}
 		else {
 			try {
@@ -115,7 +115,8 @@ public class SecureFilter extends BasePortalFilter {
 			}
 
 			if (userId > 0) {
-				request = setCredentials(request, session, userId);
+				request = setCredentials(
+					request, session, userId, HttpServletRequest.BASIC_AUTH);
 			}
 			else {
 				response.setHeader(HttpHeaders.WWW_AUTHENTICATE, _BASIC_REALM);
@@ -139,7 +140,8 @@ public class SecureFilter extends BasePortalFilter {
 
 		if (userId > 0) {
 			request = new ProtectedServletRequest(
-				request, String.valueOf(userId));
+				request, String.valueOf(userId),
+				HttpServletRequest.DIGEST_AUTH);
 		}
 		else {
 			try {
@@ -150,7 +152,8 @@ public class SecureFilter extends BasePortalFilter {
 			}
 
 			if (userId > 0) {
-				request = setCredentials(request, session, userId);
+				request = setCredentials(
+					request, session, userId, HttpServletRequest.DIGEST_AUTH);
 			}
 			else {
 
@@ -255,7 +258,7 @@ public class SecureFilter extends BasePortalFilter {
 
 				if ((user != null) && !user.isDefaultUser()) {
 					request = setCredentials(
-						request, request.getSession(), user.getUserId());
+						request, request.getSession(), user.getUserId(), null);
 				}
 				else {
 					if (_digestAuthEnabled) {
@@ -285,14 +288,15 @@ public class SecureFilter extends BasePortalFilter {
 	}
 
 	protected HttpServletRequest setCredentials(
-			HttpServletRequest request, HttpSession session, long userId)
+			HttpServletRequest request, HttpSession session, long userId,
+			String authType)
 		throws Exception {
 
 		User user = UserLocalServiceUtil.getUser(userId);
 
 		String userIdString = String.valueOf(userId);
 
-		request = new ProtectedServletRequest(request, userIdString);
+		request = new ProtectedServletRequest(request, userIdString, authType);
 
 		session.setAttribute(WebKeys.USER, user);
 		session.setAttribute(_AUTHENTICATED_USER, userIdString);

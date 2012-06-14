@@ -104,6 +104,7 @@ body.portlet {
 	}
 
 	.portlet-title-default, .portlet-actions {
+		min-height: 20px;
 		vertical-align: top;
 	}
 

@@ -37,17 +37,22 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.EmailAddress;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.OrgLabor;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.OrganizationConstants;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.OrganizationServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.struts.PortletAction;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
@@ -197,6 +202,9 @@ public class EditOrganizationAction extends PortletAction {
 	protected Organization updateOrganization(ActionRequest actionRequest)
 		throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		long organizationId = ParamUtil.getLong(
 			actionRequest, "organizationId");
 
@@ -263,10 +271,18 @@ public class EditOrganizationAction extends PortletAction {
 			actionRequest, "privateLayoutSetPrototypeLinkEnabled",
 			(privateLayoutSetPrototypeId > 0));
 
-		SitesUtil.updateLayoutSetPrototypesLinks(
-			organization.getGroup(), publicLayoutSetPrototypeId,
-			privateLayoutSetPrototypeId, publicLayoutSetPrototypeLinkEnabled,
-			privateLayoutSetPrototypeLinkEnabled);
+		Group organizationGroup = organization.getGroup();
+
+		if (GroupPermissionUtil.contains(
+				themeDisplay.getPermissionChecker(),
+				organizationGroup.getGroupId(), ActionKeys.UPDATE)) {
+
+			SitesUtil.updateLayoutSetPrototypesLinks(
+				organizationGroup, publicLayoutSetPrototypeId,
+				privateLayoutSetPrototypeId,
+				publicLayoutSetPrototypeLinkEnabled,
+				privateLayoutSetPrototypeLinkEnabled);
+		}
 
 		// Reminder queries
 

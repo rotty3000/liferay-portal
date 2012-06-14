@@ -96,7 +96,7 @@ public class EditLayoutSetBranchAction extends EditLayoutsAction {
 		}
 		catch (Exception e) {
 			if (e instanceof LayoutSetBranchNameException) {
-				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+				SessionErrors.add(actionRequest, e.getClass(), e);
 
 				sendRedirect(actionRequest, actionResponse);
 			}

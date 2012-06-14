@@ -14,7 +14,6 @@
 
 package com.liferay.portal.freemarker;
 
-import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.templateparser.TemplateContext;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -76,8 +75,7 @@ public class FreeMarkerTemplateContextHelper extends TemplateContextHelper {
 
 	@Override
 	public void prepare(
-			TemplateContext templateContext, HttpServletRequest request)
-		throws TemplateException {
+		TemplateContext templateContext, HttpServletRequest request) {
 
 		super.prepare(templateContext, request);
 

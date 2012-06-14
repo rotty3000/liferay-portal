@@ -74,6 +74,11 @@
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="privateLayout" type="tns:boolean"></parameter>
 		</operation>
+		<operation xmlns:operNS="urn:http.service.portal.liferay.com" xmlns:rtns="urn:http.service.portal.liferay.com" xmlns:tns2="http://model.portal.liferay.com" name="getLayouts" qname="operNS:getLayouts" returnQName="getLayoutsReturn" returnType="rtns:ArrayOf_tns2_LayoutSoap" returnItemType="tns2:LayoutSoap" soapAction="">
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="privateLayout" type="tns:boolean"></parameter>
+			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="parentLayoutId" type="tns:long"></parameter>
+		</operation>
 		<operation xmlns:operNS="urn:http.service.portal.liferay.com" name="setLayouts" qname="operNS:setLayouts" soapAction="">
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="groupId" type="tns:long"></parameter>
 			<parameter xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="privateLayout" type="tns:boolean"></parameter>

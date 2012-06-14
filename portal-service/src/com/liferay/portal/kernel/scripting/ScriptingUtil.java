@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.scripting;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -58,6 +60,8 @@ public class ScriptingUtil {
 	}
 
 	public static Scripting getScripting() {
+		PortalRuntimePermission.checkGetBeanProperty(ScriptingUtil.class);
+
 		return _scripting;
 	}
 
@@ -66,6 +70,8 @@ public class ScriptingUtil {
 	}
 
 	public void setScripting(Scripting scripting) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_scripting = scripting;
 	}
 

@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.pop.POPServerUtil;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.struts.AuthPublicPathRegistry;
 import com.liferay.portal.util.BrowserLauncher;
 import com.liferay.portal.util.PrefsPropsUtil;
@@ -263,9 +264,8 @@ public class GlobalStartupAction extends SimpleAction {
 
 		// Javadoc
 
-		Thread thread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = thread.getContextClassLoader();
+		ClassLoader contextClassLoader =
+			PACLClassLoaderUtil.getContextClassLoader();
 
 		JavadocManagerUtil.load(StringPool.BLANK, contextClassLoader);
 

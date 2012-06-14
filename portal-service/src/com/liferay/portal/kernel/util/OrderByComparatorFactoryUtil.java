@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -26,11 +28,16 @@ public class OrderByComparatorFactoryUtil {
 	}
 
 	public static OrderByComparatorFactory getOrderByComparatorFactory() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			OrderByComparatorFactoryUtil.class);
+
 		return _orderByComparatorFactory;
 	}
 
 	public void setOrderByComparatorFactory(
 		OrderByComparatorFactory orderByComparatorFactory) {
+
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
 		_orderByComparatorFactory = orderByComparatorFactory;
 	}

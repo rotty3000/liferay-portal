@@ -15,33 +15,39 @@
 package com.liferay.portlet.documentlibrary.antivirus;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.io.File;
 import java.io.InputStream;
 
 /**
  * @author Michael C. Han
+ * @author Raymond Augé
  */
 public class AntivirusScannerUtil {
 
 	public static AntivirusScanner getAntivirusScanner() {
+		PortalRuntimePermission.checkGetBeanProperty(
+			AntivirusScannerUtil.class);
+
 		return _antivirusScanner;
 	}
 
 	public static boolean isActive() {
-		if (_antivirusScanner == null) {
+		AntivirusScanner antivirusScanner = getAntivirusScanner();
+
+		if (antivirusScanner == null) {
 			return false;
 		}
-		else {
-			return _antivirusScanner.isActive();
-		}
+
+		return antivirusScanner.isActive();
 	}
 
 	public static void scan(byte[] bytes)
 		throws AntivirusScannerException, SystemException {
 
 		if (isActive()) {
-			_antivirusScanner.scan(bytes);
+			getAntivirusScanner().scan(bytes);
 		}
 	}
 
@@ -49,7 +55,7 @@ public class AntivirusScannerUtil {
 		throws AntivirusScannerException, SystemException {
 
 		if (isActive()) {
-			_antivirusScanner.scan(file);
+			getAntivirusScanner().scan(file);
 		}
 	}
 
@@ -57,11 +63,13 @@ public class AntivirusScannerUtil {
 		throws AntivirusScannerException, SystemException {
 
 		if (isActive()) {
-			_antivirusScanner.scan(inputStream);
+			getAntivirusScanner().scan(inputStream);
 		}
 	}
 
 	public void setAntivirusScanner(AntivirusScanner antiVirusScanner) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_antivirusScanner = antiVirusScanner;
 	}
 

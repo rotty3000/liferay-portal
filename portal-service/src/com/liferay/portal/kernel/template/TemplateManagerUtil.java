@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.template;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Tina Tian
+ * @author Raymond Augé
  */
 public class TemplateManagerUtil {
 
@@ -44,11 +47,13 @@ public class TemplateManagerUtil {
 	}
 
 	public static void destroy() {
-		for (TemplateManager templateManager : _templateManagers.values()) {
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		for (TemplateManager templateManager : templateManagers.values()) {
 			templateManager.destroy();
 		}
 
-		_templateManagers.clear();
+		templateManagers.clear();
 	}
 
 	public static Template getTemplate(
@@ -105,17 +110,21 @@ public class TemplateManagerUtil {
 	public static TemplateManager getTemplateManager(
 		String templateManagerName) {
 
-		return _templateManagers.get(templateManagerName);
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		return templateManagers.get(templateManagerName);
 	}
 
 	public static Set<String> getTemplateManagerNames(
 		String templateManagerName) {
 
-		return _templateManagers.keySet();
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		return templateManagers.keySet();
 	}
 
 	public static Map<String, TemplateManager> getTemplateManagers() {
-		return Collections.unmodifiableMap(_templateManagers);
+		return Collections.unmodifiableMap(_getTemplateManagers());
 	}
 
 	public static boolean hasTemplate(
@@ -129,11 +138,15 @@ public class TemplateManagerUtil {
 	}
 
 	public static boolean hasTemplateManager(String templateManagerName) {
-		return _templateManagers.containsKey(templateManagerName);
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		return templateManagers.containsKey(templateManagerName);
 	}
 
 	public static void init() throws TemplateException {
-		for (TemplateManager templateManager : _templateManagers.values()) {
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		for (TemplateManager templateManager : templateManagers.values()) {
 			templateManager.init();
 		}
 	}
@@ -143,12 +156,16 @@ public class TemplateManagerUtil {
 
 		templateManager.init();
 
-		_templateManagers.put(
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		templateManagers.put(
 			templateManager.getTemplateManagerName(), templateManager);
 	}
 
 	public static void unregisterTemplateManager(String templateManagerName) {
-		TemplateManager templateManager = _templateManagers.remove(
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		TemplateManager templateManager = templateManagers.remove(
 			templateManagerName);
 
 		if (templateManager != null) {
@@ -157,8 +174,13 @@ public class TemplateManagerUtil {
 	}
 
 	public void setTemplateManagers(List<TemplateManager> templateManagers) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
+		Map<String, TemplateManager> templateManagersMap =
+			_getTemplateManagers();
+
 		for (TemplateManager templateManager : templateManagers) {
-			_templateManagers.put(
+			templateManagersMap.put(
 				templateManager.getTemplateManagerName(), templateManager);
 		}
 	}
@@ -167,7 +189,9 @@ public class TemplateManagerUtil {
 			String templateManagerName)
 		throws TemplateException {
 
-		TemplateManager templateManager = _templateManagers.get(
+		Map<String, TemplateManager> templateManagers = _getTemplateManagers();
+
+		TemplateManager templateManager = templateManagers.get(
 			templateManagerName);
 
 		if (templateManager == null) {
@@ -176,6 +200,12 @@ public class TemplateManagerUtil {
 		}
 
 		return templateManager;
+	}
+
+	private static Map<String, TemplateManager> _getTemplateManagers() {
+		PortalRuntimePermission.checkGetBeanProperty(TemplateManagerUtil.class);
+
+		return _templateManagers;
 	}
 
 	private static Map<String, TemplateManager> _templateManagers =

@@ -85,7 +85,7 @@
 			FROM
 				DLFileEntry
 			WHERE
-				(fileEntryId NOT IN(
+				(fileEntryId NOT IN (
 					SELECT
 						DLFileVersion.fileEntryId
 					FROM
@@ -103,7 +103,7 @@
 			FROM
 				DLFileEntry
 			WHERE
-				(fileEntryId NOT IN(
+				(fileEntryId NOT IN (
 					SELECT
 						classPK
 					FROM
@@ -135,7 +135,7 @@
 			FROM
 				DLFileEntry
 			WHERE
-				(groupId NOT IN(
+				(groupId NOT IN (
 					SELECT
 						DISTINCT groupId
 					FROM

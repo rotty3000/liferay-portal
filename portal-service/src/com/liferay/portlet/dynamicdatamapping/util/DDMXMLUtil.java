@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.dynamicdatamapping.util;
 
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 
@@ -36,10 +37,14 @@ public class DDMXMLUtil {
 	}
 
 	public static DDMXML getDDMXML() {
+		PortalRuntimePermission.checkGetBeanProperty(DDMXMLUtil.class);
+
 		return _ddmXML;
 	}
 
 	public void setDDMXML(DDMXML ddmXML) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+
 		_ddmXML = ddmXML;
 	}
 

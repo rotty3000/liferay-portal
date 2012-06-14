@@ -273,8 +273,8 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	public boolean hasPermission(
-			PermissionChecker permissionChecker, long entryClassPK,
-			String actionId)
+			PermissionChecker permissionChecker, String entryClassName,
+			long entryClassPK, String actionId)
 		throws Exception {
 
 		return true;
@@ -900,7 +900,8 @@ public abstract class BaseIndexer implements Indexer {
 
 				if ((indexer.isFilterSearch() &&
 					 indexer.hasPermission(
-						 permissionChecker, entryClassPK, ActionKeys.VIEW)) ||
+						 permissionChecker, entryClassName, entryClassPK,
+						 ActionKeys.VIEW)) ||
 					!indexer.isFilterSearch() ||
 					!indexer.isPermissionAware()) {
 
@@ -946,6 +947,14 @@ public abstract class BaseIndexer implements Indexer {
 
 	protected Document getBaseModelDocument(
 			String portletId, BaseModel<?> baseModel)
+		throws SystemException {
+
+		return getBaseModelDocument(portletId, baseModel, baseModel);
+	}
+
+	protected Document getBaseModelDocument(
+			String portletId, BaseModel<?> baseModel,
+			BaseModel<?> workflowedBaseModel)
 		throws SystemException {
 
 		Document document = new DocumentImpl();
@@ -1025,8 +1034,9 @@ public abstract class BaseIndexer implements Indexer {
 				Field.SCOPE_GROUP_ID, groupedModel.getGroupId());
 		}
 
-		if (baseModel instanceof WorkflowedModel) {
-			WorkflowedModel workflowedModel = (WorkflowedModel)baseModel;
+		if (workflowedBaseModel instanceof WorkflowedModel) {
+			WorkflowedModel workflowedModel =
+				(WorkflowedModel)workflowedBaseModel;
 
 			document.addKeyword(Field.STATUS, workflowedModel.getStatus());
 		}

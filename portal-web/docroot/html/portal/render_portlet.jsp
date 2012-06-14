@@ -413,7 +413,7 @@ portletDisplay.setURLPortlet(themeDisplay.getCDNHost() + portletIcon);
 
 // URL close
 
-String urlClose = themeDisplay.getPathMain() + "/portal/update_layout?p_l_id=" + plid + "&p_p_id=" + portletDisplay.getId() + "&p_v_l_s_g_id=" + themeDisplay.getParentGroupId() + "&doAsUserId=" + HttpUtil.encodeURL(themeDisplay.getDoAsUserId()) + "&" + Constants.CMD + "=" + Constants.DELETE + "&referer=" + HttpUtil.encodeURL(themeDisplay.getPathMain() + "/portal/layout?p_l_id=" + plid + "&doAsUserId=" + themeDisplay.getDoAsUserId()) + "&refresh=1";
+String urlClose = themeDisplay.getPathMain() + "/portal/update_layout?p_auth=" + AuthTokenUtil.getToken(request) + "&p_l_id=" + plid + "&p_p_id=" + portletDisplay.getId() + "&p_v_l_s_g_id=" + themeDisplay.getParentGroupId() + "&doAsUserId=" + HttpUtil.encodeURL(themeDisplay.getDoAsUserId()) + "&" + Constants.CMD + "=" + Constants.DELETE + "&referer=" + HttpUtil.encodeURL(themeDisplay.getPathMain() + "/portal/layout?p_l_id=" + plid + "&doAsUserId=" + themeDisplay.getDoAsUserId()) + "&refresh=1";
 
 if (themeDisplay.isAddSessionIdToURL()) {
 	urlClose = PortalUtil.getURLWithSessionId(urlClose, themeDisplay.getSessionId());
@@ -600,7 +600,7 @@ portletDisplay.setURLMax(urlMax.toString());
 
 // URL min
 
-String urlMin = themeDisplay.getPathMain() + "/portal/update_layout?p_l_id=" + plid + "&p_p_id=" + portletDisplay.getId() + "&p_p_restore=" + portletDisplay.isStateMin() + "&p_v_l_s_g_id=" + themeDisplay.getParentGroupId() + "&doAsUserId=" + HttpUtil.encodeURL(themeDisplay.getDoAsUserId()) + "&" + Constants.CMD + "=minimize&referer=" + HttpUtil.encodeURL(themeDisplay.getPathMain() + "/portal/layout?p_l_id=" + plid + "&doAsUserId=" + themeDisplay.getDoAsUserId()) + "&refresh=1";
+String urlMin = themeDisplay.getPathMain() + "/portal/update_layout?p_l_id=" + plid + "&p_p_id=" + portletDisplay.getId() + "&p_p_restore=" + portletDisplay.isStateMin() + "&p_v_l_s_g_id=" + themeDisplay.getParentGroupId() + "&doAsUserId=" + HttpUtil.encodeURL(themeDisplay.getDoAsUserId()) + "&" + Constants.CMD + "=minimize&referer=" + HttpUtil.encodeURL(themeDisplay.getPathMain() + "/portal/layout?p_auth=" + AuthTokenUtil.getToken(request) + "&p_l_id=" + plid + "&doAsUserId=" + themeDisplay.getDoAsUserId()) + "&refresh=1";
 
 portletDisplay.setURLMin(urlMin);
 
@@ -862,7 +862,9 @@ if ((layout.isTypePanel() || layout.isTypeControlPanel()) && !portletDisplay.get
 
 		PortletRequestProcessor portletReqProcessor = (PortletRequestProcessor)portletCtx.getAttribute(WebKeys.PORTLET_STRUTS_PROCESSOR);
 
-		if (portletReqProcessor != null) {
+		boolean addNotAjaxablePortlet = !portlet.isAjaxable() && cmd.equals("add");
+
+		if ((portletReqProcessor != null) && !addNotAjaxablePortlet) {
 			if (!access || portletException) {
 				ActionMapping actionMapping = portletReqProcessor.processMapping(request, response, (String)portlet.getInitParams().get("view-action"));
 
@@ -948,22 +950,13 @@ if ((layout.isTypePanel() || layout.isTypeControlPanel()) && !portletDisplay.get
 				portletContent = "/portal/portlet_error.jsp";
 			}
 
-			if (!portlet.isAjaxable() && cmd.equals("add")) {
-		%>
-
-				<liferay-util:buffer var="nonAjaxableContentMessage">
-					<div class="portlet-msg-info">
-						<liferay-ui:message key="this-change-will-only-be-shown-after-you-refresh-the-page" />
-					</div>
-				</liferay-util:buffer>
-
-		<%
-				renderRequestImpl.setAttribute(WebKeys.PORTLET_CONTENT, nonAjaxableContentMessage);
+			if (addNotAjaxablePortlet) {
+				portletContent = "/portal/portlet_not_ajaxable.jsp";
 			}
 		%>
 
 			<c:choose>
-				<c:when test="<%= useDefaultTemplate || portletException %>">
+				<c:when test="<%= useDefaultTemplate || portletException || addNotAjaxablePortlet %>">
 					<tiles:insert flush="false" template='<%= StrutsUtil.TEXT_HTML_DIR + "/common/themes/portlet.jsp" %>'>
 						<tiles:put name="portlet_content" value="<%= portletContent %>" />
 					</tiles:insert>
