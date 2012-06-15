@@ -405,14 +405,22 @@
 			<param-value>^/html/.+\.(css|gif|html|ico|jpg|js|png)(\?.*)?$</param-value>
 		</init-param>
 	</filter>
-	<filter>
-		<filter-name>WebDAV Servlet Filter</filter-name>
-		<filter-class>com.liferay.portal.servlet.filters.secure.SecureFilter</filter-class>
-		<init-param>
-			<param-name>portal_property_prefix</param-name>
-			<param-value>webdav.servlet.</param-value>
-		</init-param>
-	</filter>
+    <filter>
+        <filter-name>WebDAV Servlet Filter</filter-name>
+        <filter-class>com.liferay.portal.servlet.filters.secure.SecureFilter</filter-class>
+        <init-param>
+            <param-name>portal_property_prefix</param-name>
+            <param-value>webdav.servlet.</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>XML-RPC Servlet Filter</filter-name>
+        <filter-class>com.liferay.portal.servlet.filters.authverification.AuthVerificationFilter</filter-class>
+        <init-param>
+            <param-name>portal_property_prefix</param-name>
+            <param-value>xml-rpc.servlet.</param-value>
+        </init-param>
+    </filter>
 	<filter-mapping>
 		<filter-name>Ignore Filter - FTL</filter-name>
 		<url-pattern>*.ftl</url-pattern>
@@ -1066,4 +1074,11 @@
 		<dispatcher>INCLUDE</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+    <filter-mapping>
+        <filter-name>XML-RPC Servlet Filter</filter-name>
+        <url-pattern>/xmlrpc/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
 </web-app>
