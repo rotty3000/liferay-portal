@@ -15,6 +15,7 @@
 package com.liferay.portal.module.framework;
 
 import aQute.libg.header.OSGiHeader;
+import aQute.libg.version.Version;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -32,6 +33,10 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.util.PropsValues;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.URL;
@@ -43,10 +48,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.Attributes;
+import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 import javax.servlet.ServletContext;
@@ -76,7 +83,7 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 	public static Object addBundle(String location, InputStream inputStream)
 		throws PortalException {
 
-		return _instance._addBundle(location, inputStream);
+		return _instance._addBundle(location, inputStream, true);
 	}
 
 	public static Framework getFramework() {
@@ -150,16 +157,27 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 	private ModuleFrameworkUtil() {
 	}
 
-	private Object _addBundle(String location, InputStream inputStream)
+	private Object _addBundle(
+			String location, InputStream inputStream, boolean checkPermissions)
 		throws PortalException {
 
-		_checkPermission();
+		if (checkPermissions) {
+			_checkPermission();
+		}
 
 		if (_framework == null) {
 			return null;
 		}
 
 		BundleContext bundleContext = _framework.getBundleContext();
+
+		if (inputStream != null) {
+			Bundle bundle = _getBundle(bundleContext, inputStream);
+
+			if (bundle != null) {
+				return bundle;
+			}
+		}
 
 		try {
 			return bundleContext.installBundle(location, inputStream);
@@ -188,6 +206,20 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		properties.put(
 			Constants.FRAMEWORK_STORAGE,
 			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(PropsValues.MODULE_FRAMEWORK_LIB_DIR);
+		sb.append(StringPool.COMMA);
+		sb.append(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIR);
+
+		properties.put(MFConstants.FELIX_FILEINSTALL_DIR, sb.toString());
+
+		properties.put(
+			MFConstants.FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
+		properties.put(
+			MFConstants.FELIX_FILEINSTALL_TMPDIR,
+			System.getProperty("java.io.tmpdir"));
 
 		UniqueList<String> packages = new UniqueList<String>();
 
@@ -229,6 +261,59 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		BundleContext bundleContext = _framework.getBundleContext();
 
 		return bundleContext.getBundle(bundleId);
+	}
+
+	public static Bundle _getBundle(
+			BundleContext bundleContext, InputStream inputStream)
+		throws PortalException {
+
+		try {
+			inputStream.mark(0);
+
+			JarInputStream jarInputStream = new JarInputStream(inputStream);
+
+			Manifest manifest = jarInputStream.getManifest();
+
+			inputStream.reset();
+
+			Attributes attributes = manifest.getMainAttributes();
+
+			String bundleSymbolicNameAttribute = attributes.getValue(
+				Constants.BUNDLE_SYMBOLICNAME);
+
+			Map<String, Map<String, String>> bundleSymbolicNamesMap =
+				OSGiHeader.parseHeader(bundleSymbolicNameAttribute);
+
+			Set<String> bundleSymbolicNamesSet =
+				bundleSymbolicNamesMap.keySet();
+
+			Iterator<String> bundleSymbolicNamesIterator =
+				bundleSymbolicNamesSet.iterator();
+
+			String bundleSymbolicName = bundleSymbolicNamesIterator.next();
+
+			String bundleVersionAttribute = attributes.getValue(
+				Constants.BUNDLE_VERSION);
+
+			Version bundleVersion = Version.parseVersion(
+				bundleVersionAttribute);
+
+			for (Bundle bundle : bundleContext.getBundles()) {
+				Version curBundleVersion = Version.parseVersion(
+					bundle.getVersion().toString());
+
+				if (bundleSymbolicName.equals(bundle.getSymbolicName()) &&
+					bundleVersion.equals(curBundleVersion)) {
+
+					return bundle;
+				}
+			}
+
+			return null;
+		}
+		catch (IOException ioe) {
+			throw new PortalException(ioe);
+		}
 	}
 
 	private void _getBundleExportPackages(
@@ -321,6 +406,29 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		}
 
 		return interfaces;
+	}
+
+	private String _getFileInstallLogLevel() {
+
+		// Felix file install uses a logging level scheme as follows:
+		// NONE=0, ERROR=1, WARNING=2, INFO=3, DEBUG=4
+
+		int fileInstallLogLevel = 0;
+
+		if (_log.isDebugEnabled()) {
+			fileInstallLogLevel = 4;
+		}
+		else if (_log.isErrorEnabled()) {
+			fileInstallLogLevel = 1;
+		}
+		else if (_log.isInfoEnabled()) {
+			fileInstallLogLevel = 3;
+		}
+		else if (_log.isWarnEnabled()) {
+			fileInstallLogLevel = 2;
+		}
+
+		return String.valueOf(fileInstallLogLevel);
 	}
 
 	private String _getState(long bundleId) throws PortalException {
@@ -455,6 +563,30 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		bundleStartLevel.setStartLevel(startLevel);
 	}
 
+	private void _setupFileInstall() throws Exception {
+		String fileIntallPath = PropsValues.LIFERAY_LIB_PORTAL_DIR.concat(
+			"org.apache.felix.fileinstall.jar");
+
+		File fileInstallBundle = new File(fileIntallPath);
+
+		InputStream inputStream = new BufferedInputStream(
+			new FileInputStream(fileInstallBundle));
+
+		try {
+			Bundle bundle = (Bundle)_addBundle(
+				fileIntallPath, inputStream, false);
+
+			if ((bundle != null) && (bundle.getState() == Bundle.INSTALLED)) {
+				bundle.start();
+			}
+		}
+		finally {
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+	}
+
 	private void _setupLogBridge() throws Exception {
 		BundleContext bundleContext = _framework.getBundleContext();
 
@@ -522,6 +654,8 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		_setupLogBridge();
 
 		_framework.start();
+
+		_setupFileInstall();
 	}
 
 	private void _startRuntime() throws Exception {

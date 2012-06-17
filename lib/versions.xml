@@ -2575,6 +2575,17 @@
 		</licenses>
 	</library>
 	<library>
+		<file-name>portal/org.apache.felix.fileinstall.jar</file-name>
+		<version>3.1.10</version>
+		<project-name>Apache Felix File Install</project-name>
+		<project-url>http://felix.apache.org/site/apache-felix-file-install.html</project-url>
+		<licenses>
+			<license>
+				<license-name>Apache License 2.0</license-name>
+			</license>
+		</licenses>
+	</library>
+	<library>
 		<file-name>portal/oro.jar</file-name>
 		<version>2.0.8</version>
 		<project-name>ORO</project-name>
