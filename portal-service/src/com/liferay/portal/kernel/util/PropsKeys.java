@@ -1457,6 +1457,8 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_ENABLED = "module.framework.enabled";
 
+	public static final String MODULE_FRAMEWORK_AUTO_DEPLOY_DIR = "module.framework.auto.deploy.dir";
+
 	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL = "module.framework.beginning.start.level";
 
 	public static final String MODULE_FRAMEWORK_RUNTIME_START_LEVEL = "module.framework.runtime.start.level";
