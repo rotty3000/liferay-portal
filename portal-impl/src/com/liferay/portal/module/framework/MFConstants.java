@@ -12,29 +12,23 @@
  * details.
  */
 
-package com.liferay.portal.osgi;
-
-import com.liferay.portal.kernel.exception.PortalException;
+package com.liferay.portal.module.framework;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
-public class OSGiException extends PortalException {
+public class MFConstants {
 
-	public OSGiException() {
-		super();
-	}
+	public static final String BEAN_ID = "bean.id";
 
-	public OSGiException(String msg) {
-		super(msg);
-	}
+	public static final String ORIGINAL_BEAN = "original.bean";
 
-	public OSGiException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+	public static final String OSGI_BUNDLE = "osgi-bundle";
 
-	public OSGiException(Throwable cause) {
-		super(cause);
-	}
+	public static final String OSGI_BUNDLECONTEXT = "osgi-bundlecontext";
+
+	public static final String SERVICE_VENDOR = "service.vendor";
+
+	public static final String WEB_CONTEXTPATH = "Web-ContextPath";
 
 }
