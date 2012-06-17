@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<project name="osgi-admin-portlet" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.lib.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<var name="module.dependencies" value="mvc-portlet-support" />
+
+	<var name="module.classes.dir" value="docroot/WEB-INF/classes" />
+	<var name="module.src.dir" value="docroot/WEB-INF/src" />
+
+	<target name="deploy" depends="jar">
+		<antcall target="loop-module-dependencies">
+			<param name="loop.modules.cmd" value="deploy-module" />
+		</antcall>
+
+		<copy file="${jar.file}.jar" tofile="${deploy.dir}/${jar.file}.war" />
+	</target>
+</project>

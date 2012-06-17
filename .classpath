@@ -5,14 +5,16 @@
 	<classpathentry excluding="**/.svn/**|.svn/|integration/|unit/" kind="src" path="portal-impl/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/mvc-portlet-support/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/osgi-admin-portlet/docroot/WEB-INF/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/war-artifact-listener/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/web-extender/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-web/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="support-tomcat/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-bridges/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-taglib/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -236,8 +238,8 @@
 	<classpathentry kind="lib" path="lib/portal/oauth-provider.jar"/>
 	<classpathentry kind="lib" path="lib/portal/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/portal/openid4java.jar"/>
-	<classpathentry kind="lib" path="lib/portal/org.apache.felix.fileinstall.jar"/>
-	<classpathentry kind="lib" path="lib/portal/org.eclipse.osgi.jar"/>
+	<classpathentry kind="lib" path="lib/portal/org.apache.felix.fileinstall.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/org.apache.felix.fileinstall-3.2.0/src/main/java"/>
+	<classpathentry kind="lib" path="lib/portal/org.eclipse.osgi.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/equinox-SDK-3.8RC4/plugins/org.eclipse.osgi.source_3.8.0.v20120529-1548.jar"/>
 	<classpathentry kind="lib" path="lib/portal/oro.jar"/>
 	<classpathentry kind="lib" path="lib/portal/pdfbox.jar"/>
 	<classpathentry kind="lib" path="lib/portal/poi.jar"/>

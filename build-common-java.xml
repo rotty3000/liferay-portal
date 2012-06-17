@@ -17,12 +17,6 @@
 	</if>
 
 	<target name="clean">
-		<liferay-if notNull="module.dependencies">
-			<antcall target="loop-module-dependencies">
-				<param name="loop.modules.cmd" value="clean-module" />
-			</antcall>
-		</liferay-if>
-
 		<delete dir="${module.classes.dir}" />
 		<delete dir="test-classes" />
 		<delete dir="test-results" />

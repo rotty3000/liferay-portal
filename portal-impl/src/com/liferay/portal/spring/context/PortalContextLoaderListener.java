@@ -216,8 +216,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
 			try {
-				MFUtil.registerContext(servletContext);
 				MFUtil.registerContext(applicationContext);
+				MFUtil.registerContext(servletContext);
 
 				MFUtil.startRuntime();
 			}

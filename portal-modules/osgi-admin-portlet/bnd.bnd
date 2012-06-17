@@ -1,0 +1,36 @@
+Bundle-Icon: /icon.png;size=16
+Bundle-Localization: WEB-INF/classes/content/Language
+Bundle-Name: OSGi Admin
+Bundle-SymbolicName: osgi-admin-portlet
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 0.0.1
+Export-Package: content,com.liferay.osgiadmin.portlet
+Import-Package: \
+	aQute.libg.header,\
+	aQute.libg.version,\
+	com.liferay.mvc.freemarker,\
+	com.liferay.portal.kernel.servlet,\
+	com.liferay.portal.kernel.upload,\
+	com.liferay.portal.kernel.util,\
+	com.liferay.portal.module.framework,\
+	com.liferay.portal.model,\
+	com.liferay.portal.security.auth,\
+	com.liferay.portal.security.permission,\
+	com.liferay.portal.theme,\
+	com.liferay.portal.util,\
+	com.liferay.portlet,\
+	com.liferay.portlet.admin,\
+	com.liferay.util,\
+	com.liferay.util.bean,\
+	javax.portlet,\
+	org.osgi.framework,\
+	org.osgi.framework.startlevel,\
+	*
+Web-ContextPath: /osgi-admin-portlet
+-wab: \
+	docroot,\
+	{WEB-INF/liferay-display.xml=docroot/WEB-INF/liferay-display.xml},\
+	{WEB-INF/liferay-plugin-package.properties=docroot/WEB-INF/liferay-plugin-package.properties},\
+	{WEB-INF/liferay-portlet.xml=docroot/WEB-INF/liferay-portlet.xml},\
+	{WEB-INF/portlet.xml=docroot/WEB-INF/portlet.xml},\
+	{WEB-INF/web.xml=docroot/WEB-INF/web.xml}
