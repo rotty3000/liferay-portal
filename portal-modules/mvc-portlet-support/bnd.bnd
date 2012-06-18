@@ -1,0 +1,25 @@
+Bundle-Name: MVC Portlet Support Hook
+Bundle-SymbolicName: mvc-portlet-support
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 0.0.1
+Export-Package: \
+	com.liferay.mvc.freemarker
+Import-Package: \
+	com.liferay.portal.freemarker,\
+	com.liferay.portal.kernel.concurrent,\
+	com.liferay.portal.kernel.io.unsync,\
+	com.liferay.portal.kernel.log,\
+	com.liferay.portal.kernel.servlet,\
+	com.liferay.portal.kernel.template,\
+	com.liferay.portal.kernel.util,\
+	com.liferay.portal.model,\
+	com.liferay.portal.util,\
+	com.liferay.util.bridges.mvc,\
+	com.liferay.util.freemarker,\
+	freemarker.ext.servlet,\
+	freemarker.template,\
+	javax.portlet;version=2.0.0,\
+	javax.servlet;version=[3.0.0',' 4.0.0),\
+	javax.servlet.http;version=[3.0.0',' 4.0.0),\
+	*
+Private-Package: com.liferay.mvc.freemarker.internal
