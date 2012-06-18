@@ -21,6 +21,32 @@ public interface ModuleFrameworkConstants {
 
 	public static final String BEAN_ID = "bean.id";
 
+	public static final String BUNDLE = "bundle";
+
+	public static final String BUNDLE_ID = "bundle.id";
+
+	public static final String BUNDLE_SYMBOLICNAME = "bundle.symbolicName";
+
+	public static final String BUNDLE_VERSION = "bundle.version";
+
+	public static final String COLLISION = "collision";
+
+	public static final String COLLISION_BUNDLES = "collision.bundles";
+
+	public static final String CONTEXT_PATH = "context.path";
+
+	public static final String EXTENDER_BUNDLE = "extender.bundle";
+
+	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
+
+	public static final String EXTENDER_BUNDLE_SYMBOLICNAME =
+		"extender.bundle.symbolicName";
+
+	public static final String EXTENDER_BUNDLE_VERSION =
+		"extender.bundle.version";
+
+	public static final String EXCEPTION = "exception";
+
 	public static final String FELIX_FILEINSTALL_DIR = "felix.fileinstall.dir";
 
 	public static final String FELIX_FILEINSTALL_LOG_LEVEL =
@@ -40,6 +66,10 @@ public interface ModuleFrameworkConstants {
 	public static final String OSGI_BUNDLECONTEXT = "osgi-bundlecontext";
 
 	public static final String SERVICE_VENDOR = "service.vendor";
+
+	public static final String SERVLET_CONTEXT_NAME = "servlet.context.name";
+
+	public static final String TIMESTAMP = "timestamp";
 
 	public static final String WEB_CONTEXTPATH = "Web-ContextPath";
 

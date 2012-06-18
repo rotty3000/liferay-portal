@@ -1060,6 +1060,10 @@ public class PropsValues {
 
 	public static final String[] MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA);
 
+	public static final String[] MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES);
+
+	public static final String[] MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES);
+
 	public static final boolean MONITORING_DATA_SAMPLE_THREAD_LOCAL = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.MONITORING_DATA_SAMPLE_THREAD_LOCAL));
 
 	public static boolean MONITORING_PORTAL_REQUEST = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.MONITORING_PORTAL_REQUEST));

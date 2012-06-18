@@ -1475,6 +1475,10 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = "module.framework.system.packages.extra";
 
+	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = "module.framework.web.extender.default.portlet.packages";
+
+	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = "module.framework.web.extender.default.servlet.packages";
+
 	public static final String MONITORING_DATA_SAMPLE_THREAD_LOCAL = "monitoring.data.sample.thread.local";
 
 	public static final String MONITORING_PORTAL_REQUEST = "monitoring.portal.request";
