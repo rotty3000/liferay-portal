@@ -12,6 +12,8 @@
 	</target>
 
 	<target name="clean">
+		<ant dir="${project.dir}/tools/ant" target="clean" inheritAll="false" />
+
 		<ant dir="classes" target="clean" inheritAll="false" />
 
 		<ant dir="portal-service" target="clean" inheritAll="false" />
@@ -21,6 +23,10 @@
 		<ant dir="util-taglib" target="clean" inheritAll="false" />
 
 		<ant dir="portal-impl" target="clean" inheritAll="false" />
+
+		<antcall target="loop-modules">
+			<param name="loop.modules.cmd" value="clean-module" />
+		</antcall>
 
 		<ant dir="portal-web" target="clean" inheritAll="false" />
 
@@ -140,6 +146,10 @@
 		<ant dir="util-taglib" target="compile" inheritAll="false" />
 
 		<ant dir="portal-impl" target="compile" inheritAll="false" />
+
+		<antcall target="loop-modules">
+			<param name="loop.modules.cmd" value="compile-module" />
+		</antcall>
 	</target>
 
 	<target name="deploy">
@@ -180,6 +190,10 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 		<ant dir="util-taglib" target="deploy" inheritAll="false" />
 
 		<ant dir="portal-impl" target="deploy" inheritAll="false" />
+
+		<antcall target="loop-modules">
+			<param name="loop.modules.cmd" value="deploy-module" />
+		</antcall>
 
 		<ant dir="portal-web" target="deploy" inheritAll="false" />
 
@@ -477,6 +491,10 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 		<ant dir="util-taglib" target="jar" inheritAll="false" />
 
 		<ant dir="portal-impl" target="jar" inheritAll="false" />
+
+		<antcall target="loop-modules">
+			<param name="loop.modules.cmd" value="jar-module" />
+		</antcall>
 
 		<ant dir="portal-web" target="war" inheritAll="false" />
 
