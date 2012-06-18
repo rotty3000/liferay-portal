@@ -20,6 +20,7 @@ import aQute.libg.version.Version;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -207,18 +208,17 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 			Constants.FRAMEWORK_STORAGE,
 			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
 
+		// Felix fileinstall
+
 		StringBundler sb = new StringBundler(3);
 
 		sb.append(PropsValues.MODULE_FRAMEWORK_LIB_DIR);
 		sb.append(StringPool.COMMA);
 		sb.append(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIR);
 
-		properties.put(MFConstants.FELIX_FILEINSTALL_DIR, sb.toString());
-
-		properties.put(
-			MFConstants.FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
-		properties.put(
-			MFConstants.FELIX_FILEINSTALL_TMPDIR,
+		properties.put(FELIX_FILEINSTALL_DIR, sb.toString());
+		properties.put(FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
+		properties.put(FELIX_FILEINSTALL_TMPDIR,
 			System.getProperty("java.io.tmpdir"));
 
 		UniqueList<String> packages = new UniqueList<String>();
@@ -234,6 +234,14 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		packages.addAll(
 			Arrays.asList(PropsValues.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA));
+		packages.addAll(
+			Arrays.asList(
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES));
+		packages.addAll(
+			Arrays.asList(
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES));
 
 		Collections.sort(packages);
 
@@ -515,6 +523,13 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		List<String> names = new ArrayList<String>();
 
 		for (Class<?> interfaceClass : interfaces) {
+			if (ArrayUtil.contains(
+					PropsValues.MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES,
+					interfaceClass.getName())) {
+
+				continue;
+			}
+
 			names.add(interfaceClass.getName());
 		}
 
@@ -587,6 +602,14 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		}
 	}
 
+	private void _setupLogBridge() throws Exception {
+		BundleContext bundleContext = _framework.getBundleContext();
+
+		_logBridge = new LogBridge();
+
+		_logBridge.start(bundleContext);
+	}
+
 	private void _startBundle(long bundleId) throws PortalException {
 		_checkPermission();
 
@@ -642,6 +665,8 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		_framework = frameworkFactory.newFramework(properties);
 
 		_framework.init();
+
+		_setupLogBridge();
 
 		_framework.start();
 
@@ -705,6 +730,10 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		if (_framework == null) {
 			return;
 		}
+
+		BundleContext bundleContext = _framework.getBundleContext();
+
+		_logBridge.stop(bundleContext);
 
 		_framework.stop();
 	}
@@ -786,5 +815,6 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 	private static ModuleFrameworkUtil _instance = new ModuleFrameworkUtil();
 
 	private Framework _framework;
+	private LogBridge _logBridge;
 
 }

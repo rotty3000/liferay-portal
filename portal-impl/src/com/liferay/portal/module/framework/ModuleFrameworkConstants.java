@@ -29,6 +29,10 @@ public interface ModuleFrameworkConstants {
 	public static final String FELIX_FILEINSTALL_TMPDIR =
 		"felix.fileinstall.tmpdir";
 
+	public static final String INVOKER_PATH = "/invoke";
+
+	public static final String MODULE_MAPPING = "/module/";
+
 	public static final String ORIGINAL_BEAN = "original.bean";
 
 	public static final String OSGI_BUNDLE = "osgi-bundle";
