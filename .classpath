@@ -6,6 +6,7 @@
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/mvc-portlet-support/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/osgi-admin-portlet/docroot/WEB-INF/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/war-artifact-listener/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/web-extender/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
