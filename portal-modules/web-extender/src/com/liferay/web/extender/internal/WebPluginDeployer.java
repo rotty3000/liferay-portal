@@ -152,12 +152,14 @@ public class WebPluginDeployer implements BundleListener {
 				_bundleContext.registerService(
 					ServletContext.class, bundleServletContext, properties);
 
+			ClassLoader bundleClassLoader =
+				bundleServletContext.getClassLoader();
+
 			bundleServletContext.open();
 
 			HotDeployUtil.fireDeployEvent(
 				new HotDeployEvent(
-					bundleServletContext,
-					bundleServletContext.getClassLoader(), false));
+					bundleServletContext, bundleClassLoader, false));
 
 			_trackedContexts.put(servletContextName, bundleServletContext);
 			_trackedRegistrations.put(servletContextName, registration);
