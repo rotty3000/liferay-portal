@@ -70,6 +70,10 @@ _sass_cache_*.css
 /portal-impl/test/portal-test-ext.properties
 /portal-impl/test/test-portal-impl-ext.properties
 
+/portal-modules/*/classes
+/portal-modules/*/*.jar
+/portal-modules/*/docroot/WEB-INF/classes
+
 /portal-service/*.iml
 /portal-service/*.ipr
 /portal-service/*.iws
@@ -174,6 +178,8 @@ _sass_cache_*.css
 /support-tomcat/support-tomcat*.jar
 
 /test-results
+
+/tools/ant/classes
 
 /tools/maven/*.asc
 
