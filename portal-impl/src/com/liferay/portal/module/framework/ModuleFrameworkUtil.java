@@ -20,6 +20,7 @@ import aQute.libg.version.Version;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -515,6 +516,13 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 		List<String> names = new ArrayList<String>();
 
 		for (Class<?> interfaceClass : interfaces) {
+			if (ArrayUtil.contains(
+					PropsValues.MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES,
+					interfaceClass.getName())) {
+
+				continue;
+			}
+
 			names.add(interfaceClass.getName());
 		}
 
