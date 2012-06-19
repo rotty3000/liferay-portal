@@ -16,7 +16,7 @@
 		</init-param>
 		<init-param>
 			<name>com.liferay.portal.invokerPortletName</name>
-			<value>osgi${Web-ContextPath}/1</value>
+			<value>module${Web-ContextPath}/1</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
