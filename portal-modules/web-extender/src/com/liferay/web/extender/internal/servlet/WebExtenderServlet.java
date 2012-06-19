@@ -111,7 +111,7 @@ public class WebExtenderServlet extends PortletServlet
 		String pathInfo = request.getPathInfo();
 
 		if (pathInfo.startsWith(MODULE_MAPPING)) {
-			pathInfo = pathInfo.substring(7);
+			pathInfo = pathInfo.substring(MODULE_MAPPING.length());
 		}
 
 		String servletContextName = pathInfo;
