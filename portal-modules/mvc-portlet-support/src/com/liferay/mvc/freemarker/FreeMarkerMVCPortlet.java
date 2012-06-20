@@ -21,11 +21,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateContextType;
-import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
+import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
+import com.liferay.portal.template.StringTemplateResource;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
@@ -69,8 +70,11 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 					_templateIds.add(templateId);
 				}
 
+				TemplateResource templateResource = new StringTemplateResource(
+					templateId, templateContent);
+
 				Template template = TemplateManagerUtil.getTemplate(
-					TemplateManager.FREEMARKER, templateId, templateContent,
+					TemplateManager.FREEMARKER, templateResource,
 					TemplateContextType.CLASS_LOADER);
 
 				template.put("portletContext", getPortletContext());
@@ -112,13 +116,13 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 		super.destroy();
 
 		for (String templateId : _templateIds) {
-			try {
-				TemplateManagerUtil.clearCache(
-					TemplateManager.FREEMARKER, templateId);
-			}
-			catch (TemplateException te) {
-				_log.error(te, te);
-			}
+//			try {
+//				TemplateManagerUtil.clearCache(
+//					TemplateManager.FREEMARKER, templateId);
+//			}
+//			catch (TemplateException te) {
+//				_log.error(te, te);
+//			}
 		}
 
 		TemplateManagerUtil.destroy(getClass().getClassLoader());
