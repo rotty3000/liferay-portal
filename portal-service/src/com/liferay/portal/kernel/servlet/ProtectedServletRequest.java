@@ -14,11 +14,7 @@
 
 package com.liferay.portal.kernel.servlet;
 
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
-
 import java.security.Principal;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -54,16 +50,19 @@ public class ProtectedServletRequest extends HttpServletRequestWrapper {
 			return super.getAuthType();
 		}
 
-		if(HttpServletRequest.BASIC_AUTH.equals(_authType)){
+		if (HttpServletRequest.BASIC_AUTH.equals(_authType)) {
 			return HttpServletRequest.BASIC_AUTH;
 		}
-		if(HttpServletRequest.CLIENT_CERT_AUTH.equals(_authType)){
+
+		if (HttpServletRequest.CLIENT_CERT_AUTH.equals(_authType)) {
 			return HttpServletRequest.CLIENT_CERT_AUTH;
 		}
-		if(HttpServletRequest.DIGEST_AUTH.equals(_authType)){
+
+		if (HttpServletRequest.DIGEST_AUTH.equals(_authType)) {
 			return HttpServletRequest.DIGEST_AUTH;
 		}
-		if(HttpServletRequest.FORM_AUTH.equals(_authType)){
+
+		if (HttpServletRequest.FORM_AUTH.equals(_authType)) {
 			return HttpServletRequest.FORM_AUTH;
 		}
 

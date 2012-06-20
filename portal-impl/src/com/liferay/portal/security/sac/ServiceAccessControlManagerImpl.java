@@ -23,14 +23,15 @@ import com.liferay.portal.security.RemoteMethodAccessType;
 import com.liferay.portal.security.auth.AuthSettingsUtil;
 import com.liferay.portal.security.auth.AuthenticationContext;
 import com.liferay.portal.security.auth.PortalAAManager;
-import com.liferay.portal.security.auth.PortalAAManagerImpl;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Tomas Polesovsky
@@ -59,8 +60,7 @@ public class ServiceAccessControlManagerImpl {
 	}
 
 	protected void checkAllowedHosts() {
-		PortalAAManager portalAAManager =
-			PortalAAManagerImpl.getInstance();
+		PortalAAManager portalAAManager = PortalAAManager.getInstance();
 
 		AuthenticationContext authenticationContext =
 			portalAAManager.getAuthenticationContext();
