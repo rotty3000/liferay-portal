@@ -20,11 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.GroupConstants;
-import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutSetPrototype;
-import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.*;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.base.LayoutSetPrototypeLocalServiceBaseImpl;
@@ -95,6 +91,20 @@ public class LayoutSetPrototypeLocalServiceImpl
 			layoutSetPrototype.getName(LocaleUtil.getDefault()), null, 0,
 			friendlyURL, false, true, serviceContext);
 
+		LayoutSet privateLayoutSet = group.getPrivateLayoutSet();
+
+		privateLayoutSet.setLayoutSetPrototypeUuid(
+				layoutSetPrototype.getUuid());
+
+		layoutSetLocalService.updateLayoutSet(privateLayoutSet);
+
+		LayoutSet publicLayoutSet = group.getPublicLayoutSet();
+
+		publicLayoutSet.setLayoutSetPrototypeUuid(
+				layoutSetPrototype.getUuid());
+
+		layoutSetLocalService.updateLayoutSet(publicLayoutSet);
+
 		layoutLocalService.addLayout(
 			userId, group.getGroupId(), true,
 			LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "home", null, null,
@@ -111,7 +121,7 @@ public class LayoutSetPrototypeLocalServiceImpl
 		// Group
 
 		if (layoutSetPersistence.countByLayoutSetPrototypeUuid(
-				layoutSetPrototype.getUuid()) > 0) {
+				layoutSetPrototype.getUuid()) > 2) {
 
 			throw new RequiredLayoutSetPrototypeException();
 		}
