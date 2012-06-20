@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -57,17 +57,17 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 	public BundleRequestDispatcher(
 		String servletMapping, boolean extensionMapping, String requestURI,
-		Servlet servlet, FilterChain filterChain) {
+		Servlet servlet, BundleFilterChain bundleFilterChain) {
 
 		_servletMapping = servletMapping;
 		_extensionMapping = extensionMapping;
-		_servlet = servlet;
-		_filterChain = filterChain;
+		_bundleFilterChain = bundleFilterChain;
+		_servletConfig = servlet.getServletConfig();
+		_servletContext = _servletConfig.getServletContext();
 
-		ServletContext servletContext =
-			_servlet.getServletConfig().getServletContext();
+		_bundleFilterChain.setServlet(servlet);
 
-		String contextPath = servletContext.getContextPath();
+		String contextPath = _servletContext.getContextPath();
 
 		_requestURI = StringUtil.replace(
 			requestURI, StringPool.DOUBLE_SLASH, StringPool.SLASH);
@@ -95,65 +95,19 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 	public void forward(ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
-		doDispatch(request, response, false);
+		request = new BundleServletRequest(
+			(HttpServletRequest)request, _servletContext);
+
+		doDispatch(request, response);
 	}
 
 	public void include(ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
+		request = new BundleServletRequest(
+			(HttpServletRequest)request, _servletContext);
+
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-
-		httpServletRequest = new HttpServletRequestWrapper(httpServletRequest) {
-
-			@Override
-			public Object getAttribute(String name) {
-				if (name.equals(INCLUDE_CONTEXT_PATH) ||
-					name.equals(INCLUDE_PATH_INFO) ||
-					name.equals(INCLUDE_QUERY_STRING) ||
-					name.equals(INCLUDE_REQUEST_URI) ||
-					name.equals(INCLUDE_SERVLET_PATH)) {
-
-					return _attributes.get(name);
-				}
-				else {
-					return super.getAttribute(name);
-				}
-			}
-
-			@Override
-			public Enumeration getAttributeNames() {
-				List<String> attributeNames = new Vector<String>();
-
-				Enumeration<String> enu = super.getAttributeNames();
-
-				while (enu.hasMoreElements()) {
-					String name = enu.nextElement();
-				}
-
-				attributeNames.addAll(_attributes.keySet());
-
-				return Collections.enumeration(attributeNames);
-			}
-
-			@Override
-			public void setAttribute(String name, Object value) {
-				if (name.equals(INCLUDE_CONTEXT_PATH) ||
-					name.equals(INCLUDE_PATH_INFO) ||
-					name.equals(INCLUDE_QUERY_STRING) ||
-					name.equals(INCLUDE_REQUEST_URI) ||
-					name.equals(INCLUDE_SERVLET_PATH)) {
-
-					_attributes.put(name, value);
-				}
-				else {
-					super.setAttribute(name, value);
-				}
-			}
-
-			private Map<String, Object> _attributes =
-				new HashMap<String, Object>();
-
-		};
 
 		if (_contextPath != null) {
 			httpServletRequest.setAttribute(INCLUDE_CONTEXT_PATH, _contextPath);
@@ -175,41 +129,39 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 			httpServletRequest.setAttribute(INCLUDE_SERVLET_PATH, _servletPath);
 		}
 
-		doDispatch(httpServletRequest, response, true);
+		doDispatch(request, response);
 	}
 
 	public void doDispatch(
-			ServletRequest request, ServletResponse response, boolean include)
+			ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
-		BundleServletConfig bundleServletConfig =
-			(BundleServletConfig)_servlet.getServletConfig();
+		if (_servletConfig instanceof BundleServletConfig) {
+			BundleServletConfig bundleServletConfig =
+				(BundleServletConfig)_servletConfig;
 
-		HttpContext httpContext = bundleServletConfig.getHttpContext();
+			HttpContext httpContext = bundleServletConfig.getHttpContext();
 
-		if (!httpContext.handleSecurity(
-				(HttpServletRequest)request, (HttpServletResponse)response)) {
+			if (!httpContext.handleSecurity(
+					(HttpServletRequest)request,
+					(HttpServletResponse)response)) {
 
-			return;
+				return;
+			}
 		}
 
-		request = new BundleServletRequest(
-			(HttpServletRequest)request,
-			bundleServletConfig.getServletContext());
-
-		_filterChain.doFilter(request, response);
-
-		_servlet.service(request, response);
+		_bundleFilterChain.doFilter(request, response);
 	}
 
+	private ServletConfig _servletConfig;
+	private ServletContext _servletContext;
 	private String _contextPath;
 	private boolean _extensionMapping;
-	private FilterChain _filterChain;
+	private BundleFilterChain _bundleFilterChain;
 	private String _pathInfo;
 	private String _queryString;
 	private String _requestURI;
 	private String _servletPath;
-	private Servlet _servlet;
 	private String _servletMapping;
 
 	public class BundleServletRequest extends HttpServletRequestWrapper {
@@ -223,8 +175,42 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		@Override
+		public Object getAttribute(String name) {
+			if (name.equals(INCLUDE_CONTEXT_PATH) ||
+				name.equals(INCLUDE_PATH_INFO) ||
+				name.equals(INCLUDE_QUERY_STRING) ||
+				name.equals(INCLUDE_REQUEST_URI) ||
+				name.equals(INCLUDE_SERVLET_PATH)) {
+
+				return _attributes.get(name);
+			}
+
+			return super.getAttribute(name);
+		}
+
+		@Override
+		public Enumeration getAttributeNames() {
+			List<String> attributeNames = new Vector<String>();
+
+			Enumeration<String> enu = super.getAttributeNames();
+
+			while (enu.hasMoreElements()) {
+				String name = enu.nextElement();
+			}
+
+			attributeNames.addAll(_attributes.keySet());
+
+			return Collections.enumeration(attributeNames);
+		}
+
+		@Override
 		public String getContextPath() {
 			return _servletContext.getContextPath();
+		}
+
+		@Override
+		public String getPathInfo() {
+			return _pathInfo;
 		}
 
 		@Override
@@ -245,10 +231,21 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		@Override
-		public String getPathInfo() {
-			return _pathInfo;
+		public void setAttribute(String name, Object value) {
+			if (name.equals(INCLUDE_CONTEXT_PATH) ||
+				name.equals(INCLUDE_PATH_INFO) ||
+				name.equals(INCLUDE_QUERY_STRING) ||
+				name.equals(INCLUDE_REQUEST_URI) ||
+				name.equals(INCLUDE_SERVLET_PATH)) {
+
+				_attributes.put(name, value);
+			}
+			else {
+				super.setAttribute(name, value);
+			}
 		}
 
+		private Map<String, Object> _attributes = new HashMap<String, Object>();
 		private ServletContext _servletContext;
 
 	}

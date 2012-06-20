@@ -17,6 +17,7 @@ package com.liferay.web.extender.internal.servlet;
 import com.liferay.portal.apache.bridges.struts.LiferayServletContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -43,7 +44,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -104,9 +104,11 @@ public class BundleServletContext extends LiferayServletContext
 		if (name.equals(OSGI_BUNDLE)) {
 			return _bundle;
 		}
-
-		if (name.equals(OSGI_BUNDLECONTEXT)) {
+		else if (name.equals(OSGI_BUNDLECONTEXT)) {
 			return _bundle.getBundleContext();
+		}
+		else if (name.equals(PluginContextListener.PLUGIN_CLASS_LOADER)) {
+			return getClassLoader();
 		}
 
 		Object value = _contextAttributes.get(name);
@@ -182,11 +184,11 @@ public class BundleServletContext extends LiferayServletContext
 	public RequestDispatcher getRequestDispatcher(String path) {
 		String alias = path;
 
-		FilterChain filterChain = getFilterChain(alias);
+		BundleFilterChain bundleFilterChain = getFilterChain(alias);
 
 		if (path.startsWith(MODULE_MAPPING) && path.endsWith(INVOKER_PATH)) {
 			return new BundleRequestDispatcher(
-				path, false, path, _portletServlet, filterChain);
+				path, false, path, _portletServlet, bundleFilterChain);
 		}
 
 		if (!isValidPath(path)) {
@@ -199,7 +201,7 @@ public class BundleServletContext extends LiferayServletContext
 
 		if (_servletsMap.containsKey(alias)) {
 			return new BundleRequestDispatcher(
-				alias, false, path, _servletsMap.get(alias), filterChain);
+				alias, false, path, _servletsMap.get(alias), bundleFilterChain);
 		}
 
 		String extensionMapping = FileUtil.getExtension(alias).toLowerCase();
@@ -213,13 +215,14 @@ public class BundleServletContext extends LiferayServletContext
 		while (alias.length() != 0) {
 			if (_servletsMap.containsKey(alias)) {
 				return new BundleRequestDispatcher(
-					alias, false, path, _servletsMap.get(alias), filterChain);
+					alias, false, path, _servletsMap.get(alias),
+					bundleFilterChain);
 			}
 			else if (_servletsMap.containsKey(alias.concat(extensionMapping))) {
 				return new BundleRequestDispatcher(
 					alias.concat(extensionMapping), true, path,
 					_servletsMap.get(alias.concat(extensionMapping)),
-					filterChain);
+					bundleFilterChain);
 			}
 
 			alias = alias.substring(0, alias.lastIndexOf(StringPool.SLASH));
@@ -231,13 +234,13 @@ public class BundleServletContext extends LiferayServletContext
 			return new BundleRequestDispatcher(
 				StringPool.SLASH.concat(extensionMapping), true, path,
 				_servletsMap.get(StringPool.SLASH.concat(extensionMapping)),
-				filterChain);
+				bundleFilterChain);
 		}
 
 		if (_servletsMap.containsKey(StringPool.SLASH)) {
 			return new BundleRequestDispatcher(
 				StringPool.SLASH, false, path,
-				_servletsMap.get(StringPool.SLASH), filterChain);
+				_servletsMap.get(StringPool.SLASH), bundleFilterChain);
 		}
 
 		return null;
@@ -571,7 +574,7 @@ public class BundleServletContext extends LiferayServletContext
 		}
 	}
 
-	protected FilterChain getFilterChain(String alias) {
+	protected BundleFilterChain getFilterChain(String alias) {
 		BundleFilterChain bundleFilterChain = new BundleFilterChain();
 
 		for (Object[] filterDefinition : _filterList) {

@@ -21,6 +21,7 @@ import java.util.Queue;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -40,12 +41,19 @@ public class BundleFilterChain implements FilterChain {
 		Filter currentFilter = _filters.poll();
 
 		if (currentFilter == null) {
+			_servlet.service(request, response);
+
 			return;
 		}
 
 		currentFilter.doFilter(request, response, this);
 	}
 
+	public void setServlet(Servlet servlet) {
+		_servlet = servlet;
+	}
+
 	private Queue<Filter> _filters = new LinkedList<Filter>();
+	private Servlet _servlet;
 
 }
