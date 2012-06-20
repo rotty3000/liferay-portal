@@ -19,6 +19,13 @@ import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.IOException;
 
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -96,23 +103,79 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 
+		httpServletRequest = new HttpServletRequestWrapper(httpServletRequest) {
+
+			@Override
+			public Object getAttribute(String name) {
+				if (name.equals(INCLUDE_CONTEXT_PATH) ||
+					name.equals(INCLUDE_PATH_INFO) ||
+					name.equals(INCLUDE_QUERY_STRING) ||
+					name.equals(INCLUDE_REQUEST_URI) ||
+					name.equals(INCLUDE_SERVLET_PATH)) {
+
+					return _attributes.get(name);
+				}
+				else {
+					return super.getAttribute(name);
+				}
+			}
+
+			@Override
+			public Enumeration getAttributeNames() {
+				List<String> attributeNames = new Vector<String>();
+
+				Enumeration<String> enu = super.getAttributeNames();
+
+				while (enu.hasMoreElements()) {
+					String name = enu.nextElement();
+				}
+
+				attributeNames.addAll(_attributes.keySet());
+
+				return Collections.enumeration(attributeNames);
+			}
+
+			@Override
+			public void setAttribute(String name, Object value) {
+				if (name.equals(INCLUDE_CONTEXT_PATH) ||
+					name.equals(INCLUDE_PATH_INFO) ||
+					name.equals(INCLUDE_QUERY_STRING) ||
+					name.equals(INCLUDE_REQUEST_URI) ||
+					name.equals(INCLUDE_SERVLET_PATH)) {
+
+					_attributes.put(name, value);
+				}
+				else {
+					super.setAttribute(name, value);
+				}
+			}
+
+			private Map<String, Object> _attributes =
+				new HashMap<String, Object>();
+
+		};
+
 		if (_contextPath != null) {
 			httpServletRequest.setAttribute(INCLUDE_CONTEXT_PATH, _contextPath);
 		}
+
 		if (_pathInfo != null) {
 			httpServletRequest.setAttribute(INCLUDE_PATH_INFO, _pathInfo);
 		}
+
 		if (_queryString != null) {
 			httpServletRequest.setAttribute(INCLUDE_QUERY_STRING, _queryString);
 		}
+
 		if (_requestURI != null) {
 			httpServletRequest.setAttribute(INCLUDE_REQUEST_URI, _requestURI);
 		}
+
 		if (_servletPath != null) {
 			httpServletRequest.setAttribute(INCLUDE_SERVLET_PATH, _servletPath);
 		}
 
-		doDispatch(request, response, true);
+		doDispatch(httpServletRequest, response, true);
 	}
 
 	public void doDispatch(

@@ -14,13 +14,13 @@
 
 package com.liferay.mvc.freemarker.internal;
 
-import com.liferay.portal.freemarker.FreeMarkerTemplateLoader;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
 
@@ -67,7 +67,7 @@ public class FreeMarkerMVCContextHelper {
 		template.put(
 			"fullTemplatesPath",
 			StringPool.SLASH + servletContextName +
-			FreeMarkerTemplateLoader.SERVLET_SEPARATOR);
+			TemplateResourceParser.SERVLET_SEPARATOR);
 
 		TemplateHashModel taglibsFactory =
 			FreeMarkerTaglibFactoryUtil.createTaglibFactory(servletContext);

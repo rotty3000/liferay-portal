@@ -679,7 +679,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		for (Element portletElement : portletElements) {
 			String portletName = portletElement.elementText("portlet-name");
 
-			String invokerPortletName = "osgi".concat(webContextpath).concat(
+			String invokerPortletName = MODULE.concat(webContextpath).concat(
 				StringPool.SLASH).concat(portletName);
 
 			XPath xPath = SAXReaderUtil.createXPath(
