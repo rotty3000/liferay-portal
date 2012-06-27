@@ -18,8 +18,10 @@ import com.liferay.web.extender.internal.definition.FilterDefinition;
 import com.liferay.web.extender.internal.definition.ListenerDefinition;
 import com.liferay.web.extender.internal.definition.ServletDefinition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +53,7 @@ public class WebXML {
 	/**
 	 * @return the listeners
 	 */
-	public Map<String, ListenerDefinition> getListeners() {
+	public List<ListenerDefinition> getListeners() {
 		return _listeners;
 	}
 
@@ -104,13 +106,13 @@ public class WebXML {
 	 * @param listeners the listeners to set
 	 */
 	public void setListener(String className, ListenerDefinition listener) {
-		_listeners.put(className, listener);
+		_listeners.add(listener);
 	}
 
 	/**
 	 * @param listeners the listeners to set
 	 */
-	public void setListeners(Map<String, ListenerDefinition> listeners) {
+	public void setListeners(List<ListenerDefinition> listeners) {
 		_listeners = listeners;
 	}
 
@@ -135,8 +137,8 @@ public class WebXML {
 		new HashMap<String, FilterDefinition>();
 	private Map<String, String> _mimeTypes =
 		new HashMap<String, String>();
-	private Map<String, ListenerDefinition> _listeners =
-		new HashMap<String, ListenerDefinition>();
+	private List<ListenerDefinition> _listeners =
+		new ArrayList<ListenerDefinition>();
 	private Map<String, ServletDefinition> _servlets =
 		new HashMap<String, ServletDefinition>();
 

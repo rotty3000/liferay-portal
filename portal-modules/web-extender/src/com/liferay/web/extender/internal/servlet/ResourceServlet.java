@@ -14,17 +14,20 @@
 
 package com.liferay.web.extender.internal.servlet;
 
+import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.webserver.WebServerServlet;
 
 import java.io.IOException;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,7 +36,7 @@ import org.osgi.service.http.HttpContext;
 /**
  * @author Raymond Augé
  */
-public class ResourceServlet extends HttpServlet {
+public class ResourceServlet extends WebServerServlet {
 
 	public ResourceServlet(String name, HttpContext httpContext) {
 		_name = name;
@@ -46,13 +49,18 @@ public class ResourceServlet extends HttpServlet {
 	}
 
 	@Override
+	public void init(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
+	}
+
+	@Override
 	public void service(
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		String pathInfo = request.getPathInfo();
+		String requestURI = URLDecoder.decode(request.getRequestURI(), "UTF-8");
 
-		String fileName = pathInfo;
+		String fileName = requestURI;
 
 		int pos = fileName.lastIndexOf(StringPool.SLASH);
 
@@ -62,21 +70,50 @@ public class ResourceServlet extends HttpServlet {
 
 		try {
 			URL resourceURL = _httpContext.getResource(
-				_name.concat(pathInfo));
+				_name.concat(requestURI));
 
 			if (resourceURL == null) {
-				throw new ServletException(pathInfo + " not found");
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+				return;
 			}
 
 			URLConnection connection = resourceURL.openConnection();
 
-			int contentLength = connection.getContentLength();
+			long lastModified = connection.getLastModified();
+
+			if (lastModified > 0) {
+				long ifModifiedSince = request.getDateHeader(
+					HttpHeaders.IF_MODIFIED_SINCE);
+
+				if ((ifModifiedSince > 0) &&
+					(ifModifiedSince == lastModified)) {
+
+					response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+
+					return;
+				}
+			}
+
+			if (lastModified > 0) {
+				response.setDateHeader(
+					HttpHeaders.LAST_MODIFIED, lastModified);
+			}
 
 			String contentType = _httpContext.getMimeType(fileName);
 
-			ServletResponseUtil.sendFile(
-				request, response, fileName, connection.getInputStream(),
-				contentLength, contentType);
+			// Send file
+
+			if (isSupportsRangeHeader(contentType)) {
+				sendFileWithRangeHeader(
+					request, response, fileName, connection.getInputStream(),
+					connection.getContentLength(), contentType);
+			}
+			else {
+				ServletResponseUtil.sendFile(
+					request, response, fileName, connection.getInputStream(),
+					connection.getContentLength(), contentType);
+			}
 		}
 		catch (Exception e) {
 			PortalUtil.sendError(

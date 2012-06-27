@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
@@ -60,9 +61,11 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 			sb.append(webContextPath);
 			sb.append("))");
 
+			Filter filter = _bundleContext.createFilter(sb.toString());
+
 			Collection<ServiceReference<ServletContext>> serviceReferences =
 				_bundleContext.getServiceReferences(
-					ServletContext.class, sb.toString());
+					ServletContext.class, filter.toString());
 
 			Iterator<ServiceReference<ServletContext>> iterator =
 				serviceReferences.iterator();

@@ -15,26 +15,22 @@
 package com.liferay.mvc.freemarker;
 
 import com.liferay.mvc.freemarker.internal.FreeMarkerMVCContextHelper;
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateContextType;
+import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateResource;
-import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
-import com.liferay.portal.template.StringTemplateResource;
+import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
 import java.io.Writer;
-
-import java.net.URL;
-
-import java.util.Set;
 
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletContext;
@@ -55,35 +51,42 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 
 		PortletContext portletContext = getPortletContext();
 
-		URL resource = portletContext.getResource(path);
+		String servletContextName = portletContext.getPortletContextName();
 
-		if (resource == null) {
+		String resourcePath = servletContextName.concat(
+			TemplateResourceParser.SERVLET_SEPARATOR).concat(path);
+
+		boolean resourceExists = false;
+
+		try {
+			resourceExists = TemplateResourceLoaderUtil.hasTemplateResource(
+				TemplateManager.FREEMARKER, resourcePath);
+		}
+		catch (TemplateException te) {
+			throw new IOException(te);
+		}
+
+		if (!resourceExists) {
 			_log.error(path + " is not a valid include");
 		}
 		else {
 			try {
-				String templateContent = HttpUtil.URLtoString(resource);
-
-				String templateId = portletResponse.getNamespace() + path;
-
-				if (!_templateIds.contains(templateId)) {
-					_templateIds.add(templateId);
-				}
-
-				TemplateResource templateResource = new StringTemplateResource(
-					templateId, templateContent);
+				TemplateResource templateResource =
+					TemplateResourceLoaderUtil.getTemplateResource(
+						TemplateManager.FREEMARKER, resourcePath);
 
 				Template template = TemplateManagerUtil.getTemplate(
 					TemplateManager.FREEMARKER, templateResource,
 					TemplateContextType.CLASS_LOADER);
 
+				FreeMarkerMVCContextHelper.addPortletJSPTaglibSupport(
+					template, servletContextName, portletRequest,
+					portletResponse);
+
 				template.put("portletContext", getPortletContext());
 				template.put(
 					"userInfo",
 					portletRequest.getAttribute(PortletRequest.USER_INFO));
-
-				FreeMarkerMVCContextHelper.addPortletJSPTaglibSupport(
-					template, portletRequest, portletResponse, _templateIds);
 
 				Writer writer = null;
 
@@ -115,21 +118,9 @@ public class FreeMarkerMVCPortlet extends MVCPortlet {
 	public void destroy() {
 		super.destroy();
 
-		for (String templateId : _templateIds) {
-//			try {
-//				TemplateManagerUtil.clearCache(
-//					TemplateManager.FREEMARKER, templateId);
-//			}
-//			catch (TemplateException te) {
-//				_log.error(te, te);
-//			}
-		}
-
 		TemplateManagerUtil.destroy(getClass().getClassLoader());
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(FreeMarkerMVCPortlet.class);
-
-	private Set<String> _templateIds = new ConcurrentHashSet<String>();
 
 }

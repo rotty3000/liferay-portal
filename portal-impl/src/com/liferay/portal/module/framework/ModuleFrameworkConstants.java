@@ -57,6 +57,9 @@ public interface ModuleFrameworkConstants {
 
 	public static final String INVOKER_PATH = "/invoke";
 
+	public static final String LIFERAY_FORCE_WAB_PROCESSING =
+		"Liferay-Force-WAB-Processing";
+
 	public static final String MODULE = "module";
 
 	public static final String MODULE_MAPPING = "/" + MODULE + "/";

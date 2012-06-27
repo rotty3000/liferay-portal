@@ -40,6 +40,7 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 		return new DefaultHttpContext(_bundleServletContext);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void registerFilter(
 			String filterMapping, Filter filter, Dictionary initParams,
 			HttpContext httpContext)
@@ -53,9 +54,9 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 			filterMapping, filter, initParams, httpContext);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void registerListener(
-			String listenerClassName, Object listener, Dictionary initParams,
-			HttpContext httpContext)
+			Object listener, Dictionary initParams, HttpContext httpContext)
 		throws ServletException {
 
 		if (httpContext == null) {
@@ -63,7 +64,7 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 		}
 
 		_bundleServletContext.registerListener(
-			listenerClassName, listener, initParams, httpContext);
+			listener, initParams, httpContext);
 	}
 
 	public void registerResources(
@@ -77,6 +78,7 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 		_bundleServletContext.registerResources(alias, name, httpContext);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void registerServlet(
 			String alias, Servlet servlet, Dictionary initparams,
 			HttpContext httpContext)
@@ -98,8 +100,8 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 		_bundleServletContext.unregisterFilter(filterMapping);
 	}
 
-	public void unregisterListener(String listenerClassName) {
-		_bundleServletContext.unregisterListener(listenerClassName);
+	public void unregisterListener(Object listener) {
+		_bundleServletContext.unregisterListener(listener);
 	}
 
 	private BundleServletContext _bundleServletContext;

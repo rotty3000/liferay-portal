@@ -51,6 +51,7 @@ public class PortalHttpContext implements HttpContext {
 			return _servletContext.getResource(resource);
 		}
 		catch (MalformedURLException e) {
+			// TODO do I need to report this?
 		}
 
 		return null;

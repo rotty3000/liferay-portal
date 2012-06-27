@@ -1,8 +1,10 @@
 Bundle-Activator: com.liferay.web.extender.internal.Activator
 Bundle-Name: Web Extender
-Bundle-SymbolicName: web-extender;singleton:=true
+Bundle-SymbolicName: web-extender
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 1.0.0
+Export-Package: \
+	com.liferay.web.extender.servlet
 Import-Package: \
 	com.liferay.portal.apache.bridges.struts,\
 	com.liferay.portal.deploy.auto,\
@@ -19,7 +21,7 @@ Import-Package: \
 	com.liferay.portal.module.framework,\
 	com.liferay.portal.service,\
 	com.liferay.portal.util,\
-	com.liferay.util,\
+	com.liferay.util.bean,\
 	javax.servlet;version="[3.0.0, 4.0.0)",\
 	javax.servlet.http;version="[3.0.0, 4.0.0)",\
 	org.objectweb.asm,\

@@ -14,8 +14,6 @@
 
 package com.liferay.web.extender.internal;
 
-import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
-import com.liferay.portal.kernel.deploy.hot.HotDeployUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
@@ -45,10 +43,10 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * @author Raymond Augé
  */
-public class WebPluginDeployer
+public class WebBundleDeployer
 	implements BundleListener, ModuleFrameworkConstants {
 
-	public WebPluginDeployer(
+	public WebBundleDeployer(
 			BundleContext bundleContext, ServletContext portalServletContext,
 			Servlet portletServlet)
 		throws Exception {
@@ -153,14 +151,7 @@ public class WebPluginDeployer
 				_bundleContext.registerService(
 					ServletContext.class, bundleServletContext, properties);
 
-			ClassLoader bundleClassLoader =
-				bundleServletContext.getClassLoader();
-
 			bundleServletContext.open();
-
-			HotDeployUtil.fireDeployEvent(
-				new HotDeployEvent(
-					bundleServletContext, bundleClassLoader, false));
 
 			_trackedContexts.put(servletContextName, bundleServletContext);
 			_trackedRegistrations.put(servletContextName, registration);
@@ -185,16 +176,12 @@ public class WebPluginDeployer
 		}
 
 		try {
-			HotDeployUtil.fireUndeployEvent(
-				new HotDeployEvent(
-					bundleServletContext, bundleServletContext.getClassLoader(),
-					false));
+			bundleServletContext.close();
 		}
 		catch (Exception e) {
 			_eventUtil.sendEvent(bundle, EventUtil.FAILED, null, false);
 		}
 
-		bundleServletContext.close();
 		registration.unregister();
 
 		_trackedContexts.remove(servletContextName);
@@ -234,7 +221,7 @@ public class WebPluginDeployer
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		WebPluginDeployer.class);
+		WebBundleDeployer.class);
 
 	private BundleContext _bundleContext;
 	private List<Bundle> _collidedWabs = Collections.synchronizedList(

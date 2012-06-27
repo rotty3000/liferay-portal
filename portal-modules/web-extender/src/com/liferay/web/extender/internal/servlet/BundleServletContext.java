@@ -17,7 +17,10 @@ package com.liferay.web.extender.internal.servlet;
 import com.liferay.portal.apache.bridges.struts.LiferayServletContext;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.PluginContextListener;
+import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -25,13 +28,17 @@ import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.struts.AuthPublicPathRegistry;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.web.extender.internal.http.HttpServiceTracker;
+import com.liferay.web.extender.servlet.BundleServletConfig;
+import com.liferay.web.extender.servlet.ServletInitializer;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -43,7 +50,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Filter;
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -56,10 +62,15 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionListener;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.NamespaceException;
@@ -81,6 +92,8 @@ public class BundleServletContext extends LiferayServletContext
 
 	public void close() {
 		_httpServiceTracker.close();
+
+		FileUtil.deltree(_tempDir);
 	}
 
 	public Bundle getBundle() {
@@ -104,12 +117,20 @@ public class BundleServletContext extends LiferayServletContext
 		if (name.equals(OSGI_BUNDLE)) {
 			return _bundle;
 		}
-
-		if (name.equals(OSGI_BUNDLECONTEXT)) {
+		else if (name.equals(OSGI_BUNDLECONTEXT)) {
 			return _bundle.getBundleContext();
+		}
+		else if (name.equals(JavaConstants.JAVAX_SERVLET_CONTEXT_TEMPDIR)) {
+			return getTempDir();
 		}
 
 		Object value = _contextAttributes.get(name);
+
+		if (name.equals(PluginContextListener.PLUGIN_CLASS_LOADER) &&
+			(value == null)) {
+
+			return getClassLoader();
+		}
 
 		if ((value != null) ||
 			name.equals(
@@ -182,11 +203,25 @@ public class BundleServletContext extends LiferayServletContext
 	public RequestDispatcher getRequestDispatcher(String path) {
 		String alias = path;
 
-		FilterChain filterChain = getFilterChain(alias);
+		BundleFilterChain bundleFilterChain = getFilterChain(alias);
+
+		String pathMain = PortalUtil.getPathMain();
+
+		String contextPath = getContextPath();
+
+		if (contextPath.startsWith(pathMain)) {
+			contextPath = contextPath.substring(pathMain.length());
+		}
 
 		if (path.startsWith(MODULE_MAPPING) && path.endsWith(INVOKER_PATH)) {
+			bundleFilterChain.setServlet(_portletServlet);
+
+			if (path.startsWith(contextPath)) {
+				path = path.substring(contextPath.length());
+			}
+
 			return new BundleRequestDispatcher(
-				path, false, path, _portletServlet, filterChain);
+				path, false, path, this, bundleFilterChain);
 		}
 
 		if (!isValidPath(path)) {
@@ -198,8 +233,10 @@ public class BundleServletContext extends LiferayServletContext
 		}
 
 		if (_servletsMap.containsKey(alias)) {
+			bundleFilterChain.setServlet(_servletsMap.get(alias));
+
 			return new BundleRequestDispatcher(
-				alias, false, path, _servletsMap.get(alias), filterChain);
+				alias, false, path, this, bundleFilterChain);
 		}
 
 		String extensionMapping = FileUtil.getExtension(alias).toLowerCase();
@@ -212,14 +249,18 @@ public class BundleServletContext extends LiferayServletContext
 
 		while (alias.length() != 0) {
 			if (_servletsMap.containsKey(alias)) {
+				bundleFilterChain.setServlet(_servletsMap.get(alias));
+
 				return new BundleRequestDispatcher(
-					alias, false, path, _servletsMap.get(alias), filterChain);
+					alias, false, path, this, bundleFilterChain);
 			}
 			else if (_servletsMap.containsKey(alias.concat(extensionMapping))) {
+				bundleFilterChain.setServlet(
+					_servletsMap.get(alias.concat(extensionMapping)));
+
 				return new BundleRequestDispatcher(
-					alias.concat(extensionMapping), true, path,
-					_servletsMap.get(alias.concat(extensionMapping)),
-					filterChain);
+					alias.concat(extensionMapping), true, path, this,
+					bundleFilterChain);
 			}
 
 			alias = alias.substring(0, alias.lastIndexOf(StringPool.SLASH));
@@ -228,16 +269,19 @@ public class BundleServletContext extends LiferayServletContext
 		if (_servletsMap.containsKey(
 				StringPool.SLASH.concat(extensionMapping))) {
 
+			bundleFilterChain.setServlet(
+				_servletsMap.get(StringPool.SLASH.concat(extensionMapping)));
+
 			return new BundleRequestDispatcher(
-				StringPool.SLASH.concat(extensionMapping), true, path,
-				_servletsMap.get(StringPool.SLASH.concat(extensionMapping)),
-				filterChain);
+				StringPool.SLASH.concat(extensionMapping), true, path, this,
+				bundleFilterChain);
 		}
 
 		if (_servletsMap.containsKey(StringPool.SLASH)) {
+			bundleFilterChain.setServlet(_servletsMap.get(StringPool.SLASH));
+
 			return new BundleRequestDispatcher(
-				StringPool.SLASH, false, path,
-				_servletsMap.get(StringPool.SLASH), filterChain);
+				StringPool.SLASH, false, path, this, bundleFilterChain);
 		}
 
 		return null;
@@ -295,6 +339,16 @@ public class BundleServletContext extends LiferayServletContext
 		return _servletContextName;
 	}
 
+	public List<ServletRequestAttributeListener>
+		getServletRequestAttributeListeners() {
+
+		return _servletRequestAttributeListeners;
+	}
+
+	public List<ServletRequestListener> getServletRequestListeners() {
+		return _servletRequestListeners;
+	}
+
 	public void open() {
 		_httpServiceTracker = new HttpServiceTracker(
 				_bundle.getBundleContext());
@@ -314,7 +368,7 @@ public class BundleServletContext extends LiferayServletContext
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
 			FilterConfig filterConfig = new BundleFilterConfig(
 				this, filterMapping, initParams, httpContext);
@@ -330,8 +384,8 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	public void registerListener(
-			String listenerClassName, Object listener,
-			Dictionary<String, String> initParams, HttpContext httpContext)
+			Object listener, Dictionary<String, String> initParams,
+			HttpContext httpContext)
 		throws ServletException {
 
 		Thread currentThread = Thread.currentThread();
@@ -339,7 +393,7 @@ public class BundleServletContext extends LiferayServletContext
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
 			for (Enumeration<String> keys = initParams.keys();
 					keys.hasMoreElements();) {
@@ -354,13 +408,32 @@ public class BundleServletContext extends LiferayServletContext
 				_initParams.put(key, value);
 			}
 
+			if (listener instanceof HttpSessionActivationListener) {
+				PortletSessionListenerManager.
+					addHttpSessionActivationListener(
+						(HttpSessionActivationListener)listener);
+			}
+			if (listener instanceof HttpSessionAttributeListener) {
+				PortletSessionListenerManager.
+					addHttpSessionAttributeListener(
+						(HttpSessionAttributeListener)listener);
+			}
+			if (listener instanceof HttpSessionBindingListener) {
+				PortletSessionListenerManager.
+					addHttpSessionBindingListener(
+						(HttpSessionBindingListener)listener);
+			}
 			if (listener instanceof HttpSessionListener) {
-				// TODO throw new UnsupportedOperationException();
+				PortletSessionListenerManager.addHttpSessionListener(
+					(HttpSessionListener)listener);
 			}
-			else if (listener instanceof HttpSessionAttributeListener) {
-				// TODO throw new UnsupportedOperationException();
+			if (listener instanceof ServletContextAttributeListener) {
+				// done
+				_servletContextAttributeListeners.add(
+					(ServletContextAttributeListener)listener);
 			}
-			else if (listener instanceof ServletContextListener) {
+			if (listener instanceof ServletContextListener) {
+				// done
 				ServletContextListener servletContextListener =
 					(ServletContextListener)listener;
 
@@ -368,20 +441,19 @@ public class BundleServletContext extends LiferayServletContext
 					new ServletContextEvent(this);
 
 				servletContextListener.contextInitialized(servletContextEvent);
-			}
-			else if (listener instanceof ServletContextAttributeListener) {
-				_contextAttributeListeners.put(
-					listenerClassName,
-					(ServletContextAttributeListener)listener);
-			}
-			else if (listener instanceof ServletRequestListener) {
-				// TODO throw new UnsupportedOperationException();
-			}
-			else if (listener instanceof ServletRequestAttributeListener) {
-				// TODO throw new UnsupportedOperationException();
-			}
 
-			_listeners.put(listenerClassName, listener);
+				_servletContextListeners.add(servletContextListener);
+			}
+			if (listener instanceof ServletRequestAttributeListener) {
+				// done
+				_servletRequestAttributeListeners.add(
+					(ServletRequestAttributeListener)listener);
+			}
+			if (listener instanceof ServletRequestListener) {
+				// done
+				_servletRequestListeners.add(
+					(ServletRequestListener)listener);
+			}
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
@@ -424,12 +496,12 @@ public class BundleServletContext extends LiferayServletContext
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
 			ServletConfig servletConfig = new BundleServletConfig(
 				this, alias, initParams, httpContext);
 
-			servlet.init(servletConfig);
+			handleServletInitializers(servlet, servletConfig);
 
 			_servletsMap.put(alias, servlet);
 		}
@@ -443,7 +515,7 @@ public class BundleServletContext extends LiferayServletContext
 		Object value = _contextAttributes.remove(name);
 
 		for(ServletContextAttributeListener listener :
-				_contextAttributeListeners.values()) {
+				_servletContextAttributeListeners) {
 
 			listener.attributeRemoved(
 				new ServletContextAttributeEvent(this, name, value));
@@ -452,12 +524,16 @@ public class BundleServletContext extends LiferayServletContext
 
 	@Override
 	public void setAttribute(String name, Object value) {
+		if (name.equals(JavaConstants.JAVAX_SERVLET_CONTEXT_TEMPDIR)) {
+			return;
+		}
+
 		Object originalValue = _contextAttributes.get(name);
 
 		_contextAttributes.put(name, value);
 
 		for(ServletContextAttributeListener listener :
-				_contextAttributeListeners.values()) {
+				_servletContextAttributeListeners) {
 
 			if (originalValue != null) {
 				listener.attributeReplaced(
@@ -477,7 +553,7 @@ public class BundleServletContext extends LiferayServletContext
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
 			Servlet servlet = _servletsMap.get(alias);
 
@@ -508,7 +584,7 @@ public class BundleServletContext extends LiferayServletContext
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
 			Filter filter = _filtersMap.get(filterMapping);
 
@@ -525,53 +601,62 @@ public class BundleServletContext extends LiferayServletContext
 		}
 	}
 
-	public void unregisterListener(String listenerClassName) {
+	public void unregisterListener(Object listener) {
 		Thread currentThread = Thread.currentThread();
 
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
 
 		try {
-			currentThread.setContextClassLoader(_classLoader);
+			currentThread.setContextClassLoader(getClassLoader());
 
-			Object listener = _listeners.get(listenerClassName);
-
-			if (listener == null) {
-				return;
+			if (listener instanceof HttpSessionActivationListener) {
+				PortletSessionListenerManager.
+					removeHttpSessionActivationListener(
+						(HttpSessionActivationListener)listener);
 			}
-
+			if (listener instanceof HttpSessionAttributeListener) {
+				PortletSessionListenerManager.
+					removeHttpSessionAttributeListener(
+						(HttpSessionAttributeListener)listener);
+			}
+			if (listener instanceof HttpSessionBindingListener) {
+				PortletSessionListenerManager.removeHttpSessionBindingListener(
+					(HttpSessionBindingListener)listener);
+			}
 			if (listener instanceof HttpSessionListener) {
-				// TODO HttpSessionListener
+				PortletSessionListenerManager.removeHttpSessionListener(
+					(HttpSessionListener)listener);
 			}
-			else if (listener instanceof HttpSessionAttributeListener) {
-				// TODO HttpSessionAttributeListener
+			if (listener instanceof ServletContextAttributeListener) {
+				_servletContextAttributeListeners.remove(listener);
 			}
-			else if (listener instanceof ServletContextListener) {
-				ServletContextListener servletContextListener =
-					(ServletContextListener)listener;
+			if (listener instanceof ServletContextListener) {
+				if (_servletContextListeners.contains(listener)) {
+					_servletContextListeners.remove(listener);
 
-				ServletContextEvent servletContextEvent = new ServletContextEvent(
-					this);
+					ServletContextListener servletContextListener =
+						(ServletContextListener)listener;
 
-				servletContextListener.contextDestroyed(servletContextEvent);
-			}
-			else if (listener instanceof ServletContextAttributeListener) {
-				_contextAttributeListeners.remove(listenerClassName);
-			}
-			else if (listener instanceof ServletRequestListener) {
-				// TODO ServletRequestListener
-			}
-			else if (listener instanceof ServletRequestAttributeListener) {
-				// TODO ServletRequestAttributeListener
-			}
+					ServletContextEvent servletContextEvent =
+						new ServletContextEvent(this);
 
-			_listeners.remove(listener);
+					servletContextListener.contextDestroyed(
+						servletContextEvent);
+				}
+			}
+			if (listener instanceof ServletRequestAttributeListener) {
+				_servletRequestAttributeListeners.remove(listener);
+			}
+			if (listener instanceof ServletRequestListener) {
+				_servletRequestListeners.remove(listener);
+			}
 		}
 		finally {
 			currentThread.setContextClassLoader(contextClassLoader);
 		}
 	}
 
-	protected FilterChain getFilterChain(String alias) {
+	protected BundleFilterChain getFilterChain(String alias) {
 		BundleFilterChain bundleFilterChain = new BundleFilterChain();
 
 		for (Object[] filterDefinition : _filterList) {
@@ -593,6 +678,72 @@ public class BundleServletContext extends LiferayServletContext
 		}
 
 		return bundleFilterChain;
+	}
+
+	protected File getTempDir() {
+		if (_tempDir == null) {
+			File parentTempDir = (File)super.getAttribute(
+				JavaConstants.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+
+			String servletContextName = getServletContextName();
+
+			File tempDir = new File(parentTempDir, servletContextName);
+
+			if (!tempDir.exists() && !tempDir.mkdirs()) {
+				throw new IllegalStateException(
+					"Can't create webapp tempDir for " +
+						getServletContextName());
+			}
+
+			_tempDir = tempDir;
+		}
+
+		return _tempDir;
+	}
+
+	protected void handleServletInitializers(
+			Servlet servlet, ServletConfig servletConfig)
+		throws ServletException {
+
+		BundleContext bundleContext = _bundle.getBundleContext();
+
+		String servletClass = servlet.getClass().getName();
+
+		ServiceReference<ServletInitializer> reference = null;
+		ServletInitializer initializer = null;
+
+		try {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append("(servletClassName=");
+			sb.append(servletClass);
+			sb.append(")");
+
+			org.osgi.framework.Filter filter = bundleContext.createFilter(
+				sb.toString());
+
+			Collection<ServiceReference<ServletInitializer>> serviceReferences =
+				bundleContext.getServiceReferences(
+					ServletInitializer.class, filter.toString());
+
+			if (!serviceReferences.isEmpty()) {
+				reference = serviceReferences.iterator().next();
+
+				initializer = bundleContext.getService(reference);
+			}
+		}
+		catch (InvalidSyntaxException e) {
+			_log.error(e, e);
+		}
+
+		if (initializer != null) {
+			initializer.init(servlet, servletConfig);
+
+			bundleContext.ungetService(reference);
+		}
+		else {
+			servlet.init(servletConfig);
+		}
 	}
 
 	protected boolean isValidPath(String path) {
@@ -687,21 +838,28 @@ public class BundleServletContext extends LiferayServletContext
 
 	private Bundle _bundle;
 	private ClassLoader _classLoader;
-	private Map<String,Object> _contextAttributes =
-		new ConcurrentHashMap<String,Object>();
-	private Map<String, ServletContextAttributeListener> _contextAttributeListeners =
-		new ConcurrentHashMap<String, ServletContextAttributeListener>();
+	private Map<String, Object> _contextAttributes =
+		new ConcurrentHashMap<String, Object>();
 	private String _contextPath;
-	private Map<String,Filter> _filtersMap =
-		new ConcurrentHashMap<String,Filter>();
+	private Map<String, Filter> _filtersMap =
+		new ConcurrentHashMap<String, Filter>();
 	private Map<String, String> _initParams = new HashMap<String, String>();
 	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private HttpServiceTracker _httpServiceTracker;
-	private Map<String,Object> _listeners =
-		new ConcurrentHashMap<String, Object>();
+	private List<ServletContextAttributeListener>
+		_servletContextAttributeListeners =
+			new ArrayList<ServletContextAttributeListener>();
+	private List<ServletContextListener> _servletContextListeners =
+		new ArrayList<ServletContextListener>();
+	private List<ServletRequestAttributeListener>
+		_servletRequestAttributeListeners =
+			new ArrayList<ServletRequestAttributeListener>();
+	private List<ServletRequestListener> _servletRequestListeners =
+		new ArrayList<ServletRequestListener>();
 	private Servlet _portletServlet;
 	private String _servletContextName;
-	private Map<String,Servlet> _servletsMap =
-		new ConcurrentHashMap<String,Servlet>();
+	private Map<String, Servlet> _servletsMap =
+		new ConcurrentHashMap<String, Servlet>();
+	private File _tempDir;
 
 }

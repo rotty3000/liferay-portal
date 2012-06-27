@@ -34,12 +34,12 @@ public interface ExtendedHttpService extends HttpService {
 		throws NamespaceException, ServletException;
 
 	public void registerListener(
-			String listenerClassName, Object listener,
-			Dictionary<String, String> initParams, HttpContext httpContext)
+			Object listener, Dictionary<String, String> initParams,
+			HttpContext httpContext)
 		throws ServletException;
 
 	public void unregisterFilter(String filterMapping);
 
-	public void unregisterListener(String listenerClassName);
+	public void unregisterListener(Object listener);
 
 }

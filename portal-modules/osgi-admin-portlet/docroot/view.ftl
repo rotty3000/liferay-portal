@@ -14,7 +14,7 @@
  */
 -->
 
-<#include "${fullTemplatesPath}/init.ftl" />
+<#include "init.ftl" />
 
 <#assign tabs1 = ParamUtil.getString(request, "tabs1", "bundles") />
 
@@ -186,7 +186,7 @@
 			<@liferay_ui["search-container-column-text"]>
 				<#assign expandedView = false />
 
-				<#include "${fullTemplatesPath}/bundle_action.ftl" />
+				<#include "bundle_action.ftl" />
 			</@>
 		</@>
 

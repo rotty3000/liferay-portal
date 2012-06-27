@@ -14,8 +14,6 @@
 
 package com.liferay.web.extender.internal.servlet;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.struts.StrutsAction;
@@ -23,7 +21,10 @@ import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.web.extender.internal.http.ExtendedHttpService;
 import com.liferay.web.extender.internal.http.HttpServiceFactory;
@@ -107,26 +108,54 @@ public class WebExtenderServlet extends PortletServlet
 		throws IOException, ServletException {
 
 		String portletId = (String)request.getAttribute(WebKeys.PORTLET_ID);
+		String requestURI = request.getRequestURI();
 
-		String pathInfo = request.getPathInfo();
+		Portlet portlet = null;
 
-		if (pathInfo.startsWith(MODULE_MAPPING)) {
-			pathInfo = pathInfo.substring(MODULE_MAPPING.length());
+		if (Validator.isNotNull(portletId)) {
+			try {
+				String rootPortletId = PortletConstants.getRootPortletId(portletId);
+
+				portlet = PortletLocalServiceUtil.getPortletById(rootPortletId);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
-		String servletContextName = pathInfo;
+		String servletContextName = null;
 
-		if (servletContextName.startsWith(StringPool.SLASH)) {
-			servletContextName = servletContextName.substring(1);
+		if (portlet != null) {
+			servletContextName =
+				portlet.getPortletApp().getServletContextName();
 		}
+		else {
+			if (requestURI != null) {
+				String pathMain = PortalUtil.getPathMain();
 
-		int pos = servletContextName.indexOf(StringPool.SLASH);
+				if (requestURI.startsWith(pathMain)) {
+					requestURI = requestURI.substring(pathMain.length());
+				}
 
-		if (pos != -1) {
-			pathInfo = servletContextName.substring(
-				pos, servletContextName.length());
+				if (requestURI.startsWith(MODULE_MAPPING)) {
+					requestURI = requestURI.substring(MODULE_MAPPING.length());
+				}
 
-			servletContextName = servletContextName.substring(0, pos);
+				servletContextName = requestURI;
+
+				if (servletContextName.startsWith(StringPool.SLASH)) {
+					servletContextName = servletContextName.substring(1);
+				}
+
+				int pos = servletContextName.indexOf(StringPool.SLASH);
+
+				if (pos != -1) {
+					requestURI = servletContextName.substring(
+						pos, servletContextName.length());
+
+					servletContextName = servletContextName.substring(0, pos);
+				}
+			}
 		}
 
 		ServletContext servletContext = ServletContextPool.get(
@@ -141,7 +170,7 @@ public class WebExtenderServlet extends PortletServlet
 			return;
 		}
 
-		service(request, response, servletContext, portletId, pathInfo);
+		service(request, response, servletContext, portletId, requestURI);
 	}
 
 	protected void service(
@@ -202,8 +231,6 @@ public class WebExtenderServlet extends PortletServlet
 			currentThread.setContextClassLoader(contextClassLoader);
 		}
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(WebExtenderServlet.class);
 
 	private BundleContext _bundleContext;
 	private ServiceRegistration<?> _serviceRegistration;

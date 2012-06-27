@@ -22,10 +22,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.struts.StrutsActionRegistryUtil;
 import com.liferay.web.extender.internal.http.PortalHttpContext;
-import com.liferay.web.extender.internal.servlet.BundleServletConfig;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 import com.liferay.web.extender.internal.servlet.WebExtenderServlet;
 import com.liferay.web.extender.internal.webbundle.WebBundleURLStreamHandlerService;
+import com.liferay.web.extender.servlet.BundleServletConfig;
 
 import java.util.Hashtable;
 
@@ -37,7 +37,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.url.URLConstants;
 import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -66,7 +65,7 @@ public class Activator
 
 		ClassLoader classLoader = systemBundle.getClass().getClassLoader();
 
-		_ushRegistration = _bundleContext.registerService(
+		_bundleContext.registerService(
 			URLStreamHandlerService.class.getName(),
 			new WebBundleURLStreamHandlerService(classLoader),
 			handlerProperties);
@@ -89,7 +88,7 @@ public class Activator
 
 			StrutsActionRegistryUtil.register(MODULE_MAPPING, _osgiServlet);
 
-			_webPluginDeployer = new WebPluginDeployer(
+			_webPluginDeployer = new WebBundleDeployer(
 				_bundleContext, servletContext, _osgiServlet);
 
 			_bundleContext.addBundleListener(_webPluginDeployer);
@@ -106,6 +105,8 @@ public class Activator
 	public void modifiedService(
 		ServiceReference<ServletContext> serviceReference,
 		ServletContext servletContext) {
+
+		// not needed
 	}
 
 	public void removedService(
@@ -125,15 +126,11 @@ public class Activator
 	public void start(BundleContext bundleContext) throws Exception {
 		_bundleContext = bundleContext;
 
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(3);
 
-		sb.append("(&(");
-		sb.append(BEAN_ID);
-		sb.append("=");
+		sb.append("(&(bean.id=");
 		sb.append(ServletContext.class.getName());
-		sb.append(")(");
-		sb.append(ORIGINAL_BEAN);
-		sb.append("=*))");
+		sb.append(")(original.bean=*))");
 
 		Filter filter = bundleContext.createFilter(sb.toString());
 
@@ -147,8 +144,6 @@ public class Activator
 	public void stop(BundleContext bundleContext) throws Exception {
 		_servletContextTracker.close();
 		_servletContextTracker = null;
-		_ushRegistration.unregister();
-		_ushRegistration = null;
 	}
 
 	protected void checkStartableBundles() {
@@ -172,7 +167,6 @@ public class Activator
 	private BundleContext _bundleContext;
 	private WebExtenderServlet _osgiServlet;
 	private ServiceTracker<ServletContext, ServletContext> _servletContextTracker;
-	private ServiceRegistration<?> _ushRegistration;
-	private WebPluginDeployer _webPluginDeployer;
+	private WebBundleDeployer _webPluginDeployer;
 
 }

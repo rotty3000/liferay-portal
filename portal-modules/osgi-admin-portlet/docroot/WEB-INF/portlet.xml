@@ -14,10 +14,6 @@
 			<name>view-template</name>
 			<value>/view.ftl</value>
 		</init-param>
-		<init-param>
-			<name>com.liferay.portal.invokerPortletName</name>
-			<value>module${Web-ContextPath}/1</value>
-		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
 			<mime-type>text/html</mime-type>

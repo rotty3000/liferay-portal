@@ -1,0 +1,13 @@
+Bundle-Activator: com.liferay.jasper.internal.JasperServletInitializer
+Bundle-Name: Jasper Servlet Initalizer
+Bundle-SymbolicName: jasper-initializer
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 1.0.0
+Import-Package: \
+	com.liferay.portal.kernel.util,\
+	com.liferay.web.extender.servlet,\
+	javax.servlet;version=[3.0.0',' 4.0.0),\
+	javax.servlet.http;version=[3.0.0',' 4.0.0),\
+	org.apache.jasper.servlet,\
+	*
+Private-Package: com.liferay.jasper.internal

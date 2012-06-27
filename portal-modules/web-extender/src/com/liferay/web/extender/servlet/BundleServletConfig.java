@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.web.extender.internal.servlet;
+package com.liferay.web.extender.servlet;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -38,11 +39,20 @@ public class BundleServletConfig implements ServletConfig {
 	}
 
 	public String getInitParameter(String name) {
-		return _initParameters.get(name);
+		return getInitParameters().get(name);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Enumeration getInitParameterNames() {
-		return _initParameters.keys();
+		return getInitParameters().keys();
+	}
+
+	public Dictionary<String, String> getInitParameters() {
+		if (_initParameters == null) {
+			_initParameters = new Hashtable<String, String>();
+		}
+
+		return _initParameters;
 	}
 
 	public HttpContext getHttpContext() {
@@ -55,6 +65,10 @@ public class BundleServletConfig implements ServletConfig {
 
 	public String getServletName() {
 		return _servletName;
+	}
+
+	public void setInitParameter(String paramName, String value) {
+		getInitParameters().put(paramName, value);
 	}
 
 	private HttpContext _httpContext;

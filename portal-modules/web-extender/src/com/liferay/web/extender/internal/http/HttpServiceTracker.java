@@ -25,6 +25,7 @@ import com.liferay.web.extender.internal.servlet.WebXML;
 import com.liferay.web.extender.internal.servlet.WebXMLLoader;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -101,11 +102,12 @@ public class HttpServiceTracker
 	}
 
 	protected void destroyListeners(ExtendedHttpService httpService) {
-		Map<String, ListenerDefinition> listeners = _webXML.getListeners();
+		List<ListenerDefinition> listeners = _webXML.getListeners();
 
-		for (String listenerClassName : listeners.keySet()) {
+		for (ListenerDefinition listenerDefinition : listeners) {
 			try {
-				httpService.unregisterListener(listenerClassName);
+				httpService.unregisterListener(
+					listenerDefinition.getListener());
 			}
 			catch (Exception e) {
 				_log.error(e);
@@ -149,15 +151,12 @@ public class HttpServiceTracker
 	protected void initListeners(
 		ExtendedHttpService httpService, HttpContext httpContext) {
 
-		Map<String, ListenerDefinition> listeners = _webXML.getListeners();
+		List<ListenerDefinition> listeners = _webXML.getListeners();
 
-		for (String listenerClassName : listeners.keySet()) {
-			ListenerDefinition listenerDefinition = listeners.get(
-				listenerClassName);
-
+		for (ListenerDefinition listenerDefinition : listeners) {
 			try {
 				httpService.registerListener(
-					listenerClassName, listenerDefinition.getListener(),
+					listenerDefinition.getListener(),
 					listenerDefinition.getContextParams(), httpContext);
 			}
 			catch (Exception e) {

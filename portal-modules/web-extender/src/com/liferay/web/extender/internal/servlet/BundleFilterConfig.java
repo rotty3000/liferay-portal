@@ -41,10 +41,15 @@ public class BundleFilterConfig implements FilterConfig {
 		return _filterName;
 	}
 
+	public HttpContext getHttpContext() {
+		return _httpContext;
+	}
+
 	public String getInitParameter(String arg0) {
 		return _initParameters.get(arg0);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Enumeration getInitParameterNames() {
 		return _initParameters.keys();
 	}

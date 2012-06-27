@@ -26,6 +26,8 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Raymond Augé: I added comments to remove validation warnings.
  */
 package org.objectweb.asm.depend;
 
@@ -104,6 +106,7 @@ public class DependencyVisitor implements
 	}
 
 	public void visitAttribute(final Attribute attr) {
+		// not needed
 	}
 
 	public FieldVisitor visitField(
@@ -141,6 +144,7 @@ public class DependencyVisitor implements
 	}
 
 	public void visitSource(final String source, final String debug) {
+		// not needed
 	}
 
 	public void visitInnerClass(
@@ -223,6 +227,7 @@ public class DependencyVisitor implements
 	}
 
 	public void visitCode() {
+		// not needed
 	}
 
 	public void visitFrame(
@@ -232,24 +237,31 @@ public class DependencyVisitor implements
 		final int nStack,
 		final Object[] stack)
 	{
+		// not needed
 	}
 
 	public void visitInsn(final int opcode) {
+		// not needed
 	}
 
 	public void visitIntInsn(final int opcode, final int operand) {
+		// not needed
 	}
 
 	public void visitVarInsn(final int opcode, final int var) {
+		// not needed
 	}
 
 	public void visitJumpInsn(final int opcode, final Label label) {
+		// not needed
 	}
 
 	public void visitLabel(final Label label) {
+		// not needed
 	}
 
 	public void visitIincInsn(final int var, final int increment) {
+		// not needed
 	}
 
 	public void visitTableSwitchInsn(
@@ -258,6 +270,7 @@ public class DependencyVisitor implements
 		final Label dflt,
 		final Label[] labels)
 	{
+		// not needed
 	}
 
 	public void visitLookupSwitchInsn(
@@ -265,6 +278,7 @@ public class DependencyVisitor implements
 		final int[] keys,
 		final Label[] labels)
 	{
+		// not needed
 	}
 
 	public void visitTryCatchBlock(
@@ -277,9 +291,11 @@ public class DependencyVisitor implements
 	}
 
 	public void visitLineNumber(final int line, final Label start) {
+		// not needed
 	}
 
 	public void visitMaxs(final int maxStack, final int maxLocals) {
+		// not needed
 	}
 
 	// AnnotationVisitor
@@ -315,6 +331,7 @@ public class DependencyVisitor implements
 	String signatureClassName;
 
 	public void visitFormalTypeParameter(final String name) {
+		// not needed
 	}
 
 	public SignatureVisitor visitClassBound() {
@@ -346,9 +363,11 @@ public class DependencyVisitor implements
 	}
 
 	public void visitBaseType(final char descriptor) {
+		// not needed
 	}
 
 	public void visitTypeVariable(final String name) {
+		// not needed
 	}
 
 	public SignatureVisitor visitArrayType() {
@@ -366,6 +385,7 @@ public class DependencyVisitor implements
 	}
 
 	public void visitTypeArgument() {
+		// not needed
 	}
 
 	public SignatureVisitor visitTypeArgument(final char wildcard) {
@@ -375,6 +395,7 @@ public class DependencyVisitor implements
 	// common
 
 	public void visitEnd() {
+		// not needed
 	}
 
 	// ---------------------------------------------

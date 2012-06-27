@@ -17,9 +17,6 @@ package com.liferay.mvc.freemarker.internal;
 import com.liferay.portal.kernel.servlet.PortletServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.template.Template;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.Portlet;
 import com.liferay.portal.template.TemplateResourceParser;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
@@ -28,8 +25,6 @@ import freemarker.ext.servlet.HttpRequestHashModel;
 import freemarker.ext.servlet.ServletContextHashModel;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.TemplateHashModel;
-
-import java.util.Set;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -45,9 +40,12 @@ import javax.servlet.http.HttpServletResponse;
 public class FreeMarkerMVCContextHelper {
 
 	public static void addPortletJSPTaglibSupport(
-			Template template, PortletRequest portletRequest,
-			PortletResponse portletResponse, Set<String> templateRegistry)
+			Template template, String servletContextName,
+			PortletRequest portletRequest, PortletResponse portletResponse)
 		throws Exception {
+
+		ServletContext servletContext = ServletContextPool.get(
+			servletContextName);
 
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			portletRequest);
@@ -56,18 +54,9 @@ public class FreeMarkerMVCContextHelper {
 
 		template.prepare(request);
 
-		Portlet portlet = (Portlet)request.getAttribute(WebKeys.RENDER_PORTLET);
-
-		String servletContextName =
-			portlet.getPortletApp().getServletContextName();
-
-		final ServletContext servletContext = ServletContextPool.get(
-			servletContextName);
-
 		template.put(
-			"fullTemplatesPath",
-			StringPool.SLASH + servletContextName +
-			TemplateResourceParser.SERVLET_SEPARATOR);
+			"fullTemplatesPath", servletContextName.concat(
+				TemplateResourceParser.SERVLET_SEPARATOR));
 
 		TemplateHashModel taglibsFactory =
 			FreeMarkerTaglibFactoryUtil.createTaglibFactory(servletContext);

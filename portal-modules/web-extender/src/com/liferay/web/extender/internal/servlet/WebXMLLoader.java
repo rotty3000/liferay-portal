@@ -28,6 +28,7 @@ import com.liferay.web.extender.internal.definition.ServletDefinition;
 import java.net.URL;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -98,7 +99,7 @@ public class WebXMLLoader {
 			webXML.setContextParam(contextParamName, contextParamValue);
 		}
 
-		Map<String, ListenerDefinition> listeners = webXML.getListeners();
+		List<ListenerDefinition> listeners = webXML.getListeners();
 
 		for (Element listenerElement : root.elements("listener")) {
 			String listenerClass = listenerElement.element(
@@ -122,7 +123,7 @@ public class WebXMLLoader {
 				continue;
 			}
 
-			listeners.put(listenerClass, listenerDefinition);
+			listeners.add(listenerDefinition);
 		}
 	}
 

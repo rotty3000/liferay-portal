@@ -81,6 +81,8 @@ public class EventUtil
 
 	public void modifiedService(
 		ServiceReference<EventAdmin> reference, EventAdmin service) {
+
+		// not needed
 	}
 
 	public void removedService(

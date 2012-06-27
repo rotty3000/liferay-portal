@@ -14,6 +14,8 @@
 
 package com.liferay.web.extender.internal.servlet;
 
+import com.liferay.web.extender.servlet.BundleServletConfig;
+
 import java.io.IOException;
 
 import java.util.LinkedList;
@@ -21,9 +23,15 @@ import java.util.Queue;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.osgi.service.http.HttpContext;
 
 /**
  * @author Raymond Augé
@@ -40,12 +48,35 @@ public class BundleFilterChain implements FilterChain {
 		Filter currentFilter = _filters.poll();
 
 		if (currentFilter == null) {
+			ServletConfig servletConfig = _servlet.getServletConfig();
+
+			if (servletConfig instanceof BundleServletConfig) {
+				BundleServletConfig bundleServletConfig =
+					(BundleServletConfig)servletConfig;
+
+				HttpContext httpContext = bundleServletConfig.getHttpContext();
+
+				if (!httpContext.handleSecurity(
+						(HttpServletRequest)request,
+						(HttpServletResponse)response)) {
+
+					return;
+				}
+			}
+
+			_servlet.service(request, response);
+
 			return;
 		}
 
 		currentFilter.doFilter(request, response, this);
 	}
 
+	public void setServlet(Servlet servlet) {
+		_servlet = servlet;
+	}
+
 	private Queue<Filter> _filters = new LinkedList<Filter>();
+	private Servlet _servlet;
 
 }

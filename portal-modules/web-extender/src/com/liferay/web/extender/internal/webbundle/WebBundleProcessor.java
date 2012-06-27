@@ -22,13 +22,17 @@ import com.liferay.portal.kernel.io.FileFilter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
+import com.liferay.portal.kernel.servlet.PortalClassLoaderFilter;
+import com.liferay.portal.kernel.servlet.PortalClassLoaderServlet;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -44,7 +48,6 @@ import com.liferay.portal.tools.deploy.BaseDeployer;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
-import com.liferay.util.UniqueList;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -120,10 +123,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		// spec states that this is only true when the Manifest does not contain
 		// a Bundle_SymbolicName header.
 
-		Object bundleSymbolicName = attributes.getValue(
-			Constants.BUNDLE_SYMBOLICNAME);
+		String bundleSymbolicName = GetterUtil.getString(
+			attributes.getValue(Constants.BUNDLE_SYMBOLICNAME));
+		boolean force = GetterUtil.getBoolean(
+			attributes.getValue(
+				ModuleFrameworkConstants.LIFERAY_FORCE_WAB_PROCESSING), false);
 
-		if (bundleSymbolicName == null) {
+		if (Validator.isNull(bundleSymbolicName) || force) {
 			_processPaths(
 				_resourcePaths, _deployedAppFolder, _deployedAppFolder.toURI(),
 				webContextpath);
@@ -134,6 +140,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processBundleVersion(attributes);
 			processBundleManifestVersion(attributes);
 			processPortletXML(webContextpath);
+			processWebXML("WEB-INF/web.xml");
+			processWebXML("WEB-INF/liferay-web.xml");
 			processLiferayPortletXML(webContextpath);
 			processBundleClassPath(attributes);
 			processDeclarativeReferences(attributes);
@@ -217,7 +225,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 	}
 
 	protected void processBundleClassPath(Attributes attributes) {
-		StringBundler sb = new StringBundler();
+		StringBundler sb = new StringBundler(1 + (_resourcePaths.size() * 2));
 
 		sb.append("WEB-INF/classes/");
 
@@ -443,16 +451,30 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			_exportPackages.add(packageName);
 		}
 
+		String[] privatePackages = StringUtil.split(
+			GetterUtil.getString(attributes.getValue("Private-Package")));
+
 		if (!_exportPackages.isEmpty()) {
 			Collections.sort(_exportPackages);
 
-			String exportPackages = StringUtil.merge(
-				_exportPackages, ";version=\"".concat(_version).concat("\","));
+			for (Iterator<String> itr = _exportPackages.iterator();
+					itr.hasNext();) {
 
-			attributes.putValue(
-				Constants.EXPORT_PACKAGE,
-				exportPackages.concat(";version=\"").concat(_version).concat(
-					"\""));
+				if (!ArrayUtil.contains(privatePackages, itr.next())) {
+					itr.remove();
+				}
+			}
+
+			if (!_exportPackages.isEmpty()) {
+				String exportPackages = StringUtil.merge(
+					_exportPackages,
+					";version=\"".concat(_version).concat("\","));
+
+				attributes.putValue(
+					Constants.EXPORT_PACKAGE,
+					exportPackages.concat(";version=\"").concat(
+						_version).concat("\""));
+			}
 		}
 
 		String importPackage = MapUtil.getString(
@@ -464,7 +486,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		else if (!_importPackages.isEmpty()) {
 			Collections.sort(_importPackages);
 
-			StringBundler sb = new StringBundler(_importPackages.size());
+			StringBundler sb = new StringBundler(_importPackages.size() * 3);
 
 			for (Iterator<String> itr = _importPackages.iterator();
 					itr.hasNext();) {
@@ -591,7 +613,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				strutsPathElement = SAXReaderUtil.createElement(
 					"struts-path");
 
-				strutsPathElement.setText("osgi".concat(webContextpath));
+				strutsPathElement.setText(MODULE.concat(webContextpath));
 
 				children.add(pos + 1, strutsPathElement);
 			}
@@ -602,7 +624,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 					strutsPath = StringPool.SLASH.concat(strutsPath);
 				}
 
-				strutsPath = "osgi".concat(webContextpath).concat(strutsPath);
+				strutsPath = MODULE.concat(webContextpath).concat(strutsPath);
 
 				strutsPathElement.setText(strutsPath);
 			}
@@ -622,7 +644,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		int requiredDeploymentContextsSize = requiredDeploymentContexts.size();
 
-		StringBundler sb = new StringBundler(6*requiredDeploymentContextsSize);
+		StringBundler sb = new StringBundler(
+			6 * requiredDeploymentContextsSize);
 
 		int i = 0;
 
@@ -653,6 +676,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 	protected void processPortletXML(String webContextpath)
 		throws IOException {
+
 		File portletXMLFile = new File(
 			_deployedAppFolder, "WEB-INF/" +
 				Portal.PORTLET_XML_FILE_NAME_STANDARD);
@@ -720,7 +744,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 						invokerPortletName);
 				}
 
-				invokerPortletName = "osgi".concat(webContextpath).concat(
+				invokerPortletName = MODULE.concat(webContextpath).concat(
 					invokerPortletName);
 
 				valueElement.setText(invokerPortletName);
@@ -730,6 +754,87 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		content = DDMXMLUtil.formatXML(document);
 
 		FileUtil.write(portletXMLFile, content);
+	}
+
+	protected void processWebXML(String descriptor) throws IOException {
+		File webXMLFile = new File(_deployedAppFolder, descriptor);
+
+		if (!webXMLFile.exists()) {
+			return;
+		}
+
+		String content = FileUtil.read(webXMLFile);
+
+		Document document = null;
+
+		try {
+			document = SAXReaderUtil.read(content);
+		}
+		catch (DocumentException de) {
+			throw new IOException(de);
+		}
+
+		Element rootElement = document.getRootElement();
+
+		List<Element> elements = rootElement.elements("filter");
+
+		for (Element element : elements) {
+			Element classElement = element.element("filter-class");
+
+			if (classElement.getTextTrim().equals(
+					PortalClassLoaderFilter.class.getName())) {
+
+				for (Element curParam : element.elements(
+						"init-param")) {
+
+String paramName = curParam.element(
+				"param-name").getTextTrim();
+
+if (paramName.equals("filter-class")) {
+				String className = curParam.element(
+					"param-value").getTextTrim();
+
+				classElement.setText(className);
+
+				curParam.detach();
+
+				break;
+}
+}
+			}
+		}
+
+		elements = rootElement.elements("servlet");
+
+		for (Element element : elements) {
+			Element classElement = element.element("servlet-class");
+
+			if (classElement.getTextTrim().equals(
+					PortalClassLoaderServlet.class.getName())) {
+
+				for (Element curParam : element.elements(
+						"init-param")) {
+
+String paramName = curParam.element(
+				"param-name").getTextTrim();
+
+if (paramName.equals("servlet-class")) {
+				String className = curParam.element(
+					"param-value").getTextTrim();
+
+				classElement.setText(className);
+
+				curParam.detach();
+
+				break;
+}
+}
+			}
+		}
+
+		content = DDMXMLUtil.formatXML(document);
+
+		FileUtil.write(webXMLFile, content);
 	}
 
 	protected void processTldDependencies(File tldFile) throws IOException {

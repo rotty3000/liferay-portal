@@ -9,6 +9,8 @@ Import-Package: \
 	aQute.libg.header,\
 	aQute.libg.version,\
 	com.liferay.mvc.freemarker,\
+	com.liferay.portal.freemarker,\
+	com.liferay.portal.kernel.language,\
 	com.liferay.portal.kernel.servlet,\
 	com.liferay.portal.kernel.upload,\
 	com.liferay.portal.kernel.util,\
@@ -20,12 +22,13 @@ Import-Package: \
 	com.liferay.portal.util,\
 	com.liferay.portlet,\
 	com.liferay.portlet.admin,\
-	com.liferay.util,\
 	com.liferay.util.bean,\
 	javax.portlet,\
 	org.osgi.framework,\
 	org.osgi.framework.startlevel,\
 	*
+Liferay-Force-WAB-Processing: true
+Private-Package: com.liferay.osgiadmin.internal
 Web-ContextPath: /osgi-admin-portlet
 -wab: \
 	docroot,\

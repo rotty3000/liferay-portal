@@ -58,8 +58,10 @@ public class BundleUtil {
 		return headerMap;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List<ServiceReference> getRegisteredServices(Bundle bundle) {
-		ServiceReference[] serviceReferences = bundle.getRegisteredServices();
+		ServiceReference[] serviceReferences =
+			bundle.getRegisteredServices();
 
 		if (serviceReferences == null) {
 			serviceReferences = new ServiceReference[0];
@@ -68,6 +70,7 @@ public class BundleUtil {
 		return Arrays.asList(serviceReferences);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List<ServiceReference> getServicesInUse(Bundle bundle) {
 		ServiceReference[] serviceReferences = bundle.getServicesInUse();
 

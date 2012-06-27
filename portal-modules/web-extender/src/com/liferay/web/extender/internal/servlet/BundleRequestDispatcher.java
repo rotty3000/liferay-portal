@@ -14,8 +14,11 @@
 
 package com.liferay.web.extender.internal.servlet;
 
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UniqueList;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -24,20 +27,17 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletRequestAttributeListener;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-
-import org.osgi.service.http.HttpContext;
 
 /**
  * @author Raymond Augé
@@ -57,180 +57,177 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 	public BundleRequestDispatcher(
 		String servletMapping, boolean extensionMapping, String requestURI,
-		Servlet servlet, FilterChain filterChain) {
+		BundleServletContext bundleServletContext,
+		BundleFilterChain bundleFilterChain) {
 
 		_servletMapping = servletMapping;
 		_extensionMapping = extensionMapping;
-		_servlet = servlet;
-		_filterChain = filterChain;
-
-		ServletContext servletContext =
-			_servlet.getServletConfig().getServletContext();
-
-		String contextPath = servletContext.getContextPath();
+		_bundleFilterChain = bundleFilterChain;
+		_bundleServletContext = bundleServletContext;
 
 		_requestURI = StringUtil.replace(
 			requestURI, StringPool.DOUBLE_SLASH, StringPool.SLASH);
 
-		_contextPath = contextPath;
-		_pathInfo = requestURI;
-		_queryString = StringPool.BLANK;
-		_servletPath = StringPool.BLANK;
+		_contextPath = _bundleServletContext.getContextPath();
+
+		_pathInfo = null;
+		_queryString = null;
+		_servletPath = null;
 
 		if (!_extensionMapping) {
 			_servletPath = _servletMapping;
 		}
-
-		int pos = -1;
-
-		if (!StringPool.BLANK.equals(_servletPath)) {
-			_requestURI.indexOf(_servletPath);
+		else {
+			_servletPath = _requestURI;
 		}
 
-		if (pos != -1) {
-			_pathInfo = _requestURI.substring(pos + _servletPath.length());
+		if ((_servletPath != null) &&
+			_requestURI.startsWith(_servletPath) &&
+			_requestURI.length() > _servletPath.length()) {
+
+			_pathInfo = _requestURI.substring(_servletPath.length());
 		}
 	}
 
 	public void forward(ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
-		doDispatch(request, response, false);
+		BundleServletRequest bundleServletRequest = new BundleServletRequest(
+			(HttpServletRequest)request, _bundleServletContext);
+
+		doDispatch(bundleServletRequest, response);
 	}
 
 	public void include(ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
-		HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-
-		httpServletRequest = new HttpServletRequestWrapper(httpServletRequest) {
-
-			@Override
-			public Object getAttribute(String name) {
-				if (name.equals(INCLUDE_CONTEXT_PATH) ||
-					name.equals(INCLUDE_PATH_INFO) ||
-					name.equals(INCLUDE_QUERY_STRING) ||
-					name.equals(INCLUDE_REQUEST_URI) ||
-					name.equals(INCLUDE_SERVLET_PATH)) {
-
-					return _attributes.get(name);
-				}
-				else {
-					return super.getAttribute(name);
-				}
-			}
-
-			@Override
-			public Enumeration getAttributeNames() {
-				List<String> attributeNames = new Vector<String>();
-
-				Enumeration<String> enu = super.getAttributeNames();
-
-				while (enu.hasMoreElements()) {
-					String name = enu.nextElement();
-				}
-
-				attributeNames.addAll(_attributes.keySet());
-
-				return Collections.enumeration(attributeNames);
-			}
-
-			@Override
-			public void setAttribute(String name, Object value) {
-				if (name.equals(INCLUDE_CONTEXT_PATH) ||
-					name.equals(INCLUDE_PATH_INFO) ||
-					name.equals(INCLUDE_QUERY_STRING) ||
-					name.equals(INCLUDE_REQUEST_URI) ||
-					name.equals(INCLUDE_SERVLET_PATH)) {
-
-					_attributes.put(name, value);
-				}
-				else {
-					super.setAttribute(name, value);
-				}
-			}
-
-			private Map<String, Object> _attributes =
-				new HashMap<String, Object>();
-
-		};
+		BundleServletRequest bundleServletRequest = new BundleServletRequest(
+			(HttpServletRequest)request, _bundleServletContext);
 
 		if (_contextPath != null) {
-			httpServletRequest.setAttribute(INCLUDE_CONTEXT_PATH, _contextPath);
+			bundleServletRequest.setAttribute(
+				INCLUDE_CONTEXT_PATH, _contextPath);
 		}
 
 		if (_pathInfo != null) {
-			httpServletRequest.setAttribute(INCLUDE_PATH_INFO, _pathInfo);
+			bundleServletRequest.setAttribute(
+				INCLUDE_PATH_INFO, _pathInfo);
 		}
 
 		if (_queryString != null) {
-			httpServletRequest.setAttribute(INCLUDE_QUERY_STRING, _queryString);
+			bundleServletRequest.setAttribute(
+				INCLUDE_QUERY_STRING, _queryString);
 		}
 
 		if (_requestURI != null) {
-			httpServletRequest.setAttribute(INCLUDE_REQUEST_URI, _requestURI);
+			bundleServletRequest.setAttribute(
+				INCLUDE_REQUEST_URI, _requestURI);
 		}
 
 		if (_servletPath != null) {
-			httpServletRequest.setAttribute(INCLUDE_SERVLET_PATH, _servletPath);
+			bundleServletRequest.setAttribute(
+				INCLUDE_SERVLET_PATH, _servletPath);
 		}
 
-		doDispatch(httpServletRequest, response, true);
+		doDispatch(bundleServletRequest, response);
 	}
 
 	public void doDispatch(
-			ServletRequest request, ServletResponse response, boolean include)
+			ServletRequest request, ServletResponse response)
 		throws IOException, ServletException {
 
-		BundleServletConfig bundleServletConfig =
-			(BundleServletConfig)_servlet.getServletConfig();
+		for (ServletRequestListener servletRequestListener :
+				_bundleServletContext.getServletRequestListeners()) {
 
-		HttpContext httpContext = bundleServletConfig.getHttpContext();
-
-		if (!httpContext.handleSecurity(
-				(HttpServletRequest)request, (HttpServletResponse)response)) {
-
-			return;
+			servletRequestListener.requestInitialized(
+				new ServletRequestEvent(_bundleServletContext, request));
 		}
 
-		request = new BundleServletRequest(
-			(HttpServletRequest)request,
-			bundleServletConfig.getServletContext());
+		_bundleFilterChain.doFilter(request, response);
 
-		_filterChain.doFilter(request, response);
+		for (ServletRequestListener servletRequestListener :
+				_bundleServletContext.getServletRequestListeners()) {
 
-		_servlet.service(request, response);
+			servletRequestListener.requestDestroyed(
+				new ServletRequestEvent(_bundleServletContext, request));
+		}
 	}
 
+	private static final String[] _MASKED_ATTRIBUTES = new String[] {
+		INCLUDE_CONTEXT_PATH, INCLUDE_PATH_INFO, INCLUDE_QUERY_STRING,
+		INCLUDE_REQUEST_URI, INCLUDE_SERVLET_PATH,
+		WebKeys.INVOKER_FILTER_URI, WebKeys.SERVLET_PATH
+	};
+
+	private BundleServletContext _bundleServletContext;
 	private String _contextPath;
 	private boolean _extensionMapping;
-	private FilterChain _filterChain;
+	private BundleFilterChain _bundleFilterChain;
 	private String _pathInfo;
 	private String _queryString;
 	private String _requestURI;
 	private String _servletPath;
-	private Servlet _servlet;
 	private String _servletMapping;
 
 	public class BundleServletRequest extends HttpServletRequestWrapper {
 
 		public BundleServletRequest(
-			HttpServletRequest request, ServletContext servletContext) {
+			HttpServletRequest request,
+			BundleServletContext bundleServletContext) {
 
 			super(request);
 
-			_servletContext = servletContext;
+			_bundleServletContext = bundleServletContext;
+		}
+
+		@Override
+		public Object getAttribute(String name) {
+			if ((name.equals(INCLUDE_SERVLET_PATH) ||
+				 name.equals(WebKeys.INVOKER_FILTER_URI)) &&
+				_attributes.containsKey(WebKeys.SERVLET_PATH)) {
+
+				return _attributes.get(WebKeys.SERVLET_PATH);
+			}
+
+			if (ArrayUtil.contains(_MASKED_ATTRIBUTES, name)) {
+				return _attributes.get(name);
+			}
+
+			return super.getAttribute(name);
+		}
+
+		@Override
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		public Enumeration getAttributeNames() {
+			List<String> attributeNames = new UniqueList<String>();
+
+			Enumeration<String> enu = super.getAttributeNames();
+
+			while (enu.hasMoreElements()) {
+				String name = enu.nextElement();
+
+				attributeNames.add(name);
+			}
+
+			attributeNames.addAll(_attributes.keySet());
+
+			return Collections.enumeration(attributeNames);
 		}
 
 		@Override
 		public String getContextPath() {
-			return _servletContext.getContextPath();
+			return _bundleServletContext.getContextPath();
+		}
+
+		@Override
+		public String getPathInfo() {
+			return _pathInfo;
 		}
 
 		@Override
 		public RequestDispatcher getRequestDispatcher(String path) {
 			RequestDispatcher requestDispatcher =
-				_servletContext.getRequestDispatcher(path);
+				_bundleServletContext.getRequestDispatcher(path);
 
 			if (requestDispatcher != null) {
 				return requestDispatcher;
@@ -240,16 +237,68 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		@Override
+		public String getRequestURI() {
+			return _requestURI;
+		}
+
+		@Override
 		public String getServletPath() {
 			return _servletPath;
 		}
 
 		@Override
-		public String getPathInfo() {
-			return _pathInfo;
+		public void removeAttribute(String name) {
+			Object oldValue = null;
+
+			if (ArrayUtil.contains(_MASKED_ATTRIBUTES, name)) {
+				oldValue = _attributes.remove(name);
+			}
+			else {
+				oldValue = super.getAttribute(name);
+
+				super.removeAttribute(name);
+			}
+
+			for (ServletRequestAttributeListener listener :
+					_bundleServletContext.getServletRequestAttributeListeners()) {
+
+				listener.attributeReplaced(
+					new ServletRequestAttributeEvent(
+						_bundleServletContext, this, name, oldValue));
+			}
 		}
 
-		private ServletContext _servletContext;
+		@Override
+		public void setAttribute(String name, Object value) {
+			Object oldValue = null;
+
+			if (ArrayUtil.contains(_MASKED_ATTRIBUTES, name)) {
+				oldValue = _attributes.put(name, value);
+			}
+			else {
+				oldValue = super.getAttribute(name);
+
+				super.setAttribute(name, value);
+			}
+
+			for (ServletRequestAttributeListener listener :
+					_bundleServletContext.getServletRequestAttributeListeners()) {
+
+				if (oldValue != null) {
+					listener.attributeReplaced(
+						new ServletRequestAttributeEvent(
+							_bundleServletContext, this, name, oldValue));
+				}
+				else {
+					listener.attributeAdded(
+						new ServletRequestAttributeEvent(
+							_bundleServletContext, this, name, oldValue));
+				}
+			}
+		}
+
+		private Map<String, Object> _attributes = new HashMap<String, Object>();
+		private BundleServletContext _bundleServletContext;
 
 	}
 

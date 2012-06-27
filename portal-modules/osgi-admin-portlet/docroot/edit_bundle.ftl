@@ -13,7 +13,7 @@
  * details.
  */
 -->
-<#include "${fullTemplatesPath}/init.ftl" />
+<#include "init.ftl" />
 
 <#assign redirect = ParamUtil.getString(request, "redirect") />
 
@@ -111,7 +111,7 @@
 
 			<#assign expandedView = true />
 
-			<#include "${fullTemplatesPath}/bundle_action.ftl" />
+			<#include "bundle_action.ftl" />
 		</@>
 
 	</@>

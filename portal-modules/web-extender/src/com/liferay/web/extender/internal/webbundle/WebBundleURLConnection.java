@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.util.FastDateFormatFactoryImpl;
 import com.liferay.portal.util.FileImpl;
@@ -70,6 +71,7 @@ public class WebBundleURLConnection extends URLConnection
 
 	@Override
 	public void connect() throws IOException {
+		// not needed
 	}
 
 	@Override
@@ -89,7 +91,11 @@ public class WebBundleURLConnection extends URLConnection
 
 		URL innerURL = new URL(path);
 
-		File tempFile = FileUtil.createTempFile("war");
+		String fileName = innerURL.getPath();
+
+		int pos = fileName.lastIndexOf(StringPool.SLASH);
+
+		File tempFile = FileUtil.createTempFile(fileName.substring(pos + 1));
 
 		StreamUtil.transfer(
 			innerURL.openStream(), new FileOutputStream(tempFile));
