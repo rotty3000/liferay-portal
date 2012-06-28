@@ -642,6 +642,11 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		List<String> requiredDeploymentContexts =
 			readPluginPackage.getRequiredDeploymentContexts();
 
+		if (requiredDeploymentContexts == null ||
+				requiredDeploymentContexts.isEmpty()) {
+			return;
+		}
+
 		int requiredDeploymentContextsSize = requiredDeploymentContexts.size();
 
 		StringBundler sb = new StringBundler(
