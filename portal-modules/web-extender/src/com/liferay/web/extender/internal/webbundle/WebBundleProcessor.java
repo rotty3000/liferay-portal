@@ -1065,10 +1065,10 @@ if (paramName.equals("servlet-class")) {
 		"WEB-INF/lib/commons-fileupload.jar",
 		"WEB-INF/lib/commons-io.jar",
 		"WEB-INF/lib/commons-lang.jar",
-		"WEB-INF/lib/commons-logging.jar",
+		 "WEB-INF/lib/commons-logging.jar",
 		"WEB-INF/lib/log4j.jar",
 		"WEB-INF/lib/util-bridges.jar",
-		"WEB-INF/lib/util-java.jar",
+		// "WEB-INF/lib/util-java.jar",
 		"WEB-INF/lib/util-taglib.jar"
 	};
 
