@@ -14,6 +14,7 @@
 
 package com.liferay.web.extender.internal;
 
+import com.liferay.portal.deploy.hot.module.ModuleHotDeployThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
@@ -151,12 +152,22 @@ public class WebBundleDeployer
 				_bundleContext.registerService(
 					ServletContext.class, bundleServletContext, properties);
 
+			// register in the current thread that the deployment process
+			// has been started in the Module Framework
+
+			// This is required in order to keep both deployment
+			// mechanism
+
+			ModuleHotDeployThreadLocal.startModuleDeployment();
+
 			bundleServletContext.open();
 
 			_trackedContexts.put(servletContextName, bundleServletContext);
 			_trackedRegistrations.put(servletContextName, registration);
 
 			_eventUtil.sendEvent(bundle, EventUtil.DEPLOYED, null, false);
+
+			ModuleHotDeployThreadLocal.stopModuleDeployment();
 		}
 		catch (Exception e) {
 			_eventUtil.sendEvent(bundle, EventUtil.FAILED, e, false);

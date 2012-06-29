@@ -9,6 +9,7 @@ Import-Package: \
 	com.liferay.portal.apache.bridges.struts,\
 	com.liferay.portal.deploy.auto,\
 	com.liferay.portal.deploy.auto.exploded.tomcat,\
+	com.liferay.portal.deploy.hot.module,\
 	com.liferay.portal.kernel.deploy.hot,\
 	com.liferay.portal.kernel.exception,\
 	com.liferay.portal.kernel.io,\
