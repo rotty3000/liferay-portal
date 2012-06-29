@@ -78,6 +78,7 @@ import org.objectweb.asm.depend.DependencyVisitor;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class WebBundleProcessor implements ModuleFrameworkConstants {
 

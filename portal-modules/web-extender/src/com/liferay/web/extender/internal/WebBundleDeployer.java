@@ -43,6 +43,7 @@ import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class WebBundleDeployer
 	implements BundleListener, ModuleFrameworkConstants {

@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class WebBundleURLConnection extends URLConnection
 	implements ModuleFrameworkConstants {
