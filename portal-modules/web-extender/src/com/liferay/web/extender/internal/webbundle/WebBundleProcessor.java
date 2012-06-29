@@ -78,6 +78,7 @@ import org.objectweb.asm.depend.DependencyVisitor;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class WebBundleProcessor implements ModuleFrameworkConstants {
 
@@ -642,6 +643,11 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		List<String> requiredDeploymentContexts =
 			readPluginPackage.getRequiredDeploymentContexts();
 
+		if (requiredDeploymentContexts == null ||
+				requiredDeploymentContexts.isEmpty()) {
+			return;
+		}
+
 		int requiredDeploymentContextsSize = requiredDeploymentContexts.size();
 
 		StringBundler sb = new StringBundler(
@@ -1060,10 +1066,10 @@ if (paramName.equals("servlet-class")) {
 		"WEB-INF/lib/commons-fileupload.jar",
 		"WEB-INF/lib/commons-io.jar",
 		"WEB-INF/lib/commons-lang.jar",
-		"WEB-INF/lib/commons-logging.jar",
+		 "WEB-INF/lib/commons-logging.jar",
 		"WEB-INF/lib/log4j.jar",
 		"WEB-INF/lib/util-bridges.jar",
-		"WEB-INF/lib/util-java.jar",
+		// "WEB-INF/lib/util-java.jar",
 		"WEB-INF/lib/util-taglib.jar"
 	};
 

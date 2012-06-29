@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class WebBundleURLConnection extends URLConnection
 	implements ModuleFrameworkConstants {
@@ -91,14 +92,7 @@ public class WebBundleURLConnection extends URLConnection
 
 		URL innerURL = new URL(path);
 
-		String fileName = innerURL.getPath();
-
-		int pos = fileName.lastIndexOf(StringPool.SLASH);
-
-		File tempFile = FileUtil.createTempFile(fileName.substring(pos + 1));
-
-		StreamUtil.transfer(
-			innerURL.openStream(), new FileOutputStream(tempFile));
+		File tempFile = transferToTempFolder(innerURL);
 
 		try {
 			WebBundleProcessor webBundleProcessor = new WebBundleProcessor(
@@ -111,6 +105,28 @@ public class WebBundleURLConnection extends URLConnection
 		finally {
 			tempFile.delete();
 		}
+	}
+
+	/**
+	 * This methods tries to keep the behaviour of the current deployment
+	 * mechanism. So the name of the file is being kept as it is.
+	 *
+	 * <br />
+	 *
+	 * TODO We need to improve the way the plugins are detected
+	 */
+	protected File transferToTempFolder(URL url) throws IOException {
+		File tempFolder = FileUtil.createTempFolder();
+
+		int start = url.getPath().lastIndexOf(StringPool.SLASH);
+
+		String fileName = url.getPath().substring(start + 1);
+
+		File tempFile = new File(tempFolder, fileName);
+
+		StreamUtil.transfer(url.openStream(), new FileOutputStream(tempFile));
+
+		return tempFile;
 	}
 
 	private ClassLoader _systemBundleClassLoader;

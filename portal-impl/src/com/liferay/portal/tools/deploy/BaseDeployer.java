@@ -1905,7 +1905,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 		webXmlContent = WebXMLBuilder.organizeWebXML(webXmlContent);
 
-		int x = webXmlContent.indexOf("<jsp-config>") - 1;
+		int x = webXmlContent.indexOf("</web-app>") - 1;
 
 		String servletContent = getDynamicResourceServlet();
 
