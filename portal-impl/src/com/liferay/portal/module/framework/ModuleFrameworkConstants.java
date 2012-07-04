@@ -26,6 +26,8 @@ public interface ModuleFrameworkConstants {
 	public static final String FELIX_FILEINSTALL_LOG_LEVEL =
 		"felix.fileinstall.log.level";
 
+	public static final String FELIX_FILEINSTALL_POLL = "felix.fileinstall.poll";
+
 	public static final String FELIX_FILEINSTALL_TMPDIR =
 		"felix.fileinstall.tmpdir";
 

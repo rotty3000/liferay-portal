@@ -218,6 +218,9 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		properties.put(FELIX_FILEINSTALL_DIR, sb.toString());
 		properties.put(FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
+		properties.put(
+			FELIX_FILEINSTALL_POLL,
+			String.valueOf(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL));
 		properties.put(FELIX_FILEINSTALL_TMPDIR,
 			System.getProperty("java.io.tmpdir"));
 
