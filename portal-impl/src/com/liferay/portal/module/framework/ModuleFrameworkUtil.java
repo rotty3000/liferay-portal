@@ -208,18 +208,17 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 			Constants.FRAMEWORK_STORAGE,
 			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
 
+		// Felix fileinstall
+
 		StringBundler sb = new StringBundler(3);
 
 		sb.append(PropsValues.MODULE_FRAMEWORK_LIB_DIR);
 		sb.append(StringPool.COMMA);
 		sb.append(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIR);
 
-		properties.put(MFConstants.FELIX_FILEINSTALL_DIR, sb.toString());
-
-		properties.put(
-			MFConstants.FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
-		properties.put(
-			MFConstants.FELIX_FILEINSTALL_TMPDIR,
+		properties.put(FELIX_FILEINSTALL_DIR, sb.toString());
+		properties.put(FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
+		properties.put(FELIX_FILEINSTALL_TMPDIR,
 			System.getProperty("java.io.tmpdir"));
 
 		UniqueList<String> packages = new UniqueList<String>();
