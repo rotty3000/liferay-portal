@@ -5,6 +5,9 @@
 	<classpathentry excluding="**/.svn/**|.svn/|integration/|unit/" kind="src" path="portal-impl/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/module-admin-portlet/docroot/WEB-INF/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/mvc-portlet-support/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/web-extender/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
 	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/unit"/>
@@ -164,7 +167,7 @@
 	<classpathentry kind="lib" path="lib/portal/fastutil.jar"/>
 	<classpathentry kind="lib" path="lib/portal/flexjson.jar"/>
 	<classpathentry kind="lib" path="lib/portal/fontbox.jar"/>
-	<classpathentry kind="lib" path="lib/portal/freemarker.jar"/>
+	<classpathentry kind="lib" path="lib/portal/freemarker.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/freemarker-2.3.17/src/freemarker"/>
 	<classpathentry kind="lib" path="lib/portal/freshcookies-security.jar"/>
 	<classpathentry kind="lib" path="lib/portal/gif89.jar"/>
 	<classpathentry kind="lib" path="lib/portal/groovy.jar"/>

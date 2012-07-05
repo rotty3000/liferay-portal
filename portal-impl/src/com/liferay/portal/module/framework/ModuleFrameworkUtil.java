@@ -237,6 +237,14 @@ public class ModuleFrameworkUtil implements ModuleFrameworkConstants {
 
 		packages.addAll(
 			Arrays.asList(PropsValues.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA));
+		packages.addAll(
+			Arrays.asList(
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES));
+		packages.addAll(
+			Arrays.asList(
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES));
 
 		Collections.sort(packages);
 

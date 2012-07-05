@@ -1,0 +1,48 @@
+Bundle-Activator: com.liferay.web.extender.internal.Activator
+Bundle-Name: Web Extender
+Bundle-SymbolicName: web-extender
+Bundle-Vendor: Liferay, Inc.
+Bundle-Version: 1.0.0
+Export-Package: \
+	com.liferay.web.extender.servlet
+Import-Package: \
+	com.liferay.portal.apache.bridges.struts,\
+	com.liferay.portal.deploy.auto,\
+	com.liferay.portal.deploy.auto.exploded.tomcat,\
+	com.liferay.portal.kernel.deploy.hot,\
+	com.liferay.portal.kernel.exception,\
+	com.liferay.portal.kernel.io,\
+	com.liferay.portal.kernel.io.unsync,\
+	com.liferay.portal.kernel.log,\
+	com.liferay.portal.kernel.servlet,\
+	com.liferay.portal.kernel.util,\
+	com.liferay.portal.kernel.xml,\
+	com.liferay.portal.model,\
+	com.liferay.portal.module.framework,\
+	com.liferay.portal.service,\
+	com.liferay.portal.util,\
+	com.liferay.util.ant,\
+	com.liferay.util.bean,\
+	javax.servlet;version="[3.0.0, 4.0.0)",\
+	javax.servlet.http;version="[3.0.0, 4.0.0)",\
+	org.apache.felix.fileinstall,\
+	org.objectweb.asm,\
+	org.objectweb.asm.commons,\
+	org.objectweb.asm.signature,\
+	org.osgi.framework,\
+	org.osgi.framework.wiring,\
+	org.osgi.service.event,\
+	org.osgi.service.http,\
+	org.osgi.util.tracker,\
+	*
+Include-Resource: OSGI-INF/src/=src/
+Private-Package: \
+	com.liferay.web.extender.internal,\
+	com.liferay.web.extender.internal.artifact,\
+	com.liferay.web.extender.internal.definition,\
+	com.liferay.web.extender.internal.event,\
+	com.liferay.web.extender.internal.http,\
+	com.liferay.web.extender.internal.servlet,\
+	com.liferay.web.extender.internal.servlet.dependencies,\
+	com.liferay.web.extender.internal.webbundle,\
+	org.objectweb.asm.depend

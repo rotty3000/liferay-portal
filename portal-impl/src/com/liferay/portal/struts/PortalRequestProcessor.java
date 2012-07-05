@@ -42,6 +42,7 @@ import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserTracker;
 import com.liferay.portal.model.UserTrackerPath;
+import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -445,6 +446,7 @@ public class PortalRequestProcessor extends TilesRequestProcessor {
 	protected boolean isPortletPath(String path) {
 		if ((path != null) &&
 			!path.equals(_PATH_C) &&
+			!path.startsWith(ModuleFrameworkConstants.MODULE_MAPPING) &&
 			!path.startsWith(_PATH_COMMON) &&
 			(path.indexOf(_PATH_J_SECURITY_CHECK) == -1) &&
 			!path.startsWith(_PATH_PORTAL)) {

@@ -32,13 +32,17 @@ import javax.servlet.ServletContext;
 /**
  * @author Ivica Cardic
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
+ * @author Miguel Pastor
  */
 public class HotDeployEvent {
 
 	public HotDeployEvent(
 		ServletContext servletContext, ClassLoader contextClassLoader) {
 
-		this(servletContext, contextClassLoader, true);
+		this(
+			servletContext, contextClassLoader,
+			DependencyManagementThreadLocal.isEnabled());
 	}
 
 	public HotDeployEvent(
