@@ -22,7 +22,7 @@ import com.liferay.portal.kernel.util.AutoResetThreadLocal;
  */
 public class DependencyManagementThreadLocal {
 
-	public static Boolean isEnabled(){
+	public static Boolean isEnabled() {
 		return _enabled.get();
 	}
 
