@@ -820,4 +820,14 @@ Please set the environment variable ANT_OPTS to the recommended value of
 
 		<antcall target="report-test-coverage" />
 	</target>
+
+	<target name="wrap-jar" description="Wrap non OSGI jar into a valid bundle">
+		<bndwrap output="${output.folder}">
+			<fileset dir="${project.dir}/lib/" includes="**/${file}.jar" />
+		</bndwrap>
+			<move overwrite="true" todir="${output.folder}" >
+			<fileset dir="${output.folder}" includes="${file}.bar" />
+			<mapper type="glob" from="${file}.bar" to="${file}.jar" />
+		</move>
+	</target>
 </project>

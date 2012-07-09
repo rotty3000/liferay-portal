@@ -15,7 +15,9 @@
 package com.liferay.portal.deploy.auto;
 
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
+import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.plugin.PluginPackage;
+import com.liferay.portal.module.framework.ModuleFrameworkUtil;
 
 import java.io.File;
 
@@ -34,7 +36,13 @@ public class PHPPortletAutoDeployer extends PortletAutoDeployer {
 			for (int i = 0; i < phpJars.length; i++) {
 				String phpJar = phpJars[i];
 
-				jars.add(downloadJar(phpJar));
+				String jar = downloadJar(phpJar);
+
+				jars.add(jar);
+
+				if (DependencyManagementThreadLocal.isEnabled()) {
+					ModuleFrameworkUtil.addBundle(jar);
+				}
 			}
 
 			addRequiredJar(jars, "portals-bridges.jar");

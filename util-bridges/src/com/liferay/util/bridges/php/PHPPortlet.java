@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.servlet.DynamicServletConfig;
 import com.liferay.portal.kernel.servlet.PortletServletObjectsFactory;
 import com.liferay.portal.kernel.servlet.ServletObjectsFactory;
 import com.liferay.portal.kernel.servlet.StringServletResponse;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.util.bridges.common.ScriptPostProcess;
@@ -153,7 +154,7 @@ public class PHPPortlet extends GenericPortlet {
 				while (enu.hasMoreElements()) {
 					String name = enu.nextElement();
 
-					if (!name.equals("portlet-class")) {
+					if (!ArrayUtil.contains(_RESTRICTED_PARAMS, name)) {
 						params.put(name, servletConfig.getInitParameter(name));
 					}
 				}
@@ -232,6 +233,9 @@ public class PHPPortlet extends GenericPortlet {
 
 	private static final String _QUERCUS_SERVLET =
 		"com.caucho.quercus.servlet.QuercusServlet";
+
+	private static final String[] _RESTRICTED_PARAMS =
+		{"bean.id", "original.bean", "portlet-class", "service.vendor"};
 
 	private static Log _log = LogFactoryUtil.getLog(PHPPortlet.class);
 

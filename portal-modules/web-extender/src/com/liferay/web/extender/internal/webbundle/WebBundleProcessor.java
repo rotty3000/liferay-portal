@@ -1077,6 +1077,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		"WEB-INF/lib/commons-lang.jar",
 		"WEB-INF/lib/commons-logging.jar",
 		"WEB-INF/lib/log4j.jar",
+		"WEB-INF/lib/slf4j-api.jar",
 		"WEB-INF/lib/util-bridges.jar",
 		"WEB-INF/lib/util-java.jar",
 		"WEB-INF/lib/util-taglib.jar"

@@ -260,6 +260,44 @@
 					<attribute name="Liferay-Portal-Version" value="${release.info.version}" />
 				</manifest>
 
+				<!-- Load in the manifest custom properties defined in ext.bnd -->
+
+				<liferay-if available="ext.bnd">
+					<scriptdef name="split" language="beanshell" classpathref="project.classpath">
+						<attribute name="value"/>
+						<attribute name="delimiter"/>
+						<attribute name="prefix" />
+
+							<![CDATA[
+								String delimiter = attributes.get("delimiter");
+								String prefix = attributes.get("prefix");
+								String value = attributes.get("value");
+
+								String[] splitted = value.split(delimiter);
+
+								String name = splitted[0];
+								String val = splitted[1];
+
+								project.setNewProperty(prefix + "name", name);
+								project.setNewProperty(prefix + "value", val);
+							]]>
+					</scriptdef>
+
+					<loadfile property="ext.bnd" srcFile="ext.bnd" />
+
+					<for param="line" list="${ext.bnd}">
+						<sequential>
+							<property name="directive" value="@{line}" />
+
+							<split delimiter=":" prefix="directive." value="${directive}" />
+
+							<manifest file="classes/META-INF/MANIFEST.MF" mode="update">
+								<attribute name="${directive.name}" value="${directive.value}" />
+							</manifest>
+						</sequential>
+					</for>
+				</liferay-if>
+
 				<if>
 					<and>
 						<isset property="manifest.bundle.name" />
