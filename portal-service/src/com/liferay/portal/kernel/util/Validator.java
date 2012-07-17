@@ -450,6 +450,24 @@ public class Validator {
 	}
 
 	/**
+	 * Returns <code>true</code> if the file extension is valid
+	 *
+	 * @param  fileExtension file extension
+	 * @return <code>true</code> if the extension is valid; <code>false</code>
+	 *         otherwise
+	 */
+	public static boolean isFileExtension(String fileExtension) {
+		if (isNull(fileExtension) || fileExtension.contains(StringPool.SLASH) ||
+			fileExtension.contains(StringPool.BACK_SLASH) ||
+			fileExtension.contains(StringPool.NULL_CHAR)) {
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Returns <code>true</code> if the date is valid in the Gregorian calendar.
 	 *
 	 * @param  month the month (0-based, meaning 0 for January)
