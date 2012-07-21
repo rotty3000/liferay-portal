@@ -6,7 +6,7 @@
 
 <#-- CSS class -->
 
-<#assign cssClass = fieldStructure.fieldCssClass!"">
+<#assign cssClass = escapeAttribute(fieldStructure.fieldCssClass!"")>
 
 <#-- Field name -->
 
@@ -79,4 +79,20 @@
 
 <#function getFileEntryURL fileEntry>
 	<#return themeDisplay.getPathContext() + "/documents/" + fileEntry.getRepositoryId()?c + "/" + fileEntry.getFolderId()?c + "/" +  httpUtil.encodeURL(htmlUtil.unescape(fileEntry.getTitle()), true) + "/" + fileEntry.getUuid()>
+</#function>
+
+<#function escape value="">
+	<#return htmlUtil.escape(value)>
+</#function>
+
+<#function escapeAttribute value="">
+	<#return htmlUtil.escapeAttribute(value)>
+</#function>
+
+<#function escapeJS value="">
+	<#return htmlUtil.escapeJS(value)>
+</#function>
+
+<#function escapeCSS value="">
+	<#return htmlUtil.escapeCSS(value)>
 </#function>
