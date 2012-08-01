@@ -41,7 +41,6 @@ import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.HttpMethods;
-import com.liferay.portal.kernel.servlet.NonSerializableObjectRequestWrapper;
 import com.liferay.portal.kernel.servlet.PersistentHttpServletRequestWrapper;
 import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -69,7 +68,6 @@ import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ReleaseInfo;
-import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringComparator;
@@ -2715,8 +2713,9 @@ public class PortalImpl implements Portal {
 	public HttpServletRequest getOriginalServletRequest(
 		HttpServletRequest request) {
 
-		List<HttpServletRequestWrapper> persistentHttpServletRequestWrappers =
-			new ArrayList<HttpServletRequestWrapper>();
+		List<PersistentHttpServletRequestWrapper>
+			persistentHttpServletRequestWrappers =
+				new ArrayList<PersistentHttpServletRequestWrapper>();
 
 		HttpServletRequest originalRequest = request;
 
@@ -2726,8 +2725,12 @@ public class PortalImpl implements Portal {
 			if (originalRequest instanceof
 					PersistentHttpServletRequestWrapper) {
 
+				PersistentHttpServletRequestWrapper
+					persistentHttpServletRequestWrapper =
+						(PersistentHttpServletRequestWrapper)originalRequest;
+
 				persistentHttpServletRequestWrappers.add(
-					(HttpServletRequestWrapper)originalRequest);
+					persistentHttpServletRequestWrapper.clone());
 			}
 
 			// Get original request so that portlets inside portlets render
@@ -2749,11 +2752,6 @@ public class PortalImpl implements Portal {
 			httpServletRequestWrapper.setRequest(originalRequest);
 
 			originalRequest = httpServletRequestWrapper;
-		}
-
-		if (ServerDetector.isWebLogic()) {
-			originalRequest = new NonSerializableObjectRequestWrapper(
-				originalRequest);
 		}
 
 		return originalRequest;
