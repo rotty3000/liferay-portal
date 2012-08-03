@@ -810,7 +810,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	public byte[] getZipEntryAsByteArray(String path) {
-		if (!isValidPath(path)) {
+		if (!Validator.isFilePath(path, false)) {
 			return null;
 		}
 
@@ -822,7 +822,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	public InputStream getZipEntryAsInputStream(String path) {
-		if (!isValidPath(path)) {
+		if (!Validator.isFilePath(path, false)) {
 			return null;
 		}
 
@@ -838,7 +838,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	public String getZipEntryAsString(String path) {
-		if (!isValidPath(path)) {
+		if (!Validator.isFilePath(path, false)) {
 			return null;
 		}
 
@@ -854,7 +854,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	public List<String> getZipFolderEntries(String path) {
-		if (!isValidPath(path)) {
+		if (!Validator.isFilePath(path, false)) {
 			return null;
 		}
 
@@ -1385,7 +1385,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	protected String getExpandoPath(String path) {
-		if (!isValidPath(path)) {
+		if (!Validator.isFilePath(path, false)) {
 			throw new IllegalArgumentException(
 				path + " is located outside of the lar");
 		}
@@ -1450,14 +1450,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 			ResourcedModel resourcedModel = (ResourcedModel)classedModel;
 
 			return resourcedModel.isResourceMain();
-		}
-
-		return true;
-	}
-
-	protected boolean isValidPath(String path) {
-		if ((path == null) || path.contains(StringPool.DOUBLE_PERIOD)) {
-			return false;
 		}
 
 		return true;

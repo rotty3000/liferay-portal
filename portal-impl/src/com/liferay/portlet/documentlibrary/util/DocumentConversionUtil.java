@@ -171,7 +171,13 @@ public class DocumentConversionUtil {
 		sourceExtension = _fixExtension(sourceExtension);
 		targetExtension = _fixExtension(targetExtension);
 
-		_validateExtension(targetExtension);
+		if (!Validator.isFileExtension(targetExtension)) {
+			throw new SystemException("Invalid extension: " + targetExtension);
+		}
+
+		if (!Validator.isFileName(id)) {
+			throw new SystemException("Invalid file name: " + id);
+		}
 
 		String fileName = getFilePath(id, targetExtension);
 
@@ -370,15 +376,6 @@ public class DocumentConversionUtil {
 					sourceExtension,
 					conversions.toArray(new String[conversions.size()]));
 			}
-		}
-	}
-
-	private void _validateExtension(String extension) throws SystemException {
-		if (extension.contains(StringPool.SLASH) ||
-			extension.contains(StringPool.BACK_SLASH) ||
-			extension.contains(File.pathSeparator)) {
-
-			throw new SystemException("Invalid extension: " + extension);
 		}
 	}
 
