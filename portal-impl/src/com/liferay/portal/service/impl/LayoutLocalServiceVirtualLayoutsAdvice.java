@@ -210,13 +210,14 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 		List<Layout> childLayouts = new ArrayList<Layout>();
 
 		PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
+			PermissionThreadLocal.getPermissionChecker();
 
 		for (Layout layout : layouts) {
 			Layout childLayout = layout;
 
 			if (!LayoutPermissionUtil.contains(
 					permissionChecker, layout, ActionKeys.VIEW)) {
+
 				continue;
 			}
 
@@ -255,11 +256,12 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 			for (Layout userGroupLayout : userGroupLayouts) {
 				if (!LayoutPermissionUtil.contains(
 						permissionChecker, userGroupLayout, ActionKeys.VIEW)) {
+
 					continue;
 				}
 
 				Layout virtualLayout = new VirtualLayout(
-						userGroupLayout, group);
+					userGroupLayout, group);
 
 				layouts.add(virtualLayout);
 			}
