@@ -381,7 +381,9 @@ public class LayoutTypePortletImpl
 		List<Portlet> staticPortlets = getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
 
-		return addStaticPortlets(portlets, staticPortlets, null);
+		List<Portlet> portletsFromPrefs = getPortletsFromPrefs();
+
+		return addStaticPortlets(portlets, staticPortlets, portletsFromPrefs);
 	}
 
 	public List<Portlet> getAllPortlets(String columnId)
@@ -639,6 +641,11 @@ public class LayoutTypePortletImpl
 
 	public boolean hasPortletId(String portletId)
 		throws PortalException, SystemException {
+
+		List<String> portletIds = getPortletIdsFromPrefs();
+		if (portletIds.contains(portletId)) {
+			return true;
+		}
 
 		List<String> columns = getColumns();
 
@@ -1350,6 +1357,37 @@ public class LayoutTypePortletImpl
 		Layout layout = getLayout();
 
 		return layout.getPlid();
+	}
+
+	protected List<String> getPortletIdsFromPrefs() throws SystemException {
+		List<PortletPreferences> portletPreferencesList =
+			PortletPreferencesLocalServiceUtil.getPortletPreferences(
+				PortletKeys.PREFS_OWNER_ID_DEFAULT,
+				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, getPlid());
+
+		List<String> result = new ArrayList<String>(
+			portletPreferencesList.size());
+
+		for (PortletPreferences pref : portletPreferencesList) {
+			result.add(pref.getPortletId());
+		}
+
+		return result;
+	}
+
+	protected List<Portlet> getPortletsFromPrefs() throws SystemException {
+		List<String> portletIds = getPortletIdsFromPrefs();
+		List<Portlet> result = new ArrayList<Portlet>(portletIds.size());
+		for (String portletId : portletIds) {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				getCompanyId(), portletId);
+
+			if (portlet != null) {
+				result.add(portlet);
+			}
+		}
+
+		return result;
 	}
 
 	protected List<String> getRuntimeColumns() {

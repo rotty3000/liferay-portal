@@ -120,7 +120,6 @@ import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
@@ -4488,16 +4487,6 @@ public class PortalImpl implements Portal {
 
 		if (layout.isTypePortlet()) {
 			if (layoutTypePortlet.hasPortletId(portletId)) {
-				return true;
-			}
-
-			// works only for portlets rendered at least once
-			List portletPreferences = PortletPreferencesLocalServiceUtil
-				.getPortletPreferences(
-					PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid(),
-					portletId);
-
-			if (portletPreferences.size() > 0) {
 				return true;
 			}
 		}
