@@ -14,18 +14,23 @@
 
 package com.liferay.portal.security.auth;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.Encryptor;
 import com.liferay.util.PwdGenerator;
+
+import java.security.Key;
 
 import java.util.Set;
 
@@ -69,8 +74,21 @@ public class SessionAuthToken implements AuthToken {
 	public String getToken(
 		HttpServletRequest request, long plid, String portletId) {
 
-		return getSessionAuthenticationToken(
-			request, PortletPermissionUtil.getPrimaryKey(plid, portletId));
+		String message = PortletPermissionUtil.getPrimaryKey(plid, portletId);
+		try {
+			Long companyId = CompanyThreadLocal.getCompanyId();
+			Key key = CompanyLocalServiceUtil.getCompany(companyId).getKeyObj();
+
+			String digest = Encryptor.hmac(
+				key, SessionAuthToken.class.getName(), message);
+
+			return digest;
+		} catch (Exception e) {
+			_log.error(
+				"HMAC encryption algorithm is not correctly configured!", e);
+		}
+
+		return getSessionAuthenticationToken(request, message);
 	}
 
 	protected String getSessionAuthenticationToken(
@@ -154,5 +172,7 @@ public class SessionAuthToken implements AuthToken {
 	}
 
 	private static final String _PORTAL = "PORTAL";
+
+	private static Log _log = LogFactoryUtil.getLog(SessionAuthToken.class);
 
 }

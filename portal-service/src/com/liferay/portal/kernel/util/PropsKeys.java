@@ -377,6 +377,8 @@ public interface PropsKeys {
 
 	public static final String COMPANY_ENCRYPTION_KEY_SIZE = "company.encryption.key.size";
 
+	public static final String COMPANY_HMAC_ALGORITHM = "company.hmac.alhorithm";
+
 	public static final String COMPANY_LOGIN_PREPOPULATE_DOMAIN = "company.login.prepopulate.domain";
 
 	public static final String COMPANY_SECURITY_AUTH_REQUIRES_HTTPS = "company.security.auth.requires.https";
