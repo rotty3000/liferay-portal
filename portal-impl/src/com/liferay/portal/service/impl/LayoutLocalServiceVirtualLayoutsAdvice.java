@@ -28,10 +28,14 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.impl.VirtualLayout;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
+import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.sites.util.SitesUtil;
 
@@ -205,8 +209,16 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 
 		List<Layout> childLayouts = new ArrayList<Layout>();
 
+		PermissionChecker permissionChecker =
+				PermissionThreadLocal.getPermissionChecker();
+
 		for (Layout layout : layouts) {
 			Layout childLayout = layout;
+
+			if (!LayoutPermissionUtil.contains(
+					permissionChecker, layout, ActionKeys.VIEW)) {
+				continue;
+			}
 
 			Group layoutGroup = layout.getGroup();
 
@@ -230,6 +242,9 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 		List<UserGroup> userUserGroups =
 			UserGroupLocalServiceUtil.getUserUserGroups(group.getClassPK());
 
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
 		for (UserGroup userGroup : userUserGroups) {
 			Group userGroupGroup = userGroup.getGroup();
 
@@ -238,8 +253,13 @@ public class LayoutLocalServiceVirtualLayoutsAdvice
 				parentLayoutId);
 
 			for (Layout userGroupLayout : userGroupLayouts) {
+				if (!LayoutPermissionUtil.contains(
+						permissionChecker, userGroupLayout, ActionKeys.VIEW)) {
+					continue;
+				}
+
 				Layout virtualLayout = new VirtualLayout(
-					userGroupLayout, group);
+						userGroupLayout, group);
 
 				layouts.add(virtualLayout);
 			}
