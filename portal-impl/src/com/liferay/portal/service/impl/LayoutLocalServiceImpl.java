@@ -1149,10 +1149,10 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 						group.getCompanyId(), userGroupClassNameId,
 						userGroup.getUserGroupId());
 
-					layoutSet = layoutSetPersistence.findByG_P(
+					List<Layout> layouts = layoutPersistence.filterFindByG_P(
 						userGroupGroup.getGroupId(), privateLayout);
 
-					count += layoutSet.getPageCount();
+					count += layouts.size();
 				}
 			}
 		}
@@ -1245,15 +1245,17 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 				long userGroupClassNameId =
 					classNameLocalService.getClassNameId(UserGroup.class);
 
+				List<Layout> layouts = null;
+
 				for (UserGroup userGroup : userGroups) {
 					Group userGroupGroup = groupPersistence.findByC_C_C(
 						group.getCompanyId(), userGroupClassNameId,
 						userGroup.getUserGroupId());
 
-					layoutSet = layoutSetPersistence.findByG_P(
+					layouts = layoutPersistence.filterFindByG_P(
 						userGroupGroup.getGroupId(), privateLayout);
 
-					if (layoutSet.getPageCount() > 0) {
+					if (layouts.size() > 0) {
 						return true;
 					}
 				}
