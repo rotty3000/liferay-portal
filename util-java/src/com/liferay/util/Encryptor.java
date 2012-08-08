@@ -36,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author Brian Wing Shun Chan
@@ -44,6 +46,9 @@ import javax.crypto.KeyGenerator;
 public class Encryptor {
 
 	public static final String ENCODING = Digester.ENCODING;
+
+	public static final String HMAC_ALGORITHM = GetterUtil.getString(
+		PropsUtil.get(PropsKeys.COMPANY_HMAC_ALGORITHM));
 
 	public static final String IBM_PROVIDER_CLASS =
 		"com.ibm.crypto.provider.IBMJCE";
@@ -242,11 +247,45 @@ public class Encryptor {
 		return (Provider)providerClass.newInstance();
 	}
 
+	public static String hmac(Key key, String keyName, String plainMessage)
+		throws EncryptorException {
+
+		String cacheKey = keyName.concat(StringPool.POUND).concat(
+			key.toString());
+
+		Mac mac = _hmacMacMap.get(cacheKey);
+
+		try {
+			if (mac == null) {
+				// private HMAC key derived from company's key
+				byte[] hmacKey = Encryptor.encryptUnencoded(key, keyName);
+
+				SecretKeySpec secretKeySpec = new SecretKeySpec(
+					hmacKey, HMAC_ALGORITHM);
+
+				mac = Mac.getInstance(HMAC_ALGORITHM);
+
+				mac.init(secretKeySpec);
+
+				_hmacMacMap.put(cacheKey, mac);
+			}
+
+			synchronized (mac) {
+				return Base64.encode(mac.doFinal(plainMessage.getBytes()));
+			}
+		}
+		catch (Exception e) {
+			throw new EncryptorException(e);
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(Encryptor.class);
 
 	private static Map<String, Cipher> _decryptCipherMap =
 		new ConcurrentHashMap<String, Cipher>(1, 1f, 1);
 	private static Map<String, Cipher> _encryptCipherMap =
 		new ConcurrentHashMap<String, Cipher>(1, 1f, 1);
+	private static Map<String, Mac> _hmacMacMap =
+		new ConcurrentHashMap<String, Mac>(1, 1f, 1);
 
 }
