@@ -488,6 +488,9 @@ public class LuceneIndexSearcherImpl implements IndexSearcher {
 		if ((values == null) || (values.length == 0)) {
 			values = doc.getValues(field);
 		}
+		else {
+			field = localizedName;
+		}
 
 		String snippet = null;
 
