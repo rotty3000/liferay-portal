@@ -492,7 +492,7 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		sb.append(" AND ");
 		sb.append("InlineSQLResourcePermission.primKey = CAST_TEXT(");
 		sb.append(classPKField);
-		sb.append(") AND (");
+		sb.append(") AND ((");
 
 		long userId = getUserId();
 
@@ -591,7 +591,7 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 			}
 		}
 
-		sb.append("))");
+		sb.append(")))");
 
 		permissionJoin = StringUtil.replace(
 			permissionJoin,
