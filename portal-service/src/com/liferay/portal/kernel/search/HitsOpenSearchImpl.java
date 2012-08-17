@@ -100,11 +100,6 @@ public abstract class HitsOpenSearchImpl extends BaseOpenSearchImpl {
 				searchContext.setIncludeStagingGroups(false);
 			}
 
-			QueryConfig queryConfig = new QueryConfig();
-
-			queryConfig.setHighlightEnabled(false);
-
-			searchContext.setQueryConfig(queryConfig);
 			searchContext.setKeywords(keywords);
 			searchContext.setScopeStrict(false);
 

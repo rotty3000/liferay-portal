@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.FacetedSearcher;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
-import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.facet.AssetEntriesFacet;
@@ -763,14 +762,6 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 			scopeFacet.setStatic(true);
 
 			searchContext.addFacet(scopeFacet);
-
-			// Do not highlight results as it is unnecessarily expensive
-
-			QueryConfig queryConfig = new QueryConfig();
-
-			queryConfig.setHighlightEnabled(false);
-
-			searchContext.setQueryConfig(queryConfig);
 
 			// Search
 

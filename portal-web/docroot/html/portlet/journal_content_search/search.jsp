@@ -63,6 +63,12 @@
 				searchContext.setGroupIds(null);
 				searchContext.setKeywords(keywords);
 
+				QueryConfig queryConfig = new QueryConfig();
+
+				queryConfig.setHighlightEnabled(true);
+
+				searchContext.setQueryConfig(queryConfig);
+
 				Hits results = indexer.search(searchContext);
 
 				String[] queryTerms = results.getQueryTerms();
