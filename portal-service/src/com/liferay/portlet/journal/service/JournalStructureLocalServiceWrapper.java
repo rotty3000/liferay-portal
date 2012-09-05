@@ -365,6 +365,13 @@ public class JournalStructureLocalServiceWrapper
 		_journalStructureLocalService.deleteStructures(groupId);
 	}
 
+	public com.liferay.portlet.journal.model.JournalStructure fetchStructure(
+		long groupId, java.lang.String structureId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalStructureLocalService.fetchStructure(groupId, structureId);
+	}
+
 	public com.liferay.portlet.journal.model.JournalStructure getStructure(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,
