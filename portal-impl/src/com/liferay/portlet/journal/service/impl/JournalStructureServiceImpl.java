@@ -17,8 +17,10 @@ package com.liferay.portlet.journal.service.impl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.journal.NoSuchStructureException;
 import com.liferay.portlet.journal.model.JournalStructure;
 import com.liferay.portlet.journal.service.base.JournalStructureServiceBaseImpl;
 import com.liferay.portlet.journal.service.permission.JournalPermission;
@@ -79,6 +81,39 @@ public class JournalStructureServiceImpl
 			getPermissionChecker(), groupId, structureId, ActionKeys.VIEW);
 
 		return journalStructureLocalService.getStructure(groupId, structureId);
+	}
+
+	public JournalStructure getStructure(
+			long groupId, String structureId, boolean includeGlobalStructures)
+		throws PortalException, SystemException {
+
+		JournalStructurePermission.check(
+			getPermissionChecker(), groupId, structureId, ActionKeys.UPDATE);
+
+		JournalStructure structure =
+			journalStructureLocalService.fetchStructure(groupId, structureId);
+
+		if (structure != null) {
+			return structure;
+		}
+
+		if (!includeGlobalStructures) {
+			throw new NoSuchStructureException(
+				"No JournalStructure exists with the structure id " +
+					structureId);
+		}
+
+		Group group = groupPersistence.findByPrimaryKey(groupId);
+
+		Group companyGroup = groupLocalService.getCompanyGroup(
+			group.getCompanyId());
+
+		JournalStructurePermission.check(
+			getPermissionChecker(), companyGroup.getGroupId(), structureId,
+			ActionKeys.UPDATE);
+
+		return journalStructurePersistence.findByG_S(
+			companyGroup.getGroupId(), structureId);
 	}
 
 	public List<JournalStructure> getStructures(long groupId)
