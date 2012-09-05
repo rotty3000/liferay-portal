@@ -111,6 +111,36 @@ public class JournalTemplateServiceWrapper implements JournalTemplateService,
 		return _journalTemplateService.getTemplate(groupId, templateId);
 	}
 
+	public java.lang.String getTemplateScript(
+		com.liferay.portlet.journal.model.JournalTemplate template,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalTemplateService.getTemplateScript(template, tokens,
+			languageId, transform);
+	}
+
+	public java.lang.String getTemplateScript(long groupId,
+		java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalTemplateService.getTemplateScript(groupId, templateId,
+			tokens, languageId);
+	}
+
+	public java.lang.String getTemplateScript(long groupId,
+		java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _journalTemplateService.getTemplateScript(groupId, templateId,
+			tokens, languageId, transform);
+	}
+
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> search(
 		long companyId, long[] groupIds, java.lang.String keywords,
 		java.lang.String structureId, java.lang.String structureIdComparator,

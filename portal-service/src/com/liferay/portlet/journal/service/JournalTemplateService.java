@@ -106,6 +106,30 @@ public interface JournalTemplateService extends BaseService {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getTemplateScript(
+		com.liferay.portlet.journal.model.JournalTemplate template,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getTemplateScript(long groupId,
+		java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.lang.String getTemplateScript(long groupId,
+		java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.journal.model.JournalTemplate> search(
 		long companyId, long[] groupIds, java.lang.String keywords,
 		java.lang.String structureId, java.lang.String structureIdComparator,
