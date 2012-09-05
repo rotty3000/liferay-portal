@@ -25,6 +25,7 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.journal.model.JournalTemplate;
 import com.liferay.portlet.journal.model.JournalTemplateConstants;
 import com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil;
+import com.liferay.portlet.journal.service.JournalTemplateServiceUtil;
 import com.liferay.portlet.journal.util.JournalUtil;
 
 import java.util.Map;
@@ -70,7 +71,7 @@ public class GetTemplateAction extends Action {
 				JournalTemplateLocalServiceUtil.getTemplate(
 					groupId, templateId, true);
 
-			String script = JournalUtil.getTemplateScript(
+			String script = JournalTemplateServiceUtil.getTemplateScript(
 				template, tokens, languageId, transform);
 
 			String extension = JournalTemplateConstants.LANG_TYPE_VM;

@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil;
 
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class URIResolver implements javax.xml.transform.URIResolver {
 				long groupId = GetterUtil.getLong(_tokens.get("group_id"));
 				String templateId = href.substring(templateIdIndex);
 
-				content = JournalUtil.getTemplateScript(
+				content = JournalTemplateLocalServiceUtil.getTemplateScript(
 					groupId, templateId, _tokens, _languageId);
 			}
 			else {

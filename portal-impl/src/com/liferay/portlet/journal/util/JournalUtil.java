@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.templateparser.Transformer;
-import com.liferay.portal.kernel.templateparser.TransformerListener;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -71,7 +70,6 @@ import com.liferay.portlet.journal.model.JournalStructureConstants;
 import com.liferay.portlet.journal.model.JournalTemplate;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.journal.service.JournalFolderLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil;
 import com.liferay.portlet.journal.util.comparator.ArticleCreateDateComparator;
 import com.liferay.portlet.journal.util.comparator.ArticleDisplayDateComparator;
 import com.liferay.portlet.journal.util.comparator.ArticleIDComparator;
@@ -846,64 +844,6 @@ public class JournalUtil {
 		}
 
 		return recentTemplates;
-	}
-
-	public static String getTemplateScript(
-		JournalTemplate template, Map<String, String> tokens, String languageId,
-		boolean transform) {
-
-		String script = template.getXsl();
-
-		if (transform) {
-
-			// Listeners
-
-			String[] listeners = PropsUtil.getArray(
-				PropsKeys.JOURNAL_TRANSFORMER_LISTENER);
-
-			for (int i = 0; i < listeners.length; i++) {
-				TransformerListener listener = null;
-
-				try {
-					listener = (TransformerListener)Class.forName(
-						listeners[i]).newInstance();
-
-					listener.setTemplateDriven(true);
-					listener.setLanguageId(languageId);
-					listener.setTokens(tokens);
-				}
-				catch (Exception e) {
-					_log.error(e, e);
-				}
-
-				// Modify transform script
-
-				if (listener != null) {
-					script = listener.onScript(script);
-				}
-			}
-		}
-
-		return script;
-	}
-
-	public static String getTemplateScript(
-			long groupId, String templateId, Map<String, String> tokens,
-			String languageId)
-		throws PortalException, SystemException {
-
-		return getTemplateScript(groupId, templateId, tokens, languageId, true);
-	}
-
-	public static String getTemplateScript(
-			long groupId, String templateId, Map<String, String> tokens,
-			String languageId, boolean transform)
-		throws PortalException, SystemException {
-
-		JournalTemplate template = JournalTemplateLocalServiceUtil.getTemplate(
-			groupId, templateId);
-
-		return getTemplateScript(template, tokens, languageId, transform);
 	}
 
 	public static Map<String, String> getTokens(

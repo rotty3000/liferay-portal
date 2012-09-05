@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,7 +95,7 @@ public class PropertiesTransformerListener extends BaseTransformerListener {
 
 			long groupId = GetterUtil.getLong(tokens.get("group_id"));
 
-			String script = JournalUtil.getTemplateScript(
+			String script = JournalTemplateLocalServiceUtil.getTemplateScript(
 				groupId, _GLOBAL_PROPERTIES, newTokens, getLanguageId());
 
 			PropertiesUtil.load(properties, script);
