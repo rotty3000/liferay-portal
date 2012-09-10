@@ -21,10 +21,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.jcr.Binary;
 import javax.jcr.Node;
@@ -427,6 +428,12 @@ public class JCRStore extends BaseStore {
 		}
 	}
 
+	public void destroy() throws PortalException, SystemException {
+		//TODO: Ray - JCRFactoryUtil.closeSession() ???
+		// But what if jvm is killed and destroy method is not called?
+		// And also there is JCRFactoryUtil.shutdown() in GlobalShutdownAction
+	}
+
 	@Override
 	public InputStream getFileAsStream(
 			long companyId, long repositoryId, String fileName,
@@ -572,6 +579,10 @@ public class JCRStore extends BaseStore {
 		return size;
 	}
 
+	public String getInitPropertiesKey() {
+		return PropsKeys.DL_STORE_JCR;
+	}
+
 	@Override
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
@@ -615,6 +626,14 @@ public class JCRStore extends BaseStore {
 		}
 
 		return true;
+	}
+
+	public void init(Properties configuration) throws PortalException, SystemException {
+		_DL_STORE_JCR_MOVE_VERSION_LABELS = GetterUtil.getBoolean(
+			configuration.getProperty(
+				PropsKeys.DL_STORE_JCR_MOVE_VERSION_LABELS));
+
+		//TODO: Ray - JCRFactoryUtil.createSession() ???
 	}
 
 	@Override
@@ -806,7 +825,7 @@ public class JCRStore extends BaseStore {
 
 			versionHistory.addVersionLabel(
 				version.getName(), versionLabel,
-				PropsValues.DL_STORE_JCR_MOVE_VERSION_LABELS);
+				_DL_STORE_JCR_MOVE_VERSION_LABELS);
 		}
 		catch (PathNotFoundException pnfe) {
 			throw new NoSuchFileException(
@@ -930,5 +949,7 @@ public class JCRStore extends BaseStore {
 
 		return getFolderNode(companyNode, JCRFactory.NODE_DOCUMENTLIBRARY);
 	}
+
+	private boolean _DL_STORE_JCR_MOVE_VERSION_LABELS;
 
 }

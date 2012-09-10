@@ -31,6 +31,7 @@ import com.liferay.portal.util.PropsValues;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.aopalliance.intercept.MethodInterceptor;
 
@@ -83,6 +84,10 @@ public class StoreFactory {
 		_warned = true;
 	}
 
+	public static Store createStore(String storeClassName) throws Exception {
+		return _createStore(storeClassName);
+	}
+
 	public static Store getInstance() {
 		if (_store == null) {
 			checkProperties();
@@ -116,11 +121,32 @@ public class StoreFactory {
 		_store = store;
 	}
 
-	private static Store _getInstance() throws Exception {
+	public static Store removeInstance(){
+		if (_log.isDebugEnabled()) {
+			_log.debug("Removing store instance.");
+		}
+
+		Store _oldStore = _store;
+		_store = null;
+		return _oldStore;
+	}
+
+	private static Store _createStore(String storeClassName) throws Exception {
 		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
 
-		Store store = (Store)InstanceFactory.newInstance(
-			classLoader, PropsValues.DL_STORE_IMPL);
+		Store store = (Store) InstanceFactory.newInstance(
+			classLoader, storeClassName);
+
+		Properties storeProps = PropsUtil.getProperties(
+			store.getInitPropertiesKey(), false);
+
+		store.init(storeProps);
+
+		return store;
+	}
+
+	private static Store _getInstance() throws Exception {
+		Store store = createStore(PropsValues.DL_STORE_IMPL);
 
 		if (store instanceof DBStore) {
 			DB db = DBFactoryUtil.getDB();
@@ -139,6 +165,9 @@ public class StoreFactory {
 					Arrays.asList(
 						transactionAdviceMethodInterceptor,
 						tempFileMethodInterceptor);
+
+				ClassLoader classLoader =
+					PACLClassLoaderUtil.getPortalClassLoader();
 
 				store = (Store)ProxyUtil.newProxyInstance(
 					classLoader, new Class<?>[] {Store.class},

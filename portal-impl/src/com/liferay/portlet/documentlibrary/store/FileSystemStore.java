@@ -17,9 +17,9 @@ package com.liferay.portlet.documentlibrary.store;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
@@ -34,6 +34,7 @@ import java.io.InputStream;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -44,10 +45,24 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class FileSystemStore extends BaseStore {
 
-	public FileSystemStore() {
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		String rootDirPropsValue = configuration.getProperty(
+			PropsKeys.DL_STORE_FILE_SYSTEM_ROOT_DIR);
+
+		_rootDir = new File(rootDirPropsValue);
+
 		if (!_rootDir.exists()) {
 			_rootDir.mkdirs();
 		}
+	}
+
+	public void destroy() throws PortalException, SystemException {
+	}
+
+	public String getInitPropertiesKey() {
+		return PropsKeys.DL_STORE_FILE;
 	}
 
 	@Override
@@ -426,6 +441,11 @@ public class FileSystemStore extends BaseStore {
 	}
 
 	protected File getCompanyDir(long companyId) {
+		if(_rootDir == null){
+			throw new IllegalStateException(
+				"FileSystemStore is not correctly initalized!");
+		}
+
 		File companyDir = new File(_rootDir + StringPool.SLASH + companyId);
 
 		if (!companyDir.exists()) {
@@ -509,7 +529,7 @@ public class FileSystemStore extends BaseStore {
 
 	private Map<RepositoryDirKey, File> _repositoryDirs =
 		new ConcurrentHashMap<RepositoryDirKey, File>();
-	private File _rootDir = new File(PropsValues.DL_STORE_FILE_SYSTEM_ROOT_DIR);
+	private File _rootDir;
 
 	private class RepositoryDirKey {
 

@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.CompanyConstants;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.util.MaintenanceUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
@@ -94,14 +93,15 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 
 		String targetStoreClassName = values[0];
 
-		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
-
-		_targetStore = (Store)classLoader.loadClass(
-			targetStoreClassName).newInstance();
+		_targetStore = StoreFactory.createStore(targetStoreClassName);
 
 		migratePortlets();
 
 		StoreFactory.setInstance(_targetStore);
+
+		if(_sourceStore != null){
+			_sourceStore.destroy();
+		}
 
 		MaintenanceUtil.appendStatus(
 			"Please set " + PropsKeys.DL_STORE_IMPL +

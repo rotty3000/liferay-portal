@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.documentlibrary.store;
 
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.EnvironmentExecutionTestListener;
@@ -21,9 +22,13 @@ import com.liferay.portal.test.ExecutionTestListeners;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Properties;
 
 /**
  * @author Vilmos Papp
@@ -31,6 +36,20 @@ import org.junit.runner.RunWith;
 @ExecutionTestListeners(listeners = {EnvironmentExecutionTestListener.class})
 @RunWith(LiferayIntegrationJUnitTestRunner.class)
 public class AdvancedFileSystemStoreTest {
+
+	@Before
+	public void initStore() throws Exception {
+		_store = new AdvancedFileSystemStore();
+		Properties initProps = PropsUtil.getProperties(
+			_store.getInitPropertiesKey(), false);
+
+		_store.init(initProps);
+	}
+
+	@After
+	public void destroyStore() throws Exception {
+		_store.destroy();
+	}
 
 	@Test
 	public void testUpdateFileWithMoveFiles() throws Exception {
@@ -93,7 +112,7 @@ public class AdvancedFileSystemStoreTest {
 
 	private static final String _FILE_NAME_EXTENSION = ".txt";
 
-	private static Store _store = new AdvancedFileSystemStore();
+	private static Store _store;
 
 	static {
 		for (int i = 0; i < _DATA_SIZE; i++) {

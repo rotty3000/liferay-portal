@@ -14,10 +14,13 @@
 
 package com.liferay.portlet.documentlibrary.store;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.proxy.BaseProxyBean;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
@@ -77,6 +80,10 @@ public class StoreProxyBean extends BaseProxyBean implements Store {
 		throw new UnsupportedOperationException();
 	}
 
+	public void destroy() {
+		throw new UnsupportedOperationException();
+	}
+
 	public File getFile(long companyId, long repositoryId, String fileName) {
 		throw new UnsupportedOperationException();
 	}
@@ -130,6 +137,10 @@ public class StoreProxyBean extends BaseProxyBean implements Store {
 		throw new UnsupportedOperationException();
 	}
 
+	public String getInitPropertiesKey() {
+		throw new UnsupportedOperationException();
+	}
+
 	public boolean hasDirectory(
 		long companyId, long repositoryId, String dirName) {
 
@@ -144,6 +155,10 @@ public class StoreProxyBean extends BaseProxyBean implements Store {
 		long companyId, long repositoryId, String fileName,
 		String versionLabel) {
 
+		throw new UnsupportedOperationException();
+	}
+
+	public void init(Properties configuration) {
 		throw new UnsupportedOperationException();
 	}
 

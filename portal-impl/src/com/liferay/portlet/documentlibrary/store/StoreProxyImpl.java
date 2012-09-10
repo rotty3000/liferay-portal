@@ -19,12 +19,42 @@ import com.liferay.portal.kernel.exception.SystemException;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
 public class StoreProxyImpl implements Store {
+
+	public String getInitPropertiesKey() {
+		// TODO: Ray - please review
+		// When is this method call it means we are just about to initialize
+		// the store, but calling StoreFactory.getInstance() we initialize it,
+		// so maybe UnsupportedOperationException is better for this method?
+
+		Store store = StoreFactory.getInstance();
+
+		return store.getInitPropertiesKey();
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+		// TODO: Ray - please review
+		// When is this method call it means we are trying to initialize
+		// the store, but calling StoreFactory.getInstance() we initialize it,
+		// so maybe UnsupportedOperationException is better for this method?
+
+		Store store = StoreFactory.getInstance();
+
+		store.init(configuration);
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		Store store = StoreFactory.getInstance();
+
+		store.destroy();
+	}
 
 	public void addDirectory(long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
