@@ -15,14 +15,15 @@
 package com.liferay.portlet.documentlibrary.store;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.repository.cmis.CMISRepositoryUtil;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -57,18 +59,6 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
  * @author Edward Han
  */
 public class CMISStore extends BaseStore {
-
-	public CMISStore() {
-		_systemRootDir = getFolder(
-			SessionHolder.session.getRootFolder(),
-			PropsValues.DL_STORE_CMIS_SYSTEM_ROOT_DIR);
-
-		if (_systemRootDir == null) {
-			_systemRootDir = createFolder(
-				SessionHolder.session.getRootFolder(),
-				PropsValues.DL_STORE_CMIS_SYSTEM_ROOT_DIR);
-		}
-	}
 
 	@Override
 	public void addDirectory(
@@ -167,6 +157,11 @@ public class CMISStore extends BaseStore {
 			companyId, repositoryId, fileName, versionLabel);
 
 		document.delete(true);
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		// clear all caches
+		_session.clear();
 	}
 
 	@Override
@@ -274,6 +269,10 @@ public class CMISStore extends BaseStore {
 		return headVersionLabel;
 	}
 
+	public String getInitPropertiesKey() {
+		return PropsKeys.DL_STORE_CMIS;
+	}
+
 	@Override
 	public boolean hasDirectory(
 		long companyId, long repositoryId, String dirName) {
@@ -308,6 +307,21 @@ public class CMISStore extends BaseStore {
 		}
 		else {
 			return true;
+		}
+	}
+
+	public void init(Properties configuration) throws PortalException, SystemException {
+		initSession(configuration);
+
+		String dlStoreCMISSystemRootDir = configuration.getProperty(
+			PropsKeys.DL_STORE_CMIS_SYSTEM_ROOT_DIR);
+
+		_systemRootDir = getFolder(
+			_session.getRootFolder(), dlStoreCMISSystemRootDir);
+
+		if (_systemRootDir == null) {
+			_systemRootDir = createFolder(
+				_session.getRootFolder(), dlStoreCMISSystemRootDir);
 		}
 	}
 
@@ -436,10 +450,15 @@ public class CMISStore extends BaseStore {
 		properties.put(
 			PropertyIds.OBJECT_TYPE_ID, BaseTypeId.CMIS_FOLDER.value());
 
-		ObjectId objectId = SessionHolder.session.createFolder(
+		if(_session == null){
+			throw new IllegalStateException(
+				"CMISStore is not correctly initalized!");
+		}
+
+		ObjectId objectId = _session.createFolder(
 			properties, parentFolderId);
 
-		return (Folder)SessionHolder.session.getObject(objectId);
+		return (Folder)_session.getObject(objectId);
 	}
 
 	protected Folder getCompanyFolder(long companyId) {
@@ -553,49 +572,47 @@ public class CMISStore extends BaseStore {
 		return versioningFolder;
 	}
 
-	private static Folder _systemRootDir;
+	private void initSession(Properties properties) {
+		Map<String, String> parameters = new HashMap<String, String>();
 
-	private static class SessionHolder {
+		parameters.put(
+			SessionParameter.ATOMPUB_URL,
+			properties.getProperty(PropsKeys.DL_STORE_CMIS_REPOSITORY_URL));
+		parameters.put(
+			SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+		parameters.put(
+			SessionParameter.COMPRESSION, Boolean.TRUE.toString());
 
-		private final static Session session;
+		Locale locale = LocaleUtil.getDefault();
 
-		static {
-			Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(
+			SessionParameter.LOCALE_ISO3166_COUNTRY, locale.getCountry());
+		parameters.put(
+			SessionParameter.LOCALE_ISO639_LANGUAGE, locale.getLanguage());
+		parameters.put(
+			SessionParameter.PASSWORD,
+			properties.getProperty(
+				PropsKeys.DL_STORE_CMIS_CREDENTIALS_PASSWORD));
+		parameters.put(
+			SessionParameter.USER,
+			properties.getProperty(
+				PropsKeys.DL_STORE_CMIS_CREDENTIALS_USERNAME));
 
-			parameters.put(
-				SessionParameter.ATOMPUB_URL,
-				PropsValues.DL_STORE_CMIS_REPOSITORY_URL);
-			parameters.put(
-				SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-			parameters.put(
-				SessionParameter.COMPRESSION, Boolean.TRUE.toString());
+		SessionFactory sessionFactory =
+			CMISRepositoryUtil.getSessionFactory();
 
-			Locale locale = LocaleUtil.getDefault();
+		List<Repository> repositories = sessionFactory.getRepositories(
+			parameters);
 
-			parameters.put(
-				SessionParameter.LOCALE_ISO3166_COUNTRY, locale.getCountry());
-			parameters.put(
-				SessionParameter.LOCALE_ISO639_LANGUAGE, locale.getLanguage());
-			parameters.put(
-				SessionParameter.PASSWORD,
-				PropsValues.DL_STORE_CMIS_CREDENTIALS_PASSWORD);
-			parameters.put(
-				SessionParameter.USER,
-				PropsValues.DL_STORE_CMIS_CREDENTIALS_USERNAME);
+		Repository repository = repositories.get(0);
 
-			SessionFactory sessionFactory =
-				CMISRepositoryUtil.getSessionFactory();
+		_session = repository.createSession();
 
-			List<Repository> repositories = sessionFactory.getRepositories(
-				parameters);
-
-			Repository repository = repositories.get(0);
-
-			session = repository.createSession();
-
-			session.setDefaultContext(CMISRepositoryUtil.getOperationContext());
-		}
+		_session.setDefaultContext(CMISRepositoryUtil.getOperationContext());
 
 	}
+
+	private Session _session;
+	private Folder _systemRootDir;
 
 }

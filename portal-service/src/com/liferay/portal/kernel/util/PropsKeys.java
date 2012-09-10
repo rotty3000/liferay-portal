@@ -667,6 +667,8 @@ public interface PropsKeys {
 
 	public static final String DL_STORE_ANTIVIRUS_IMPL = "dl.store.antivirus.impl";
 
+	public static final String DL_STORE_CMIS = "dl.store.cmis";
+
 	public static final String DL_STORE_CMIS_CREDENTIALS_PASSWORD = "dl.store.cmis.credentials.password";
 
 	public static final String DL_STORE_CMIS_CREDENTIALS_USERNAME = "dl.store.cmis.credentials.username";
@@ -675,15 +677,17 @@ public interface PropsKeys {
 
 	public static final String DL_STORE_CMIS_SYSTEM_ROOT_DIR = "dl.store.cmis.system.root.dir";
 
+	public static final String DL_STORE_FILE = "dl.store.file";
+
 	public static final String DL_STORE_FILE_SYSTEM_ROOT_DIR = "dl.store.file.system.root.dir";
 
 	public static final String DL_STORE_IMPL = "dl.store.impl";
 
-	public static final String DL_STORE_JCR_FETCH_DELAY = "dl.store.jcr.fetch.delay";
-
-	public static final String DL_STORE_JCR_FETCH_MAX_FAILURES = "dl.store.jcr.fetch.max.failures";
+	public static final String DL_STORE_JCR = "dl.store.jcr";
 
 	public static final String DL_STORE_JCR_MOVE_VERSION_LABELS = "dl.store.jcr.move.version.labels";
+
+	public static final String DL_STORE_S3 = "dl.store.s3";
 
 	public static final String DL_STORE_S3_ACCESS_KEY = "dl.store.s3.access.key";
 
