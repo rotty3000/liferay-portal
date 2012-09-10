@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
-import com.liferay.portal.util.PropsUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 
 import java.io.File;
@@ -37,6 +36,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
@@ -53,16 +53,6 @@ import org.jets3t.service.security.AWSCredentials;
  * @author Edward Han
  */
 public class S3Store extends BaseStore {
-
-	public S3Store() {
-		try {
-			_s3Service = getS3Service();
-			_s3Bucket = getS3Bucket();
-		}
-		catch (S3ServiceException s3se) {
-			_log.error(s3se.getMessage());
-		}
-	}
 
 	@Override
 	public void addDirectory(
@@ -151,6 +141,14 @@ public class S3Store extends BaseStore {
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
+		}
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		try {
+			_s3Service.shutdown();
+		} catch (ServiceException e) {
+			throw new SystemException(e.getMessage(), e);
 		}
 	}
 
@@ -256,6 +254,10 @@ public class S3Store extends BaseStore {
 		}
 	}
 
+	public String getInitPropertiesKey() {
+		return PropsKeys.DL_STORE_S3;
+	}
+
 	@Override
 	public boolean hasDirectory(
 		long companyId, long repositoryId, String dirName) {
@@ -283,6 +285,18 @@ public class S3Store extends BaseStore {
 		}
 		catch (S3ServiceException s3se) {
 			throw new SystemException(s3se);
+		}
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		try {
+			_s3Service = getS3Service(configuration);
+			_s3Bucket = getS3Bucket(configuration);
+		}
+		catch (S3ServiceException s3se) {
+			_log.error(s3se.getMessage());
 		}
 	}
 
@@ -427,13 +441,21 @@ public class S3Store extends BaseStore {
 		}
 	}
 
-	protected AWSCredentials getAWSCredentials() throws S3ServiceException {
-		if (Validator.isNull(_ACCESS_KEY) || Validator.isNull(_SECRET_KEY)) {
+	protected AWSCredentials getAWSCredentials(Properties configuration)
+		throws S3ServiceException {
+
+		String s3AccessKey = configuration.getProperty(
+			PropsKeys.DL_STORE_S3_ACCESS_KEY);
+
+		String s3SecretKey = configuration.getProperty(
+			PropsKeys.DL_STORE_S3_SECRET_KEY);
+
+		if (Validator.isNull(s3AccessKey) || Validator.isNull(s3SecretKey)) {
 			throw new S3ServiceException(
 				"S3 access and secret keys are not set");
 		}
 		else {
-			return new AWSCredentials(_ACCESS_KEY, _SECRET_KEY);
+			return new AWSCredentials(s3AccessKey, s3SecretKey);
 		}
 	}
 
@@ -520,29 +542,26 @@ public class S3Store extends BaseStore {
 		return sb.toString();
 	}
 
-	protected S3Bucket getS3Bucket() throws S3ServiceException {
-		if (Validator.isNull(_BUCKET_NAME)) {
+	protected S3Bucket getS3Bucket(Properties configuration)
+		throws S3ServiceException {
+
+		String bucketName = configuration.getProperty(
+			PropsKeys.DL_STORE_S3_BUCKET_NAME);
+
+		if (Validator.isNull(bucketName)) {
 			throw new S3ServiceException("S3 bucket name is not set");
 		}
-		else {
-			return getS3Service().getBucket(_BUCKET_NAME);
-		}
+
+		return getS3Service(configuration).getBucket(bucketName);
 	}
 
-	protected S3Service getS3Service() throws S3ServiceException {
-		AWSCredentials credentials = getAWSCredentials();
+	protected S3Service getS3Service(Properties configuration)
+		throws S3ServiceException {
+
+		AWSCredentials credentials = getAWSCredentials(configuration);
 
 		return new RestS3Service(credentials);
 	}
-
-	private static final String _ACCESS_KEY = PropsUtil.get(
-		PropsKeys.DL_STORE_S3_ACCESS_KEY);
-
-	private static final String _BUCKET_NAME = PropsUtil.get(
-		PropsKeys.DL_STORE_S3_BUCKET_NAME);
-
-	private static final String _SECRET_KEY = PropsUtil.get(
-		PropsKeys.DL_STORE_S3_SECRET_KEY);
 
 	private static Log _log = LogFactoryUtil.getLog(S3Store.class);
 

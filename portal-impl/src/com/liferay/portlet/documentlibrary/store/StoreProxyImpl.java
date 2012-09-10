@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import java.io.File;
 import java.io.InputStream;
 
+import java.util.Properties;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Edward Han
@@ -106,6 +108,12 @@ public class StoreProxyImpl implements Store {
 		store.deleteFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
+	public void destroy() throws PortalException, SystemException {
+		Store store = StoreFactory.getInstance();
+
+		store.destroy();
+	}
+
 	public File getFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
@@ -189,6 +197,17 @@ public class StoreProxyImpl implements Store {
 		return store.getFileSize(companyId, repositoryId, fileName);
 	}
 
+	public String getInitPropertiesKey() {
+		// TODO: Ray - please review
+		// When is this method call it means we are just about to initialize
+		// the store, but calling StoreFactory.getInstance() we initialize it,
+		// so maybe UnsupportedOperationException is better for this method?
+
+		Store store = StoreFactory.getInstance();
+
+		return store.getInitPropertiesKey();
+	}
+
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
@@ -214,6 +233,18 @@ public class StoreProxyImpl implements Store {
 		Store store = StoreFactory.getInstance();
 
 		return store.hasFile(companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+		// TODO: Ray - please review
+		// When is this method call it means we are trying to initialize
+		// the store, but calling StoreFactory.getInstance() we initialize it,
+		// so maybe UnsupportedOperationException is better for this method?
+
+		Store store = StoreFactory.getInstance();
+
+		store.init(configuration);
 	}
 
 	public void move(String srcDir, String destDir) throws SystemException {

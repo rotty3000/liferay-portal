@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import java.io.File;
 import java.io.InputStream;
 
+import java.util.Properties;
+
 /**
  * The interface for all file store implementations. Most, if not all
  * implementations should extend from the class {@link BaseStore}.
@@ -66,6 +68,8 @@ public interface Store {
 			String versionLabel)
 		throws PortalException, SystemException;
 
+	public void destroy() throws PortalException, SystemException;
+
 	public File getFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException;
 
@@ -102,6 +106,8 @@ public interface Store {
 	public long getFileSize(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException;
 
+	public String getInitPropertiesKey();
+
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException;
@@ -112,6 +118,9 @@ public interface Store {
 	public boolean hasFile(
 			long companyId, long repositoryId, String fileName,
 			String versionLabel)
+		throws PortalException, SystemException;
+
+	public void init(Properties configuration)
 		throws PortalException, SystemException;
 
 	public void move(String srcDir, String destDir) throws SystemException;

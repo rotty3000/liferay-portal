@@ -22,6 +22,8 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import java.io.File;
 import java.io.InputStream;
 
+import java.util.Properties;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Edward Han
@@ -150,6 +152,10 @@ public class SafeFileNameStoreWrapper implements Store {
 		}
 
 		_store.deleteFile(companyId, repositoryId, safeFileName, versionLabel);
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		_store.destroy();
 	}
 
 	public File getFile(long companyId, long repositoryId, String fileName)
@@ -304,6 +310,10 @@ public class SafeFileNameStoreWrapper implements Store {
 		return _store.getFileSize(companyId, repositoryId, safeFileName);
 	}
 
+	public String getInitPropertiesKey() {
+		return _store.getInitPropertiesKey();
+	}
+
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
@@ -342,6 +352,12 @@ public class SafeFileNameStoreWrapper implements Store {
 
 		return _store.hasFile(
 			companyId, repositoryId, safeFileName, versionLabel);
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		_store.init(configuration);
 	}
 
 	public void move(String srcDir, String destDir) throws SystemException {

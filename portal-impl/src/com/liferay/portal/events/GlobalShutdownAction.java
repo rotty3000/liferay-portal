@@ -42,6 +42,8 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.search.lucene.LuceneHelperUtil;
 import com.liferay.portal.util.PropsUtil;
+import com.liferay.portlet.documentlibrary.store.Store;
+import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.portlet.documentlibrary.util.DocumentConversionUtil;
 import com.liferay.util.ThirdPartyThreadLocalRegistry;
 
@@ -186,6 +188,18 @@ public class GlobalShutdownAction extends SimpleAction {
 			SchedulerEngineUtil.shutdown();
 		}
 		catch (Exception e) {
+		}
+
+		// Document library store
+
+		try {
+			Store store = StoreFactory.removeInstance();
+			if (store != null) {
+				store.destroy();
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		// Wait 1 second so Quartz threads can cleanly shutdown

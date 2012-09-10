@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.model.DLContent;
 import com.liferay.portlet.documentlibrary.service.DLContentLocalServiceUtil;
@@ -40,6 +41,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Shuyang Zhou
@@ -110,6 +112,9 @@ public class DBStore extends BaseStore {
 
 		DLContentLocalServiceUtil.deleteContent(
 			companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void destroy() throws PortalException, SystemException {
 	}
 
 	@Override
@@ -260,6 +265,10 @@ public class DBStore extends BaseStore {
 		return dlContent.getSize();
 	}
 
+	public String getInitPropertiesKey() {
+		return StringPool.DOUBLE_SLASH;
+	}
+
 	@Override
 	public boolean hasDirectory(
 		long companyId, long repositoryId, String dirName) {
@@ -275,6 +284,10 @@ public class DBStore extends BaseStore {
 
 		return DLContentLocalServiceUtil.hasContent(
 			companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
 	}
 
 	@Override

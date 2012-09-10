@@ -411,7 +411,11 @@ public class HookHotDeployListener
 		}
 
 		if (portalProperties.containsKey(PropsKeys.DL_STORE_IMPL)) {
-			StoreFactory.setInstance(null);
+			Store store = StoreFactory.removeInstance();
+
+			if (store != null) {
+				store.destroy();
+			}
 		}
 
 		if (portalProperties.containsKey(
@@ -1779,6 +1783,13 @@ public class HookHotDeployListener
 
 			Store store = (Store)newInstance(
 				portletClassLoader, Store.class, storeClassName);
+
+			String propertiesKey = store.getInitPropertiesKey();
+
+			Properties storeProps = PropertiesUtil.getProperties(
+					portalProperties, propertiesKey, false);
+
+			store.init(storeProps);
 
 			StoreFactory.setInstance(store);
 		}
