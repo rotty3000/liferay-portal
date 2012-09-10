@@ -84,8 +84,11 @@ public class StoreFactory {
 		_warned = true;
 	}
 
-	public static Store createStore(String storeClassName) throws Exception {
-		return _createStore(storeClassName);
+	public static Store createStore(
+			String storeClassName, Properties initProperties)
+		throws Exception {
+
+		return _createStore(storeClassName, initProperties);
 	}
 
 	public static Store getInstance() {
@@ -131,22 +134,27 @@ public class StoreFactory {
 		_store = store;
 	}
 
-	private static Store _createStore(String storeClassName) throws Exception {
+	private static Store _createStore(
+			String storeClassName, Properties initProperties)
+		throws Exception {
+
 		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
 
 		Store store = (Store) InstanceFactory.newInstance(
 			classLoader, storeClassName);
 
-		Properties storeProps = PropsUtil.getProperties(
-			store.getInitPropertiesKey(), false);
+		if (initProperties == null) {
+			initProperties = PropsUtil.getProperties(
+				store.getInitPropertiesKey(), false);
+		}
 
-		store.init(storeProps);
+		store.init(initProperties);
 
 		return store;
 	}
 
 	private static Store _getInstance() throws Exception {
-		Store store = createStore(PropsValues.DL_STORE_IMPL);
+		Store store = createStore(PropsValues.DL_STORE_IMPL, null);
 
 		if (store instanceof DBStore) {
 			DB db = DBFactoryUtil.getDB();

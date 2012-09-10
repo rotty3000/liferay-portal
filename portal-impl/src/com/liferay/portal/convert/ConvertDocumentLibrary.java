@@ -18,23 +18,21 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.CompanyConstants;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.util.MaintenanceUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.store.AdvancedFileSystemStore;
-import com.liferay.portlet.documentlibrary.store.CMISStore;
-import com.liferay.portlet.documentlibrary.store.FileSystemStore;
-import com.liferay.portlet.documentlibrary.store.JCRStore;
-import com.liferay.portlet.documentlibrary.store.S3Store;
 import com.liferay.portlet.documentlibrary.store.Store;
 import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.portlet.documentlibrary.util.comparator.FileVersionVersionComparator;
@@ -45,40 +43,48 @@ import com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil;
 
 import java.io.InputStream;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Minhchau Dang
  * @author Alexander Chow
  */
-public class ConvertDocumentLibrary extends ConvertProcess {
-
-	@Override
-	public String getDescription() {
-		return "migrate-documents-from-one-repository-to-another";
-	}
+public abstract class ConvertDocumentLibrary extends ConvertProcess {
 
 	@Override
 	public String getParameterDescription() {
-		return "please-select-a-new-repository-hook";
+		return "please-fill-out-store-parameters-or-leave-blank-to-use-" +
+			"defaults";
 	}
 
 	@Override
 	public String[] getParameterNames() {
-		StringBundler sb = new StringBundler(_HOOKS.length * 2 + 2);
+		ArrayList<String> result = new ArrayList<String>();
 
-		sb.append(PropsKeys.DL_STORE_IMPL);
-		sb.append(StringPool.EQUAL);
+		String storeClassName = getStoreClassName();
 
-		for (String hook : _HOOKS) {
-			if (!hook.equals(PropsValues.DL_STORE_IMPL)) {
-				sb.append(hook);
-				sb.append(StringPool.SEMICOLON);
-			}
+		try {
+			ClassLoader classLoader =
+				PACLClassLoaderUtil.getPortalClassLoader();
+
+			Store store = (Store) InstanceFactory.newInstance(
+				classLoader, storeClassName);
+
+			String propsKey = store.getInitPropertiesKey();
+
+			Properties properties = PropsUtil.getProperties(propsKey, false);
+
+			result.addAll(properties.stringPropertyNames());
+		} catch (Exception e) {
+			_log.warn("Cannot instantiate " + storeClassName, e);
 		}
 
-		return new String[] {sb.toString()};
+		return result.toArray(new String[0]);
 	}
+
+	public abstract String getStoreClassName();
 
 	@Override
 	public boolean isEnabled() {
@@ -91,9 +97,23 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 
 		String[] values = getParameterValues();
 
-		String targetStoreClassName = values[0];
+		String targetStoreClassName = getStoreClassName();
 
-		_targetStore = StoreFactory.createStore(targetStoreClassName);
+		Properties initProperties = new Properties();
+		String[] parameterNames = getParameterNames();
+
+		for (int i = 0; i < parameterNames.length; i++) {
+			String value = values[i];
+			String key = parameterNames[i];
+			if (Validator.isNull(value)) {
+				value = PropsUtil.get(key);
+			}
+
+			initProperties.setProperty(key, value);
+		}
+
+		_targetStore = StoreFactory.createStore(
+			targetStoreClassName, initProperties);
 
 		migratePortlets();
 
@@ -266,12 +286,6 @@ public class ConvertDocumentLibrary extends ConvertProcess {
 			}
 		}
 	}
-
-	private static final String[] _HOOKS = new String[] {
-		AdvancedFileSystemStore.class.getName(), CMISStore.class.getName(),
-		FileSystemStore.class.getName(), JCRStore.class.getName(),
-		S3Store.class.getName()
-	};
 
 	private static Log _log = LogFactoryUtil.getLog(
 		ConvertDocumentLibrary.class);
