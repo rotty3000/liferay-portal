@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.log.Jdk14LogFactoryImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineUtil;
+import com.liferay.portal.kernel.store.StoreUtil;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.util.CentralizedThreadLocal;
@@ -42,8 +43,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.search.lucene.LuceneHelperUtil;
 import com.liferay.portal.util.PropsUtil;
-import com.liferay.portlet.documentlibrary.store.Store;
-import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.portlet.documentlibrary.util.DocumentConversionUtil;
 import com.liferay.util.ThirdPartyThreadLocalRegistry;
 
@@ -190,22 +189,19 @@ public class GlobalShutdownAction extends SimpleAction {
 		catch (Exception e) {
 		}
 
-		// Document library store
+		// Wait 1 second so Quartz threads can cleanly shutdown
 
 		try {
-			Store store = StoreFactory.removeInstance();
-			if (store != null) {
-				store.destroy();
-			}
+			Thread.sleep(1000);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		// Wait 1 second so Quartz threads can cleanly shutdown
+		// Store
 
 		try {
-			Thread.sleep(1000);
+			StoreUtil.destroy();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

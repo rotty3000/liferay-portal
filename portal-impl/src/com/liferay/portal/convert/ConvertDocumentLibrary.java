@@ -18,6 +18,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.store.Store;
+import com.liferay.portal.kernel.store.StoreFactoryUtil;
+import com.liferay.portal.kernel.store.StoreUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -28,13 +31,10 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.util.MaintenanceUtil;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.store.Store;
-import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.portlet.documentlibrary.util.comparator.FileVersionVersionComparator;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
@@ -93,7 +93,7 @@ public abstract class ConvertDocumentLibrary extends ConvertProcess {
 
 	@Override
 	protected void doConvert() throws Exception {
-		_sourceStore = StoreFactory.getInstance();
+		_sourceStore = StoreUtil.getDefaultStore();
 
 		String[] values = getParameterValues();
 
@@ -112,23 +112,21 @@ public abstract class ConvertDocumentLibrary extends ConvertProcess {
 			initProperties.setProperty(key, value);
 		}
 
-		_targetStore = StoreFactory.createStore(
+		_targetStore = StoreFactoryUtil.createStore(
 			targetStoreClassName, initProperties);
 
 		migratePortlets();
 
-		StoreFactory.setInstance(_targetStore);
+		StoreUtil.setStore(CONVERT_STORE_ID, _targetStore);
 
-		if (_sourceStore != null) {
-			_sourceStore.destroy();
+		if(!StoreUtil.getDefaultStoreId().equals(CONVERT_STORE_ID)){
+			StoreUtil.setDefaultStoreId(CONVERT_STORE_ID);
 		}
 
 		MaintenanceUtil.appendStatus(
 			"Please set " + PropsKeys.DL_STORE_IMPL +
 				" in your portal-ext.properties to use " +
 					targetStoreClassName);
-
-		PropsValues.DL_STORE_IMPL = targetStoreClassName;
 	}
 
 	protected List<DLFileVersion> getDLFileVersions(DLFileEntry dlFileEntry)
@@ -289,6 +287,9 @@ public abstract class ConvertDocumentLibrary extends ConvertProcess {
 
 	private static Log _log = LogFactoryUtil.getLog(
 		ConvertDocumentLibrary.class);
+
+	private static final String CONVERT_STORE_ID =
+		ConvertDocumentLibrary.class.getName();
 
 	private Store _sourceStore;
 	private Store _targetStore;

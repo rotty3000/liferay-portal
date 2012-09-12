@@ -112,7 +112,7 @@ public class AdvancedFileSystemStoreTest {
 
 	private static final String _FILE_NAME_EXTENSION = ".txt";
 
-	private static Store _store;
+	private static com.liferay.portal.kernel.store.Store _store;
 
 	static {
 		for (int i = 0; i < _DATA_SIZE; i++) {

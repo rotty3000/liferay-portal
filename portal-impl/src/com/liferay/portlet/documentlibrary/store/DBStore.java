@@ -47,7 +47,7 @@ import java.util.Properties;
  * @author Shuyang Zhou
  * @author Tina Tian
  */
-public class DBStore extends BaseStore {
+public class DBStore extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(

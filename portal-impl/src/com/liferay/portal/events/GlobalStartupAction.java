@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.javadoc.JavadocManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.store.StoreUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
@@ -308,6 +309,16 @@ public class GlobalStartupAction extends SimpleAction {
 
 		if (PropsValues.POP_SERVER_NOTIFICATIONS_ENABLED) {
 			POPServerUtil.start();
+		}
+
+		// Store
+
+		try {
+			StoreUtil.init(null);
+		} catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(e.getMessage());
+			}
 		}
 
 		// Launch browser

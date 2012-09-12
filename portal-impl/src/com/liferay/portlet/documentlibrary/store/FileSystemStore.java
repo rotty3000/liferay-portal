@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Alexander Chow
  * @author Edward Han
  */
-public class FileSystemStore extends BaseStore {
+public class FileSystemStore extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(long companyId, long repositoryId, String dirName)

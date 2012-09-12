@@ -52,7 +52,7 @@ import org.jets3t.service.security.AWSCredentials;
  * @author Sten Martinez
  * @author Edward Han
  */
-public class S3Store extends BaseStore {
+public class S3Store extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(

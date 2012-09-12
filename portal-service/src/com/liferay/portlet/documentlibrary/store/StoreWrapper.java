@@ -26,9 +26,9 @@ import java.util.Properties;
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class StoreWrapper implements Store {
+public class StoreWrapper implements com.liferay.portal.kernel.store.Store {
 
-	public StoreWrapper(Store store) {
+	public StoreWrapper(com.liferay.portal.kernel.store.Store store) {
 		_store = store;
 	}
 
@@ -250,6 +250,6 @@ public class StoreWrapper implements Store {
 			toVersionLabel);
 	}
 
-	private Store _store;
+	private com.liferay.portal.kernel.store.Store _store;
 
 }

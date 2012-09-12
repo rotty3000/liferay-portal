@@ -12,66 +12,53 @@
  * details.
  */
 
-package com.liferay.portlet.documentlibrary.store;
+package com.liferay.portal.kernel.store;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.store.StoreUtil;
 
 import java.io.File;
 import java.io.InputStream;
-
 import java.util.Properties;
 
 /**
- * @author Brian Wing Shun Chan
- * @author Edward Han
+ * @author Tomas Polesovsky
  */
-public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
+public class UnmodifiableStoreInstance implements Store {
 
-	private com.liferay.portal.kernel.store.Store getStore(){
-		return StoreUtil.getDefaultStore();
+	public UnmodifiableStoreInstance(Store _store) {
+		this._store = _store;
 	}
 
 	public void addDirectory(long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.addDirectory(companyId, repositoryId, dirName);
+		_store.addDirectory(companyId, repositoryId, dirName);
 	}
 
 	public void addFile(
 			long companyId, long repositoryId, String fileName, byte[] bytes)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.addFile(companyId, repositoryId, fileName, bytes);
+		_store.addFile(companyId, repositoryId, fileName, bytes);
 	}
 
 	public void addFile(
 			long companyId, long repositoryId, String fileName, File file)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.addFile(companyId, repositoryId, fileName, file);
+		_store.addFile(companyId, repositoryId, fileName, file);
 	}
 
 	public void addFile(
 			long companyId, long repositoryId, String fileName, InputStream is)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.addFile(companyId, repositoryId, fileName, is);
+		_store.addFile(companyId, repositoryId, fileName, is);
 	}
 
 	public void checkRoot(long companyId) throws SystemException {
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.checkRoot(companyId);
+		_store.checkRoot(companyId);
 	}
 
 	public void copyFileVersion(
@@ -79,9 +66,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.copyFileVersion(
+		_store.copyFileVersion(
 			companyId, repositoryId, fileName, fromVersionLabel,
 			toVersionLabel);
 	}
@@ -90,41 +75,32 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.deleteDirectory(companyId, repositoryId, dirName);
-	}
-
-	public void deleteFile(long companyId, long repositoryId, String fileName)
-		throws PortalException, SystemException {
-
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.deleteFile(companyId, repositoryId, fileName);
+		_store.deleteDirectory(companyId, repositoryId, dirName);
 	}
 
 	public void deleteFile(
-			long companyId, long repositoryId, String fileName,
-			String versionLabel)
+			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
+		_store.deleteFile(companyId, repositoryId, fileName);
+	}
 
-		store.deleteFile(companyId, repositoryId, fileName, versionLabel);
+	public void deleteFile(
+		long companyId, long repositoryId, String fileName, String versionLabel)
+		throws PortalException, SystemException {
+
+		_store.deleteFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
 	public void destroy() throws PortalException, SystemException {
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.destroy();
+		new UnsupportedOperationException("This store cannot be destroyed");
 	}
 
-	public File getFile(long companyId, long repositoryId, String fileName)
+	public File getFile(
+		long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFile(companyId, repositoryId, fileName);
+		return _store.getFile(companyId, repositoryId, fileName);
 	}
 
 	public File getFile(
@@ -132,18 +108,14 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFile(companyId, repositoryId, fileName, versionLabel);
+		return _store.getFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
 	public byte[] getFileAsBytes(
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileAsBytes(companyId, repositoryId, fileName);
+		return _store.getFileAsBytes(companyId, repositoryId, fileName);
 	}
 
 	public byte[] getFileAsBytes(
@@ -151,9 +123,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileAsBytes(
+		return _store.getFileAsBytes(
 			companyId, repositoryId, fileName, versionLabel);
 	}
 
@@ -161,9 +131,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileAsStream(companyId, repositoryId, fileName);
+		return _store.getFileAsStream(companyId, repositoryId, fileName);
 	}
 
 	public InputStream getFileAsStream(
@@ -171,58 +139,45 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileAsStream(
+		return _store.getFileAsStream(
 			companyId, repositoryId, fileName, versionLabel);
 	}
 
-	public String[] getFileNames(long companyId, long repositoryId)
-		throws SystemException {
-
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileNames(companyId, repositoryId);
+	public String[] getFileNames(
+			long companyId, long repositoryId) throws SystemException {
+		return _store.getFileNames(companyId, repositoryId);
 	}
 
 	public String[] getFileNames(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileNames(companyId, repositoryId, dirName);
+		return _store.getFileNames(companyId, repositoryId, dirName);
 	}
 
-	public long getFileSize(long companyId, long repositoryId, String fileName)
+	public long getFileSize(
+			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getFileSize(companyId, repositoryId, fileName);
+		return _store.getFileSize(companyId, repositoryId, fileName);
 	}
 
 	public String getInitPropertiesKey() {
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.getInitPropertiesKey();
+		return _store.getInitPropertiesKey();
 	}
 
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.hasDirectory(companyId, repositoryId, dirName);
+		return _store.hasDirectory(companyId, repositoryId, dirName);
 	}
 
-	public boolean hasFile(long companyId, long repositoryId, String fileName)
+	public boolean hasFile(
+			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.hasFile(companyId, repositoryId, fileName);
+		return _store.hasFile(companyId, repositoryId, fileName);
 	}
 
 	public boolean hasFile(
@@ -230,23 +185,17 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		return store.hasFile(companyId, repositoryId, fileName, versionLabel);
+		return _store.hasFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
 	public void init(Properties configuration)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.init(configuration);
+		new UnsupportedOperationException("This store cannot be reinitialized");
 	}
 
 	public void move(String srcDir, String destDir) throws SystemException {
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.move(srcDir, destDir);
+		_store.move(srcDir, destDir);
 	}
 
 	public void updateFile(
@@ -254,9 +203,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String fileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFile(companyId, repositoryId, newRepositoryId, fileName);
+		_store.updateFile(companyId, repositoryId, newRepositoryId, fileName);
 	}
 
 	public void updateFile(
@@ -264,9 +211,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String newFileName)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFile(companyId, repositoryId, fileName, newFileName);
+		_store.updateFile(companyId, repositoryId, fileName, newFileName);
 	}
 
 	public void updateFile(
@@ -274,9 +219,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel, byte[] bytes)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFile(
+		_store.updateFile(
 			companyId, repositoryId, fileName, versionLabel, bytes);
 	}
 
@@ -285,9 +228,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel, File file)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFile(companyId, repositoryId, fileName, versionLabel, file);
+		_store.updateFile(companyId, repositoryId, fileName, versionLabel, file);
 	}
 
 	public void updateFile(
@@ -295,9 +236,7 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String versionLabel, InputStream is)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFile(companyId, repositoryId, fileName, versionLabel, is);
+		_store.updateFile(companyId, repositoryId, fileName, versionLabel, is);
 	}
 
 	public void updateFileVersion(
@@ -305,11 +244,10 @@ public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
 			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException {
 
-		com.liferay.portal.kernel.store.Store store = getStore();
-
-		store.updateFileVersion(
-			companyId, repositoryId, fileName, fromVersionLabel,
-			toVersionLabel);
+		_store.updateFileVersion(
+			companyId, repositoryId, fileName, fromVersionLabel, toVersionLabel);
 	}
+
+	private Store _store;
 
 }

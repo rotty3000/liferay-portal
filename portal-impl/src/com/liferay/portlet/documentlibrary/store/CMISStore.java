@@ -58,7 +58,7 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
  * @author Alexander Chow
  * @author Edward Han
  */
-public class CMISStore extends BaseStore {
+public class CMISStore extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(

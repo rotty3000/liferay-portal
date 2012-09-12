@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.jcr.Binary;
 import javax.jcr.Node;
@@ -61,7 +62,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class JCRStore extends BaseStore {
+public class JCRStore extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(long companyId, long repositoryId, String dirName)
@@ -429,9 +430,7 @@ public class JCRStore extends BaseStore {
 	}
 
 	public void destroy() throws PortalException, SystemException {
-		//TODO: Ray - JCRFactoryUtil.closeSession() ???
-		// But what if jvm is killed and destroy method is not called?
-		// And also there is JCRFactoryUtil.shutdown() in GlobalShutdownAction
+		_hasInstance.set(false);
 	}
 
 	@Override
@@ -635,7 +634,10 @@ public class JCRStore extends BaseStore {
 			configuration.getProperty(
 				PropsKeys.DL_STORE_JCR_MOVE_VERSION_LABELS));
 
-		//TODO: Ray - JCRFactoryUtil.createSession() ???
+		if(_hasInstance.get()){
+			throw new IllegalStateException(
+				"There can be only one instance of JCRStore!");
+		}
 	}
 
 	@Override
@@ -950,6 +952,8 @@ public class JCRStore extends BaseStore {
 
 		return getFolderNode(companyNode, JCRFactory.NODE_DOCUMENTLIBRARY);
 	}
+
+	private static AtomicBoolean _hasInstance = new AtomicBoolean();
 
 	private boolean _dlStoreJcrMoveVersionLabels;
 

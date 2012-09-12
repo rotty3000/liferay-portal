@@ -25,7 +25,8 @@ import java.util.Properties;
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class StoreProxyBean extends BaseProxyBean implements Store {
+public class StoreProxyBean extends BaseProxyBean
+	implements com.liferay.portal.kernel.store.Store {
 
 	public void addDirectory(
 		long companyId, long repositoryId, String dirName) {

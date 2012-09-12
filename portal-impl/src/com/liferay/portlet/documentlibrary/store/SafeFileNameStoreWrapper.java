@@ -28,9 +28,12 @@ import java.util.Properties;
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class SafeFileNameStoreWrapper implements Store {
+public class SafeFileNameStoreWrapper
+	implements com.liferay.portal.kernel.store.Store {
 
-	public SafeFileNameStoreWrapper(Store store) {
+	public SafeFileNameStoreWrapper(
+		com.liferay.portal.kernel.store.Store store) {
+
 		_store = store;
 	}
 
@@ -467,6 +470,6 @@ public class SafeFileNameStoreWrapper implements Store {
 		}
 	}
 
-	private Store _store;
+	private com.liferay.portal.kernel.store.Store _store;
 
 }
