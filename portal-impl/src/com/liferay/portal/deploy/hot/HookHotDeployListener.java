@@ -66,6 +66,8 @@ import com.liferay.portal.kernel.servlet.filters.invoker.FilterMapping;
 import com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilterConfig;
 import com.liferay.portal.kernel.servlet.filters.invoker.InvokerFilterHelper;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
+import com.liferay.portal.kernel.store.Store;
+import com.liferay.portal.kernel.store.StoreUtil;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.struts.StrutsPortletAction;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
@@ -142,8 +144,6 @@ import com.liferay.portlet.DefaultControlPanelEntryFactory;
 import com.liferay.portlet.documentlibrary.antivirus.AntivirusScanner;
 import com.liferay.portlet.documentlibrary.antivirus.AntivirusScannerUtil;
 import com.liferay.portlet.documentlibrary.antivirus.AntivirusScannerWrapper;
-import com.liferay.portlet.documentlibrary.store.Store;
-import com.liferay.portlet.documentlibrary.store.StoreFactory;
 import com.liferay.portlet.documentlibrary.util.DLProcessor;
 import com.liferay.portlet.documentlibrary.util.DLProcessorRegistryUtil;
 import com.liferay.util.log4j.Log4JUtil;
@@ -411,7 +411,11 @@ public class HookHotDeployListener
 		}
 
 		if (portalProperties.containsKey(PropsKeys.DL_STORE_IMPL)) {
-			StoreFactory.setInstance(null);
+			Store store = StoreUtil.removeStore(_HOOK_STORE_ID);
+
+			if (store != null) {
+				store.destroy();
+			}
 		}
 
 		if (portalProperties.containsKey(
@@ -1780,7 +1784,15 @@ public class HookHotDeployListener
 			Store store = (Store)newInstance(
 				portletClassLoader, Store.class, storeClassName);
 
-			StoreFactory.setInstance(store);
+			String propertiesKey = store.getInitPropertiesKey();
+
+			Properties storeProps = PropertiesUtil.getProperties(
+					portalProperties, propertiesKey, false);
+
+			store.init(storeProps);
+
+			StoreUtil.setStore(_HOOK_STORE_ID, store);
+			StoreUtil.setDefaultStoreId(_HOOK_STORE_ID);
 		}
 
 		if (portalProperties.containsKey(
@@ -2518,6 +2530,9 @@ public class HookHotDeployListener
 		ReleaseLocalServiceUtil.updateRelease(
 			release.getReleaseId(), buildNumber, null, true);
 	}
+
+	private static final String _HOOK_STORE_ID =
+		HookHotDeployListener.class.getName();
 
 	private static final String[] _PROPS_KEYS_EVENTS = {
 		LOGIN_EVENTS_POST, LOGIN_EVENTS_PRE, LOGOUT_EVENTS_POST,

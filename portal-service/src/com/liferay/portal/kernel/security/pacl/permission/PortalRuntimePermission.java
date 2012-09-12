@@ -24,6 +24,20 @@ import java.security.Permission;
  */
 public class PortalRuntimePermission extends BasicPermission {
 
+	public static void checkDestroy(Class<?> clazz) {
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if (securityManager == null) {
+			return;
+		}
+
+		Permission permission = new PortalRuntimePermission(
+			PACLConstants.PORTAL_RUNTIME_PERMISSION_DESTROY, clazz,
+			null);
+
+		securityManager.checkPermission(permission);
+	}
+
 	public static void checkExpandoBridge(String className) {
 		SecurityManager securityManager = System.getSecurityManager();
 
@@ -51,6 +65,20 @@ public class PortalRuntimePermission extends BasicPermission {
 		Permission permission = new PortalRuntimePermission(
 			PACLConstants.PORTAL_RUNTIME_PERMISSION_GET_BEAN_PROPERTY, clazz,
 			property);
+
+		securityManager.checkPermission(permission);
+	}
+
+	public static void checkInit(Class<?> clazz) {
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if (securityManager == null) {
+			return;
+		}
+
+		Permission permission = new PortalRuntimePermission(
+			PACLConstants.PORTAL_RUNTIME_PERMISSION_INIT, clazz,
+			null);
 
 		securityManager.checkPermission(permission);
 	}
@@ -83,6 +111,20 @@ public class PortalRuntimePermission extends BasicPermission {
 		Permission permission = new PortalRuntimePermission(
 			PACLConstants.PORTAL_RUNTIME_PERMISSION_SET_BEAN_PROPERTY, clazz,
 			property);
+
+		securityManager.checkPermission(permission);
+	}
+
+	public static void checkStore(String storeId) {
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if (securityManager == null) {
+			return;
+		}
+
+		Permission permission = new PortalRuntimePermission(
+			PACLConstants.PORTAL_RUNTIME_PERMISSION_STORE,
+			storeId);
 
 		securityManager.checkPermission(permission);
 	}

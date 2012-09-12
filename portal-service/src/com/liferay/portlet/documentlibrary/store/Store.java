@@ -24,10 +24,14 @@ import java.io.InputStream;
  * The interface for all file store implementations. Most, if not all
  * implementations should extend from the class {@link BaseStore}.
  *
+ * @deprecated After 6.1 please use
+ *             {@link com.liferay.portal.kernel.store.Store}
+ *
  * @author Brian Wing Shun Chan
  * @author Edward Han
  * @see    BaseStore
  */
+@Deprecated
 public interface Store {
 
 	public static final String VERSION_DEFAULT = "1.0";

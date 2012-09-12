@@ -23,7 +23,7 @@ import com.liferay.portal.test.ExecutionTestListeners;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.test.TransactionalExecutionTestListener;
 import com.liferay.portlet.documentlibrary.model.DLContent;
-import com.liferay.portlet.documentlibrary.store.Store;
+import com.liferay.portal.kernel.store.Store;
 
 import java.io.ByteArrayInputStream;
 

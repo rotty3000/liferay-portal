@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.log.Jdk14LogFactoryImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineUtil;
+import com.liferay.portal.kernel.store.StoreUtil;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.template.TemplateResourceLoaderUtil;
 import com.liferay.portal.kernel.util.CentralizedThreadLocal;
@@ -192,6 +193,15 @@ public class GlobalShutdownAction extends SimpleAction {
 
 		try {
 			Thread.sleep(1000);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Store
+
+		try {
+			StoreUtil.destroy();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

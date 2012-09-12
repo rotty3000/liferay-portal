@@ -29,13 +29,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * The abstract base class for all file store implementations. Most, if not all
- * implementations should extend this class.
+ * The abstract base class for all old file store implementations. Most, if not
+ * all implementations should now extend
+ * {@link com.liferay.portal.kernel.store.BaseStore}.
  *
  * @author Brian Wing Shun Chan
  * @author Alexander Chow
  * @author Edward Han
+ *
+ * @deprecated After 6.1. please use
+ *             {@link com.liferay.portal.kernel.store.BaseStore}
  */
+@Deprecated
 public abstract class BaseStore implements Store {
 
 	/**

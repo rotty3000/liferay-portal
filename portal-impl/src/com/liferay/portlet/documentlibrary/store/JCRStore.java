@@ -21,10 +21,10 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.jcr.Binary;
 import javax.jcr.Node;
@@ -60,7 +62,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class JCRStore extends BaseStore {
+public class JCRStore extends com.liferay.portal.kernel.store.BaseStore {
 
 	@Override
 	public void addDirectory(long companyId, long repositoryId, String dirName)
@@ -427,6 +429,10 @@ public class JCRStore extends BaseStore {
 		}
 	}
 
+	public void destroy() throws PortalException, SystemException {
+		_hasInstance.set(false);
+	}
+
 	@Override
 	public InputStream getFileAsStream(
 			long companyId, long repositoryId, String fileName,
@@ -572,6 +578,10 @@ public class JCRStore extends BaseStore {
 		return size;
 	}
 
+	public String getInitPropertiesKey() {
+		return PropsKeys.DL_STORE_JCR;
+	}
+
 	@Override
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
@@ -615,6 +625,19 @@ public class JCRStore extends BaseStore {
 		}
 
 		return true;
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		_dlStoreJcrMoveVersionLabels = GetterUtil.getBoolean(
+			configuration.getProperty(
+				PropsKeys.DL_STORE_JCR_MOVE_VERSION_LABELS));
+
+		if(_hasInstance.get()){
+			throw new IllegalStateException(
+				"There can be only one instance of JCRStore!");
+		}
 	}
 
 	@Override
@@ -805,8 +828,7 @@ public class JCRStore extends BaseStore {
 					contentNode.getPath());
 
 			versionHistory.addVersionLabel(
-				version.getName(), versionLabel,
-				PropsValues.DL_STORE_JCR_MOVE_VERSION_LABELS);
+				version.getName(), versionLabel, _dlStoreJcrMoveVersionLabels);
 		}
 		catch (PathNotFoundException pnfe) {
 			throw new NoSuchFileException(
@@ -930,5 +952,9 @@ public class JCRStore extends BaseStore {
 
 		return getFolderNode(companyNode, JCRFactory.NODE_DOCUMENTLIBRARY);
 	}
+
+	private static AtomicBoolean _hasInstance = new AtomicBoolean();
+
+	private boolean _dlStoreJcrMoveVersionLabels;
 
 }

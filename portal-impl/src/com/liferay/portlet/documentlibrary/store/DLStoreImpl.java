@@ -691,8 +691,8 @@ public class DLStoreImpl implements DLStore {
 	@BeanReference(type = GroupLocalService.class)
 	protected GroupLocalService groupLocalService;
 
-	@BeanReference(type = Store.class)
-	protected Store store;
+	@BeanReference(type = com.liferay.portlet.documentlibrary.store.Store.class)
+	protected com.liferay.portal.kernel.store.Store store;
 
 	private static final String[] _KEYWORDS_FIELDS = {
 		Field.ASSET_TAG_NAMES, Field.CONTENT, Field.PROPERTIES

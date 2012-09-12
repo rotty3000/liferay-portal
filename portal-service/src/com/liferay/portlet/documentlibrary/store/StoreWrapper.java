@@ -20,13 +20,15 @@ import com.liferay.portal.kernel.exception.SystemException;
 import java.io.File;
 import java.io.InputStream;
 
+import java.util.Properties;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class StoreWrapper implements Store {
+public class StoreWrapper implements com.liferay.portal.kernel.store.Store {
 
-	public StoreWrapper(Store store) {
+	public StoreWrapper(com.liferay.portal.kernel.store.Store store) {
 		_store = store;
 	}
 
@@ -90,6 +92,10 @@ public class StoreWrapper implements Store {
 		throws PortalException, SystemException {
 
 		_store.deleteFile(companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		_store.destroy();
 	}
 
 	public File getFile(long companyId, long repositoryId, String fileName)
@@ -157,6 +163,10 @@ public class StoreWrapper implements Store {
 		return _store.getFileSize(companyId, repositoryId, fileName);
 	}
 
+	public String getInitPropertiesKey() {
+		return _store.getInitPropertiesKey();
+	}
+
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
@@ -176,6 +186,12 @@ public class StoreWrapper implements Store {
 		throws PortalException, SystemException {
 
 		return _store.hasFile(companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		_store.init(configuration);
 	}
 
 	public void move(String srcDir, String destDir) throws SystemException {
@@ -234,6 +250,6 @@ public class StoreWrapper implements Store {
 			toVersionLabel);
 	}
 
-	private Store _store;
+	private com.liferay.portal.kernel.store.Store _store;
 
 }

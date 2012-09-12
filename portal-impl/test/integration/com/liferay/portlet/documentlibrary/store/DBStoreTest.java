@@ -62,7 +62,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		// UnsyncByteArrayInputStream
 
@@ -108,7 +108,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		// ByteArrayInputStream
 
@@ -122,7 +122,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		// BufferedInputStream
 
@@ -136,7 +136,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 	}
 
 	@Test
@@ -157,19 +157,19 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName1, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName1, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName2, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName2, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		_store.deleteDirectory(companyId, repositoryId, directory);
 
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName1, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName1, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName2, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName2, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		// Two levels deep
 
@@ -184,19 +184,19 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName1, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName1, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName2, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName2, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		_store.deleteDirectory(companyId, repositoryId, directory);
 
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName1, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName1, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName2, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName2, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertTrue(
 			_store.hasFile(companyId, repositoryId, fileName, "1.1"));
 
@@ -217,7 +217,7 @@ public class DBStoreTest {
 
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 		Assert.assertFalse(
 			_store.hasFile(companyId, repositoryId, fileName, "1.1"));
 	}
@@ -235,14 +235,14 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		_store.deleteFile(
-			companyId, repositoryId, fileName, Store.VERSION_DEFAULT);
+			companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT);
 
 		Assert.assertFalse(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		// 1.1
 
@@ -569,7 +569,7 @@ public class DBStoreTest {
 
 		Assert.assertTrue(
 			_store.hasFile(
-				companyId, repositoryId, fileName, Store.VERSION_DEFAULT));
+				companyId, repositoryId, fileName, com.liferay.portal.kernel.store.Store.VERSION_DEFAULT));
 
 		for (int i = 1; i <= newVersionCount; i++) {
 			Assert.assertTrue(
@@ -598,7 +598,7 @@ public class DBStoreTest {
 
 	private static final byte[] _DATA_VERSION_2 = new byte[_DATA_SIZE];
 
-	private static Store _store = new DBStore();
+	private static com.liferay.portal.kernel.store.Store _store = new DBStore();
 
 	static {
 		for (int i = 0; i < _DATA_SIZE; i++) {

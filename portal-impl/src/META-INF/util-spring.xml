@@ -317,6 +317,11 @@
 			<bean class="com.liferay.portal.staging.permission.StagingPermissionImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.store.StoreFactoryUtil" class="com.liferay.portal.kernel.store.StoreFactoryUtil">
+		<property name="storeFactory">
+			<bean class="com.liferay.portal.store.StoreFactoryImpl" />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.template.TemplateManagerUtil" class="com.liferay.portal.kernel.template.TemplateManagerUtil">
 		<property name="templateManagers">
 			<list>

@@ -16,20 +16,27 @@ package com.liferay.portlet.documentlibrary.store;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.store.StoreUtil;
 
 import java.io.File;
 import java.io.InputStream;
+
+import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Edward Han
  */
-public class StoreProxyImpl implements Store {
+public class StoreProxyImpl implements com.liferay.portal.kernel.store.Store {
+
+	private com.liferay.portal.kernel.store.Store getStore(){
+		return StoreUtil.getDefaultStore();
+	}
 
 	public void addDirectory(long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.addDirectory(companyId, repositoryId, dirName);
 	}
@@ -38,7 +45,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String fileName, byte[] bytes)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.addFile(companyId, repositoryId, fileName, bytes);
 	}
@@ -47,7 +54,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String fileName, File file)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.addFile(companyId, repositoryId, fileName, file);
 	}
@@ -56,13 +63,13 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String fileName, InputStream is)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.addFile(companyId, repositoryId, fileName, is);
 	}
 
 	public void checkRoot(long companyId) throws SystemException {
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.checkRoot(companyId);
 	}
@@ -72,7 +79,7 @@ public class StoreProxyImpl implements Store {
 			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.copyFileVersion(
 			companyId, repositoryId, fileName, fromVersionLabel,
@@ -83,7 +90,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.deleteDirectory(companyId, repositoryId, dirName);
 	}
@@ -91,7 +98,7 @@ public class StoreProxyImpl implements Store {
 	public void deleteFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.deleteFile(companyId, repositoryId, fileName);
 	}
@@ -101,15 +108,21 @@ public class StoreProxyImpl implements Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.deleteFile(companyId, repositoryId, fileName, versionLabel);
+	}
+
+	public void destroy() throws PortalException, SystemException {
+		com.liferay.portal.kernel.store.Store store = getStore();
+
+		store.destroy();
 	}
 
 	public File getFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFile(companyId, repositoryId, fileName);
 	}
@@ -119,7 +132,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFile(companyId, repositoryId, fileName, versionLabel);
 	}
@@ -128,7 +141,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileAsBytes(companyId, repositoryId, fileName);
 	}
@@ -138,7 +151,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileAsBytes(
 			companyId, repositoryId, fileName, versionLabel);
@@ -148,7 +161,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileAsStream(companyId, repositoryId, fileName);
 	}
@@ -158,7 +171,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileAsStream(
 			companyId, repositoryId, fileName, versionLabel);
@@ -167,7 +180,7 @@ public class StoreProxyImpl implements Store {
 	public String[] getFileNames(long companyId, long repositoryId)
 		throws SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileNames(companyId, repositoryId);
 	}
@@ -176,7 +189,7 @@ public class StoreProxyImpl implements Store {
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileNames(companyId, repositoryId, dirName);
 	}
@@ -184,16 +197,22 @@ public class StoreProxyImpl implements Store {
 	public long getFileSize(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.getFileSize(companyId, repositoryId, fileName);
+	}
+
+	public String getInitPropertiesKey() {
+		com.liferay.portal.kernel.store.Store store = getStore();
+
+		return store.getInitPropertiesKey();
 	}
 
 	public boolean hasDirectory(
 			long companyId, long repositoryId, String dirName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.hasDirectory(companyId, repositoryId, dirName);
 	}
@@ -201,7 +220,7 @@ public class StoreProxyImpl implements Store {
 	public boolean hasFile(long companyId, long repositoryId, String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.hasFile(companyId, repositoryId, fileName);
 	}
@@ -211,13 +230,21 @@ public class StoreProxyImpl implements Store {
 			String versionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		return store.hasFile(companyId, repositoryId, fileName, versionLabel);
 	}
 
+	public void init(Properties configuration)
+		throws PortalException, SystemException {
+
+		com.liferay.portal.kernel.store.Store store = getStore();
+
+		store.init(configuration);
+	}
+
 	public void move(String srcDir, String destDir) throws SystemException {
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.move(srcDir, destDir);
 	}
@@ -227,7 +254,7 @@ public class StoreProxyImpl implements Store {
 			String fileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFile(companyId, repositoryId, newRepositoryId, fileName);
 	}
@@ -237,7 +264,7 @@ public class StoreProxyImpl implements Store {
 			String newFileName)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFile(companyId, repositoryId, fileName, newFileName);
 	}
@@ -247,7 +274,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel, byte[] bytes)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFile(
 			companyId, repositoryId, fileName, versionLabel, bytes);
@@ -258,7 +285,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel, File file)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFile(companyId, repositoryId, fileName, versionLabel, file);
 	}
@@ -268,7 +295,7 @@ public class StoreProxyImpl implements Store {
 			String versionLabel, InputStream is)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFile(companyId, repositoryId, fileName, versionLabel, is);
 	}
@@ -278,7 +305,7 @@ public class StoreProxyImpl implements Store {
 			String fromVersionLabel, String toVersionLabel)
 		throws PortalException, SystemException {
 
-		Store store = StoreFactory.getInstance();
+		com.liferay.portal.kernel.store.Store store = getStore();
 
 		store.updateFileVersion(
 			companyId, repositoryId, fileName, fromVersionLabel,
