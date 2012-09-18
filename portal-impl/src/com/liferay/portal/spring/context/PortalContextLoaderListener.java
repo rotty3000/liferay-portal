@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.ClearTimerThreadUtil;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.MethodCache;
+import com.liferay.portal.kernel.util.PortalLifecycle;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -156,7 +157,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		InitUtil.init();
 
-		ServletContext servletContext = servletContextEvent.getServletContext();
+		final ServletContext servletContext =
+			servletContextEvent.getServletContext();
 
 		ClassPathUtil.initializeClassPaths(servletContext);
 
@@ -237,7 +239,20 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
 			try {
 				ModuleFrameworkUtil.registerContext(applicationContext);
-				ModuleFrameworkUtil.registerContext(servletContext);
+
+				PortalLifecycleUtil.register(
+					new PortalLifecycle() {
+
+						public void portalInit() {
+							ModuleFrameworkUtil.registerContext(servletContext);
+						}
+
+						public void portalDestroy() {
+							// not needed
+						}
+
+					}
+				);
 
 				ModuleFrameworkUtil.startRuntime();
 			}
