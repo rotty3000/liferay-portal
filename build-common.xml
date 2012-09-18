@@ -39,10 +39,16 @@
 
 	<property name="liferay.home" value="${app.server.parent.dir}" />
 
+	<property name="module.framework.lib.dir" value="${liferay.home}/data/framework/lib" />
+
 	<path id="lib.classpath">
 		<fileset dir="${project.dir}/lib/development" includes="*.jar" />
 		<fileset dir="${project.dir}/lib/global" includes="*.jar" />
 		<fileset dir="${project.dir}/lib/portal" includes="*.jar" />
+
+		<!-- All other libs should take precedence over these -->
+
+		<fileset dir="${project.dir}/lib/framework" includes="*.jar" />
 	</path>
 
 	<path id="project.classpath">
@@ -73,6 +79,9 @@
 
 	<taskdef classname="com.tonicsystems.jarjar.JarJarTask" classpath="${project.dir}/lib/development/jarjar.jar" name="jarjar" />
 	<taskdef classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="${project.dir}/lib/development/xmltask.jar" name="xmltask" />
+
+	<var name="module.classes.dir" value="classes" />
+	<var name="module.src.dir" value="src" />
 
 	<property name="doc.dir" value="${project.dir}/api" />
 
@@ -396,7 +405,15 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</sequential>
 	</macrodef>
 
+	<target name="clean-module">
+		<ant dir="${project.dir}/portal-modules/${module.name}" target="clean" inheritAll="false" />
+	</target>
+
 	<target name="compile">
+	</target>
+
+	<target name="compile-module">
+		<ant dir="${project.dir}/portal-modules/${module.name}" target="compile"  inheritAll="false" />
 	</target>
 
 	<target name="compile-test">
@@ -450,6 +467,10 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</ant>
 	</target>
 
+	<target name="deploy-module">
+		<ant dir="${project.dir}/portal-modules/${module.name}" target="deploy" inheritAll="false" />
+	</target>
+
 	<target name="format-javadoc">
 		<echo message="Run &quot;ant compile-test&quot; in portal-impl before using format-javadoc to generate @Override tags." />
 
@@ -490,6 +511,29 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				</cobertura-instrument>
 			</then>
 		</if>
+	</target>
+
+	<target name="jar-module">
+		<ant dir="${project.dir}/portal-modules/${module.name}" target="jar" inheritAll="false" />
+	</target>
+
+	<target name="loop-modules">
+		<for param="module.name">
+			<path>
+				<dirset dir="${project.dir}/portal-modules" includes="*" />
+			</path>
+			<sequential>
+				<antelope:stringutil string="@{module.name}" property="module.name.unix">
+					<antelope:replace regex="\\" replacement="/" />
+				</antelope:stringutil>
+
+				<antelope:grep in="${module.name.unix}" regex="(.*/)(.*)" group="2" property="module.name" />
+
+				<echo message="${module.name}"></echo>
+
+				<antcall target="${loop.modules.cmd}" />
+			</sequential>
+		</for>
 	</target>
 
 	<target name="print-current-time">
@@ -774,5 +818,16 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</ant>
 
 		<antcall target="report-test-coverage" />
+	</target>
+
+	<target name="wrap-jar" description="Wrap non OSGI jar into a valid bundle">
+		<bndwrap definitions="${definitions}" output="${output.folder}">
+			<fileset dir="${project.dir}/lib/" includes="**/${file}.jar" />
+		</bndwrap>
+
+		<move overwrite="true" todir="${output.folder}" >
+			<fileset dir="${output.folder}" includes="${file}.bar" />
+			<mapper type="glob" from="${file}.bar" to="${file}.jar" />
+		</move>
 	</target>
 </project>

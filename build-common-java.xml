@@ -17,7 +17,7 @@
 	</if>
 
 	<target name="clean">
-		<delete dir="classes" />
+		<delete dir="${module.classes.dir}" />
 		<delete dir="test-classes" />
 		<delete dir="test-results" />
 		<delete dir="woven-classes" />
@@ -41,12 +41,12 @@
 			</then>
 		</if>
 
-		<mkdir dir="classes" />
+		<mkdir dir="${module.classes.dir}" />
 
 		<antcall target="compile-java">
 			<param name="javac.classpathref" value="project.classpath" />
-			<param name="javac.destdir" value="classes" />
-			<param name="javac.srcdir" value="src" />
+			<param name="javac.destdir" value="${module.classes.dir}" />
+			<param name="javac.srcdir" value="${module.src.dir}" />
 		</antcall>
 	</target>
 
@@ -90,7 +90,7 @@
 				>
 					<bndfiles path="bnd.bnd" />
 					<classpath>
-						<pathelement location="classes" />
+						<pathelement location="${module.classes.dir}" />
 					</classpath>
 				</bnd>
 			</then>
@@ -98,9 +98,9 @@
 				<antcall target="manifest" />
 
 				<jar
-					basedir="classes"
+					basedir="${module.classes.dir}"
 					jarfile="${jar.file}.jar"
-					manifest="classes/META-INF/MANIFEST.MF"
+					manifest="${module.classes.dir}/META-INF/MANIFEST.MF"
 				/>
 			</else>
 		</if>
@@ -115,7 +115,7 @@
 
 	<target name="jar-sources">
 		<jar
-			basedir="src"
+			basedir="${module.src.dir}"
 			jarfile="${jar.file}-sources.jar"
 		/>
 	</target>
@@ -129,7 +129,7 @@
 			destdir="${doc.dir}/${ant.project.name}/javadocs"
 			maxmemory="768m"
 			packagenames="*.*"
-			sourcepath="src"
+			sourcepath="${module.src.dir}"
 			stylesheetfile="${project.dir}/tools/javadoc.css"
 			useexternalfile="yes"
 		>

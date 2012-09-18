@@ -22,6 +22,8 @@
 
 		<ant dir="portal-impl" target="clean" inheritAll="false" />
 
+		<ant dir="portal-modules" target="clean" inheritAll="false" />
+
 		<ant dir="portal-web" target="clean" inheritAll="false" />
 
 		<ant dir="sql" target="clean" inheritAll="false" />
@@ -140,6 +142,8 @@
 		<ant dir="util-taglib" target="compile" inheritAll="false" />
 
 		<ant dir="portal-impl" target="compile" inheritAll="false" />
+
+		<ant dir="portal-modules" target="compile" inheritAll="false" />
 	</target>
 
 	<target name="deploy">
@@ -181,6 +185,8 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 
 		<ant dir="portal-impl" target="deploy" inheritAll="false" />
 
+		<ant dir="portal-modules" target="deploy" inheritAll="false" />
+
 		<ant dir="portal-web" target="deploy" inheritAll="false" />
 
 		<copy todir="${liferay.home}/data/hsql">
@@ -211,6 +217,15 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 
 		<copy todir="${app.server.lib.portal.dir}">
 			<fileset dir="lib/portal" />
+		</copy>
+
+		<copy todir="${app.server.lib.portal.dir}">
+			<fileset dir="lib/framework/${module.framework.implementation}" includes="*.jar" />
+		</copy>
+
+		<copy todir="${module.framework.lib.dir}" failonerror="false">
+			<fileset dir="lib/framework" includes="*.jar" />
+			<fileset dir="lib/framework/${module.framework.implementation}/libs" includes="*.jar" />
 		</copy>
 
 		<if>
@@ -473,6 +488,8 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 		<ant dir="util-taglib" target="jar" inheritAll="false" />
 
 		<ant dir="portal-impl" target="jar" inheritAll="false" />
+
+		<ant dir="portal-modules" target="jar" inheritAll="false" />
 
 		<ant dir="portal-web" target="war" inheritAll="false" />
 
