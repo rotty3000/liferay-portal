@@ -43,8 +43,25 @@ import javax.servlet.ServletException;
 
 /**
  * @author Shuyang Zhou
+ * @author Raymond Augé
  */
 public class ClassPathUtil {
+
+	public static List<File> getClassPathFiles(String classPath) {
+		String[] paths = StringUtil.split(classPath, File.pathSeparatorChar);
+
+		List<File> files = new ArrayList<File>();
+
+		for (String path : paths) {
+			File file = new File(path);
+
+			if (file.exists() && file.canRead()) {
+				files.add(file);
+			}
+		}
+
+		return files;
+	}
 
 	public static URL[] getClassPathURLs(String classPath)
 		throws MalformedURLException {
