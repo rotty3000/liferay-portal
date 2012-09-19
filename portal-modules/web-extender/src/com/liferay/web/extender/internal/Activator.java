@@ -41,7 +41,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.url.URLConstants;
 import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -82,7 +81,7 @@ public class Activator
 			new PortalHttpContext(servletContext));
 
 		try {
-			_osgiServlet = new WebExtenderServlet();
+			_osgiServlet = new WebExtenderServlet(bundleContext);
 
 			_osgiServlet.init(servletConfig);
 
@@ -111,19 +110,8 @@ public class Activator
 		return servletContext;
 	}
 
-	public static BundleContext getBundleContext() {
+	public BundleContext getBundleContext() {
 		return _bundleContext;
-	}
-
-	public static PackageAdmin getPackageAdmin() {
-		try {
-			return _packageAdminTracker.waitForService(10000);
-		}
-		catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-
-			return null;
-		}
 	}
 
 	public void modifiedService(
@@ -175,20 +163,14 @@ public class Activator
 				bundleContext, filter, this);
 
 		_servletContextTracker.open();
-
-		_packageAdminTracker = new ServiceTracker(
-			bundleContext, PackageAdmin.class.getName(), null);
-		_packageAdminTracker.open();
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
-		_packageAdminTracker.close();
 		_servletContextTracker.close();
 
 		EventUtil.close();
 
 		_bundleContext = null;
-		_packageAdminTracker = null;
 		_servletContextTracker = null;
 	}
 
@@ -210,12 +192,9 @@ public class Activator
 
 	private static Log _log = LogFactoryUtil.getLog(Activator.class);
 
-	private static BundleContext _bundleContext;
-	private static ServiceTracker<PackageAdmin, PackageAdmin>
-		_packageAdminTracker;
-
 	private ServiceRegistration<ArtifactUrlTransformer>
 		_artifactUrlTransformerRegistration;
+	private BundleContext _bundleContext;
 	private BundleStartListener _bundleStartListener;
 	private BundleStopListener _bundleStopListener;
 	private WebExtenderServlet _osgiServlet;

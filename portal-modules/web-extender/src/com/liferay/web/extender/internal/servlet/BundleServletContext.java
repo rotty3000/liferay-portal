@@ -28,10 +28,12 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.struts.AuthPublicPathRegistry;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.web.extender.internal.http.DefaultHttpContext;
 import com.liferay.web.extender.internal.http.HttpServiceTracker;
 import com.liferay.web.extender.servlet.BundleServletConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
@@ -86,6 +88,7 @@ public class BundleServletContext extends LiferayServletContext
 		super(webExtenderServlet.getServletContext());
 
 		_bundle = bundle;
+		_httpContext = new DefaultHttpContext(_bundle);
 		_webExtenderServlet = webExtenderServlet;
 	}
 
@@ -199,6 +202,10 @@ public class BundleServletContext extends LiferayServletContext
 		return _contextPath;
 	}
 
+	public HttpContext getHttpContext() {
+		return _httpContext;
+	}
+
 	@Override
 	public String getInitParameter(String name) {
 		return _initParams.get(name);
@@ -208,6 +215,11 @@ public class BundleServletContext extends LiferayServletContext
 	@SuppressWarnings("unchecked")
 	public Enumeration<String> getInitParameterNames() {
 		return Collections.enumeration(_initParams.keySet());
+	}
+
+	@Override
+	public String getMimeType(String name) {
+		return super.getMimeType(name);
 	}
 
 	@Override
@@ -300,46 +312,20 @@ public class BundleServletContext extends LiferayServletContext
 
 	@Override
 	public URL getResource(String path) throws MalformedURLException {
-		String filePattern = path;
-
-		int pos = path.lastIndexOf(StringPool.SLASH);
-
-		if (pos != -1) {
-			filePattern = path.substring(pos + 1);
-			path = path.substring(0, pos);
-		}
-
-		Enumeration<URL> findEntries = _bundle.findEntries(
-			path, filePattern, false);
-
-		if ((findEntries != null) && findEntries.hasMoreElements()) {
-			return findEntries.nextElement();
-		}
-
-		return null;
+		return _httpContext.getResource(path);
 	}
 
 	@Override
 	public InputStream getResourceAsStream(String path) {
-		String filePattern = path;
+		try {
+			URL resourceURL = getResource(path);
 
-		int pos = path.lastIndexOf(StringPool.SLASH);
-
-		if (pos != -1) {
-			filePattern = path.substring(pos + 1);
-			path = path.substring(0, pos);
+			if (resourceURL != null) {
+				return resourceURL.openStream();
+			}
 		}
-
-		Enumeration<URL> findEntries = _bundle.findEntries(
-			path, filePattern, false);
-
-		if ((findEntries != null) && findEntries.hasMoreElements()) {
-			try {
-				return findEntries.nextElement().openStream();
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
+		catch (IOException e) {
+			_log.error(e, e);
 		}
 
 		return null;
@@ -395,9 +381,9 @@ public class BundleServletContext extends LiferayServletContext
 		BundleContext bundleContext = _bundle.getBundleContext();
 
 		_servletContextRegistration = bundleContext.registerService(
-				ServletContext.class, this, properties);
+			ServletContext.class, this, properties);
 
-		_httpServiceTracker = new HttpServiceTracker(bundleContext);
+		_httpServiceTracker = new HttpServiceTracker(bundleContext, _bundle);
 
 		_httpServiceTracker.open();
 	}
@@ -869,6 +855,7 @@ public class BundleServletContext extends LiferayServletContext
 	private String _contextPath;
 	private Map<String, Filter> _filtersMap =
 		new ConcurrentHashMap<String, Filter>();
+	private HttpContext _httpContext;
 	private Map<String, String> _initParams = new HashMap<String, String>();
 	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private HttpServiceTracker _httpServiceTracker;

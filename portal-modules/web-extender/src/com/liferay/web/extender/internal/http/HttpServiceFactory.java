@@ -16,7 +16,6 @@ package com.liferay.web.extender.internal.http;
 
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.web.extender.internal.Activator;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 import com.liferay.web.extender.internal.servlet.WebExtenderServlet;
 
@@ -40,45 +39,45 @@ import org.osgi.service.http.HttpService;
  */
 public class HttpServiceFactory implements ServiceFactory<HttpService> {
 
-	public HttpServiceFactory(WebExtenderServlet webExtenderServlet) {
+	public HttpServiceFactory(
+		BundleContext bundleContext, WebExtenderServlet webExtenderServlet) {
+
+		_bundleContext = bundleContext;
 		_webExtenderServlet = webExtenderServlet;
 	}
 
 	public HttpService getService(
 		Bundle bundle, ServiceRegistration<HttpService> serviceRegistration) {
 
-		ServiceReference<ServletContext> servletContextReference = null;
+		Dictionary<String,String> headers = bundle.getHeaders();
+
+		String webContextPath = headers.get("Web-ContextPath");
+
+		StringBundler sb = new StringBundler(7);
+
+		sb.append("(&(osgi.web.symbolicname=");
+		sb.append(bundle.getSymbolicName());
+		sb.append(")(osgi.web.version=");
+		sb.append(bundle.getVersion().toString());
+		sb.append(")(osgi.web.contextpath=");
+		sb.append(webContextPath);
+		sb.append("))");
 
 		try {
-			Dictionary<String,String> headers = bundle.getHeaders();
-
-			String webContextPath = headers.get("Web-ContextPath");
-
-			StringBundler sb = new StringBundler(7);
-
-			sb.append("(&(osgi.web.symbolicname=");
-			sb.append(bundle.getSymbolicName());
-			sb.append(")(osgi.web.version=");
-			sb.append(bundle.getVersion().toString());
-			sb.append(")(osgi.web.contextpath=");
-			sb.append(webContextPath);
-			sb.append("))");
-
-			BundleContext bundleContext = Activator.getBundleContext();
-
-			Filter filter = bundleContext.createFilter(sb.toString());
+			Filter filter = _bundleContext.createFilter(sb.toString());
 
 			Collection<ServiceReference<ServletContext>> serviceReferences =
-				bundleContext.getServiceReferences(
+				_bundleContext.getServiceReferences(
 					ServletContext.class, filter.toString());
 
 			Iterator<ServiceReference<ServletContext>> iterator =
 				serviceReferences.iterator();
 
 			if (iterator.hasNext()) {
-				servletContextReference = iterator.next();
+				ServiceReference<ServletContext> servletContextReference =
+					iterator.next();
 
-				ServletContext servletContext = bundleContext.getService(
+				ServletContext servletContext = _bundleContext.getService(
 					servletContextReference);
 
 				return new HttpServiceWrapper(
@@ -122,11 +121,10 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 	}
 
 	protected String getBundleContextName(Bundle bundle) {
-		String symbolicName = bundle.getSymbolicName();
-
-		return symbolicName.replaceAll("\\W", "");
+		return String.valueOf(bundle.getBundleId());
 	}
 
+	private BundleContext _bundleContext;
 	private WebExtenderServlet _webExtenderServlet;
 
 }

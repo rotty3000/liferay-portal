@@ -26,7 +26,6 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.web.extender.internal.Activator;
 import com.liferay.web.extender.internal.http.ExtendedHttpService;
 import com.liferay.web.extender.internal.http.HttpServiceFactory;
 
@@ -41,6 +40,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
 
@@ -52,7 +52,8 @@ public class WebExtenderServlet extends PortletServlet
 
 	public static final String NAME = "Web Extender Servlet";
 
-	public WebExtenderServlet() {
+	public WebExtenderServlet(BundleContext bundleContext) {
+		_bundleContext = bundleContext;
 	}
 
 	@Override
@@ -65,9 +66,10 @@ public class WebExtenderServlet extends PortletServlet
 		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
 		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
 
-		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(this);
+		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
+			_bundleContext, this);
 
-		_serviceRegistration = Activator.getBundleContext().registerService(
+		_serviceRegistration = _bundleContext.registerService(
 			new String[] {
 				HttpService.class.getName(),
 				ExtendedHttpService.class.getName()},
@@ -98,6 +100,10 @@ public class WebExtenderServlet extends PortletServlet
 		service(request, response);
 
 		return null;
+	}
+
+	public BundleContext getBundleContext() {
+		return _bundleContext;
 	}
 
 	@Override
@@ -231,6 +237,7 @@ public class WebExtenderServlet extends PortletServlet
 		}
 	}
 
+	private BundleContext _bundleContext;
 	private ServiceRegistration<?> _serviceRegistration;
 
 }
