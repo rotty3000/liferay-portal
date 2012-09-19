@@ -72,15 +72,6 @@ public class ModuleAdminPortlet extends FreeMarkerPortlet {
 	}
 
 	@Override
-	public void destroy() {
-		_packageAdminTracker.close();
-
-		_packageAdminTracker = null;
-
-		super.destroy();
-	}
-
-	@Override
 	public void processAction(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException {

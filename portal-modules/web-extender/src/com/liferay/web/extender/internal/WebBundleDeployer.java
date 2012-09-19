@@ -46,7 +46,9 @@ public class WebBundleDeployer implements ModuleFrameworkConstants {
 	}
 
 	public void close() {
-		for (Bundle bundle : Activator.getBundleContext().getBundles()) {
+		BundleContext bundleContext = _webExtenderServlet.getBundleContext();
+
+		for (Bundle bundle : bundleContext.getBundles()) {
 			String servletContextName =
 				BundleServletContext.getServletContextName(bundle);
 
@@ -81,11 +83,9 @@ public class WebBundleDeployer implements ModuleFrameworkConstants {
 			return;
 		}
 
-		BundleServletContext bundleServletContext = null;
-
 		try {
-			bundleServletContext = new BundleServletContext(
-				bundle, _webExtenderServlet);
+			BundleServletContext bundleServletContext =
+				new BundleServletContext(bundle, _webExtenderServlet);
 
 			bundleServletContext.open();
 
@@ -137,7 +137,7 @@ public class WebBundleDeployer implements ModuleFrameworkConstants {
 
 		Iterator<Long> iterator = _collidedWabBundleIds.iterator();
 
-		BundleContext bundleContext = Activator.getBundleContext();
+		BundleContext bundleContext = _webExtenderServlet.getBundleContext();
 
 		while (iterator.hasNext()) {
 			long bundleId = iterator.next();

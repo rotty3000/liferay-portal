@@ -37,7 +37,7 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 	}
 
 	public HttpContext createDefaultHttpContext() {
-		return new DefaultHttpContext(_bundleServletContext);
+		return _bundleServletContext.getHttpContext();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

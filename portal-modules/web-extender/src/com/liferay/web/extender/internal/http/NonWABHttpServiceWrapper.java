@@ -41,7 +41,7 @@ public class NonWABHttpServiceWrapper implements ExtendedHttpService, HttpServic
 	}
 
 	public HttpContext createDefaultHttpContext() {
-		return new DefaultHttpContext(_bundleServletContext);
+		return _bundleServletContext.getHttpContext();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
