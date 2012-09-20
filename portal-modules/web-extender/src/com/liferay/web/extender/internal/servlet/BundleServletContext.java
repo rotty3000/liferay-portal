@@ -88,8 +88,9 @@ public class BundleServletContext extends LiferayServletContext
 		super(webExtenderServlet.getServletContext());
 
 		_bundle = bundle;
-		_httpContext = new DefaultHttpContext(_bundle);
 		_webExtenderServlet = webExtenderServlet;
+
+		_httpContext = new DefaultHttpContext(_bundle);
 	}
 
 	public void close() {
@@ -223,6 +224,17 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	@Override
+	public String getRealPath(String path) {
+		URL resourceURL = _httpContext.getResource(path);
+
+		if (resourceURL != null) {
+			return resourceURL.toExternalForm();
+		}
+
+		return path;
+	}
+
+	@Override
 	public RequestDispatcher getRequestDispatcher(String path) {
 		String alias = path;
 
@@ -237,17 +249,14 @@ public class BundleServletContext extends LiferayServletContext
 		}
 
 		if (path.startsWith(MODULE_MAPPING) && path.endsWith(INVOKER_PATH)) {
-			bundleFilterChain.setServlet(_webExtenderServlet);
+			int pos = path.lastIndexOf(INVOKER_PATH);
 
-			if (path.startsWith(contextPath)) {
-				path = path.substring(contextPath.length());
+			if (alias.startsWith(contextPath)) {
+				alias = alias.substring(contextPath.length(), pos);
 			}
-
-			return new BundleRequestDispatcher(
-				path, false, path, this, bundleFilterChain);
 		}
 
-		if (!isValidPath(path)) {
+		if (!isValidPath(alias)) {
 			return null;
 		}
 
