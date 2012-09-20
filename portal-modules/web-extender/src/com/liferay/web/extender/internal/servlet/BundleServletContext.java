@@ -850,7 +850,7 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	private static final String[] _ILLEGAL_PATHS = new String[] {
-		"WEB-INF/", "OSGI-INF/", "META-INF/", "OSGI-OPT/"
+		"OSGI-INF/", "META-INF/", "OSGI-OPT/"
 	};
 
 	private static final String _EXTENSION_PREFIX = "*.";
