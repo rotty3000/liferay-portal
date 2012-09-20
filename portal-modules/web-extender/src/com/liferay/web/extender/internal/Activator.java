@@ -81,13 +81,14 @@ public class Activator
 			new PortalHttpContext(servletContext));
 
 		try {
-			_osgiServlet = new WebExtenderServlet(bundleContext);
+			_webExtenderServlet = new WebExtenderServlet(bundleContext);
 
-			_osgiServlet.init(servletConfig);
+			_webExtenderServlet.init(servletConfig);
 
-			StrutsActionRegistryUtil.register(MODULE_MAPPING, _osgiServlet);
+			StrutsActionRegistryUtil.register(
+				MODULE_MAPPING, _webExtenderServlet);
 
-			_webPluginDeployer = new WebBundleDeployer(_osgiServlet);
+			_webPluginDeployer = new WebBundleDeployer(_webExtenderServlet);
 
 			_bundleStartListener = new BundleStartListener(_webPluginDeployer);
 			_bundleStopListener = new BundleStopListener(_webPluginDeployer);
@@ -137,11 +138,11 @@ public class Activator
 		StrutsActionRegistryUtil.unregister(MODULE_MAPPING);
 
 		_webPluginDeployer.close();
-		_osgiServlet.destroy();
+		_webExtenderServlet.destroy();
 
 		_bundleStartListener = null;
 		_bundleStopListener = null;
-		_osgiServlet = null;
+		_webExtenderServlet = null;
 		_webPluginDeployer = null;
 	}
 
@@ -197,7 +198,7 @@ public class Activator
 	private BundleContext _bundleContext;
 	private BundleStartListener _bundleStartListener;
 	private BundleStopListener _bundleStopListener;
-	private WebExtenderServlet _osgiServlet;
+	private WebExtenderServlet _webExtenderServlet;
 	private ServiceTracker<ServletContext, ServletContext>
 		_servletContextTracker;
 	private WebBundleDeployer _webPluginDeployer;

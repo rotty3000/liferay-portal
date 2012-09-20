@@ -30,6 +30,8 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -47,6 +49,7 @@ import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.tools.deploy.BaseDeployer;
 import com.liferay.portal.util.Portal;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 import com.liferay.web.extender.internal.introspection.ClassLoaderSource;
@@ -62,9 +65,11 @@ import java.io.InputStream;
 
 import java.net.URI;
 
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.jar.Attributes;
@@ -211,6 +216,18 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				StringUtil.merge(classPath.keySet()));
 			analyzer.setClasspath(
 				classPath.values().toArray(new File[classPath.size()]));
+
+			Properties properties = PropsUtil.getProperties(
+				PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS.concat(
+					StringPool.PERIOD), true);
+
+			Enumeration<Object> keys = properties.keys();
+
+			while (keys.hasMoreElements()) {
+				String key = (String)keys.nextElement();
+
+				analyzer.setProperty(key, properties.getProperty(key));
+			}
 
 			// The order of these operations is important
 
@@ -406,6 +423,19 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 	protected void processDeclarativeReferences()
 		throws IOException {
 
+		for (String value :
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES) {
+
+			int pos = value.indexOf(StringPool.SEMICOLON);
+
+			if (pos != -1) {
+				value = value.substring(0, pos);
+			}
+
+			_importPackages.add(value.trim());
+		}
+
 		// References from web.xml
 
 		File xml = new File(_deployedAppFolder, "WEB-INF/web.xml");
@@ -414,19 +444,6 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processXmlDependencies(
 				xml, _WEBXML_CLASSREFERENCE_ELEMENTS, "x",
 				"http://java.sun.com/xml/ns/j2ee");
-
-			for (String value :
-					PropsValues.
-						MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES) {
-
-				int pos = value.indexOf(StringPool.SEMICOLON);
-
-				if (pos != -1) {
-					value = value.substring(0, pos);
-				}
-
-				_importPackages.add(value.trim());
-			}
 		}
 
 		// References from *.tld
@@ -449,22 +466,10 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processXmlDependencies(
 				xml, _PORTLETXML_CLASSREFERENCE_ELEMENTS, "x",
 				"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd");
-
-			for (String value :
-					PropsValues.
-						MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES) {
-
-				int pos = value.indexOf(StringPool.SEMICOLON);
-
-				if (pos != -1) {
-					value = value.substring(0, pos);
-				}
-
-				_importPackages.add(value.trim());
-			}
 		}
 
 		// References from liferay-web.xml
+		// TODO: remove this?
 
 //		xml = new File(_deployedAppFolder, "WEB-INF/liferay-web.xml");
 //
@@ -497,24 +502,17 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 	protected void processExportImportPackage(Analyzer analyzer)
 		throws IOException {
 
-		_importPackages.add("com.liferay.web.extender.servlet");
-		_importPackages.add("com.liferay.web.extender.servlet.jsp");
-		_importPackages.add("org.apache.jasper.runtime");
-		_importPackages.add("org.apache.jasper.servlet");
-		_importPackages.add("org.eclipse.jetty.servlet.listener");
-		_importPackages.add("org.eclipse.jetty.util");
-		_importPackages.add("org.eclipse.jetty.util.log");
-		_importPackages.add("org.glassfish.jsp.api");
+		String importPackage = analyzer.getProperty(Constants.IMPORT_PACKAGE);
 
-		String privatePackages = MapUtil.getString(
-			_parameterMap, aQute.lib.osgi.Constants.PRIVATE_PACKAGE);
+		if (Validator.isNotNull(importPackage)) {
+			String[] packageImports = StringUtil.split(importPackage);
 
-		if (Validator.isNotNull(privatePackages)) {
-			analyzer.setProperty(
-				aQute.lib.osgi.Constants.PRIVATE_PACKAGE, privatePackages);
+			for (String pachageImport : packageImports) {
+				_importPackages.add(pachageImport);
+			}
 		}
 
-		String importPackage = MapUtil.getString(
+		importPackage = MapUtil.getString(
 			_parameterMap, Constants.IMPORT_PACKAGE);
 
 		if (Validator.isNotNull(importPackage)) {
@@ -534,12 +532,6 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			analyzer.setProperty(Constants.IMPORT_PACKAGE, sb.toString());
 		}
-
-		analyzer.setProperty(
-			Constants.EXPORT_PACKAGE,
-			"!com.liferay.taglib.*,!com.liferay.util.*," +
-				"!org.apache.commons.logging.*,!org.apache.log4j.*," +
-					"!org.slf4j.impl.*,*");
 	}
 
 	protected void processLiferayPortletXML(String webContextpath)
@@ -681,7 +673,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		List<Element> portletElements = rootElement.elements("portlet");
 
 		for (Element portletElement : portletElements) {
-			String portletName = portletElement.elementText("portlet-name");
+			String portletName = PortalUtil.getJsSafePortletId(
+				portletElement.elementText("portlet-name"));
 
 			String invokerPortletName = MODULE.concat(webContextpath).concat(
 				StringPool.SLASH).concat(portletName);

@@ -43,6 +43,10 @@ public class DefaultHttpContext implements HttpContext {
 	}
 
 	public URL getResource(String path) {
+		if (!path.startsWith(StringPool.SLASH)) {
+			path = StringPool.SLASH.concat(path);
+		}
+
 		URL resourceURL = _bundle.getResource(path);
 
 		if (resourceURL != null) {
