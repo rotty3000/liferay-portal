@@ -20,6 +20,7 @@ import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
+import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.io.FileFilter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -147,7 +148,16 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		AutoDeploymentContext autoDeploymentContext =
 			buildAutoDeploymentContext(webContextpath);
 
-		doAutoDeploy(autoDeploymentContext);
+		boolean enabled = DependencyManagementThreadLocal.isEnabled();
+
+		try {
+			DependencyManagementThreadLocal.setEnabled(false);
+
+			doAutoDeploy(autoDeploymentContext);
+		}
+		finally {
+			DependencyManagementThreadLocal.setEnabled(enabled);
+		}
 
 		_deployedAppFolder = autoDeploymentContext.getDeployDir();
 

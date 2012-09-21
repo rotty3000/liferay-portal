@@ -37,6 +37,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,14 +63,19 @@ public class WebExtenderServlet extends PortletServlet
 
 		Hashtable<String,Object> properties = new Hashtable<String, Object>();
 
-		properties.put(BEAN_ID, HttpService.class.getName());
+		properties.put(BEAN_ID, HttpServlet.class.getName());
 		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
 		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
+
+		_httpServletRegistration = _bundleContext.registerService(
+			HttpServlet.class, this, properties);
 
 		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
 			_bundleContext, this);
 
-		_serviceRegistration = _bundleContext.registerService(
+		properties.put(BEAN_ID, HttpService.class.getName());
+
+		_httpServiceRegistration = _bundleContext.registerService(
 			new String[] {
 				HttpService.class.getName(),
 				ExtendedHttpService.class.getName()},
@@ -78,7 +84,8 @@ public class WebExtenderServlet extends PortletServlet
 
 	@Override
 	public void destroy() {
-		_serviceRegistration.unregister();
+		_httpServletRegistration.unregister();
+		_httpServiceRegistration.unregister();
 
 		super.destroy();
 	}
@@ -136,10 +143,12 @@ public class WebExtenderServlet extends PortletServlet
 		}
 		else {
 			if (requestURI != null) {
-				String pathMain = PortalUtil.getPathMain();
+				String pathContext = PortalUtil.getPathContext();
 
-				if (requestURI.startsWith(pathMain)) {
-					requestURI = requestURI.substring(pathMain.length());
+				if (Validator.isNotNull(pathContext) &&
+					requestURI.startsWith(pathContext)) {
+
+					requestURI = requestURI.substring(pathContext.length());
 				}
 
 				if (requestURI.startsWith(MODULE_MAPPING)) {
@@ -238,6 +247,7 @@ public class WebExtenderServlet extends PortletServlet
 	}
 
 	private BundleContext _bundleContext;
-	private ServiceRegistration<?> _serviceRegistration;
+	private ServiceRegistration<?> _httpServiceRegistration;
+	private ServiceRegistration<HttpServlet> _httpServletRegistration;
 
 }

@@ -19,6 +19,7 @@ import com.liferay.portal.deploy.auto.AutoDeployer;
 import com.liferay.portal.kernel.deploy.Deployer;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
+import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.License;
@@ -1249,10 +1250,18 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 	public String getExtraFiltersContent(double webXmlVersion, File srcFile)
 		throws Exception {
 
+		if (!DependencyManagementThreadLocal.isEnabled()) {
+			return StringPool.BLANK;
+		}
+
 		return getSessionFiltersContent();
 	}
 
 	public String getIgnoreFiltersContent(File srcFile) throws Exception {
+		if (!DependencyManagementThreadLocal.isEnabled()) {
+			return StringPool.BLANK;
+		}
+
 		boolean ignoreFiltersEnabled = true;
 
 		Properties properties = getPluginPackageProperties(srcFile);
