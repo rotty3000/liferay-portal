@@ -22,12 +22,14 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -168,10 +170,10 @@ public class ModuleFrameworkImpl
 			FELIX_FILEINSTALL_POLL,
 			String.valueOf(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL));
 		properties.put(FELIX_FILEINSTALL_TMPDIR,
-			System.getProperty("java.io.tmpdir"));
+			System.getProperty(SystemProperties.TMP_DIR));
 
 		Properties extraProperties = PropsUtil.getProperties(
-			"module.framework.extra.", true);
+			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
 
 		for (Object key : extraProperties.keySet()) {
 			String propertyKey = (String)key;
@@ -348,7 +350,7 @@ public class ModuleFrameworkImpl
 			}
 
 			File fragmentFile = new File(
-				System.getProperty("java.io.tmpdir"),
+				System.getProperty(SystemProperties.TMP_DIR),
 				fragmentFileName.concat(".jar"));
 
 			if (!fragmentFile.exists()) {

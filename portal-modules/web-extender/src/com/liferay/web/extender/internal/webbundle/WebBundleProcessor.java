@@ -228,8 +228,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				classPath.values().toArray(new File[classPath.size()]));
 
 			Properties properties = PropsUtil.getProperties(
-				PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS.concat(
-					StringPool.PERIOD), true);
+				PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS, true);
 
 			Enumeration<Object> keys = properties.keys();
 
