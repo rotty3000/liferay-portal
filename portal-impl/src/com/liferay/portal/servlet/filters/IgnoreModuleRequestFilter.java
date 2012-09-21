@@ -60,7 +60,8 @@ public abstract class IgnoreModuleRequestFilter extends BasePortalFilter {
 		return false;
 	}
 
-	private static final String _MODULE_PATH = PortalUtil.getPathMain().concat(
-		ModuleFrameworkConstants.MODULE_MAPPING);
+	private static final String _MODULE_PATH =
+		PortalUtil.getPathContext().concat(
+			ModuleFrameworkConstants.MODULE_MAPPING);
 
 }

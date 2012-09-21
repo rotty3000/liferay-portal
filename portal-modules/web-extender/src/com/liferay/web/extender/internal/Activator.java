@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
-import com.liferay.portal.struts.StrutsActionRegistryUtil;
 import com.liferay.web.extender.internal.artifact.WarArtifactListener;
 import com.liferay.web.extender.internal.event.EventUtil;
 import com.liferay.web.extender.internal.http.PortalHttpContext;
@@ -85,9 +84,6 @@ public class Activator
 
 			_webExtenderServlet.init(servletConfig);
 
-			StrutsActionRegistryUtil.register(
-				MODULE_MAPPING, _webExtenderServlet);
-
 			_webPluginDeployer = new WebBundleDeployer(_webExtenderServlet);
 
 			_bundleStartListener = new BundleStartListener(_webPluginDeployer);
@@ -134,8 +130,6 @@ public class Activator
 
 		bundleContext.removeBundleListener(_bundleStartListener);
 		bundleContext.removeBundleListener(_bundleStopListener);
-
-		StrutsActionRegistryUtil.unregister(MODULE_MAPPING);
 
 		_webPluginDeployer.close();
 		_webExtenderServlet.destroy();

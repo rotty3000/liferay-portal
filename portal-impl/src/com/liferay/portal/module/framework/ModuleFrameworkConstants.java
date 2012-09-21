@@ -61,7 +61,7 @@ public interface ModuleFrameworkConstants {
 
 	public static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
 
-	public static final String MODULE = "module";
+	public static final String MODULE = "o";
 
 	public static final String MODULE_MAPPING = "/" + MODULE + "/";
 

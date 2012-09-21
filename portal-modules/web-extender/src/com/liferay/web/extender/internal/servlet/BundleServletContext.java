@@ -193,7 +193,7 @@ public class BundleServletContext extends LiferayServletContext
 				sb.append(contextPath);
 			}
 
-			sb.append(PortalUtil.getPathMain());
+			sb.append(PortalUtil.getPathContext());
 			sb.append(MODULE_MAPPING);
 			sb.append(getServletContextName());
 
@@ -240,12 +240,14 @@ public class BundleServletContext extends LiferayServletContext
 
 		BundleFilterChain bundleFilterChain = getFilterChain(alias);
 
-		String pathMain = PortalUtil.getPathMain();
+		String pathContext = PortalUtil.getPathContext();
 
 		String contextPath = getContextPath();
 
-		if (contextPath.startsWith(pathMain)) {
-			contextPath = contextPath.substring(pathMain.length());
+		if (Validator.isNotNull(pathContext) &&
+			contextPath.startsWith(pathContext)) {
+
+			contextPath = contextPath.substring(pathContext.length());
 		}
 
 		if (path.startsWith(MODULE_MAPPING) && path.endsWith(INVOKER_PATH)) {
