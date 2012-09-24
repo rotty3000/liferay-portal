@@ -9,4 +9,4 @@ Import-Package: \
 	org.phidias.compile
 Export-Package: \
 	com.liferay.web.extender.servlet.jsp,\
-	javax.servlet.jsp.resources
+	javax.servlet.jsp.resources;version="2.2"
