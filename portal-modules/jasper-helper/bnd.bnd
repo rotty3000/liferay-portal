@@ -5,8 +5,8 @@ Import-Package: \
 	com.liferay.portal.kernel.log,\
 	com.liferay.portal.kernel.process,\
 	com.liferay.portal.module.framework,\
-	javax.servlet.jsp.resources,\
 	org.osgi.framework,\
 	org.phidias.compile
 Export-Package: \
-	com.liferay.web.extender.servlet.jsp
+	com.liferay.web.extender.servlet.jsp,\
+	javax.servlet.jsp.resources

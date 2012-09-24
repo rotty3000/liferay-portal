@@ -1,0 +1,4 @@
+Bundle-SymbolicName: webconsole-ext
+Fragment-Host: org.apache.felix.webconsole
+Include-Resource: classes
+Web-ContextPath: /fwc

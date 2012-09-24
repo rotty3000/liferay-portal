@@ -22,7 +22,9 @@ import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -30,6 +32,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 
+import org.apache.jasper.Constants;
 import org.apache.jasper.JspCompilationContext;
 import org.apache.jasper.compiler.ErrorDispatcher;
 import org.apache.jasper.compiler.Jsr199JavaCompiler;
@@ -51,6 +54,15 @@ public class JspCompiler extends Jsr199JavaCompiler {
 		super.init(ctxt, errDispatcher, suppressLogging);
 
 		ServletContext servletContext = ctxt.getServletContext();
+
+		Map<String, String[]> mappings = new HashMap<String, String[]>();
+
+		mappings.put(
+			"http://java.sun.com/jsp/jstl/core",
+			new String[] {"/WEB-INF/tld/c.tld", null});
+
+		servletContext.setAttribute(
+			Constants.JSP_TLD_URI_TO_LOCATION_MAP, mappings);
 
 		_bundle = (Bundle)servletContext.getAttribute(
 			ModuleFrameworkConstants.OSGI_BUNDLE);

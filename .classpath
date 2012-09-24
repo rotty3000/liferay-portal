@@ -25,7 +25,7 @@
 	<classpathentry kind="lib" path="lib/development/antelope.jar"/>
 	<classpathentry kind="lib" path="lib/development/ant-ext.jar"/>
 	<classpathentry kind="lib" path="lib/development/ant-installer.jar"/>
-	<classpathentry kind="lib" path="lib/development/catalina.jar"/>
+	<classpathentry kind="lib" path="lib/development/catalina.jar" sourcepath="/home/rotty/.m2/repository/org/apache/tomcat/tomcat-catalina/7.0.27/tomcat-catalina-7.0.27-sources.jar"/>
 	<classpathentry kind="lib" path="lib/development/ckpackager.jar"/>
 	<classpathentry kind="lib" path="lib/development/cobertura.jar"/>
 	<classpathentry kind="lib" path="lib/development/deployment.jar"/>
@@ -219,7 +219,7 @@
 	<classpathentry kind="lib" path="lib/portal/jsqlparser.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jstl-api.jar"/>
-	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803-sources.jar"/>
 	<classpathentry kind="lib" path="lib/portal/juh.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jurt.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jython.jar"/>

@@ -17,7 +17,7 @@
 
 		<path id="web-lib.classpath">
 			<fileset dir="${project.dir}/lib/development" includes="catalina.jar,tomcat-coyote.jar" />
-			<fileset dir="${project.dir}/lib/framework" includes="jasper.jar" />
+			<fileset dir="${project.dir}/lib/framework" includes="javax.servlet.jsp-2.2.7-SNAPSHOT.jar" />
 		</path>
 
 		<javac

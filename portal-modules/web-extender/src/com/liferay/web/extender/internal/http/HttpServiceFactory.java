@@ -16,6 +16,7 @@ package com.liferay.web.extender.internal.http;
 
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 import com.liferay.web.extender.internal.servlet.WebExtenderServlet;
 
@@ -84,7 +85,8 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 					(BundleServletContext)servletContext);
 			}
 
-			String bundleContextName = getBundleContextName(bundle);
+			String bundleContextName = getBundleContextName(
+				bundle, webContextPath);
 
 			ServletContext servletContext = ServletContextPool.get(
 				bundleContextName);
@@ -120,7 +122,13 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 		// Nothing to do here
 	}
 
-	protected String getBundleContextName(Bundle bundle) {
+	protected String getBundleContextName(
+		Bundle bundle, String webContextPath) {
+
+		if (Validator.isNotNull(webContextPath)) {
+			return webContextPath;
+		}
+
 		return String.valueOf(bundle.getBundleId());
 	}
 

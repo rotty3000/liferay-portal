@@ -1259,7 +1259,7 @@ Please set the property "jdk.6.home" in build.properties.
 			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
 			<pathelement location="${app.server.bin.dir}/tomcat-juli.jar" />
-			<pathelement location="${project.dir}/lib/framework/jasper.jar" />
+			<pathelement location="${project.dir}/lib/framework/javax.servlet.jsp-2.2.7-SNAPSHOT.jar" />
 		</path>
 
 		<antcall target="compile-common-jsp" inheritrefs="true">
