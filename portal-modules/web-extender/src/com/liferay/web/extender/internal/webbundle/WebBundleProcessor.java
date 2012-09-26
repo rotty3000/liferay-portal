@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.io.FileFilter;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceConfigurator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
@@ -56,7 +57,9 @@ import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 import com.liferay.web.extender.internal.introspection.ClassLoaderSource;
 import com.liferay.web.extender.internal.introspection.Source;
 import com.liferay.web.extender.internal.util.Util;
+import com.liferay.web.extender.jsonwebservice.JSONWebServiceConfiguratorImpl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -123,8 +126,17 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			File manifestFile = _getManifestFile();
 
-			writePath(
-				manifestFile, jarOutputStream, processedPaths, MANIFEST_PATH);
+			FileInputStream inputStream = null;
+
+			try {
+				inputStream = new FileInputStream(manifestFile);
+
+				writePath(
+					inputStream, jarOutputStream, processedPaths, MANIFEST_PATH);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
 
 			writeJarPaths(
 				_deployedAppFolder, _deployedAppFolder.toURI(), jarOutputStream,
@@ -909,13 +921,43 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				continue;
 			}
 
-			writePath(file, zipOutputStream, processedPaths, relativePath);
+			InputStream inputStream = null;
+
+			if (relativePath.equals("WEB-INF/service.xml")) {
+				try {
+					byte[] bytes =
+						JSONWebServiceConfiguratorImpl.class.getName().
+							getBytes(StringPool.UTF8);
+
+					inputStream = new ByteArrayInputStream(bytes);
+
+					String path =
+						"WEB-INF/classes/META-INF/services/".concat(
+							JSONWebServiceConfigurator.class.getName());
+
+					writePath(
+						inputStream, zipOutputStream, processedPaths, path);
+				}
+				finally {
+					StreamUtil.cleanUp(inputStream);
+				}
+			}
+
+			try {
+				inputStream = new FileInputStream(file);
+
+				writePath(
+					inputStream, zipOutputStream, processedPaths, relativePath);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
 		}
 	}
 
 	protected void writePath(
-		File file, ZipOutputStream zipOutputStream, Set<String> processedPaths,
-		String path) {
+		InputStream inputStream, ZipOutputStream zipOutputStream,
+		Set<String> processedPaths, String path) {
 
 		if (processedPaths.contains(path)) {
 			return;
@@ -923,31 +965,15 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		processedPaths.add(path);
 
-		FileInputStream fis = null;
-
 		try {
-			fis = new FileInputStream(file);
-
 			zipOutputStream.putNextEntry(new JarEntry(path));
 
-			StreamUtil.transfer(fis, zipOutputStream, false);
+			StreamUtil.transfer(inputStream, zipOutputStream, false);
 
 			zipOutputStream.closeEntry();
 		}
 		catch (IOException ioe) {
 			_log.error(ioe);
-		}
-		finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-
-			fis = null;
 		}
 	}
 

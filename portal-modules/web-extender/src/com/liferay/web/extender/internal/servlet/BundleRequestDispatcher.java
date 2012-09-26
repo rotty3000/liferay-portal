@@ -14,6 +14,7 @@
 
 package com.liferay.web.extender.internal.servlet;
 
+import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
@@ -42,6 +44,7 @@ import javax.servlet.ServletRequestListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Raymond Augé
@@ -97,8 +100,7 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		throws IOException, ServletException {
 
 		BundleServletRequest bundleServletRequest =
-			new BundleServletRequest(
-				(HttpServletRequest)request, _bundleServletContext);
+			new BundleServletRequest((HttpServletRequest)request);
 
 		doDispatch(bundleServletRequest, response);
 	}
@@ -107,8 +109,7 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		throws IOException, ServletException {
 
 		BundleServletRequest bundleServletRequest =
-			new BundleServletRequest(
-				(HttpServletRequest)request, _bundleServletContext);
+			new BundleServletRequest((HttpServletRequest)request);
 
 		if (_contextPath != null) {
 			bundleServletRequest.setAttribute(
@@ -201,13 +202,10 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 	public class BundleServletRequest extends HttpServletRequestWrapper {
 
-		public BundleServletRequest(
-			HttpServletRequest request,
-			BundleServletContext bundleServletContext) {
-
+		public BundleServletRequest(HttpServletRequest request) {
 			super(request);
 
-			_bundleServletContext = bundleServletContext;
+			_session = new BundleSession(request.getSession());
 		}
 
 		@Override
@@ -277,6 +275,16 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		@Override
+		public HttpSession getSession() {
+			return _session;
+		}
+
+		@Override
+		public HttpSession getSession(boolean create) {
+			return _session;
+		}
+
+		@Override
 		public void removeAttribute(String name) {
 			Object oldValue = null;
 
@@ -328,7 +336,20 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		private Map<String, Object> _attributes = new HashMap<String, Object>();
-		private BundleServletContext _bundleServletContext;
+		private HttpSession _session;
+
+	}
+
+	public class BundleSession extends HttpSessionWrapper {
+
+		public BundleSession(HttpSession session) {
+			super(session);
+		}
+
+		@Override
+		public ServletContext getServletContext() {
+			return _bundleServletContext;
+		}
 
 	}
 

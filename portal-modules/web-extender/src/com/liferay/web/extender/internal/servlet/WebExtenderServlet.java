@@ -203,34 +203,19 @@ public class WebExtenderServlet extends PortletServlet
 		try {
 			currentThread.setContextClassLoader(bundleClassLoader);
 
-			if (pathInfo.endsWith(INVOKER_PATH)) {
-				if (Validator.isNotNull(portletId)) {
-					super.service(request, response);
-
-					return;
-				}
-
-				PortalUtil.sendError(
-					HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					new IllegalAccessException("Illegal request"), request,
-					response);
-
-				return;
-			}
-
-			if (Validator.isNotNull(portletId) &&
-				pathInfo.equals(INVOKER_PATH)) {
-
-				super.service(request, response);
-
-				return;
-			}
-
 			RequestDispatcher requestDispatcher =
 				bundleServletContext.getRequestDispatcher(pathInfo);
 
 			if (requestDispatcher != null) {
 				requestDispatcher.forward(request, response);
+
+				return;
+			}
+
+			if (pathInfo.endsWith(INVOKER_PATH) &&
+				Validator.isNotNull(portletId)) {
+
+				super.service(request, response);
 
 				return;
 			}
