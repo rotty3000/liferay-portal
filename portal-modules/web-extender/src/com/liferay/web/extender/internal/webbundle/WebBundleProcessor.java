@@ -201,6 +201,20 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			return;
 		}
 
+		PluginPackage pluginPackage = _baseDeployer.readPluginPackage(
+			_deployedAppFolder);
+
+		String recommendedDeploymentContext =
+			pluginPackage.getRecommendedDeploymentContext();
+
+		if (Validator.isNotNull(recommendedDeploymentContext)) {
+			webContextpath = recommendedDeploymentContext;
+
+			if (!webContextpath.startsWith(StringPool.SLASH)) {
+				webContextpath = StringPool.SLASH.concat(webContextpath);
+			}
+		}
+
 		Manifest manifest = _getManifest();
 
 		Attributes attributes = manifest.getMainAttributes();
@@ -253,7 +267,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			// The order of these operations is important
 
 			processBundleSymbolicName(analyzer, webContextpath);
-			processBundleVersion(analyzer);
+			processBundleVersion(analyzer, pluginPackage);
 			processBundleManifestVersion(analyzer);
 
 			processPortletXML(webContextpath);
@@ -348,14 +362,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		analyzer.setProperty(Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName);
 	}
 
-	protected void processBundleVersion(Analyzer analyzer) {
+	protected void processBundleVersion(
+		Analyzer analyzer, PluginPackage pluginPackage) {
+
 		_version = MapUtil.getString(_parameterMap, Constants.BUNDLE_VERSION);
 
 		if (Validator.isNull(_version)) {
-			PluginPackage readPluginPackage = _baseDeployer.readPluginPackage(
-				_deployedAppFolder);
-
-			_version = readPluginPackage.getVersion();
+			_version = pluginPackage.getVersion();
 		}
 
 		analyzer.setProperty(Constants.BUNDLE_VERSION, _version);

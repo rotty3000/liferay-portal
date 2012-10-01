@@ -126,13 +126,13 @@ public class Activator
 
 		_artifactUrlTransformerRegistration = null;
 
+		_webPluginDeployer.close();
+		_webExtenderServlet.destroy();
+
 		BundleContext bundleContext = getBundleContext();
 
 		bundleContext.removeBundleListener(_bundleStartListener);
 		bundleContext.removeBundleListener(_bundleStopListener);
-
-		_webPluginDeployer.close();
-		_webExtenderServlet.destroy();
 
 		_bundleStartListener = null;
 		_bundleStopListener = null;

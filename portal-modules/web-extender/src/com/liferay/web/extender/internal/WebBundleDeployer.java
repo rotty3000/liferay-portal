@@ -17,7 +17,6 @@ package com.liferay.web.extender.internal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.web.extender.internal.event.EventUtil;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -46,19 +46,30 @@ public class WebBundleDeployer implements ModuleFrameworkConstants {
 	}
 
 	public void close() {
-		BundleContext bundleContext = _webExtenderServlet.getBundleContext();
+		Set<String> keySet = ServletContextPool.keySet();
 
-		for (Bundle bundle : bundleContext.getBundles()) {
-			String servletContextName =
-				BundleServletContext.getServletContextName(bundle);
+		Iterator<String> iterator = keySet.iterator();
 
-			if (Validator.isNotNull(servletContextName)) {
-				try {
-					doStop(bundle, servletContextName);
-				}
-				catch (Exception e) {
-					_log.error(e, e);
-				}
+		while (iterator.hasNext()) {
+			String servletContextName = iterator.next();
+
+			ServletContext servletContext = ServletContextPool.get(
+				servletContextName);
+
+			if (!(servletContext instanceof BundleServletContext)) {
+				continue;
+			}
+
+			BundleServletContext bundleServletContext =
+				(BundleServletContext)servletContext;
+
+			Bundle bundle = bundleServletContext.getBundle();
+
+			try {
+				doStop(bundle, servletContextName);
+			}
+			catch (Exception e) {
+				_log.error(e, e);
 			}
 		}
 
@@ -85,7 +96,8 @@ public class WebBundleDeployer implements ModuleFrameworkConstants {
 
 		try {
 			BundleServletContext bundleServletContext =
-				new BundleServletContext(bundle, _webExtenderServlet);
+				new BundleServletContext(
+					bundle, servletContextName, _webExtenderServlet);
 
 			bundleServletContext.open();
 

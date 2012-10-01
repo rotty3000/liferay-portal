@@ -16,11 +16,11 @@ package com.liferay.web.extender.internal.event;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -107,10 +107,9 @@ public class EventUtil
 		Bundle bundle, String eventTopic, Exception exception,
 		boolean collision) {
 
-		Dictionary<String,String> headers = bundle.getHeaders();
-		String contextPath = headers.get(WEB_CONTEXTPATH);
 		String servletContextName = BundleServletContext.getServletContextName(
-			bundle);
+			bundle, true);
+		String servletContextPath = StringPool.SLASH.concat(servletContextName);
 
 		Map<String, Object> properties = new Hashtable<String, Object>();
 
@@ -120,7 +119,7 @@ public class EventUtil
 		properties.put(BUNDLE_VERSION, bundle.getVersion());
 
 		if (collision) {
-			properties.put(COLLISION, headers.get(WEB_CONTEXTPATH));
+			properties.put(COLLISION, servletContextPath);
 
 			List<String> collidedIds = new ArrayList<String>();
 
@@ -131,12 +130,11 @@ public class EventUtil
 					continue;
 				}
 
-				Dictionary<String,String> curHeaders = bundle.getHeaders();
+				String curContextName =
+					BundleServletContext.getServletContextName(curBundle);
 
-				String curContextPath = curHeaders.get(WEB_CONTEXTPATH);
-
-				if ((curContextPath != null) &&
-					curContextPath.equals(contextPath)) {
+				if ((curContextName != null) &&
+					curContextName.equals(servletContextName)) {
 
 					collidedIds.add(String.valueOf(curBundle.getBundleId()));
 				}
@@ -145,7 +143,7 @@ public class EventUtil
 			properties.put(COLLISION_BUNDLES, collidedIds);
 		}
 
-		properties.put(CONTEXT_PATH, contextPath);
+		properties.put(CONTEXT_PATH, servletContextPath);
 		properties.put(EXTENDER_BUNDLE, _webExtenderBundle);
 		properties.put(EXTENDER_BUNDLE_ID, _webExtenderBundle.getBundleId());
 		properties.put(

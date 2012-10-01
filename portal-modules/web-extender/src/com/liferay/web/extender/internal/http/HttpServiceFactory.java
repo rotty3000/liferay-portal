@@ -16,12 +16,11 @@ package com.liferay.web.extender.internal.http;
 
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 import com.liferay.web.extender.internal.servlet.WebExtenderServlet;
 
 import java.util.Collection;
-import java.util.Dictionary;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
@@ -38,7 +37,8 @@ import org.osgi.service.http.HttpService;
 /**
  * @author Raymond Augé
  */
-public class HttpServiceFactory implements ServiceFactory<HttpService> {
+public class HttpServiceFactory
+	implements ModuleFrameworkConstants, ServiceFactory<HttpService> {
 
 	public HttpServiceFactory(
 		BundleContext bundleContext, WebExtenderServlet webExtenderServlet) {
@@ -50,56 +50,64 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 	public HttpService getService(
 		Bundle bundle, ServiceRegistration<HttpService> serviceRegistration) {
 
-		Dictionary<String,String> headers = bundle.getHeaders();
+		StringBundler sb = new StringBundler(13);
 
-		String webContextPath = headers.get("Web-ContextPath");
-
-		StringBundler sb = new StringBundler(7);
-
-		sb.append("(&(osgi.web.symbolicname=");
+		sb.append("(&(");
+		sb.append(BUNDLE_SYMBOLICNAME);
+		sb.append("=");
 		sb.append(bundle.getSymbolicName());
-		sb.append(")(osgi.web.version=");
+		sb.append(")(");
+		sb.append(BUNDLE_VERSION);
+		sb.append("=");
 		sb.append(bundle.getVersion().toString());
-		sb.append(")(osgi.web.contextpath=");
-		sb.append(webContextPath);
-		sb.append("))");
+		sb.append(")(");
+		sb.append(BUNDLE_ID);
+		sb.append("=");
+		sb.append(bundle.getBundleId());
+		sb.append(")(");
+		sb.append(WEB_CONTEXTPATH);
+		sb.append("=*))");
 
 		try {
 			Filter filter = _bundleContext.createFilter(sb.toString());
 
-			Collection<ServiceReference<ServletContext>> serviceReferences =
-				_bundleContext.getServiceReferences(
-					ServletContext.class, filter.toString());
+			Collection<ServiceReference<BundleServletContext>>
+				serviceReferences = _bundleContext.getServiceReferences(
+					BundleServletContext.class, filter.toString());
 
-			Iterator<ServiceReference<ServletContext>> iterator =
+			Iterator<ServiceReference<BundleServletContext>> iterator =
 				serviceReferences.iterator();
 
 			if (iterator.hasNext()) {
-				ServiceReference<ServletContext> servletContextReference =
+				ServiceReference<BundleServletContext> servletContextReference =
 					iterator.next();
 
-				ServletContext servletContext = _bundleContext.getService(
-					servletContextReference);
+				BundleServletContext bundleServletContext =
+					_bundleContext.getService(servletContextReference);
 
-				return new HttpServiceWrapper(
-					(BundleServletContext)servletContext);
+				return new HttpServiceWrapper(bundleServletContext);
 			}
 
-			String bundleContextName = getBundleContextName(
-				bundle, webContextPath);
+			String bundleContextName =
+				BundleServletContext.getServletContextName(bundle, true);
 
 			ServletContext servletContext = ServletContextPool.get(
 				bundleContextName);
 
 			if (servletContext == null) {
 				BundleServletContext bundleServletContext =
-					new BundleServletContext(bundle, _webExtenderServlet);
+					new BundleServletContext(
+						bundle, bundleContextName, _webExtenderServlet);
 
 				bundleServletContext.setServletContextName(bundleContextName);
 
 				ServletContextPool.put(bundleContextName, bundleServletContext);
 
 				servletContext = bundleServletContext;
+			}
+
+			if (!(servletContext instanceof BundleServletContext)) {
+				return null;
 			}
 
 			return new NonWABHttpServiceWrapper(
@@ -120,16 +128,6 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 		HttpService httpService) {
 
 		// Nothing to do here
-	}
-
-	protected String getBundleContextName(
-		Bundle bundle, String webContextPath) {
-
-		if (Validator.isNotNull(webContextPath)) {
-			return webContextPath;
-		}
-
-		return String.valueOf(bundle.getBundleId());
 	}
 
 	private BundleContext _bundleContext;
