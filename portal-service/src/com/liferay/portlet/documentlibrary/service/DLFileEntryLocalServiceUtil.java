@@ -317,7 +317,7 @@ public class DLFileEntryLocalServiceUtil {
 	}
 
 	/**
-	* @deprecated {@link #checkInFileEntry(long, long, String, ServiceContext)
+	* @deprecated {@link #checkInFileEntry(long, long, String, ServiceContext)}
 	*/
 	public static void checkInFileEntry(long userId, long fileEntryId,
 		java.lang.String lockUuid)
@@ -446,6 +446,12 @@ public class DLFileEntryLocalServiceUtil {
 		long imageId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().fetchFileEntryByAnyImageId(imageId);
+	}
+
+	public static com.liferay.portlet.documentlibrary.model.DLFileEntry fetchFileEntryByName(
+		long groupId, long folderId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchFileEntryByName(groupId, folderId, name);
 	}
 
 	public static java.util.List<com.liferay.portlet.documentlibrary.model.DLFileEntry> getExtraSettingsFileEntries(

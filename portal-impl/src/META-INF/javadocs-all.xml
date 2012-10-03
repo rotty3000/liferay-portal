@@ -251564,6 +251564,33 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>getGroups</name>
+			<comment><![CDATA[Returns all the sites that are children of the parent group.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>site</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the group is to be associated with a main site]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups, or <code>null</code> if no matches were found]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getGroups</name>
 			<comment><![CDATA[Returns the groups with the matching primary keys.]]></comment>
 			<param>
 				<name>groupIds</name>
@@ -251659,6 +251686,74 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<type>com.liferay.portal.kernel.exception.PortalException</type>
 				<comment><![CDATA[if a matching group could not be found]]></comment>
 			</throws>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getLayoutsGroups</name>
+			<comment><![CDATA[Returns a range of all groups that are children of the parent group and that have at least one layout.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>site</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the group is to be associated with a main site]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the range of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>getLayoutsGroupsCount</name>
+			<comment><![CDATA[Returns the number of groups that are children or the parent group and that have at least one layout]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>site</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether the group is to be associated with a main site]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
 			<throws>
 				<name>SystemException</name>
 				<type>com.liferay.portal.kernel.exception.SystemException</type>
@@ -251925,7 +252020,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>getUserGroups</name>
-			<comment><![CDATA[Returns a name ordered range of all the user's site groups and immediate organization groups, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the user's site groups and immediate organization groups, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -251966,7 +252061,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>getUserGroups</name>
-			<comment><![CDATA[Returns a name ordered range of all the user's site groups and immediate organization groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the user's site groups and immediate organization groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -252214,7 +252309,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>search</name>
-			<comment><![CDATA[Returns a name ordered range of all the company's groups, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the company's groups, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -252250,7 +252345,552 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>search</name>
-			<comment><![CDATA[Returns a name ordered range of all the groups that match the class name IDs, name, and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the site groups belonging to the parent group and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the site groups belonging to the parent group and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the class name IDs and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the class name IDs and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the group's class name IDs (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the class name IDs, name, and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups belonging to the parent group that match the class name IDs, name, and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the group's class name IDs (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups that match the class name IDs and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups that match the class name IDs and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the group's class name IDs (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups that match the class name IDs, name, and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -252279,6 +252919,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>params</name>
 				<type>java.util.LinkedHashMap</type>
 				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
 			</param>
 			<param>
 				<name>start</name>
@@ -252332,6 +252977,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<comment><![CDATA[the finder params (optionally <code>null</code>). To include a user's organizations, inherited organizations, and user groups in the search, add an entry with key &quot;usersGroups&quot; mapped to the user's ID and an entry with key &quot;inherit&quot; mapped to a non-<code>null</code> object. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
 			</param>
 			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
 				<name>start</name>
 				<type>int</type>
 				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
@@ -252357,7 +253007,94 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>search</name>
-			<comment><![CDATA[Returns a name ordered range of all the site groups and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the groups that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by name]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the groups that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+
+<p>
+Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+</p>]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>start</name>
+				<type>int</type>
+				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
+			</param>
+			<param>
+				<name>end</name>
+				<type>int</type>
+				<comment><![CDATA[the upper bound of the range of groups to return (not inclusive)]]></comment>
+			</param>
+			<param>
+				<name>obc</name>
+				<type>com.liferay.portal.kernel.util.OrderByComparator</type>
+				<comment><![CDATA[the comparator to order the groups (optionally <code>null</code>)]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>search</name>
+			<comment><![CDATA[Returns an ordered range of all the site groups and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -252381,6 +253118,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>params</name>
 				<type>java.util.LinkedHashMap</type>
 				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
 			</param>
 			<param>
 				<name>start</name>
@@ -252429,6 +253171,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organizations and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
 			</param>
 			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<param>
 				<name>start</name>
 				<type>int</type>
 				<comment><![CDATA[the lower bound of the range of groups to return]]></comment>
@@ -252445,6 +253192,196 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 			</param>
 			<return>
 				<comment><![CDATA[the matching groups ordered by comparator <code>obc</code>]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups belonging to the parent group that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups belonging to the parent group and immediate organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups belonging to the parent group that match the class name IDs, and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups belonging to the parent group that match the class name IDs, name, and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>parentGroupId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the parent group]]></comment>
+			</param>
+			<param>
+				<name>name</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's name (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>description</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups that match the class name IDs, and keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>classNameIds</name>
+				<type>long[]</type>
+				<comment><![CDATA[the class names of entities to include in the search (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
 			</return>
 			<throws>
 				<name>SystemException</name>
@@ -252474,6 +253411,38 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>description</name>
 				<type>java.lang.String</type>
 				<comment><![CDATA[the group's description (optionally <code>null</code>)]]></comment>
+			</param>
+			<param>
+				<name>params</name>
+				<type>java.util.LinkedHashMap</type>
+				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the number of matching groups]]></comment>
+			</return>
+			<throws>
+				<name>SystemException</name>
+				<type>com.liferay.portal.kernel.exception.SystemException</type>
+				<comment><![CDATA[if a system exception occurred]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>searchCount</name>
+			<comment><![CDATA[Returns the number of groups that match the keywords, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.]]></comment>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[the primary key of the company]]></comment>
+			</param>
+			<param>
+				<name>keywords</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the keywords (space separated), which may occur in the sites's name, or description (optionally <code>null</code>)]]></comment>
 			</param>
 			<param>
 				<name>params</name>
@@ -252511,6 +253480,11 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 				<name>params</name>
 				<type>java.util.LinkedHashMap</type>
 				<comment><![CDATA[the finder params (optionally <code>null</code>). To include the user's inherited organization groups and user groups in the search, add entries having &quot;usersGroups&quot; and &quot;inherit&quot; as keys mapped to the the user's ID. For more information see {@link com.liferay.portal.service.persistence.GroupFinder}]]></comment>
+			</param>
+			<param>
+				<name>andOperator</name>
+				<type>boolean</type>
+				<comment><![CDATA[whether every field must match its keywords, or just one field.]]></comment>
 			</param>
 			<return>
 				<comment><![CDATA[the number of matching groups]]></comment>
@@ -253588,7 +254562,7 @@ Useful when paginating results. Returns a maximum of <code>end - start</code> in
 		</method>
 		<method>
 			<name>search</name>
-			<comment><![CDATA[Returns a name ordered range of all the site groups and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
+			<comment><![CDATA[Returns an ordered range of all the site groups and organization groups that match the name and description, optionally including the user's inherited organization groups and user groups. System and staged groups are not included.
 
 <p>
 Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -379345,40 +380319,7 @@ A separate instance of this class is created every time <code>renderRequest.getA
 		<name>OmniadminControlPanelEntry</name>
 		<type>com.liferay.portlet.admin.OmniadminControlPanelEntry</type>
 		<author><![CDATA[Jorge Ferrer]]></author>
-		<method>
-			<name>isVisible</name>
-			<param>
-				<name>permissionChecker</name>
-				<type>com.liferay.portal.security.permission.PermissionChecker</type>
-			</param>
-			<param>
-				<name>portlet</name>
-				<type>com.liferay.portal.model.Portlet</type>
-			</param>
-			<throws>
-				<name>Exception</name>
-				<type>java.lang.Exception</type>
-			</throws>
-		</method>
-		<method>
-			<name>isVisible</name>
-			<param>
-				<name>portlet</name>
-				<type>com.liferay.portal.model.Portlet</type>
-			</param>
-			<param>
-				<name>category</name>
-				<type>java.lang.String</type>
-			</param>
-			<param>
-				<name>themeDisplay</name>
-				<type>com.liferay.portal.theme.ThemeDisplay</type>
-			</param>
-			<throws>
-				<name>Exception</name>
-				<type>java.lang.Exception</type>
-			</throws>
-		</method>
+		<deprecated><![CDATA[{@link com.liferay.portlet.OmniadminControlPanelEntry}]]></deprecated>
 	</javadoc>
 	<javadoc>
 		<name>ActionUtil</name>

@@ -58,7 +58,7 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 	public long addRepository(
 			long userId, long groupId, long classNameId, long parentFolderId,
 			String name, String description, String portletId,
-			UnicodeProperties typeSettingsProperties,
+			UnicodeProperties typeSettingsProperties, boolean hidden,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -84,7 +84,7 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 		repository.setDlFolderId(
 			getDLFolderId(
 				user, groupId, repositoryId, parentFolderId, name, description,
-				serviceContext));
+				hidden, serviceContext));
 
 		repositoryPersistence.update(repository, false);
 
@@ -102,6 +102,22 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 		}
 
 		return repositoryId;
+	}
+
+	/**
+	 * @deprecated {@link #addRepository(long, long, long, long, String, String,
+	 * 				String, UnicodeProperties, boolean, ServiceContext)}
+	 */
+	public long addRepository(
+			long userId, long groupId, long classNameId, long parentFolderId,
+			String name, String description, String portletId,
+			UnicodeProperties typeSettingsProperties,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		return addRepository(
+			userId, groupId, classNameId, parentFolderId, name, description,
+			portletId, typeSettingsProperties, false, serviceContext);
 	}
 
 	public void checkRepository(long repositoryId) throws SystemException {
@@ -155,6 +171,19 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 		}
 
 		return repository;
+	}
+
+	public Repository fetchRepository(long groupId, String portletId)
+		throws SystemException {
+
+		return fetchRepository(groupId, portletId, portletId);
+	}
+
+	public Repository fetchRepository(
+			long groupId, String name, String portletId)
+		throws SystemException {
+
+		return repositoryPersistence.fetchByG_N_P(groupId, name, portletId);
 	}
 
 	public LocalRepository getLocalRepositoryImpl(long repositoryId)
@@ -421,7 +450,8 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 
 	protected long getDLFolderId(
 			User user, long groupId, long repositoryId, long parentFolderId,
-			String name, String description, ServiceContext serviceContext)
+			String name, String description, boolean hidden,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		if (Validator.isNull(name)) {
@@ -430,7 +460,7 @@ public class RepositoryLocalServiceImpl extends RepositoryLocalServiceBaseImpl {
 
 		DLFolder dlFolder = dlFolderLocalService.addFolder(
 			user.getUserId(), groupId, repositoryId, true, parentFolderId, name,
-			description, serviceContext);
+			description, hidden, serviceContext);
 
 		return dlFolder.getFolderId();
 	}

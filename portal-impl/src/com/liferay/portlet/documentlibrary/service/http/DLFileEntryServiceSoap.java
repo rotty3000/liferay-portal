@@ -95,7 +95,7 @@ public class DLFileEntryServiceSoap {
 	}
 
 	/**
-	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)
+	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)}
 	*/
 	public static void checkInFileEntry(long fileEntryId,
 		java.lang.String lockUuid) throws RemoteException {

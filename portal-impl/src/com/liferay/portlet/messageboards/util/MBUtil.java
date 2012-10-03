@@ -746,6 +746,21 @@ public class MBUtil {
 		return true;
 	}
 
+	public static String replaceMessageBodyPaths(
+		ThemeDisplay themeDisplay, String messageBody) {
+
+		return StringUtil.replace(
+			messageBody,
+			new String[] {
+				"@theme_images_path@", "href=\"/", "src=\"/"
+			},
+			new String[] {
+				themeDisplay.getPathThemeImages(),
+				"href=\"" + themeDisplay.getURLPortal() + "/",
+				"src=\"" + themeDisplay.getURLPortal() + "/"
+			});
+	}
+
 	private static String[] _findThreadPriority(
 		double value, ThemeDisplay themeDisplay, String[] priorities) {
 

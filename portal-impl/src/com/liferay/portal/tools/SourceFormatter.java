@@ -1243,12 +1243,14 @@ public class SourceFormatter {
 				new String[] {
 					"com.liferay.portal.PortalException",
 					"com.liferay.portal.SystemException",
-					"com.liferay.util.LocalizationUtil"
+					"com.liferay.util.LocalizationUtil",
+					"private static final Log _log"
 				},
 				new String[] {
 					"com.liferay.portal.kernel.exception.PortalException",
 					"com.liferay.portal.kernel.exception.SystemException",
-					"com.liferay.portal.kernel.util.LocalizationUtil"
+					"com.liferay.portal.kernel.util.LocalizationUtil",
+					"private static Log _log"
 				});
 
 			newContent = stripJavaImports(newContent, packagePath, className);
@@ -2013,6 +2015,11 @@ public class SourceFormatter {
 
 		boolean readAttributes = false;
 
+		String currentException = null;
+		String previousException = null;
+
+		boolean hasUnsortedExceptions = false;
+
 		while ((line = unsyncBufferedReader.readLine()) != null) {
 			lineCount++;
 
@@ -2123,6 +2130,25 @@ public class SourceFormatter {
 				}
 			}
 
+			if (!hasUnsortedExceptions) {
+				int i = line.indexOf("<liferay-ui:error exception=\"<%=");
+
+				if (i != -1) {
+					currentException = line.substring(i + 33);
+
+					if (Validator.isNotNull(previousException) &&
+						(previousException.compareTo(currentException) > 0)) {
+
+						hasUnsortedExceptions = true;
+					}
+				}
+
+				if (!hasUnsortedExceptions) {
+					previousException = currentException;
+					currentException = null;
+				}
+			}
+
 			if (trimmedLine.startsWith(StringPool.LESS_THAN) &&
 				!trimmedLine.startsWith("<%") &&
 				!trimmedLine.startsWith("<!")) {
@@ -2206,6 +2232,22 @@ public class SourceFormatter {
 				content,
 				previousAttributeAndValue + "\n" + currentAttributeAndValue,
 				currentAttributeAndValue + "\n" + previousAttributeAndValue);
+		}
+
+		if (hasUnsortedExceptions) {
+			if ((StringUtil.count(content, currentException) > 1) ||
+				(StringUtil.count(content, previousException) > 1)) {
+
+				_sourceFormatterHelper.printError(
+					fileName, "unsorted exceptions: " + fileName);
+			}
+			else {
+				content = StringUtil.replaceFirst(
+					content, previousException, currentException);
+
+				content = StringUtil.replaceLast(
+					content, currentException, previousException);
+			}
 		}
 
 		return content;

@@ -14,32 +14,10 @@
 
 package com.liferay.portlet.admin;
 
-import com.liferay.portal.model.Portlet;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.BaseControlPanelEntry;
-
 /**
- * @author Jorge Ferrer
+ * @author     Jorge Ferrer
+ * @deprecated {@link com.liferay.portlet.OmniadminControlPanelEntry}
  */
-public class OmniadminControlPanelEntry extends BaseControlPanelEntry {
-
-	public boolean isVisible(
-			PermissionChecker permissionChecker, Portlet portlet)
-		throws Exception {
-
-		return permissionChecker.isOmniadmin();
-	}
-
-	@Override
-	public boolean isVisible(
-			Portlet portlet, String category, ThemeDisplay themeDisplay)
-		throws Exception {
-
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		return isVisible(permissionChecker, portlet);
-	}
-
+public class OmniadminControlPanelEntry
+	extends com.liferay.portlet.OmniadminControlPanelEntry {
 }

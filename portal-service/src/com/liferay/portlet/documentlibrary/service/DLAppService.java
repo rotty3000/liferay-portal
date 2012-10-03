@@ -322,7 +322,7 @@ public interface DLAppService extends BaseService {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)
+	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)}
 	*/
 	public void checkInFileEntry(long fileEntryId, java.lang.String lockUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,

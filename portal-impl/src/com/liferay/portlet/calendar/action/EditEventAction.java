@@ -190,8 +190,17 @@ public class EditEventAction extends PortletAction {
 		int durationMinute = ParamUtil.getInteger(
 			actionRequest, "durationMinute");
 		boolean allDay = ParamUtil.getBoolean(actionRequest, "allDay");
-		boolean timeZoneSensitive = ParamUtil.getBoolean(
-			actionRequest, "timeZoneSensitive");
+
+		boolean timeZoneSensitive = false;
+
+		if (allDay) {
+			timeZoneSensitive = false;
+		}
+		else {
+			timeZoneSensitive = ParamUtil.getBoolean(
+				actionRequest, "timeZoneSensitive");
+		}
+
 		String type = ParamUtil.getString(actionRequest, "type");
 
 		int endDateMonth = ParamUtil.getInteger(actionRequest, "endDateMonth");

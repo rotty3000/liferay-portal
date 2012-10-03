@@ -339,7 +339,7 @@ public class DLAppServiceWrapper implements DLAppService,
 	}
 
 	/**
-	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)
+	* @deprecated {@link #checkInFileEntry(long, String, ServiceContext)}
 	*/
 	public void checkInFileEntry(long fileEntryId, java.lang.String lockUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,

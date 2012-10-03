@@ -658,9 +658,42 @@ AUI.add(
 		SpreadSheet.TYPE_EDITOR['ddm-documentlibrary'] = DLFileEntryCellEditor;
 
 		Liferay.SpreadSheet = SpreadSheet;
+
+		var DDLUtil = {
+			previewDialog: null,
+
+			openPreviewDialog: function(content) {
+				var instance = this;
+
+				var previewDialog = instance.previewDialog;
+
+				if (!previewDialog) {
+					previewDialog = new A.Dialog(
+						{
+							bodyContent: content,
+							centered: true,
+							modal: true,
+							width: A.getWin().width() / 2,
+							title: Liferay.Language.get('preview')
+						}
+					).render();
+
+					instance.previewDialog = previewDialog;
+				}
+				else {
+					previewDialog.show();
+
+					previewDialog.set('bodyContent', content);
+				}
+
+				return previewDialog;
+			}
+		};
+
+		Liferay.DDLUtil = DDLUtil;
 	},
 	'',
 	{
-		requires: ['aui-arraysort', 'aui-datatable', 'json', 'liferay-portlet-url']
+		requires: ['aui-arraysort', 'aui-datatable', 'aui-dialog', 'json', 'liferay-portlet-url']
 	}
 );
