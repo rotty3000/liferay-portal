@@ -253,6 +253,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			analyzer.setClasspath(
 				classPath.values().toArray(new File[classPath.size()]));
 
+			processBundleSymbolicName(analyzer, webContextpath);
+
+			bundleSymbolicName = analyzer.getProperty(
+				Constants.BUNDLE_SYMBOLICNAME);
+
+			String importPackage = StringPool.BLANK;
+
 			Properties properties = PropsUtil.getProperties(
 				PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS, true);
 
@@ -260,13 +267,31 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			while (keys.hasMoreElements()) {
 				String key = (String)keys.nextElement();
+				String originalKey = key;
 
-				analyzer.setProperty(key, properties.getProperty(key));
+				if (key.endsWith(StringPool.CLOSE_BRACKET)) {
+					String bundleFilterSuffix = StringPool.OPEN_BRACKET.concat(
+						bundleSymbolicName).concat(StringPool.CLOSE_BRACKET);
+
+					if (!key.endsWith(bundleFilterSuffix)) {
+						continue;
+					}
+
+					key = key.substring(
+						0, key.indexOf(StringPool.OPEN_BRACKET));
+				}
+
+				String value = properties.getProperty(originalKey);
+
+				if (key.equals(Constants.IMPORT_PACKAGE)) {
+					importPackage += StringPool.COMMA.concat(value);
+				}
+
+				analyzer.setProperty(key, value);
 			}
 
 			// The order of these operations is important
 
-			processBundleSymbolicName(analyzer, webContextpath);
 			processBundleVersion(analyzer, pluginPackage);
 			processBundleManifestVersion(analyzer);
 
@@ -275,7 +300,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processWebXML("WEB-INF/liferay-web.xml");
 			processLiferayPortletXML(webContextpath);
 			processDeclarativeReferences();
-			processExportImportPackage(analyzer);
+			processExportImportPackage(analyzer, importPackage);
 			processPluginDependencies(analyzer);
 
 			try {
@@ -533,10 +558,9 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void processExportImportPackage(Analyzer analyzer)
+	protected void processExportImportPackage(
+			Analyzer analyzer, String importPackage)
 		throws IOException {
-
-		String importPackage = analyzer.getProperty(Constants.IMPORT_PACKAGE);
 
 		if (Validator.isNotNull(importPackage)) {
 			String[] packageImports = StringUtil.split(importPackage);
@@ -557,6 +581,10 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				(_importPackages.size() * 3) + 1);
 
 			for (String packageName : _importPackages) {
+				if (Validator.isNull(packageName)) {
+					continue;
+				}
+
 				sb.append(packageName);
 				sb.append(";resolution:=\"optional\"");
 				sb.append(StringPool.COMMA);
