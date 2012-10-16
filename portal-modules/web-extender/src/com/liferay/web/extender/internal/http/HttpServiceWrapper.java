@@ -14,7 +14,6 @@
 
 package com.liferay.web.extender.internal.http;
 
-
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 
 import java.util.Dictionary;

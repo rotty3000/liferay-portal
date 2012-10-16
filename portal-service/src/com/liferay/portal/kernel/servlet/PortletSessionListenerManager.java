@@ -169,8 +169,7 @@ public class PortletSessionListenerManager
 		for (HttpSessionActivationListener httpSessionActivationListener :
 				_httpSessionActivationListeners) {
 
-			httpSessionActivationListener.sessionDidActivate(
-				httpSessionEvent);
+			httpSessionActivationListener.sessionDidActivate(httpSessionEvent);
 		}
 	}
 
@@ -192,8 +191,7 @@ public class PortletSessionListenerManager
 		for (HttpSessionBindingListener httpSessionBindingListener :
 				_httpSessionBindingListeners) {
 
-			httpSessionBindingListener.valueBound(
-				httpSessionBindingEvent);
+			httpSessionBindingListener.valueBound(httpSessionBindingEvent);
 		}
 	}
 
@@ -204,8 +202,7 @@ public class PortletSessionListenerManager
 		for (HttpSessionBindingListener httpSessionBindingListener :
 				_httpSessionBindingListeners) {
 
-			httpSessionBindingListener.valueUnbound(
-				httpSessionBindingEvent);
+			httpSessionBindingListener.valueUnbound(httpSessionBindingEvent);
 		}
 	}
 

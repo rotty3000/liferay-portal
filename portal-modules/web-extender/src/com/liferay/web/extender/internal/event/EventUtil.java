@@ -74,9 +74,6 @@ public class EventUtil
 		_instance._start(bundleContext);
 	}
 
-	private EventUtil() {
-	}
-
 	public EventAdmin addingService(ServiceReference<EventAdmin> reference) {
 		_eventAdmin = _bundleContext.getService(reference);
 
@@ -103,11 +100,14 @@ public class EventUtil
 		_webExtenderBundle = null;
 	}
 
-	public void _sendEvent(
+	private EventUtil() {
+	}
+
+	private void _sendEvent(
 		Bundle bundle, String eventTopic, Exception exception,
 		boolean collision) {
 
-		Dictionary<String,String> headers = bundle.getHeaders();
+		Dictionary<String, String> headers = bundle.getHeaders();
 		String contextPath = headers.get(WEB_CONTEXTPATH);
 		String servletContextName = BundleServletContext.getServletContextName(
 			bundle);
@@ -131,7 +131,7 @@ public class EventUtil
 					continue;
 				}
 
-				Dictionary<String,String> curHeaders = bundle.getHeaders();
+				Dictionary<String, String> curHeaders = bundle.getHeaders();
 
 				String curContextPath = curHeaders.get(WEB_CONTEXTPATH);
 

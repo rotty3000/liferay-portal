@@ -252,10 +252,11 @@ public class HttpServiceTracker
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServiceTracker.class);
 
+	protected WebXML _webXML;
+	protected WebXMLLoader _webXMLLoader;
+
 	private Bundle _bundle;
 	private BundleContext _bundleContext;
 	private ServiceReference<HttpService> _serviceReference;
-	protected WebXML _webXML;
-	protected WebXMLLoader _webXMLLoader;
 
 }

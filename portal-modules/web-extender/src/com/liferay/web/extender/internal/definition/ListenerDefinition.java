@@ -25,13 +25,13 @@ public class ListenerDefinition {
 	}
 
 	public ListenerDefinition(
-		Dictionary<String,String> contextParams, Object listener) {
+		Dictionary<String, String> contextParams, Object listener) {
 
 		_contextParams = contextParams;
 		_listener = listener;
 	}
 
-	public Dictionary<String,String> getContextParams() {
+	public Dictionary<String, String> getContextParams() {
 		return _contextParams;
 	}
 
@@ -39,7 +39,7 @@ public class ListenerDefinition {
 		return _listener;
 	}
 
-	public void setContextParams(Dictionary<String,String> contextParams) {
+	public void setContextParams(Dictionary<String, String> contextParams) {
 		_contextParams = contextParams;
 	}
 
@@ -47,7 +47,7 @@ public class ListenerDefinition {
 		_listener = listener;
 	}
 
-	private Dictionary<String,String> _contextParams;
+	private Dictionary<String, String> _contextParams;
 	private Object _listener;
 
 }

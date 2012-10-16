@@ -112,8 +112,7 @@ public class ResourceServlet extends WebServerServlet {
 			}
 
 			if (lastModified > 0) {
-				response.setDateHeader(
-					HttpHeaders.LAST_MODIFIED, lastModified);
+				response.setDateHeader(HttpHeaders.LAST_MODIFIED, lastModified);
 			}
 
 			String contentType = _httpContext.getMimeType(fileName);

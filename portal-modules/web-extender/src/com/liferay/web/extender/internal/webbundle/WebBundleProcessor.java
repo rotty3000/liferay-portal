@@ -82,10 +82,10 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.osgi.framework.Constants;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.depend.DependencyVisitor;
+
+import org.osgi.framework.Constants;
 
 /**
  * @author Raymond Augé
@@ -418,8 +418,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		DependencyVisitor dependencyVisitor = new DependencyVisitor();
 
-		processClass(
-			dependencyVisitor, className, source, _importPackages);
+		processClass(dependencyVisitor, className, source, _importPackages);
 
 		Set<String> packages = dependencyVisitor.getGlobals().keySet();
 
@@ -430,9 +429,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void processDeclarativeReferences()
-		throws IOException {
-
+	protected void processDeclarativeReferences() throws IOException {
 		for (String value :
 				PropsValues.
 					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES) {
@@ -494,8 +491,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		if (xml.exists()) {
 			processXmlDependencies(
-				xml, _LIFERAYPORTLETXML_CLASSREFERENCE_ELEMENTS, null,
-				null);
+				xml, _LIFERAYPORTLETXML_CLASSREFERENCE_ELEMENTS, null, null);
 		}
 
 		// References from liferay-hook.xml
@@ -504,8 +500,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		if (xml.exists()) {
 			processXmlDependencies(
-				xml, _LIFERAYHOOKXML_CLASSREFERENCE_ELEMENTS, null,
-				null);
+				xml, _LIFERAYHOOKXML_CLASSREFERENCE_ELEMENTS, null, null);
 		}
 	}
 
@@ -587,8 +582,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 				int pos = children.indexOf(previousChild);
 
-				strutsPathElement = SAXReaderUtil.createElement(
-					"struts-path");
+				strutsPathElement = SAXReaderUtil.createElement("struts-path");
 
 				strutsPathElement.setText(MODULE.concat(webContextpath));
 
@@ -619,7 +613,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		List<String> requiredDeploymentContexts =
 			readPluginPackage.getRequiredDeploymentContexts();
 
-		if (requiredDeploymentContexts == null ||
+		if ((requiredDeploymentContexts == null) ||
 				requiredDeploymentContexts.isEmpty()) {
 
 			return;
@@ -656,9 +650,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void processPortletXML(String webContextpath)
-		throws IOException {
-
+	protected void processPortletXML(String webContextpath) throws IOException {
 		File portletXMLFile = new File(
 			_deployedAppFolder, "WEB-INF/" +
 				Portal.PORTLET_XML_FILE_NAME_STANDARD);
@@ -1004,7 +996,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				relativePath.endsWith(".jar") &&
 				!ArrayUtil.contains(_EXCLUDED_CLASS_PATHS, relativePath)) {
 
-				classPath.put(relativePath ,file);
+				classPath.put(relativePath, file);
 			}
 
 			if (file.isDirectory()) {
@@ -1013,9 +1005,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void _saveManifest(Manifest manifest)
-		throws IOException {
-
+	protected void _saveManifest(Manifest manifest) throws IOException {
 		File manifestFile = _getManifestFile();
 
 		FileOutputStream fos = new FileOutputStream(manifestFile);
@@ -1031,16 +1021,11 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 	private static Log _log = LogFactoryUtil.getLog(WebBundleProcessor.class);
 
 	private static final String[] _EXCLUDED_CLASS_PATHS = new String[] {
-		"WEB-INF/lib/commons-codec.jar",
-		"WEB-INF/lib/commons-fileupload.jar",
-		"WEB-INF/lib/commons-io.jar",
-		"WEB-INF/lib/commons-lang.jar"
-//		,
-//		"WEB-INF/lib/commons-logging.jar",
-//		"WEB-INF/lib/log4j.jar",
-//		"WEB-INF/lib/slf4j-api.jar",
-//		"WEB-INF/lib/util-bridges.jar",
-//		"WEB-INF/lib/util-java.jar",
+		"WEB-INF/lib/commons-codec.jar", "WEB-INF/lib/commons-fileupload.jar",
+		"WEB-INF/lib/commons-io.jar", "WEB-INF/lib/commons-lang.jar"
+//		, //		"WEB-INF/lib/commons-logging.jar",
+//		"WEB-INF/lib/log4j.jar", //		"WEB-INF/lib/slf4j-api.jar",
+//		"WEB-INF/lib/util-bridges.jar", //		"WEB-INF/lib/util-java.jar",
 //		"WEB-INF/lib/util-taglib.jar"
 	};
 

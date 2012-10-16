@@ -49,7 +49,7 @@ public class HttpServiceFactory implements ServiceFactory<HttpService> {
 	public HttpService getService(
 		Bundle bundle, ServiceRegistration<HttpService> serviceRegistration) {
 
-		Dictionary<String,String> headers = bundle.getHeaders();
+		Dictionary<String, String> headers = bundle.getHeaders();
 
 		String webContextPath = headers.get("Web-ContextPath");
 
