@@ -14,14 +14,14 @@
 
 package com.liferay.util.bridges.php;
 
-import com.liferay.portal.kernel.servlet.ServletContextUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-
 import com.caucho.vfs.FilesystemPath;
 import com.caucho.vfs.Path;
 import com.caucho.vfs.StreamImpl;
 import com.caucho.vfs.VfsStream;
+
+import com.liferay.portal.kernel.servlet.ServletContextUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

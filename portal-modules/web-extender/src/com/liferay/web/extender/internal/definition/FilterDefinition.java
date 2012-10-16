@@ -39,16 +39,16 @@ public class FilterDefinition {
 		return _filter;
 	}
 
+	public Dictionary<String, String> getInitParams() {
+		return _initParams;
+	}
+
 	public String getName() {
 		return _name;
 	}
 
 	public void setFilter(Filter filter) {
 		_filter = filter;
-	}
-
-	public Dictionary<String, String> getInitParams() {
-		return _initParams;
 	}
 
 	public void setInitParam(String key, String value) {

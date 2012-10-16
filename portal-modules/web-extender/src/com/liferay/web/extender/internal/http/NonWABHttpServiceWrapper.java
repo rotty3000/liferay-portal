@@ -14,7 +14,6 @@
 
 package com.liferay.web.extender.internal.http;
 
-
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 
@@ -33,7 +32,8 @@ import org.osgi.service.http.NamespaceException;
 /**
  * @author Raymond Augé
  */
-public class NonWABHttpServiceWrapper implements ExtendedHttpService, HttpService {
+public class NonWABHttpServiceWrapper implements
+	ExtendedHttpService, HttpService {
 
 	public NonWABHttpServiceWrapper(BundleServletContext bundleServletContext) {
 		_bundleServletContext = bundleServletContext;

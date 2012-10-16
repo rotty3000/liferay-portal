@@ -83,7 +83,7 @@ public class WebXMLLoader {
 	protected static void loadContext(
 		Bundle bundle, Element root, WebXML webXML) {
 
-		Hashtable<String,String> contextParams = webXML.getContextParams();
+		Hashtable<String, String> contextParams = webXML.getContextParams();
 
 		for (Element element : root.elements("context-param")) {
 			String contextParamName = element.element(
@@ -133,7 +133,7 @@ public class WebXMLLoader {
 			String urlPattern = filterMappingsEl.element(
 				"url-pattern").getTextTrim();
 
-			Map<String,String> namespaces = new TreeMap<String,String>();
+			Map<String, String> namespaces = new TreeMap<String, String>();
 
 			namespaces.put("x", root.getNamespace().getText());
 
@@ -211,7 +211,7 @@ public class WebXMLLoader {
 			String urlPattern = servletMappingsEl.element(
 				"url-pattern").getTextTrim();
 
-			Map<String,String> namespaces = new TreeMap<String,String>();
+			Map<String, String> namespaces = new TreeMap<String, String>();
 
 			namespaces.put("x", root.getNamespace().getText());
 
@@ -267,11 +267,11 @@ public class WebXMLLoader {
 		}
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(WebXMLLoader.class);
+
 	private static final String _RESOURCE_PREFIX = "/*.";
 
 	private static final String _SLASH_STAR = "/*";
-
-	private static final Log _log = LogFactoryUtil.getLog(WebXMLLoader.class);
 
 	private URL _defaultWeb;
 

@@ -462,7 +462,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void registerFilter(
 			String filterMapping, Filter filter,
 			Dictionary<String, String> initParams, HttpContext httpContext)
-		throws ServletException, NamespaceException {
+		throws NamespaceException, ServletException {
 
 		validate(filterMapping, filter, httpContext);
 
@@ -520,25 +520,30 @@ public class BundleServletContext extends LiferayServletContext
 					addHttpSessionActivationListener(
 						(HttpSessionActivationListener)listener);
 			}
+
 			if (listener instanceof HttpSessionAttributeListener) {
 				PortletSessionListenerManager.
 					addHttpSessionAttributeListener(
 						(HttpSessionAttributeListener)listener);
 			}
+
 			if (listener instanceof HttpSessionBindingListener) {
 				PortletSessionListenerManager.
 					addHttpSessionBindingListener(
 						(HttpSessionBindingListener)listener);
 			}
+
 			if (listener instanceof HttpSessionListener) {
 				PortletSessionListenerManager.addHttpSessionListener(
 					(HttpSessionListener)listener);
 			}
+
 			if (listener instanceof ServletContextAttributeListener) {
 				// done
 				_servletContextAttributeListeners.add(
 					(ServletContextAttributeListener)listener);
 			}
+
 			if (listener instanceof ServletContextListener) {
 				// done
 				ServletContextListener servletContextListener =
@@ -551,15 +556,16 @@ public class BundleServletContext extends LiferayServletContext
 
 				_servletContextListeners.add(servletContextListener);
 			}
+
 			if (listener instanceof ServletRequestAttributeListener) {
 				// done
 				_servletRequestAttributeListeners.add(
 					(ServletRequestAttributeListener)listener);
 			}
+
 			if (listener instanceof ServletRequestListener) {
 				// done
-				_servletRequestListeners.add(
-					(ServletRequestListener)listener);
+				_servletRequestListeners.add((ServletRequestListener)listener);
 			}
 		}
 		finally {
@@ -596,7 +602,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void registerServlet(
 			String alias, Servlet servlet,
 			Dictionary<String, String> initParams, HttpContext httpContext)
-		throws ServletException, NamespaceException {
+		throws NamespaceException, ServletException {
 
 		validate(alias, servlet, httpContext);
 
@@ -628,7 +634,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void removeAttribute(String name) {
 		Object value = _contextAttributes.remove(name);
 
-		for(ServletContextAttributeListener listener :
+		for (ServletContextAttributeListener listener :
 				_servletContextAttributeListeners) {
 
 			listener.attributeRemoved(
@@ -648,7 +654,7 @@ public class BundleServletContext extends LiferayServletContext
 
 		_contextAttributes.put(name, value);
 
-		for(ServletContextAttributeListener listener :
+		for (ServletContextAttributeListener listener :
 				_servletContextAttributeListeners) {
 
 			// TODO add try/catch
@@ -740,22 +746,27 @@ public class BundleServletContext extends LiferayServletContext
 					removeHttpSessionActivationListener(
 						(HttpSessionActivationListener)listener);
 			}
+
 			if (listener instanceof HttpSessionAttributeListener) {
 				PortletSessionListenerManager.
 					removeHttpSessionAttributeListener(
 						(HttpSessionAttributeListener)listener);
 			}
+
 			if (listener instanceof HttpSessionBindingListener) {
 				PortletSessionListenerManager.removeHttpSessionBindingListener(
 					(HttpSessionBindingListener)listener);
 			}
+
 			if (listener instanceof HttpSessionListener) {
 				PortletSessionListenerManager.removeHttpSessionListener(
 					(HttpSessionListener)listener);
 			}
+
 			if (listener instanceof ServletContextAttributeListener) {
 				_servletContextAttributeListeners.remove(listener);
 			}
+
 			if (listener instanceof ServletContextListener) {
 				if (_servletContextListeners.contains(listener)) {
 					_servletContextListeners.remove(listener);
@@ -770,9 +781,11 @@ public class BundleServletContext extends LiferayServletContext
 						servletContextEvent);
 				}
 			}
+
 			if (listener instanceof ServletRequestAttributeListener) {
 				_servletRequestAttributeListeners.remove(listener);
 			}
+
 			if (listener instanceof ServletRequestListener) {
 				_servletRequestListeners.remove(listener);
 			}
@@ -882,8 +895,7 @@ public class BundleServletContext extends LiferayServletContext
 		throws NamespaceException {
 
 		if (Validator.isNull(alias)) {
-			throw new IllegalArgumentException(
-				"Empty aliases are not allowed");
+			throw new IllegalArgumentException("Empty aliases are not allowed");
 		}
 
 		if (!alias.startsWith(StringPool.SLASH) ||
@@ -911,11 +923,11 @@ public class BundleServletContext extends LiferayServletContext
 		}
 	}
 
+	private static final String _EXTENSION_PREFIX = "*.";
+
 	private static final String[] _ILLEGAL_PATHS = new String[] {
 		"OSGI-INF/", "META-INF/", "OSGI-OPT/"
 	};
-
-	private static final String _EXTENSION_PREFIX = "*.";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BundleServletContext.class);
@@ -924,11 +936,11 @@ public class BundleServletContext extends LiferayServletContext
 	private Map<String, Object> _contextAttributes =
 		new ConcurrentHashMap<String, Object>();
 	private String _contextPath;
+	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private Map<String, Filter> _filtersMap =
 		new ConcurrentHashMap<String, Filter>();
 	private HttpContext _httpContext;
 	private Map<String, String> _initParams = new HashMap<String, String>();
-	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private HttpServiceTracker _httpServiceTracker;
 	private List<ServletContextAttributeListener>
 		_servletContextAttributeListeners =
@@ -942,10 +954,10 @@ public class BundleServletContext extends LiferayServletContext
 			new ArrayList<ServletRequestAttributeListener>();
 	private List<ServletRequestListener> _servletRequestListeners =
 		new ArrayList<ServletRequestListener>();
-	private Servlet _webExtenderServlet;
 	private String _servletContextName;
 	private Map<String, Servlet> _servletsMap =
 		new ConcurrentHashMap<String, Servlet>();
 	private File _tempDir;
+	private Servlet _webExtenderServlet;
 
 }

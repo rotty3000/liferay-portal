@@ -61,7 +61,7 @@ public class WebExtenderServlet extends PortletServlet
 	public void init(ServletConfig servletConfig) throws ServletException {
 		super.init(servletConfig);
 
-		Hashtable<String,Object> properties = new Hashtable<String, Object>();
+		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
 		properties.put(BEAN_ID, HttpServlet.class.getName());
 		properties.put(ORIGINAL_BEAN, Boolean.TRUE);

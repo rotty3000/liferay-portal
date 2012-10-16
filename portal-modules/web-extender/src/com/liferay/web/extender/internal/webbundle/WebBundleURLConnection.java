@@ -50,7 +50,8 @@ public class WebBundleURLConnection extends URLConnection
 		// together
 
 		if (FastDateFormatFactoryUtil.getFastDateFormatFactory() == null) {
-			FastDateFormatFactoryUtil instance = new FastDateFormatFactoryUtil();
+			FastDateFormatFactoryUtil instance =
+				new FastDateFormatFactoryUtil();
 
 			instance.setFastDateFormatFactory(new FastDateFormatFactoryImpl());
 		}

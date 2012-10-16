@@ -29,7 +29,7 @@ public class BundleFilterConfig implements FilterConfig {
 
 	public BundleFilterConfig(
 		ServletContext servletContext, String filterName,
-		Dictionary<String,String> initParameters, HttpContext httpContext) {
+		Dictionary<String, String> initParameters, HttpContext httpContext) {
 
 		_servletContext = servletContext;
 		_filterName = filterName;
@@ -60,7 +60,7 @@ public class BundleFilterConfig implements FilterConfig {
 
 	private String _filterName;
 	private HttpContext _httpContext;
-	private Dictionary<String,String> _initParameters;
+	private Dictionary<String, String> _initParameters;
 	private ServletContext _servletContext;
 
 }
