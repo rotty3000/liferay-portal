@@ -214,7 +214,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>Module Framework Servlet</servlet-name>
-		<servlet-class>com.liferay.portal.servlet.ModuleFrameworkServlet</servlet-class>
+		<servlet-class>com.liferay.portal.module.framework.adapter.servlet.ModuleFrameworkServletAdapter</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>

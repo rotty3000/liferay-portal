@@ -35,6 +35,8 @@ public interface ModuleFrameworkConstants {
 
 	public static final String CONTEXT_PATH = "context.path";
 
+	public static final String EXCEPTION = "exception";
+
 	public static final String EXTENDER_BUNDLE = "extender.bundle";
 
 	public static final String EXTENDER_BUNDLE_ID = "extender.bundle.id";
@@ -45,14 +47,13 @@ public interface ModuleFrameworkConstants {
 	public static final String EXTENDER_BUNDLE_VERSION =
 		"extender.bundle.version";
 
-	public static final String EXCEPTION = "exception";
-
 	public static final String FELIX_FILEINSTALL_DIR = "felix.fileinstall.dir";
 
 	public static final String FELIX_FILEINSTALL_LOG_LEVEL =
 		"felix.fileinstall.log.level";
 
-	public static final String FELIX_FILEINSTALL_POLL = "felix.fileinstall.poll";
+	public static final String FELIX_FILEINSTALL_POLL =
+		"felix.fileinstall.poll";
 
 	public static final String FELIX_FILEINSTALL_TMPDIR =
 		"felix.fileinstall.tmpdir";

@@ -33,7 +33,7 @@
 <#assign ParamUtil =                     staticUtil["com.liferay.portal.kernel.util.ParamUtil"] />
 <#assign Validator =                     staticUtil["com.liferay.portal.kernel.util.Validator"] />
 <#assign ModuleFrameworkException =      staticUtil["com.liferay.portal.module.framework.ModuleFrameworkException"] />
-<#assign ModuleFrameworkUtil =           staticUtil["com.liferay.portal.module.framework.ModuleFrameworkUtil"] />
+<#assign ModuleFrameworkAdapter =        staticUtil["com.liferay.portal.module.framework.adapter.ModuleFrameworkAdapter"] />
 <#assign PortalUtil =                    staticUtil["com.liferay.portal.util.PortalUtil"] />
 <#assign PropsValues =                   staticUtil["com.liferay.portal.util.PropsValues"] />
 <#assign WebKeys =                       staticUtil["com.liferay.portal.util.WebKeys"] />
@@ -52,6 +52,6 @@
 
 <#assign dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone) />
 
-<#assign framework = ModuleFrameworkUtil.getFramework() />
+<#assign framework = ModuleFrameworkAdapter.getFramework() />
 
 <#assign bundleContext = framework.getBundleContext() />
