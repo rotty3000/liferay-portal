@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.templateparser.TransformerListener;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -34,6 +35,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
+import com.liferay.portal.util.PropsUtil;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.journal.DuplicateTemplateIdException;
@@ -453,6 +455,63 @@ public class JournalTemplateLocalServiceImpl
 		throws PortalException, SystemException {
 
 		return journalTemplatePersistence.findBySmallImageId(smallImageId);
+	}
+
+	public String getTemplateScript(
+		JournalTemplate template, Map<String, String> tokens, String languageId,
+		boolean transform) {
+
+		String script = template.getXsl();
+
+		if (transform) {
+
+			// Listeners
+
+			String[] listeners = PropsUtil.getArray(
+				PropsKeys.JOURNAL_TRANSFORMER_LISTENER);
+
+			for (int i = 0; i < listeners.length; i++) {
+				TransformerListener listener = null;
+
+				try {
+					listener = (TransformerListener)Class.forName(
+						listeners[i]).newInstance();
+
+					listener.setTemplateDriven(true);
+					listener.setLanguageId(languageId);
+					listener.setTokens(tokens);
+				}
+				catch (Exception e) {
+					_log.error(e, e);
+				}
+
+				// Modify transform script
+
+				if (listener != null) {
+					script = listener.onScript(script);
+				}
+			}
+		}
+
+		return script;
+	}
+
+	public String getTemplateScript(
+			long groupId, String templateId, Map<String, String> tokens,
+			String languageId)
+		throws PortalException, SystemException {
+
+		return getTemplateScript(groupId, templateId, tokens, languageId, true);
+	}
+
+	public String getTemplateScript(
+			long groupId, String templateId, Map<String, String> tokens,
+			String languageId, boolean transform)
+		throws PortalException, SystemException {
+
+		JournalTemplate template = getTemplate(groupId, templateId);
+
+		return getTemplateScript(template, tokens, languageId, transform);
 	}
 
 	public List<JournalTemplate> getTemplates() throws SystemException {

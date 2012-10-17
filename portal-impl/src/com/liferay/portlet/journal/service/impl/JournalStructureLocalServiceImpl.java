@@ -368,6 +368,34 @@ public class JournalStructureLocalServiceImpl
 		}
 	}
 
+	public JournalStructure fetchStructure(long groupId, String structureId)
+		throws PortalException, SystemException {
+
+		structureId = structureId.trim().toUpperCase();
+
+		JournalStructure structure = null;
+
+		if (groupId == 0) {
+			_log.error(
+				"No group id was passed for " + structureId + ". Group id is " +
+					"required since 4.2.0. Please update all custom code and " +
+					"data that references structures without a group id.");
+
+			List<JournalStructure> structures =
+				journalStructurePersistence.findByStructureId(structureId);
+
+			if (!structures.isEmpty()) {
+				structure = structures.get(0);
+			}
+		}
+		else {
+			structure = journalStructurePersistence.fetchByG_S(
+				groupId, structureId);
+		}
+
+		return structure;
+	}
+
 	public JournalStructure getStructure(long id)
 		throws PortalException, SystemException {
 

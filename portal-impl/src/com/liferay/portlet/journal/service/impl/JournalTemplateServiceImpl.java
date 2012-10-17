@@ -106,6 +106,42 @@ public class JournalTemplateServiceImpl extends JournalTemplateServiceBaseImpl {
 		return journalTemplateLocalService.getTemplate(groupId, templateId);
 	}
 
+	public String getTemplateScript(
+			JournalTemplate template, Map<String, String> tokens,
+			String languageId, boolean transform)
+		throws PortalException, SystemException {
+
+		JournalTemplatePermission.check(
+			getPermissionChecker(), template, ActionKeys.UPDATE);
+
+		return journalTemplateLocalService.getTemplateScript(
+			template, tokens, languageId, transform);
+	}
+
+	public String getTemplateScript(
+			long groupId, String templateId, Map<String, String> tokens,
+			String languageId)
+		throws PortalException, SystemException {
+
+		JournalTemplatePermission.check(
+			getPermissionChecker(), groupId, templateId, ActionKeys.UPDATE);
+
+		return journalTemplateLocalService.getTemplateScript(
+			groupId, templateId, tokens, languageId);
+	}
+
+	public String getTemplateScript(
+			long groupId, String templateId, Map<String, String> tokens,
+			String languageId, boolean transform)
+		throws PortalException, SystemException {
+
+		JournalTemplatePermission.check(
+			getPermissionChecker(), groupId, templateId, ActionKeys.UPDATE);
+
+		return journalTemplateLocalService.getTemplateScript(
+			groupId, templateId, tokens, languageId, transform);
+	}
+
 	public List<JournalTemplate> search(
 			long companyId, long[] groupIds, String keywords,
 			String structureId, String structureIdComparator, int start,

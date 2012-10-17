@@ -287,6 +287,124 @@ public class JournalTemplateServiceHttp {
 		}
 	}
 
+	public static java.lang.String getTemplateScript(
+		HttpPrincipal httpPrincipal,
+		com.liferay.portlet.journal.model.JournalTemplate template,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
+					"getTemplateScript", _getTemplateScriptParameterTypes6);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey,
+					template, tokens, languageId, transform);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (java.lang.String)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
+	public static java.lang.String getTemplateScript(
+		HttpPrincipal httpPrincipal, long groupId, java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
+					"getTemplateScript", _getTemplateScriptParameterTypes7);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
+					templateId, tokens, languageId);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (java.lang.String)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
+	public static java.lang.String getTemplateScript(
+		HttpPrincipal httpPrincipal, long groupId, java.lang.String templateId,
+		java.util.Map<java.lang.String, java.lang.String> tokens,
+		java.lang.String languageId, boolean transform)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
+					"getTemplateScript", _getTemplateScriptParameterTypes8);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
+					templateId, tokens, languageId, transform);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				if (e instanceof com.liferay.portal.kernel.exception.PortalException) {
+					throw (com.liferay.portal.kernel.exception.PortalException)e;
+				}
+
+				if (e instanceof com.liferay.portal.kernel.exception.SystemException) {
+					throw (com.liferay.portal.kernel.exception.SystemException)e;
+				}
+
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (java.lang.String)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	public static java.util.List<com.liferay.portlet.journal.model.JournalTemplate> search(
 		HttpPrincipal httpPrincipal, long companyId, long[] groupIds,
 		java.lang.String keywords, java.lang.String structureId,
@@ -295,7 +413,7 @@ public class JournalTemplateServiceHttp {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"search", _searchParameterTypes6);
+					"search", _searchParameterTypes9);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					companyId, groupIds, keywords, structureId,
@@ -332,7 +450,7 @@ public class JournalTemplateServiceHttp {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"search", _searchParameterTypes7);
+					"search", _searchParameterTypes10);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					companyId, groupIds, templateId, structureId,
@@ -367,7 +485,7 @@ public class JournalTemplateServiceHttp {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"searchCount", _searchCountParameterTypes8);
+					"searchCount", _searchCountParameterTypes11);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					companyId, groupIds, keywords, structureId,
@@ -402,7 +520,7 @@ public class JournalTemplateServiceHttp {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"searchCount", _searchCountParameterTypes9);
+					"searchCount", _searchCountParameterTypes12);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
 					companyId, groupIds, templateId, structureId,
@@ -443,7 +561,7 @@ public class JournalTemplateServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"updateTemplate", _updateTemplateParameterTypes10);
+					"updateTemplate", _updateTemplateParameterTypes13);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
 					templateId, structureId, nameMap, descriptionMap, xsl,
@@ -488,7 +606,7 @@ public class JournalTemplateServiceHttp {
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			MethodKey methodKey = new MethodKey(JournalTemplateServiceUtil.class.getName(),
-					"updateTemplate", _updateTemplateParameterTypes11);
+					"updateTemplate", _updateTemplateParameterTypes14);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey, groupId,
 					templateId, structureId, nameMap, descriptionMap, xsl,
@@ -547,35 +665,47 @@ public class JournalTemplateServiceHttp {
 	private static final Class<?>[] _getTemplateParameterTypes5 = new Class[] {
 			long.class, java.lang.String.class
 		};
-	private static final Class<?>[] _searchParameterTypes6 = new Class[] {
+	private static final Class<?>[] _getTemplateScriptParameterTypes6 = new Class[] {
+			com.liferay.portlet.journal.model.JournalTemplate.class,
+			java.util.Map.class, java.lang.String.class, boolean.class
+		};
+	private static final Class<?>[] _getTemplateScriptParameterTypes7 = new Class[] {
+			long.class, java.lang.String.class, java.util.Map.class,
+			java.lang.String.class
+		};
+	private static final Class<?>[] _getTemplateScriptParameterTypes8 = new Class[] {
+			long.class, java.lang.String.class, java.util.Map.class,
+			java.lang.String.class, boolean.class
+		};
+	private static final Class<?>[] _searchParameterTypes9 = new Class[] {
 			long.class, long[].class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
-	private static final Class<?>[] _searchParameterTypes7 = new Class[] {
+	private static final Class<?>[] _searchParameterTypes10 = new Class[] {
 			long.class, long[].class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, boolean.class,
 			int.class, int.class,
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
-	private static final Class<?>[] _searchCountParameterTypes8 = new Class[] {
+	private static final Class<?>[] _searchCountParameterTypes11 = new Class[] {
 			long.class, long[].class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class
 		};
-	private static final Class<?>[] _searchCountParameterTypes9 = new Class[] {
+	private static final Class<?>[] _searchCountParameterTypes12 = new Class[] {
 			long.class, long[].class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, boolean.class
 		};
-	private static final Class<?>[] _updateTemplateParameterTypes10 = new Class[] {
+	private static final Class<?>[] _updateTemplateParameterTypes13 = new Class[] {
 			long.class, java.lang.String.class, java.lang.String.class,
 			java.util.Map.class, java.util.Map.class, java.lang.String.class,
 			boolean.class, java.lang.String.class, boolean.class, boolean.class,
 			java.lang.String.class, java.io.File.class,
 			com.liferay.portal.service.ServiceContext.class
 		};
-	private static final Class<?>[] _updateTemplateParameterTypes11 = new Class[] {
+	private static final Class<?>[] _updateTemplateParameterTypes14 = new Class[] {
 			long.class, java.lang.String.class, java.lang.String.class,
 			java.util.Map.class, java.util.Map.class, java.lang.String.class,
 			boolean.class, java.lang.String.class, boolean.class,
