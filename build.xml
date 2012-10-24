@@ -219,7 +219,7 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 			<fileset dir="lib/portal" />
 		</copy>
 
-		<copy todir="${app.server.lib.portal.dir}">
+		<copy todir="${module.framework.core.dir}">
 			<fileset dir="lib/framework/${module.framework.implementation}" includes="*.jar" />
 		</copy>
 

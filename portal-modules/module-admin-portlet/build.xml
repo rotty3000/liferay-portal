@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="module-admin-portlet" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="portal-modules" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
 	<property name="project.dir" value="../.." />
 
 	<import file="../../build-common-java.xml" />

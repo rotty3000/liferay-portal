@@ -43,7 +43,7 @@ import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
-import com.liferay.portal.module.framework.ModuleFrameworkUtil;
+import com.liferay.portal.module.framework.adapter.ModuleFrameworkAdapter;
 import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
@@ -120,7 +120,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		}
 
 		try {
-			ModuleFrameworkUtil.stopRuntime();
+			ModuleFrameworkAdapter.stopRuntime();
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -130,7 +130,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			super.contextDestroyed(servletContextEvent);
 
 			try {
-				ModuleFrameworkUtil.stopFramework();
+				ModuleFrameworkAdapter.stopFramework();
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -169,7 +169,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
 			try {
-				ModuleFrameworkUtil.startFramework();
+				ModuleFrameworkAdapter.startFramework();
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -238,13 +238,14 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
 			try {
-				ModuleFrameworkUtil.registerContext(applicationContext);
+				ModuleFrameworkAdapter.registerContext(applicationContext);
 
 				PortalLifecycleUtil.register(
 					new PortalLifecycle() {
 
 						public void portalInit() {
-							ModuleFrameworkUtil.registerContext(servletContext);
+							ModuleFrameworkAdapter.registerContext(
+								servletContext);
 						}
 
 						public void portalDestroy() {
@@ -254,7 +255,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 					}
 				);
 
-				ModuleFrameworkUtil.startRuntime();
+				ModuleFrameworkAdapter.startRuntime();
 			}
 			catch (Exception e) {
 				_log.error(e, e);

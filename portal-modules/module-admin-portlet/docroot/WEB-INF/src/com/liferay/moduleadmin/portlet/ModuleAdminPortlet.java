@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.module.framework.ModuleFrameworkException;
-import com.liferay.portal.module.framework.ModuleFrameworkUtil;
+import com.liferay.portal.module.framework.adapter.ModuleFrameworkAdapter;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
@@ -93,11 +93,11 @@ public class ModuleAdminPortlet extends FreeMarkerPortlet {
 					throw new ModuleFrameworkException("file-does-not-exist");
 				}
 
-				ModuleFrameworkUtil.addBundle(
+				ModuleFrameworkAdapter.addBundle(
 					location, new FileInputStream(file));
 			}
 			else if (cmd.equals("install-from-remote-location")) {
-				ModuleFrameworkUtil.addBundle(location);
+				ModuleFrameworkAdapter.addBundle(location);
 			}
 			else if (cmd.equals("update-from-upload")) {
 				long bundleId = ParamUtil.getLong(uploadRequest, "bundleId");
@@ -106,18 +106,18 @@ public class ModuleAdminPortlet extends FreeMarkerPortlet {
 					throw new ModuleFrameworkException("file-does-not-exist");
 				}
 
-				ModuleFrameworkUtil.updateBundle(
+				ModuleFrameworkAdapter.updateBundle(
 					bundleId, new FileInputStream(file));
 			}
 			else if (cmd.equals("update-from-remote-location")) {
 				long bundleId = ParamUtil.getLong(uploadRequest, "bundleId");
 
-				ModuleFrameworkUtil.updateBundle(bundleId);
+				ModuleFrameworkAdapter.updateBundle(bundleId);
 			}
 			else if (cmd.equals("uninstall")) {
 				long bundleId = ParamUtil.getLong(uploadRequest, "bundleId");
 
-				ModuleFrameworkUtil.uninstallBundle(bundleId);
+				ModuleFrameworkAdapter.uninstallBundle(bundleId);
 			}
 
 			sendRedirect(actionRequest, actionResponse);
@@ -134,9 +134,9 @@ public class ModuleAdminPortlet extends FreeMarkerPortlet {
 	@Override
 	public void render(
 			RenderRequest renderRequest, RenderResponse renderResponse)
-		throws PortletException, IOException {
+		throws IOException, PortletException {
 
-		Map<String, Object> ftlVariables = new HashMap<String,Object>();
+		Map<String, Object> ftlVariables = new HashMap<String, Object>();
 
 		ftlVariables.put("ModuleUtil", new ModuleUtil(_packageAdminTracker));
 
@@ -162,22 +162,23 @@ public class ModuleAdminPortlet extends FreeMarkerPortlet {
 				int startLevel = ParamUtil.getInteger(
 					resourceRequest, "startLevel");
 
-				ModuleFrameworkUtil.setBundleStartLevel(bundleId, startLevel);
+				ModuleFrameworkAdapter.setBundleStartLevel(
+					bundleId, startLevel);
 			}
 			else if (cmd.equals("startBundle")) {
-				ModuleFrameworkUtil.startBundle(bundleId);
+				ModuleFrameworkAdapter.startBundle(bundleId);
 			}
 			else if (cmd.equals("stopBundle")) {
-				ModuleFrameworkUtil.stopBundle(bundleId);
+				ModuleFrameworkAdapter.stopBundle(bundleId);
 			}
 			else if (cmd.equals("uninstallBundle")) {
-				ModuleFrameworkUtil.uninstallBundle(bundleId);
+				ModuleFrameworkAdapter.uninstallBundle(bundleId);
 			}
 			else if (cmd.equals("updateBundle")) {
-				ModuleFrameworkUtil.updateBundle(bundleId);
+				ModuleFrameworkAdapter.updateBundle(bundleId);
 			}
 
-			String state = ModuleFrameworkUtil.getState(bundleId);
+			String state = ModuleFrameworkAdapter.getState(bundleId);
 
 			JSONObject jsonResult = JSONFactoryUtil.createJSONObject();
 

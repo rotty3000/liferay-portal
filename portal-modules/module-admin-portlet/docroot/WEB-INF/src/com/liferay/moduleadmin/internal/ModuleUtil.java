@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,10 +47,10 @@ public class ModuleUtil {
 		return bundle.adapt((BundleStartLevel.class));
 	}
 
-	public Map<String,Object> getHeaders(Bundle bundle, String languageId) {
-		Map<String,Object> headerMap = new HashMap<String,Object>();
+	public Map<String, Object> getHeaders(Bundle bundle, String languageId) {
+		Map<String, Object> headerMap = new HashMap<String, Object>();
 
-		Dictionary<String,String> headers = bundle.getHeaders(languageId);
+		Dictionary<String, String> headers = bundle.getHeaders(languageId);
 
 		Enumeration<String> keys = headers.keys();
 
@@ -66,8 +66,7 @@ public class ModuleUtil {
 
 	@SuppressWarnings("rawtypes")
 	public List<ServiceReference> getRegisteredServices(Bundle bundle) {
-		ServiceReference[] serviceReferences =
-			bundle.getRegisteredServices();
+		ServiceReference[] serviceReferences = bundle.getRegisteredServices();
 
 		if (serviceReferences == null) {
 			serviceReferences = new ServiceReference[0];
@@ -103,7 +102,8 @@ public class ModuleUtil {
 
 		if (exportedPackages != null) {
 			for (ExportedPackage exportedPackage : exportedPackages) {
-				org.osgi.framework.Version version = exportedPackage.getVersion();
+				org.osgi.framework.Version version =
+					exportedPackage.getVersion();
 
 				Version curVersion = new Version(version.toString());
 

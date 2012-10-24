@@ -39,6 +39,7 @@
 
 	<property name="liferay.home" value="${app.server.parent.dir}" />
 
+	<property name="module.framework.core.dir" value="${liferay.home}/data/framework/core" />
 	<property name="module.framework.lib.dir" value="${liferay.home}/data/framework/lib" />
 
 	<path id="lib.classpath">
