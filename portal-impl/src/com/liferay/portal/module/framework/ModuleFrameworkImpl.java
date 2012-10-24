@@ -138,80 +138,6 @@ public class ModuleFrameworkImpl
 		}
 	}
 
-	private Map<String, String> _buildProperties() {
-		Map<String, String> properties = new HashMap<String, String>();
-
-		properties.put(
-			Constants.BUNDLE_DESCRIPTION, ReleaseInfo.getReleaseInfo());
-		properties.put(Constants.BUNDLE_NAME, ReleaseInfo.getName());
-		properties.put(Constants.BUNDLE_VENDOR, ReleaseInfo.getVendor());
-		properties.put(Constants.BUNDLE_VERSION, ReleaseInfo.getVersion());
-		properties.put(
-			Constants.FRAMEWORK_BEGINNING_STARTLEVEL,
-			String.valueOf(PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
-		properties.put(
-			Constants.FRAMEWORK_BUNDLE_PARENT,
-			Constants.FRAMEWORK_BUNDLE_PARENT_APP);
-		properties.put(
-			Constants.FRAMEWORK_STORAGE,
-			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
-
-		// File install
-
-		StringBundler sb = new StringBundler(3);
-
-		sb.append(PropsValues.MODULE_FRAMEWORK_LIB_DIR);
-		sb.append(StringPool.COMMA);
-		sb.append(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIR);
-
-		properties.put(FELIX_FILEINSTALL_DIR, sb.toString());
-		properties.put(FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
-		properties.put(
-			FELIX_FILEINSTALL_POLL,
-			String.valueOf(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL));
-		properties.put(FELIX_FILEINSTALL_TMPDIR,
-			System.getProperty(SystemProperties.TMP_DIR));
-
-		Properties extraProperties = PropsUtil.getProperties(
-			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
-
-		for (Object key : extraProperties.keySet()) {
-			String propertyKey = (String)key;
-
-			properties.put(
-				propertyKey, (String)extraProperties.get(propertyKey));
-		}
-
-		UniqueList<String> packages = new UniqueList<String>();
-
-		packages.addAll(
-			Arrays.asList(PropsValues.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA));
-
-		Collections.sort(packages);
-
-		if (_log.isTraceEnabled()) {
-			_log.trace(
-				"The portal's system bundle is exporting the following " +
-					"packages: \n" +
-						StringUtil.merge(packages).replace(",", "\n"));
-		}
-
-		properties.put(
-			Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-			StringUtil.merge(packages));
-
-		return properties;
-	}
-
-	private void _checkPermission() throws PrincipalException {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if ((permissionChecker == null) || !permissionChecker.isOmniadmin()) {
-			throw new PrincipalException();
-		}
-	}
-
 	public Bundle getBundle(long bundleId) {
 		if (_framework == null) {
 			return null;
@@ -282,175 +208,8 @@ public class ModuleFrameworkImpl
 		}
 	}
 
-	private void _generateSystemFragments(List<Bundle> toRefresh)
-		throws Exception {
-
-		Set<URL> set = new HashSet<URL>();
-
-		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
-
-		URL url = null;
-
-		Enumeration<URL> enu = classLoader.getResources(MANIFEST_PATH);
-
-		while (enu.hasMoreElements()) {
-			url = enu.nextElement();
-
-			set.add(url);
-		}
-
-		enu = Validator.class.getClassLoader().getResources(
-			"/".concat(MANIFEST_PATH));
-
-		while (enu.hasMoreElements()) {
-			url = enu.nextElement();
-
-			set.add(url);
-		}
-
-		enu = Collections.enumeration(set);
-
-		while (enu.hasMoreElements()) {
-			url = enu.nextElement();
-
-			Manifest manifest = new Manifest(url.openStream());
-
-			Attributes attributes = manifest.getMainAttributes();
-
-			String bundleSymbolicName = attributes.getValue(
-				Constants.BUNDLE_SYMBOLICNAME);
-
-			if (Validator.isNull(bundleSymbolicName)) {
-				continue;
-			}
-
-			String rootBundleSymbolicName = bundleSymbolicName;
-
-			int pos = rootBundleSymbolicName.indexOf(StringPool.SEMICOLON);
-
-			if (pos != -1) {
-				rootBundleSymbolicName = rootBundleSymbolicName.substring(
-					0, pos);
-			}
-
-			if (ArrayUtil.contains(
-					PropsValues.MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS,
-					rootBundleSymbolicName)) {
-
-				continue;
-			}
-
-			String bundleVersion = GetterUtil.getString(
-				attributes.getValue(Constants.BUNDLE_VERSION));
-
-			String fragmentFileName = "gen-".concat(rootBundleSymbolicName);
-
-			if (Validator.isNotNull(bundleVersion)) {
-				fragmentFileName += "-".concat(bundleVersion);
-			}
-
-			File fragmentFile = new File(
-				System.getProperty(SystemProperties.TMP_DIR),
-				fragmentFileName.concat(".jar"));
-
-			if (!fragmentFile.exists()) {
-				Manifest fragmentManifest = new Manifest();
-
-				Attributes fragmentAttributes =
-					fragmentManifest.getMainAttributes();
-
-				fragmentAttributes.putValue(
-					Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
-				fragmentAttributes.putValue(
-					Constants.BUNDLE_MANIFESTVERSION, String.valueOf(2));
-				fragmentAttributes.putValue(
-					Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName);
-				fragmentAttributes.putValue(
-					Constants.BUNDLE_VERSION, bundleVersion);
-				fragmentAttributes.putValue(
-					Constants.EXPORT_PACKAGE,
-					attributes.getValue(Constants.EXPORT_PACKAGE));
-				fragmentAttributes.putValue(
-					Constants.FRAGMENT_HOST,
-					"system.bundle;extension:=framework");
-
-				JarOutputStream jarOutputStream = new JarOutputStream(
-					new FileOutputStream(fragmentFile));
-
-				try {
-					jarOutputStream.putNextEntry(new JarEntry(MANIFEST_PATH));
-
-					fragmentManifest.write(jarOutputStream);
-
-					jarOutputStream.closeEntry();
-				}
-				finally {
-					jarOutputStream.close();
-				}
-			}
-
-			InputStream inputStream = new BufferedInputStream(
-				new FileInputStream(fragmentFile));
-
-			try {
-				Bundle bundle = (Bundle)addBundle(
-					fragmentFile.getAbsolutePath(), inputStream, false);
-
-				if ((bundle.getState() & Bundle.INSTALLED) != 0) {
-					toRefresh.add(bundle);
-				}
-			}
-			finally {
-				inputStream.close();
-			}
-		}
-	}
-
 	public Framework getFramework() {
 		return _framework;
-	}
-
-	private Set<Class<?>> _getInterfaces(Object bean) {
-		Set<Class<?>> interfaces = new HashSet<Class<?>>();
-
-		Class<?> beanClass = bean.getClass();
-
-		for (Class<?> interfaceClass : beanClass.getInterfaces()) {
-			interfaces.add(interfaceClass);
-		}
-
-		while ((beanClass = beanClass.getSuperclass()) != null) {
-			for (Class<?> interfaceClass : beanClass.getInterfaces()) {
-				if (!interfaces.contains(interfaceClass)) {
-					interfaces.add(interfaceClass);
-				}
-			}
-		}
-
-		return interfaces;
-	}
-
-	private String _getFileInstallLogLevel() {
-
-		// Felix file install uses a logging level scheme as follows:
-		// NONE=0, ERROR=1, WARNING=2, INFO=3, DEBUG=4
-
-		int fileInstallLogLevel = 0;
-
-		if (_log.isDebugEnabled()) {
-			fileInstallLogLevel = 4;
-		}
-		else if (_log.isErrorEnabled()) {
-			fileInstallLogLevel = 1;
-		}
-		else if (_log.isInfoEnabled()) {
-			fileInstallLogLevel = 3;
-		}
-		else if (_log.isWarnEnabled()) {
-			fileInstallLogLevel = 2;
-		}
-
-		return String.valueOf(fileInstallLogLevel);
 	}
 
 	public String getState(long bundleId) throws PortalException {
@@ -487,30 +246,6 @@ public class ModuleFrameworkImpl
 		}
 	}
 
-	private void _registerApplicationContext(
-		ApplicationContext applicationContext) {
-
-		BundleContext bundleContext = _framework.getBundleContext();
-
-		for (String beanName : applicationContext.getBeanDefinitionNames()) {
-			Object bean = null;
-
-			try {
-				bean = applicationContext.getBean(beanName);
-			}
-			catch (BeanIsAbstractException biae) {
-				// Ignore this case
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-
-			if (bean != null) {
-				_registerService(bundleContext, beanName, bean);
-			}
-		}
-	}
-
 	public void registerContext(Object context) {
 		if (context == null) {
 			return;
@@ -530,52 +265,6 @@ public class ModuleFrameworkImpl
 		}
 	}
 
-	private void _registerService(
-		BundleContext bundleContext, String beanName, Object bean) {
-
-		Set<Class<?>> interfaces = _getInterfaces(bean);
-
-		List<String> names = new ArrayList<String>();
-
-		for (Class<?> interfaceClass : interfaces) {
-			if (ArrayUtil.contains(
-					PropsValues.MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES,
-					interfaceClass.getName())) {
-
-				continue;
-			}
-
-			names.add(interfaceClass.getName());
-		}
-
-		if (names.isEmpty()) {
-			return;
-		}
-
-		Hashtable<String, Object> properties = new Hashtable<String, Object>();
-
-		properties.put(BEAN_ID, beanName);
-		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
-		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
-
-		bundleContext.registerService(
-			names.toArray(new String[names.size()]), bean, properties);
-	}
-
-	private void _registerServletContext(ServletContext servletContext) {
-		BundleContext bundleContext = _framework.getBundleContext();
-
-		Hashtable<String, Object> properties = new Hashtable<String, Object>();
-
-		properties.put(BEAN_ID, ServletContext.class.getName());
-		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
-		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
-
-		bundleContext.registerService(
-			new String[] {ServletContext.class.getName()}, servletContext,
-			properties);
-	}
-
 	public void setBundleStartLevel(long bundleId, int startLevel)
 		throws PortalException {
 
@@ -591,182 +280,6 @@ public class ModuleFrameworkImpl
 			BundleStartLevel.class);
 
 		bundleStartLevel.setStartLevel(startLevel);
-	}
-
-	@SuppressWarnings("deprecation")
-	private void _setupInitialBundles()
-		throws Exception {
-
-		BundleContext bundleContext = getFramework().getBundleContext();
-
-		ServiceReference<?> frameworkWiringReference =
-			bundleContext.getServiceReference(FrameworkWiring.class.getName());
-
-		FrameworkWiring frameworkWiring = null;
-
-		if (frameworkWiringReference != null) {
-			frameworkWiring = (FrameworkWiring)bundleContext.getService(
-				frameworkWiringReference);
-		}
-
-		List<Bundle> lazyActivationBundles = new ArrayList<Bundle>();
-		List<Bundle> startBundles = new ArrayList<Bundle>();
-		List<Bundle> refreshBundles = new ArrayList<Bundle>();
-
-		_generateSystemFragments(refreshBundles);
-
-		for (String initialBundle :
-				PropsValues.MODULE_FRAMEWORK_INITIAL_BUNDLES) {
-
-			_installInitialBundle(
-				initialBundle, lazyActivationBundles, startBundles,
-				refreshBundles);
-		}
-
-		FrameworkListener frameworkListener = new StartupFrameworkListener(
-			startBundles, lazyActivationBundles);
-
-		if (frameworkWiring != null) {
-			frameworkWiring.refreshBundles(refreshBundles, frameworkListener);
-
-			return;
-		}
-
-		ServiceReference<?> packageAdminReference =
-			bundleContext.getServiceReference(PackageAdmin.class.getName());
-
-		PackageAdmin packageAdmin = null;
-
-		if (packageAdminReference != null) {
-			packageAdmin = (PackageAdmin)bundleContext.getService(
-				packageAdminReference);
-		}
-
-		if (packageAdmin == null) {
-			return;
-		}
-
-		bundleContext.addFrameworkListener(frameworkListener);
-
-		packageAdmin.refreshPackages(
-			refreshBundles.toArray(new Bundle[refreshBundles.size()]));
-	}
-
-	private void _installInitialBundle(
-		String location, List<Bundle> lazyActivationBundles,
-		List<Bundle> startBundles, List<Bundle> refreshBundles) {
-
-		int defaultStartLevel =
-			PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL;
-		boolean start = false;
-		int startLevel = defaultStartLevel;
-
-		int pos = location.lastIndexOf(StringPool.AT);
-
-		if (pos != -1) {
-			String[] attributes = StringUtil.split(
-				location.substring(pos + 1), StringPool.COLON);
-
-			for (String attribute : attributes) {
-				if (attribute.equals("start")) {
-					start = true;
-				}
-				else {
-					startLevel = GetterUtil.getInteger(attribute);
-				}
-			}
-
-			location = location.substring(0, pos);
-		}
-
-		InputStream inputStream = null;
-
-		try {
-			if (!location.startsWith("file:")) {
-				location = "file:".concat(
-					PropsValues.LIFERAY_LIB_PORTAL_DIR.concat(location));
-			}
-
-			URL initialBundleURL = new URL(location);
-
-			try {
-				inputStream = new BufferedInputStream(
-					initialBundleURL.openStream());
-			}
-			catch (IOException ioe) {
-				_log.error(ioe.getMessage());
-
-				return;
-			}
-
-			Bundle bundle = (Bundle)addBundle(
-				initialBundleURL.toString(), inputStream, false);
-
-			if (bundle == null) {
-				return;
-			}
-
-			if (hasLazyActivationPolicy(bundle)) {
-				lazyActivationBundles.add(bundle);
-
-				return;
-			}
-
-			if (((bundle.getState() & Bundle.UNINSTALLED) == 0) &&
-				(startLevel > 0)) {
-
-				BundleStartLevel bundleStartLevel = bundle.adapt(
-					BundleStartLevel.class);
-
-				bundleStartLevel.setStartLevel(startLevel);
-			}
-
-			if (start) {
-				startBundles.add(bundle);
-			}
-
-			if ((bundle.getState() & Bundle.INSTALLED) != 0) {
-				refreshBundles.add(bundle);
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-		finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				}
-				catch (IOException e) {
-					_log.error(e, e);
-				}
-			}
-		}
-	}
-
-	private boolean hasLazyActivationPolicy(Bundle bundle) {
-		Dictionary<String, String> headers = bundle.getHeaders();
-
-		String fragmentHost = headers.get(Constants.FRAGMENT_HOST);
-
-		if (fragmentHost != null) {
-			return false;
-		}
-
-		String activationPolicy = headers.get(Constants.BUNDLE_ACTIVATIONPOLICY);
-
-		if (activationPolicy != null) {
-			Map<String, Map<String, String>> header = OSGiHeader.parseHeader(
-				activationPolicy);
-
-			if ((header.size() > 0) &&
-				header.containsKey(Constants.ACTIVATION_LAZY)) {
-
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public void startBundle(long bundleId) throws PortalException {
@@ -973,6 +486,494 @@ public class ModuleFrameworkImpl
 
 			throw new ModuleFrameworkException(be);
 		}
+	}
+
+	private Map<String, String> _buildProperties() {
+		Map<String, String> properties = new HashMap<String, String>();
+
+		properties.put(
+			Constants.BUNDLE_DESCRIPTION, ReleaseInfo.getReleaseInfo());
+		properties.put(Constants.BUNDLE_NAME, ReleaseInfo.getName());
+		properties.put(Constants.BUNDLE_VENDOR, ReleaseInfo.getVendor());
+		properties.put(Constants.BUNDLE_VERSION, ReleaseInfo.getVersion());
+		properties.put(
+			Constants.FRAMEWORK_BEGINNING_STARTLEVEL,
+			String.valueOf(PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
+		properties.put(
+			Constants.FRAMEWORK_BUNDLE_PARENT,
+			Constants.FRAMEWORK_BUNDLE_PARENT_APP);
+		properties.put(
+			Constants.FRAMEWORK_STORAGE,
+			PropsValues.MODULE_FRAMEWORK_STATE_DIR);
+		properties.put("osgi.framework.useSystemProperties", "false");
+
+		// File install
+
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(PropsValues.MODULE_FRAMEWORK_LIB_DIR);
+		sb.append(StringPool.COMMA);
+		sb.append(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_DIR);
+
+		properties.put(FELIX_FILEINSTALL_DIR, sb.toString());
+		properties.put(FELIX_FILEINSTALL_LOG_LEVEL, _getFileInstallLogLevel());
+		properties.put(
+			FELIX_FILEINSTALL_POLL,
+			String.valueOf(PropsValues.MODULE_FRAMEWORK_AUTO_DEPLOY_INTERVAL));
+		properties.put(FELIX_FILEINSTALL_TMPDIR,
+			System.getProperty(SystemProperties.TMP_DIR));
+
+		Properties extraProperties = PropsUtil.getProperties(
+			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
+
+		for (Object key : extraProperties.keySet()) {
+			String propertyKey = (String)key;
+
+			properties.put(
+				propertyKey, (String)extraProperties.get(propertyKey));
+		}
+
+		UniqueList<String> packages = new UniqueList<String>();
+
+		packages.addAll(
+			Arrays.asList(PropsValues.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA));
+
+		Collections.sort(packages);
+
+		if (_log.isTraceEnabled()) {
+			_log.trace(
+				"The portal's system bundle is exporting the following " +
+					"packages: \n" +
+						StringUtil.merge(packages).replace(",", "\n"));
+		}
+
+		properties.put(
+			Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
+			StringUtil.merge(packages));
+
+		return properties;
+	}
+
+	private void _checkPermission() throws PrincipalException {
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		if ((permissionChecker == null) || !permissionChecker.isOmniadmin()) {
+			throw new PrincipalException();
+		}
+	}
+
+	private void _generateSystemFragments(List<Bundle> toRefresh)
+		throws Exception {
+
+		Set<URL> set = new HashSet<URL>();
+
+		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
+
+		URL url = null;
+
+		Enumeration<URL> enu = classLoader.getResources(MANIFEST_PATH);
+
+		while (enu.hasMoreElements()) {
+			url = enu.nextElement();
+
+			set.add(url);
+		}
+
+		enu = Validator.class.getClassLoader().getResources(
+			"/".concat(MANIFEST_PATH));
+
+		while (enu.hasMoreElements()) {
+			url = enu.nextElement();
+
+			set.add(url);
+		}
+
+		enu = Collections.enumeration(set);
+
+		while (enu.hasMoreElements()) {
+			url = enu.nextElement();
+
+			Manifest manifest = new Manifest(url.openStream());
+
+			Attributes attributes = manifest.getMainAttributes();
+
+			String bundleSymbolicName = attributes.getValue(
+				Constants.BUNDLE_SYMBOLICNAME);
+
+			if (Validator.isNull(bundleSymbolicName)) {
+				continue;
+			}
+
+			String rootBundleSymbolicName = bundleSymbolicName;
+
+			int pos = rootBundleSymbolicName.indexOf(StringPool.SEMICOLON);
+
+			if (pos != -1) {
+				rootBundleSymbolicName = rootBundleSymbolicName.substring(
+					0, pos);
+			}
+
+			if (ArrayUtil.contains(
+					PropsValues.MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS,
+					rootBundleSymbolicName)) {
+
+				continue;
+			}
+
+			String bundleVersion = GetterUtil.getString(
+				attributes.getValue(Constants.BUNDLE_VERSION));
+
+			String fragmentFileName = "gen-".concat(rootBundleSymbolicName);
+
+			if (Validator.isNotNull(bundleVersion)) {
+				fragmentFileName += "-".concat(bundleVersion);
+			}
+
+			File fragmentFile = new File(
+				System.getProperty(SystemProperties.TMP_DIR),
+				fragmentFileName.concat(".jar"));
+
+			if (!fragmentFile.exists()) {
+				Manifest fragmentManifest = new Manifest();
+
+				Attributes fragmentAttributes =
+					fragmentManifest.getMainAttributes();
+
+				fragmentAttributes.putValue(
+					Attributes.Name.MANIFEST_VERSION.toString(), "1.0");
+				fragmentAttributes.putValue(
+					Constants.BUNDLE_MANIFESTVERSION, String.valueOf(2));
+				fragmentAttributes.putValue(
+					Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName);
+				fragmentAttributes.putValue(
+					Constants.BUNDLE_VERSION, bundleVersion);
+				fragmentAttributes.putValue(
+					Constants.EXPORT_PACKAGE,
+					attributes.getValue(Constants.EXPORT_PACKAGE));
+				fragmentAttributes.putValue(
+					Constants.FRAGMENT_HOST,
+					"system.bundle;extension:=framework");
+
+				JarOutputStream jarOutputStream = new JarOutputStream(
+					new FileOutputStream(fragmentFile));
+
+				try {
+					jarOutputStream.putNextEntry(new JarEntry(MANIFEST_PATH));
+
+					fragmentManifest.write(jarOutputStream);
+
+					jarOutputStream.closeEntry();
+				}
+				finally {
+					jarOutputStream.close();
+				}
+			}
+
+			InputStream inputStream = new BufferedInputStream(
+				new FileInputStream(fragmentFile));
+
+			try {
+				Bundle bundle = (Bundle)addBundle(
+					fragmentFile.getAbsolutePath(), inputStream, false);
+
+				if ((bundle.getState() & Bundle.INSTALLED) != 0) {
+					toRefresh.add(bundle);
+				}
+			}
+			finally {
+				inputStream.close();
+			}
+		}
+	}
+
+	private String _getFileInstallLogLevel() {
+
+		// Felix file install uses a logging level scheme as follows:
+		// NONE=0, ERROR=1, WARNING=2, INFO=3, DEBUG=4
+
+		int fileInstallLogLevel = 0;
+
+		if (_log.isDebugEnabled()) {
+			fileInstallLogLevel = 4;
+		}
+		else if (_log.isErrorEnabled()) {
+			fileInstallLogLevel = 1;
+		}
+		else if (_log.isInfoEnabled()) {
+			fileInstallLogLevel = 3;
+		}
+		else if (_log.isWarnEnabled()) {
+			fileInstallLogLevel = 2;
+		}
+
+		return String.valueOf(fileInstallLogLevel);
+	}
+
+	private Set<Class<?>> _getInterfaces(Object bean) {
+		Set<Class<?>> interfaces = new HashSet<Class<?>>();
+
+		Class<?> beanClass = bean.getClass();
+
+		for (Class<?> interfaceClass : beanClass.getInterfaces()) {
+			interfaces.add(interfaceClass);
+		}
+
+		while ((beanClass = beanClass.getSuperclass()) != null) {
+			for (Class<?> interfaceClass : beanClass.getInterfaces()) {
+				if (!interfaces.contains(interfaceClass)) {
+					interfaces.add(interfaceClass);
+				}
+			}
+		}
+
+		return interfaces;
+	}
+
+	private boolean _hasLazyActivationPolicy(Bundle bundle) {
+		Dictionary<String, String> headers = bundle.getHeaders();
+
+		String fragmentHost = headers.get(Constants.FRAGMENT_HOST);
+
+		if (fragmentHost != null) {
+			return false;
+		}
+
+		String activationPolicy = headers.get(Constants.BUNDLE_ACTIVATIONPOLICY);
+
+		if (activationPolicy != null) {
+			Map<String, Map<String, String>> header = OSGiHeader.parseHeader(
+				activationPolicy);
+
+			if ((header.size() > 0) &&
+				header.containsKey(Constants.ACTIVATION_LAZY)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void _installInitialBundle(
+		String location, List<Bundle> lazyActivationBundles,
+		List<Bundle> startBundles, List<Bundle> refreshBundles) {
+
+		int defaultStartLevel =
+			PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL;
+		boolean start = false;
+		int startLevel = defaultStartLevel;
+
+		int pos = location.lastIndexOf(StringPool.AT);
+
+		if (pos != -1) {
+			String[] attributes = StringUtil.split(
+				location.substring(pos + 1), StringPool.COLON);
+
+			for (String attribute : attributes) {
+				if (attribute.equals("start")) {
+					start = true;
+				}
+				else {
+					startLevel = GetterUtil.getInteger(attribute);
+				}
+			}
+
+			location = location.substring(0, pos);
+		}
+
+		InputStream inputStream = null;
+
+		try {
+			if (!location.startsWith("file:")) {
+				location = "file:".concat(
+					PropsValues.LIFERAY_LIB_PORTAL_DIR.concat(location));
+			}
+
+			URL initialBundleURL = new URL(location);
+
+			try {
+				inputStream = new BufferedInputStream(
+					initialBundleURL.openStream());
+			}
+			catch (IOException ioe) {
+				_log.error(ioe.getMessage());
+
+				return;
+			}
+
+			Bundle bundle = (Bundle)addBundle(
+				initialBundleURL.toString(), inputStream, false);
+
+			if (bundle == null) {
+				return;
+			}
+
+			if (_hasLazyActivationPolicy(bundle)) {
+				lazyActivationBundles.add(bundle);
+
+				return;
+			}
+
+			if (((bundle.getState() & Bundle.UNINSTALLED) == 0) &&
+				(startLevel > 0)) {
+
+				BundleStartLevel bundleStartLevel = bundle.adapt(
+					BundleStartLevel.class);
+
+				bundleStartLevel.setStartLevel(startLevel);
+			}
+
+			if (start) {
+				startBundles.add(bundle);
+			}
+
+			if ((bundle.getState() & Bundle.INSTALLED) != 0) {
+				refreshBundles.add(bundle);
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+		finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				}
+				catch (IOException e) {
+					_log.error(e, e);
+				}
+			}
+		}
+	}
+
+	private void _registerApplicationContext(
+		ApplicationContext applicationContext) {
+
+		BundleContext bundleContext = _framework.getBundleContext();
+
+		for (String beanName : applicationContext.getBeanDefinitionNames()) {
+			Object bean = null;
+
+			try {
+				bean = applicationContext.getBean(beanName);
+			}
+			catch (BeanIsAbstractException biae) {
+				// Ignore this case
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+
+			if (bean != null) {
+				_registerService(bundleContext, beanName, bean);
+			}
+		}
+	}
+
+	private void _registerService(
+		BundleContext bundleContext, String beanName, Object bean) {
+
+		Set<Class<?>> interfaces = _getInterfaces(bean);
+
+		List<String> names = new ArrayList<String>();
+
+		for (Class<?> interfaceClass : interfaces) {
+			if (ArrayUtil.contains(
+					PropsValues.MODULE_FRAMEWORK_SERVICES_IGNORED_INTERFACES,
+					interfaceClass.getName())) {
+
+				continue;
+			}
+
+			names.add(interfaceClass.getName());
+		}
+
+		if (names.isEmpty()) {
+			return;
+		}
+
+		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+
+		properties.put(BEAN_ID, beanName);
+		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
+		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
+
+		bundleContext.registerService(
+			names.toArray(new String[names.size()]), bean, properties);
+	}
+
+	private void _registerServletContext(ServletContext servletContext) {
+		BundleContext bundleContext = _framework.getBundleContext();
+
+		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+
+		properties.put(BEAN_ID, ServletContext.class.getName());
+		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
+		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
+
+		bundleContext.registerService(
+			new String[] {ServletContext.class.getName()}, servletContext,
+			properties);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void _setupInitialBundles()
+		throws Exception {
+
+		BundleContext bundleContext = getFramework().getBundleContext();
+
+		ServiceReference<?> frameworkWiringReference =
+			bundleContext.getServiceReference(FrameworkWiring.class.getName());
+
+		FrameworkWiring frameworkWiring = null;
+
+		if (frameworkWiringReference != null) {
+			frameworkWiring = (FrameworkWiring)bundleContext.getService(
+				frameworkWiringReference);
+		}
+
+		List<Bundle> lazyActivationBundles = new ArrayList<Bundle>();
+		List<Bundle> startBundles = new ArrayList<Bundle>();
+		List<Bundle> refreshBundles = new ArrayList<Bundle>();
+
+		_generateSystemFragments(refreshBundles);
+
+		for (String initialBundle :
+				PropsValues.MODULE_FRAMEWORK_INITIAL_BUNDLES) {
+
+			_installInitialBundle(
+				initialBundle, lazyActivationBundles, startBundles,
+				refreshBundles);
+		}
+
+		FrameworkListener frameworkListener = new StartupFrameworkListener(
+			startBundles, lazyActivationBundles);
+
+		if (frameworkWiring != null) {
+			frameworkWiring.refreshBundles(refreshBundles, frameworkListener);
+
+			return;
+		}
+
+		ServiceReference<?> packageAdminReference =
+			bundleContext.getServiceReference(PackageAdmin.class.getName());
+
+		PackageAdmin packageAdmin = null;
+
+		if (packageAdminReference != null) {
+			packageAdmin = (PackageAdmin)bundleContext.getService(
+				packageAdminReference);
+		}
+
+		if (packageAdmin == null) {
+			return;
+		}
+
+		bundleContext.addFrameworkListener(frameworkListener);
+
+		packageAdmin.refreshPackages(
+			refreshBundles.toArray(new Bundle[refreshBundles.size()]));
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ModuleFrameworkImpl.class);
