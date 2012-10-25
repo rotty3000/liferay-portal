@@ -517,7 +517,7 @@ public class ModuleFrameworkImpl
 			FELIX_FILEINSTALL_TMPDIR, System.getProperty("java.io.tmpdir"));
 
 		Properties extraProperties = PropsUtil.getProperties(
-			"module.framework.extra.", true);
+			"module.framework.properties.", true);
 
 		for (Object key : extraProperties.keySet()) {
 			String propertyKey = (String)key;
