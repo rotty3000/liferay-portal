@@ -1,4 +1,4 @@
-Bundle-Activator: com.liferay.web.extender.internal.Activator
+Bundle-Activator: com.liferay.web.extender.internal.WebExtenderActivator
 Bundle-Name: Web Extender
 Bundle-SymbolicName: web-extender
 Export-Package: \
