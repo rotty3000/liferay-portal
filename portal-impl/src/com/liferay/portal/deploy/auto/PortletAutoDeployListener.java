@@ -81,7 +81,11 @@ public class PortletAutoDeployListener extends BaseAutoDeployListener {
 			_log.debug("Using deployer " + deployer.getClass().getName());
 		}
 
-		int code = deployer.autoDeploy(autoDeploymentContext);
+		AutoDeployer deployerCopy = deployer.copy();
+
+		deployerCopy.setAutoDeploymentContext(autoDeploymentContext);
+
+		int code = deployerCopy.autoDeploy();
 
 		if ((code == AutoDeployer.CODE_DEFAULT) && _log.isInfoEnabled()) {
 			_log.info(

@@ -106,7 +106,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		_baseDeployer = new BaseDeployer();
 
-		_baseDeployer.setAppServerType(ServerDetector.getServerId());
+		_baseDeployer.setAppServerType(ServerDetector.MODULE_FRAMEWORK_ID);
 	}
 
 	public java.io.InputStream getInputStream() throws IOException {
@@ -132,7 +132,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				inputStream = new FileInputStream(manifestFile);
 
 				writePath(
-					inputStream, jarOutputStream, processedPaths, MANIFEST_PATH);
+					inputStream, jarOutputStream, processedPaths,
+					MANIFEST_PATH);
 			}
 			finally {
 				StreamUtil.cleanUp(inputStream);
@@ -301,7 +302,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processLiferayPortletXML(webContextpath);
 			processDeclarativeReferences();
 			processExportImportPackage(analyzer, importPackage);
-			processPluginDependencies(analyzer);
+			processPluginDependencies(analyzer, pluginPackage);
 
 			try {
 				manifest = analyzer.calcManifest();
@@ -337,6 +338,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		AutoDeploymentContext autoDeploymentContext =
 			new AutoDeploymentContext();
 
+		autoDeploymentContext.setAppServerType(
+			ServerDetector.MODULE_FRAMEWORK_ID);
 		autoDeploymentContext.setContext(context);
 		autoDeploymentContext.setDestDir(destDir.getAbsolutePath());
 		autoDeploymentContext.setFile(_file);
@@ -658,12 +661,11 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		FileUtil.write(liferayPortletXMLFile, content);
 	}
 
-	protected void processPluginDependencies(Analyzer analyzer) {
-		PluginPackage readPluginPackage = _baseDeployer.readPluginPackage(
-			_deployedAppFolder);
+	protected void processPluginDependencies(
+		Analyzer analyzer, PluginPackage pluginPackage) {
 
 		List<String> requiredDeploymentContexts =
-			readPluginPackage.getRequiredDeploymentContexts();
+			pluginPackage.getRequiredDeploymentContexts();
 
 		if ((requiredDeploymentContexts == null) ||
 				requiredDeploymentContexts.isEmpty()) {

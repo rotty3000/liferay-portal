@@ -48,7 +48,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Raymond Augé
  */
-public class Activator
+public class WebExtenderActivator
 	implements BundleActivator, ModuleFrameworkConstants,
 		ServiceTrackerCustomizer<ServletContext, ServletContext> {
 
@@ -185,7 +185,7 @@ public class Activator
 		}
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(Activator.class);
+	private static Log _log = LogFactoryUtil.getLog(WebExtenderActivator.class);
 
 	private ServiceRegistration<ArtifactUrlTransformer>
 		_artifactUrlTransformerRegistration;

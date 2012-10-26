@@ -15,9 +15,7 @@
 package com.liferay.portal.servlet;
 
 import com.liferay.portal.kernel.servlet.PluginContextListener;
-import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
-import com.liferay.portal.security.pacl.PACLPolicy;
-import com.liferay.portal.security.pacl.PACLPolicyManager;
+import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 
 import java.io.IOException;
 
@@ -30,9 +28,9 @@ import javax.servlet.ServletResponse;
 /**
  * @author Raymond Augé
  */
-public class PACLRequestDispatcherWrapper implements RequestDispatcher {
+public class ContextClassLoaderRequestDispatcher implements RequestDispatcher {
 
-	public PACLRequestDispatcherWrapper(
+	public ContextClassLoaderRequestDispatcher(
 		ServletContext servletContext, RequestDispatcher requestDispatcher) {
 
 		_servletContext = servletContext;
@@ -58,23 +56,20 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 			boolean include)
 		throws IOException, ServletException {
 
+		ClassLoader contextClassLoader =
+			PACLClassLoaderUtil.getContextClassLoader();
+
 		ClassLoader pluginClassLoader =
 			(ClassLoader)_servletContext.getAttribute(
 				PluginContextListener.PLUGIN_CLASS_LOADER);
 
-		PACLPolicy paclPolicy =
-			PortalSecurityManagerThreadLocal.getPACLPolicy();
-
 		try {
 			if (pluginClassLoader == null) {
-				PortalSecurityManagerThreadLocal.setPACLPolicy(null);
+				PACLClassLoaderUtil.setContextClassLoader(
+					PACLClassLoaderUtil.getPortalClassLoader());
 			}
 			else {
-				PACLPolicy pluginPACLPolicy = PACLPolicyManager.getPACLPolicy(
-					pluginClassLoader);
-
-				PortalSecurityManagerThreadLocal.setPACLPolicy(
-					pluginPACLPolicy);
+				PACLClassLoaderUtil.setContextClassLoader(pluginClassLoader);
 			}
 
 			if (include) {
@@ -85,7 +80,7 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 			}
 		}
 		finally {
-			PortalSecurityManagerThreadLocal.setPACLPolicy(paclPolicy);
+			PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
 		}
 	}
 

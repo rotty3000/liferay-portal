@@ -15,6 +15,7 @@
 package com.liferay.portal.module.framework.adapter;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.module.framework.classloader.ModuleFrameworkClassloader;
 
 import java.io.InputStream;
 
@@ -122,6 +123,6 @@ public class ModuleFrameworkAdapter {
 
 	private static ModuleFrameworkAdapterHelper _moduleFrameworkAdapterHelper =
 		new ModuleFrameworkAdapterHelper(
-			"com.liferay.portal.module.framework.internal.ModuleFrameworkImpl");
+			"com.liferay.portal.module.framework.ModuleFrameworkUtil");
 
 }

@@ -188,9 +188,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		jars.add(path);
 	}
 
-	public int autoDeploy(AutoDeploymentContext autoDeploymentContext)
-		throws AutoDeployException {
-
+	public int autoDeploy() throws AutoDeployException {
 		List<String> wars = new ArrayList<String>();
 
 		File file = autoDeploymentContext.getFile();
@@ -228,6 +226,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			!appServerType.equals(ServerDetector.JBOSS_ID) &&
 			!appServerType.equals(ServerDetector.JONAS_ID) &&
 			!appServerType.equals(ServerDetector.JETTY_ID) &&
+			!appServerType.equals(ServerDetector.MODULE_FRAMEWORK_ID) &&
 			!appServerType.equals(ServerDetector.OC4J_ID) &&
 			!appServerType.equals(ServerDetector.RESIN_ID) &&
 			!appServerType.equals(ServerDetector.TOMCAT_ID) &&
@@ -239,6 +238,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		}
 
 		if (appServerType.equals(ServerDetector.GLASSFISH_ID) ||
+			appServerType.equals(ServerDetector.MODULE_FRAMEWORK_ID) ||
 			appServerType.equals(ServerDetector.WEBSPHERE_ID)) {
 
 			unpackWar = false;
@@ -249,6 +249,29 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 			jbossPrefix = "1";
 		}
+	}
+
+	public AutoDeployer copy() {
+		BaseDeployer deployer = new BaseDeployer();
+
+		deployer.setAppServerType(appServerType);
+		deployer.setAuiTaglibDTD(auiTaglibDTD);
+		deployer.setBaseDir(baseDir);
+		deployer.setDestDir(destDir);
+		deployer.setFilePattern(filePattern);
+		deployer.setJars(jars);
+		deployer.setJbossPrefix(jbossPrefix);
+		deployer.setPortletExtTaglibDTD(portletExtTaglibDTD);
+		deployer.setPortletTaglibDTD(portletTaglibDTD);
+		deployer.setSecurityTaglibDTD(securityTaglibDTD);
+		deployer.setThemeTaglibDTD(themeTaglibDTD);
+		deployer.setTomcatLibDir(tomcatLibDir);
+		deployer.setUiTaglibDTD(auiTaglibDTD);
+		deployer.setUnpackWar(unpackWar);
+		deployer.setUtilTaglibDTD(utilTaglibDTD);
+		deployer.setWars(wars);
+
+		return deployer;
 	}
 
 	public void copyDependencyXml(String fileName, String targetDir)
@@ -874,6 +897,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 				 appServerType.equals(ServerDetector.GLASSFISH_ID) ||
 				 appServerType.equals(ServerDetector.JETTY_ID) ||
 				 appServerType.equals(ServerDetector.JONAS_ID) ||
+				 appServerType.equals(ServerDetector.MODULE_FRAMEWORK_ID) ||
 				 appServerType.equals(ServerDetector.OC4J_ID) ||
 				 appServerType.equals(ServerDetector.RESIN_ID) ||
 				 appServerType.equals(ServerDetector.TOMCAT_ID) ||
@@ -885,10 +909,6 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		}
 
 		String destDir = this.destDir;
-
-		if (autoDeploymentContext.getDestDir() != null) {
-			destDir = autoDeploymentContext.getDestDir();
-		}
 
 		File deployDirFile = new File(destDir + "/" + deployDir);
 
@@ -1969,6 +1989,26 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 		this.appServerType = appServerType;
 	}
 
+	public void setAutoDeploymentContext(
+		AutoDeploymentContext autoDeploymentContext) {
+
+		this.autoDeploymentContext = autoDeploymentContext;
+
+		// Use this opportunity to apply any context sensitive attributes
+
+		String appServerType = autoDeploymentContext.getAppServerType();
+
+		if (Validator.isNotNull(appServerType)) {
+			this.appServerType = appServerType;
+		}
+
+		String destDir = autoDeploymentContext.getDestDir();
+
+		if (Validator.isNotNull(destDir)) {
+			this.destDir = destDir;
+		}
+	}
+
 	public void setAuiTaglibDTD(String auiTaglibDTD) {
 		this.auiTaglibDTD = auiTaglibDTD;
 	}
@@ -2253,6 +2293,10 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			_log.info("Modifying Servlet " + webXmlVersion + " " + webXml);
 		}
 	}
+
+	// Keep this one private
+
+	private AutoDeploymentContext autoDeploymentContext;
 
 	protected String appServerType;
 	protected String auiTaglibDTD;

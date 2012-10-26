@@ -96,7 +96,7 @@
 	<classpathentry kind="lib" path="lib/development/spring-test.jar"/>
 	<classpathentry kind="lib" path="lib/development/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="lib/development/xmltask.jar"/>
-	<classpathentry kind="lib" path="lib/framework/javax.servlet.jsp-2.2.7-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/framework/javax.servlet.jsp-2.2.7-SNAPSHOT.jar" sourcepath="/javax.servlet.jsp/src/main/java"/>
 	<classpathentry kind="lib" path="lib/framework/org.phidias.compile.jar"/>
 	<classpathentry kind="lib" path="lib/global/portlet.jar"/>
 	<classpathentry kind="lib" path="lib/portal/abdera.jar"/>
@@ -312,5 +312,7 @@
 	<classpathentry kind="lib" path="lib/portal/xstream.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xuggle-xuggler-noarch.jar"/>
 	<classpathentry kind="lib" path="lib/framework/felix/felix.jar" sourcepath="/home/migue/development/sourcecode/osgi/apache-felix/org.apache.felix.framework-4.0.2"/>
+	<classpathentry kind="lib" path="/home/rotty/AS/liferay-portal/jetty-8.1.7/lib/jetty-webapp-8.1.7.v20120910.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/jetty-webapp-8.1.7.v20120910-sources.jar"/>
+	<classpathentry kind="lib" path="/home/rotty/AS/liferay-portal/jetty-8.1.7/lib/jetty-deploy-8.1.7.v20120910.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/jetty-deploy-8.1.7.v20120910-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

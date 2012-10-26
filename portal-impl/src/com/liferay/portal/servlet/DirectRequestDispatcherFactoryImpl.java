@@ -102,15 +102,16 @@ public class DirectRequestDispatcherFactoryImpl
 
 		Servlet servlet = DirectServletRegistryUtil.getServlet(fullPath);
 
+		RequestDispatcher requestDispatcher = null;
+
 		if (servlet == null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("No servlet found for " + fullPath);
 			}
 
-			RequestDispatcher requestDispatcher =
-				servletContext.getRequestDispatcher(path);
+			requestDispatcher = servletContext.getRequestDispatcher(path);
 
-			return new DirectServletPathRegisterDispatcher(
+			requestDispatcher = new DirectServletPathRegisterDispatcher(
 				path, requestDispatcher);
 		}
 		else {
@@ -118,8 +119,12 @@ public class DirectRequestDispatcherFactoryImpl
 				_log.debug("Servlet found for " + fullPath);
 			}
 
-			return new DirectRequestDispatcher(servlet, queryString);
+			requestDispatcher = new DirectRequestDispatcher(
+				servlet, queryString);
 		}
+
+		return new ContextClassLoaderRequestDispatcher(
+			servletContext, requestDispatcher);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

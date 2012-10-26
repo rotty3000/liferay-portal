@@ -36,6 +36,8 @@ public class ServerDetector {
 
 	public static final String JONAS_ID = "jonas";
 
+	public static final String MODULE_FRAMEWORK_ID = "module_framework";
+
 	public static final String OC4J_ID = "oc4j";
 
 	public static final String RESIN_ID = "resin";
