@@ -26,7 +26,6 @@ import java.io.Writer;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.jsp.PageContext;
 
 /**
  * @author Shuyang Zhou
@@ -77,12 +76,6 @@ public class PipingServletResponse extends HttpServletResponseWrapper {
 		}
 
 		_printWriter = UnsyncPrintWriterPool.borrow(writer);
-	}
-
-	public PipingServletResponse(PageContext pageContext) {
-		this(
-			(HttpServletResponse)pageContext.getResponse(),
-			pageContext.getOut());
 	}
 
 	@Override
