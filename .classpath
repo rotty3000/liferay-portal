@@ -61,7 +61,7 @@
 	<classpathentry kind="lib" path="lib/development/jsf-facelets.jar"/>
 	<classpathentry kind="lib" path="lib/development/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="lib/development/jsf-portlet.jar"/>
-	<classpathentry kind="lib" path="lib/development/jsp-api.jar" sourcepath="/home/rotty/workspace-2/glassfish/javax.servlet.jsp-trunk/api/src/main/java"/>
+	<classpathentry kind="lib" path="lib/development/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/development/jta.jar"/>
 	<classpathentry kind="lib" path="lib/development/junit.jar"/>
 	<classpathentry kind="lib" path="lib/development/just-ice.jar"/>
@@ -96,7 +96,7 @@
 	<classpathentry kind="lib" path="lib/development/spring-test.jar"/>
 	<classpathentry kind="lib" path="lib/development/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="lib/development/xmltask.jar"/>
-	<classpathentry kind="lib" path="lib/framework/javax.servlet.jsp-2.2.7-SNAPSHOT.jar" sourcepath="/javax.servlet.jsp/src/main/java"/>
+	<classpathentry kind="lib" path="lib/framework/javax.servlet.jsp-2.2.7-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/framework/org.phidias.compile.jar"/>
 	<classpathentry kind="lib" path="lib/global/portlet.jar"/>
 	<classpathentry kind="lib" path="lib/portal/abdera.jar"/>
@@ -166,7 +166,7 @@
 	<classpathentry kind="lib" path="lib/portal/ehcache-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/ehcache-jgroupsreplication.jar"/>
 	<classpathentry kind="lib" path="lib/portal/fastutil.jar"/>
-	<classpathentry kind="lib" path="lib/portal/fileinstall.jar" sourcepath="/home/migue/development/sourcecode/osgi/apache-felix/file-install/org.apache.felix.fileinstall-3.1.10"/>
+	<classpathentry kind="lib" path="lib/portal/fileinstall.jar"/>
 	<classpathentry kind="lib" path="lib/portal/flexjson.jar"/>
 	<classpathentry kind="lib" path="lib/portal/fontbox.jar"/>
 	<classpathentry kind="lib" path="lib/portal/freemarker.jar"/>
@@ -221,7 +221,7 @@
 	<classpathentry kind="lib" path="lib/portal/jsqlparser.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jstl-api.jar"/>
-	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803-sources.jar"/>
+	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar"/>
 	<classpathentry kind="lib" path="lib/portal/juh.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jurt.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jython.jar"/>
@@ -272,14 +272,14 @@
 	<classpathentry kind="lib" path="lib/portal/spring-beans.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-context.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-context-support.jar"/>
-	<classpathentry kind="lib" path="lib/portal/spring-core.jar" sourcepath="/home/migue/development/sourcecode/springsource/spring-framework"/>
+	<classpathentry kind="lib" path="lib/portal/spring-core.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-expression.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-jdbc.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-jms.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-orm.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-oxm.jar"/>
-	<classpathentry kind="lib" path="lib/portal/spring-transaction.jar" sourcepath="/home/migue/development/sourcecode/springsource/spring-framework"/>
-	<classpathentry kind="lib" path="lib/portal/spring-web.jar" sourcepath="/home/migue/development/sourcecode/springsource/spring-framework"/>
+	<classpathentry kind="lib" path="lib/portal/spring-transaction.jar"/>
+	<classpathentry kind="lib" path="lib/portal/spring-web.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-web-portlet.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-web-servlet.jar"/>
 	<classpathentry kind="lib" path="lib/portal/spring-web-struts.jar"/>
@@ -302,7 +302,7 @@
 	<classpathentry kind="lib" path="lib/portal/velocity-tools.jar"/>
 	<classpathentry kind="lib" path="lib/portal/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/portal/wstx.jar"/>
-	<classpathentry kind="lib" path="lib/portal/xalan.jar" sourcepath="/home/migue/.m2/repository/xalan/xalan/2.7.1/xalan-2.7.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/portal/xalan.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xbean.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xbean-spring.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xercesImpl.jar"/>
@@ -311,8 +311,6 @@
 	<classpathentry kind="lib" path="lib/portal/xpp3.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xstream.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xuggle-xuggler-noarch.jar"/>
-	<classpathentry kind="lib" path="lib/framework/felix/felix.jar" sourcepath="/home/migue/development/sourcecode/osgi/apache-felix/org.apache.felix.framework-4.0.2"/>
-	<classpathentry kind="lib" path="/home/rotty/AS/liferay-portal/jetty-8.1.7/lib/jetty-webapp-8.1.7.v20120910.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/jetty-webapp-8.1.7.v20120910-sources.jar"/>
-	<classpathentry kind="lib" path="/home/rotty/AS/liferay-portal/jetty-8.1.7/lib/jetty-deploy-8.1.7.v20120910.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/jetty-deploy-8.1.7.v20120910-sources.jar"/>
+	<classpathentry kind="lib" path="lib/framework/felix/felix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
