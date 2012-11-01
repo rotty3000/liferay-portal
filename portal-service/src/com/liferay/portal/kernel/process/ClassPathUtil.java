@@ -119,6 +119,18 @@ public class ClassPathUtil {
 		sb.append(appServerGlobalClassPath);
 		sb.append(File.pathSeparator);
 
+		if (ServerDetector.isGlassfish()) {
+			File glassfishModules = new File(
+				System.getProperty("AS_INSTALL"), "modules");
+
+			if (glassfishModules.exists() && glassfishModules.isDirectory()) {
+				StringBundler glassfishModulePath = processDir(
+					glassfishModules.getAbsoluteFile());
+
+				sb.append(glassfishModulePath);
+			}
+		}
+
 		String portalGlobalClassPath = _buildClassPath(
 			classLoader, PortalException.class.getName());
 
