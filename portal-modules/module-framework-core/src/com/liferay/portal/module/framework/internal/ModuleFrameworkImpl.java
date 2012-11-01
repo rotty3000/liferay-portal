@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
@@ -559,6 +560,9 @@ public class ModuleFrameworkImpl
 	private void _generateSystemFragments(List<Bundle> toRefresh)
 		throws Exception {
 
+		List<String> ignoreFragments = ListUtil.fromArray(
+			PropsValues.MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS);
+
 		Set<URL> set = new HashSet<URL>();
 
 		ClassLoader classLoader = PACLClassLoaderUtil.getPortalClassLoader();
@@ -584,7 +588,7 @@ public class ModuleFrameworkImpl
 
 		enu = Collections.enumeration(set);
 
-		while (enu.hasMoreElements()) {
+		fragments: while (enu.hasMoreElements()) {
 			url = enu.nextElement();
 
 			Manifest manifest = new Manifest(url.openStream());
@@ -607,11 +611,19 @@ public class ModuleFrameworkImpl
 					0, pos);
 			}
 
-			if (ArrayUtil.contains(
-				PropsValues.MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS,
-				rootBundleSymbolicName)) {
+			for (String ignoreFragment :
+					PropsValues.
+						MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS) {
 
-				continue;
+				int fragmentLength = ignoreFragment.length();
+
+				if (rootBundleSymbolicName.equals(ignoreFragment) ||
+					(ignoreFragment.endsWith(StringPool.STAR) &&
+					 rootBundleSymbolicName.startsWith(
+						 ignoreFragment.substring(0, fragmentLength - 1)))) {
+
+					continue fragments;
+				}
 			}
 
 			String bundleVersion = GetterUtil.getString(
@@ -639,6 +651,7 @@ public class ModuleFrameworkImpl
 					Constants.BUNDLE_MANIFESTVERSION, String.valueOf(2));
 				fragmentAttributes.putValue(
 					Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName);
+				fragmentAttributes.putValue("X-Origin", url.getPath());
 				fragmentAttributes.putValue(
 					Constants.BUNDLE_VERSION, bundleVersion);
 				fragmentAttributes.putValue(
