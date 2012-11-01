@@ -85,6 +85,10 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.jsp.JspFactory;
+
+import org.apache.jasper.runtime.JspFactoryImpl;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.depend.DependencyVisitor;
 
@@ -126,7 +130,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			File manifestFile = _getManifestFile();
 
-			FileInputStream inputStream = null;
+			InputStream inputStream = null;
 
 			try {
 				inputStream = new FileInputStream(manifestFile);
@@ -134,6 +138,23 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				writePath(
 					inputStream, jarOutputStream, processedPaths,
 					MANIFEST_PATH);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
+
+			try {
+				byte[] bytes = JspFactoryImpl.class.getName().getBytes(
+					StringPool.UTF8);
+
+				inputStream = new ByteArrayInputStream(bytes);
+
+				String path =
+					"WEB-INF/classes/META-INF/services/".concat(
+						JspFactory.class.getName());
+
+				writePath(
+					inputStream, jarOutputStream, processedPaths, path);
 			}
 			finally {
 				StreamUtil.cleanUp(inputStream);
