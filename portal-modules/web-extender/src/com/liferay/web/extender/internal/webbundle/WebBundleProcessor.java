@@ -195,7 +195,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		_deployedAppFolder = autoDeploymentContext.getDeployDir();
 
-		if (!PropsValues.AUTO_DEPLOY_UNPACK_WAR) {
+		if (!_deployedAppFolder.exists()) {
 			File[] listFiles = _deployedAppFolder.getParentFile().listFiles(
 				new FilenameFilter() {
 					public boolean accept(File dir, String name) {
