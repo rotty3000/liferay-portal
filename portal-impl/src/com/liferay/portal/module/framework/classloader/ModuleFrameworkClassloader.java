@@ -30,7 +30,7 @@ public class ModuleFrameworkClassloader extends URLClassLoader {
 	public ModuleFrameworkClassloader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 
-		_system = getSystemClassLoader();
+		// _system = getSystemClassLoader();
 	}
 
 	@Override

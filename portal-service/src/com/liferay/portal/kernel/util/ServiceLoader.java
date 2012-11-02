@@ -35,6 +35,14 @@ import java.util.List;
 public class ServiceLoader {
 
 	public static <S> List<S> load(Class<S> clazz) throws Exception {
+		return load(clazz, _serviceLoaderFilterCondition);
+	}
+
+	public static <S> List<S> load(
+			Class<S> clazz,
+			ServiceLoaderFilterCondition serviceLoaderFilterCondition) 
+		throws Exception {
+
 		Thread currentThread = Thread.currentThread();
 
 		ClassLoader classLoader = currentThread.getContextClassLoader();
@@ -48,7 +56,10 @@ public class ServiceLoader {
 			URL url = enu.nextElement();
 
 			try {
-				_load(services, classLoader, clazz, url);
+				if (serviceLoaderFilterCondition.shouldLoad(url)) {
+					_load(services, classLoader, clazz, url);
+				}
+				
 			}
 			catch (Exception e) {
 				_log.error("Unable to load " + clazz + "with " + classLoader);
@@ -56,6 +67,7 @@ public class ServiceLoader {
 		}
 
 		return services;
+
 	}
 
 	private static <S> void _load(
@@ -106,5 +118,12 @@ public class ServiceLoader {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ServiceLoader.class);
+
+	private static ServiceLoaderFilterCondition _serviceLoaderFilterCondition = 
+		new ServiceLoaderFilterCondition() {
+			public boolean shouldLoad(URL url) {
+				return true;
+			}
+		};
 
 }
