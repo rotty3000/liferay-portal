@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
+import com.liferay.portal.kernel.util.ServiceLoaderFilterCondition;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -314,8 +315,16 @@ public class ModuleFrameworkImpl
 	}
 
 	public void startFramework() throws Exception {
+		ServiceLoaderFilterCondition serviceLoaderFilterCondition =
+			new ServiceLoaderFilterCondition() {
+				public boolean shouldLoad(URL url) {
+					return url.getPath().contains(
+						PropsValues.MODULE_FRAMEWORK_CORE_DIR);
+				}
+			};
+
 		List<FrameworkFactory> frameworkFactories = ServiceLoader.load(
-			FrameworkFactory.class);
+			FrameworkFactory.class, serviceLoaderFilterCondition);
 
 		if (frameworkFactories.isEmpty()) {
 			return;
@@ -694,6 +703,7 @@ public class ModuleFrameworkImpl
 	}
 
 	private String _getFileInstallLogLevel() {
+
 		// Felix file install uses a logging level scheme as follows:
 		// NONE=0, ERROR=1, WARNING=2, INFO=3, DEBUG=4
 
