@@ -36,8 +36,6 @@ Import-Package: \
 	javax.portlet,\
 	javax.el,\
 	javax.servlet,\
-	javax.servlet.annotation,\
-	javax.servlet.descriptor,\
 	javax.servlet.http,\
 	javax.servlet.jsp,\
 	javax.servlet.jsp.el,\
