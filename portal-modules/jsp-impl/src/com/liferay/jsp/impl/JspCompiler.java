@@ -22,6 +22,11 @@ import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import java.io.File;
 import java.io.IOException;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import java.security.ProtectionDomain;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +74,37 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 		_classpath = ClassPathUtil.getClassPathFiles(
 			ClassPathUtil.getPortalClassPath());
+
+		addDependencyToClassPath(javax.el.ExpressionFactory.class);
+		addDependencyToClassPath(javax.servlet.jsp.JspException.class);
+		addDependencyToClassPath(ServletContext.class);
+	}
+
+	protected void addDependencyToClassPath(Class<?> clazz) {
+		ProtectionDomain protectionDomain = clazz.getProtectionDomain();
+
+		if (protectionDomain == null) {
+			return;
+		}
+
+		URL location = protectionDomain.getCodeSource().getLocation();
+
+		try {
+			File file = new File(location.toURI());
+
+			if (file.exists() && file.canRead()) {
+				// Make sure it's added at the beginning.
+
+				if (_classpath.contains(file)) {
+					_classpath.remove(file);
+				}
+
+				_classpath.add(0, file);
+			}
+		}
+		catch (URISyntaxException use) {
+			_log.error(use, use);
+		}
 	}
 
 	@Override
