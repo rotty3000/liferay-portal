@@ -551,12 +551,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		// References from liferay-web.xml
 		// TODO: remove this?
 
-//		xml = new File(_deployedAppFolder, "WEB-INF/liferay-web.xml");
-//
-//		if (xml.exists()) {
-//			processXmlDependencies(
-//				xml, _WEBXML_CLASSREFERENCE_ELEMENTS, null, null);
-//		}
+		xml = new File(_deployedAppFolder, "WEB-INF/liferay-web.xml");
+
+		if (xml.exists()) {
+			processXmlDependencies(
+				xml, _WEBXML_CLASSREFERENCE_ELEMENTS, "x", 
+				"http://java.sun.com/xml/ns/j2ee");
+		}
 
 		// References from liferay-portlet.xml
 
