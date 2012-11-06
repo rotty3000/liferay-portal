@@ -285,7 +285,7 @@
 		<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
 		<init-param>
 			<param-name>compilerClassName</param-name>
-			<param-value>com.liferay.web.extender.servlet.jsp.JspCompiler</param-value>
+			<param-value>com.liferay.jsp.impl.JspCompiler</param-value>
 		</init-param>
 		<init-param>
 			<param-name>keepgenerated</param-name>

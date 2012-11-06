@@ -94,14 +94,6 @@ public class WebXML {
 		_filters = filters;
 	}
 
-	public void setMimeType(String extension, String mimeType) {
-		_mimeTypes.put(extension, mimeType);
-	}
-
-	public void setMimeTypes(Map<String, String> mimeTypes) {
-		_mimeTypes = mimeTypes;
-	}
-
 	/**
 	 * @param listeners the listeners to set
 	 */
@@ -114,6 +106,14 @@ public class WebXML {
 	 */
 	public void setListeners(List<ListenerDefinition> listeners) {
 		_listeners = listeners;
+	}
+
+	public void setMimeType(String extension, String mimeType) {
+		_mimeTypes.put(extension, mimeType);
+	}
+
+	public void setMimeTypes(Map<String, String> mimeTypes) {
+		_mimeTypes = mimeTypes;
 	}
 
 	/**
@@ -135,8 +135,7 @@ public class WebXML {
 		new Hashtable<String, String>();
 	private Map<String, FilterDefinition> _filters =
 		new HashMap<String, FilterDefinition>();
-	private Map<String, String> _mimeTypes =
-		new HashMap<String, String>();
+	private Map<String, String> _mimeTypes = new HashMap<String, String>();
 	private List<ListenerDefinition> _listeners =
 		new ArrayList<ListenerDefinition>();
 	private Map<String, ServletDefinition> _servlets =

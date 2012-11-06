@@ -5,9 +5,11 @@
 	<classpathentry excluding="**/.svn/**|.svn/|integration/|unit/" kind="src" path="portal-impl/test"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
-	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/jasper-helper/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/jsp-impl/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/jstl-impl/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/log-bridge/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/module-admin-portlet/docroot/WEB-INF/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/module-framework-core/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-modules/web-extender/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/unit"/>
@@ -219,7 +221,6 @@
 	<classpathentry kind="lib" path="lib/portal/jsqlparser.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jstl-api.jar"/>
-	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar"/>
 	<classpathentry kind="lib" path="lib/portal/juh.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jurt.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jython.jar"/>
@@ -309,6 +310,7 @@
 	<classpathentry kind="lib" path="lib/portal/xpp3.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xstream.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xuggle-xuggler-noarch.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/javax.servlet.jsp"/>
+	<classpathentry kind="lib" path="portal-modules/jsp-impl/lib/org.apache.jasper.glassfish-2.1.0.v201110031002.jar"/>
+	<classpathentry kind="lib" path="portal-modules/jstl-impl/lib/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

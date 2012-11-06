@@ -1523,11 +1523,15 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_BEGINNING_START_LEVEL = "module.framework.beginning.start.level";
 
+	public static final String MODULE_FRAMEWORK_CORE_DIR = "module.framework.core.dir";
+
 	public static final String MODULE_FRAMEWORK_ENABLED = "module.framework.enabled";
 
 	public static final String MODULE_FRAMEWORK_INITIAL_BUNDLES = "module.framework.initial.bundles";
 
 	public static final String MODULE_FRAMEWORK_LIB_DIR = "module.framework.lib.dir";
+
+	public static final String MODULE_FRAMEWORK_PROPERTIES = "module.framework.properties.";
 
 	public static final String MODULE_FRAMEWORK_REGISTER_LIFERAY_SERVICES = "module.framework.register.liferay.services";
 
@@ -1541,9 +1545,9 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = "module.framework.system.packages.extra";
 
-	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = "module.framework.web.extender.default.portlet.packages";
-
 	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = "module.framework.web.extender.default.servlet.packages";
+
+	public static final String MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS = "module.framework.web.extender.headers.";
 
 	public static final String MONITORING_DATA_SAMPLE_THREAD_LOCAL = "monitoring.data.sample.thread.local";
 

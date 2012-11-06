@@ -7,7 +7,7 @@
 		<portlet-class>com.liferay.moduleadmin.portlet.ModuleAdminPortlet</portlet-class>
 		<init-param>
 			<name>com.liferay.portal.invokerPortletName</name>
-			<value>module/${Bundle-SymbolicName}/1</value>
+			<value>o/${Bundle-SymbolicName}/1</value>
 		</init-param>
 		<init-param>
 			<name>view-template</name>

@@ -14,6 +14,7 @@
 
 package com.liferay.web.extender.internal.servlet;
 
+import com.liferay.portal.kernel.servlet.HttpSessionWrapper;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
@@ -42,6 +44,7 @@ import javax.servlet.ServletRequestListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Raymond Augé
@@ -87,61 +90,14 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 		if ((_servletPath != null) &&
 			_requestURI.startsWith(_servletPath) &&
-			_requestURI.length() > _servletPath.length()) {
+			(_requestURI.length() > _servletPath.length())) {
 
 			_pathInfo = _requestURI.substring(_servletPath.length());
 		}
 	}
 
-	public void forward(ServletRequest request, ServletResponse response)
-		throws IOException, ServletException {
-
-		BundleServletRequest bundleServletRequest =
-			new BundleServletRequest(
-				(HttpServletRequest)request, _bundleServletContext);
-
-		doDispatch(bundleServletRequest, response);
-	}
-
-	public void include(ServletRequest request, ServletResponse response)
-		throws IOException, ServletException {
-
-		BundleServletRequest bundleServletRequest =
-			new BundleServletRequest(
-				(HttpServletRequest)request, _bundleServletContext);
-
-		if (_contextPath != null) {
-			bundleServletRequest.setAttribute(
-				INCLUDE_CONTEXT_PATH, _contextPath);
-		}
-
-		if (_pathInfo != null) {
-			bundleServletRequest.setAttribute(
-				INCLUDE_PATH_INFO, _pathInfo);
-		}
-
-		if (_queryString != null) {
-			bundleServletRequest.setAttribute(
-				INCLUDE_QUERY_STRING, _queryString);
-		}
-
-		if (_requestURI != null) {
-			bundleServletRequest.setAttribute(
-				INCLUDE_REQUEST_URI,
-				_bundleServletContext.getContextPath().concat(_requestURI));
-		}
-
-		if (_servletPath != null) {
-			bundleServletRequest.setAttribute(
-				INCLUDE_SERVLET_PATH, _servletPath);
-		}
-
-		doDispatch(bundleServletRequest, response);
-	}
-
-	public void doDispatch(
-			ServletRequest request, ServletResponse response)
-		throws IOException, ServletException {
+	public void doDispatch(ServletRequest request, ServletResponse response)
+			throws IOException, ServletException {
 
 		ClassLoader contextClassLoader =
 			PACLClassLoaderUtil.getContextClassLoader();
@@ -155,8 +111,7 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 			PACLPolicy pluginPACLPolicy = PACLPolicyManager.getPACLPolicy(
 				pluginClassLoader);
 
-			PortalSecurityManagerThreadLocal.setPACLPolicy(
-				pluginPACLPolicy);
+			PortalSecurityManagerThreadLocal.setPACLPolicy(pluginPACLPolicy);
 
 			PACLClassLoaderUtil.setContextClassLoader(pluginClassLoader);
 
@@ -183,16 +138,59 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 	}
 
+	public void forward(ServletRequest request, ServletResponse response)
+		throws IOException, ServletException {
+
+		BundleServletRequest bundleServletRequest =
+			new BundleServletRequest((HttpServletRequest)request);
+
+		doDispatch(bundleServletRequest, response);
+	}
+
+	public void include(ServletRequest request, ServletResponse response)
+		throws IOException, ServletException {
+
+		BundleServletRequest bundleServletRequest =
+			new BundleServletRequest((HttpServletRequest)request);
+
+		if (_contextPath != null) {
+			bundleServletRequest.setAttribute(
+				INCLUDE_CONTEXT_PATH, _contextPath);
+		}
+
+		if (_pathInfo != null) {
+			bundleServletRequest.setAttribute(INCLUDE_PATH_INFO, _pathInfo);
+		}
+
+		if (_queryString != null) {
+			bundleServletRequest.setAttribute(
+				INCLUDE_QUERY_STRING, _queryString);
+		}
+
+		if (_requestURI != null) {
+			bundleServletRequest.setAttribute(
+				INCLUDE_REQUEST_URI,
+				_bundleServletContext.getContextPath().concat(_requestURI));
+		}
+
+		if (_servletPath != null) {
+			bundleServletRequest.setAttribute(
+				INCLUDE_SERVLET_PATH, _servletPath);
+		}
+
+		doDispatch(bundleServletRequest, response);
+	}
+
 	private static final String[] _MASKED_ATTRIBUTES = new String[] {
 		INCLUDE_CONTEXT_PATH, INCLUDE_PATH_INFO, INCLUDE_QUERY_STRING,
-		INCLUDE_REQUEST_URI, INCLUDE_SERVLET_PATH,
-		WebKeys.INVOKER_FILTER_URI, WebKeys.SERVLET_PATH
+		INCLUDE_REQUEST_URI, INCLUDE_SERVLET_PATH, WebKeys.INVOKER_FILTER_URI,
+		WebKeys.SERVLET_PATH
 	};
 
+	private BundleFilterChain _bundleFilterChain;
 	private BundleServletContext _bundleServletContext;
 	private String _contextPath;
 	private boolean _extensionMapping;
-	private BundleFilterChain _bundleFilterChain;
 	private String _pathInfo;
 	private String _queryString;
 	private String _requestURI;
@@ -201,13 +199,10 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 
 	public class BundleServletRequest extends HttpServletRequestWrapper {
 
-		public BundleServletRequest(
-			HttpServletRequest request,
-			BundleServletContext bundleServletContext) {
-
+		public BundleServletRequest(HttpServletRequest request) {
 			super(request);
 
-			_bundleServletContext = bundleServletContext;
+			_session = new BundleSession(request.getSession());
 		}
 
 		@Override
@@ -277,6 +272,16 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		@Override
+		public HttpSession getSession() {
+			return _session;
+		}
+
+		@Override
+		public HttpSession getSession(boolean create) {
+			return _session;
+		}
+
+		@Override
 		public void removeAttribute(String name) {
 			Object oldValue = null;
 
@@ -290,7 +295,7 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 			}
 
 			for (ServletRequestAttributeListener listener :
-					_bundleServletContext.getServletRequestAttributeListeners()) {
+				_bundleServletContext.getServletRequestAttributeListeners()) {
 
 				listener.attributeReplaced(
 					new ServletRequestAttributeEvent(
@@ -312,7 +317,7 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 			}
 
 			for (ServletRequestAttributeListener listener :
-					_bundleServletContext.getServletRequestAttributeListeners()) {
+				_bundleServletContext.getServletRequestAttributeListeners()) {
 
 				if (oldValue != null) {
 					listener.attributeReplaced(
@@ -328,7 +333,20 @@ public class BundleRequestDispatcher implements RequestDispatcher {
 		}
 
 		private Map<String, Object> _attributes = new HashMap<String, Object>();
-		private BundleServletContext _bundleServletContext;
+		private HttpSession _session;
+
+	}
+
+	public class BundleSession extends HttpSessionWrapper {
+
+		public BundleSession(HttpSession session) {
+			super(session);
+		}
+
+		@Override
+		public ServletContext getServletContext() {
+			return _bundleServletContext;
+		}
 
 	}
 

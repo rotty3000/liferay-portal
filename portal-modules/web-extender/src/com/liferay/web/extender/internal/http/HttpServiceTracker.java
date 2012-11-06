@@ -41,11 +41,11 @@ import org.osgi.util.tracker.ServiceTracker;
 public class HttpServiceTracker
 	extends ServiceTracker<HttpService, HttpService> {
 
-	public HttpServiceTracker(BundleContext bundleContext) {
+	public HttpServiceTracker(BundleContext bundleContext, Bundle bundle) {
 		super(bundleContext, HttpService.class, null);
 
 		_bundleContext = bundleContext;
-		_bundle = bundleContext.getBundle();
+		_bundle = bundle;
 		_webXMLLoader = new WebXMLLoader();
 	}
 
@@ -252,10 +252,11 @@ public class HttpServiceTracker
 	private static final Log _log = LogFactoryUtil.getLog(
 		HttpServiceTracker.class);
 
+	protected WebXML _webXML;
+	protected WebXMLLoader _webXMLLoader;
+
 	private Bundle _bundle;
 	private BundleContext _bundleContext;
 	private ServiceReference<HttpService> _serviceReference;
-	protected WebXML _webXML;
-	protected WebXMLLoader _webXMLLoader;
 
 }

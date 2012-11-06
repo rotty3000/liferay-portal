@@ -21,17 +21,25 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.PortletSessionListenerManager;
 import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.struts.AuthPublicPathRegistry;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.web.extender.internal.http.DefaultHttpContext;
 import com.liferay.web.extender.internal.http.HttpServiceTracker;
 import com.liferay.web.extender.servlet.BundleServletConfig;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.net.MalformedURLException;
@@ -46,6 +54,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,7 +63,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
@@ -81,12 +89,16 @@ public class BundleServletContext extends LiferayServletContext
 	implements ModuleFrameworkConstants {
 
 	public BundleServletContext(
-		Bundle bundle, WebExtenderServlet webExtenderServlet) {
+		Bundle bundle, String servletContextName,
+		WebExtenderServlet webExtenderServlet) {
 
 		super(webExtenderServlet.getServletContext());
 
 		_bundle = bundle;
+		_servletContextName = servletContextName;
 		_webExtenderServlet = webExtenderServlet;
+
+		_httpContext = new DefaultHttpContext(_bundle);
 	}
 
 	public void close() {
@@ -102,15 +114,72 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	public static String getServletContextName(Bundle bundle) {
+		return getServletContextName(bundle, false);
+	}
+
+	public static String getServletContextName(
+		Bundle bundle, boolean generate) {
+
 		Dictionary<String,String> headers = bundle.getHeaders();
 
 		String webContextPath = headers.get(WEB_CONTEXTPATH);
 
-		if (Validator.isNull(webContextPath)) {
-			return null;
+		if (Validator.isNotNull(webContextPath)) {
+			return webContextPath.substring(1);
 		}
 
-		return webContextPath.substring(1);
+		String deploymentContext = null;
+
+		try {
+			String xml = HttpUtil.URLtoString(
+				bundle.getResource("/WEB-INF/liferay-plugin-package.xml"));
+
+			if (xml != null) {
+				Document document = SAXReaderUtil.read(xml);
+
+				Element rootElement = document.getRootElement();
+
+				deploymentContext = GetterUtil.getString(
+					rootElement.elementText("recommended-deployment-context"));
+			}
+			else {
+				String propertiesString = HttpUtil.URLtoString(
+					bundle.getResource(
+						"/WEB-INF/liferay-plugin-package.properties"));
+
+				if (propertiesString != null) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(
+							"Reading plugin package from " +
+								"liferay-plugin-package.properties");
+					}
+
+					Properties properties = PropertiesUtil.load(
+						propertiesString);
+
+					deploymentContext = GetterUtil.getString(
+						properties.getProperty(
+							"recommended-deployment-context"),
+						deploymentContext);
+				}
+			}
+		}
+		catch (Exception e) {
+			// Ignore this case
+		}
+
+		if (Validator.isNull(deploymentContext) && generate) {
+			deploymentContext = PortalUtil.getJsSafePortletId(
+				bundle.getSymbolicName());
+		}
+
+		if (Validator.isNotNull(deploymentContext) &&
+			deploymentContext.startsWith(StringPool.SLASH)) {
+
+			deploymentContext = deploymentContext.substring(1);
+		}
+
+		return deploymentContext;
 	}
 
 	@Override
@@ -189,7 +258,7 @@ public class BundleServletContext extends LiferayServletContext
 				sb.append(contextPath);
 			}
 
-			sb.append(PortalUtil.getPathMain());
+			sb.append(PortalUtil.getPathContext());
 			sb.append(MODULE_MAPPING);
 			sb.append(getServletContextName());
 
@@ -197,6 +266,10 @@ public class BundleServletContext extends LiferayServletContext
 		}
 
 		return _contextPath;
+	}
+
+	public HttpContext getHttpContext() {
+		return _httpContext;
 	}
 
 	@Override
@@ -211,31 +284,46 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	@Override
+	public String getMimeType(String name) {
+		return super.getMimeType(name);
+	}
+
+	@Override
+	public String getRealPath(String path) {
+		URL resourceURL = _httpContext.getResource(path);
+
+		if (resourceURL != null) {
+			return resourceURL.toExternalForm();
+		}
+
+		return path;
+	}
+
+	@Override
 	public RequestDispatcher getRequestDispatcher(String path) {
 		String alias = path;
 
 		BundleFilterChain bundleFilterChain = getFilterChain(alias);
 
-		String pathMain = PortalUtil.getPathMain();
+		String pathContext = PortalUtil.getPathContext();
 
 		String contextPath = getContextPath();
 
-		if (contextPath.startsWith(pathMain)) {
-			contextPath = contextPath.substring(pathMain.length());
+		if (Validator.isNotNull(pathContext) &&
+			contextPath.startsWith(pathContext)) {
+
+			contextPath = contextPath.substring(pathContext.length());
 		}
 
 		if (path.startsWith(MODULE_MAPPING) && path.endsWith(INVOKER_PATH)) {
-			bundleFilterChain.setServlet(_webExtenderServlet);
+			int pos = path.lastIndexOf(INVOKER_PATH);
 
-			if (path.startsWith(contextPath)) {
-				path = path.substring(contextPath.length());
+			if (alias.startsWith(contextPath)) {
+				alias = alias.substring(contextPath.length(), pos);
 			}
-
-			return new BundleRequestDispatcher(
-				path, false, path, this, bundleFilterChain);
 		}
 
-		if (!isValidPath(path)) {
+		if (!isValidPath(alias)) {
 			return null;
 		}
 
@@ -300,46 +388,20 @@ public class BundleServletContext extends LiferayServletContext
 
 	@Override
 	public URL getResource(String path) throws MalformedURLException {
-		String filePattern = path;
-
-		int pos = path.lastIndexOf(StringPool.SLASH);
-
-		if (pos != -1) {
-			filePattern = path.substring(pos + 1);
-			path = path.substring(0, pos);
-		}
-
-		Enumeration<URL> findEntries = _bundle.findEntries(
-			path, filePattern, false);
-
-		if ((findEntries != null) && findEntries.hasMoreElements()) {
-			return findEntries.nextElement();
-		}
-
-		return null;
+		return _httpContext.getResource(path);
 	}
 
 	@Override
 	public InputStream getResourceAsStream(String path) {
-		String filePattern = path;
+		try {
+			URL resourceURL = getResource(path);
 
-		int pos = path.lastIndexOf(StringPool.SLASH);
-
-		if (pos != -1) {
-			filePattern = path.substring(pos + 1);
-			path = path.substring(0, pos);
+			if (resourceURL != null) {
+				return resourceURL.openStream();
+			}
 		}
-
-		Enumeration<URL> findEntries = _bundle.findEntries(
-			path, filePattern, false);
-
-		if ((findEntries != null) && findEntries.hasMoreElements()) {
-			try {
-				return findEntries.nextElement().openStream();
-			}
-			catch (Exception e) {
-				_log.error(e);
-			}
+		catch (IOException e) {
+			_log.error(e, e);
 		}
 
 		return null;
@@ -364,10 +426,6 @@ public class BundleServletContext extends LiferayServletContext
 
 	@Override
 	public String getServletContextName() {
-		if (_servletContextName == null) {
-			_servletContextName = getServletContextName(_bundle);
-		}
-
 		return _servletContextName;
 	}
 
@@ -382,22 +440,21 @@ public class BundleServletContext extends LiferayServletContext
 	}
 
 	public void open() {
-		Dictionary<String,String> headers = _bundle.getHeaders();
-
-		String webContextPath = headers.get(WEB_CONTEXTPATH);
-
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
-		properties.put("osgi.web.symbolicname", _bundle.getSymbolicName());
-		properties.put("osgi.web.version", _bundle.getVersion().toString());
-		properties.put("osgi.web.contextpath", webContextPath);
+		properties.put(BUNDLE_SYMBOLICNAME, _bundle.getSymbolicName());
+		properties.put(BUNDLE_ID, _bundle.getBundleId());
+		properties.put(BUNDLE, _bundle);
+		properties.put(BUNDLE_VERSION, _bundle.getVersion());
+		properties.put(
+			WEB_CONTEXTPATH, StringPool.SLASH.concat(_servletContextName));
 
 		BundleContext bundleContext = _bundle.getBundleContext();
 
 		_servletContextRegistration = bundleContext.registerService(
-				ServletContext.class, this, properties);
+			BundleServletContext.class, this, properties);
 
-		_httpServiceTracker = new HttpServiceTracker(bundleContext);
+		_httpServiceTracker = new HttpServiceTracker(bundleContext, _bundle);
 
 		_httpServiceTracker.open();
 	}
@@ -405,7 +462,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void registerFilter(
 			String filterMapping, Filter filter,
 			Dictionary<String, String> initParams, HttpContext httpContext)
-		throws ServletException, NamespaceException {
+		throws NamespaceException, ServletException {
 
 		validate(filterMapping, filter, httpContext);
 
@@ -463,25 +520,30 @@ public class BundleServletContext extends LiferayServletContext
 					addHttpSessionActivationListener(
 						(HttpSessionActivationListener)listener);
 			}
+
 			if (listener instanceof HttpSessionAttributeListener) {
 				PortletSessionListenerManager.
 					addHttpSessionAttributeListener(
 						(HttpSessionAttributeListener)listener);
 			}
+
 			if (listener instanceof HttpSessionBindingListener) {
 				PortletSessionListenerManager.
 					addHttpSessionBindingListener(
 						(HttpSessionBindingListener)listener);
 			}
+
 			if (listener instanceof HttpSessionListener) {
 				PortletSessionListenerManager.addHttpSessionListener(
 					(HttpSessionListener)listener);
 			}
+
 			if (listener instanceof ServletContextAttributeListener) {
 				// done
 				_servletContextAttributeListeners.add(
 					(ServletContextAttributeListener)listener);
 			}
+
 			if (listener instanceof ServletContextListener) {
 				// done
 				ServletContextListener servletContextListener =
@@ -494,15 +556,16 @@ public class BundleServletContext extends LiferayServletContext
 
 				_servletContextListeners.add(servletContextListener);
 			}
+
 			if (listener instanceof ServletRequestAttributeListener) {
 				// done
 				_servletRequestAttributeListeners.add(
 					(ServletRequestAttributeListener)listener);
 			}
+
 			if (listener instanceof ServletRequestListener) {
 				// done
-				_servletRequestListeners.add(
-					(ServletRequestListener)listener);
+				_servletRequestListeners.add((ServletRequestListener)listener);
 			}
 		}
 		finally {
@@ -539,7 +602,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void registerServlet(
 			String alias, Servlet servlet,
 			Dictionary<String, String> initParams, HttpContext httpContext)
-		throws ServletException, NamespaceException {
+		throws NamespaceException, ServletException {
 
 		validate(alias, servlet, httpContext);
 
@@ -571,7 +634,7 @@ public class BundleServletContext extends LiferayServletContext
 	public void removeAttribute(String name) {
 		Object value = _contextAttributes.remove(name);
 
-		for(ServletContextAttributeListener listener :
+		for (ServletContextAttributeListener listener :
 				_servletContextAttributeListeners) {
 
 			listener.attributeRemoved(
@@ -591,7 +654,7 @@ public class BundleServletContext extends LiferayServletContext
 
 		_contextAttributes.put(name, value);
 
-		for(ServletContextAttributeListener listener :
+		for (ServletContextAttributeListener listener :
 				_servletContextAttributeListeners) {
 
 			// TODO add try/catch
@@ -683,22 +746,27 @@ public class BundleServletContext extends LiferayServletContext
 					removeHttpSessionActivationListener(
 						(HttpSessionActivationListener)listener);
 			}
+
 			if (listener instanceof HttpSessionAttributeListener) {
 				PortletSessionListenerManager.
 					removeHttpSessionAttributeListener(
 						(HttpSessionAttributeListener)listener);
 			}
+
 			if (listener instanceof HttpSessionBindingListener) {
 				PortletSessionListenerManager.removeHttpSessionBindingListener(
 					(HttpSessionBindingListener)listener);
 			}
+
 			if (listener instanceof HttpSessionListener) {
 				PortletSessionListenerManager.removeHttpSessionListener(
 					(HttpSessionListener)listener);
 			}
+
 			if (listener instanceof ServletContextAttributeListener) {
 				_servletContextAttributeListeners.remove(listener);
 			}
+
 			if (listener instanceof ServletContextListener) {
 				if (_servletContextListeners.contains(listener)) {
 					_servletContextListeners.remove(listener);
@@ -713,9 +781,11 @@ public class BundleServletContext extends LiferayServletContext
 						servletContextEvent);
 				}
 			}
+
 			if (listener instanceof ServletRequestAttributeListener) {
 				_servletRequestAttributeListeners.remove(listener);
 			}
+
 			if (listener instanceof ServletRequestListener) {
 				_servletRequestListeners.remove(listener);
 			}
@@ -825,8 +895,7 @@ public class BundleServletContext extends LiferayServletContext
 		throws NamespaceException {
 
 		if (Validator.isNull(alias)) {
-			throw new IllegalArgumentException(
-				"Empty aliases are not allowed");
+			throw new IllegalArgumentException("Empty aliases are not allowed");
 		}
 
 		if (!alias.startsWith(StringPool.SLASH) ||
@@ -854,11 +923,11 @@ public class BundleServletContext extends LiferayServletContext
 		}
 	}
 
-	private static final String[] _ILLEGAL_PATHS = new String[] {
-		"WEB-INF/", "OSGI-INF/", "META-INF/", "OSGI-OPT/"
-	};
-
 	private static final String _EXTENSION_PREFIX = "*.";
+
+	private static final String[] _ILLEGAL_PATHS = new String[] {
+		"OSGI-INF/", "META-INF/", "OSGI-OPT/"
+	};
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BundleServletContext.class);
@@ -867,26 +936,28 @@ public class BundleServletContext extends LiferayServletContext
 	private Map<String, Object> _contextAttributes =
 		new ConcurrentHashMap<String, Object>();
 	private String _contextPath;
+	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private Map<String, Filter> _filtersMap =
 		new ConcurrentHashMap<String, Filter>();
+	private HttpContext _httpContext;
 	private Map<String, String> _initParams = new HashMap<String, String>();
-	private List<Object[]> _filterList = new ArrayList<Object[]>();
 	private HttpServiceTracker _httpServiceTracker;
 	private List<ServletContextAttributeListener>
 		_servletContextAttributeListeners =
 			new ArrayList<ServletContextAttributeListener>();
 	private List<ServletContextListener> _servletContextListeners =
 		new ArrayList<ServletContextListener>();
-	private ServiceRegistration<ServletContext> _servletContextRegistration;
+	private ServiceRegistration<BundleServletContext>
+		_servletContextRegistration;
 	private List<ServletRequestAttributeListener>
 		_servletRequestAttributeListeners =
 			new ArrayList<ServletRequestAttributeListener>();
 	private List<ServletRequestListener> _servletRequestListeners =
 		new ArrayList<ServletRequestListener>();
-	private Servlet _webExtenderServlet;
 	private String _servletContextName;
 	private Map<String, Servlet> _servletsMap =
 		new ConcurrentHashMap<String, Servlet>();
 	private File _tempDir;
+	private Servlet _webExtenderServlet;
 
 }

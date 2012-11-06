@@ -1087,6 +1087,8 @@ public class PropsValues {
 
 	public static final int MODULE_FRAMEWORK_BEGINNING_START_LEVEL = GetterUtil.getInteger(PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_BEGINNING_START_LEVEL));
 
+	public static final String MODULE_FRAMEWORK_CORE_DIR = PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_CORE_DIR);
+
 	public static final boolean MODULE_FRAMEWORK_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.MODULE_FRAMEWORK_ENABLED));
 
 	public static final String[] MODULE_FRAMEWORK_INITIAL_BUNDLES = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_INITIAL_BUNDLES);
@@ -1104,8 +1106,6 @@ public class PropsValues {
 	public static final String[] MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_SYSTEM_BUNDLE_IGNORED_FRAGMENTS);
 
 	public static final String[] MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_SYSTEM_PACKAGES_EXTRA);
-
-	public static final String[] MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES);
 
 	public static final String[] MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES = PropsUtil.getArray(PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES);
 

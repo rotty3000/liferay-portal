@@ -14,7 +14,6 @@
 
 package com.liferay.web.extender.internal.http;
 
-
 import com.liferay.web.extender.internal.servlet.BundleServletContext;
 
 import java.util.Dictionary;
@@ -37,7 +36,7 @@ public class HttpServiceWrapper implements ExtendedHttpService, HttpService {
 	}
 
 	public HttpContext createDefaultHttpContext() {
-		return new DefaultHttpContext(_bundleServletContext);
+		return _bundleServletContext.getHttpContext();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

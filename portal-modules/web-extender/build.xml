@@ -7,4 +7,16 @@
 
 	<property name="deploy.dir" value="${module.framework.lib.dir}" />
 	<property name="jar.file" value="${ant.project.name}" />
+
+	<path id="module-lib.classpath">
+		<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar" />
+	</path>
+
+	<target name="compile">
+		<ant dir="${project.dir}/portal-modules/jsp-impl" target="jar" inheritall="false" />
+
+		<mkdir dir="${module.classes.dir}" />
+
+		<antcall target="build-common-java.compile" />
+	</target>
 </project>

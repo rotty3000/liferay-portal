@@ -15,12 +15,13 @@
 package com.liferay.web.extender.internal.http;
 
 import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.module.framework.ModuleFrameworkConstants;
-import com.liferay.web.extender.internal.servlet.BundleServletContext;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.io.IOException;
 
 import java.net.URL;
+
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,29 +34,42 @@ import org.osgi.service.http.HttpContext;
  */
 public class DefaultHttpContext implements HttpContext {
 
-	public DefaultHttpContext(BundleServletContext bundleServletContext) {
-		_bundleServletContext = bundleServletContext;
+	public DefaultHttpContext(Bundle bundle) {
+		_bundle = bundle;
 	}
 
 	public String getMimeType(String name) {
-		String mimeType = _bundleServletContext.getMimeType(name);
+		return MimeTypesUtil.getContentType(name);
+	}
 
-		if (mimeType == null) {
-			mimeType = MimeTypesUtil.getContentType(name);
+	public URL getResource(String path) {
+		if (!path.startsWith(StringPool.SLASH)) {
+			path = StringPool.SLASH.concat(path);
 		}
 
-		return mimeType;
-	}
+		URL resourceURL = _bundle.getResource(path);
 
-	public URL getResource(String name) {
-		Bundle bundle = (Bundle)_bundleServletContext.getAttribute(
-			ModuleFrameworkConstants.OSGI_BUNDLE);
+		if (resourceURL != null) {
+			return resourceURL;
+		}
 
-		return bundle.getEntry(name);
-	}
+		String filePattern = path;
 
-	public BundleServletContext getBundleServletContext() {
-		return _bundleServletContext;
+		int pos = path.lastIndexOf(StringPool.SLASH);
+
+		if (pos != -1) {
+			filePattern = path.substring(pos + 1);
+			path = path.substring(0, pos);
+		}
+
+		Enumeration<URL> findEntries = _bundle.findEntries(
+			path, filePattern, false);
+
+		if ((findEntries != null) && findEntries.hasMoreElements()) {
+			return findEntries.nextElement();
+		}
+
+		return null;
 	}
 
 	public boolean handleSecurity(
@@ -65,6 +79,6 @@ public class DefaultHttpContext implements HttpContext {
 		return true;
 	}
 
-	private BundleServletContext _bundleServletContext;
+	private Bundle _bundle;
 
 }

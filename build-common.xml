@@ -39,6 +39,7 @@
 
 	<property name="liferay.home" value="${app.server.parent.dir}" />
 
+	<property name="module.framework.core.dir" value="${liferay.home}/data/framework/core" />
 	<property name="module.framework.lib.dir" value="${liferay.home}/data/framework/lib" />
 
 	<path id="lib.classpath">
@@ -453,7 +454,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 	</target>
 
 	<target name="compile-module">
-		<ant dir="${project.dir}/portal-modules/${module.name}" target="compile"  inheritAll="false" />
+		<ant dir="${project.dir}/portal-modules/${module.name}" target="compile" inheritAll="false" />
 	</target>
 
 	<target name="compile-test">
@@ -568,8 +569,6 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				</antelope:stringutil>
 
 				<antelope:grep in="${module.name.unix}" regex="(.*/)(.*)" group="2" property="module.name" />
-
-				<echo message="${module.name}"></echo>
 
 				<antcall target="${loop.modules.cmd}" />
 			</sequential>

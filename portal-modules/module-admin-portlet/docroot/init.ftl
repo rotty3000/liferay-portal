@@ -14,13 +14,13 @@
  */
 -->
 
-<#assign aui =                           PortletJspTagLibs["/WEB-INF/tld/aui.tld"] />
-<#assign liferay_portlet =               PortletJspTagLibs["/WEB-INF/tld/liferay-portlet-ext.tld"] />
-<#assign liferay_security =              PortletJspTagLibs["/WEB-INF/tld/liferay-security.tld"] />
-<#assign liferay_theme =                 PortletJspTagLibs["/WEB-INF/tld/liferay-theme.tld"] />
-<#assign liferay_ui =                    PortletJspTagLibs["/WEB-INF/tld/liferay-ui.tld"] />
-<#assign liferay_util =                  PortletJspTagLibs["/WEB-INF/tld/liferay-util.tld"] />
-<#assign portlet =                       PortletJspTagLibs["/WEB-INF/tld/liferay-portlet.tld"] />
+<#assign aui =                           PortletJspTagLibs["/META-INF/aui.tld"] />
+<#assign liferay_portlet =               PortletJspTagLibs["/META-INF/liferay-portlet-ext.tld"] />
+<#assign liferay_security =              PortletJspTagLibs["/META-INF/liferay-security.tld"] />
+<#assign liferay_theme =                 PortletJspTagLibs["/META-INF/liferay-theme.tld"] />
+<#assign liferay_ui =                    PortletJspTagLibs["/META-INF/liferay-ui.tld"] />
+<#assign liferay_util =                  PortletJspTagLibs["/META-INF/liferay-util.tld"] />
+<#assign portlet =                       PortletJspTagLibs["/META-INF/liferay-portlet.tld"] />
 
 <#assign OSGiHeader =                    staticUtil["aQute.libg.header.OSGiHeader"] />
 
@@ -33,7 +33,7 @@
 <#assign ParamUtil =                     staticUtil["com.liferay.portal.kernel.util.ParamUtil"] />
 <#assign Validator =                     staticUtil["com.liferay.portal.kernel.util.Validator"] />
 <#assign ModuleFrameworkException =      staticUtil["com.liferay.portal.module.framework.ModuleFrameworkException"] />
-<#assign ModuleFrameworkUtil =           staticUtil["com.liferay.portal.module.framework.ModuleFrameworkUtil"] />
+<#assign ModuleFrameworkAdapter =        staticUtil["com.liferay.portal.module.framework.adapter.ModuleFrameworkAdapter"] />
 <#assign PortalUtil =                    staticUtil["com.liferay.portal.util.PortalUtil"] />
 <#assign PropsValues =                   staticUtil["com.liferay.portal.util.PropsValues"] />
 <#assign WebKeys =                       staticUtil["com.liferay.portal.util.WebKeys"] />
@@ -52,6 +52,6 @@
 
 <#assign dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone) />
 
-<#assign framework = ModuleFrameworkUtil.getFramework() />
+<#assign framework = ModuleFrameworkAdapter.getFramework() />
 
 <#assign bundleContext = framework.getBundleContext() />

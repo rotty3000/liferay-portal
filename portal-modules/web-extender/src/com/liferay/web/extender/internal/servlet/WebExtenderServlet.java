@@ -26,7 +26,6 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.web.extender.internal.Activator;
 import com.liferay.web.extender.internal.http.ExtendedHttpService;
 import com.liferay.web.extender.internal.http.HttpServiceFactory;
 
@@ -38,9 +37,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.http.HttpService;
 
@@ -52,22 +53,29 @@ public class WebExtenderServlet extends PortletServlet
 
 	public static final String NAME = "Web Extender Servlet";
 
-	public WebExtenderServlet() {
+	public WebExtenderServlet(BundleContext bundleContext) {
+		_bundleContext = bundleContext;
 	}
 
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
 		super.init(servletConfig);
 
-		Hashtable<String,Object> properties = new Hashtable<String, Object>();
+		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
-		properties.put(BEAN_ID, HttpService.class.getName());
+		properties.put(BEAN_ID, HttpServlet.class.getName());
 		properties.put(ORIGINAL_BEAN, Boolean.TRUE);
 		properties.put(SERVICE_VENDOR, ReleaseInfo.getVendor());
 
-		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(this);
+		_httpServletRegistration = _bundleContext.registerService(
+			HttpServlet.class, this, properties);
 
-		_serviceRegistration = Activator.getBundleContext().registerService(
+		HttpServiceFactory httpServiceFactory = new HttpServiceFactory(
+			_bundleContext, this);
+
+		properties.put(BEAN_ID, HttpService.class.getName());
+
+		_httpServiceRegistration = _bundleContext.registerService(
 			new String[] {
 				HttpService.class.getName(),
 				ExtendedHttpService.class.getName()},
@@ -76,7 +84,8 @@ public class WebExtenderServlet extends PortletServlet
 
 	@Override
 	public void destroy() {
-		_serviceRegistration.unregister();
+		_httpServletRegistration.unregister();
+		_httpServiceRegistration.unregister();
 
 		super.destroy();
 	}
@@ -98,6 +107,10 @@ public class WebExtenderServlet extends PortletServlet
 		service(request, response);
 
 		return null;
+	}
+
+	public BundleContext getBundleContext() {
+		return _bundleContext;
 	}
 
 	@Override
@@ -130,10 +143,12 @@ public class WebExtenderServlet extends PortletServlet
 		}
 		else {
 			if (requestURI != null) {
-				String pathMain = PortalUtil.getPathMain();
+				String pathContext = PortalUtil.getPathContext();
 
-				if (requestURI.startsWith(pathMain)) {
-					requestURI = requestURI.substring(pathMain.length());
+				if (Validator.isNotNull(pathContext) &&
+					requestURI.startsWith(pathContext)) {
+
+					requestURI = requestURI.substring(pathContext.length());
 				}
 
 				if (requestURI.startsWith(MODULE_MAPPING)) {
@@ -188,34 +203,19 @@ public class WebExtenderServlet extends PortletServlet
 		try {
 			currentThread.setContextClassLoader(bundleClassLoader);
 
-			if (pathInfo.endsWith(INVOKER_PATH)) {
-				if (Validator.isNotNull(portletId)) {
-					super.service(request, response);
-
-					return;
-				}
-
-				PortalUtil.sendError(
-					HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-					new IllegalAccessException("Illegal request"), request,
-					response);
-
-				return;
-			}
-
-			if (Validator.isNotNull(portletId) &&
-				pathInfo.equals(INVOKER_PATH)) {
-
-				super.service(request, response);
-
-				return;
-			}
-
 			RequestDispatcher requestDispatcher =
 				bundleServletContext.getRequestDispatcher(pathInfo);
 
 			if (requestDispatcher != null) {
 				requestDispatcher.forward(request, response);
+
+				return;
+			}
+
+			if (pathInfo.endsWith(INVOKER_PATH) &&
+				Validator.isNotNull(portletId)) {
+
+				super.service(request, response);
 
 				return;
 			}
@@ -231,6 +231,8 @@ public class WebExtenderServlet extends PortletServlet
 		}
 	}
 
-	private ServiceRegistration<?> _serviceRegistration;
+	private BundleContext _bundleContext;
+	private ServiceRegistration<?> _httpServiceRegistration;
+	private ServiceRegistration<HttpServlet> _httpServletRegistration;
 
 }

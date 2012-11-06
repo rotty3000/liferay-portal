@@ -10,4 +10,6 @@
 
 	<var name="module.classes.dir" value="docroot/WEB-INF/classes" />
 	<var name="module.src.dir" value="docroot/WEB-INF/src" />
+
+	<path id="module-lib.classpath" />
 </project>

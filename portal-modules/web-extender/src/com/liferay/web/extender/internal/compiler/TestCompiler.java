@@ -28,12 +28,12 @@ import java.util.Map;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
-import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.JavaFileManager;
+import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager.Location;
-import javax.tools.JavaFileObject;
+import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject.Kind;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
@@ -103,7 +103,7 @@ public class TestCompiler implements Constants {
 			return;
 		}
 
-		for (Diagnostic dm: diagnostics.getDiagnostics()) {
+		for (Diagnostic dm : diagnostics.getDiagnostics()) {
 			System.err.println(
 				"COMPILE ERROR: " + className + Kind.SOURCE.extension + ":" +
 					dm.getLineNumber());
@@ -123,12 +123,11 @@ public class TestCompiler implements Constants {
 			//_ignoreMethods.add("inferBinaryName");
 		}
 
-		public Object invoke(
-				Object proxy, Method method, Object[] args)
+		public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 
 			if (_ignoreMethods.contains(method.getName())) {
-				 return method.invoke(_bundleJavaManager, args);
+				return method.invoke(_bundleJavaManager, args);
 			}
 
 			System.err.print("METHOD: " + method.getName() + "(");

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<project name="module-framework-core" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.core.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<path id="module-lib.classpath" />
+</project>

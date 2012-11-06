@@ -119,6 +119,18 @@ public class ClassPathUtil {
 		sb.append(appServerGlobalClassPath);
 		sb.append(File.pathSeparator);
 
+		if (ServerDetector.isGlassfish()) {
+			File glassfishModules = new File(
+				System.getProperty("AS_INSTALL"), "modules");
+
+			if (glassfishModules.exists() && glassfishModules.isDirectory()) {
+				StringBundler glassfishModulePath = processDir(
+					glassfishModules.getAbsoluteFile());
+
+				sb.append(glassfishModulePath);
+			}
+		}
+
 		String portalGlobalClassPath = _buildClassPath(
 			classLoader, PortalException.class.getName());
 
@@ -251,6 +263,14 @@ public class ClassPathUtil {
 			return StringPool.BLANK;
 		}
 
+		StringBundler sb = processDir(dir);
+
+		sb.setIndex(sb.index() - 1);
+
+		return sb.toString();
+	}
+
+	private static StringBundler processDir(File dir) {
 		File[] files = dir.listFiles();
 
 		Arrays.sort(files);
@@ -258,13 +278,18 @@ public class ClassPathUtil {
 		StringBundler sb = new StringBundler(files.length * 2);
 
 		for (File file : files) {
-			sb.append(file.getAbsolutePath());
-			sb.append(File.pathSeparator);
+			if (file.isDirectory() && !file.getName().equals("classes")) {
+				sb.append(processDir(file));
+			}
+			else if ((file.isDirectory() && file.getName().equals("classes")) ||
+					 file.getName().endsWith(".jar")){
+
+				sb.append(file.getAbsolutePath());
+				sb.append(File.pathSeparator);
+			}
 		}
 
-		sb.setIndex(sb.index() - 1);
-
-		return sb.toString();
+		return sb;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ClassPathUtil.class);

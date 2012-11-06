@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<project name="jsp-impl" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.lib.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<path id="module-lib.classpath">
+		<fileset dir="${project.dir}/portal-modules/jsp-impl/lib" includes="org.apache.jasper.glassfish-2.1.0.v201110031002.jar" />
+	</path>
+
+	<target name="compile">
+		<mkdir dir="tmp"/>
+
+		<unjar
+			dest="tmp"
+			src="org.apache.jasper.glassfish-2.1.0.v201110031002-sources.jar"
+		/>
+
+		<copy overwrite="true" todir="${module.src.dir}">
+			<fileset
+				dir="tmp"
+				includes="org/apache/jasper/EmbeddedServletOptions.java,org/apache/jasper/JspC.java,org/apache/jasper/Options.java,org/apache/jasper/compiler/Compiler.java,org/apache/jasper/compiler/Generator.java,org/apache/jasper/compiler/Jsr199JavaCompiler.java,org/apache/jasper/compiler/JspRuntimeContext.java,org/apache/jasper/compiler/TldLocationsCache.java"
+			/>
+		</copy>
+
+		<delete dir="tmp" />
+
+		<patch dir="${module.src.dir}" patchfile="patches/patch-1.patch" strip="1" />
+
+		<mkdir dir="${module.classes.dir}" />
+
+		<antcall target="build-common-java.compile" />
+	</target>
+</project>

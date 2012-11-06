@@ -20,7 +20,9 @@ import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployListener;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
+import com.liferay.portal.kernel.deploy.hot.DependencyManagementThreadLocal;
 import com.liferay.portal.kernel.io.FileFilter;
+import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceConfigurator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
@@ -30,6 +32,8 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -47,12 +51,15 @@ import com.liferay.portal.kernel.xml.XPath;
 import com.liferay.portal.module.framework.ModuleFrameworkConstants;
 import com.liferay.portal.tools.deploy.BaseDeployer;
 import com.liferay.portal.util.Portal;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.dynamicdatamapping.util.DDMXMLUtil;
 import com.liferay.web.extender.internal.introspection.ClassLoaderSource;
 import com.liferay.web.extender.internal.introspection.Source;
 import com.liferay.web.extender.internal.util.Util;
+import com.liferay.web.extender.jsonwebservice.JSONWebServiceConfiguratorImpl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -62,9 +69,11 @@ import java.io.InputStream;
 
 import java.net.URI;
 
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.jar.Attributes;
@@ -76,10 +85,14 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.osgi.framework.Constants;
+import javax.servlet.jsp.JspFactory;
+
+import org.apache.jasper.runtime.JspFactoryImpl;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.depend.DependencyVisitor;
+
+import org.osgi.framework.Constants;
 
 /**
  * @author Raymond Augé
@@ -97,7 +110,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		_baseDeployer = new BaseDeployer();
 
-		_baseDeployer.setAppServerType(ServerDetector.getServerId());
+		_baseDeployer.setAppServerType(ServerDetector.MODULE_FRAMEWORK_ID);
 	}
 
 	public java.io.InputStream getInputStream() throws IOException {
@@ -117,8 +130,35 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			File manifestFile = _getManifestFile();
 
-			writePath(
-				manifestFile, jarOutputStream, processedPaths, MANIFEST_PATH);
+			InputStream inputStream = null;
+
+			try {
+				inputStream = new FileInputStream(manifestFile);
+
+				writePath(
+					inputStream, jarOutputStream, processedPaths,
+					MANIFEST_PATH);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
+
+			try {
+				byte[] bytes = JspFactoryImpl.class.getName().getBytes(
+					StringPool.UTF8);
+
+				inputStream = new ByteArrayInputStream(bytes);
+
+				String path =
+					"WEB-INF/classes/META-INF/services/".concat(
+						JspFactory.class.getName());
+
+				writePath(
+					inputStream, jarOutputStream, processedPaths, path);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
 
 			writeJarPaths(
 				_deployedAppFolder, _deployedAppFolder.toURI(), jarOutputStream,
@@ -142,11 +182,20 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		AutoDeploymentContext autoDeploymentContext =
 			buildAutoDeploymentContext(webContextpath);
 
-		doAutoDeploy(autoDeploymentContext);
+		boolean enabled = DependencyManagementThreadLocal.isEnabled();
+
+		try {
+			DependencyManagementThreadLocal.setEnabled(false);
+
+			doAutoDeploy(autoDeploymentContext);
+		}
+		finally {
+			DependencyManagementThreadLocal.setEnabled(enabled);
+		}
 
 		_deployedAppFolder = autoDeploymentContext.getDeployDir();
 
-		if (!PropsValues.AUTO_DEPLOY_UNPACK_WAR) {
+		if (!_deployedAppFolder.exists()) {
 			File[] listFiles = _deployedAppFolder.getParentFile().listFiles(
 				new FilenameFilter() {
 					public boolean accept(File dir, String name) {
@@ -172,6 +221,20 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			!_deployedAppFolder.isDirectory()) {
 
 			return;
+		}
+
+		PluginPackage pluginPackage = _baseDeployer.readPluginPackage(
+			_deployedAppFolder);
+
+		String recommendedDeploymentContext =
+			pluginPackage.getRecommendedDeploymentContext();
+
+		if (Validator.isNotNull(recommendedDeploymentContext)) {
+			webContextpath = recommendedDeploymentContext;
+
+			if (!webContextpath.startsWith(StringPool.SLASH)) {
+				webContextpath = StringPool.SLASH.concat(webContextpath);
+			}
 		}
 
 		Manifest manifest = _getManifest();
@@ -212,10 +275,46 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			analyzer.setClasspath(
 				classPath.values().toArray(new File[classPath.size()]));
 
+			processBundleSymbolicName(analyzer, webContextpath);
+
+			bundleSymbolicName = analyzer.getProperty(
+				Constants.BUNDLE_SYMBOLICNAME);
+
+			String importPackage = StringPool.BLANK;
+
+			Properties properties = PropsUtil.getProperties(
+				PropsKeys.MODULE_FRAMEWORK_WEB_EXTENDER_HEADERS, true);
+
+			Enumeration<Object> keys = properties.keys();
+
+			while (keys.hasMoreElements()) {
+				String key = (String)keys.nextElement();
+				String originalKey = key;
+
+				if (key.endsWith(StringPool.CLOSE_BRACKET)) {
+					String bundleFilterSuffix = StringPool.OPEN_BRACKET.concat(
+						bundleSymbolicName).concat(StringPool.CLOSE_BRACKET);
+
+					if (!key.endsWith(bundleFilterSuffix)) {
+						continue;
+					}
+
+					key = key.substring(
+						0, key.indexOf(StringPool.OPEN_BRACKET));
+				}
+
+				String value = properties.getProperty(originalKey);
+
+				if (key.equals(Constants.IMPORT_PACKAGE)) {
+					importPackage += StringPool.COMMA.concat(value);
+				}
+
+				analyzer.setProperty(key, value);
+			}
+
 			// The order of these operations is important
 
-			processBundleSymbolicName(analyzer, webContextpath);
-			processBundleVersion(analyzer);
+			processBundleVersion(analyzer, pluginPackage);
 			processBundleManifestVersion(analyzer);
 
 			processPortletXML(webContextpath);
@@ -223,8 +322,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processWebXML("WEB-INF/liferay-web.xml");
 			processLiferayPortletXML(webContextpath);
 			processDeclarativeReferences();
-			processExportImportPackage(analyzer);
-			processPluginDependencies(analyzer);
+			processExportImportPackage(analyzer, importPackage);
+			processPluginDependencies(analyzer, pluginPackage);
 
 			try {
 				manifest = analyzer.calcManifest();
@@ -260,6 +359,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		AutoDeploymentContext autoDeploymentContext =
 			new AutoDeploymentContext();
 
+		autoDeploymentContext.setAppServerType(
+			ServerDetector.MODULE_FRAMEWORK_ID);
 		autoDeploymentContext.setContext(context);
 		autoDeploymentContext.setDestDir(destDir.getAbsolutePath());
 		autoDeploymentContext.setFile(_file);
@@ -310,14 +411,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		analyzer.setProperty(Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName);
 	}
 
-	protected void processBundleVersion(Analyzer analyzer) {
+	protected void processBundleVersion(
+		Analyzer analyzer, PluginPackage pluginPackage) {
+
 		_version = MapUtil.getString(_parameterMap, Constants.BUNDLE_VERSION);
 
 		if (Validator.isNull(_version)) {
-			PluginPackage readPluginPackage = _baseDeployer.readPluginPackage(
-				_deployedAppFolder);
-
-			_version = readPluginPackage.getVersion();
+			_version = pluginPackage.getVersion();
 		}
 
 		analyzer.setProperty(Constants.BUNDLE_VERSION, _version);
@@ -391,8 +491,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		DependencyVisitor dependencyVisitor = new DependencyVisitor();
 
-		processClass(
-			dependencyVisitor, className, source, _importPackages);
+		processClass(dependencyVisitor, className, source, _importPackages);
 
 		Set<String> packages = dependencyVisitor.getGlobals().keySet();
 
@@ -403,8 +502,19 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void processDeclarativeReferences()
-		throws IOException {
+	protected void processDeclarativeReferences() throws IOException {
+		for (String value :
+				PropsValues.
+					MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES) {
+
+			int pos = value.indexOf(StringPool.SEMICOLON);
+
+			if (pos != -1) {
+				value = value.substring(0, pos);
+			}
+
+			_importPackages.add(value.trim());
+		}
 
 		// References from web.xml
 
@@ -414,19 +524,6 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processXmlDependencies(
 				xml, _WEBXML_CLASSREFERENCE_ELEMENTS, "x",
 				"http://java.sun.com/xml/ns/j2ee");
-
-			for (String value :
-					PropsValues.
-						MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_SERVLET_PACKAGES) {
-
-				int pos = value.indexOf(StringPool.SEMICOLON);
-
-				if (pos != -1) {
-					value = value.substring(0, pos);
-				}
-
-				_importPackages.add(value.trim());
-			}
 		}
 
 		// References from *.tld
@@ -449,22 +546,10 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 			processXmlDependencies(
 				xml, _PORTLETXML_CLASSREFERENCE_ELEMENTS, "x",
 				"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd");
-
-			for (String value :
-					PropsValues.
-						MODULE_FRAMEWORK_WEB_EXTENDER_DEFAULT_PORTLET_PACKAGES) {
-
-				int pos = value.indexOf(StringPool.SEMICOLON);
-
-				if (pos != -1) {
-					value = value.substring(0, pos);
-				}
-
-				_importPackages.add(value.trim());
-			}
 		}
 
 		// References from liferay-web.xml
+		// TODO: remove this?
 
 //		xml = new File(_deployedAppFolder, "WEB-INF/liferay-web.xml");
 //
@@ -479,8 +564,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		if (xml.exists()) {
 			processXmlDependencies(
-				xml, _LIFERAYPORTLETXML_CLASSREFERENCE_ELEMENTS, null,
-				null);
+				xml, _LIFERAYPORTLETXML_CLASSREFERENCE_ELEMENTS, null, null);
 		}
 
 		// References from liferay-hook.xml
@@ -489,32 +573,23 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		if (xml.exists()) {
 			processXmlDependencies(
-				xml, _LIFERAYHOOKXML_CLASSREFERENCE_ELEMENTS, null,
-				null);
+				xml, _LIFERAYHOOKXML_CLASSREFERENCE_ELEMENTS, null, null);
 		}
 	}
 
-	protected void processExportImportPackage(Analyzer analyzer)
+	protected void processExportImportPackage(
+			Analyzer analyzer, String importPackage)
 		throws IOException {
 
-		_importPackages.add("com.liferay.web.extender.servlet");
-		_importPackages.add("com.liferay.web.extender.servlet.jsp");
-		_importPackages.add("org.apache.jasper.runtime");
-		_importPackages.add("org.apache.jasper.servlet");
-		_importPackages.add("org.eclipse.jetty.servlet.listener");
-		_importPackages.add("org.eclipse.jetty.util");
-		_importPackages.add("org.eclipse.jetty.util.log");
-		_importPackages.add("org.glassfish.jsp.api");
+		if (Validator.isNotNull(importPackage)) {
+			String[] packageImports = StringUtil.split(importPackage);
 
-		String privatePackages = MapUtil.getString(
-			_parameterMap, aQute.lib.osgi.Constants.PRIVATE_PACKAGE);
-
-		if (Validator.isNotNull(privatePackages)) {
-			analyzer.setProperty(
-				aQute.lib.osgi.Constants.PRIVATE_PACKAGE, privatePackages);
+			for (String pachageImport : packageImports) {
+				_importPackages.add(pachageImport);
+			}
 		}
 
-		String importPackage = MapUtil.getString(
+		importPackage = MapUtil.getString(
 			_parameterMap, Constants.IMPORT_PACKAGE);
 
 		if (Validator.isNotNull(importPackage)) {
@@ -525,6 +600,10 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				(_importPackages.size() * 3) + 1);
 
 			for (String packageName : _importPackages) {
+				if (Validator.isNull(packageName)) {
+					continue;
+				}
+
 				sb.append(packageName);
 				sb.append(";resolution:=\"optional\"");
 				sb.append(StringPool.COMMA);
@@ -534,12 +613,53 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 			analyzer.setProperty(Constants.IMPORT_PACKAGE, sb.toString());
 		}
+	}
 
-		analyzer.setProperty(
-			Constants.EXPORT_PACKAGE,
-			"!com.liferay.taglib.*,!com.liferay.util.*," +
-				"!org.apache.commons.logging.*,!org.apache.log4j.*," +
-					"!org.slf4j.impl.*,*");
+	protected void processJspDepedencies(File jspFile) throws IOException {
+		DependencyVisitor dependencyVisitor = new DependencyVisitor();
+
+		Source source = new ClassLoaderSource(getSystemBundleClassLoader());
+
+		String content = FileUtil.read(jspFile);
+
+		int startPos = content.length();
+		int pos = -1;
+
+		while (true) {
+			pos = content.lastIndexOf("<%@", startPos);
+
+			if (pos == -1) {
+				break;
+			}
+
+			startPos = pos;
+
+			int x = content.indexOf("import=\"", startPos);
+			int y = -1;
+
+			if (x != -1) {
+				x = x + "import=\"".length();
+				y = content.indexOf("\"", x);
+			}
+
+			if ((x != -1) && (y != -1)) {
+				String value = content.substring(x, y);
+
+				processClass(
+					dependencyVisitor, value.replace('.', '/') + ".class",
+					source, _importPackages);
+			}
+
+			startPos -= 3;
+		}
+
+		Set<String> packages = dependencyVisitor.getGlobals().keySet();
+
+		for (String referencedPackage : packages) {
+			_importPackages.add(
+				referencedPackage.replaceAll(
+					StringPool.SLASH, StringPool.PERIOD));
+		}
 	}
 
 	protected void processLiferayPortletXML(String webContextpath)
@@ -585,8 +705,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 				int pos = children.indexOf(previousChild);
 
-				strutsPathElement = SAXReaderUtil.createElement(
-					"struts-path");
+				strutsPathElement = SAXReaderUtil.createElement("struts-path");
 
 				strutsPathElement.setText(MODULE.concat(webContextpath));
 
@@ -610,14 +729,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		FileUtil.write(liferayPortletXMLFile, content);
 	}
 
-	protected void processPluginDependencies(Analyzer analyzer) {
-		PluginPackage readPluginPackage = _baseDeployer.readPluginPackage(
-			_deployedAppFolder);
+	protected void processPluginDependencies(
+		Analyzer analyzer, PluginPackage pluginPackage) {
 
 		List<String> requiredDeploymentContexts =
-			readPluginPackage.getRequiredDeploymentContexts();
+			pluginPackage.getRequiredDeploymentContexts();
 
-		if (requiredDeploymentContexts == null ||
+		if ((requiredDeploymentContexts == null) ||
 				requiredDeploymentContexts.isEmpty()) {
 
 			return;
@@ -654,9 +772,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void processPortletXML(String webContextpath)
-		throws IOException {
-
+	protected void processPortletXML(String webContextpath) throws IOException {
 		File portletXMLFile = new File(
 			_deployedAppFolder, "WEB-INF/" +
 				Portal.PORTLET_XML_FILE_NAME_STANDARD);
@@ -681,7 +797,8 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		List<Element> portletElements = rootElement.elements("portlet");
 
 		for (Element portletElement : portletElements) {
-			String portletName = portletElement.elementText("portlet-name");
+			String portletName = PortalUtil.getJsSafePortletId(
+				portletElement.elementText("portlet-name"));
 
 			String invokerPortletName = MODULE.concat(webContextpath).concat(
 				StringPool.SLASH).concat(portletName);
@@ -907,13 +1024,43 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				continue;
 			}
 
-			writePath(file, zipOutputStream, processedPaths, relativePath);
+			InputStream inputStream = null;
+
+			if (relativePath.equals("WEB-INF/service.xml")) {
+				try {
+					byte[] bytes =
+						JSONWebServiceConfiguratorImpl.class.getName().
+							getBytes(StringPool.UTF8);
+
+					inputStream = new ByteArrayInputStream(bytes);
+
+					String path =
+						"WEB-INF/classes/META-INF/services/".concat(
+							JSONWebServiceConfigurator.class.getName());
+
+					writePath(
+						inputStream, zipOutputStream, processedPaths, path);
+				}
+				finally {
+					StreamUtil.cleanUp(inputStream);
+				}
+			}
+
+			try {
+				inputStream = new FileInputStream(file);
+
+				writePath(
+					inputStream, zipOutputStream, processedPaths, relativePath);
+			}
+			finally {
+				StreamUtil.cleanUp(inputStream);
+			}
 		}
 	}
 
 	protected void writePath(
-		File file, ZipOutputStream zipOutputStream, Set<String> processedPaths,
-		String path) {
+		InputStream inputStream, ZipOutputStream zipOutputStream,
+		Set<String> processedPaths, String path) {
 
 		if (processedPaths.contains(path)) {
 			return;
@@ -921,31 +1068,15 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 
 		processedPaths.add(path);
 
-		FileInputStream fis = null;
-
 		try {
-			fis = new FileInputStream(file);
-
 			zipOutputStream.putNextEntry(new JarEntry(path));
 
-			StreamUtil.transfer(fis, zipOutputStream, false);
+			StreamUtil.transfer(inputStream, zipOutputStream, false);
 
 			zipOutputStream.closeEntry();
 		}
 		catch (IOException ioe) {
 			_log.error(ioe);
-		}
-		finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-
-			fis = null;
 		}
 	}
 
@@ -1001,7 +1132,13 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 				relativePath.endsWith(".jar") &&
 				!ArrayUtil.contains(_EXCLUDED_CLASS_PATHS, relativePath)) {
 
-				classPath.put(relativePath ,file);
+				classPath.put(relativePath, file);
+			}
+			else if (relativePath.endsWith(".jsp") ||
+					 relativePath.endsWith(".jspf") ||
+					 relativePath.endsWith(".jspx")) {
+
+				processJspDepedencies(file);
 			}
 
 			if (file.isDirectory()) {
@@ -1010,9 +1147,7 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 		}
 	}
 
-	protected void _saveManifest(Manifest manifest)
-		throws IOException {
-
+	protected void _saveManifest(Manifest manifest) throws IOException {
 		File manifestFile = _getManifestFile();
 
 		FileOutputStream fos = new FileOutputStream(manifestFile);
@@ -1028,16 +1163,11 @@ public class WebBundleProcessor implements ModuleFrameworkConstants {
 	private static Log _log = LogFactoryUtil.getLog(WebBundleProcessor.class);
 
 	private static final String[] _EXCLUDED_CLASS_PATHS = new String[] {
-		"WEB-INF/lib/commons-codec.jar",
-		"WEB-INF/lib/commons-fileupload.jar",
-		"WEB-INF/lib/commons-io.jar",
-		"WEB-INF/lib/commons-lang.jar"
-//		,
-//		"WEB-INF/lib/commons-logging.jar",
-//		"WEB-INF/lib/log4j.jar",
-//		"WEB-INF/lib/slf4j-api.jar",
-//		"WEB-INF/lib/util-bridges.jar",
-//		"WEB-INF/lib/util-java.jar",
+		"WEB-INF/lib/commons-codec.jar", "WEB-INF/lib/commons-fileupload.jar",
+		"WEB-INF/lib/commons-io.jar", "WEB-INF/lib/commons-lang.jar"
+//		, //		"WEB-INF/lib/commons-logging.jar",
+//		"WEB-INF/lib/log4j.jar", //		"WEB-INF/lib/slf4j-api.jar",
+//		"WEB-INF/lib/util-bridges.jar", //		"WEB-INF/lib/util-java.jar",
 //		"WEB-INF/lib/util-taglib.jar"
 	};
 
