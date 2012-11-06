@@ -11,6 +11,8 @@
 	<property name="manifest.bundle.symbolic.name" value="portal-impl;singleton:=true" />
 	<property name="service.file" value="service.xml" />
 
+	<path id="module-lib.classpath" />
+
 	<target name="build-alloy-taglib">
 		<if>
 			<not>

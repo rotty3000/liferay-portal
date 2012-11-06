@@ -7,6 +7,8 @@
 	<property name="manifest.bundle.name" value="Liferay Util Taglib" />
 	<property name="manifest.bundle.symbolic.name" value="util-taglib" />
 
+	<path id="module-lib.classpath" />
+
 	<target name="build-taglibs">
 		<delete file="${project.dir}/util-taglib/src/META-INF/aui.tld" failonerror="false" />
 

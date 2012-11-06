@@ -51,6 +51,8 @@
 		<pathelement location="${project.dir}/lib/portal/velocity.jar" />
 	</path>
 
+	<path id="module-lib.classpath" />
+
 	<target name="build-alloy">
 		<if>
 			<not>

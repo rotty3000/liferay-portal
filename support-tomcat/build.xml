@@ -6,6 +6,8 @@
 	<property name="deploy.dir" value="${app.server.lib.support.dir}" />
 	<property name="jar.file" value="${ant.project.name}" />
 
+	<path id="module-lib.classpath" />
+
 	<target name="clean">
 		<antcall target="build-common-java.clean" />
 
