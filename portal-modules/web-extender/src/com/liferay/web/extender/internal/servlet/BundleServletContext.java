@@ -230,7 +230,6 @@ public class BundleServletContext extends LiferayServletContext
 		return Collections.enumeration(attributeNames);
 	}
 
-	@Override
 	public ClassLoader getClassLoader() {
 		Object value = _contextAttributes.get(
 			PluginContextListener.PLUGIN_CLASS_LOADER);
