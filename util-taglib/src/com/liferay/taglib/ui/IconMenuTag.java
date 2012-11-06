@@ -16,7 +16,6 @@ package com.liferay.taglib.ui;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.PortalIncludeUtil;
-import com.liferay.portal.kernel.servlet.taglib.BaseBodyTagSupport;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
 import com.liferay.portal.kernel.servlet.taglib.aui.ScriptData;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -30,6 +29,7 @@ import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.taglib.aui.ScriptTag;
+import com.liferay.taglib.util.BaseBodyTagSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;

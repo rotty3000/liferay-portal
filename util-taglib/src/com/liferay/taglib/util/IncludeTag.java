@@ -287,7 +287,9 @@ public class IncludeTag extends AttributesTagSupport {
 		request.setAttribute(
 			WebKeys.SERVLET_CONTEXT_INCLUDE_FILTER_STRICT, _strict);
 
-		HttpServletResponse response = new PipingServletResponse(pageContext);
+		HttpServletResponse response = new PipingServletResponse(
+			(HttpServletResponse)pageContext.getResponse(),
+			pageContext.getOut());
 
 		requestDispatcher.include(request, response);
 

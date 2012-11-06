@@ -14,7 +14,7 @@
 
 package com.liferay.taglib.core;
 
-import com.liferay.portal.kernel.servlet.taglib.TagSupport;
+import com.liferay.taglib.util.TagSupport;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
