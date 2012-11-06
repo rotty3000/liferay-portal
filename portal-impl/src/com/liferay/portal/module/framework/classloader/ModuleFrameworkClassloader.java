@@ -30,7 +30,9 @@ public class ModuleFrameworkClassloader extends URLClassLoader {
 	public ModuleFrameworkClassloader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 
-		_system = getSystemClassLoader();
+		// On some app servers we could find their own OSGI framework in the boostrap classloader
+
+		// _system = getSystemClassLoader();
 	}
 
 	@Override
