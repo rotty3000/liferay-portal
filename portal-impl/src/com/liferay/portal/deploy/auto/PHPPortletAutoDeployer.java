@@ -31,9 +31,7 @@ public class PHPPortletAutoDeployer extends PortletAutoDeployer {
 		try {
 			String[] phpJars = {"resin.jar", "script-10.jar"};
 
-			for (int i = 0; i < phpJars.length; i++) {
-				String phpJar = phpJars[i];
-
+			for (String phpJar : phpJars) {
 				jars.add(downloadJar(phpJar));
 			}
 
@@ -42,6 +40,37 @@ public class PHPPortletAutoDeployer extends PortletAutoDeployer {
 		catch (Exception e) {
 			throw new AutoDeployException(e);
 		}
+	}
+
+	@Override
+	public AutoDeployer copy() {
+		PHPPortletAutoDeployer deployer;
+
+		try {
+			deployer = new PHPPortletAutoDeployer();
+		}
+		catch (AutoDeployException ade) {
+			throw new IllegalStateException(ade);
+		}
+
+		deployer.setAppServerType(appServerType);
+		deployer.setAuiTaglibDTD(auiTaglibDTD);
+		deployer.setBaseDir(baseDir);
+		deployer.setDestDir(destDir);
+		deployer.setFilePattern(filePattern);
+		deployer.setJars(jars);
+		deployer.setJbossPrefix(jbossPrefix);
+		deployer.setPortletExtTaglibDTD(portletExtTaglibDTD);
+		deployer.setPortletTaglibDTD(portletTaglibDTD);
+		deployer.setSecurityTaglibDTD(securityTaglibDTD);
+		deployer.setThemeTaglibDTD(themeTaglibDTD);
+		deployer.setTomcatLibDir(tomcatLibDir);
+		deployer.setUiTaglibDTD(uiTaglibDTD);
+		deployer.setUnpackWar(unpackWar);
+		deployer.setUtilTaglibDTD(utilTaglibDTD);
+		deployer.setWars(wars);
+
+		return deployer;
 	}
 
 	@Override
