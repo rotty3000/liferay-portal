@@ -1634,6 +1634,15 @@ set "CLASSPATH=%FMWCONFIG_CLASSPATH%"
 				</replace>
 			</then>
 			<else>
+				<if>
+					<os name="Linux" />
+					<then>
+						<replace file="${app.server.weblogic.dir}/configure.sh">
+							<replacefilter token="#!/bin/sh" value="#!/bin/bash" />
+						</replace>
+					</then>
+				</if>
+
 				<chmod
 					dir="${app.server.weblogic.dir}"
 					includes="configure.sh"
