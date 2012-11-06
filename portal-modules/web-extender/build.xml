@@ -9,7 +9,7 @@
 	<property name="jar.file" value="${ant.project.name}" />
 
 	<path id="module-lib.classpath">
-		<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar" />
+		<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar, lib/*.jar" />
 	</path>
 
 	<target name="compile">
