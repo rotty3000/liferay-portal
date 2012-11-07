@@ -14,6 +14,8 @@
 
 package com.liferay.portal.service.impl;
 
+import com.liferay.counter.NoSuchCounterException;
+import com.liferay.counter.model.Counter;
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.RequiredLayoutException;
@@ -1514,6 +1516,32 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 		}
 		finally {
 			FileUtil.delete(file);
+		}
+	}
+
+	public void resetCounterIdByLayoutId(
+			long groupId, boolean privateLayout, long layoutId)
+		throws PortalException, SystemException {
+
+		Counter counter = null;
+
+		String counterName = getCounterName(groupId, privateLayout);
+
+		try {
+			counter = counterLocalService.getCounter(counterName);
+
+			if (counter.getCurrentId() < layoutId) {
+				counter.setCurrentId(layoutId);
+
+				counterLocalService.updateCounter(counter);
+			}
+		}
+		catch (NoSuchCounterException nsce) {
+			counter = counterLocalService.createCounter(counterName);
+
+			counter.setCurrentId(layoutId);
+
+			counterLocalService.updateCounter(counter);
 		}
 	}
 
