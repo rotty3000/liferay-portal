@@ -21,7 +21,7 @@
 
 		<path id="web-lib.classpath">
 			<fileset dir="${project.dir}/lib/development" includes="catalina.jar,tomcat-coyote.jar" />
-			<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar" />
+			<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar, lib/*.jar" />
 		</path>
 
 		<javac
