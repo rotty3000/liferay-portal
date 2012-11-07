@@ -19,14 +19,17 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseAsyncDestination;
 import com.liferay.portal.kernel.servlet.PortalClassLoaderFilter;
 import com.liferay.portal.kernel.servlet.PortalClassLoaderServlet;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.PathUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
 import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.pacl.PACLClassUtil;
+import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.security.Permission;
 
@@ -217,10 +220,14 @@ public class RuntimeChecker extends BaseReflectChecker {
 
 			if (referenceId.equals("portal")) {
 				Class<?> callerClass7 = Reflection.getCallerClass(7);
+				Class<?> callerClass8 = Reflection.getCallerClass(8);
 
 				if ((callerClass7 == BaseAsyncDestination.class) ||
 					(callerClass7 == PortalClassLoaderFilter.class) ||
-					(callerClass7 == PortalClassLoaderServlet.class)) {
+					(callerClass7 == PortalClassLoaderServlet.class) ||
+					((callerClass7 == ClassResolverUtil.class) &&
+						(Validator.equals(callerClass8.getName(),
+							MVCPortlet.class.getName())))) {
 
 					return true;
 				}
