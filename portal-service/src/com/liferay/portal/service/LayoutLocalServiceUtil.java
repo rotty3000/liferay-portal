@@ -1104,6 +1104,13 @@ public class LayoutLocalServiceUtil {
 			is);
 	}
 
+	public static void resetCounterIdByLayoutId(long groupId,
+		boolean privateLayout, long layoutId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().resetCounterIdByLayoutId(groupId, privateLayout, layoutId);
+	}
+
 	/**
 	* Sets the layouts for the group, replacing and prioritizing all layouts of
 	* the parent layout.

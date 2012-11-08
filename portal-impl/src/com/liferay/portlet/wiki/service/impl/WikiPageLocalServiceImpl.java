@@ -445,12 +445,12 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		// Asset
 
-		List<WikiPage> pageVersions = wikiPagePersistence.findByN_T(
+		List<WikiPage> versionPages = wikiPagePersistence.findByN_T(
 			page.getNodeId(), page.getTitle());
 
-		for (WikiPage pageVersion : pageVersions) {
+		for (WikiPage versionPage : versionPages) {
 			assetEntryLocalService.deleteEntry(
-				WikiPage.class.getName(), pageVersion.getPrimaryKey());
+				WikiPage.class.getName(), versionPage.getPrimaryKey());
 		}
 
 		assetEntryLocalService.deleteEntry(
@@ -1008,14 +1008,14 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		// All versions
 
-		List<WikiPage> pageVersions = wikiPagePersistence.findByN_T(
+		List<WikiPage> versionPages = wikiPagePersistence.findByN_T(
 			nodeId, title);
 
-		if (pageVersions.size() == 0) {
+		if (versionPages.size() == 0) {
 			return;
 		}
 
-		for (WikiPage page : pageVersions) {
+		for (WikiPage page : versionPages) {
 			page.setTitle(newTitle);
 
 			wikiPagePersistence.update(page);
@@ -1031,7 +1031,7 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			wikiPagePersistence.update(page);
 		}
 
-		WikiPage page = pageVersions.get(pageVersions.size() - 1);
+		WikiPage page = versionPages.get(versionPages.size() - 1);
 
 		long resourcePrimKey = page.getResourcePrimKey();
 
@@ -1156,6 +1156,15 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		wikiPagePersistence.update(page);
 
+		List<WikiPage> versionPages = wikiPagePersistence.findByR_N_H(
+			page.getResourcePrimKey(), page.getNodeId(), false);
+
+		for (WikiPage versionPage : versionPages) {
+			versionPage.setTitle(title);
+
+			wikiPagePersistence.update(versionPage);
+		}
+
 		WikiPageResource pageResource =
 			wikiPageResourcePersistence.fetchByPrimaryKey(
 				page.getResourcePrimKey());
@@ -1190,6 +1199,15 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		page.setTitle(title);
 
 		wikiPagePersistence.update(page);
+
+		List<WikiPage> versionPages = wikiPagePersistence.findByR_N_H(
+			page.getResourcePrimKey(), page.getNodeId(), false);
+
+		for (WikiPage versionPage : versionPages) {
+			versionPage.setTitle(title);
+
+			wikiPagePersistence.update(versionPage);
+		}
 
 		WikiPageResource pageResource =
 			wikiPageResourcePersistence.fetchByPrimaryKey(

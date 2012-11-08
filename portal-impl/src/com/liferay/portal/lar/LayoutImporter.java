@@ -1047,8 +1047,18 @@ public class LayoutImporter {
 			}
 
 			if (existingLayout == null) {
-				layoutId = LayoutLocalServiceUtil.getNextLayoutId(
-					groupId, privateLayout);
+				Group group = layout.getGroup();
+
+				if (group.hasStagingGroup() &&
+					(group.getStagingGroup().getGroupId() == groupId)) {
+
+					LayoutLocalServiceUtil.resetCounterIdByLayoutId(
+						groupId, privateLayout, layoutId);
+				}
+				else {
+					layoutId = LayoutLocalServiceUtil.getNextLayoutId(
+						groupId, privateLayout);
+				}
 			}
 		}
 
