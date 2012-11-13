@@ -51,6 +51,8 @@
 		<pathelement location="${project.dir}/lib/portal/velocity.jar" />
 	</path>
 
+	<path id="module-lib.classpath" />
+
 	<target name="build-alloy">
 		<if>
 			<not>
@@ -1248,11 +1250,12 @@ Please set the property "jdk.6.home" in build.properties.
 			</else>
 		</if>
 
+		<ant dir="${project.dir}/portal-modules/jsp-impl" target="jar" inheritAll="false" />
+
 		<path id="jspc.classpath">
 			<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
 			<path refid="jspc.common.classpath" />
 			<pathelement location="${app.server.dir}/lib/el-api.jar" />
-			<pathelement location="${app.server.dir}/lib/jasper.jar" />
 			<pathelement location="${app.server.dir}/lib/jasper-el.jar" />
 			<pathelement location="${app.server.dir}/lib/jasper-jdt.jar" />
 			<pathelement location="${app.server.dir}/lib/jsp-api.jar" />
@@ -1260,6 +1263,7 @@ Please set the property "jdk.6.home" in build.properties.
 			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
 			<pathelement location="${app.server.bin.dir}/tomcat-juli.jar" />
+			<pathelement location="${project.dir}/portal-modules/jsp-impl/jsp-impl.jar" />
 		</path>
 
 		<antcall target="compile-common-jsp" inheritrefs="true">

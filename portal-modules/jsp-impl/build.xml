@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<project name="jsp-impl" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.lib.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<property name="original.lib.name" value="org.apache.jasper.glassfish" />
+	<property name="original.lib.version" value="2.1.0.v201110031002" />
+	<property name="original.lib.url" value="http://search.maven.org/remotecontent?filepath=org/eclipse/jetty/orbit/" />
+
+	<path id="module-lib.classpath">
+		<fileset dir="${project.dir}/portal-modules/jsp-impl/lib" includes="${original.lib.name}.jar" />
+	</path>
+
+	<target name="compile">
+		<if>
+			<not>
+				<available file="lib/${original.lib.name}.jar" />
+			</not>
+			<then>
+				<mkdir dir="lib"/>
+
+				<get
+					dest="lib/${original.lib.name}.jar"
+					src="${original.lib.url}${original.lib.name}/${original.lib.version}/${original.lib.name}-${original.lib.version}.jar"
+					verbose="true"
+				/>
+
+				<get
+					dest="lib/${original.lib.name}-sources.jar"
+					src="${original.lib.url}${original.lib.name}/${original.lib.version}/${original.lib.name}-${original.lib.version}-sources.jar"
+					verbose="true"
+				/>
+			</then>
+		</if>
+
+		<mkdir dir="tmp"/>
+
+		<unjar
+			dest="tmp"
+			src="lib/${original.lib.name}-sources.jar"
+		/>
+
+		<copy overwrite="true" todir="${module.src.dir}">
+			<fileset
+				dir="tmp"
+				includes="org/apache/jasper/EmbeddedServletOptions.java,org/apache/jasper/JspC.java,org/apache/jasper/Options.java,org/apache/jasper/compiler/Compiler.java,org/apache/jasper/compiler/Generator.java,org/apache/jasper/compiler/Jsr199JavaCompiler.java,org/apache/jasper/compiler/JspRuntimeContext.java,org/apache/jasper/compiler/TldLocationsCache.java,org/apache/jasper/runtime/PageContextImpl.java"
+			/>
+		</copy>
+
+		<delete dir="tmp" />
+
+		<patch dir="${module.src.dir}" patchfile="patches/patch-1.patch" strip="1" />
+
+		<antcall target="build-common-java.compile" />
+	</target>
+</project>

@@ -62,7 +62,9 @@ public class JSPSearchEntry extends SearchEntry {
 					_servletContext, _path);
 
 			requestDispatcher.include(
-				_request, new PipingServletResponse(pageContext));
+				_request, new PipingServletResponse(
+					(HttpServletResponse)pageContext.getResponse(),
+					pageContext.getOut()));
 		}
 		else {
 			pageContext.include(_path);

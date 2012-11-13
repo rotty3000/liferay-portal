@@ -6,6 +6,8 @@
 	<property name="deploy.dir" value="${app.server.lib.support.dir}" />
 	<property name="jar.file" value="${ant.project.name}" />
 
+	<path id="module-lib.classpath" />
+
 	<target name="clean">
 		<antcall target="build-common-java.clean" />
 
@@ -13,10 +15,13 @@
 	</target>
 
 	<target name="compile">
+		<ant dir="${project.dir}/portal-modules/jsp-impl" target="jar" inheritAll="false" />
+
 		<mkdir dir="classes" />
 
 		<path id="web-lib.classpath">
-			<fileset dir="${project.dir}/lib/development" includes="catalina.jar,jasper.jar,tomcat-coyote.jar" />
+			<fileset dir="${project.dir}/lib/development" includes="catalina.jar,tomcat-coyote.jar" />
+			<fileset dir="${project.dir}/portal-modules/jsp-impl" includes="jsp-impl.jar" />
 		</path>
 
 		<javac

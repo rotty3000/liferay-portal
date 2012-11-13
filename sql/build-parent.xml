@@ -5,6 +5,8 @@
 
 	<mkdir dir="log" />
 
+	<path id="module-lib.classpath" />
+
 	<target name="build-db">
 		<java
 			classname="com.liferay.portal.tools.DBBuilder"

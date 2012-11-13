@@ -16,7 +16,6 @@ package com.liferay.portal.servlet;
 
 import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.security.lang.PortalSecurityManagerThreadLocal;
-import com.liferay.portal.security.pacl.PACLClassLoaderUtil;
 import com.liferay.portal.security.pacl.PACLPolicy;
 import com.liferay.portal.security.pacl.PACLPolicyManager;
 
@@ -59,9 +58,6 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 			boolean include)
 		throws IOException, ServletException {
 
-		ClassLoader contextClassLoader =
-			PACLClassLoaderUtil.getContextClassLoader();
-
 		ClassLoader pluginClassLoader =
 			(ClassLoader)_servletContext.getAttribute(
 				PluginContextListener.PLUGIN_CLASS_LOADER);
@@ -72,9 +68,6 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 		try {
 			if (pluginClassLoader == null) {
 				PortalSecurityManagerThreadLocal.setPACLPolicy(null);
-
-				PACLClassLoaderUtil.setContextClassLoader(
-					PACLClassLoaderUtil.getPortalClassLoader());
 			}
 			else {
 				PACLPolicy pluginPACLPolicy = PACLPolicyManager.getPACLPolicy(
@@ -82,8 +75,6 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 
 				PortalSecurityManagerThreadLocal.setPACLPolicy(
 					pluginPACLPolicy);
-
-				PACLClassLoaderUtil.setContextClassLoader(pluginClassLoader);
 			}
 
 			if (include) {
@@ -94,8 +85,6 @@ public class PACLRequestDispatcherWrapper implements RequestDispatcher {
 			}
 		}
 		finally {
-			PACLClassLoaderUtil.setContextClassLoader(contextClassLoader);
-
 			PortalSecurityManagerThreadLocal.setPACLPolicy(paclPolicy);
 		}
 	}

@@ -14,7 +14,6 @@
 
 package com.liferay.taglib.ui;
 
-import com.liferay.portal.kernel.servlet.taglib.TagSupport;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -28,6 +27,7 @@ import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.permission.ExpandoColumnPermissionUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
+import com.liferay.taglib.util.TagSupport;
 
 import java.io.Serializable;
 

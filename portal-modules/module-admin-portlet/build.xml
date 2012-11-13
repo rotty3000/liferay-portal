@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project name="module-admin-portlet" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.lib.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<var name="module.classes.dir" value="docroot/WEB-INF/classes" />
+	<var name="module.src.dir" value="docroot/WEB-INF/src" />
+
+	<path id="module-lib.classpath" />
+</project>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+
+<project name="jstl-impl" basedir="." default="compile" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value="../.." />
+
+	<import file="../../build-common-java.xml" />
+
+	<property name="deploy.dir" value="${module.framework.lib.dir}" />
+	<property name="jar.file" value="${ant.project.name}" />
+
+	<property name="original.lib.name" value="org.apache.taglibs.standard.glassfish" />
+	<property name="original.lib.version" value="1.2.0.v201112081803" />
+	<property name="original.lib.url" value="http://search.maven.org/remotecontent?filepath=org/eclipse/jetty/orbit/" />
+
+	<path id="module-lib.classpath">
+		<fileset dir="${project.dir}/portal-modules/jstl-impl/lib" includes="${original.lib.name}.jar" />
+	</path>
+
+	<target name="compile">
+		<if>
+			<not>
+				<available file="lib/${original.lib.name}.jar" />
+			</not>
+			<then>
+				<mkdir dir="lib"/>
+
+				<get
+					dest="lib/${original.lib.name}.jar"
+					src="${original.lib.url}${original.lib.name}/${original.lib.version}/${original.lib.name}-${original.lib.version}.jar"
+					verbose="true"
+				/>
+
+				<get
+					dest="lib/${original.lib.name}-sources.jar"
+					src="${original.lib.url}${original.lib.name}/${original.lib.version}/${original.lib.name}-${original.lib.version}-sources.jar"
+					verbose="true"
+				/>
+			</then>
+		</if>
+
+		<mkdir dir="${module.src.dir}"/>
+		<mkdir dir="tmp"/>
+
+		<unjar
+			dest="tmp"
+			src="lib/${original.lib.name}-sources.jar"
+		/>
+
+		<copy overwrite="true" todir="${module.src.dir}">
+			<fileset
+				dir="tmp"
+				includes="org/apache/taglibs/standard/tlv/JstlBaseTLV.java"
+			/>
+		</copy>
+
+		<delete dir="tmp" />
+
+		<patch dir="${module.src.dir}" patchfile="patches/patch-1.patch" strip="1" />
+
+		<mkdir dir="${module.classes.dir}" />
+
+		<antcall target="build-common-java.compile" />
+	</target>
+</project>

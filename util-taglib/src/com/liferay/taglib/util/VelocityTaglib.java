@@ -17,7 +17,6 @@ package com.liferay.taglib.util;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
 import com.liferay.portal.kernel.servlet.PipingPageContext;
-import com.liferay.portal.kernel.servlet.taglib.TagSupport;
 import com.liferay.portal.kernel.templateparser.TemplateContext;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.WebKeys;

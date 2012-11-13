@@ -48,7 +48,11 @@ public class HookAutoDeployListener extends BaseAutoDeployListener {
 			_log.info("Copying hook plugin for " + file.getPath());
 		}
 
-		int code = _autoDeployer.autoDeploy(autoDeploymentContext);
+		AutoDeployer deployerCopy = _autoDeployer.copy();
+
+		deployerCopy.setAutoDeploymentContext(autoDeploymentContext);
+
+		int code = deployerCopy.autoDeploy();
 
 		if ((code == AutoDeployer.CODE_DEFAULT) && _log.isInfoEnabled()) {
 			_log.info(

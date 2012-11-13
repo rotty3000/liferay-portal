@@ -49,7 +49,11 @@ public class ExtAutoDeployListener extends BaseAutoDeployListener {
 				"Copying extension environment plugin for " + file.getPath());
 		}
 
-		int code = _autoDeployer.autoDeploy(autoDeploymentContext);
+		AutoDeployer deployerCopy = _autoDeployer.copy();
+
+		deployerCopy.setAutoDeploymentContext(autoDeploymentContext);
+
+		int code = deployerCopy.autoDeploy();
 
 		if ((code == AutoDeployer.CODE_DEFAULT) && _log.isInfoEnabled()) {
 			_log.info(
