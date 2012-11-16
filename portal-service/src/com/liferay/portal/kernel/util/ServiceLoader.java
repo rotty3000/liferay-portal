@@ -47,10 +47,18 @@ public class ServiceLoader {
 
 		ClassLoader classLoader = currentThread.getContextClassLoader();
 
-		return load(classLoader, clazz);
+		return _load(classLoader, clazz, serviceLoaderFilterCondition);
 	}
 
 	public static <S> List<S> load(ClassLoader classLoader, Class<S> clazz)
+		throws Exception {
+
+		return _load(classLoader, clazz, _serviceLoaderFilterCondition);
+	}
+
+	private static <S> List<S> _load(
+			ClassLoader classLoader, Class<S> clazz, 
+			ServiceLoaderFilterCondition serviceLoaderFilterCondition)
 		throws Exception {
 
 		Enumeration<URL> enu = classLoader.getResources(
@@ -62,7 +70,7 @@ public class ServiceLoader {
 			URL url = enu.nextElement();
 
 			try {
-				if (_serviceLoaderFilterCondition.shouldLoad(url)) {
+				if (serviceLoaderFilterCondition.shouldLoad(url)) {
 					_load(services, classLoader, clazz, url);
 				}
 
@@ -73,7 +81,6 @@ public class ServiceLoader {
 		}
 
 		return services;
-
 	}
 
 	private static <S> void _load(
