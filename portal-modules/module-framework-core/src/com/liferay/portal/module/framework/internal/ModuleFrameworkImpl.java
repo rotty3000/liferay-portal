@@ -532,8 +532,9 @@ public class ModuleFrameworkImpl
 		for (Object key : extraProperties.keySet()) {
 			String propertyKey = (String)key;
 
-			properties.put(
-				propertyKey, (String)extraProperties.get(propertyKey));
+			String value = (String)extraProperties.get(propertyKey);
+
+			properties.put(propertyKey, value.equals(StringPool.BLANK)?null:value);
 		}
 
 		UniqueList<String> packages = new UniqueList<String>();
