@@ -93,7 +93,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			try {
 				Class<?> clazz = Class.forName(
 					dependency, true,
-					PACLClassLoaderUtil.getContextClassLoader());
+					PACLClassLoaderUtil.getPortalClassLoader());
 
 				addDependencyToClassPath(clazz);
 
