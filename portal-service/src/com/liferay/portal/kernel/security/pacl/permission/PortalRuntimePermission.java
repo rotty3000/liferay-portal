@@ -91,6 +91,10 @@ public class PortalRuntimePermission extends BasicPermission {
 		this(name, subject, null);
 	}
 
+	public PortalRuntimePermission(String name, String subject) {
+		this(name, subject, null);
+	}
+
 	public PortalRuntimePermission(
 		String name, Object subject, String property) {
 
