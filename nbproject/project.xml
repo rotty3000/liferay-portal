@@ -456,7 +456,6 @@
                 <classpath mode="compile">lib/portal/json-java.jar</classpath>
                 <classpath mode="compile">lib/portal/jsonrpc.jar</classpath>
                 <classpath mode="compile">lib/portal/jspwiki.jar</classpath>
-                <classpath mode="compile">lib/portal/jsqlparser.jar</classpath>
                 <classpath mode="compile">lib/portal/jsr107cache.jar</classpath>
                 <classpath mode="compile">lib/portal/jstl-api.jar</classpath>
                 <classpath mode="compile">lib/portal/jstl-impl.jar</classpath>
