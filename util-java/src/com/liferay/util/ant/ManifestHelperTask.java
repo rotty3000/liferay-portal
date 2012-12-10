@@ -21,15 +21,16 @@ import com.liferay.portal.kernel.util.OSDetector;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -121,10 +122,20 @@ public class ManifestHelperTask extends Task {
 			"import.packages", attributes.getValue(Constants.IMPORT_PACKAGE));
 	}
 
-	protected String execute(String command) throws Exception {
+	protected String execute(String command, String[] args) throws Exception {
 		Runtime runtime = Runtime.getRuntime();
 
-		Process process = runtime.exec(command);
+		// Check to see if the command is available
+
+		Process process = runtime.exec(new String [] {"which", command});
+
+		String whichCommand = StringUtil.read(process.getInputStream());
+
+		if (Validator.isNull(whichCommand)) {
+			return null;
+		}
+
+		process = runtime.exec(args);
 
 		return StringUtil.read(process.getInputStream());
 	}
@@ -139,10 +150,13 @@ public class ManifestHelperTask extends Task {
 
 		if (gitDir.exists()) {
 			if (OSDetector.isWindows()) {
-				return execute("cmd /c git rev-parse HEAD");
+				return execute(
+					"git",
+					new String[] {"cmd", "/c", "git", "rev-parse", "HEAD"});
 			}
 			else {
-				return execute("git rev-parse HEAD");
+				return execute(
+					"git", new String[] {"git" , "rev-parse", "HEAD"});
 			}
 		}
 
@@ -150,10 +164,12 @@ public class ManifestHelperTask extends Task {
 
 		if (svnDir.exists()) {
 			if (OSDetector.isWindows()) {
-				return execute("cmd /c svnversion .");
+				return execute(
+					"svnversion",
+					new String[] {"cmd", "/c", "svnversion", "."});
 			}
 			else {
-				return execute("svnversion .");
+				return execute("svnversion", new String[] {"svnversion", "."});
 			}
 		}
 
