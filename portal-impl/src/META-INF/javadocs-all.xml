@@ -77689,6 +77689,110 @@ Holds context information that is used during exporting and importing portlet da
 		</field>
 	</javadoc>
 	<javadoc>
+		<name>StagedModelDataHandlerRegistry</name>
+		<type>com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistry</type>
+		<author><![CDATA[Mate Thurzo]]></author>
+		<see><![CDATA[com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil]]></see>
+		<since><![CDATA[6.2]]></since>
+		<method>
+			<name>getStagedModelDataHandler</name>
+			<param>
+				<name>className</name>
+				<type>java.lang.String</type>
+			</param>
+		</method>
+		<method>
+			<name>getStagedModelDataHandlers</name>
+		</method>
+		<method>
+			<name>register</name>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+			</param>
+		</method>
+		<method>
+			<name>unregister</name>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+			</param>
+		</method>
+	</javadoc>
+	<javadoc>
+		<name>StagedModelDataHandlerRegistryUtil</name>
+		<type>com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil</type>
+		<comment><![CDATA[Provides a utility facade to the staged model data handler registry framework.]]></comment>
+		<author><![CDATA[Mate Thurzo]]></author>
+		<author><![CDATA[Brian Wing Shun Chan]]></author>
+		<since><![CDATA[6.2]]></since>
+		<method>
+			<name>getStagedModelDataHandler</name>
+			<comment><![CDATA[Returns the registered staged model data handler with the class name.]]></comment>
+			<param>
+				<name>className</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[the name of the staged model class]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[the registered staged model data handler with the class name, or <code>null</code> if none are registered with the class name]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>getStagedModelDataHandlerRegistry</name>
+			<comment><![CDATA[Returns the staged model data handler registry.]]></comment>
+			<return>
+				<comment><![CDATA[the staged model data handler registry]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>getStagedModelDataHandlers</name>
+			<comment><![CDATA[Returns all the registered staged model data handlers.]]></comment>
+			<return>
+				<comment><![CDATA[the registered staged model data handlers]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>register</name>
+			<comment><![CDATA[Registers the staged model data handler.]]></comment>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+				<comment><![CDATA[the staged model data handler to register]]></comment>
+			</param>
+		</method>
+		<method>
+			<name>unregister</name>
+			<comment><![CDATA[Unregisters the staged model data handlers.]]></comment>
+			<param>
+				<name>stagedModelDataHandlers</name>
+				<type>java.util.List</type>
+				<comment><![CDATA[the staged model data handlers to unregister]]></comment>
+			</param>
+		</method>
+		<method>
+			<name>unregister</name>
+			<comment><![CDATA[Unregisters the staged model data handler.]]></comment>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+				<comment><![CDATA[the staged model data handler to unregister]]></comment>
+			</param>
+		</method>
+		<method>
+			<name>setStagedModelDataHandlerRegistry</name>
+			<comment><![CDATA[Sets the staged model data handler registry.]]></comment>
+			<param>
+				<name>stagedModelDataHandlerRegistry</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistry</type>
+				<comment><![CDATA[the staged model data handler registry]]></comment>
+			</param>
+		</method>
+		<field>
+			<name>_stagedModelDataHandlerRegistry</name>
+		</field>
+	</javadoc>
+	<javadoc>
 		<name>UserIdStrategy</name>
 		<type>com.liferay.portal.kernel.lar.UserIdStrategy</type>
 		<author><![CDATA[Bruno Farache]]></author>
@@ -187831,6 +187935,41 @@ Holds context information that is used during exporting and importing portlet da
 		</field>
 		<field>
 			<name>_permissionImporter</name>
+		</field>
+	</javadoc>
+	<javadoc>
+		<name>StagedModelDataHandlerRegistryImpl</name>
+		<type>com.liferay.portal.lar.StagedModelDataHandlerRegistryImpl</type>
+		<comment><![CDATA[Implementation class for the staged model data handler registry framework]]></comment>
+		<author><![CDATA[Mate Thurzo]]></author>
+		<see><![CDATA[com.liferay.portal.kernel.lar.StagedModelDataHandlerRegistryUtil]]></see>
+		<since><![CDATA[6.2]]></since>
+		<method>
+			<name>getStagedModelDataHandler</name>
+			<param>
+				<name>className</name>
+				<type>java.lang.String</type>
+			</param>
+		</method>
+		<method>
+			<name>getStagedModelDataHandlers</name>
+		</method>
+		<method>
+			<name>register</name>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+			</param>
+		</method>
+		<method>
+			<name>unregister</name>
+			<param>
+				<name>stagedModelDataHandler</name>
+				<type>com.liferay.portal.kernel.lar.StagedModelDataHandler</type>
+			</param>
+		</method>
+		<field>
+			<name>_stagedModelDataHandlers</name>
 		</field>
 	</javadoc>
 	<javadoc>
