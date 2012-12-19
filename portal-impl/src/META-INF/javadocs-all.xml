@@ -250334,6 +250334,9 @@ For example, if the class name and primary key of a blog entry were passed to th
 			</return>
 		</method>
 		<method>
+			<name>getUser</name>
+		</method>
+		<method>
 			<name>getUserId</name>
 			<comment><![CDATA[Returns the primary key of the user.]]></comment>
 			<return>
@@ -250505,15 +250508,15 @@ For example, if the class name and primary key of a blog entry were passed to th
 			<return>
 				<comment><![CDATA[<code>true</code> if guest permissions will be used in permission checks; <code>false</code> otherwise]]></comment>
 			</return>
-			<deprecated><![CDATA[As of 6.2, replace with {@link #isCheckGuest(long)}]]></deprecated>
+			<deprecated><![CDATA[As of 6.2, replaced by {@link #isCheckGuest(long)}]]></deprecated>
 		</method>
 		<method>
 			<name>isCheckGuest</name>
-			<comment><![CDATA[Returns <code>true</code> if guest permissions will be used in permission checks for the given group.]]></comment>
+			<comment><![CDATA[Returns <code>true</code> if guest permissions will be used in permission checks for the group.]]></comment>
 			<param>
 				<name>groupId</name>
 				<type>long</type>
-				<comment><![CDATA[the primary key of the group on which the check will be performed]]></comment>
+				<comment><![CDATA[the primary key of the group]]></comment>
 			</param>
 			<return>
 				<comment><![CDATA[<code>true</code> if guest permissions will be used in permission checks; <code>false</code> otherwise]]></comment>
