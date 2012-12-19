@@ -170,16 +170,15 @@ public interface PermissionChecker extends Cloneable {
 	 *
 	 * @return     <code>true</code> if guest permissions will be used in
 	 *             permission checks; <code>false</code> otherwise
-	 * @deprecated As of 6.2, replace with {@link #isCheckGuest(long)}
+	 * @deprecated As of 6.2, replaced by {@link #isCheckGuest(long)}
 	 */
 	public boolean isCheckGuest();
 
 	/**
 	 * Returns <code>true</code> if guest permissions will be used in permission
-	 * checks for the given group.
+	 * checks for the group.
 	 *
-	 * @param  groupId the primary key of the group on which the check will be
-	 *         performed
+	 * @param  groupId the primary key of the group
 	 * @return <code>true</code> if guest permissions will be used in permission
 	 *         checks; <code>false</code> otherwise
 	 */
