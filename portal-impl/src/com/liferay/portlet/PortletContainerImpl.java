@@ -63,6 +63,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.taglib.aui.AUIUtil;
 import com.liferay.util.SerializableUtil;
 
 import java.io.Serializable;
@@ -796,6 +797,12 @@ public class PortletContainerImpl implements PortletContainer {
 				Writer writer = response.getWriter();
 
 				writer.write(bufferCacheServletResponse.getString());
+
+				if (themeDisplay.isIsolated() ||
+					themeDisplay.isStateExclusive()) {
+
+					AUIUtil.outputScriptData(request, writer);
+				}
 			}
 		}
 		finally {
