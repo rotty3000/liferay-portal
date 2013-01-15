@@ -464,6 +464,12 @@ public class JournalArticleLocalServiceUtil {
 			serviceContext);
 	}
 
+	public static com.liferay.portlet.journal.model.JournalArticle fetchArticle(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchArticle(uuid, groupId);
+	}
+
 	public static com.liferay.portlet.journal.model.JournalArticle getArticle(
 		long id)
 		throws com.liferay.portal.kernel.exception.PortalException,

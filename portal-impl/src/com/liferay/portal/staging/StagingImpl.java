@@ -28,6 +28,8 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.portal.kernel.lar.UserIdStrategy;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageStatus;
@@ -179,7 +181,8 @@ public class StagingImpl implements Staging {
 		Group liveGroup = stagingGroup.getLiveGroup();
 
 		Layout sourceLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(
-			targetLayout.getUuid(), liveGroup.getGroupId());
+			targetLayout.getUuid(), liveGroup.getGroupId(),
+			targetLayout.isPrivateLayout());
 
 		copyPortlet(
 			portletRequest, liveGroup.getGroupId(), stagingGroup.getGroupId(),
@@ -626,7 +629,8 @@ public class StagingImpl implements Staging {
 
 			try {
 				LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(
-					parentLayout.getUuid(), liveGroupId);
+					parentLayout.getUuid(), liveGroupId,
+					parentLayout.isPrivateLayout());
 
 				// If one parent is found all others are assumed to exist
 
@@ -1091,7 +1095,8 @@ public class StagingImpl implements Staging {
 			liveGroup = stagingGroup.getLiveGroup();
 
 			targetLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(
-				sourceLayout.getUuid(), liveGroup.getGroupId());
+				sourceLayout.getUuid(), liveGroup.getGroupId(),
+				sourceLayout.isPrivateLayout());
 		}
 
 		copyPortlet(
@@ -1430,6 +1435,11 @@ public class StagingImpl implements Staging {
 				}
 			}
 			catch (LayoutSetBranchNameException lsbne) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Unable to create master branch for public layouts",
+						lsbne);
+				}
 			}
 		}
 
@@ -1460,6 +1470,11 @@ public class StagingImpl implements Staging {
 				}
 			}
 			catch (LayoutSetBranchNameException lsbne) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Unable to create master branch for private layouts",
+						lsbne);
+				}
 			}
 		}
 	}
@@ -1575,7 +1590,8 @@ public class StagingImpl implements Staging {
 
 			try {
 				LayoutServiceHttp.getLayoutByUuidAndGroupId(
-					httpPrincipal, parentLayout.getUuid(), remoteGroupId);
+					httpPrincipal, parentLayout.getUuid(), remoteGroupId,
+					parentLayout.getPrivateLayout());
 
 				// If one parent is found all others are assumed to exist
 
@@ -2144,6 +2160,9 @@ public class StagingImpl implements Staging {
 			}
 		}
 		catch (PortalException pe) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to set recent layout revision ID", pe);
+			}
 		}
 
 		portalPreferences.setValue(
@@ -2289,5 +2308,7 @@ public class StagingImpl implements Staging {
 		}
 
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(StagingImpl.class);
 
 }

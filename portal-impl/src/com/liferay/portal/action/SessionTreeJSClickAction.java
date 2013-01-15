@@ -72,7 +72,7 @@ public class SessionTreeJSClickAction extends Action {
 
 					for (Layout layout : layouts) {
 						SessionTreeJSClicks.openLayoutNodes(
-							request, treeId, layout.getPrivateLayout(),
+							request, treeId, layout.isPrivateLayout(),
 							layout.getLayoutId(), true);
 					}
 				}
@@ -80,7 +80,7 @@ public class SessionTreeJSClickAction extends Action {
 					Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
 					SessionTreeJSClicks.openLayoutNodes(
-						request, treeId, layout.getPrivateLayout(),
+						request, treeId, layout.isPrivateLayout(),
 						layout.getLayoutId(), true);
 				}
 			}
@@ -100,7 +100,7 @@ public class SessionTreeJSClickAction extends Action {
 
 					for (Layout layout : layouts) {
 						SessionTreeJSClicks.closeLayoutNodes(
-							request, treeId, layout.getPrivateLayout(),
+							request, treeId, layout.isPrivateLayout(),
 							layout.getLayoutId(), true);
 					}
 				}
@@ -108,7 +108,7 @@ public class SessionTreeJSClickAction extends Action {
 					Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
 					SessionTreeJSClicks.closeLayoutNodes(
-						request, treeId, layout.getPrivateLayout(),
+						request, treeId, layout.isPrivateLayout(),
 						layout.getLayoutId(), true);
 				}
 			}

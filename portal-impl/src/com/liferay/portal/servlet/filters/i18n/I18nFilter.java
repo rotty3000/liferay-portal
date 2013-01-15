@@ -52,6 +52,8 @@ public class I18nFilter extends BasePortalFilter {
 	}
 
 	public static void setLanguageIds(Set<String> languageIds) {
+		_languageIds.clear();
+
 		for (String languageId : languageIds) {
 			languageId = languageId.substring(1);
 

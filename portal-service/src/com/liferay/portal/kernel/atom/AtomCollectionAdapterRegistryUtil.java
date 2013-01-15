@@ -43,15 +43,14 @@ public class AtomCollectionAdapterRegistryUtil {
 		return getAtomCollectionAdapterRegistry().getAtomCollectionAdapters();
 	}
 
-	public static void register(AtomCollectionAdapter<?> atomCollectionAdapter)
-		throws AtomException {
+	public static void register(
+		AtomCollectionAdapter<?> atomCollectionAdapter) {
 
 		getAtomCollectionAdapterRegistry().register(atomCollectionAdapter);
 	}
 
 	public static void register(
-			List<AtomCollectionAdapter<?>> atomCollectionAdapters)
-		throws AtomException {
+		List<AtomCollectionAdapter<?>> atomCollectionAdapters) {
 
 		for (AtomCollectionAdapter<?> atomCollectionAdapter :
 				atomCollectionAdapters) {

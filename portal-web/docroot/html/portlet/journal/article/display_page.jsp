@@ -30,7 +30,7 @@ String layoutBreadcrumb = StringPool.BLANK;
 
 if (Validator.isNotNull(layoutUuid)) {
 	try {
-		selLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(layoutUuid, themeDisplay.getParentGroupId());
+		selLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(layoutUuid, themeDisplay.getParentGroupId(), layout.isPrivateLayout());
 
 		layoutBreadcrumb = _getLayoutBreadcrumb(selLayout, locale);
 	}
@@ -544,7 +544,7 @@ Group parentGroup = themeDisplay.getParentGroup();
 <c:if test="<%= (article != null) && Validator.isNotNull(layoutUuid) %>">
 
 	<%
-	Layout defaultDisplayLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(layoutUuid, scopeGroupId);
+	Layout defaultDisplayLayout = LayoutLocalServiceUtil.getLayoutByUuidAndGroupId(layoutUuid, scopeGroupId, layout.isPrivateLayout());
 
 	defaultDisplayLayout = defaultDisplayLayout.toEscapedModel();
 

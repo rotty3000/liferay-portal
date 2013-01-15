@@ -30,50 +30,16 @@ String selectScope = (String)request.getAttribute("configuration.jsp-selectScope
 			<%= selectScope %>
 		</aui:fieldset>
 
-		<aui:fieldset>
+		<aui:fieldset label="model.resource.com.liferay.portlet.asset">
 
 			<%
-			classNameIds = availableClassNameIds;
-
-			String portletId = portletResource;
-
-			for (long groupId : groupIds) {
-			%>
-
-				<div class="add-asset-selector">
-					<div class="lfr-meta-actions edit-controls">
-						<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
-
-						<liferay-ui:icon-menu align="left" cssClass="select-existing-selector" icon='<%= themeDisplay.getPathThemeImages() + "/common/search.png" %>' message="select-existing" showWhenSingleIcon="<%= true %>">
-
-							<%
-							for (AssetRendererFactory curRendererFactory : AssetRendererFactoryRegistryUtil.getAssetRendererFactories()) {
-								if (curRendererFactory.isSelectable()) {
-									String taglibURL = "javascript:" + renderResponse.getNamespace() + "selectionForType('" + groupId + "', '" + curRendererFactory.getClassName() + "')";
-								%>
-
-									<liferay-ui:icon
-										message="<%= ResourceActionsUtil.getModelResource(locale, curRendererFactory.getClassName()) %>" src="<%= curRendererFactory.getIconPath(renderRequest) %>" url="<%= taglibURL %>"
-									/>
-
-								<%
-								}
-							}
-							%>
-
-						</liferay-ui:icon-menu>
-					</div>
-				</div>
-
-			<%
-			}
-
 			List<String> deletedAssets = new ArrayList<String>();
 
 			List<String> headerNames = new ArrayList<String>();
 
-			headerNames.add("type");
 			headerNames.add("title");
+			headerNames.add("type");
+			headerNames.add("modified-date");
 			headerNames.add(StringPool.BLANK);
 
 			SearchContainer searchContainer = new SearchContainer(renderRequest, new DisplayTerms(renderRequest), new DisplayTerms(renderRequest), SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, configurationRenderURL, headerNames, LanguageUtil.get(pageContext, "no-assets-selected"));
@@ -137,47 +103,30 @@ String selectScope = (String)request.getAttribute("configuration.jsp-selectScope
 
 				ResultRow row = new ResultRow(doc, null, assetEntryOrder);
 
-				PortletURL rowURL = renderResponse.createRenderURL();
-
-				rowURL.setParameter("struts_action", "/portlet_configuration/edit_configuration");
-				rowURL.setParameter("redirect", redirect);
-				rowURL.setParameter("backURL", redirect);
-				rowURL.setParameter("portletResource", portletResource);
-				rowURL.setParameter("typeSelection", assetEntryClassName);
-				rowURL.setParameter("assetEntryId", String.valueOf(assetEntry.getEntryId()));
-				rowURL.setParameter("assetEntryOrder", String.valueOf(assetEntryOrder));
-
-				// Type
-
-				row.addText(ResourceActionsUtil.getModelResource(locale, assetEntryClassName), rowURL);
-
 				// Title
 
 				AssetRendererFactory assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(assetEntry.getClassName());
 
 				AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(assetEntry.getClassPK());
 
-				String title = HtmlUtil.escape(assetRenderer.getTitle(locale));
+				StringBundler sb = new StringBundler(4);
 
-				if (assetEntryClassName.equals(DLFileEntryConstants.getClassName())) {
-					FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(assetEntry.getClassPK());
+				sb.append("<img alt=\"\" src=\"");
+				sb.append(assetRenderer.getIconPath(renderRequest));
+				sb.append("\" />");
+				sb.append(HtmlUtil.escape(assetRenderer.getTitle(locale)));
 
-					fileEntry = fileEntry.toEscapedModel();
+				row.addText(sb.toString());
 
-					StringBundler sb = new StringBundler(6);
+				// Type
 
-					sb.append("<img alt=\"\" class=\"dl-file-icon\" src=\"");
-					sb.append(themeDisplay.getPathThemeImages());
-					sb.append("/file_system/small/");
-					sb.append(fileEntry.getIcon());
-					sb.append(".png\" />");
-					sb.append(title);
+				row.addText(ResourceActionsUtil.getModelResource(locale, assetEntryClassName));
 
-					row.addText(sb.toString(), rowURL);
-				}
-				else {
-					row.addText(title, rowURL);
-				}
+				// Modified Date
+
+				Date modifiedDate = assetEntry.getModifiedDate();
+
+				row.addText(LanguageUtil.format(pageContext, "x-ago", LanguageUtil.getTimeDescription(pageContext, System.currentTimeMillis() - modifiedDate.getTime(), true)));
 
 				// Action
 
@@ -197,7 +146,45 @@ String selectScope = (String)request.getAttribute("configuration.jsp-selectScope
 				</div>
 			</c:if>
 
-			<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
+			<liferay-ui:search-iterator paginate="<%= total > SearchContainer.DEFAULT_DELTA %>" searchContainer="<%= searchContainer %>" />
+
+			<%
+			classNameIds = availableClassNameIds;
+
+			String portletId = portletResource;
+
+			for (long groupId : groupIds) {
+			%>
+
+				<div class="add-asset-selector">
+					<div class="lfr-meta-actions edit-controls">
+						<%@ include file="/html/portlet/asset_publisher/add_asset.jspf" %>
+
+						<liferay-ui:icon-menu align="left" cssClass="select-existing-selector" icon='<%= themeDisplay.getPathThemeImages() + "/common/add.png" %>' message='<%= LanguageUtil.format(pageContext, (groupIds.length == 1) ? "select" : "select-in-x", new Object[] {(GroupLocalServiceUtil.getGroup(groupId)).getDescriptiveName(locale)}) %>' showWhenSingleIcon="<%= true %>">
+
+							<%
+							for (AssetRendererFactory curRendererFactory : AssetRendererFactoryRegistryUtil.getAssetRendererFactories()) {
+								if (curRendererFactory.isSelectable()) {
+									String taglibURL = "javascript:" + renderResponse.getNamespace() + "selectionForType('" + groupId + "', '" + curRendererFactory.getClassName() + "')";
+								%>
+
+									<liferay-ui:icon
+										message="<%= ResourceActionsUtil.getModelResource(locale, curRendererFactory.getClassName()) %>" src="<%= curRendererFactory.getIconPath(renderRequest) %>" url="<%= taglibURL %>"
+									/>
+
+								<%
+								}
+							}
+							%>
+
+						</liferay-ui:icon-menu>
+					</div>
+				</div>
+
+			<%
+			}
+			%>
+
 		</aui:fieldset>
 	</liferay-ui:panel>
 	<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="assetPublisherSelectionDisplaySettingsPanel" persistState="<%= true %>" title="display-settings">

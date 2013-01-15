@@ -786,6 +786,10 @@
 		<priority value="INFO" />
 	</category>
 
+	<category name="com.liferay.portal.staging">
+		<priority value="WARN" />
+	</category>
+
 	<category name="com.liferay.portal.struts">
 		<priority value="ERROR" />
 	</category>

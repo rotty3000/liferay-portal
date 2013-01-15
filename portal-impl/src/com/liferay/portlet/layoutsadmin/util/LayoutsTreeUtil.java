@@ -119,14 +119,14 @@ public class LayoutsTreeUtil {
 
 					childrenJSON = getLayoutsJSON(
 						request, virtualLayout.getSourceGroupId(),
-						virtualLayout.getPrivateLayout(),
+						virtualLayout.isPrivateLayout(),
 						virtualLayout.getLayoutId(), expandedLayoutIds,
 						incomplete);
 
 				}
 				else {
 					childrenJSON = getLayoutsJSON(
-						request, groupId, layout.getPrivateLayout(),
+						request, groupId, layout.isPrivateLayout(),
 						layout.getLayoutId(), expandedLayoutIds, incomplete);
 				}
 

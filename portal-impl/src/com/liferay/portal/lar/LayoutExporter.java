@@ -16,7 +16,7 @@ package com.liferay.portal.lar;
 
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.lar.ImportExportThreadLocal;
+import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
@@ -186,14 +186,14 @@ public class LayoutExporter {
 		throws Exception {
 
 		try {
-			ImportExportThreadLocal.setLayoutExportInProcess(true);
+			ExportImportThreadLocal.setLayoutExportInProcess(true);
 
 			return doExportLayoutsAsFile(
 				groupId, privateLayout, layoutIds, parameterMap, startDate,
 				endDate);
 		}
 		finally {
-			ImportExportThreadLocal.setLayoutExportInProcess(false);
+			ExportImportThreadLocal.setLayoutExportInProcess(false);
 		}
 	}
 
@@ -868,7 +868,8 @@ public class LayoutExporter {
 						scopeLayout = LayoutLocalServiceUtil.
 							fetchLayoutByUuidAndGroupId(
 								scopeLayoutUuid,
-								portletDataContext.getGroupId());
+								portletDataContext.getGroupId(),
+								portletDataContext.isPrivateLayout());
 
 						if (scopeLayout == null) {
 							continue;

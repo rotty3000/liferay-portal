@@ -1076,7 +1076,7 @@ public class EditLayoutsAction extends PortletAction {
 						enableLayoutRevision.getLayoutRevisionId(), false,
 						layoutRevision.getPlid(),
 						lastLayoutRevision.getLayoutRevisionId(),
-						lastLayoutRevision.getPrivateLayout(),
+						lastLayoutRevision.isPrivateLayout(),
 						lastLayoutRevision.getName(),
 						lastLayoutRevision.getTitle(),
 						lastLayoutRevision.getDescription(),

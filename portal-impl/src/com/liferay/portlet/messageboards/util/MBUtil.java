@@ -33,12 +33,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -53,6 +55,7 @@ import com.liferay.portlet.messageboards.model.MBMailingList;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageConstants;
 import com.liferay.portlet.messageboards.model.MBStatsUser;
+import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMailingListLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.permission.MBMessagePermission;
@@ -64,7 +67,9 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -298,6 +303,22 @@ public class MBUtil {
 		categoryId = ParamUtil.getLong(request, "mbCategoryId", categoryId);
 
 		return categoryId;
+	}
+
+	public static Set<Long> getCategorySubscriptionClassPKs(long userId)
+		throws SystemException {
+
+		List<Subscription> subscriptions =
+			SubscriptionLocalServiceUtil.getUserSubscriptions(
+				userId, MBCategory.class.getName());
+
+		Set<Long> classPKs = new HashSet<Long>(subscriptions.size());
+
+		for (Subscription subscription : subscriptions) {
+			classPKs.add(subscription.getClassPK());
+		}
+
+		return classPKs;
 	}
 
 	public static String getEmailFromAddress(
@@ -620,6 +641,22 @@ public class MBUtil {
 		}
 
 		return priorityPair;
+	}
+
+	public static Set<Long> getThreadSubscriptionClassPKs(long userId)
+		throws SystemException {
+
+		List<Subscription> subscriptions =
+			SubscriptionLocalServiceUtil.getUserSubscriptions(
+				userId, MBThread.class.getName());
+
+		Set<Long> classPKs = new HashSet<Long>(subscriptions.size());
+
+		for (Subscription subscription : subscriptions) {
+			classPKs.add(subscription.getClassPK());
+		}
+
+		return classPKs;
 	}
 
 	public static Date getUnbanDate(MBBan ban, int expireInterval) {

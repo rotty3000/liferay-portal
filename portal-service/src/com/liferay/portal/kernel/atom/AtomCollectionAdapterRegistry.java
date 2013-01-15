@@ -26,8 +26,7 @@ public interface AtomCollectionAdapterRegistry {
 
 	public List<AtomCollectionAdapter<?>> getAtomCollectionAdapters();
 
-	public void register(AtomCollectionAdapter<?> atomCollectionAdapter)
-		throws AtomException;
+	public void register(AtomCollectionAdapter<?> atomCollectionAdapter);
 
 	public void unregister(AtomCollectionAdapter<?> atomCollectionAdapter);
 
