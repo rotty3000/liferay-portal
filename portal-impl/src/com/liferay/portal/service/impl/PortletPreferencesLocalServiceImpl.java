@@ -14,6 +14,7 @@
 
 package com.liferay.portal.service.impl;
 
+import com.liferay.portal.NoSuchPortletException;
 import com.liferay.portal.kernel.concurrent.LockRegistry;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
@@ -29,6 +30,7 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.PortletPreferencesIds;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.service.base.PortletPreferencesLocalServiceBaseImpl;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
@@ -49,6 +51,10 @@ public class PortletPreferencesLocalServiceImpl
 			long companyId, long ownerId, int ownerType, long plid,
 			String portletId, Portlet portlet, String defaultPreferences)
 		throws SystemException {
+
+		if (!portletLocalService.hasPortlet(companyId, portletId)) {
+			throw new SystemException(new NoSuchPortletException(portletId));
+		}
 
 		long portletPreferencesId = counterLocalService.increment();
 
@@ -300,6 +306,12 @@ public class PortletPreferencesLocalServiceImpl
 				ownerId, ownerType, plid, portletId);
 
 		if (portletPreferences == null) {
+			long companyId = CompanyThreadLocal.getCompanyId();
+			if (!portletLocalService.hasPortlet(companyId, portletId)) {
+				throw new SystemException(
+					new NoSuchPortletException(portletId));
+			}
+
 			long portletPreferencesId = counterLocalService.increment();
 
 			portletPreferences = portletPreferencesPersistence.create(
