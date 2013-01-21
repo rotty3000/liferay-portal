@@ -61,6 +61,11 @@ public class BlogsIndexer extends BaseIndexer {
 		setPermissionAware(true);
 	}
 
+	@Override
+	public void addRelatedEntryFields(Document document, Object obj) {
+		document.addKeyword(Field.RELATED_ENTRY, true);
+	}
+
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}

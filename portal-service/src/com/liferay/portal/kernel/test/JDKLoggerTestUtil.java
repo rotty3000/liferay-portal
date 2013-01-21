@@ -14,6 +14,8 @@
 
 package com.liferay.portal.kernel.test;
 
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Handler;
@@ -68,6 +70,13 @@ public class JDKLoggerTestUtil {
 		private List<LogRecord> _logRecords =
 			new CopyOnWriteArrayList<LogRecord>();
 
+	}
+
+	static {
+
+		// See LPS-32051 and LPS-32471
+
+		LogFactoryUtil.getLog(JDKLoggerTestUtil.class);
 	}
 
 }

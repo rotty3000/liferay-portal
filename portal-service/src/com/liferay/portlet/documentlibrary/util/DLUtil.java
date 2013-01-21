@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
@@ -27,6 +28,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -206,6 +208,10 @@ public class DLUtil {
 		return getDL().getEmailFromName(preferences, companyId);
 	}
 
+	public static List<Object> getEntries(Hits hits) {
+		return getDL().getEntries(hits);
+	}
+
 	public static String getFileEntryImage(
 		FileEntry fileEntry, ThemeDisplay themeDisplay) {
 
@@ -220,12 +226,6 @@ public class DLUtil {
 
 	public static String getFileIcon(String extension) {
 		return getDL().getFileIcon(extension);
-	}
-
-	public static Set<Long> getFolderSubscriptionClassPKs(long userId)
-		throws SystemException {
-
-		return getDL().getFolderSubscriptionClassPKs(userId);
 	}
 
 	public static String getGenericName(String extension) {
@@ -363,6 +363,31 @@ public class DLUtil {
 
 	public static boolean isOfficeExtension(String extension) {
 		return getDL().isOfficeExtension(extension);
+	}
+
+	public static boolean isSubscribedToFileEntryType(
+			long companyId, long groupId, long userId, long fileEntryTypeId)
+		throws SystemException {
+
+		return getDL().isSubscribedToFileEntryType(
+			companyId, groupId, userId, fileEntryTypeId);
+	}
+
+	public static boolean isSubscribedToFolder(
+			long companyId, long groupId, long userId, long folderId)
+		throws PortalException, SystemException {
+
+		return getDL().isSubscribedToFolder(
+			companyId, groupId, userId, folderId);
+	}
+
+	public static boolean isSubscribedToFolder(
+			long companyId, long groupId, long userId, long folderId,
+			boolean recursive)
+		throws PortalException, SystemException {
+
+		return getDL().isSubscribedToFolder(
+			companyId, groupId, userId, folderId, recursive);
 	}
 
 	public void setDL(DL dl) {

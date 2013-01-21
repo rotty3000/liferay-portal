@@ -104,6 +104,20 @@ public class DDMStructureServiceImpl extends DDMStructureServiceBaseImpl {
 			getUserId(), structureId, nameMap, descriptionMap, serviceContext);
 	}
 
+	public DDMStructure copyStructure(
+			long structureId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		String ddmResource = ParamUtil.getString(serviceContext, "ddmResource");
+
+		DDMPermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ddmResource, ActionKeys.ADD_STRUCTURE);
+
+		return ddmStructureLocalService.copyStructure(
+			getUserId(), structureId, serviceContext);
+	}
+
 	public void deleteStructure(long structureId)
 		throws PortalException, SystemException {
 

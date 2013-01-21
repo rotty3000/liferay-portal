@@ -288,6 +288,12 @@ public interface DDMTemplateLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate copyTemplate(
+		long userId, long templateId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> copyTemplates(
 		long userId, long classNameId, long oldClassPK, long newClassPK,
 		java.lang.String type,
@@ -361,12 +367,12 @@ public interface DDMTemplateLocalService extends BaseLocalService,
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
-		long classNameId, long classPK, java.lang.String type)
+		long groupId, long classNameId, long classPK, java.lang.String type)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
-		long classNameId, long classPK, java.lang.String type,
+		long groupId, long classNameId, long classPK, java.lang.String type,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException;
 

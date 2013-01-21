@@ -49,7 +49,7 @@ public class ModuleFrameworkUtilAdapter {
 
 	public static void registerContext(Object context) {
 		_moduleFrameworkAdapterHelper.exec(
-			"registerContext", new Class<?>[]{Object.class}, context);
+			"registerContext", new Class<?>[] {Object.class}, context);
 	}
 
 	public static void setBundleStartLevel(long bundleId, int startLevel) {

@@ -50,6 +50,8 @@ import com.liferay.portlet.asset.model.AssetLink;
 import com.liferay.portlet.asset.model.AssetLinkConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryTypeConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileShortcut;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
@@ -1402,19 +1404,14 @@ public class DLAppHelperLocalServiceImpl
 				preferences);
 		}
 
+		FileEntry fileEntry = fileVersion.getFileEntry();
+
 		Folder folder = null;
 
-		try {
-			FileEntry fileEntry = fileVersion.getFileEntry();
+		long folderId = fileEntry.getFolderId();
 
-			long folderId = fileEntry.getFolderId();
-
-			if (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-				folder = dlAppLocalService.getFolder(folderId);
-			}
-		}
-		catch (Exception e) {
-			return;
+		if (folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			folder = dlAppLocalService.getFolder(folderId);
 		}
 
 		String folderName = LanguageUtil.get(
@@ -1426,11 +1423,18 @@ public class DLAppHelperLocalServiceImpl
 
 		SubscriptionSender subscriptionSender = new SubscriptionSender();
 
+		DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+
+		DLFileEntryType dlFileEntryType =
+			dlFileEntryTypeLocalService.getDLFileEntryType(
+				dlFileEntry.getFileEntryTypeId());
+
 		subscriptionSender.setCompanyId(fileVersion.getCompanyId());
 		subscriptionSender.setContextAttributes(
 			"[$DOCUMENT_STATUS_BY_USER_NAME$]",
 			fileVersion.getStatusByUserName(), "[$DOCUMENT_TITLE$]",
-			fileVersion.getTitle(), "[$FOLDER_NAME$]", folderName);
+			fileVersion.getTitle(), "[$DOCUMENT_TYPE$]",
+			dlFileEntryType.getName(), "[$FOLDER_NAME$]", folderName);
 		subscriptionSender.setContextUserPrefix("DOCUMENT");
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setHtmlFormat(true);
@@ -1455,9 +1459,21 @@ public class DLAppHelperLocalServiceImpl
 			folderIds.addAll(folder.getAncestorFolderIds());
 		}
 
-		for (long folderId : folderIds) {
+		for (long curFolderId : folderIds) {
 			subscriptionSender.addPersistedSubscribers(
-				Folder.class.getName(), folderId);
+				Folder.class.getName(), curFolderId);
+		}
+
+		if (dlFileEntryType.getFileEntryTypeId() ==
+				DLFileEntryTypeConstants.FILE_ENTRY_TYPE_ID_BASIC_DOCUMENT) {
+
+			subscriptionSender.addPersistedSubscribers(
+				DLFileEntryType.class.getName(), fileVersion.getGroupId());
+		}
+		else {
+			subscriptionSender.addPersistedSubscribers(
+				DLFileEntryType.class.getName(),
+				dlFileEntryType.getFileEntryTypeId());
 		}
 
 		subscriptionSender.flushNotificationsAsync();

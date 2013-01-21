@@ -463,7 +463,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				<mkdir dir="test-results/${test.type}" />
 
 				<copy todir="test-classes/${test.type}">
-					<fileset dir="test" includes="*.properties" />
+					<fileset dir="test" includes="*.properties,META-INF/*.xml" />
 					<fileset dir="test/${test.type}" includes="**/*.properties,**/dependencies/**,META-INF/*.xml" />
 				</copy>
 
@@ -709,6 +709,15 @@ Please set the environment variable ANT_OPTS to the recommended value of
 
 	<target name="test-class" depends="compile,instrument-test-coverage,compile-test">
 		<if>
+			<available file="test/functional" type="dir" />
+			<then>
+				<resourcecount property="test.functional.count">
+					<fileset dir="test-classes/functional" includes="**/${class}.class" />
+				</resourcecount>
+			</then>
+		</if>
+
+		<if>
 			<available file="test/integration" type="dir" />
 			<then>
 				<resourcecount property="test.integration.count">
@@ -727,10 +736,16 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</if>
 
 		<if>
-			<equals arg1="${test.integration.count}" arg2="1" />
+			<equals arg1="${test.functional.count}" arg2="1" />
 			<then>
-				<var name="test.type" value="integration" />
+				<var name="test.type" value="functional" />
 			</then>
+			<elseif>
+				<equals arg1="${test.integration.count}" arg2="1" />
+				<then>
+					<var name="test.type" value="integration" />
+				</then>
+			</elseif>
 			<elseif>
 				<equals arg1="${test.unit.count}" arg2="1" />
 				<then>
@@ -738,7 +753,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				</then>
 			</elseif>
 			<else>
-				<var name="test.type" value="" />
+				<fail>The property "test.type" is invalid.</fail>
 			</else>
 		</if>
 

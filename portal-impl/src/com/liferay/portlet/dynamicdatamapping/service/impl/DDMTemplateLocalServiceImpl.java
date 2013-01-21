@@ -192,25 +192,7 @@ public class DDMTemplateLocalServiceImpl
 		DDMTemplate template = ddmTemplatePersistence.findByPrimaryKey(
 			templateId);
 
-		File smallImageFile = null;
-
-		if (template.isSmallImage() &&
-				Validator.isNull(template.getSmallImageURL())) {
-
-			Image smallImage = ImageUtil.fetchByPrimaryKey(
-				template.getSmallImageId());
-
-			if (smallImage != null) {
-				smallImageFile = FileUtil.createTempFile(smallImage.getType());
-
-				try {
-					FileUtil.write(smallImageFile, smallImage.getTextObj());
-				}
-				catch (IOException ioe) {
-					_log.error(ioe);
-				}
-			}
-		}
+		File smallImageFile = copySmallImage(template);
 
 		return addTemplate(
 			userId, template.getGroupId(), template.getClassNameId(),
@@ -219,6 +201,24 @@ public class DDMTemplateLocalServiceImpl
 			template.getScript(), template.isCacheable(),
 			template.isSmallImage(), template.getSmallImageURL(),
 			smallImageFile, serviceContext);
+	}
+
+	public DDMTemplate copyTemplate(
+			long userId, long templateId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		DDMTemplate template = ddmTemplatePersistence.findByPrimaryKey(
+			templateId);
+
+		File smallImageFile = copySmallImage(template);
+
+		return addTemplate(
+			userId, template.getGroupId(), template.getClassNameId(),
+			template.getClassPK(), null, template.getNameMap(),
+			template.getDescriptionMap(), template.getType(),
+			template.getMode(), template.getLanguage(), template.getScript(),
+			template.isCacheable(), template.isSmallImage(),
+			template.getSmallImageURL(), smallImageFile, serviceContext);
 	}
 
 	public List<DDMTemplate> copyTemplates(
@@ -233,8 +233,7 @@ public class DDMTemplateLocalServiceImpl
 
 		for (DDMTemplate oldTemplate : oldTemplates) {
 			DDMTemplate newTemplate = copyTemplate(
-				userId, oldTemplate.getTemplateId(), oldTemplate.getNameMap(),
-				oldTemplate.getDescriptionMap(), serviceContext);
+				userId, oldTemplate.getTemplateId(), serviceContext);
 
 			newTemplates.add(newTemplate);
 		}
@@ -372,18 +371,20 @@ public class DDMTemplateLocalServiceImpl
 	}
 
 	public List<DDMTemplate> getTemplates(
-			long classNameId, long classPK, String type)
+			long groupId, long classNameId, long classPK, String type)
 		throws SystemException {
 
-		return ddmTemplatePersistence.findByC_C_T(classNameId, classPK, type);
+		return ddmTemplatePersistence.findByG_C_C_T(
+			groupId, classNameId, classPK, type);
 	}
 
 	public List<DDMTemplate> getTemplates(
-			long classNameId, long classPK, String type, String mode)
+			long groupId, long classNameId, long classPK, String type,
+			String mode)
 		throws SystemException {
 
-		return ddmTemplatePersistence.findByC_C_T_M(
-			classNameId, classPK, type, mode);
+		return ddmTemplatePersistence.findByG_C_C_T_M(
+			groupId, classNameId, classPK, type, mode);
 	}
 
 	public int getTemplatesCount(long groupId) throws SystemException {
@@ -525,6 +526,30 @@ public class DDMTemplateLocalServiceImpl
 			smallImageBytes);
 
 		return template;
+	}
+
+	protected File copySmallImage(DDMTemplate template) throws SystemException {
+		File smallImageFile = null;
+
+		if (template.isSmallImage() &&
+			Validator.isNull(template.getSmallImageURL())) {
+
+			Image smallImage = ImageUtil.fetchByPrimaryKey(
+				template.getSmallImageId());
+
+			if (smallImage != null) {
+				smallImageFile = FileUtil.createTempFile(smallImage.getType());
+
+				try {
+					FileUtil.write(smallImageFile, smallImage.getTextObj());
+				}
+				catch (IOException ioe) {
+					_log.error(ioe, ioe);
+				}
+			}
+		}
+
+		return smallImageFile;
 	}
 
 	protected void saveImages(

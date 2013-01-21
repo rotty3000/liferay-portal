@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.search.facet.ScopeFacet;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.trash.TrashRenderer;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -66,12 +67,14 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.service.AssetCategoryLocalServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
+import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.trash.model.TrashEntry;
 import com.liferay.portlet.trash.service.TrashEntryLocalServiceUtil;
 
@@ -98,6 +101,10 @@ public abstract class BaseIndexer implements Indexer {
 
 	public static final int INDEX_FILTER_SEARCH_LIMIT = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.INDEX_FILTER_SEARCH_LIMIT));
+
+	public void addRelatedEntryFields(Document document, Object obj)
+		throws Exception {
+	}
 
 	public void delete(long companyId, String uid) throws SearchException {
 		try {
@@ -186,8 +193,28 @@ public abstract class BaseIndexer implements Indexer {
 		try {
 			searchContext.setSearchEngineId(getSearchEngineId());
 
-			searchContext.setEntryClassNames(
-				new String[] {getClassName(searchContext)});
+			String[] entryClassNames = {getClassName(searchContext)};
+
+			if (searchContext.isIncludeAttachments()) {
+				entryClassNames = ArrayUtil.append(
+					entryClassNames, DLFileEntry.class.getName());
+			}
+
+			if (searchContext.isIncludeDiscussions()) {
+				entryClassNames = ArrayUtil.append(
+					entryClassNames, MBMessage.class.getName());
+
+				searchContext.setAttribute("discussion", true);
+			}
+
+			searchContext.setEntryClassNames(entryClassNames);
+
+			if (searchContext.isIncludeAttachments() ||
+				searchContext.isIncludeDiscussions()) {
+
+				searchContext.setAttribute(
+					"relatedEntryClassName", getClassName(searchContext));
+			}
 
 			BooleanQuery contextQuery = BooleanQueryFactoryUtil.create(
 				searchContext);

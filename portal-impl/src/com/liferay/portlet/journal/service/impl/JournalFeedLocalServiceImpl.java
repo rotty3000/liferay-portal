@@ -30,6 +30,7 @@ import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.journal.DuplicateFeedIdException;
 import com.liferay.portlet.journal.FeedContentFieldException;
@@ -38,7 +39,6 @@ import com.liferay.portlet.journal.FeedNameException;
 import com.liferay.portlet.journal.FeedTargetLayoutFriendlyUrlException;
 import com.liferay.portlet.journal.model.JournalFeed;
 import com.liferay.portlet.journal.model.JournalFeedConstants;
-import com.liferay.portlet.journal.model.JournalStructure;
 import com.liferay.portlet.journal.service.base.JournalFeedLocalServiceBaseImpl;
 import com.liferay.util.RSSUtil;
 
@@ -337,10 +337,10 @@ public class JournalFeedLocalServiceImpl
 		}
 		else {
 			try {
-				JournalStructure structure =
-					journalStructurePersistence.findByG_S(groupId, structureId);
+				DDMStructure ddmStructure =
+					ddmStructureLocalService.getStructure(groupId, structureId);
 
-				Document document = SAXReaderUtil.read(structure.getXsd());
+				Document document = SAXReaderUtil.read(ddmStructure.getXsd());
 
 				contentField = HtmlUtil.escapeXPathAttribute(contentField);
 

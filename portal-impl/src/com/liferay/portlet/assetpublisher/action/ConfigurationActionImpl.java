@@ -160,6 +160,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 			scopeIds = ArrayUtil.append(scopeIds, scopeId);
 		}
 
+		preferences.setValue("defaultScope", Boolean.FALSE.toString());
 		preferences.setValues("scopeIds", scopeIds);
 	}
 

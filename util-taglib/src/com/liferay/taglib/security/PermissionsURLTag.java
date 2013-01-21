@@ -54,7 +54,22 @@ public class PermissionsURLTag extends TagSupport {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		if (Validator.isNull(resourceGroupId)) {
+		if (resourceGroupId instanceof Number) {
+			Number resourceGroupIdNumber = (Number)resourceGroupId;
+
+			if (resourceGroupIdNumber.longValue() < 0) {
+				resourceGroupId = null;
+			}
+		}
+		else if (resourceGroupId instanceof String) {
+			String esourceGroupIdString = (String)resourceGroupId;
+
+			if (esourceGroupIdString.length() == 0) {
+				resourceGroupId = null;
+			}
+		}
+
+		if (resourceGroupId == null) {
 			resourceGroupId = String.valueOf(themeDisplay.getScopeGroupId());
 		}
 

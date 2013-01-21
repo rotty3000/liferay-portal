@@ -294,6 +294,13 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 	}
 
 	public java.util.List<com.liferay.portal.model.Subscription> getSubscriptions(
+		long companyId, long userId, java.lang.String className, long[] classPKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _subscriptionLocalService.getSubscriptions(companyId, userId,
+			className, classPKs);
+	}
+
+	public java.util.List<com.liferay.portal.model.Subscription> getSubscriptions(
 		long companyId, java.lang.String className, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _subscriptionLocalService.getSubscriptions(companyId, className,
@@ -324,6 +331,13 @@ public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _subscriptionLocalService.isSubscribed(companyId, userId,
 			className, classPK);
+	}
+
+	public boolean isSubscribed(long companyId, long userId,
+		java.lang.String className, long[] classPKs)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _subscriptionLocalService.isSubscribed(companyId, userId,
+			className, classPKs);
 	}
 
 	/**

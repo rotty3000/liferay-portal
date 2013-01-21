@@ -64,7 +64,7 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 				<aui:option label="default" value="<%= 0 %>" />
 
 				<%
-				List<DDMTemplate> templates = DDMTemplateLocalServiceUtil.getTemplates(structureClassNameId, selRecordSet.getDDMStructureId(), DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
+				List<DDMTemplate> templates = DDMTemplateLocalServiceUtil.getTemplates(scopeGroupId, structureClassNameId, selRecordSet.getDDMStructureId(), DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY);
 
 				for (DDMTemplate template : templates) {
 					boolean selected = false;
@@ -86,7 +86,7 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 				<aui:option label="default" value="<%= 0 %>" />
 
 				<%
-				List<DDMTemplate> templates = DDMTemplateLocalServiceUtil.getTemplates(structureClassNameId, selRecordSet.getDDMStructureId(), DDMTemplateConstants.TEMPLATE_TYPE_FORM, DDMTemplateConstants.TEMPLATE_MODE_CREATE);
+				List<DDMTemplate> templates = DDMTemplateLocalServiceUtil.getTemplates(scopeGroupId, structureClassNameId, selRecordSet.getDDMStructureId(), DDMTemplateConstants.TEMPLATE_TYPE_FORM, DDMTemplateConstants.TEMPLATE_MODE_CREATE);
 
 				for (DDMTemplate template : templates) {
 					boolean selected = false;

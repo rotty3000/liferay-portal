@@ -99,6 +99,14 @@ public class DDMTemplateServiceUtil {
 			serviceContext);
 	}
 
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplate copyTemplate(
+		long templateId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().copyTemplate(templateId, serviceContext);
+	}
+
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> copyTemplates(
 		long classNameId, long classPK, long newClassPK, java.lang.String type,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -117,7 +125,8 @@ public class DDMTemplateServiceUtil {
 
 	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplate fetchTemplate(
 		long groupId, java.lang.String templateKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService().fetchTemplate(groupId, templateKey);
 	}
 
@@ -157,10 +166,17 @@ public class DDMTemplateServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
-		long classNameId, long classPK, java.lang.String type,
+		long groupId, long classNameId, long classPK, java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getTemplates(groupId, classNameId, classPK, type);
+	}
+
+	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
+		long groupId, long classNameId, long classPK, java.lang.String type,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getTemplates(classNameId, classPK, type, mode);
+		return getService()
+				   .getTemplates(groupId, classNameId, classPK, type, mode);
 	}
 
 	public static java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> search(

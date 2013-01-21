@@ -29,6 +29,12 @@ public class IndexerWrapper implements Indexer {
 		_indexer = indexer;
 	}
 
+	public void addRelatedEntryFields(Document document, Object obj)
+		throws Exception {
+
+		_indexer.addRelatedEntryFields(document, obj);
+	}
+
 	public void delete(long companyId, String uid) throws SearchException {
 		_indexer.delete(companyId, uid);
 	}

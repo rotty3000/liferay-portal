@@ -80,7 +80,7 @@
 		</liferay-ui:search-container-results>
 
 		<liferay-ui:search-container-row
-			className="java.lang.Object"
+			className="Object"
 			keyProperty="primaryKey"
 			modelVar="result"
 		>

@@ -31,6 +31,8 @@ import com.liferay.portal.kernel.search.BooleanQueryFactoryUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.search.SearchException;
@@ -42,10 +44,13 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Repository;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
@@ -71,6 +76,7 @@ import com.liferay.portlet.dynamicdatamapping.util.DDMIndexerUtil;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
+import com.liferay.portlet.messageboards.model.MBMessage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,6 +109,19 @@ public class DLIndexer extends BaseIndexer {
 		setPermissionAware(true);
 	}
 
+	@Override
+	public void addRelatedEntryFields(Document document, Object obj)
+		throws Exception {
+
+		MBMessage message = (MBMessage)obj;
+
+		DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(
+			message.getClassPK());
+
+		document.addKeyword(Field.FOLDER_ID, dlFileEntry.getFolderId());
+		document.addKeyword(Field.RELATED_ENTRY, true);
+	}
+
 	public String[] getClassNames() {
 		return CLASS_NAMES;
 	}
@@ -132,6 +151,22 @@ public class DLIndexer extends BaseIndexer {
 
 		if (status != WorkflowConstants.STATUS_ANY) {
 			contextQuery.addRequiredTerm(Field.STATUS, status);
+		}
+
+		String relatedEntryClassName = (String)searchContext.getAttribute(
+			"relatedEntryClassName");
+
+		if (Validator.isNotNull(relatedEntryClassName)) {
+			contextQuery.addRequiredTerm(
+				Field.CLASS_NAME_ID,
+				PortalUtil.getClassNameId(relatedEntryClassName));
+
+			Indexer indexer = IndexerRegistryUtil.getIndexer(
+				relatedEntryClassName);
+
+			if (indexer != null) {
+				indexer.postProcessContextQuery(contextQuery, searchContext);
+			}
 		}
 
 		long[] folderIds = searchContext.getFolderIds();
@@ -348,6 +383,26 @@ public class DLIndexer extends BaseIndexer {
 			ExpandoBridgeIndexerUtil.addAttributes(document, expandoBridge);
 
 			addFileEntryTypeAttributes(document, dlFileVersion);
+
+			if (dlFileEntry.isInHiddenFolder()) {
+				try {
+					Repository repository =
+						RepositoryLocalServiceUtil.getRepository(
+							dlFileEntry.getRepositoryId());
+
+					String portletId = repository.getPortletId();
+
+					for (Indexer indexer : IndexerRegistryUtil.getIndexers()) {
+						if (portletId.equals(indexer.getPortletId())) {
+							indexer.addRelatedEntryFields(document, obj);
+
+							break;
+						}
+					}
+				}
+				catch (Exception e) {
+				}
+			}
 
 			if (!dlFileVersion.isInTrash() &&
 				dlFileVersion.isInTrashContainer()) {

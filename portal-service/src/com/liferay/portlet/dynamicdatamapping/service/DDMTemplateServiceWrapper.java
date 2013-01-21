@@ -91,6 +91,14 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 			descriptionMap, serviceContext);
 	}
 
+	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate copyTemplate(
+		long templateId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _ddmTemplateService.copyTemplate(templateId, serviceContext);
+	}
+
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> copyTemplates(
 		long classNameId, long classPK, long newClassPK, java.lang.String type,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -108,7 +116,8 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 
 	public com.liferay.portlet.dynamicdatamapping.model.DDMTemplate fetchTemplate(
 		long groupId, java.lang.String templateKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _ddmTemplateService.fetchTemplate(groupId, templateKey);
 	}
 
@@ -148,10 +157,18 @@ public class DDMTemplateServiceWrapper implements DDMTemplateService,
 	}
 
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
-		long classNameId, long classPK, java.lang.String type,
+		long groupId, long classNameId, long classPK, java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _ddmTemplateService.getTemplates(groupId, classNameId, classPK,
+			type);
+	}
+
+	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> getTemplates(
+		long groupId, long classNameId, long classPK, java.lang.String type,
 		java.lang.String mode)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _ddmTemplateService.getTemplates(classNameId, classPK, type, mode);
+		return _ddmTemplateService.getTemplates(groupId, classNameId, classPK,
+			type, mode);
 	}
 
 	public java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> search(

@@ -27,6 +27,7 @@ import com.liferay.portal.security.permission.PermissionThreadLocal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -309,6 +310,58 @@ public class SearchEngineUtil {
 	public static String getSearchWriterDestinationName(String searchEngineId) {
 		return DestinationNames.SEARCH_WRITER.concat(StringPool.SLASH).concat(
 			searchEngineId);
+	}
+
+	public static void indexDictionaries(long companyId)
+		throws SearchException {
+
+		Set<String> searchEngineIds = getSearchEngineIds();
+
+		for (String searchEngineId : searchEngineIds) {
+			indexDictionaries(searchEngineId, companyId);
+		}
+	}
+
+	public static void indexDictionaries(String searchEngineId, long companyId)
+		throws SearchException {
+
+		SearchEngine searchEngine = getSearchEngine(searchEngineId);
+
+		IndexWriter indexWriter = searchEngine.getIndexWriter();
+
+		SearchContext searchContext = new SearchContext();
+
+		searchContext.setCompanyId(companyId);
+		searchContext.setSearchEngineId(searchEngineId);
+
+		indexWriter.indexDictionaries(searchContext);
+	}
+
+	public static void indexDictionary(long companyId, Locale locale)
+		throws SearchException {
+
+		Set<String> searchEngineIds = getSearchEngineIds();
+
+		for (String searchEngineId : searchEngineIds) {
+			indexDictionary(searchEngineId, companyId, locale);
+		}
+	}
+
+	public static void indexDictionary(
+			String searchEngineId, long companyId, Locale locale)
+		throws SearchException {
+
+		SearchEngine searchEngine = getSearchEngine(searchEngineId);
+
+		IndexWriter indexWriter = searchEngine.getIndexWriter();
+
+		SearchContext searchContext = new SearchContext();
+
+		searchContext.setCompanyId(companyId);
+		searchContext.setSearchEngineId(searchEngineId);
+		searchContext.setLocale(locale);
+
+		indexWriter.indexDictionary(searchContext);
 	}
 
 	public static boolean isIndexReadOnly() {

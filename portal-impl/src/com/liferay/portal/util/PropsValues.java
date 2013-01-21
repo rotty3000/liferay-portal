@@ -14,6 +14,7 @@
 
 package com.liferay.portal.util;
 
+import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.util.CookieKeys;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -81,7 +82,7 @@ public class PropsValues {
 
 	public static final int ASSET_CATEGORIES_SELECTOR_MAX_ENTRIES = GetterUtil.getInteger(PropsUtil.get(PropsKeys.ASSET_CATEGORIES_SELECTOR_MAX_ENTRIES));
 
-	public static final boolean ASSET_ENTRY_INCREMENT_VIEW_COUNTER_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.ASSET_ENTRY_INCREMENT_VIEW_COUNTER_ENABLED));
+	public static final boolean ASSET_ENTRY_BUFFERED_INCREMENT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_ENABLED, new Filter("AssetEntry")));
 
 	public static final String ASSET_ENTRY_VALIDATOR = PropsUtil.get(PropsKeys.ASSET_ENTRY_VALIDATOR);
 
@@ -223,9 +224,11 @@ public class PropsValues {
 
 	public static final String BROWSER_LAUNCHER_URL = PropsUtil.get(PropsKeys.BROWSER_LAUNCHER_URL);
 
-	public static final int BUFFERED_INCREMENT_PARALLEL_QUEUE_SIZE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_PARALLEL_QUEUE_SIZE));
+	public static final boolean BUFFERED_INCREMENT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_ENABLED));
 
-	public static final int BUFFERED_INCREMENT_SERIAL_QUEUE_SIZE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_SERIAL_QUEUE_SIZE));
+	public static final int BUFFERED_INCREMENT_STANDBY_QUEUE_THRESHOLD = GetterUtil.getInteger(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_STANDBY_QUEUE_THRESHOLD));
+
+	public static final long BUFFERED_INCREMENT_STANDBY_TIME_UPPER_LIMIT = GetterUtil.getLong(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_STANDBY_TIME_UPPER_LIMIT));
 
 	public static final int CACHE_CONTENT_THRESHOLD_SIZE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.CACHE_CONTENT_THRESHOLD_SIZE));
 
@@ -477,10 +480,6 @@ public class PropsValues {
 
 	public static final String[] DL_DISPLAY_VIEWS = PropsUtil.getArray(PropsKeys.DL_DISPLAY_VIEWS);
 
-	public static final String DL_EMAIL_FROM_ADDRESS = PropsUtil.get(PropsKeys.DL_EMAIL_FROM_ADDRESS);
-
-	public static final String DL_EMAIL_FROM_NAME = PropsUtil.get(PropsKeys.DL_EMAIL_FROM_NAME);
-
 	public static final String DL_EMAIL_FILE_ENTRY_ADDED_BODY = PropsUtil.get(PropsKeys.DL_EMAIL_FILE_ENTRY_ADDED_BODY);
 
 	public static final boolean DL_EMAIL_FILE_ENTRY_ADDED_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_EMAIL_FILE_ENTRY_ADDED_ENABLED));
@@ -492,6 +491,12 @@ public class PropsValues {
 	public static final boolean DL_EMAIL_FILE_ENTRY_UPDATED_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_EMAIL_FILE_ENTRY_UPDATED_ENABLED));
 
 	public static final String DL_EMAIL_FILE_ENTRY_UPDATED_SUBJECT = PropsUtil.get(PropsKeys.DL_EMAIL_FILE_ENTRY_UPDATED_SUBJECT);
+
+	public static final String DL_EMAIL_FROM_ADDRESS = PropsUtil.get(PropsKeys.DL_EMAIL_FROM_ADDRESS);
+
+	public static final String DL_EMAIL_FROM_NAME = PropsUtil.get(PropsKeys.DL_EMAIL_FROM_NAME);
+
+	public static final boolean DL_FILE_ENTRY_BUFFERED_INCREMENT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.BUFFERED_INCREMENT_ENABLED, new Filter("DLFileEntry")));
 
 	public static final boolean DL_FILE_ENTRY_COMMENTS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_COMMENTS_ENABLED));
 
@@ -532,8 +537,6 @@ public class PropsValues {
 	public static final int DL_FILE_ENTRY_PREVIEW_VIDEO_WIDTH = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_PREVIEW_VIDEO_WIDTH));
 
 	public static final boolean DL_FILE_ENTRY_PROCESSORS_TRIGGER_SYNCHRONOUSLY = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_PROCESSORS_TRIGGER_SYNCHRONOUSLY));
-
-	public static final boolean DL_FILE_ENTRY_READ_COUNT_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_READ_COUNT_ENABLED));
 
 	public static final int DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT));
 
@@ -1459,7 +1462,7 @@ public class PropsValues {
 
 	public static final long SANDBOX_DEPLOY_INTERVAL = GetterUtil.getLong(PropsUtil.get(PropsKeys.SANDBOX_DEPLOY_INTERVAL));
 
-	public static final String SANITIZER_IMPL = PropsUtil.get(PropsKeys.SANITIZER_IMPL);
+	public static String[] SANITIZER_IMPL = PropsUtil.getArray(PropsKeys.SANITIZER_IMPL);
 
 	public static final boolean SC_PRODUCT_COMMENTS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SC_PRODUCT_COMMENTS_ENABLED));
 

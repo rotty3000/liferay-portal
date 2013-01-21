@@ -124,6 +124,23 @@ public class DDMTemplateServiceSoap {
 		}
 	}
 
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap copyTemplate(
+		long templateId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.portlet.dynamicdatamapping.model.DDMTemplate returnValue =
+				DDMTemplateServiceUtil.copyTemplate(templateId, serviceContext);
+
+			return com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap[] copyTemplates(
 		long classNameId, long classPK, long newClassPK, java.lang.String type,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -248,12 +265,29 @@ public class DDMTemplateServiceSoap {
 	}
 
 	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap[] getTemplates(
-		long classNameId, long classPK, java.lang.String type,
+		long groupId, long classNameId, long classPK, java.lang.String type)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> returnValue =
+				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
+					classPK, type);
+
+			return com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap[] getTemplates(
+		long groupId, long classNameId, long classPK, java.lang.String type,
 		java.lang.String mode) throws RemoteException {
 		try {
 			java.util.List<com.liferay.portlet.dynamicdatamapping.model.DDMTemplate> returnValue =
-				DDMTemplateServiceUtil.getTemplates(classNameId, classPK, type,
-					mode);
+				DDMTemplateServiceUtil.getTemplates(groupId, classNameId,
+					classPK, type, mode);
 
 			return com.liferay.portlet.dynamicdatamapping.model.DDMTemplateSoap.toSoapModels(returnValue);
 		}

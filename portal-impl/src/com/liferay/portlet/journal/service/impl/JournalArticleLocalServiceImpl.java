@@ -19,6 +19,8 @@ import com.liferay.portal.NoSuchImageException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
 import com.liferay.portal.kernel.log.Log;
@@ -106,6 +108,7 @@ import com.liferay.portlet.journal.model.JournalArticleDisplay;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.model.impl.JournalArticleDisplayImpl;
 import com.liferay.portlet.journal.service.base.JournalArticleLocalServiceBaseImpl;
+import com.liferay.portlet.journal.social.JournalActivityKeys;
 import com.liferay.portlet.journal.util.JournalUtil;
 import com.liferay.portlet.journal.util.comparator.ArticleIDComparator;
 import com.liferay.portlet.journal.util.comparator.ArticleVersionComparator;
@@ -1131,10 +1134,10 @@ public class JournalArticleLocalServiceImpl
 				// default one. If the default one does not exist, throw an
 				// exception.
 
-				DDMTemplate ddmTtemplate = null;
+				DDMTemplate ddmTemplate = null;
 
 				try {
-					ddmTtemplate = ddmTemplatePersistence.findByG_T(
+					ddmTemplate = ddmTemplatePersistence.findByG_T(
 						article.getGroupId(), templateId);
 				}
 				catch (NoSuchTemplateException nste1) {
@@ -1142,7 +1145,7 @@ public class JournalArticleLocalServiceImpl
 						Group companyGroup = groupLocalService.getCompanyGroup(
 							article.getCompanyId());
 
-						ddmTtemplate = ddmTemplatePersistence.findByG_T(
+						ddmTemplate = ddmTemplatePersistence.findByG_T(
 							companyGroup.getGroupId(), templateId);
 
 						tokens.put(
@@ -1151,7 +1154,7 @@ public class JournalArticleLocalServiceImpl
 					}
 					catch (NoSuchTemplateException nste2) {
 						if (!defaultTemplateId.equals(templateId)) {
-							ddmTtemplate = ddmTemplatePersistence.findByG_T(
+							ddmTemplate = ddmTemplatePersistence.findByG_T(
 								article.getGroupId(), defaultTemplateId);
 						}
 						else {
@@ -1160,9 +1163,9 @@ public class JournalArticleLocalServiceImpl
 					}
 				}
 
-				script = ddmTtemplate.getScript();
-				langType = ddmTtemplate.getLanguage();
-				cacheable = ddmTtemplate.isCacheable();
+				script = ddmTemplate.getScript();
+				langType = ddmTemplate.getLanguage();
+				cacheable = ddmTemplate.isCacheable();
 			}
 
 			content = JournalUtil.transform(
@@ -2773,6 +2776,23 @@ public class JournalArticleLocalServiceImpl
 						expirationDate, true);
 				}
 
+				// Social
+
+				if (serviceContext.isCommandUpdate()) {
+					socialActivityLocalService.addActivity(
+						user.getUserId(), article.getGroupId(),
+						JournalArticle.class.getName(), article.getId(),
+						JournalActivityKeys.UPDATE_ARTICLE,
+						getExtraDataJSON(article, serviceContext), 0);
+				}
+				else {
+					socialActivityLocalService.addUniqueActivity(
+						user.getUserId(), article.getGroupId(),
+						JournalArticle.class.getName(), article.getId(),
+						JournalActivityKeys.ADD_ARTICLE,
+						getExtraDataJSON(article, serviceContext), 0);
+				}
+
 				// Indexer
 
 				reindex(article);
@@ -2783,6 +2803,23 @@ public class JournalArticleLocalServiceImpl
 		}
 
 		if (oldStatus == WorkflowConstants.STATUS_IN_TRASH) {
+
+			// Social
+
+			if (serviceContext.isCommandUpdate()) {
+				socialActivityLocalService.addActivity(
+					user.getUserId(), article.getGroupId(),
+					JournalArticle.class.getName(), article.getId(),
+					JournalActivityKeys.UPDATE_ARTICLE,
+					getExtraDataJSON(article, serviceContext), 0);
+			}
+			else {
+				socialActivityLocalService.addUniqueActivity(
+					user.getUserId(), article.getGroupId(),
+					JournalArticle.class.getName(), article.getId(),
+					JournalActivityKeys.ADD_ARTICLE,
+					getExtraDataJSON(article, serviceContext), 0);
+			}
 
 			// Trash
 
@@ -2813,6 +2850,7 @@ public class JournalArticleLocalServiceImpl
 
 				indexer.delete(article);
 			}
+
 		}
 		else if (status == WorkflowConstants.STATUS_IN_TRASH) {
 			assetEntryLocalService.updateVisible(
@@ -3411,6 +3449,16 @@ public class JournalArticleLocalServiceImpl
 		dateInterval[1] = latestExpirationDate;
 
 		return dateInterval;
+	}
+
+	protected String getExtraDataJSON(
+		JournalArticle article, ServiceContext serviceContext) {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("title", article.getTitle(serviceContext.getLocale()));
+
+		return jsonObject.toString();
 	}
 
 	protected String getUniqueUrlTitle(
