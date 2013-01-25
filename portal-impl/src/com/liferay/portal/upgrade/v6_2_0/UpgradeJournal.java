@@ -14,15 +14,23 @@
 
 package com.liferay.portal.upgrade.v6_2_0;
 
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.upgrade.RenameUpgradePortletPreferences;
 import com.liferay.portal.upgrade.v6_2_0.util.JournalFeedTable;
 
 import java.sql.SQLException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Brian Wing Shun Chan
+ * @author Marcellus Tavares
  */
-public class UpgradeJournal extends UpgradeProcess {
+public class UpgradeJournal extends RenameUpgradePortletPreferences {
+
+	public UpgradeJournal() {
+		_preferenceNamesMap.put("templateId", "ddmTemplateKey");
+	}
 
 	@Override
 	protected void doUpgrade() throws Exception {
@@ -37,6 +45,21 @@ public class UpgradeJournal extends UpgradeProcess {
 				JournalFeedTable.TABLE_SQL_CREATE,
 				JournalFeedTable.TABLE_SQL_ADD_INDEXES);
 		}
+
+		updatePortletPreferences();
 	}
+
+	@Override
+	protected String[] getPortletIds() {
+		return new String[] {"56_INSTANCE_%"};
+	}
+
+	@Override
+	protected Map<String, String> getPreferenceNamesMap() {
+		return _preferenceNamesMap;
+	}
+
+	private Map<String, String> _preferenceNamesMap =
+		new HashMap<String, String>();
 
 }

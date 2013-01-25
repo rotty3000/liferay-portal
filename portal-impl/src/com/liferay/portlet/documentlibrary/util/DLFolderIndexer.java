@@ -42,9 +42,6 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderActionableDynamicQuery;
-import com.liferay.portlet.expando.model.ExpandoBridge;
-import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
-import com.liferay.portlet.expando.util.ExpandoBridgeIndexerUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,13 +125,6 @@ public class DLFolderIndexer extends BaseIndexer {
 		document.addText(Field.DESCRIPTION, dlFolder.getDescription());
 		document.addKeyword(Field.FOLDER_ID, dlFolder.getParentFolderId());
 		document.addText(Field.TITLE, dlFolder.getName());
-
-		ExpandoBridge expandoBridge =
-			ExpandoBridgeFactoryUtil.getExpandoBridge(
-				dlFolder.getCompanyId(), DLFolder.class.getName(),
-				dlFolder.getFolderId());
-
-		ExpandoBridgeIndexerUtil.addAttributes(document, expandoBridge);
 
 		if (!dlFolder.isInTrash() && dlFolder.isInTrashContainer()) {
 			DLFolder trashedFolder = dlFolder.getTrashContainer();

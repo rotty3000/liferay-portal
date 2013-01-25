@@ -57,7 +57,8 @@ import java.util.List;
 public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 	public void addPortletFileEntries(
-			long groupId, long userId, String portletId, long folderId,
+			long groupId, long userId, String className, long classPK,
+			String portletId, long folderId,
 			List<ObjectValuePair<String, InputStream>> inputStreamOVPs)
 		throws PortalException, SystemException {
 
@@ -66,14 +67,14 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 				inputStreamOVPs.get(i);
 
 			addPortletFileEntry(
-				groupId, userId, portletId, folderId, inputStreamOVP.getValue(),
-				inputStreamOVP.getKey());
+				groupId, userId, className, classPK, portletId, folderId,
+				inputStreamOVP.getValue(), inputStreamOVP.getKey());
 		}
 	}
 
 	public FileEntry addPortletFileEntry(
-			long groupId, long userId, String portletId, long folderId,
-			File file, String fileName)
+			long groupId, long userId, String className, long classPK,
+			String portletId, long folderId, File file, String fileName)
 		throws PortalException, SystemException {
 
 		if (Validator.isNull(fileName)) {
@@ -90,6 +91,9 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 		String contentType = MimeTypesUtil.getContentType(file);
 
+		serviceContext.setAttribute("className", className);
+		serviceContext.setAttribute("classPK", String.valueOf(classPK));
+
 		boolean dlAppHelperEnabled = DLAppHelperThreadLocal.isEnabled();
 
 		try {
@@ -105,8 +109,9 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 	}
 
 	public FileEntry addPortletFileEntry(
-			long groupId, long userId, String portletId, long folderId,
-			InputStream inputStream, String fileName)
+			long groupId, long userId, String className, long classPK,
+			String portletId, long folderId, InputStream inputStream,
+			String fileName)
 		throws PortalException, SystemException {
 
 		if (inputStream == null) {
@@ -132,6 +137,9 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 		String contentType = MimeTypesUtil.getContentType(
 			inputStream, fileName);
+
+		serviceContext.setAttribute("className", className);
+		serviceContext.setAttribute("classPK", String.valueOf(classPK));
 
 		boolean dlAppHelperEnabled = DLAppHelperThreadLocal.isEnabled();
 

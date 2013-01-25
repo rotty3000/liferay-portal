@@ -56,8 +56,8 @@ public class JournalTransformerTest {
 
 		Element rootElement = document.addElement("root");
 
-		JournalTestUtil.addDynamicElement(rootElement, "text", "name");
-		JournalTestUtil.addDynamicElement(rootElement, "text", "link");
+		JournalTestUtil.addDynamicElementElement(rootElement, "text", "name");
+		JournalTestUtil.addDynamicElementElement(rootElement, "text", "link");
 
 		String xsd = document.asXML();
 
@@ -66,20 +66,21 @@ public class JournalTransformerTest {
 		String xsl = "$name.getData()";
 
 		DDMTemplate ddmTemplate = JournalTestUtil.addDDMTemplate(
-			ddmStructure.getStructureId(), xsl,
-			JournalTemplateConstants.LANG_TYPE_VM);
+			ddmStructure.getStructureId(),
+			JournalTemplateConstants.LANG_TYPE_VM, xsl);
 
 		document = JournalTestUtil.createDocument("en_US", "en_US");
 
-		Element dynamicElement = JournalTestUtil.addDynamicElement(
-			document.getRootElement(), "text", "name");
+		Element dynamicElementElement =
+			JournalTestUtil.addDynamicElementElement(
+				document.getRootElement(), "text", "name");
 
-		JournalTestUtil.addDynamicContent(
-			dynamicElement, "en_US", "Joe Bloggs");
+		JournalTestUtil.addDynamicContentElement(
+			dynamicElementElement, "en_US", "Joe Bloggs");
 
 		String xml = document.asXML();
 
-		JournalArticle article = JournalTestUtil.addArticle(
+		JournalArticle article = JournalTestUtil.addArticleWithXMLContent(
 			xml, ddmStructure.getStructureKey(), ddmTemplate.getTemplateKey());
 
 		Map<String, String> tokens = getTokens();
@@ -124,12 +125,13 @@ public class JournalTransformerTest {
 		Document document = JournalTestUtil.createDocument(
 			"en_US,pt_BR", "en_US");
 
-		Element dynamicElementElement = JournalTestUtil.addDynamicElement(
-			document.getRootElement(), "text", "name");
+		Element dynamicElementElement =
+			JournalTestUtil.addDynamicElementElement(
+				document.getRootElement(), "text", "name");
 
-		JournalTestUtil.addDynamicContent(
+		JournalTestUtil.addDynamicContentElement(
 			dynamicElementElement, "en_US", "Joe Bloggs");
-		JournalTestUtil.addDynamicContent(
+		JournalTestUtil.addDynamicContentElement(
 			dynamicElementElement, "pt_BR", "Joao da Silva");
 
 		String xml = document.asXML();

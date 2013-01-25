@@ -45,7 +45,7 @@ if (treeWalker.isOdd()) {
 }
 %>
 
-<c:if test="<%= !Validator.equals(message.getMessageId(), selMessage.getMessageId()) || MBUtil.isViewableMessage(themeDisplay, message) %>">
+<c:if test="<%= (message.getMessageId() != selMessage.getMessageId()) || MBUtil.isViewableMessage(themeDisplay, message) %>">
 	<tr class="<%= className %>" onMouseEnter="this.className = '<%= classHoverName %>';" onMouseLeave="this.className = '<%= className %>';">
 		<td style="padding-left: <%= depth > 0 ? depth * 10 : 5 %>px; width: 90%;" valign="middle">
 			<c:if test="<%= !message.isRoot() %>">

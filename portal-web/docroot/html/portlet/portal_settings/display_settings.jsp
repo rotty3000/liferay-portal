@@ -138,7 +138,7 @@ boolean deployed = false;
 			}
 		%>
 
-			<aui:option label="<%= curTheme.getName() %>" selected="<%= (Validator.equals(defaultRegularThemeId, curTheme.getThemeId())) %>" value="<%= curTheme.getThemeId() %>" />
+			<aui:option label="<%= curTheme.getName() %>" selected="<%= Validator.equals(defaultRegularThemeId, curTheme.getThemeId()) %>" value="<%= curTheme.getThemeId() %>" />
 
 		<%
 		}
@@ -161,7 +161,7 @@ boolean deployed = false;
 			}
 		%>
 
-			<aui:option label="<%= curTheme.getName() %>" selected="<%= (Validator.equals(defaultWapThemeId, curTheme.getThemeId())) %>" value="<%= curTheme.getThemeId() %>" />
+			<aui:option label="<%= curTheme.getName() %>" selected="<%= Validator.equals(defaultWapThemeId, curTheme.getThemeId()) %>" value="<%= curTheme.getThemeId() %>" />
 
 		<%
 		}
@@ -190,7 +190,7 @@ boolean deployed = false;
 			}
 		%>
 
-			<aui:option label="<%= curTheme.getName() %>" selected="<%= (Validator.equals(defaultControlPanelThemeId, curTheme.getThemeId())) %>" value="<%= curTheme.getThemeId() %>" />
+			<aui:option label="<%= curTheme.getName() %>" selected="<%= Validator.equals(defaultControlPanelThemeId, curTheme.getThemeId()) %>" value="<%= curTheme.getThemeId() %>" />
 
 		<%
 		}

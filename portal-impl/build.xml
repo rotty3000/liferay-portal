@@ -366,32 +366,32 @@ public class Creole10Parser]]></replacevalue>
 		<ant dir="../portal-web" target="build-selenium-new" />
 	</target>
 
-	<target name="build-selenium-new-actions">
-		<ant dir="../portal-web" target="build-selenium-new-actions" />
+	<target name="build-selenium-new-action">
+		<ant dir="../portal-web" target="build-selenium-new-action" />
 	</target>
 
-	<target name="build-selenium-new-functions">
-		<ant dir="../portal-web" target="build-selenium-new-functions" />
+	<target name="build-selenium-new-function">
+		<ant dir="../portal-web" target="build-selenium-new-function" />
 	</target>
 
-	<target name="build-selenium-new-macros">
-		<ant dir="../portal-web" target="build-selenium-new-macros" />
+	<target name="build-selenium-new-macro">
+		<ant dir="../portal-web" target="build-selenium-new-macro" />
 	</target>
 
-	<target name="build-selenium-new-paths">
-		<ant dir="../portal-web" target="build-selenium-new-paths" />
+	<target name="build-selenium-new-path">
+		<ant dir="../portal-web" target="build-selenium-new-path" />
 	</target>
 
-	<target name="build-selenium-new-test-cases">
-		<ant dir="../portal-web" target="build-selenium-new-test-cases" />
+	<target name="build-selenium-new-test-case">
+		<ant dir="../portal-web" target="build-selenium-new-test-case" />
 	</target>
 
-	<target name="build-selenium-new-test-plans">
-		<ant dir="../portal-web" target="build-selenium-new-test-plans" />
+	<target name="build-selenium-new-test-plan">
+		<ant dir="../portal-web" target="build-selenium-new-test-plan" />
 	</target>
 
-	<target name="build-selenium-new-test-suites">
-		<ant dir="../portal-web" target="build-selenium-new-test-suites" />
+	<target name="build-selenium-new-test-suite">
+		<ant dir="../portal-web" target="build-selenium-new-test-suite" />
 	</target>
 
 	<target name="build-selenium-server">

@@ -50,6 +50,7 @@ import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.ModelHintsUtil;
+import com.liferay.portal.model.Repository;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
@@ -176,6 +177,30 @@ public class DLFileEntryLocalServiceImpl
 		dlFileEntry.setVersionUserName(user.getFullName());
 		dlFileEntry.setCreateDate(serviceContext.getCreateDate(now));
 		dlFileEntry.setModifiedDate(serviceContext.getModifiedDate(now));
+
+		DLFolder repositoryDLFolder = null;
+
+		if (repositoryId != groupId) {
+			Repository repository = repositoryLocalService.getRepository(
+				repositoryId);
+
+			repositoryDLFolder = dlFolderPersistence.findByPrimaryKey(
+				repository.getDlFolderId());
+		}
+
+		if ((repositoryDLFolder != null) && repositoryDLFolder.isHidden()) {
+			long classNameId = PortalUtil.getClassNameId(
+				(String)serviceContext.getAttribute("className"));
+			long classPK = ParamUtil.getLong(serviceContext, "classPK");
+
+			if (Validator.isNotNull(classNameId) &&
+					Validator.isNotNull(classPK)) {
+
+				dlFileEntry.setClassNameId(classNameId);
+				dlFileEntry.setClassPK(classPK);
+			}
+		}
+
 		dlFileEntry.setRepositoryId(repositoryId);
 		dlFileEntry.setFolderId(folderId);
 		dlFileEntry.setName(name);

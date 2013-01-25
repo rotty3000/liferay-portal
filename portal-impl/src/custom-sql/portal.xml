@@ -65,6 +65,38 @@
 				(resourceBlockId = ?)
 		]]>
 	</sql>
+	<sql id="com.liferay.portal.service.impl.ResourcePermissionLocalServiceImpl.findMissingResourcePermissions">
+		<![CDATA[
+			SELECT
+				TEMP_TABLE.companyId, TEMP_TABLE.name, TEMP_TABLE.scope, TEMP_TABLE.primKey, Role_.roleId
+			FROM (
+				SELECT
+					DISTINCT ResourcePermission.companyId, ResourcePermission.name, ResourcePermission.scope, ResourcePermission.primKey
+				FROM
+					ResourcePermission
+				WHERE
+					(ResourcePermission.name = ?) AND
+					(ResourcePermission.scope = ?)
+			) TEMP_TABLE
+			CROSS JOIN
+				Role_
+			WHERE
+				(TEMP_TABLE.companyId = Role_.companyId) AND
+				NOT EXISTS (
+					SELECT
+						*
+					FROM
+						ResourcePermission AS ResourcePermission
+					WHERE
+						(TEMP_TABLE.companyId = ResourcePermission.companyId) AND
+						(TEMP_TABLE.name = ResourcePermission.name) AND
+						(TEMP_TABLE.scope = ResourcePermission.scope) AND
+						(TEMP_TABLE.primKey = ResourcePermission.primKey) AND
+						(Role_.roleId = ResourcePermission.roleId)
+				) AND
+				(Role_.name = ?)
+		]]>
+	</sql>
 	<sql id="com.liferay.portal.service.impl.ResourceBlockLocalServiceImpl.releaseResourceBlock">
 		<![CDATA[
 			UPDATE
@@ -84,6 +116,18 @@
 			WHERE
 				(referenceCount > 0) AND
 				(resourceBlockId = ?)
+		]]>
+	</sql>
+	<sql id="com.liferay.portal.service.impl.ResourcePermissionLocalServiceImpl.updateActionIds">
+		<![CDATA[
+			UPDATE
+				ResourcePermission
+			SET
+				actionIds = actionIds + ? - BITAND(CAST_LONG(ResourcePermission.actionIds), ?)
+			WHERE
+				(ResourcePermission.name = ?) AND
+				(ResourcePermission.scope = ?) AND
+				(ResourcePermission.roleId IN ([$ROLE_ID$]))
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.service.persistence.GroupFinder.countByLayouts">
@@ -859,18 +903,6 @@
 			WHERE
 				(ResourcePermission.roleId = ?) AND
 				[$SCOPE$]
-		]]>
-	</sql>
-	<sql id="com.liferay.portal.service.persistence.ResourcePermissionFinder.findByC_N_S">
-		<![CDATA[
-			SELECT
-				DISTINCT ResourcePermission.primKey
-			FROM
-				ResourcePermission
-			WHERE
-				(ResourcePermission.companyId = ?) AND
-				(ResourcePermission.name = ?) AND
-				(ResourcePermission.scope = ?)
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.service.persistence.ResourceTypePermissionFinder.findByEitherScopeC_G_N">

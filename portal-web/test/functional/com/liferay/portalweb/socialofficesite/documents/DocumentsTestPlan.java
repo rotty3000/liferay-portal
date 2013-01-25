@@ -16,6 +16,7 @@ package com.liferay.portalweb.socialofficesite.documents;
 
 import com.liferay.portalweb.portal.BaseTestSuite;
 import com.liferay.portalweb.socialofficesite.documents.dmdocument.DMDocumentTestPlan;
+import com.liferay.portalweb.socialofficesite.documents.dmlar.DMLARTestPlan;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -29,6 +30,7 @@ public class DocumentsTestPlan extends BaseTestSuite {
 		TestSuite testSuite = new TestSuite();
 
 		testSuite.addTest(DMDocumentTestPlan.suite());
+		testSuite.addTest(DMLARTestPlan.suite());
 
 		return testSuite;
 	}

@@ -773,7 +773,7 @@
 				<isset property="selenium.types" />
 			</not>
 			<then>
-				<property name="selenium.types" value="actions,functions,macros,paths,testcases,testplans,testsuites" />
+				<property name="selenium.types" value="action,function,macro,path,testcase,testplan,testsuite" />
 			</then>
 		</if>
 
@@ -785,49 +785,49 @@
 			newenvironment="true"
 		>
 			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<arg line="--basedir test  --type ${selenium.types}" />
+			<arg line="--basedir test/functional --type ${selenium.types}" />
 		</java>
 	</target>
 
-	<target name="build-selenium-new-actions">
+	<target name="build-selenium-new-action">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="actions" />
+			<param name="selenium.types" value="action" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-functions">
+	<target name="build-selenium-new-function">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="functions" />
+			<param name="selenium.types" value="function" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-macros">
+	<target name="build-selenium-new-macro">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="macros" />
+			<param name="selenium.types" value="macro" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-paths">
+	<target name="build-selenium-new-path">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="paths" />
+			<param name="selenium.types" value="path" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-test-cases">
+	<target name="build-selenium-new-test-case">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="testcases" />
+			<param name="selenium.types" value="testcase" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-test-plans">
+	<target name="build-selenium-new-test-plan">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="testplans" />
+			<param name="selenium.types" value="testplan" />
 		</antcall>
 	</target>
 
-	<target name="build-selenium-new-test-suites">
+	<target name="build-selenium-new-test-suite">
 		<antcall target="build-selenium-new">
-			<param name="selenium.types" value="testsuites" />
+			<param name="selenium.types" value="testsuite" />
 		</antcall>
 	</target>
 

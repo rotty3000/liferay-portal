@@ -28,12 +28,7 @@ public class UpgradeScopes extends BaseUpgradePortletPreferences {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-
-		// UUID
-
 		VerifyUUID.verifyModel("Layout", "plid");
-
-		// PortletPreferences
 
 		updatePortletPreferences();
 	}

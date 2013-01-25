@@ -164,35 +164,46 @@ public class ResourceActionLocalServiceImpl
 			List<String> guestDefaultActions =
 				ResourceActionsUtil.getModelResourceGuestDefaultActions(name);
 
+			long guestBitwiseValue = 0;
+			long ownerBitwiseValue = 0;
+			long siteMemberBitwiseValue = 0;
+
 			for (ResourceAction resourceAction : newResourceActions) {
 				String actionId = resourceAction.getActionId();
 
-				if (groupDefaultActions.contains(actionId)) {
-					resourcePermissionLocalService.addResourcePermissions(
-						name, RoleConstants.SITE_MEMBER,
-						ResourceConstants.SCOPE_INDIVIDUAL,
-						resourceAction.getBitwiseValue());
-				}
-
 				if (guestDefaultActions.contains(actionId)) {
-					resourcePermissionLocalService.addResourcePermissions(
-						name, RoleConstants.GUEST,
-						ResourceConstants.SCOPE_INDIVIDUAL,
-						resourceAction.getBitwiseValue());
+					guestBitwiseValue |= resourceAction.getBitwiseValue();
 				}
 
+				ownerBitwiseValue |= resourceAction.getBitwiseValue();
+
+				if (groupDefaultActions.contains(actionId)) {
+					siteMemberBitwiseValue |= resourceAction.getBitwiseValue();
+				}
+			}
+
+			if (guestBitwiseValue > 0) {
+				resourcePermissionLocalService.addResourcePermissions(
+					name, RoleConstants.GUEST,
+					ResourceConstants.SCOPE_INDIVIDUAL, guestBitwiseValue);
+			}
+
+			if (ownerBitwiseValue > 0) {
 				resourcePermissionLocalService.addResourcePermissions(
 					name, RoleConstants.OWNER,
-					ResourceConstants.SCOPE_INDIVIDUAL,
-					resourceAction.getBitwiseValue());
+					ResourceConstants.SCOPE_INDIVIDUAL, ownerBitwiseValue);
+			}
+
+			if (siteMemberBitwiseValue > 0) {
+				resourcePermissionLocalService.addResourcePermissions(
+					name, RoleConstants.SITE_MEMBER,
+					ResourceConstants.SCOPE_INDIVIDUAL, siteMemberBitwiseValue);
 			}
 		}
 	}
 
 	protected String encodeKey(String name, String actionId) {
-		String key = name.concat(StringPool.POUND).concat(actionId);
-
-		return key.toLowerCase();
+		return name.concat(StringPool.POUND).concat(actionId);
 	}
 
 	private static Map<String, ResourceAction> _resourceActions =
