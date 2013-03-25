@@ -39,6 +39,7 @@ import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.ServiceComponent;
 import com.liferay.portal.service.base.ServiceComponentLocalServiceBaseImpl;
 import com.liferay.portal.tools.servicebuilder.Entity;
+import com.liferay.portal.util.TableRegistryUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,6 +67,9 @@ public class ServiceComponentLocalServiceImpl
 		catch (Exception e) {
 			throw new SystemException(e);
 		}
+
+		TableRegistryUtil.unregisterPluginTables(
+			servletContext.getServletContextName());
 	}
 
 	public ServiceComponent initServiceComponent(
@@ -129,6 +133,10 @@ public class ServiceComponentLocalServiceImpl
 							" which is newer than " + buildNumber);
 			}
 			else {
+				TableRegistryUtil.registerPluginTables(
+					servletContext.getServletContextName(),
+					serviceComponent.getTablesSQL());
+
 				return serviceComponent;
 			}
 		}
@@ -165,6 +173,9 @@ public class ServiceComponentLocalServiceImpl
 			serviceComponent.setData(dataXML);
 
 			serviceComponentPersistence.update(serviceComponent);
+
+			TableRegistryUtil.registerPluginTables(
+				servletContext.getServletContextName(), tablesSQL);
 
 			serviceComponentLocalService.upgradeDB(
 				classLoader, buildNamespace, buildNumber, buildAutoUpgrade,
