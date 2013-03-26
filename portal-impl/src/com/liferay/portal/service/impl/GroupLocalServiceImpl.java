@@ -720,6 +720,12 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		membershipRequestLocalService.deleteMembershipRequests(
 			group.getGroupId());
 
+		// Portlet preferences
+
+		portletPreferencesLocalService.deletePortletPreferences(
+			group.getGroupId(), PortletKeys.PREFS_OWNER_TYPE_GROUP,
+			PortletKeys.PREFS_PLID_SHARED);
+
 		// Repositories
 
 		repositoryLocalService.deleteRepositories(group.getGroupId());
@@ -814,12 +820,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 				group.getCompanyId(), Group.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL, group.getGroupId());
 		}
-
-		// Preferences
-
-		portletPreferencesLocalService.deletePortletPreferences(
-			group.getGroupId(), PortletKeys.PREFS_OWNER_TYPE_GROUP,
-			PortletKeys.PREFS_PLID_SHARED);
 
 		// Group
 
