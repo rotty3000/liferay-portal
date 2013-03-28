@@ -124,8 +124,8 @@ public class PortletContainerImpl implements PortletContainer {
 
 			return _doProcessAction(request, response, portlet);
 		}
-		catch (PrincipalException e){
-			if(_log.isDebugEnabled()){
+		catch (PrincipalException e) {
+			if (_log.isDebugEnabled()) {
 				_log.debug(e);
 			}
 
@@ -181,21 +181,12 @@ public class PortletContainerImpl implements PortletContainer {
 
 			_doRender(request, response, portlet);
 		}
-		catch (PrincipalException e){
-			if(_log.isDebugEnabled()){
+		catch (PrincipalException e) {
+			if (_log.isDebugEnabled()) {
 				_log.debug(e);
 			}
 
-			try {
-				RequestDispatcher requestDispatcher =
-					request.getRequestDispatcher(
-						"/html/portal/portlet_access_denied.jsp");
-
-				requestDispatcher.include(request, response);
-
-			} catch (Exception ex){
-				throw new PortletContainerException(ex);
-			}
+			renderPortletError(request, response, portlet);
 		}
 		catch (Exception e) {
 			throw new PortletContainerException(e);
@@ -215,8 +206,8 @@ public class PortletContainerImpl implements PortletContainer {
 
 			_doServeResource(request, response, portlet);
 		}
-		catch (PrincipalException e){
-			if(_log.isDebugEnabled()){
+		catch (PrincipalException e) {
+			if (_log.isDebugEnabled()) {
 				_log.debug(e);
 			}
 
@@ -257,16 +248,15 @@ public class PortletContainerImpl implements PortletContainer {
 	protected void check(HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
-		if(portlet == null){
+		if (portlet == null) {
 			return;
 		}
 
-		if(!PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
-			throw new PrincipalException(
-				"Unable to check portlet that doesn't belong to the page");
-		}
+		boolean isPortletAvailable = isPortletAvailable(portlet);
 
-		if(portlet.isActive() && !portlet.isUndeployedPortlet()){
+		if (isPortletAvailable &&
+			PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
+
 			PortalUtil.addPortletDefaultResource(request, portlet);
 
 			PermissionChecker permissionChecker =
@@ -282,10 +272,9 @@ public class PortletContainerImpl implements PortletContainer {
 				ParamUtil.getString(request, "p_p_mode"));
 
 			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, layout, portlet,
-				portletMode);
+				permissionChecker, scopeGroupId, layout, portlet, portletMode);
 
-			if(access){
+			if (access) {
 				return;
 			}
 		}
@@ -368,6 +357,14 @@ public class PortletContainerImpl implements PortletContainer {
 		return scopeGroupId;
 	}
 
+	protected boolean isPortletAvailable(Portlet portlet) {
+		boolean active = portlet.isActive();
+		boolean ready = portlet.isReady();
+		boolean deployed = !portlet.isUndeployedPortlet();
+
+		return active && ready && deployed;
+	}
+
 	protected void processPublicRenderParameters(
 		HttpServletRequest request, Layout layout, Portlet portlet) {
 
@@ -418,6 +415,40 @@ public class PortletContainerImpl implements PortletContainer {
 			else {
 				publicRenderParameters.remove(publicRenderParameterName);
 			}
+		}
+	}
+
+	protected void renderPortletError(
+			HttpServletRequest request, HttpServletResponse response,
+			Portlet portlet)
+		throws PortletContainerException {
+
+		String portletContent = null;
+
+		if (!isPortletAvailable(portlet)) {
+			if (!portlet.isActive()) {
+				if (portlet.isShowPortletInactive()) {
+					portletContent = "/html/portal/portlet_inactive.jsp";
+				}
+			}
+
+			if (!portlet.isReady()) {
+				portletContent = "/portal/portlet_not_ready.jsp";
+			}
+		}
+		else if (portlet.isShowPortletAccessDenied()) {
+			portletContent = "/html/portal/portlet_access_denied.jsp";
+		}
+
+		try {
+			if (portletContent != null) {
+				RequestDispatcher requestDispatcher =
+					request.getRequestDispatcher(portletContent);
+
+				requestDispatcher.include(request, response);
+			}
+		} catch (Exception ex) {
+			throw new PortletContainerException(ex);
 		}
 	}
 
@@ -593,8 +624,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
-			invokerPortlet.processAction(
-				actionRequestImpl, actionResponseImpl);
+			invokerPortlet.processAction(actionRequestImpl, actionResponseImpl);
 
 			actionResponseImpl.transferHeaders(response);
 
