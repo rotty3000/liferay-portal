@@ -32,12 +32,8 @@ int columnPos = GetterUtil.getInteger(request.getAttribute(WebKeys.RENDER_PORTLE
 int columnCount = GetterUtil.getInteger(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_COUNT));
 Boolean renderPortletResource = (Boolean)request.getAttribute(WebKeys.RENDER_PORTLET_RESOURCE);
 
-boolean allowAddPortletDefaultResource = PortalUtil.isAllowAddPortletDefaultResource(request, portlet);
+boolean allowAddPortletDefaultResource = true;
 boolean runtimePortlet = (renderPortletResource != null) && renderPortletResource.booleanValue();
-
-if (allowAddPortletDefaultResource && !portlet.isUndeployedPortlet()) {
-	PortalUtil.addPortletDefaultResource(request, portlet);
-}
 
 boolean stateMax = layoutTypePortlet.hasStateMaxPortletId(portletId);
 boolean stateMin = layoutTypePortlet.hasStateMinPortletId(portletId);
@@ -150,7 +146,7 @@ if (portlet.isUndeployedPortlet()) {
 	access = true;
 }
 else if (allowAddPortletDefaultResource) {
-	access = PortletPermissionUtil.hasAccessPermission(permissionChecker, themeDisplay.getScopeGroupId(), layout, portlet, portletMode);
+	access = true;
 }
 
 InvokerPortlet invokerPortlet = null;
