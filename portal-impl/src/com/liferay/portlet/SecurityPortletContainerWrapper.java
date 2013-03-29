@@ -71,7 +71,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			check(ownerLayoutRequest, portlet);
+			checkAction(ownerLayoutRequest, portlet);
 
 			return _portletContainer.processAction(request, response, portlet);
 		}
@@ -127,7 +127,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			check(request, portlet);
+			checkRender(request, portlet);
 
 			_portletContainer.render(request, response, portlet);
 		}
@@ -155,7 +155,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			check(ownerLayoutRequest, portlet);
+			checkResource(ownerLayoutRequest, portlet);
 
 			_portletContainer.serveResource(request, response, portlet);
 		}
@@ -251,6 +251,24 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 
 		throw new PrincipalException();
+	}
+
+	protected void checkAction(HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		check(request, portlet);
+	}
+
+	protected void checkRender(HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		check(request, portlet);
+	}
+
+	protected void checkResource(HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		check(request, portlet);
 	}
 
 	protected HttpServletRequest getOwnerLayoutRequestWrapper(
