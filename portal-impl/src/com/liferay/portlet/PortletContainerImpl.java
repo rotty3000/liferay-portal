@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.PortletContainer;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
@@ -52,8 +53,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -120,7 +119,7 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			check(ownerLayoutRequest, portlet);
+			PortletContainerSecurityUtil.check(ownerLayoutRequest, portlet);
 
 			return _doProcessAction(request, response, portlet);
 		}
@@ -177,7 +176,7 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			check(request, portlet);
+			PortletContainerSecurityUtil.check(request, portlet);
 
 			_doRender(request, response, portlet);
 		}
@@ -202,7 +201,7 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			check(ownerLayoutRequest, portlet);
+			PortletContainerSecurityUtil.check(ownerLayoutRequest, portlet);
 
 			_doServeResource(request, response, portlet);
 		}
@@ -243,58 +242,6 @@ public class PortletContainerImpl implements PortletContainer {
 		catch (Exception e) {
 			throw new PortletContainerException(e);
 		}
-	}
-
-	protected void check(HttpServletRequest request, Portlet portlet)
-		throws Exception {
-
-		if (portlet == null) {
-			return;
-		}
-
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long scopeGroupId = themeDisplay.getScopeGroupId();
-		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
-
-		if (layout.isTypeControlPanel()) {
-			if (portlet.isSystem()) {
-				return;
-			}
-
-			if (PortletPermissionUtil.hasControlPanelAccessPermission(
-				permissionChecker, scopeGroupId, portlet)) {
-
-				return;
-			}
-
-			if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
-				return;
-			}
-
-			throw new PrincipalException();
-		}
-
-		if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
-
-			PortalUtil.addPortletDefaultResource(request, portlet);
-
-			PortletMode portletMode = PortletModeFactory.getPortletMode(
-				ParamUtil.getString(request, "p_p_mode"));
-
-			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, layout, portlet, portletMode);
-
-			if (access) {
-				return;
-			}
-		}
-
-		throw new PrincipalException();
 	}
 
 	protected HttpServletRequest getOwnerLayoutRequestWrapper(
