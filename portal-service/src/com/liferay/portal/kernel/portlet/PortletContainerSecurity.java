@@ -24,7 +24,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface PortletContainerSecurity {
 
-	public void check(HttpServletRequest request, Portlet portlet)
+	public void checkAction(HttpServletRequest request, Portlet portlet)
+		throws PrincipalException;
+
+	public void checkRender(HttpServletRequest request, Portlet portlet)
+		throws PrincipalException;
+
+	public void checkResource(HttpServletRequest request, Portlet portlet)
 		throws PrincipalException;
 
 }

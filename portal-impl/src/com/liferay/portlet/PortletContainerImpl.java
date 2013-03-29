@@ -50,7 +50,6 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.PublicRenderParameter;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
@@ -119,7 +118,8 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			PortletContainerSecurityUtil.check(ownerLayoutRequest, portlet);
+			PortletContainerSecurityUtil.checkAction(
+				ownerLayoutRequest, portlet);
 
 			return _doProcessAction(request, response, portlet);
 		}
@@ -176,7 +176,7 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			PortletContainerSecurityUtil.check(request, portlet);
+			PortletContainerSecurityUtil.checkRender(request, portlet);
 
 			_doRender(request, response, portlet);
 		}
@@ -201,7 +201,8 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			PortletContainerSecurityUtil.check(ownerLayoutRequest, portlet);
+			PortletContainerSecurityUtil.checkResource(
+				ownerLayoutRequest, portlet);
 
 			_doServeResource(request, response, portlet);
 		}
@@ -541,12 +542,6 @@ public class PortletContainerImpl implements PortletContainer {
 
 					request = uploadServletRequest;
 				}
-			}
-
-			if (PropsValues.AUTH_TOKEN_CHECK_ENABLED &&
-				invokerPortlet.isCheckAuthToken()) {
-
-				AuthTokenUtil.check(request);
 			}
 
 			ActionRequestImpl actionRequestImpl = ActionRequestFactory.create(
