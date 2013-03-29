@@ -252,18 +252,36 @@ public class PortletContainerImpl implements PortletContainer {
 			return;
 		}
 
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long scopeGroupId = themeDisplay.getScopeGroupId();
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		if (layout.isTypeControlPanel()) {
+			if (portlet.isSystem()) {
+				return;
+			}
+
+			if (PortletPermissionUtil.hasControlPanelAccessPermission(
+				permissionChecker, scopeGroupId, portlet)) {
+
+				return;
+			}
+
+			if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
+				return;
+			}
+
+			throw new PrincipalException();
+		}
+
 		if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
 
 			PortalUtil.addPortletDefaultResource(request, portlet);
-
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
-
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-			long scopeGroupId = themeDisplay.getScopeGroupId();
-			Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
 
 			PortletMode portletMode = PortletModeFactory.getPortletMode(
 				ParamUtil.getString(request, "p_p_mode"));
