@@ -25,10 +25,23 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class PortletContainerSecurityUtil {
 
-	public static void check(HttpServletRequest request, Portlet portlet)
+	public static void checkAction(HttpServletRequest request, Portlet portlet)
 		throws PrincipalException {
 
-		getPortletContainerSecurity().check(request, portlet);
+		getPortletContainerSecurity().checkAction(request, portlet);
+	}
+
+	public static void checkRender(HttpServletRequest request, Portlet portlet)
+		throws PrincipalException {
+
+		getPortletContainerSecurity().checkRender(request, portlet);
+	}
+
+	public static void checkResource(
+			HttpServletRequest request, Portlet portlet)
+		throws PrincipalException {
+
+		getPortletContainerSecurity().checkResource(request, portlet);
 	}
 
 	public static PortletContainerSecurity getPortletContainerSecurity() {

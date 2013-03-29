@@ -19,16 +19,21 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerSecurity;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsValues;
+
+import java.util.Map;
 
 import javax.portlet.PortletMode;
 
@@ -40,11 +45,21 @@ import javax.servlet.http.HttpServletRequest;
 @DoPrivileged
 public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 
-	public void check(HttpServletRequest request, Portlet portlet)
+	public void checkAction(HttpServletRequest request, Portlet portlet)
 		throws PrincipalException {
 
 		try {
-			doCheck(request, portlet);
+			checkPageSecurity(request, portlet);
+
+			Map<String, String> initParams = portlet.getInitParams();
+
+			boolean checkAuthToken = GetterUtil.getBoolean(
+				initParams.get("check-auth-token"), true);
+
+			if (PropsValues.AUTH_TOKEN_CHECK_ENABLED && checkAuthToken) {
+				AuthTokenUtil.check(request);
+			}
+
 		} catch (PrincipalException e) {
 			throw e;
 		} catch (Exception e) {
@@ -52,7 +67,32 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		}
 	}
 
-	protected void doCheck(HttpServletRequest request, Portlet portlet)
+	public void checkRender(HttpServletRequest request, Portlet portlet)
+		throws PrincipalException {
+
+		try {
+			checkPageSecurity(request, portlet);
+		} catch (PrincipalException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new PrincipalException(e);
+		}
+	}
+
+	public void checkResource(HttpServletRequest request, Portlet portlet)
+		throws PrincipalException {
+
+		try {
+			checkPageSecurity(request, portlet);
+		} catch (PrincipalException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new PrincipalException(e);
+		}
+	}
+
+	protected void checkPageSecurity(
+			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
 		if (portlet == null) {
