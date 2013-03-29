@@ -252,10 +252,7 @@ public class PortletContainerImpl implements PortletContainer {
 			return;
 		}
 
-		boolean isPortletAvailable = isPortletAvailable(portlet);
-
-		if (isPortletAvailable &&
-			PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
+		if (PortalUtil.isAllowAddPortletDefaultResource(request, portlet)) {
 
 			PortalUtil.addPortletDefaultResource(request, portlet);
 
@@ -357,14 +354,6 @@ public class PortletContainerImpl implements PortletContainer {
 		return scopeGroupId;
 	}
 
-	protected boolean isPortletAvailable(Portlet portlet) {
-		boolean active = portlet.isActive();
-		boolean ready = portlet.isReady();
-		boolean deployed = !portlet.isUndeployedPortlet();
-
-		return active && ready && deployed;
-	}
-
 	protected void processPublicRenderParameters(
 		HttpServletRequest request, Layout layout, Portlet portlet) {
 
@@ -425,18 +414,7 @@ public class PortletContainerImpl implements PortletContainer {
 
 		String portletContent = null;
 
-		if (!isPortletAvailable(portlet)) {
-			if (!portlet.isActive()) {
-				if (portlet.isShowPortletInactive()) {
-					portletContent = "/html/portal/portlet_inactive.jsp";
-				}
-			}
-
-			if (!portlet.isReady()) {
-				portletContent = "/portal/portlet_not_ready.jsp";
-			}
-		}
-		else if (portlet.isShowPortletAccessDenied()) {
+		if (portlet.isShowPortletAccessDenied()) {
 			portletContent = "/html/portal/portlet_access_denied.jsp";
 		}
 
