@@ -104,6 +104,10 @@ public class PACLPolicyManager {
 	public static void unregister(ClassLoader classLoader) {
 		PACLPolicy paclPolicy = _paclPolicies.remove(classLoader);
 
+		if (paclPolicy != null) {
+			paclPolicy.destroy();
+		}
+
 		if ((paclPolicy == null) || !paclPolicy.isActive()) {
 			return;
 		}

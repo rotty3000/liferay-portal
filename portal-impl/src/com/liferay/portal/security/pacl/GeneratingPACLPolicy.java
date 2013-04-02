@@ -68,7 +68,7 @@ public class GeneratingPACLPolicy extends ActivePACLPolicy {
 	public boolean hasSQL(String sql) {
 		SQLChecker sqlChecker = getSqlChecker();
 
-		if (!sqlChecker.hasSQL(sql)) {
+		while (!sqlChecker.hasSQL(sql)) {
 			AuthorizationProperty authorizationProperty =
 				sqlChecker.generateAuthorizationProperty(sql);
 

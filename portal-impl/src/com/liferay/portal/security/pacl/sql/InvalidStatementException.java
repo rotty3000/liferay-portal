@@ -12,33 +12,29 @@
  * details.
  */
 
-package com.liferay.portal.security.pacl.checker;
+package com.liferay.portal.security.pacl.sql;
 
-import com.liferay.portal.security.pacl.PACLPolicy;
-
-import java.security.Permission;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * @author Brian Wing Shun Chan
- * @author Raymond Augé
+ * @author Zsolt Berentey
  */
-public interface Checker {
+public class InvalidStatementException extends PortalException {
 
-	public void afterPropertiesSet();
+	public InvalidStatementException() {
+		super();
+	}
 
-	public void destroy();
+	public InvalidStatementException(String msg) {
+		super(msg);
+	}
 
-	public AuthorizationProperty generateAuthorizationProperty(
-		Object... arguments);
+	public InvalidStatementException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
-	public ClassLoader getClassLoader();
-
-	public PACLPolicy getPACLPolicy();
-
-	public String getServletContextName();
-
-	public boolean implies(Permission permission);
-
-	public void setPACLPolicy(PACLPolicy paclPolicy);
+	public InvalidStatementException(Throwable cause) {
+		super(cause);
+	}
 
 }

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
+import com.liferay.portal.util.TableRegistryUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +29,7 @@ import java.net.URLClassLoader;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -75,6 +77,19 @@ public class PACLIntegrationJUnitTestRunner
 		HotDeployUtil.setCapturePrematureEvents(false);
 
 		PortalLifecycleUtil.flushInits();
+
+		List<String> tableNames = TableRegistryUtil.getTableNames("portal");
+
+		tableNames.add("testpacl_createfailure");
+		tableNames.add("testpacl_createsuccess");
+		tableNames.add("testpacl_dropfailure");
+		tableNames.add("testpacl_dropsuccess");
+		tableNames.add("testpacl_insertfailure");
+		tableNames.add("testpacl_insertsuccess");
+		tableNames.add("testpacl_replacefailure");
+		tableNames.add("testpacl_replacesuccess");
+		tableNames.add("testpacl_truncatefailure");
+		tableNames.add("testpacl_truncatesuccess");
 
 		_initialized = true;
 	}

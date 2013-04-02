@@ -25,6 +25,8 @@ import java.util.Set;
  */
 public interface PACLPolicy {
 
+	public void destroy();
+
 	public ClassLoader getClassLoader();
 
 	public Policy getPolicy();

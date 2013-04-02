@@ -45,6 +45,13 @@ public class ActivePACLPolicy extends BasePACLPolicy {
 		}
 	}
 
+	@Override
+	public void destroy() {
+		super.destroy();
+
+		_sqlChecker.destroy();
+	}
+
 	public JNDIChecker getJndiChecker() {
 		return _jndiChecker;
 	}

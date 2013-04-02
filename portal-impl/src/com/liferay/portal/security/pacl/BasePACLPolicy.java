@@ -74,6 +74,10 @@ public abstract class BasePACLPolicy implements PACLPolicy {
 		}
 	}
 
+	public void destroy() {
+		destroyCheckers();
+	}
+
 	public ClassLoader getClassLoader() {
 		return _classLoader;
 	}
@@ -139,6 +143,12 @@ public abstract class BasePACLPolicy implements PACLPolicy {
 			throw new IllegalStateException(
 				"The plugin's Java policy tried to declared all " +
 					"permissions");
+		}
+	}
+
+	protected void destroyCheckers() {
+		for (Checker checker : _checkers.values()) {
+			checker.destroy();
 		}
 	}
 
