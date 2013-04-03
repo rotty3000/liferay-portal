@@ -118,6 +118,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -138,7 +140,7 @@ import jodd.bean.BeanUtil;
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
  * @author Bruno Farache
- * @author Alex Chow
+ * @author Alexander Chow
  */
 public class PortletDataContextImpl implements PortletDataContext {
 
@@ -1418,6 +1420,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 		serviceContext.setCompanyId(getCompanyId());
 		serviceContext.setScopeGroupId(getScopeGroupId());
+		serviceContext.setUserId(getUserId(classedModel));
 
 		// Dates
 
@@ -1581,6 +1584,22 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 	protected String getPrimaryKeyString(String className, String primaryKey) {
 		return className.concat(StringPool.POUND).concat(primaryKey);
+	}
+
+	protected long getUserId(ClassedModel classedModel) {
+		try {
+			Class<?> clazz = classedModel.getModelClass();
+
+			Method method = clazz.getMethod("getUserUuid");
+
+			String userUuid = (String)method.invoke(classedModel);
+
+			return getUserId(userUuid);
+		}
+		catch (Exception e) {
+		}
+
+		return 0;
 	}
 
 	protected void initXStream() {
