@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermissio
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.auth.PrincipalException;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -44,11 +46,35 @@ public class PortletContainerSecurityUtil {
 		getPortletContainerSecurity().checkResource(request, portlet);
 	}
 
+	public static Set<String> getPortletAddDefaultResourceCheckWhitelist() {
+		return getPortletContainerSecurity().
+			getPortletAddDefaultResourceCheckWhitelist();
+	}
+
+	public static Set<String>
+		getPortletAddDefaultResourceCheckWhitelistActions() {
+
+		return getPortletContainerSecurity().
+			getPortletAddDefaultResourceCheckWhitelistActions();
+	}
+
 	public static PortletContainerSecurity getPortletContainerSecurity() {
 		PortalRuntimePermission.checkGetBeanProperty(
 			PortletContainerSecurityUtil.class);
 
 		return _portletContainerSecurity;
+	}
+
+	public static Set<String> resetPortletAddDefaultResourceCheckWhitelist() {
+		return getPortletContainerSecurity().
+			resetPortletAddDefaultResourceCheckWhitelist();
+	}
+
+	public static Set<String>
+		resetPortletAddDefaultResourceCheckWhitelistActions() {
+
+		return getPortletContainerSecurity().
+			resetPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
 	public void setPortletContainerSecurity(

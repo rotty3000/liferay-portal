@@ -852,10 +852,6 @@ public interface Portal {
 
 	public String getPortalWebDir();
 
-	public Set<String> getPortletAddDefaultResourceCheckWhitelist();
-
-	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions();
-
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             #getPortletBreadcrumbs(HttpServletRequest)}
@@ -1168,10 +1164,6 @@ public interface Portal {
 		PortalPortEventListener portalPortEventListener);
 
 	public void resetCDNHosts();
-
-	public Set<String> resetPortletAddDefaultResourceCheckWhitelist();
-
-	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions();
 
 	public void sendError(
 			Exception e, ActionRequest actionRequest,

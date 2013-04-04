@@ -17,6 +17,8 @@ package com.liferay.portal.kernel.portlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.security.auth.PrincipalException;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -32,5 +34,13 @@ public interface PortletContainerSecurity {
 
 	public void checkResource(HttpServletRequest request, Portlet portlet)
 		throws PrincipalException;
+
+	public Set<String> getPortletAddDefaultResourceCheckWhitelist();
+
+	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions();
+
+	public Set<String> resetPortletAddDefaultResourceCheckWhitelist();
+
+	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions();
 
 }
