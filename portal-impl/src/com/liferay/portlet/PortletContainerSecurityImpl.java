@@ -167,7 +167,11 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			return;
 		}
 
-		if (isAllowAddPortletDefaultResource(request, portlet)) {
+		if (isRenderingEmbeddedPortlet(request, portlet)) {
+			return;
+		}
+
+		if (isGrantedByPPAUTH(request, portlet)) {
 			return;
 		}
 
@@ -234,12 +238,6 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 
 		if (layout.isTypePanel() &&
 			isPanelSelectedPortlet(themeDisplay, portletId)) {
-
-			return true;
-		}
-
-		if (layout.isTypeControlPanel() &&
-			PortalUtil.isControlPanelPortlet(portletId, themeDisplay)) {
 
 			return true;
 		}
