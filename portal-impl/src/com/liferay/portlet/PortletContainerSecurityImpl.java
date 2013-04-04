@@ -167,7 +167,7 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			return;
 		}
 
-		if (isRenderingEmbeddedPortlet(request, portlet)) {
+		if (isRenderingEmbeddedRuntimePortlet(request, portlet)) {
 			return;
 		}
 
@@ -193,73 +193,30 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			return;
 		}
 
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
-
-		long scopeGroupId = themeDisplay.getScopeGroupId();
-
-		if (isAllowAddPortletDefaultResource(request, portlet)) {
-
-			PortalUtil.addPortletDefaultResource(request, portlet);
-
-			PortletMode portletMode = PortletModeFactory.getPortletMode(
-				ParamUtil.getString(request, "p_p_mode"));
-
-			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, layout, portlet, portletMode);
-
-			if (access) {
-				return;
-			}
-		}
-
-		throw new PrincipalException();
-	}
-
-	protected boolean isAllowAddPortletDefaultResource(
-			HttpServletRequest request, Portlet portlet)
-		throws PortalException, SystemException {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		Layout layout = themeDisplay.getLayout();
-		LayoutTypePortlet layoutTypePortlet =
-			themeDisplay.getLayoutTypePortlet();
 
 		String portletId = portlet.getPortletId();
-
-		if (isRenderingEmbeddedPortlet(request, portlet)) {
-			return true;
-		}
-
-		if (layout.isTypePanel() &&
-			isPanelSelectedPortlet(themeDisplay, portletId)) {
-
-			return true;
-		}
-
-		if ((layoutTypePortlet != null) &&
-			layoutTypePortlet.hasPortletId(portletId)) {
-
-			return true;
-		}
 
 		if (themeDisplay.isSignedIn() &&
 			portletId.equals(PortletKeys.LAYOUTS_ADMIN) &&
 			isLayoutConfigurationAllowed(request, portlet)) {
 
-			return true;
+			return;
 		}
 
-		if (isGrantedByPPAUTH(request, portlet)) {
-			return true;
+		if (isPortletOnPage(request, portlet) ||
+			isRenderingEmbeddedRuntimePortlet(request, portlet) ||
+			isGrantedByPPAUTH(request, portlet)) {
+
+			PortalUtil.addPortletDefaultResource(request, portlet);
+
+			if (hasAccessPermission(request, portlet)) {
+				return;
+			}
 		}
 
-		return false;
+		throw new PrincipalException();
 	}
 
 	protected boolean isGrantedByPPAUTH(
@@ -418,7 +375,35 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		return false;
 	}
 
-	protected boolean isRenderingEmbeddedPortlet(
+	protected boolean isPortletOnPage(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		Layout layout = themeDisplay.getLayout();
+		LayoutTypePortlet layoutTypePortlet =
+			themeDisplay.getLayoutTypePortlet();
+
+		String portletId = portlet.getPortletId();
+
+		if (layout.isTypePanel() &&
+			isPanelSelectedPortlet(themeDisplay, portletId)) {
+
+			return true;
+		}
+
+		if ((layoutTypePortlet != null) &&
+			layoutTypePortlet.hasPortletId(portletId)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	protected boolean isRenderingEmbeddedRuntimePortlet(
 		HttpServletRequest request, Portlet portlet) {
 
 		Boolean renderPortletResource = (Boolean)request.getAttribute(
@@ -433,6 +418,27 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		}
 
 		return false;
+	}
+
+	private boolean hasAccessPermission(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		PortletMode portletMode = PortletModeFactory.getPortletMode(
+			ParamUtil.getString(request, "p_p_mode"));
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+		long scopeGroupId = themeDisplay.getScopeGroupId();
+		boolean access = PortletPermissionUtil.hasAccessPermission(
+			permissionChecker, scopeGroupId, layout, portlet, portletMode);
+
+		return access;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
