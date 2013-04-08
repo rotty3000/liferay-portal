@@ -193,11 +193,18 @@ public class JSONWebServiceDetectorBeanPostProcessor
 
 		Class<?> utilClass = loadUtilClass(serviceBeanClass);
 
-		try {
-			method = utilClass.getMethod(
-				method.getName(), method.getParameterTypes());
+		for (Method curMethod : utilClass.getMethods()) {
+			if (method.getName().equals(curMethod.getName()) &&
+				method.getParameterTypes().equals(
+					curMethod.getParameterTypes())) {
+
+				method = curMethod;
+
+				break;
+			}
 		}
-		catch (NoSuchMethodException nsme) {
+
+		if (method == null) {
 			return;
 		}
 
