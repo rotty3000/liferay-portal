@@ -32,6 +32,7 @@ import com.liferay.portal.util.PropsValues;
 
 import java.lang.reflect.Method;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -193,20 +194,24 @@ public class JSONWebServiceDetectorBeanPostProcessor
 
 		Class<?> utilClass = loadUtilClass(serviceBeanClass);
 
+		Method matchedMethod = null;
+
 		for (Method curMethod : utilClass.getMethods()) {
 			if (method.getName().equals(curMethod.getName()) &&
-				method.getParameterTypes().equals(
+				Arrays.equals(method.getParameterTypes(),
 					curMethod.getParameterTypes())) {
 
-				method = curMethod;
+				matchedMethod = curMethod;
 
 				break;
 			}
 		}
 
-		if (method == null) {
+		if (matchedMethod == null) {
 			return;
 		}
+
+		method = matchedMethod;
 
 		String path = _jsonWebServiceMappingResolver.resolvePath(
 			serviceBeanClass, method);
