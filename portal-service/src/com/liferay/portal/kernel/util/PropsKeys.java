@@ -1841,6 +1841,8 @@ public interface PropsKeys {
 
 	public static final String PERMISSIONS_PROPAGATION_ENABLED = "permissions.propagation.enabled";
 
+	public static final String PERMISSIONS_ROLE_HAS_VIEW_PERMISSION_ON_SELF_BY_DEFAULT = "permissions.role.has.view.permission.on.self.by.default";
+
 	public static final String PERMISSIONS_ROLE_RESOURCE_PERMISSION_QUERY_THRESHOLD = "permissions.role.resource.permission.query.threshold";
 
 	public static final String PERMISSIONS_THREAD_LOCAL_CACHE_MAX_SIZE = "permissions.thread.local.cache.max.size";

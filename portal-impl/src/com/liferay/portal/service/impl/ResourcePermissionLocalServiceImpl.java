@@ -255,6 +255,64 @@ public class ResourcePermissionLocalServiceImpl
 	}
 
 	/**
+	 * Updates the role's permissions at the scope, adding the actions that can
+	 * be performed on resources of the type. Existing actions are preserved.
+	 *
+	 * <p>
+	 * Depending on the scope, the value of <code>primKey</code> will have
+	 * different meanings. For more information, see {@link
+	 * com.liferay.portal.model.impl.ResourcePermissionImpl}.
+	 * </p>
+	 *
+	 * @param  companyId the primary key of the company
+	 * @param  name the resource's name, which can be either a class name or a
+	 *         portlet ID
+	 * @param  scope the scope
+	 * @param  primKey the primary key
+	 * @param  roleIdsToActionIds a map of role IDs to action IDs of the actions
+	 * @throws PortalException if a role with the primary key or a resource
+	 *         action with the name and action ID could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void addResourcePermissions(
+			long companyId, String name, int scope,
+			String primKey, Map<Long, String[]> roleIdsToActionIds)
+			throws PortalException, SystemException {
+
+		updateResourcePermission(companyId, name, scope, primKey, 0,
+				roleIdsToActionIds, ResourcePermissionConstants.OPERATOR_ADD);
+	}
+	
+	/**
+	 * Updates the role's permissions at the scope, adding the actions that can
+	 * be performed on resources of the type. Existing actions are preserved.
+	 *
+	 * <p>
+	 * Depending on the scope, the value of <code>primKey</code> will have
+	 * different meanings. For more information, see {@link
+	 * com.liferay.portal.model.impl.ResourcePermissionImpl}.
+	 * </p>
+	 *
+	 * @param  companyId the primary key of the company
+	 * @param  name the resource's name, which can be either a class name or a
+	 *         portlet ID
+	 * @param  scope the scope
+	 * @param  primKey the primary key
+	 * @param  roleId the primary key of the role
+	 * @param  actionIds the action IDs of the actions
+	 * @throws PortalException if a role with the primary key or a resource
+	 *         action with the name and action ID could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void addResourcePermissions(
+			long companyId, String name, int scope, String primKey, long roleId,
+			String[] actionIds) throws PortalException, SystemException {
+
+		updateResourcePermission(companyId, name, scope, primKey, roleId, 0,
+				 actionIds, ResourcePermissionConstants.OPERATOR_ADD);
+	}
+
+	/**
 	 * Deletes all resource permissions at the scope to resources of the type.
 	 * This method should not be confused with any of the
 	 * <code>removeResourcePermission</code> methods, as its purpose is very

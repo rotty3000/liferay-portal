@@ -87,6 +87,16 @@ public class ResourceBlockLocalServiceImpl
 			ResourceBlockConstants.OPERATOR_ADD);
 	}
 
+	public void addCompanyScopePermissions(
+			long companyId, String name, long roleId, List<String> actionIds)
+		throws PortalException, SystemException {
+
+		updateCompanyScopePermissions(
+			companyId, name, roleId, getActionIds(name, actionIds),
+			ResourceBlockConstants.OPERATOR_ADD);
+	}
+	
+	
 	public void addGroupScopePermission(
 			long companyId, long groupId, String name, long roleId,
 			String actionId)

@@ -227,16 +227,6 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 			roles.remove(siteOwnerRole);
 		}
 
-		long modelResourceRoleId = 0;
-
-		if (modelResource.equals(Role.class.getName())) {
-			modelResourceRoleId = GetterUtil.getLong(resourcePrimKey);
-
-			Role role = RoleLocalServiceUtil.getRole(modelResourceRoleId);
-
-			roles.remove(role);
-		}
-
 		List<Team> teams = null;
 
 		if (group.isOrganization() || group.isRegularSite()) {
@@ -249,11 +239,6 @@ definePermissionsURL.setParameter(Constants.CMD, Constants.VIEW);
 		if (teams != null) {
 			for (Team team : teams) {
 				Role role = RoleLocalServiceUtil.getTeamRole(team.getCompanyId(), team.getTeamId());
-
-				if (role.getRoleId() == modelResourceRoleId) {
-					continue;
-				}
-
 				roles.add(role);
 			}
 		}

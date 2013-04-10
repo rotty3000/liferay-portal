@@ -233,7 +233,18 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				indexer.reindex(userId);
 			}
 		}
+		
+		// Default VIEW permissions on self
 
+		if (PropsValues.PERMISSIONS_ROLE_HAS_VIEW_PERMISSION_ON_SELF_BY_DEFAULT) {
+			resourcePermissionLocalService.addResourcePermissions(	
+				role.getCompanyId(), Role.class.getName(), 
+				ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(role.getRoleId()),
+				role.getRoleId(), new String[] {ActionKeys.VIEW}
+				);	
+		}
+		
 		return role;
 	}
 
@@ -1358,7 +1369,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				continue;
 			}
 
-			setRolePermissions(
+			addRolePermissions(
 				role, portletId,
 				new String[] {
 					ActionKeys.ACCESS_IN_CONTROL_PANEL
@@ -1366,17 +1377,17 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 		}
 	}
 
-	protected void setRolePermissions(
+	protected void addRolePermissions(
 			Role role, String name, String[] actionIds)
 		throws PortalException, SystemException {
 
 		if (resourceBlockLocalService.isSupported(name)) {
-			resourceBlockLocalService.setCompanyScopePermissions(
+			resourceBlockLocalService.addCompanyScopePermissions(
 				role.getCompanyId(), name, role.getRoleId(),
 				Arrays.asList(actionIds));
 		}
 		else {
-			resourcePermissionLocalService.setResourcePermissions(
+			resourcePermissionLocalService.addResourcePermissions(
 				role.getCompanyId(), name, ResourceConstants.SCOPE_COMPANY,
 				String.valueOf(role.getCompanyId()), role.getRoleId(),
 				actionIds);

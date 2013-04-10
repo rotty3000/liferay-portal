@@ -266,6 +266,15 @@ public class ResourceBlockLocalServiceUtil {
 			.addCompanyScopePermissions(companyId, name, roleId, actionIdsLong);
 	}
 
+	public static void addCompanyScopePermissions(long companyId,
+		java.lang.String name, long roleId,
+		java.util.List<java.lang.String> actionIds)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addCompanyScopePermissions(companyId, name, roleId, actionIds);
+	}
+
 	public static void addGroupScopePermission(long companyId, long groupId,
 		java.lang.String name, long roleId, java.lang.String actionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
