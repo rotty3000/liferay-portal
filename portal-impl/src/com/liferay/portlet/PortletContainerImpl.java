@@ -176,6 +176,8 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
+			registerEmbeddedPortlet(request, portlet);
+
 			PortletContainerSecurityUtil.checkRender(request, portlet);
 
 			_doRender(request, response, portlet);
@@ -371,6 +373,25 @@ public class PortletContainerImpl implements PortletContainer {
 				publicRenderParameters.remove(publicRenderParameterName);
 			}
 		}
+	}
+
+	protected void registerEmbeddedPortlet(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Boolean renderPortletResource = (Boolean)request.getAttribute(
+			WebKeys.RENDER_PORTLET_RESOURCE);
+
+		if ((renderPortletResource == null) || !renderPortletResource) {
+			return;
+		}
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		layoutTypePortlet.addEmbeddedPortletId(portlet.getPortletId());
 	}
 
 	protected void renderPortletError(

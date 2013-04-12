@@ -406,15 +406,12 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 	protected boolean isRenderingEmbeddedRuntimePortlet(
 		HttpServletRequest request, Portlet portlet) {
 
-		Boolean renderPortletResource = (Boolean)request.getAttribute(
-			WebKeys.RENDER_PORTLET_RESOURCE);
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
 
-		if (renderPortletResource != null) {
-			boolean runtimePortlet = renderPortletResource.booleanValue();
-
-			if (runtimePortlet) {
-				return true;
-			}
+		if (layoutTypePortlet.hasEmbeddedPortletId(portlet.getPortletId())) {
+			return true;
 		}
 
 		return false;
