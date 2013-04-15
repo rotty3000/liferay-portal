@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.servlet.taglib.ui.BreadcrumbEntry;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -971,14 +972,25 @@ public class PortalUtil {
 		return getPortal().getPortalWebDir();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * PortletContainerSecurityUtil#getPortletAddDefaultResourceCheckWhitelist()
+	 * }
+	 */
 	public static Set<String> getPortletAddDefaultResourceCheckWhitelist() {
-		return getPortal().getPortletAddDefaultResourceCheckWhitelist();
+		return PortletContainerSecurityUtil.
+			getPortletAddDefaultResourceCheckWhitelist();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * PortletContainerSecurityUtil#getPortletAddDefaultResourceCheckWhitelistActions()}
+	 */
 	public static Set<String>
 		getPortletAddDefaultResourceCheckWhitelistActions() {
 
-		return getPortal().getPortletAddDefaultResourceCheckWhitelistActions();
+		return PortletContainerSecurityUtil.
+			getPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
 	/**
@@ -1600,14 +1612,25 @@ public class PortalUtil {
 		getPortal().resetCDNHosts();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * PortletContainerSecurityUtil#resetPortletAddDefaultResourceCheckWhitelist()
+	 * }
+	 */
 	public static Set<String> resetPortletAddDefaultResourceCheckWhitelist() {
-		return getPortal().resetPortletAddDefaultResourceCheckWhitelist();
+		return PortletContainerSecurityUtil.
+			resetPortletAddDefaultResourceCheckWhitelist();
 	}
 
+	/**
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * PortletContainerSecurityUtil#resetPortletAddDefaultResourceCheckWhitelistActions()
+	 * }
+	 */
 	public static Set<String>
 		resetPortletAddDefaultResourceCheckWhitelistActions() {
 
-		return getPortal().
+		return PortletContainerSecurityUtil.
 			resetPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
