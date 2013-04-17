@@ -269,6 +269,15 @@
 	<bean id="com.liferay.portal.kernel.portlet.PortletContainerUtil" class="com.liferay.portal.kernel.portlet.PortletContainerUtil">
 		<property name="portletContainer" ref="com.liferay.portlet.RestrictPortletContainerWrapper" />
 	</bean>
+	<bean id="com.liferay.portal.kernel.portlet.security.EmbeddedPortletRenderingContextUtil" class="com.liferay.portal.kernel.portlet.security.EmbeddedPortletRenderingContextUtil">
+		<property name="handlers">
+			<list>
+				<bean class="com.liferay.portlet.security.EmbeddedPortletRenderingContextLayoutTemplateHandler" />
+				<bean class="com.liferay.portlet.security.EmbeddedPortletRenderingContextPortletHandler" />
+				<bean class="com.liferay.portlet.security.EmbeddedPortletRenderingContextThemeHandler" />
+			</list>
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.sanitizer.SanitizerUtil" class="com.liferay.portal.kernel.sanitizer.SanitizerUtil">
 		<property name="sanitizer">
 			<bean class="com.liferay.portal.sanitizer.SanitizerImpl" />
