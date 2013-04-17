@@ -139,6 +139,7 @@ import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
@@ -5979,6 +5980,17 @@ public class PortalImpl implements Portal {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean isSystemRole(long roleId) throws SystemException {
+		Role role = RoleLocalServiceUtil.fetchRole(roleId);
+
+		if (role == null) {
+			return false;
+		}
+
+		return isSystemRole(role.getName());
 	}
 
 	@Override

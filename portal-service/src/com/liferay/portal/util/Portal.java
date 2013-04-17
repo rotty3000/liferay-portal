@@ -1217,6 +1217,8 @@ public interface Portal {
 
 	public boolean isSystemGroup(String groupName);
 
+	public boolean isSystemRole(long roleId) throws SystemException;
+
 	public boolean isSystemRole(String roleName);
 
 	public boolean isUpdateAvailable() throws SystemException;

@@ -156,7 +156,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 				auditedModel.getUserId(), auditedModel.getModelClassName(),
 				String.valueOf(auditedModel.getPrimaryKeyObj()), false,
 				serviceContext.isAddGroupPermissions(),
-				serviceContext.isAddGuestPermissions(),
+				serviceContext.isAddGuestPermissions(), false,
 				getPermissionedModel(auditedModel));
 		}
 		else {
@@ -264,7 +264,20 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		addResources(
 			companyId, groupId, userId, name, String.valueOf(primKey),
-			portletActions, addGroupPermissions, addGuestPermissions, null);
+			portletActions, addGroupPermissions, addGuestPermissions, false,
+			null);
+	}
+
+	public void addResources(
+			long companyId, long groupId, long userId, String name,
+			long primKey, boolean portletActions, boolean addGroupPermissions,
+			boolean addGuestPermissions, boolean skipPermissionCheck)
+		throws PortalException, SystemException {
+
+		addResources(
+			companyId, groupId, userId, name, String.valueOf(primKey),
+			portletActions, addGroupPermissions, addGuestPermissions,
+			skipPermissionCheck, null);
 	}
 
 	/**
@@ -297,7 +310,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		addResources(
 			companyId, groupId, userId, name, primKey, portletActions,
-			addGroupPermissions, addGuestPermissions, null);
+			addGroupPermissions, addGuestPermissions, false, null);
 	}
 
 	/**
@@ -847,7 +860,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 	protected void addResources(
 			long companyId, long groupId, long userId, String name,
 			String primKey, boolean portletActions, boolean addGroupPermissions,
-			boolean addGuestPermissions, PermissionedModel permissionedModel)
+			boolean addGuestPermissions, boolean skipPermissionCheck,
+			PermissionedModel permissionedModel)
 		throws PortalException, SystemException {
 
 		if (!PermissionThreadLocal.isAddResource()) {
@@ -871,8 +885,12 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		PermissionThreadLocal.setIndexEnabled(false);
 
+		boolean firstSkipPermissionCheckChange =
+			ResourcePermissionsThreadLocal.setSkipPermissionCheck(
+				skipPermissionCheck);
+
 		List<ResourcePermission> resourcePermissions =
-			resourcePermissionPersistence.findByC_N_S_P(
+			resourcePermissionLocalService.getResourcePermissions(
 				companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, primKey);
 
 		ResourcePermissionsThreadLocal.setResourcePermissions(
@@ -905,6 +923,10 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		}
 		finally {
 			ResourcePermissionsThreadLocal.setResourcePermissions(null);
+
+			if (firstSkipPermissionCheckChange) {
+				ResourcePermissionsThreadLocal.setSkipPermissionCheck(null);
+			}
 
 			PermissionThreadLocal.setIndexEnabled(flushEnabled);
 

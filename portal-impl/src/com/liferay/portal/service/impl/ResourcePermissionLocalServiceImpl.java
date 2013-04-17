@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -455,6 +457,13 @@ public class ResourcePermissionLocalServiceImpl
 	public List<ResourcePermission> getResourcePermissions(
 			long companyId, String name, int scope, String primKey)
 		throws SystemException {
+
+		Boolean skipPermissionCheck =
+			ResourcePermissionsThreadLocal.getSkipPermissionCheck();
+
+		if ((skipPermissionCheck != null) && skipPermissionCheck) {
+			return null;
+		}
 
 		return resourcePermissionPersistence.findByC_N_S_P(
 			companyId, name, scope, primKey);
@@ -1109,9 +1118,29 @@ public class ResourcePermissionLocalServiceImpl
 			Map<Long, String[]> roleIdsToActionIds)
 		throws PortalException, SystemException {
 
-		updateResourcePermission(
-			companyId, name, scope, primKey, 0, roleIdsToActionIds,
-			ResourcePermissionConstants.OPERATOR_SET);
+		setResourcePermissions(
+			companyId, name, scope, primKey, roleIdsToActionIds, false);
+	}
+
+	public void setResourcePermissions(
+			long companyId, String name, int scope, String primKey,
+			Map<Long, String[]> roleIdsToActionIds, boolean skipPermissionCheck)
+		throws PortalException, SystemException {
+
+		boolean firstSkipPermissionCheckChange =
+			ResourcePermissionsThreadLocal.setSkipPermissionCheck(
+				skipPermissionCheck);
+
+		try {
+			updateResourcePermission(
+				companyId, name, scope, primKey, 0, roleIdsToActionIds,
+				ResourcePermissionConstants.OPERATOR_SET);
+		}
+		finally {
+			if (firstSkipPermissionCheckChange) {
+				ResourcePermissionsThreadLocal.setSkipPermissionCheck(null);
+			}
+		}
 	}
 
 	protected void doUpdateResourcePermission(
@@ -1128,8 +1157,33 @@ public class ResourcePermissionLocalServiceImpl
 			resourcePermission = resourcePermissionsMap.get(roleId);
 		}
 		else {
-			resourcePermission = resourcePermissionPersistence.fetchByC_N_S_P_R(
-				companyId, name, scope, primKey, roleId);
+			Boolean skipPermissionCheck =
+				ResourcePermissionsThreadLocal.getSkipPermissionCheck();
+
+			if (PortalUtil.isSystemRole(roleId) ||
+				(skipPermissionCheck == null) || !skipPermissionCheck) {
+
+				resourcePermission =
+					resourcePermissionPersistence.fetchByC_N_S_P_R(
+						companyId, name, scope, primKey, roleId);
+			}
+			else if (_log.isDebugEnabled()) {
+				StringBundler sb = new StringBundler(11);
+
+				sb.append("ResourcePermissionPersistence.fetchByC_N_S_P_R()");
+				sb.append(" has been skipped for: ");
+				sb.append(companyId);
+				sb.append(StringPool.DASH);
+				sb.append(name);
+				sb.append(StringPool.DASH);
+				sb.append(scope);
+				sb.append(StringPool.DASH);
+				sb.append(primKey);
+				sb.append(StringPool.DASH);
+				sb.append(roleId);
+
+				_log.debug(sb.toString());
+			}
 		}
 
 		if (resourcePermission == null) {
@@ -1384,5 +1438,8 @@ public class ResourcePermissionLocalServiceImpl
 
 	private static final String _UPDATE_ACTION_IDS =
 		ResourcePermissionLocalServiceImpl.class.getName() + ".updateActionIds";
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ResourcePermissionLocalServiceImpl.class);
 
 }
