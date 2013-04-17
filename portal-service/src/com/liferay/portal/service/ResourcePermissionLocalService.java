@@ -733,6 +733,12 @@ public interface ResourcePermissionLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public void setNewResourcePermissions(long companyId,
+		java.lang.String name, int scope, java.lang.String primKey,
+		java.util.Map<java.lang.Long, java.lang.String[]> roleIdsToActionIds)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	/**
 	* Updates the role's permissions at the scope, setting the actions that can
 	* be performed on resources of the type, also setting the owner of any

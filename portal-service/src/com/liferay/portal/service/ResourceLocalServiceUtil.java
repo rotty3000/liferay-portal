@@ -165,6 +165,17 @@ public class ResourceLocalServiceUtil {
 			groupPermissions, guestPermissions);
 	}
 
+	public static void addNewResources(long companyId, long groupId,
+		long userId, java.lang.String name, long primKey,
+		boolean portletActions, boolean addGroupPermissions,
+		boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addNewResources(companyId, groupId, userId, name, primKey,
+			portletActions, addGroupPermissions, addGuestPermissions);
+	}
+
 	/**
 	* Adds resources for the entity with the name and primary key, always
 	* creating a resource at the individual scope and only creating resources
