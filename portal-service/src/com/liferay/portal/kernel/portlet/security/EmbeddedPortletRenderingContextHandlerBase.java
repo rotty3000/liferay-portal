@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class EmbeddedPortletRenderingContextHandlerBase<T>
 	implements EmbeddedPortletRenderingContextHandler<T> {
 
-	public boolean canCreateContext(T parent) {
+	public boolean canCreateContext(Object parent) {
 		if (parent == null) {
 			return false;
 		}

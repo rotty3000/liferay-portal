@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
+import com.liferay.portal.kernel.portlet.security.EmbeddedPortletRenderingContextUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
@@ -176,11 +177,20 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			registerEmbeddedPortlet(request, portlet);
-
 			PortletContainerSecurityUtil.checkRender(request, portlet);
 
-			_doRender(request, response, portlet);
+			if (PortletContainerUtil.isRuntimePortlet(request)) {
+				registerEmbeddedPortlet(request, portlet);
+			}
+
+			try {
+				EmbeddedPortletRenderingContextUtil.pushParent(
+					request, portlet);
+
+				_doRender(request, response, portlet);
+			} finally {
+				EmbeddedPortletRenderingContextUtil.pop(request);
+			}
 		}
 		catch (PrincipalException e) {
 			if (_log.isDebugEnabled()) {
@@ -379,19 +389,12 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest request, Portlet portlet)
 		throws PortalException, SystemException {
 
-		Boolean renderPortletResource = (Boolean)request.getAttribute(
-			WebKeys.RENDER_PORTLET_RESOURCE);
-
-		if ((renderPortletResource == null) || !renderPortletResource) {
-			return;
-		}
-
 		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
 
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		layoutTypePortlet.addEmbeddedPortletId(portlet.getPortletId());
+		layoutTypePortlet.addEmbeddedPortletId(request, portlet.getPortletId());
 	}
 
 	protected void renderPortletError(

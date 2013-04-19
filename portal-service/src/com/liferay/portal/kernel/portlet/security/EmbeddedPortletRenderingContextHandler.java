@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface EmbeddedPortletRenderingContextHandler<T> {
 
-	public boolean canCreateContext(T parent);
+	public boolean canCreateContext(Object parent);
 
 	public EmbeddedPortletRenderingContext createContext(
 			HttpServletRequest request, T parent);

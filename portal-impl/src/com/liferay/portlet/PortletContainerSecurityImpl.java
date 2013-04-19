@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerSecurity;
+import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -167,7 +168,7 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			return;
 		}
 
-		if (isRenderingEmbeddedRuntimePortlet(request, portlet)) {
+		if (checkEmbeddedPortlet(request, portlet)) {
 			return;
 		}
 
@@ -176,6 +177,23 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		}
 
 		throw new PrincipalException();
+	}
+
+	protected boolean checkEmbeddedPortlet(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		if (layoutTypePortlet.checkEmbeddedPortletId(
+				request, portlet.getPortletId())) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	protected void checkPageSecurity(
@@ -205,8 +223,11 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			return;
 		}
 
-		if (isPortletOnPage(request, portlet) ||
-			isRenderingEmbeddedRuntimePortlet(request, portlet) ||
+		boolean isEmbeddedPortlet = checkEmbeddedPortlet(request, portlet);
+
+		if (isEmbeddedPortlet ||
+			PortletContainerUtil.isRuntimePortlet(request) ||
+			isPortletOnPage(request, portlet) ||
 			isGrantedByPPAUTH(request, portlet)) {
 
 			PortalUtil.addPortletDefaultResource(request, portlet);
@@ -389,7 +410,7 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		String portletId = portlet.getPortletId();
 
 		if (layout.isTypePanel() &&
-			isPanelSelectedPortlet(themeDisplay, portletId)) {
+				isPanelSelectedPortlet(themeDisplay, portletId)) {
 
 			return true;
 		}
@@ -397,20 +418,6 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		if ((layoutTypePortlet != null) &&
 			layoutTypePortlet.hasPortletId(portletId)) {
 
-			return true;
-		}
-
-		return false;
-	}
-
-	protected boolean isRenderingEmbeddedRuntimePortlet(
-		HttpServletRequest request, Portlet portlet) {
-
-		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
-		LayoutTypePortlet layoutTypePortlet =
-			(LayoutTypePortlet)layout.getLayoutType();
-
-		if (layoutTypePortlet.hasEmbeddedPortletId(portlet.getPortletId())) {
 			return true;
 		}
 

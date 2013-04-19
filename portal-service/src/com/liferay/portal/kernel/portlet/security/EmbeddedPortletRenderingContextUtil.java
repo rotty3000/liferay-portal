@@ -40,6 +40,10 @@ public class EmbeddedPortletRenderingContextUtil {
 
 		List<EmbeddedPortletRenderingContext> stack = getStack(request);
 
+		if (stack.size() == 0) {
+			return null;
+		}
+
 		for (EmbeddedPortletRenderingContextHandler handler : _HANDLERS) {
 			EmbeddedPortletRenderingContext result = handler.fetchContext(
 				stack);
@@ -70,6 +74,10 @@ public class EmbeddedPortletRenderingContextUtil {
 			HttpServletRequest request,
 			EmbeddedPortletRenderingContext embeddedPortletRenderingContext)
 		throws PortalException, SystemException {
+
+		if (embeddedPortletRenderingContext == null) {
+			return false;
+		}
 
 		for (EmbeddedPortletRenderingContextHandler handler : _HANDLERS) {
 			if (handler.isValid(request, embeddedPortletRenderingContext)) {
@@ -102,6 +110,7 @@ public class EmbeddedPortletRenderingContextUtil {
 		for (EmbeddedPortletRenderingContextHandler handler : _HANDLERS) {
 			if (handler.canCreateContext(parent)) {
 				context = handler.createContext(request, parent);
+				break;
 			}
 		}
 

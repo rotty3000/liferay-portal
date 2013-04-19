@@ -20,13 +20,16 @@ import com.liferay.portlet.PortalPreferences;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
  */
 public interface LayoutTypePortlet extends LayoutType {
 
-	public boolean addEmbeddedPortletId(String portletId)
+	public boolean addEmbeddedPortletId(
+			HttpServletRequest request, String portletId)
 		throws PortalException, SystemException;
 
 	public void addModeAboutPortletId(String portletId);
@@ -78,6 +81,10 @@ public interface LayoutTypePortlet extends LayoutType {
 			List<Portlet> portlets, List<Portlet> startPortlets,
 			List<Portlet> endPortlets)
 		throws SystemException;
+
+	public boolean checkEmbeddedPortletId(
+			HttpServletRequest request, String portletId)
+		throws PortalException, SystemException;
 
 	public List<Portlet> getAllPortlets()
 		throws PortalException, SystemException;
