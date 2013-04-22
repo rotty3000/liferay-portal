@@ -15,6 +15,7 @@
 package com.liferay.portal.module.framework;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.service.registry.ServiceRegistryUtil;
 import com.liferay.portal.util.ClassLoaderUtil;
 
 import java.io.InputStream;
@@ -75,6 +76,11 @@ public class ModuleFrameworkUtilAdapter {
 
 		try {
 			_moduleFramework.startFramework();
+
+			ServiceRegistryUtil serviceRegistryUtil = new ServiceRegistryUtil();
+
+			serviceRegistryUtil.setServiceRegistry(
+				_moduleFramework.getServiceRegistry());
 		}
 		finally {
 			ClassLoaderUtil.setContextClassLoader(classLoader);
