@@ -1,0 +1,72 @@
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.portal.service.registry;
+
+import java.util.Collection;
+import java.util.Map;
+
+/**
+ * @author Raymond Augé
+ */
+public interface ServiceRegistry {
+
+	public Filter getFilter(String filterString) throws Exception;
+
+	public <T> T getService(Class<T> clazz);
+
+	public Object getService(String className);
+
+	public <T> T getService(ServiceReference<T> serviceReference);
+
+	public <T> Collection<T> getServices(Class<T> clazz, String filter)
+		throws Exception;
+
+	public <T> ServiceRegistration<T> registerService(
+		Class<T> clazz, T service);
+
+	public <T> ServiceRegistration<T> registerService(
+		Class<T> clazz, T service, Map<String, Object> map);
+
+	public ServiceRegistration<?> registerService(
+		String className, Object service);
+
+	public ServiceRegistration<?> registerService(
+		String className, Object service, Map<String, Object> map);
+
+	public ServiceRegistration<?> registerService(
+		String[] classNames, Object service);
+
+	public ServiceRegistration<?> registerService(
+		String[] classNames, Object service, Map<String, Object> map);
+
+	public <S, T> ServiceTracker<S, T> trackServices(Class<S> clazz);
+
+	public <S, T> ServiceTracker<S, T> trackServices(
+		Class<S> clazz,
+		ServiceTrackerCustomizer<S, T> serviceTrackerCustomizer);
+
+	public <S, T> ServiceTracker<S, T> trackServices(String className);
+
+	public <S, T> ServiceTracker<S, T> trackServices(
+		String className,
+		ServiceTrackerCustomizer<S, T> serviceTrackerCustomizer);
+
+	public <S, T> ServiceTracker<S, T> trackServices(Filter filter);
+
+	public <S, T> ServiceTracker<S, T> trackServices(
+		Filter filter,
+		ServiceTrackerCustomizer<S, T> serviceTrackerCustomizer);
+
+}
