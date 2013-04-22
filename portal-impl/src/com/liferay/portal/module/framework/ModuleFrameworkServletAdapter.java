@@ -14,7 +14,16 @@
 
 package com.liferay.portal.module.framework;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.service.registry.Filter;
+import com.liferay.portal.service.registry.ServiceRegistryUtil;
+import com.liferay.portal.service.registry.ServiceTracker;
+
+import java.io.IOException;
+
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,48 +35,62 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ModuleFrameworkServletAdapter extends HttpServlet {
 
-	public HttpServlet addingService(Object serviceReference) {
-		return (HttpServlet)_moduleFrameworkAdapterHelper.execute(
-			"addingService", serviceReference);
-	}
-
 	@Override
 	public void destroy() {
-		_moduleFrameworkAdapterHelper.execute("destroy");
+		if (_serviceTracker == null) {
+			return;
+		}
+
+		_serviceTracker.close();
 	}
 
 	@Override
-	public void init(ServletConfig servletConfig) {
-		_moduleFrameworkAdapterHelper.exec(
-			"init", new Class[] {ServletConfig.class}, servletConfig);
-	}
+	public void init(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
 
-	public void modifiedService(
-		Object serviceReference, HttpServlet httpService) {
+		try {
+			Filter filter = ServiceRegistryUtil.getFilter(
+				"(&(objectClass=" + HttpServlet.class.getName() +
+					")(original.bean=*))");
 
-		_moduleFrameworkAdapterHelper.execute(
-			"modifiedService", serviceReference, httpService);
-	}
+			_serviceTracker = ServiceRegistryUtil.trackServices(filter);
 
-	public void removedService(
-		Object serviceReference, HttpServlet httpService) {
-
-		_moduleFrameworkAdapterHelper.execute(
-			"removedService", serviceReference, httpService);
+			_serviceTracker.open();
+		}
+		catch (Exception ise) {
+			_log.error(ise, ise);
+		}
 	}
 
 	@Override
 	protected void service(
-		HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response)
+		throws IOException, ServletException {
 
-		_moduleFrameworkAdapterHelper.exec(
-			"service",
-			new Class[] {HttpServletRequest.class, HttpServletResponse.class},
-			request, response);
+		if (_serviceTracker == null) {
+			response.sendError(
+				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
+				"Module framework is unavailable");
+
+			return;
+		}
+
+		HttpServlet httpServlet = _serviceTracker.getService();
+
+		if (httpServlet == null) {
+			response.sendError(
+				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
+				"Module framework HTTP service is unavailable");
+
+			return;
+		}
+
+		httpServlet.service(request, response);
 	}
 
-	private static ModuleFrameworkAdapterHelper _moduleFrameworkAdapterHelper =
-		new ModuleFrameworkAdapterHelper(
-			"com.liferay.osgi.bootstrap.ModuleFrameworkServlet");
+	private static Log _log = LogFactoryUtil.getLog(
+		ModuleFrameworkServletAdapter.class);
+
+	private ServiceTracker<HttpServlet, HttpServlet> _serviceTracker;
 
 }
