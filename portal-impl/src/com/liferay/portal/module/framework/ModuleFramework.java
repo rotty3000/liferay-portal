@@ -15,6 +15,7 @@
 package com.liferay.portal.module.framework;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.service.registry.ServiceRegistry;
 
 import java.io.InputStream;
 
@@ -37,6 +38,8 @@ public interface ModuleFramework {
 	public Map<String, List<URL>> getExtraPackageMap();
 
 	public List<URL> getExtraPackageURLs();
+
+	public ServiceRegistry getServiceRegistry();
 
 	public Object getFramework();
 

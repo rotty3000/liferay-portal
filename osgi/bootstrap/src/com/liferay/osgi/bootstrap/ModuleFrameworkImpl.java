@@ -22,6 +22,7 @@ import aQute.lib.osgi.Verifier;
 import aQute.libg.header.OSGiHeader;
 import aQute.libg.version.Version;
 
+import com.liferay.osgi.bootstrap.registry.ServiceRegistryImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -42,6 +43,7 @@ import com.liferay.portal.module.framework.ModuleFramework;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.registry.ServiceRegistry;
 import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
@@ -239,6 +241,14 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 	public Framework getFramework() {
 		return _framework;
+	}
+
+	public ServiceRegistry getServiceRegistry() {
+		if (_serviceRegistry != null) {
+			return _serviceRegistry;
+		}
+
+		return new ServiceRegistryImpl(_framework.getBundleContext());
 	}
 
 	public String getState(long bundleId) throws PortalException {
@@ -1013,6 +1023,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 	private Map<String, List<URL>> _extraPackageMap;
 	private List<URL> _extraPackageURLs;
 	private Framework _framework;
+	private ServiceRegistry _serviceRegistry;
 
 	private class ModuleFrameworkServiceLoaderCondition
 		implements ServiceLoaderCondition {
