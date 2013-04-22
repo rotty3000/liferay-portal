@@ -103,4 +103,5 @@ public class EmbeddedPortletRenderingContextLayoutTemplateHandler
 	public String[] getSupportedParentClassNames() {
 		return new String[]{SUPPORTED_CLASS_NAME};
 	}
+
 }

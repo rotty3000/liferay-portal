@@ -187,6 +187,19 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
+		String peAuth = request.getParameter("p_e_auth");
+		if (Validator.isNull(peAuth)) {
+			return false;
+		}
+
+		String embeddedPortletToken =
+			AuthTokenUtil.generateEmbeddedPortletToken(
+				request, layout.getPlid(), portlet.getPortletId());
+
+		if (!embeddedPortletToken.equals(peAuth)) {
+			return false;
+		}
+
 		if (layoutTypePortlet.checkEmbeddedPortletId(
 				request, portlet.getPortletId())) {
 

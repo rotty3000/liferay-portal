@@ -25,6 +25,9 @@ public interface AuthToken {
 
 	public void check(HttpServletRequest request) throws PortalException;
 
+	public String generateEmbeddedPortletToken(
+		HttpServletRequest request, long plid, String portletId);
+
 	public String getToken(HttpServletRequest request);
 
 	public String getToken(

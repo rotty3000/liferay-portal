@@ -555,7 +555,7 @@ public class LayoutTypePortletImpl
 	public boolean hasDefaultScopePortletId(long groupId, String portletId)
 		throws PortalException, SystemException {
 
-		if (hasPortletId(portletId)) {
+		if (hasPortletId(portletId, true)) {
 			long scopeGroupId = PortalUtil.getScopeGroupId(
 				getLayout(), portletId);
 
@@ -630,7 +630,7 @@ public class LayoutTypePortletImpl
 	public boolean hasPortletId(String portletId)
 		throws PortalException, SystemException {
 
-		return hasPortletId(portletId, true);
+		return hasPortletId(portletId, false);
 	}
 
 	public boolean hasStateMax() {
