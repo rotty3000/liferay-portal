@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.service.registry.Filter;
 import com.liferay.portal.service.registry.ServiceRegistryUtil;
 import com.liferay.portal.service.registry.ServiceTracker;
+import com.liferay.portal.util.PortalUtil;
 
 import java.io.IOException;
 
@@ -68,9 +69,11 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 		throws IOException, ServletException {
 
 		if (_serviceTracker == null) {
-			response.sendError(
+			PortalUtil.sendError(
 				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
-				"Module framework is unavailable");
+				new ServletException(
+					"Module framework is unavailable"),
+				request, response);
 
 			return;
 		}
@@ -78,9 +81,11 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 		HttpServlet httpServlet = _serviceTracker.getService();
 
 		if (httpServlet == null) {
-			response.sendError(
+			PortalUtil.sendError(
 				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
-				"Module framework HTTP service is unavailable");
+				new ServletException(
+					"Module framework HTTP service is unavailable"),
+				request, response);
 
 			return;
 		}
