@@ -1,0 +1,64 @@
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.osgi.bootstrap.registry;
+
+import com.liferay.portal.service.registry.Filter;
+import com.liferay.portal.service.registry.ServiceReference;
+
+import java.util.Map;
+
+/**
+ * @author Raymond Augé
+ */
+public class FilterWrapper implements Filter {
+
+	public FilterWrapper(org.osgi.framework.Filter filter) {
+		_filter = filter;
+	}
+
+	public org.osgi.framework.Filter getFilter() {
+		return _filter;
+	}
+
+	@Override
+	public boolean match(Map<String, Object> map) {
+		return _filter.match(new MapWrapper(map));
+	}
+
+	@Override
+	public boolean match(ServiceReference<?> serviceReference) {
+		if (!(serviceReference instanceof ServiceReferenceWrapper)) {
+			throw new IllegalArgumentException();
+		}
+
+		ServiceReferenceWrapper<?> serviceReferenceWrapper =
+			(ServiceReferenceWrapper<?>)serviceReference;
+
+		return _filter.match(serviceReferenceWrapper.getServiceReference());
+	}
+
+	@Override
+	public boolean matchCase(Map<String, Object> map) {
+		return _filter.matchCase(new MapWrapper(map));
+	}
+
+	@Override
+	public boolean matches(Map<String, Object> map) {
+		return _filter.matches(map);
+	}
+
+	private org.osgi.framework.Filter _filter;
+
+}
