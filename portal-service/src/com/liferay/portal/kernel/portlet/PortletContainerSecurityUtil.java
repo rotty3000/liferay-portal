@@ -16,7 +16,6 @@ package com.liferay.portal.kernel.portlet;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.model.Portlet;
-import com.liferay.portal.security.auth.PrincipalException;
 
 import java.util.Set;
 
@@ -27,23 +26,25 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class PortletContainerSecurityUtil {
 
-	public static void checkAction(HttpServletRequest request, Portlet portlet)
-		throws PrincipalException {
-
-		getPortletContainerSecurity().checkAction(request, portlet);
-	}
-
-	public static void checkRender(HttpServletRequest request, Portlet portlet)
-		throws PrincipalException {
-
-		getPortletContainerSecurity().checkRender(request, portlet);
-	}
-
-	public static void checkResource(
+	public static PortletContainerSecurityCheckResult checkAction(
 			HttpServletRequest request, Portlet portlet)
-		throws PrincipalException {
+		throws Exception {
 
-		getPortletContainerSecurity().checkResource(request, portlet);
+		return getPortletContainerSecurity().checkAction(request, portlet);
+	}
+
+	public static PortletContainerSecurityCheckResult checkRender(
+			HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		return getPortletContainerSecurity().checkRender(request, portlet);
+	}
+
+	public static PortletContainerSecurityCheckResult checkResource(
+			HttpServletRequest request, Portlet portlet)
+		throws Exception {
+
+		return getPortletContainerSecurity().checkResource(request, portlet);
 	}
 
 	public static Set<String> getPortletAddDefaultResourceCheckWhitelist() {
