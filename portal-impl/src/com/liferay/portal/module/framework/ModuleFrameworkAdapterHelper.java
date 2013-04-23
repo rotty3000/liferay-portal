@@ -63,7 +63,7 @@ public class ModuleFrameworkAdapterHelper {
 			URL[] urls = new URL[files.length];
 
 			for (int i = 0; i < urls.length; i++) {
-				urls[i] = new URL("file:" + files[i].getAbsolutePath());
+				urls[i] = new URL("file", null, files[i].getAbsolutePath());
 			}
 
 			_classLoader = new ModuleFrameworkClassLoader(
