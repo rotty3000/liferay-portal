@@ -14,9 +14,20 @@
 
 package com.liferay.taglib.portletext;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.PortletDisplay;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.taglib.ui.IconTag;
+
+import javax.portlet.WindowStateException;
 
 /**
  * @author Brian Wing Shun Chan
@@ -51,16 +62,50 @@ public class IconMinimizeTag extends IconTag {
 		setImage("../portlet/".concat(image));
 		setMessage(image);
 
-		String onClick =
-			"Liferay.Portlet.minimize('#p_p_id_".concat(
-				portletDisplay.getId()).concat("_', this); return false;");
+		String minimizeURL = createMinimizeURL(portletDisplay);
 
-		setOnClick(onClick);
+		StringBundler onClickSB = new StringBundler(5);
+		onClickSB.append("Liferay.Portlet.minimize('#p_p_id_");
+		onClickSB.append(portletDisplay.getId());
+		onClickSB.append("_', this, {'minimizeURL':'");
+		onClickSB.append(HtmlUtil.escapeJS(minimizeURL));
+		onClickSB.append("'}); return false;");
+
+		setOnClick(onClickSB.toString());
 
 		setToolTip(false);
 		setUrl(portletDisplay.getURLMin());
 
 		return super.getPage();
+	}
+
+	private String createMinimizeURL(PortletDisplay portletDisplay) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		LiferayPortletURL minimizeURL = PortletURLFactoryUtil.create(
+			request, portletDisplay.getId(), themeDisplay.getPlid(), "0");
+
+		try {
+			minimizeURL.setWindowState(LiferayWindowState.EXCLUSIVE);
+		} catch (WindowStateException e) {
+			minimizeURL.setParameter(
+				"p_p_state", LiferayWindowState.EXCLUSIVE.toString());
+		}
+
+		String portletURLString = minimizeURL.toString();
+		int queryStringIdx = portletURLString.indexOf(CharPool.QUESTION);
+		String minimizeURLQueryPart = portletURLString.substring(
+			queryStringIdx + 1);
+
+		StringBundler sb = new StringBundler(5);
+		sb.append(themeDisplay.getPathMain());
+		sb.append("/portal/render_portlet?p_l_id=");
+		sb.append(themeDisplay.getPlid());
+		sb.append(StringPool.AMPERSAND);
+		sb.append(minimizeURLQueryPart);
+
+		return sb.toString();
 	}
 
 	private static final String _PAGE =
