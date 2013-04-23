@@ -21,12 +21,19 @@ import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.InstancePool;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WeakValueConcurrentHashMap;
+import com.liferay.portal.service.registry.Filter;
+import com.liferay.portal.service.registry.ServiceRegistration;
+import com.liferay.portal.service.registry.ServiceRegistryUtil;
+import com.liferay.portal.service.registry.ServiceTracker;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,25 +51,29 @@ public class EventsProcessorImpl implements EventsProcessor {
 			HttpSession session)
 		throws ActionException {
 
-		for (String className : classes) {
-			if (Validator.isNull(className)) {
-				return;
+		if (!_eventsMap.containsKey(key)) {
+			for (int i = 0; i < classes.length; i++) {
+				String className = classes[i];
+
+				if (Validator.isNull(className)) {
+					continue;
+				}
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Registering event " + className);
+				}
+
+				Object event = InstancePool.get(className);
+
+				Map<String, Object> map = new HashMap<String, Object>();
+
+				map.put("service.ranking", (classes.length - i) * 1000);
+
+				registerEvent(key, event, map);
 			}
-
-			if (_log.isDebugEnabled()) {
-				_log.debug("Process event " + className);
-			}
-
-			Object event = InstancePool.get(className);
-
-			processEvent(event, ids, request, response, session);
 		}
 
-		if (Validator.isNull(key)) {
-			return;
-		}
-
-		List<Object> events = _getEvents(key);
+		Collection<Object> events = _getEvents(key);
 
 		for (Object event : events) {
 			processEvent(event, ids, request, response, session);
@@ -108,32 +119,96 @@ public class EventsProcessorImpl implements EventsProcessor {
 	}
 
 	public void registerEvent(String key, Object event) {
-		List<Object> events = _getEvents(key);
+		Map<String, Object> map = new HashMap<String, Object>();
 
-		events.add(event);
+		registerEvent(key, event, map);
+	}
+
+	public void registerEvent(
+		String key, Object event, Map<String, Object> map) {
+
+		map.put("lifecycle.event", key);
+
+		ServiceRegistration<?> serviceRegistration =
+			ServiceRegistryUtil.registerService(
+				event.getClass().getName(), event, map);
+
+		Map<Object, ServiceRegistration<?>> serviceRegistrations =
+			_eventsMap.get(key);
+
+		if (serviceRegistrations == null) {
+			serviceRegistrations =
+				new ConcurrentHashMap<Object, ServiceRegistration<?>>();
+
+			_eventsMap.put(key, serviceRegistrations);
+		}
+
+		serviceRegistrations.put(event, serviceRegistration);
 	}
 
 	public void unregisterEvent(String key, Object event) {
-		List<Object> events = _getEvents(key);
+		Map<Object, ServiceRegistration<?>> serviceRegistrations =
+			_eventsMap.get(key);
 
-		events.remove(event);
-	}
-
-	private List<Object> _getEvents(String key) {
-		List<Object> events = _eventsMap.get(key);
-
-		if (events == null) {
-			events = new ArrayList<Object>();
-
-			_eventsMap.put(key, events);
+		if (serviceRegistrations == null) {
+			return;
 		}
 
-		return events;
+		ServiceRegistration<?> serviceRegistration =
+			serviceRegistrations.remove(event);
+
+		if (serviceRegistration == null) {
+			return;
+		}
+
+		serviceRegistration.unregister();
+	}
+
+	private Collection<Object> _getEvents(String key) {
+		ServiceTracker<?, ?> serviceTracker = _trackerMap.get(key);
+
+		if (serviceTracker != null) {
+			return _sortedListServices(serviceTracker);
+		}
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("(lifecycle.event=");
+		sb.append(key);
+		sb.append(")");
+
+		Filter filter = null;
+
+		try {
+			filter = ServiceRegistryUtil.getFilter(sb.toString());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		serviceTracker = ServiceRegistryUtil.trackServices(filter);
+
+		serviceTracker.open();
+
+		_trackerMap.put(key, serviceTracker);
+
+		return _sortedListServices(serviceTracker);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Collection<Object> _sortedListServices(
+		ServiceTracker<?, ?> serviceTracker) {
+
+		SortedMap<?, ?> tracked = serviceTracker.getTracked();
+
+		return (Collection<Object>)tracked.values();
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(EventsProcessorImpl.class);
 
-	private Map<String, List<Object>> _eventsMap =
-		new HashMap<String, List<Object>>();
+	private Map<String, Map<Object, ServiceRegistration<?>>> _eventsMap =
+		new ConcurrentHashMap<String, Map<Object, ServiceRegistration<?>>>();
+	private Map<String, ServiceTracker<?, ?>> _trackerMap =
+		new WeakValueConcurrentHashMap<String, ServiceTracker<?, ?>>();
 
 }

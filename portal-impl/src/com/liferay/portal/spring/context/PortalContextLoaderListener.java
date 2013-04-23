@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.CharBufferPool;
 import com.liferay.portal.kernel.util.ClearThreadLocalUtil;
 import com.liferay.portal.kernel.util.ClearTimerThreadUtil;
 import com.liferay.portal.kernel.util.InstancePool;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.PortalLifecycleUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
@@ -54,6 +55,8 @@ import com.liferay.portlet.PortletContextBagPool;
 import com.liferay.portlet.wiki.util.WikiCacheUtil;
 
 import java.beans.PropertyDescriptor;
+
+import java.io.File;
 
 import java.lang.reflect.Field;
 
@@ -117,25 +120,21 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			_log.error(e, e);
 		}
 
-		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
-			try {
-				ModuleFrameworkUtilAdapter.stopRuntime();
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+		try {
+			ModuleFrameworkUtilAdapter.stopRuntime();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
 		}
 
 		try {
 			super.contextDestroyed(servletContextEvent);
 
-			if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
-				try {
-					ModuleFrameworkUtilAdapter.stopFramework();
-				}
-				catch (Exception e) {
-					_log.error(e, e);
-				}
+			try {
+				ModuleFrameworkUtilAdapter.stopFramework();
+			}
+			catch (Exception e) {
+				_log.error(e, e);
 			}
 		}
 		finally {
@@ -166,13 +165,17 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		PortletContextBagPool.clear();
 		WebAppPool.clear();
 
-		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
-			try {
-				ModuleFrameworkUtilAdapter.startFramework();
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+		File tempDir = (File)servletContext.getAttribute(
+			JavaConstants.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+
+		PropsValues.LIFERAY_WEB_PORTAL_CONTEXT_TEMPDIR =
+			tempDir.getAbsolutePath();
+
+		try {
+			ModuleFrameworkUtilAdapter.startFramework();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 
 		PortalContextLoaderLifecycleThreadLocal.setInitializing(true);
@@ -230,16 +233,14 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 
 		clearFilteredPropertyDescriptorsCache(autowireCapableBeanFactory);
 
-		if (PropsValues.MODULE_FRAMEWORK_ENABLED) {
-			try {
-				ModuleFrameworkUtilAdapter.registerContext(applicationContext);
-				ModuleFrameworkUtilAdapter.registerContext(servletContext);
+		try {
+			ModuleFrameworkUtilAdapter.registerContext(applicationContext);
+			ModuleFrameworkUtilAdapter.registerContext(servletContext);
 
-				ModuleFrameworkUtilAdapter.startRuntime();
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
+			ModuleFrameworkUtilAdapter.startRuntime();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 

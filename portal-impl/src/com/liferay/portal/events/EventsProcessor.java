@@ -16,6 +16,8 @@ package com.liferay.portal.events;
 
 import com.liferay.portal.kernel.events.ActionException;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -38,6 +40,9 @@ public interface EventsProcessor {
 		throws ActionException;
 
 	public void registerEvent(String key, Object event);
+
+	public void registerEvent(
+		String key, Object event, Map<String, Object> map);
 
 	public void unregisterEvent(String key, Object event);
 

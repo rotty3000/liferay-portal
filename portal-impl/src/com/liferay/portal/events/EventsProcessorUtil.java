@@ -16,6 +16,8 @@ package com.liferay.portal.events;
 
 import com.liferay.portal.kernel.events.ActionException;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -55,6 +57,12 @@ public class EventsProcessorUtil {
 
 	public static void registerEvent(String key, Object event) {
 		_instance.registerEvent(key, event);
+	}
+
+	public static void registerEvent(
+		String key, Object event, Map<String, Object> map) {
+
+		_instance.registerEvent(key, event, map);
 	}
 
 	public static void setEventsProcessor(EventsProcessor eventsProcessor) {
