@@ -1031,7 +1031,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		public boolean isLoad(URL url) {
 			String path = url.getPath();
 
-			return path.contains(PropsValues.MODULE_FRAMEWORK_CORE_DIR);
+			return path.contains(
+				PropsValues.LIFERAY_WEB_PORTAL_CONTEXT_TEMPDIR);
 		}
 
 	}
