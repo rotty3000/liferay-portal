@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -166,7 +167,23 @@ public class PortletContainerImpl implements PortletContainer {
 				return;
 			}
 
-			if (PortletContainerUtil.isRuntimePortlet(request)) {
+			Object canRegisterFromParent = request.getAttribute(
+				"canRegisterEmbeddedPortlets");
+
+			boolean canRegisterEmbeddedPortlets =
+				GetterUtil.getBoolean(canRegisterFromParent, true) &&
+					(securityCheckResult.isEmbeddedPortlet() ||
+					securityCheckResult.isControlPanelPortlet() ||
+					securityCheckResult.isPortletOnPage() ||
+					securityCheckResult.isRuntimePortlet());
+
+			request.setAttribute(
+				"canRegisterEmbeddedPortlets", Boolean.valueOf(
+					canRegisterEmbeddedPortlets));
+
+			if (canRegisterEmbeddedPortlets &&
+				PortletContainerUtil.isRuntimePortlet(request)) {
+
 				registerEmbeddedPortlet(request, portlet);
 			}
 
@@ -177,6 +194,8 @@ public class PortletContainerImpl implements PortletContainer {
 				_doRender(request, response, portlet);
 			} finally {
 				EmbeddedPortletRenderingContextUtil.pop(request);
+				request.setAttribute(
+					"canRegisterEmbeddedPortlets", canRegisterFromParent);
 			}
 		}
 		catch (Exception e) {
