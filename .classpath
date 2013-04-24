@@ -101,6 +101,8 @@
 	<classpathentry kind="lib" path="lib/portal/antlr3.jar"/>
 	<classpathentry kind="lib" path="lib/portal/antlr3-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/portal/aopalliance.jar"/>
+	<classpathentry kind="lib" path="lib/portal/arkadiko-core.jar"/>
+	<classpathentry kind="lib" path="lib/portal/arkadiko-sr.jar"/>
 	<classpathentry kind="lib" path="lib/portal/asm.jar"/>
 	<classpathentry kind="lib" path="lib/portal/asm-analysis.jar"/>
 	<classpathentry kind="lib" path="lib/portal/asm-commons.jar"/>

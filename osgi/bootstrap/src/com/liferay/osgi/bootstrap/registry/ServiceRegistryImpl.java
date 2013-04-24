@@ -50,13 +50,13 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 		return _bundleContext.getService(serviceReference);
 	}
 
-	public <T> T getService(ServiceReference<T> serviceReference) {
+	public <S> S getService(ServiceReference<S> serviceReference) {
 		if (!(serviceReference instanceof ServiceReferenceWrapper)) {
 			throw new IllegalArgumentException();
 		}
 
-		ServiceReferenceWrapper<T> serviceReferenceWrapper =
-			(ServiceReferenceWrapper<T>)serviceReference;
+		ServiceReferenceWrapper<S> serviceReferenceWrapper =
+			(ServiceReferenceWrapper<S>)serviceReference;
 
 		return _bundleContext.getService(
 			serviceReferenceWrapper.getServiceReference());

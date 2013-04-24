@@ -234,7 +234,6 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		clearFilteredPropertyDescriptorsCache(autowireCapableBeanFactory);
 
 		try {
-			ModuleFrameworkUtilAdapter.registerContext(applicationContext);
 			ModuleFrameworkUtilAdapter.registerContext(servletContext);
 
 			ModuleFrameworkUtilAdapter.startRuntime();

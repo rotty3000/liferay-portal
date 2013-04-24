@@ -28,7 +28,7 @@ public interface ServiceRegistry {
 
 	public Object getService(String className);
 
-	public <T> T getService(ServiceReference<T> serviceReference);
+	public <S> S getService(ServiceReference<S> serviceReference);
 
 	public <T> Collection<T> getServices(Class<T> clazz, String filter)
 		throws Exception;

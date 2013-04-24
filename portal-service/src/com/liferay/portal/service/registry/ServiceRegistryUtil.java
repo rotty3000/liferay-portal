@@ -34,7 +34,7 @@ public class ServiceRegistryUtil {
 		return _serviceRegistry.getService(className);
 	}
 
-	public static <T> T getService(ServiceReference<T> serviceReference) {
+	public static <S> S getService(ServiceReference<S> serviceReference) {
 		return _serviceRegistry.getService(serviceReference);
 	}
 
