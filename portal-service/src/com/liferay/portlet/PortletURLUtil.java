@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -40,6 +41,7 @@ import javax.portlet.PortletMode;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -162,24 +164,17 @@ public class PortletURLUtil {
 	public static String getRefreshURL(
 		HttpServletRequest request, ThemeDisplay themeDisplay) {
 
-		StringBundler sb = new StringBundler(32);
-
-		sb.append(themeDisplay.getPathMain());
-		sb.append("/portal/render_portlet?p_l_id=");
-
 		long plid = themeDisplay.getPlid();
-
-		sb.append(plid);
 
 		Portlet portlet = (Portlet)request.getAttribute(WebKeys.RENDER_PORTLET);
 
 		String portletId = portlet.getPortletId();
 
-		sb.append("&p_p_id=");
-		sb.append(portletId);
+		LiferayPortletURL portletURL = PortletURLFactoryUtil.create(
+			request, portletId, plid, "0");
 
-		sb.append("&p_p_lifecycle=0&p_t_lifecycle=");
-		sb.append(themeDisplay.getLifecycle());
+		portletURL.setLifecycle("0");
+		portletURL.setParameter("p_t_lifecycle", themeDisplay.getLifecycle());
 
 		WindowState windowState = WindowState.NORMAL;
 
@@ -198,54 +193,42 @@ public class PortletURLUtil {
 			}
 		}
 
-		sb.append("&p_p_state=");
-		sb.append(windowState);
-
-		sb.append("&p_p_mode=view&p_p_col_id=");
-
-		String columnId = (String)request.getAttribute(
-			WebKeys.RENDER_PORTLET_COLUMN_ID);
-
-		sb.append(columnId);
-
-		Integer columnPos = (Integer)request.getAttribute(
-			WebKeys.RENDER_PORTLET_COLUMN_POS);
-
-		sb.append("&p_p_col_pos=");
-		sb.append(columnPos);
-
-		Integer columnCount = (Integer)request.getAttribute(
-			WebKeys.RENDER_PORTLET_COLUMN_COUNT);
-
-		sb.append("&p_p_col_count=");
-		sb.append(columnCount);
+		try {
+			portletURL.setWindowState(windowState);
+		} catch (WindowStateException e) {
+			portletURL.setParameter("p_p_state", windowState.toString());
+		}
 
 		if (portlet.isStatic()) {
-			sb.append("&p_p_static=1");
+			portletURL.setParameter("p_p_static", "1");
 
 			if (portlet.isStaticStart()) {
-				sb.append("&p_p_static_start=1");
+				portletURL.setParameter("p_p_static_start", "1");
 			}
 		}
 
-		sb.append("&p_p_isolated=1");
+		portletURL.setParameter("p_p_isolated", "1");
 
 		long sourceGroupId = ParamUtil.getLong(request, "p_v_l_s_g_id");
 
 		if (sourceGroupId > 0) {
-			sb.append("&p_v_l_s_g_id=");
-			sb.append(sourceGroupId);
+			portletURL.setParameter(
+				"p_v_l_s_g_id", Long.toString(sourceGroupId));
 		}
 
-		String doAsUserId = themeDisplay.getDoAsUserId();
+		StringBundler sb = new StringBundler(8);
 
-		if (Validator.isNotNull(doAsUserId)) {
-			sb.append("&doAsUserId=");
-			sb.append(HttpUtil.encodeURL(doAsUserId));
-		}
+		sb.append(themeDisplay.getPathMain());
+		sb.append("/portal/render_portlet?p_l_id=");
+		sb.append(plid);
+		sb.append(StringPool.AMPERSAND);
+
+		String portletURLString = portletURL.toString();
+
+		int queryStringIdx = portletURLString.indexOf(CharPool.QUESTION);
+		sb.append(portletURLString.substring(queryStringIdx + 1));
 
 		String currentURL = PortalUtil.getCurrentURL(request);
-
 		sb.append("&currentURL=");
 		sb.append(HttpUtil.encodeURL(currentURL));
 
@@ -255,6 +238,8 @@ public class PortletURLUtil {
 			String namespace = PortalUtil.getPortletNamespace(portletId);
 
 			Map<String, String[]> parameters = request.getParameterMap();
+
+			StringBundler paramsBundler = new StringBundler(parameters.size());
 
 			for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
 				String name = entry.getKey();
@@ -266,13 +251,21 @@ public class PortletURLUtil {
 					String[] values = entry.getValue();
 
 					for (int i = 0; i < values.length; i++) {
-						sb.append(StringPool.AMPERSAND);
-						sb.append(name);
-						sb.append(StringPool.EQUAL);
-						sb.append(HttpUtil.encodeURL(values[i]));
+						String value = values[i];
+
+						if (Validator.isNotNull(name) && (value != null)) {
+							portletURL.setParameter(name, value);
+						}
+
+						paramsBundler.append(StringPool.AMPERSAND);
+						paramsBundler.append(name);
+						paramsBundler.append(StringPool.EQUAL);
+						paramsBundler.append(HttpUtil.encodeURL(value));
 					}
 				}
 			}
+
+			sb.append(paramsBundler);
 		}
 
 		return sb.toString();

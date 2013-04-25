@@ -24,9 +24,12 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.PortletContainer;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityCheckResult;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
+import com.liferay.portal.kernel.portlet.security.EmbeddedPortletRenderingContextUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
@@ -36,6 +39,7 @@ import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.upload.UploadServletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -49,10 +53,7 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.PublicRenderParameter;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -116,6 +117,20 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
+			HttpServletRequest ownerLayoutRequest =
+				getOwnerLayoutRequestWrapper(request, portlet);
+
+			PortletContainerSecurityCheckResult securityCheckResult =
+				PortletContainerSecurityUtil.checkAction(
+					ownerLayoutRequest, portlet);
+
+			if (!securityCheckResult.accessAllowed()) {
+				processActionError(
+					request, response, portlet, securityCheckResult);
+
+				return ActionResult.EMPTY_ACTION_RESULT;
+			}
+
 			return _doProcessAction(request, response, portlet);
 		}
 		catch (Exception e) {
@@ -142,7 +157,46 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			_doRender(request, response, portlet);
+			PortletContainerSecurityCheckResult securityCheckResult =
+				PortletContainerSecurityUtil.checkRender(request, portlet);
+
+			if (!securityCheckResult.accessAllowed()) {
+				renderPortletError(
+					request, response, portlet, securityCheckResult);
+
+				return;
+			}
+
+			Object canRegisterFromParent = request.getAttribute(
+				"canRegisterEmbeddedPortlets");
+
+			boolean canRegisterEmbeddedPortlets =
+				GetterUtil.getBoolean(canRegisterFromParent, true) &&
+					(securityCheckResult.isEmbeddedPortlet() ||
+					securityCheckResult.isControlPanelPortlet() ||
+					securityCheckResult.isPortletOnPage() ||
+					securityCheckResult.isRuntimePortlet());
+
+			request.setAttribute(
+				"canRegisterEmbeddedPortlets", Boolean.valueOf(
+					canRegisterEmbeddedPortlets));
+
+			if (canRegisterEmbeddedPortlets &&
+				PortletContainerUtil.isRuntimePortlet(request)) {
+
+				registerEmbeddedPortlet(request, portlet);
+			}
+
+			try {
+				EmbeddedPortletRenderingContextUtil.pushParent(
+					request, portlet);
+
+				_doRender(request, response, portlet);
+			} finally {
+				EmbeddedPortletRenderingContextUtil.pop(request);
+				request.setAttribute(
+					"canRegisterEmbeddedPortlets", canRegisterFromParent);
+			}
 		}
 		catch (Exception e) {
 			throw new PortletContainerException(e);
@@ -155,6 +209,20 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
+			HttpServletRequest ownerLayoutRequest =
+				getOwnerLayoutRequestWrapper(request, portlet);
+
+			PortletContainerSecurityCheckResult securityCheckResult =
+				PortletContainerSecurityUtil.checkResource(
+					ownerLayoutRequest, portlet);
+
+			if (!securityCheckResult.accessAllowed()) {
+				serveResourceError(
+					request, response, portlet, securityCheckResult);
+
+				return;
+			}
+
 			_doServeResource(request, response, portlet);
 		}
 		catch (Exception e) {
@@ -237,6 +305,33 @@ public class PortletContainerImpl implements PortletContainer {
 		return scopeGroupId;
 	}
 
+	protected void processActionError(
+		HttpServletRequest request, HttpServletResponse response,
+		Portlet portlet,
+		PortletContainerSecurityCheckResult securityCheckResult) {
+
+		String url = null;
+
+		LastPath lastPath = (LastPath)request.getAttribute(WebKeys.LAST_PATH);
+
+		if (lastPath != null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(PortalUtil.getPortalURL(request));
+			sb.append(lastPath.getContextPath());
+			sb.append(lastPath.getPath());
+
+			url = sb.toString();
+		}
+		else {
+			url = String.valueOf(request.getRequestURI());
+		}
+
+		_log.warn(
+			"Reject processAction for " + url + " on " +
+				portlet.getPortletId());
+	}
+
 	protected void processPublicRenderParameters(
 		HttpServletRequest request, Layout layout, Portlet portlet) {
 
@@ -290,6 +385,42 @@ public class PortletContainerImpl implements PortletContainer {
 		}
 	}
 
+	protected void registerEmbeddedPortlet(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		layoutTypePortlet.addEmbeddedPortletId(request, portlet.getPortletId());
+	}
+
+	protected void renderPortletError(
+			HttpServletRequest request, HttpServletResponse response,
+			Portlet portlet,
+			PortletContainerSecurityCheckResult securityCheckResult)
+		throws PortletContainerException {
+
+		String portletContent = null;
+
+		if (portlet.isShowPortletAccessDenied()) {
+			portletContent = "/html/portal/portlet_access_denied.jsp";
+		}
+
+		try {
+			if (portletContent != null) {
+				RequestDispatcher requestDispatcher =
+					request.getRequestDispatcher(portletContent);
+
+				requestDispatcher.include(request, response);
+			}
+		} catch (Exception ex) {
+			throw new PortletContainerException(ex);
+		}
+	}
+
 	protected Event serializeEvent(
 		Event event, ClassLoader portletClassLoader) {
 
@@ -321,6 +452,38 @@ public class PortletContainerImpl implements PortletContainer {
 			serializedValue, portletClassLoader);
 
 		return new EventImpl(event.getName(), event.getQName(), value);
+	}
+
+	protected void serveResourceError(
+		HttpServletRequest request, HttpServletResponse response,
+		Portlet portlet,
+		PortletContainerSecurityCheckResult securityCheckResult) {
+
+		String url = null;
+
+		LastPath lastPath = (LastPath)request.getAttribute(WebKeys.LAST_PATH);
+
+		if (lastPath != null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(PortalUtil.getPortalURL(request));
+			sb.append(lastPath.getContextPath());
+			sb.append(lastPath.getPath());
+
+			url = sb.toString();
+		}
+		else {
+			url = String.valueOf(request.getRequestURI());
+		}
+
+		response.setHeader(
+			HttpHeaders.CACHE_CONTROL,
+			HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE);
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+		_log.warn(
+			"Reject serveResource for " + url + " on " +
+				portlet.getPortletId());
 	}
 
 	private void _doPreparePortlet(HttpServletRequest request, Portlet portlet)
@@ -378,42 +541,6 @@ public class PortletContainerImpl implements PortletContainer {
 			HttpServletRequest request, HttpServletResponse response,
 			Portlet portlet)
 		throws Exception {
-
-		HttpServletRequest ownerLayoutRequest = getOwnerLayoutRequestWrapper(
-			request, portlet);
-
-		Layout ownerLayout = (Layout)ownerLayoutRequest.getAttribute(
-			WebKeys.LAYOUT);
-
-		boolean allowAddPortletDefaultResource =
-			PortalUtil.isAllowAddPortletDefaultResource(
-				ownerLayoutRequest, portlet);
-
-		if (!allowAddPortletDefaultResource) {
-			String url = null;
-
-			LastPath lastPath = (LastPath)request.getAttribute(
-				WebKeys.LAST_PATH);
-
-			if (lastPath != null) {
-				StringBundler sb = new StringBundler(3);
-
-				sb.append(PortalUtil.getPortalURL(request));
-				sb.append(lastPath.getContextPath());
-				sb.append(lastPath.getPath());
-
-				url = sb.toString();
-			}
-			else {
-				url = String.valueOf(request.getRequestURI());
-			}
-
-			_log.error(
-				"Reject processAction for " + url + " on " +
-					portlet.getPortletId());
-
-			return ActionResult.EMPTY_ACTION_RESULT;
-		}
 
 		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
 
@@ -474,12 +601,6 @@ public class PortletContainerImpl implements PortletContainer {
 				}
 			}
 
-			if (PropsValues.AUTH_TOKEN_CHECK_ENABLED &&
-				invokerPortlet.isCheckAuthToken()) {
-
-				AuthTokenUtil.check(request);
-			}
-
 			ActionRequestImpl actionRequestImpl = ActionRequestFactory.create(
 				request, portlet, invokerPortlet, portletContext, windowState,
 				portletMode, portletPreferences, layout.getPlid());
@@ -498,24 +619,9 @@ public class PortletContainerImpl implements PortletContainer {
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
+			invokerPortlet.processAction(actionRequestImpl, actionResponseImpl);
 
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-			long scopeGroupId = themeDisplay.getScopeGroupId();
-
-			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, ownerLayout, portlet,
-				portletMode);
-
-			if (access) {
-				invokerPortlet.processAction(
-					actionRequestImpl, actionResponseImpl);
-
-				actionResponseImpl.transferHeaders(response);
-			}
+			actionResponseImpl.transferHeaders(response);
 
 			RenderParametersPool.put(
 				request, layout.getPlid(), portlet.getPortletId(),
@@ -828,47 +934,6 @@ public class PortletContainerImpl implements PortletContainer {
 			Portlet portlet)
 		throws Exception {
 
-		HttpServletRequest ownerLayoutRequest = getOwnerLayoutRequestWrapper(
-			request, portlet);
-
-		Layout ownerLayout = (Layout)ownerLayoutRequest.getAttribute(
-			WebKeys.LAYOUT);
-
-		boolean allowAddPortletDefaultResource =
-			PortalUtil.isAllowAddPortletDefaultResource(
-				ownerLayoutRequest, portlet);
-
-		if (!allowAddPortletDefaultResource) {
-			String url = null;
-
-			LastPath lastPath = (LastPath)request.getAttribute(
-				WebKeys.LAST_PATH);
-
-			if (lastPath != null) {
-				StringBundler sb = new StringBundler(3);
-
-				sb.append(PortalUtil.getPortalURL(request));
-				sb.append(lastPath.getContextPath());
-				sb.append(lastPath.getPath());
-
-				url = sb.toString();
-			}
-			else {
-				url = String.valueOf(request.getRequestURI());
-			}
-
-			response.setHeader(
-				HttpHeaders.CACHE_CONTROL,
-				HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-			_log.error(
-				"Reject serveResource for " + url + " on " +
-					portlet.getPortletId());
-
-			return;
-		}
-
 		WindowState windowState = (WindowState)request.getAttribute(
 			WebKeys.WINDOW_STATE);
 
@@ -939,21 +1004,10 @@ public class PortletContainerImpl implements PortletContainer {
 
 			ServiceContextThreadLocal.pushServiceContext(serviceContext);
 
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
+			invokerPortlet.serveResource(
+				resourceRequestImpl, resourceResponseImpl);
 
-			long scopeGroupId = themeDisplay.getScopeGroupId();
-
-			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, ownerLayout, portlet,
-				portletMode);
-
-			if (access) {
-				invokerPortlet.serveResource(
-					resourceRequestImpl, resourceResponseImpl);
-
-				resourceResponseImpl.transferHeaders(response);
-			}
+			resourceResponseImpl.transferHeaders(response);
 		}
 		finally {
 			ServiceContextThreadLocal.popServiceContext();

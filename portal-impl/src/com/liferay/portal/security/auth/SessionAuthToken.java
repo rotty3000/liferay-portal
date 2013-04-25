@@ -62,6 +62,16 @@ public class SessionAuthToken implements AuthToken {
 		}
 	}
 
+	public String generateEmbeddedPortletToken(
+		HttpServletRequest request, long plid, String portletId) {
+
+		// add _EMBEDDED suffix so that we have 2 different tokens
+
+		String embeddedPortletId = portletId + _EMBEDDED;
+
+		return getToken(request, plid, embeddedPortletId);
+	}
+
 	public String getToken(HttpServletRequest request) {
 		return getSessionAuthenticationToken(request, _PORTAL);
 	}
@@ -153,6 +163,7 @@ public class SessionAuthToken implements AuthToken {
 		return authTokenIgnorePortlets.contains(rootPortletId);
 	}
 
+	private static final String _EMBEDDED = "EMBEDDED";
 	private static final String _PORTAL = "PORTAL";
 
 }

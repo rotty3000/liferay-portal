@@ -30,6 +30,13 @@ public class AuthTokenUtil {
 		getAuthToken().check(request);
 	}
 
+	public static String generateEmbeddedPortletToken(
+		HttpServletRequest request, long plid, String portletId) {
+
+		return getAuthToken().generateEmbeddedPortletToken(
+			request, plid, portletId);
+	}
+
 	public static AuthToken getAuthToken() {
 		PortalRuntimePermission.checkGetBeanProperty(AuthTokenUtil.class);
 

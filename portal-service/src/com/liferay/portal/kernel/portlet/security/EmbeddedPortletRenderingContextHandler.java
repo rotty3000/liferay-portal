@@ -12,25 +12,31 @@
  * details.
  */
 
-package com.liferay.portal.security.auth;
+package com.liferay.portal.kernel.portlet.security;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Amos Fong
+ * @author Tomas Polesovsky
  */
-public interface AuthToken {
+public interface EmbeddedPortletRenderingContextHandler<T> {
 
-	public void check(HttpServletRequest request) throws PortalException;
+	public boolean canCreateContext(Object parent);
 
-	public String generateEmbeddedPortletToken(
-		HttpServletRequest request, long plid, String portletId);
+	public EmbeddedPortletRenderingContext createContext(
+			HttpServletRequest request, T parent);
 
-	public String getToken(HttpServletRequest request);
+	public EmbeddedPortletRenderingContext fetchContext(
+		List<EmbeddedPortletRenderingContext> stack);
 
-	public String getToken(
-		HttpServletRequest request, long plid, String portletId);
+	public boolean isValid(
+			HttpServletRequest request,
+			EmbeddedPortletRenderingContext embeddedPortletRenderingContext)
+		throws PortalException, SystemException;
 
 }

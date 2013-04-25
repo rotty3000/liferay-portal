@@ -97,6 +97,17 @@ public class PortletContainerUtil {
 		return _portletContainer;
 	}
 
+	public static boolean isRuntimePortlet(HttpServletRequest request) {
+		Boolean renderPortletResource = (Boolean)request.getAttribute(
+			WebKeys.RENDER_PORTLET_RESOURCE);
+
+		if ((renderPortletResource != null) && renderPortletResource) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public static void preparePortlet(
 			HttpServletRequest request, Portlet portlet)
 		throws PortletContainerException {

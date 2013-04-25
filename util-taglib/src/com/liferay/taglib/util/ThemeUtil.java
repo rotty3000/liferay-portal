@@ -17,6 +17,7 @@ package com.liferay.taglib.util;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.security.EmbeddedPortletRenderingContextUtil;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.servlet.PluginContextListener;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
@@ -166,6 +167,8 @@ public class ThemeUtil {
 		}
 
 		try {
+			EmbeddedPortletRenderingContextUtil.pushParent(request, theme);
+
 			if (extension.equals(ThemeHelper.TEMPLATE_EXTENSION_FTL)) {
 				return doIncludeFTL(
 					servletContext, request, pageContext, path, theme,
@@ -183,6 +186,8 @@ public class ThemeUtil {
 			return null;
 		}
 		finally {
+			EmbeddedPortletRenderingContextUtil.pop(request);
+
 			if ((pluginClassLoader != null) &&
 				(pluginClassLoader != contextClassLoader)) {
 

@@ -152,6 +152,10 @@ public class LayoutTemplateImpl
 		return _thumbnailPath;
 	}
 
+	public long getTimestamp() {
+		return _timestamp;
+	}
+
 	public String getUncachedContent() throws IOException {
 		if (_servletContext == null) {
 			if (_log.isDebugEnabled()) {
@@ -286,6 +290,10 @@ public class LayoutTemplateImpl
 		_thumbnailPath = thumbnailPath;
 	}
 
+	public void setTimestamp(long timestamp) {
+		_timestamp = timestamp;
+	}
+
 	public void setWapContent(String wapContent) {
 		_setWapContent = true;
 
@@ -310,6 +318,7 @@ public class LayoutTemplateImpl
 	private String _templatePath;
 	private String _themeId;
 	private String _thumbnailPath;
+	private long _timestamp;
 	private String _wapContent;
 	private String _wapTemplatePath;
 	private boolean _warFile;

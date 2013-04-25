@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.portlet.FriendlyURLMapper;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -39,6 +40,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutType;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
 import com.liferay.portal.model.PublicRenderParameter;
@@ -700,6 +703,25 @@ public class PortletURLImpl
 		writer.write(toString);
 	}
 
+	protected void addEmbeddedPortletToken(StringBundler sb, Key key) {
+		LayoutType layoutType = getLayout().getLayoutType();
+
+		if (layoutType instanceof LayoutTypePortlet) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layoutType;
+
+			if (layoutTypePortlet.hasEmbeddedPortletId(getPortletId())) {
+				String embeddedPortletToken =
+					AuthTokenUtil.generateEmbeddedPortletToken(
+						_request, _plid, _portletId);
+
+				sb.append("p_e_auth");
+				sb.append(StringPool.EQUAL);
+				sb.append(processValue(key, embeddedPortletToken));
+				sb.append(StringPool.AMPERSAND);
+			}
+		}
+	}
+
 	protected void addPortalAuthToken(StringBundler sb, Key key) {
 		if (!PropsValues.AUTH_TOKEN_CHECK_ENABLED ||
 			!_lifecycle.equals(PortletRequest.ACTION_PHASE)) {
@@ -759,7 +781,8 @@ public class PortletURLImpl
 		}
 
 		Set<String> portletAddDefaultResourceCheckWhiteList =
-			PortalUtil.getPortletAddDefaultResourceCheckWhitelist();
+			PortletContainerSecurityUtil.
+				getPortletAddDefaultResourceCheckWhitelist();
 
 		if (portletAddDefaultResourceCheckWhiteList.contains(_portletId)) {
 			return;
@@ -881,6 +904,8 @@ public class PortletURLImpl
 		}
 
 		addPortletAuthToken(sb, key);
+
+		addEmbeddedPortletToken(sb, key);
 
 		for (Map.Entry<String, String> entry :
 				getReservedParameterMap().entrySet()) {
