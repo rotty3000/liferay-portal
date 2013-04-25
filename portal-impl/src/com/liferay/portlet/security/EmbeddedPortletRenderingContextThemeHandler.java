@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Tomas Polesovsky
  */
-public class EmbeddedPortletRenderingContextThemeHandler extends
-	EmbeddedPortletRenderingContextHandlerBase<Theme> {
+public class EmbeddedPortletRenderingContextThemeHandler
+	extends EmbeddedPortletRenderingContextHandlerBase<Theme> {
 
 	public static String SUPPORTED_CLASS_NAME = ThemeImpl.class.getName();
 

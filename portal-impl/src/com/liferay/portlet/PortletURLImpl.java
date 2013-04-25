@@ -705,6 +705,7 @@ public class PortletURLImpl
 
 	protected void addEmbeddedPortletToken(StringBundler sb, Key key) {
 		LayoutType layoutType = getLayout().getLayoutType();
+
 		if (layoutType instanceof LayoutTypePortlet) {
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layoutType;
 

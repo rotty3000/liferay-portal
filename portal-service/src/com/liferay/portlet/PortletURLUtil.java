@@ -252,6 +252,7 @@ public class PortletURLUtil {
 
 					for (int i = 0; i < values.length; i++) {
 						String value = values[i];
+
 						if (Validator.isNotNull(name) && (value != null)) {
 							portletURL.setParameter(name, value);
 						}

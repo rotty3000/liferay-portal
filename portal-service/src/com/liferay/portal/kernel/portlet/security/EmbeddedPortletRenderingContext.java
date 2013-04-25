@@ -28,6 +28,7 @@ public class EmbeddedPortletRenderingContext {
 		}
 
 		String[] items = StringUtil.split(context);
+
 		if (items.length != 3) {
 			return null;
 		}

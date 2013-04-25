@@ -178,6 +178,7 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 			(LayoutTypePortlet)layout.getLayoutType();
 
 		String peAuth = request.getParameter("p_e_auth");
+
 		if (Validator.isNull(peAuth)) {
 			return false;
 		}
@@ -427,7 +428,7 @@ public class PortletContainerSecurityImpl implements PortletContainerSecurity {
 		String portletId = portlet.getPortletId();
 
 		if (layout.isTypePanel() &&
-				isPanelSelectedPortlet(themeDisplay, portletId)) {
+			isPanelSelectedPortlet(themeDisplay, portletId)) {
 
 			return true;
 		}

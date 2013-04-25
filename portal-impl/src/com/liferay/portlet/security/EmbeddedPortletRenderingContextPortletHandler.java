@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Tomas Polesovsky
  */
-public class EmbeddedPortletRenderingContextPortletHandler extends
-	EmbeddedPortletRenderingContextHandlerBase<Portlet> {
+public class EmbeddedPortletRenderingContextPortletHandler
+	extends EmbeddedPortletRenderingContextHandlerBase<Portlet> {
 
 	public static String SUPPORTED_CLASS_NAME = PortletImpl.class.getName();
 
