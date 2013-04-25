@@ -184,7 +184,7 @@ public interface LayoutTypePortlet extends LayoutType {
 			long userId, String portletId, String columnId, int columnPos)
 		throws PortalException, SystemException;
 
-	public boolean removeEmbeddedPortlet(String portletId)
+	public void removeEmbeddedPortlets(String[] portletIds)
 		throws PortalException, SystemException;
 
 	public void removeModeAboutPortletId(String portletId);

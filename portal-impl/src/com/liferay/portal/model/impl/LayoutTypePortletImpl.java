@@ -807,7 +807,7 @@ public class LayoutTypePortletImpl
 		}
 	}
 
-	public boolean removeEmbeddedPortlet(String portletId)
+	public void removeEmbeddedPortlets(String[] portletIds)
 		throws PortalException, SystemException {
 
 		Layout freshLayout = LayoutLocalServiceUtil.getLayout(getPlid());
@@ -818,24 +818,31 @@ public class LayoutTypePortletImpl
 		String[] embeddedPortlets = StringUtil.split(
 			freshTypeSettings.getProperty(_EMBEDDED_PORTLETS));
 
-		if (!ArrayUtil.contains(embeddedPortlets, portletId)) {
-			return false;
+		List<String> removedPortletIds = new ArrayList<String>(
+			portletIds.length);
+
+		for (String portletId : portletIds) {
+			if (!ArrayUtil.contains(embeddedPortlets, portletId)) {
+				continue;
+			}
+
+			embeddedPortlets = ArrayUtil.remove(embeddedPortlets, portletId);
+
+			freshTypeSettings.setProperty(_EMBEDDED_PORTLETS + portletId, null);
+			setTypeSettingsProperty(_EMBEDDED_PORTLETS + portletId, null);
+
+			removedPortletIds.add(portletId);
 		}
 
-		embeddedPortlets = ArrayUtil.remove(embeddedPortlets, portletId);
 		String propValue = StringUtil.merge(embeddedPortlets);
 		freshTypeSettings.setProperty(_EMBEDDED_PORTLETS, propValue);
-		freshTypeSettings.setProperty(_EMBEDDED_PORTLETS + portletId, null);
-		LayoutLocalServiceUtil.updateLayout(freshLayout);
 
+		LayoutLocalServiceUtil.updateLayout(freshLayout);
 		setTypeSettingsProperty(_EMBEDDED_PORTLETS, propValue);
-		setTypeSettingsProperty(_EMBEDDED_PORTLETS + portletId, null);
 
 		_embeddedPortlets = null;
 
-		onRemoveFromLayout(new String[]{portletId});
-
-		return true;
+		onRemoveFromLayout(removedPortletIds.toArray(new String[0]));
 	}
 
 	public void removeModeAboutPortletId(String portletId) {
@@ -1038,6 +1045,7 @@ public class LayoutTypePortletImpl
 				keys.hasNext();) {
 
 			String key = keys.next();
+
 			if (key.startsWith(_EMBEDDED_PORTLETS)) {
 				keys.remove();
 			}
@@ -1046,10 +1054,12 @@ public class LayoutTypePortletImpl
 		LayoutLocalServiceUtil.updateLayout(freshLayout);
 
 		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
+
 		for (Iterator<String> keys = typeSettingsProperties.keySet().iterator();
 			keys.hasNext();) {
 
 			String key = keys.next();
+
 			if (key.startsWith(_EMBEDDED_PORTLETS)) {
 				keys.remove();
 			}
