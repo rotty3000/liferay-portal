@@ -31,6 +31,7 @@ page import="com.liferay.portlet.announcements.model.AnnouncementsEntryConstants
 page import="com.liferay.portlet.announcements.model.AnnouncementsFlagConstants" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceUtil" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsFlagLocalServiceUtil" %><%@
+page import="com.liferay.portlet.announcements.service.permission.AlertsEntryPermission" %><%@
 page import="com.liferay.portlet.announcements.service.permission.AnnouncementsEntryPermission" %><%@
 page import="com.liferay.portlet.announcements.util.AnnouncementsUtil" %>
 
