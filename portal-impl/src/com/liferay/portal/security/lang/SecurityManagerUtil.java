@@ -49,7 +49,12 @@ public class SecurityManagerUtil {
 			loadPortalSecurityManager();
 		}
 
-		if (_portalSecurityManager == null) {
+		if (_portalSecurityManagerStrategy ==
+				PortalSecurityManagerStrategy.NONE) {
+
+			System.setSecurityManager(null);
+		}
+		else if (_portalSecurityManager == null) {
 			_portalSecurityManagerStrategy =
 				PortalSecurityManagerStrategy.DEFAULT;
 
@@ -65,11 +70,6 @@ public class SecurityManagerUtil {
 					PortalSecurityManagerStrategy.LIFERAY) {
 
 			System.setSecurityManager((SecurityManager)_portalSecurityManager);
-		}
-		else if (_portalSecurityManagerStrategy ==
-					PortalSecurityManagerStrategy.NONE) {
-
-			System.setSecurityManager(null);
 		}
 	}
 
