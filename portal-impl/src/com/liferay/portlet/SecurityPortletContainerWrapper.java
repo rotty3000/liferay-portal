@@ -268,7 +268,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return;
 		}
 
-		if (isAllowAddPortletDefaultResource(request, portlet)) {
+		if (isPortletAllowedToExecute(request, portlet)) {
 			PortalUtil.addPortletDefaultResource(request, portlet);
 
 			if (hasAccessPermission(request, portlet)) {
@@ -366,29 +366,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 
 		return request;
-	}
-
-	protected boolean isAllowAddPortletDefaultResource(
-			HttpServletRequest request, Portlet portlet)
-		throws PortalException, SystemException {
-
-		if (isRenderingRuntimePortlet(request, portlet)) {
-			return true;
-		}
-
-		if (isPortletOnPage(request, portlet)) {
-			return true;
-		}
-
-		if (isLayoutConfigurationAllowed(request, portlet)) {
-			return true;
-		}
-
-		if (isGrantedByPPAUTH(request, portlet)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	protected boolean isGrantedByPPAUTH(
@@ -545,6 +522,29 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 				panelSelectedPortlets);
 
 			return ArrayUtil.contains(panelSelectedPortletsArray, portletId);
+		}
+
+		return false;
+	}
+
+	protected boolean isPortletAllowedToExecute(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		if (isRenderingRuntimePortlet(request, portlet)) {
+			return true;
+		}
+
+		if (isPortletOnPage(request, portlet)) {
+			return true;
+		}
+
+		if (isLayoutConfigurationAllowed(request, portlet)) {
+			return true;
+		}
+
+		if (isGrantedByPPAUTH(request, portlet)) {
+			return true;
 		}
 
 		return false;
