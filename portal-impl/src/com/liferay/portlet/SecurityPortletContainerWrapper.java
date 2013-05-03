@@ -405,12 +405,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return true;
 		}
 
-		if (layout.isTypeControlPanel() &&
-			PortalUtil.isControlPanelPortlet(portletId, themeDisplay)) {
-
-			return true;
-		}
-
 		if ((layoutTypePortlet != null) &&
 			layoutTypePortlet.hasPortletId(portletId)) {
 
@@ -643,7 +637,11 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return;
 		}
 
-		if (isAllowAddPortletDefaultResource(request, portlet)) {
+		if (isRenderingRuntimePortlet(request, portlet)) {
+			return;
+		}
+
+		if (isGrantedByPPAUTH(request, portlet)) {
 			return;
 		}
 
