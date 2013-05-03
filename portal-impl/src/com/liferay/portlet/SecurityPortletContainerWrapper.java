@@ -14,6 +14,7 @@
 
 package com.liferay.portlet;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.ActionResult;
@@ -24,12 +25,14 @@ import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.TempAttributesServletRequest;
 import com.liferay.portal.kernel.struts.LastPath;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -39,6 +42,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.Event;
 import javax.portlet.PortletMode;
@@ -256,7 +260,27 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 	protected void checkAction(HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
+		checkCSRFProtection(request, portlet);
+
 		check(request, portlet);
+	}
+
+	protected void checkCSRFProtection(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException {
+
+		if (!PropsValues.AUTH_TOKEN_CHECK_ENABLED) {
+			return;
+		}
+
+		Map<String, String> initParams = portlet.getInitParams();
+
+		boolean checkAuthToken = GetterUtil.getBoolean(
+			initParams.get("check-auth-token"), true);
+
+		if (checkAuthToken) {
+			AuthTokenUtil.check(request);
+		}
 	}
 
 	protected void checkRender(HttpServletRequest request, Portlet portlet)

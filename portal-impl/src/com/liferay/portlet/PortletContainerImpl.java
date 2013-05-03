@@ -45,7 +45,6 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.PublicRenderParameter;
 import com.liferay.portal.model.User;
-import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -58,7 +57,6 @@ import com.liferay.portal.theme.PortletDisplayFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.util.SerializableUtil;
 
 import java.io.Serializable;
@@ -379,12 +377,6 @@ public class PortletContainerImpl implements PortletContainer {
 
 					request = uploadServletRequest;
 				}
-			}
-
-			if (PropsValues.AUTH_TOKEN_CHECK_ENABLED &&
-				invokerPortlet.isCheckAuthToken()) {
-
-				AuthTokenUtil.check(request);
 			}
 
 			ActionRequestImpl actionRequestImpl = ActionRequestFactory.create(
