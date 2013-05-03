@@ -268,24 +268,10 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return;
 		}
 
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long scopeGroupId = themeDisplay.getScopeGroupId();
-
 		if (isAllowAddPortletDefaultResource(request, portlet)) {
 			PortalUtil.addPortletDefaultResource(request, portlet);
 
-			PortletMode portletMode = PortletModeFactory.getPortletMode(
-				ParamUtil.getString(request, "p_p_mode"));
-
-			boolean access = PortletPermissionUtil.hasAccessPermission(
-				permissionChecker, scopeGroupId, layout, portlet, portletMode);
-
-			if (access) {
+			if (hasAccessPermission(request, portlet)) {
 				return;
 			}
 		}
@@ -662,6 +648,29 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 
 		throw new PrincipalException();
+	}
+
+	private boolean hasAccessPermission(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long scopeGroupId = themeDisplay.getScopeGroupId();
+
+		PortletMode portletMode = PortletModeFactory.getPortletMode(
+			ParamUtil.getString(request, "p_p_mode"));
+
+		boolean access = PortletPermissionUtil.hasAccessPermission(
+			permissionChecker, scopeGroupId, layout, portlet, portletMode);
+
+		return access;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
