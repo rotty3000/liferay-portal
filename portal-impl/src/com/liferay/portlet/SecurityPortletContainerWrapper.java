@@ -395,15 +395,8 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 
 		String portletId = portlet.getPortletId();
 
-		Boolean renderPortletResource = (Boolean)request.getAttribute(
-			WebKeys.RENDER_PORTLET_RESOURCE);
-
-		if (renderPortletResource != null) {
-			boolean runtimePortlet = renderPortletResource.booleanValue();
-
-			if (runtimePortlet) {
-				return true;
-			}
+		if (isRenderingRuntimePortlet(request, portlet)) {
+			return true;
 		}
 
 		if (layout.isTypePanel() &&
@@ -555,6 +548,23 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 				panelSelectedPortlets);
 
 			return ArrayUtil.contains(panelSelectedPortletsArray, portletId);
+		}
+
+		return false;
+	}
+
+	protected boolean isRenderingRuntimePortlet(
+		HttpServletRequest request, Portlet portlet) {
+
+		Boolean renderPortletResource = (Boolean)request.getAttribute(
+			WebKeys.RENDER_PORTLET_RESOURCE);
+
+		if (renderPortletResource != null) {
+			boolean runtimePortlet = renderPortletResource.booleanValue();
+
+			if (runtimePortlet) {
+				return true;
+			}
 		}
 
 		return false;
