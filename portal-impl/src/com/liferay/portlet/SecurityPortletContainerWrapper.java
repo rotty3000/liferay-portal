@@ -261,6 +261,13 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return;
 		}
 
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		if (layout.isTypeControlPanel()) {
+			checkControlPanel(request, portlet);
+			return;
+		}
+
 		PermissionChecker permissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 
@@ -268,25 +275,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			WebKeys.THEME_DISPLAY);
 
 		long scopeGroupId = themeDisplay.getScopeGroupId();
-		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
-
-		if (layout.isTypeControlPanel()) {
-			if (portlet.isSystem()) {
-				return;
-			}
-
-			if (PortletPermissionUtil.hasControlPanelAccessPermission(
-					permissionChecker, scopeGroupId, portlet)) {
-
-				return;
-			}
-
-			if (isAllowAddPortletDefaultResource(request, portlet)) {
-				return;
-			}
-
-			throw new PrincipalException();
-		}
 
 		if (isAllowAddPortletDefaultResource(request, portlet)) {
 			PortalUtil.addPortletDefaultResource(request, portlet);
@@ -593,6 +581,34 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		} catch (Exception ex) {
 			throw new PortletContainerException(ex);
 		}
+	}
+
+	private void checkControlPanel(HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		if (portlet.isSystem()) {
+			return;
+		}
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long scopeGroupId = themeDisplay.getScopeGroupId();
+
+		if (PortletPermissionUtil.hasControlPanelAccessPermission(
+				permissionChecker, scopeGroupId, portlet)) {
+
+			return;
+		}
+
+		if (isAllowAddPortletDefaultResource(request, portlet)) {
+			return;
+		}
+
+		throw new PrincipalException();
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
