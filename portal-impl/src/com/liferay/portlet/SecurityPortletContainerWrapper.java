@@ -418,69 +418,10 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 
 		if (themeDisplay.isSignedIn() &&
-			portletId.equals(PortletKeys.LAYOUTS_ADMIN)) {
+			portletId.equals(PortletKeys.LAYOUTS_ADMIN) &&
+			isLayoutConfigurationAllowed(request, portlet)) {
 
-			PermissionChecker permissionChecker =
-				themeDisplay.getPermissionChecker();
-
-			Group group = layout.getGroup();
-
-			if (group.isSite()) {
-				if (LayoutPermissionUtil.contains(
-						permissionChecker, layout, ActionKeys.CUSTOMIZE) ||
-					LayoutPermissionUtil.contains(
-							permissionChecker, layout, ActionKeys.UPDATE)) {
-
-					return true;
-				}
-			}
-
-			if (group.isCompany()) {
-				if (permissionChecker.isCompanyAdmin()) {
-					return true;
-				}
-			}
-			else if (group.isLayoutPrototype()) {
-				long layoutPrototypeId = group.getClassPK();
-
-				if (LayoutPrototypePermissionUtil.contains(
-						permissionChecker, layoutPrototypeId,
-					ActionKeys.UPDATE)) {
-
-					return true;
-				}
-			}
-			else if (group.isLayoutSetPrototype()) {
-				long layoutSetPrototypeId = group.getClassPK();
-
-				if (LayoutSetPrototypePermissionUtil.contains(
-						permissionChecker, layoutSetPrototypeId,
-					ActionKeys.UPDATE)) {
-
-					return true;
-				}
-			}
-			else if (group.isOrganization()) {
-				long organizationId = group.getOrganizationId();
-
-				if (OrganizationPermissionUtil.contains(
-						permissionChecker, organizationId, ActionKeys.UPDATE)) {
-
-					return true;
-				}
-			}
-			else if (group.isUserGroup()) {
-				long scopeGroupId = themeDisplay.getScopeGroupId();
-
-				if (GroupPermissionUtil.contains(
-						permissionChecker, scopeGroupId, ActionKeys.UPDATE)) {
-
-					return true;
-				}
-			}
-			else if (group.isUser()) {
-				return true;
-			}
+			return true;
 		}
 
 		if (!portlet.isAddDefaultResource()) {
@@ -530,6 +471,79 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	protected boolean isLayoutConfigurationAllowed(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PermissionChecker permissionChecker =
+				themeDisplay.getPermissionChecker();
+
+		Layout layout = themeDisplay.getLayout();
+		Group group = layout.getGroup();
+
+		if (group.isSite()) {
+			if (LayoutPermissionUtil.contains(
+					permissionChecker, layout, ActionKeys.CUSTOMIZE) ||
+				LayoutPermissionUtil.contains(
+						permissionChecker, layout, ActionKeys.UPDATE)) {
+
+				return true;
+			}
+		}
+
+		if (group.isCompany()) {
+			if (permissionChecker.isCompanyAdmin()) {
+				return true;
+			}
+		}
+		else if (group.isLayoutPrototype()) {
+			long layoutPrototypeId = group.getClassPK();
+
+			if (LayoutPrototypePermissionUtil.contains(
+					permissionChecker, layoutPrototypeId,
+				ActionKeys.UPDATE)) {
+
+				return true;
+			}
+		}
+		else if (group.isLayoutSetPrototype()) {
+			long layoutSetPrototypeId = group.getClassPK();
+
+			if (LayoutSetPrototypePermissionUtil.contains(
+					permissionChecker, layoutSetPrototypeId,
+				ActionKeys.UPDATE)) {
+
+				return true;
+			}
+		}
+		else if (group.isOrganization()) {
+			long organizationId = group.getOrganizationId();
+
+			if (OrganizationPermissionUtil.contains(
+					permissionChecker, organizationId, ActionKeys.UPDATE)) {
+
+				return true;
+			}
+		}
+		else if (group.isUserGroup()) {
+			long scopeGroupId = themeDisplay.getScopeGroupId();
+
+			if (GroupPermissionUtil.contains(
+					permissionChecker, scopeGroupId, ActionKeys.UPDATE)) {
+
+				return true;
+			}
+		}
+		else if (group.isUser()) {
+			return true;
 		}
 
 		return false;
