@@ -386,11 +386,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			HttpServletRequest request, Portlet portlet)
 		throws PortalException, SystemException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		String portletId = portlet.getPortletId();
-
 		if (isRenderingRuntimePortlet(request, portlet)) {
 			return true;
 		}
@@ -399,10 +394,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return true;
 		}
 
-		if (themeDisplay.isSignedIn() &&
-			portletId.equals(PortletKeys.LAYOUTS_ADMIN) &&
-			isLayoutConfigurationAllowed(request, portlet)) {
-
+		if (isLayoutConfigurationAllowed(request, portlet)) {
 			return true;
 		}
 
@@ -479,6 +471,14 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
+
+		if (!themeDisplay.isSignedIn()) {
+			return false;
+		}
+
+		if (!portlet.getPortletId().equals(PortletKeys.LAYOUTS_ADMIN)) {
+			return false;
+		}
 
 		PermissionChecker permissionChecker =
 				themeDisplay.getPermissionChecker();
