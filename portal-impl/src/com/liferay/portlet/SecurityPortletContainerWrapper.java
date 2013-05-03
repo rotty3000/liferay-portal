@@ -424,6 +424,21 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return true;
 		}
 
+		if (isGrantedByPPAUTH(request, portlet)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected boolean isGrantedByPPAUTH(
+		HttpServletRequest request, Portlet portlet) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String portletId = portlet.getPortletId();
+
 		if (!portlet.isAddDefaultResource()) {
 			return false;
 		}
@@ -464,7 +479,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 
 		if (Validator.isNotNull(requestPortletAuthenticationToken)) {
 			String actualPortletAuthenticationToken = AuthTokenUtil.getToken(
-				request, layout.getPlid(), portletId);
+				request, themeDisplay.getPlid(), portletId);
 
 			if (requestPortletAuthenticationToken.equals(
 					actualPortletAuthenticationToken)) {
