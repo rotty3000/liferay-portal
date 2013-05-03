@@ -389,25 +389,13 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		Layout layout = themeDisplay.getLayout();
-		LayoutTypePortlet layoutTypePortlet =
-			themeDisplay.getLayoutTypePortlet();
-
 		String portletId = portlet.getPortletId();
 
 		if (isRenderingRuntimePortlet(request, portlet)) {
 			return true;
 		}
 
-		if (layout.isTypePanel() &&
-			isPanelSelectedPortlet(themeDisplay, portletId)) {
-
-			return true;
-		}
-
-		if ((layoutTypePortlet != null) &&
-			layoutTypePortlet.hasPortletId(portletId)) {
-
+		if (isPortletOnPage(request, portlet)) {
 			return true;
 		}
 
@@ -571,6 +559,34 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 				panelSelectedPortlets);
 
 			return ArrayUtil.contains(panelSelectedPortletsArray, portletId);
+		}
+
+		return false;
+	}
+
+	protected boolean isPortletOnPage(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		Layout layout = themeDisplay.getLayout();
+		LayoutTypePortlet layoutTypePortlet =
+			themeDisplay.getLayoutTypePortlet();
+
+		String portletId = portlet.getPortletId();
+
+		if (layout.isTypePanel() &&
+			isPanelSelectedPortlet(themeDisplay, portletId)) {
+
+			return true;
+		}
+
+		if ((layoutTypePortlet != null) &&
+			layoutTypePortlet.hasPortletId(portletId)) {
+
+			return true;
 		}
 
 		return false;
