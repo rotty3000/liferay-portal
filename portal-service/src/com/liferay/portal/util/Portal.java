@@ -1078,6 +1078,9 @@ public interface Portal {
 			ActionResponse actionResponse)
 		throws Exception;
 
+	/**
+	 * @deprecated As of 6.2 with no direct replacement
+	 */
 	public boolean isAllowAddPortletDefaultResource(
 			HttpServletRequest request, Portlet portlet)
 		throws PortalException, SystemException;
