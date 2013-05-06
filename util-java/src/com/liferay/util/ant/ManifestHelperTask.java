@@ -129,6 +129,8 @@ public class ManifestHelperTask extends Task {
 			"export.packages", attributes.getValue(Constants.EXPORT_PACKAGE));
 		project.setProperty(
 			"import.packages", attributes.getValue(Constants.IMPORT_PACKAGE));
+
+		analyzer.close();
 	}
 
 	protected String execute(String command) throws Exception {
