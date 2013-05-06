@@ -66,7 +66,16 @@ public class ManifestHelperTask extends Task {
 		path.setRefid(reference);
 	}
 
+	public void setProjectDirPropertyName(String projectDirPropertyName) {
+		_projectDirPropertyName = projectDirPropertyName;
+	}
+
 	protected void doExecute() throws Exception {
+		if (_projectDirPropertyName == null) {
+			throw new BuildException(
+				"attribute projectDirPropertyName must be set");
+		}
+
 		Project project = getProject();
 
 		project.setProperty("build.revision", getBuildRevision());
@@ -134,7 +143,7 @@ public class ManifestHelperTask extends Task {
 		Project project = getProject();
 
 		File projectDir = new File(
-			project.getBaseDir(), project.getProperty("project.dir"));
+			project.getBaseDir(), project.getProperty(_projectDirPropertyName));
 
 		File gitDir = new File(projectDir, ".git");
 
@@ -171,5 +180,6 @@ public class ManifestHelperTask extends Task {
 
 	private boolean _analyze;
 	private Path _path;
+	private String _projectDirPropertyName;
 
 }

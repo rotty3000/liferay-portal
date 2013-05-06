@@ -445,6 +445,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 			<liferay-manifest-helper
 				analyze="@{analyze}"
 				classpathref="project.classpath"
+				projectDirPropertyName="project.dir"
 			/>
 		</sequential>
 	</macrodef>
