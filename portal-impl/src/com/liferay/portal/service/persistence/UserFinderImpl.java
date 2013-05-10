@@ -227,6 +227,8 @@ public class UserFinderImpl
 
 		LinkedHashMap<String, Object> params3 = null;
 
+		LinkedHashMap<String, Object> params4 = null;
+
 		Long[] groupIds = null;
 
 		if (params.get("usersGroups") instanceof Long) {
@@ -306,19 +308,45 @@ public class UserFinderImpl
 
 			params2.remove("usersRoles");
 
+			params3 = new LinkedHashMap<String, Object>(params1);
+
+			params3.remove("usersRoles");
+
+			params4 = new LinkedHashMap<String, Object>(params1);
+
+			params4.remove("usersRoles");
+
+			List<Long> organizationIds = new ArrayList<Long>();
 			List<Long> roleGroupIds = new ArrayList<Long>();
+			List<Long> userGroupIds = new ArrayList<Long>();
 
 			for (long roleId : roleIds) {
 				List<Group> groups = RoleUtil.getGroups(roleId);
 
 				for (Group group : groups) {
-					roleGroupIds.add(group.getGroupId());
+					if (group.isOrganization()) {
+						organizationIds.add(group.getOrganizationId());
+					}
+					else if (group.isUserGroup()) {
+						userGroupIds.add(group.getClassPK());
+					}
+					else {
+						roleGroupIds.add(group.getGroupId());
+					}
 				}
 			}
 
 			params2.put(
 				"usersGroups",
 				roleGroupIds.toArray(new Long[roleGroupIds.size()]));
+
+			params3.put(
+				"usersUserGroups",
+				userGroupIds.toArray(new Long[userGroupIds.size()]));
+
+			params4.put(
+				"usersOrgs",
+				organizationIds.toArray(new Long[organizationIds.size()]));
 		}
 
 		Session session = null;
@@ -339,13 +367,19 @@ public class UserFinderImpl
 						session, companyId, firstNames, middleNames, lastNames,
 						screenNames, emailAddresses, status, params2,
 						andOperator));
-			}
 
-			if (doUnionOnGroup) {
 				userIds.addAll(
 					countByC_FN_MN_LN_SN_EA_S(
 						session, companyId, firstNames, middleNames, lastNames,
 						screenNames, emailAddresses, status, params3,
+						andOperator));
+			}
+
+			if (doUnionOnRole) {
+				userIds.addAll(
+					countByC_FN_MN_LN_SN_EA_S(
+						session, companyId, firstNames, middleNames, lastNames,
+						screenNames, emailAddresses, status, params4,
 						andOperator));
 			}
 
@@ -501,6 +535,8 @@ public class UserFinderImpl
 
 		LinkedHashMap<String, Object> params3 = null;
 
+		LinkedHashMap<String, Object> params4 = null;
+
 		Long[] groupIds = null;
 
 		if (params.get("usersGroups") instanceof Long) {
@@ -580,19 +616,45 @@ public class UserFinderImpl
 
 			params2.remove("usersRoles");
 
+			params3 = new LinkedHashMap<String, Object>(params1);
+
+			params3.remove("usersRoles");
+
+			params4 = new LinkedHashMap<String, Object>(params1);
+
+			params4.remove("usersRoles");
+
+			List<Long> organizationIds = new ArrayList<Long>();
 			List<Long> roleGroupIds = new ArrayList<Long>();
+			List<Long> userGroupIds = new ArrayList<Long>();
 
 			for (long roleId : roleIds) {
 				List<Group> groups = RoleUtil.getGroups(roleId);
 
 				for (Group group : groups) {
-					roleGroupIds.add(group.getGroupId());
+					if (group.isOrganization()) {
+						organizationIds.add(group.getOrganizationId());
+					}
+					else if (group.isUserGroup()) {
+						userGroupIds.add(group.getClassPK());
+					}
+					else {
+						roleGroupIds.add(group.getGroupId());
+					}
 				}
 			}
 
 			params2.put(
 				"usersGroups",
 				roleGroupIds.toArray(new Long[roleGroupIds.size()]));
+
+			params3.put(
+				"usersUserGroups",
+				userGroupIds.toArray(new Long[userGroupIds.size()]));
+
+			params4.put(
+				"usersOrgs",
+				organizationIds.toArray(new Long[organizationIds.size()]));
 		}
 
 		Session session = null;
@@ -632,11 +694,15 @@ public class UserFinderImpl
 				sb.append(" UNION (");
 				sb.append(replaceJoinAndWhere(sql, params2));
 				sb.append(StringPool.CLOSE_PARENTHESIS);
-			}
 
-			if (doUnionOnGroup) {
 				sb.append(" UNION (");
 				sb.append(replaceJoinAndWhere(sql, params3));
+				sb.append(StringPool.CLOSE_PARENTHESIS);
+			}
+
+			if (doUnionOnRole) {
+				sb.append(" UNION (");
+				sb.append(replaceJoinAndWhere(sql, params4));
 				sb.append(StringPool.CLOSE_PARENTHESIS);
 			}
 
@@ -683,10 +749,24 @@ public class UserFinderImpl
 				if (status != WorkflowConstants.STATUS_ANY) {
 					qPos.add(status);
 				}
+
+				setJoin(qPos, params3);
+
+				qPos.add(companyId);
+				qPos.add(false);
+				qPos.add(firstNames, 2);
+				qPos.add(middleNames, 2);
+				qPos.add(lastNames, 2);
+				qPos.add(screenNames, 2);
+				qPos.add(emailAddresses, 2);
+
+				if (status != WorkflowConstants.STATUS_ANY) {
+					qPos.add(status);
+				}
 			}
 
-			if (doUnionOnGroup) {
-				setJoin(qPos, params3);
+			if (doUnionOnRole) {
+				setJoin(qPos, params4);
 
 				qPos.add(companyId);
 				qPos.add(false);
