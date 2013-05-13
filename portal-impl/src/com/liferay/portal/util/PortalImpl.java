@@ -6378,14 +6378,11 @@ public class PortalImpl implements Portal {
 			else {
 				Layout curLayout = themeDisplay.getLayout();
 
-				LayoutSet curLayoutSet;
+				LayoutSet curLayoutSet = curLayout.getLayoutSet();
 
 				if (themeDisplay.getDoAsGroupId() > 0) {
 					curLayoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
 						themeDisplay.getDoAsGroupId(), privateLayoutSet);
-				}
-				else {
-					curLayoutSet = curLayout.getLayoutSet();
 				}
 
 				if (canonicalURL ||
