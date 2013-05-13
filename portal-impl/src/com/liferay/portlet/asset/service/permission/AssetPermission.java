@@ -23,6 +23,8 @@ import com.liferay.portal.security.permission.PermissionChecker;
  */
 public class AssetPermission {
 
+	public static final String RESOURCE_NAME = "com.liferay.portlet.asset";
+
 	public static void check(
 			PermissionChecker permissionChecker, long groupId, String actionId)
 		throws PortalException {
@@ -36,7 +38,7 @@ public class AssetPermission {
 		PermissionChecker permissionChecker, long groupId, String actionId) {
 
 		return permissionChecker.hasPermission(
-			groupId, "com.liferay.portlet.asset", groupId, actionId);
+			groupId, RESOURCE_NAME, groupId, actionId);
 	}
 
 }

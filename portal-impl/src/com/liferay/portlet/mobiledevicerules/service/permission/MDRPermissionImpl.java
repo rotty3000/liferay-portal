@@ -36,10 +36,7 @@ public class MDRPermissionImpl implements MDRPermission {
 		PermissionChecker permissionChecker, long groupId, String actionId) {
 
 		return permissionChecker.hasPermission(
-			groupId, _CLASS_NAME, groupId, actionId);
+			groupId, RESOURCE_NAME, groupId, actionId);
 	}
-
-	private static final String _CLASS_NAME =
-		"com.liferay.portlet.mobiledevicerules";
 
 }

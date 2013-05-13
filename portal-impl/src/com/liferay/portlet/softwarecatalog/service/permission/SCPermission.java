@@ -23,6 +23,9 @@ import com.liferay.portal.security.permission.PermissionChecker;
  */
 public class SCPermission {
 
+	public static final String RESOURCE_NAME =
+		"com.liferay.portlet.softwarecatalog";
+
 	public static void check(
 			PermissionChecker permissionChecker, long groupId, String actionId)
 		throws PortalException {
@@ -36,7 +39,7 @@ public class SCPermission {
 		PermissionChecker permissionChecker, long groupId, String actionId) {
 
 		return permissionChecker.hasPermission(
-			groupId, "com.liferay.portlet.softwarecatalog", groupId, actionId);
+			groupId, RESOURCE_NAME, groupId, actionId);
 	}
 
 }

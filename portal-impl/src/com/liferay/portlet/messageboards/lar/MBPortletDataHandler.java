@@ -32,6 +32,7 @@ import com.liferay.portlet.messageboards.service.MBBanLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBStatsUserLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.permission.MBPermission;
 import com.liferay.portlet.messageboards.service.persistence.MBBanExportActionableDynamicQuery;
 import com.liferay.portlet.messageboards.service.persistence.MBCategoryExportActionableDynamicQuery;
 import com.liferay.portlet.messageboards.service.persistence.MBMessageExportActionableDynamicQuery;
@@ -104,7 +105,7 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 		throws Exception {
 
 		portletDataContext.addPermissions(
-			_RESOURCE_NAME, portletDataContext.getScopeGroupId());
+			MBPermission.RESOURCE_NAME, portletDataContext.getScopeGroupId());
 
 		Element rootElement = addExportDataRootElement(portletDataContext);
 
@@ -146,7 +147,7 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 		throws Exception {
 
 		portletDataContext.importPermissions(
-			_RESOURCE_NAME, portletDataContext.getSourceGroupId(),
+			MBPermission.RESOURCE_NAME, portletDataContext.getSourceGroupId(),
 			portletDataContext.getScopeGroupId());
 
 		Element categoriesElement =
@@ -235,8 +236,5 @@ public class MBPortletDataHandler extends BasePortletDataHandler {
 				MBBan.class, userBansActionableDynamicQuery.performCount());
 		}
 	}
-
-	private static final String _RESOURCE_NAME =
-		"com.liferay.portlet.messageboards";
 
 }

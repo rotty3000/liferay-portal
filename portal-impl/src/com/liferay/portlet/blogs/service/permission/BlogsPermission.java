@@ -25,6 +25,8 @@ import com.liferay.portal.util.PortletKeys;
  */
 public class BlogsPermission {
 
+	public static final String RESOURCE_NAME = "com.liferay.portlet.blogs";
+
 	public static void check(
 			PermissionChecker permissionChecker, long groupId, String actionId)
 		throws PortalException {
@@ -38,17 +40,15 @@ public class BlogsPermission {
 		PermissionChecker permissionChecker, long groupId, String actionId) {
 
 		Boolean hasPermission = StagingPermissionUtil.hasPermission(
-			permissionChecker, groupId, _CLASS_NAME, groupId, PortletKeys.BLOGS,
-			actionId);
+			permissionChecker, groupId, RESOURCE_NAME, groupId,
+			PortletKeys.BLOGS, actionId);
 
 		if (hasPermission != null) {
 			return hasPermission.booleanValue();
 		}
 
 		return permissionChecker.hasPermission(
-			groupId, _CLASS_NAME, groupId, actionId);
+			groupId, RESOURCE_NAME, groupId, actionId);
 	}
-
-	private static final String _CLASS_NAME = "com.liferay.portlet.blogs";
 
 }

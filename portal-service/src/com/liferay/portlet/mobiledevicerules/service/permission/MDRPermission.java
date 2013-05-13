@@ -22,6 +22,9 @@ import com.liferay.portal.security.permission.PermissionChecker;
  */
 public interface MDRPermission {
 
+	public static final String RESOURCE_NAME =
+		"com.liferay.portlet.mobiledevicerules";
+
 	public void check(
 			PermissionChecker permissionChecker, long groupId, String actionId)
 		throws PortalException;

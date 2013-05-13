@@ -14,10 +14,12 @@
 
 package com.liferay.portal.lar;
 
+import com.liferay.portal.LARFileException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.ExportImport;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.ExportImportUtil;
+import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.MissingReference;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerKeys;
@@ -37,6 +39,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.ElementHandler;
 import com.liferay.portal.kernel.xml.ElementProcessor;
@@ -59,6 +62,7 @@ import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 
 import java.io.File;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +167,8 @@ public class ExportImportImpl implements ExportImport {
 
 				portletDataContext.addReferenceElement(
 					entityStagedModel, entityElement, fileEntry,
-					FileEntry.class, false);
+					FileEntry.class, PortletDataContext.REFERENCE_TYPE_EMBEDDED,
+					false);
 
 				String path = ExportImportPathUtil.getModelPath(
 					fileEntry.getGroupId(), FileEntry.class.getName(),
@@ -347,6 +352,52 @@ public class ExportImportImpl implements ExportImport {
 			ArrayUtil.toStringArray(newLinksToLayout.toArray()));
 
 		return content;
+	}
+
+	public ManifestSummary getManifestSummary(
+			long userId, long groupId, Map<String, String[]> parameterMap,
+			File file)
+		throws Exception {
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		String userIdStrategy = MapUtil.getString(
+			parameterMap, PortletDataHandlerKeys.USER_ID_STRATEGY);
+		ZipReader zipReader = ZipReaderFactoryUtil.getZipReader(file);
+
+		PortletDataContext portletDataContext = new PortletDataContextImpl(
+			group.getCompanyId(), groupId, parameterMap,
+			getUserIdStrategy(userId, userIdStrategy), zipReader);
+
+		final ManifestSummary manifestSummary = new ManifestSummary();
+
+		SAXParser saxParser = new SAXParser();
+
+		ElementHandler elementHandler = new ElementHandler(
+			new ElementProcessor() {
+
+				@Override
+				public void processElement(Element element) {
+					String className = element.attributeValue("class-name");
+					long count = GetterUtil.getLong(element.getText());
+
+					manifestSummary.addModelCount(className, count);
+				}
+
+			},
+			new String[] {"staged-model"});
+
+		saxParser.setContentHandler(elementHandler);
+
+		InputStream is = portletDataContext.getZipEntryAsInputStream(
+			"/manifest.xml");
+
+		if (is == null) {
+			throw new LARFileException("manifest.xml not found in the LAR");
+		}
+
+		saxParser.parse(new InputSource(is));
+
+		return manifestSummary;
 	}
 
 	public String importContentReferences(
@@ -588,6 +639,26 @@ public class ExportImportImpl implements ExportImport {
 				portletDataContext.getZipEntryAsInputStream("/manifest.xml")));
 
 		return missingReferences;
+	}
+
+	public void writeManifestSummary(
+		Document document, ManifestSummary manifestSummary) {
+
+		Element rootElement = document.getRootElement();
+
+		Element summaryElement = rootElement.addElement("summary");
+
+		Map<String, Long> modelCounters = manifestSummary.getModelCounters();
+
+		for (String modelClassName : modelCounters.keySet()) {
+			Element element = summaryElement.addElement("staged-model");
+
+			element.addAttribute("class-name", modelClassName);
+
+			String count = String.valueOf(modelCounters.get(modelClassName));
+
+			element.addText(count);
+		}
 	}
 
 	protected Map<String, String[]> getDLReferenceParameters(

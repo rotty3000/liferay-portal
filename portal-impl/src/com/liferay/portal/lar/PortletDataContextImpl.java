@@ -615,35 +615,38 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 	public Element addReferenceElement(
 		StagedModel referrerStagedModel, Element element,
-		ClassedModel classedModel, boolean missing) {
-
-		return addReferenceElement(
-			referrerStagedModel, element, classedModel,
-			classedModel.getModelClassName(), StringPool.BLANK, missing);
-	}
-
-	public Element addReferenceElement(
-		StagedModel referrerStagedModel, Element element,
-		ClassedModel classedModel, Class<?> clazz, boolean missing) {
+		ClassedModel classedModel, Class<?> clazz, String referenceType,
+		boolean missing) {
 
 		return addReferenceElement(
 			referrerStagedModel, element, classedModel, clazz.getName(),
-			StringPool.BLANK, missing);
+			StringPool.BLANK, referenceType, missing);
 	}
 
 	public Element addReferenceElement(
 		StagedModel referrerStagedModel, Element element,
-		ClassedModel classedModel, String binPath, boolean missing) {
+		ClassedModel classedModel, String referenceType, boolean missing) {
 
 		return addReferenceElement(
 			referrerStagedModel, element, classedModel,
-			classedModel.getModelClassName(), binPath, missing);
+			classedModel.getModelClassName(), StringPool.BLANK, referenceType,
+			missing);
+	}
+
+	public Element addReferenceElement(
+		StagedModel referrerStagedModel, Element element,
+		ClassedModel classedModel, String binPath, String referenceType,
+		boolean missing) {
+
+		return addReferenceElement(
+			referrerStagedModel, element, classedModel,
+			classedModel.getModelClassName(), binPath, referenceType, missing);
 	}
 
 	public Element addReferenceElement(
 		StagedModel referrerStagedModel, Element element,
 		ClassedModel classedModel, String className, String binPath,
-		boolean missing) {
+		String referenceType, boolean missing) {
 
 		if (missing) {
 			addReferenceElement(
@@ -653,7 +656,13 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 		Element referenceElement = null;
 
-		if (!missing) {
+		if (missing) {
+			Element referencesElement = _missingReferencesElement;
+
+			referenceElement = referencesElement.addElement(
+				"missing-reference");
+		}
+		else {
 			Element referencesElement = element.element("references");
 
 			if (referencesElement == null) {
@@ -662,12 +671,10 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 			referenceElement = referencesElement.addElement("reference");
 		}
-		else {
-			Element referencesElement = _missingReferencesElement;
 
-			referenceElement = referencesElement.addElement(
-				"missing-reference");
+		referenceElement.addAttribute("class-name", className);
 
+		if (missing) {
 			if (classedModel instanceof StagedModel) {
 				referenceElement.addAttribute(
 					"display-name",
@@ -679,16 +686,6 @@ public class PortletDataContextImpl implements PortletDataContext {
 					"display-name",
 					String.valueOf(classedModel.getPrimaryKeyObj()));
 			}
-
-			referenceElement.addAttribute(
-				"referrer-display-name",
-				StagedModelDataHandlerUtil.getDisplayName(referrerStagedModel));
-		}
-
-		referenceElement.addAttribute("class-name", className);
-
-		if (Validator.isNotNull(binPath)) {
-			referenceElement.addAttribute("path", binPath);
 		}
 
 		if (classedModel instanceof StagedGroupedModel) {
@@ -697,17 +694,32 @@ public class PortletDataContextImpl implements PortletDataContext {
 
 			referenceElement.addAttribute(
 				"group-id", String.valueOf(stagedGroupedModel.getGroupId()));
+		}
+
+		if (Validator.isNotNull(binPath)) {
+			referenceElement.addAttribute("path", binPath);
+		}
+
+		referenceElement.addAttribute("type", referenceType);
+
+		if (missing) {
+			referenceElement.addAttribute(
+				"referrer-class-name", referrerStagedModel.getModelClassName());
+			referenceElement.addAttribute(
+				"referrer-display-name",
+				StagedModelDataHandlerUtil.getDisplayName(referrerStagedModel));
+		}
+
+		if (classedModel instanceof StagedGroupedModel) {
+			StagedGroupedModel stagedGroupedModel =
+				(StagedGroupedModel)classedModel;
+
 			referenceElement.addAttribute("uuid", stagedGroupedModel.getUuid());
 		}
 		else if (classedModel instanceof StagedModel) {
 			StagedModel stagedModel = (StagedModel)classedModel;
 
 			referenceElement.addAttribute("uuid", stagedModel.getUuid());
-		}
-
-		if (missing) {
-			referenceElement.addAttribute(
-				"referrer-class-name", referrerStagedModel.getModelClassName());
 		}
 
 		return referenceElement;
@@ -1044,8 +1056,14 @@ public class PortletDataContextImpl implements PortletDataContext {
 	public List<Element> getReferenceDataElements(
 		Element parentElement, Class<?> clazz) {
 
+		return getReferenceDataElements(parentElement, clazz, null);
+	}
+
+	public List<Element> getReferenceDataElements(
+		Element parentElement, Class<?> clazz, String referenceType) {
+
 		List<Element> referenceElements = getReferenceElements(
-			parentElement, clazz);
+			parentElement, clazz, referenceType);
 
 		return getReferenceDataElements(referenceElements, clazz);
 	}
@@ -1053,8 +1071,14 @@ public class PortletDataContextImpl implements PortletDataContext {
 	public List<Element> getReferenceDataElements(
 		StagedModel parentStagedModel, Class<?> clazz) {
 
+		return getReferenceDataElements(parentStagedModel, clazz, null);
+	}
+
+	public List<Element> getReferenceDataElements(
+		StagedModel parentStagedModel, Class<?> clazz, String referenceType) {
+
 		List<Element> referenceElements = getReferenceElements(
-			parentStagedModel, clazz);
+			parentStagedModel, clazz, referenceType);
 
 		return getReferenceDataElements(referenceElements, clazz);
 	}
@@ -1868,7 +1892,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	protected List<Element> getReferenceElements(
-		Element parentElement, Class<?> clazz) {
+		Element parentElement, Class<?> clazz, String referenceType) {
 
 		if (parentElement == null) {
 			return Collections.emptyList();
@@ -1880,8 +1904,19 @@ public class PortletDataContextImpl implements PortletDataContext {
 			return Collections.emptyList();
 		}
 
-		XPath xPath = SAXReaderUtil.createXPath(
-			"reference[@class-name='"+ clazz.getName() + "']");
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("reference[@class-name='");
+		sb.append(clazz.getName());
+
+		if (referenceType != null) {
+			sb.append("' and @type='");
+			sb.append(referenceType);
+		}
+
+		sb.append("']");
+
+		XPath xPath = SAXReaderUtil.createXPath(sb.toString());
 
 		List<Node> nodes = xPath.selectNodes(referencesElement);
 
@@ -1889,12 +1924,12 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	protected List<Element> getReferenceElements(
-		StagedModel parentStagedModel, Class<?> clazz) {
+		StagedModel parentStagedModel, Class<?> clazz, String referenceType) {
 
 		Element stagedModelElement = getImportDataStagedModelElement(
 			parentStagedModel);
 
-		return getReferenceElements(stagedModelElement, clazz);
+		return getReferenceElements(stagedModelElement, clazz, referenceType);
 	}
 
 	protected long getUserId(AuditedModel auditedModel) {
