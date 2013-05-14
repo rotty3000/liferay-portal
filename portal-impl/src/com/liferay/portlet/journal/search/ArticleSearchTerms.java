@@ -38,6 +38,7 @@ public class ArticleSearchTerms extends ArticleDisplayTerms {
 		templateId = DAOParamUtil.getString(portletRequest, TEMPLATE_ID);
 		title = DAOParamUtil.getString(portletRequest, TITLE);
 		type = DAOParamUtil.getString(portletRequest, TYPE);
+		userName = DAOParamUtil.getString(portletRequest, USER_NAME);
 		version = ParamUtil.getDouble(portletRequest, VERSION);
 
 		groupId = setGroupId(portletRequest);
@@ -98,6 +99,10 @@ public class ArticleSearchTerms extends ArticleDisplayTerms {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public void setVersion(double version) {

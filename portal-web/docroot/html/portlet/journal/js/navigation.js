@@ -47,6 +47,8 @@ AUI.add(
 
 		var STR_TYPE = 'type';
 
+		var STR_USER_NAME = 'userName';
+
 		var STRUTS_ACTION = 'struts_action';
 
 		var SRC_ENTRIES_PAGINATOR = 1;
@@ -92,6 +94,7 @@ AUI.add(
 						instance._statusNode = instance.byId(STR_STATUS);
 						instance._titleNode = instance.byId(STR_TITLE);
 						instance._typeNode = instance.byId(STR_TYPE);
+						instance._userNameNode = instance.byId(STR_USER_NAME);
 
 						var checkBoxesId = [
 							instance.ns(STR_ROW_IDS_JOURNAL_ARTICLE_CHECKBOX),
@@ -276,7 +279,8 @@ AUI.add(
 							showSearchInfo: true,
 							status: instance._statusNode.get('value'),
 							title: instance._titleNode.get('value'),
-							type: instance._typeNode.get('value')
+							type: instance._typeNode.get('value'),
+							userName: instance._userNameNode.get('value')
 						};
 
 						instance._searchArticle(searchData);
@@ -300,7 +304,8 @@ AUI.add(
 							showSearchInfo: true,
 							status: instance._statusNode.get('value'),
 							title: instance._titleNode.get('value'),
-							type: instance._typeNode.get('value')
+							type: instance._typeNode.get('value'),
+							userName: instance._userNameNode.get('value')
 						};
 
 						if (event.searchEverywhere) {
@@ -383,7 +388,8 @@ AUI.add(
 							showSearchInfo: true,
 							status: '',
 							title: '',
-							type: ''
+							type: '',
+							userName: ''
 						};
 
 						instance._searchArticle(searchData);
@@ -417,6 +423,7 @@ AUI.add(
 						requestParams[instance.ns(STR_STATUS)] = searchData.status;
 						requestParams[instance.ns(STR_TITLE)] = searchData.title;
 						requestParams[instance.ns(STR_TYPE)] = searchData.type;
+						requestParams[instance.ns(STR_USER_NAME)] = searchData.userName;
 						requestParams[instance.ns(SEARCH_TYPE)] = SEARCH_TYPE_SINGLE;
 						requestParams[instance.ns(STR_KEYWORDS)] = searchData.keywords;
 						requestParams[instance.ns(STR_SHOW_SEARCH_INFO)] = searchData.showSearchInfo;

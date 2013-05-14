@@ -1315,8 +1315,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	/**
 	 * Returns an ordered range of all the web content articles matching the
 	 * parameters, including a keywords parameter for matching with the
-	 * article's ID, title, description, and content, a DDM structure key
-	 * parameter, and a DDM template key parameter.
+	 * user name, article's ID, title, description, and content, a DDM structure
+	 * key parameter, and a DDM template key parameter.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1388,7 +1388,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 
 	/**
 	 * Returns an ordered range of all the web content articles matching the
-	 * parameters, including keyword parameters for article ID, title,
+	 * parameters, including keyword parameters for userName, article ID, title,
 	 * description, and content, a DDM structure key parameter, a DDM template
 	 * key parameter, and an AND operator switch.
 	 *
@@ -1404,6 +1404,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *
 	 * @param  companyId the primary key of the web content article's company
 	 * @param  groupId the primary key of the group (optionally <code>0</code>)
+	 * @param  userName the user name keywords (space separated, optionally
+	 *         <code>null</code>)
 	 * @param  folderIds the primary keys of the web content article folders
 	 *         (optionally {@link java.util.Collections#EMPTY_LIST})
 	 * @param  classNameId the primary key of the DDMStructure class if the web
@@ -1453,7 +1455,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public List<JournalArticle> search(
-			long companyId, long groupId, List<Long> folderIds,
+			long companyId, long groupId, String userName, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
 			String description, String content, String type,
 			String ddmStructureKey, String ddmTemplateKey, Date displayDateGT,
@@ -1464,18 +1466,18 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		QueryDefinition queryDefinition = new QueryDefinition(
 			status, start, end, obc);
 
-		return journalArticleFinder.filterFindByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
-			companyId, groupId, folderIds, classNameId, articleId, version,
-			title, description, content, type, ddmStructureKey, ddmTemplateKey,
-			displayDateGT, displayDateLT, reviewDate, andOperator,
-			queryDefinition);
+		return journalArticleFinder.filterFindByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R(
+			companyId, groupId, userName, folderIds, classNameId, articleId,
+			version, title, description, content, type, ddmStructureKey,
+			ddmTemplateKey, displayDateGT, displayDateLT, reviewDate,
+			andOperator, queryDefinition);
 	}
 
 	/**
 	 * Returns an ordered range of all the web content articles matching the
-	 * parameters, including keyword parameters for article ID, title,
-	 * description, and content, a DDM structure keys (plural) parameter, a DDM
-	 * template keys (plural) parameter, and an AND operator switch.
+	 * parameters, including keyword parameters for user name, article ID,
+	 * title, description, and content, a DDM structure keys (plural) parameter,
+	 * a DDM template keys (plural) parameter, and an AND operator switch.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end -
@@ -1489,6 +1491,8 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 *
 	 * @param  companyId the primary key of the web content article's company
 	 * @param  groupId the primary key of the group (optionally <code>0</code>)
+	 * @param  userName the user name keywords (space separated, optionally
+	 *         <code>null</code>)
 	 * @param  folderIds the primary keys of the web content article folders
 	 *         (optionally {@link java.util.Collections#EMPTY_LIST})
 	 * @param  classNameId the primary key of the DDMStructure class if the web
@@ -1538,7 +1542,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public List<JournalArticle> search(
-			long companyId, long groupId, List<Long> folderIds,
+			long companyId, long groupId, String userName, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
 			String description, String content, String type,
 			String[] ddmStructureKeys, String[] ddmTemplateKeys,
@@ -1549,9 +1553,9 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 		QueryDefinition queryDefinition = new QueryDefinition(
 			status, start, end, obc);
 
-		return journalArticleFinder.filterFindByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
-			companyId, groupId, folderIds, classNameId, articleId, version,
-			title, description, content, type, ddmStructureKeys,
+		return journalArticleFinder.filterFindByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R(
+			companyId, groupId, userName, folderIds, classNameId, articleId,
+			version, title, description, content, type, ddmStructureKeys,
 			ddmTemplateKeys, displayDateGT, displayDateLT, reviewDate,
 			andOperator, queryDefinition);
 	}
@@ -1615,12 +1619,14 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 
 	/**
 	 * Returns the number of web content articles matching the parameters,
-	 * including keyword parameters for article ID, title, description, and
-	 * content, a DDM structure key parameter, a DDM template key parameter, and
-	 * an AND operator switch.
+	 * including keyword parameters for user name, article ID, title,
+	 * description, and content, a DDM structure key parameter, a DDM template
+	 * key parameter, and an AND operator switch.
 	 *
 	 * @param  companyId the primary key of the web content article's company
 	 * @param  groupId the primary key of the group (optionally <code>0</code>)
+	 * @param  userName the user name keywords (space separated, optionally
+	 *         <code>null</code>)
 	 * @param  folderIds the primary keys of the web content article folders
 	 *         (optionally {@link java.util.Collections#EMPTY_LIST})
 	 * @param  classNameId the primary key of the DDMStructure class if the web
@@ -1664,7 +1670,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int searchCount(
-			long companyId, long groupId, List<Long> folderIds,
+			long companyId, long groupId, String userName, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
 			String description, String content, String type,
 			String ddmStructureKey, String ddmTemplateKey, Date displayDateGT,
@@ -1672,21 +1678,23 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			boolean andOperator)
 		throws SystemException {
 
-		return journalArticleFinder.filterCountByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
-			companyId, groupId, folderIds, classNameId, articleId, version,
-			title, description, content, type, ddmStructureKey, ddmTemplateKey,
-			displayDateGT, displayDateLT, reviewDate, andOperator,
-			new QueryDefinition(status));
+		return journalArticleFinder.filterCountByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R(
+			companyId, groupId, userName, folderIds, classNameId, articleId,
+			version, title, description, content, type, ddmStructureKey,
+			ddmTemplateKey, displayDateGT, displayDateLT, reviewDate,
+			andOperator, new QueryDefinition(status));
 	}
 
 	/**
 	 * Returns the number of web content articles matching the parameters,
-	 * including keyword parameters for article ID, title, description, and
-	 * content, a DDM structure keys (plural) parameter, a DDM template keys
-	 * (plural) parameter, and an AND operator switch.
+	 * including keyword parameters for user name, article ID, title,
+	 * description, and content, a DDM structure keys (plural) parameter, a DDM
+	 * template keys (plural) parameter, and an AND operator switch.
 	 *
 	 * @param  companyId the primary key of the web content article's company
 	 * @param  groupId the primary key of the group (optionally <code>0</code>)
+	 * @param  userName the user name keywords (space separated, optionally
+	 *         <code>null</code>)
 	 * @param  folderIds the primary keys of the web content article folders
 	 *         (optionally {@link java.util.Collections#EMPTY_LIST})
 	 * @param  classNameId the primary key of the DDMStructure class if the web
@@ -1730,7 +1738,7 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	public int searchCount(
-			long companyId, long groupId, List<Long> folderIds,
+			long companyId, long groupId, String userName, List<Long> folderIds,
 			long classNameId, String articleId, Double version, String title,
 			String description, String content, String type,
 			String[] ddmStructureKeys, String[] ddmTemplateKeys,
@@ -1738,9 +1746,9 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			boolean andOperator)
 		throws SystemException {
 
-		return journalArticleFinder.filterCountByC_G_F_C_A_V_T_D_C_T_S_T_D_R(
-			companyId, groupId, folderIds, classNameId, articleId, version,
-			title, description, content, type, ddmStructureKeys,
+		return journalArticleFinder.filterCountByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R(
+			companyId, groupId, userName, folderIds, classNameId, articleId,
+			version, title, description, content, type, ddmStructureKeys,
 			ddmTemplateKeys, displayDateGT, displayDateLT, reviewDate,
 			andOperator, new QueryDefinition(status));
 	}

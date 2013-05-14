@@ -1548,8 +1548,8 @@ public class JournalArticleServiceHttp {
 
 	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
 		HttpPrincipal httpPrincipal, long companyId, long groupId,
-		java.util.List<java.lang.Long> folderIds, long classNameId,
-		java.lang.String articleId, java.lang.Double version,
+		java.lang.String userName, java.util.List<java.lang.Long> folderIds,
+		long classNameId, java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String ddmStructureKey, java.lang.String ddmTemplateKey,
@@ -1562,8 +1562,8 @@ public class JournalArticleServiceHttp {
 					"search", _searchParameterTypes40);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
-					companyId, groupId, folderIds, classNameId, articleId,
-					version, title, description, content, type,
+					companyId, groupId, userName, folderIds, classNameId,
+					articleId, version, title, description, content, type,
 					ddmStructureKey, ddmTemplateKey, displayDateGT,
 					displayDateLT, status, reviewDate, andOperator, start, end,
 					obc);
@@ -1592,8 +1592,8 @@ public class JournalArticleServiceHttp {
 
 	public static java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
 		HttpPrincipal httpPrincipal, long companyId, long groupId,
-		java.util.List<java.lang.Long> folderIds, long classNameId,
-		java.lang.String articleId, java.lang.Double version,
+		java.lang.String userName, java.util.List<java.lang.Long> folderIds,
+		long classNameId, java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String[] ddmStructureKeys,
@@ -1607,8 +1607,8 @@ public class JournalArticleServiceHttp {
 					"search", _searchParameterTypes41);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
-					companyId, groupId, folderIds, classNameId, articleId,
-					version, title, description, content, type,
+					companyId, groupId, userName, folderIds, classNameId,
+					articleId, version, title, description, content, type,
 					ddmStructureKeys, ddmTemplateKeys, displayDateGT,
 					displayDateLT, status, reviewDate, andOperator, start, end,
 					obc);
@@ -1674,8 +1674,9 @@ public class JournalArticleServiceHttp {
 	}
 
 	public static int searchCount(HttpPrincipal httpPrincipal, long companyId,
-		long groupId, java.util.List<java.lang.Long> folderIds,
-		long classNameId, java.lang.String articleId, java.lang.Double version,
+		long groupId, java.lang.String userName,
+		java.util.List<java.lang.Long> folderIds, long classNameId,
+		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String ddmStructureKey, java.lang.String ddmTemplateKey,
@@ -1687,8 +1688,8 @@ public class JournalArticleServiceHttp {
 					"searchCount", _searchCountParameterTypes43);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
-					companyId, groupId, folderIds, classNameId, articleId,
-					version, title, description, content, type,
+					companyId, groupId, userName, folderIds, classNameId,
+					articleId, version, title, description, content, type,
 					ddmStructureKey, ddmTemplateKey, displayDateGT,
 					displayDateLT, status, reviewDate, andOperator);
 
@@ -1715,8 +1716,9 @@ public class JournalArticleServiceHttp {
 	}
 
 	public static int searchCount(HttpPrincipal httpPrincipal, long companyId,
-		long groupId, java.util.List<java.lang.Long> folderIds,
-		long classNameId, java.lang.String articleId, java.lang.Double version,
+		long groupId, java.lang.String userName,
+		java.util.List<java.lang.Long> folderIds, long classNameId,
+		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String[] ddmStructureKeys,
@@ -1729,8 +1731,8 @@ public class JournalArticleServiceHttp {
 					"searchCount", _searchCountParameterTypes44);
 
 			MethodHandler methodHandler = new MethodHandler(methodKey,
-					companyId, groupId, folderIds, classNameId, articleId,
-					version, title, description, content, type,
+					companyId, groupId, userName, folderIds, classNameId,
+					articleId, version, title, description, content, type,
 					ddmStructureKeys, ddmTemplateKeys, displayDateGT,
 					displayDateLT, status, reviewDate, andOperator);
 
@@ -2279,8 +2281,8 @@ public class JournalArticleServiceHttp {
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[] _searchParameterTypes40 = new Class[] {
-			long.class, long.class, java.util.List.class, long.class,
-			java.lang.String.class, java.lang.Double.class,
+			long.class, long.class, java.lang.String.class, java.util.List.class,
+			long.class, java.lang.String.class, java.lang.Double.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, java.util.Date.class,
@@ -2289,8 +2291,8 @@ public class JournalArticleServiceHttp {
 			com.liferay.portal.kernel.util.OrderByComparator.class
 		};
 	private static final Class<?>[] _searchParameterTypes41 = new Class[] {
-			long.class, long.class, java.util.List.class, long.class,
-			java.lang.String.class, java.lang.Double.class,
+			long.class, long.class, java.lang.String.class, java.util.List.class,
+			long.class, java.lang.String.class, java.lang.Double.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String[].class, java.lang.String[].class,
@@ -2306,16 +2308,16 @@ public class JournalArticleServiceHttp {
 			int.class, java.util.Date.class
 		};
 	private static final Class<?>[] _searchCountParameterTypes43 = new Class[] {
-			long.class, long.class, java.util.List.class, long.class,
-			java.lang.String.class, java.lang.Double.class,
+			long.class, long.class, java.lang.String.class, java.util.List.class,
+			long.class, java.lang.String.class, java.lang.Double.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class, java.util.Date.class,
 			java.util.Date.class, int.class, java.util.Date.class, boolean.class
 		};
 	private static final Class<?>[] _searchCountParameterTypes44 = new Class[] {
-			long.class, long.class, java.util.List.class, long.class,
-			java.lang.String.class, java.lang.Double.class,
+			long.class, long.class, java.lang.String.class, java.util.List.class,
+			long.class, java.lang.String.class, java.lang.Double.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String.class, java.lang.String.class,
 			java.lang.String[].class, java.lang.String[].class,

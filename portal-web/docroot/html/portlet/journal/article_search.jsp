@@ -45,6 +45,8 @@ boolean advancedSearch = ParamUtil.getBoolean(liferayPortletRequest, displayTerm
 		<liferay-ui:message arguments="<%= andOperator %>" key="match-x-of-the-following-fields" />
 
 		<aui:fieldset>
+			<aui:input label="author" name="<%= displayTerms.USER_NAME %>" size="20" type="text" value="<%= displayTerms.getUserName() %>" />
+
 			<aui:input label="id" name="<%= displayTerms.ARTICLE_ID %>" size="20" value="<%= displayTerms.getArticleId() %>" />
 
 			<aui:input name="<%= displayTerms.TITLE %>" size="20" type="text" value="<%= displayTerms.getTitle() %>" />

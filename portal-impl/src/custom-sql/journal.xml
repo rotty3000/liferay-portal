@@ -40,7 +40,7 @@
 				([$STATUS$])
 		]]>
 	</sql>
-	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.countByC_G_F_C_A_V_T_D_C_T_S_T_D_R">
+	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.countByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R">
 		<![CDATA[
 			SELECT
 				COUNT(DISTINCT JournalArticle.articleId) AS COUNT_VALUE
@@ -52,6 +52,7 @@
 				(classNameId = ?) AND
 				([$STATUS$]) AND
 				(
+					(userName LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(articleId LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(version = ?) [$AND_OR_CONNECTOR$]
 					(lower(title) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
@@ -167,7 +168,7 @@
 				JournalArticle.id_ ASC
 		]]>
 	</sql>
-	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.findByC_G_F_C_A_V_T_D_C_T_S_T_D_R">
+	<sql id="com.liferay.portlet.journal.service.persistence.JournalArticleFinder.findByC_G_U_F_C_A_V_T_D_C_T_S_T_D_R">
 		<![CDATA[
 			SELECT
 				JournalArticle.*
@@ -184,6 +185,7 @@
 				(JournalArticle.classNameId = ?) AND
 				([$STATUS$]) AND
 				(
+					(JournalArticle.userName LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(JournalArticle.articleId LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(JournalArticle.version = ?) [$AND_OR_CONNECTOR$]
 					(lower(JournalArticle.title) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]

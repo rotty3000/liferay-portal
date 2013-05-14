@@ -60,6 +60,7 @@ public class JournalRSSUtil {
 
 		long companyId = feed.getCompanyId();
 		long groupId = feed.getGroupId();
+		String userName = null;
 		List<Long> folderIds = Collections.emptyList();
 		String articleId = null;
 		Double version = null;
@@ -104,7 +105,7 @@ public class JournalRSSUtil {
 		}
 
 		return JournalArticleLocalServiceUtil.search(
-			companyId, groupId, folderIds,
+			companyId, groupId, userName, folderIds,
 			JournalArticleConstants.CLASSNAME_ID_DEFAULT, articleId, version,
 			title, description, content, type, structureId, templateId,
 			displayDateGT, displayDateLT, status, reviewDate, andOperator,

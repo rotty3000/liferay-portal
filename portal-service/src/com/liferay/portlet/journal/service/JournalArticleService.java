@@ -1048,8 +1048,8 @@ public interface JournalArticleService extends BaseService {
 	/**
 	* Returns an ordered range of all the web content articles matching the
 	* parameters, including a keywords parameter for matching with the
-	* article's ID, title, description, and content, a DDM structure key
-	* parameter, and a DDM template key parameter.
+	* user name, article's ID, title, description, and content, a DDM structure
+	* key parameter, and a DDM template key parameter.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end -
@@ -1117,7 +1117,7 @@ public interface JournalArticleService extends BaseService {
 
 	/**
 	* Returns an ordered range of all the web content articles matching the
-	* parameters, including keyword parameters for article ID, title,
+	* parameters, including keyword parameters for userName, article ID, title,
 	* description, and content, a DDM structure key parameter, a DDM template
 	* key parameter, and an AND operator switch.
 	*
@@ -1133,6 +1133,8 @@ public interface JournalArticleService extends BaseService {
 	*
 	* @param companyId the primary key of the web content article's company
 	* @param groupId the primary key of the group (optionally <code>0</code>)
+	* @param userName the user name keywords (space separated, optionally
+	<code>null</code>)
 	* @param folderIds the primary keys of the web content article folders
 	(optionally {@link java.util.Collections#EMPTY_LIST})
 	* @param classNameId the primary key of the DDMStructure class if the web
@@ -1183,8 +1185,9 @@ public interface JournalArticleService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
-		long companyId, long groupId, java.util.List<java.lang.Long> folderIds,
-		long classNameId, java.lang.String articleId, java.lang.Double version,
+		long companyId, long groupId, java.lang.String userName,
+		java.util.List<java.lang.Long> folderIds, long classNameId,
+		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String ddmStructureKey, java.lang.String ddmTemplateKey,
@@ -1195,9 +1198,9 @@ public interface JournalArticleService extends BaseService {
 
 	/**
 	* Returns an ordered range of all the web content articles matching the
-	* parameters, including keyword parameters for article ID, title,
-	* description, and content, a DDM structure keys (plural) parameter, a DDM
-	* template keys (plural) parameter, and an AND operator switch.
+	* parameters, including keyword parameters for user name, article ID,
+	* title, description, and content, a DDM structure keys (plural) parameter,
+	* a DDM template keys (plural) parameter, and an AND operator switch.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end -
@@ -1211,6 +1214,8 @@ public interface JournalArticleService extends BaseService {
 	*
 	* @param companyId the primary key of the web content article's company
 	* @param groupId the primary key of the group (optionally <code>0</code>)
+	* @param userName the user name keywords (space separated, optionally
+	<code>null</code>)
 	* @param folderIds the primary keys of the web content article folders
 	(optionally {@link java.util.Collections#EMPTY_LIST})
 	* @param classNameId the primary key of the DDMStructure class if the web
@@ -1261,8 +1266,9 @@ public interface JournalArticleService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portlet.journal.model.JournalArticle> search(
-		long companyId, long groupId, java.util.List<java.lang.Long> folderIds,
-		long classNameId, java.lang.String articleId, java.lang.Double version,
+		long companyId, long groupId, java.lang.String userName,
+		java.util.List<java.lang.Long> folderIds, long classNameId,
+		java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String[] ddmStructureKeys,
@@ -1327,12 +1333,14 @@ public interface JournalArticleService extends BaseService {
 
 	/**
 	* Returns the number of web content articles matching the parameters,
-	* including keyword parameters for article ID, title, description, and
-	* content, a DDM structure key parameter, a DDM template key parameter, and
-	* an AND operator switch.
+	* including keyword parameters for user name, article ID, title,
+	* description, and content, a DDM structure key parameter, a DDM template
+	* key parameter, and an AND operator switch.
 	*
 	* @param companyId the primary key of the web content article's company
 	* @param groupId the primary key of the group (optionally <code>0</code>)
+	* @param userName the user name keywords (space separated, optionally
+	<code>null</code>)
 	* @param folderIds the primary keys of the web content article folders
 	(optionally {@link java.util.Collections#EMPTY_LIST})
 	* @param classNameId the primary key of the DDMStructure class if the web
@@ -1377,8 +1385,8 @@ public interface JournalArticleService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int searchCount(long companyId, long groupId,
-		java.util.List<java.lang.Long> folderIds, long classNameId,
-		java.lang.String articleId, java.lang.Double version,
+		java.lang.String userName, java.util.List<java.lang.Long> folderIds,
+		long classNameId, java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String ddmStructureKey, java.lang.String ddmTemplateKey,
@@ -1388,12 +1396,14 @@ public interface JournalArticleService extends BaseService {
 
 	/**
 	* Returns the number of web content articles matching the parameters,
-	* including keyword parameters for article ID, title, description, and
-	* content, a DDM structure keys (plural) parameter, a DDM template keys
-	* (plural) parameter, and an AND operator switch.
+	* including keyword parameters for user name, article ID, title,
+	* description, and content, a DDM structure keys (plural) parameter, a DDM
+	* template keys (plural) parameter, and an AND operator switch.
 	*
 	* @param companyId the primary key of the web content article's company
 	* @param groupId the primary key of the group (optionally <code>0</code>)
+	* @param userName the user name keywords (space separated, optionally
+	<code>null</code>)
 	* @param folderIds the primary keys of the web content article folders
 	(optionally {@link java.util.Collections#EMPTY_LIST})
 	* @param classNameId the primary key of the DDMStructure class if the web
@@ -1438,8 +1448,8 @@ public interface JournalArticleService extends BaseService {
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int searchCount(long companyId, long groupId,
-		java.util.List<java.lang.Long> folderIds, long classNameId,
-		java.lang.String articleId, java.lang.Double version,
+		java.lang.String userName, java.util.List<java.lang.Long> folderIds,
+		long classNameId, java.lang.String articleId, java.lang.Double version,
 		java.lang.String title, java.lang.String description,
 		java.lang.String content, java.lang.String type,
 		java.lang.String[] ddmStructureKeys,

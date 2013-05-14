@@ -97,6 +97,7 @@ public class GetArticlesAction extends Action {
 
 		folderIds.add(folderId);
 
+		String userName = null;
 		String articleId = null;
 		Double version = null;
 		String title = null;
@@ -163,8 +164,8 @@ public class GetArticlesAction extends Action {
 		}
 
 		return JournalArticleServiceUtil.search(
-			companyId, groupId, folderIds, 0, articleId, version, title,
-			description, content, type, structureIds, templateIds,
+			companyId, groupId, userName, folderIds, 0, articleId, version,
+			title, description, content, type, structureIds, templateIds,
 			displayDateGT, displayDateLT, status, reviewDate, andOperator,
 			start, end, obc);
 	}
