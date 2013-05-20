@@ -70,6 +70,7 @@ import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -1523,12 +1524,12 @@ public class ServicePreAction extends Action {
 
 			Group userGroup = user.getGroup();
 
-			layouts = LayoutLocalServiceUtil.getLayouts(
+			layouts = LayoutServiceUtil.getLayouts(
 				userGroup.getGroupId(), true,
 				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 			if (layouts.size() == 0) {
-				layouts = LayoutLocalServiceUtil.getLayouts(
+				layouts = LayoutServiceUtil.getLayouts(
 					userGroup.getGroupId(), false,
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 			}
@@ -1550,12 +1551,12 @@ public class ServicePreAction extends Action {
 					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 				for (Group group : groups) {
-					layouts = LayoutLocalServiceUtil.getLayouts(
+					layouts = LayoutServiceUtil.getLayouts(
 						group.getGroupId(), true,
 						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 					if (layouts.size() == 0) {
-						layouts = LayoutLocalServiceUtil.getLayouts(
+						layouts = LayoutServiceUtil.getLayouts(
 							group.getGroupId(), false,
 							LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 					}
@@ -1576,29 +1577,70 @@ public class ServicePreAction extends Action {
 				WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 			if (layoutSet != null) {
-				layouts = LayoutLocalServiceUtil.getLayouts(
+				layouts = LayoutServiceUtil.getLayouts(
 					layoutSet.getGroupId(), layoutSet.isPrivateLayout(),
 					LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
+				Group group = null;
+
 				if (layouts.size() > 0) {
 					layout = layouts.get(0);
+					group = layout.getGroup();
+				}
+
+				if ((layout != null) && layout.isPrivateLayout()) {
+					layouts = LayoutServiceUtil.getLayouts(
+						group.getGroupId(), false,
+						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+					if (layouts.size() > 0) {
+						layout = layouts.get(0);
+					}
+					else {
+						group = null;
+						layout = null;
+					}
+				}
+
+				if ((group != null) && group.isStagingGroup()) {
+					Group liveGroup = group.getLiveGroup();
+
+					layouts = LayoutServiceUtil.getLayouts(
+						liveGroup.getGroupId(), false,
+						LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+					if (layouts.size() > 0) {
+						layout = layouts.get(0);
+					}
+					else {
+						layout = null;
+					}
 				}
 			}
 		}
 
-		if ((layout == null) || layout.isPrivateLayout()) {
+		if (layout == null) {
 
 			// Check the Guest site
 
 			Group guestGroup = GroupLocalServiceUtil.getGroup(
 				user.getCompanyId(), GroupConstants.GUEST);
 
-			layouts = LayoutLocalServiceUtil.getLayouts(
+			layouts = LayoutServiceUtil.getLayouts(
 				guestGroup.getGroupId(), false,
 				LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
 
 			if (layouts.size() > 0) {
 				layout = layouts.get(0);
+			}
+			else if (user.isDefaultUser()) {
+				throw new LayoutPermissionException(
+					"No Layouts available to for the Guest user");
+			}
+			else {
+				throw new LayoutPermissionException(
+					"No Layouts available to for the user '" +
+						user.getScreenName() + "'");
 			}
 		}
 
