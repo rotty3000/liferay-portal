@@ -896,10 +896,12 @@ public class LayoutStagedModelDataHandler
 			addGuestPermissions = true;
 		}
 
+		boolean skipExistingPermissionCheck = true;
+
 		ResourceLocalServiceUtil.addResources(
 			companyId, groupId, userId, Layout.class.getName(),
 			importedLayout.getPlid(), false, addGroupPermissions,
-			addGuestPermissions);
+			addGuestPermissions, skipExistingPermissionCheck);
 	}
 
 	protected void mergePortlets(
