@@ -271,13 +271,13 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 	public void addResources(
 			long companyId, long groupId, long userId, String name,
 			long primKey, boolean portletActions, boolean addGroupPermissions,
-			boolean addGuestPermissions, boolean skipPermissionCheck)
+			boolean addGuestPermissions, boolean skipExistingPermissionCheck)
 		throws PortalException, SystemException {
 
 		addResources(
 			companyId, groupId, userId, name, String.valueOf(primKey),
 			portletActions, addGroupPermissions, addGuestPermissions,
-			skipPermissionCheck, null);
+			skipExistingPermissionCheck, null);
 	}
 
 	/**
@@ -860,7 +860,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 	protected void addResources(
 			long companyId, long groupId, long userId, String name,
 			String primKey, boolean portletActions, boolean addGroupPermissions,
-			boolean addGuestPermissions, boolean skipPermissionCheck,
+			boolean addGuestPermissions, boolean skipExistingPermissionCheck,
 			PermissionedModel permissionedModel)
 		throws PortalException, SystemException {
 
@@ -886,8 +886,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		PermissionThreadLocal.setIndexEnabled(false);
 
 		boolean firstSkipPermissionCheckChange =
-			ResourcePermissionsThreadLocal.setSkipPermissionCheck(
-				skipPermissionCheck);
+			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
+				skipExistingPermissionCheck);
 
 		List<ResourcePermission> resourcePermissions =
 			resourcePermissionLocalService.getResourcePermissions(
@@ -925,7 +925,8 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 			ResourcePermissionsThreadLocal.setResourcePermissions(null);
 
 			if (firstSkipPermissionCheckChange) {
-				ResourcePermissionsThreadLocal.setSkipPermissionCheck(null);
+				ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
+					null);
 			}
 
 			PermissionThreadLocal.setIndexEnabled(flushEnabled);

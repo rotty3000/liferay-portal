@@ -31,8 +31,8 @@ public class ResourcePermissionsThreadLocal {
 		return _resourcePermissions.get();
 	}
 
-	public static Boolean getSkipPermissionCheck() {
-		return _skipPermissionCheck.get();
+	public static Boolean getSkipExistingPermissionCheck() {
+		return _skipExistingPermissionCheck.get();
 	}
 
 	public static void setResourcePermissions(
@@ -52,14 +52,16 @@ public class ResourcePermissionsThreadLocal {
 		}
 	}
 
-	public static boolean setSkipPermissionCheck(Boolean skipPermissionCheck) {
-		if ((skipPermissionCheck != null ) &&
-			(_skipPermissionCheck.get() != null)) {
+	public static boolean setSkipExistingPermissionCheck(
+		Boolean skipExistingPermissionCheck) {
+
+		if ((skipExistingPermissionCheck != null ) &&
+			(_skipExistingPermissionCheck.get() != null)) {
 
 			return false;
 		}
 
-		_skipPermissionCheck.set(skipPermissionCheck);
+		_skipExistingPermissionCheck.set(skipExistingPermissionCheck);
 
 		return true;
 	}
@@ -70,9 +72,9 @@ public class ResourcePermissionsThreadLocal {
 				ResourcePermissionsThreadLocal.class + "._resourcePermissions",
 				null);
 
-	private static ThreadLocal<Boolean> _skipPermissionCheck =
+	private static ThreadLocal<Boolean> _skipExistingPermissionCheck =
 		new InitialThreadLocal<Boolean>(
-			ResourcePermissionsThreadLocal.class + "._skipPermissionCheck",
-			null);
+			ResourcePermissionsThreadLocal.class +
+				"._skipExistingPermissionCheck", null);
 
 }
