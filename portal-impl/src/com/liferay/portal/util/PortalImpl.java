@@ -139,11 +139,6 @@ import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
-import com.liferay.portal.service.permission.GroupPermissionUtil;
-import com.liferay.portal.service.permission.LayoutPermissionUtil;
-import com.liferay.portal.service.permission.LayoutPrototypePermissionUtil;
-import com.liferay.portal.service.permission.LayoutSetPrototypePermissionUtil;
-import com.liferay.portal.service.permission.OrganizationPermissionUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.service.permission.UserPermissionUtil;
 import com.liferay.portal.servlet.filters.i18n.I18nFilter;
@@ -212,7 +207,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -418,11 +412,6 @@ public class PortalImpl implements Portal {
 			PropsValues.AUTH_TOKEN_IGNORE_ACTIONS);
 		_authTokenIgnorePortlets = SetUtil.fromArray(
 			PropsValues.AUTH_TOKEN_IGNORE_PORTLETS);
-
-		// Portlet add default resource check white list
-
-		resetPortletAddDefaultResourceCheckWhitelist();
-		resetPortletAddDefaultResourceCheckWhitelistActions();
 
 		// Reserved parameter names
 
@@ -3570,12 +3559,14 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public Set<String> getPortletAddDefaultResourceCheckWhitelist() {
-		return _portletAddDefaultResourceCheckWhitelist;
+		return PortletContainerSecurityUtil.
+			getPortletAddDefaultResourceCheckWhitelist();
 	}
 
 	@Override
 	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions() {
-		return _portletAddDefaultResourceCheckWhitelistActions;
+		return PortletContainerSecurityUtil.
+			getPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
 	/**
@@ -5237,6 +5228,9 @@ public class PortalImpl implements Portal {
 			null, null, portletConfig, actionRequest, actionResponse);
 	}
 
+	/**
+	 * @deprecated As of 6.2 with no direct replacement
+	 */
 	@Override
 	public boolean isAllowAddPortletDefaultResource(
 			HttpServletRequest request, Portlet portlet)
@@ -5354,7 +5348,10 @@ public class PortalImpl implements Portal {
 			return true;
 		}
 
-		if (_portletAddDefaultResourceCheckWhitelist.contains(portletId)) {
+		if (PortletContainerSecurityUtil.
+				getPortletAddDefaultResourceCheckWhitelist().contains(
+					portletId)) {
+
 			return true;
 		}
 
@@ -5367,8 +5364,9 @@ public class PortalImpl implements Portal {
 			strutsAction = ParamUtil.getString(request, "struts_action");
 		}
 
-		if (_portletAddDefaultResourceCheckWhitelistActions.contains(
-				strutsAction)) {
+		if (PortletContainerSecurityUtil.
+				getPortletAddDefaultResourceCheckWhitelistActions().contains(
+					strutsAction)) {
 
 			return true;
 		}
@@ -5837,25 +5835,14 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelist() {
-		_portletAddDefaultResourceCheckWhitelist = SetUtil.fromArray(
-			PropsValues.PORTLET_ADD_DEFAULT_RESOURCE_CHECK_WHITELIST);
-
-		_portletAddDefaultResourceCheckWhitelist = Collections.unmodifiableSet(
-			_portletAddDefaultResourceCheckWhitelist);
-
-		return _portletAddDefaultResourceCheckWhitelist;
+		return PortletContainerSecurityUtil.
+			resetPortletAddDefaultResourceCheckWhitelist();
 	}
 
 	@Override
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions() {
-		_portletAddDefaultResourceCheckWhitelistActions = SetUtil.fromArray(
-			PropsValues.PORTLET_ADD_DEFAULT_RESOURCE_CHECK_WHITELIST_ACTIONS);
-
-		_portletAddDefaultResourceCheckWhitelistActions =
-			Collections.unmodifiableSet(
-				_portletAddDefaultResourceCheckWhitelistActions);
-
-		return _portletAddDefaultResourceCheckWhitelistActions;
+		return PortletContainerSecurityUtil.
+			resetPortletAddDefaultResourceCheckWhitelistActions();
 	}
 
 	@Override
@@ -6967,6 +6954,9 @@ public class PortalImpl implements Portal {
 		return true;
 	}
 
+	/**
+	 * @deprecated As of 6.2 with no direct replacement
+	 */
 	protected boolean isPanelSelectedPortlet(
 		ThemeDisplay themeDisplay, String portletId) {
 
@@ -7101,8 +7091,6 @@ public class PortalImpl implements Portal {
 	private final AtomicInteger _portalPort = new AtomicInteger(-1);
 	private List<PortalPortEventListener> _portalPortEventListeners =
 		new ArrayList<PortalPortEventListener>();
-	private Set<String> _portletAddDefaultResourceCheckWhitelist;
-	private Set<String> _portletAddDefaultResourceCheckWhitelistActions;
 	private Set<String> _reservedParams;
 	private final AtomicInteger _securePortalPort = new AtomicInteger(-1);
 	private String[] _sortedSystemGroups;
