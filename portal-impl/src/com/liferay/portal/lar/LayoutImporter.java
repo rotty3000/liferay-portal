@@ -564,7 +564,7 @@ public class LayoutImporter {
 			}
 		}
 
-		List<Layout> newLayouts = new ArrayList<Layout>();
+		List<Layout> importedLayouts = new ArrayList<Layout>();
 
 		if (_log.isDebugEnabled()) {
 			if (_layoutElements.size() > 0) {
@@ -573,7 +573,7 @@ public class LayoutImporter {
 		}
 
 		for (Element layoutElement : _layoutElements) {
-			importLayout(portletDataContext, newLayouts, layoutElement);
+			importLayout(portletDataContext, importedLayouts, layoutElement);
 		}
 
 		Element portletsElement = _rootElement.element("portlets");
@@ -729,7 +729,7 @@ public class LayoutImporter {
 
 		if (deleteMissingLayouts) {
 			deleteMissingLayouts(
-				groupId, privateLayout, newLayouts, previousLayouts,
+				groupId, privateLayout, importedLayouts, previousLayouts,
 				serviceContext);
 		}
 
@@ -751,7 +751,7 @@ public class LayoutImporter {
 
 		long lastMergeTime = System.currentTimeMillis();
 
-		for (Layout layout : newLayouts) {
+		for (Layout layout : importedLayouts) {
 			boolean modifiedTypeSettingsProperties = false;
 
 			UnicodeProperties typeSettingsProperties =
@@ -810,7 +810,7 @@ public class LayoutImporter {
 	}
 
 	protected void importLayout(
-			PortletDataContext portletDataContext, List<Layout> newLayouts,
+			PortletDataContext portletDataContext, List<Layout> importedLayouts,
 			Element layoutElement)
 		throws Exception {
 
@@ -821,12 +821,12 @@ public class LayoutImporter {
 		StagedModelDataHandlerUtil.importStagedModel(
 			portletDataContext, layout);
 
-		List<Layout> portletDataContextNewLayouts =
-			portletDataContext.getNewLayouts();
+		List<Layout> portletDataContextImportedLayouts =
+			portletDataContext.getImportedLayouts();
 
-		newLayouts.addAll(portletDataContextNewLayouts);
+		importedLayouts.addAll(portletDataContextImportedLayouts);
 
-		portletDataContextNewLayouts.clear();
+		portletDataContextImportedLayouts.clear();
 	}
 
 	protected String importTheme(LayoutSet layoutSet, InputStream themeZip)

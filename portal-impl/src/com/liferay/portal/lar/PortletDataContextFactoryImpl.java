@@ -70,7 +70,7 @@ public class PortletDataContextFactoryImpl
 
 		portletDataContext.setDataStrategy(dataStrategy);
 
-		portletDataContext.setNewLayouts(new ArrayList<Layout>());
+		portletDataContext.setImportedLayouts(new ArrayList<Layout>());
 		portletDataContext.setParameterMap(parameterMap);
 		portletDataContext.setUserIdStrategy(userIdStrategy);
 		portletDataContext.setZipReader(zipReader);

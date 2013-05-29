@@ -234,6 +234,8 @@ public interface PortletDataContext extends Serializable {
 
 	public Element getImportDataStagedModelElement(StagedModel stagedModel);
 
+	public List<Layout> getImportedLayouts();
+
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             ExportImportPathUtil#getLayoutPath(PortletDataContext, long)}
@@ -245,8 +247,6 @@ public interface PortletDataContext extends Serializable {
 	public ManifestSummary getManifestSummary();
 
 	public Element getMissingReferencesElement();
-
-	public List<Layout> getNewLayouts();
 
 	public Map<?, ?> getNewPrimaryKeysMap(Class<?> clazz);
 
@@ -434,9 +434,9 @@ public interface PortletDataContext extends Serializable {
 
 	public void setImportDataRootElement(Element importDataRootElement);
 
-	public void setMissingReferencesElement(Element missingReferencesElement);
+	public void setImportedLayouts(List<Layout> importedLayouts);
 
-	public void setNewLayouts(List<Layout> newLayouts);
+	public void setMissingReferencesElement(Element missingReferencesElement);
 
 	public void setOldPlid(long oldPlid);
 
