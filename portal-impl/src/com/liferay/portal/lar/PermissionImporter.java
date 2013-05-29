@@ -33,6 +33,7 @@ import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.TeamLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
+import com.liferay.portal.util.PortalUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class PermissionImporter {
 	protected void importPermissions(
 			LayoutCache layoutCache, long companyId, long groupId, long userId,
 			Layout layout, String resourceName, String resourcePrimKey,
-			Element permissionsElement, boolean portletActions)
+			Element permissionsElement, boolean skipExistingPermissionCheck)
 		throws Exception {
 
 		Map<Long, String[]> roleIdsToActionIds = new HashMap<Long, String[]>();
@@ -130,6 +131,10 @@ public class PermissionImporter {
 
 				List<String> actions = getActions(roleElement);
 
+				if (!PortalUtil.isSystemRole(roleName) && !actions.isEmpty()) {
+					skipExistingPermissionCheck = false;
+				}
+
 				roleIdsToActionIds.put(
 					role.getRoleId(),
 					actions.toArray(new String[actions.size()]));
@@ -142,12 +147,13 @@ public class PermissionImporter {
 
 		ResourcePermissionLocalServiceUtil.setResourcePermissions(
 			companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-			resourcePrimKey, roleIdsToActionIds);
+			resourcePrimKey, roleIdsToActionIds, skipExistingPermissionCheck);
 	}
 
 	protected void importPortletPermissions(
 			LayoutCache layoutCache, long companyId, long groupId, long userId,
-			Layout layout, Element portletElement, String portletId)
+			Layout layout, Element portletElement, String portletId,
+			boolean skipExistingPermissionCheck)
 		throws Exception {
 
 		Element permissionsElement = portletElement.element("permissions");
@@ -160,7 +166,8 @@ public class PermissionImporter {
 
 			importPermissions(
 				layoutCache, companyId, groupId, userId, layout, resourceName,
-				resourcePrimKey, permissionsElement, true);
+				resourcePrimKey, permissionsElement,
+				skipExistingPermissionCheck);
 		}
 	}
 

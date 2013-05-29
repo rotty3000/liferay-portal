@@ -78,6 +78,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Mate Thurzo
@@ -360,6 +361,10 @@ public class LayoutStagedModelDataHandler
 			long plid = CounterLocalServiceUtil.increment();
 
 			importedLayout = LayoutUtil.create(plid);
+
+			Set<Layout> newLayouts = portletDataContext.getNewLayouts();
+
+			newLayouts.add(importedLayout);
 
 			if (layoutsImportMode.equals(
 					PortletDataHandlerKeys.

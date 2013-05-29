@@ -564,16 +564,19 @@ public class LayoutImporter {
 			}
 		}
 
-		List<Layout> importedLayouts = new ArrayList<Layout>();
-
 		if (_log.isDebugEnabled()) {
 			if (_layoutElements.size() > 0) {
 				_log.debug("Importing layouts");
 			}
 		}
 
+		List<Layout> importedLayouts = new ArrayList<Layout>();
+
+		Set<Layout> newLayouts = new HashSet<Layout>();
+
 		for (Element layoutElement : _layoutElements) {
-			importLayout(portletDataContext, importedLayouts, layoutElement);
+			importLayout(
+				portletDataContext, importedLayouts, newLayouts, layoutElement);
 		}
 
 		Element portletsElement = _rootElement.element("portlets");
@@ -698,9 +701,12 @@ public class LayoutImporter {
 			// Portlet permissions
 
 			if (importPermissions) {
+				boolean skipExistingPermissionCheck = newLayouts.contains(
+					layout);
+
 				_permissionImporter.importPortletPermissions(
 					layoutCache, companyId, groupId, userId, layout,
-					portletElement, portletId);
+					portletElement, portletId, skipExistingPermissionCheck);
 			}
 
 			// Archived setups
@@ -811,7 +817,7 @@ public class LayoutImporter {
 
 	protected void importLayout(
 			PortletDataContext portletDataContext, List<Layout> importedLayouts,
-			Element layoutElement)
+			Set<Layout> newLayouts, Element layoutElement)
 		throws Exception {
 
 		String path = layoutElement.attributeValue("path");
@@ -827,6 +833,13 @@ public class LayoutImporter {
 		importedLayouts.addAll(portletDataContextImportedLayouts);
 
 		portletDataContextImportedLayouts.clear();
+
+		Set<Layout> portletDataContextNewLayouts =
+			portletDataContext.getNewLayouts();
+
+		newLayouts.addAll(portletDataContextNewLayouts);
+
+		portletDataContextNewLayouts.clear();
 	}
 
 	protected String importTheme(LayoutSet layoutSet, InputStream themeZip)

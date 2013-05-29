@@ -248,6 +248,8 @@ public interface PortletDataContext extends Serializable {
 
 	public Element getMissingReferencesElement();
 
+	public Set<Layout> getNewLayouts();
+
 	public Map<?, ?> getNewPrimaryKeysMap(Class<?> clazz);
 
 	public Map<?, ?> getNewPrimaryKeysMap(String className);
@@ -437,6 +439,8 @@ public interface PortletDataContext extends Serializable {
 	public void setImportedLayouts(List<Layout> importedLayouts);
 
 	public void setMissingReferencesElement(Element missingReferencesElement);
+
+	public void setNewLayouts(Set<Layout> newLayouts);
 
 	public void setOldPlid(long oldPlid);
 
