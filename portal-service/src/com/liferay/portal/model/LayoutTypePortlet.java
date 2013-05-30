@@ -26,6 +26,9 @@ import java.util.List;
  */
 public interface LayoutTypePortlet extends LayoutType {
 
+	public boolean addEmbeddedPortletId(String portletId)
+		throws PortalException, SystemException;
+
 	public void addModeAboutPortletId(String portletId);
 
 	public void addModeConfigPortletId(String portletId);
@@ -123,6 +126,8 @@ public interface LayoutTypePortlet extends LayoutType {
 	public boolean hasDefaultScopePortletId(long groupId, String portletId)
 		throws PortalException, SystemException;
 
+	public boolean hasEmbeddedPortletId(String portletId);
+
 	public boolean hasModeAboutPortletId(String portletId);
 
 	public boolean hasModeConfigPortletId(String portletId);
@@ -144,7 +149,8 @@ public interface LayoutTypePortlet extends LayoutType {
 	public boolean hasPortletId(String portletId)
 		throws PortalException, SystemException;
 
-	public boolean hasPortletId(String portletId, boolean strict)
+	public boolean hasPortletId(
+			String portletId, boolean includeEmbeddedPortlets)
 		throws PortalException, SystemException;
 
 	public boolean hasStateMax();
@@ -173,6 +179,9 @@ public interface LayoutTypePortlet extends LayoutType {
 
 	public void movePortletId(
 			long userId, String portletId, String columnId, int columnPos)
+		throws PortalException, SystemException;
+
+	public void removeEmbeddedPortletIds(String[] portletIds)
 		throws PortalException, SystemException;
 
 	public void removeModeAboutPortletId(String portletId);
