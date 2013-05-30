@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletJSONUtil;
-import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletParameterUtil;
 import com.liferay.portal.kernel.portlet.RestrictPortletServletRequest;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
@@ -33,10 +32,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.service.PortletLocalServiceUtil;
-import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,17 +91,15 @@ public class RuntimeTag extends TagSupport {
 			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-			if (themeDisplay.isStateMaximized()) {
-				LayoutTypePortlet layoutTypePortlet =
-					themeDisplay.getLayoutTypePortlet();
+			LayoutTypePortlet layoutTypePortlet =
+				themeDisplay.getLayoutTypePortlet();
 
-				if (layoutTypePortlet.hasStateMaxPortletId(portletId)) {
+			if (themeDisplay.isStateMaximized() &&
+				layoutTypePortlet.hasStateMaxPortletId(portletId)) {
 
-					// A portlet in the maximized state has already been
-					// processed
+				// A portlet in the maximized state has already been processed
 
-					return;
-				}
+				return;
 			}
 
 			Layout layout = themeDisplay.getLayout();
@@ -115,22 +109,10 @@ public class RuntimeTag extends TagSupport {
 
 			JSONObject jsonObject = null;
 
-			if ((PortletPreferencesLocalServiceUtil.getPortletPreferencesCount(
-					PortletKeys.PREFS_OWNER_TYPE_LAYOUT, themeDisplay.getPlid(),
-					portletId) < 1) ||
+			if (((layoutTypePortlet != null) &&
+				 !layoutTypePortlet.hasPortletId(portletId)) ||
 				layout.isTypeControlPanel() ||
 				layout.isTypePanel()) {
-
-				PortletPreferencesFactoryUtil.getPortletSetup(
-					request, portletId, defaultPreferences);
-
-				PortletLayoutListener portletLayoutListener =
-					portlet.getPortletLayoutListenerInstance();
-
-				if (portletLayoutListener != null) {
-					portletLayoutListener.onAddToLayout(
-						portletId, themeDisplay.getPlid());
-				}
 
 				jsonObject = JSONFactoryUtil.createJSONObject();
 
@@ -228,7 +210,7 @@ public class RuntimeTag extends TagSupport {
 			String value = footerCssPathsJSONArray.getString(i);
 
 			printWriter.print("<link href=\"");
-			printWriter.print(HtmlUtil.escape(value));
+			printWriter.print(HtmlUtil.escapeAttribute(value));
 			printWriter.println("\" rel=\"stylesheet\" type=\"text/css\" />");
 		}
 
@@ -239,7 +221,7 @@ public class RuntimeTag extends TagSupport {
 			String value = footerJavaScriptPathsJSONArray.getString(i);
 
 			printWriter.print("<script src=\"");
-			printWriter.print(HtmlUtil.escape(value));
+			printWriter.print(HtmlUtil.escapeAttribute(value));
 			printWriter.println("\" type=\"text/javascript\"></script>");
 		}
 
@@ -259,7 +241,7 @@ public class RuntimeTag extends TagSupport {
 			String value = headerCssPathsJSONArray.getString(i);
 
 			printWriter.print("<link href=\"");
-			printWriter.print(HtmlUtil.escape(value));
+			printWriter.print(HtmlUtil.escapeAttribute(value));
 			printWriter.println("\" rel=\"stylesheet\" type=\"text/css\" />");
 		}
 
@@ -270,7 +252,7 @@ public class RuntimeTag extends TagSupport {
 			String value = headerJavaScriptPathsJSONArray.getString(i);
 
 			printWriter.print("<script src=\"");
-			printWriter.print(HtmlUtil.escape(value));
+			printWriter.print(HtmlUtil.escapeAttribute(value));
 			printWriter.println("\" type=\"text/javascript\"></script>");
 		}
 
