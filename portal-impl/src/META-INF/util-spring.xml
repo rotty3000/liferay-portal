@@ -270,6 +270,11 @@
 			<bean class="com.liferay.portal.kernel.poller.comet.CometHandlerPool" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil" class="com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil">
+		<property name="handlers">
+			<list />
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil" class="com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil">
 		<property name="portletContainerSecurity" ref="com.liferay.portlet.PortletContainerSecurity" />
 	</bean>
