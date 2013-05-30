@@ -170,7 +170,7 @@ public class PortletContainerImpl implements PortletContainer {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		layoutTypePortlet.addEmbeddedPortletId(portlet.getPortletId());
+		layoutTypePortlet.addEmbeddedPortletId(request, portlet.getPortletId());
 	}
 
 	protected boolean canRegisterEmbeddedPortlet(HttpServletRequest request)

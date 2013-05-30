@@ -462,7 +462,15 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		if ((layoutTypePortlet != null) &&
 			layoutTypePortlet.hasEmbeddedPortletId(portletId)) {
 
-			return true;
+			if (layoutTypePortlet.isEmbeddedPortletIdValid(
+					request, portletId)) {
+
+				return true;
+			}
+
+			// reset embedded portlets on page, some template was modified
+
+			layoutTypePortlet.resetEmbeddedPortlets();
 		}
 
 		return false;
