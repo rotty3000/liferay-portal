@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.io.DummyWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
+import com.liferay.portal.kernel.servlet.ServletContextUtil;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -331,6 +332,8 @@ public class LayoutTemplateLocalServiceImpl
 			}
 		}
 
+		long timestamp = ServletContextUtil.getLastModified(servletContext);
+
 		List<Element> layoutTemplateElements = element.elements(
 			"layout-template");
 
@@ -367,6 +370,7 @@ public class LayoutTemplateLocalServiceImpl
 
 			layoutTemplateModel.setStandard(standard);
 			layoutTemplateModel.setThemeId(themeId);
+			layoutTemplateModel.setTimestamp(timestamp);
 			layoutTemplateModel.setName(
 				GetterUtil.getString(
 					layoutTemplateElement.attributeValue("name"),
