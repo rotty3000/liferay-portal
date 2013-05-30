@@ -167,6 +167,11 @@ public class LayoutTemplateImpl
 	}
 
 	@Override
+	public long getTimestamp() {
+		return _timestamp;
+	}
+
+	@Override
 	public String getUncachedContent() throws IOException {
 		if (_servletContext == null) {
 			if (_log.isDebugEnabled()) {
@@ -319,6 +324,11 @@ public class LayoutTemplateImpl
 	}
 
 	@Override
+	public void setTimestamp(long timestamp) {
+		this._timestamp = timestamp;
+	}
+
+	@Override
 	public void setWapContent(String wapContent) {
 		_setWapContent = true;
 
@@ -344,6 +354,7 @@ public class LayoutTemplateImpl
 	private String _templatePath;
 	private String _themeId;
 	private String _thumbnailPath;
+	private long _timestamp;
 	private String _wapContent;
 	private String _wapTemplatePath;
 	private boolean _warFile;
