@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletMode;
 import com.liferay.portal.kernel.portlet.PortletContainer;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityCheck;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
@@ -36,7 +37,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.webdav.WebDAVStorage;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.Layout;
@@ -56,6 +56,7 @@ import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.PortletDisplayFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.WebKeys;
 import com.liferay.util.SerializableUtil;
 
 import java.io.Serializable;
@@ -137,6 +138,10 @@ public class PortletContainerImpl implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
+			if (canRegisterEmbeddedPortlet(request)) {
+				addEmbeddedPortlet(request, portlet);
+			}
+
 			_doRender(request, response, portlet);
 		}
 		catch (Exception e) {
@@ -156,6 +161,54 @@ public class PortletContainerImpl implements PortletContainer {
 		catch (Exception e) {
 			throw new PortletContainerException(e);
 		}
+	}
+
+	protected void addEmbeddedPortlet(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		layoutTypePortlet.addEmbeddedPortletId(portlet.getPortletId());
+	}
+
+	protected boolean canRegisterEmbeddedPortlet(HttpServletRequest request)
+		throws PortalException, SystemException {
+
+		PortletContainerSecurityCheck securityCheck =
+			(PortletContainerSecurityCheck)request.getAttribute(
+				WebKeys.PORTLET_SECURITY_CHECK);
+
+		if ((securityCheck != null) && securityCheck.isRuntimePortlet()) {
+			securityCheck = securityCheck.getParent();
+
+			// we register embedded portlet only in case the parent portlet is
+			// embedded or standard, if it's again runtime, continue
+
+			while (securityCheck != null) {
+				if (securityCheck.isEmbeddedPortlet() ||
+					securityCheck.isControlPanelPortlet() ||
+					securityCheck.isPortletOnPage()) {
+
+					return true;
+				}
+
+				if (!securityCheck.isRuntimePortlet()) {
+					break;
+				}
+
+				securityCheck = securityCheck.getParent();
+			}
+
+			if (securityCheck == null) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected long getScopeGroupId(
