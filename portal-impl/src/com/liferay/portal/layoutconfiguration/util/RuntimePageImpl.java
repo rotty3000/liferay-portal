@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.servlet.PipingServletResponse;
 import com.liferay.portal.kernel.servlet.PluginContextListener;
@@ -265,7 +266,12 @@ public class RuntimePageImpl implements RuntimePage {
 		ClassLoader contextClassLoader =
 			ClassLoaderUtil.getContextClassLoader();
 
+		HttpServletRequest request =
+			(HttpServletRequest)pageContext.getRequest();
+
 		try {
+			RenderingContextUtil.pushParent(request, layoutTemplate);
+
 			if ((pluginClassLoader != null) &&
 				(pluginClassLoader != contextClassLoader)) {
 
@@ -289,6 +295,8 @@ public class RuntimePageImpl implements RuntimePage {
 
 				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
 			}
+
+			RenderingContextUtil.pop(request);
 		}
 	}
 
