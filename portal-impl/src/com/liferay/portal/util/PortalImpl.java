@@ -430,6 +430,10 @@ public class PortalImpl implements Portal {
 		_reservedParams.add("p_auth");
 		_reservedParams.add("p_auth_secret");
 
+		// Embedded portlets
+
+		_reservedParams.add("p_e_auth");
+
 		// Portal layout
 
 		_reservedParams.add("p_l_id");

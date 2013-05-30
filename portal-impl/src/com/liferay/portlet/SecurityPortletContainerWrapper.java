@@ -457,6 +457,20 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
+		String peAuth = request.getParameter("p_e_auth");
+
+		if (Validator.isNull(peAuth)) {
+			return false;
+		}
+
+		String embeddedPortletToken =
+			AuthTokenUtil.getEmbeddedPortletToken(
+				request, layout.getPlid(), portlet.getPortletId());
+
+		if (!embeddedPortletToken.equals(peAuth)) {
+			return false;
+		}
+
 		String portletId = portlet.getPortletId();
 
 		if ((layoutTypePortlet != null) &&
