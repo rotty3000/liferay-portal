@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.portlet.PortletContainerException;
 import com.liferay.portal.kernel.portlet.PortletContainerSecurityCheck;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.WindowStateFactory;
+import com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
@@ -142,7 +143,14 @@ public class PortletContainerImpl implements PortletContainer {
 				addEmbeddedPortlet(request, portlet);
 			}
 
-			_doRender(request, response, portlet);
+			try {
+				RenderingContextUtil.pushParent(request, portlet);
+
+				_doRender(request, response, portlet);
+			}
+			finally {
+				RenderingContextUtil.pop(request);
+			}
 		}
 		catch (Exception e) {
 			throw new PortletContainerException(e);
