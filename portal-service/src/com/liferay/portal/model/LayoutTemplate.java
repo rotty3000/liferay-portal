@@ -49,6 +49,8 @@ public interface LayoutTemplate
 
 	public String getThumbnailPath();
 
+	public long getTimestamp();
+
 	public String getUncachedContent() throws IOException;
 
 	public String getUncachedWapContent() throws IOException;
@@ -84,6 +86,8 @@ public interface LayoutTemplate
 	public void setThemeId(String themeId);
 
 	public void setThumbnailPath(String thumbnailPath);
+
+	public void setTimestamp(long timestamp);
 
 	public void setWapContent(String wapContent);
 
