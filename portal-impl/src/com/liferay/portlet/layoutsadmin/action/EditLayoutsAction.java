@@ -75,7 +75,6 @@ import com.liferay.portal.service.LayoutRevisionLocalServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.service.LayoutSetBranchLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
-import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.ThemeLocalServiceUtil;
@@ -1056,9 +1055,11 @@ public class EditLayoutsAction extends PortletAction {
 				actionRequest, "removeEmbeddedPortletIds");
 
 			if (removeEmbeddedPortletIds.length > 0) {
-				PortletLocalServiceUtil.deletePortlets(
-					themeDisplay.getCompanyId(), removeEmbeddedPortletIds,
-					layout.getPlid());
+				LayoutTypePortlet layoutTypePortlet =
+					(LayoutTypePortlet)layout.getLayoutType();
+
+				layoutTypePortlet.removeEmbeddedPortletIds(
+					removeEmbeddedPortletIds);
 			}
 
 			LayoutSettings layoutSettings = LayoutSettings.getInstance(layout);
