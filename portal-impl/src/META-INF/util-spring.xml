@@ -272,7 +272,9 @@
 	</bean>
 	<bean id="com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil" class="com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil">
 		<property name="handlers">
-			<list />
+			<list>
+				<bean class="com.liferay.portlet.embedded.RenderingContextThemeHandler" />
+			</list>
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil" class="com.liferay.portal.kernel.portlet.PortletContainerSecurityUtil">
