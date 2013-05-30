@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.ActionResult;
 import com.liferay.portal.kernel.portlet.PortletContainer;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
+import com.liferay.portal.kernel.portlet.PortletContainerSecurityCheck;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.PortletModeFactory;
 import com.liferay.portal.kernel.portlet.PortletSecurity;
@@ -32,6 +33,7 @@ import com.liferay.portal.kernel.struts.LastPath;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
@@ -55,6 +57,7 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,9 +111,20 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			checkAction(ownerLayoutRequest, portlet);
+			PortletContainerSecurityCheck securityCheck = checkAction(
+				ownerLayoutRequest, portlet);
 
-			return _portletContainer.processAction(request, response, portlet);
+			try {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck);
+
+				return _portletContainer.processAction(
+					request, response, portlet);
+			}
+			finally {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck.getParent());
+			}
 		}
 		catch (PrincipalException pe) {
 			return processActionException(request, response, portlet, pe);
@@ -140,9 +154,19 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		throws PortletContainerException {
 
 		try {
-			checkRender(request, portlet);
+			PortletContainerSecurityCheck securityCheck = checkRender(
+				request, portlet);
 
-			_portletContainer.render(request, response, portlet);
+			try {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck);
+
+				_portletContainer.render(request, response, portlet);
+			}
+			finally {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck.getParent());
+			}
 		}
 		catch (PrincipalException e) {
 			processRenderException(request, response, portlet);
@@ -165,9 +189,19 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			HttpServletRequest ownerLayoutRequest =
 				getOwnerLayoutRequestWrapper(request, portlet);
 
-			checkResource(ownerLayoutRequest, portlet);
+			PortletContainerSecurityCheck securityCheck = checkResource(
+				ownerLayoutRequest, portlet);
 
-			_portletContainer.serveResource(request, response, portlet);
+			try {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck);
+
+				_portletContainer.serveResource(request, response, portlet);
+			}
+			finally {
+				request.setAttribute(
+					WebKeys.PORTLET_SECURITY_CHECK, securityCheck.getParent());
+			}
 		}
 		catch (PrincipalException pe) {
 			processServeResourceException(request, response, portlet, pe);
@@ -180,38 +214,48 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 	}
 
-	protected void check(HttpServletRequest request, Portlet portlet)
+	protected PortletContainerSecurityCheck check(
+			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
+		PortletContainerSecurityCheck parentCheck =
+			(PortletContainerSecurityCheck)request.getAttribute(
+				WebKeys.PORTLET_SECURITY_CHECK);
+
+		PortletContainerSecurityCheck securityCheck =
+			new PortletContainerSecurityCheck(parentCheck);
+
 		if (portlet == null) {
-			return;
+			return securityCheck;
 		}
 
 		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
 
 		if (layout.isTypeControlPanel()) {
-			isAccessAllowedToControlPanelPortlet(request, portlet);
+			isAccessAllowedToControlPanelPortlet(
+				request, portlet, securityCheck);
 
-			return;
+			return securityCheck;
 		}
 
-		if (isAccessAllowedToLayoutPortlet(request, portlet)) {
+		if (isAccessAllowedToLayoutPortlet(request, portlet, securityCheck)) {
 			PortalUtil.addPortletDefaultResource(request, portlet);
 
 			if (hasAccessPermission(request, portlet)) {
-				return;
+				return securityCheck;
 			}
 		}
 
 		throw new PrincipalException();
 	}
 
-	protected void checkAction(HttpServletRequest request, Portlet portlet)
+	protected PortletContainerSecurityCheck checkAction(
+			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
 		checkCSRFProtection(request, portlet);
 
-		check(request, portlet);
+		return check(request, portlet);
 	}
 
 	protected void checkCSRFProtection(
@@ -232,16 +276,18 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		}
 	}
 
-	protected void checkRender(HttpServletRequest request, Portlet portlet)
+	protected PortletContainerSecurityCheck checkRender(
+			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
-		check(request, portlet);
+		return check(request, portlet);
 	}
 
-	protected void checkResource(HttpServletRequest request, Portlet portlet)
+	protected PortletContainerSecurityCheck checkResource(
+			HttpServletRequest request, Portlet portlet)
 		throws Exception {
 
-		check(request, portlet);
+		return check(request, portlet);
 	}
 
 	protected String getOriginalURL(HttpServletRequest request) {
@@ -335,10 +381,12 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 	}
 
 	protected void isAccessAllowedToControlPanelPortlet(
-			HttpServletRequest request, Portlet portlet)
+			HttpServletRequest request, Portlet portlet,
+			PortletContainerSecurityCheck securityCheck)
 		throws PortalException, SystemException {
 
 		if (portlet.isSystem()) {
+			securityCheck.setExecutingSystemPortlet();
 			return;
 		}
 
@@ -351,14 +399,17 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 		if (PortletPermissionUtil.hasControlPanelAccessPermission(
 				permissionChecker, themeDisplay.getScopeGroupId(), portlet)) {
 
+			securityCheck.setExecutingControlPanelPortlet();
 			return;
 		}
 
 		if (isAccessGrantedByRuntimePortlet(request, portlet)) {
+			securityCheck.setExecutingRuntimePortlet();
 			return;
 		}
 
 		if (isAccessGrantedByPortletAuthenticationToken(request, portlet)) {
+			securityCheck.setExecutingOnDemandPortlet();
 			return;
 		}
 
@@ -366,22 +417,51 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 	}
 
 	protected boolean isAccessAllowedToLayoutPortlet(
-			HttpServletRequest request, Portlet portlet)
+			HttpServletRequest request, Portlet portlet,
+			PortletContainerSecurityCheck securityCheck)
 		throws PortalException, SystemException {
 
 		if (isAccessGrantedByRuntimePortlet(request, portlet)) {
+			securityCheck.setExecutingRuntimePortlet();
 			return true;
 		}
 
 		if (isAccessGrantedByPortletOnPage(request, portlet)) {
+			securityCheck.setExecutingPortletOnPage();
+			return true;
+		}
+
+		if (isAccessGrantedByEmbeddedPortletOnPage(request, portlet)) {
+			securityCheck.setExecutingEmbeddedPortlet();
 			return true;
 		}
 
 		if (isLayoutConfigurationAllowed(request, portlet)) {
+			securityCheck.setExecutingPortletConfiguration();
 			return true;
 		}
 
 		if (isAccessGrantedByPortletAuthenticationToken(request, portlet)) {
+			securityCheck.setExecutingOnDemandPortlet();
+			return true;
+		}
+
+		return false;
+	}
+
+	protected boolean isAccessGrantedByEmbeddedPortletOnPage(
+			HttpServletRequest request, Portlet portlet)
+		throws PortalException, SystemException {
+
+		Layout layout = (Layout)request.getAttribute(WebKeys.LAYOUT);
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		String portletId = portlet.getPortletId();
+
+		if ((layoutTypePortlet != null) &&
+			layoutTypePortlet.hasEmbeddedPortletId(portletId)) {
+
 			return true;
 		}
 
@@ -471,7 +551,7 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			themeDisplay.getLayoutTypePortlet();
 
 		if ((layoutTypePortlet != null) &&
-			layoutTypePortlet.hasPortletId(portletId)) {
+			layoutTypePortlet.hasPortletId(portletId, false)) {
 
 			return true;
 		}
