@@ -141,6 +141,8 @@ public interface LiferayPortletURL
 	 */
 	public boolean isParameterIncludedInPath(String name);
 
+	public boolean isRenderPortletURL();
+
 	/**
 	 * Returns <code>true</code> if this URL is secure (https).
 	 *
@@ -305,5 +307,7 @@ public interface LiferayPortletURL
 	public void setRefererPlid(long refererPlid);
 
 	public void setRemovedParameterNames(Set<String> removedParamNames);
+
+	public void setRenderPortletURL(boolean renderPortletURL);
 
 }
