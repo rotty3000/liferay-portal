@@ -434,10 +434,16 @@
 											p_p_id: portlet.portletId,
 											p_p_state: 'exclusive'
 										};
+										var uri = themeDisplay.getPathMain() + '/portal/render_portlet?';
+
+										if (!!options['minimizeURL']) {
+											uri = options.minimizeURL;
+											data = {};
+										}
 
 										content.plug(A.Plugin.ParseContent);
 
-										content.load(themeDisplay.getPathMain() + '/portal/render_portlet?' + A.QueryString.stringify(data));
+										content.load(uri + A.QueryString.stringify(data));
 									}
 								}
 							},
