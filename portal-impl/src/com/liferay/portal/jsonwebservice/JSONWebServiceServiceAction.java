@@ -17,6 +17,9 @@ package com.liferay.portal.jsonwebservice;
 import com.liferay.portal.action.JSONServiceAction;
 import com.liferay.portal.jsonwebservice.action.JSONWebServiceDiscoverAction;
 import com.liferay.portal.jsonwebservice.action.JSONWebServiceInvokerAction;
+import com.liferay.portal.kernel.bean.BeanLocator;
+import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
+import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
@@ -25,6 +28,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
 import java.lang.reflect.InvocationTargetException;
@@ -46,6 +51,34 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 		ServletContext servletContext, ClassLoader classLoader) {
 
 		_contextPath = ContextPathUtil.getContextPath(servletContext);
+
+		BeanLocator beanLocator;
+
+		if (_contextPath.equals(PropsValues.PORTAL_CTX) || _contextPath.isEmpty()) {
+			System.out.println("*** PORTAL");
+			beanLocator = PortalBeanLocatorUtil.getBeanLocator();
+		}
+		else {
+			System.out.println("*** PLUGIN");
+
+			String contextName = _contextPath;
+
+			if (contextName.startsWith(StringPool.SLASH)) {
+				contextName = contextName.substring(1);
+			}
+
+			beanLocator = PortletBeanLocatorUtil.getBeanLocator(contextName);
+		}
+
+		// iterate and configure!
+		String[] beanNames = beanLocator.getNames();
+		JSONWebServiceRegitrator jsonWebServiceRegitrator = new JSONWebServiceRegitrator();
+
+		for (String beanName : beanNames) {
+			jsonWebServiceRegitrator.processBean(beanLocator, beanName);
+		}
+
+		System.out.println("*** Done.");
 
 		if (_log.isInfoEnabled()) {
 			int count =
