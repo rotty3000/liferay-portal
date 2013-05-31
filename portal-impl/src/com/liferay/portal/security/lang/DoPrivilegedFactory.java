@@ -50,7 +50,7 @@ public class DoPrivilegedFactory implements BeanPostProcessor {
 
 		Class<?> clazz = bean.getClass();
 
-		if (!_isDoPrivileged(clazz) && !_isFinderOrPersistence(beanName)) {
+		if (!_isDoPrivileged(clazz) || !_isFinderOrPersistence(beanName)) {
 			return bean;
 		}
 
