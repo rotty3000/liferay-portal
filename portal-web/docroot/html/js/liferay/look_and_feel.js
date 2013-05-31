@@ -105,7 +105,7 @@ AUI.add(
 		var WORD_SPACING = 'wordSpacing';
 
 		var PortletCSS = {
-			init: function(portletId) {
+			init: function(portletId, cssPortletURL) {
 				var instance = this;
 
 				var curPortletBoundaryId = 'p_p_id_' + portletId + '_';
@@ -154,6 +154,19 @@ AUI.add(
 								}
 							);
 
+							var cssPortletURI = themeDisplay.getPathMain() + '/portal/render_portlet';
+							var cssPortletData =  {
+								p_l_id: themeDisplay.getPlid(),
+								p_p_id: 113,
+								p_p_state: EXCLUSIVE,
+								doAsUserId: themeDisplay.getDoAsUserIdEncoded()
+							};
+
+							if (cssPortletURL != null) {
+								cssPortletURI = cssPortletURL;
+								cssPortletData = {};
+							}
+
 							instance._currentPopup.plug(
 								[
 									{
@@ -174,13 +187,8 @@ AUI.add(
 											},
 											autoLoad: false,
 											showLoading: false,
-											data: {
-												p_l_id: themeDisplay.getPlid(),
-												p_p_id: 113,
-												p_p_state: EXCLUSIVE,
-												doAsUserId: themeDisplay.getDoAsUserIdEncoded()
-											},
-											uri: themeDisplay.getPathMain() + '/portal/render_portlet'
+											data: cssPortletData,
+											uri: cssPortletURI
 										}
 									},
 									{

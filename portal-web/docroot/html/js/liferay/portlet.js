@@ -436,7 +436,7 @@
 										};
 										var uri = themeDisplay.getPathMain() + '/portal/render_portlet?';
 
-										if (!!options['minimizeURL']) {
+										if (options['minimizeURL']) {
 											uri = options.minimizeURL;
 											data = {};
 										}
@@ -674,8 +674,8 @@
 	Liferay.provide(
 		Portlet,
 		'loadCSSEditor',
-		function(portletId) {
-			Liferay.PortletCSS.init(portletId);
+		function(portletId, cssPortletURL) {
+			Liferay.PortletCSS.init(portletId, cssPortletURL);
 		},
 		['liferay-look-and-feel']
 	);
