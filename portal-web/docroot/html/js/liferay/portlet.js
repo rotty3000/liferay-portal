@@ -428,18 +428,26 @@
 						content.unplug(A.Plugin.IO);
 					}
 					else {
+						var minimizeURI = themeDisplay.getPathMain() + '/portal/render_portlet';
+						var minimizeData = {
+							doAsUserId: doAsUserId,
+							p_l_id: plid,
+							p_p_id: portlet.portletId,
+							p_p_state: 'exclusive'
+						};
+
+						if (options['minimizeURL'] != null) {
+							minimizeURI = options.minimizeURL;
+							minimizeData = {};
+						}
+
 						content.plug(
 							A.Plugin.IO,
 							{
 								autoLoad: false,
-								data: {
-									doAsUserId: doAsUserId,
-									p_l_id: plid,
-									p_p_id: portlet.portletId,
-									p_p_state: 'exclusive'
-								},
+								data: minimizeData,
 								showLoading: false,
-								uri: themeDisplay.getPathMain() + '/portal/render_portlet'
+								uri: minimizeURI
 							}
 						);
 					}
