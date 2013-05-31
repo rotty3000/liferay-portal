@@ -164,21 +164,20 @@ public class PortletURLUtil {
 
 		StringBundler sb = new StringBundler(32);
 
-		sb.append(themeDisplay.getPathMain());
-		sb.append("/portal/render_portlet?p_l_id=");
-
 		long plid = themeDisplay.getPlid();
-
-		sb.append(plid);
 
 		Portlet portlet = (Portlet)request.getAttribute(WebKeys.RENDER_PORTLET);
 
 		String portletId = portlet.getPortletId();
 
-		sb.append("&p_p_id=");
-		sb.append(portletId);
+		LiferayPortletURL liferayPortletURL = PortletURLFactoryUtil.create(
+			request, portletId, plid, PortletRequest.RENDER_PHASE);
 
-		sb.append("&p_p_lifecycle=0&p_t_lifecycle=");
+		liferayPortletURL.setRenderPortletURL(true);
+
+		sb.append(liferayPortletURL.toString());
+
+		sb.append("&p_t_lifecycle=");
 		sb.append(themeDisplay.getLifecycle());
 
 		WindowState windowState = WindowState.NORMAL;
