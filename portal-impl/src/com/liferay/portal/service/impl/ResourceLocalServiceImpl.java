@@ -156,7 +156,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 				auditedModel.getUserId(), auditedModel.getModelClassName(),
 				String.valueOf(auditedModel.getPrimaryKeyObj()), false,
 				serviceContext.isAddGroupPermissions(),
-				serviceContext.isAddGuestPermissions(), false,
+				serviceContext.isAddGuestPermissions(),
 				getPermissionedModel(auditedModel));
 		}
 		else {
@@ -234,6 +234,20 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 			guestPermissions, null);
 	}
 
+	@Override
+	public void addNewResources(
+			long companyId, long groupId, long userId, String name,
+			long primKey, boolean portletActions, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException, SystemException {
+
+		ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(true);
+
+		addResources(
+			companyId, groupId, userId, name, String.valueOf(primKey),
+			portletActions, addGroupPermissions, addGuestPermissions, null);
+	}
+
 	/**
 	 * Adds resources for the entity with the name and primary key, always
 	 * creating a resource at the individual scope and only creating resources
@@ -264,20 +278,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		addResources(
 			companyId, groupId, userId, name, String.valueOf(primKey),
-			portletActions, addGroupPermissions, addGuestPermissions, false,
-			null);
-	}
-
-	public void addResources(
-			long companyId, long groupId, long userId, String name,
-			long primKey, boolean portletActions, boolean addGroupPermissions,
-			boolean addGuestPermissions, boolean skipExistingPermissionCheck)
-		throws PortalException, SystemException {
-
-		addResources(
-			companyId, groupId, userId, name, String.valueOf(primKey),
-			portletActions, addGroupPermissions, addGuestPermissions,
-			skipExistingPermissionCheck, null);
+			portletActions, addGroupPermissions, addGuestPermissions, null);
 	}
 
 	/**
@@ -310,7 +311,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 
 		addResources(
 			companyId, groupId, userId, name, primKey, portletActions,
-			addGroupPermissions, addGuestPermissions, false, null);
+			addGroupPermissions, addGuestPermissions, null);
 	}
 
 	/**
@@ -860,8 +861,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 	protected void addResources(
 			long companyId, long groupId, long userId, String name,
 			String primKey, boolean portletActions, boolean addGroupPermissions,
-			boolean addGuestPermissions, boolean skipExistingPermissionCheck,
-			PermissionedModel permissionedModel)
+			boolean addGuestPermissions, PermissionedModel permissionedModel)
 		throws PortalException, SystemException {
 
 		if (!PermissionThreadLocal.isAddResource()) {
@@ -884,10 +884,6 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		boolean flushEnabled = PermissionThreadLocal.isFlushEnabled();
 
 		PermissionThreadLocal.setIndexEnabled(false);
-
-		boolean firstSkipPermissionCheckChange =
-			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
-				skipExistingPermissionCheck);
 
 		List<ResourcePermission> resourcePermissions =
 			resourcePermissionLocalService.getResourcePermissions(
@@ -923,11 +919,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		}
 		finally {
 			ResourcePermissionsThreadLocal.setResourcePermissions(null);
-
-			if (firstSkipPermissionCheckChange) {
-				ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
-					null);
-			}
+			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(null);
 
 			PermissionThreadLocal.setIndexEnabled(flushEnabled);
 

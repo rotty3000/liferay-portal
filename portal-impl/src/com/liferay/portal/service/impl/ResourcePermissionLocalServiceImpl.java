@@ -1007,6 +1007,36 @@ public class ResourcePermissionLocalServiceImpl
 		PermissionCacheUtil.clearCache();
 	}
 
+	@Override
+	public void setNewResourcePermissions(
+			long companyId, String name, int scope, String primKey,
+			Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException, SystemException {
+
+		Boolean skipExistingPermissionCheck =
+			ResourcePermissionsThreadLocal.getSkipExistingPermissionCheck();
+
+		boolean resetSkipExistingPermissionCheck = false;
+
+		if (skipExistingPermissionCheck == null) {
+			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(true);
+
+			resetSkipExistingPermissionCheck = true;
+		}
+
+		try {
+			updateResourcePermission(
+				companyId, name, scope, primKey, 0, roleIdsToActionIds,
+				ResourcePermissionConstants.OPERATOR_SET);
+		}
+		finally {
+			if (resetSkipExistingPermissionCheck) {
+				ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
+					null);
+			}
+		}
+	}
+
 	/**
 	 * Updates the role's permissions at the scope, setting the actions that can
 	 * be performed on resources of the type, also setting the owner of any
@@ -1118,31 +1148,9 @@ public class ResourcePermissionLocalServiceImpl
 			Map<Long, String[]> roleIdsToActionIds)
 		throws PortalException, SystemException {
 
-		setResourcePermissions(
-			companyId, name, scope, primKey, roleIdsToActionIds, false);
-	}
-
-	public void setResourcePermissions(
-			long companyId, String name, int scope, String primKey,
-			Map<Long, String[]> roleIdsToActionIds,
-			boolean skipExistingPermissionCheck)
-		throws PortalException, SystemException {
-
-		boolean firstSkipPermissionCheckChange =
-			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
-				skipExistingPermissionCheck);
-
-		try {
-			updateResourcePermission(
-				companyId, name, scope, primKey, 0, roleIdsToActionIds,
-				ResourcePermissionConstants.OPERATOR_SET);
-		}
-		finally {
-			if (firstSkipPermissionCheckChange) {
-				ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
-					null);
-			}
-		}
+		updateResourcePermission(
+			companyId, name, scope, primKey, 0, roleIdsToActionIds,
+			ResourcePermissionConstants.OPERATOR_SET);
 	}
 
 	protected void doUpdateResourcePermission(
@@ -1159,11 +1167,12 @@ public class ResourcePermissionLocalServiceImpl
 			resourcePermission = resourcePermissionsMap.get(roleId);
 		}
 		else {
-			Boolean skipPermissionCheck =
+			Boolean skipExistingPermissionCheck =
 				ResourcePermissionsThreadLocal.getSkipExistingPermissionCheck();
 
 			if (PortalUtil.isSystemRole(roleId) ||
-				(skipPermissionCheck == null) || !skipPermissionCheck) {
+				(skipExistingPermissionCheck == null) ||
+				!skipExistingPermissionCheck) {
 
 				resourcePermission =
 					resourcePermissionPersistence.fetchByC_N_S_P_R(
