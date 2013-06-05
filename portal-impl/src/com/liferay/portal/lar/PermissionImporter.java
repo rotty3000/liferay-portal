@@ -145,9 +145,16 @@ public class PermissionImporter {
 			return;
 		}
 
-		ResourcePermissionLocalServiceUtil.setResourcePermissions(
-			companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
-			resourcePrimKey, roleIdsToActionIds, skipExistingPermissionCheck);
+		if (skipExistingPermissionCheck) {
+			ResourcePermissionLocalServiceUtil.setNewResourcePermissions(
+				companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
+				resourcePrimKey, roleIdsToActionIds);
+		}
+		else {
+			ResourcePermissionLocalServiceUtil.setResourcePermissions(
+				companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
+				resourcePrimKey, roleIdsToActionIds);
+		}
 	}
 
 	protected void importPortletPermissions(

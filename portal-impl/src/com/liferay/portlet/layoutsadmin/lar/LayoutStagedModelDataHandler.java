@@ -901,12 +901,10 @@ public class LayoutStagedModelDataHandler
 			addGuestPermissions = true;
 		}
 
-		boolean skipExistingPermissionCheck = true;
-
-		ResourceLocalServiceUtil.addResources(
+		ResourceLocalServiceUtil.addNewResources(
 			companyId, groupId, userId, Layout.class.getName(),
 			importedLayout.getPlid(), false, addGroupPermissions,
-			addGuestPermissions, skipExistingPermissionCheck);
+			addGuestPermissions);
 	}
 
 	protected void mergePortlets(
