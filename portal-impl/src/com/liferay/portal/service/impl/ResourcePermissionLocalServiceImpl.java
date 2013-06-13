@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -455,6 +457,13 @@ public class ResourcePermissionLocalServiceImpl
 	public List<ResourcePermission> getResourcePermissions(
 			long companyId, String name, int scope, String primKey)
 		throws SystemException {
+
+		Boolean skipPermissionCheck =
+			ResourcePermissionsThreadLocal.getSkipExistingPermissionCheck();
+
+		if ((skipPermissionCheck != null) && skipPermissionCheck) {
+			return null;
+		}
 
 		return resourcePermissionPersistence.findByC_N_S_P(
 			companyId, name, scope, primKey);
@@ -998,6 +1007,36 @@ public class ResourcePermissionLocalServiceImpl
 		PermissionCacheUtil.clearCache();
 	}
 
+	@Override
+	public void setNewResourcePermissions(
+			long companyId, String name, int scope, String primKey,
+			Map<Long, String[]> roleIdsToActionIds)
+		throws PortalException, SystemException {
+
+		Boolean skipExistingPermissionCheck =
+			ResourcePermissionsThreadLocal.getSkipExistingPermissionCheck();
+
+		boolean resetSkipExistingPermissionCheck = false;
+
+		if (skipExistingPermissionCheck == null) {
+			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(true);
+
+			resetSkipExistingPermissionCheck = true;
+		}
+
+		try {
+			updateResourcePermission(
+				companyId, name, scope, primKey, 0, roleIdsToActionIds,
+				ResourcePermissionConstants.OPERATOR_SET);
+		}
+		finally {
+			if (resetSkipExistingPermissionCheck) {
+				ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(
+					null);
+			}
+		}
+	}
+
 	/**
 	 * Updates the role's permissions at the scope, setting the actions that can
 	 * be performed on resources of the type, also setting the owner of any
@@ -1128,8 +1167,34 @@ public class ResourcePermissionLocalServiceImpl
 			resourcePermission = resourcePermissionsMap.get(roleId);
 		}
 		else {
-			resourcePermission = resourcePermissionPersistence.fetchByC_N_S_P_R(
-				companyId, name, scope, primKey, roleId);
+			Boolean skipExistingPermissionCheck =
+				ResourcePermissionsThreadLocal.getSkipExistingPermissionCheck();
+
+			if (PortalUtil.isSystemRole(roleId) ||
+				(skipExistingPermissionCheck == null) ||
+				!skipExistingPermissionCheck) {
+
+				resourcePermission =
+					resourcePermissionPersistence.fetchByC_N_S_P_R(
+						companyId, name, scope, primKey, roleId);
+			}
+			else if (_log.isDebugEnabled()) {
+				StringBundler sb = new StringBundler(11);
+
+				sb.append("ResourcePermissionPersistence.fetchByC_N_S_P_R()");
+				sb.append(" has been skipped for: ");
+				sb.append(companyId);
+				sb.append(StringPool.DASH);
+				sb.append(name);
+				sb.append(StringPool.DASH);
+				sb.append(scope);
+				sb.append(StringPool.DASH);
+				sb.append(primKey);
+				sb.append(StringPool.DASH);
+				sb.append(roleId);
+
+				_log.debug(sb.toString());
+			}
 		}
 
 		if (resourcePermission == null) {
@@ -1384,5 +1449,8 @@ public class ResourcePermissionLocalServiceImpl
 
 	private static final String _UPDATE_ACTION_IDS =
 		ResourcePermissionLocalServiceImpl.class.getName() + ".updateActionIds";
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ResourcePermissionLocalServiceImpl.class);
 
 }

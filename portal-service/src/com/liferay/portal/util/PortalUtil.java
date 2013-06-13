@@ -1688,6 +1688,10 @@ public class PortalUtil {
 		return getPortal().isSystemGroup(groupName);
 	}
 
+	public static boolean isSystemRole(long roleId) throws SystemException {
+		return getPortal().isSystemRole(roleId);
+	}
+
 	public static boolean isSystemRole(String roleName) {
 		return getPortal().isSystemRole(roleName);
 	}

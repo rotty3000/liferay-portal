@@ -31,6 +31,10 @@ public class ResourcePermissionsThreadLocal {
 		return _resourcePermissions.get();
 	}
 
+	public static Boolean getSkipExistingPermissionCheck() {
+		return _skipExistingPermissionCheck.get();
+	}
+
 	public static void setResourcePermissions(
 		List<ResourcePermission> resourcePermissions) {
 
@@ -48,10 +52,29 @@ public class ResourcePermissionsThreadLocal {
 		}
 	}
 
+	public static boolean setSkipExistingPermissionCheck(
+		Boolean skipExistingPermissionCheck) {
+
+		if ((skipExistingPermissionCheck != null ) &&
+			(_skipExistingPermissionCheck.get() != null)) {
+
+			return false;
+		}
+
+		_skipExistingPermissionCheck.set(skipExistingPermissionCheck);
+
+		return true;
+	}
+
 	private static ThreadLocal<Map<Long, ResourcePermission>>
 		_resourcePermissions = new InitialThreadLocal
 			<Map<Long, ResourcePermission>>(
 				ResourcePermissionsThreadLocal.class + "._resourcePermissions",
 				null);
+
+	private static ThreadLocal<Boolean> _skipExistingPermissionCheck =
+		new InitialThreadLocal<Boolean>(
+			ResourcePermissionsThreadLocal.class +
+				"._skipExistingPermissionCheck", null);
 
 }

@@ -561,16 +561,19 @@ public class LayoutImporter {
 			}
 		}
 
-		List<Layout> newLayouts = new ArrayList<Layout>();
-
 		if (_log.isDebugEnabled()) {
 			if (_layoutElements.size() > 0) {
 				_log.debug("Importing layouts");
 			}
 		}
 
+		List<Layout> importedLayouts = new ArrayList<Layout>();
+
+		Set<Layout> newLayouts = new HashSet<Layout>();
+
 		for (Element layoutElement : _layoutElements) {
-			importLayout(portletDataContext, newLayouts, layoutElement);
+			importLayout(
+				portletDataContext, importedLayouts, newLayouts, layoutElement);
 		}
 
 		Element portletsElement = _rootElement.element("portlets");
@@ -695,9 +698,12 @@ public class LayoutImporter {
 			// Portlet permissions
 
 			if (importPermissions) {
+				boolean skipExistingPermissionCheck = newLayouts.contains(
+					layout);
+
 				_permissionImporter.importPortletPermissions(
 					layoutCache, companyId, groupId, userId, layout,
-					portletElement, portletId);
+					portletElement, portletId, skipExistingPermissionCheck);
 			}
 
 			// Archived setups
@@ -726,7 +732,7 @@ public class LayoutImporter {
 
 		if (deleteMissingLayouts) {
 			deleteMissingLayouts(
-				groupId, privateLayout, newLayouts, previousLayouts,
+				groupId, privateLayout, importedLayouts, previousLayouts,
 				serviceContext);
 		}
 
@@ -748,7 +754,7 @@ public class LayoutImporter {
 
 		long lastMergeTime = System.currentTimeMillis();
 
-		for (Layout layout : newLayouts) {
+		for (Layout layout : importedLayouts) {
 			boolean modifiedTypeSettingsProperties = false;
 
 			UnicodeProperties typeSettingsProperties =
@@ -807,8 +813,8 @@ public class LayoutImporter {
 	}
 
 	protected void importLayout(
-			PortletDataContext portletDataContext, List<Layout> newLayouts,
-			Element layoutElement)
+			PortletDataContext portletDataContext, List<Layout> importedLayouts,
+			Set<Layout> newLayouts, Element layoutElement)
 		throws Exception {
 
 		String path = layoutElement.attributeValue("path");
@@ -818,7 +824,14 @@ public class LayoutImporter {
 		StagedModelDataHandlerUtil.importStagedModel(
 			portletDataContext, layout);
 
-		List<Layout> portletDataContextNewLayouts =
+		List<Layout> portletDataContextImportedLayouts =
+			portletDataContext.getImportedLayouts();
+
+		importedLayouts.addAll(portletDataContextImportedLayouts);
+
+		portletDataContextImportedLayouts.clear();
+
+		Set<Layout> portletDataContextNewLayouts =
 			portletDataContext.getNewLayouts();
 
 		newLayouts.addAll(portletDataContextNewLayouts);

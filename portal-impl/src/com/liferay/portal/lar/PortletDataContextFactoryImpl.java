@@ -29,6 +29,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -70,7 +71,8 @@ public class PortletDataContextFactoryImpl
 
 		portletDataContext.setDataStrategy(dataStrategy);
 
-		portletDataContext.setNewLayouts(new ArrayList<Layout>());
+		portletDataContext.setImportedLayouts(new ArrayList<Layout>());
+		portletDataContext.setNewLayouts(new HashSet<Layout>());
 		portletDataContext.setParameterMap(parameterMap);
 		portletDataContext.setUserIdStrategy(userIdStrategy);
 		portletDataContext.setZipReader(zipReader);

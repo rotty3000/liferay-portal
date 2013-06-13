@@ -78,6 +78,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Mate Thurzo
@@ -365,6 +366,10 @@ public class LayoutStagedModelDataHandler
 
 			importedLayout = LayoutUtil.create(plid);
 
+			Set<Layout> newLayouts = portletDataContext.getNewLayouts();
+
+			newLayouts.add(importedLayout);
+
 			if (layoutsImportMode.equals(
 					PortletDataHandlerKeys.
 						LAYOUTS_IMPORT_MODE_CREATED_FROM_PROTOTYPE)) {
@@ -522,9 +527,9 @@ public class LayoutStagedModelDataHandler
 
 		LayoutUtil.update(importedLayout);
 
-		List<Layout> newLayouts = portletDataContext.getNewLayouts();
+		List<Layout> importedLayouts = portletDataContext.getImportedLayouts();
 
-		newLayouts.add(importedLayout);
+		importedLayouts.add(importedLayout);
 
 		layoutPlids.put(layout.getPlid(), importedLayout.getPlid());
 
@@ -899,7 +904,7 @@ public class LayoutStagedModelDataHandler
 			addGuestPermissions = true;
 		}
 
-		ResourceLocalServiceUtil.addResources(
+		ResourceLocalServiceUtil.addNewResources(
 			companyId, groupId, userId, Layout.class.getName(),
 			importedLayout.getPlid(), false, addGroupPermissions,
 			addGuestPermissions);

@@ -954,6 +954,11 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	@Override
+	public List<Layout> getImportedLayouts() {
+		return _importedLayouts;
+	}
+
+	@Override
 	public String getLayoutPath(long plid) {
 		return ExportImportPathUtil.getLayoutPath(this, plid);
 	}
@@ -974,7 +979,7 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	@Override
-	public List<Layout> getNewLayouts() {
+	public Set<Layout> getNewLayouts() {
 		return _newLayouts;
 	}
 
@@ -1734,12 +1739,17 @@ public class PortletDataContextImpl implements PortletDataContext {
 	}
 
 	@Override
+	public void setImportedLayouts(List<Layout> importedLayouts) {
+		_importedLayouts = importedLayouts;
+	}
+
+	@Override
 	public void setMissingReferencesElement(Element missingReferencesElement) {
 		_missingReferencesElement = missingReferencesElement;
 	}
 
 	@Override
-	public void setNewLayouts(List<Layout> newLayouts) {
+	public void setNewLayouts(Set<Layout> newLayouts) {
 		_newLayouts = newLayouts;
 	}
 
@@ -2270,11 +2280,12 @@ public class PortletDataContextImpl implements PortletDataContext {
 	private Element _exportDataRootElement;
 	private long _groupId;
 	private Element _importDataRootElement;
+	private List<Layout> _importedLayouts;
 	private Map<String, Lock> _locksMap = new HashMap<String, Lock>();
 	private ManifestSummary _manifestSummary = new ManifestSummary();
 	private Set<String> _missingReferences = new HashSet<String>();
 	private Element _missingReferencesElement;
-	private List<Layout> _newLayouts;
+	private Set<Layout> _newLayouts;
 	private Map<String, Map<?, ?>> _newPrimaryKeysMaps =
 		new HashMap<String, Map<?, ?>>();
 	private Set<String> _notUniquePerLayout = new HashSet<String>();

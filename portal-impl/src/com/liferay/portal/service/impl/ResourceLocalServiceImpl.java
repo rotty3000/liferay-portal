@@ -234,6 +234,20 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 			guestPermissions, null);
 	}
 
+	@Override
+	public void addNewResources(
+			long companyId, long groupId, long userId, String name,
+			long primKey, boolean portletActions, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException, SystemException {
+
+		ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(true);
+
+		addResources(
+			companyId, groupId, userId, name, String.valueOf(primKey),
+			portletActions, addGroupPermissions, addGuestPermissions, null);
+	}
+
 	/**
 	 * Adds resources for the entity with the name and primary key, always
 	 * creating a resource at the individual scope and only creating resources
@@ -872,7 +886,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		PermissionThreadLocal.setIndexEnabled(false);
 
 		List<ResourcePermission> resourcePermissions =
-			resourcePermissionPersistence.findByC_N_S_P(
+			resourcePermissionLocalService.getResourcePermissions(
 				companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, primKey);
 
 		ResourcePermissionsThreadLocal.setResourcePermissions(
@@ -905,6 +919,7 @@ public class ResourceLocalServiceImpl extends ResourceLocalServiceBaseImpl {
 		}
 		finally {
 			ResourcePermissionsThreadLocal.setResourcePermissions(null);
+			ResourcePermissionsThreadLocal.setSkipExistingPermissionCheck(null);
 
 			PermissionThreadLocal.setIndexEnabled(flushEnabled);
 
