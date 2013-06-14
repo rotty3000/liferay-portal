@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.executor.CopyThreadLocalCallable;
 import com.liferay.portal.kernel.portlet.PortletContainerException;
 import com.liferay.portal.kernel.portlet.PortletContainerUtil;
 import com.liferay.portal.kernel.portlet.RestrictPortletServletRequest;
+import com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.Portlet;
@@ -163,6 +164,8 @@ public class PortletRenderer {
 			HttpServletRequest request =
 				PortletContainerUtil.setupOptionalRenderParameters(
 					_request, null, _columnId, _columnPos, _columnCount);
+
+			RenderingContextUtil.cloneContext(request);
 
 			_restrictPortletServletRequest =
 				(RestrictPortletServletRequest)request;

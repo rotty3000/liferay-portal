@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
 import com.liferay.portal.model.PublicRenderParameter;
@@ -400,6 +401,11 @@ public class PortletURLImpl
 	}
 
 	@Override
+	public boolean isRenderPortletURL() {
+		return _renderPortletURL;
+	}
+
+	@Override
 	public boolean isSecure() {
 		return _secure;
 	}
@@ -679,6 +685,13 @@ public class PortletURLImpl
 	}
 
 	@Override
+	public void setRenderPortletURL(boolean renderPortletURL) {
+		_renderPortletURL = renderPortletURL;
+
+		clearCache();
+	}
+
+	@Override
 	public void setResourceID(String resourceID) {
 		_resourceID = resourceID;
 	}
@@ -745,6 +758,27 @@ public class PortletURLImpl
 		}
 
 		writer.write(toString);
+	}
+
+	protected void addEmbeddedPortletToken(StringBundler sb, Key key) {
+		ThemeDisplay themeDisplay = (ThemeDisplay) _request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		LayoutTypePortlet layoutTypePortlet =
+			themeDisplay.getLayoutTypePortlet();
+
+		if ((layoutTypePortlet != null) &&
+			layoutTypePortlet.hasEmbeddedPortletId(getPortletId())) {
+
+			String embeddedPortletToken =
+				AuthTokenUtil.getEmbeddedPortletToken(
+					_request, _plid, _portletId);
+
+			sb.append("p_e_auth");
+			sb.append(StringPool.EQUAL);
+			sb.append(processValue(key, embeddedPortletToken));
+			sb.append(StringPool.AMPERSAND);
+		}
 	}
 
 	protected void addPortalAuthToken(StringBundler sb, Key key) {
@@ -840,7 +874,7 @@ public class PortletURLImpl
 		}
 
 		try {
-			if (_layoutFriendlyURL == null) {
+			if ((_layoutFriendlyURL == null) && !_renderPortletURL) {
 				Layout layout = getLayout();
 
 				if (layout != null) {
@@ -871,7 +905,19 @@ public class PortletURLImpl
 			_log.error(e);
 		}
 
-		if (Validator.isNull(_layoutFriendlyURL)) {
+		if (_renderPortletURL) {
+			sb.append(portalURL);
+			sb.append(themeDisplay.getPathMain());
+			sb.append("/portal/render_portlet?");
+
+			addPortalAuthToken(sb, key);
+
+			sb.append("p_l_id");
+			sb.append(StringPool.EQUAL);
+			sb.append(processValue(key, _plid));
+			sb.append(StringPool.AMPERSAND);
+		}
+		else if (Validator.isNull(_layoutFriendlyURL)) {
 			sb.append(portalURL);
 			sb.append(themeDisplay.getPathMain());
 			sb.append("/portal/layout?");
@@ -925,6 +971,8 @@ public class PortletURLImpl
 
 			addPortalAuthToken(sb, key);
 		}
+
+		addEmbeddedPortletToken(sb, key);
 
 		addPortletAuthToken(sb, key);
 
@@ -1462,6 +1510,7 @@ public class PortletURLImpl
 	private long _refererPlid;
 	private Set<String> _removedParameterNames;
 	private Map<String, String[]> _removePublicRenderParameters;
+	private boolean _renderPortletURL;
 	private HttpServletRequest _request;
 	private Map<String, String> _reservedParameters;
 	private String _resourceID;

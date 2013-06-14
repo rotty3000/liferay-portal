@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletSecurityUtil;
+import com.liferay.portal.kernel.portlet.embedded.RenderingContext;
+import com.liferay.portal.kernel.portlet.embedded.RenderingContextUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
@@ -42,12 +44,12 @@ import com.liferay.portal.model.LayoutTypePortletConstants;
 import com.liferay.portal.model.Plugin;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
-import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutTemplateLocalServiceUtil;
 import com.liferay.portal.service.PluginSettingLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
@@ -69,9 +71,12 @@ import java.text.Format;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Brian Wing Shun Chan
@@ -97,6 +102,96 @@ public class LayoutTypePortletImpl
 
 		_layoutSetPrototypeLayout = SitesUtil.getLayoutSetPrototypeLayout(
 			layout);
+	}
+
+	@Override
+	public boolean addEmbeddedPortletId(
+			HttpServletRequest request, String portletId)
+		throws PortalException, SystemException {
+
+		Set<String> portletAddDefaultResourceCheckWhiteList =
+			PortletSecurityUtil.getWhitelist();
+
+		if (portletAddDefaultResourceCheckWhiteList.contains(portletId)) {
+			return false;
+		}
+
+		Layout freshLayout = LayoutLocalServiceUtil.getLayout(getPlid());
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)freshLayout.getLayoutType();
+
+		boolean hasEmbeddedPortletId = layoutTypePortlet.hasEmbeddedPortletId(
+			portletId);
+		boolean isEmbeddedPortletIdValid = hasEmbeddedPortletId &&
+			layoutTypePortlet.isEmbeddedPortletIdValid(request, portletId);
+
+		if (hasEmbeddedPortletId && isEmbeddedPortletIdValid) {
+			return false;
+		}
+
+		RenderingContext embeddedPortletRenderingContext =
+			RenderingContextUtil.getActualContext(request);
+
+		if (embeddedPortletRenderingContext == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Portlet " + portletId +
+						" cannot be added because there is no rendering " +
+						"context");
+			}
+
+			return false;
+		}
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(
+			getCompanyId(), portletId);
+
+		if (portlet == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Portlet " + portletId +
+						" cannot be added because it is not registered");
+			}
+
+			return false;
+		}
+
+		String embeddedPortletKey =
+			_EMBEDDED_PORTLETS + StringPool.UNDERLINE + portletId;
+
+		UnicodeProperties freshTypeSettings =
+			freshLayout.getTypeSettingsProperties();
+
+		String[] embeddedPortlets = StringUtil.split(
+			freshTypeSettings.getProperty(_EMBEDDED_PORTLETS));
+
+		embeddedPortlets = ArrayUtil.append(embeddedPortlets, portletId);
+		String embeddedPortletsMerged = StringUtil.merge(embeddedPortlets);
+		String embeddedPortletContext =
+			embeddedPortletRenderingContext.toString();
+
+		freshTypeSettings.setProperty(
+			_EMBEDDED_PORTLETS, embeddedPortletsMerged);
+		freshTypeSettings.setProperty(
+			embeddedPortletKey, embeddedPortletContext);
+
+		setTypeSettingsProperty(_EMBEDDED_PORTLETS, embeddedPortletsMerged);
+		setTypeSettingsProperty(embeddedPortletKey, embeddedPortletContext);
+
+		LayoutLocalServiceUtil.updateLayout(freshLayout);
+
+		_embeddedPortlets = null;
+
+		if (!hasEmbeddedPortletId) {
+			PortletLayoutListener portletLayoutListener =
+				portlet.getPortletLayoutListenerInstance();
+
+			if (portletLayoutListener != null) {
+				portletLayoutListener.onAddToLayout(portletId, getPlid());
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -177,7 +272,7 @@ public class LayoutTypePortletImpl
 		throws PortalException, SystemException {
 
 		return addPortletId(
-			userId, portletId, columnId, columnPos, checkPermission, false);
+			userId, portletId, columnId, columnPos, checkPermission, true);
 	}
 
 	@Override
@@ -279,8 +374,7 @@ public class LayoutTypePortletImpl
 		List<Portlet> staticPortlets = getStaticPortlets(
 			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
 
-		List<Portlet> embeddedPortlets = getEmbeddedPortlets(
-			portlets, staticPortlets);
+		List<Portlet> embeddedPortlets = getEmbeddedPortlets();
 
 		return addStaticPortlets(portlets, staticPortlets, embeddedPortlets);
 	}
@@ -490,6 +584,18 @@ public class LayoutTypePortletImpl
 	}
 
 	@Override
+	public boolean hasEmbeddedPortletId(String portletId) {
+		String[] embeddedPortlets = StringUtil.split(
+			getTypeSettingsProperty(_EMBEDDED_PORTLETS));
+
+		if (ArrayUtil.contains(embeddedPortlets, portletId)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean hasModeAboutPortletId(String portletId) {
 		return StringUtil.contains(getModeAbout(), portletId);
 	}
@@ -551,7 +657,37 @@ public class LayoutTypePortletImpl
 	public boolean hasPortletId(String portletId)
 		throws PortalException, SystemException {
 
-		return hasPortletId(portletId, false);
+		return hasPortletId(portletId, true);
+	}
+
+	@Override
+	public boolean hasPortletId(
+			String portletId, boolean includeEmbeddedPortlets)
+		throws PortalException, SystemException {
+
+		List<String> columns = getColumns();
+
+		for (String columnId : columns) {
+			if (hasNonstaticPortletId(columnId, portletId)) {
+				return true;
+			}
+
+			if (hasStaticPortletId(columnId, portletId)) {
+				return true;
+			}
+		}
+
+		Layout layout = getLayout();
+
+		if (layout.isTypeControlPanel()) {
+			return false;
+		}
+
+		if (includeEmbeddedPortlets && hasEmbeddedPortletId(portletId)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -701,6 +837,28 @@ public class LayoutTypePortletImpl
 	}
 
 	@Override
+	public boolean isEmbeddedPortletIdValid(
+			HttpServletRequest request, String portletId)
+		throws PortalException, SystemException {
+
+		String embeddedPortletContext = getTypeSettingsProperty(
+			_EMBEDDED_PORTLETS + StringPool.UNDERLINE + portletId);
+
+		if (Validator.isNotNull(embeddedPortletContext)) {
+			RenderingContext embeddedPortletRenderingContext =
+				RenderingContext.fromString(embeddedPortletContext);
+
+			if (RenderingContextUtil.isValid(
+					request, embeddedPortletRenderingContext)) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	public boolean isPortletCustomizable(String portletId) {
 		return isColumnCustomizable(getColumn(portletId));
 	}
@@ -714,7 +872,7 @@ public class LayoutTypePortletImpl
 
 		try {
 			removePortletId(userId, portletId, false);
-			addPortletId(userId, portletId, columnId, columnPos, false, true);
+			addPortletId(userId, portletId, columnId, columnPos, false, false);
 		}
 		finally {
 			_enablePortletLayoutListener = true;
@@ -739,6 +897,48 @@ public class LayoutTypePortletImpl
 		catch (Exception e) {
 			_log.error("Unable to fire portlet layout listener event", e);
 		}
+	}
+
+	@Override
+	public void removeEmbeddedPortletIds(String[] portletIds)
+		throws PortalException, SystemException {
+
+		Layout freshLayout = LayoutLocalServiceUtil.getLayout(getPlid());
+
+		UnicodeProperties freshTypeSettings =
+			freshLayout.getTypeSettingsProperties();
+
+		String[] embeddedPortlets = StringUtil.split(
+			freshTypeSettings.getProperty(_EMBEDDED_PORTLETS));
+
+		List<String> removedPortletIds = new ArrayList<String>(
+			portletIds.length);
+
+		for (String portletId : portletIds) {
+			if (!ArrayUtil.contains(embeddedPortlets, portletId)) {
+				continue;
+			}
+
+			String embeddedPortletKey =
+				_EMBEDDED_PORTLETS + StringPool.UNDERLINE + portletId;
+
+			embeddedPortlets = ArrayUtil.remove(embeddedPortlets, portletId);
+
+			freshTypeSettings.setProperty(embeddedPortletKey, null);
+			setTypeSettingsProperty(embeddedPortletKey, null);
+
+			removedPortletIds.add(portletId);
+		}
+
+		String propValue = StringUtil.merge(embeddedPortlets);
+		freshTypeSettings.setProperty(_EMBEDDED_PORTLETS, propValue);
+
+		LayoutLocalServiceUtil.updateLayout(freshLayout);
+		setTypeSettingsProperty(_EMBEDDED_PORTLETS, propValue);
+
+		_embeddedPortlets = null;
+
+		onRemoveFromLayout(removedPortletIds.toArray(new String[0]));
 	}
 
 	@Override
@@ -942,6 +1142,48 @@ public class LayoutTypePortletImpl
 	}
 
 	@Override
+	public void resetEmbeddedPortlets()
+		throws PortalException, SystemException {
+
+		Layout freshLayout = LayoutLocalServiceUtil.getLayout(getPlid());
+
+		String[] embeddedPortlets =
+			StringUtil.split(
+				freshLayout.getTypeSettingsProperty(_EMBEDDED_PORTLETS));
+
+		UnicodeProperties freshLayoutProperties =
+			freshLayout.getTypeSettingsProperties();
+
+		for (Iterator<String> keys = freshLayoutProperties.keySet().iterator();
+				keys.hasNext();) {
+
+			String key = keys.next();
+
+			if (key.startsWith(_EMBEDDED_PORTLETS)) {
+				keys.remove();
+			}
+		}
+
+		LayoutLocalServiceUtil.updateLayout(freshLayout);
+
+		UnicodeProperties typeSettingsProperties = getTypeSettingsProperties();
+
+		for (Iterator<String> keys = typeSettingsProperties.keySet().iterator();
+			keys.hasNext();) {
+
+			String key = keys.next();
+
+			if (key.startsWith(_EMBEDDED_PORTLETS)) {
+				keys.remove();
+			}
+		}
+
+		_embeddedPortlets = null;
+
+		onRemoveFromLayout(embeddedPortlets);
+	}
+
+	@Override
 	public void resetModes() {
 		setModeAbout(StringPool.BLANK);
 		setModeConfig(StringPool.BLANK);
@@ -1137,7 +1379,7 @@ public class LayoutTypePortletImpl
 
 	protected String addPortletId(
 			long userId, String portletId, String columnId, int columnPos,
-			boolean checkPermission, boolean strictHasPortlet)
+			boolean checkPermission, boolean includeEmbeddedPortlets)
 		throws PortalException, SystemException {
 
 		portletId = JS.getSafeName(portletId);
@@ -1186,7 +1428,7 @@ public class LayoutTypePortletImpl
 				portletId, generateInstanceId());
 		}
 
-		if (hasPortletId(portletId, strictHasPortlet)) {
+		if (hasPortletId(portletId, includeEmbeddedPortlets)) {
 			return null;
 		}
 
@@ -1358,48 +1600,19 @@ public class LayoutTypePortletImpl
 		return layout.getCompanyId();
 	}
 
-	protected List<Portlet> getEmbeddedPortlets(
-			List<Portlet> columnPortlets, List<Portlet> staticPortlets)
-		throws SystemException {
-
+	protected List<Portlet> getEmbeddedPortlets() throws SystemException {
 		if (_embeddedPortlets != null) {
 			return _embeddedPortlets;
 		}
 
 		List<Portlet> portlets = new ArrayList<Portlet>();
 
-		Layout layout = getLayout();
+		String[] embeddedPortletIds = StringUtil.split(
+			getTypeSettingsProperty(_EMBEDDED_PORTLETS));
 
-		List<PortletPreferences> portletPreferences =
-			PortletPreferencesLocalServiceUtil.getPortletPreferences(
-				PortletKeys.PREFS_OWNER_ID_DEFAULT,
-				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid());
-
-		if (isCustomizable() && hasUserPreferences()) {
-			portletPreferences = ListUtil.copy(portletPreferences);
-
-			portletPreferences.addAll(
-				PortletPreferencesLocalServiceUtil.getPortletPreferences(
-					_portalPreferences.getUserId(),
-					PortletKeys.PREFS_OWNER_TYPE_USER, layout.getPlid()));
-		}
-
-		Set<String> whiteList = PortletSecurityUtil.getWhitelist();
-
-		for (PortletPreferences portletPreference : portletPreferences) {
-			String portletId = portletPreference.getPortletId();
-
+		for (String portletId : embeddedPortletIds) {
 			Portlet portlet = PortletLocalServiceUtil.getPortletById(
 				getCompanyId(), portletId);
-
-			if (Validator.isNull(portletId) ||
-				columnPortlets.contains(portlet) ||
-				staticPortlets.contains(portlet) || portlet.isSystem() ||
-				portlet.isUndeployedPortlet() || !portlet.isActive() ||
-				!whiteList.contains(portletId)) {
-
-				continue;
-			}
 
 			if (portlet != null) {
 				Portlet embeddedPortlet = portlet;
@@ -1643,41 +1856,6 @@ public class LayoutTypePortletImpl
 		return false;
 	}
 
-	protected boolean hasPortletId(String portletId, boolean strict)
-		throws PortalException, SystemException {
-
-		List<String> columns = getColumns();
-
-		for (String columnId : columns) {
-			if (hasNonstaticPortletId(columnId, portletId)) {
-				return true;
-			}
-
-			if (hasStaticPortletId(columnId, portletId)) {
-				return true;
-			}
-		}
-
-		Layout layout = getLayout();
-
-		if (layout.isTypeControlPanel()) {
-			return false;
-		}
-
-		if (!strict &&
-			((PortletPreferencesLocalServiceUtil.getPortletPreferencesCount(
-				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid(),
-				portletId) > 0) ||
-			 (PortletPreferencesLocalServiceUtil.getPortletPreferencesCount(
-				PortletKeys.PREFS_OWNER_TYPE_USER, layout.getPlid(),
-				portletId) > 0))) {
-
-			return true;
-		}
-
-		return false;
-	}
-
 	protected boolean hasStaticPortletId(String columnId, String portletId)
 		throws PortalException, SystemException {
 
@@ -1801,6 +1979,8 @@ public class LayoutTypePortletImpl
 			CustomizedPages.namespacePlid(getPlid()), _MODIFIED_DATE,
 			_dateFormat.format(new Date()));
 	}
+
+	private static final String _EMBEDDED_PORTLETS = "embedded-portlets";
 
 	private static final String _MODIFIED_DATE = "modifiedDate";
 

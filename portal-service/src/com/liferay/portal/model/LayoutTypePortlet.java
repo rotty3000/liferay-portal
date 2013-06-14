@@ -20,11 +20,17 @@ import com.liferay.portlet.PortalPreferences;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
  */
 public interface LayoutTypePortlet extends LayoutType {
+
+	public boolean addEmbeddedPortletId(
+			HttpServletRequest request, String portletId)
+		throws PortalException, SystemException;
 
 	public void addModeAboutPortletId(String portletId);
 
@@ -123,6 +129,8 @@ public interface LayoutTypePortlet extends LayoutType {
 	public boolean hasDefaultScopePortletId(long groupId, String portletId)
 		throws PortalException, SystemException;
 
+	public boolean hasEmbeddedPortletId(String portletId);
+
 	public boolean hasModeAboutPortletId(String portletId);
 
 	public boolean hasModeConfigPortletId(String portletId);
@@ -142,6 +150,10 @@ public interface LayoutTypePortlet extends LayoutType {
 	public boolean hasModeViewPortletId(String portletId);
 
 	public boolean hasPortletId(String portletId)
+		throws PortalException, SystemException;
+
+	public boolean hasPortletId(
+			String portletId, boolean includeEmbeddedPortlets)
 		throws PortalException, SystemException;
 
 	public boolean hasStateMax();
@@ -166,10 +178,17 @@ public interface LayoutTypePortlet extends LayoutType {
 
 	public boolean isDefaultUpdated();
 
+	public boolean isEmbeddedPortletIdValid(
+			HttpServletRequest request, String portletId)
+		throws PortalException, SystemException;
+
 	public boolean isPortletCustomizable(String portletId);
 
 	public void movePortletId(
 			long userId, String portletId, String columnId, int columnPos)
+		throws PortalException, SystemException;
+
+	public void removeEmbeddedPortletIds(String[] portletIds)
 		throws PortalException, SystemException;
 
 	public void removeModeAboutPortletId(String portletId);
@@ -206,6 +225,7 @@ public interface LayoutTypePortlet extends LayoutType {
 	public void reorganizePortlets(
 		List<String> newColumns, List<String> oldColumns);
 
+	public void resetEmbeddedPortlets() throws PortalException, SystemException;
 	public void resetModes();
 
 	public void resetStates();
