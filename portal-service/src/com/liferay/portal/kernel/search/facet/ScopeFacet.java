@@ -32,6 +32,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Raymond Augé
@@ -154,16 +158,36 @@ public class ScopeFacet extends MultiValueFacet {
 	}
 
 	private long[] addScopeGroup(long groupId) {
-		Layout layout = getSearchContext().getLayout();
 
 		try {
-			if ((layout != null) && (layout.getGroupId() == groupId) &&
-				layout.hasScopeGroup()) {
+			List<Layout> scopeLayouts = new ArrayList<Layout>();
 
-				Group scopeGroup = layout.getScopeGroup();
+			Layout layout = getSearchContext().getLayout();
 
-				return new long[] {groupId, scopeGroup.getGroupId()};
+			if (layout != null) {
+				scopeLayouts.addAll(
+					LayoutLocalServiceUtil.getScopeGroupLayouts(
+						groupId, layout.isPrivateLayout()));
+			} else {
+				scopeLayouts.addAll(
+					LayoutLocalServiceUtil.getScopeGroupLayouts(
+						groupId, false));
+
+				scopeLayouts.addAll(
+					LayoutLocalServiceUtil.getScopeGroupLayouts(
+						groupId, true));
 			}
+
+			long[] scopeGroupIds = new long[scopeLayouts.size()+1];
+
+			scopeGroupIds[0] = groupId;
+
+			for (int i = 0; i < scopeLayouts.size(); i++) {
+				Layout scopeLayout = scopeLayouts.get(i);
+				scopeGroupIds[i+1] = scopeLayout.getScopeGroup().getGroupId();
+			}
+
+			return scopeGroupIds;
 		}
 		catch (Exception e) {
 			_log.error(e, e);
