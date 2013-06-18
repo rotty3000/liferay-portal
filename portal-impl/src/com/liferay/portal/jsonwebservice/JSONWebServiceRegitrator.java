@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.util.PropsValues;
 import org.springframework.aop.TargetSource;
@@ -191,7 +192,7 @@ public class JSONWebServiceRegitrator {
 		String servletContextName =
 			PortletClassLoaderUtil.getServletContextName();
 
-		if (servletContextName != null) {
+		if (Validator.isNotNull(servletContextName)) {
 			ServletContext servletContext = ServletContextPool.get(
 				servletContextName);
 
