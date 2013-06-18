@@ -14,6 +14,7 @@
 
 package com.liferay.portal.jsonwebservice;
 
+import com.liferay.portal.deploy.hot.HookHotDeployListener;
 import com.liferay.portal.kernel.annotation.AnnotationLocator;
 import com.liferay.portal.kernel.bean.BeanLocator;
 import com.liferay.portal.kernel.bean.BeanLocatorException;
@@ -27,26 +28,29 @@ import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.util.PropsValues;
-import org.springframework.aop.TargetSource;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
 
-import javax.servlet.ServletContext;
 import java.lang.reflect.Method;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
+import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.AdvisedSupport;
+
 /**
  * @author Igor Spasic
  */
-public class JSONWebServiceRegitrator {
+public class JSONWebServiceRegitrator extends HookHotDeployListener {
 
 	public void processBean(BeanLocator beanLocator, String beanName) {
 		if (!PropsValues.JSON_WEB_SERVICE_ENABLED ||
@@ -165,15 +169,16 @@ public class JSONWebServiceRegitrator {
 		}
 	}
 
-	// this has to be fixed for plugins
-	// drop AopUtils usage and find field 'h'
-	protected Class getTargetClass(Object proxy) throws Exception {
-		if ((AopUtils.isJdkDynamicProxy(proxy))) {
-			TargetSource targetSource = ((Advised)proxy).getTargetSource();
+	protected Class<?> getTargetClass(Object service) throws Exception {
+		if (ProxyUtil.isProxyClass(service.getClass())) {
+			AdvisedSupport advisedSupport = getAdvisedSupport(service);
 
-			return getTargetClass(targetSource.getTarget());
+			TargetSource targetSource = advisedSupport.getTargetSource();
+
+			service = targetSource.getTarget();
 		}
-		return proxy.getClass();
+
+		return service.getClass();
 	}
 
 	boolean wireViaUtil = false;
