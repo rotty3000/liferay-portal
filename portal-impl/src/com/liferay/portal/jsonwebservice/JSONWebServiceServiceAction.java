@@ -29,7 +29,7 @@ import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.util.WebKeys;
 
 import java.lang.reflect.InvocationTargetException;
@@ -54,7 +54,10 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 
 		BeanLocator beanLocator;
 
-		if (_contextPath.equals(PropsValues.PORTAL_CTX) || _contextPath.isEmpty()) {
+		if (_contextPath.equals(
+				PortalContextLoaderListener.getPortalServletContextPath()) ||
+			_contextPath.isEmpty()) {
+
 			System.out.println("*** PORTAL");
 			beanLocator = PortalBeanLocatorUtil.getBeanLocator();
 		}
