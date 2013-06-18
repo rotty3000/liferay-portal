@@ -184,7 +184,7 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 	boolean wireViaUtil = false;
 
 	protected void registerJSONWebServiceAction(
-			Object serviceBean, Class serviceBeanClass, Method method)
+			Object serviceBean, Class<?> serviceBeanClass, Method method)
 		throws Exception {
 
 		String httpMethod = _jsonWebServiceMappingResolver.resolveHttpMethod(
