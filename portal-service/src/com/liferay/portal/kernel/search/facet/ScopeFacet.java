@@ -158,7 +158,7 @@ public class ScopeFacet extends MultiValueFacet {
 			searchContext, facetQuery, BooleanClauseOccur.MUST.getName());
 	}
 
-	private long[] addScopeGroup(long groupId) {
+	protected long[] addScopeGroup(long groupId) {
 		try {
 			List<Long> scopeLayoutGroupIds = new ArrayList<Long>();
 
