@@ -58,7 +58,7 @@ public class JSONWebServiceRegistrator extends HookHotDeployListener {
 		String contextPath, BeanLocator beanLocator, String beanName) {
 
 		if (!PropsValues.JSON_WEB_SERVICE_ENABLED ||
-			!beanName.endsWith("Service")) {
+			!beanName.endsWith(_serviceClassNameSuffix)) {
 
 			return;
 		}
@@ -69,6 +69,29 @@ public class JSONWebServiceRegistrator extends HookHotDeployListener {
 			bean = beanLocator.locate(beanName);
 		}
 		catch (BeanLocatorException e) {
+			return;
+		}
+
+		JSONWebService jsonWebService = AnnotationLocator.locate(
+			bean.getClass(), JSONWebService.class);
+
+		if (jsonWebService != null) {
+			try {
+				onJSONWebServiceBean(contextPath, bean, jsonWebService);
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+	}
+
+	public void processBean(String contextPath, Object bean) {
+
+		String beanName = bean.getClass().getSimpleName();
+
+		if (!PropsValues.JSON_WEB_SERVICE_ENABLED ||
+			!beanName.endsWith(_serviceClassNameSuffix)) {
+
 			return;
 		}
 
@@ -237,13 +260,13 @@ public class JSONWebServiceRegistrator extends HookHotDeployListener {
 	private static Log _log = LogFactoryUtil.getLog(
 		JSONWebServiceRegistrator.class);
 
-	private static Set<String> _excludedMethodNames = SetUtil.fromArray(
+	private Set<String> _excludedMethodNames = SetUtil.fromArray(
 		new String[] {"getBeanIdentifier", "setBeanIdentifier"});
-
 	private Set<String> _invalidHttpMethods = SetUtil.fromArray(
 		PropsUtil.getArray(PropsKeys.JSONWS_WEB_SERVICE_INVALID_HTTP_METHODS));
 	private JSONWebServiceMappingResolver _jsonWebServiceMappingResolver =
 		new JSONWebServiceMappingResolver();
+	private String _serviceClassNameSuffix = "Service";
 	private Map<Class<?>, Class<?>> _utilClasses =
 		new HashMap<Class<?>, Class<?>>();
 	private boolean _wireViaUtil = false;
