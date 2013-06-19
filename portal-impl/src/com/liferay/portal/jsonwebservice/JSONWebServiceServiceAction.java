@@ -52,19 +52,18 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 
 		_contextPath = ContextPathUtil.getContextPath(servletContext);
 
+		String contextName = _contextPath;
+
 		BeanLocator beanLocator;
 
 		if (_contextPath.equals(
 				PortalContextLoaderListener.getPortalServletContextPath()) ||
 			_contextPath.isEmpty()) {
 
-			System.out.println("*** PORTAL");
 			beanLocator = PortalBeanLocatorUtil.getBeanLocator();
 		}
 		else {
-			System.out.println("*** PLUGIN");
-
-			String contextName = _contextPath;
+			contextName = _contextPath;
 
 			if (contextName.startsWith(StringPool.SLASH)) {
 				contextName = contextName.substring(1);
@@ -73,15 +72,10 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			beanLocator = PortletBeanLocatorUtil.getBeanLocator(contextName);
 		}
 
-		// iterate and configure!
-		String[] beanNames = beanLocator.getNames();
-		JSONWebServiceRegitrator jsonWebServiceRegitrator = new JSONWebServiceRegitrator();
+		JSONWebServiceRegistrator jsonWebServiceRegitrator =
+			new JSONWebServiceRegistrator();
 
-		for (String beanName : beanNames) {
-			jsonWebServiceRegitrator.processBean(beanLocator, beanName);
-		}
-
-		System.out.println("*** Done.");
+		jsonWebServiceRegitrator.processAllBeans(_contextPath, beanLocator);
 
 		if (_log.isInfoEnabled()) {
 			int count =

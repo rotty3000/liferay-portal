@@ -24,16 +24,12 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceMappingResolver;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceMode;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
-import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.spring.context.PortalContextLoaderListener;
 import com.liferay.portal.util.PropsValues;
 
 import java.lang.reflect.Method;
@@ -42,17 +38,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.AdvisedSupport;
 
 /**
  * @author Igor Spasic
  */
-public class JSONWebServiceRegitrator extends HookHotDeployListener {
+public class JSONWebServiceRegistrator extends HookHotDeployListener {
 
-	public void processBean(BeanLocator beanLocator, String beanName) {
+	public void processAllBeans(String contextPath, BeanLocator beanLocator) {
+		String[] beanNames = beanLocator.getNames();
+
+		for (String beanName : beanNames) {
+			processBean(contextPath, beanLocator, beanName);
+		}
+	}
+
+	public void processBean(
+		String contextPath, BeanLocator beanLocator, String beanName) {
+
 		if (!PropsValues.JSON_WEB_SERVICE_ENABLED ||
 			!beanName.endsWith("Service")) {
 
@@ -73,12 +77,28 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 
 		if (jsonWebService != null) {
 			try {
-				onJSONWebServiceBean(bean, jsonWebService);
+				onJSONWebServiceBean(contextPath, bean, jsonWebService);
 			}
 			catch (Exception e) {
 				_log.error(e, e);
 			}
 		}
+	}
+
+	public void setWireViaUtil(boolean wireViaUtil) {
+		this._wireViaUtil = wireViaUtil;
+	}
+
+	protected Class<?> getTargetClass(Object service) throws Exception {
+		if (ProxyUtil.isProxyClass(service.getClass())) {
+			AdvisedSupport advisedSupport = getAdvisedSupport(service);
+
+			TargetSource targetSource = advisedSupport.getTargetSource();
+
+			service = targetSource.getTarget();
+		}
+
+		return service.getClass();
 	}
 
 	protected Class<?> loadUtilClass(Class<?> implementationClass)
@@ -112,7 +132,8 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 	}
 
 	protected void onJSONWebServiceBean(
-			Object serviceBean, JSONWebService jsonWebService)
+			String contextPath, Object serviceBean,
+			JSONWebService jsonWebService)
 		throws Exception {
 
 		JSONWebServiceMode jsonWebServiceMode = JSONWebServiceMode.MANUAL;
@@ -143,7 +164,8 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 
 			if (jsonWebServiceMode.equals(JSONWebServiceMode.AUTO)) {
 				if (methodJSONWebService == null) {
-					registerJSONWebServiceAction(serviceBean, serviceBeanClass, method);
+					registerJSONWebServiceAction(
+						contextPath, serviceBean, serviceBeanClass, method);
 				}
 				else {
 					JSONWebServiceMode methodJSONWebServiceMode =
@@ -152,7 +174,8 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 					if (!methodJSONWebServiceMode.equals(
 							JSONWebServiceMode.IGNORE)) {
 
-						registerJSONWebServiceAction(serviceBean, serviceBeanClass, method);
+						registerJSONWebServiceAction(
+							contextPath, serviceBean, serviceBeanClass, method);
 					}
 				}
 			}
@@ -163,28 +186,16 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 				if (!methodJSONWebServiceMode.equals(
 						JSONWebServiceMode.IGNORE)) {
 
-					registerJSONWebServiceAction(serviceBean, serviceBeanClass, method);
+					registerJSONWebServiceAction(
+						contextPath, serviceBean, serviceBeanClass, method);
 				}
 			}
 		}
 	}
 
-	protected Class<?> getTargetClass(Object service) throws Exception {
-		if (ProxyUtil.isProxyClass(service.getClass())) {
-			AdvisedSupport advisedSupport = getAdvisedSupport(service);
-
-			TargetSource targetSource = advisedSupport.getTargetSource();
-
-			service = targetSource.getTarget();
-		}
-
-		return service.getClass();
-	}
-
-	boolean wireViaUtil = false;
-
 	protected void registerJSONWebServiceAction(
-			Object serviceBean, Class<?> serviceBeanClass, Method method)
+			String contextPath, Object serviceBean, Class<?> serviceBeanClass,
+			Method method)
 		throws Exception {
 
 		String httpMethod = _jsonWebServiceMappingResolver.resolveHttpMethod(
@@ -194,25 +205,7 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 			return;
 		}
 
-		String servletContextName =
-			PortletClassLoaderUtil.getServletContextName();
-
-		if (Validator.isNotNull(servletContextName)) {
-			ServletContext servletContext = ServletContextPool.get(
-				servletContextName);
-
-			servletContextName = servletContext.getContextPath();
-		}
-		else {
-			servletContextName =
-				PortalContextLoaderListener.getPortalServletContextPath();
-
-			if (servletContextName.equals(StringPool.SLASH)) {
-				servletContextName = StringPool.BLANK;
-			}
-		}
-
-		if (wireViaUtil == true) {
+		if (_wireViaUtil == true) {
 			Class<?> utilClass = loadUtilClass(serviceBeanClass);
 
 			try {
@@ -227,7 +220,7 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 				serviceBeanClass, method);
 
 			JSONWebServiceActionsManagerUtil.registerJSONWebServiceAction(
-				servletContextName, method.getDeclaringClass(), method, path,
+				contextPath, method.getDeclaringClass(), method, path,
 				httpMethod);
 		}
 		else {
@@ -235,14 +228,14 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 				serviceBeanClass, method);
 
 			JSONWebServiceActionsManagerUtil.registerJSONWebServiceAction(
-				servletContextName, serviceBean, serviceBeanClass, method, path,
+				contextPath, serviceBean, serviceBeanClass, method, path,
 				httpMethod);
 
 		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-		JSONWebServiceRegitrator.class);
+		JSONWebServiceRegistrator.class);
 
 	private static Set<String> _excludedMethodNames = SetUtil.fromArray(
 		new String[] {"getBeanIdentifier", "setBeanIdentifier"});
@@ -253,5 +246,6 @@ public class JSONWebServiceRegitrator extends HookHotDeployListener {
 		new JSONWebServiceMappingResolver();
 	private Map<Class<?>, Class<?>> _utilClasses =
 		new HashMap<Class<?>, Class<?>>();
+	private boolean _wireViaUtil = false;
 
 }
