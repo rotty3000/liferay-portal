@@ -49,6 +49,37 @@ public class ScopeFacet extends MultiValueFacet {
 		setFieldName(Field.GROUP_ID);
 	}
 
+	protected long[] addScopeGroup(long groupId) {
+		try {
+			List<Long> scopeLayoutGroupIds = new ArrayList<Long>();
+
+			scopeLayoutGroupIds.add(groupId);
+
+			for (Layout layout : LayoutLocalServiceUtil.getScopeGroupLayouts(
+					groupId, false)) {
+
+				Group group = layout.getScopeGroup();
+
+				scopeLayoutGroupIds.add(group.getGroupId());
+			}
+
+			for (Layout layout : LayoutLocalServiceUtil.getScopeGroupLayouts(
+					groupId, true)) {
+
+				Group group = layout.getScopeGroup();
+
+				scopeLayoutGroupIds.add(group.getGroupId());
+			}
+
+			return ArrayUtil.toLongArray(scopeLayoutGroupIds);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		return new long[] {groupId};
+	}
+
 	@Override
 	protected BooleanClause doGetFacetClause() {
 		SearchContext searchContext = getSearchContext();
@@ -156,37 +187,6 @@ public class ScopeFacet extends MultiValueFacet {
 
 		return BooleanClauseFactoryUtil.create(
 			searchContext, facetQuery, BooleanClauseOccur.MUST.getName());
-	}
-
-	protected long[] addScopeGroup(long groupId) {
-		try {
-			List<Long> scopeLayoutGroupIds = new ArrayList<Long>();
-
-			scopeLayoutGroupIds.add(groupId);
-
-			for (Layout layout : LayoutLocalServiceUtil.getScopeGroupLayouts(
-					groupId, false)) {
-
-				Group group = layout.getScopeGroup();
-
-				scopeLayoutGroupIds.add(group.getGroupId());
-			}
-
-			for (Layout layout : LayoutLocalServiceUtil.getScopeGroupLayouts(
-					groupId, true)) {
-
-				Group group = layout.getScopeGroup();
-
-				scopeLayoutGroupIds.add(group.getGroupId());
-			}
-
-			return ArrayUtil.toLongArray(scopeLayoutGroupIds);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-
-		return new long[] {groupId};
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ScopeFacet.class);
