@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.auth;
 
+import com.liferay.portal.kernel.portlet.PortletSecurityUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -64,6 +65,16 @@ public class SessionAuthToken implements AuthToken {
 	}
 
 	@Override
+	public String getSystemPortletToken(
+		HttpServletRequest request, long plid, String portletId) {
+
+		return getSessionAuthenticationToken(
+			request,
+			_SYSTEM.concat(
+				PortletPermissionUtil.getPrimaryKey(plid, portletId)));
+	}
+
+	@Override
 	public String getToken(HttpServletRequest request) {
 		return getSessionAuthenticationToken(request, _PORTAL);
 	}
@@ -74,6 +85,37 @@ public class SessionAuthToken implements AuthToken {
 
 		return getSessionAuthenticationToken(
 			request, PortletPermissionUtil.getPrimaryKey(plid, portletId));
+	}
+
+	@Override
+	public boolean isPortletOnSystemWhitelist(String portletId) {
+		String rootPortletId = PortletConstants.getRootPortletId(portletId);
+
+		Set<String> systemPortletsWhitelist =
+			PortletSecurityUtil.getSystemWhitelist();
+
+		return systemPortletsWhitelist.contains(rootPortletId);
+	}
+
+	@Override
+	public boolean isSystemPortletTokenValid(
+		HttpServletRequest request, long plid, String portletId,
+		String tokenValue) {
+
+		if (isPortletOnSystemWhitelist(portletId)) {
+			return true;
+		}
+
+		String key = _SYSTEM.concat(
+			PortletPermissionUtil.getPrimaryKey(plid, portletId));
+
+		String sessionToken = getSessionAuthenticationToken(request, key);
+
+		if (sessionToken.equals(tokenValue)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	protected String getSessionAuthenticationToken(
@@ -157,5 +199,7 @@ public class SessionAuthToken implements AuthToken {
 	}
 
 	private static final String _PORTAL = "PORTAL";
+
+	private static final String _SYSTEM = "SYSTEM";
 
 }
