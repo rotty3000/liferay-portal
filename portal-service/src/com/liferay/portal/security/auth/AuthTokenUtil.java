@@ -36,6 +36,12 @@ public class AuthTokenUtil {
 		return _authToken;
 	}
 
+	public static String getSystemPortletToken(
+		HttpServletRequest request, long plid, String portletId) {
+
+		return getAuthToken().getSystemPortletToken(request, plid, portletId);
+	}
+
 	public static String getToken(HttpServletRequest request) {
 		return getAuthToken().getToken(request);
 	}
@@ -44,6 +50,18 @@ public class AuthTokenUtil {
 		HttpServletRequest request, long plid, String portletId) {
 
 		return getAuthToken().getToken(request, plid, portletId);
+	}
+
+	public static boolean isPortletOnSystemWhitelist(String portletId) {
+		return getAuthToken().isPortletOnSystemWhitelist(portletId);
+	}
+
+	public static boolean isSystemPortletTokenValid(
+		HttpServletRequest request, long plid, String portletId,
+		String tokenValue) {
+
+		return getAuthToken().isSystemPortletTokenValid(
+			request, plid, portletId, tokenValue);
 	}
 
 	public void setAuthToken(AuthToken authToken) {

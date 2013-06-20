@@ -25,9 +25,18 @@ public interface AuthToken {
 
 	public void check(HttpServletRequest request) throws PortalException;
 
+	public String getSystemPortletToken(
+		HttpServletRequest request, long plid, String portletId);
+
 	public String getToken(HttpServletRequest request);
 
 	public String getToken(
 		HttpServletRequest request, long plid, String portletId);
+
+	public boolean isPortletOnSystemWhitelist(String portletId);
+
+	public boolean isSystemPortletTokenValid(
+		HttpServletRequest request, long plid, String portletId,
+		String tokenValue);
 
 }
