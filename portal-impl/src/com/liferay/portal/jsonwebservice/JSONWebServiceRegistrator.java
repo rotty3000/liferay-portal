@@ -47,6 +47,10 @@ import org.springframework.aop.framework.AdvisedSupport;
 public class JSONWebServiceRegistrator extends HookHotDeployListener {
 
 	public void processAllBeans(String contextPath, BeanLocator beanLocator) {
+		if (beanLocator == null) {
+			return;
+		}
+
 		String[] beanNames = beanLocator.getNames();
 
 		for (String beanName : beanNames) {
