@@ -1058,9 +1058,25 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		if (bag.isGroupAdmin(this, group)) {
 			return true;
 		}
-		else {
-			return false;
+
+		while (!group.isRoot()) {
+			if ((group.isSite() &&
+					hasPermission(
+						group.getGroupId(), Group.class.getName(),
+						group.getGroupId(), ActionKeys.MANAGE_SUBGROUPS)) ||
+				(group.isOrganization() &&
+					hasPermission(
+						group.getGroupId(), Organization.class.getName(),
+						group.getOrganizationId(),
+						ActionKeys.MANAGE_SUBGROUPS))) {
+
+				return true;
+			}
+
+			group = group.getParentGroup();
 		}
+
+		return false;
 	}
 
 	protected boolean isGroupMemberImpl(long groupId) throws Exception {
