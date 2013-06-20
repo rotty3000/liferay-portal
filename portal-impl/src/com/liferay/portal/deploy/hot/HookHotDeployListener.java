@@ -2482,6 +2482,10 @@ public class HookHotDeployListener
 			PortletSecurityUtil.resetWhitelistActions();
 		}
 
+		if (containsKey(portalProperties, PORTLET_SYSTEM_CHECK_WHITELIST)) {
+			PortletSecurityUtil.resetSystemWhitelist();
+		}
+
 		CacheUtil.clearCache();
 
 		JavaScriptBundleUtil.clearCache();
