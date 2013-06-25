@@ -29,8 +29,14 @@ import java.util.Set;
 public class PortletSecurityImpl implements PortletSecurity {
 
 	public PortletSecurityImpl() {
+		resetSystemWhitelist();
 		resetWhitelist();
 		resetWhitelistActions();
+	}
+
+	@Override
+	public Set<String> getSystemWhitelist() {
+		return _systemWhitelist;
 	}
 
 	@Override
@@ -41,6 +47,15 @@ public class PortletSecurityImpl implements PortletSecurity {
 	@Override
 	public Set<String> getWhitelistActions() {
 		return _whitelistActions;
+	}
+
+	@Override
+	public Set<String> resetSystemWhitelist() {
+		_systemWhitelist = SetUtil.fromArray(
+			PropsValues.PORTLET_SYSTEM_CHECK_WHITELIST);
+		_systemWhitelist = Collections.unmodifiableSet(_systemWhitelist);
+
+		return _systemWhitelist;
 	}
 
 	@Override
@@ -61,6 +76,7 @@ public class PortletSecurityImpl implements PortletSecurity {
 		return _whitelistActions;
 	}
 
+	private Set<String> _systemWhitelist;
 	private Set<String> _whitelist;
 	private Set<String> _whitelistActions;
 

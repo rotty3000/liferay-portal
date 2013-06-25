@@ -22,9 +22,13 @@ import java.util.Set;
  */
 public interface PortletSecurity {
 
+	public Set<String> getSystemWhitelist();
+
 	public Set<String> getWhitelist();
 
 	public Set<String> getWhitelistActions();
+
+	public Set<String> resetSystemWhitelist();
 
 	public Set<String> resetWhitelist();
 

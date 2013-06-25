@@ -35,6 +35,7 @@ AUI.add(
 				p_p_static: null,
 				p_p_url_type: null,
 				p_p_width: null,
+				p_s_auth: null,
 				p_t_lifecycle: null,
 				p_v_l_s_g_id: null,
 				refererGroupId: null,
