@@ -27,6 +27,7 @@ import com.liferay.portal.service.OrganizationLocalServiceUtil;
 /**
  * @author Charles May
  * @author Jorge Ferrer
+ * @author Sergio González
  */
 public class OrganizationPermissionImpl implements OrganizationPermission {
 
@@ -100,24 +101,6 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 			return true;
 		}
 
-		while (!organization.isRoot()) {
-			Organization parentOrganization =
-				organization.getParentOrganization();
-
-			Group parentGroup = parentOrganization.getGroup();
-
-			groupId = parentGroup.getGroupId();
-
-			if (contains(
-					permissionChecker, groupId, parentOrganization,
-					ActionKeys.MANAGE_SUBORGANIZATIONS)) {
-
-				return true;
-			}
-
-			organization = parentOrganization;
-		}
-
 		return false;
 	}
 
@@ -130,9 +113,19 @@ public class OrganizationPermissionImpl implements OrganizationPermission {
 			   (organization.getOrganizationId() !=
 					OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID)) {
 
-			if (permissionChecker.hasPermission(
+			if (actionId.equals(ActionKeys.ADD_ORGANIZATION) &&
+				permissionChecker.hasPermission(
 					groupId, Organization.class.getName(),
-					organization.getOrganizationId(), actionId)) {
+					organization.getOrganizationId(),
+					ActionKeys.MANAGE_SUBGROUPS) ||
+				PortalPermissionUtil.contains(
+					permissionChecker, ActionKeys.ADD_COMMUNITY)) {
+
+				return true;
+			}
+			else if (permissionChecker.hasPermission(
+					 groupId, Organization.class.getName(),
+					 organization.getOrganizationId(), actionId)) {
 
 				return true;
 			}
