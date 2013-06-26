@@ -14,6 +14,7 @@
 
 package com.liferay.portal.security.auth;
 
+import com.liferay.portal.kernel.portlet.PortletSecurityUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -74,6 +75,28 @@ public class SessionAuthToken implements AuthToken {
 
 		return getSessionAuthenticationToken(
 			request, PortletPermissionUtil.getPrimaryKey(plid, portletId));
+	}
+
+	@Override
+	public boolean isTokenValid(
+		HttpServletRequest request, long plid, String portletId,
+		String strutsAction, String tokenValue) {
+
+		if (PortletSecurityUtil.isPortletWhitelisted(portletId, strutsAction)) {
+			return true;
+		}
+
+		if (Validator.isNotNull(tokenValue)) {
+			String key = PortletPermissionUtil.getPrimaryKey(plid, portletId);
+
+			String sessionToken = getSessionAuthenticationToken(request, key);
+
+			if (sessionToken.equals(tokenValue)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected String getSessionAuthenticationToken(
