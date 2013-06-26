@@ -46,6 +46,14 @@ public class AuthTokenUtil {
 		return getAuthToken().getToken(request, plid, portletId);
 	}
 
+	public static boolean isTokenValid(
+		HttpServletRequest request, long plid, String portletId,
+		String strutsAction, String tokenValue) {
+
+		return getAuthToken().isTokenValid(
+			request, plid, portletId, strutsAction, tokenValue);
+	}
+
 	public void setAuthToken(AuthToken authToken) {
 		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
