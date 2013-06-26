@@ -26,6 +26,8 @@ public interface PortletSecurity {
 
 	public Set<String> getWhitelistActions();
 
+	public boolean isPortletWhitelisted(String portletId, String strutsAction);
+
 	public Set<String> resetWhitelist();
 
 	public Set<String> resetWhitelistActions();

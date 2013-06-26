@@ -38,6 +38,13 @@ public class PortletSecurityUtil {
 		return getPortletSecurity().getWhitelistActions();
 	}
 
+	public static boolean isPortletWhitelisted(
+		String portletId, String strutsAction) {
+
+		return getPortletSecurity().isPortletWhitelisted(
+			portletId, strutsAction);
+	}
+
 	public static Set<String> resetWhitelist() {
 		return getPortletSecurity().resetWhitelist();
 	}
