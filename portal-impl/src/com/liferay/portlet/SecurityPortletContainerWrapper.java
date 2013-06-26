@@ -57,7 +57,6 @@ import com.liferay.portal.util.WebKeys;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.portlet.Event;
 import javax.portlet.PortletMode;
@@ -408,12 +407,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 			return true;
 		}
 
-		Set<String> whitelist = _portletSecurity.getWhitelist();
-
-		if (whitelist.contains(portletId)) {
-			return true;
-		}
-
 		String namespace = PortalUtil.getPortletNamespace(portletId);
 
 		String strutsAction = ParamUtil.getString(
@@ -421,12 +414,6 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 
 		if (Validator.isNull(strutsAction)) {
 			strutsAction = ParamUtil.getString(request, "struts_action");
-		}
-
-		Set<String> whitelistActions = _portletSecurity.getWhitelistActions();
-
-		if (whitelistActions.contains(strutsAction)) {
-			return true;
 		}
 
 		String requestPortletAuthenticationToken = ParamUtil.getString(
@@ -440,15 +427,11 @@ public class SecurityPortletContainerWrapper implements PortletContainer {
 				originalRequest, "p_p_auth");
 		}
 
-		if (Validator.isNotNull(requestPortletAuthenticationToken)) {
-			String actualPortletAuthenticationToken = AuthTokenUtil.getToken(
-				request, themeDisplay.getPlid(), portletId);
+		if (AuthTokenUtil.isTokenValid(
+				request, themeDisplay.getPlid(), portletId, strutsAction,
+			requestPortletAuthenticationToken)) {
 
-			if (requestPortletAuthenticationToken.equals(
-					actualPortletAuthenticationToken)) {
-
-				return true;
-			}
+			return true;
 		}
 
 		return false;

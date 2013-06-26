@@ -17,6 +17,7 @@ package com.liferay.portlet;
 import com.liferay.portal.kernel.portlet.PortletSecurity;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.Collections;
@@ -41,6 +42,25 @@ public class PortletSecurityImpl implements PortletSecurity {
 	@Override
 	public Set<String> getWhitelistActions() {
 		return _whitelistActions;
+	}
+
+	@Override
+	public boolean isPortletWhitelisted(String portletId, String strutsAction) {
+		Set<String> whitelist = getWhitelist();
+
+		if (whitelist.contains(portletId)) {
+			return true;
+		}
+
+		if (Validator.isNotNull(strutsAction)) {
+			Set<String> whitelistActions = getWhitelistActions();
+
+			if (whitelistActions.contains(strutsAction)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
