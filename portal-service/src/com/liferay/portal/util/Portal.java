@@ -281,6 +281,9 @@ public interface Portal {
 	 * Returns the set of struts actions that should not be checked for an
 	 * authentication token.
 	 *
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelistActions()}
+	 *
 	 * @return the set of struts actions that should not be checked for an
 	 *         authentication token
 	 */
@@ -289,6 +292,9 @@ public interface Portal {
 	/**
 	 * Returns the set of IDs of portlets that should not be checked for an
 	 * authentication token.
+	 *
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelist()}
 	 *
 	 * @return the set of IDs of portlets that should not be checked for an
 	 *         authentication token
