@@ -281,6 +281,9 @@ public interface Portal {
 	 * Returns the set of struts actions that should not be checked for an
 	 * authentication token.
 	 *
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelistActions()}
+	 *
 	 * @return the set of struts actions that should not be checked for an
 	 *         authentication token
 	 */
@@ -289,6 +292,9 @@ public interface Portal {
 	/**
 	 * Returns the set of IDs of portlets that should not be checked for an
 	 * authentication token.
+	 *
+	 * @deprecated As of 6.2.0, replaced by {@link
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletCSRFWhitelist()}
 	 *
 	 * @return the set of IDs of portlets that should not be checked for an
 	 *         authentication token
@@ -891,13 +897,13 @@ public interface Portal {
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#getWhitelist()}
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelist()}
 	 */
 	public Set<String> getPortletAddDefaultResourceCheckWhitelist();
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#getWhitelistActions()}
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#getPortletInvocationWhitelistActions()}
 	 */
 	public Set<String> getPortletAddDefaultResourceCheckWhitelistActions();
 
@@ -1246,13 +1252,13 @@ public interface Portal {
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#resetWhitelist()}
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelist()}
 	 */
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelist();
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 * com.liferay.portal.kernel.portlet.PortletSecurityUtil#resetWhitelistActions()}
+	 * com.liferay.portal.security.auth.AuthTokenWhitelistUtil#resetPortletInvocationWhitelistActions()}
 	 */
 	public Set<String> resetPortletAddDefaultResourceCheckWhitelistActions();
 
