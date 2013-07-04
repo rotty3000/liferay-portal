@@ -306,10 +306,12 @@ public class DDMTemplateServiceImpl extends DDMTemplateServiceBaseImpl {
 	public DDMTemplate getTemplate(long templateId)
 		throws PortalException, SystemException {
 
+		DDMTemplate template = ddmTemplateLocalService.getTemplate(templateId);
+		
 		DDMTemplatePermission.check(
 			getPermissionChecker(), templateId, ActionKeys.VIEW);
 
-		return ddmTemplatePersistence.findByPrimaryKey(templateId);
+		return template;
 	}
 
 	/**
