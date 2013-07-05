@@ -126,17 +126,14 @@ public class DLFileEntryPermission {
 			}
 		}
 
-		if (permissionChecker.hasOwnerPermission(
+		return
+			permissionChecker.hasOwnerPermission(
 				dlFileEntry.getCompanyId(), DLFileEntry.class.getName(),
 				dlFileEntry.getFileEntryId(), dlFileEntry.getUserId(),
-				actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			dlFileEntry.getGroupId(), DLFileEntry.class.getName(),
-			dlFileEntry.getFileEntryId(), actionId);
+				actionId) ||
+			permissionChecker.hasPermission(
+				dlFileEntry.getGroupId(), DLFileEntry.class.getName(),
+				dlFileEntry.getFileEntryId(), actionId);
 	}
 
 	public static boolean contains(

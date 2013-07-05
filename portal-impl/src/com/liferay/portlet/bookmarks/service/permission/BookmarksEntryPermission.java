@@ -86,16 +86,13 @@ public class BookmarksEntryPermission {
 			}
 		}
 
-		if (permissionChecker.hasOwnerPermission(
+		return
+			permissionChecker.hasOwnerPermission(
 				entry.getCompanyId(), BookmarksEntry.class.getName(),
-				entry.getEntryId(), entry.getUserId(), actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			entry.getGroupId(), BookmarksEntry.class.getName(),
-			entry.getEntryId(), actionId);
+				entry.getEntryId(), entry.getUserId(), actionId) ||
+			permissionChecker.hasPermission(
+				entry.getGroupId(), BookmarksEntry.class.getName(),
+				entry.getEntryId(), actionId);
 	}
 
 	public static boolean contains(
