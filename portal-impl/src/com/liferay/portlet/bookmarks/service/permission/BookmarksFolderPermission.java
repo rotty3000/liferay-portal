@@ -72,7 +72,9 @@ public class BookmarksFolderPermission {
 					folder = BookmarksFolderLocalServiceUtil.getFolder(
 						folderId);
 
-					if (!_hasPermission(permissionChecker, folder, actionId)) {
+					if (!_hasPermission(
+							permissionChecker, folder, ActionKeys.VIEW)) {
+
 						return false;
 					}
 
