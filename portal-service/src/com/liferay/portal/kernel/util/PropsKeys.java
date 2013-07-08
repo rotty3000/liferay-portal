@@ -1867,6 +1867,8 @@ public interface PropsKeys {
 
 	public static final String PERMISSIONS_OBJECT_BLOCKING_CACHE = "permissions.object.blocking.cache";
 
+	public static final String PERMISSIONS_PARENT_INHERITANCE_ENABLED = "permission.parent.inheritance.enabled";
+
 	public static final String PERMISSIONS_PROPAGATION_ENABLED = "permissions.propagation.enabled";
 
 	public static final String PERMISSIONS_ROLE_RESOURCE_PERMISSION_QUERY_THRESHOLD = "permissions.role.resource.permission.query.threshold";

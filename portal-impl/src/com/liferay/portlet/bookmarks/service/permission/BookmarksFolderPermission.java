@@ -95,16 +95,20 @@ public class BookmarksFolderPermission {
 		}
 
 		try {
-			while (folderId !=
-						BookmarksFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			if (_hasPermission(permissionChecker, folder, actionId)) {
+				return true;
+			}
 
-				folder = BookmarksFolderLocalServiceUtil.getFolder(folderId);
+			if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+				folder = folder.getParentFolder();
 
-				if (_hasPermission(permissionChecker, folder, actionId)) {
-					return true;
+				while (folder != null) {
+					if (_hasPermission(permissionChecker, folder, actionId)) {
+						return true;
+					}
+
+					folder = folder.getParentFolder();
 				}
-
-				folderId = folder.getParentFolderId();
 			}
 		}
 		catch (NoSuchFolderException nsfe) {
