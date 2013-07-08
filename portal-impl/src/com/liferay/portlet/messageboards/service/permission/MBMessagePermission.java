@@ -109,7 +109,8 @@ public class MBMessagePermission {
 					}
 				}
 
-				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+				if (PropsValues.
+						PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED &&
 					MBCategoryPermission.contains(
 						permissionChecker, category, actionId)) {
 

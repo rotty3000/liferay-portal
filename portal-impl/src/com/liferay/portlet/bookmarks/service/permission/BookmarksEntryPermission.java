@@ -73,7 +73,8 @@ public class BookmarksEntryPermission {
 					return false;
 				}
 
-				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+				if (PropsValues.
+						PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED &&
 					BookmarksFolderPermission.contains(
 						permissionChecker, folder, actionId)) {
 

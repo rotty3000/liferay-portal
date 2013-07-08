@@ -112,7 +112,7 @@ public class DLFileEntryPermission {
 					return false;
 				}
 
-				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED &&
 					!actionId.equals(ActionKeys.OVERRIDE_CHECKOUT) &&
 					DLFolderPermission.contains(
 						permissionChecker, dlFolder, actionId)) {

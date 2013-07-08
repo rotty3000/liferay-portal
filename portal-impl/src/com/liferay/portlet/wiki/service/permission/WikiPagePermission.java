@@ -140,7 +140,7 @@ public class WikiPagePermission {
 
 				return false;
 			}
-			else if (!PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+			else if (!PropsValues.PERMISSIONS_PARENT_INHERITANCE_WIKI_ENABLED) {
 				WikiPage originalPage = page;
 
 				while (page != null) {
@@ -167,7 +167,7 @@ public class WikiPagePermission {
 			return true;
 		}
 
-		if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+		if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_WIKI_ENABLED) {
 			if (WikiNodePermission.contains(
 					permissionChecker, node, actionId)) {
 

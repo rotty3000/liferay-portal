@@ -83,7 +83,7 @@ public class DLFolderPermission {
 			DLFolder originalFolder = dlFolder;
 
 			try {
-				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED &&
 					!dlFolder.isRoot()) {
 
 					DLFolder dlParentFolder = dlFolder.getParentFolder();
@@ -130,7 +130,7 @@ public class DLFolderPermission {
 				return true;
 			}
 
-			if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+			if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED) {
 				dlFolder = dlFolder.getParentFolder();
 
 				while (dlFolder != null) {

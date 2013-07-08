@@ -1867,7 +1867,13 @@ public interface PropsKeys {
 
 	public static final String PERMISSIONS_OBJECT_BLOCKING_CACHE = "permissions.object.blocking.cache";
 
-	public static final String PERMISSIONS_PARENT_INHERITANCE_ENABLED = "permission.parent.inheritance.enabled";
+	public static final String PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED = "permissions.parent.inheritance.bookmarks.enabled";
+
+	public static final String PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED = "permissions.parent.inheritance.dl.enabled";
+
+	public static final String PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED = "permissions.parent.inheritance.message.boards.enabled";
+
+	public static final String PERMISSIONS_PARENT_INHERITANCE_WIKI_ENABLED = "permissions.parent.inheritance.wiki.enabled";
 
 	public static final String PERMISSIONS_PROPAGATION_ENABLED = "permissions.propagation.enabled";
 

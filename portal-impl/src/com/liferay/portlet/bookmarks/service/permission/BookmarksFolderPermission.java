@@ -64,7 +64,8 @@ public class BookmarksFolderPermission {
 			BookmarksFolder originalFolder = folder;
 
 			try {
-				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+				if (PropsValues.
+						PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED &&
 					!folder.isRoot()) {
 
 					BookmarksFolder parentFolder = folder.getParentFolder();
@@ -110,7 +111,7 @@ public class BookmarksFolderPermission {
 				return true;
 			}
 
-			if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+			if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED) {
 				folder = folder.getParentFolder();
 
 				while (folder != null) {
