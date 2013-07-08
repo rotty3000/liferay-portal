@@ -106,25 +106,37 @@ public class MBCategoryPermission {
 			return false;
 		}
 
-		long categoryId = category.getCategoryId();
-
 		if (PropsValues.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE) {
-			long originalCategoryId = categoryId;
+			MBCategory originalCategory = category;
 
 			try {
-				while (categoryId !=
-							MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
+				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED &&
+					!category.isRoot()) {
 
-					category = MBCategoryLocalServiceUtil.getCategory(
-						categoryId);
+					MBCategory parentCategory = category.getParentCategory();
+
+					while (parentCategory != null) {
+						category = parentCategory;
+						parentCategory = parentCategory.getParentCategory();
+					}
 
 					if (!_hasPermission(
-							permissionChecker, category, ActionKeys.VIEW)) {
+							permissionChecker, category,
+							ActionKeys.VIEW)) {
 
 						return false;
 					}
+				}
+				else {
+					while (category != null) {
+						if (!_hasPermission(
+								permissionChecker, category, ActionKeys.VIEW)) {
 
-					categoryId = category.getParentCategoryId();
+							return false;
+						}
+
+						category = category.getParentCategory();
+					}
 				}
 			}
 			catch (NoSuchCategoryException nsce) {
@@ -137,7 +149,7 @@ public class MBCategoryPermission {
 				return true;
 			}
 
-			categoryId = originalCategoryId;
+			category = originalCategory;
 		}
 
 		try {

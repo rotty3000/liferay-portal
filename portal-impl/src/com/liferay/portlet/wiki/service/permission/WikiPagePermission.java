@@ -135,27 +135,30 @@ public class WikiPagePermission {
 		WikiNode node = page.getNode();
 
 		if (PropsValues.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE) {
-			WikiPage originalPage = page;
-
 			if (!WikiNodePermission.contains(
 					permissionChecker, node, ActionKeys.VIEW)) {
 
 				return false;
 			}
+			else if (!PropsValues.PERMISSIONS_PARENT_INHERITANCE_ENABLED) {
+				WikiPage originalPage = page;
 
-			while (page != null) {
-				if (!_hasPermission(permissionChecker, page, ActionKeys.VIEW)) {
-					return false;
+				while (page != null) {
+					if (!_hasPermission(
+							permissionChecker, page, ActionKeys.VIEW)) {
+
+						return false;
+					}
+
+					page = page.getParentPage();
 				}
 
-				page = page.getParentPage();
+				page = originalPage;
 			}
 
 			if (actionId.equals(ActionKeys.VIEW)) {
 				return true;
 			}
-
-			page = originalPage;
 		}
 
 		if (_checkStatus(page, permissionChecker, actionId) ||
