@@ -86,11 +86,8 @@ public class DLFolderPermission {
 				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED &&
 					!dlFolder.isRoot()) {
 
-					DLFolder dlParentFolder = dlFolder.getParentFolder();
-
-					while (dlParentFolder != null) {
-						dlFolder = dlParentFolder;
-						dlParentFolder = dlParentFolder.getParentFolder();
+					while (dlFolder.getParentFolder() != null) {
+						dlFolder = dlFolder.getParentFolder();
 					}
 
 					if (!_hasPermission(

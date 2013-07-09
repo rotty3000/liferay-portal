@@ -114,11 +114,8 @@ public class MBCategoryPermission {
 						PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED &&
 					!category.isRoot()) {
 
-					MBCategory parentCategory = category.getParentCategory();
-
-					while (parentCategory != null) {
-						category = parentCategory;
-						parentCategory = parentCategory.getParentCategory();
+					while (category.getParentCategory() != null) {
+						category = category.getParentCategory();
 					}
 
 					if (!_hasPermission(

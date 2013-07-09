@@ -68,11 +68,8 @@ public class BookmarksFolderPermission {
 						PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED &&
 					!folder.isRoot()) {
 
-					BookmarksFolder parentFolder = folder.getParentFolder();
-
-					while (parentFolder != null) {
-						folder = parentFolder;
-						parentFolder = parentFolder.getParentFolder();
+					while (folder.getParentFolder() != null) {
+						folder = folder.getParentFolder();
 					}
 
 					if (!_hasPermission(
