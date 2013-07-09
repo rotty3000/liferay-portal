@@ -290,10 +290,12 @@ public class DDMStructureServiceImpl extends DDMStructureServiceBaseImpl {
 	public DDMStructure getStructure(long structureId)
 		throws PortalException, SystemException {
 
+		DDMStructure structure = ddmStructureLocalService.getStructure(structureId);
+
 		DDMStructurePermission.check(
 			getPermissionChecker(), structureId, ActionKeys.VIEW);
 
-		return ddmStructurePersistence.findByPrimaryKey(structureId);
+		return structure;
 	}
 
 	/**
