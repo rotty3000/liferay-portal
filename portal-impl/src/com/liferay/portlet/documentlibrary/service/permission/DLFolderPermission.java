@@ -91,8 +91,7 @@ public class DLFolderPermission {
 					}
 
 					if (!_hasPermission(
-							permissionChecker, dlFolder,
-							ActionKeys.VIEW)) {
+							permissionChecker, dlFolder, ActionKeys.VIEW)) {
 
 						return false;
 					}

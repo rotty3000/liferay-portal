@@ -119,8 +119,7 @@ public class MBCategoryPermission {
 					}
 
 					if (!_hasPermission(
-							permissionChecker, category,
-							ActionKeys.VIEW)) {
+							permissionChecker, category, ActionKeys.VIEW)) {
 
 						return false;
 					}

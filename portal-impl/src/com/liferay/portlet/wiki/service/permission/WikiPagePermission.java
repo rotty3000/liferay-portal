@@ -161,7 +161,7 @@ public class WikiPagePermission {
 			}
 		}
 
-		if (_checkStatus(page, permissionChecker, actionId) ||
+		if (_checkStatus(permissionChecker, page, actionId) ||
 			_hasPermission(permissionChecker, page, actionId)) {
 
 			return true;
@@ -177,7 +177,7 @@ public class WikiPagePermission {
 				page = page.getParentPage();
 
 				while (page != null) {
-					if (_checkStatus(page, permissionChecker, actionId) ||
+					if (_checkStatus(permissionChecker, page, actionId) ||
 						_hasPermission(permissionChecker, page, actionId)) {
 
 						return true;
@@ -192,8 +192,7 @@ public class WikiPagePermission {
 	}
 
 	private static boolean _checkStatus(
-			WikiPage page, PermissionChecker permissionChecker,
-			String actionId) {
+		PermissionChecker permissionChecker, WikiPage page, String actionId) {
 
 		if (page.isPending()) {
 			Boolean hasPermission = WorkflowPermissionUtil.hasPermission(
