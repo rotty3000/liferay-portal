@@ -123,10 +123,9 @@ public class LayoutRevisionLocalServiceImpl
 			layoutRevision.getLayoutRevisionId(), layoutRevision,
 			serviceContext);
 
-		boolean explicitCreation = ParamUtil.getBoolean(
-			serviceContext, "explicitCreation");
+		int workflowAction = serviceContext.getWorkflowAction();
 
-		if (!explicitCreation) {
+		if (workflowAction == WorkflowConstants.ACTION_INCOMPLETE) {
 			layoutRevisionLocalService.updateStatus(
 				serviceContext.getUserId(),
 				layoutRevision.getLayoutRevisionId(),
