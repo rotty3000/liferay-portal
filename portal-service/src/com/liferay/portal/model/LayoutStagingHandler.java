@@ -235,6 +235,14 @@ public class LayoutStagingHandler implements InvocationHandler, Serializable {
 				WorkflowConstants.ACTION_SAVE_DRAFT);
 		}
 
+		boolean explicitCreation = ParamUtil.getBoolean(
+			serviceContext, "explicitCreation");
+
+		if (!explicitCreation) {
+			serviceContext.setWorkflowAction(
+				WorkflowConstants.ACTION_INCOMPLETE);
+		}
+
 		return LayoutRevisionLocalServiceUtil.addLayoutRevision(
 			serviceContext.getUserId(), layoutSetBranchId,
 			layoutBranch.getLayoutBranchId(),
