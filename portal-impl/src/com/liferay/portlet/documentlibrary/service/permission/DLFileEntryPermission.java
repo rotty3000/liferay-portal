@@ -112,7 +112,8 @@ public class DLFileEntryPermission {
 					return false;
 				}
 
-				if (!actionId.equals(ActionKeys.OVERRIDE_CHECKOUT) &&
+				if (PropsValues.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED &&
+					!actionId.equals(ActionKeys.OVERRIDE_CHECKOUT) &&
 					DLFolderPermission.contains(
 						permissionChecker, dlFolder, actionId)) {
 
@@ -126,17 +127,14 @@ public class DLFileEntryPermission {
 			}
 		}
 
-		if (permissionChecker.hasOwnerPermission(
+		return
+			permissionChecker.hasOwnerPermission(
 				dlFileEntry.getCompanyId(), DLFileEntry.class.getName(),
 				dlFileEntry.getFileEntryId(), dlFileEntry.getUserId(),
-				actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			dlFileEntry.getGroupId(), DLFileEntry.class.getName(),
-			dlFileEntry.getFileEntryId(), actionId);
+				actionId) ||
+			permissionChecker.hasPermission(
+				dlFileEntry.getGroupId(), DLFileEntry.class.getName(),
+				dlFileEntry.getFileEntryId(), actionId);
 	}
 
 	public static boolean contains(

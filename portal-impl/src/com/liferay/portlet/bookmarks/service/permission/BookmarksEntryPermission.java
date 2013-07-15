@@ -73,7 +73,9 @@ public class BookmarksEntryPermission {
 					return false;
 				}
 
-				if (BookmarksFolderPermission.contains(
+				if (PropsValues.
+						PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED &&
+					BookmarksFolderPermission.contains(
 						permissionChecker, folder, actionId)) {
 
 					return true;
@@ -86,16 +88,13 @@ public class BookmarksEntryPermission {
 			}
 		}
 
-		if (permissionChecker.hasOwnerPermission(
+		return
+			permissionChecker.hasOwnerPermission(
 				entry.getCompanyId(), BookmarksEntry.class.getName(),
-				entry.getEntryId(), entry.getUserId(), actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			entry.getGroupId(), BookmarksEntry.class.getName(),
-			entry.getEntryId(), actionId);
+				entry.getEntryId(), entry.getUserId(), actionId) ||
+			permissionChecker.hasPermission(
+				entry.getGroupId(), BookmarksEntry.class.getName(),
+				entry.getEntryId(), actionId);
 	}
 
 	public static boolean contains(

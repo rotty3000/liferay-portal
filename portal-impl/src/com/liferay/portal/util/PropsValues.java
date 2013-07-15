@@ -1408,6 +1408,14 @@ public class PropsValues {
 
 	public static final boolean PERMISSIONS_OBJECT_BLOCKING_CACHE = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_OBJECT_BLOCKING_CACHE));
 
+	public static final boolean PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_PARENT_INHERITANCE_BOOKMARKS_ENABLED));
+
+	public static final boolean PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_PARENT_INHERITANCE_DL_ENABLED));
+
+	public static final boolean PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED));
+
+	public static final boolean PERMISSIONS_PARENT_INHERITANCE_WIKI_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_PARENT_INHERITANCE_WIKI_ENABLED));
+
 	public static final boolean PERMISSIONS_PROPAGATION_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.PERMISSIONS_PROPAGATION_ENABLED));
 
 	public static final int PERMISSIONS_ROLE_RESOURCE_PERMISSION_QUERY_THRESHOLD = GetterUtil.getInteger(PropsUtil.get(PropsKeys.PERMISSIONS_ROLE_RESOURCE_PERMISSION_QUERY_THRESHOLD));

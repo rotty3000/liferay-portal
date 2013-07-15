@@ -109,7 +109,9 @@ public class MBMessagePermission {
 					}
 				}
 
-				if (MBCategoryPermission.contains(
+				if (PropsValues.
+						PERMISSIONS_PARENT_INHERITANCE_MESSAGE_BOARDS_ENABLED &&
+					MBCategoryPermission.contains(
 						permissionChecker, category, actionId)) {
 
 					return true;
@@ -122,16 +124,13 @@ public class MBMessagePermission {
 			}
 		}
 
-		if (permissionChecker.hasOwnerPermission(
+		return
+			permissionChecker.hasOwnerPermission(
 				message.getCompanyId(), MBMessage.class.getName(),
-				message.getRootMessageId(), message.getUserId(), actionId)) {
-
-			return true;
-		}
-
-		return permissionChecker.hasPermission(
-			groupId, MBMessage.class.getName(), message.getMessageId(),
-			actionId);
+				message.getRootMessageId(), message.getUserId(), actionId) ||
+			permissionChecker.hasPermission(
+				groupId, MBMessage.class.getName(), message.getMessageId(),
+				actionId);
 	}
 
 }
