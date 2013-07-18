@@ -264,51 +264,16 @@ public class LayoutTypePortletImpl
 	public List<Portlet> getAllPortlets()
 		throws PortalException, SystemException {
 
-		List<Portlet> portlets = new ArrayList<Portlet>();
-
-		List<String> columns = getColumns();
-
-		for (int i = 0; i < columns.size(); i++) {
-			String columnId = columns.get(i);
-
-			portlets.addAll(getAllPortlets(columnId));
-		}
-
-		List<Portlet> staticPortlets = getStaticPortlets(
-			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
-
-		List<Portlet> embeddedPortlets = getEmbeddedPortlets(
-			portlets, staticPortlets);
-
-		return addStaticPortlets(portlets, staticPortlets, embeddedPortlets);
+		return getPortlets(
+			PORTLET_INCLUDE_STATIC | PORTLET_INCLUDE_EMBEDDED |
+				PORTLET_INCLUDE_EMBEDDED_SYSTEM);
 	}
 
 	@Override
 	public List<Portlet> getAllPortlets(String columnId)
 		throws PortalException, SystemException {
 
-		String columnValue = getColumnValue(columnId);
-
-		String[] portletIds = StringUtil.split(columnValue);
-
-		List<Portlet> portlets = new ArrayList<Portlet>(portletIds.length);
-
-		for (String portletId : portletIds) {
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				getCompanyId(), portletId);
-
-			if (portlet != null) {
-				portlets.add(portlet);
-			}
-		}
-
-		List<Portlet> startPortlets = getStaticPortlets(
-			PropsKeys.LAYOUT_STATIC_PORTLETS_START + columnId);
-
-		List<Portlet> endPortlets = getStaticPortlets(
-			PropsKeys.LAYOUT_STATIC_PORTLETS_END + columnId);
-
-		return addStaticPortlets(portlets, startPortlets, endPortlets);
+		return getPortlets(columnId, PORTLET_INCLUDE_STATIC);
 	}
 
 	@Override
@@ -420,33 +385,70 @@ public class LayoutTypePortletImpl
 		for (int i = 0; i < columns.size(); i++) {
 			String columnId = columns.get(i);
 
-			String columnValue = getColumnValue(columnId);
-
-			portletIds.addAll(
-				ListUtil.fromArray(StringUtil.split(columnValue)));
+			portletIds.addAll(getPortletIds(columnId));
 		}
 
 		return portletIds;
 	}
 
 	@Override
-	public List<Portlet> getPortlets() throws SystemException {
-		List<String> portletIds = getPortletIds();
+	public List<Portlet> getPortlets() throws PortalException, SystemException {
+		return getPortlets(PORTLET_INCLUDE_LAYOUT);
+	}
 
-		List<Portlet> portlets = new ArrayList<Portlet>(portletIds.size());
+	@Override
+	public List<Portlet> getPortlets(int includes)
+		throws PortalException, SystemException {
 
-		for (int i = 0; i < portletIds.size(); i++) {
-			String portletId = portletIds.get(i);
+		List<Portlet> portlets = new ArrayList<Portlet>();
 
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				getCompanyId(), portletId);
+		List<String> columns = getColumns();
 
-			if (portlet != null) {
-				portlets.add(portlet);
-			}
+		for (int i = 0; i < columns.size(); i++) {
+			String columnId = columns.get(i);
+
+			portlets.addAll(getPortlets(columnId, includes));
 		}
 
-		return portlets;
+		boolean includeStatic = false;
+
+		if ((includes & PORTLET_INCLUDE_STATIC) == PORTLET_INCLUDE_STATIC) {
+			includeStatic = true;
+		}
+
+		boolean includeEmbedded = false;
+
+		if ((includes & PORTLET_INCLUDE_EMBEDDED) == PORTLET_INCLUDE_EMBEDDED) {
+			includeEmbedded = true;
+		}
+
+		if (!includeStatic && !includeEmbedded) {
+			return portlets;
+		}
+
+		List<Portlet> staticPortlets = null;
+
+		if (includeStatic) {
+			staticPortlets = getStaticPortlets(
+				PropsKeys.LAYOUT_STATIC_PORTLETS_ALL);
+		}
+
+		List<Portlet> embeddedPortlets = null;
+
+		boolean includeEmbeddedSystem = false;
+
+		if ((includes & PORTLET_INCLUDE_EMBEDDED_SYSTEM) ==
+				PORTLET_INCLUDE_EMBEDDED_SYSTEM) {
+
+			includeEmbeddedSystem = true;
+		}
+
+		if (includeEmbedded) {
+			embeddedPortlets = getEmbeddedPortlets(
+				portlets, staticPortlets, includeEmbeddedSystem);
+		}
+
+		return addStaticPortlets(portlets, staticPortlets, embeddedPortlets);
 	}
 
 	@Override
@@ -1357,7 +1359,8 @@ public class LayoutTypePortletImpl
 	}
 
 	protected List<Portlet> getEmbeddedPortlets(
-			List<Portlet> columnPortlets, List<Portlet> staticPortlets)
+			List<Portlet> columnPortlets, List<Portlet> staticPortlets,
+			boolean includeEmbeddedSystem)
 		throws SystemException {
 
 		if (_embeddedPortlets != null) {
@@ -1390,7 +1393,8 @@ public class LayoutTypePortletImpl
 
 			if (Validator.isNull(portletId) ||
 				columnPortlets.contains(portlet) ||
-				staticPortlets.contains(portlet) || portlet.isSystem() ||
+				staticPortlets.contains(portlet) ||
+				(!includeEmbeddedSystem && portlet.isSystem()) ||
 				portlet.isUndeployedPortlet() || !portlet.isActive()) {
 
 				continue;
@@ -1436,6 +1440,45 @@ public class LayoutTypePortletImpl
 		Layout layout = getLayout();
 
 		return layout.getPlid();
+	}
+
+	protected List<String> getPortletIds(String columnId) {
+		List<String> portletIds = new ArrayList<String>();
+
+		String columnValue = getColumnValue(columnId);
+
+		return ListUtil.fromArray(StringUtil.split(columnValue));
+	}
+
+	protected List<Portlet> getPortlets(String columnId, int filter)
+		throws PortalException, SystemException {
+
+		List<String> portletIds = getPortletIds(columnId);
+
+		List<Portlet> portlets = new ArrayList<Portlet>(portletIds.size());
+
+		for (int i = 0; i < portletIds.size(); i++) {
+			String portletId = portletIds.get(i);
+
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				getCompanyId(), portletId);
+
+			if (portlet != null) {
+				portlets.add(portlet);
+			}
+		}
+
+		if ((filter & PORTLET_INCLUDE_STATIC) != PORTLET_INCLUDE_STATIC) {
+			return portlets;
+		}
+
+		List<Portlet> startPortlets = getStaticPortlets(
+			PropsKeys.LAYOUT_STATIC_PORTLETS_START + columnId);
+
+		List<Portlet> endPortlets = getStaticPortlets(
+			PropsKeys.LAYOUT_STATIC_PORTLETS_END + columnId);
+
+		return addStaticPortlets(portlets, startPortlets, endPortlets);
 	}
 
 	protected String[] getStaticPortletIds(String position)

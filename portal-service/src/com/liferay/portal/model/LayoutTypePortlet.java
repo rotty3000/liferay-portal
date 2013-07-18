@@ -26,6 +26,14 @@ import java.util.List;
  */
 public interface LayoutTypePortlet extends LayoutType {
 
+	public static final int PORTLET_INCLUDE_EMBEDDED = 1;
+
+	public static final int PORTLET_INCLUDE_EMBEDDED_SYSTEM = 2;
+
+	public static final int PORTLET_INCLUDE_LAYOUT = 0;
+
+	public static final int PORTLET_INCLUDE_STATIC = 4;
+
 	public void addModeAboutPortletId(String portletId);
 
 	public void addModeConfigPortletId(String portletId);
@@ -112,7 +120,10 @@ public interface LayoutTypePortlet extends LayoutType {
 
 	public List<String> getPortletIds();
 
-	public List<Portlet> getPortlets() throws SystemException;
+	public List<Portlet> getPortlets() throws PortalException, SystemException;
+
+	public List<Portlet> getPortlets(int includes)
+		throws PortalException, SystemException;
 
 	public String getStateMax();
 
