@@ -26,12 +26,33 @@ import java.util.List;
  */
 public interface LayoutTypePortlet extends LayoutType {
 
+	/**
+	 * Use this include constant for including the embedded portlets when
+	 * querying the layout portlets with the {@link #getPortlets(int)} method
+	 */
 	public static final int PORTLET_INCLUDE_EMBEDDED = 1;
 
+	/**
+	 * Use this include constant for including the embedded system portlets when
+	 * querying the layout portlets with the {@link #getPortlets(int)} method.
+	 * Please not that this include constant is only effective with the {@link
+	 * #PORTLET_INCLUDE_EMBEDDED}
+	 */
 	public static final int PORTLET_INCLUDE_EMBEDDED_SYSTEM = 2;
 
+	/**
+	 * Use this include constant for including only the manually added portlets
+	 * when querying the layout portlets with the {@link #getPortlets(int)}
+	 * method. The method {@link #getPortlets()} is a shortcut for calling
+	 * <code>geetPortlets(LayoutTypePortlet.PORTLET_INCLUDE_LAYOUT)</code>. This
+	 * include constant is implicitly added to every call
+	 */
 	public static final int PORTLET_INCLUDE_LAYOUT = 0;
 
+	/**
+	 * Use this include constant for including the static portlets when querying
+	 * the layout portlets with the {@link #getPortlets(int)} method
+	 */
 	public static final int PORTLET_INCLUDE_STATIC = 4;
 
 	public void addModeAboutPortletId(String portletId);
@@ -84,8 +105,35 @@ public interface LayoutTypePortlet extends LayoutType {
 			List<Portlet> endPortlets)
 		throws SystemException;
 
+	/**
+	 * Returns all portlets associated with the layout represented by this
+	 * class. The set of all portlets includes the static, embedded, and
+	 * embedded system portlets as well besides the portlets added to the
+	 * layout. This method is equivalent of using the {@link #getPortlets(int)}
+	 * method with the following parameter:
+	 * <code>LayoutTypePortlet.PORTLET_INCLUDE_EMBEDDED |
+	 * LayoutTypePortlet.PORTLET_INCLUDE_EMBEDDED_SYSTEM |
+	 * LayoutTypePortlet.PORTLET_INCLUDE_STATIC</code>
+	 *
+	 * @return a list of portlets associated with the layout represented by this
+	 *         class
+	 * @throws SystemException if a system exception occurred
+	 * @see    #PORTLET_INCLUDE_EMBEDDED
+	 * @see    #PORTLET_INCLUDE_EMBEDDED_SYSTEM
+	 * @see    #PORTLET_INCLUDE_LAYOUT
+	 * @see    #PORTLET_INCLUDE_STATIC
+	 */
 	public List<Portlet> getAllPortlets() throws SystemException;
 
+	/**
+	 * Returns all portlets associated with the layout represented by this class
+	 * and in a specified column.
+	 *
+	 * @param  columnId a specific column ID to get the portlets from
+	 * @return a list of portlets in the specified column of the layout
+	 *         represented by this class
+	 * @throws SystemException
+	 */
 	public List<Portlet> getAllPortlets(String columnId) throws SystemException;
 
 	public Layout getLayoutSetPrototypeLayout();
@@ -116,10 +164,46 @@ public interface LayoutTypePortlet extends LayoutType {
 
 	public PortalPreferences getPortalPreferences();
 
+	/**
+	 * Return the portlet IDs of the portlets manually added to this layout. If
+	 * only the portlet IDs are needed and the portlet objects are not in the
+	 * caller environment this method should be used instead of {@link
+	 * #getPortlets()}, this method's implementation is more effecient in these
+	 * cases.
+	 *
+	 * @return a list of the portlet IDs manually added to this layout
+	 */
 	public List<String> getPortletIds();
 
+	/**
+	 * Returns the portlets associtated with the layout represented by this
+	 * class. The returned portlets does not include the embedded or the system
+	 * portlets, this method is used to get the manually added portlets. To get
+	 * all portlets from the layout use the {@link #getAllPortlets()} method. If
+	 * only the portlet IDs are needed in the caller environment the {@link
+	 * #getPortletIds()} method should be used, it has a more efficient
+	 * implementation for these cases.
+	 *
+	 * @return the portlets manually added to the layout represented by this
+	 *         class
+	 * @throws SystemException if a system exception occurred
+	 */
 	public List<Portlet> getPortlets() throws SystemException;
 
+	/**
+	 * Returns the portlets associated with the layout represented by this class
+	 * with additional includes specified by the method parameter.
+	 *
+	 * @param  includes a bitwise OR combination of the portlet include
+	 *         constants
+	 * @return a list of portlets based on the includes parameter plus the
+	 *         portlets manually added to the layout
+	 * @throws SystemException
+	 * @see    #PORTLET_INCLUDE_EMBEDDED
+	 * @see    #PORTLET_INCLUDE_EMBEDDED_SYSTEM
+	 * @see    #PORTLET_INCLUDE_LAYOUT
+	 * @see    #PORTLET_INCLUDE_STATIC
+	 */
 	public List<Portlet> getPortlets(int includes) throws SystemException;
 
 	public String getStateMax();
