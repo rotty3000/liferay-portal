@@ -84,11 +84,9 @@ public interface LayoutTypePortlet extends LayoutType {
 			List<Portlet> endPortlets)
 		throws SystemException;
 
-	public List<Portlet> getAllPortlets()
-		throws PortalException, SystemException;
+	public List<Portlet> getAllPortlets() throws SystemException;
 
-	public List<Portlet> getAllPortlets(String columnId)
-		throws PortalException, SystemException;
+	public List<Portlet> getAllPortlets(String columnId) throws SystemException;
 
 	public Layout getLayoutSetPrototypeLayout();
 
@@ -120,10 +118,9 @@ public interface LayoutTypePortlet extends LayoutType {
 
 	public List<String> getPortletIds();
 
-	public List<Portlet> getPortlets() throws PortalException, SystemException;
+	public List<Portlet> getPortlets() throws SystemException;
 
-	public List<Portlet> getPortlets(int includes)
-		throws PortalException, SystemException;
+	public List<Portlet> getPortlets(int includes) throws SystemException;
 
 	public String getStateMax();
 

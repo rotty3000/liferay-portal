@@ -261,8 +261,7 @@ public class LayoutTypePortletImpl
 	}
 
 	@Override
-	public List<Portlet> getAllPortlets()
-		throws PortalException, SystemException {
+	public List<Portlet> getAllPortlets() throws SystemException {
 
 		return getPortlets(
 			PORTLET_INCLUDE_STATIC | PORTLET_INCLUDE_EMBEDDED |
@@ -271,7 +270,7 @@ public class LayoutTypePortletImpl
 
 	@Override
 	public List<Portlet> getAllPortlets(String columnId)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		return getPortlets(columnId, PORTLET_INCLUDE_STATIC);
 	}
@@ -392,14 +391,12 @@ public class LayoutTypePortletImpl
 	}
 
 	@Override
-	public List<Portlet> getPortlets() throws PortalException, SystemException {
+	public List<Portlet> getPortlets() throws SystemException {
 		return getPortlets(PORTLET_INCLUDE_LAYOUT);
 	}
 
 	@Override
-	public List<Portlet> getPortlets(int includes)
-		throws PortalException, SystemException {
-
+	public List<Portlet> getPortlets(int includes) throws SystemException {
 		List<Portlet> portlets = new ArrayList<Portlet>();
 
 		List<String> columns = getColumns();
@@ -1451,7 +1448,7 @@ public class LayoutTypePortletImpl
 	}
 
 	protected List<Portlet> getPortlets(String columnId, int filter)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		List<String> portletIds = getPortletIds(columnId);
 
@@ -1482,13 +1479,22 @@ public class LayoutTypePortletImpl
 	}
 
 	protected String[] getStaticPortletIds(String position)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		Layout layout = getLayout();
 
 		String selector1 = StringPool.BLANK;
 
-		Group group = layout.getGroup();
+		Group group = null;
+
+		try {
+			group = layout.getGroup();
+		}
+		catch (PortalException pe) {
+			_log.error(pe.getMessage());
+
+			return new String[0];
+		}
 
 		if (group.isUser()) {
 			selector1 = LayoutTypePortletConstants.STATIC_PORTLET_USER_SELECTOR;
@@ -1515,7 +1521,7 @@ public class LayoutTypePortletImpl
 	}
 
 	protected List<Portlet> getStaticPortlets(String position)
-		throws PortalException, SystemException {
+		throws SystemException {
 
 		String[] portletIds = getStaticPortletIds(position);
 
