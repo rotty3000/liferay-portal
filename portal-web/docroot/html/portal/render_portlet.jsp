@@ -748,7 +748,7 @@ if (portlet.isActive() && portlet.isReady() && supportsMimeType && (invokerPortl
 			return;
 		}
 
-		LogUtil.log(_log, e);
+		LogUtil.log(_log, e, null);
 	}
 }
 
