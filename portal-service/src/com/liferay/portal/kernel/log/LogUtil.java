@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -43,8 +44,17 @@ public class LogUtil {
 		}
 	}
 
+	/**
+	 * @Deprecated As of 6.2 please use {@link #log(Log, Throwable, String)}
+	 */
+	@Deprecated
 	public static void log(Log log, Throwable t) {
+		log(log, t, null);
+	}
+
+	public static void log(Log log, Throwable t, String message) {
 		if (t == null) {
+			log.error(message);
 			return;
 		}
 
@@ -59,7 +69,12 @@ public class LogUtil {
 		// elements.
 
 		if (steArray.length <= STACK_TRACE_LENGTH) {
-			log.error(cause);
+			if (Validator.isNotNull(message)) {
+				log.error(message, cause);
+			}
+			else {
+				log.error(cause);
+			}
 
 			return;
 		}
@@ -105,7 +120,12 @@ public class LogUtil {
 
 		cause.setStackTrace(steArray);
 
-		log.error(cause);
+		if (Validator.isNotNull(message)) {
+			log.error(message, cause);
+		}
+		else {
+			log.error(cause);
+		}
 	}
 
 }
