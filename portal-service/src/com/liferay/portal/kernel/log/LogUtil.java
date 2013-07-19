@@ -29,9 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.servlet.ServletException;
-import javax.servlet.jsp.JspException;
-
 /**
  * @author Brian Wing Shun Chan
  */
@@ -95,6 +92,72 @@ public class LogUtil {
 		}
 
 		log.debug(message);
+	}
+
+	public static void log(Log log, Throwable t) {
+		if (t == null) {
+			return;
+		}
+
+		Throwable cause = t;
+		while (cause.getCause() != null) {
+			cause = cause.getCause();
+		}
+
+		StackTraceElement[] steArray = cause.getStackTrace();
+
+		// Make the stack trace more readable by limiting the number of
+		// elements.
+
+		if (steArray.length <= STACK_TRACE_LENGTH) {
+			log.error(StackTraceUtil.getStackTrace(cause));
+
+			return;
+		}
+
+		int count = 0;
+
+		List<StackTraceElement> steList = new ArrayList<StackTraceElement>();
+
+		for (int i = 0; i < steArray.length; i++) {
+			StackTraceElement ste = steArray[i];
+
+			// Make the stack trace more readable by removing elements that
+			// refer to classes with no packages, or starts with a $, or are
+			// Spring classes, or are standard reflection classes.
+
+			String className = ste.getClassName();
+
+			boolean addElement = true;
+
+			if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
+				addElement = false;
+			}
+
+			if (className.startsWith("$") ||
+				className.startsWith("java.lang.reflect.") ||
+				className.startsWith("org.springframework.") ||
+				className.startsWith("sun.reflect.")) {
+
+				addElement = false;
+			}
+
+			if (addElement) {
+				steList.add(ste);
+
+				count++;
+			}
+
+			if (count >= STACK_TRACE_LENGTH) {
+				break;
+			}
+		}
+
+		steArray = steList.toArray(new StackTraceElement[steList.size()]);
+
+		cause.setStackTrace(steArray);
+
+		log.error(StackTraceUtil.getStackTrace(cause));
 	}
 
 	public static String sanitize(Object obj) {
@@ -179,72 +242,6 @@ public class LogUtil {
 		}
 
 		return message;
-	}
-
-	public static void log(Log log, Throwable t) {
-		if (t == null) {
-			return;
-		}
-
-		Throwable cause = t;
-		while (cause.getCause() != null) {
-			cause = cause.getCause();
-		}
-
-		StackTraceElement[] steArray = cause.getStackTrace();
-
-		// Make the stack trace more readable by limiting the number of
-		// elements.
-
-		if (steArray.length <= STACK_TRACE_LENGTH) {
-			log.error(StackTraceUtil.getStackTrace(cause));
-
-			return;
-		}
-
-		int count = 0;
-
-		List<StackTraceElement> steList = new ArrayList<StackTraceElement>();
-
-		for (int i = 0; i < steArray.length; i++) {
-			StackTraceElement ste = steArray[i];
-
-			// Make the stack trace more readable by removing elements that
-			// refer to classes with no packages, or starts with a $, or are
-			// Spring classes, or are standard reflection classes.
-
-			String className = ste.getClassName();
-
-			boolean addElement = true;
-
-			if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
-				addElement = false;
-			}
-
-			if (className.startsWith("$") ||
-				className.startsWith("java.lang.reflect.") ||
-				className.startsWith("org.springframework.") ||
-				className.startsWith("sun.reflect.")) {
-
-				addElement = false;
-			}
-
-			if (addElement) {
-				steList.add(ste);
-
-				count++;
-			}
-
-			if (count >= STACK_TRACE_LENGTH) {
-				break;
-			}
-		}
-
-		steArray = steList.toArray(new StackTraceElement[steList.size()]);
-
-		cause.setStackTrace(steArray);
-
-		log.error(StackTraceUtil.getStackTrace(cause));
 	}
 
 	private static final String _SANITIZED = " [Sanitized]";
