@@ -16,6 +16,11 @@ package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.secure.TransparentException;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 
@@ -43,6 +48,31 @@ public class LogUtil {
 			props.list(UnsyncPrintWriterPool.borrow(unsyncStringWriter));
 
 			log.debug(unsyncStringWriter.toString());
+		}
+	}
+
+	public static void init() {
+		_SECURE_LOGGING_ESCAPE_HTML_ENABLED = GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.SECURE_LOGGING_ESCAPE_HTML_ENABLED));
+
+		_SECURE_LOGGING_SANITIZE_ENABLED = GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.SECURE_LOGGING_SANITIZE_ENABLED));
+
+		_SECURE_LOGGING_SANITIZE_REPLACEMENT = (char)GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.SECURE_LOGGING_SANITIZE_REPLACEMENT));
+
+		int[] whitelist = GetterUtil.getIntegerValues(
+			PropsUtil.getArray(PropsKeys.SECURE_LOGGING_SANITIZE_WHITELIST));
+
+		for (int codePoint : whitelist) {
+			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length)) {
+				_logMessageWhitelist[codePoint] = 1;
+			}
+			else {
+				System.err.println(
+					"Unable to register log whitelisted character: " +
+						codePoint);
+			}
 		}
 	}
 
@@ -107,6 +137,10 @@ public class LogUtil {
 	}
 
 	public static Throwable sanitize(Throwable exception) {
+		if (!_SECURE_LOGGING_SANITIZE_ENABLED) {
+			return exception;
+		}
+
 		List<Throwable> excStack = new ArrayList<Throwable>();
 
 		Throwable e = exception;
@@ -144,6 +178,10 @@ public class LogUtil {
 	}
 
 	protected static String sanitize(String message, boolean returnNull) {
+		if (!_SECURE_LOGGING_SANITIZE_ENABLED) {
+			return message;
+		}
+
 		if (message == null) {
 			return null;
 		}
@@ -157,13 +195,20 @@ public class LogUtil {
 			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length) &&
 				(_logMessageWhitelist[codePoint] == 0)) {
 
-				characters[i] = '_';
+				characters[i] = _SECURE_LOGGING_SANITIZE_REPLACEMENT;
 				sanitized = true;
 			}
 		}
 
 		if (sanitized) {
-			return new String(characters).concat(_SANITIZED);
+			String result = new String(characters).concat(_SANITIZED);
+
+			if (_SECURE_LOGGING_ESCAPE_HTML_ENABLED) {
+				return HtmlUtil.escape(result);
+			}
+			else {
+				return result;
+			}
 		}
 
 		return returnNull ? null : message;
@@ -229,5 +274,12 @@ public class LogUtil {
 	private static final String _SANITIZED = " [Sanitized]";
 
 	private static int[] _logMessageWhitelist = new int[128];
+
+	private static boolean _SECURE_LOGGING_ESCAPE_HTML_ENABLED = false;
+
+	private static boolean _SECURE_LOGGING_SANITIZE_ENABLED = false;
+
+	private static char _SECURE_LOGGING_SANITIZE_REPLACEMENT =
+		CharPool.UNDERLINE;
 
 }
