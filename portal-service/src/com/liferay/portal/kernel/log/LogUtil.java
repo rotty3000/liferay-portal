@@ -113,58 +113,50 @@ public class LogUtil {
 		// Make the stack trace more readable by limiting the number of
 		// elements.
 
-		if (steArray.length <= STACK_TRACE_LENGTH) {
-			if (Validator.isNotNull(message)) {
-				log.error(message, cause);
-			}
-			else {
-				log.error(cause);
+		if (steArray.length > STACK_TRACE_LENGTH) {
+			int count = 0;
+
+			List<StackTraceElement> steList =
+				new ArrayList<StackTraceElement>();
+
+			for (int i = 0; i < steArray.length; i++) {
+				StackTraceElement ste = steArray[i];
+
+				// Make the stack trace more readable by removing elements that
+				// refer to classes with no packages, or starts with a $, or are
+				// Spring classes, or are standard reflection classes.
+
+				String className = ste.getClassName();
+
+				boolean addElement = true;
+
+				if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
+					addElement = false;
+				}
+
+				if (className.startsWith("$") ||
+					className.startsWith("java.lang.reflect.") ||
+					className.startsWith("org.springframework.") ||
+					className.startsWith("sun.reflect.")) {
+
+					addElement = false;
+				}
+
+				if (addElement) {
+					steList.add(ste);
+
+					count++;
+				}
+
+				if (count >= STACK_TRACE_LENGTH) {
+					break;
+				}
 			}
 
-			return;
+			steArray = steList.toArray(new StackTraceElement[steList.size()]);
+
+			cause.setStackTrace(steArray);
 		}
-
-		int count = 0;
-
-		List<StackTraceElement> steList = new ArrayList<StackTraceElement>();
-
-		for (int i = 0; i < steArray.length; i++) {
-			StackTraceElement ste = steArray[i];
-
-			// Make the stack trace more readable by removing elements that
-			// refer to classes with no packages, or starts with a $, or are
-			// Spring classes, or are standard reflection classes.
-
-			String className = ste.getClassName();
-
-			boolean addElement = true;
-
-			if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
-				addElement = false;
-			}
-
-			if (className.startsWith("$") ||
-				className.startsWith("java.lang.reflect.") ||
-				className.startsWith("org.springframework.") ||
-				className.startsWith("sun.reflect.")) {
-
-				addElement = false;
-			}
-
-			if (addElement) {
-				steList.add(ste);
-
-				count++;
-			}
-
-			if (count >= STACK_TRACE_LENGTH) {
-				break;
-			}
-		}
-
-		steArray = steList.toArray(new StackTraceElement[steList.size()]);
-
-		cause.setStackTrace(steArray);
 
 		if (Validator.isNotNull(message)) {
 			log.error(message, cause);
