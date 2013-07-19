@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.log;
 
+import com.liferay.portal.kernel.log.secure.SecureLogWrapper;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 import java.util.Map;
@@ -40,7 +41,7 @@ public class LogFactoryUtil {
 		LogWrapper logWrapper = _logWrappers.get(name);
 
 		if (logWrapper == null) {
-			logWrapper = new LogWrapper(_logFactory.getLog(name));
+			logWrapper = new SecureLogWrapper(_logFactory.getLog(name));
 
 			LogWrapper previousLogWrapper = _logWrappers.putIfAbsent(
 				name, logWrapper);
@@ -77,9 +78,9 @@ public class LogFactoryUtil {
 		_logFactory = logFactory;
 	}
 
-	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
-
 	private static final ConcurrentMap<String, LogWrapper> _logWrappers =
 		new ConcurrentHashMap<String, LogWrapper>();
+
+	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
 
 }
