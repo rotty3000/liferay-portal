@@ -21,12 +21,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import javax.servlet.ServletException;
-import javax.servlet.jsp.JspException;
-
 /**
  * @author Brian Wing Shun Chan
- * @author Raymond Augé
  */
 public class LogUtil {
 
@@ -47,62 +43,16 @@ public class LogUtil {
 		}
 	}
 
-	public static void log(Log log, JspException jspe) {
-		Throwable cause = jspe.getCause();
-
-		if (cause == null) {
-			cause = jspe;
-		}
-
-		if ((cause != jspe) && (cause instanceof JspException)) {
-			log(log, (JspException)cause);
-		}
-		else if (cause instanceof ServletException) {
-			log(log, (ServletException)cause);
-		}
-		else {
-			_log(log, cause);
-		}
-	}
-
-	public static void log(Log log, ServletException se) {
-		Throwable cause = se.getRootCause();
-
-		if (cause == null) {
-			cause = se;
-		}
-
-		if (cause instanceof JspException) {
-			log(log, (JspException)cause);
-		}
-		else if ((cause != se) && (cause instanceof ServletException)) {
-			log(log, (ServletException)cause);
-		}
-		else {
-			_log(log, cause);
-		}
-	}
-
 	public static void log(Log log, Throwable t) {
-		if (t instanceof JspException) {
-			log(log, (JspException)t);
+		if (t == null) {
+			return;
 		}
-		else if (t instanceof ServletException) {
-			log(log, (ServletException)t);
-		}
-		else {
-			Throwable cause = t.getCause();
 
-			if (cause != null) {
-				log(log, cause);
-			}
-			else {
-				_log(log, t);
-			}
+		Throwable cause = t;
+		while (cause.getCause() != null) {
+			cause = cause.getCause();
 		}
-	}
 
-	private static void _log(Log log, Throwable cause) {
 		StackTraceElement[] steArray = cause.getStackTrace();
 
 		// Make the stack trace more readable by limiting the number of
