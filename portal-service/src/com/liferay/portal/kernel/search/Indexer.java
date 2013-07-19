@@ -66,6 +66,9 @@ public interface Indexer {
 			long entryClassPK, String actionId)
 		throws Exception;
 
+	public int indexSearchCount(SearchContext searchContext)
+		throws SearchException;
+
 	public boolean isFilterSearch();
 
 	public boolean isPermissionAware();

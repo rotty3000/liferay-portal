@@ -98,6 +98,11 @@ public class DummyIndexer implements Indexer {
 	}
 
 	@Override
+	public int indexSearchCount(SearchContext searchContext) {
+		return 0;
+	}
+
+	@Override
 	public boolean isFilterSearch() {
 		return false;
 	}

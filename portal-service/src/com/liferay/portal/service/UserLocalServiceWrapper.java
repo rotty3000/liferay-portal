@@ -2427,6 +2427,27 @@ public class UserLocalServiceWrapper implements UserLocalService,
 		return _userLocalService.hasRoleUser(companyId, name, userId, inherited);
 	}
 
+	@Override
+	public int indexSearchCount(long companyId, java.lang.String firstName,
+		java.lang.String middleName, java.lang.String lastName,
+		java.lang.String screenName, java.lang.String emailAddress, int status,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		boolean andSearch)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userLocalService.indexSearchCount(companyId, firstName,
+			middleName, lastName, screenName, emailAddress, status, params,
+			andSearch);
+	}
+
+	@Override
+	public int indexSearchCount(long companyId, java.lang.String keywords,
+		int status,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _userLocalService.indexSearchCount(companyId, keywords, status,
+			params);
+	}
+
 	/**
 	* Returns <code>true</code> if the user's password is expired.
 	*

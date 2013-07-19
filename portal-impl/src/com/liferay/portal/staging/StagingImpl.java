@@ -53,12 +53,14 @@ import com.liferay.portal.kernel.staging.Staging;
 import com.liferay.portal.kernel.staging.StagingConstants;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.DateRange;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -105,6 +107,7 @@ import com.liferay.portal.service.ServiceContextThreadLocal;
 import com.liferay.portal.service.WorkflowInstanceLinkLocalServiceUtil;
 import com.liferay.portal.service.http.GroupServiceHttp;
 import com.liferay.portal.service.http.LayoutServiceHttp;
+import com.liferay.portal.service.http.StagingServiceHttp;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -119,6 +122,8 @@ import com.liferay.portlet.documentlibrary.FileExtensionException;
 import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -309,58 +314,61 @@ public class StagingImpl implements Staging {
 			throw ree;
 		}
 
-		byte[] bytes = null;
+		long stagingRequestId = 0;
 
-		if (layoutIdMap == null) {
-			bytes = LayoutLocalServiceUtil.exportLayouts(
-				sourceGroupId, privateLayout, parameterMap, startDate, endDate);
-		}
-		else {
-			List<Layout> layouts = new ArrayList<Layout>();
+		File file = null;
 
-			for (Map.Entry<Long, Boolean> entry : layoutIdMap.entrySet()) {
-				long plid = GetterUtil.getLong(String.valueOf(entry.getKey()));
-				boolean includeChildren = entry.getValue();
+		FileInputStream fileInputStream = null;
 
-				Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+		try {
+			file = exportLayoutsAsFile(
+				sourceGroupId, privateLayout, layoutIdMap, parameterMap,
+				remoteGroupId, startDate, endDate, httpPrincipal);
 
-				if (!layouts.contains(layout)) {
-					layouts.add(layout);
+			String checksum = FileUtil.getMD5Checksum(file);
+
+			fileInputStream = new FileInputStream(file);
+
+			stagingRequestId = StagingServiceHttp.createStagingRequest(
+				httpPrincipal, remoteGroupId, checksum);
+
+			byte[] bytes =
+				new byte[PropsValues.STAGING_REMOTE_TRANSFER_BUFFER_SIZE];
+
+			int i = 0;
+
+			while ((i = fileInputStream.read(bytes)) >= 0) {
+				if (i < PropsValues.STAGING_REMOTE_TRANSFER_BUFFER_SIZE) {
+					byte[] tempBytes = new byte[i];
+
+					System.arraycopy(bytes, 0, tempBytes, 0, i);
+
+					StagingServiceHttp.updateStagingRequest(
+						httpPrincipal, stagingRequestId, file.getName(),
+						tempBytes);
+				}
+				else {
+					StagingServiceHttp.updateStagingRequest(
+						httpPrincipal, stagingRequestId, file.getName(), bytes);
 				}
 
-				List<Layout> parentLayouts = getMissingRemoteParentLayouts(
-					httpPrincipal, layout, remoteGroupId);
-
-				for (Layout parentLayout : parentLayouts) {
-					if (!layouts.contains(parentLayout)) {
-						layouts.add(parentLayout);
-					}
-				}
-
-				if (includeChildren) {
-					for (Layout childLayout : layout.getAllChildren()) {
-						if (!layouts.contains(childLayout)) {
-							layouts.add(childLayout);
-						}
-					}
-				}
+				bytes =
+					new byte[PropsValues.STAGING_REMOTE_TRANSFER_BUFFER_SIZE];
 			}
 
-			long[] layoutIds = getLayoutIds(layouts);
-
-			if (layoutIds.length <= 0) {
-				throw new RemoteExportException(
-					RemoteExportException.NO_LAYOUTS);
-			}
-
-			bytes = LayoutLocalServiceUtil.exportLayouts(
-				sourceGroupId, privateLayout, layoutIds, parameterMap,
-				startDate, endDate);
+			StagingServiceHttp.publishStagingRequest(
+				httpPrincipal, stagingRequestId, privateLayout, parameterMap);
 		}
+		finally {
+			StreamUtil.cleanUp(fileInputStream);
 
-		LayoutServiceHttp.importLayouts(
-			httpPrincipal, remoteGroupId, remotePrivateLayout, parameterMap,
-			bytes);
+			FileUtil.delete(file);
+
+			if (stagingRequestId > 0) {
+				StagingServiceHttp.cleanUpStagingRequest(
+					httpPrincipal, stagingRequestId);
+			}
+		}
 	}
 
 	@Override
@@ -2026,6 +2034,62 @@ public class StagingImpl implements Staging {
 			ree.setURL(remoteURL);
 
 			throw ree;
+		}
+	}
+
+	protected File exportLayoutsAsFile(
+			long sourceGroupId, boolean privateLayout,
+			Map<Long, Boolean> layoutIdMap, Map<String, String[]> parameterMap,
+			long remoteGroupId, Date startDate, Date endDate,
+			HttpPrincipal httpPrincipal)
+		throws Exception {
+
+		if ((layoutIdMap == null) || layoutIdMap.isEmpty()) {
+			return LayoutLocalServiceUtil.exportLayoutsAsFile(
+				sourceGroupId, privateLayout, null, parameterMap, startDate,
+				endDate);
+		}
+		else {
+			List<Layout> layouts = new ArrayList<Layout>();
+
+			for (Map.Entry<Long, Boolean> entry : layoutIdMap.entrySet()) {
+				long plid = GetterUtil.getLong(String.valueOf(entry.getKey()));
+				boolean includeChildren = entry.getValue();
+
+				Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+				if (!layouts.contains(layout)) {
+					layouts.add(layout);
+				}
+
+				List<Layout> parentLayouts = getMissingRemoteParentLayouts(
+					httpPrincipal, layout, remoteGroupId);
+
+				for (Layout parentLayout : parentLayouts) {
+					if (!layouts.contains(parentLayout)) {
+						layouts.add(parentLayout);
+					}
+				}
+
+				if (includeChildren) {
+					for (Layout childLayout : layout.getAllChildren()) {
+						if (!layouts.contains(childLayout)) {
+							layouts.add(childLayout);
+						}
+					}
+				}
+			}
+
+			long[] layoutIds = getLayoutIds(layouts);
+
+			if (layoutIds.length <= 0) {
+				throw new RemoteExportException(
+					RemoteExportException.NO_LAYOUTS);
+			}
+
+			return LayoutLocalServiceUtil.exportLayoutsAsFile(
+				sourceGroupId, privateLayout, layoutIds, parameterMap,
+				startDate, endDate);
 		}
 	}
 

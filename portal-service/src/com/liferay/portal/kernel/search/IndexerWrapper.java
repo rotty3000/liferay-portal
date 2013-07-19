@@ -112,6 +112,13 @@ public class IndexerWrapper implements Indexer {
 	}
 
 	@Override
+	public int indexSearchCount(SearchContext searchContext)
+		throws SearchException {
+
+		return _indexer.indexSearchCount(searchContext);
+	}
+
+	@Override
 	public boolean isFilterSearch() {
 		return _indexer.isFilterSearch();
 	}

@@ -2867,6 +2867,63 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		return roleLocalService.hasUserRole(userId, companyId, name, inherited);
 	}
 
+	public int indexSearchCount(
+			long companyId, String keywords, int status,
+			LinkedHashMap<String, Object> params)
+		throws SystemException {
+
+		String firstName = null;
+		String middleName = null;
+		String lastName = null;
+		String fullName = null;
+		String screenName = null;
+		String emailAddress = null;
+		String street = null;
+		String city = null;
+		String zip = null;
+		String region = null;
+		String country = null;
+		boolean andOperator = false;
+
+		if (Validator.isNotNull(keywords)) {
+			firstName = keywords;
+			middleName = keywords;
+			lastName = keywords;
+			fullName = keywords;
+			screenName = keywords;
+			emailAddress = keywords;
+			street = keywords;
+			city = keywords;
+			zip = keywords;
+			region = keywords;
+			country = keywords;
+		}
+		else {
+			andOperator = true;
+		}
+
+		if (params != null) {
+			params.put("keywords", keywords);
+		}
+
+		return indexSearchCount(
+			companyId, firstName, middleName, lastName, fullName, screenName,
+			emailAddress, street, city, zip, region, country, status, params,
+			andOperator);
+	}
+
+	public int indexSearchCount(
+			long companyId, String firstName, String middleName,
+			String lastName, String screenName, String emailAddress, int status,
+			LinkedHashMap<String, Object> params, boolean andSearch)
+		throws SystemException {
+
+		return indexSearchCount(
+			companyId, firstName, middleName, lastName, null, screenName,
+			emailAddress, null, null, null, null, null, status, params,
+			andSearch);
+	}
+
 	/**
 	 * Returns <code>true</code> if the user's password is expired.
 	 *
@@ -5492,6 +5549,65 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		}
 
 		return userIds;
+	}
+
+	protected int indexSearchCount(
+			long companyId, String firstName, String middleName,
+			String lastName, String fullName, String screenName,
+			String emailAddress, String street, String city, String zip,
+			String region, String country, int status,
+			LinkedHashMap<String, Object> params, boolean andSearch)
+		throws SystemException {
+
+		try {
+			SearchContext searchContext = new SearchContext();
+
+			searchContext.setAndSearch(andSearch);
+
+			Map<String, Serializable> attributes =
+				new HashMap<String, Serializable>();
+
+			attributes.put("city", city);
+			attributes.put("country", country);
+			attributes.put("emailAddress", emailAddress);
+			attributes.put("firstName", firstName);
+			attributes.put("fullName", fullName);
+			attributes.put("lastName", lastName);
+			attributes.put("middleName", middleName);
+			attributes.put("params", params);
+			attributes.put("region", region);
+			attributes.put("screenName", screenName);
+			attributes.put("street", street);
+			attributes.put("status", status);
+			attributes.put("zip", zip);
+
+			searchContext.setAttributes(attributes);
+
+			searchContext.setCompanyId(companyId);
+
+			if (params != null) {
+				String keywords = (String)params.remove("keywords");
+
+				if (Validator.isNotNull(keywords)) {
+					searchContext.setKeywords(keywords);
+				}
+			}
+
+			QueryConfig queryConfig = new QueryConfig();
+
+			queryConfig.setHighlightEnabled(false);
+			queryConfig.setScoreEnabled(false);
+
+			searchContext.setQueryConfig(queryConfig);
+
+			Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+				User.class);
+
+			return indexer.indexSearchCount(searchContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	protected void reindex(final User user) {

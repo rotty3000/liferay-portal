@@ -28,9 +28,17 @@ while (true) {
 	Hits hits = null;
 
 	if (searchTerms.isAdvancedSearch()) {
+		total = UserLocalServiceUtil.indexSearchCount(company.getCompanyId(), searchTerms.getFirstName(), searchTerms.getMiddleName(), searchTerms.getLastName(), searchTerms.getScreenName(), searchTerms.getEmailAddress(), searchTerms.getStatus(), userParams, searchTerms.isAndOperator());
+
+		userSearchContainer.setTotal(total);
+
 		hits = UserLocalServiceUtil.search(company.getCompanyId(), searchTerms.getFirstName(), searchTerms.getMiddleName(), searchTerms.getLastName(), searchTerms.getScreenName(), searchTerms.getEmailAddress(), searchTerms.getStatus(), userParams, searchTerms.isAndOperator(), userSearchContainer.getStart(), userSearchContainer.getEnd(), sort);
 	}
 	else {
+		total = UserLocalServiceUtil.indexSearchCount(company.getCompanyId(), searchTerms.getKeywords(), searchTerms.getStatus(), userParams);
+
+		userSearchContainer.setTotal(total);
+
 		hits = UserLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), searchTerms.getStatus(), userParams, userSearchContainer.getStart(), userSearchContainer.getEnd(), sort);
 	}
 
@@ -40,12 +48,13 @@ while (true) {
 
 	if (!corruptIndex) {
 		results = (List<User>)tuple.getObject(0);
-		total = hits.getLength();
 
 		break;
+	}
+	else {
+		userSearchContainer.setTotal(0);
 	}
 }
 
 pageContext.setAttribute("results", results);
-pageContext.setAttribute("total", total);
 %>

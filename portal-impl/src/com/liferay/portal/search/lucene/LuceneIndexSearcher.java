@@ -80,6 +80,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopFieldDocs;
+import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.TokenGroup;
 
@@ -87,6 +88,27 @@ import org.apache.lucene.search.highlight.TokenGroup;
  * @author Bruno Farache
  */
 public class LuceneIndexSearcher extends BaseIndexSearcher {
+
+	@Override
+	public int indexSearchCount(SearchContext searchContext, Query query)
+		throws SearchException {
+
+		try {
+			TotalHitCountCollector collector = new TotalHitCountCollector();
+
+			IndexSearcher searcher = LuceneHelperUtil.getSearcher(
+				searchContext.getCompanyId(), true);
+
+			searcher.search(
+				(org.apache.lucene.search.Query)
+					QueryTranslatorUtil.translate(query), collector);
+
+			return collector.getTotalHits();
+		}
+		catch (Exception e) {
+			throw new SearchException();
+		}
+	}
 
 	@Override
 	public Hits search(SearchContext searchContext, Query query)

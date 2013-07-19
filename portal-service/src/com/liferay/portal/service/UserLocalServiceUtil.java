@@ -2294,6 +2294,25 @@ public class UserLocalServiceUtil {
 		return getService().hasRoleUser(companyId, name, userId, inherited);
 	}
 
+	public static int indexSearchCount(long companyId,
+		java.lang.String firstName, java.lang.String middleName,
+		java.lang.String lastName, java.lang.String screenName,
+		java.lang.String emailAddress, int status,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		boolean andSearch)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .indexSearchCount(companyId, firstName, middleName,
+			lastName, screenName, emailAddress, status, params, andSearch);
+	}
+
+	public static int indexSearchCount(long companyId,
+		java.lang.String keywords, int status,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().indexSearchCount(companyId, keywords, status, params);
+	}
+
 	/**
 	* Returns <code>true</code> if the user's password is expired.
 	*

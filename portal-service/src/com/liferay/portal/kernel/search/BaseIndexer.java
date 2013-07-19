@@ -346,6 +346,17 @@ public abstract class BaseIndexer implements Indexer {
 	}
 
 	@Override
+	public int indexSearchCount(SearchContext searchContext)
+		throws SearchException {
+
+		searchContext.setSearchEngineId(getSearchEngineId());
+
+		BooleanQuery fullQuery = getFullQuery(searchContext);
+
+		return SearchEngineUtil.indexSearchCount(searchContext, fullQuery);
+	}
+
+	@Override
 	public boolean isFilterSearch() {
 		return _filterSearch;
 	}

@@ -57,6 +57,32 @@ public class FacetedSearcher extends BaseIndexer {
 	}
 
 	@Override
+	public int indexSearchCount(SearchContext searchContext)
+		throws SearchException {
+
+		try {
+			searchContext.setSearchEngineId(getSearchEngineId());
+
+			BooleanQuery contextQuery = BooleanQueryFactoryUtil.create(
+				searchContext);
+
+			contextQuery.addRequiredTerm(
+				Field.COMPANY_ID, searchContext.getCompanyId());
+
+			BooleanQuery fullQuery = createFullQuery(
+				contextQuery, searchContext);
+
+			return SearchEngineUtil.indexSearchCount(searchContext, fullQuery);
+		}
+		catch (SearchException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			throw new SearchException(e);
+		}
+	}
+
+	@Override
 	public void registerIndexerPostProcessor(
 		IndexerPostProcessor indexerPostProcessor) {
 
