@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.log.secure.SecureLogWrapper;
 import com.liferay.portal.kernel.log.secure.TransparentException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -42,12 +43,21 @@ public class LogUtil {
 
 	public static void debug(Log log, Properties props) {
 		if (log.isDebugEnabled()) {
+			Properties sanitizedProps = new Properties();
+
+			for (String key : props.stringPropertyNames()) {
+				sanitizedProps.put(
+					sanitize(key, false),
+					sanitize(props.getProperty(key), false));
+			}
+
 			UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(
-				props.size() + 1);
+				sanitizedProps.size() + 1);
 
-			props.list(UnsyncPrintWriterPool.borrow(unsyncStringWriter));
+			sanitizedProps.list(
+				UnsyncPrintWriterPool.borrow(unsyncStringWriter));
 
-			log.debug(unsyncStringWriter.toString());
+			insecureDebug(log, unsyncStringWriter.toString());
 		}
 	}
 
@@ -71,6 +81,20 @@ public class LogUtil {
 						codePoint);
 			}
 		}
+	}
+
+	public static void insecureDebug(Log log, String message) {
+		Log log1 = log;
+		while (log1 instanceof LogWrapper) {
+			log1 = ((LogWrapper)log1).getWrappedLog();
+
+			if (log1 instanceof SecureLogWrapper) {
+				log = ((SecureLogWrapper)log1).getWrappedLog();
+				break;
+			}
+		}
+
+		log.debug(message);
 	}
 
 	public static void log(Log log, JspException jspe) {
