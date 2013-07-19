@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.log.secure.SecureLogWrapper;
 import com.liferay.portal.kernel.log.secure.TransparentException;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -42,12 +43,27 @@ public class LogUtil {
 
 	public static void debug(Log log, Properties props) {
 		if (log.isDebugEnabled()) {
+			Properties sanitizedProps = new Properties();
+
+			for (String key : props.stringPropertyNames()) {
+				sanitizedProps.put(
+					sanitize(key, false),
+					sanitize(props.getProperty(key), false));
+			}
+
 			UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(
-				props.size() + 1);
+				sanitizedProps.size() + 1);
 
-			props.list(UnsyncPrintWriterPool.borrow(unsyncStringWriter));
+			sanitizedProps.list(
+				UnsyncPrintWriterPool.borrow(unsyncStringWriter));
 
-			log.debug(unsyncStringWriter.toString());
+			if (log instanceof SecureLogWrapper) {
+				SecureLogWrapper secureLogWrapper = (SecureLogWrapper)log;
+				secureLogWrapper.insecureDebug(unsyncStringWriter.toString());
+			}
+			else {
+				log.debug(unsyncStringWriter.toString());
+			}
 		}
 	}
 
