@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.log.secure.TransparentException;
 import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 
@@ -100,6 +101,83 @@ public class LogUtil {
 		}
 	}
 
+	public static String sanitize(Object obj) {
+		if (obj == null) {
+			return null;
+		}
+
+		return sanitize(obj.toString(), false);
+	}
+
+	public static Throwable sanitize(Throwable throwable) {
+		List<Throwable> throwableStack = new ArrayList<Throwable>();
+
+		Throwable causeOnStack = throwable;
+
+		while (causeOnStack != null) {
+			throwableStack.add(causeOnStack);
+
+			causeOnStack = causeOnStack.getCause();
+		}
+
+		Throwable cause = null;
+
+		boolean sanitized = false;
+
+		for (int i = throwableStack.size() - 1; i > - 1; i--) {
+			Throwable t = throwableStack.get(i);
+			String message = t.toString();
+
+			String sanitizedMessage = sanitize(message, true);
+
+			if (!sanitized && (sanitizedMessage == null)) {
+				cause = t;
+				continue;
+			}
+
+			if (sanitizedMessage == null) {
+				sanitizedMessage = message;
+			}
+
+			sanitized = true;
+
+			cause = new TransparentException(
+				sanitizedMessage, t.getStackTrace(), cause);
+		}
+
+		return cause;
+	}
+
+	protected static String sanitize(String message, boolean returnNull) {
+		if (message == null) {
+			return null;
+		}
+
+		boolean sanitized = false;
+		char[] characters = message.toCharArray();
+
+		for (int i = 0; i < characters.length; i++) {
+			int codePoint = characters[i];
+
+			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length) &&
+				(_logMessageWhitelist[codePoint] == 0)) {
+
+				characters[i] = '_';
+				sanitized = true;
+			}
+		}
+
+		if (sanitized) {
+			return new String(characters).concat(_SANITIZED);
+		}
+
+		if (returnNull) {
+			return null;
+		}
+
+		return message;
+	}
+
 	private static void _log(Log log, Throwable cause) {
 		StackTraceElement[] steArray = cause.getStackTrace();
 
@@ -156,5 +234,9 @@ public class LogUtil {
 
 		log.error(StackTraceUtil.getStackTrace(cause));
 	}
+
+	private static final String _SANITIZED = " [Sanitized]";
+
+	private static int[] _logMessageWhitelist = new int[128];
 
 }
