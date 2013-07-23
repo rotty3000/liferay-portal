@@ -195,11 +195,10 @@ public class IncludeTag extends AttributesTagSupport {
 			String currentURL = (String)request.getAttribute(
 				WebKeys.CURRENT_URL);
 
-			_log.error(
+			LogUtil.log(
+				_log, e,
 				"Current URL " + currentURL + " generates exception: " +
-					e.getMessage());
-
-			LogUtil.log(_log, e);
+				e.getMessage());
 
 			if (e instanceof JspException) {
 				throw (JspException)e;
