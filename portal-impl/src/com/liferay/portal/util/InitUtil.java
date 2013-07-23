@@ -111,7 +111,7 @@ public class InitUtil {
 		}
 
 		try {
-			LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
+			LogFactoryUtil.init(new Log4jLogFactoryImpl());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
