@@ -15,15 +15,19 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
-import com.liferay.portal.kernel.util.StackTraceUtil;
+import com.liferay.portal.kernel.log.secure.SecureLogWrapper;
+import com.liferay.portal.kernel.log.secure.TransparentException;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import javax.servlet.ServletException;
-import javax.servlet.jsp.JspException;
 
 /**
  * @author Brian Wing Shun Chan
@@ -36,125 +40,228 @@ public class LogUtil {
 
 	public static void debug(Log log, Properties props) {
 		if (log.isDebugEnabled()) {
+			Properties sanitizedProps = new Properties();
+
+			for (String key : props.stringPropertyNames()) {
+				sanitizedProps.put(
+					sanitize(key, false),
+					sanitize(props.getProperty(key), false));
+			}
+
 			UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(
-				props.size() + 1);
+				sanitizedProps.size() + 1);
 
-			props.list(UnsyncPrintWriterPool.borrow(unsyncStringWriter));
+			sanitizedProps.list(
+				UnsyncPrintWriterPool.borrow(unsyncStringWriter));
 
-			log.debug(unsyncStringWriter.toString());
+			insecureDebug(log, unsyncStringWriter.toString());
 		}
 	}
 
-	public static void log(Log log, JspException jspe) {
-		Throwable cause = jspe.getCause();
+	public static void init() {
+		_SECURE_LOGGING_ESCAPE_HTML_ENABLED = GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.SECURE_LOGGING_ESCAPE_HTML_ENABLED));
 
-		if (cause == null) {
-			cause = jspe;
-		}
+		_SECURE_LOGGING_SANITIZE_REPLACEMENT = (char)GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.SECURE_LOGGING_SANITIZE_REPLACEMENT));
 
-		if ((cause != jspe) && (cause instanceof JspException)) {
-			log(log, (JspException)cause);
-		}
-		else if (cause instanceof ServletException) {
-			log(log, (ServletException)cause);
-		}
-		else {
-			_log(log, cause);
-		}
-	}
+		int[] whitelist = GetterUtil.getIntegerValues(
+			PropsUtil.getArray(PropsKeys.SECURE_LOGGING_SANITIZE_WHITELIST));
 
-	public static void log(Log log, ServletException se) {
-		Throwable cause = se.getRootCause();
-
-		if (cause == null) {
-			cause = se;
-		}
-
-		if (cause instanceof JspException) {
-			log(log, (JspException)cause);
-		}
-		else if ((cause != se) && (cause instanceof ServletException)) {
-			log(log, (ServletException)cause);
-		}
-		else {
-			_log(log, cause);
-		}
-	}
-
-	public static void log(Log log, Throwable t) {
-		if (t instanceof JspException) {
-			log(log, (JspException)t);
-		}
-		else if (t instanceof ServletException) {
-			log(log, (ServletException)t);
-		}
-		else {
-			Throwable cause = t.getCause();
-
-			if (cause != null) {
-				log(log, cause);
+		for (int codePoint : whitelist) {
+			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length)) {
+				_logMessageWhitelist[codePoint] = 1;
 			}
 			else {
-				_log(log, t);
+				System.err.println(
+					"Unable to register log whitelisted character: " +
+						codePoint);
 			}
 		}
 	}
 
-	private static void _log(Log log, Throwable cause) {
+	public static void insecureDebug(Log log, String message) {
+		Log log1 = log;
+		while (log1 instanceof LogWrapper) {
+			log1 = ((LogWrapper)log1).getWrappedLog();
+
+			if (log1 instanceof SecureLogWrapper) {
+				log = ((SecureLogWrapper)log1).getWrappedLog();
+				break;
+			}
+		}
+
+		log.debug(message);
+	}
+
+	/**
+	 * @Deprecated As of 6.2 please use {@link #log(Log, Throwable, String)}
+	 */
+	@Deprecated
+	public static void log(Log log, Throwable t) {
+		log(log, t, null);
+	}
+
+	public static void log(Log log, Throwable t, String message) {
+		if (t == null) {
+			log.error(message);
+			return;
+		}
+
+		Throwable cause = t;
+		while (cause.getCause() != null) {
+			cause = cause.getCause();
+		}
+
 		StackTraceElement[] steArray = cause.getStackTrace();
 
 		// Make the stack trace more readable by limiting the number of
 		// elements.
 
-		if (steArray.length <= STACK_TRACE_LENGTH) {
-			log.error(StackTraceUtil.getStackTrace(cause));
+		if (steArray.length > STACK_TRACE_LENGTH) {
+			int count = 0;
 
-			return;
+			List<StackTraceElement> steList =
+				new ArrayList<StackTraceElement>();
+
+			for (int i = 0; i < steArray.length; i++) {
+				StackTraceElement ste = steArray[i];
+
+				// Make the stack trace more readable by removing elements that
+				// refer to classes with no packages, or starts with a $, or are
+				// Spring classes, or are standard reflection classes.
+
+				String className = ste.getClassName();
+
+				boolean addElement = true;
+
+				if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
+					addElement = false;
+				}
+
+				if (className.startsWith("$") ||
+					className.startsWith("java.lang.reflect.") ||
+					className.startsWith("org.springframework.") ||
+					className.startsWith("sun.reflect.")) {
+
+					addElement = false;
+				}
+
+				if (addElement) {
+					steList.add(ste);
+
+					count++;
+				}
+
+				if (count >= STACK_TRACE_LENGTH) {
+					break;
+				}
+			}
+
+			steArray = steList.toArray(new StackTraceElement[steList.size()]);
+
+			cause.setStackTrace(steArray);
 		}
 
-		int count = 0;
-
-		List<StackTraceElement> steList = new ArrayList<StackTraceElement>();
-
-		for (int i = 0; i < steArray.length; i++) {
-			StackTraceElement ste = steArray[i];
-
-			// Make the stack trace more readable by removing elements that
-			// refer to classes with no packages, or starts with a $, or are
-			// Spring classes, or are standard reflection classes.
-
-			String className = ste.getClassName();
-
-			boolean addElement = true;
-
-			if (REMOVE_UNKNOWN_SOURCE && (ste.getLineNumber() < 0)) {
-				addElement = false;
-			}
-
-			if (className.startsWith("$") ||
-				className.startsWith("java.lang.reflect.") ||
-				className.startsWith("org.springframework.") ||
-				className.startsWith("sun.reflect.")) {
-
-				addElement = false;
-			}
-
-			if (addElement) {
-				steList.add(ste);
-
-				count++;
-			}
-
-			if (count >= STACK_TRACE_LENGTH) {
-				break;
-			}
+		if (Validator.isNotNull(message)) {
+			log.error(message, cause);
 		}
-
-		steArray = steList.toArray(new StackTraceElement[steList.size()]);
-
-		cause.setStackTrace(steArray);
-
-		log.error(StackTraceUtil.getStackTrace(cause));
+		else {
+			log.error(cause);
+		}
 	}
+
+	public static String sanitize(Object obj) {
+		if (obj == null) {
+			return null;
+		}
+
+		return sanitize(obj.toString(), false);
+	}
+
+	public static Throwable sanitize(Throwable throwable) {
+		List<Throwable> throwableStack = new ArrayList<Throwable>();
+
+		Throwable causeOnStack = throwable;
+
+		while (causeOnStack != null) {
+			throwableStack.add(causeOnStack);
+
+			causeOnStack = causeOnStack.getCause();
+		}
+
+		Throwable cause = null;
+
+		boolean sanitized = false;
+
+		for (int i = throwableStack.size() - 1; i > - 1; i--) {
+			Throwable t = throwableStack.get(i);
+			String message = t.toString();
+
+			String sanitizedMessage = sanitize(message, true);
+
+			if (!sanitized && (sanitizedMessage == null)) {
+				cause = t;
+				continue;
+			}
+
+			if (sanitizedMessage == null) {
+				sanitizedMessage = message;
+			}
+
+			sanitized = true;
+
+			cause = new TransparentException(
+				sanitizedMessage, t.getStackTrace(), cause);
+		}
+
+		return cause;
+	}
+
+	protected static String sanitize(String message, boolean returnNull) {
+		if (message == null) {
+			return null;
+		}
+
+		boolean sanitized = false;
+		char[] characters = message.toCharArray();
+
+		for (int i = 0; i < characters.length; i++) {
+			int codePoint = characters[i];
+
+			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length) &&
+				(_logMessageWhitelist[codePoint] == 0)) {
+
+				characters[i] = _SECURE_LOGGING_SANITIZE_REPLACEMENT;
+				sanitized = true;
+			}
+		}
+
+		if (sanitized) {
+			String result = new String(characters).concat(_SANITIZED);
+
+			if (_SECURE_LOGGING_ESCAPE_HTML_ENABLED) {
+				return HtmlUtil.escape(result);
+			}
+			else {
+				return result;
+			}
+		}
+
+		if (returnNull) {
+			return null;
+		}
+
+		return message;
+	}
+
+	private static final String _SANITIZED = " [Sanitized]";
+
+	private static int[] _logMessageWhitelist = new int[128];
+
+	private static boolean _SECURE_LOGGING_ESCAPE_HTML_ENABLED = false;
+
+	private static char _SECURE_LOGGING_SANITIZE_REPLACEMENT =
+		CharPool.UNDERLINE;
 
 }

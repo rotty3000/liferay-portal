@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
 import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataSourceFactoryUtil;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.LogUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaDetector;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -103,7 +104,14 @@ public class InitUtil {
 		// Shared log
 
 		try {
-			LogFactoryUtil.setLogFactory(new Log4jLogFactoryImpl());
+			LogUtil.init();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			LogFactoryUtil.init(new Log4jLogFactoryImpl());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

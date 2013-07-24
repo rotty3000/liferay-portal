@@ -14,7 +14,11 @@
 
 package com.liferay.portal.kernel.log;
 
+import com.liferay.portal.kernel.log.secure.SecureLogWrapper;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +44,13 @@ public class LogFactoryUtil {
 		LogWrapper logWrapper = _logWrappers.get(name);
 
 		if (logWrapper == null) {
-			logWrapper = new LogWrapper(_logFactory.getLog(name));
+			if (_SECURE_LOGGING_SANITIZE_ENABLED) {
+				logWrapper = new LogWrapper(
+					new SecureLogWrapper(_logFactory.getLog(name)));
+			}
+			else {
+				logWrapper = new LogWrapper(_logFactory.getLog(name));
+			}
 
 			LogWrapper previousLogWrapper = _logWrappers.putIfAbsent(
 				name, logWrapper);
@@ -59,6 +69,13 @@ public class LogFactoryUtil {
 		return _logFactory;
 	}
 
+	public static void init(LogFactory logFactory) {
+		_SECURE_LOGGING_SANITIZE_ENABLED = GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.SECURE_LOGGING_SANITIZE_ENABLED));
+
+		LogFactoryUtil.setLogFactory(logFactory);
+	}
+
 	public static void setLogFactory(LogFactory logFactory) {
 		PortalRuntimePermission.checkSetBeanProperty(LogFactoryUtil.class);
 
@@ -67,7 +84,13 @@ public class LogFactoryUtil {
 
 			LogWrapper logWrapper = entry.getValue();
 
-			logWrapper.setLog(logFactory.getLog(name));
+			if (_SECURE_LOGGING_SANITIZE_ENABLED) {
+				logWrapper.setLog(
+					new SecureLogWrapper(logFactory.getLog(name)));
+			}
+			else {
+				logWrapper.setLog(logFactory.getLog(name));
+			}
 		}
 
 		// The following volatile write will flush out all cache data. All
@@ -77,9 +100,11 @@ public class LogFactoryUtil {
 		_logFactory = logFactory;
 	}
 
-	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
-
 	private static final ConcurrentMap<String, LogWrapper> _logWrappers =
 		new ConcurrentHashMap<String, LogWrapper>();
+
+	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
+
+	private static volatile boolean _SECURE_LOGGING_SANITIZE_ENABLED = false;
 
 }
