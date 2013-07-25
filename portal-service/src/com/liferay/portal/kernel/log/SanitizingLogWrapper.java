@@ -123,6 +123,34 @@ public class SanitizingLogWrapper extends LogWrapper {
 		getWrappedLog().warn(sanitize(t));
 	}
 
+	protected static void init() {
+		if (_initialized) {
+			return;
+		}
+
+		_initialized = true;
+
+		_LOG_SANITIZING_ESCAPE_HTML_ENABLED = GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.LOG_SANITIZING_ESCAPE_HTML_ENABLED));
+
+		_LOG_SANITIZING_REPLACEMENT = (char)GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.LOG_SANITIZING_REPLACEMENT));
+
+		int[] whitelist = GetterUtil.getIntegerValues(
+			PropsUtil.getArray(PropsKeys.LOG_SANITIZING_WHITELIST));
+
+		for (int codePoint : whitelist) {
+			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length)) {
+				_logMessageWhitelist[codePoint] = 1;
+			}
+			else {
+				System.err.println(
+					"Unable to register log whitelisted character: " +
+						codePoint);
+			}
+		}
+	}
+
 	protected String sanitize(Object obj) {
 		if (obj == null) {
 			return null;
@@ -207,43 +235,15 @@ public class SanitizingLogWrapper extends LogWrapper {
 		return cause;
 	}
 
-	protected static void init() {
-		if (_initialized) {
-			return;
-		}
-
-		_initialized = true;
-
-		_LOG_SANITIZING_ESCAPE_HTML_ENABLED = GetterUtil.getBoolean(
-				PropsUtil.get(PropsKeys.LOG_SANITIZING_ESCAPE_HTML_ENABLED));
-
-		_LOG_SANITIZING_REPLACEMENT = (char)GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.LOG_SANITIZING_REPLACEMENT));
-
-		int[] whitelist = GetterUtil.getIntegerValues(
-			PropsUtil.getArray(PropsKeys.LOG_SANITIZING_WHITELIST));
-
-		for (int codePoint : whitelist) {
-			if ((codePoint >= 0) && (codePoint < _logMessageWhitelist.length)) {
-				_logMessageWhitelist[codePoint] = 1;
-			}
-			else {
-				System.err.println(
-					"Unable to register log whitelisted character: " +
-						codePoint);
-			}
-		}
-	}
-
 	private static final String _SANITIZED = " [Sanitized]";
 
 	private static boolean _initialized = false;
 
-	private static int[] _logMessageWhitelist = new int[128];
-
 	private static boolean _LOG_SANITIZING_ESCAPE_HTML_ENABLED = false;
 
 	private static char _LOG_SANITIZING_REPLACEMENT = CharPool.UNDERLINE;
+
+	private static int[] _logMessageWhitelist = new int[128];
 
 	static {
 		init();

@@ -52,7 +52,7 @@ public class SanitizingLogWrapperTest {
 		_expectedChars = new char[_messageChars.length + sanitized.length()];
 
 		for (int i = 0; i < _messageChars.length; i++) {
-			if (i == 9 || ((i >= 32) && (i != 127))) {
+			if ((i == 9) || ((i >= 32) && (i != 127))) {
 				_expectedChars[i] = (char)i;
 			}
 			else {

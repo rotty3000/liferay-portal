@@ -45,7 +45,7 @@ public class LogFactoryUtil {
 
 		if (logWrapper == null) {
 			if ((_LOG_SANITIZING_ENABLED != null) &&
-				(_LOG_SANITIZING_ENABLED.booleanValue())) {
+				_LOG_SANITIZING_ENABLED.booleanValue()) {
 
 				logWrapper = new SanitizingLogWrapper(_logFactory.getLog(name));
 			}
@@ -84,7 +84,7 @@ public class LogFactoryUtil {
 			LogWrapper logWrapper = entry.getValue();
 
 			if ((_LOG_SANITIZING_ENABLED != null) &&
-				(_LOG_SANITIZING_ENABLED.booleanValue())) {
+				_LOG_SANITIZING_ENABLED.booleanValue()) {
 
 				Log log = logFactory.getLog(name);
 
@@ -108,11 +108,11 @@ public class LogFactoryUtil {
 		_logFactory = logFactory;
 	}
 
+	private static final ConcurrentMap<String, LogWrapper> _logWrappers =
+		new ConcurrentHashMap<String, LogWrapper>();
+
 	private static Boolean _LOG_SANITIZING_ENABLED = null;
 
 	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
-
-	private static final ConcurrentMap<String, LogWrapper> _logWrappers =
-		new ConcurrentHashMap<String, LogWrapper>();
 
 }
