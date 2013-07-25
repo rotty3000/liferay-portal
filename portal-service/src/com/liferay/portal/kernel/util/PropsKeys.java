@@ -1443,6 +1443,14 @@ public interface PropsKeys {
 
 	public static final String LOOK_AND_FEEL_MODIFIABLE = "look.and.feel.modifiable";
 
+	public static final String LOG_SANITIZING_ESCAPE_HTML_ENABLED = "log.sanitizing.escape.html.enabled";
+
+	public static final String LOG_SANITIZING_ENABLED = "log.sanitizing.enabled";
+
+	public static final String LOG_SANITIZING_REPLACEMENT = "log.sanitizing.replacement";
+
+	public static final String LOG_SANITIZING_WHITELIST = "log.sanitizing.whitelist";
+
 	public static final String LUCENE_ANALYZER_MAX_TOKENS = "lucene.analyzer.max.tokens";
 
 	public static final String LUCENE_BOOLEAN_QUERY_CLAUSE_MAX_SIZE = "lucene.boolean.query.clause.max.size";

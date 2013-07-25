@@ -15,6 +15,9 @@
 package com.liferay.portal.kernel.log;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +26,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Raymond Augé
  */
 public class LogFactoryUtil {
 
@@ -40,7 +44,14 @@ public class LogFactoryUtil {
 		LogWrapper logWrapper = _logWrappers.get(name);
 
 		if (logWrapper == null) {
-			logWrapper = new LogWrapper(_logFactory.getLog(name));
+			if ((_LOG_SANITIZING_ENABLED != null) &&
+				(_LOG_SANITIZING_ENABLED.booleanValue())) {
+
+				logWrapper = new SanitizingLogWrapper(_logFactory.getLog(name));
+			}
+			else {
+				logWrapper = new LogWrapper(_logFactory.getLog(name));
+			}
 
 			LogWrapper previousLogWrapper = _logWrappers.putIfAbsent(
 				name, logWrapper);
@@ -62,12 +73,32 @@ public class LogFactoryUtil {
 	public static void setLogFactory(LogFactory logFactory) {
 		PortalRuntimePermission.checkSetBeanProperty(LogFactoryUtil.class);
 
+		if (_LOG_SANITIZING_ENABLED == null) {
+			_LOG_SANITIZING_ENABLED = GetterUtil.getBoolean(
+				PropsUtil.get(PropsKeys.LOG_SANITIZING_ENABLED));
+		}
+
 		for (Map.Entry<String, LogWrapper> entry : _logWrappers.entrySet()) {
 			String name = entry.getKey();
 
 			LogWrapper logWrapper = entry.getValue();
 
-			logWrapper.setLog(logFactory.getLog(name));
+			if ((_LOG_SANITIZING_ENABLED != null) &&
+				(_LOG_SANITIZING_ENABLED.booleanValue())) {
+
+				Log log = logFactory.getLog(name);
+
+				if (log instanceof LogWrapper) {
+					LogWrapper curLogWrapper = (LogWrapper)log;
+
+					log = curLogWrapper.getWrappedLog();
+				}
+
+				logWrapper.setLog(new SanitizingLogWrapper(log));
+			}
+			else {
+				logWrapper.setLog(logFactory.getLog(name));
+			}
 		}
 
 		// The following volatile write will flush out all cache data. All
@@ -76,6 +107,8 @@ public class LogFactoryUtil {
 
 		_logFactory = logFactory;
 	}
+
+	private static Boolean _LOG_SANITIZING_ENABLED = null;
 
 	private static volatile LogFactory _logFactory = new Jdk14LogFactoryImpl();
 

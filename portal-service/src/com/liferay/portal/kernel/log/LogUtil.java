@@ -14,11 +14,11 @@
 
 package com.liferay.portal.kernel.log;
 
-import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.util.StackTraceUtil;
-import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,6 +27,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
 public class LogUtil {
 
@@ -36,12 +37,14 @@ public class LogUtil {
 
 	public static void debug(Log log, Properties props) {
 		if (log.isDebugEnabled()) {
-			UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(
-				props.size() + 1);
+			Enumeration enumeration = props.propertyNames();
 
-			props.list(UnsyncPrintWriterPool.borrow(unsyncStringWriter));
+			while (enumeration.hasMoreElements()) {
+				String key = (String)enumeration.nextElement();
+				String value = props.getProperty(key);
 
-			log.debug(unsyncStringWriter.toString());
+				log.debug(key + StringPool.EQUAL + value);
+			}
 		}
 	}
 
@@ -116,8 +119,7 @@ public class LogUtil {
 
 		List<StackTraceElement> steList = new ArrayList<StackTraceElement>();
 
-		for (int i = 0; i < steArray.length; i++) {
-			StackTraceElement ste = steArray[i];
+		for (StackTraceElement ste : steArray) {
 
 			// Make the stack trace more readable by removing elements that
 			// refer to classes with no packages, or starts with a $, or are
