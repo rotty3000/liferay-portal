@@ -80,17 +80,11 @@ if (layoutRevision != null) {
 String[] mainSections = PropsValues.LAYOUT_FORM_UPDATE;
 
 if (selLayout.isSupportsEmbeddedPortlets()) {
-	List<Portlet> embeddedPortlets = new ArrayList<Portlet>();
-
 	LayoutTypePortlet selLayoutTypePortlet = (LayoutTypePortlet)selLayout.getLayoutType();
 
-	List<String> portletIds = selLayoutTypePortlet.getPortletIds();
+	int portletIncludes = LayoutTypePortlet.PORTLET_INCLUDE_EMBEDDED | LayoutTypePortlet.PORTLET_INCLUDE_STATIC;
 
-	for (Portlet portlet : selLayoutTypePortlet.getAllPortlets()) {
-		if (!portlet.isSystem() && !portletIds.contains(portlet.getPortletId())) {
-			embeddedPortlets.add(portlet);
-		}
-	}
+	List<Portlet> embeddedPortlets = selLayoutTypePortlet.getPortlets(portletIncludes);
 
 	if (!embeddedPortlets.isEmpty()) {
 		request.setAttribute("edit_pages.jsp-embeddedPortlets", embeddedPortlets);

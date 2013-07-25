@@ -692,11 +692,11 @@ public class LayoutExporter {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		// The getAllPortlets method returns all effective portlets for any
-		// layout type, including embedded portlets, or in the case of panel
-		// type layout, selected portlets
+		int portletIncludes =
+			LayoutTypePortlet.PORTLET_INCLUDE_STATIC |
+				LayoutTypePortlet.PORTLET_INCLUDE_EMBEDDED;
 
-		for (Portlet portlet : layoutTypePortlet.getAllPortlets()) {
+		for (Portlet portlet : layoutTypePortlet.getPortlets(portletIncludes)) {
 			String portletId = portlet.getPortletId();
 
 			javax.portlet.PortletPreferences jxPortletPreferences =

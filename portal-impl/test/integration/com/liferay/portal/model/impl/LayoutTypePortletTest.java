@@ -17,12 +17,17 @@ package com.liferay.portal.model.impl;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.test.ExecutionTestListeners;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTemplate;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceTestUtil;
 import com.liferay.portal.test.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.test.MainServletExecutionTestListener;
@@ -30,6 +35,9 @@ import com.liferay.portal.test.TransactionalCallbackAwareExecutionTestListener;
 import com.liferay.portal.util.GroupTestUtil;
 import com.liferay.portal.util.LayoutTestUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portal.util.PropsUtil;
+import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.util.TestPropsValues;
 import com.liferay.portal.util.UserTestUtil;
 
 import java.util.List;
@@ -287,6 +295,91 @@ public class LayoutTypePortletTest {
 		portletId = layoutTypePortlet.addPortletId(user.getUserId(), portletId);
 
 		Assert.assertNotNull(portletId);
+	}
+
+	@Test
+	@Transactional
+	public void testGetPortlets() throws Exception {
+		LayoutTypePortlet layoutTypePortlet = getLayoutTypePortlet();
+
+		Layout layout = layoutTypePortlet.getLayout();
+
+		User user = UserTestUtil.addUser(
+			ServiceTestUtil.randomString(), layout.getGroupId());
+
+		// Add normal portlet
+
+		String portletId = StringPool.BLANK;
+
+		portletId = layoutTypePortlet.addPortletId(
+			user.getUserId(), PortletKeys.JOURNAL_CONTENT);
+
+		// Add static portlet
+
+		String[] originalPropertyValues =
+			PropsValues.LAYOUT_STATIC_PORTLETS_ALL;
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL, PortletKeys.BOOKMARKS);
+
+		// Add embedded
+
+		PortletPreferencesLocalServiceUtil.getPreferences(
+			TestPropsValues.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
+			PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layout.getPlid(),
+			PortletKeys.BLOGS, PortletConstants.DEFAULT_PREFERENCES);
+
+		// Test only manually added
+
+		List<Portlet> portlets = layoutTypePortlet.getPortlets();
+
+		Assert.assertEquals(1, portlets.size());
+
+		portletId = portlets.get(0).getPortletId();
+
+		Assert.assertTrue(portletId.startsWith(PortletKeys.JOURNAL_CONTENT));
+
+		// Test static
+
+		portlets = layoutTypePortlet.getPortlets(
+			LayoutTypePortlet.PORTLET_INCLUDE_STATIC);
+
+		Assert.assertEquals(2, portlets.size());
+
+		for (Portlet portlet : portlets) {
+			String tempPortletId = portlet.getPortletId();
+
+			if (!tempPortletId.startsWith(PortletKeys.JOURNAL_CONTENT) &&
+				!tempPortletId.equals(PortletKeys.BOOKMARKS)) {
+
+				Assert.fail("Invalid portlet has been returned");
+			}
+		}
+
+		// Test embedded
+
+		portlets = layoutTypePortlet.getPortlets(
+			LayoutTypePortlet.PORTLET_INCLUDE_EMBEDDED |
+				LayoutTypePortlet.PORTLET_INCLUDE_STATIC);
+
+		Assert.assertEquals(3, portlets.size());
+
+		for (Portlet portlet : portlets) {
+			String tempPortletId = portlet.getPortletId();
+
+			if (!tempPortletId.startsWith(PortletKeys.JOURNAL_CONTENT) &&
+				!tempPortletId.equals(PortletKeys.BOOKMARKS) &&
+				!tempPortletId.equals(PortletKeys.BLOGS)) {
+
+				Assert.fail("Invalid portlet has been returned");
+			}
+		}
+
+		// Cleanup property value
+
+		PropsUtil.set(
+			PropsKeys.LAYOUT_STATIC_PORTLETS_ALL,
+			ArrayUtil.toString(originalPropertyValues, (String)null));
 	}
 
 	@Test
