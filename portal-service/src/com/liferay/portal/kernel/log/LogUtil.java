@@ -14,7 +14,6 @@
 
 package com.liferay.portal.kernel.log;
 
-import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.ArrayList;
@@ -110,7 +109,7 @@ public class LogUtil {
 		// elements.
 
 		if (steArray.length <= STACK_TRACE_LENGTH) {
-			log.error(StackTraceUtil.getStackTrace(cause));
+			log.error(cause);
 
 			return;
 		}
@@ -156,7 +155,7 @@ public class LogUtil {
 
 		cause.setStackTrace(steArray);
 
-		log.error(StackTraceUtil.getStackTrace(cause));
+		log.error(cause);
 	}
 
 }
