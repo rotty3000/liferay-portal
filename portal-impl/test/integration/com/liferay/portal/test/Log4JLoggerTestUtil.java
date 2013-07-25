@@ -30,9 +30,11 @@ public class Log4JLoggerTestUtil {
 	public static CaptureAppender configureLog4JLogger(
 		String name, Level level) {
 
-		LogWrapper logWrapper = (LogWrapper)LogFactoryUtil.getLog(name);
+		Log log = LogFactoryUtil.getLog(name);
 
-		Log log = logWrapper.getWrappedLog();
+		while (log instanceof LogWrapper) {
+			log = ((LogWrapper)log).getWrappedLog();
+		}
 
 		if (!(log instanceof Log4jLogImpl)) {
 			throw new IllegalStateException(
