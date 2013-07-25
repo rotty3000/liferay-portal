@@ -47,7 +47,8 @@ public class LogFactoryUtil {
 			if ((_LOG_SANITIZING_ENABLED != null) &&
 				_LOG_SANITIZING_ENABLED.booleanValue()) {
 
-				logWrapper = new SanitizingLogWrapper(_logFactory.getLog(name));
+				logWrapper = new LogWrapper(
+					new SanitizingLogWrapper(_logFactory.getLog(name)));
 			}
 			else {
 				logWrapper = new LogWrapper(_logFactory.getLog(name));
