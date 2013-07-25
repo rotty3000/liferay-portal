@@ -83,18 +83,9 @@ public class LogFactoryUtil {
 
 			LogWrapper logWrapper = entry.getValue();
 
-			if ((_LOG_SANITIZING_ENABLED != null) &&
-				_LOG_SANITIZING_ENABLED.booleanValue()) {
-
-				Log log = logFactory.getLog(name);
-
-				if (log instanceof LogWrapper) {
-					LogWrapper curLogWrapper = (LogWrapper)log;
-
-					log = curLogWrapper.getWrappedLog();
-				}
-
-				logWrapper.setLog(new SanitizingLogWrapper(log));
+			if (_LOG_SANITIZING_ENABLED.booleanValue()) {
+				logWrapper.setLog(
+					new SanitizingLogWrapper(logFactory.getLog(name)));
 			}
 			else {
 				logWrapper.setLog(logFactory.getLog(name));
