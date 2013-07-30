@@ -97,6 +97,14 @@ if (layout != null) {
 				}
 			}
 		}
+
+		// portlet is embedded in VM_liferay.vm
+
+		if (themeDisplay.isShowStagingIcon()) {
+			Portlet stagingBarPortlet = PortletLocalServiceUtil.getPortletById(PortletKeys.STAGING_BAR);
+
+			portlets.add(stagingBarPortlet);
+		}
 	}
 	else if ((layout.isTypeControlPanel() || layout.isTypePanel()) && Validator.isNotNull(ppid)) {
 		portlets = new ArrayList<Portlet>();
