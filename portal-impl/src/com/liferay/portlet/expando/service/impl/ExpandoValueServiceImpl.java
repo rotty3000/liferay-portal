@@ -145,6 +145,8 @@ public class ExpandoValueServiceImpl extends ExpandoValueServiceBaseImpl {
 			String data = dataSerializable.toString();
 
 			if (Validator.isNotNull(data)) {
+				data = JSONFactoryUtil.looseSerialize(data);
+
 				if (!data.startsWith(StringPool.OPEN_CURLY_BRACE)) {
 					data = "{data:".concat(data).concat("}");
 				}
