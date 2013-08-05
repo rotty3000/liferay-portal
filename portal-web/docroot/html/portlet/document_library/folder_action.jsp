@@ -172,10 +172,13 @@ String iconMenuId = null;
 							redirect="<%= currentURL %>"
 							resourcePrimKey="<%= resourcePrimKey %>"
 							var="permissionsURL"
+							windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 						/>
 
 						<liferay-ui:icon
 							image="permissions"
+							linkCssClass="use-dialog"
+							method="get"
 							url="<%= permissionsURL %>"
 						/>
 					</c:if>

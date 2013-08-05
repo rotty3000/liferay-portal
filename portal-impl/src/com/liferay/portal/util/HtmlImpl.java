@@ -335,6 +335,15 @@ public class HtmlImpl implements Html {
 	}
 
 	@Override
+	public String replaceNewLine(String text) {
+		if (text == null) {
+			return null;
+		}
+
+		return text.replaceAll("\r?\n", "<br />");
+	}
+
+	@Override
 	public String stripBetween(String text, String tag) {
 		return StringUtil.stripBetween(text, "<" + tag, "</" + tag + ">");
 	}

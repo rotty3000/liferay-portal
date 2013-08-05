@@ -42,10 +42,13 @@ PollsQuestion question = (PollsQuestion)row.getObject();
 			modelResourceDescription="<%= question.getTitle(locale) %>"
 			resourcePrimKey="<%= String.valueOf(question.getQuestionId()) %>"
 			var="permissionsURL"
+			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 		/>
 
 		<liferay-ui:icon
 			image="permissions"
+			linkCssClass="use-dialog"
+			method="get"
 			url="<%= permissionsURL %>"
 		/>
 	</c:if>

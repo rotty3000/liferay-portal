@@ -19,8 +19,6 @@
 <%@ page import="java.net.URL" %>
 
 <%
-String id = (String)request.getAttribute("liferay-ui:icon:id");
-
 IntegerWrapper iconListIconCount = (IntegerWrapper)request.getAttribute("liferay-ui:icon-list:icon-count");
 
 if (iconListIconCount != null) {
@@ -28,7 +26,6 @@ if (iconListIconCount != null) {
 }
 
 boolean iconListShowWhenSingleIcon = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon-list:showWhenSingleIcon"));
-
 Boolean iconListSingleIcon = (Boolean)request.getAttribute("liferay-ui:icon-list:single-icon");
 
 IntegerWrapper iconMenuIconCount = (IntegerWrapper)request.getAttribute("liferay-ui:icon-menu:icon-count");
@@ -37,25 +34,53 @@ if (iconMenuIconCount != null) {
 	iconMenuIconCount.increment();
 }
 
+boolean iconMenuShowWhenSingleIcon = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon-menu:showWhenSingleIcon"));
 Boolean iconMenuSingleIcon = (Boolean)request.getAttribute("liferay-ui:icon-menu:single-icon");
 
-boolean iconMenuShowWhenSingleIcon = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon-menu:showWhenSingleIcon"));
-
+String alt = (String)request.getAttribute("liferay-ui:icon:alt");
+String id = (String)request.getAttribute("liferay-ui:icon:id");
 String image = (String)request.getAttribute("liferay-ui:icon:image");
 String imageHover = (String)request.getAttribute("liferay-ui:icon:imageHover");
-
-boolean auiImage = (image != null) && image.startsWith(_AUI_PATH);
-
-String alt = (String)request.getAttribute("liferay-ui:icon:alt");
-
 String message = (String)request.getAttribute("liferay-ui:icon:message");
+String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:cssClass"));
+Map<String, Object> data = (Map<String, Object>)request.getAttribute("liferay-ui:icon:data");
+boolean label = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:label"));
+String lang = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:lang"));
+String linkCssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:linkCssClass"));
+boolean localizeMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:localizeMessage"));
+String method = (String)request.getAttribute("liferay-ui:icon:method");
+String onClick = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:onClick"));
+String src = (String)request.getAttribute("liferay-ui:icon:src");
+String srcHover = (String)request.getAttribute("liferay-ui:icon:srcHover");
+boolean toolTip = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:toolTip"));
+String target = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:target"));
+String url = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:url"));
+
+if (data == null) {
+	data = new HashMap<String, Object>(1);
+}
+
+if (Validator.isNull(data.get("title"))) {
+	data.put("title", localizeMessage ? LanguageUtil.get(pageContext, message) : message);
+}
+
+if ((iconListIconCount != null) || (iconListSingleIcon != null)) {
+	label = true;
+}
+
+if ((iconMenuIconCount != null) || (iconMenuSingleIcon != null)) {
+	label = true;
+}
 
 if (message == null) {
 	message = StringUtil.replace(image, StringPool.UNDERLINE, StringPool.DASH);
 }
 
-String src = (String)request.getAttribute("liferay-ui:icon:src");
-String srcHover = (String)request.getAttribute("liferay-ui:icon:srcHover");
+if (Validator.isNull(method)) {
+	method = "post";
+}
+
+boolean auiImage = (image != null) && image.startsWith(_AUI_PATH);
 
 if (Validator.isNull(src)) {
 	if (auiImage) {
@@ -82,32 +107,6 @@ if (Validator.isNull(srcHover) && Validator.isNotNull(imageHover)) {
 	sb.append(".png");
 
 	srcHover = sb.toString();
-}
-
-String url = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:url"));
-
-String method = (String)request.getAttribute("liferay-ui:icon:method");
-
-if (Validator.isNull(method)) {
-	method = "post";
-}
-
-String target = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:target"));
-boolean label = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:label"));
-String lang = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:lang"));
-boolean localizeMessage = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:localizeMessage"));
-boolean toolTip = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:icon:toolTip"));
-String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:cssClass"));
-String linkCssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:linkCssClass"));
-Map<String, Object> data = (Map<String, Object>)request.getAttribute("liferay-ui:icon:data");
-String onClick = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon:onClick"));
-
-if ((iconListIconCount != null) || (iconListSingleIcon != null)) {
-	label = true;
-}
-
-if ((iconMenuIconCount != null) || (iconMenuSingleIcon != null)) {
-	label = true;
 }
 
 String details = null;

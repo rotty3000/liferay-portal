@@ -23,10 +23,13 @@
 				redirect="<%= currentURL %>"
 				resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
 				var="permissionsURL"
+				windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 			/>
 
 			<liferay-ui:icon
 				image="permissions"
+				linkCssClass="use-dialog"
+				method="get"
 				url="<%= permissionsURL %>"
 			/>
 		</c:if>
@@ -39,10 +42,13 @@
 				redirect="<%= currentURL %>"
 				resourcePrimKey="<%= String.valueOf(fileShortcut.getFileShortcutId()) %>"
 				var="shortcutPermissionsURL"
+				windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 			/>
 
 			<liferay-ui:icon
 				image="permissions"
+				linkCssClass="use-dialog"
+				method="get"
 				url="<%= shortcutPermissionsURL %>"
 			/>
 		</c:if>

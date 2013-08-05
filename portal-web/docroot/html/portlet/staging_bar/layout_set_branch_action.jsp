@@ -50,10 +50,13 @@ long currentLayoutSetBranchId = GetterUtil.getLong((String)request.getAttribute(
 			modelResourceDescription="<%= layoutSetBranch.getName() %>"
 			resourcePrimKey="<%= String.valueOf(layoutSetBranch.getLayoutSetBranchId()) %>"
 			var="permissionsURL"
+			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 		/>
 
 		<liferay-ui:icon
 			image="permissions"
+			linkCssClass="use-dialog"
+			method="get"
 			url="<%= permissionsURL %>"
 		/>
 	</c:if>

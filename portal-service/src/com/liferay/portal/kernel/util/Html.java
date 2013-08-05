@@ -48,6 +48,8 @@ public interface Html {
 
 	public String replaceMsWordCharacters(String text);
 
+	public String replaceNewLine(String html);
+
 	public String stripBetween(String text, String tag);
 
 	public String stripComments(String text);

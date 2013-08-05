@@ -56,10 +56,13 @@ Team team = (Team)row.getObject();
 			resourcePrimKey="<%= String.valueOf(role.getRoleId()) %>"
 			roleTypes="<%= roleTypes %>"
 			var="permissionsURL"
+			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
 		/>
 
 		<liferay-ui:icon
 			image="permissions"
+			linkCssClass="use-dialog"
+			method="get"
 			url="<%= permissionsURL %>"
 		/>
 	</c:if>

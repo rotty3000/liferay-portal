@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.NoSuchTagException;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.impl.AssetTagImpl;
@@ -216,7 +217,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -262,7 +264,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -312,7 +315,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -362,7 +366,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -415,7 +420,8 @@ public class AssetTagFinderImpl
 
 			if (inlineSQLHelper) {
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupId);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					PortalUtil.getSiteGroupId(groupId));
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
@@ -457,8 +463,15 @@ public class AssetTagFinderImpl
 			sql = CustomSQLUtil.replaceOrderBy(sql, obc);
 
 			if (inlineSQLHelper) {
+				long[] siteGroupIds = new long[groupIds.length];
+
+				for (int i = 0; i < groupIds.length; i++) {
+					siteGroupIds[i] = PortalUtil.getSiteGroupId(groupIds[i]);
+				}
+
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupIds);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					siteGroupIds);
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
