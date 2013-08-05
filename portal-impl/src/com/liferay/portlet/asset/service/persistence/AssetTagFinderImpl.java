@@ -463,8 +463,15 @@ public class AssetTagFinderImpl
 			sql = CustomSQLUtil.replaceOrderBy(sql, obc);
 
 			if (inlineSQLHelper) {
+				long[] siteGroupIds = new long[groupIds.length];
+
+				for (int i = 0; i < groupIds.length; i++) {
+					siteGroupIds[i] = PortalUtil.getSiteGroupId(groupIds[i]);
+				}
+
 				sql = InlineSQLHelperUtil.replacePermissionCheck(
-					sql, AssetTag.class.getName(), "AssetTag.tagId", groupIds);
+					sql, AssetTag.class.getName(), "AssetTag.tagId",
+					siteGroupIds);
 			}
 
 			SQLQuery q = session.createSQLQuery(sql);
