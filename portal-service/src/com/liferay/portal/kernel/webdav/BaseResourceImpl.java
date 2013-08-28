@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Lock;
 
@@ -169,10 +170,10 @@ public class BaseResourceImpl implements Resource {
 
 	private static Format _createDateFormatter =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'", LocaleUtil.US);
+			"yyyy-MM-dd'T'HH:mm:ss'Z'", LocaleUtil.US, TimeZoneUtil.GMT);
 	private static Format _modifiedDateFormatter =
 		FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"EEE, dd MMM yyyy HH:mm:ss zzz", LocaleUtil.US);
+			"EEE, dd MMM yyyy HH:mm:ss zzz", LocaleUtil.US, TimeZoneUtil.GMT);
 
 	private String _className;
 	private Date _createDate;

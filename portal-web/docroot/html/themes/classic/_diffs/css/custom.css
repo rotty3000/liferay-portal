@@ -22,20 +22,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 	}
 
 	#wrapper {
-		background: none;
-		margin: 0 auto;
-		padding: 2em 5em 0;
 		position: relative;
-
-		@include respond-to(phone) {
-			padding-left: 0.5em;
-			padding-right: 0.5em;
-		}
-
-		@include respond-to(tablet) {
-			padding-left: 1em;
-			padding-right: 1em;
-		}
 	}
 
 	.site-title {
@@ -157,6 +144,10 @@ $dockbarOpenGradientStart: #0EA6F9;
 				}
 			}
 
+			> li > a {
+				padding: 4px 15px 5px;
+			}
+
 			.dropdown-menu {
 				background: #00ACFF;
 				border-width: 0;
@@ -180,6 +171,7 @@ $dockbarOpenGradientStart: #0EA6F9;
 		.navbar-inner {
 			background: #555;
 			border-width: 0;
+			min-height: 36px;
 
 			li a {
 				color: #FFF;
@@ -202,6 +194,14 @@ $dockbarOpenGradientStart: #0EA6F9;
 
 	.breadcrumb {
 		background-color: #FAFAFA;
+	}
+
+	#breadcrumbs {
+		margin-bottom: 45px;
+
+		.breadcrumb {
+			margin-bottom: 0;
+		}
 	}
 
 	/* ---------- Portlet wrapper and icons ---------- */

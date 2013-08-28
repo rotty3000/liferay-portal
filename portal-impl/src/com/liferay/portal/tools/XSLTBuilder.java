@@ -14,6 +14,8 @@
 
 package com.liferay.portal.tools;
 
+import com.liferay.portal.kernel.util.StringPool;
+
 import java.io.FileOutputStream;
 
 import javax.xml.transform.Transformer;
@@ -37,6 +39,8 @@ public class XSLTBuilder {
 
 	public XSLTBuilder(String xml, String xsl, String html) {
 		try {
+			System.setProperty("line.separator", StringPool.NEW_LINE);
+
 			TransformerFactory transformerFactory =
 				TransformerFactory.newInstance();
 

@@ -287,7 +287,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 				groupId, vocabularyId, start, end, obc);
 		}
 		else {
-			return assetCategoryFinder.filterFindByG_N_V(
+			return assetCategoryPersistence.filterFindByG_LikeN_V(
 				groupId, name, vocabularyId, start, end, obc);
 		}
 	}
@@ -309,7 +309,7 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 				groupId, vocabularyId);
 		}
 		else {
-			return assetCategoryFinder.filterCountByG_N_V(
+			return assetCategoryPersistence.filterCountByG_LikeN_V(
 				groupId, name, vocabularyId);
 		}
 	}
@@ -409,8 +409,14 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 
 		String name = CustomSQLUtil.keywords(keywords)[0];
 
-		return getVocabularyCategories(
-			groupId, name, vocabularyId, start, end, obc);
+		if (Validator.isNull(name)) {
+			return assetCategoryPersistence.filterFindByG_V(
+				groupId, vocabularyId, start, end, obc);
+		}
+		else {
+			return assetCategoryPersistence.filterFindByG_LikeN_V(
+				groupId, name, vocabularyId, start, end, obc);
+		}
 	}
 
 	@Override
@@ -436,15 +442,21 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
 		for (long groupId : groupIds) {
-			for (long vocabularyId : vocabularyIds) {
-				List<AssetCategory> categories = getVocabularyCategories(
-					groupId, name, vocabularyId, start, end, null);
+			JSONArray categoriesJSONArray = null;
 
-				JSONArray categoriesJSONArray = toJSONArray(categories);
+			if (Validator.isNull(name)) {
+				categoriesJSONArray = toJSONArray(
+					assetCategoryPersistence.filterFindByG_V(
+						groupId, vocabularyIds));
+			}
+			else {
+				categoriesJSONArray = toJSONArray(
+					assetCategoryPersistence.filterFindByG_LikeN_V(
+						groupId, name, vocabularyIds));
+			}
 
-				for (int j = 0; j < categoriesJSONArray.length(); j++) {
-					jsonArray.put(categoriesJSONArray.getJSONObject(j));
-				}
+			for (int j = 0; j < categoriesJSONArray.length(); j++) {
+				jsonArray.put(categoriesJSONArray.getJSONObject(j));
 			}
 		}
 

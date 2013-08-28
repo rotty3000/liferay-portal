@@ -32,6 +32,7 @@ import com.liferay.portal.util.PortletKeys;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -58,10 +59,10 @@ public class LayoutSetPrototypeExportImportTest
 		return PortletKeys.LAYOUT_SET_PROTOTYPE;
 	}
 
+	@Ignore
 	@Override
 	@Test
 	public void testExportImportAssetLinks() throws Exception {
-		Assert.assertTrue("This test does not apply", true);
 	}
 
 	@Test
@@ -143,8 +144,6 @@ public class LayoutSetPrototypeExportImportTest
 	@Override
 	protected void testExportImportDisplayStyle(long groupId, String scopeType)
 		throws Exception {
-
-		Assert.assertTrue("This test does not apply", true);
 	}
 
 }

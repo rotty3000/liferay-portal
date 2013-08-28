@@ -54,7 +54,7 @@ public class HeaderFilter extends BasePortalFilter {
 
 		_filterConfig = filterConfig;
 		_dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			_DATE_FORMAT, LocaleUtil.US, TimeZoneUtil.getTimeZone(_TIME_ZONE));
+			_DATE_FORMAT, LocaleUtil.US, TimeZoneUtil.GMT);
 	}
 
 	protected long getLastModified(HttpServletRequest request) {
@@ -154,8 +154,6 @@ public class HeaderFilter extends BasePortalFilter {
 	private static final String _DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
 
 	private static final String _EXPIRES = "Expires";
-
-	private static final String _TIME_ZONE = "GMT";
 
 	private static Set<String> _requestHeaderIgnoreInitParams =
 		SetUtil.fromArray(PropsValues.REQUEST_HEADER_IGNORE_INIT_PARAMS);

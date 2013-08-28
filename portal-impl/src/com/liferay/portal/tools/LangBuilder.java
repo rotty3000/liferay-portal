@@ -41,8 +41,7 @@ import java.io.InputStream;
 
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 /**
  * @author Brian Wing Shun Chan
@@ -483,7 +482,7 @@ public class LangBuilder {
 		UnsyncBufferedWriter unsyncBufferedWriter = new UnsyncBufferedWriter(
 			new FileWriter(propertiesFile));
 
-		Set<String> messages = new TreeSet<String>(
+		Map<String, String> messages = new TreeMap<String, String>(
 			new NumericalStringComparator(true, true));
 
 		boolean begin = false;
@@ -510,7 +509,7 @@ public class LangBuilder {
 					}
 				}
 
-				messages.add(key + "=" + value);
+				messages.put(key, value);
 			}
 			else {
 				if (begin && line.equals(StringPool.BLANK)) {
@@ -545,18 +544,20 @@ public class LangBuilder {
 	}
 
 	private void _sortAndWrite(
-			UnsyncBufferedWriter unsyncBufferedWriter, Set<String> messages,
-			boolean firstLine)
+			UnsyncBufferedWriter unsyncBufferedWriter,
+			Map<String, String> messages, boolean firstLine)
 		throws IOException {
 
-		String[] messagesArray = messages.toArray(new String[messages.size()]);
+		boolean firstEntry = true;
 
-		for (int i = 0; i < messagesArray.length; i++) {
-			if (!firstLine || (i != 0)) {
+		for (Map.Entry<String, String> entry : messages.entrySet()) {
+			if (!firstLine || !firstEntry) {
 				unsyncBufferedWriter.newLine();
 			}
 
-			unsyncBufferedWriter.write(messagesArray[i]);
+			firstEntry = false;
+
+			unsyncBufferedWriter.write(entry.getKey() + "=" + entry.getValue());
 		}
 
 		messages.clear();

@@ -89,7 +89,6 @@
 		color: #555;
 		font-size: 15px;
 		font-weight: lighter;
-		margin-left: 6px;
 	}
 
 	select:focus {
@@ -145,10 +144,6 @@
 	}
 
 	/* ---------- Main ---------- */
-
-	#wrapper {
-		padding: 1em 3em 0;
-	}
 
 	.logo, .logo:hover {
 		color: #333;
@@ -367,7 +362,7 @@
 	/* ---------- Breadcrumbs ---------- */
 
 	.breadcrumb {
-		padding: 7px 15px 4px;
+		padding: 3px 15px 2px;
 
 		li {
 			span.divider {
