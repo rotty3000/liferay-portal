@@ -243,15 +243,18 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
 
-		if (PortletConstants.hasUserId(portletId)) {
+		Portlet portlet = getPortletById(companyId, portletId);
+
+		if (PortletConstants.hasUserId(portletId) ||
+			(portlet.getPreferencesUniquePerLayout() &&
+				!portlet.getPreferencesOwnedByGroup())) {
+
 			ownerType = PortletKeys.PREFS_OWNER_TYPE_USER;
 		}
 
 		List<PortletPreferences> portletPreferencesList =
 			portletPreferencesLocalService.getPortletPreferences(
 				ownerType, plid, portletId);
-
-		Portlet portlet = getPortletById(companyId, portletId);
 
 		PortletLayoutListener portletLayoutListener = null;
 
