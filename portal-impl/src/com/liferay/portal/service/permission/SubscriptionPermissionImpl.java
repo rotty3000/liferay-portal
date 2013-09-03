@@ -16,22 +16,34 @@ package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowInstance;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.permission.BlogsPermission;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission;
+import com.liferay.portlet.documentlibrary.service.permission.DLPermission;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.permission.JournalPermission;
 import com.liferay.portlet.messageboards.NoSuchDiscussionException;
 import com.liferay.portlet.messageboards.model.MBCategory;
+import com.liferay.portlet.messageboards.model.MBDiscussion;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBDiscussionLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBThreadLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.permission.MBCategoryPermission;
+import com.liferay.portlet.messageboards.service.permission.MBDiscussionPermission;
 import com.liferay.portlet.messageboards.service.permission.MBMessagePermission;
 import com.liferay.portlet.messageboards.service.permission.MBPermission;
 import com.liferay.portlet.wiki.model.WikiNode;
@@ -96,12 +108,34 @@ public class SubscriptionPermissionImpl implements SubscriptionPermission {
 		}
 
 		try {
-			MBDiscussionLocalServiceUtil.getDiscussion(
-				subscriptionClassName, subscriptionClassPK);
+			MBDiscussion discussion =
+				MBDiscussionLocalServiceUtil.getDiscussion(
+					subscriptionClassName, subscriptionClassPK);
 
-			return true;
+			long threadId = discussion.getThreadId();
+
+			MBThread thread = MBThreadLocalServiceUtil.fetchThread(threadId);
+
+			return hasDiscussionPermission(
+				permissionChecker, subscriptionClassName, subscriptionClassPK,
+				thread.getCompanyId(), thread.getGroupId(), thread.getUserId());
 		}
 		catch (NoSuchDiscussionException nsde) {
+		}
+
+		if (subscriptionClassName.equals(Folder.class.getName())) {
+			try {
+				DLFolder dlFolder = DLFolderLocalServiceUtil.getDLFolder(
+					subscriptionClassPK);
+
+				return DLFolderPermission.contains(
+					permissionChecker, dlFolder, ActionKeys.VIEW);
+			}
+
+			catch (NoSuchFolderException nsfe) {
+				return DLPermission.contains(
+					permissionChecker, subscriptionClassPK, ActionKeys.VIEW);
+			}
 		}
 
 		if (Validator.isNotNull(inferredClassName)) {
@@ -123,6 +157,32 @@ public class SubscriptionPermissionImpl implements SubscriptionPermission {
 		}
 
 		return true;
+	}
+
+	protected boolean hasDiscussionPermission(
+			PermissionChecker permissionChecker, String subscriptionClassName,
+			long subscriptionClassPK, long companyId, long groupId, long userId)
+		throws PortalException, SystemException {
+
+		if (subscriptionClassName.equals(Layout.class.getName())) {
+			Layout layout = LayoutLocalServiceUtil.getLayout(
+				subscriptionClassPK);
+
+			return LayoutPermissionUtil.contains(
+				permissionChecker, layout, ActionKeys.VIEW);
+		}
+		else if (subscriptionClassName.equals(
+					WorkflowInstance.class.getName())) {
+
+			return permissionChecker.hasPermission(
+				groupId, PortletKeys.WORKFLOW_DEFINITIONS, groupId,
+				ActionKeys.VIEW);
+		}
+		else {
+			return MBDiscussionPermission.contains(
+				permissionChecker, companyId, groupId, subscriptionClassName,
+				subscriptionClassPK, userId, ActionKeys.VIEW);
+		}
 	}
 
 	protected Boolean hasPermission(
