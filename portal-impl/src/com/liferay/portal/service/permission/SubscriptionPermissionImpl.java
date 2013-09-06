@@ -25,11 +25,9 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.permission.BlogsPermission;
-import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.permission.DLFolderPermission;
@@ -112,30 +110,27 @@ public class SubscriptionPermissionImpl implements SubscriptionPermission {
 				MBDiscussionLocalServiceUtil.getDiscussion(
 					subscriptionClassName, subscriptionClassPK);
 
-			long threadId = discussion.getThreadId();
+			MBThread thread = MBThreadLocalServiceUtil.fetchThread(
+				discussion.getThreadId());
 
-			MBThread thread = MBThreadLocalServiceUtil.fetchThread(threadId);
-
-			return hasDiscussionPermission(
+			return hasPermission(
 				permissionChecker, subscriptionClassName, subscriptionClassPK,
-				thread.getCompanyId(), thread.getGroupId(), thread.getUserId());
+				thread);
 		}
 		catch (NoSuchDiscussionException nsde) {
 		}
 
 		if (subscriptionClassName.equals(Folder.class.getName())) {
-			try {
-				DLFolder dlFolder = DLFolderLocalServiceUtil.getDLFolder(
-					subscriptionClassPK);
+			DLFolder dlFolder = DLFolderLocalServiceUtil.fetchDLFolder(
+				subscriptionClassPK);
 
+			if (dlFolder != null) {
 				return DLFolderPermission.contains(
 					permissionChecker, dlFolder, ActionKeys.VIEW);
 			}
 
-			catch (NoSuchFolderException nsfe) {
-				return DLPermission.contains(
-					permissionChecker, subscriptionClassPK, ActionKeys.VIEW);
-			}
+			return DLPermission.contains(
+				permissionChecker, subscriptionClassPK, ActionKeys.VIEW);
 		}
 
 		if (Validator.isNotNull(inferredClassName)) {
@@ -159,30 +154,27 @@ public class SubscriptionPermissionImpl implements SubscriptionPermission {
 		return true;
 	}
 
-	protected boolean hasDiscussionPermission(
+	protected boolean hasPermission(
 			PermissionChecker permissionChecker, String subscriptionClassName,
-			long subscriptionClassPK, long companyId, long groupId, long userId)
+			long subscriptionClassPK, MBThread thread)
 		throws PortalException, SystemException {
 
 		if (subscriptionClassName.equals(Layout.class.getName())) {
-			Layout layout = LayoutLocalServiceUtil.getLayout(
-				subscriptionClassPK);
-
 			return LayoutPermissionUtil.contains(
-				permissionChecker, layout, ActionKeys.VIEW);
+				permissionChecker, subscriptionClassPK, ActionKeys.VIEW);
 		}
 		else if (subscriptionClassName.equals(
 					WorkflowInstance.class.getName())) {
 
 			return permissionChecker.hasPermission(
-				groupId, PortletKeys.WORKFLOW_DEFINITIONS, groupId,
-				ActionKeys.VIEW);
+				thread.getGroupId(), PortletKeys.WORKFLOW_DEFINITIONS,
+				thread.getGroupId(), ActionKeys.VIEW);
 		}
-		else {
-			return MBDiscussionPermission.contains(
-				permissionChecker, companyId, groupId, subscriptionClassName,
-				subscriptionClassPK, userId, ActionKeys.VIEW);
-		}
+
+		return MBDiscussionPermission.contains(
+			permissionChecker, thread.getCompanyId(), thread.getGroupId(),
+			subscriptionClassName, subscriptionClassPK, thread.getUserId(),
+			ActionKeys.VIEW);
 	}
 
 	protected Boolean hasPermission(
