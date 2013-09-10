@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.spring.aop.Skip;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -776,6 +777,56 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 		long classNameId = PortalUtil.getClassNameId(Team.class);
 
 		return rolePersistence.findByC_C_C(companyId, classNameId, teamId);
+	}
+
+	@Override
+	public List<Role> getTeamRoles(long groupId)
+		throws PortalException, SystemException {
+
+		return getTeamRoles(groupId, null);
+	}
+
+	@Override
+	public List<Role> getTeamRoles(long groupId, long[] skipRoleIds)
+		throws PortalException, SystemException {
+
+		Group group = groupLocalService.getGroup(groupId);
+
+		List<Team> teams = null;
+
+		if (group.isLayout()) {
+			teams = teamLocalService.getGroupTeams(group.getParentGroupId());
+		}
+		else {
+			teams = teamLocalService.getGroupTeams(groupId);
+		}
+
+		if ((teams == null) || teams.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<Role> roles = new ArrayList<Role>();
+
+		if (ArrayUtil.isNotEmpty(skipRoleIds)) {
+			Arrays.sort(skipRoleIds);
+		}
+		else {
+			skipRoleIds = null;
+		}
+
+		for (Team team : teams) {
+			Role role = getTeamRole(team.getCompanyId(), team.getTeamId());
+
+			if ((skipRoleIds != null) &&
+				(Arrays.binarySearch(skipRoleIds, role.getRoleId()) >= 0)) {
+
+				continue;
+			}
+
+			roles.add(role);
+		}
+
+		return roles;
 	}
 
 	/**
