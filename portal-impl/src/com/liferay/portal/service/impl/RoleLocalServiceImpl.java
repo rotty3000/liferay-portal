@@ -704,6 +704,13 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 		return rolePersistence.findByCompanyId(companyId);
 	}
 
+	@Override
+	public List<Role> getRoles(long companyId, Integer[] types)
+		throws SystemException {
+
+		return roleFinder.findByC_T(companyId, types);
+	}
+
 	/**
 	 * Returns all the roles with the primary keys.
 	 *
