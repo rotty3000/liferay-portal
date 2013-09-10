@@ -802,7 +802,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	public List<Role> getTeamRoles(long groupId)
 		throws PortalException, SystemException {
 
-		return getTeamRoles(groupId, null);
+		return roleLocalService.getTeamRoles(groupId, null);
 	}
 
 	/**
@@ -816,6 +816,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
+	@ThreadLocalCachable
 	public List<Role> getTeamRoles(long groupId, long[] skipRoleIds)
 		throws PortalException, SystemException {
 
