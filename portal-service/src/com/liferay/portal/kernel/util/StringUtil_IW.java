@@ -71,6 +71,10 @@ public class StringUtil_IW {
 		return StringUtil.endsWith(s, end);
 	}
 
+	public boolean equalsIgnoreCase(java.lang.String s1, java.lang.String s2) {
+		return StringUtil.equalsIgnoreCase(s1, s2);
+	}
+
 	public java.lang.String extract(java.lang.String s, char[] chars) {
 		return StringUtil.extract(s, chars);
 	}

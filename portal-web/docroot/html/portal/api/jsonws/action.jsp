@@ -428,7 +428,9 @@ String signature = ParamUtil.getString(request, "signature");
 			scriptTpl.formatDataType = A.rbind(formatDataType, scriptTpl, true);
 
 			urlTpl.toURIParam = function(value) {
-				return A.Lang.String.uncamelize(value, '-').toLowerCase();
+				value = A.Lang.String.uncamelize(value, '-');
+
+				return value.toLowerCase();
 			};
 
 			var curlExample = A.one('#curlExample');

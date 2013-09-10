@@ -218,7 +218,7 @@ public class UpgradeCustomizablePortletsTest
 
 		PortalPreferencesImpl portalPreferencesImpl =
 			(PortalPreferencesImpl)PortletPreferencesFactoryUtil.fromXML(
-				0, ownerId, ownerType, preferences);
+				ownerId, ownerType, preferences);
 
 		return new PortalPreferencesWrapper(portalPreferencesImpl);
 	}

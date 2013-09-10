@@ -102,6 +102,13 @@ public class UserTestUtil {
 			ServiceTestUtil.randomString(), TestPropsValues.getGroupId());
 	}
 
+	public static User addUser(long groupId, Locale locale) throws Exception {
+		return addUser(
+			ServiceTestUtil.randomString(), false, locale,
+			ServiceTestUtil.randomString(), ServiceTestUtil.randomString(),
+			new long[] {groupId});
+	}
+
 	public static User addUser(
 			String screenName, boolean autoScreenName, Locale locale,
 			String firstName, String lastName, long[] groupIds)
@@ -118,7 +125,8 @@ public class UserTestUtil {
 		String password1 = StringPool.BLANK;
 		String password2 = StringPool.BLANK;
 		String emailAddress =
-			"ServiceTestSuite." + ServiceTestUtil.nextLong() + "@liferay.com";
+			ServiceTestUtil.randomString() + ServiceTestUtil.nextLong() +
+				"@liferay.com";
 		long facebookId = 0;
 		String openId = StringPool.BLANK;
 		String middleName = StringPool.BLANK;
