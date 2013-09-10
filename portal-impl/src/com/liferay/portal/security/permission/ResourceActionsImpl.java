@@ -51,6 +51,7 @@ import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.PortletLocalService;
 import com.liferay.portal.service.ResourceActionLocalService;
 import com.liferay.portal.service.RoleLocalService;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletResourceBundles;
@@ -557,8 +558,6 @@ public class ResourceActionsImpl implements ResourceActions {
 			long companyId, Group group, String modelResource, int[] roleTypes)
 		throws SystemException {
 
-		List<Role> allRoles = roleLocalService.getRoles(companyId);
-
 		Integer[] types = null;
 
 		if (roleTypes == null) {
@@ -568,17 +567,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			types = ArrayUtil.toArray(roleTypes);
 		}
 
-		List<Role> roles = new ArrayList<Role>();
-
-		for (int type : types) {
-			for (Role role : allRoles) {
-				if (role.getType() == type) {
-					roles.add(role);
-				}
-			}
-		}
-
-		return roles;
+		return RoleLocalServiceUtil.getRoles(companyId, types);
 	}
 
 	@Override
