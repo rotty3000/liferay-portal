@@ -567,7 +567,13 @@ public class ResourceActionsImpl implements ResourceActions {
 			types = ArrayUtil.toArray(roleTypes);
 		}
 
-		return RoleLocalServiceUtil.getRoles(companyId, types);
+		List<Role> roles = RoleLocalServiceUtil.getRoles(companyId, types);
+
+		if (roles instanceof UnmodifiableList<?>) {
+			roles = ListUtil.copy(roles);
+		}
+
+		return roles;
 	}
 
 	@Override
