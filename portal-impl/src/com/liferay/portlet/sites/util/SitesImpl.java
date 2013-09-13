@@ -328,7 +328,11 @@ public class SitesImpl implements Sites {
 
 		long companyId = targetLayout.getCompanyId();
 
-		List<Role> roles = RoleLocalServiceUtil.getRoles(companyId);
+		List<Role> roles = ResourceActionsUtil.getRoles(
+			companyId, targetLayout.getGroup(), null, null);
+
+		roles.addAll(
+			RoleLocalServiceUtil.getTeamRoles(targetLayout.getGroupId(), null));
 
 		LayoutTypePortlet sourceLayoutTypePortlet =
 			(LayoutTypePortlet)sourceLayout.getLayoutType();

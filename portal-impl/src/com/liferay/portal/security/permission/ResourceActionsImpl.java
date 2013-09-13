@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -50,6 +51,7 @@ import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.PortletLocalService;
 import com.liferay.portal.service.ResourceActionLocalService;
 import com.liferay.portal.service.RoleLocalService;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.PortletResourceBundles;
@@ -556,20 +558,19 @@ public class ResourceActionsImpl implements ResourceActions {
 			long companyId, Group group, String modelResource, int[] roleTypes)
 		throws SystemException {
 
-		List<Role> allRoles = roleLocalService.getRoles(companyId);
+		Integer[] types = null;
 
 		if (roleTypes == null) {
-			roleTypes = getRoleTypes(companyId, group, modelResource);
+			types = getRoleTypes(companyId, group, modelResource);
+		}
+		else {
+			types = ArrayUtil.toArray(roleTypes);
 		}
 
-		List<Role> roles = new ArrayList<Role>();
+		List<Role> roles = RoleLocalServiceUtil.getRoles(companyId, types);
 
-		for (int roleType : roleTypes) {
-			for (Role role : allRoles) {
-				if (role.getType() == roleType) {
-					roles.add(role);
-				}
-			}
+		if (roles instanceof UnmodifiableList<?>) {
+			roles = ListUtil.copy(roles);
 		}
 
 		return roles;
@@ -816,23 +817,19 @@ public class ResourceActionsImpl implements ResourceActions {
 		return actions;
 	}
 
-	protected int[] getRoleTypes(
+	protected Integer[] getRoleTypes(
 		long companyId, Group group, String modelResource) {
 
-		int[] types = {
-			RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_SITE
-		};
+		Integer[] types = _TYPES_R_S;
 
 		if (isPortalModelResource(modelResource)) {
 			if (modelResource.equals(Organization.class.getName()) ||
 				modelResource.equals(User.class.getName())) {
 
-				types = new int[] {
-					RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_ORGANIZATION
-				};
+				types = _TYPES_R_O;
 			}
 			else {
-				types = new int[] {RoleConstants.TYPE_REGULAR};
+				types = _TYPE_R;
 			}
 		}
 		else {
@@ -847,13 +844,10 @@ public class ResourceActionsImpl implements ResourceActions {
 				}
 
 				if (group.isOrganization()) {
-					types = new int[] {
-						RoleConstants.TYPE_REGULAR,
-						RoleConstants.TYPE_ORGANIZATION, RoleConstants.TYPE_SITE
-					};
+					types = _TYPES_R_O_S;
 				}
 				else if (group.isUser()) {
-					types = new int[] {RoleConstants.TYPE_REGULAR};
+					types = _TYPE_R;
 				}
 			}
 		}
@@ -1161,6 +1155,19 @@ public class ResourceActionsImpl implements ResourceActions {
 		Organization.class.getName(), PasswordPolicy.class.getName(),
 		Role.class.getName(), User.class.getName(), UserGroup.class.getName()
 	};
+
+	private static final Integer[] _TYPE_R = new Integer[] {
+		RoleConstants.TYPE_REGULAR};
+
+	private static final Integer[] _TYPES_R_O = new Integer[] {
+		RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_ORGANIZATION};
+
+	private static final Integer[] _TYPES_R_O_S = new Integer[] {
+		RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_ORGANIZATION,
+		RoleConstants.TYPE_SITE};
+
+	private static final Integer[] _TYPES_R_S = new Integer[] {
+		RoleConstants.TYPE_REGULAR, RoleConstants.TYPE_SITE};
 
 	private static Log _log = LogFactoryUtil.getLog(ResourceActionsImpl.class);
 

@@ -15,12 +15,16 @@
 package com.liferay.portal.service.persistence;
 
 import com.liferay.portal.NoSuchRoleException;
+import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
+import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Accessor;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -30,6 +34,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceAction;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.impl.RoleImpl;
+import com.liferay.portal.model.impl.RoleModelImpl;
 import com.liferay.portal.service.ResourceActionLocalServiceUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
@@ -85,6 +90,9 @@ public class RoleFinderImpl
 	public static final String FIND_BY_C_N =
 		RoleFinder.class.getName() + ".findByC_N";
 
+	public static final String FIND_BY_C_T =
+		RoleFinder.class.getName() + ".findByC_T";
+
 	public static final String FIND_BY_U_G =
 		RoleFinder.class.getName() + ".findByU_G";
 
@@ -99,6 +107,12 @@ public class RoleFinderImpl
 
 	public static final String FIND_BY_C_N_S_P_A =
 		RoleFinder.class.getName() + ".findByC_N_S_P_A";
+
+	public static final FinderPath FINDER_PATH_FIND_BY_C_T = new FinderPath(
+		RoleModelImpl.ENTITY_CACHE_ENABLED, RoleModelImpl.FINDER_CACHE_ENABLED,
+		RoleImpl.class,
+		RolePersistenceImpl.FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_T",
+		new String[] {Long.class.getName(), String.class.getName()});
 
 	public static final String JOIN_BY_USERS_ROLES =
 		RoleFinder.class.getName() + ".joinByUsersRoles";
@@ -225,7 +239,6 @@ public class RoleFinderImpl
 			qPos.add(companyId);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
-			qPos.add(types);
 
 			Iterator<Long> itr = q.iterate();
 
@@ -410,6 +423,58 @@ public class RoleFinderImpl
 		throw new NoSuchRoleException(sb.toString());
 	}
 
+	public List<Role> findByC_T(long companyId, Integer[] types)
+		throws SystemException {
+
+		String typesAsHexString = ArrayUtil.toString(types, _typesAccessor);
+
+		Object[] finderArgs = new Object[] {companyId, typesAsHexString};
+
+		List<Role> list = (List<Role>)FinderCacheUtil.getResult(
+			FINDER_PATH_FIND_BY_C_T, finderArgs, this);
+
+		if (list != null) {
+			return list;
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(FIND_BY_C_T);
+
+			sql = StringUtil.replace(sql, "[$TYPE$]", getTypes(types));
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("Role_", RoleImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+
+			list = q.list(false);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		finally {
+			if (list == null) {
+				FinderCacheUtil.removeResult(
+					FINDER_PATH_FIND_BY_C_T, finderArgs);
+			}
+			else {
+				FinderCacheUtil.putResult(
+					FINDER_PATH_FIND_BY_C_T, finderArgs, list);
+			}
+
+			closeSession(session);
+		}
+
+		return list;
+	}
+
 	@Override
 	public List<Role> findByU_G(long userId, List<Group> groups)
 		throws SystemException {
@@ -560,7 +625,6 @@ public class RoleFinderImpl
 			qPos.add(companyId);
 			qPos.add(names, 2);
 			qPos.add(descriptions, 2);
-			qPos.add(types);
 
 			return (List<Role>)QueryUtil.list(q, getDialect(), start, end);
 		}
@@ -790,17 +854,17 @@ public class RoleFinderImpl
 
 		StringBundler sb = new StringBundler(types.length * 2);
 
-		sb.append(" AND (");
+		sb.append(" AND (Role_.type_ IN (");
 
 		for (int i = 0; i < types.length; i++) {
-			sb.append("Role_.type_ = ?");
+			sb.append(types[i]);
 
 			if ((i + 1) < types.length) {
-				sb.append(" OR ");
+				sb.append(StringPool.COMMA);
 			}
 		}
 
-		sb.append(StringPool.CLOSE_PARENTHESIS);
+		sb.append("))");
 
 		return sb.toString();
 	}
@@ -873,5 +937,15 @@ public class RoleFinderImpl
 	}
 
 	private String _countByR_U;
+
+	private Accessor<Integer, String> _typesAccessor =
+		new Accessor<Integer, String>() {
+
+		@Override
+		public String get(Integer value) {
+			return StringUtil.toHexString(value);
+		}
+
+	};
 
 }

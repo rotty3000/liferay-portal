@@ -3386,10 +3386,14 @@ public class JournalArticleLocalServiceImpl
 	public void rebuildTree(long companyId)
 		throws PortalException, SystemException {
 
-		List<JournalArticle> articles =
-			journalArticlePersistence.findByCompanyId(companyId);
+		List<JournalArticle> articles = journalArticlePersistence.findByC_NotST(
+			companyId, WorkflowConstants.STATUS_IN_TRASH);
 
 		for (JournalArticle article : articles) {
+			if (article.isInTrashContainer()) {
+				continue;
+			}
+
 			article.setTreePath(article.buildTreePath());
 
 			journalArticlePersistence.update(article);
@@ -5272,14 +5276,19 @@ public class JournalArticleLocalServiceImpl
 				journalArticlePersistence.update(articleVersion);
 			}
 
+			JournalArticleResource articleResource =
+				journalArticleResourceLocalService.getArticleResource(
+					article.getResourcePrimKey());
+
 			UnicodeProperties typeSettingsProperties = new UnicodeProperties();
 
 			typeSettingsProperties.put("title", article.getArticleId());
 
 			trashEntryLocalService.addTrashEntry(
 				userId, article.getGroupId(), JournalArticle.class.getName(),
-				article.getResourcePrimKey(), oldArticleVersionStatus,
-				articleVersionStatusOVPs, typeSettingsProperties);
+				article.getResourcePrimKey(), articleResource.getUuid(), null,
+				oldArticleVersionStatus, articleVersionStatusOVPs,
+				typeSettingsProperties);
 		}
 
 		if ((article.getClassNameId() ==

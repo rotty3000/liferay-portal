@@ -454,7 +454,7 @@ public class JournalTestUtil {
 		throws Exception {
 
 		JournalFolder folder = JournalFolderLocalServiceUtil.fetchFolder(
-			serviceContext.getScopeGroupId(), name);
+			serviceContext.getScopeGroupId(), parentFolderId, name);
 
 		if (folder != null) {
 			return folder;
@@ -472,6 +472,22 @@ public class JournalTestUtil {
 
 		staticContentElement.addAttribute("language-id", languageId);
 		staticContentElement.setText(value);
+	}
+
+	public static Element addMetadataElement(
+		Element element, String locale, String label) {
+
+		Element metadataElement = element.addElement("meta-data");
+
+		metadataElement.addAttribute("locale", locale);
+
+		Element entryElement = metadataElement.addElement("entry");
+
+		entryElement.addAttribute("name", "label");
+
+		entryElement.addCDATA(label);
+
+		return entryElement;
 	}
 
 	public static Document createDocument(

@@ -1143,6 +1143,7 @@ public class PortalSecurityManagerImpl extends SecurityManager
 	private static class DoReferenceRegistryPACL
 		implements ReferenceRegistry.PACL {
 
+		@Override
 		public ReferenceEntry getReferenceEntry(
 				final Class<?> clazz, final Object object,
 				final String fieldName)

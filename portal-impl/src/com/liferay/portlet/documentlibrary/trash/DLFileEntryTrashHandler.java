@@ -137,6 +137,11 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 	}
 
 	@Override
+	public String getSystemEventClassName() {
+		return FileEntry.class.getName();
+	}
+
+	@Override
 	public ContainerModel getTrashContainer(long classPK)
 		throws PortalException, SystemException {
 
@@ -172,9 +177,7 @@ public class DLFileEntryTrashHandler extends DLBaseTrashHandler {
 		try {
 			DLFileEntry dlFileEntry = getDLFileEntry(classPK);
 
-			DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
-
-			return dlFileVersion.isInTrash();
+			return dlFileEntry.isInTrash();
 		}
 		catch (InvalidRepositoryException ire) {
 			return false;

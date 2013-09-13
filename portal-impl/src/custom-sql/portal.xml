@@ -1176,6 +1176,17 @@
 				(lower(Role_.name) = ?)
 		]]>
 	</sql>
+	<sql id="com.liferay.portal.service.persistence.RoleFinder.findByC_T">
+		<![CDATA[
+			SELECT
+				{Role_.*}
+			FROM
+				Role_
+			WHERE
+				(Role_.companyId = ?)
+				[$TYPE$]
+		]]>
+	</sql>
 	<sql id="com.liferay.portal.service.persistence.RoleFinder.findByU_G">
 		<![CDATA[
 			(
