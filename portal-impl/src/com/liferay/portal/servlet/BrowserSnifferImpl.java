@@ -17,13 +17,12 @@ package com.liferay.portal.servlet;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.servlet.BrowserSniffer;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,64 +62,39 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 
 	@Override
 	public float getMajorVersion(HttpServletRequest request) {
-		float majorVersion = 0;
-
-		String version = getVersion(request);
-
-		Matcher matcher = _majorVersionPattern.matcher(version);
-
-		if (matcher.find()) {
-			majorVersion = GetterUtil.getFloat(matcher.group(1));
-		}
-
-		return majorVersion;
+		return GetterUtil.getFloat(getVersion(request));
 	}
 
 	@Override
 	public String getRevision(HttpServletRequest request) {
-		String revision = StringPool.BLANK;
+		String revision = (String)request.getAttribute(
+			WebKeys.BROWSER_SNIFFER_REVISION);
 
-		String userAgent = getUserAgent(request);
-
-		Matcher matcher = _revisionPattern.matcher(userAgent);
-
-		if (matcher.find()) {
-			revision = matcher.group(1);
+		if (revision != null) {
+			return revision;
 		}
+
+		revision = parseVersion(
+			getUserAgent(request), _revisionLeadings, _revisionSeparators);
+
+		request.setAttribute(WebKeys.BROWSER_SNIFFER_REVISION, revision);
 
 		return revision;
 	}
 
 	@Override
 	public String getVersion(HttpServletRequest request) {
-		String userAgent = getUserAgent(request);
+		String version = (String)request.getAttribute(
+			WebKeys.BROWSER_SNIFFER_VERSION);
 
-		String version = StringPool.BLANK;
-
-		Matcher matcher = _versionPattern.matcher(userAgent);
-
-		if (matcher.find()) {
-			version = matcher.group(1);
+		if (version != null) {
+			return version;
 		}
-		else if (isFirefox(request)) {
-			Matcher versionFirefoxMatcher = _versionFirefoxPattern.matcher(
-				userAgent);
 
-			if (versionFirefoxMatcher.find()) {
-				version = versionFirefoxMatcher.group(1);
-			}
-		}
-		else if (isChrome(request)) {
-			Matcher versionChromeMatcher = _versionChromePattern.matcher(
-				userAgent);
+		version = parseVersion(
+			getUserAgent(request), _versionLeadings, _versionSeparators);
 
-			if (versionChromeMatcher.find()) {
-				version = versionChromeMatcher.group(1);
-			}
-		}
-		else {
-			version = getRevision(request);
-		}
+		request.setAttribute(WebKeys.BROWSER_SNIFFER_VERSION, version);
 
 		return version;
 	}
@@ -450,6 +424,79 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 		return false;
 	}
 
+	protected String parseVersion(
+		String userAgent, String[] leadings, char[] separators) {
+
+		leading:
+		for (String leading : leadings) {
+			int index = 0;
+
+			version:
+			while (true) {
+				index = userAgent.indexOf(leading, index);
+
+				if ((index < 0) ||
+					(((index += leading.length()) + 2) > userAgent.length())) {
+
+					continue leading;
+				}
+
+				char c1 = userAgent.charAt(index);
+				char c2 = userAgent.charAt(++index);
+
+				if (((c2 > '0') && (c2 < '9')) || (c2 == '.')) {
+					for (char separator : separators) {
+						if (c1 == separator) {
+							break version;
+						}
+					}
+				}
+			}
+
+			// Major
+
+			int majorStart = index;
+			int majorEnd = index + 1;
+
+			for (int i = majorStart; i < userAgent.length(); i++) {
+				char c = userAgent.charAt(i);
+
+				if ((c < '0') || (c > '9')) {
+					majorEnd = i;
+
+					break;
+				}
+			}
+
+			String major = userAgent.substring(majorStart, majorEnd);
+
+			if (userAgent.charAt(majorEnd) != '.') {
+				return major;
+			}
+
+			// Minor
+
+			int minorStart = majorEnd + 1;
+			int minorEnd = minorStart + 1;
+
+			for (int i = minorStart; i < userAgent.length(); i++) {
+				char c = userAgent.charAt(i);
+
+				if ((c < '0') || (c > '9')) {
+					minorEnd = i;
+
+					break;
+				}
+			}
+
+			String minor = userAgent.substring(minorStart, minorEnd);
+
+			return major.concat(StringPool.PERIOD).concat(minor);
+		}
+
+		return StringPool.BLANK;
+	}
+
 	private static final String[] _FIREFOX_ALIASES = {
 		"firefox", "minefield", "granparadiso", "bonecho", "firebird",
 		"phoenix", "camino"
@@ -461,15 +508,12 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 		"windows", "win32", "16bit"
 	};
 
-	private static Pattern _majorVersionPattern = Pattern.compile(
-		"(\\d+[.]\\d+)");
-	private static Pattern _revisionPattern = Pattern.compile(
-		"(?:rv|it|ra|ie)[\\/: ]([\\d.]+)");
-	private static Pattern _versionChromePattern = Pattern.compile(
-		"(?:chrome)[\\/]([\\d.]+)");
-	private static Pattern _versionFirefoxPattern = Pattern.compile(
-		"(?:firefox|minefield)[\\/]([\\d.]+)");
-	private static Pattern _versionPattern = Pattern.compile(
-		"(?:version)[\\/]([\\d.]+)");
+	private static String[] _revisionLeadings = {"rv", "it", "ra", "ie"};
+	private static char[] _revisionSeparators =
+		{CharPool.COLON, CharPool.SLASH, CharPool.BACK_SLASH};
+	private static String[] _versionLeadings =
+		{"version", "firefox", "minefield", "chrome"};
+	private static char[] _versionSeparators =
+		{CharPool.SLASH, CharPool.BACK_SLASH};
 
 }

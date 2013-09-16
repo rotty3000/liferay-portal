@@ -128,10 +128,10 @@ if (layout != null) {
 								%>
 
 									{
-										deletable: <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.DELETE) %>,
+										deletable: <%= LayoutPermissionUtil.contains(permissionChecker, curLayout, ActionKeys.DELETE) %>,
 										id: <%= curLayout.getLayoutId() %>,
-										sortable: <%= GroupPermissionUtil.contains(themeDisplay.getPermissionChecker(), scopeGroupId, ActionKeys.MANAGE_LAYOUTS) && SitesUtil.isLayoutSortable(curLayout) %>,
-										updateable: <%= LayoutPermissionUtil.contains(themeDisplay.getPermissionChecker(), curLayout, ActionKeys.UPDATE) %>
+										sortable: <%= GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.MANAGE_LAYOUTS) && SitesUtil.isLayoutSortable(curLayout) %>,
+										updateable: <%= LayoutPermissionUtil.contains(permissionChecker, curLayout, ActionKeys.UPDATE) %>
 									},
 
 								<%

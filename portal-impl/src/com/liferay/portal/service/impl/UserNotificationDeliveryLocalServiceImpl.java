@@ -103,4 +103,18 @@ public class UserNotificationDeliveryLocalServiceImpl
 			deliver);
 	}
 
+	@Override
+	public UserNotificationDelivery updateUserNotificationDelivery(
+			long userNotificationDeliveryId, boolean deliver)
+		throws SystemException {
+
+		UserNotificationDelivery userNotificationDelivery =
+			fetchUserNotificationDelivery(userNotificationDeliveryId);
+
+		userNotificationDelivery.setDeliver(deliver);
+
+		return userNotificationDeliveryPersistence.update(
+			userNotificationDelivery);
+	}
+
 }

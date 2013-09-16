@@ -35,14 +35,9 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.struts.ActionConstants;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.PortletURLImpl;
 import com.liferay.portlet.login.util.LoginUtil;
-
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,12 +95,12 @@ public class UpdatePasswordAction extends Action {
 
 			String redirect = ParamUtil.getString(request, WebKeys.REFERER);
 
-			if (Validator.isNull(redirect)) {
-				PortletURL portletURL = new PortletURLImpl(
-					request, PortletKeys.LOGIN, themeDisplay.getPlid(),
-					PortletRequest.RENDER_PHASE);
+			if (Validator.isNotNull(redirect)) {
+				redirect = PortalUtil.escapeRedirect(redirect);
+			}
 
-				redirect = portletURL.toString();
+			if (Validator.isNull(redirect)) {
+				redirect = themeDisplay.getPathMain();
 			}
 
 			response.sendRedirect(redirect);

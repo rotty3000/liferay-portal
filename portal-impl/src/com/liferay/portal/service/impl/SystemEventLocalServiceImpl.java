@@ -25,6 +25,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.SystemEvent;
 import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.base.SystemEventLocalServiceBaseImpl;
 
@@ -85,6 +86,13 @@ public class SystemEventLocalServiceImpl
 	}
 
 	@Override
+	public void deleteSystemEvents(long groupId, long systemEventSetKey)
+		throws SystemException {
+
+		systemEventPersistence.removeByG_S(groupId, systemEventSetKey);
+	}
+
+	@Override
 	public SystemEvent fetchSystemEvent(
 			long groupId, long classNameId, long classPK, int type)
 		throws SystemException {
@@ -135,10 +143,12 @@ public class SystemEventLocalServiceImpl
 
 		Company company = companyPersistence.findByPrimaryKey(companyId);
 
-		Group companyGroup = company.getGroup();
+		if (!CompanyThreadLocal.isDeleteInProcess()) {
+			Group companyGroup = company.getGroup();
 
-		if (companyGroup.getGroupId() == groupId) {
-			groupId = 0;
+			if (companyGroup.getGroupId() == groupId) {
+				groupId = 0;
+			}
 		}
 
 		if (Validator.isNotNull(referrerClassName) &&

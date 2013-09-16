@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -384,8 +383,7 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 	@Override
 	public String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString)
-		throws PortalException, SystemException {
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString) {
 
 		return getPortletFileEntryURL(
 			themeDisplay, fileEntry, queryString, true);
@@ -393,9 +391,8 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 	@Override
 	public String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
-			boolean absoluteURL)
-		throws PortalException, SystemException {
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
+		boolean absoluteURL) {
 
 		StringBundler sb = new StringBundler(10);
 
@@ -414,9 +411,7 @@ public class PortletFileRepositoryImpl implements PortletFileRepository {
 
 		String title = fileEntry.getTitle();
 
-		FileVersion fileVersion = fileEntry.getFileVersion();
-
-		if (fileVersion.isInTrash()) {
+		if (fileEntry.isInTrash()) {
 			title = TrashUtil.getOriginalTitle(fileEntry.getTitle());
 		}
 

@@ -384,10 +384,14 @@ public class BookmarksEntryLocalServiceImpl
 	public void rebuildTree(long companyId)
 		throws PortalException, SystemException {
 
-		List<BookmarksEntry> entries =
-			bookmarksEntryPersistence.findByCompanyId(companyId);
+		List<BookmarksEntry> entries = bookmarksEntryPersistence.findByC_NotS(
+			companyId, WorkflowConstants.STATUS_IN_TRASH);
 
 		for (BookmarksEntry entry : entries) {
+			if (entry.isInTrashContainer()) {
+				continue;
+			}
+
 			entry.setTreePath(entry.buildTreePath());
 
 			bookmarksEntryPersistence.update(entry);
@@ -594,7 +598,8 @@ public class BookmarksEntryLocalServiceImpl
 		else if (status == WorkflowConstants.STATUS_IN_TRASH) {
 			trashEntryLocalService.addTrashEntry(
 				userId, entry.getGroupId(), BookmarksEntry.class.getName(),
-				entry.getEntryId(), oldStatus, null, null);
+				entry.getEntryId(), entry.getUuid(), null, oldStatus, null,
+				null);
 		}
 
 		return entry;

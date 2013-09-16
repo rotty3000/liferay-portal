@@ -142,7 +142,7 @@ public class ReleaseInfo {
 
 	private static final String _CODE_NAME = "Newton";
 
-	private static final String _DATE = "September 13, 2013";
+	private static final String _DATE = "September 20, 2013";
 
 	private static final String _NAME = "Liferay Portal Community Edition";
 

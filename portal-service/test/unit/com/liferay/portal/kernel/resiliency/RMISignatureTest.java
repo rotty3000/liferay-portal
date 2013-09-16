@@ -57,13 +57,13 @@ public class RMISignatureTest {
 
 		Method[] methods = rmiClass.getDeclaredMethods();
 
-		Method:
+		method:
 		for (Method method : methods) {
 			Class<?>[] exceptionTypes = method.getExceptionTypes();
 
 			for (Class<?> exceptionType : exceptionTypes) {
 				if (RemoteException.class.isAssignableFrom(exceptionType)) {
-					continue Method;
+					continue method;
 				}
 			}
 

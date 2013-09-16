@@ -43,6 +43,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.lar.LayoutExporter;
+import com.liferay.portal.lar.ThemeExporter;
+import com.liferay.portal.lar.ThemeImporter;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
@@ -218,6 +220,8 @@ public class LayoutStagedModelDataHandler
 		}
 
 		fixExportTypeSettings(layout);
+
+		exportTheme(portletDataContext, layout);
 
 		portletDataContext.addClassedModel(
 			layoutElement, ExportImportPathUtil.getModelPath(layout), layout,
@@ -449,7 +453,7 @@ public class LayoutStagedModelDataHandler
 				(Layout)portletDataContext.getZipEntryAsObject(
 					parentLayoutPath);
 
-			StagedModelDataHandlerUtil.importStagedModel(
+			StagedModelDataHandlerUtil.importReferenceStagedModel(
 				portletDataContext, parentLayout);
 
 			Layout importedParentLayout = newLayoutsMap.get(parentLayoutId);
@@ -560,6 +564,8 @@ public class LayoutStagedModelDataHandler
 
 		importLayoutFriendlyURLs(portletDataContext, layout);
 
+		importTheme(portletDataContext, layout);
+
 		portletDataContext.importClassedModel(
 			layout, importedLayout, LayoutPortletDataHandler.NAMESPACE);
 	}
@@ -662,6 +668,15 @@ public class LayoutStagedModelDataHandler
 			catch (NoSuchLayoutException nsle) {
 			}
 		}
+	}
+
+	protected void exportTheme(
+			PortletDataContext portletDataContext, Layout layout)
+		throws Exception {
+
+		ThemeExporter themeExporter = new ThemeExporter();
+
+		themeExporter.exportTheme(portletDataContext, layout);
 	}
 
 	protected Object[] extractFriendlyURLInfo(Layout layout) {
@@ -803,7 +818,7 @@ public class LayoutStagedModelDataHandler
 				layoutElement, JournalArticle.class);
 
 		if (!referenceDataElements.isEmpty()) {
-			StagedModelDataHandlerUtil.importStagedModel(
+			StagedModelDataHandlerUtil.importReferenceStagedModel(
 				portletDataContext, referenceDataElements.get(0));
 		}
 
@@ -836,7 +851,7 @@ public class LayoutStagedModelDataHandler
 				(LayoutFriendlyURL)portletDataContext.getZipEntryAsObject(
 					layoutFriendlyURLPath);
 
-			StagedModelDataHandlerUtil.importStagedModel(
+			StagedModelDataHandlerUtil.importReferenceStagedModel(
 				portletDataContext, layoutFriendlyURL);
 		}
 	}
@@ -899,7 +914,7 @@ public class LayoutStagedModelDataHandler
 				(Layout)portletDataContext.getZipEntryAsObject(
 					linkedToLayoutPath);
 
-			StagedModelDataHandlerUtil.importStagedModel(
+			StagedModelDataHandlerUtil.importReferenceStagedModel(
 				portletDataContext, linkedToLayout);
 
 			Layout importedLinkedLayout = newLayoutsMap.get(linkToLayoutId);
@@ -927,6 +942,15 @@ public class LayoutStagedModelDataHandler
 		}
 
 		updateTypeSettings(importedLayout, layout);
+	}
+
+	protected void importTheme(
+			PortletDataContext portletDataContext, Layout layout)
+		throws Exception {
+
+		ThemeImporter themeImporter = new ThemeImporter();
+
+		themeImporter.importTheme(portletDataContext, layout);
 	}
 
 	protected void initNewLayoutPermissions(

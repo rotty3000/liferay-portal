@@ -226,10 +226,6 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences, String data)
 		throws Exception {
 
-		Map<String, String> articleIds =
-			(Map<String, String>)portletDataContext.getNewPrimaryKeysMap(
-				JournalArticle.class + ".articleId");
-
 		Layout layout = LayoutLocalServiceUtil.getLayout(
 			portletDataContext.getPlid());
 
@@ -238,6 +234,10 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 		Element footerArticleElement = rootElement.element("footer-article");
 
 		importReferenceArticle(portletDataContext, footerArticleElement);
+
+		Map<String, String> articleIds =
+			(Map<String, String>)portletDataContext.getNewPrimaryKeysMap(
+				JournalArticle.class + ".articleId");
 
 		String[] footerArticleValues = portletPreferences.getValues(
 			"footerArticleValues", new String[] {"0", ""});
@@ -307,7 +307,7 @@ public class RSSPortletDataHandler extends BasePortletDataHandler {
 		}
 
 		for (Element referenceDataElement : referenceDataElements) {
-			StagedModelDataHandlerUtil.importStagedModel(
+			StagedModelDataHandlerUtil.importReferenceStagedModel(
 				portletDataContext, referenceDataElement);
 		}
 	}

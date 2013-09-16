@@ -3,7 +3,7 @@
 
 <service-builder package-path="com.liferay.portlet.journal">
 	<namespace>Journal</namespace>
-	<entity name="JournalArticle" uuid="true" local-service="true" remote-service="true">
+	<entity name="JournalArticle" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -126,6 +126,10 @@
 		<finder name="C_ST" return-type="Collection">
 			<finder-column name="companyId" />
 			<finder-column name="status" />
+		</finder>
+		<finder name="C_NotST" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
 		</finder>
 		<finder name="LtD_S" return-type="Collection">
 			<finder-column name="displayDate" comparator="&lt;" />
@@ -402,7 +406,7 @@
 		<reference package-path="com.liferay.portlet.dynamicdatamapping" entity="DDMStructure" />
 		<reference package-path="com.liferay.portlet.expando" entity="ExpandoValue" />
 	</entity>
-	<entity name="JournalFolder" uuid="true" local-service="true" remote-service="true">
+	<entity name="JournalFolder" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -453,6 +457,10 @@
 		<finder name="G_N" return-type="JournalFolder">
 			<finder-column name="groupId" />
 			<finder-column name="name" />
+		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
 		</finder>
 		<finder name="G_P_N" return-type="JournalFolder" unique="true">
 			<finder-column name="groupId" />

@@ -92,7 +92,7 @@
 			<finder-column name="version" />
 		</finder>
 	</entity>
-	<entity name="DLFileEntry" human-name="document library file entry" uuid="true" local-service="true" remote-service="true">
+	<entity name="DLFileEntry" human-name="document library file entry" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -341,7 +341,7 @@
 
 		<reference package-path="com.liferay.portal" entity="Layout" />
 	</entity>
-	<entity name="DLFileShortcut" human-name="document library file shortcut" uuid="true" local-service="true" remote-service="true">
+	<entity name="DLFileShortcut" human-name="document library file shortcut" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -382,6 +382,10 @@
 		<finder name="G_F" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="folderId" />
+		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
 		</finder>
 		<finder name="G_F_A" return-type="Collection">
 			<finder-column name="groupId" />
@@ -458,6 +462,10 @@
 		<finder name="MimeType" return-type="Collection">
 			<finder-column name="mimeType" />
 		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
+		</finder>
 		<finder name="F_V" return-type="DLFileVersion" unique="true">
 			<finder-column name="fileEntryId" />
 			<finder-column name="version" />
@@ -478,7 +486,7 @@
 			<finder-column name="version" />
 		</finder>
 	</entity>
-	<entity name="DLFolder" human-name="document library folder" uuid="true" local-service="true" remote-service="true">
+	<entity name="DLFolder" human-name="document library folder" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -538,6 +546,10 @@
 		<finder name="G_P" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="parentFolderId" />
+		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
 		</finder>
 		<finder name="P_N" return-type="Collection">
 			<finder-column name="parentFolderId" />

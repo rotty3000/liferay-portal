@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
@@ -12,4 +11,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
+
+package com.liferay.portal.kernel.xml;
+
+import org.xml.sax.InputSource;
+
+/**
+ * @author Marcellus Tavares
+ */
+public interface XMLSchema {
+
+	public String getPublicId();
+
+	public String getSchemaLanguage();
+
+	public InputSource getSchemaSource();
+
+	public String getSystemId();
+
+}

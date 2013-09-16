@@ -94,8 +94,7 @@ public class BatchablePipe<K, V> {
 	private boolean _doIncrease(IncreasableEntry<K, V> increasableEntry) {
 		boolean[] marked = {false};
 
-		Retry:
-
+		retry:
 		while (true) {
 			Entry<K, V> predecessorEntry = _headEntry;
 			Entry<K, V> currentEntry =
@@ -109,7 +108,7 @@ public class BatchablePipe<K, V> {
 					if (!predecessorEntry._nextEntry.compareAndSet(
 							currentEntry, successorEntry, false, false)) {
 
-						continue Retry;
+						continue retry;
 					}
 
 					currentEntry = predecessorEntry._nextEntry.getReference();

@@ -317,6 +317,14 @@ public class UserNotificationDeliveryLocalServiceUtil {
 			notificationType, deliveryType, deliver);
 	}
 
+	public static com.liferay.portal.model.UserNotificationDelivery updateUserNotificationDelivery(
+		long userNotificationDeliveryId, boolean deliver)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateUserNotificationDelivery(userNotificationDeliveryId,
+			deliver);
+	}
+
 	public static UserNotificationDeliveryLocalService getService() {
 		if (_service == null) {
 			_service = (UserNotificationDeliveryLocalService)PortalBeanLocatorUtil.locate(UserNotificationDeliveryLocalService.class.getName());

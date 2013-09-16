@@ -115,13 +115,11 @@ public interface PortletFileRepository {
 		throws PortalException, SystemException;
 
 	public String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString)
-		throws PortalException, SystemException;
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString);
 
 	public String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
-			boolean absoluteURL)
-		throws PortalException, SystemException;
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
+		boolean absoluteURL);
 
 	public Folder getPortletFolder(long folderId)
 		throws PortalException, SystemException;

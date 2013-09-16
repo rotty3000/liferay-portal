@@ -4580,6 +4580,8 @@ public class ServiceBuilder {
 			entityElement.attributeValue("cache-enabled"), true);
 		boolean jsonEnabled = GetterUtil.getBoolean(
 			entityElement.attributeValue("json-enabled"), remoteService);
+		boolean trashEnabled = GetterUtil.getBoolean(
+			entityElement.attributeValue("trash-enabled"));
 		boolean deprecated = GetterUtil.getBoolean(
 			entityElement.attributeValue("deprecated"));
 
@@ -4959,8 +4961,9 @@ public class ServiceBuilder {
 				humanName, table, alias, uuid, uuidAccessor, localService,
 				remoteService, persistenceClass, finderClass, dataSource,
 				sessionFactory, txManager, cacheEnabled, jsonEnabled,
-				deprecated, pkList, regularColList, blobList, collectionList,
-				columnList, order, finderList, referenceList, txRequiredList));
+				trashEnabled, deprecated, pkList, regularColList, blobList,
+				collectionList, columnList, order, finderList, referenceList,
+				txRequiredList));
 	}
 
 	private String _processTemplate(String name) throws Exception {

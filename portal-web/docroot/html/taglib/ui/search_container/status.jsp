@@ -20,14 +20,11 @@
 int status = GetterUtil.getInteger(request.getAttribute("liferay-ui:search-container-column-status:status"));
 long statusByUserId = GetterUtil.getLong(request.getAttribute("liferay-ui:search-container-column-status:statusByUserId"));
 Date statusDate = GetterUtil.getDate(request.getAttribute("liferay-ui:search-container-column-status:statusDate"), DateFormatFactoryUtil.getDate(locale), null);
+
+User statusByUser = UserLocalServiceUtil.fetchUser(statusByUserId);
 %>
 
-<c:if test="<%= statusByUserId > 0 %>">
-
-	<%
-	User statusByUser = UserLocalServiceUtil.getUser(statusByUserId);
-	%>
-
+<c:if test="<%= statusByUser != null %>">
 	<liferay-util:buffer var="buffer">
 		<div class="user-status-tooltip">
 			<span class="user-status-avatar">
@@ -49,6 +46,6 @@ Date statusDate = GetterUtil.getDate(request.getAttribute("liferay-ui:search-con
 
 <aui:workflow-status showIcon="<%= false %>" showLabel="<%= false %>" status="<%= status %>" />
 
-<c:if test="<%= statusByUserId > 0 %>">
+<c:if test="<%= statusByUser != null %>">
 	</span>
 </c:if>

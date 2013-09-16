@@ -57,6 +57,7 @@ public class TrashEntryWrapper implements TrashEntry, ModelWrapper<TrashEntry> {
 		attributes.put("createDate", getCreateDate());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
+		attributes.put("systemEventSetKey", getSystemEventSetKey());
 		attributes.put("typeSettings", getTypeSettings());
 		attributes.put("status", getStatus());
 
@@ -111,6 +112,12 @@ public class TrashEntryWrapper implements TrashEntry, ModelWrapper<TrashEntry> {
 
 		if (classPK != null) {
 			setClassPK(classPK);
+		}
+
+		Long systemEventSetKey = (Long)attributes.get("systemEventSetKey");
+
+		if (systemEventSetKey != null) {
+			setSystemEventSetKey(systemEventSetKey);
 		}
 
 		String typeSettings = (String)attributes.get("typeSettings");
@@ -344,6 +351,26 @@ public class TrashEntryWrapper implements TrashEntry, ModelWrapper<TrashEntry> {
 	}
 
 	/**
+	* Returns the system event set key of this trash entry.
+	*
+	* @return the system event set key of this trash entry
+	*/
+	@Override
+	public long getSystemEventSetKey() {
+		return _trashEntry.getSystemEventSetKey();
+	}
+
+	/**
+	* Sets the system event set key of this trash entry.
+	*
+	* @param systemEventSetKey the system event set key of this trash entry
+	*/
+	@Override
+	public void setSystemEventSetKey(long systemEventSetKey) {
+		_trashEntry.setSystemEventSetKey(systemEventSetKey);
+	}
+
+	/**
 	* Returns the type settings of this trash entry.
 	*
 	* @return the type settings of this trash entry
@@ -506,6 +533,17 @@ public class TrashEntryWrapper implements TrashEntry, ModelWrapper<TrashEntry> {
 	public java.lang.String getTypeSettingsProperty(java.lang.String key,
 		java.lang.String defaultValue) {
 		return _trashEntry.getTypeSettingsProperty(key, defaultValue);
+	}
+
+	@Override
+	public boolean isTrashEntry(java.lang.Class<?> clazz, long classPK) {
+		return _trashEntry.isTrashEntry(clazz, classPK);
+	}
+
+	@Override
+	public boolean isTrashEntry(
+		com.liferay.portal.model.TrashedModel trashedModel) {
+		return _trashEntry.isTrashEntry(trashedModel);
 	}
 
 	@Override

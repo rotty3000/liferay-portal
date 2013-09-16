@@ -195,17 +195,15 @@ public class PortletFileRepositoryUtil {
 	}
 
 	public static String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString)
-		throws PortalException, SystemException {
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString) {
 
 		return getPortletFileRepository().getPortletFileEntryURL(
 			themeDisplay, fileEntry, queryString);
 	}
 
 	public static String getPortletFileEntryURL(
-			ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
-			boolean absoluteURL)
-		throws PortalException, SystemException {
+		ThemeDisplay themeDisplay, FileEntry fileEntry, String queryString,
+		boolean absoluteURL) {
 
 		return getPortletFileRepository().getPortletFileEntryURL(
 			themeDisplay, fileEntry, queryString, absoluteURL);

@@ -3,7 +3,7 @@
 
 <service-builder package-path="com.liferay.portlet.bookmarks">
 	<namespace>Bookmarks</namespace>
-	<entity name="BookmarksEntry" uuid="true" local-service="true" remote-service="true">
+	<entity name="BookmarksEntry" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -59,6 +59,10 @@
 			<finder-column name="groupId" />
 			<finder-column name="status" />
 		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
+		</finder>
 		<finder name="G_U_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="userId" />
@@ -93,7 +97,7 @@
 		<reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
 		<reference package-path="com.liferay.portlet.trash" entity="TrashEntry" />
 	</entity>
-	<entity name="BookmarksFolder" uuid="true" local-service="true" remote-service="true">
+	<entity name="BookmarksFolder" uuid="true" local-service="true" remote-service="true" trash-enabled="true">
 
 		<!-- PK fields -->
 
@@ -144,6 +148,10 @@
 		<finder name="G_P" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="parentFolderId" />
+		</finder>
+		<finder name="C_NotS" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="status" comparator="!=" />
 		</finder>
 		<finder name="G_P_S" return-type="Collection">
 			<finder-column name="groupId" />

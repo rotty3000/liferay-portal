@@ -503,7 +503,7 @@
 			<arg value="sass.dir.0=/html/css" />
 			<arg value="sass.dir.1=/html/portlet" />
 			<arg value="sass.dir.2=/html/themes" />
-			<arg value="saas.docroot.dir=${basedir}/docroot" />
+			<arg value="sass.docroot.dir=${basedir}/docroot" />
 			<arg value="sass.portal.common.dir=${basedir}/docroot/html/css/common" />
 		</java>
 	</target>
