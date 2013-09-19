@@ -2,9 +2,11 @@
 
 if "" == "%JAVA_HOME%" goto errorJavaHome
 
-set "JAVA_OPTS=-Dfile.encoding=UTF8 -Djava.net.preferIPv4Stack=true -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=256m"
+pushd "%~p0" & pushd .. & set "JETTY_HOME=%cd%" & popd & popd
 
-"%JAVA_HOME%/bin/java" %JAVA_OPTS% -jar ../start.jar
+set "JAVA_OPTS=-Dfile.encoding=UTF8 ${java.security.manager.option} -Djetty.home=%JETTY_HOME% -Djava.security.policy=%JETTY_HOME%\lib\policy\jetty.policy -Djava.net.preferIPv4Stack=true -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=256m"
+
+"%JAVA_HOME%/bin/java" %JAVA_OPTS% -jar %JETTY_HOME%/start.jar
 
 goto end
 
