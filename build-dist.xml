@@ -3,6 +3,16 @@
 <project name="portal-dist" basedir="." default="dist" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="build.xml" />
 
+	<if>
+		<isset property="java.security" />
+		<then>
+			<property name="java.security.manager.option" value="-Djava.security.manager" />
+		</then>
+		<else>
+			<property name="java.security.manager.option" value="" />
+		</else>
+	</if>
+
 	<target name="build-dist-geronimo">
 		<antcall target="unzip-geronimo" />
 
@@ -931,7 +941,7 @@ release was successful.</echo>
 			<replacetoken><![CDATA[<jvm-options>-Xmx512m</jvm-options>]]></replacetoken>
 			<replacevalue>
 				<![CDATA[
-					@java.security.manager.option@
+					<jvm-options>@java.security.manager.option@</jvm-options>
 					<jvm-options>-Dfile.encoding=UTF8</jvm-options>
 					<jvm-options>-Djava.net.preferIPv4Stack=true</jvm-options>
 					<jvm-options>-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false</jvm-options>
@@ -939,23 +949,8 @@ release was successful.</echo>
 					<jvm-options>-Xmx1024m</jvm-options>
 				]]>
 			</replacevalue>
+			<replacefilter token="@java.security.manager.option@" value="${java.security.manager.option}"/>
 		</replace>
-
-		<if>
-			<isset property="java.security" />
-			<then>
-				<replace file="${app.server.glassfish.instance.dir}/config/domain.xml">
-					<replacetoken><![CDATA[@java.security.manager.option@]]></replacetoken>
-					<replacevalue><![CDATA[<jvm-options>-Djava.security.manager</jvm-options>]]></replacevalue>
-				</replace>
-			</then>
-			<else>
-				<replace file="${app.server.glassfish.instance.dir}/config/domain.xml">
-					<replacetoken><![CDATA[@java.security.manager.option@]]></replacetoken>
-					<replacevalue><![CDATA[]]></replacevalue>
-				</replace>
-			</else>
-		</if>
 
 		<replace file="${app.server.glassfish.instance.dir}/config/domain.xml">
 			<replacetoken><![CDATA[<jvm-options>-XX:MaxPermSize=192m</jvm-options>]]></replacetoken>
@@ -1148,16 +1143,6 @@ release was successful.</echo>
 					</replacevalue>
 				</replace>
 
-				<if>
-					<isset property="java.security" />
-					<then>
-						<property name="java.security.manager.option" value="-Djava.security.manager" />
-					</then>
-					<else>
-						<property name="java.security.manager.option" value="" />
-					</else>
-				</if>
-
 				<replace file="${app.server.jboss.bin.dir}/standalone.conf">
 					<replacetoken><![CDATA[JAVA_OPTS="-Xms64m -Xmx512m -XX:MaxPermSize=256m ]]></replacetoken>
 					<replacevalue><![CDATA[JAVA_OPTS="]]></replacevalue>
@@ -1187,8 +1172,6 @@ release was successful.</echo>
 							:JAVA_OPTS_SET
 						]]>
 					</replacevalue>
-				</replace>
-				<replace file="${app.server.jboss.bin.dir}/standalone.conf.bat">
 					<replacefilter token="@java.security.manager.option@" value="${java.security.manager.option}" />
 				</replace>
 
@@ -1373,16 +1356,6 @@ release was successful.</echo>
 		<mkdir dir="${app.server.parent.dir}/jetty-${app.server.jetty.version}/contexts" />
 		<mkdir dir="${app.server.parent.dir}/jetty-${app.server.jetty.version}/temp" />
 		<mkdir dir="${app.server.parent.dir}/jetty-${app.server.jetty.version}/webapps" />
-
-		<if>
-			<isset property="java.security" />
-			<then>
-				<property name="java.security.manager.option" value="-Djava.security.manager" />
-			</then>
-			<else>
-				<property name="java.security.manager.option" value="" />
-			</else>
-		</if>
 
 		<copy
 			file="tools/servers/jetty/bin/run.bat"
@@ -1741,16 +1714,6 @@ release was successful.</echo>
 					<fileset dir="${jdk.windows.home}/jre" />
 				</copy>
 			</then>
-		</if>
-
-		<if>
-			<isset property="java.security" />
-			<then>
-				<property name="java.security.manager.option" value="-Djava.security.manager" />
-			</then>
-			<else>
-				<property name="java.security.manager.option" value="" />
-			</else>
 		</if>
 
 		<copy
