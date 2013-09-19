@@ -1425,7 +1425,7 @@ release was successful.</echo>
 			tofile="${app.server.jetty.bin.dir}/start.ini"
 		/>
 
-		<echo file="${app.server.jetty.dir}/lib/policy/jetty.policy" append="true">
+		<echo file="${app.server.jetty.dir}/lib/policy/server.policy">
 			grant {
 				permission java.security.AllPermission;
 			};
