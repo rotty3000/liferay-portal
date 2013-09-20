@@ -33,10 +33,12 @@ import com.liferay.portal.kernel.spring.aop.Skip;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
@@ -66,6 +68,7 @@ import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +76,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides the local service for accessing, adding, checking, deleting, and
@@ -779,6 +783,57 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 	}
 
 	/**
+	 * Returns a team to team role mapping for the group
+	 *
+	 * @param  groupId the primary key of the group
+	 * @return team to team role mapping for the group
+	 * @throws PortalException if a role could not be found for one of the teams
+	 *         within the given group
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Map<Team, Role> getTeamRoleMap(long groupId)
+		throws PortalException, SystemException {
+
+		return getTeamRoleMap(groupId, null);
+	}
+
+	/**
+	 * Returns the team roles in the group
+	 *
+	 * @param  groupId the primary key of the group
+	 * @return the team roles in the given groupId
+	 * @throws PortalException if a role could not be found for one of the teams
+	 *         within the given group
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Collection<Role> getTeamRoles(long groupId)
+		throws PortalException, SystemException {
+
+		return getTeamRoles(groupId, null);
+	}
+
+	/**
+	 * Returns the team roles in the group
+	 *
+	 * @param  groupId the primary key of the group
+	 * @param  skipRoleIds array of roleIds to be skipped (optional)
+	 * @return the team roles in the given groupId
+	 * @throws PortalException if a role could not be found for one of the teams
+	 *         within the given group
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Collection<Role> getTeamRoles(long groupId, long[] skipRoleIds)
+		throws PortalException, SystemException {
+
+		Map<Team, Role> roles = getTeamRoleMap(groupId, skipRoleIds);
+
+		return roles.values();
+	}
+
+	/**
 	 * Returns all the roles of the type.
 	 *
 	 * @param  type the role's type (optionally <code>0</code>)
@@ -1428,6 +1483,45 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 			PortletKeys.MY_ACCOUNT, PortletKeys.MY_PAGES,
 			PortletKeys.MY_WORKFLOW_INSTANCES, PortletKeys.MY_WORKFLOW_TASKS
 		};
+	}
+
+	protected Map<Team, Role> getTeamRoleMap(long groupId, long[] skipRoleIds)
+		throws PortalException, SystemException {
+
+		Group group = groupLocalService.getGroup(groupId);
+
+		List<Team> teams = null;
+
+		if (group.isLayout()) {
+			teams = teamLocalService.getGroupTeams(group.getParentGroupId());
+		}
+		else {
+			teams = teamLocalService.getGroupTeams(groupId);
+		}
+
+		if ((teams == null) || teams.isEmpty()) {
+			return Collections.emptyMap();
+		}
+
+		Set<Long> roleIds = null;
+
+		if (ArrayUtil.isNotEmpty(skipRoleIds)) {
+			roleIds = SetUtil.fromArray(skipRoleIds);
+		}
+
+		Map<Team, Role> teamRoleMap = new LinkedHashMap<Team, Role>();
+
+		for (Team team : teams) {
+			Role role = getTeamRole(team.getCompanyId(), team.getTeamId());
+
+			if ((roleIds != null) && roleIds.contains(role.getRoleId())) {
+				continue;
+			}
+
+			teamRoleMap.put(team, role);
+		}
+
+		return teamRoleMap;
 	}
 
 	protected void initPersonalControlPanelPortletsPermissions(Role role)
