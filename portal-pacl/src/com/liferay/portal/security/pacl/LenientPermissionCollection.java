@@ -56,11 +56,13 @@ public class LenientPermissionCollection extends PermissionCollection {
 		}
 
 		if (_codeSource != null) {
-//			System.out.println("PASSING: " + permission + "\t\t for " + _codeSource);
+//			System.out.println(
+//				"PASSING: " + permission + "\t\t for " + _codeSource);
 		}
 
 		if (_protectionDomain != null) {
-//			System.out.println("PASSING: " + permission + "\t\t for " + _protectionDomain);
+//			System.out.println(
+//				"PASSING: " + permission + "\t\t for " + _protectionDomain);
 		}
 
 		return true;
