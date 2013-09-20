@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.net.URL;
 
 import java.security.AccessController;
-import java.security.AllPermission;
 import java.security.CodeSource;
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -235,8 +234,6 @@ public class PortalPolicy extends Policy {
 			return null;
 		}
 	}
-
-	private static AllPermission _allPermission = new AllPermission();
 
 	private static ThreadLocal<Boolean> _started = new ThreadLocal<Boolean>() {
 
