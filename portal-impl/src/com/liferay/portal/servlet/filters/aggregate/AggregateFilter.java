@@ -14,8 +14,6 @@
 
 package com.liferay.portal.servlet.filters.aggregate;
 
-import com.liferay.portal.kernel.cache.key.CacheKeyGenerator;
-import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -308,22 +306,6 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 		return content;
 	}
 
-	protected String getCacheFileName(HttpServletRequest request) {
-		CacheKeyGenerator cacheKeyGenerator =
-			CacheKeyGeneratorUtil.getCacheKeyGenerator(
-				AggregateFilter.class.getName());
-
-		cacheKeyGenerator.append(request.getRequestURI());
-
-		String queryString = request.getQueryString();
-
-		if (queryString != null) {
-			cacheKeyGenerator.append(sterilizeQueryString(queryString));
-		}
-
-		return String.valueOf(cacheKeyGenerator.finish());
-	}
-
 	protected Object getContent(
 			HttpServletRequest request, HttpServletResponse response,
 			FilterChain filterChain)
@@ -364,17 +346,14 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 
 		File cacheContentTypeFile = new File(
 			_tempDir, cacheCommonFileName + "_E_CONTENT_TYPE");
+
+		String cacheCDNHost = getCacheCDNHost(request, urlConnection);
+
 		File cacheDataFile = new File(
-			_tempDir, cacheCommonFileName + "_E_DATA");
+			_tempDir, cacheCommonFileName + "_E_DATA" + cacheCDNHost);
 
-		if (cacheDataFile.exists() &&
-			(cacheDataFile.lastModified() >= urlConnection.getLastModified())) {
-
-			if (cacheContentTypeFile.exists()) {
-				String contentType = FileUtil.read(cacheContentTypeFile);
-
-				response.setContentType(contentType);
-			}
+		if (cacheDataFileExists(
+				response, cacheDataFile, urlConnection, cacheContentTypeFile)) {
 
 			return cacheDataFile;
 		}
@@ -520,12 +499,6 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 				ServletResponseUtil.write(response, (String)minifiedContent);
 			}
 		}
-	}
-
-	protected String sterilizeQueryString(String queryString) {
-		return StringUtil.replace(
-			queryString, new String[] {StringPool.SLASH, StringPool.BACK_SLASH},
-			new String[] {StringPool.UNDERLINE, StringPool.UNDERLINE});
 	}
 
 	private static final String _CSS_COMMENT_BEGIN = "/*";
