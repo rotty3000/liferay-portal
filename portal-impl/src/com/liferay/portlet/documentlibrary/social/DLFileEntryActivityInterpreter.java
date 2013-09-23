@@ -14,12 +14,16 @@
 
 package com.liferay.portlet.documentlibrary.social;
 
+import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
@@ -30,6 +34,10 @@ import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityConstants;
 import com.liferay.portlet.trash.util.TrashUtil;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -81,9 +89,10 @@ public class DLFileEntryActivityInterpreter
 	}
 
 	protected String getFolderLink(
-		FileEntry fileEntry, ServiceContext serviceContext) {
+			FileEntry fileEntry, ServiceContext serviceContext)
+		throws WindowStateException {
 
-		StringBundler sb = new StringBundler(6);
+		StringBundler sb = new StringBundler(8);
 
 		sb.append(serviceContext.getPortalURL());
 		sb.append(serviceContext.getPathMain());
@@ -91,6 +100,18 @@ public class DLFileEntryActivityInterpreter
 		sb.append(fileEntry.getRepositoryId());
 		sb.append("&folderId=");
 		sb.append(fileEntry.getFolderId());
+		sb.append("&noSuchEntryRedirect=");
+
+		LiferayPortletURL noSuchEntryRedirectURL = PortletURLFactoryUtil.create(
+			serviceContext.getRequest(), PortletKeys.DOCUMENT_LIBRARY_DISPLAY,
+			serviceContext.getPlid(), PortletRequest.RENDER_PHASE);
+
+		noSuchEntryRedirectURL.setParameter(
+			"folderId", String.valueOf(fileEntry.getFolderId()));
+
+		noSuchEntryRedirectURL.setWindowState(WindowState.MAXIMIZED);
+
+		sb.append(HttpUtil.encodeURL(noSuchEntryRedirectURL.toString()));
 
 		return sb.toString();
 	}
