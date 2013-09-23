@@ -1525,7 +1525,7 @@ release was successful.</echo>
 
 		<replace file="${app.server.jonas.dir}/conf/osgi/defaults.properties">
 			<replacetoken><![CDATA[javase-packages ${javase-${javase.version}}]]></replacetoken>
-			<replacevalue><![CDATA[javase-packages ${javase-${javase.version}}, com.sun.jmx.mbeanserver, com.sun.crypto.provider, org.apache.felix.framework]]></replacevalue>
+			<replacevalue><![CDATA[javase-packages ${javase-${javase.version}}, com.sun.jmx.interceptor, com.sun.jmx.mbeanserver, com.sun.crypto.provider, org.apache.felix.framework]]></replacevalue>
 		</replace>
 
 		<replace file="${app.server.jonas.bin.dir}/setenv">
