@@ -3693,7 +3693,8 @@ public class PortalImpl implements Portal {
 		Long plidObj = _plidToPortletIdMap.get(key);
 
 		if (plidObj == null) {
-			plid = doGetPlidFromPortletId(groupId, privateLayout, portletId);
+			plid = doGetPlidFromPortletId(
+				groupId, privateLayout, portletId, true);
 
 			if (plid != LayoutConstants.DEFAULT_PLID) {
 				_plidToPortletIdMap.put(key, plid);
@@ -3723,7 +3724,7 @@ public class PortalImpl implements Portal {
 				_plidToPortletIdMap.remove(key);
 
 				plid = doGetPlidFromPortletId(
-					groupId, privateLayout, portletId);
+					groupId, privateLayout, portletId, true);
 
 				if (plid != LayoutConstants.DEFAULT_PLID) {
 					_plidToPortletIdMap.put(key, plid);
@@ -6975,6 +6976,14 @@ public class PortalImpl implements Portal {
 			long groupId, boolean privateLayout, String portletId)
 		throws PortalException, SystemException {
 
+		return doGetPlidFromPortletId(groupId, privateLayout, portletId, false);
+	}
+
+	protected long doGetPlidFromPortletId(
+			long groupId, boolean privateLayout, String portletId,
+			boolean excludeEmbeddedPortlets)
+		throws PortalException, SystemException {
+
 		long scopeGroupId = groupId;
 
 		try {
@@ -6999,7 +7008,9 @@ public class PortalImpl implements Portal {
 			LayoutTypePortlet layoutTypePortlet =
 				(LayoutTypePortlet)layout.getLayoutType();
 
-			if (layoutTypePortlet.hasPortletId(portletId)) {
+			if (layoutTypePortlet.hasPortletId(
+					portletId, excludeEmbeddedPortlets)) {
+
 				if (getScopeGroupId(layout, portletId) == scopeGroupId) {
 					plid = layout.getPlid();
 
