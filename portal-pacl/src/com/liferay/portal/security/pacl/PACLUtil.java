@@ -97,10 +97,6 @@ public class PACLUtil {
 		ProtectionDomain protectionDomain = AccessController.doPrivileged(
 			new ProtectionDomainPrivilegedAction(callerClass));
 
-		if (protectionDomain.getClassLoader() == null) {
-			return true;
-		}
-
 		PortalSecurityManager portalSecurityManager =
 			SecurityManagerUtil.getPortalSecurityManager();
 
