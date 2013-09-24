@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
+import com.liferay.portal.kernel.servlet.SanitizedServletResponse;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.staging.LayoutStagingUtil;
@@ -102,6 +103,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		}
 		else if (cmd.equals(Constants.UPDATE)) {
 			try {
+				SanitizedServletResponse.disableXSSAuditor(actionResponse);
+
 				validateEmailAssetEntryAdded(actionRequest);
 				validateEmailFrom(actionRequest);
 
