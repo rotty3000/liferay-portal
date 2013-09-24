@@ -45,6 +45,25 @@ import javax.servlet.http.HttpServletResponseWrapper;
  */
 public class SanitizedServletResponse extends HttpServletResponseWrapper {
 
+	public static void disableXSSAuditor(HttpServletResponse response) {
+		response.setHeader(HttpHeaders.X_XSS_PROTECTION, "0");
+	}
+
+	public static void disableXSSAuditor(PortletResponse response) {
+		disableXSSAuditor(PortalUtil.getHttpServletResponse(response));
+	}
+
+	public static void disableXSSAuditorOnNextRequest(
+		HttpServletRequest request) {
+
+		request.getSession().setAttribute(_DISABLE_XSS_AUDITOR, Boolean.TRUE);
+	}
+
+	public static void disableXSSAuditorOnNextRequest(PortletRequest request) {
+		disableXSSAuditorOnNextRequest(
+			PortalUtil.getHttpServletRequest(request));
+	}
+
 	public static HttpServletResponse getSanitizedServletResponse(
 		HttpServletRequest request, HttpServletResponse response) {
 
@@ -136,16 +155,31 @@ public class SanitizedServletResponse extends HttpServletResponseWrapper {
 	protected static void setXXSSProtection(
 		HttpServletRequest request, HttpServletResponse response) {
 
-		if (!_X_XSS_PROTECTION) {
+		HttpSession session = request.getSession(false);
+
+		if ((session != null) &&
+			(session.getAttribute(_DISABLE_XSS_AUDITOR) != null)) {
+
+			session.removeAttribute(_DISABLE_XSS_AUDITOR);
+
+			response.setHeader(HttpHeaders.X_XSS_PROTECTION, "0");
+
 			return;
 		}
 
-		response.setHeader(HttpHeaders.X_XSS_PROTECTION, "1; mode=block");
+		if (Validator.isNull(_X_XSS_PROTECTION)) {
+			return;
+		}
+
+		response.setHeader(HttpHeaders.X_XSS_PROTECTION, _X_XSS_PROTECTION);
 	}
 
 	private SanitizedServletResponse(HttpServletResponse response) {
 		super(response);
 	}
+
+	private static final String _DISABLE_XSS_AUDITOR =
+		SanitizedServletResponse.class.getName() + ".disableXSSAuditor";
 
 	private static final boolean _X_CONTENT_TYPE_OPTIONS =
 		GetterUtil.getBoolean(
@@ -158,8 +192,8 @@ public class SanitizedServletResponse extends HttpServletResponseWrapper {
 
 	private static final boolean _X_FRAME_OPTIONS;
 
-	private static final boolean _X_XSS_PROTECTION = GetterUtil.getBoolean(
-		PropsUtil.get(PropsKeys.HTTP_HEADER_SECURE_X_XSS_PROTECTION), true);
+	private static final String _X_XSS_PROTECTION = PropsUtil.get(
+		PropsKeys.HTTP_HEADER_SECURE_X_XSS_PROTECTION);
 
 	private static final KeyValuePair[] _xFrameOptionKVPs;
 

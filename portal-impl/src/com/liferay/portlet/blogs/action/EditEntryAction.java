@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
+import com.liferay.portal.kernel.servlet.SanitizedServletResponse;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -97,6 +98,8 @@ public class EditEntryAction extends PortletAction {
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		try {
+			SanitizedServletResponse.disableXSSAuditor(actionResponse);
+
 			BlogsEntry entry = null;
 			String oldUrlTitle = StringPool.BLANK;
 
@@ -181,6 +184,8 @@ public class EditEntryAction extends PortletAction {
 				return;
 			}
 
+			boolean redirectSent = false;
+
 			if ((entry != null) &&
 				(workflowAction == WorkflowConstants.ACTION_SAVE_DRAFT)) {
 
@@ -188,12 +193,14 @@ public class EditEntryAction extends PortletAction {
 					portletConfig, actionRequest, entry, redirect);
 
 				sendRedirect(actionRequest, actionResponse, redirect);
+				redirectSent = true;
 			}
 			else {
 				WindowState windowState = actionRequest.getWindowState();
 
 				if (!windowState.equals(LiferayWindowState.POP_UP)) {
 					sendRedirect(actionRequest, actionResponse, redirect);
+					redirectSent = true;
 				}
 				else {
 					redirect = PortalUtil.escapeRedirect(redirect);
@@ -212,8 +219,14 @@ public class EditEntryAction extends PortletAction {
 						}
 
 						actionResponse.sendRedirect(redirect);
+						redirectSent = true;
 					}
 				}
+			}
+
+			if (redirectSent) {
+				SanitizedServletResponse.disableXSSAuditorOnNextRequest(
+					actionRequest);
 			}
 		}
 		catch (Exception e) {
@@ -223,6 +236,8 @@ public class EditEntryAction extends PortletAction {
 				SessionErrors.add(actionRequest, e.getClass());
 
 				setForward(actionRequest, "portlet.blogs.error");
+
+				SanitizedServletResponse.disableXSSAuditor(actionResponse);
 			}
 			else if (e instanceof EntryContentException ||
 					 e instanceof EntryDisplayDateException ||
@@ -232,17 +247,22 @@ public class EditEntryAction extends PortletAction {
 					 e instanceof SanitizerException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
+
+				SanitizedServletResponse.disableXSSAuditor(actionResponse);
 			}
 			else if (e instanceof AssetCategoryException ||
 					 e instanceof AssetTagException) {
 
 				SessionErrors.add(actionRequest, e.getClass(), e);
+
+				SanitizedServletResponse.disableXSSAuditor(actionResponse);
 			}
 			else {
 				Throwable cause = e.getCause();
 
 				if (cause instanceof SanitizerException) {
 					SessionErrors.add(actionRequest, SanitizerException.class);
+					SanitizedServletResponse.disableXSSAuditor(actionResponse);
 				}
 				else {
 					throw e;
