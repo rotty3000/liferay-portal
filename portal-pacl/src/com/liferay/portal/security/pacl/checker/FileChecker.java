@@ -432,6 +432,14 @@ public class FileChecker extends BaseChecker {
 						}
 					}
 
+					if (ServerDetector.isResin()) {
+						String resinHome = System.getProperty("resin.home");
+
+						if (fileName.startsWith(resinHome)) {
+							continue;
+						}
+					}
+
 					addCanonicalPath(paths, fileName);
 				}
 			}
