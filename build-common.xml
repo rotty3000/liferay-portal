@@ -931,7 +931,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 					<formatter type="brief" usefile="false" />
 					<formatter type="xml" />
 					<batchtest todir="test-results/${test.type}">
-						<fileset dir="test-classes/${test.dir}" includes="**/${class}.class">
+						<fileset dir="test-classes/${test.dir}" includes="**/${test.class}.class">
 							<exclude name="${test.excludes}" />
 							<filename regex=".*/pacl/test/[\w]+Test.class" negate="false" />
 						</fileset>
