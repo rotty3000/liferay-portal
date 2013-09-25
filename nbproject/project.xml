@@ -72,6 +72,12 @@
 					<encoding>UTF-8</encoding>
 				</source-folder>
 				<source-folder>
+					<label>support-resin\src</label>
+					<type>java</type>
+					<location>support-resin/src</location>
+					<encoding>UTF-8</encoding>
+				</source-folder>
+				<source-folder>
 					<label>support-tomcat\src</label>
 					<type>java</type>
 					<location>support-tomcat/src</location>
@@ -176,6 +182,10 @@
 						<location>portal-web/test/functional</location>
 					</source-folder>
 					<source-folder style="packages">
+						<label>support-resin\src</label>
+						<location>support-resin/src</location>
+					</source-folder>
+					<source-folder style="packages">
 						<label>support-tomcat\src</label>
 						<location>support-tomcat/src</location>
 					</source-folder>
@@ -230,6 +240,7 @@
 				<!--<package-root>portal-service/test/integration</package-root>-->
 				<package-root>portal-service/test/unit</package-root>
 				<package-root>portal-web/test/functional</package-root>
+				<package-root>support-resin/src</package-root>
 				<package-root>support-tomcat/src</package-root>
 				<package-root>util-bridges/src</package-root>
 				<package-root>util-java/src</package-root>

@@ -1587,7 +1587,7 @@ release was successful.</echo>
 
 		<replace file="${app.server.resin.dir}/conf/resin.properties">
 			<replacetoken><![CDATA[# jvm_args  : -Xmx2048m -XX:MaxPermSize=256m]]></replacetoken>
-			<replacevalue><![CDATA[jvm_args  : -Dfile.encoding=UTF-8 @java.security.manager.option@ -Djava.security.policy="@app.server.resin.dir@/conf/server.policy" -Djava.net.preferIPv4Stack=true -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=256m]]></replacevalue>
+			<replacevalue><![CDATA[jvm_args  : -Dfile.encoding=UTF-8 -Dcaucho.environment.class.loader=com.liferay.support.resin.EnvironmentClassLoader @java.security.manager.option@ -Djava.security.policy="@app.server.resin.dir@/conf/server.policy" -Djava.net.preferIPv4Stack=true -Duser.timezone=GMT -Xmx1024m -XX:MaxPermSize=256m]]></replacevalue>
 			<replacefilter token="@app.server.resin.dir@" value="${app.server.resin.dir}" />
 			<replacefilter token="@java.security.manager.option@" value="${java.security.manager.option}" />
 		</replace>

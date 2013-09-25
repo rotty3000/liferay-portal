@@ -60,6 +60,13 @@
 		</if>
 
 		<if>
+			<equals arg1="${app.server.type}" arg2="resin" />
+			<then>
+				<ant dir="support-resin" target="clean" inheritAll="false" />
+			</then>
+		</if>
+
+		<if>
 			<equals arg1="${app.server.type}" arg2="tomcat" />
 			<then>
 				<delete failonerror="false">
@@ -382,6 +389,8 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 						includes="saxpath.jar"
 					/>
 				</copy>
+
+				<ant dir="support-resin" target="deploy" inheritAll="false" />
 			</then>
 		</if>
 
@@ -604,6 +613,7 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 
 		<ant dir="portal-web" target="war" inheritAll="false" />
 
+		<ant dir="support-resin" target="jar" inheritAll="false" />
 		<ant dir="support-tomcat" target="jar" inheritAll="false" />
 	</target>
 
