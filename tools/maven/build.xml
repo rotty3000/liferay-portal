@@ -67,6 +67,11 @@
 		</antcall>
 
 		<antcall target="deploy-artifact">
+			<param name="artifact.id" value="support-resin" />
+			<param name="packaging" value="jar" />
+		</antcall>
+
+		<antcall target="deploy-artifact">
 			<param name="artifact.id" value="support-tomcat" />
 			<param name="packaging" value="jar" />
 		</antcall>
@@ -256,6 +261,11 @@
 		<antcall target="install-artifact">
 			<param name="artifact.id" value="portal-web" />
 			<param name="packaging" value="war" />
+		</antcall>
+
+		<antcall target="install-artifact">
+			<param name="artifact.id" value="support-resin" />
+			<param name="packaging" value="jar" />
 		</antcall>
 
 		<antcall target="install-artifact">
