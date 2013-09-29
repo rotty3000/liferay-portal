@@ -877,12 +877,29 @@ release was successful.</echo>
 		<copy
 			file="tools/servers/geronimo/bin/setenv.bat"
 			tofile="${app.server.geronimo.bin.dir}/setenv.bat"
-		/>
+		>
+			<filterset>
+				<filter token="java.security.manager.option" value="${java.security.manager.option}" />
+				<filter token="java.security.policy" value="-Djava.security.policy=${app.server.geronimo.bin.dir}/geronimo.policy" />
+			</filterset>
+		</copy>
 
 		<copy
 			file="tools/servers/geronimo/bin/setenv.sh"
 			tofile="${app.server.geronimo.bin.dir}/setenv.sh"
-		/>
+		>
+			<filterset>
+				<filter token="java.security.manager.option" value="${java.security.manager.option}" />
+				<filter token="java.security.policy" value="-Djava.security.policy=${app.server.geronimo.bin.dir}/geronimo.policy" />
+			</filterset>
+		</copy>
+
+
+		<echo file="${app.server.geronimo.bin.dir}/geronimo.policy">
+			grant {
+				permission java.security.AllPermission;
+			};
+		</echo>
 
 		<chmod perm="a+x">
 			<fileset dir="${app.server.geronimo.bin.dir}">
