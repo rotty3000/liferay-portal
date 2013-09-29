@@ -14,11 +14,13 @@
 
 package com.liferay.portal.kernel.configuration;
 
+import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 
 /**
  * @author Brian Wing Shun Chan
  */
+@DoPrivileged
 public class ConfigurationFactoryUtil {
 
 	public static Configuration getConfiguration(

@@ -7,17 +7,16 @@
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-pacl/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-service/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-web/test/functional"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="support-resin/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="support-tomcat/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-bridges/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/src"/>
-	<!--<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/integration"/>-->
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-java/test/unit"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-slf4j/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="util-taglib/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-openjdk-amd64"/>
 	<classpathentry kind="lib" path="lib/development/activation.jar"/>
 	<classpathentry kind="lib" path="lib/development/annotations.jar"/>
 	<classpathentry kind="lib" path="lib/development/ant-apache-bsf.jar"/>
@@ -47,7 +46,7 @@
 	<classpathentry kind="lib" path="lib/development/jasper.jar"/>
 	<classpathentry kind="lib" path="lib/development/jaxb-api.jar"/>
 	<classpathentry kind="lib" path="lib/development/jbi_rt.jar"/>
-	<classpathentry kind="lib" path="lib/development/jetty-server.jar"/>
+	<classpathentry kind="lib" path="lib/development/jetty-server.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/jetty-server-8.1.10.v20130312-sources.jar"/>
 	<classpathentry kind="lib" path="lib/development/jetty-util.jar"/>
 	<classpathentry kind="lib" path="lib/development/jhighlight.jar"/>
 	<classpathentry kind="lib" path="lib/development/jms.jar"/>
@@ -69,14 +68,14 @@
 	<classpathentry kind="lib" path="lib/development/postgresql.jar"/>
 	<classpathentry kind="lib" path="lib/development/powermock-mockito.jar"/>
 	<classpathentry kind="lib" path="lib/development/qdox.jar"/>
-	<classpathentry kind="lib" path="lib/development/resin.jar"/>
+	<classpathentry kind="lib" path="lib/development/resin.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/resin-4.0.33-src.zip"/>
 	<classpathentry kind="lib" path="lib/development/sap.jar"/>
 	<classpathentry kind="lib" path="lib/development/saxpath.jar"/>
 	<classpathentry kind="lib" path="lib/development/script-10.jar"/>
 	<classpathentry kind="lib" path="lib/development/sdk-addon-api-0.2.jar"/>
 	<classpathentry kind="lib" path="lib/development/selenium-java.jar"/>
 	<classpathentry kind="lib" path="lib/development/selenium-server.jar"/>
-	<classpathentry kind="lib" path="lib/development/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/development/servlet-api.jar" sourcepath="/home/rotty/MY-SHARE/LOBS/TAR-BIN/javax.servlet-3.0.0.v201112011016-sources.jar"/>
 	<classpathentry kind="lib" path="lib/development/smtp.jar"/>
 	<classpathentry kind="lib" path="lib/development/sonar-ant-task.jar"/>
 	<classpathentry kind="lib" path="lib/development/spring-instrument.jar"/>
