@@ -42,11 +42,13 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.Encryptor;
+import com.liferay.util.axis.SimpleAuthenticator;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.net.Authenticator;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -447,13 +449,9 @@ public class LicenseUtil {
 				connection = url.openConnection(proxy);
 
 				if (Validator.isNotNull(_PROXY_USER_NAME)) {
-					String login =
-						_PROXY_USER_NAME + StringPool.COLON + _PROXY_PASSWORD;
-
-					String encodedLogin = Base64.encode(login.getBytes());
-
-					connection.setRequestProperty(
-						"Proxy-Authorization", "Basic " + encodedLogin);
+					Authenticator.setDefault(
+						new SimpleAuthenticator(
+							_PROXY_USER_NAME, _PROXY_PASSWORD));
 				}
 			}
 			else {
@@ -495,6 +493,8 @@ public class LicenseUtil {
 			}
 			catch (Exception e) {
 			}
+
+			Authenticator.setDefault(null);
 		}
 	}
 
