@@ -150,6 +150,10 @@ public class PluginPackageImpl
 		return _liferayVersions;
 	}
 
+	public String getLoggingConfigLocation() {
+		return _loggingConfigLocation;
+	}
+
 	@Override
 	public String getLongDescription() {
 		return _longDescription;
@@ -297,6 +301,11 @@ public class PluginPackageImpl
 	}
 
 	@Override
+	public void setLoggingConfigLocation(String loggingConfigLocation) {
+		_loggingConfigLocation = loggingConfigLocation;
+	}
+
+	@Override
 	public void setLongDescription(String longDescription) {
 		_longDescription = longDescription;
 	}
@@ -374,6 +383,7 @@ public class PluginPackageImpl
 	private String _downloadURL;
 	private List<License> _licenses = new ArrayList<License>();
 	private List<String> _liferayVersions = new ArrayList<String>();
+	private String _loggingConfigLocation;
 	private String _longDescription = StringPool.BLANK;
 	private Date _modifiedDate;
 	private ModuleId _moduleId;

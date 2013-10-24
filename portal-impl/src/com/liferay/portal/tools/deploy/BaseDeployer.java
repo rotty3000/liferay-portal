@@ -66,6 +66,7 @@ import com.liferay.util.ant.DeleteTask;
 import com.liferay.util.ant.ExpandTask;
 import com.liferay.util.ant.UpToDateTask;
 import com.liferay.util.ant.WarTask;
+import com.liferay.util.log4j.Log4JUtil;
 import com.liferay.util.xml.DocUtil;
 import com.liferay.util.xml.XMLFormatter;
 
@@ -314,34 +315,51 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			fileName, targetDir, fileName, filterMap, overwrite);
 	}
 
+	/**
+	 * Copies log4j DTD, if necessary.
+	 *
+	 * @param srcFile the base folder from where the plugin is being deployed
+	 * @param pluginPackage plugin's settings
+	 */
 	public void copyDtds(File srcFile, PluginPackage pluginPackage)
 		throws Exception {
 
-		File portalLog4jXml = new File(
-			srcFile.getAbsolutePath() +
-				"/WEB-INF/classes/META-INF/portal-log4j.xml");
+		String[] log4jLocations = {
+			Log4JUtil.PORTAL_LOG4J_XML_LOCATION,
+			pluginPackage.getLoggingConfigLocation()};
 
-		if (!portalLog4jXml.exists()) {
-			return;
-		}
+		for (String log4jLocation: log4jLocations) {
 
-		InputStream is = null;
+			if (Validator.isNull(log4jLocation)) {
+				continue;
+			}
 
-		try {
-			Class<?> clazz = getClass();
-
-			ClassLoader classLoader = clazz.getClassLoader();
-
-			is = classLoader.getResourceAsStream("META-INF/log4j.dtd");
-
-			File file = new File(
+			File log4jXml = new File(
 				srcFile.getAbsolutePath() +
-					"/WEB-INF/classes/META-INF/log4j.dtd");
+					"/WEB-INF/classes/" + log4jLocation);
 
-			FileUtil.write(file, is);
-		}
-		finally {
-			StreamUtil.cleanUp(is);
+			if (!log4jXml.exists()) {
+				continue;
+			}
+
+			InputStream is = null;
+
+			try {
+				Class<?> clazz = getClass();
+
+				ClassLoader classLoader = clazz.getClassLoader();
+
+				is = classLoader.getResourceAsStream(
+					Log4JUtil.PORTAL_LOG4J_DTD_LOCATION);
+
+				File targetLog4jDtdFile = new File(
+					log4jXml.getParent(), "log4j.dtd");
+
+				FileUtil.write(targetLog4jDtdFile, is);
+			}
+			finally {
+				StreamUtil.cleanUp(is);
+			}
 		}
 	}
 
@@ -1522,6 +1540,9 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			"liferay_versions",
 			getPluginPackageLiferayVersionsXml(
 				pluginPackage.getLiferayVersions()));
+		filterMap.put(
+			"logging_config_location",
+			pluginPackage.getLoggingConfigLocation());
 		filterMap.put("long_description", pluginPackage.getLongDescription());
 		filterMap.put("module_artifact_id", pluginPackage.getArtifactId());
 		filterMap.put("module_group_id", pluginPackage.getGroupId());
