@@ -56,11 +56,10 @@ import org.dom4j.io.SAXReader;
  */
 public class Log4JUtil {
 
+	public static final String PORTAL_LOG4J_DTD_LOCATION = "META-INF/log4j.dtd";
+
 	public static final String PORTAL_LOG4J_EXT_XML_LOCATION =
 		"META-INF/portal-log4j-ext.xml";
-
-	public static final String PORTAL_LOG4J_DTD_LOCATION =
-		"META-INF/log4j.dtd";
 
 	public static final String PORTAL_LOG4J_XML_LOCATION =
 		"META-INF/portal-log4j.xml";

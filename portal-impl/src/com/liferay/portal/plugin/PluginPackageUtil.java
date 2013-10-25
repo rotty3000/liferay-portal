@@ -1204,8 +1204,8 @@ public class PluginPackageUtil {
 				pluginPackageElement.element("deployment-settings"),
 				"setting"));
 		pluginPackage.setLoggingConfigLocation(
-			_readText(pluginPackageElement.elementText(
-				"logging-config-location")));
+			_readText(
+				pluginPackageElement.elementText("logging-config-location")));
 
 		return pluginPackage;
 	}

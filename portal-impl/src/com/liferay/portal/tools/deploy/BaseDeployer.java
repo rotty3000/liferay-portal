@@ -328,8 +328,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			Log4JUtil.PORTAL_LOG4J_XML_LOCATION,
 			pluginPackage.getLoggingConfigLocation()};
 
-		for (String log4jLocation: log4jLocations) {
-
+		for (String log4jLocation : log4jLocations) {
 			if (Validator.isNull(log4jLocation)) {
 				continue;
 			}

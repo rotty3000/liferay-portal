@@ -194,7 +194,6 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		URL locationURL = classLoader.getResource(location);
 
 		if (locationURL == null) {
-
 			if (Validator.isNotNull(customLocation)) {
 				if (_log.isWarnEnabled()) {
 					_log.warn(
@@ -207,8 +206,7 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		}
 
 		if (_log.isInfoEnabled()) {
-			_log.info(
-				"Setting up portal log levels based on " + location);
+			_log.info("Setting up portal log levels based on " + location);
 		}
 
 		Log4JUtil.configureLog4J(locationURL);
