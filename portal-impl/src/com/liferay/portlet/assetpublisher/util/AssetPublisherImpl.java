@@ -147,7 +147,7 @@ public class AssetPublisherImpl implements AssetPublisher {
 			PortletPreferencesFactoryUtil.getStrictPortletSetup(
 				layout, referringPortletResource);
 
-		if (portletPreferences instanceof StrictPortletPreferencesImpl) {
+		if (!(portletPreferences instanceof StrictPortletPreferencesImpl)) {
 			throw new PrincipalException();
 		}
 
