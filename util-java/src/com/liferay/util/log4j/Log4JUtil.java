@@ -56,12 +56,20 @@ import org.dom4j.io.SAXReader;
  */
 public class Log4JUtil {
 
+	public static final String PORTAL_LOG4J_DTD_LOCATION = "META-INF/log4j.dtd";
+
+	public static final String PORTAL_LOG4J_EXT_XML_LOCATION =
+		"META-INF/portal-log4j-ext.xml";
+
+	public static final String PORTAL_LOG4J_XML_LOCATION =
+		"META-INF/portal-log4j.xml";
+
 	public static void configureLog4J(ClassLoader classLoader) {
-		configureLog4J(classLoader.getResource("META-INF/portal-log4j.xml"));
+		configureLog4J(classLoader.getResource(PORTAL_LOG4J_XML_LOCATION));
 
 		try {
 			Enumeration<URL> enu = classLoader.getResources(
-				"META-INF/portal-log4j-ext.xml");
+				PORTAL_LOG4J_EXT_XML_LOCATION);
 
 			while (enu.hasMoreElements()) {
 				configureLog4J(enu.nextElement());

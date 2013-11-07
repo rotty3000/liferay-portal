@@ -49,6 +49,8 @@ public interface PluginPackage {
 
 	public List<String> getLiferayVersions();
 
+	public String getLoggingConfigLocation();
+
 	public String getLongDescription();
 
 	public Date getModifiedDate();
@@ -98,6 +100,8 @@ public interface PluginPackage {
 	public void setLicenses(List<License> licenses);
 
 	public void setLiferayVersions(List<String> liferayVersions);
+
+	public void setLoggingConfigLocation(String loggingConfigLocation);
 
 	public void setLongDescription(String longDescription);
 

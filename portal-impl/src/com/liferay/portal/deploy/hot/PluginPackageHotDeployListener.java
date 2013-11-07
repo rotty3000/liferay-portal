@@ -127,7 +127,7 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 
 		ClassLoader classLoader = hotDeployEvent.getContextClassLoader();
 
-		initLogger(classLoader);
+		initLogger(classLoader, pluginPackage);
 		initPortletProps(classLoader);
 		initServiceComponent(servletContext, classLoader);
 
@@ -178,9 +178,38 @@ public class PluginPackageHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
-	protected void initLogger(ClassLoader classLoader) {
-		Log4JUtil.configureLog4J(
-			classLoader.getResource("META-INF/portal-log4j.xml"));
+	protected void initLogger(
+		ClassLoader classLoader, PluginPackage pluginPackage) {
+
+		// default location
+
+		String location = Log4JUtil.PORTAL_LOG4J_XML_LOCATION;
+
+		String customLocation = pluginPackage.getLoggingConfigLocation();
+
+		if (Validator.isNotNull(customLocation)) {
+			location = customLocation;
+		}
+
+		URL locationURL = classLoader.getResource(location);
+
+		if (locationURL == null) {
+			if (Validator.isNotNull(customLocation)) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Custom portal logging config not found at " +
+							"specified path " + customLocation);
+				}
+
+				return;
+			}
+		}
+
+		if (_log.isInfoEnabled()) {
+			_log.info("Setting up portal log levels based on " + location);
+		}
+
+		Log4JUtil.configureLog4J(locationURL);
 	}
 
 	protected void initPortletProps(ClassLoader classLoader) throws Exception {

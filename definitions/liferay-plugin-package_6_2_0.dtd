@@ -19,7 +19,7 @@ variable.
 The plugin-package element contains the declarative data of a plugin.
 -->
 <!ELEMENT plugin-package (name, module-id, recommended-deployment-context?,
-required-deployment-contexts?, types, tags?, short-description,
+required-deployment-contexts?, logging-config-location?, types, tags?, short-description,
 long-description?, change-log, page-url?, screenshots?, author, licenses,
 liferay-versions, deployment-settings?)>
 
@@ -56,6 +56,15 @@ The required-deployment-context element contains the name of a context that is
 required by this plugin.
 -->
 <!ELEMENT required-deployment-context (#PCDATA)>
+
+<!--
+The logging-config-location element contains the path to configuration of the
+portal logging that should be applied once the plugin is deployed. Typically:
+ META-INF/portal-log4j-ext.xml.
+
+ The file has to be reachable for plugin's classloader.
+-->
+<!ELEMENT logging-config-location (#PCDATA)>
 
 <!--
 The types element contains a list of plugin types included in the package.

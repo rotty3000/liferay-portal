@@ -974,6 +974,8 @@ public class PluginPackageUtil {
 		List<String> requiredDeploymentContexts = ListUtil.fromArray(
 			StringUtil.split(
 				properties.getProperty("required-deployment-contexts")));
+		String loggingConfigLocation = GetterUtil.getString(
+			properties.getProperty("logging-config-location"));
 
 		PluginPackage pluginPackage = new PluginPackageImpl(moduleId);
 
@@ -987,12 +989,14 @@ public class PluginPackageUtil {
 		pluginPackage.setTags(tags);
 		pluginPackage.setShortDescription(shortDescription);
 		pluginPackage.setLongDescription(longDescription);
+
 		pluginPackage.setChangeLog(changeLog);
 		//pluginPackage.setScreenshots(null);
 		pluginPackage.setPageURL(pageURL);
 		pluginPackage.setDownloadURL(downloadURL);
 		//pluginPackage.setDeploymentSettings(null);
 		pluginPackage.setRequiredDeploymentContexts(requiredDeploymentContexts);
+		pluginPackage.setLoggingConfigLocation(loggingConfigLocation);
 
 		return pluginPackage;
 	}
@@ -1199,6 +1203,9 @@ public class PluginPackageUtil {
 			_readProperties(
 				pluginPackageElement.element("deployment-settings"),
 				"setting"));
+		pluginPackage.setLoggingConfigLocation(
+			_readText(
+				pluginPackageElement.elementText("logging-config-location")));
 
 		return pluginPackage;
 	}
