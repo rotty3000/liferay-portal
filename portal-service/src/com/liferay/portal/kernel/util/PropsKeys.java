@@ -2529,6 +2529,8 @@ public interface PropsKeys {
 
 	public static final String USERS_IMAGE_MAX_WIDTH = "users.image.max.width";
 
+	public static final String USERS_IMAGE_PORTRAIT_POLICY = "users.image.portrait.policy";
+
 	public static final String USERS_INDEXER_ENABLED = "users.indexer.enabled";
 
 	public static final String USERS_LAST_NAME_REQUIRED = "users.last.name.required";
