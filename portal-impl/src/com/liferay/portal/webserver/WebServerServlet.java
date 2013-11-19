@@ -359,7 +359,9 @@ public class WebServerServlet extends HttpServlet {
 		}
 	}
 
-	protected Image getDefaultImage(HttpServletRequest request, long imageId) {
+	protected Image getDefaultImage(HttpServletRequest request, long imageId)
+		throws PortalException, SystemException {
+
 		String path = GetterUtil.getString(request.getPathInfo());
 
 		if (path.startsWith("/company_logo") ||
@@ -370,14 +372,30 @@ public class WebServerServlet extends HttpServlet {
 		else if (path.startsWith("/organization_logo")) {
 			return ImageToolUtil.getDefaultOrganizationLogo();
 		}
-		else if (path.startsWith("/user_female_portrait")) {
-			return ImageToolUtil.getDefaultUserFemalePortrait();
-		}
-		else if (path.startsWith("/user_male_portrait")) {
-			return ImageToolUtil.getDefaultUserMalePortrait();
-		}
-		else if (path.startsWith("/user_portrait")) {
-			return ImageToolUtil.getDefaultUserMalePortrait();
+		else if (path.startsWith("/user_")) {
+			long userId = ParamUtil.getLong(request, "p_u_i_d");
+
+			boolean female = _USERS_IMAGE_PORTRAIT_POLICY_ALL &&
+				path.startsWith("/user_female_portrait");
+
+			if (_USERS_IMAGE_PORTRAIT_POLICY_PERMISSION_CHECK && (userId > 0)) {
+				User user = UserLocalServiceUtil.fetchUser(userId);
+
+				if ((user != null) &&
+					UserPermissionUtil.contains(
+						PermissionThreadLocal.getPermissionChecker(), userId,
+						ActionKeys.VIEW)) {
+
+					female = !user.isMale();
+				}
+			}
+
+			if (female) {
+				return ImageToolUtil.getDefaultUserFemalePortrait();
+			}
+			else {
+				return ImageToolUtil.getDefaultUserMalePortrait();
+			}
 		}
 		else {
 			return null;
