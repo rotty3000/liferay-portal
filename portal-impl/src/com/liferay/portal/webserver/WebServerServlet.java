@@ -62,6 +62,7 @@ import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileVersion;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
@@ -71,6 +72,7 @@ import com.liferay.portal.service.ImageLocalServiceUtil;
 import com.liferay.portal.service.ImageServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
+import com.liferay.portal.service.permission.UserPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -429,13 +431,31 @@ public class WebServerServlet extends HttpServlet {
 		if (imageId > 0) {
 			image = ImageServiceUtil.getImage(imageId);
 
-			String path = GetterUtil.getString(request.getPathInfo());
+			if (_USERS_IMAGE_PORTRAIT_POLICY_ALL) {
+				String path = GetterUtil.getString(request.getPathInfo());
 
-			if (path.startsWith("/user_female_portrait") ||
-				path.startsWith("/user_male_portrait") ||
-				path.startsWith("/user_portrait")) {
+				if (path.startsWith("/user_female_portrait") ||
+					path.startsWith("/user_male_portrait") ||
+					path.startsWith("/user_portrait")) {
 
-				image = getUserPortraitImageResized(image, imageId);
+					image = getUserPortraitImageResized(image, imageId);
+				}
+			}
+			else {
+				User user = UserLocalServiceUtil.fetchUserByPortraitId(imageId);
+
+				if (user != null) {
+					if (_USERS_IMAGE_PORTRAIT_POLICY_PERMISSION_CHECK &&
+						UserPermissionUtil.contains(
+							PermissionThreadLocal.getPermissionChecker(),
+							user.getUserId(), ActionKeys.VIEW)) {
+
+						image = getUserPortraitImageResized(image, imageId);
+					}
+					else {
+						image = null;
+					}
+				}
 			}
 		}
 		else {
@@ -541,6 +561,9 @@ public class WebServerServlet extends HttpServlet {
 				}
 			}
 			catch (Exception e) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(e);
+				}
 			}
 		}
 
@@ -1310,6 +1333,14 @@ public class WebServerServlet extends HttpServlet {
 
 		return user;
 	}
+
+	private static final boolean _USERS_IMAGE_PORTRAIT_POLICY_ALL =
+		StringUtil.equalsIgnoreCase(
+			PropsValues.USERS_IMAGE_PORTRAIT_POLICY, "all");
+
+	private static final boolean _USERS_IMAGE_PORTRAIT_POLICY_PERMISSION_CHECK =
+		StringUtil.equalsIgnoreCase(
+			PropsValues.USERS_IMAGE_PORTRAIT_POLICY, "permission-check");
 
 	private static final boolean _WEB_SERVER_SERVLET_VERSION_VERBOSITY_DEFAULT =
 		StringUtil.equalsIgnoreCase(
