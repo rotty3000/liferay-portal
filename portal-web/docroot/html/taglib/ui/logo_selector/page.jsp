@@ -32,8 +32,12 @@ String imageSrc = null;
 if (deleteLogo || (imageId == 0)) {
 	imageSrc = defaultLogoURL;
 }
+else if (Validator.isNotNull(defaultLogoURL)) {
+	imageSrc = HttpUtil.setParameter(defaultLogoURL, "img_id", imageId);
+	imageSrc = HttpUtil.setParameter(imageSrc, "t", WebServerServletTokenUtil.getToken(imageId));
+}
 else {
-	imageSrc = themeDisplay.getPathImage() + "/logo?img_id=" + imageId + "&t" + WebServerServletTokenUtil.getToken(imageId);
+	imageSrc = themeDisplay.getPathImage() + "/logo?img_id=" + imageId + "&t=" + WebServerServletTokenUtil.getToken(imageId);
 }
 %>
 
