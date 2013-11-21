@@ -24,6 +24,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Sampsa Sohlman
  */
 public class DynamicServletRequest extends HttpServletRequestWrapper {
 
@@ -111,9 +113,8 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 	}
 
 	public DynamicServletRequest(
-		HttpServletRequest request, Map<String, String[]> params,
-		boolean inherit) {
-
+			HttpServletRequest request, Map<String, String[]> params,
+			boolean inherit) {
 		this(request, params, inherit, false);
 	}
 
@@ -125,6 +126,7 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 
 		_params = new HashMap<String, String[]>();
 		_inherit = inherit;
+		_removePpParams = removePortletParams;
 
 		if (params != null) {
 			_params.putAll(params);
@@ -184,7 +186,9 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 		String[] values = _params.get(name);
 
 		if (_inherit && (values == null)) {
-			return super.getParameter(name);
+			if (isParameterAllowed(name)) {
+				return super.getParameter(name);
+			}
 		}
 
 		if (ArrayUtil.isNotEmpty(values)) {
@@ -200,7 +204,13 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 		Map<String, String[]> map = new HashMap<String, String[]>();
 
 		if (_inherit) {
-			map.putAll(super.getParameterMap());
+			for (Entry<String, String[]> entry
+				: super.getParameterMap().entrySet()) {
+
+				if (isParameterAllowed(entry.getKey())) {
+					map.put(entry.getKey(), entry.getValue());
+				}
+			}
 		}
 
 		map.putAll(_params);
@@ -216,7 +226,11 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 			Enumeration<String> enu = super.getParameterNames();
 
 			while (enu.hasMoreElements()) {
-				names.add(enu.nextElement());
+				String name = enu.nextElement();
+
+				if (isParameterAllowed(name)) {
+					names.add(name);
+				}
 			}
 		}
 
@@ -230,7 +244,9 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 		String[] values = _params.get(name);
 
 		if (_inherit && (values == null)) {
-			return super.getParameterValues(name);
+			if (isParameterAllowed(name)) {
+				return super.getParameterValues(name);
+			}
 		}
 
 		return values;
@@ -244,7 +260,13 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 		_params.put(name, values);
 	}
 
+	protected boolean isParameterAllowed(String name) {
+		return (!_removePpParams ||
+			(name != null && !name.startsWith("p_p_")));
+	}
+
 	private boolean _inherit;
 	private Map<String, String[]> _params;
+	private boolean _removePpParams;
 
 }
