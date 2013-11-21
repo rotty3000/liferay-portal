@@ -84,8 +84,11 @@ public class PortletLogic extends RuntimeLogic {
 
 		queryString = PortletParameterUtil.addNamespace(portletId, queryString);
 
+		boolean removePpParams = ( portletId!= null ) &&
+			!portletId.equals(_request.getParameter("p_p_id"));
+
 		HttpServletRequest request = DynamicServletRequest.addQueryString(
-			_request, queryString);
+			_request, queryString, true, removePpParams);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
