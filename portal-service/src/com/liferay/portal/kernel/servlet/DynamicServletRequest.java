@@ -40,11 +40,18 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 	public static HttpServletRequest addQueryString(
 		HttpServletRequest request, String queryString) {
 
-		return addQueryString(request, queryString, true);
+		return addQueryString(request, queryString, true, false);
 	}
 
 	public static HttpServletRequest addQueryString(
 		HttpServletRequest request, String queryString, boolean inherit) {
+
+		return addQueryString(request, queryString, inherit, false);
+	}
+
+	public static HttpServletRequest addQueryString(
+		HttpServletRequest request, String queryString, boolean inherit,
+		boolean removePpParams) {
 
 		String[] parameters = StringUtil.split(queryString, CharPool.AMPERSAND);
 
@@ -81,7 +88,8 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 			}
 		}
 
-		request = new DynamicServletRequest(request, parameterMap, inherit);
+		request = new DynamicServletRequest(
+			request, parameterMap, inherit, removePpParams);
 
 		request.setAttribute(DYNAMIC_QUERY_STRING, queryString);
 
@@ -89,22 +97,29 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 	}
 
 	public DynamicServletRequest(HttpServletRequest request) {
-		this(request, null, true);
+		this(request, null, true, false);
 	}
 
 	public DynamicServletRequest(HttpServletRequest request, boolean inherit) {
-		this(request, null, inherit);
+		this(request, null, inherit, false);
 	}
 
 	public DynamicServletRequest(
 		HttpServletRequest request, Map<String, String[]> params) {
 
-		this(request, params, true);
+		this(request, params, true, false);
 	}
 
 	public DynamicServletRequest(
 		HttpServletRequest request, Map<String, String[]> params,
 		boolean inherit) {
+
+		this(request, params, inherit, false);
+	}
+
+	public DynamicServletRequest(
+		HttpServletRequest request, Map<String, String[]> params,
+		boolean inherit, boolean removePortletParams) {
 
 		super(request);
 
