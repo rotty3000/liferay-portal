@@ -43,24 +43,50 @@ public class DynamicServletRequestTest {
 
 	@Test
 	public void testAddPortletDynamicServletRequest() throws Exception {
-		doTestAddQueryString(true, false);
+		doTestAddQueryString(true, false, false);
+	}
+
+	@Test
+	public void testAddPortletDynamicServletRequestRemovePpId()
+		throws Exception {
+
+		doTestAddQueryString(true, false, true);
 	}
 
 	@Test
 	public void testAddPortletDynamicServletRequestWithInherit()
 		throws Exception {
 
-		doTestAddQueryString(true, true);
+		doTestAddQueryString(true, true, false);
+	}
+
+	@Test
+	public void testAddPortletDynamicServletRequestWithInheritRemovePpId()
+		throws Exception {
+
+		doTestAddQueryString(true, true, true);
 	}
 
 	@Test
 	public void testAddPortletHttpRequestWithInherit() throws Exception {
-		doTestAddQueryString(false, true);
+		doTestAddQueryString(false, true, false);
+	}
+
+	@Test
+	public void testAddPortletHttpRequestWithInheritRemovePpId()
+		throws Exception {
+
+		doTestAddQueryString(false, true, true);
 	}
 
 	@Test
 	public void testAddPortletHttpServletRequest() throws Exception {
-		doTestAddQueryString(false, false);
+		doTestAddQueryString(false, false, false);
+	}
+
+	@Test
+	public void testAddPortletHttpServletRequestRemovePpId() throws Exception {
+		doTestAddQueryString(false, false, true);
 	}
 
 	protected void assertMultiValues(
@@ -87,7 +113,8 @@ public class DynamicServletRequestTest {
 		Assert.assertEquals(exist, names.contains("other"));
 	}
 
-	protected void doTestAddQueryString(boolean isDynamic, boolean inherit)
+	protected void doTestAddQueryString(
+			boolean isDynamic, boolean inherit, boolean removePortletParameters)
 		throws Exception {
 
 		mockRequest.addParameter("p_p_id", "16");
@@ -115,7 +142,7 @@ public class DynamicServletRequestTest {
 			"multi3=multi3value3");
 
 		request = DynamicServletRequest.addQueryString(
-			request, queryString, inherit);
+			request, queryString, inherit, removePortletParameters);
 
 		Set names = new HashSet(Collections.list(request.getParameterNames()));
 
@@ -129,10 +156,22 @@ public class DynamicServletRequestTest {
 		Assert.assertTrue(names.contains("_145_xyz"));
 
 		if (inherit) {
-			Assert.assertEquals("edit", request.getParameter("p_p_mode"));
-			Assert.assertEquals("normal", request.getParameter("p_p_state"));
-			Assert.assertEquals("1", request.getParameter("p_p_lifecycle"));
-			Assert.assertEquals("absc", request.getParameter("p_p_anything"));
+			Assert.assertEquals(
+				removePortletParameters,
+				request.getParameter("p_p_mode")== null);
+
+			Assert.assertEquals(
+				removePortletParameters,
+				request.getParameter("p_p_state")== null);
+
+			Assert.assertEquals(
+				removePortletParameters,
+				request.getParameter("p_p_lifecycle")== null);
+
+			Assert.assertEquals(
+				removePortletParameters,
+				request.getParameter("p_p_anything")== null);
+
 			Assert.assertEquals("otherValue", request.getParameter("other"));
 
 			assertMultiValues(
@@ -150,8 +189,33 @@ public class DynamicServletRequestTest {
 						"multi3value3"});
 			}
 
-			assertNames(names, true);
-			assertNames(mapNames, true);
+			Assert.assertEquals(
+				!removePortletParameters, names.contains("p_p_mode"));
+
+			Assert.assertEquals(
+				!removePortletParameters, names.contains("p_p_state"));
+
+			Assert.assertEquals(
+				!removePortletParameters, names.contains("p_p_lifecycle"));
+
+			Assert.assertEquals(
+				!removePortletParameters, names.contains("p_p_anything"));
+
+			Assert.assertEquals(true, names.contains("other"));
+
+			Assert.assertEquals(
+				!removePortletParameters, mapNames.contains("p_p_mode"));
+
+			Assert.assertEquals(
+				!removePortletParameters, mapNames.contains("p_p_state"));
+
+			Assert.assertEquals(
+				!removePortletParameters, mapNames.contains("p_p_lifecycle"));
+
+			Assert.assertEquals(
+				!removePortletParameters, mapNames.contains("p_p_anything"));
+
+			Assert.assertEquals(true, mapNames.contains("other"));
 		}
 		else {
 			Assert.assertNull(request.getParameter("p_p_mode"));
@@ -159,6 +223,7 @@ public class DynamicServletRequestTest {
 			Assert.assertNull(request.getParameter("p_p_lifecycle"));
 			Assert.assertNull(request.getParameter("p_p_anything"));
 			Assert.assertNull(request.getParameter("other"));
+
 			assertNames(names, false);
 			assertNames(mapNames, false);
 		}
