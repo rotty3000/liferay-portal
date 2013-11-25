@@ -113,20 +113,21 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 	}
 
 	public DynamicServletRequest(
-			HttpServletRequest request, Map<String, String[]> params,
-			boolean inherit) {
+		HttpServletRequest request, Map<String, String[]> params,
+		boolean inherit) {
+
 		this(request, params, inherit, false);
 	}
 
 	public DynamicServletRequest(
 		HttpServletRequest request, Map<String, String[]> params,
-		boolean inherit, boolean removePortletParams) {
+		boolean inherit, boolean removePpParams) {
 
 		super(request);
 
 		_params = new HashMap<String, String[]>();
 		_inherit = inherit;
-		_removePpParams = removePortletParams;
+		_removePpParams = removePpParams;
 
 		if (params != null) {
 			_params.putAll(params);
@@ -204,11 +205,12 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 		Map<String, String[]> map = new HashMap<String, String[]>();
 
 		if (_inherit) {
-			for (Entry<String, String[]> entry
-				: super.getParameterMap().entrySet()) {
+			Set<Entry<String, String[]>> parentParameters =
+				super.getParameterMap().entrySet();
 
-				if (isParameterAllowed(entry.getKey())) {
-					map.put(entry.getKey(), entry.getValue());
+			for (Entry<String, String[]> parameter : parentParameters) {
+				if (isParameterAllowed(parameter.getKey())) {
+					map.put(parameter.getKey(), parameter.getValue());
 				}
 			}
 		}
@@ -262,7 +264,7 @@ public class DynamicServletRequest extends HttpServletRequestWrapper {
 
 	protected boolean isParameterAllowed(String name) {
 		return (!_removePpParams ||
-			(name != null && !name.startsWith("p_p_")));
+			((name != null) && !name.startsWith("p_p_")));
 	}
 
 	private boolean _inherit;

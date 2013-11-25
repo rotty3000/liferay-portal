@@ -84,7 +84,7 @@ public class PortletLogic extends RuntimeLogic {
 
 		queryString = PortletParameterUtil.addNamespace(portletId, queryString);
 
-		boolean removePpParams = ( portletId!= null ) &&
+		boolean removePpParams = (portletId != null) &&
 			!portletId.equals(_request.getParameter("p_p_id"));
 
 		HttpServletRequest request = DynamicServletRequest.addQueryString(

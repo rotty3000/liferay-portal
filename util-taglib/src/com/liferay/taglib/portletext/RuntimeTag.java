@@ -81,12 +81,12 @@ public class RuntimeTag extends TagSupport {
 
 		String portletId = portletName;
 
+		RestrictPortletServletRequest restrictPortletServletRequest =
+			new RestrictPortletServletRequest(request);
+
 		queryString = PortletParameterUtil.addNamespace(portletId, queryString);
 
-		RestrictPortletServletRequest restrictPortletServletRequest =
-				new RestrictPortletServletRequest(request);
-
-		boolean removePpParams = ( portletId!= null ) &&
+		boolean removePpParams = (portletId != null) &&
 			!portletId.equals(request.getParameter("p_p_id"));
 
 		request = DynamicServletRequest.addQueryString(
