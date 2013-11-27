@@ -326,6 +326,14 @@
 		<servlet-class>com.liferay.portal.servlet.CleanUpServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>CASProxyGrantingTicketServlet</servlet-name>
+		<servlet-class>com.liferay.portal.servlet.CASProxyGrantingTicketServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CASProxyGrantingTicketServlet</servlet-name>
+		<url-pattern>/casProxyCallbackUrl/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Main Servlet</servlet-name>
 		<url-pattern>/c/*</url-pattern>
