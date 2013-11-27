@@ -1062,4 +1062,9 @@
 	<bean id="com.liferay.portlet.usersadmin.util.UsersAdminUtil" class="com.liferay.portlet.usersadmin.util.UsersAdminUtil">
 		<property name="usersAdmin" ref="com.liferay.portlet.usersadmin.util.UsersAdmin" />
 	</bean>
+	<bean id="com.liferay.portal.kernel.util.CasServiceUtil" class="com.liferay.portal.kernel.cas.CasServiceUtil">
+		<property name="casService">
+			<bean class="com.liferay.portal.security.cas.CasServiceImpl" />
+		</property>
+	</bean>
 </beans>
