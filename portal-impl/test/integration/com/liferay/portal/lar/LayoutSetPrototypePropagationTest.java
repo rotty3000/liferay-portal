@@ -224,9 +224,11 @@ public class LayoutSetPrototypePropagationTest
 		propagateChanges(group);
 
 		layout.setLayoutPrototypeLinkEnabled(true);
+
 		LayoutLocalServiceUtil.updateLayout(layout);
 
 		_layout.setLayoutPrototypeLinkEnabled(true);
+
 		LayoutLocalServiceUtil.updateLayout(_layout);
 
 		layout = LayoutTestUtil.updateLayoutTemplateId(layout, "1_column");
@@ -486,12 +488,15 @@ public class LayoutSetPrototypePropagationTest
 
 		if ((layout != null) && (_layout != null)) {
 			layout = LayoutLocalServiceUtil.getLayout(layout.getPlid());
-			_layout = LayoutLocalServiceUtil.getLayout(_layout.getPlid());
 
 			layout.setLayoutPrototypeLinkEnabled(linkEnabled);
+
 			LayoutLocalServiceUtil.updateLayout(layout);
 
+			_layout = LayoutLocalServiceUtil.getLayout(_layout.getPlid());
+
 			_layout.setLayoutPrototypeLinkEnabled(linkEnabled);
+
 			LayoutLocalServiceUtil.updateLayout(_layout);
 		}
 	}
