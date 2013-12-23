@@ -383,21 +383,21 @@ public class LayoutImporter {
 			}
 
 			if (existingLayoutSetPrototype == null) {
-				List<LayoutSet> layoutSets =
-					LayoutSetLocalServiceUtil.
-						getLayoutSetsByLayoutSetPrototypeUuid(
-							layoutSetPrototype.getUuid());
-
 				layoutSetPrototype.setUuid(importedLayoutSetPrototypeUuid);
 
 				LayoutSetPrototypeLocalServiceUtil.updateLayoutSetPrototype(
 					layoutSetPrototype);
 
-				for (LayoutSet tempLayoutSet : layoutSets) {
-					tempLayoutSet.setLayoutSetPrototypeUuid(
+				List<LayoutSet> layoutSets =
+					LayoutSetLocalServiceUtil.
+						getLayoutSetsByLayoutSetPrototypeUuid(
+							layoutSetPrototype.getUuid());
+
+				for (LayoutSet curLayoutSet : layoutSets) {
+					curLayoutSet.setLayoutSetPrototypeUuid(
 						importedLayoutSetPrototypeUuid);
 
-					LayoutSetLocalServiceUtil.updateLayoutSet(tempLayoutSet);
+					LayoutSetLocalServiceUtil.updateLayoutSet(curLayoutSet);
 				}
 			}
 		}
