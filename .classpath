@@ -89,6 +89,7 @@
 	<classpathentry kind="lib" path="lib/development/spring-test.jar"/>
 	<classpathentry kind="lib" path="lib/development/tomcat-coyote.jar"/>
 	<classpathentry kind="lib" path="lib/development/xmltask.jar"/>
+	<classpathentry kind="lib" path="lib/global/liferay-registry.jar"/>
 	<classpathentry kind="lib" path="lib/global/portlet.jar"/>
 	<classpathentry kind="lib" path="lib/portal/abdera.jar"/>
 	<classpathentry kind="lib" path="lib/portal/alloy-taglib.jar"/>

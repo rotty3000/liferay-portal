@@ -313,6 +313,7 @@
 				<classpath mode="compile">lib/development/spring-test.jar</classpath>
 				<classpath mode="compile">lib/development/tomcat-coyote.jar</classpath>
 				<classpath mode="compile">lib/development/xmltask.jar</classpath>
+				<classpath mode="compile">lib/global/liferay-registry.jar</classpath>
 				<classpath mode="compile">lib/global/portlet.jar</classpath>
 				<classpath mode="compile">lib/portal/abdera.jar</classpath>
 				<classpath mode="compile">lib/portal/alloy-taglib.jar</classpath>
