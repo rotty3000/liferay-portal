@@ -406,7 +406,7 @@ public class AssetPublisherDisplayContext {
 	public String getOrderByType1() {
 		if (_orderByType1 == null) {
 			_orderByType1 = GetterUtil.getString(
-				_portletPreferences.getValue("orderByType1", "ASC"));
+				_portletPreferences.getValue("orderByType1", "DESC"));
 		}
 
 		return _orderByType1;
