@@ -79,6 +79,8 @@ log
 /portal-impl/*.iml
 /portal-impl/*.ipr
 /portal-impl/*.iws
+/portal-impl/benchmark/**/generated
+/portal-impl/benchmark-classes
 /portal-impl/classes
 /portal-impl/portal-impl*.asc
 /portal-impl/portal-impl*.jar

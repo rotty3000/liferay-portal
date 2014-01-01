@@ -709,7 +709,163 @@ Please set the environment variable ANT_OPTS to the recommended value of
 		</sequential>
 	</macrodef>
 
+	<target name="benchmark">
+		<if>
+			<isset property="benchmark.class" />
+			<then>
+				<antcall target="benchmark-cmd" />
+			</then>
+			<else>
+				<antcall target="benchmark-synopsis" />
+			</else>
+		</if>
+	</target>
+
+	<target name="benchmark-cmd" depends="compile,compile-test,compile-benchmark">
+		<if>
+			<isset property="h"/>
+			<then>
+				<property name="warmup.iterations" value="20" />
+
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="warmup.iterations"/>
+			</not>
+			<then>
+				<property name="warmup.iterations" value="20" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="iterations"/>
+			</not>
+			<then>
+				<property name="iterations" value="20" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="forks"/>
+			</not>
+			<then>
+				<property name="forks" value="1" />
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<isset property="threads"/>
+			</not>
+			<then>
+				<property name="threads" value="1" />
+			</then>
+		</if>
+
+		<path id="benchmark.classpath">
+			<pathelement location="benchmark-classes" />
+			<path refid="project.classpath" />
+		</path>
+
+		<property name="benchmark.classpath.string" refid="benchmark.classpath" />
+
+		<java
+			classname="org.openjdk.jmh.Main"
+			classpathref="benchmark.classpath"
+			fork="true"
+			newenvironment="true"
+		>
+			<jvmarg value="-Xmx1024m" />
+			<jvmarg value="-ea:com.liferay..." />
+
+			<arg value=".*${benchmark.class}.*" />
+			<arg value="--jvmclasspath" />
+			<arg value="${benchmark.classpath.string}" />
+			<arg value="-wi" />
+			<arg value="${warmup.iterations}" />
+			<arg value="-i" />
+			<arg value="${iterations}" />
+			<arg value="-f" />
+			<arg value="${forks}" />
+			<arg value="-t" />
+			<arg value="${threads}" />
+		</java>
+
+		<delete dir="benchmark" includes="**/generated/*.java" />
+	</target>
+
+	<target name="benchmark-synopsis" unless="benchmark.class">
+		<echo>
+The expected use of this ant task is as follows:
+
+ant benchmark -Dbenchmark.class=REGEX [options]
+
+OPTIONS:
+	-Dbenchmark.class=REGEX	(string) Microbenchmarks to run. Regexp
+				filtering out classes or methods
+				which are MicroBenchmarks.
+	-Dforks=#		(int) Start each benchmark in new JVM,
+				forking from the same JDK unless
+				--jvm is set. Optional parameter
+				specifies number of times harness
+				should fork. Zero forks means "no
+				fork", also "false" is accepted.
+	-Diterations=#		(int) The number of iterations to perform.
+	-Dthreads=#		(int or 'max') Number of threads to run the
+				microbenchmark with. Special value 'max' will
+				use Runtime.availableProcessors().
+	-Dwarmup.iterations=#	(int) Number of warmup iterations to run.
+
+The underlying task has more options but requires altering the build file
+directly. See the following for details:
+		</echo>
+
+		<path id="benchmark.classpath">
+			<pathelement location="benchmark-classes" />
+			<path refid="project.classpath" />
+		</path>
+
+		<java
+			classname="org.openjdk.jmh.Main"
+			classpathref="benchmark.classpath"
+			fork="true"
+			newenvironment="true"
+		>
+			<arg value="-h" />
+		</java>
+	</target>
+
 	<target name="compile">
+	</target>
+
+	<target name="compile-benchmark">
+		<delete dir="benchmark-classes"/>
+		<mkdir dir="benchmark-classes" />
+		<delete dir="benchmark" includes="**/generated/*.java" />
+
+		<copy todir="benchmark-classes" preservelastmodified="true">
+			<fileset dir="test" includes="*.properties,META-INF/*.dtd,META-INF/*.xml" />
+			<fileset dir="benchmark" includes="**/*.policy,**/*.properties,**/dependencies/**,META-INF/*.xml" />
+		</copy>
+
+		<javac
+			classpathref="project.classpath"
+			compiler="${javac.compiler}"
+			debug="${javac.debug}"
+			deprecation="${javac.deprecation}"
+			destdir="benchmark-classes"
+			encoding="${javac.encoding}"
+			includeAntRuntime="false"
+			nowarn="${javac.nowarn}"
+			srcdir="benchmark"
+		>
+			<compilerarg value="-s" />
+			<compilerarg value="benchmark" />
+		</javac>
 	</target>
 
 	<target name="compile-test">
