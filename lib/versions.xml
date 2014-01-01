@@ -89,6 +89,18 @@
 		</licenses>
 	</library>
 	<library>
+		<file-name>lib/development/args4j.jar</file-name>
+		<version>2.0.26</version>
+		<project-name>args4j</project-name>
+		<project-url>http://args4j.kohsuke.org</project-url>
+		<licenses>
+			<license>
+				<license-name>MIT License</license-name>
+				<license-url>http://opensource.org/licenses/MIT</license-url>
+			</license>
+		</licenses>
+	</library>
+	<library>
 		<file-name>lib/development/catalina.jar</file-name>
 		<version>7.0.42</version>
 		<project-name>Tomcat</project-name>
@@ -407,6 +419,18 @@
 			<license>
 				<license-name>CDDL 1.0</license-name>
 				<license-url>http://glassfish.java.net/public/CDDLv1.0.html</license-url>
+			</license>
+		</licenses>
+	</library>
+	<library>
+		<file-name>lib/development/jmh-core.jar</file-name>
+		<version>0.2</version>
+		<project-name>JMH</project-name>
+		<project-url>http://openjdk.java.net/projects/code-tools/jmh/</project-url>
+		<licenses>
+			<license>
+				<license-name>GPL 2.0</license-name>
+				<license-url>http://www.gnu.org/licenses/gpl-2.0.html</license-url>
 			</license>
 		</licenses>
 	</library>

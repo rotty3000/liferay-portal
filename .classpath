@@ -25,6 +25,7 @@
 	<classpathentry kind="lib" path="lib/development/antelope.jar"/>
 	<classpathentry kind="lib" path="lib/development/ant-ext.jar"/>
 	<classpathentry kind="lib" path="lib/development/ant-installer.jar"/>
+	<classpathentry kind="lib" path="lib/development/args4j.jar"/>
 	<classpathentry kind="lib" path="lib/development/catalina.jar"/>
 	<classpathentry kind="lib" path="lib/development/cobertura.jar"/>
 	<classpathentry kind="lib" path="lib/development/deployment.jar"/>
@@ -51,6 +52,7 @@
 	<classpathentry kind="lib" path="lib/development/jetty-server.jar"/>
 	<classpathentry kind="lib" path="lib/development/jetty-util.jar"/>
 	<classpathentry kind="lib" path="lib/development/jhighlight.jar"/>
+	<classpathentry kind="lib" path="lib/development/jmh-core.jar"/>
 	<classpathentry kind="lib" path="lib/development/jms.jar"/>
 	<classpathentry kind="lib" path="lib/development/jndi.jar"/>
 	<classpathentry kind="lib" path="lib/development/jnet.jar"/>

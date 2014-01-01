@@ -243,6 +243,7 @@
 				<classpath mode="compile">lib/development/ant-ext.jar</classpath>
 				<classpath mode="compile">lib/development/ant-installer.jar</classpath>
 				<classpath mode="compile">lib/development/antelope.jar</classpath>
+				<classpath mode="compile">lib/development/args4j.jar</classpath>
 				<classpath mode="compile">lib/development/catalina.jar</classpath>
 				<classpath mode="compile">lib/development/cobertura.jar</classpath>
 				<classpath mode="compile">lib/development/deployment.jar</classpath>
@@ -269,6 +270,7 @@
 				<classpath mode="compile">lib/development/jetty-server.jar</classpath>
 				<classpath mode="compile">lib/development/jetty-util.jar</classpath>
 				<classpath mode="compile">lib/development/jhighlight.jar</classpath>
+				<classpath mode="compile">lib/development/jmh-core.jar</classpath>
 				<classpath mode="compile">lib/development/jms.jar</classpath>
 				<classpath mode="compile">lib/development/jndi.jar</classpath>
 				<classpath mode="compile">lib/development/jnet.jar</classpath>
