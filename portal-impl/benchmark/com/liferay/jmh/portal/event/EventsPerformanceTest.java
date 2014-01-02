@@ -28,8 +28,14 @@ import com.liferay.portal.module.framework.ModuleFrameworkUtilAdapter;
 import com.liferay.portal.spring.util.SpringUtil;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
+import com.liferay.registry.ServiceTrackerCollection;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -102,6 +108,109 @@ public class EventsPerformanceTest {
 		return lifecycleEvent;
 	}
 
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTracker_getServices()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (Object service : _serviceTracker.getServices()) {
+			((LifecycleAction)service).processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTracker_getServices_Typed()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (LifecycleAction lifecycleAction : _serviceTracker.getServices(
+				new LifecycleAction[_serviceTracker.size()])) {
+
+			lifecycleAction.processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTracker_getTracked_values()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (LifecycleAction lifecycleAction :
+				_serviceTracker.getTracked().values()) {
+
+			lifecycleAction.processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTrackerCollection()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (LifecycleAction lifecycleAction : _serviceTrackerCollection) {
+			lifecycleAction.processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTrackerCollection_ToArray()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (Object object : _serviceTrackerCollection.toArray()) {
+			((LifecycleAction)object).processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
+	@GenerateMicroBenchmark
+	public LifecycleEvent serviceTrackerCollection_ToArray_Typed()
+		throws ActionException {
+
+		BeanchmarkLifecycleEvent lifecycleEvent =
+			new BeanchmarkLifecycleEvent();
+
+		for (LifecycleAction lifecycleAction :
+				_serviceTrackerCollection.toArray(
+					new LifecycleAction[_serviceTrackerCollection.size()])) {
+
+			lifecycleAction.processLifecycleEvent(lifecycleEvent);
+		}
+
+		assert lifecycleEvent.counter.get() == 4;
+
+		return lifecycleEvent;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Setup(Level.Trial)
 	public void setup() throws Exception {
@@ -145,6 +254,35 @@ public class EventsPerformanceTest {
 			"a.key", new BenchmarkLifecycleAction());
 		EventsProcessorUtil.registerEvent(
 			"a.key", new BenchmarkLifecycleAction());
+
+		String filterString = "(lifecycle.event=a.key)";
+
+		Hashtable<String,Object> map = new Hashtable<String,Object>();
+
+		map.put("lifecycle.event", "a.key");
+
+		// Registry
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		registry.registerService(
+			LifecycleAction.class, new BenchmarkLifecycleAction(), map);
+		registry.registerService(
+			LifecycleAction.class, new BenchmarkLifecycleAction(), map);
+		registry.registerService(
+			LifecycleAction.class, new BenchmarkLifecycleAction(), map);
+		registry.registerService(
+			LifecycleAction.class, new BenchmarkLifecycleAction(), map);
+
+		Filter filter = registry.getFilter(filterString);
+
+		_serviceTrackerCollection =
+			new ServiceTrackerCollection<LifecycleAction>(
+				LifecycleAction.class, filter, map);
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();
 	}
 
 	@TearDown(Level.Trial)
@@ -167,5 +305,7 @@ public class EventsPerformanceTest {
 
 	LifecycleAction[] _array;
 	List<LifecycleAction> _list;
+	ServiceTracker<LifecycleAction, LifecycleAction> _serviceTracker;
+	ServiceTrackerCollection<LifecycleAction> _serviceTrackerCollection;
 
 }
