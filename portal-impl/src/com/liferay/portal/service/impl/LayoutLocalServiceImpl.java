@@ -75,6 +75,8 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.comparator.LayoutComparator;
 import com.liferay.portal.util.comparator.LayoutPriorityComparator;
+import com.liferay.portlet.documentlibrary.FileNameException;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.dynamicdatalists.RecordSetDuplicateRecordSetKeyException;
 import com.liferay.portlet.dynamicdatamapping.StructureDuplicateStructureKeyException;
 import com.liferay.portlet.mobiledevicerules.model.MDRRuleGroupInstance;
@@ -893,6 +895,10 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 			long[] layoutIds, Map<String, String[]> parameterMap,
 			Date startDate, Date endDate, String fileName)
 		throws PortalException, SystemException {
+
+		if (!DLStoreUtil.isValidName(fileName)) {
+			throw new FileNameException(fileName);
+		}
 
 		Map<String, Serializable> taskContextMap =
 			BackgroundTaskContextMapFactory.buildTaskContextMap(

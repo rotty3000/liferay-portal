@@ -64,6 +64,7 @@ page import="com.liferay.portal.security.auth.AuthException" %><%@
 page import="com.liferay.portal.security.auth.RemoteAuthException" %><%@
 page import="com.liferay.portal.theme.NavItem" %><%@
 page import="com.liferay.portlet.backgroundtask.util.comparator.BackgroundTaskComparatorFactoryUtil" %><%@
+page import="com.liferay.portlet.documentlibrary.FileNameException" %><%@
 page import="com.liferay.portlet.dynamicdatalists.RecordSetDuplicateRecordSetKeyException" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.StructureDuplicateStructureKeyException" %><%@
 page import="com.liferay.portlet.layoutsadmin.util.LayoutsTreeUtil" %><%@
