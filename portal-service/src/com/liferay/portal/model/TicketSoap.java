@@ -30,6 +30,7 @@ public class TicketSoap implements Serializable {
 	public static TicketSoap toSoapModel(Ticket model) {
 		TicketSoap soapModel = new TicketSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setTicketId(model.getTicketId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setCreateDate(model.getCreateDate());
@@ -89,6 +90,14 @@ public class TicketSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setTicketId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getTicketId() {
@@ -163,6 +172,7 @@ public class TicketSoap implements Serializable {
 		_expirationDate = expirationDate;
 	}
 
+	private long _mvccVersion;
 	private long _ticketId;
 	private long _companyId;
 	private Date _createDate;

@@ -34,9 +34,11 @@ import java.io.ObjectOutput;
 public class PortletCacheModel implements CacheModel<Portlet>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
-		sb.append("{id=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", id=");
 		sb.append(id);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -55,6 +57,7 @@ public class PortletCacheModel implements CacheModel<Portlet>, Externalizable {
 	public Portlet toEntityModel() {
 		PortletImpl portletImpl = new PortletImpl();
 
+		portletImpl.setMvccVersion(mvccVersion);
 		portletImpl.setId(id);
 		portletImpl.setCompanyId(companyId);
 
@@ -81,6 +84,7 @@ public class PortletCacheModel implements CacheModel<Portlet>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		id = objectInput.readLong();
 		companyId = objectInput.readLong();
 		portletId = objectInput.readUTF();
@@ -91,6 +95,7 @@ public class PortletCacheModel implements CacheModel<Portlet>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(id);
 		objectOutput.writeLong(companyId);
 
@@ -111,6 +116,7 @@ public class PortletCacheModel implements CacheModel<Portlet>, Externalizable {
 		objectOutput.writeBoolean(active);
 	}
 
+	public long mvccVersion;
 	public long id;
 	public long companyId;
 	public String portletId;

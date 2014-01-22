@@ -113,6 +113,8 @@ public class CompanyPersistenceTest {
 
 		Company newCompany = _persistence.create(pk);
 
+		newCompany.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newCompany.setAccountId(ServiceTestUtil.nextLong());
 
 		newCompany.setWebId(ServiceTestUtil.randomString());
@@ -135,6 +137,8 @@ public class CompanyPersistenceTest {
 
 		Company existingCompany = _persistence.findByPrimaryKey(newCompany.getPrimaryKey());
 
+		Assert.assertEquals(existingCompany.getMvccVersion(),
+			newCompany.getMvccVersion());
 		Assert.assertEquals(existingCompany.getCompanyId(),
 			newCompany.getCompanyId());
 		Assert.assertEquals(existingCompany.getAccountId(),
@@ -185,10 +189,10 @@ public class CompanyPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Company", "companyId",
-			true, "accountId", true, "webId", true, "key", true, "mx", true,
-			"homeURL", true, "logoId", true, "system", true, "maxUsers", true,
-			"active", true);
+		return OrderByComparatorFactoryUtil.create("Company", "mvccVersion",
+			true, "companyId", true, "accountId", true, "webId", true, "key",
+			true, "mx", true, "homeURL", true, "logoId", true, "system", true,
+			"maxUsers", true, "active", true);
 	}
 
 	@Test
@@ -328,6 +332,8 @@ public class CompanyPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Company company = _persistence.create(pk);
+
+		company.setMvccVersion(ServiceTestUtil.nextLong());
 
 		company.setAccountId(ServiceTestUtil.nextLong());
 

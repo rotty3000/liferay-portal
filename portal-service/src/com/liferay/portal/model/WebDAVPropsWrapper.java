@@ -52,6 +52,7 @@ public class WebDAVPropsWrapper implements WebDAVProps,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("webDavPropsId", getWebDavPropsId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("createDate", getCreateDate());
@@ -65,6 +66,12 @@ public class WebDAVPropsWrapper implements WebDAVProps,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long webDavPropsId = (Long)attributes.get("webDavPropsId");
 
 		if (webDavPropsId != null) {
@@ -126,6 +133,26 @@ public class WebDAVPropsWrapper implements WebDAVProps,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_webDAVProps.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this web d a v props.
+	*
+	* @return the mvcc version of this web d a v props
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _webDAVProps.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this web d a v props.
+	*
+	* @param mvccVersion the mvcc version of this web d a v props
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_webDAVProps.setMvccVersion(mvccVersion);
 	}
 
 	/**

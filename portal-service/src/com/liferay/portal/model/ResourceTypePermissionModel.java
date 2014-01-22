@@ -37,7 +37,8 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface ResourceTypePermissionModel extends BaseModel<ResourceTypePermission> {
+public interface ResourceTypePermissionModel extends BaseModel<ResourceTypePermission>,
+	MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +58,22 @@ public interface ResourceTypePermissionModel extends BaseModel<ResourceTypePermi
 	 * @param primaryKey the primary key of this resource type permission
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this resource type permission.
+	 *
+	 * @return the mvcc version of this resource type permission
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this resource type permission.
+	 *
+	 * @param mvccVersion the mvcc version of this resource type permission
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the resource type permission ID of this resource type permission.

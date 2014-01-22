@@ -35,9 +35,11 @@ public class ClassNameCacheModel implements CacheModel<ClassName>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
-		sb.append("{classNameId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", classNameId=");
 		sb.append(classNameId);
 		sb.append(", value=");
 		sb.append(value);
@@ -50,6 +52,7 @@ public class ClassNameCacheModel implements CacheModel<ClassName>,
 	public ClassName toEntityModel() {
 		ClassNameImpl classNameImpl = new ClassNameImpl();
 
+		classNameImpl.setMvccVersion(mvccVersion);
 		classNameImpl.setClassNameId(classNameId);
 
 		if (value == null) {
@@ -66,6 +69,7 @@ public class ClassNameCacheModel implements CacheModel<ClassName>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		classNameId = objectInput.readLong();
 		value = objectInput.readUTF();
 	}
@@ -73,6 +77,7 @@ public class ClassNameCacheModel implements CacheModel<ClassName>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(classNameId);
 
 		if (value == null) {
@@ -83,6 +88,7 @@ public class ClassNameCacheModel implements CacheModel<ClassName>,
 		}
 	}
 
+	public long mvccVersion;
 	public long classNameId;
 	public String value;
 }

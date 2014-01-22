@@ -5316,6 +5316,7 @@ public class LayoutFriendlyURLPersistenceImpl extends BasePersistenceImpl<Layout
 		layoutFriendlyURLImpl.setNew(layoutFriendlyURL.isNew());
 		layoutFriendlyURLImpl.setPrimaryKey(layoutFriendlyURL.getPrimaryKey());
 
+		layoutFriendlyURLImpl.setMvccVersion(layoutFriendlyURL.getMvccVersion());
 		layoutFriendlyURLImpl.setUuid(layoutFriendlyURL.getUuid());
 		layoutFriendlyURLImpl.setLayoutFriendlyURLId(layoutFriendlyURL.getLayoutFriendlyURLId());
 		layoutFriendlyURLImpl.setGroupId(layoutFriendlyURL.getGroupId());

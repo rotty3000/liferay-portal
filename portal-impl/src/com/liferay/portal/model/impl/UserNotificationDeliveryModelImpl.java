@@ -59,6 +59,7 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 	 */
 	public static final String TABLE_NAME = "UserNotificationDelivery";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "userNotificationDeliveryId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
 			{ "userId", Types.BIGINT },
@@ -68,7 +69,7 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 			{ "deliveryType", Types.INTEGER },
 			{ "deliver", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table UserNotificationDelivery (userNotificationDeliveryId LONG not null primary key,companyId LONG,userId LONG,portletId VARCHAR(200) null,classNameId LONG,notificationType INTEGER,deliveryType INTEGER,deliver BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table UserNotificationDelivery (mvccVersion LONG default 0,userNotificationDeliveryId LONG not null primary key,companyId LONG,userId LONG,portletId VARCHAR(200) null,classNameId LONG,notificationType INTEGER,deliveryType INTEGER,deliver BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table UserNotificationDelivery";
 	public static final String ORDER_BY_JPQL = " ORDER BY userNotificationDelivery.userNotificationDeliveryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY UserNotificationDelivery.userNotificationDeliveryId ASC";
@@ -130,6 +131,7 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("userNotificationDeliveryId",
 			getUserNotificationDeliveryId());
 		attributes.put("companyId", getCompanyId());
@@ -148,6 +150,12 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long userNotificationDeliveryId = (Long)attributes.get(
 				"userNotificationDeliveryId");
 
@@ -196,6 +204,16 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 		if (deliver != null) {
 			setDeliver(deliver);
 		}
+	}
+
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@Override
@@ -407,6 +425,7 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 	public Object clone() {
 		UserNotificationDeliveryImpl userNotificationDeliveryImpl = new UserNotificationDeliveryImpl();
 
+		userNotificationDeliveryImpl.setMvccVersion(getMvccVersion());
 		userNotificationDeliveryImpl.setUserNotificationDeliveryId(getUserNotificationDeliveryId());
 		userNotificationDeliveryImpl.setCompanyId(getCompanyId());
 		userNotificationDeliveryImpl.setUserId(getUserId());
@@ -502,6 +521,8 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 	public CacheModel<UserNotificationDelivery> toCacheModel() {
 		UserNotificationDeliveryCacheModel userNotificationDeliveryCacheModel = new UserNotificationDeliveryCacheModel();
 
+		userNotificationDeliveryCacheModel.mvccVersion = getMvccVersion();
+
 		userNotificationDeliveryCacheModel.userNotificationDeliveryId = getUserNotificationDeliveryId();
 
 		userNotificationDeliveryCacheModel.companyId = getCompanyId();
@@ -529,9 +550,11 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
-		sb.append("{userNotificationDeliveryId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", userNotificationDeliveryId=");
 		sb.append(getUserNotificationDeliveryId());
 		sb.append(", companyId=");
 		sb.append(getCompanyId());
@@ -554,12 +577,16 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.UserNotificationDelivery");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>userNotificationDeliveryId</column-name><column-value><![CDATA[");
 		sb.append(getUserNotificationDeliveryId());
@@ -602,6 +629,7 @@ public class UserNotificationDeliveryModelImpl extends BaseModelImpl<UserNotific
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			UserNotificationDelivery.class
 		};
+	private long _mvccVersion;
 	private long _userNotificationDeliveryId;
 	private long _companyId;
 	private long _userId;

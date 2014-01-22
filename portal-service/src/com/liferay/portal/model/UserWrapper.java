@@ -52,6 +52,7 @@ public class UserWrapper implements User, ModelWrapper<User> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("userId", getUserId());
 		attributes.put("companyId", getCompanyId());
@@ -98,6 +99,12 @@ public class UserWrapper implements User, ModelWrapper<User> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -362,6 +369,26 @@ public class UserWrapper implements User, ModelWrapper<User> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_user.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this user.
+	*
+	* @return the mvcc version of this user
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _user.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this user.
+	*
+	* @param mvccVersion the mvcc version of this user
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_user.setMvccVersion(mvccVersion);
 	}
 
 	/**

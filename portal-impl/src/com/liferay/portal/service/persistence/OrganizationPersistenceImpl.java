@@ -6932,6 +6932,7 @@ public class OrganizationPersistenceImpl extends BasePersistenceImpl<Organizatio
 		organizationImpl.setNew(organization.isNew());
 		organizationImpl.setPrimaryKey(organization.getPrimaryKey());
 
+		organizationImpl.setMvccVersion(organization.getMvccVersion());
 		organizationImpl.setUuid(organization.getUuid());
 		organizationImpl.setOrganizationId(organization.getOrganizationId());
 		organizationImpl.setCompanyId(organization.getCompanyId());

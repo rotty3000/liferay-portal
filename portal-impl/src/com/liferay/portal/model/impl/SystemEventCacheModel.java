@@ -37,9 +37,11 @@ public class SystemEventCacheModel implements CacheModel<SystemEvent>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
-		sb.append("{systemEventId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", systemEventId=");
 		sb.append(systemEventId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -76,6 +78,7 @@ public class SystemEventCacheModel implements CacheModel<SystemEvent>,
 	public SystemEvent toEntityModel() {
 		SystemEventImpl systemEventImpl = new SystemEventImpl();
 
+		systemEventImpl.setMvccVersion(mvccVersion);
 		systemEventImpl.setSystemEventId(systemEventId);
 		systemEventImpl.setGroupId(groupId);
 		systemEventImpl.setCompanyId(companyId);
@@ -124,6 +127,7 @@ public class SystemEventCacheModel implements CacheModel<SystemEvent>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		systemEventId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -143,6 +147,7 @@ public class SystemEventCacheModel implements CacheModel<SystemEvent>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(systemEventId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -179,6 +184,7 @@ public class SystemEventCacheModel implements CacheModel<SystemEvent>,
 		}
 	}
 
+	public long mvccVersion;
 	public long systemEventId;
 	public long groupId;
 	public long companyId;

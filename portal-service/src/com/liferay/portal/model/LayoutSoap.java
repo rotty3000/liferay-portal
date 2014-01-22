@@ -31,6 +31,7 @@ public class LayoutSoap implements Serializable {
 	public static LayoutSoap toSoapModel(Layout model) {
 		LayoutSoap soapModel = new LayoutSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setPlid(model.getPlid());
 		soapModel.setGroupId(model.getGroupId());
@@ -111,6 +112,14 @@ public class LayoutSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setPlid(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -366,6 +375,7 @@ public class LayoutSoap implements Serializable {
 		_sourcePrototypeLayoutUuid = sourcePrototypeLayoutUuid;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _plid;
 	private long _groupId;

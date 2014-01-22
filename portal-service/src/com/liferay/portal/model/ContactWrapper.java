@@ -51,6 +51,7 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("contactId", getContactId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
@@ -90,6 +91,12 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long contactId = (Long)attributes.get("contactId");
 
 		if (contactId != null) {
@@ -307,6 +314,26 @@ public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_contact.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this contact.
+	*
+	* @return the mvcc version of this contact
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _contact.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this contact.
+	*
+	* @param mvccVersion the mvcc version of this contact
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_contact.setMvccVersion(mvccVersion);
 	}
 
 	/**

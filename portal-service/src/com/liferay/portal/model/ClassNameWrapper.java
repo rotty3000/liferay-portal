@@ -50,6 +50,7 @@ public class ClassNameWrapper implements ClassName, ModelWrapper<ClassName> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("value", getValue());
 
@@ -58,6 +59,12 @@ public class ClassNameWrapper implements ClassName, ModelWrapper<ClassName> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long classNameId = (Long)attributes.get("classNameId");
 
 		if (classNameId != null) {
@@ -89,6 +96,26 @@ public class ClassNameWrapper implements ClassName, ModelWrapper<ClassName> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_className.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this class name.
+	*
+	* @return the mvcc version of this class name
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _className.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this class name.
+	*
+	* @param mvccVersion the mvcc version of this class name
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_className.setMvccVersion(mvccVersion);
 	}
 
 	/**

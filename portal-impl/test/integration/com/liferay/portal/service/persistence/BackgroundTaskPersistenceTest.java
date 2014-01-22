@@ -111,6 +111,8 @@ public class BackgroundTaskPersistenceTest {
 
 		BackgroundTask newBackgroundTask = _persistence.create(pk);
 
+		newBackgroundTask.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newBackgroundTask.setGroupId(ServiceTestUtil.nextLong());
 
 		newBackgroundTask.setCompanyId(ServiceTestUtil.nextLong());
@@ -143,6 +145,8 @@ public class BackgroundTaskPersistenceTest {
 
 		BackgroundTask existingBackgroundTask = _persistence.findByPrimaryKey(newBackgroundTask.getPrimaryKey());
 
+		Assert.assertEquals(existingBackgroundTask.getMvccVersion(),
+			newBackgroundTask.getMvccVersion());
 		Assert.assertEquals(existingBackgroundTask.getBackgroundTaskId(),
 			newBackgroundTask.getBackgroundTaskId());
 		Assert.assertEquals(existingBackgroundTask.getGroupId(),
@@ -214,11 +218,12 @@ public class BackgroundTaskPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("BackgroundTask",
-			"backgroundTaskId", true, "groupId", true, "companyId", true,
-			"userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "name", true, "servletContextNames", true,
-			"taskExecutorClassName", true, "taskContext", true, "completed",
-			true, "completionDate", true, "status", true, "statusMessage", true);
+			"mvccVersion", true, "backgroundTaskId", true, "groupId", true,
+			"companyId", true, "userId", true, "userName", true, "createDate",
+			true, "modifiedDate", true, "name", true, "servletContextNames",
+			true, "taskExecutorClassName", true, "taskContext", true,
+			"completed", true, "completionDate", true, "status", true,
+			"statusMessage", true);
 	}
 
 	@Test
@@ -337,6 +342,8 @@ public class BackgroundTaskPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		BackgroundTask backgroundTask = _persistence.create(pk);
+
+		backgroundTask.setMvccVersion(ServiceTestUtil.nextLong());
 
 		backgroundTask.setGroupId(ServiceTestUtil.nextLong());
 

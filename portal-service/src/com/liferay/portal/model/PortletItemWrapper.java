@@ -52,6 +52,7 @@ public class PortletItemWrapper implements PortletItem,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("portletItemId", getPortletItemId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -68,6 +69,12 @@ public class PortletItemWrapper implements PortletItem,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long portletItemId = (Long)attributes.get("portletItemId");
 
 		if (portletItemId != null) {
@@ -147,6 +154,26 @@ public class PortletItemWrapper implements PortletItem,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_portletItem.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this portlet item.
+	*
+	* @return the mvcc version of this portlet item
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _portletItem.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this portlet item.
+	*
+	* @param mvccVersion the mvcc version of this portlet item
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_portletItem.setMvccVersion(mvccVersion);
 	}
 
 	/**

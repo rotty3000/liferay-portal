@@ -52,6 +52,7 @@ public class UserNotificationEventWrapper implements UserNotificationEvent,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("userNotificationEventId", getUserNotificationEventId());
 		attributes.put("companyId", getCompanyId());
@@ -68,6 +69,12 @@ public class UserNotificationEventWrapper implements UserNotificationEvent,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -148,6 +155,26 @@ public class UserNotificationEventWrapper implements UserNotificationEvent,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_userNotificationEvent.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this user notification event.
+	*
+	* @return the mvcc version of this user notification event
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _userNotificationEvent.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this user notification event.
+	*
+	* @param mvccVersion the mvcc version of this user notification event
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_userNotificationEvent.setMvccVersion(mvccVersion);
 	}
 
 	/**

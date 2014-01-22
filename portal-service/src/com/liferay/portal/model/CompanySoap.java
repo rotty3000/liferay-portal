@@ -30,6 +30,7 @@ public class CompanySoap implements Serializable {
 	public static CompanySoap toSoapModel(Company model) {
 		CompanySoap soapModel = new CompanySoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setAccountId(model.getAccountId());
 		soapModel.setWebId(model.getWebId());
@@ -90,6 +91,14 @@ public class CompanySoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setCompanyId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getCompanyId() {
@@ -180,6 +189,7 @@ public class CompanySoap implements Serializable {
 		_active = active;
 	}
 
+	private long _mvccVersion;
 	private long _companyId;
 	private long _accountId;
 	private String _webId;

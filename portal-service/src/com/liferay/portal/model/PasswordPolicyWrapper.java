@@ -53,6 +53,7 @@ public class PasswordPolicyWrapper implements PasswordPolicy,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("passwordPolicyId", getPasswordPolicyId());
 		attributes.put("companyId", getCompanyId());
@@ -93,6 +94,12 @@ public class PasswordPolicyWrapper implements PasswordPolicy,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -317,6 +324,26 @@ public class PasswordPolicyWrapper implements PasswordPolicy,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_passwordPolicy.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this password policy.
+	*
+	* @return the mvcc version of this password policy
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _passwordPolicy.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this password policy.
+	*
+	* @param mvccVersion the mvcc version of this password policy
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_passwordPolicy.setMvccVersion(mvccVersion);
 	}
 
 	/**

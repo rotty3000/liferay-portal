@@ -37,9 +37,11 @@ public class OrganizationCacheModel implements CacheModel<Organization>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", organizationId=");
 		sb.append(organizationId);
@@ -81,6 +83,8 @@ public class OrganizationCacheModel implements CacheModel<Organization>,
 	@Override
 	public Organization toEntityModel() {
 		OrganizationImpl organizationImpl = new OrganizationImpl();
+
+		organizationImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			organizationImpl.setUuid(StringPool.BLANK);
@@ -158,6 +162,7 @@ public class OrganizationCacheModel implements CacheModel<Organization>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		organizationId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -180,6 +185,8 @@ public class OrganizationCacheModel implements CacheModel<Organization>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -238,6 +245,7 @@ public class OrganizationCacheModel implements CacheModel<Organization>,
 		objectOutput.writeLong(logoId);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long organizationId;
 	public long companyId;

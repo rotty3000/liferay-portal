@@ -29,6 +29,7 @@ public class ShardSoap implements Serializable {
 	public static ShardSoap toSoapModel(Shard model) {
 		ShardSoap soapModel = new ShardSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setShardId(model.getShardId());
 		soapModel.setClassNameId(model.getClassNameId());
 		soapModel.setClassPK(model.getClassPK());
@@ -85,6 +86,14 @@ public class ShardSoap implements Serializable {
 		setShardId(pk);
 	}
 
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
+	}
+
 	public long getShardId() {
 		return _shardId;
 	}
@@ -117,6 +126,7 @@ public class ShardSoap implements Serializable {
 		_name = name;
 	}
 
+	private long _mvccVersion;
 	private long _shardId;
 	private long _classNameId;
 	private long _classPK;

@@ -43,7 +43,7 @@ import java.util.Map;
  * @generated
  */
 @ProviderType
-public interface RoleModel extends AttachedModel, BaseModel<Role>,
+public interface RoleModel extends AttachedModel, BaseModel<Role>, MVCCModel,
 	StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -64,6 +64,22 @@ public interface RoleModel extends AttachedModel, BaseModel<Role>,
 	 * @param primaryKey the primary key of this role
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this role.
+	 *
+	 * @return the mvcc version of this role
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this role.
+	 *
+	 * @param mvccVersion the mvcc version of this role
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this role.

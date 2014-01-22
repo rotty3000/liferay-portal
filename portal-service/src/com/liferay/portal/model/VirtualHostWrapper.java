@@ -51,6 +51,7 @@ public class VirtualHostWrapper implements VirtualHost,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("virtualHostId", getVirtualHostId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("layoutSetId", getLayoutSetId());
@@ -61,6 +62,12 @@ public class VirtualHostWrapper implements VirtualHost,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long virtualHostId = (Long)attributes.get("virtualHostId");
 
 		if (virtualHostId != null) {
@@ -104,6 +111,26 @@ public class VirtualHostWrapper implements VirtualHost,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_virtualHost.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this virtual host.
+	*
+	* @return the mvcc version of this virtual host
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _virtualHost.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this virtual host.
+	*
+	* @param mvccVersion the mvcc version of this virtual host
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_virtualHost.setMvccVersion(mvccVersion);
 	}
 
 	/**

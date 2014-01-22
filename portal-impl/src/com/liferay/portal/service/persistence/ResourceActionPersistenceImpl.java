@@ -1235,6 +1235,7 @@ public class ResourceActionPersistenceImpl extends BasePersistenceImpl<ResourceA
 		resourceActionImpl.setNew(resourceAction.isNew());
 		resourceActionImpl.setPrimaryKey(resourceAction.getPrimaryKey());
 
+		resourceActionImpl.setMvccVersion(resourceAction.getMvccVersion());
 		resourceActionImpl.setResourceActionId(resourceAction.getResourceActionId());
 		resourceActionImpl.setName(resourceAction.getName());
 		resourceActionImpl.setActionId(resourceAction.getActionId());

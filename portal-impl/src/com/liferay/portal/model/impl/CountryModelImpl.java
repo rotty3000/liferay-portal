@@ -61,6 +61,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 	 */
 	public static final String TABLE_NAME = "Country";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "countryId", Types.BIGINT },
 			{ "name", Types.VARCHAR },
 			{ "a2", Types.VARCHAR },
@@ -70,7 +71,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 			{ "zipRequired", Types.BOOLEAN },
 			{ "active_", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Country (countryId LONG not null primary key,name VARCHAR(75) null,a2 VARCHAR(75) null,a3 VARCHAR(75) null,number_ VARCHAR(75) null,idd_ VARCHAR(75) null,zipRequired BOOLEAN,active_ BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table Country (mvccVersion LONG default 0,countryId LONG not null primary key,name VARCHAR(75) null,a2 VARCHAR(75) null,a3 VARCHAR(75) null,number_ VARCHAR(75) null,idd_ VARCHAR(75) null,zipRequired BOOLEAN,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table Country";
 	public static final String ORDER_BY_JPQL = " ORDER BY country.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Country.name ASC";
@@ -104,6 +105,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 
 		Country model = new CountryImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setCountryId(soapModel.getCountryId());
 		model.setName(soapModel.getName());
 		model.setA2(soapModel.getA2());
@@ -176,6 +178,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("countryId", getCountryId());
 		attributes.put("name", getName());
 		attributes.put("a2", getA2());
@@ -193,6 +196,12 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long countryId = (Long)attributes.get("countryId");
 
 		if (countryId != null) {
@@ -240,6 +249,17 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 		if (active != null) {
 			setActive(active);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -438,6 +458,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 	public Object clone() {
 		CountryImpl countryImpl = new CountryImpl();
 
+		countryImpl.setMvccVersion(getMvccVersion());
 		countryImpl.setCountryId(getCountryId());
 		countryImpl.setName(getName());
 		countryImpl.setA2(getA2());
@@ -523,6 +544,8 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 	public CacheModel<Country> toCacheModel() {
 		CountryCacheModel countryCacheModel = new CountryCacheModel();
 
+		countryCacheModel.mvccVersion = getMvccVersion();
+
 		countryCacheModel.countryId = getCountryId();
 
 		countryCacheModel.name = getName();
@@ -574,9 +597,11 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
-		sb.append("{countryId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", countryId=");
 		sb.append(getCountryId());
 		sb.append(", name=");
 		sb.append(getName());
@@ -599,12 +624,16 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.Country");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>countryId</column-name><column-value><![CDATA[");
 		sb.append(getCountryId());
@@ -647,6 +676,7 @@ public class CountryModelImpl extends BaseModelImpl<Country>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Country.class
 		};
+	private long _mvccVersion;
 	private long _countryId;
 	private String _name;
 	private String _originalName;

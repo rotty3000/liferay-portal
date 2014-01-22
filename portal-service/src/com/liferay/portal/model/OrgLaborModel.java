@@ -36,7 +36,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface OrgLaborModel extends BaseModel<OrgLabor> {
+public interface OrgLaborModel extends BaseModel<OrgLabor>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -56,6 +56,22 @@ public interface OrgLaborModel extends BaseModel<OrgLabor> {
 	 * @param primaryKey the primary key of this org labor
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this org labor.
+	 *
+	 * @return the mvcc version of this org labor
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this org labor.
+	 *
+	 * @param mvccVersion the mvcc version of this org labor
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the org labor ID of this org labor.

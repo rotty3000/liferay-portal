@@ -111,6 +111,8 @@ public class UserTrackerPersistenceTest {
 
 		UserTracker newUserTracker = _persistence.create(pk);
 
+		newUserTracker.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newUserTracker.setCompanyId(ServiceTestUtil.nextLong());
 
 		newUserTracker.setUserId(ServiceTestUtil.nextLong());
@@ -129,6 +131,8 @@ public class UserTrackerPersistenceTest {
 
 		UserTracker existingUserTracker = _persistence.findByPrimaryKey(newUserTracker.getPrimaryKey());
 
+		Assert.assertEquals(existingUserTracker.getMvccVersion(),
+			newUserTracker.getMvccVersion());
 		Assert.assertEquals(existingUserTracker.getUserTrackerId(),
 			newUserTracker.getUserTrackerId());
 		Assert.assertEquals(existingUserTracker.getCompanyId(),
@@ -184,9 +188,9 @@ public class UserTrackerPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("UserTracker",
-			"userTrackerId", true, "companyId", true, "userId", true,
-			"modifiedDate", true, "sessionId", true, "remoteAddr", true,
-			"remoteHost", true, "userAgent", true);
+			"mvccVersion", true, "userTrackerId", true, "companyId", true,
+			"userId", true, "modifiedDate", true, "sessionId", true,
+			"remoteAddr", true, "remoteHost", true, "userAgent", true);
 	}
 
 	@Test
@@ -305,6 +309,8 @@ public class UserTrackerPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		UserTracker userTracker = _persistence.create(pk);
+
+		userTracker.setMvccVersion(ServiceTestUtil.nextLong());
 
 		userTracker.setCompanyId(ServiceTestUtil.nextLong());
 

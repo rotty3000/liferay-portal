@@ -36,9 +36,11 @@ import java.util.Date;
 public class RoleCacheModel implements CacheModel<Role>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", roleId=");
 		sb.append(roleId);
@@ -74,6 +76,8 @@ public class RoleCacheModel implements CacheModel<Role>, Externalizable {
 	@Override
 	public Role toEntityModel() {
 		RoleImpl roleImpl = new RoleImpl();
+
+		roleImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			roleImpl.setUuid(StringPool.BLANK);
@@ -147,6 +151,7 @@ public class RoleCacheModel implements CacheModel<Role>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		roleId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -166,6 +171,8 @@ public class RoleCacheModel implements CacheModel<Role>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -220,6 +227,7 @@ public class RoleCacheModel implements CacheModel<Role>, Externalizable {
 		}
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long roleId;
 	public long companyId;

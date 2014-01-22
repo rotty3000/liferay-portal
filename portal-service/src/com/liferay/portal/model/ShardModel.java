@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface ShardModel extends AttachedModel, BaseModel<Shard> {
+public interface ShardModel extends AttachedModel, BaseModel<Shard>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface ShardModel extends AttachedModel, BaseModel<Shard> {
 	 * @param primaryKey the primary key of this shard
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this shard.
+	 *
+	 * @return the mvcc version of this shard
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this shard.
+	 *
+	 * @param mvccVersion the mvcc version of this shard
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the shard ID of this shard.

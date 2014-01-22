@@ -114,6 +114,8 @@ public class LayoutPersistenceTest {
 
 		Layout newLayout = _persistence.create(pk);
 
+		newLayout.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newLayout.setUuid(ServiceTestUtil.randomString());
 
 		newLayout.setGroupId(ServiceTestUtil.nextLong());
@@ -176,6 +178,8 @@ public class LayoutPersistenceTest {
 
 		Layout existingLayout = _persistence.findByPrimaryKey(newLayout.getPrimaryKey());
 
+		Assert.assertEquals(existingLayout.getMvccVersion(),
+			newLayout.getMvccVersion());
 		Assert.assertEquals(existingLayout.getUuid(), newLayout.getUuid());
 		Assert.assertEquals(existingLayout.getPlid(), newLayout.getPlid());
 		Assert.assertEquals(existingLayout.getGroupId(), newLayout.getGroupId());
@@ -274,15 +278,16 @@ public class LayoutPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Layout", "uuid", true,
-			"plid", true, "groupId", true, "companyId", true, "userId", true,
-			"userName", true, "createDate", true, "modifiedDate", true,
-			"privateLayout", true, "layoutId", true, "parentLayoutId", true,
-			"name", true, "title", true, "description", true, "keywords", true,
-			"robots", true, "type", true, "typeSettings", true, "hidden", true,
-			"friendlyURL", true, "iconImageId", true, "themeId", true,
-			"colorSchemeId", true, "wapThemeId", true, "wapColorSchemeId",
-			true, "css", true, "priority", true, "layoutPrototypeUuid", true,
+		return OrderByComparatorFactoryUtil.create("Layout", "mvccVersion",
+			true, "uuid", true, "plid", true, "groupId", true, "companyId",
+			true, "userId", true, "userName", true, "createDate", true,
+			"modifiedDate", true, "privateLayout", true, "layoutId", true,
+			"parentLayoutId", true, "name", true, "title", true, "description",
+			true, "keywords", true, "robots", true, "type", true,
+			"typeSettings", true, "hidden", true, "friendlyURL", true,
+			"iconImageId", true, "themeId", true, "colorSchemeId", true,
+			"wapThemeId", true, "wapColorSchemeId", true, "css", true,
+			"priority", true, "layoutPrototypeUuid", true,
 			"layoutPrototypeLinkEnabled", true, "sourcePrototypeLayoutUuid",
 			true);
 	}
@@ -446,6 +451,8 @@ public class LayoutPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Layout layout = _persistence.create(pk);
+
+		layout.setMvccVersion(ServiceTestUtil.nextLong());
 
 		layout.setUuid(ServiceTestUtil.randomString());
 

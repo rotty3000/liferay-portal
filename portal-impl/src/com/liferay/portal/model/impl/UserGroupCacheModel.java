@@ -37,9 +37,11 @@ public class UserGroupCacheModel implements CacheModel<UserGroup>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", userGroupId=");
 		sb.append(userGroupId);
@@ -69,6 +71,8 @@ public class UserGroupCacheModel implements CacheModel<UserGroup>,
 	@Override
 	public UserGroup toEntityModel() {
 		UserGroupImpl userGroupImpl = new UserGroupImpl();
+
+		userGroupImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			userGroupImpl.setUuid(StringPool.BLANK);
@@ -127,6 +131,7 @@ public class UserGroupCacheModel implements CacheModel<UserGroup>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		userGroupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -143,6 +148,8 @@ public class UserGroupCacheModel implements CacheModel<UserGroup>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -182,6 +189,7 @@ public class UserGroupCacheModel implements CacheModel<UserGroup>,
 		objectOutput.writeBoolean(addedByLDAPImport);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long userGroupId;
 	public long companyId;

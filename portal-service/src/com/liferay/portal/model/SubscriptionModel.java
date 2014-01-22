@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface SubscriptionModel extends AttachedModel, AuditedModel,
-	BaseModel<Subscription> {
+	BaseModel<Subscription>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface SubscriptionModel extends AttachedModel, AuditedModel,
 	 * @param primaryKey the primary key of this subscription
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this subscription.
+	 *
+	 * @return the mvcc version of this subscription
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this subscription.
+	 *
+	 * @param mvccVersion the mvcc version of this subscription
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the subscription ID of this subscription.

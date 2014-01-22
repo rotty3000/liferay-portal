@@ -14,7 +14,6 @@
 
 package com.liferay.portal.search;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.search.BaseIndexerPostProcessor;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
@@ -287,11 +286,11 @@ public class DocumentImplTest {
 			SearchContext searchContext, Sort sort, String[] screenNames)
 		throws Exception {
 
+		searchContext.setSorts(sort);
+
 		Query query = _indexer.getFullQuery(searchContext);
 
-		Hits results = SearchEngineUtil.search(
-			searchContext.getSearchEngineId(), searchContext.getCompanyId(),
-			query, sort, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		Hits results = SearchEngineUtil.search(searchContext, query);
 
 		Assert.assertEquals(screenNames.length, results.getLength());
 

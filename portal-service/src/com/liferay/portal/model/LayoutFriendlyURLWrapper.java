@@ -53,6 +53,7 @@ public class LayoutFriendlyURLWrapper implements LayoutFriendlyURL,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("layoutFriendlyURLId", getLayoutFriendlyURLId());
 		attributes.put("groupId", getGroupId());
@@ -71,6 +72,12 @@ public class LayoutFriendlyURLWrapper implements LayoutFriendlyURL,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -162,6 +169,26 @@ public class LayoutFriendlyURLWrapper implements LayoutFriendlyURL,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_layoutFriendlyURL.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this layout friendly u r l.
+	*
+	* @return the mvcc version of this layout friendly u r l
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _layoutFriendlyURL.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this layout friendly u r l.
+	*
+	* @param mvccVersion the mvcc version of this layout friendly u r l
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_layoutFriendlyURL.setMvccVersion(mvccVersion);
 	}
 
 	/**

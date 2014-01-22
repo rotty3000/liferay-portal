@@ -1279,6 +1279,7 @@ public class UserNotificationDeliveryPersistenceImpl extends BasePersistenceImpl
 		userNotificationDeliveryImpl.setNew(userNotificationDelivery.isNew());
 		userNotificationDeliveryImpl.setPrimaryKey(userNotificationDelivery.getPrimaryKey());
 
+		userNotificationDeliveryImpl.setMvccVersion(userNotificationDelivery.getMvccVersion());
 		userNotificationDeliveryImpl.setUserNotificationDeliveryId(userNotificationDelivery.getUserNotificationDeliveryId());
 		userNotificationDeliveryImpl.setCompanyId(userNotificationDelivery.getCompanyId());
 		userNotificationDeliveryImpl.setUserId(userNotificationDelivery.getUserId());

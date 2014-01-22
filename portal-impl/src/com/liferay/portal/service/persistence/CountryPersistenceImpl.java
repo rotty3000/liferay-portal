@@ -1660,6 +1660,7 @@ public class CountryPersistenceImpl extends BasePersistenceImpl<Country>
 		countryImpl.setNew(country.isNew());
 		countryImpl.setPrimaryKey(country.getPrimaryKey());
 
+		countryImpl.setMvccVersion(country.getMvccVersion());
 		countryImpl.setCountryId(country.getCountryId());
 		countryImpl.setName(country.getName());
 		countryImpl.setA2(country.getA2());

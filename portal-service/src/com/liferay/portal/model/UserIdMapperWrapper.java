@@ -51,6 +51,7 @@ public class UserIdMapperWrapper implements UserIdMapper,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("userIdMapperId", getUserIdMapperId());
 		attributes.put("userId", getUserId());
 		attributes.put("type", getType());
@@ -62,6 +63,12 @@ public class UserIdMapperWrapper implements UserIdMapper,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long userIdMapperId = (Long)attributes.get("userIdMapperId");
 
 		if (userIdMapperId != null) {
@@ -111,6 +118,26 @@ public class UserIdMapperWrapper implements UserIdMapper,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_userIdMapper.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this user ID mapper.
+	*
+	* @return the mvcc version of this user ID mapper
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _userIdMapper.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this user ID mapper.
+	*
+	* @param mvccVersion the mvcc version of this user ID mapper
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_userIdMapper.setMvccVersion(mvccVersion);
 	}
 
 	/**

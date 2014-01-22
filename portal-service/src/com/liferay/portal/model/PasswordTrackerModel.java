@@ -40,7 +40,8 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface PasswordTrackerModel extends BaseModel<PasswordTracker> {
+public interface PasswordTrackerModel extends BaseModel<PasswordTracker>,
+	MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -60,6 +61,22 @@ public interface PasswordTrackerModel extends BaseModel<PasswordTracker> {
 	 * @param primaryKey the primary key of this password tracker
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this password tracker.
+	 *
+	 * @return the mvcc version of this password tracker
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this password tracker.
+	 *
+	 * @param mvccVersion the mvcc version of this password tracker
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the password tracker ID of this password tracker.

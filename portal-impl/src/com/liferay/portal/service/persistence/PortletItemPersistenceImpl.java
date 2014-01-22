@@ -1930,6 +1930,7 @@ public class PortletItemPersistenceImpl extends BasePersistenceImpl<PortletItem>
 		portletItemImpl.setNew(portletItem.isNew());
 		portletItemImpl.setPrimaryKey(portletItem.getPrimaryKey());
 
+		portletItemImpl.setMvccVersion(portletItem.getMvccVersion());
 		portletItemImpl.setPortletItemId(portletItem.getPortletItemId());
 		portletItemImpl.setGroupId(portletItem.getGroupId());
 		portletItemImpl.setCompanyId(portletItem.getCompanyId());

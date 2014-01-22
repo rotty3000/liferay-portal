@@ -1699,6 +1699,7 @@ public class LayoutSetPersistenceImpl extends BasePersistenceImpl<LayoutSet>
 		layoutSetImpl.setNew(layoutSet.isNew());
 		layoutSetImpl.setPrimaryKey(layoutSet.getPrimaryKey());
 
+		layoutSetImpl.setMvccVersion(layoutSet.getMvccVersion());
 		layoutSetImpl.setLayoutSetId(layoutSet.getLayoutSetId());
 		layoutSetImpl.setGroupId(layoutSet.getGroupId());
 		layoutSetImpl.setCompanyId(layoutSet.getCompanyId());

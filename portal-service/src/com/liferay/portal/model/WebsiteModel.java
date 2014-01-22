@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface WebsiteModel extends AttachedModel, BaseModel<Website>,
-	StagedAuditedModel {
+	MVCCModel, StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface WebsiteModel extends AttachedModel, BaseModel<Website>,
 	 * @param primaryKey the primary key of this website
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this website.
+	 *
+	 * @return the mvcc version of this website
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this website.
+	 *
+	 * @param mvccVersion the mvcc version of this website
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this website.

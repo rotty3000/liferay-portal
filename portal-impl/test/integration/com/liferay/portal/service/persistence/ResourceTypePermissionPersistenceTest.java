@@ -113,6 +113,8 @@ public class ResourceTypePermissionPersistenceTest {
 
 		ResourceTypePermission newResourceTypePermission = _persistence.create(pk);
 
+		newResourceTypePermission.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newResourceTypePermission.setCompanyId(ServiceTestUtil.nextLong());
 
 		newResourceTypePermission.setGroupId(ServiceTestUtil.nextLong());
@@ -127,6 +129,8 @@ public class ResourceTypePermissionPersistenceTest {
 
 		ResourceTypePermission existingResourceTypePermission = _persistence.findByPrimaryKey(newResourceTypePermission.getPrimaryKey());
 
+		Assert.assertEquals(existingResourceTypePermission.getMvccVersion(),
+			newResourceTypePermission.getMvccVersion());
 		Assert.assertEquals(existingResourceTypePermission.getResourceTypePermissionId(),
 			newResourceTypePermission.getResourceTypePermissionId());
 		Assert.assertEquals(existingResourceTypePermission.getCompanyId(),
@@ -178,8 +182,9 @@ public class ResourceTypePermissionPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("ResourceTypePermission",
-			"resourceTypePermissionId", true, "companyId", true, "groupId",
-			true, "name", true, "roleId", true, "actionIds", true);
+			"mvccVersion", true, "resourceTypePermissionId", true, "companyId",
+			true, "groupId", true, "name", true, "roleId", true, "actionIds",
+			true);
 	}
 
 	@Test
@@ -328,6 +333,8 @@ public class ResourceTypePermissionPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		ResourceTypePermission resourceTypePermission = _persistence.create(pk);
+
+		resourceTypePermission.setMvccVersion(ServiceTestUtil.nextLong());
 
 		resourceTypePermission.setCompanyId(ServiceTestUtil.nextLong());
 

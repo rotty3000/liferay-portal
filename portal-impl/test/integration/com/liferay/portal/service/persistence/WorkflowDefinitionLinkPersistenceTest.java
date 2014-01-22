@@ -113,6 +113,8 @@ public class WorkflowDefinitionLinkPersistenceTest {
 
 		WorkflowDefinitionLink newWorkflowDefinitionLink = _persistence.create(pk);
 
+		newWorkflowDefinitionLink.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newWorkflowDefinitionLink.setGroupId(ServiceTestUtil.nextLong());
 
 		newWorkflowDefinitionLink.setCompanyId(ServiceTestUtil.nextLong());
@@ -139,6 +141,8 @@ public class WorkflowDefinitionLinkPersistenceTest {
 
 		WorkflowDefinitionLink existingWorkflowDefinitionLink = _persistence.findByPrimaryKey(newWorkflowDefinitionLink.getPrimaryKey());
 
+		Assert.assertEquals(existingWorkflowDefinitionLink.getMvccVersion(),
+			newWorkflowDefinitionLink.getMvccVersion());
 		Assert.assertEquals(existingWorkflowDefinitionLink.getWorkflowDefinitionLinkId(),
 			newWorkflowDefinitionLink.getWorkflowDefinitionLinkId());
 		Assert.assertEquals(existingWorkflowDefinitionLink.getGroupId(),
@@ -204,10 +208,10 @@ public class WorkflowDefinitionLinkPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("WorkflowDefinitionLink",
-			"workflowDefinitionLinkId", true, "groupId", true, "companyId",
-			true, "userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "classNameId", true, "classPK", true,
-			"typePK", true, "workflowDefinitionName", true,
+			"mvccVersion", true, "workflowDefinitionLinkId", true, "groupId",
+			true, "companyId", true, "userId", true, "userName", true,
+			"createDate", true, "modifiedDate", true, "classNameId", true,
+			"classPK", true, "typePK", true, "workflowDefinitionName", true,
 			"workflowDefinitionVersion", true);
 	}
 
@@ -358,6 +362,8 @@ public class WorkflowDefinitionLinkPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		WorkflowDefinitionLink workflowDefinitionLink = _persistence.create(pk);
+
+		workflowDefinitionLink.setMvccVersion(ServiceTestUtil.nextLong());
 
 		workflowDefinitionLink.setGroupId(ServiceTestUtil.nextLong());
 

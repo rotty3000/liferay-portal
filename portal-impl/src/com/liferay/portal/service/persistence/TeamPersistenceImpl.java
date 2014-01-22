@@ -1506,6 +1506,7 @@ public class TeamPersistenceImpl extends BasePersistenceImpl<Team>
 		teamImpl.setNew(team.isNew());
 		teamImpl.setPrimaryKey(team.getPrimaryKey());
 
+		teamImpl.setMvccVersion(team.getMvccVersion());
 		teamImpl.setTeamId(team.getTeamId());
 		teamImpl.setCompanyId(team.getCompanyId());
 		teamImpl.setUserId(team.getUserId());

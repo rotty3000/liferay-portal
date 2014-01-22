@@ -113,6 +113,8 @@ public class LayoutRevisionPersistenceTest {
 
 		LayoutRevision newLayoutRevision = _persistence.create(pk);
 
+		newLayoutRevision.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newLayoutRevision.setGroupId(ServiceTestUtil.nextLong());
 
 		newLayoutRevision.setCompanyId(ServiceTestUtil.nextLong());
@@ -175,6 +177,8 @@ public class LayoutRevisionPersistenceTest {
 
 		LayoutRevision existingLayoutRevision = _persistence.findByPrimaryKey(newLayoutRevision.getPrimaryKey());
 
+		Assert.assertEquals(existingLayoutRevision.getMvccVersion(),
+			newLayoutRevision.getMvccVersion());
 		Assert.assertEquals(existingLayoutRevision.getLayoutRevisionId(),
 			newLayoutRevision.getLayoutRevisionId());
 		Assert.assertEquals(existingLayoutRevision.getGroupId(),
@@ -276,16 +280,16 @@ public class LayoutRevisionPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("LayoutRevision",
-			"layoutRevisionId", true, "groupId", true, "companyId", true,
-			"userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "layoutSetBranchId", true, "layoutBranchId",
-			true, "parentLayoutRevisionId", true, "head", true, "major", true,
-			"plid", true, "privateLayout", true, "name", true, "title", true,
-			"description", true, "keywords", true, "robots", true,
-			"typeSettings", true, "iconImageId", true, "themeId", true,
-			"colorSchemeId", true, "wapThemeId", true, "wapColorSchemeId",
-			true, "css", true, "status", true, "statusByUserId", true,
-			"statusByUserName", true, "statusDate", true);
+			"mvccVersion", true, "layoutRevisionId", true, "groupId", true,
+			"companyId", true, "userId", true, "userName", true, "createDate",
+			true, "modifiedDate", true, "layoutSetBranchId", true,
+			"layoutBranchId", true, "parentLayoutRevisionId", true, "head",
+			true, "major", true, "plid", true, "privateLayout", true, "name",
+			true, "title", true, "description", true, "keywords", true,
+			"robots", true, "typeSettings", true, "iconImageId", true,
+			"themeId", true, "colorSchemeId", true, "wapThemeId", true,
+			"wapColorSchemeId", true, "css", true, "status", true,
+			"statusByUserId", true, "statusByUserName", true, "statusDate", true);
 	}
 
 	@Test
@@ -424,6 +428,8 @@ public class LayoutRevisionPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		LayoutRevision layoutRevision = _persistence.create(pk);
+
+		layoutRevision.setMvccVersion(ServiceTestUtil.nextLong());
 
 		layoutRevision.setGroupId(ServiceTestUtil.nextLong());
 

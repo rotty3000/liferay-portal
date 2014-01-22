@@ -36,9 +36,11 @@ import java.util.Date;
 public class LockCacheModel implements CacheModel<Lock>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", lockId=");
 		sb.append(lockId);
@@ -68,6 +70,8 @@ public class LockCacheModel implements CacheModel<Lock>, Externalizable {
 	@Override
 	public Lock toEntityModel() {
 		LockImpl lockImpl = new LockImpl();
+
+		lockImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			lockImpl.setUuid(StringPool.BLANK);
@@ -131,6 +135,7 @@ public class LockCacheModel implements CacheModel<Lock>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		lockId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -147,6 +152,8 @@ public class LockCacheModel implements CacheModel<Lock>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -192,6 +199,7 @@ public class LockCacheModel implements CacheModel<Lock>, Externalizable {
 		objectOutput.writeLong(expirationDate);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long lockId;
 	public long companyId;

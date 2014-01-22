@@ -30,6 +30,7 @@ public class ResourceBlockSoap implements Serializable {
 	public static ResourceBlockSoap toSoapModel(ResourceBlock model) {
 		ResourceBlockSoap soapModel = new ResourceBlockSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setResourceBlockId(model.getResourceBlockId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setGroupId(model.getGroupId());
@@ -88,6 +89,14 @@ public class ResourceBlockSoap implements Serializable {
 		setResourceBlockId(pk);
 	}
 
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
+	}
+
 	public long getResourceBlockId() {
 		return _resourceBlockId;
 	}
@@ -136,6 +145,7 @@ public class ResourceBlockSoap implements Serializable {
 		_referenceCount = referenceCount;
 	}
 
+	private long _mvccVersion;
 	private long _resourceBlockId;
 	private long _companyId;
 	private long _groupId;

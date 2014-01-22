@@ -52,6 +52,7 @@ public class LayoutRevisionWrapper implements LayoutRevision,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("layoutRevisionId", getLayoutRevisionId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -88,6 +89,12 @@ public class LayoutRevisionWrapper implements LayoutRevision,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long layoutRevisionId = (Long)attributes.get("layoutRevisionId");
 
 		if (layoutRevisionId != null) {
@@ -288,6 +295,26 @@ public class LayoutRevisionWrapper implements LayoutRevision,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_layoutRevision.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this layout revision.
+	*
+	* @return the mvcc version of this layout revision
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _layoutRevision.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this layout revision.
+	*
+	* @param mvccVersion the mvcc version of this layout revision
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_layoutRevision.setMvccVersion(mvccVersion);
 	}
 
 	/**

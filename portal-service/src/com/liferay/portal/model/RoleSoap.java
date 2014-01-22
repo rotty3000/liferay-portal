@@ -31,6 +31,7 @@ public class RoleSoap implements Serializable {
 	public static RoleSoap toSoapModel(Role model) {
 		RoleSoap soapModel = new RoleSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setRoleId(model.getRoleId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -95,6 +96,14 @@ public class RoleSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setRoleId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -209,6 +218,7 @@ public class RoleSoap implements Serializable {
 		_subtype = subtype;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _roleId;
 	private long _companyId;

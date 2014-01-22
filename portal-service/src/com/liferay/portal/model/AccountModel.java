@@ -40,7 +40,7 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface AccountModel extends AuditedModel, BaseModel<Account> {
+public interface AccountModel extends AuditedModel, BaseModel<Account>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -60,6 +60,22 @@ public interface AccountModel extends AuditedModel, BaseModel<Account> {
 	 * @param primaryKey the primary key of this account
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this account.
+	 *
+	 * @return the mvcc version of this account
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this account.
+	 *
+	 * @param mvccVersion the mvcc version of this account
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the account ID of this account.

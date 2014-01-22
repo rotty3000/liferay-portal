@@ -73,6 +73,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	 */
 	public static final String TABLE_NAME = "LayoutRevision";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "layoutRevisionId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -104,7 +105,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LayoutRevision (layoutRevisionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,layoutSetBranchId LONG,layoutBranchId LONG,parentLayoutRevisionId LONG,head BOOLEAN,major BOOLEAN,plid LONG,privateLayout BOOLEAN,name STRING null,title STRING null,description STRING null,keywords STRING null,robots STRING null,typeSettings TEXT null,iconImageId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table LayoutRevision (mvccVersion LONG default 0,layoutRevisionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,layoutSetBranchId LONG,layoutBranchId LONG,parentLayoutRevisionId LONG,head BOOLEAN,major BOOLEAN,plid LONG,privateLayout BOOLEAN,name STRING null,title STRING null,description STRING null,keywords STRING null,robots STRING null,typeSettings TEXT null,iconImageId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutRevision";
 	public static final String ORDER_BY_JPQL = " ORDER BY layoutRevision.modifiedDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY LayoutRevision.modifiedDate DESC";
@@ -141,6 +142,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 
 		LayoutRevision model = new LayoutRevisionImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setLayoutRevisionId(soapModel.getLayoutRevisionId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -235,6 +237,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("layoutRevisionId", getLayoutRevisionId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -274,6 +277,12 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long layoutRevisionId = (Long)attributes.get("layoutRevisionId");
 
 		if (layoutRevisionId != null) {
@@ -454,6 +463,17 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 		if (statusDate != null) {
 			setStatusDate(statusDate);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -1635,6 +1655,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	public Object clone() {
 		LayoutRevisionImpl layoutRevisionImpl = new LayoutRevisionImpl();
 
+		layoutRevisionImpl.setMvccVersion(getMvccVersion());
 		layoutRevisionImpl.setLayoutRevisionId(getLayoutRevisionId());
 		layoutRevisionImpl.setGroupId(getGroupId());
 		layoutRevisionImpl.setCompanyId(getCompanyId());
@@ -1758,6 +1779,8 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	@Override
 	public CacheModel<LayoutRevision> toCacheModel() {
 		LayoutRevisionCacheModel layoutRevisionCacheModel = new LayoutRevisionCacheModel();
+
+		layoutRevisionCacheModel.mvccVersion = getMvccVersion();
 
 		layoutRevisionCacheModel.layoutRevisionId = getLayoutRevisionId();
 
@@ -1923,9 +1946,11 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(61);
+		StringBundler sb = new StringBundler(63);
 
-		sb.append("{layoutRevisionId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", layoutRevisionId=");
 		sb.append(getLayoutRevisionId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -1992,12 +2017,16 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(94);
+		StringBundler sb = new StringBundler(97);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.LayoutRevision");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>layoutRevisionId</column-name><column-value><![CDATA[");
 		sb.append(getLayoutRevisionId());
@@ -2128,6 +2157,7 @@ public class LayoutRevisionModelImpl extends BaseModelImpl<LayoutRevision>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			LayoutRevision.class
 		};
+	private long _mvccVersion;
 	private long _layoutRevisionId;
 	private long _groupId;
 	private long _companyId;

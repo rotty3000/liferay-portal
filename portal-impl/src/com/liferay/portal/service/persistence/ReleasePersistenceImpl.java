@@ -623,6 +623,7 @@ public class ReleasePersistenceImpl extends BasePersistenceImpl<Release>
 		releaseImpl.setNew(release.isNew());
 		releaseImpl.setPrimaryKey(release.getPrimaryKey());
 
+		releaseImpl.setMvccVersion(release.getMvccVersion());
 		releaseImpl.setReleaseId(release.getReleaseId());
 		releaseImpl.setCreateDate(release.getCreateDate());
 		releaseImpl.setModifiedDate(release.getModifiedDate());

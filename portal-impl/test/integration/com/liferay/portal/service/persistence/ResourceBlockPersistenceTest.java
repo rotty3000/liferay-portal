@@ -113,6 +113,8 @@ public class ResourceBlockPersistenceTest {
 
 		ResourceBlock newResourceBlock = _persistence.create(pk);
 
+		newResourceBlock.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newResourceBlock.setCompanyId(ServiceTestUtil.nextLong());
 
 		newResourceBlock.setGroupId(ServiceTestUtil.nextLong());
@@ -127,6 +129,8 @@ public class ResourceBlockPersistenceTest {
 
 		ResourceBlock existingResourceBlock = _persistence.findByPrimaryKey(newResourceBlock.getPrimaryKey());
 
+		Assert.assertEquals(existingResourceBlock.getMvccVersion(),
+			newResourceBlock.getMvccVersion());
 		Assert.assertEquals(existingResourceBlock.getResourceBlockId(),
 			newResourceBlock.getResourceBlockId());
 		Assert.assertEquals(existingResourceBlock.getCompanyId(),
@@ -177,8 +181,9 @@ public class ResourceBlockPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("ResourceBlock",
-			"resourceBlockId", true, "companyId", true, "groupId", true,
-			"name", true, "permissionsHash", true, "referenceCount", true);
+			"mvccVersion", true, "resourceBlockId", true, "companyId", true,
+			"groupId", true, "name", true, "permissionsHash", true,
+			"referenceCount", true);
 	}
 
 	@Test
@@ -321,6 +326,8 @@ public class ResourceBlockPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		ResourceBlock resourceBlock = _persistence.create(pk);
+
+		resourceBlock.setMvccVersion(ServiceTestUtil.nextLong());
 
 		resourceBlock.setCompanyId(ServiceTestUtil.nextLong());
 

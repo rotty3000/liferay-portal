@@ -28,6 +28,11 @@
 	<td>//div[@class='alert alert-info portlet-configuration']/a</td>
 	<td></td>
 </tr>
+<tr>
+	<td>OPTIONS_MENULIST_CONFIGURATION</td>
+	<td>//a[contains(@id,'_menu_configuration')]</td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 </body>

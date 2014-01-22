@@ -57,11 +57,12 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	 */
 	public static final String TABLE_NAME = "ListType";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "listTypeId", Types.INTEGER },
 			{ "name", Types.VARCHAR },
 			{ "type_", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table ListType (listTypeId INTEGER not null primary key,name VARCHAR(75) null,type_ VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table ListType (mvccVersion LONG default 0,listTypeId INTEGER not null primary key,name VARCHAR(75) null,type_ VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table ListType";
 	public static final String ORDER_BY_JPQL = " ORDER BY listType.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY ListType.name ASC";
@@ -93,6 +94,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 		ListType model = new ListTypeImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setListTypeId(soapModel.getListTypeId());
 		model.setName(soapModel.getName());
 		model.setType(soapModel.getType());
@@ -160,6 +162,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("listTypeId", getListTypeId());
 		attributes.put("name", getName());
 		attributes.put("type", getType());
@@ -172,6 +175,12 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Integer listTypeId = (Integer)attributes.get("listTypeId");
 
 		if (listTypeId != null) {
@@ -189,6 +198,17 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 		if (type != null) {
 			setType(type);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -264,6 +284,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	public Object clone() {
 		ListTypeImpl listTypeImpl = new ListTypeImpl();
 
+		listTypeImpl.setMvccVersion(getMvccVersion());
 		listTypeImpl.setListTypeId(getListTypeId());
 		listTypeImpl.setName(getName());
 		listTypeImpl.setType(getType());
@@ -336,6 +357,8 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	public CacheModel<ListType> toCacheModel() {
 		ListTypeCacheModel listTypeCacheModel = new ListTypeCacheModel();
 
+		listTypeCacheModel.mvccVersion = getMvccVersion();
+
 		listTypeCacheModel.listTypeId = getListTypeId();
 
 		listTypeCacheModel.name = getName();
@@ -359,9 +382,11 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(9);
 
-		sb.append("{listTypeId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", listTypeId=");
 		sb.append(getListTypeId());
 		sb.append(", name=");
 		sb.append(getName());
@@ -374,12 +399,16 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(16);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.ListType");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>listTypeId</column-name><column-value><![CDATA[");
 		sb.append(getListTypeId());
@@ -402,6 +431,7 @@ public class ListTypeModelImpl extends BaseModelImpl<ListType>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ListType.class
 		};
+	private long _mvccVersion;
 	private int _listTypeId;
 	private String _name;
 	private String _type;

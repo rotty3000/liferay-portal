@@ -52,6 +52,7 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("layoutSetBranchId", getLayoutSetBranchId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -79,6 +80,12 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long layoutSetBranchId = (Long)attributes.get("layoutSetBranchId");
 
 		if (layoutSetBranchId != null) {
@@ -220,6 +227,26 @@ public class LayoutSetBranchWrapper implements LayoutSetBranch,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_layoutSetBranch.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this layout set branch.
+	*
+	* @return the mvcc version of this layout set branch
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _layoutSetBranch.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this layout set branch.
+	*
+	* @param mvccVersion the mvcc version of this layout set branch
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_layoutSetBranch.setMvccVersion(mvccVersion);
 	}
 
 	/**

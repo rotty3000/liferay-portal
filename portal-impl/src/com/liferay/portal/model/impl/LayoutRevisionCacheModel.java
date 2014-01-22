@@ -37,9 +37,11 @@ public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(61);
+		StringBundler sb = new StringBundler(63);
 
-		sb.append("{layoutRevisionId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", layoutRevisionId=");
 		sb.append(layoutRevisionId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -108,6 +110,7 @@ public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 	public LayoutRevision toEntityModel() {
 		LayoutRevisionImpl layoutRevisionImpl = new LayoutRevisionImpl();
 
+		layoutRevisionImpl.setMvccVersion(mvccVersion);
 		layoutRevisionImpl.setLayoutRevisionId(layoutRevisionId);
 		layoutRevisionImpl.setGroupId(groupId);
 		layoutRevisionImpl.setCompanyId(companyId);
@@ -245,6 +248,7 @@ public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		layoutRevisionId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -280,6 +284,7 @@ public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(layoutRevisionId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -394,6 +399,7 @@ public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 		objectOutput.writeLong(statusDate);
 	}
 
+	public long mvccVersion;
 	public long layoutRevisionId;
 	public long groupId;
 	public long companyId;

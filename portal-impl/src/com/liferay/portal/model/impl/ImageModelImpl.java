@@ -61,6 +61,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 	 */
 	public static final String TABLE_NAME = "Image";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "imageId", Types.BIGINT },
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "type_", Types.VARCHAR },
@@ -68,7 +69,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 			{ "width", Types.INTEGER },
 			{ "size_", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Image (imageId LONG not null primary key,modifiedDate DATE null,type_ VARCHAR(75) null,height INTEGER,width INTEGER,size_ INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table Image (mvccVersion LONG default 0,imageId LONG not null primary key,modifiedDate DATE null,type_ VARCHAR(75) null,height INTEGER,width INTEGER,size_ INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table Image";
 	public static final String ORDER_BY_JPQL = " ORDER BY image.imageId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Image.imageId ASC";
@@ -100,6 +101,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 
 		Image model = new ImageImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setImageId(soapModel.getImageId());
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setType(soapModel.getType());
@@ -170,6 +172,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("imageId", getImageId());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("type", getType());
@@ -185,6 +188,12 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long imageId = (Long)attributes.get("imageId");
 
 		if (imageId != null) {
@@ -220,6 +229,17 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 		if (size != null) {
 			setSize(size);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -338,6 +358,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 	public Object clone() {
 		ImageImpl imageImpl = new ImageImpl();
 
+		imageImpl.setMvccVersion(getMvccVersion());
 		imageImpl.setImageId(getImageId());
 		imageImpl.setModifiedDate(getModifiedDate());
 		imageImpl.setType(getType());
@@ -423,6 +444,8 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 	public CacheModel<Image> toCacheModel() {
 		ImageCacheModel imageCacheModel = new ImageCacheModel();
 
+		imageCacheModel.mvccVersion = getMvccVersion();
+
 		imageCacheModel.imageId = getImageId();
 
 		Date modifiedDate = getModifiedDate();
@@ -453,9 +476,11 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
-		sb.append("{imageId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", imageId=");
 		sb.append(getImageId());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
@@ -474,12 +499,16 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(22);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.Image");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>imageId</column-name><column-value><![CDATA[");
 		sb.append(getImageId());
@@ -512,6 +541,7 @@ public class ImageModelImpl extends BaseModelImpl<Image> implements ImageModel {
 
 	private static ClassLoader _classLoader = Image.class.getClassLoader();
 	private static Class<?>[] _escapedModelInterfaces = new Class[] { Image.class };
+	private long _mvccVersion;
 	private long _imageId;
 	private Date _modifiedDate;
 	private String _type;

@@ -51,6 +51,7 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("accountId", getAccountId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("userId", getUserId());
@@ -73,6 +74,12 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long accountId = (Long)attributes.get("accountId");
 
 		if (accountId != null) {
@@ -188,6 +195,26 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_account.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this account.
+	*
+	* @return the mvcc version of this account
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _account.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this account.
+	*
+	* @param mvccVersion the mvcc version of this account
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_account.setMvccVersion(mvccVersion);
 	}
 
 	/**

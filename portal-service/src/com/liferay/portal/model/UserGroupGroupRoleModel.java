@@ -37,7 +37,8 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface UserGroupGroupRoleModel extends BaseModel<UserGroupGroupRole> {
+public interface UserGroupGroupRoleModel extends BaseModel<UserGroupGroupRole>,
+	MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +58,22 @@ public interface UserGroupGroupRoleModel extends BaseModel<UserGroupGroupRole> {
 	 * @param primaryKey the primary key of this user group group role
 	 */
 	public void setPrimaryKey(UserGroupGroupRolePK primaryKey);
+
+	/**
+	 * Returns the mvcc version of this user group group role.
+	 *
+	 * @return the mvcc version of this user group group role
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this user group group role.
+	 *
+	 * @param mvccVersion the mvcc version of this user group group role
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the user group ID of this user group group role.

@@ -114,6 +114,8 @@ public class RepositoryPersistenceTest {
 
 		Repository newRepository = _persistence.create(pk);
 
+		newRepository.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newRepository.setUuid(ServiceTestUtil.randomString());
 
 		newRepository.setGroupId(ServiceTestUtil.nextLong());
@@ -144,6 +146,8 @@ public class RepositoryPersistenceTest {
 
 		Repository existingRepository = _persistence.findByPrimaryKey(newRepository.getPrimaryKey());
 
+		Assert.assertEquals(existingRepository.getMvccVersion(),
+			newRepository.getMvccVersion());
 		Assert.assertEquals(existingRepository.getUuid(),
 			newRepository.getUuid());
 		Assert.assertEquals(existingRepository.getRepositoryId(),
@@ -211,11 +215,12 @@ public class RepositoryPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Repository", "uuid", true,
-			"repositoryId", true, "groupId", true, "companyId", true, "userId",
-			true, "userName", true, "createDate", true, "modifiedDate", true,
-			"classNameId", true, "name", true, "description", true,
-			"portletId", true, "typeSettings", true, "dlFolderId", true);
+		return OrderByComparatorFactoryUtil.create("Repository", "mvccVersion",
+			true, "uuid", true, "repositoryId", true, "groupId", true,
+			"companyId", true, "userId", true, "userName", true, "createDate",
+			true, "modifiedDate", true, "classNameId", true, "name", true,
+			"description", true, "portletId", true, "typeSettings", true,
+			"dlFolderId", true);
 	}
 
 	@Test
@@ -362,6 +367,8 @@ public class RepositoryPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Repository repository = _persistence.create(pk);
+
+		repository.setMvccVersion(ServiceTestUtil.nextLong());
 
 		repository.setUuid(ServiceTestUtil.randomString());
 

@@ -30,6 +30,7 @@ public class CountrySoap implements Serializable {
 	public static CountrySoap toSoapModel(Country model) {
 		CountrySoap soapModel = new CountrySoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setCountryId(model.getCountryId());
 		soapModel.setName(model.getName());
 		soapModel.setA2(model.getA2());
@@ -88,6 +89,14 @@ public class CountrySoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setCountryId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getCountryId() {
@@ -162,6 +171,7 @@ public class CountrySoap implements Serializable {
 		_active = active;
 	}
 
+	private long _mvccVersion;
 	private long _countryId;
 	private String _name;
 	private String _a2;

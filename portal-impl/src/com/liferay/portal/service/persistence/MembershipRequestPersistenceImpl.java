@@ -2498,6 +2498,7 @@ public class MembershipRequestPersistenceImpl extends BasePersistenceImpl<Member
 		membershipRequestImpl.setNew(membershipRequest.isNew());
 		membershipRequestImpl.setPrimaryKey(membershipRequest.getPrimaryKey());
 
+		membershipRequestImpl.setMvccVersion(membershipRequest.getMvccVersion());
 		membershipRequestImpl.setMembershipRequestId(membershipRequest.getMembershipRequestId());
 		membershipRequestImpl.setGroupId(membershipRequest.getGroupId());
 		membershipRequestImpl.setCompanyId(membershipRequest.getCompanyId());

@@ -30,6 +30,7 @@ public class GroupSoap implements Serializable {
 	public static GroupSoap toSoapModel(Group model) {
 		GroupSoap soapModel = new GroupSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -99,6 +100,14 @@ public class GroupSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setGroupId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -265,6 +274,7 @@ public class GroupSoap implements Serializable {
 		_active = active;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _groupId;
 	private long _companyId;

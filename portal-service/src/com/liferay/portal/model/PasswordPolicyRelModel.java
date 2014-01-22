@@ -37,7 +37,7 @@ import java.io.Serializable;
  */
 @ProviderType
 public interface PasswordPolicyRelModel extends AttachedModel,
-	BaseModel<PasswordPolicyRel> {
+	BaseModel<PasswordPolicyRel>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface PasswordPolicyRelModel extends AttachedModel,
 	 * @param primaryKey the primary key of this password policy rel
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this password policy rel.
+	 *
+	 * @return the mvcc version of this password policy rel
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this password policy rel.
+	 *
+	 * @param mvccVersion the mvcc version of this password policy rel
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the password policy rel ID of this password policy rel.

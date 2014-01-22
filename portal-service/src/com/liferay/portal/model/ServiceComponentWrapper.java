@@ -51,6 +51,7 @@ public class ServiceComponentWrapper implements ServiceComponent,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("serviceComponentId", getServiceComponentId());
 		attributes.put("buildNamespace", getBuildNamespace());
 		attributes.put("buildNumber", getBuildNumber());
@@ -62,6 +63,12 @@ public class ServiceComponentWrapper implements ServiceComponent,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long serviceComponentId = (Long)attributes.get("serviceComponentId");
 
 		if (serviceComponentId != null) {
@@ -111,6 +118,26 @@ public class ServiceComponentWrapper implements ServiceComponent,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_serviceComponent.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this service component.
+	*
+	* @return the mvcc version of this service component
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _serviceComponent.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this service component.
+	*
+	* @param mvccVersion the mvcc version of this service component
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_serviceComponent.setMvccVersion(mvccVersion);
 	}
 
 	/**

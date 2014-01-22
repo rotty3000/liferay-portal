@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface ResourceBlockModel extends BaseModel<ResourceBlock> {
+public interface ResourceBlockModel extends BaseModel<ResourceBlock>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface ResourceBlockModel extends BaseModel<ResourceBlock> {
 	 * @param primaryKey the primary key of this resource block
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this resource block.
+	 *
+	 * @return the mvcc version of this resource block
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this resource block.
+	 *
+	 * @param mvccVersion the mvcc version of this resource block
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the resource block ID of this resource block.

@@ -1495,6 +1495,7 @@ public class UserIdMapperPersistenceImpl extends BasePersistenceImpl<UserIdMappe
 		userIdMapperImpl.setNew(userIdMapper.isNew());
 		userIdMapperImpl.setPrimaryKey(userIdMapper.getPrimaryKey());
 
+		userIdMapperImpl.setMvccVersion(userIdMapper.getMvccVersion());
 		userIdMapperImpl.setUserIdMapperId(userIdMapper.getUserIdMapperId());
 		userIdMapperImpl.setUserId(userIdMapper.getUserId());
 		userIdMapperImpl.setType(userIdMapper.getType());

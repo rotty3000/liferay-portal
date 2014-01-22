@@ -31,6 +31,7 @@ public class BackgroundTaskSoap implements Serializable {
 	public static BackgroundTaskSoap toSoapModel(BackgroundTask model) {
 		BackgroundTaskSoap soapModel = new BackgroundTaskSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setBackgroundTaskId(model.getBackgroundTaskId());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -96,6 +97,14 @@ public class BackgroundTaskSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setBackgroundTaskId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getBackgroundTaskId() {
@@ -222,6 +231,7 @@ public class BackgroundTaskSoap implements Serializable {
 		_statusMessage = statusMessage;
 	}
 
+	private long _mvccVersion;
 	private long _backgroundTaskId;
 	private long _groupId;
 	private long _companyId;

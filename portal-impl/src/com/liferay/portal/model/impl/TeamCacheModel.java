@@ -36,9 +36,11 @@ import java.util.Date;
 public class TeamCacheModel implements CacheModel<Team>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
-		sb.append("{teamId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", teamId=");
 		sb.append(teamId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -65,6 +67,7 @@ public class TeamCacheModel implements CacheModel<Team>, Externalizable {
 	public Team toEntityModel() {
 		TeamImpl teamImpl = new TeamImpl();
 
+		teamImpl.setMvccVersion(mvccVersion);
 		teamImpl.setTeamId(teamId);
 		teamImpl.setCompanyId(companyId);
 		teamImpl.setUserId(userId);
@@ -113,6 +116,7 @@ public class TeamCacheModel implements CacheModel<Team>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		teamId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		userId = objectInput.readLong();
@@ -127,6 +131,7 @@ public class TeamCacheModel implements CacheModel<Team>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(teamId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(userId);
@@ -157,6 +162,7 @@ public class TeamCacheModel implements CacheModel<Team>, Externalizable {
 		}
 	}
 
+	public long mvccVersion;
 	public long teamId;
 	public long companyId;
 	public long userId;

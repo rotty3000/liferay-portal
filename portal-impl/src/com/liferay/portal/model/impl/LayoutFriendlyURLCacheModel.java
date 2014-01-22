@@ -37,9 +37,11 @@ public class LayoutFriendlyURLCacheModel implements CacheModel<LayoutFriendlyURL
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", layoutFriendlyURLId=");
 		sb.append(layoutFriendlyURLId);
@@ -71,6 +73,8 @@ public class LayoutFriendlyURLCacheModel implements CacheModel<LayoutFriendlyURL
 	@Override
 	public LayoutFriendlyURL toEntityModel() {
 		LayoutFriendlyURLImpl layoutFriendlyURLImpl = new LayoutFriendlyURLImpl();
+
+		layoutFriendlyURLImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			layoutFriendlyURLImpl.setUuid(StringPool.BLANK);
@@ -129,6 +133,7 @@ public class LayoutFriendlyURLCacheModel implements CacheModel<LayoutFriendlyURL
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		layoutFriendlyURLId = objectInput.readLong();
 		groupId = objectInput.readLong();
@@ -146,6 +151,8 @@ public class LayoutFriendlyURLCacheModel implements CacheModel<LayoutFriendlyURL
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -185,6 +192,7 @@ public class LayoutFriendlyURLCacheModel implements CacheModel<LayoutFriendlyURL
 		}
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long layoutFriendlyURLId;
 	public long groupId;

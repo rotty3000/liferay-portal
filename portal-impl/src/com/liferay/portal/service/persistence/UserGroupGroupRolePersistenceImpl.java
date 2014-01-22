@@ -2968,6 +2968,7 @@ public class UserGroupGroupRolePersistenceImpl extends BasePersistenceImpl<UserG
 		userGroupGroupRoleImpl.setNew(userGroupGroupRole.isNew());
 		userGroupGroupRoleImpl.setPrimaryKey(userGroupGroupRole.getPrimaryKey());
 
+		userGroupGroupRoleImpl.setMvccVersion(userGroupGroupRole.getMvccVersion());
 		userGroupGroupRoleImpl.setUserGroupId(userGroupGroupRole.getUserGroupId());
 		userGroupGroupRoleImpl.setGroupId(userGroupGroupRole.getGroupId());
 		userGroupGroupRoleImpl.setRoleId(userGroupGroupRole.getRoleId());

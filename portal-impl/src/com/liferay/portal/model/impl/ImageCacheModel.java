@@ -36,9 +36,11 @@ import java.util.Date;
 public class ImageCacheModel implements CacheModel<Image>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
-		sb.append("{imageId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", imageId=");
 		sb.append(imageId);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
@@ -59,6 +61,7 @@ public class ImageCacheModel implements CacheModel<Image>, Externalizable {
 	public Image toEntityModel() {
 		ImageImpl imageImpl = new ImageImpl();
 
+		imageImpl.setMvccVersion(mvccVersion);
 		imageImpl.setImageId(imageId);
 
 		if (modifiedDate == Long.MIN_VALUE) {
@@ -86,6 +89,7 @@ public class ImageCacheModel implements CacheModel<Image>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		imageId = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 		type = objectInput.readUTF();
@@ -97,6 +101,7 @@ public class ImageCacheModel implements CacheModel<Image>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(imageId);
 		objectOutput.writeLong(modifiedDate);
 
@@ -112,6 +117,7 @@ public class ImageCacheModel implements CacheModel<Image>, Externalizable {
 		objectOutput.writeInt(size);
 	}
 
+	public long mvccVersion;
 	public long imageId;
 	public long modifiedDate;
 	public String type;

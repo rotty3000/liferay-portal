@@ -35,9 +35,11 @@ public class ClusterGroupCacheModel implements CacheModel<ClusterGroup>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
-		sb.append("{clusterGroupId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", clusterGroupId=");
 		sb.append(clusterGroupId);
 		sb.append(", name=");
 		sb.append(name);
@@ -54,6 +56,7 @@ public class ClusterGroupCacheModel implements CacheModel<ClusterGroup>,
 	public ClusterGroup toEntityModel() {
 		ClusterGroupImpl clusterGroupImpl = new ClusterGroupImpl();
 
+		clusterGroupImpl.setMvccVersion(mvccVersion);
 		clusterGroupImpl.setClusterGroupId(clusterGroupId);
 
 		if (name == null) {
@@ -79,6 +82,7 @@ public class ClusterGroupCacheModel implements CacheModel<ClusterGroup>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		clusterGroupId = objectInput.readLong();
 		name = objectInput.readUTF();
 		clusterNodeIds = objectInput.readUTF();
@@ -88,6 +92,7 @@ public class ClusterGroupCacheModel implements CacheModel<ClusterGroup>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(clusterGroupId);
 
 		if (name == null) {
@@ -107,6 +112,7 @@ public class ClusterGroupCacheModel implements CacheModel<ClusterGroup>,
 		objectOutput.writeBoolean(wholeCluster);
 	}
 
+	public long mvccVersion;
 	public long clusterGroupId;
 	public String name;
 	public String clusterNodeIds;

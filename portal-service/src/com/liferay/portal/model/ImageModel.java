@@ -39,7 +39,7 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface ImageModel extends BaseModel<Image> {
+public interface ImageModel extends BaseModel<Image>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -59,6 +59,22 @@ public interface ImageModel extends BaseModel<Image> {
 	 * @param primaryKey the primary key of this image
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this image.
+	 *
+	 * @return the mvcc version of this image
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this image.
+	 *
+	 * @param mvccVersion the mvcc version of this image
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the image ID of this image.

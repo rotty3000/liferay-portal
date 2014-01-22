@@ -35,9 +35,11 @@ public class UserIdMapperCacheModel implements CacheModel<UserIdMapper>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
-		sb.append("{userIdMapperId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", userIdMapperId=");
 		sb.append(userIdMapperId);
 		sb.append(", userId=");
 		sb.append(userId);
@@ -56,6 +58,7 @@ public class UserIdMapperCacheModel implements CacheModel<UserIdMapper>,
 	public UserIdMapper toEntityModel() {
 		UserIdMapperImpl userIdMapperImpl = new UserIdMapperImpl();
 
+		userIdMapperImpl.setMvccVersion(mvccVersion);
 		userIdMapperImpl.setUserIdMapperId(userIdMapperId);
 		userIdMapperImpl.setUserId(userId);
 
@@ -87,6 +90,7 @@ public class UserIdMapperCacheModel implements CacheModel<UserIdMapper>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		userIdMapperId = objectInput.readLong();
 		userId = objectInput.readLong();
 		type = objectInput.readUTF();
@@ -97,6 +101,7 @@ public class UserIdMapperCacheModel implements CacheModel<UserIdMapper>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(userIdMapperId);
 		objectOutput.writeLong(userId);
 
@@ -122,6 +127,7 @@ public class UserIdMapperCacheModel implements CacheModel<UserIdMapper>,
 		}
 	}
 
+	public long mvccVersion;
 	public long userIdMapperId;
 	public long userId;
 	public String type;

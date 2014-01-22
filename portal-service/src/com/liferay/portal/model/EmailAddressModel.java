@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface EmailAddressModel extends AttachedModel, BaseModel<EmailAddress>,
-	StagedAuditedModel {
+	MVCCModel, StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface EmailAddressModel extends AttachedModel, BaseModel<EmailAddress
 	 * @param primaryKey the primary key of this email address
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this email address.
+	 *
+	 * @return the mvcc version of this email address
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this email address.
+	 *
+	 * @param mvccVersion the mvcc version of this email address
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this email address.

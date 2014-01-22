@@ -39,7 +39,7 @@ import java.io.Serializable;
  */
 @ProviderType
 public interface UserNotificationDeliveryModel extends BaseModel<UserNotificationDelivery>,
-	TypedModel {
+	MVCCModel, TypedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -59,6 +59,22 @@ public interface UserNotificationDeliveryModel extends BaseModel<UserNotificatio
 	 * @param primaryKey the primary key of this user notification delivery
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this user notification delivery.
+	 *
+	 * @return the mvcc version of this user notification delivery
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this user notification delivery.
+	 *
+	 * @param mvccVersion the mvcc version of this user notification delivery
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the user notification delivery ID of this user notification delivery.

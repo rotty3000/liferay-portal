@@ -110,6 +110,8 @@ public class UserNotificationEventPersistenceTest {
 
 		UserNotificationEvent newUserNotificationEvent = _persistence.create(pk);
 
+		newUserNotificationEvent.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newUserNotificationEvent.setUuid(ServiceTestUtil.randomString());
 
 		newUserNotificationEvent.setCompanyId(ServiceTestUtil.nextLong());
@@ -132,6 +134,8 @@ public class UserNotificationEventPersistenceTest {
 
 		UserNotificationEvent existingUserNotificationEvent = _persistence.findByPrimaryKey(newUserNotificationEvent.getPrimaryKey());
 
+		Assert.assertEquals(existingUserNotificationEvent.getMvccVersion(),
+			newUserNotificationEvent.getMvccVersion());
 		Assert.assertEquals(existingUserNotificationEvent.getUuid(),
 			newUserNotificationEvent.getUuid());
 		Assert.assertEquals(existingUserNotificationEvent.getUserNotificationEventId(),
@@ -191,9 +195,10 @@ public class UserNotificationEventPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("UserNotificationEvent",
-			"uuid", true, "userNotificationEventId", true, "companyId", true,
-			"userId", true, "type", true, "timestamp", true, "deliverBy", true,
-			"delivered", true, "payload", true, "archived", true);
+			"mvccVersion", true, "uuid", true, "userNotificationEventId", true,
+			"companyId", true, "userId", true, "type", true, "timestamp", true,
+			"deliverBy", true, "delivered", true, "payload", true, "archived",
+			true);
 	}
 
 	@Test
@@ -316,6 +321,8 @@ public class UserNotificationEventPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		UserNotificationEvent userNotificationEvent = _persistence.create(pk);
+
+		userNotificationEvent.setMvccVersion(ServiceTestUtil.nextLong());
 
 		userNotificationEvent.setUuid(ServiceTestUtil.randomString());
 

@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface LayoutFriendlyURLModel extends BaseModel<LayoutFriendlyURL>,
-	StagedGroupedModel {
+	MVCCModel, StagedGroupedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface LayoutFriendlyURLModel extends BaseModel<LayoutFriendlyURL>,
 	 * @param primaryKey the primary key of this layout friendly u r l
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this layout friendly u r l.
+	 *
+	 * @return the mvcc version of this layout friendly u r l
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this layout friendly u r l.
+	 *
+	 * @param mvccVersion the mvcc version of this layout friendly u r l
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this layout friendly u r l.

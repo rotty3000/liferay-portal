@@ -1983,6 +1983,7 @@ public class ResourceBlockPersistenceImpl extends BasePersistenceImpl<ResourceBl
 		resourceBlockImpl.setNew(resourceBlock.isNew());
 		resourceBlockImpl.setPrimaryKey(resourceBlock.getPrimaryKey());
 
+		resourceBlockImpl.setMvccVersion(resourceBlock.getMvccVersion());
 		resourceBlockImpl.setResourceBlockId(resourceBlock.getResourceBlockId());
 		resourceBlockImpl.setCompanyId(resourceBlock.getCompanyId());
 		resourceBlockImpl.setGroupId(resourceBlock.getGroupId());

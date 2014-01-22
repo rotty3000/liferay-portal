@@ -870,6 +870,7 @@ public class ListTypePersistenceImpl extends BasePersistenceImpl<ListType>
 		listTypeImpl.setNew(listType.isNew());
 		listTypeImpl.setPrimaryKey(listType.getPrimaryKey());
 
+		listTypeImpl.setMvccVersion(listType.getMvccVersion());
 		listTypeImpl.setListTypeId(listType.getListTypeId());
 		listTypeImpl.setName(listType.getName());
 		listTypeImpl.setType(listType.getType());

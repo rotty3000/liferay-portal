@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface PortletItemModel extends BaseModel<PortletItem>, GroupedModel,
-	TypedModel {
+	MVCCModel, TypedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface PortletItemModel extends BaseModel<PortletItem>, GroupedModel,
 	 * @param primaryKey the primary key of this portlet item
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this portlet item.
+	 *
+	 * @return the mvcc version of this portlet item
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this portlet item.
+	 *
+	 * @param mvccVersion the mvcc version of this portlet item
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the portlet item ID of this portlet item.

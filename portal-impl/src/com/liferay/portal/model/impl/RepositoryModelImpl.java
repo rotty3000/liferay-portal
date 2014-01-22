@@ -66,6 +66,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	 */
 	public static final String TABLE_NAME = "Repository";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "uuid_", Types.VARCHAR },
 			{ "repositoryId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
@@ -81,7 +82,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 			{ "typeSettings", Types.CLOB },
 			{ "dlFolderId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Repository (uuid_ VARCHAR(75) null,repositoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,name VARCHAR(75) null,description STRING null,portletId VARCHAR(200) null,typeSettings TEXT null,dlFolderId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table Repository (mvccVersion LONG default 0,uuid_ VARCHAR(75) null,repositoryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,name VARCHAR(75) null,description STRING null,portletId VARCHAR(200) null,typeSettings TEXT null,dlFolderId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table Repository";
 	public static final String ORDER_BY_JPQL = " ORDER BY repository.repositoryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Repository.repositoryId ASC";
@@ -117,6 +118,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 
 		Repository model = new RepositoryImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setUuid(soapModel.getUuid());
 		model.setRepositoryId(soapModel.getRepositoryId());
 		model.setGroupId(soapModel.getGroupId());
@@ -195,6 +197,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("repositoryId", getRepositoryId());
 		attributes.put("groupId", getGroupId());
@@ -218,6 +221,12 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -301,6 +310,17 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 		if (dlFolderId != null) {
 			setDlFolderId(dlFolderId);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -606,6 +626,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	public Object clone() {
 		RepositoryImpl repositoryImpl = new RepositoryImpl();
 
+		repositoryImpl.setMvccVersion(getMvccVersion());
 		repositoryImpl.setUuid(getUuid());
 		repositoryImpl.setRepositoryId(getRepositoryId());
 		repositoryImpl.setGroupId(getGroupId());
@@ -703,6 +724,8 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	public CacheModel<Repository> toCacheModel() {
 		RepositoryCacheModel repositoryCacheModel = new RepositoryCacheModel();
 
+		repositoryCacheModel.mvccVersion = getMvccVersion();
+
 		repositoryCacheModel.uuid = getUuid();
 
 		String uuid = repositoryCacheModel.uuid;
@@ -786,9 +809,11 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(31);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", uuid=");
 		sb.append(getUuid());
 		sb.append(", repositoryId=");
 		sb.append(getRepositoryId());
@@ -823,12 +848,16 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(46);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.Repository");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>uuid</column-name><column-value><![CDATA[");
 		sb.append(getUuid());
@@ -895,6 +924,7 @@ public class RepositoryModelImpl extends BaseModelImpl<Repository>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Repository.class
 		};
+	private long _mvccVersion;
 	private String _uuid;
 	private String _originalUuid;
 	private long _repositoryId;

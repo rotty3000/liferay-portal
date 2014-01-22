@@ -51,6 +51,7 @@ public class ImageWrapper implements Image, ModelWrapper<Image> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("imageId", getImageId());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("type", getType());
@@ -63,6 +64,12 @@ public class ImageWrapper implements Image, ModelWrapper<Image> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long imageId = (Long)attributes.get("imageId");
 
 		if (imageId != null) {
@@ -118,6 +125,26 @@ public class ImageWrapper implements Image, ModelWrapper<Image> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_image.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this image.
+	*
+	* @return the mvcc version of this image
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _image.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this image.
+	*
+	* @param mvccVersion the mvcc version of this image
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_image.setMvccVersion(mvccVersion);
 	}
 
 	/**

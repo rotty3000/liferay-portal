@@ -114,6 +114,8 @@ public class LayoutFriendlyURLPersistenceTest {
 
 		LayoutFriendlyURL newLayoutFriendlyURL = _persistence.create(pk);
 
+		newLayoutFriendlyURL.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newLayoutFriendlyURL.setUuid(ServiceTestUtil.randomString());
 
 		newLayoutFriendlyURL.setGroupId(ServiceTestUtil.nextLong());
@@ -140,6 +142,8 @@ public class LayoutFriendlyURLPersistenceTest {
 
 		LayoutFriendlyURL existingLayoutFriendlyURL = _persistence.findByPrimaryKey(newLayoutFriendlyURL.getPrimaryKey());
 
+		Assert.assertEquals(existingLayoutFriendlyURL.getMvccVersion(),
+			newLayoutFriendlyURL.getMvccVersion());
 		Assert.assertEquals(existingLayoutFriendlyURL.getUuid(),
 			newLayoutFriendlyURL.getUuid());
 		Assert.assertEquals(existingLayoutFriendlyURL.getLayoutFriendlyURLId(),
@@ -203,11 +207,11 @@ public class LayoutFriendlyURLPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("LayoutFriendlyURL", "uuid",
-			true, "layoutFriendlyURLId", true, "groupId", true, "companyId",
-			true, "userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "plid", true, "privateLayout", true,
-			"friendlyURL", true, "languageId", true);
+		return OrderByComparatorFactoryUtil.create("LayoutFriendlyURL",
+			"mvccVersion", true, "uuid", true, "layoutFriendlyURLId", true,
+			"groupId", true, "companyId", true, "userId", true, "userName",
+			true, "createDate", true, "modifiedDate", true, "plid", true,
+			"privateLayout", true, "friendlyURL", true, "languageId", true);
 	}
 
 	@Test
@@ -363,6 +367,8 @@ public class LayoutFriendlyURLPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		LayoutFriendlyURL layoutFriendlyURL = _persistence.create(pk);
+
+		layoutFriendlyURL.setMvccVersion(ServiceTestUtil.nextLong());
 
 		layoutFriendlyURL.setUuid(ServiceTestUtil.randomString());
 

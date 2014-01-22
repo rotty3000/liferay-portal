@@ -415,6 +415,249 @@
 		<antcall target="clean-up-logs" />
 	</target>
 
+	<target name="generate-changelog" depends="record-git-commit-plugins,record-git-commit-portal">
+		<tstamp>
+			<format property="build.tstamp.value" pattern="EEEE, d MMMM yyyy, hh:mm aa" />
+		</tstamp>
+
+		<property
+			name="changelog.dir"
+			value="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}"
+		/>
+
+		<math
+			datatype="int"
+			operand1="${env.BUILD_NUMBER}"
+			operand2="1"
+			operation="-"
+			result="previous.build.number"
+		/>
+
+		<property
+			name="previous.changelog.dir"
+			value="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/builds/${previous.build.number}"
+		/>
+
+		<copy
+			file="git-commit-plugins"
+			todir="${changelog.dir}"
+		/>
+
+		<copy
+			file="git-commit-portal"
+			todir="${changelog.dir}"
+		/>
+
+		<if>
+			<and>
+				<available file="${previous.changelog.dir}/git-build-log.html" />
+				<available file="${previous.changelog.dir}/git-commit-plugins" />
+				<available file="${previous.changelog.dir}/git-commit-portal" />
+			</and>
+			<then>
+				<loadfile
+					property="previous.git.commit.plugins.rev.parse"
+					srcfile="${previous.changelog.dir}/git-commit-plugins"
+				/>
+
+				<loadfile
+					property="previous.git.commit.portal.rev.parse"
+					srcfile="${previous.changelog.dir}/git-commit-portal"
+				/>
+
+				<copy
+					file="${previous.changelog.dir}/git-build-log.html"
+					tofile="${changelog.dir}/git-build-log.html"
+				/>
+
+				<if>
+					<equals arg1="${git.commit.plugins.rev.parse}" arg2="${previous.git.commit.plugins.rev.parse}" />
+					<then>
+						<property
+							name="git.log.content.plugins"
+							value="No Changes"
+						/>
+					</then>
+					<else>
+						<execute dir="${lp.plugins.dir}">
+							<![CDATA[git log --pretty=format:'<a href="https://github.com/liferay/liferay-plugins-ee/commit/'%H'" target="_blank">'%H'</a>''<br />'%an'<br />'%s'<br /><br />' ${previous.git.commit.plugins.rev.parse}...${git.commit.plugins.rev.parse} > ${changelog.dir}/git.log]]>
+						</execute>
+
+						<loadfile
+							property="git.log.content.plugins"
+							srcfile="${changelog.dir}/git.log"
+						/>
+					</else>
+				</if>
+
+				<if>
+					<equals arg1="${git.commit.portal.rev.parse}" arg2="${previous.git.commit.portal.rev.parse}" />
+					<then>
+						<property
+							name="git.log.content.portal"
+							value="No Changes"
+						/>
+					</then>
+					<else>
+						<execute dir="${project.dir}">
+							<![CDATA[git log --pretty=format:'<a href="https://github.com/liferay/liferay-portal-ee/commit/'%H'" target="_blank">'%H'</a>''<br />'%an'<br />'%s'<br /><br />' ${previous.git.commit.portal.rev.parse}...${git.commit.portal.rev.parse} > ${changelog.dir}/git.log]]>
+						</execute>
+
+						<loadfile
+							property="git.log.content.portal"
+							srcfile="${changelog.dir}/git.log"
+						/>
+					</else>
+				</if>
+
+				<replace file="${changelog.dir}/git-build-log.html">
+					<replacetoken><![CDATA[<!-- NEXT -->]]></replacetoken>
+					<replacevalue expandproperties="true"><![CDATA[<!-- NEXT -->
+		<div id="updateWrapper">
+			<div class="divider"></div>
+			<div id="update">
+				<h2>
+					Build #${env.BUILD_NUMBER} - ${env.JOB_NAME} - ${build.tstamp.value}<br />
+					Portal: ${git.commit.portal.rev.parse}<br />
+					Plugins: ${git.commit.plugins.rev.parse}
+				</h2>
+
+				<div id="portal">
+					<h4>
+						Portal Git Log:
+					</h4>
+					<p>
+						${git.log.content.portal}
+					</p>
+				</div>
+
+				<div id="plugins">
+					<h4>
+						Plugins Git Log:
+					</h4>
+					<p>
+						${git.log.content.plugins}
+					</p>
+				</div>
+			</div>
+		</div>
+				]]></replacevalue>
+				</replace>
+			</then>
+			<else>
+				<echo file="${changelog.dir}/git-build-log.html"><![CDATA[<!DOCTYPE html>
+<html>
+	<head>
+		<title>Git Build Log</title>
+		<style>
+			body {
+				font-family: Helvetica, Arial, sans-serif;
+				margin: 5%;
+				padding: 0;
+			}
+
+			h2 {
+				font-size: 17px;
+				letter-spacing: 0.04em;
+			}
+
+			h4 {
+				border-left: 1px solid #BABABA;
+				color: #555;
+				font-size: 20px;
+				font-weight: 100;
+				line-height: 30px;
+				margin: 20px 20px 0;
+				padding: 0 0 20px 10px;
+			}
+
+			p {
+				font-size: 12px;
+			}
+
+			#updateWrapper:after {
+				clear: both;
+				content: "";
+				display: table;
+			}
+
+			#update h2 {
+				background-color: #4D9CD1;
+				color: #FFF;
+				padding: 15px;
+			}
+
+			.divider {
+				background-color: #999;
+				box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+				-moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+				-webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+				height: 1px;
+				margin: 15px 0 25px;
+				width: 100%;
+			}
+
+			#plugins {
+				float: right;
+			}
+
+			#portal {
+				float: left;
+			}
+
+			#plugins, #portal {
+				width: 48%;
+			}
+
+			#plugins p, #portal p {
+				border-radius: 8px;
+				-moz-border-radius: 8px;
+				-webkit-border-radius: 8px;
+				box-shadow: inset 0px 1px 6px -1px rgba(0, 0, 0, 0.5);
+				-moz-box-shadow: inset 0px 1px 6px -1px rgba(0, 0, 0, 0.5);
+				-webkit-box-shadow: inset 0px 1px 6px -1px rgba(0, 0, 0, 0.5);
+				margin-top: 0;
+				padding: 10px;
+				word-wrap: break-word;
+			}
+
+			#plugins a, #portal a {
+				color: #3D7CA6;
+				font-family: Monaco, "Liberation Mono", Courier, monospace;
+				font-weight: bold;
+				text-decoration: none;
+			}
+
+			#plugins a:hover, #portal a:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- NEXT -->
+
+		<div id="updateWrapper">
+			<div class="divider"></div>
+
+			<br />
+
+			<div id="update">
+				<h2>
+					Initial Commit<br />
+					Build #${env.BUILD_NUMBER} - ${env.JOB_NAME} - ${build.tstamp.value}<br />
+					Portal: ${git.commit.portal.rev.parse}<br />
+					Plugins: ${git.commit.plugins.rev.parse}
+				</h2>
+			</div>
+		</div>
+	</body>
+</html>
+				]]></echo>
+			</else>
+		</if>
+	</target>
+
 	<target name="generate-test-properties" depends="check-config">
 		<if>
 			<contains string="${test.class}" substring="#" />

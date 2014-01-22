@@ -36,9 +36,11 @@ import java.util.Date;
 public class ContactCacheModel implements CacheModel<Contact>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(67);
+		StringBundler sb = new StringBundler(69);
 
-		sb.append("{contactId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", contactId=");
 		sb.append(contactId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -113,6 +115,7 @@ public class ContactCacheModel implements CacheModel<Contact>, Externalizable {
 	public Contact toEntityModel() {
 		ContactImpl contactImpl = new ContactImpl();
 
+		contactImpl.setMvccVersion(mvccVersion);
 		contactImpl.setContactId(contactId);
 		contactImpl.setCompanyId(companyId);
 		contactImpl.setUserId(userId);
@@ -294,6 +297,7 @@ public class ContactCacheModel implements CacheModel<Contact>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		contactId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		userId = objectInput.readLong();
@@ -332,6 +336,7 @@ public class ContactCacheModel implements CacheModel<Contact>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(contactId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(userId);
@@ -489,6 +494,7 @@ public class ContactCacheModel implements CacheModel<Contact>, Externalizable {
 		}
 	}
 
+	public long mvccVersion;
 	public long contactId;
 	public long companyId;
 	public long userId;

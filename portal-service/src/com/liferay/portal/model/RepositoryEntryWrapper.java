@@ -53,6 +53,7 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("repositoryEntryId", getRepositoryEntryId());
 		attributes.put("groupId", getGroupId());
@@ -70,6 +71,12 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -156,6 +163,26 @@ public class RepositoryEntryWrapper implements RepositoryEntry,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_repositoryEntry.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this repository entry.
+	*
+	* @return the mvcc version of this repository entry
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _repositoryEntry.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this repository entry.
+	*
+	* @param mvccVersion the mvcc version of this repository entry
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_repositoryEntry.setMvccVersion(mvccVersion);
 	}
 
 	/**

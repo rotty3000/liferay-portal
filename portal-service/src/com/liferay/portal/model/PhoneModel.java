@@ -40,7 +40,7 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface PhoneModel extends AttachedModel, BaseModel<Phone>,
+public interface PhoneModel extends AttachedModel, BaseModel<Phone>, MVCCModel,
 	StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -61,6 +61,22 @@ public interface PhoneModel extends AttachedModel, BaseModel<Phone>,
 	 * @param primaryKey the primary key of this phone
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this phone.
+	 *
+	 * @return the mvcc version of this phone
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this phone.
+	 *
+	 * @param mvccVersion the mvcc version of this phone
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this phone.

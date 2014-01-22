@@ -113,6 +113,8 @@ public class GroupPersistenceTest {
 
 		Group newGroup = _persistence.create(pk);
 
+		newGroup.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newGroup.setUuid(ServiceTestUtil.randomString());
 
 		newGroup.setCompanyId(ServiceTestUtil.nextLong());
@@ -153,6 +155,8 @@ public class GroupPersistenceTest {
 
 		Group existingGroup = _persistence.findByPrimaryKey(newGroup.getPrimaryKey());
 
+		Assert.assertEquals(existingGroup.getMvccVersion(),
+			newGroup.getMvccVersion());
 		Assert.assertEquals(existingGroup.getUuid(), newGroup.getUuid());
 		Assert.assertEquals(existingGroup.getGroupId(), newGroup.getGroupId());
 		Assert.assertEquals(existingGroup.getCompanyId(),
@@ -219,13 +223,14 @@ public class GroupPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Group_", "uuid", true,
-			"groupId", true, "companyId", true, "creatorUserId", true,
-			"classNameId", true, "classPK", true, "parentGroupId", true,
-			"liveGroupId", true, "treePath", true, "name", true, "description",
-			true, "type", true, "typeSettings", true, "manualMembership", true,
-			"membershipRestriction", true, "friendlyURL", true, "site", true,
-			"remoteStagingGroupCount", true, "active", true);
+		return OrderByComparatorFactoryUtil.create("Group_", "mvccVersion",
+			true, "uuid", true, "groupId", true, "companyId", true,
+			"creatorUserId", true, "classNameId", true, "classPK", true,
+			"parentGroupId", true, "liveGroupId", true, "treePath", true,
+			"name", true, "description", true, "type", true, "typeSettings",
+			true, "manualMembership", true, "membershipRestriction", true,
+			"friendlyURL", true, "site", true, "remoteStagingGroupCount", true,
+			"active", true);
 	}
 
 	@Test
@@ -397,6 +402,8 @@ public class GroupPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Group group = _persistence.create(pk);
+
+		group.setMvccVersion(ServiceTestUtil.nextLong());
 
 		group.setUuid(ServiceTestUtil.randomString());
 

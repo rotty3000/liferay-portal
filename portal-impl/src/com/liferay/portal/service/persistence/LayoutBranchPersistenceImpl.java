@@ -2342,6 +2342,7 @@ public class LayoutBranchPersistenceImpl extends BasePersistenceImpl<LayoutBranc
 		layoutBranchImpl.setNew(layoutBranch.isNew());
 		layoutBranchImpl.setPrimaryKey(layoutBranch.getPrimaryKey());
 
+		layoutBranchImpl.setMvccVersion(layoutBranch.getMvccVersion());
 		layoutBranchImpl.setLayoutBranchId(layoutBranch.getLayoutBranchId());
 		layoutBranchImpl.setGroupId(layoutBranch.getGroupId());
 		layoutBranchImpl.setCompanyId(layoutBranch.getCompanyId());

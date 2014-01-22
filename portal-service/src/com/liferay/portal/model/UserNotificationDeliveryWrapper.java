@@ -52,6 +52,7 @@ public class UserNotificationDeliveryWrapper implements UserNotificationDelivery
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("userNotificationDeliveryId",
 			getUserNotificationDeliveryId());
 		attributes.put("companyId", getCompanyId());
@@ -67,6 +68,12 @@ public class UserNotificationDeliveryWrapper implements UserNotificationDelivery
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long userNotificationDeliveryId = (Long)attributes.get(
 				"userNotificationDeliveryId");
 
@@ -135,6 +142,26 @@ public class UserNotificationDeliveryWrapper implements UserNotificationDelivery
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_userNotificationDelivery.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this user notification delivery.
+	*
+	* @return the mvcc version of this user notification delivery
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _userNotificationDelivery.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this user notification delivery.
+	*
+	* @param mvccVersion the mvcc version of this user notification delivery
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_userNotificationDelivery.setMvccVersion(mvccVersion);
 	}
 
 	/**

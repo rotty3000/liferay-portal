@@ -40,7 +40,7 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface RepositoryModel extends BaseModel<Repository>,
+public interface RepositoryModel extends BaseModel<Repository>, MVCCModel,
 	StagedGroupedModel, TypedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -61,6 +61,22 @@ public interface RepositoryModel extends BaseModel<Repository>,
 	 * @param primaryKey the primary key of this repository
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this repository.
+	 *
+	 * @return the mvcc version of this repository
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this repository.
+	 *
+	 * @param mvccVersion the mvcc version of this repository
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this repository.

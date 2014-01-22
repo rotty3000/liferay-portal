@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface RegionModel extends BaseModel<Region> {
+public interface RegionModel extends BaseModel<Region>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface RegionModel extends BaseModel<Region> {
 	 * @param primaryKey the primary key of this region
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this region.
+	 *
+	 * @return the mvcc version of this region
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this region.
+	 *
+	 * @param mvccVersion the mvcc version of this region
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the region ID of this region.

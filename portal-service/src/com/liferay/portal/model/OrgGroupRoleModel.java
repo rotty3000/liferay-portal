@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface OrgGroupRoleModel extends BaseModel<OrgGroupRole> {
+public interface OrgGroupRoleModel extends BaseModel<OrgGroupRole>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface OrgGroupRoleModel extends BaseModel<OrgGroupRole> {
 	 * @param primaryKey the primary key of this org group role
 	 */
 	public void setPrimaryKey(OrgGroupRolePK primaryKey);
+
+	/**
+	 * Returns the mvcc version of this org group role.
+	 *
+	 * @return the mvcc version of this org group role
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this org group role.
+	 *
+	 * @param mvccVersion the mvcc version of this org group role
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the organization ID of this org group role.

@@ -52,6 +52,7 @@ public class MembershipRequestWrapper implements MembershipRequest,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("membershipRequestId", getMembershipRequestId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -68,6 +69,12 @@ public class MembershipRequestWrapper implements MembershipRequest,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long membershipRequestId = (Long)attributes.get("membershipRequestId");
 
 		if (membershipRequestId != null) {
@@ -147,6 +154,26 @@ public class MembershipRequestWrapper implements MembershipRequest,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_membershipRequest.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this membership request.
+	*
+	* @return the mvcc version of this membership request
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _membershipRequest.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this membership request.
+	*
+	* @param mvccVersion the mvcc version of this membership request
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_membershipRequest.setMvccVersion(mvccVersion);
 	}
 
 	/**

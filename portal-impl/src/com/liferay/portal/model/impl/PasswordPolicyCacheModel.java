@@ -37,9 +37,11 @@ public class PasswordPolicyCacheModel implements CacheModel<PasswordPolicy>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(69);
+		StringBundler sb = new StringBundler(71);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", passwordPolicyId=");
 		sb.append(passwordPolicyId);
@@ -115,6 +117,8 @@ public class PasswordPolicyCacheModel implements CacheModel<PasswordPolicy>,
 	@Override
 	public PasswordPolicy toEntityModel() {
 		PasswordPolicyImpl passwordPolicyImpl = new PasswordPolicyImpl();
+
+		passwordPolicyImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			passwordPolicyImpl.setUuid(StringPool.BLANK);
@@ -203,6 +207,7 @@ public class PasswordPolicyCacheModel implements CacheModel<PasswordPolicy>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		passwordPolicyId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -242,6 +247,8 @@ public class PasswordPolicyCacheModel implements CacheModel<PasswordPolicy>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -311,6 +318,7 @@ public class PasswordPolicyCacheModel implements CacheModel<PasswordPolicy>,
 		objectOutput.writeLong(resetTicketMaxAge);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long passwordPolicyId;
 	public long companyId;

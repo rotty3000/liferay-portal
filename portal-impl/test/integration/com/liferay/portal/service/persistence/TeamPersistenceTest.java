@@ -114,6 +114,8 @@ public class TeamPersistenceTest {
 
 		Team newTeam = _persistence.create(pk);
 
+		newTeam.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newTeam.setCompanyId(ServiceTestUtil.nextLong());
 
 		newTeam.setUserId(ServiceTestUtil.nextLong());
@@ -134,6 +136,8 @@ public class TeamPersistenceTest {
 
 		Team existingTeam = _persistence.findByPrimaryKey(newTeam.getPrimaryKey());
 
+		Assert.assertEquals(existingTeam.getMvccVersion(),
+			newTeam.getMvccVersion());
 		Assert.assertEquals(existingTeam.getTeamId(), newTeam.getTeamId());
 		Assert.assertEquals(existingTeam.getCompanyId(), newTeam.getCompanyId());
 		Assert.assertEquals(existingTeam.getUserId(), newTeam.getUserId());
@@ -194,10 +198,10 @@ public class TeamPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Team", "teamId", true,
-			"companyId", true, "userId", true, "userName", true, "createDate",
-			true, "modifiedDate", true, "groupId", true, "name", true,
-			"description", true);
+		return OrderByComparatorFactoryUtil.create("Team", "mvccVersion", true,
+			"teamId", true, "companyId", true, "userId", true, "userName",
+			true, "createDate", true, "modifiedDate", true, "groupId", true,
+			"name", true, "description", true);
 	}
 
 	@Test
@@ -332,6 +336,8 @@ public class TeamPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Team team = _persistence.create(pk);
+
+		team.setMvccVersion(ServiceTestUtil.nextLong());
 
 		team.setCompanyId(ServiceTestUtil.nextLong());
 

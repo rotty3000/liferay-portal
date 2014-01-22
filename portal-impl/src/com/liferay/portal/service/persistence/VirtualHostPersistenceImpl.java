@@ -890,6 +890,7 @@ public class VirtualHostPersistenceImpl extends BasePersistenceImpl<VirtualHost>
 		virtualHostImpl.setNew(virtualHost.isNew());
 		virtualHostImpl.setPrimaryKey(virtualHost.getPrimaryKey());
 
+		virtualHostImpl.setMvccVersion(virtualHost.getMvccVersion());
 		virtualHostImpl.setVirtualHostId(virtualHost.getVirtualHostId());
 		virtualHostImpl.setCompanyId(virtualHost.getCompanyId());
 		virtualHostImpl.setLayoutSetId(virtualHost.getLayoutSetId());

@@ -1885,6 +1885,7 @@ public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 		contactImpl.setNew(contact.isNew());
 		contactImpl.setPrimaryKey(contact.getPrimaryKey());
 
+		contactImpl.setMvccVersion(contact.getMvccVersion());
 		contactImpl.setContactId(contact.getContactId());
 		contactImpl.setCompanyId(contact.getCompanyId());
 		contactImpl.setUserId(contact.getUserId());

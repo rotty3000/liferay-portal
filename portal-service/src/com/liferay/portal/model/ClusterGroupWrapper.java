@@ -51,6 +51,7 @@ public class ClusterGroupWrapper implements ClusterGroup,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("clusterGroupId", getClusterGroupId());
 		attributes.put("name", getName());
 		attributes.put("clusterNodeIds", getClusterNodeIds());
@@ -61,6 +62,12 @@ public class ClusterGroupWrapper implements ClusterGroup,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long clusterGroupId = (Long)attributes.get("clusterGroupId");
 
 		if (clusterGroupId != null) {
@@ -104,6 +111,26 @@ public class ClusterGroupWrapper implements ClusterGroup,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_clusterGroup.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this cluster group.
+	*
+	* @return the mvcc version of this cluster group
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _clusterGroup.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this cluster group.
+	*
+	* @param mvccVersion the mvcc version of this cluster group
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_clusterGroup.setMvccVersion(mvccVersion);
 	}
 
 	/**

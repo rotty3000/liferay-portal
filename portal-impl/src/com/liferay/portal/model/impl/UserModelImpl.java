@@ -64,6 +64,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	 */
 	public static final String TABLE_NAME = "User_";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "uuid_", Types.VARCHAR },
 			{ "userId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -105,7 +106,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			{ "emailAddressVerified", Types.BOOLEAN },
 			{ "status", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table User_ (uuid_ VARCHAR(75) null,userId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,defaultUser BOOLEAN,contactId LONG,password_ VARCHAR(75) null,passwordEncrypted BOOLEAN,passwordReset BOOLEAN,passwordModifiedDate DATE null,digest VARCHAR(255) null,reminderQueryQuestion VARCHAR(75) null,reminderQueryAnswer VARCHAR(75) null,graceLoginCount INTEGER,screenName VARCHAR(75) null,emailAddress VARCHAR(75) null,facebookId LONG,ldapServerId LONG,openId VARCHAR(1024) null,portraitId LONG,languageId VARCHAR(75) null,timeZoneId VARCHAR(75) null,greeting VARCHAR(255) null,comments STRING null,firstName VARCHAR(75) null,middleName VARCHAR(75) null,lastName VARCHAR(75) null,jobTitle VARCHAR(100) null,loginDate DATE null,loginIP VARCHAR(75) null,lastLoginDate DATE null,lastLoginIP VARCHAR(75) null,lastFailedLoginDate DATE null,failedLoginAttempts INTEGER,lockout BOOLEAN,lockoutDate DATE null,agreedToTermsOfUse BOOLEAN,emailAddressVerified BOOLEAN,status INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table User_ (mvccVersion LONG default 0,uuid_ VARCHAR(75) null,userId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,defaultUser BOOLEAN,contactId LONG,password_ VARCHAR(75) null,passwordEncrypted BOOLEAN,passwordReset BOOLEAN,passwordModifiedDate DATE null,digest VARCHAR(255) null,reminderQueryQuestion VARCHAR(75) null,reminderQueryAnswer VARCHAR(75) null,graceLoginCount INTEGER,screenName VARCHAR(75) null,emailAddress VARCHAR(75) null,facebookId LONG,ldapServerId LONG,openId VARCHAR(1024) null,portraitId LONG,languageId VARCHAR(75) null,timeZoneId VARCHAR(75) null,greeting VARCHAR(255) null,comments STRING null,firstName VARCHAR(75) null,middleName VARCHAR(75) null,lastName VARCHAR(75) null,jobTitle VARCHAR(100) null,loginDate DATE null,loginIP VARCHAR(75) null,lastLoginDate DATE null,lastLoginIP VARCHAR(75) null,lastFailedLoginDate DATE null,failedLoginAttempts INTEGER,lockout BOOLEAN,lockoutDate DATE null,agreedToTermsOfUse BOOLEAN,emailAddressVerified BOOLEAN,status INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table User_";
 	public static final String ORDER_BY_JPQL = " ORDER BY user.userId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY User_.userId ASC";
@@ -148,6 +149,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 		User model = new UserImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setUuid(soapModel.getUuid());
 		model.setUserId(soapModel.getUserId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -292,6 +294,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("userId", getUserId());
 		attributes.put("companyId", getCompanyId());
@@ -341,6 +344,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -585,6 +594,17 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		if (status != null) {
 			setStatus(status);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -1336,6 +1356,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	public Object clone() {
 		UserImpl userImpl = new UserImpl();
 
+		userImpl.setMvccVersion(getMvccVersion());
 		userImpl.setUuid(getUuid());
 		userImpl.setUserId(getUserId());
 		userImpl.setCompanyId(getCompanyId());
@@ -1484,6 +1505,8 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	@Override
 	public CacheModel<User> toCacheModel() {
 		UserCacheModel userCacheModel = new UserCacheModel();
+
+		userCacheModel.mvccVersion = getMvccVersion();
 
 		userCacheModel.uuid = getUuid();
 
@@ -1729,9 +1752,11 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(81);
+		StringBundler sb = new StringBundler(83);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", uuid=");
 		sb.append(getUuid());
 		sb.append(", userId=");
 		sb.append(getUserId());
@@ -1818,12 +1843,16 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(124);
+		StringBundler sb = new StringBundler(127);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.User");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>uuid</column-name><column-value><![CDATA[");
 		sb.append(getUuid());
@@ -1992,6 +2021,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 	private static ClassLoader _classLoader = User.class.getClassLoader();
 	private static Class<?>[] _escapedModelInterfaces = new Class[] { User.class };
+	private long _mvccVersion;
 	private String _uuid;
 	private String _originalUuid;
 	private long _userId;

@@ -889,6 +889,7 @@ public class ShardPersistenceImpl extends BasePersistenceImpl<Shard>
 		shardImpl.setNew(shard.isNew());
 		shardImpl.setPrimaryKey(shard.getPrimaryKey());
 
+		shardImpl.setMvccVersion(shard.getMvccVersion());
 		shardImpl.setShardId(shard.getShardId());
 		shardImpl.setClassNameId(shard.getClassNameId());
 		shardImpl.setClassPK(shard.getClassPK());

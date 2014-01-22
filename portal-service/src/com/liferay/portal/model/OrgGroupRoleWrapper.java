@@ -51,6 +51,7 @@ public class OrgGroupRoleWrapper implements OrgGroupRole,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("organizationId", getOrganizationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("roleId", getRoleId());
@@ -60,6 +61,12 @@ public class OrgGroupRoleWrapper implements OrgGroupRole,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long organizationId = (Long)attributes.get("organizationId");
 
 		if (organizationId != null) {
@@ -98,6 +105,26 @@ public class OrgGroupRoleWrapper implements OrgGroupRole,
 	public void setPrimaryKey(
 		com.liferay.portal.service.persistence.OrgGroupRolePK primaryKey) {
 		_orgGroupRole.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this org group role.
+	*
+	* @return the mvcc version of this org group role
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _orgGroupRole.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this org group role.
+	*
+	* @param mvccVersion the mvcc version of this org group role
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_orgGroupRole.setMvccVersion(mvccVersion);
 	}
 
 	/**

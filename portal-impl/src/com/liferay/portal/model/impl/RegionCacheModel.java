@@ -34,9 +34,11 @@ import java.io.ObjectOutput;
 public class RegionCacheModel implements CacheModel<Region>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
-		sb.append("{regionId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", regionId=");
 		sb.append(regionId);
 		sb.append(", countryId=");
 		sb.append(countryId);
@@ -55,6 +57,7 @@ public class RegionCacheModel implements CacheModel<Region>, Externalizable {
 	public Region toEntityModel() {
 		RegionImpl regionImpl = new RegionImpl();
 
+		regionImpl.setMvccVersion(mvccVersion);
 		regionImpl.setRegionId(regionId);
 		regionImpl.setCountryId(countryId);
 
@@ -81,6 +84,7 @@ public class RegionCacheModel implements CacheModel<Region>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		regionId = objectInput.readLong();
 		countryId = objectInput.readLong();
 		regionCode = objectInput.readUTF();
@@ -91,6 +95,7 @@ public class RegionCacheModel implements CacheModel<Region>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(regionId);
 		objectOutput.writeLong(countryId);
 
@@ -111,6 +116,7 @@ public class RegionCacheModel implements CacheModel<Region>, Externalizable {
 		objectOutput.writeBoolean(active);
 	}
 
+	public long mvccVersion;
 	public long regionId;
 	public long countryId;
 	public String regionCode;

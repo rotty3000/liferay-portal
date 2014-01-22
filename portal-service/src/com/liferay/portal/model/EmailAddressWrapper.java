@@ -53,6 +53,7 @@ public class EmailAddressWrapper implements EmailAddress,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("emailAddressId", getEmailAddressId());
 		attributes.put("companyId", getCompanyId());
@@ -71,6 +72,12 @@ public class EmailAddressWrapper implements EmailAddress,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -162,6 +169,26 @@ public class EmailAddressWrapper implements EmailAddress,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_emailAddress.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this email address.
+	*
+	* @return the mvcc version of this email address
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _emailAddress.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this email address.
+	*
+	* @param mvccVersion the mvcc version of this email address
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_emailAddress.setMvccVersion(mvccVersion);
 	}
 
 	/**

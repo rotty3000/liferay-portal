@@ -7653,6 +7653,7 @@ public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<Backgroun
 		backgroundTaskImpl.setNew(backgroundTask.isNew());
 		backgroundTaskImpl.setPrimaryKey(backgroundTask.getPrimaryKey());
 
+		backgroundTaskImpl.setMvccVersion(backgroundTask.getMvccVersion());
 		backgroundTaskImpl.setBackgroundTaskId(backgroundTask.getBackgroundTaskId());
 		backgroundTaskImpl.setGroupId(backgroundTask.getGroupId());
 		backgroundTaskImpl.setCompanyId(backgroundTask.getCompanyId());

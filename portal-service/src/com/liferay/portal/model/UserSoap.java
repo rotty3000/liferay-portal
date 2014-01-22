@@ -31,6 +31,7 @@ public class UserSoap implements Serializable {
 	public static UserSoap toSoapModel(User model) {
 		UserSoap soapModel = new UserSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -121,6 +122,14 @@ public class UserSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setUserId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -467,6 +476,7 @@ public class UserSoap implements Serializable {
 		_status = status;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _userId;
 	private long _companyId;

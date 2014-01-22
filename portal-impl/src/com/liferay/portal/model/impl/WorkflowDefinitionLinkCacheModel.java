@@ -37,9 +37,11 @@ public class WorkflowDefinitionLinkCacheModel implements CacheModel<WorkflowDefi
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
-		sb.append("{workflowDefinitionLinkId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", workflowDefinitionLinkId=");
 		sb.append(workflowDefinitionLinkId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -72,6 +74,7 @@ public class WorkflowDefinitionLinkCacheModel implements CacheModel<WorkflowDefi
 	public WorkflowDefinitionLink toEntityModel() {
 		WorkflowDefinitionLinkImpl workflowDefinitionLinkImpl = new WorkflowDefinitionLinkImpl();
 
+		workflowDefinitionLinkImpl.setMvccVersion(mvccVersion);
 		workflowDefinitionLinkImpl.setWorkflowDefinitionLinkId(workflowDefinitionLinkId);
 		workflowDefinitionLinkImpl.setGroupId(groupId);
 		workflowDefinitionLinkImpl.setCompanyId(companyId);
@@ -118,6 +121,7 @@ public class WorkflowDefinitionLinkCacheModel implements CacheModel<WorkflowDefi
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		workflowDefinitionLinkId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -135,6 +139,7 @@ public class WorkflowDefinitionLinkCacheModel implements CacheModel<WorkflowDefi
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(workflowDefinitionLinkId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -163,6 +168,7 @@ public class WorkflowDefinitionLinkCacheModel implements CacheModel<WorkflowDefi
 		objectOutput.writeInt(workflowDefinitionVersion);
 	}
 
+	public long mvccVersion;
 	public long workflowDefinitionLinkId;
 	public long groupId;
 	public long companyId;

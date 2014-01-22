@@ -112,6 +112,8 @@ public class PortalPreferencesPersistenceTest {
 
 		PortalPreferences newPortalPreferences = _persistence.create(pk);
 
+		newPortalPreferences.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newPortalPreferences.setOwnerId(ServiceTestUtil.nextLong());
 
 		newPortalPreferences.setOwnerType(ServiceTestUtil.nextInt());
@@ -122,6 +124,8 @@ public class PortalPreferencesPersistenceTest {
 
 		PortalPreferences existingPortalPreferences = _persistence.findByPrimaryKey(newPortalPreferences.getPrimaryKey());
 
+		Assert.assertEquals(existingPortalPreferences.getMvccVersion(),
+			newPortalPreferences.getMvccVersion());
 		Assert.assertEquals(existingPortalPreferences.getPortalPreferencesId(),
 			newPortalPreferences.getPortalPreferencesId());
 		Assert.assertEquals(existingPortalPreferences.getOwnerId(),
@@ -168,8 +172,8 @@ public class PortalPreferencesPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("PortalPreferences",
-			"portalPreferencesId", true, "ownerId", true, "ownerType", true,
-			"preferences", true);
+			"mvccVersion", true, "portalPreferencesId", true, "ownerId", true,
+			"ownerType", true, "preferences", true);
 	}
 
 	@Test
@@ -307,6 +311,8 @@ public class PortalPreferencesPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		PortalPreferences portalPreferences = _persistence.create(pk);
+
+		portalPreferences.setMvccVersion(ServiceTestUtil.nextLong());
 
 		portalPreferences.setOwnerId(ServiceTestUtil.nextLong());
 

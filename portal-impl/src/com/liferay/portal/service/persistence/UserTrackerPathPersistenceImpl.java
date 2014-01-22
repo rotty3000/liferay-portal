@@ -852,6 +852,7 @@ public class UserTrackerPathPersistenceImpl extends BasePersistenceImpl<UserTrac
 		userTrackerPathImpl.setNew(userTrackerPath.isNew());
 		userTrackerPathImpl.setPrimaryKey(userTrackerPath.getPrimaryKey());
 
+		userTrackerPathImpl.setMvccVersion(userTrackerPath.getMvccVersion());
 		userTrackerPathImpl.setUserTrackerPathId(userTrackerPath.getUserTrackerPathId());
 		userTrackerPathImpl.setUserTrackerId(userTrackerPath.getUserTrackerId());
 		userTrackerPathImpl.setPath(userTrackerPath.getPath());

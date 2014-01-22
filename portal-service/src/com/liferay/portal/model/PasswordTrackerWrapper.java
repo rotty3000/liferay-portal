@@ -52,6 +52,7 @@ public class PasswordTrackerWrapper implements PasswordTracker,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("passwordTrackerId", getPasswordTrackerId());
 		attributes.put("userId", getUserId());
 		attributes.put("createDate", getCreateDate());
@@ -62,6 +63,12 @@ public class PasswordTrackerWrapper implements PasswordTracker,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long passwordTrackerId = (Long)attributes.get("passwordTrackerId");
 
 		if (passwordTrackerId != null) {
@@ -105,6 +112,26 @@ public class PasswordTrackerWrapper implements PasswordTracker,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_passwordTracker.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this password tracker.
+	*
+	* @return the mvcc version of this password tracker
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _passwordTracker.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this password tracker.
+	*
+	* @param mvccVersion the mvcc version of this password tracker
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_passwordTracker.setMvccVersion(mvccVersion);
 	}
 
 	/**

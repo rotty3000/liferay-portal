@@ -40,7 +40,8 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface UserGroupModel extends BaseModel<UserGroup>, StagedAuditedModel {
+public interface UserGroupModel extends BaseModel<UserGroup>, MVCCModel,
+	StagedAuditedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -60,6 +61,22 @@ public interface UserGroupModel extends BaseModel<UserGroup>, StagedAuditedModel
 	 * @param primaryKey the primary key of this user group
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this user group.
+	 *
+	 * @return the mvcc version of this user group
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this user group.
+	 *
+	 * @param mvccVersion the mvcc version of this user group
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this user group.

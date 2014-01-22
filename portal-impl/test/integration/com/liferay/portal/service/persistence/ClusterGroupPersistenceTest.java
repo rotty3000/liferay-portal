@@ -110,6 +110,8 @@ public class ClusterGroupPersistenceTest {
 
 		ClusterGroup newClusterGroup = _persistence.create(pk);
 
+		newClusterGroup.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newClusterGroup.setName(ServiceTestUtil.randomString());
 
 		newClusterGroup.setClusterNodeIds(ServiceTestUtil.randomString());
@@ -120,6 +122,8 @@ public class ClusterGroupPersistenceTest {
 
 		ClusterGroup existingClusterGroup = _persistence.findByPrimaryKey(newClusterGroup.getPrimaryKey());
 
+		Assert.assertEquals(existingClusterGroup.getMvccVersion(),
+			newClusterGroup.getMvccVersion());
 		Assert.assertEquals(existingClusterGroup.getClusterGroupId(),
 			newClusterGroup.getClusterGroupId());
 		Assert.assertEquals(existingClusterGroup.getName(),
@@ -166,8 +170,8 @@ public class ClusterGroupPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("ClusterGroup",
-			"clusterGroupId", true, "name", true, "clusterNodeIds", true,
-			"wholeCluster", true);
+			"mvccVersion", true, "clusterGroupId", true, "name", true,
+			"clusterNodeIds", true, "wholeCluster", true);
 	}
 
 	@Test
@@ -286,6 +290,8 @@ public class ClusterGroupPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		ClusterGroup clusterGroup = _persistence.create(pk);
+
+		clusterGroup.setMvccVersion(ServiceTestUtil.nextLong());
 
 		clusterGroup.setName(ServiceTestUtil.randomString());
 

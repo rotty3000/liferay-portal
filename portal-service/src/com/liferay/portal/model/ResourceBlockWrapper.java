@@ -51,6 +51,7 @@ public class ResourceBlockWrapper implements ResourceBlock,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("resourceBlockId", getResourceBlockId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
@@ -63,6 +64,12 @@ public class ResourceBlockWrapper implements ResourceBlock,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long resourceBlockId = (Long)attributes.get("resourceBlockId");
 
 		if (resourceBlockId != null) {
@@ -118,6 +125,26 @@ public class ResourceBlockWrapper implements ResourceBlock,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_resourceBlock.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this resource block.
+	*
+	* @return the mvcc version of this resource block
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _resourceBlock.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this resource block.
+	*
+	* @param mvccVersion the mvcc version of this resource block
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_resourceBlock.setMvccVersion(mvccVersion);
 	}
 
 	/**

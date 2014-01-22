@@ -60,6 +60,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	 */
 	public static final String TABLE_NAME = "OrgLabor";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "orgLaborId", Types.BIGINT },
 			{ "organizationId", Types.BIGINT },
 			{ "typeId", Types.INTEGER },
@@ -78,7 +79,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 			{ "satOpen", Types.INTEGER },
 			{ "satClose", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table OrgLabor (orgLaborId LONG not null primary key,organizationId LONG,typeId INTEGER,sunOpen INTEGER,sunClose INTEGER,monOpen INTEGER,monClose INTEGER,tueOpen INTEGER,tueClose INTEGER,wedOpen INTEGER,wedClose INTEGER,thuOpen INTEGER,thuClose INTEGER,friOpen INTEGER,friClose INTEGER,satOpen INTEGER,satClose INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table OrgLabor (mvccVersion LONG default 0,orgLaborId LONG not null primary key,organizationId LONG,typeId INTEGER,sunOpen INTEGER,sunClose INTEGER,monOpen INTEGER,monClose INTEGER,tueOpen INTEGER,tueClose INTEGER,wedOpen INTEGER,wedClose INTEGER,thuOpen INTEGER,thuClose INTEGER,friOpen INTEGER,friClose INTEGER,satOpen INTEGER,satClose INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table OrgLabor";
 	public static final String ORDER_BY_JPQL = " ORDER BY orgLabor.organizationId ASC, orgLabor.typeId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY OrgLabor.organizationId ASC, OrgLabor.typeId ASC";
@@ -110,6 +111,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 		OrgLabor model = new OrgLaborImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setOrgLaborId(soapModel.getOrgLaborId());
 		model.setOrganizationId(soapModel.getOrganizationId());
 		model.setTypeId(soapModel.getTypeId());
@@ -191,6 +193,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("orgLaborId", getOrgLaborId());
 		attributes.put("organizationId", getOrganizationId());
 		attributes.put("typeId", getTypeId());
@@ -217,6 +220,12 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long orgLaborId = (Long)attributes.get("orgLaborId");
 
 		if (orgLaborId != null) {
@@ -318,6 +327,17 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 		if (satClose != null) {
 			setSatClose(satClose);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -552,6 +572,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	public Object clone() {
 		OrgLaborImpl orgLaborImpl = new OrgLaborImpl();
 
+		orgLaborImpl.setMvccVersion(getMvccVersion());
 		orgLaborImpl.setOrgLaborId(getOrgLaborId());
 		orgLaborImpl.setOrganizationId(getOrganizationId());
 		orgLaborImpl.setTypeId(getTypeId());
@@ -662,6 +683,8 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	public CacheModel<OrgLabor> toCacheModel() {
 		OrgLaborCacheModel orgLaborCacheModel = new OrgLaborCacheModel();
 
+		orgLaborCacheModel.mvccVersion = getMvccVersion();
+
 		orgLaborCacheModel.orgLaborId = getOrgLaborId();
 
 		orgLaborCacheModel.organizationId = getOrganizationId();
@@ -701,9 +724,11 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(37);
 
-		sb.append("{orgLaborId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", orgLaborId=");
 		sb.append(getOrgLaborId());
 		sb.append(", organizationId=");
 		sb.append(getOrganizationId());
@@ -744,12 +769,16 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(58);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.OrgLabor");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>orgLaborId</column-name><column-value><![CDATA[");
 		sb.append(getOrgLaborId());
@@ -828,6 +857,7 @@ public class OrgLaborModelImpl extends BaseModelImpl<OrgLabor>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			OrgLabor.class
 		};
+	private long _mvccVersion;
 	private long _orgLaborId;
 	private long _organizationId;
 	private long _originalOrganizationId;

@@ -62,6 +62,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	 */
 	public static final String TABLE_NAME = "LayoutSet";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "layoutSetId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -79,7 +80,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 			{ "layoutSetPrototypeUuid", Types.VARCHAR },
 			{ "layoutSetPrototypeLinkEnabled", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LayoutSet (layoutSetId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,privateLayout BOOLEAN,logoId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,pageCount INTEGER,settings_ TEXT null,layoutSetPrototypeUuid VARCHAR(75) null,layoutSetPrototypeLinkEnabled BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table LayoutSet (mvccVersion LONG default 0,layoutSetId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,privateLayout BOOLEAN,logoId LONG,themeId VARCHAR(75) null,colorSchemeId VARCHAR(75) null,wapThemeId VARCHAR(75) null,wapColorSchemeId VARCHAR(75) null,css TEXT null,pageCount INTEGER,settings_ TEXT null,layoutSetPrototypeUuid VARCHAR(75) null,layoutSetPrototypeLinkEnabled BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table LayoutSet";
 	public static final String ORDER_BY_JPQL = " ORDER BY layoutSet.layoutSetId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY LayoutSet.layoutSetId ASC";
@@ -113,6 +114,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 		LayoutSet model = new LayoutSetImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setLayoutSetId(soapModel.getLayoutSetId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -193,6 +195,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("layoutSetId", getLayoutSetId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -219,6 +222,12 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long layoutSetId = (Long)attributes.get("layoutSetId");
 
 		if (layoutSetId != null) {
@@ -316,6 +325,17 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 		if (layoutSetPrototypeLinkEnabled != null) {
 			setLayoutSetPrototypeLinkEnabled(layoutSetPrototypeLinkEnabled);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -612,6 +632,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	public Object clone() {
 		LayoutSetImpl layoutSetImpl = new LayoutSetImpl();
 
+		layoutSetImpl.setMvccVersion(getMvccVersion());
 		layoutSetImpl.setLayoutSetId(getLayoutSetId());
 		layoutSetImpl.setGroupId(getGroupId());
 		layoutSetImpl.setCompanyId(getCompanyId());
@@ -709,6 +730,8 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	public CacheModel<LayoutSet> toCacheModel() {
 		LayoutSetCacheModel layoutSetCacheModel = new LayoutSetCacheModel();
 
+		layoutSetCacheModel.mvccVersion = getMvccVersion();
+
 		layoutSetCacheModel.layoutSetId = getLayoutSetId();
 
 		layoutSetCacheModel.groupId = getGroupId();
@@ -805,9 +828,11 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
-		sb.append("{layoutSetId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", layoutSetId=");
 		sb.append(getLayoutSetId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -846,12 +871,16 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(52);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.LayoutSet");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>layoutSetId</column-name><column-value><![CDATA[");
 		sb.append(getLayoutSetId());
@@ -926,6 +955,7 @@ public class LayoutSetModelImpl extends BaseModelImpl<LayoutSet>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			LayoutSet.class
 		};
+	private long _mvccVersion;
 	private long _layoutSetId;
 	private long _groupId;
 	private long _originalGroupId;

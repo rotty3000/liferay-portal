@@ -31,6 +31,7 @@ public class WorkflowDefinitionLinkSoap implements Serializable {
 		WorkflowDefinitionLink model) {
 		WorkflowDefinitionLinkSoap soapModel = new WorkflowDefinitionLinkSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setWorkflowDefinitionLinkId(model.getWorkflowDefinitionLinkId());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -96,6 +97,14 @@ public class WorkflowDefinitionLinkSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setWorkflowDefinitionLinkId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getWorkflowDefinitionLinkId() {
@@ -194,6 +203,7 @@ public class WorkflowDefinitionLinkSoap implements Serializable {
 		_workflowDefinitionVersion = workflowDefinitionVersion;
 	}
 
+	private long _mvccVersion;
 	private long _workflowDefinitionLinkId;
 	private long _groupId;
 	private long _companyId;

@@ -4392,20 +4392,20 @@ public class ServiceBuilder {
 
 		List<Element> columnElements = entityElement.elements("column");
 
-		if (mvccEnabled && !columnElements.isEmpty()) {
-			Element columnElement = SAXReaderUtil.createElement("column");
-
-			columnElement.addAttribute("name", "mvccVersion");
-			columnElement.addAttribute("type", "long");
-
-			columnElements.add(columnElement);
-		}
-
 		if (uuid) {
 			Element columnElement = SAXReaderUtil.createElement("column");
 
 			columnElement.addAttribute("name", "uuid");
 			columnElement.addAttribute("type", "String");
+
+			columnElements.add(0, columnElement);
+		}
+
+		if (mvccEnabled && !columnElements.isEmpty()) {
+			Element columnElement = SAXReaderUtil.createElement("column");
+
+			columnElement.addAttribute("name", "mvccVersion");
+			columnElement.addAttribute("type", "long");
 
 			columnElements.add(0, columnElement);
 		}

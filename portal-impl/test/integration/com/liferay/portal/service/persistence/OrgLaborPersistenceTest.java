@@ -110,6 +110,8 @@ public class OrgLaborPersistenceTest {
 
 		OrgLabor newOrgLabor = _persistence.create(pk);
 
+		newOrgLabor.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newOrgLabor.setOrganizationId(ServiceTestUtil.nextLong());
 
 		newOrgLabor.setTypeId(ServiceTestUtil.nextInt());
@@ -146,6 +148,8 @@ public class OrgLaborPersistenceTest {
 
 		OrgLabor existingOrgLabor = _persistence.findByPrimaryKey(newOrgLabor.getPrimaryKey());
 
+		Assert.assertEquals(existingOrgLabor.getMvccVersion(),
+			newOrgLabor.getMvccVersion());
 		Assert.assertEquals(existingOrgLabor.getOrgLaborId(),
 			newOrgLabor.getOrgLaborId());
 		Assert.assertEquals(existingOrgLabor.getOrganizationId(),
@@ -216,12 +220,12 @@ public class OrgLaborPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("OrgLabor", "orgLaborId",
-			true, "organizationId", true, "typeId", true, "sunOpen", true,
-			"sunClose", true, "monOpen", true, "monClose", true, "tueOpen",
-			true, "tueClose", true, "wedOpen", true, "wedClose", true,
-			"thuOpen", true, "thuClose", true, "friOpen", true, "friClose",
-			true, "satOpen", true, "satClose", true);
+		return OrderByComparatorFactoryUtil.create("OrgLabor", "mvccVersion",
+			true, "orgLaborId", true, "organizationId", true, "typeId", true,
+			"sunOpen", true, "sunClose", true, "monOpen", true, "monClose",
+			true, "tueOpen", true, "tueClose", true, "wedOpen", true,
+			"wedClose", true, "thuOpen", true, "thuClose", true, "friOpen",
+			true, "friClose", true, "satOpen", true, "satClose", true);
 	}
 
 	@Test
@@ -338,6 +342,8 @@ public class OrgLaborPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		OrgLabor orgLabor = _persistence.create(pk);
+
+		orgLabor.setMvccVersion(ServiceTestUtil.nextLong());
 
 		orgLabor.setOrganizationId(ServiceTestUtil.nextLong());
 

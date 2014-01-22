@@ -8966,6 +8966,7 @@ public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 		roleImpl.setNew(role.isNew());
 		roleImpl.setPrimaryKey(role.getPrimaryKey());
 
+		roleImpl.setMvccVersion(role.getMvccVersion());
 		roleImpl.setUuid(role.getUuid());
 		roleImpl.setRoleId(role.getRoleId());
 		roleImpl.setCompanyId(role.getCompanyId());

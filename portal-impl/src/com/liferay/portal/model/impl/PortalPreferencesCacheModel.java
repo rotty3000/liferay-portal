@@ -35,9 +35,11 @@ public class PortalPreferencesCacheModel implements CacheModel<PortalPreferences
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
-		sb.append("{portalPreferencesId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", portalPreferencesId=");
 		sb.append(portalPreferencesId);
 		sb.append(", ownerId=");
 		sb.append(ownerId);
@@ -54,6 +56,7 @@ public class PortalPreferencesCacheModel implements CacheModel<PortalPreferences
 	public PortalPreferences toEntityModel() {
 		PortalPreferencesImpl portalPreferencesImpl = new PortalPreferencesImpl();
 
+		portalPreferencesImpl.setMvccVersion(mvccVersion);
 		portalPreferencesImpl.setPortalPreferencesId(portalPreferencesId);
 		portalPreferencesImpl.setOwnerId(ownerId);
 		portalPreferencesImpl.setOwnerType(ownerType);
@@ -72,6 +75,7 @@ public class PortalPreferencesCacheModel implements CacheModel<PortalPreferences
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		portalPreferencesId = objectInput.readLong();
 		ownerId = objectInput.readLong();
 		ownerType = objectInput.readInt();
@@ -81,6 +85,7 @@ public class PortalPreferencesCacheModel implements CacheModel<PortalPreferences
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(portalPreferencesId);
 		objectOutput.writeLong(ownerId);
 		objectOutput.writeInt(ownerType);
@@ -93,6 +98,7 @@ public class PortalPreferencesCacheModel implements CacheModel<PortalPreferences
 		}
 	}
 
+	public long mvccVersion;
 	public long portalPreferencesId;
 	public long ownerId;
 	public int ownerType;

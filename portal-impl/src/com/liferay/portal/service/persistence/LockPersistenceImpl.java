@@ -2328,6 +2328,7 @@ public class LockPersistenceImpl extends BasePersistenceImpl<Lock>
 		lockImpl.setNew(lock.isNew());
 		lockImpl.setPrimaryKey(lock.getPrimaryKey());
 
+		lockImpl.setMvccVersion(lock.getMvccVersion());
 		lockImpl.setUuid(lock.getUuid());
 		lockImpl.setLockId(lock.getLockId());
 		lockImpl.setCompanyId(lock.getCompanyId());

@@ -36,9 +36,11 @@ import java.util.Date;
 public class AccountCacheModel implements CacheModel<Account>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
-		sb.append("{accountId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", accountId=");
 		sb.append(accountId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -79,6 +81,7 @@ public class AccountCacheModel implements CacheModel<Account>, Externalizable {
 	public Account toEntityModel() {
 		AccountImpl accountImpl = new AccountImpl();
 
+		accountImpl.setMvccVersion(mvccVersion);
 		accountImpl.setAccountId(accountId);
 		accountImpl.setCompanyId(companyId);
 		accountImpl.setUserId(userId);
@@ -176,6 +179,7 @@ public class AccountCacheModel implements CacheModel<Account>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		accountId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		userId = objectInput.readLong();
@@ -197,6 +201,7 @@ public class AccountCacheModel implements CacheModel<Account>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(accountId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(userId);
@@ -276,6 +281,7 @@ public class AccountCacheModel implements CacheModel<Account>, Externalizable {
 		}
 	}
 
+	public long mvccVersion;
 	public long accountId;
 	public long companyId;
 	public long userId;

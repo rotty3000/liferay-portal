@@ -37,9 +37,11 @@ public class PortletItemCacheModel implements CacheModel<PortletItem>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
-		sb.append("{portletItemId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", portletItemId=");
 		sb.append(portletItemId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -68,6 +70,7 @@ public class PortletItemCacheModel implements CacheModel<PortletItem>,
 	public PortletItem toEntityModel() {
 		PortletItemImpl portletItemImpl = new PortletItemImpl();
 
+		portletItemImpl.setMvccVersion(mvccVersion);
 		portletItemImpl.setPortletItemId(portletItemId);
 		portletItemImpl.setGroupId(groupId);
 		portletItemImpl.setCompanyId(companyId);
@@ -117,6 +120,7 @@ public class PortletItemCacheModel implements CacheModel<PortletItem>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		portletItemId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -132,6 +136,7 @@ public class PortletItemCacheModel implements CacheModel<PortletItem>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(portletItemId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -164,6 +169,7 @@ public class PortletItemCacheModel implements CacheModel<PortletItem>,
 		objectOutput.writeLong(classNameId);
 	}
 
+	public long mvccVersion;
 	public long portletItemId;
 	public long groupId;
 	public long companyId;

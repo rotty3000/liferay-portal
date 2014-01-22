@@ -34,9 +34,11 @@ public class PasswordPolicyRelCacheModel implements CacheModel<PasswordPolicyRel
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
-		sb.append("{passwordPolicyRelId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", passwordPolicyRelId=");
 		sb.append(passwordPolicyRelId);
 		sb.append(", passwordPolicyId=");
 		sb.append(passwordPolicyId);
@@ -53,6 +55,7 @@ public class PasswordPolicyRelCacheModel implements CacheModel<PasswordPolicyRel
 	public PasswordPolicyRel toEntityModel() {
 		PasswordPolicyRelImpl passwordPolicyRelImpl = new PasswordPolicyRelImpl();
 
+		passwordPolicyRelImpl.setMvccVersion(mvccVersion);
 		passwordPolicyRelImpl.setPasswordPolicyRelId(passwordPolicyRelId);
 		passwordPolicyRelImpl.setPasswordPolicyId(passwordPolicyId);
 		passwordPolicyRelImpl.setClassNameId(classNameId);
@@ -65,6 +68,7 @@ public class PasswordPolicyRelCacheModel implements CacheModel<PasswordPolicyRel
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		passwordPolicyRelId = objectInput.readLong();
 		passwordPolicyId = objectInput.readLong();
 		classNameId = objectInput.readLong();
@@ -74,12 +78,14 @@ public class PasswordPolicyRelCacheModel implements CacheModel<PasswordPolicyRel
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(passwordPolicyRelId);
 		objectOutput.writeLong(passwordPolicyId);
 		objectOutput.writeLong(classNameId);
 		objectOutput.writeLong(classPK);
 	}
 
+	public long mvccVersion;
 	public long passwordPolicyRelId;
 	public long passwordPolicyId;
 	public long classNameId;

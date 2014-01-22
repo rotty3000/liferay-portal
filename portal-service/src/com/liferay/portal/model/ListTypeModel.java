@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface ListTypeModel extends BaseModel<ListType> {
+public interface ListTypeModel extends BaseModel<ListType>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface ListTypeModel extends BaseModel<ListType> {
 	 * @param primaryKey the primary key of this list type
 	 */
 	public void setPrimaryKey(int primaryKey);
+
+	/**
+	 * Returns the mvcc version of this list type.
+	 *
+	 * @return the mvcc version of this list type
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this list type.
+	 *
+	 * @param mvccVersion the mvcc version of this list type
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the list type ID of this list type.

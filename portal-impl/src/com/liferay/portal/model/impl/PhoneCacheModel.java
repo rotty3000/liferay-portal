@@ -36,9 +36,11 @@ import java.util.Date;
 public class PhoneCacheModel implements CacheModel<Phone>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", phoneId=");
 		sb.append(phoneId);
@@ -72,6 +74,8 @@ public class PhoneCacheModel implements CacheModel<Phone>, Externalizable {
 	@Override
 	public Phone toEntityModel() {
 		PhoneImpl phoneImpl = new PhoneImpl();
+
+		phoneImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			phoneImpl.setUuid(StringPool.BLANK);
@@ -132,6 +136,7 @@ public class PhoneCacheModel implements CacheModel<Phone>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		phoneId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -150,6 +155,8 @@ public class PhoneCacheModel implements CacheModel<Phone>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -191,6 +198,7 @@ public class PhoneCacheModel implements CacheModel<Phone>, Externalizable {
 		objectOutput.writeBoolean(primary);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long phoneId;
 	public long companyId;

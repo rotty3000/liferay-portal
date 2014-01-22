@@ -36,9 +36,11 @@ import java.util.Date;
 public class ReleaseCacheModel implements CacheModel<Release>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
-		sb.append("{releaseId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", releaseId=");
 		sb.append(releaseId);
 		sb.append(", createDate=");
 		sb.append(createDate);
@@ -65,6 +67,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable {
 	public Release toEntityModel() {
 		ReleaseImpl releaseImpl = new ReleaseImpl();
 
+		releaseImpl.setMvccVersion(mvccVersion);
 		releaseImpl.setReleaseId(releaseId);
 
 		if (createDate == Long.MIN_VALUE) {
@@ -114,6 +117,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		releaseId = objectInput.readLong();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
@@ -128,6 +132,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(releaseId);
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
@@ -152,6 +157,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable {
 		}
 	}
 
+	public long mvccVersion;
 	public long releaseId;
 	public long createDate;
 	public long modifiedDate;

@@ -29,6 +29,7 @@ public class VirtualHostSoap implements Serializable {
 	public static VirtualHostSoap toSoapModel(VirtualHost model) {
 		VirtualHostSoap soapModel = new VirtualHostSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setVirtualHostId(model.getVirtualHostId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setLayoutSetId(model.getLayoutSetId());
@@ -85,6 +86,14 @@ public class VirtualHostSoap implements Serializable {
 		setVirtualHostId(pk);
 	}
 
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
+	}
+
 	public long getVirtualHostId() {
 		return _virtualHostId;
 	}
@@ -117,6 +126,7 @@ public class VirtualHostSoap implements Serializable {
 		_hostname = hostname;
 	}
 
+	private long _mvccVersion;
 	private long _virtualHostId;
 	private long _companyId;
 	private long _layoutSetId;

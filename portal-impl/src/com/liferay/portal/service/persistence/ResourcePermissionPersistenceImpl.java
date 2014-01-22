@@ -4466,6 +4466,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		resourcePermissionImpl.setNew(resourcePermission.isNew());
 		resourcePermissionImpl.setPrimaryKey(resourcePermission.getPrimaryKey());
 
+		resourcePermissionImpl.setMvccVersion(resourcePermission.getMvccVersion());
 		resourcePermissionImpl.setResourcePermissionId(resourcePermission.getResourcePermissionId());
 		resourcePermissionImpl.setCompanyId(resourcePermission.getCompanyId());
 		resourcePermissionImpl.setName(resourcePermission.getName());

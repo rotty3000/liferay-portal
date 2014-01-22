@@ -38,7 +38,8 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface UserNotificationEventModel extends BaseModel<UserNotificationEvent> {
+public interface UserNotificationEventModel extends BaseModel<UserNotificationEvent>,
+	MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -58,6 +59,22 @@ public interface UserNotificationEventModel extends BaseModel<UserNotificationEv
 	 * @param primaryKey the primary key of this user notification event
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this user notification event.
+	 *
+	 * @return the mvcc version of this user notification event
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this user notification event.
+	 *
+	 * @param mvccVersion the mvcc version of this user notification event
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the uuid of this user notification event.

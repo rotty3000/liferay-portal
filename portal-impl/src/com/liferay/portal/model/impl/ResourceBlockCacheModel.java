@@ -35,9 +35,11 @@ public class ResourceBlockCacheModel implements CacheModel<ResourceBlock>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(15);
 
-		sb.append("{resourceBlockId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", resourceBlockId=");
 		sb.append(resourceBlockId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -58,6 +60,7 @@ public class ResourceBlockCacheModel implements CacheModel<ResourceBlock>,
 	public ResourceBlock toEntityModel() {
 		ResourceBlockImpl resourceBlockImpl = new ResourceBlockImpl();
 
+		resourceBlockImpl.setMvccVersion(mvccVersion);
 		resourceBlockImpl.setResourceBlockId(resourceBlockId);
 		resourceBlockImpl.setCompanyId(companyId);
 		resourceBlockImpl.setGroupId(groupId);
@@ -85,6 +88,7 @@ public class ResourceBlockCacheModel implements CacheModel<ResourceBlock>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		resourceBlockId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		groupId = objectInput.readLong();
@@ -96,6 +100,7 @@ public class ResourceBlockCacheModel implements CacheModel<ResourceBlock>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(resourceBlockId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(groupId);
@@ -117,6 +122,7 @@ public class ResourceBlockCacheModel implements CacheModel<ResourceBlock>,
 		objectOutput.writeLong(referenceCount);
 	}
 
+	public long mvccVersion;
 	public long resourceBlockId;
 	public long companyId;
 	public long groupId;

@@ -1644,6 +1644,7 @@ public class CompanyPersistenceImpl extends BasePersistenceImpl<Company>
 		companyImpl.setNew(company.isNew());
 		companyImpl.setPrimaryKey(company.getPrimaryKey());
 
+		companyImpl.setMvccVersion(company.getMvccVersion());
 		companyImpl.setCompanyId(company.getCompanyId());
 		companyImpl.setAccountId(company.getAccountId());
 		companyImpl.setWebId(company.getWebId());

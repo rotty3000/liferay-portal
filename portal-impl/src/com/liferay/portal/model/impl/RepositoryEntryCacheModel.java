@@ -37,9 +37,11 @@ public class RepositoryEntryCacheModel implements CacheModel<RepositoryEntry>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{uuid=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", uuid=");
 		sb.append(uuid);
 		sb.append(", repositoryEntryId=");
 		sb.append(repositoryEntryId);
@@ -69,6 +71,8 @@ public class RepositoryEntryCacheModel implements CacheModel<RepositoryEntry>,
 	@Override
 	public RepositoryEntry toEntityModel() {
 		RepositoryEntryImpl repositoryEntryImpl = new RepositoryEntryImpl();
+
+		repositoryEntryImpl.setMvccVersion(mvccVersion);
 
 		if (uuid == null) {
 			repositoryEntryImpl.setUuid(StringPool.BLANK);
@@ -121,6 +125,7 @@ public class RepositoryEntryCacheModel implements CacheModel<RepositoryEntry>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		uuid = objectInput.readUTF();
 		repositoryEntryId = objectInput.readLong();
 		groupId = objectInput.readLong();
@@ -137,6 +142,8 @@ public class RepositoryEntryCacheModel implements CacheModel<RepositoryEntry>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
+
 		if (uuid == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -170,6 +177,7 @@ public class RepositoryEntryCacheModel implements CacheModel<RepositoryEntry>,
 		objectOutput.writeBoolean(manualCheckInRequired);
 	}
 
+	public long mvccVersion;
 	public String uuid;
 	public long repositoryEntryId;
 	public long groupId;

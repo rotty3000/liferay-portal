@@ -50,6 +50,7 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("uuid", getUuid());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -75,6 +76,12 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		String uuid = (String)attributes.get("uuid");
 
 		if (uuid != null) {
@@ -210,6 +217,26 @@ public class GroupWrapper implements Group, ModelWrapper<Group> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_group.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this group.
+	*
+	* @return the mvcc version of this group
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _group.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this group.
+	*
+	* @param mvccVersion the mvcc version of this group
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_group.setMvccVersion(mvccVersion);
 	}
 
 	/**

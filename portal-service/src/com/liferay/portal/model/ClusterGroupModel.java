@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @generated
  */
 @ProviderType
-public interface ClusterGroupModel extends BaseModel<ClusterGroup> {
+public interface ClusterGroupModel extends BaseModel<ClusterGroup>, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -57,6 +57,22 @@ public interface ClusterGroupModel extends BaseModel<ClusterGroup> {
 	 * @param primaryKey the primary key of this cluster group
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this cluster group.
+	 *
+	 * @return the mvcc version of this cluster group
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this cluster group.
+	 *
+	 * @param mvccVersion the mvcc version of this cluster group
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the cluster group ID of this cluster group.

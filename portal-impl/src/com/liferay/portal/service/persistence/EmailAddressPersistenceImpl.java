@@ -4272,6 +4272,7 @@ public class EmailAddressPersistenceImpl extends BasePersistenceImpl<EmailAddres
 		emailAddressImpl.setNew(emailAddress.isNew());
 		emailAddressImpl.setPrimaryKey(emailAddress.getPrimaryKey());
 
+		emailAddressImpl.setMvccVersion(emailAddress.getMvccVersion());
 		emailAddressImpl.setUuid(emailAddress.getUuid());
 		emailAddressImpl.setEmailAddressId(emailAddress.getEmailAddressId());
 		emailAddressImpl.setCompanyId(emailAddress.getCompanyId());

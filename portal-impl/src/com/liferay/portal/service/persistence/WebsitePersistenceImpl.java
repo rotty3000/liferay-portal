@@ -4252,6 +4252,7 @@ public class WebsitePersistenceImpl extends BasePersistenceImpl<Website>
 		websiteImpl.setNew(website.isNew());
 		websiteImpl.setPrimaryKey(website.getPrimaryKey());
 
+		websiteImpl.setMvccVersion(website.getMvccVersion());
 		websiteImpl.setUuid(website.getUuid());
 		websiteImpl.setWebsiteId(website.getWebsiteId());
 		websiteImpl.setCompanyId(website.getCompanyId());

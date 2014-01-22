@@ -30,6 +30,7 @@ public class LockSoap implements Serializable {
 	public static LockSoap toSoapModel(Lock model) {
 		LockSoap soapModel = new LockSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setLockId(model.getLockId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -91,6 +92,14 @@ public class LockSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setLockId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -185,6 +194,7 @@ public class LockSoap implements Serializable {
 		_expirationDate = expirationDate;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _lockId;
 	private long _companyId;

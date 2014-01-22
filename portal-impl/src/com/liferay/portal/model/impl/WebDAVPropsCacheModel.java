@@ -37,9 +37,11 @@ public class WebDAVPropsCacheModel implements CacheModel<WebDAVProps>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
-		sb.append("{webDavPropsId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", webDavPropsId=");
 		sb.append(webDavPropsId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -62,6 +64,7 @@ public class WebDAVPropsCacheModel implements CacheModel<WebDAVProps>,
 	public WebDAVProps toEntityModel() {
 		WebDAVPropsImpl webDAVPropsImpl = new WebDAVPropsImpl();
 
+		webDAVPropsImpl.setMvccVersion(mvccVersion);
 		webDAVPropsImpl.setWebDavPropsId(webDavPropsId);
 		webDAVPropsImpl.setCompanyId(companyId);
 
@@ -96,6 +99,7 @@ public class WebDAVPropsCacheModel implements CacheModel<WebDAVProps>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		webDavPropsId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		createDate = objectInput.readLong();
@@ -108,6 +112,7 @@ public class WebDAVPropsCacheModel implements CacheModel<WebDAVProps>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(webDavPropsId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(createDate);
@@ -123,6 +128,7 @@ public class WebDAVPropsCacheModel implements CacheModel<WebDAVProps>,
 		}
 	}
 
+	public long mvccVersion;
 	public long webDavPropsId;
 	public long companyId;
 	public long createDate;

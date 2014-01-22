@@ -37,9 +37,11 @@ public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(33);
 
-		sb.append("{backgroundTaskId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", backgroundTaskId=");
 		sb.append(backgroundTaskId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -78,6 +80,7 @@ public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 	public BackgroundTask toEntityModel() {
 		BackgroundTaskImpl backgroundTaskImpl = new BackgroundTaskImpl();
 
+		backgroundTaskImpl.setMvccVersion(mvccVersion);
 		backgroundTaskImpl.setBackgroundTaskId(backgroundTaskId);
 		backgroundTaskImpl.setGroupId(groupId);
 		backgroundTaskImpl.setCompanyId(companyId);
@@ -157,6 +160,7 @@ public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		backgroundTaskId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -177,6 +181,7 @@ public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(backgroundTaskId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -232,6 +237,7 @@ public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 		}
 	}
 
+	public long mvccVersion;
 	public long backgroundTaskId;
 	public long groupId;
 	public long companyId;

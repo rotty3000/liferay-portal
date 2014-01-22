@@ -6204,6 +6204,7 @@ public class LayoutRevisionPersistenceImpl extends BasePersistenceImpl<LayoutRev
 		layoutRevisionImpl.setNew(layoutRevision.isNew());
 		layoutRevisionImpl.setPrimaryKey(layoutRevision.getPrimaryKey());
 
+		layoutRevisionImpl.setMvccVersion(layoutRevision.getMvccVersion());
 		layoutRevisionImpl.setLayoutRevisionId(layoutRevision.getLayoutRevisionId());
 		layoutRevisionImpl.setGroupId(layoutRevision.getGroupId());
 		layoutRevisionImpl.setCompanyId(layoutRevision.getCompanyId());

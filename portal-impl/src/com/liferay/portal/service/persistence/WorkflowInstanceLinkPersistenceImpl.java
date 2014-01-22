@@ -971,6 +971,7 @@ public class WorkflowInstanceLinkPersistenceImpl extends BasePersistenceImpl<Wor
 		workflowInstanceLinkImpl.setNew(workflowInstanceLink.isNew());
 		workflowInstanceLinkImpl.setPrimaryKey(workflowInstanceLink.getPrimaryKey());
 
+		workflowInstanceLinkImpl.setMvccVersion(workflowInstanceLink.getMvccVersion());
 		workflowInstanceLinkImpl.setWorkflowInstanceLinkId(workflowInstanceLink.getWorkflowInstanceLinkId());
 		workflowInstanceLinkImpl.setGroupId(workflowInstanceLink.getGroupId());
 		workflowInstanceLinkImpl.setCompanyId(workflowInstanceLink.getCompanyId());

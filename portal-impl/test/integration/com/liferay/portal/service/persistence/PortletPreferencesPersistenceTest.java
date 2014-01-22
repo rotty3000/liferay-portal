@@ -113,6 +113,8 @@ public class PortletPreferencesPersistenceTest {
 
 		PortletPreferences newPortletPreferences = _persistence.create(pk);
 
+		newPortletPreferences.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newPortletPreferences.setOwnerId(ServiceTestUtil.nextLong());
 
 		newPortletPreferences.setOwnerType(ServiceTestUtil.nextInt());
@@ -127,6 +129,8 @@ public class PortletPreferencesPersistenceTest {
 
 		PortletPreferences existingPortletPreferences = _persistence.findByPrimaryKey(newPortletPreferences.getPrimaryKey());
 
+		Assert.assertEquals(existingPortletPreferences.getMvccVersion(),
+			newPortletPreferences.getMvccVersion());
 		Assert.assertEquals(existingPortletPreferences.getPortletPreferencesId(),
 			newPortletPreferences.getPortletPreferencesId());
 		Assert.assertEquals(existingPortletPreferences.getOwnerId(),
@@ -177,8 +181,9 @@ public class PortletPreferencesPersistenceTest {
 
 	protected OrderByComparator getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("PortletPreferences",
-			"portletPreferencesId", true, "ownerId", true, "ownerType", true,
-			"plid", true, "portletId", true, "preferences", true);
+			"mvccVersion", true, "portletPreferencesId", true, "ownerId", true,
+			"ownerType", true, "plid", true, "portletId", true, "preferences",
+			true);
 	}
 
 	@Test
@@ -322,6 +327,8 @@ public class PortletPreferencesPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		PortletPreferences portletPreferences = _persistence.create(pk);
+
+		portletPreferences.setMvccVersion(ServiceTestUtil.nextLong());
 
 		portletPreferences.setOwnerId(ServiceTestUtil.nextLong());
 

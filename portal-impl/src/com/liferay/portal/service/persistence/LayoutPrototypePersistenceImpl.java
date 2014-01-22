@@ -4145,6 +4145,7 @@ public class LayoutPrototypePersistenceImpl extends BasePersistenceImpl<LayoutPr
 		layoutPrototypeImpl.setNew(layoutPrototype.isNew());
 		layoutPrototypeImpl.setPrimaryKey(layoutPrototype.getPrimaryKey());
 
+		layoutPrototypeImpl.setMvccVersion(layoutPrototype.getMvccVersion());
 		layoutPrototypeImpl.setUuid(layoutPrototype.getUuid());
 		layoutPrototypeImpl.setLayoutPrototypeId(layoutPrototype.getLayoutPrototypeId());
 		layoutPrototypeImpl.setCompanyId(layoutPrototype.getCompanyId());

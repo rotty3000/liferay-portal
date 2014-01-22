@@ -65,6 +65,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 	 */
 	public static final String TABLE_NAME = "MembershipRequest";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "membershipRequestId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -76,7 +77,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 			{ "replierUserId", Types.BIGINT },
 			{ "statusId", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table MembershipRequest (membershipRequestId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,comments STRING null,replyComments STRING null,replyDate DATE null,replierUserId LONG,statusId INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table MembershipRequest (mvccVersion LONG default 0,membershipRequestId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,createDate DATE null,comments STRING null,replyComments STRING null,replyDate DATE null,replierUserId LONG,statusId INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table MembershipRequest";
 	public static final String ORDER_BY_JPQL = " ORDER BY membershipRequest.createDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY MembershipRequest.createDate DESC";
@@ -110,6 +111,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 
 		MembershipRequest model = new MembershipRequestImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setMembershipRequestId(soapModel.getMembershipRequestId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -185,6 +187,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("membershipRequestId", getMembershipRequestId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -204,6 +207,12 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long membershipRequestId = (Long)attributes.get("membershipRequestId");
 
 		if (membershipRequestId != null) {
@@ -263,6 +272,17 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 		if (statusId != null) {
 			setStatusId(statusId);
 		}
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -475,6 +495,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 	public Object clone() {
 		MembershipRequestImpl membershipRequestImpl = new MembershipRequestImpl();
 
+		membershipRequestImpl.setMvccVersion(getMvccVersion());
 		membershipRequestImpl.setMembershipRequestId(getMembershipRequestId());
 		membershipRequestImpl.setGroupId(getGroupId());
 		membershipRequestImpl.setCompanyId(getCompanyId());
@@ -567,6 +588,8 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 	public CacheModel<MembershipRequest> toCacheModel() {
 		MembershipRequestCacheModel membershipRequestCacheModel = new MembershipRequestCacheModel();
 
+		membershipRequestCacheModel.mvccVersion = getMvccVersion();
+
 		membershipRequestCacheModel.membershipRequestId = getMembershipRequestId();
 
 		membershipRequestCacheModel.groupId = getGroupId();
@@ -618,9 +641,11 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
-		sb.append("{membershipRequestId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", membershipRequestId=");
 		sb.append(getMembershipRequestId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -647,12 +672,16 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.MembershipRequest");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>membershipRequestId</column-name><column-value><![CDATA[");
 		sb.append(getMembershipRequestId());
@@ -703,6 +732,7 @@ public class MembershipRequestModelImpl extends BaseModelImpl<MembershipRequest>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MembershipRequest.class
 		};
+	private long _mvccVersion;
 	private long _membershipRequestId;
 	private long _groupId;
 	private long _originalGroupId;

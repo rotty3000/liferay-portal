@@ -52,11 +52,12 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	 */
 	public static final String TABLE_NAME = "OrgGroupRole";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "organizationId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "roleId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table OrgGroupRole (organizationId LONG not null,groupId LONG not null,roleId LONG not null,primary key (organizationId, groupId, roleId))";
+	public static final String TABLE_SQL_CREATE = "create table OrgGroupRole (mvccVersion LONG default 0,organizationId LONG not null,groupId LONG not null,roleId LONG not null,primary key (organizationId, groupId, roleId))";
 	public static final String TABLE_SQL_DROP = "drop table OrgGroupRole";
 	public static final String ORDER_BY_JPQL = " ORDER BY orgGroupRole.id.organizationId ASC, orgGroupRole.id.groupId ASC, orgGroupRole.id.roleId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY OrgGroupRole.organizationId ASC, OrgGroupRole.groupId ASC, OrgGroupRole.roleId ASC";
@@ -117,6 +118,7 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("organizationId", getOrganizationId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("roleId", getRoleId());
@@ -129,6 +131,12 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long organizationId = (Long)attributes.get("organizationId");
 
 		if (organizationId != null) {
@@ -146,6 +154,16 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 		if (roleId != null) {
 			setRoleId(roleId);
 		}
+	}
+
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@Override
@@ -220,6 +238,7 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	public Object clone() {
 		OrgGroupRoleImpl orgGroupRoleImpl = new OrgGroupRoleImpl();
 
+		orgGroupRoleImpl.setMvccVersion(getMvccVersion());
 		orgGroupRoleImpl.setOrganizationId(getOrganizationId());
 		orgGroupRoleImpl.setGroupId(getGroupId());
 		orgGroupRoleImpl.setRoleId(getRoleId());
@@ -292,6 +311,8 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	public CacheModel<OrgGroupRole> toCacheModel() {
 		OrgGroupRoleCacheModel orgGroupRoleCacheModel = new OrgGroupRoleCacheModel();
 
+		orgGroupRoleCacheModel.mvccVersion = getMvccVersion();
+
 		orgGroupRoleCacheModel.organizationId = getOrganizationId();
 
 		orgGroupRoleCacheModel.groupId = getGroupId();
@@ -303,9 +324,11 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(9);
 
-		sb.append("{organizationId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", organizationId=");
 		sb.append(getOrganizationId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -318,12 +341,16 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(16);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.OrgGroupRole");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>organizationId</column-name><column-value><![CDATA[");
 		sb.append(getOrganizationId());
@@ -346,6 +373,7 @@ public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			OrgGroupRole.class
 		};
+	private long _mvccVersion;
 	private long _organizationId;
 	private long _groupId;
 	private long _originalGroupId;

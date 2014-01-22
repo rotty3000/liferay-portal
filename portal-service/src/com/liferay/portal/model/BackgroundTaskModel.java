@@ -41,7 +41,7 @@ import java.util.Date;
  */
 @ProviderType
 public interface BackgroundTaskModel extends BaseModel<BackgroundTask>,
-	GroupedModel {
+	GroupedModel, MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -61,6 +61,22 @@ public interface BackgroundTaskModel extends BaseModel<BackgroundTask>,
 	 * @param primaryKey the primary key of this background task
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this background task.
+	 *
+	 * @return the mvcc version of this background task
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this background task.
+	 *
+	 * @param mvccVersion the mvcc version of this background task
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the background task ID of this background task.

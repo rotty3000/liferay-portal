@@ -114,6 +114,8 @@ public class LockPersistenceTest {
 
 		Lock newLock = _persistence.create(pk);
 
+		newLock.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newLock.setUuid(ServiceTestUtil.randomString());
 
 		newLock.setCompanyId(ServiceTestUtil.nextLong());
@@ -138,6 +140,8 @@ public class LockPersistenceTest {
 
 		Lock existingLock = _persistence.findByPrimaryKey(newLock.getPrimaryKey());
 
+		Assert.assertEquals(existingLock.getMvccVersion(),
+			newLock.getMvccVersion());
 		Assert.assertEquals(existingLock.getUuid(), newLock.getUuid());
 		Assert.assertEquals(existingLock.getLockId(), newLock.getLockId());
 		Assert.assertEquals(existingLock.getCompanyId(), newLock.getCompanyId());
@@ -189,10 +193,11 @@ public class LockPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Lock_", "uuid", true,
-			"lockId", true, "companyId", true, "userId", true, "userName",
-			true, "createDate", true, "className", true, "key", true, "owner",
-			true, "inheritable", true, "expirationDate", true);
+		return OrderByComparatorFactoryUtil.create("Lock_", "mvccVersion",
+			true, "uuid", true, "lockId", true, "companyId", true, "userId",
+			true, "userName", true, "createDate", true, "className", true,
+			"key", true, "owner", true, "inheritable", true, "expirationDate",
+			true);
 	}
 
 	@Test
@@ -328,6 +333,8 @@ public class LockPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Lock lock = _persistence.create(pk);
+
+		lock.setMvccVersion(ServiceTestUtil.nextLong());
 
 		lock.setUuid(ServiceTestUtil.randomString());
 

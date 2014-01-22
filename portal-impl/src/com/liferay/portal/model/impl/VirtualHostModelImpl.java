@@ -56,12 +56,13 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	 */
 	public static final String TABLE_NAME = "VirtualHost";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "mvccVersion", Types.BIGINT },
 			{ "virtualHostId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
 			{ "layoutSetId", Types.BIGINT },
 			{ "hostname", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table VirtualHost (virtualHostId LONG not null primary key,companyId LONG,layoutSetId LONG,hostname VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table VirtualHost (mvccVersion LONG default 0,virtualHostId LONG not null primary key,companyId LONG,layoutSetId LONG,hostname VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table VirtualHost";
 	public static final String ORDER_BY_JPQL = " ORDER BY virtualHost.virtualHostId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY VirtualHost.virtualHostId ASC";
@@ -121,6 +122,7 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("virtualHostId", getVirtualHostId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("layoutSetId", getLayoutSetId());
@@ -134,6 +136,12 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long virtualHostId = (Long)attributes.get("virtualHostId");
 
 		if (virtualHostId != null) {
@@ -157,6 +165,16 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 		if (hostname != null) {
 			setHostname(hostname);
 		}
+	}
+
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@Override
@@ -269,6 +287,7 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	public Object clone() {
 		VirtualHostImpl virtualHostImpl = new VirtualHostImpl();
 
+		virtualHostImpl.setMvccVersion(getMvccVersion());
 		virtualHostImpl.setVirtualHostId(getVirtualHostId());
 		virtualHostImpl.setCompanyId(getCompanyId());
 		virtualHostImpl.setLayoutSetId(getLayoutSetId());
@@ -352,6 +371,8 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	public CacheModel<VirtualHost> toCacheModel() {
 		VirtualHostCacheModel virtualHostCacheModel = new VirtualHostCacheModel();
 
+		virtualHostCacheModel.mvccVersion = getMvccVersion();
+
 		virtualHostCacheModel.virtualHostId = getVirtualHostId();
 
 		virtualHostCacheModel.companyId = getCompanyId();
@@ -371,9 +392,11 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(11);
 
-		sb.append("{virtualHostId=");
+		sb.append("{mvccVersion=");
+		sb.append(getMvccVersion());
+		sb.append(", virtualHostId=");
 		sb.append(getVirtualHostId());
 		sb.append(", companyId=");
 		sb.append(getCompanyId());
@@ -388,12 +411,16 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(16);
+		StringBundler sb = new StringBundler(19);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.VirtualHost");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>mvccVersion</column-name><column-value><![CDATA[");
+		sb.append(getMvccVersion());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>virtualHostId</column-name><column-value><![CDATA[");
 		sb.append(getVirtualHostId());
@@ -420,6 +447,7 @@ public class VirtualHostModelImpl extends BaseModelImpl<VirtualHost>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			VirtualHost.class
 		};
+	private long _mvccVersion;
 	private long _virtualHostId;
 	private long _companyId;
 	private long _originalCompanyId;

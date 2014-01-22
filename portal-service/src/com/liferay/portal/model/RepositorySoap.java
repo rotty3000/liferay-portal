@@ -31,6 +31,7 @@ public class RepositorySoap implements Serializable {
 	public static RepositorySoap toSoapModel(Repository model) {
 		RepositorySoap soapModel = new RepositorySoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setRepositoryId(model.getRepositoryId());
 		soapModel.setGroupId(model.getGroupId());
@@ -95,6 +96,14 @@ public class RepositorySoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setRepositoryId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -209,6 +218,7 @@ public class RepositorySoap implements Serializable {
 		_dlFolderId = dlFolderId;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _repositoryId;
 	private long _groupId;

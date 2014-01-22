@@ -37,9 +37,11 @@ public class SubscriptionCacheModel implements CacheModel<Subscription>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
-		sb.append("{subscriptionId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", subscriptionId=");
 		sb.append(subscriptionId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -66,6 +68,7 @@ public class SubscriptionCacheModel implements CacheModel<Subscription>,
 	public Subscription toEntityModel() {
 		SubscriptionImpl subscriptionImpl = new SubscriptionImpl();
 
+		subscriptionImpl.setMvccVersion(mvccVersion);
 		subscriptionImpl.setSubscriptionId(subscriptionId);
 		subscriptionImpl.setCompanyId(companyId);
 		subscriptionImpl.setUserId(userId);
@@ -108,6 +111,7 @@ public class SubscriptionCacheModel implements CacheModel<Subscription>,
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		subscriptionId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		userId = objectInput.readLong();
@@ -122,6 +126,7 @@ public class SubscriptionCacheModel implements CacheModel<Subscription>,
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(subscriptionId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(userId);
@@ -146,6 +151,7 @@ public class SubscriptionCacheModel implements CacheModel<Subscription>,
 		}
 	}
 
+	public long mvccVersion;
 	public long subscriptionId;
 	public long companyId;
 	public long userId;

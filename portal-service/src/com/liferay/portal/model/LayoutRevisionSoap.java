@@ -31,6 +31,7 @@ public class LayoutRevisionSoap implements Serializable {
 	public static LayoutRevisionSoap toSoapModel(LayoutRevision model) {
 		LayoutRevisionSoap soapModel = new LayoutRevisionSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setLayoutRevisionId(model.getLayoutRevisionId());
 		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
@@ -111,6 +112,14 @@ public class LayoutRevisionSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setLayoutRevisionId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public long getLayoutRevisionId() {
@@ -365,6 +374,7 @@ public class LayoutRevisionSoap implements Serializable {
 		_statusDate = statusDate;
 	}
 
+	private long _mvccVersion;
 	private long _layoutRevisionId;
 	private long _groupId;
 	private long _companyId;

@@ -111,6 +111,8 @@ public class CountryPersistenceTest {
 
 		Country newCountry = _persistence.create(pk);
 
+		newCountry.setMvccVersion(ServiceTestUtil.nextLong());
+
 		newCountry.setName(ServiceTestUtil.randomString());
 
 		newCountry.setA2(ServiceTestUtil.randomString());
@@ -129,6 +131,8 @@ public class CountryPersistenceTest {
 
 		Country existingCountry = _persistence.findByPrimaryKey(newCountry.getPrimaryKey());
 
+		Assert.assertEquals(existingCountry.getMvccVersion(),
+			newCountry.getMvccVersion());
 		Assert.assertEquals(existingCountry.getCountryId(),
 			newCountry.getCountryId());
 		Assert.assertEquals(existingCountry.getName(), newCountry.getName());
@@ -175,9 +179,9 @@ public class CountryPersistenceTest {
 	}
 
 	protected OrderByComparator getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("Country", "countryId",
-			true, "name", true, "a2", true, "a3", true, "number", true, "idd",
-			true, "zipRequired", true, "active", true);
+		return OrderByComparatorFactoryUtil.create("Country", "mvccVersion",
+			true, "countryId", true, "name", true, "a2", true, "a3", true,
+			"number", true, "idd", true, "zipRequired", true, "active", true);
 	}
 
 	@Test
@@ -296,6 +300,8 @@ public class CountryPersistenceTest {
 		long pk = ServiceTestUtil.nextLong();
 
 		Country country = _persistence.create(pk);
+
+		country.setMvccVersion(ServiceTestUtil.nextLong());
 
 		country.setName(ServiceTestUtil.randomString());
 

@@ -52,6 +52,7 @@ public class UserTrackerPathWrapper implements UserTrackerPath,
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("mvccVersion", getMvccVersion());
 		attributes.put("userTrackerPathId", getUserTrackerPathId());
 		attributes.put("userTrackerId", getUserTrackerId());
 		attributes.put("path", getPath());
@@ -62,6 +63,12 @@ public class UserTrackerPathWrapper implements UserTrackerPath,
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		Long mvccVersion = (Long)attributes.get("mvccVersion");
+
+		if (mvccVersion != null) {
+			setMvccVersion(mvccVersion);
+		}
+
 		Long userTrackerPathId = (Long)attributes.get("userTrackerPathId");
 
 		if (userTrackerPathId != null) {
@@ -105,6 +112,26 @@ public class UserTrackerPathWrapper implements UserTrackerPath,
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_userTrackerPath.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the mvcc version of this user tracker path.
+	*
+	* @return the mvcc version of this user tracker path
+	*/
+	@Override
+	public long getMvccVersion() {
+		return _userTrackerPath.getMvccVersion();
+	}
+
+	/**
+	* Sets the mvcc version of this user tracker path.
+	*
+	* @param mvccVersion the mvcc version of this user tracker path
+	*/
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_userTrackerPath.setMvccVersion(mvccVersion);
 	}
 
 	/**

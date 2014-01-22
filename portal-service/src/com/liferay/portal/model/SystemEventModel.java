@@ -40,7 +40,8 @@ import java.util.Date;
  * @generated
  */
 @ProviderType
-public interface SystemEventModel extends AttachedModel, BaseModel<SystemEvent> {
+public interface SystemEventModel extends AttachedModel, BaseModel<SystemEvent>,
+	MVCCModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -60,6 +61,22 @@ public interface SystemEventModel extends AttachedModel, BaseModel<SystemEvent> 
 	 * @param primaryKey the primary key of this system event
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the mvcc version of this system event.
+	 *
+	 * @return the mvcc version of this system event
+	 */
+	@Override
+	public long getMvccVersion();
+
+	/**
+	 * Sets the mvcc version of this system event.
+	 *
+	 * @param mvccVersion the mvcc version of this system event
+	 */
+	@Override
+	public void setMvccVersion(long mvccVersion);
 
 	/**
 	 * Returns the system event ID of this system event.

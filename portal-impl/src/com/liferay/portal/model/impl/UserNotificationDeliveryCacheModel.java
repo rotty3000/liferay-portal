@@ -35,9 +35,11 @@ public class UserNotificationDeliveryCacheModel implements CacheModel<UserNotifi
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
-		sb.append("{userNotificationDeliveryId=");
+		sb.append("{mvccVersion=");
+		sb.append(mvccVersion);
+		sb.append(", userNotificationDeliveryId=");
 		sb.append(userNotificationDeliveryId);
 		sb.append(", companyId=");
 		sb.append(companyId);
@@ -62,6 +64,7 @@ public class UserNotificationDeliveryCacheModel implements CacheModel<UserNotifi
 	public UserNotificationDelivery toEntityModel() {
 		UserNotificationDeliveryImpl userNotificationDeliveryImpl = new UserNotificationDeliveryImpl();
 
+		userNotificationDeliveryImpl.setMvccVersion(mvccVersion);
 		userNotificationDeliveryImpl.setUserNotificationDeliveryId(userNotificationDeliveryId);
 		userNotificationDeliveryImpl.setCompanyId(companyId);
 		userNotificationDeliveryImpl.setUserId(userId);
@@ -85,6 +88,7 @@ public class UserNotificationDeliveryCacheModel implements CacheModel<UserNotifi
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		mvccVersion = objectInput.readLong();
 		userNotificationDeliveryId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		userId = objectInput.readLong();
@@ -98,6 +102,7 @@ public class UserNotificationDeliveryCacheModel implements CacheModel<UserNotifi
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		objectOutput.writeLong(mvccVersion);
 		objectOutput.writeLong(userNotificationDeliveryId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(userId);
@@ -115,6 +120,7 @@ public class UserNotificationDeliveryCacheModel implements CacheModel<UserNotifi
 		objectOutput.writeBoolean(deliver);
 	}
 
+	public long mvccVersion;
 	public long userNotificationDeliveryId;
 	public long companyId;
 	public long userId;

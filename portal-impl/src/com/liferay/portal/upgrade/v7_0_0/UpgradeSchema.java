@@ -24,6 +24,8 @@ public class UpgradeSchema extends UpgradeProcess {
 	@Override
 	protected void doUpgrade() throws Exception {
 		runSQLTemplate("update-6.2.0-7.0.0.sql", false);
+
+		upgrade(UpgradeMVCC.class);
 	}
 
 }

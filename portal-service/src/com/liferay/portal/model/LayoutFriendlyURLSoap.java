@@ -30,6 +30,7 @@ public class LayoutFriendlyURLSoap implements Serializable {
 	public static LayoutFriendlyURLSoap toSoapModel(LayoutFriendlyURL model) {
 		LayoutFriendlyURLSoap soapModel = new LayoutFriendlyURLSoap();
 
+		soapModel.setMvccVersion(model.getMvccVersion());
 		soapModel.setUuid(model.getUuid());
 		soapModel.setLayoutFriendlyURLId(model.getLayoutFriendlyURLId());
 		soapModel.setGroupId(model.getGroupId());
@@ -95,6 +96,14 @@ public class LayoutFriendlyURLSoap implements Serializable {
 
 	public void setPrimaryKey(long pk) {
 		setLayoutFriendlyURLId(pk);
+	}
+
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	public String getUuid() {
@@ -197,6 +206,7 @@ public class LayoutFriendlyURLSoap implements Serializable {
 		_languageId = languageId;
 	}
 
+	private long _mvccVersion;
 	private String _uuid;
 	private long _layoutFriendlyURLId;
 	private long _groupId;
