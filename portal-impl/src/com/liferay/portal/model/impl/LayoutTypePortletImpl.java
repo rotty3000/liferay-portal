@@ -785,10 +785,27 @@ public class LayoutTypePortletImpl
 			long userId, String portletId, String columnId, int columnPos)
 		throws PortalException, SystemException {
 
+		try {
+			PermissionChecker permissionChecker =
+				PermissionThreadLocal.getPermissionChecker();
+
+			if ((!LayoutPermissionUtil.contains(
+					permissionChecker, getLayout(), ActionKeys.UPDATE) &&
+				 !isCustomizable()) || !hasPortletId(portletId)) {
+
+				return;
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			return;
+		}
+
 		_enablePortletLayoutListener = false;
 
 		try {
-			removePortletId(userId, portletId, false);
+			removePortletId(userId, portletId, false, false);
 			addPortletId(userId, portletId, columnId, columnPos, false, true);
 		}
 		finally {
@@ -911,70 +928,7 @@ public class LayoutTypePortletImpl
 	public void removePortletId(
 		long userId, String portletId, boolean cleanUp) {
 
-		try {
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				getCompanyId(), portletId);
-
-			if (portlet == null) {
-				_log.error(
-					"Portlet " + portletId +
-						" cannot be removed because it is not registered");
-
-				return;
-			}
-
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
-
-			if (!LayoutPermissionUtil.contains(
-					permissionChecker, getLayout(), ActionKeys.UPDATE) &&
-				!isCustomizable()) {
-
-				return;
-			}
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			return;
-		}
-
-		List<String> columns = getColumns();
-
-		for (int i = 0; i < columns.size(); i++) {
-			String columnId = columns.get(i);
-
-			if (isCustomizable() && isColumnDisabled(columnId)) {
-				continue;
-			}
-
-			String columnValue = StringPool.BLANK;
-
-			if (hasUserPreferences()) {
-				columnValue = getUserPreference(columnId);
-			}
-			else {
-				columnValue = getTypeSettingsProperty(columnId);
-			}
-
-			columnValue = StringUtil.removeFromList(columnValue, portletId);
-
-			if (hasUserPreferences()) {
-				setUserPreference(columnId, columnValue);
-			}
-			else {
-				setTypeSettingsProperty(columnId, columnValue);
-			}
-		}
-
-		if (cleanUp) {
-			try {
-				onRemoveFromLayout(new String[] {portletId});
-			}
-			catch (Exception e) {
-				_log.error(e, e);
-			}
-		}
+		removePortletId (userId, portletId, true, cleanUp);
 	}
 
 	@Override
@@ -1868,6 +1822,77 @@ public class LayoutTypePortletImpl
 		}
 		catch (PortalException pe) {
 			_log.error(pe, pe);
+		}
+	}
+
+	protected void removePortletId(
+		long userId, String portletId, boolean checkPermission,
+		boolean cleanUp) {
+
+		try {
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				getCompanyId(), portletId);
+
+			if (portlet == null) {
+				_log.error(
+					"Portlet " + portletId +
+						" cannot be removed because it is not registered");
+
+				return;
+			}
+
+			PermissionChecker permissionChecker =
+				PermissionThreadLocal.getPermissionChecker();
+
+			if (checkPermission &&
+				!LayoutPermissionUtil.contains(
+					permissionChecker, getLayout(), ActionKeys.UPDATE) &&
+				!isCustomizable()) {
+
+				return;
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			return;
+		}
+
+		List<String> columns = getColumns();
+
+		for (int i = 0; i < columns.size(); i++) {
+			String columnId = columns.get(i);
+
+			if (isCustomizable() && isColumnDisabled(columnId)) {
+				continue;
+			}
+
+			String columnValue = StringPool.BLANK;
+
+			if (hasUserPreferences()) {
+				columnValue = getUserPreference(columnId);
+			}
+			else {
+				columnValue = getTypeSettingsProperty(columnId);
+			}
+
+			columnValue = StringUtil.removeFromList(columnValue, portletId);
+
+			if (hasUserPreferences()) {
+				setUserPreference(columnId, columnValue);
+			}
+			else {
+				setTypeSettingsProperty(columnId, columnValue);
+			}
+		}
+
+		if (cleanUp) {
+			try {
+				onRemoveFromLayout(new String[] {portletId});
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
 		}
 	}
 
