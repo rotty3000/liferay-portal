@@ -30,6 +30,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutServiceUtil;
 import com.liferay.portal.struts.PortletAction;
+import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.sites.action.ActionUtil;
 
 import java.util.List;
@@ -90,14 +91,19 @@ public class ExportLayoutsAction extends PortletAction {
 			}
 		}
 		catch (Exception e) {
-			_log.error(e, e);
+			if (e instanceof FileNameException) {
+				SessionErrors.add(actionRequest, e.getClass());
+			}
+			else {
+				_log.error(e, e);
 
-			SessionErrors.add(actionRequest, e.getClass());
+				SessionErrors.add(actionRequest, e.getClass());
 
-			String pagesRedirect = ParamUtil.getString(
-				actionRequest, "pagesRedirect");
+				String pagesRedirect = ParamUtil.getString(
+					actionRequest, "pagesRedirect");
 
-			sendRedirect(actionRequest, actionResponse, pagesRedirect);
+				sendRedirect(actionRequest, actionResponse, pagesRedirect);
+			}
 		}
 	}
 
