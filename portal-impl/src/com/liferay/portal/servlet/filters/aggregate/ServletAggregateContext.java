@@ -17,6 +17,7 @@ package com.liferay.portal.servlet.filters.aggregate;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletContextUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -38,23 +39,29 @@ public class ServletAggregateContext extends BaseAggregateContext {
 			ServletContext servletContext, String resourcePath)
 		throws IOException {
 
+		if (Validator.isNull(resourcePath)) {
+			throw new IllegalArgumentException("ResourcePath is null");
+		}
+
 		_servletContext = servletContext;
 
 		String rootPath = ServletContextUtil.getRootPath(_servletContext);
 
-		int pos = resourcePath.lastIndexOf(StringPool.SLASH);
+		int pos = resourcePath.lastIndexOf(CharPool.SLASH);
 
-		if (pos > 0) {
-			resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
+		if (pos == (resourcePath.length() - 1)) {
+			int newPos = resourcePath.lastIndexOf(CharPool.SLASH, pos - 1);
+
+			if (newPos >= 0) {
+				pos = newPos;
+			}
 		}
 
-		pos = resourcePath.lastIndexOf(StringPool.SLASH);
+		if (pos >= 0) {
+			resourcePath = resourcePath.substring(0, pos);
+		}
 
-		resourcePath = resourcePath.substring(0, pos);
-
-		pos = resourcePath.lastIndexOf(rootPath);
-
-		if (pos == 0) {
+		if (resourcePath.startsWith(rootPath)) {
 			resourcePath = resourcePath.substring(rootPath.length());
 		}
 
