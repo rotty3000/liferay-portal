@@ -91,7 +91,8 @@ public class UploadServletRequestImpl
 			_liferayServletRequest = new LiferayServletRequest(request);
 
 			List<LiferayFileItem> liferayFileItemsList =
-				servletFileUpload.parseRequest(_liferayServletRequest);
+				(List<LiferayFileItem>)(List<?>)servletFileUpload.parseRequest(
+					_liferayServletRequest);
 
 			for (LiferayFileItem liferayFileItem : liferayFileItemsList) {
 				if (liferayFileItem.isFormField()) {

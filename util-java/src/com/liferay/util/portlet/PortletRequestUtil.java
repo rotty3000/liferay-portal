@@ -79,8 +79,9 @@ public class PortletRequestUtil {
 		PortletFileUpload portletFileUpload = new PortletFileUpload(
 			diskFileItemFactory);
 
-		List<DiskFileItem> diskFileItems = portletFileUpload.parseRequest(
-			actionRequest);
+		List<DiskFileItem> diskFileItems =
+			(List<DiskFileItem>)(List<?>)portletFileUpload.parseRequest(
+				actionRequest);
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
