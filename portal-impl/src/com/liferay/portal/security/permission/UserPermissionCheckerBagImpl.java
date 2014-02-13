@@ -20,6 +20,7 @@ import com.liferay.portal.model.Organization;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author László Csontos
@@ -30,8 +31,8 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 	}
 
 	public UserPermissionCheckerBagImpl(
-		long userId, List<Group> userGroups, List<Organization> userOrgs,
-		List<Group> userOrgGroups, List<Group> userUserGroupGroups) {
+		long userId, Set<Group> userGroups, List<Organization> userOrgs,
+		Set<Group> userOrgGroups, List<Group> userUserGroupGroups) {
 
 		this.userGroups = userGroups;
 		this.userId = userId;
@@ -89,7 +90,7 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 	}
 
 	@Override
-	public List<Group> getUserGroups() {
+	public Set<Group> getUserGroups() {
 		return userGroups;
 	}
 
@@ -99,7 +100,7 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 	}
 
 	@Override
-	public List<Group> getUserOrgGroups() {
+	public Set<Group> getUserOrgGroups() {
 		return userOrgGroups;
 	}
 
@@ -114,9 +115,9 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 	}
 
 	protected List<Group> groups;
-	protected List<Group> userGroups;
+	protected Set<Group> userGroups;
 	protected long userId;
-	protected List<Group> userOrgGroups;
+	protected Set<Group> userOrgGroups;
 	protected List<Organization> userOrgs;
 	protected List<Group> userUserGroupGroups;
 
