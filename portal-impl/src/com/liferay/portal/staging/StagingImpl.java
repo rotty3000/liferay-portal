@@ -644,7 +644,6 @@ public class StagingImpl implements Staging {
 			}
 
 			errorMessageJSONObject.put("name", missingReferenceDisplayName);
-
 			errorMessageJSONObject.put(
 				"type",
 				ResourceActionsUtil.getModelResource(
@@ -799,8 +798,8 @@ public class StagingImpl implements Staging {
 					"there-are-missing-references-that-could-not-be-found-in-" +
 						"the-live-environment.-please-publish-again-to-live-" +
 							"ensuring-the-following-elements-are-published." +
-								"-global-references-need-to-be-published-" +
-									"from-the-global-site");
+								".-please-note-that-global-references-must-" +
+									"be-published-from-the-global-site");
 			}
 			else {
 				errorMessage = LanguageUtil.get(
