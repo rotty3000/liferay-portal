@@ -204,7 +204,7 @@ public class LayoutRemoteStagingBackgroundTaskExecutor
 	}
 
 	/**
-	 * @see com.liferay.portal.staging.StagingImpl#getMissingParentLayouts(
+	 * @see com.liferay.portal.lar.ExportImportHelperImpl#getMissingParentLayouts(
 	 *      Layout, long)
 	 */
 	protected List<Layout> getMissingRemoteParentLayouts(
@@ -224,7 +224,7 @@ public class LayoutRemoteStagingBackgroundTaskExecutor
 					httpPrincipal, parentLayout.getUuid(), remoteGroupId,
 					parentLayout.getPrivateLayout());
 
-				// If one parent is found all others are assumed to exist
+				// If one parent is found, all others are assumed to exist
 
 				break;
 			}

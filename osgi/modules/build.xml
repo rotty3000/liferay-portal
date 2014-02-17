@@ -6,21 +6,26 @@
 	<import file="../../build-common-java.xml" />
 
 	<target name="clean">
-		<gradle-execute gradleTask="clean" />
+		<gradle-execute
+			gradleTask="clean"
+		/>
 	</target>
 
 	<target name="compile">
-		<gradle-execute gradleTask="compileJava" />
+		<gradle-execute
+			gradleTask="compileJava"
+		/>
 	</target>
 
 	<target name="deploy">
 		<gradle-execute
 			gradleTask="deploy"
-			gradleTaskArgs="-Dorg.gradle.project.globalLibDir=${app.server.lib.global.dir} -Dorg.gradle.project.portalLibDir=${app.server.lib.portal.dir} -Dorg.gradle.project.osgiLibDir=${portal-impl.classes.dir}/com/liferay/portal/deploy/dependencies/osgi"
 		/>
 	</target>
 
 	<target name="jar">
-		<gradle-execute gradleTask="jar" />
+		<gradle-execute
+			gradleTask="jar"
+		/>
 	</target>
 </project>

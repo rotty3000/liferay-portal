@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/layouts_admin/init.jsp" %>
 
 <%
+String exportNav = ParamUtil.getString(request, "exportNav", "custom");
+
 long groupId = ParamUtil.getLong(request, "groupId");
 
 Group group = null;
@@ -94,19 +96,35 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 	param="tabs2"
 	refresh="<%= false %>"
 >
+
+	<%
+	int incompleteBackgroundTaskCount = BackgroundTaskLocalServiceUtil.getBackgroundTasksCount(liveGroupId, LayoutExportBackgroundTaskExecutor.class.getName(), false);
+	%>
+
+	<div class="<%= (incompleteBackgroundTaskCount == 0) ? "hide" : "in-progress" %>" id="<portlet:namespace />incompleteProcessMessage">
+		<liferay-util:include page="/html/portlet/layouts_admin/incomplete_processes_message.jsp">
+			<liferay-util:param name="incompleteBackgroundTaskCount" value="<%= String.valueOf(incompleteBackgroundTaskCount) %>" />
+		</liferay-util:include>
+	</div>
+
 	<liferay-ui:section>
-		<div id="<portlet:namespace />exportImportOptions">
+		<aui:nav-bar>
+			<aui:nav id="exportNav">
+				<aui:nav-item
+					data-value="custom"
+					iconCssClass="icon-puzzle"
+					label="custom"
+				/>
 
-			<%
-			int incompleteBackgroundTaskCount = BackgroundTaskLocalServiceUtil.getBackgroundTasksCount(liveGroupId, LayoutExportBackgroundTaskExecutor.class.getName(), false);
-			%>
+				<aui:nav-item
+					data-value="export-configurations"
+					iconCssClass="icon-archive"
+					label="export-templates"
+				/>
+			</aui:nav>
+		</aui:nav-bar>
 
-			<div class="<%= (incompleteBackgroundTaskCount == 0) ? "hide" : "in-progress" %>" id="<portlet:namespace />incompleteProcessMessage">
-				<liferay-util:include page="/html/portlet/layouts_admin/incomplete_processes_message.jsp">
-					<liferay-util:param name="incompleteBackgroundTaskCount" value="<%= String.valueOf(incompleteBackgroundTaskCount) %>" />
-				</liferay-util:include>
-			</div>
-
+		<div <%= exportNav.equals("custom") ? StringPool.BLANK : "class=\"hide\"" %> id="<portlet:namespace />exportOptions">
 			<portlet:actionURL var="exportPagesURL">
 				<portlet:param name="struts_action" value="/layouts_admin/export_layouts" />
 				<portlet:param name="groupId" value="<%= String.valueOf(liveGroupId) %>" />
@@ -590,6 +608,15 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 				</aui:button-row>
 			</aui:form>
 		</div>
+
+		<div <%= exportNav.equals("export-configurations") ? StringPool.BLANK : "class=\"hide\"" %> id="<portlet:namespace />exportConfigurations">
+			<liferay-util:include page="/html/portlet/layouts_admin/export_layouts_configurations.jsp">
+				<liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" />
+				<liferay-util:param name="liveGroupId" value="<%= String.valueOf(liveGroupId) %>" />
+				<liferay-util:param name="privateLayout" value="<%= String.valueOf(privateLayout) %>" />
+				<liferay-util:param name="rootNodeName" value="<%= rootNodeName %>" />
+			</liferay-util:include>
+		</div>
 	</liferay-ui:section>
 
 	<liferay-ui:section>
@@ -666,6 +693,28 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 			submitForm(form, form.attr('action'), false);
 		}
 	);
+
+	var clickHandler = function(event) {
+		var dataValue = event.target.ancestor('li').attr('data-value');
+
+		processDataValue(dataValue);
+	};
+
+	var processDataValue = function(dataValue) {
+		var exportOptions = A.one('#<portlet:namespace />exportOptions');
+		var exportConfigurations = A.one('#<portlet:namespace />exportConfigurations');
+
+		if (dataValue === 'custom') {
+			exportConfigurations.hide();
+			exportOptions.show();
+		}
+		else if (dataValue === 'export-configurations') {
+			exportOptions.hide();
+			exportConfigurations.show();
+		}
+	};
+
+	A.one('#<portlet:namespace />exportNav').delegate('click', clickHandler, 'li a');
 </aui:script>
 
 <aui:script>

@@ -9,6 +9,11 @@
 	<property name="manifest.bundle.symbolic.name" value="portal-service" />
 
 	<target name="compile">
+		<gradle-execute
+			gradleModuleDir="/portal-registry"
+			gradleTask=":portal-registry-api:compileJava"
+		/>
+
 		<mkdir dir="classes" />
 
 		<copy todir="classes" preservelastmodified="true">

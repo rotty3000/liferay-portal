@@ -49,6 +49,11 @@
 					</then>
 				</if>
 
+				<gradle-execute
+					gradleModuleDir="/portal-registry"
+					gradleTask=":portal-registry-api:compileJava"
+				/>
+
 				<mkdir dir="classes" />
 
 				<antcall target="compile-java">

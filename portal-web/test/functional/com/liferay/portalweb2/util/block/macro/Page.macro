@@ -28,6 +28,18 @@
 			</then>
 		</if>
 
+		<var name="key_pageType" value="${pageTemplateName}" />
+
+		<if>
+			<isset var="pageTemplateName" />
+			<then>
+				<execute action="CPSitepagesAddpage#assertTextEquals" locator-key1="PAGE_TYPE_LABEL" value1="${pageTemplateName}" />
+				<execute action="CPSitepagesAddpage#click" locator-key1="PAGE_TYPE_RADIO" />
+				<execute action="CPSitepagesAddpage#assertTextEquals" locator-key1="PAGE_TYPE_TEMPLATE_AUTOMATICALLY_APPLY_CHANGES_LABEL"  value1="Automatically apply changes done to the page template." />
+				<execute action="CPSitepagesAddpage#check" locator-key1="PAGE_TYPE_TEMPLATE_AUTOMATICALLY_APPLY_CHANGES_CHECKBOX" />
+			</then>
+		</if>
+
 		<execute action="Dockbar#assertClick" locator-key1="ADD_PAGE_BUTTON" value1="Add Page" />
 
 		<var name="key_pageName" value="${pageName}" />
@@ -327,7 +339,7 @@
 		<execute action="PGPanel#assertTextEquals" locator-key1="PANEL_PAGE_TITLE" value1="${pageName}" />
 		<execute action="PGPanel#assertTextEquals" locator-key1="INFO_MESSAGE" value1="Please select a tool from the left menu." />
 
-		<for list="${portletNameList}" param="portletName" >
+		<for list="${portletNameList}" param="portletName">
 			<var name="key_portletName" value="${portletName}" />
 
 			<execute action="PGPanel#assertTextEquals" locator-key1="MENU_ITEM" value1="${portletName}" />
@@ -336,6 +348,14 @@
 
 	<command name="viewPG">
 		<execute action="Home#assertTextEquals" locator-key1="BREADCRUMB_2" value1="${pageName}" />
+	</command>
+
+	<command name="viewSpecificPG">
+		<for list="${pageNameList}" param="pageName">
+			<var name="key_pageName" value="${pageName}" />
+
+			<execute action="Home#assertTextEquals" locator-key1="PAGE" value1="${pageName}" />
+		</for>
 	</command>
 
 	<command name="viewWithWorkflowPG">

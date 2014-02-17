@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequestDispatcher;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.JavaConstants;
@@ -29,7 +30,6 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.ActionResponseImpl;
 
 import java.io.IOException;
 
@@ -107,9 +107,6 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 			ActionRequest actionRequest, ActionResponse actionResponse,
 			String path)
 		throws IOException, ServletException {
-
-		ActionResponseImpl actionResponseImpl =
-			(ActionResponseImpl)actionResponse;
 
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			actionRequest);
@@ -197,8 +194,11 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 			String forwardPath = actionForward.getPath();
 
 			if (forwardPath.startsWith(StringPool.SLASH)) {
+				LiferayPortletResponse liferayPortletResponse =
+					PortalUtil.getLiferayPortletResponse(actionResponse);
+
 				LiferayPortletURL forwardURL =
-					(LiferayPortletURL)actionResponseImpl.createRenderURL();
+					(LiferayPortletURL)liferayPortletResponse.createRenderURL();
 
 				forwardURL.setParameter("struts_action", forwardPath);
 

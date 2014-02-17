@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceAction;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionMapping;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceActionsManagerUtil;
 import com.liferay.portal.kernel.util.MethodParameter;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -49,12 +50,10 @@ public class JSONWebServiceDiscoverAction implements JSONWebServiceAction {
 
 	public JSONWebServiceDiscoverAction(HttpServletRequest request) {
 		_basePath = request.getServletPath();
-		_baseURL = request.getRequestURL().toString();
-		_contextPath = request.getContextPath();
-
-		String discover = request.getParameter("discover");
-
-		_discover = StringUtil.split(discover);
+		_baseURL = String.valueOf(request.getRequestURL());
+		_contextPath = ParamUtil.getString(
+			request, "contextPath", request.getContextPath());
+		_discover = StringUtil.split(request.getParameter("discover"));
 	}
 
 	@Override
