@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.assetpublisher;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.BasePortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletLayoutListenerException;
@@ -31,6 +33,10 @@ public class AssetPublisherPortletLayoutListener
 	public void onRemoveFromLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
+		if (_log.isDebugEnabled()) {
+			_log.debug("Remove " + portletId + " from layout " + plid);
+		}
+
 		try {
 			Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
@@ -41,5 +47,8 @@ public class AssetPublisherPortletLayoutListener
 			throw new PortletLayoutListenerException(e);
 		}
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		AssetPublisherPortletLayoutListener.class);
 
 }
