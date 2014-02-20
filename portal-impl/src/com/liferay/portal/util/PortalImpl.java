@@ -7728,10 +7728,14 @@ public class PortalImpl implements Portal {
 	}
 
 	protected String[] getParameterValues(
-		PortletRequest request, String name, String displayType) {
+		PortletRequest portletRequest, String name, String displayType) {
 
-		String[] values = request.getParameterValues(name);
+		String[] values = portletRequest.getParameterValues(name);
 
+		return getParameterValues(values, displayType);
+	}
+
+	protected String[] getParameterValues(String[] values, String displayType) {
 		if (displayType.equals(
 				ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
 
@@ -7742,17 +7746,11 @@ public class PortalImpl implements Portal {
 	}
 
 	protected String[] getParameterValues(
-		UploadPortletRequest request, String name, String displayType) {
+		UploadPortletRequest uploadRequest, String name, String displayType) {
 
-		String[] values = request.getParameterValues(name);
+		String[] values = uploadRequest.getParameterValues(name);
 
-		if (displayType.equals(
-				ExpandoColumnConstants.PROPERTY_DISPLAY_TYPE_TEXT_BOX)) {
-
-			values = StringUtil.splitLines(values[0]);
-		}
-
-		return values;
+		return getParameterValues(values, displayType);
 	}
 
 	protected String getPortletParam(HttpServletRequest request, String name) {
