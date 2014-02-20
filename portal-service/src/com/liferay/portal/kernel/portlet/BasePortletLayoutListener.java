@@ -25,6 +25,7 @@ import com.liferay.portlet.PortletPreferencesFactoryUtil;
  */
 public class BasePortletLayoutListener implements PortletLayoutListener {
 
+	@Override
 	public void onAddToLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
@@ -43,6 +44,7 @@ public class BasePortletLayoutListener implements PortletLayoutListener {
 		}
 	}
 
+	@Override
 	public void onMoveInLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 
@@ -51,6 +53,7 @@ public class BasePortletLayoutListener implements PortletLayoutListener {
 		}
 	}
 
+	@Override
 	public void onRemoveFromLayout(String portletId, long plid)
 		throws PortletLayoutListenerException {
 

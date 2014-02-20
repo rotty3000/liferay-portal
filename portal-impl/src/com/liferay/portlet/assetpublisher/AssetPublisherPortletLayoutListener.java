@@ -17,7 +17,6 @@ package com.liferay.portlet.assetpublisher;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.BasePortletLayoutListener;
-import com.liferay.portal.kernel.portlet.PortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletLayoutListenerException;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -27,7 +26,7 @@ import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
  * @author Zsolt Berentey
  */
 public class AssetPublisherPortletLayoutListener
-	extends BasePortletLayoutListener implements PortletLayoutListener {
+	extends BasePortletLayoutListener {
 
 	@Override
 	public void onRemoveFromLayout(String portletId, long plid)
