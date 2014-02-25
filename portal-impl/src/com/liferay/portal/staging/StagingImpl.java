@@ -639,6 +639,10 @@ public class StagingImpl implements Staging {
 
 			errorMessageJSONObject.put("name", missingReferenceDisplayName);
 			errorMessageJSONObject.put(
+				"site",
+				LanguageUtil.format(
+					locale, "in-site-x", missingReference.getGroupId(), false));
+			errorMessageJSONObject.put(
 				"type",
 				ResourceActionsUtil.getModelResource(
 					locale, missingReference.getClassName()));
@@ -791,7 +795,9 @@ public class StagingImpl implements Staging {
 					locale,
 					"there-are-missing-references-that-could-not-be-found-in-" +
 						"the-live-environment.-please-publish-again-to-live-" +
-							"ensuring-the-following-elements-are-published");
+							"ensuring-the-following-elements-are-published." +
+								".-please-note-that-global-references-must-" +
+									"be-published-from-the-global-site");
 			}
 			else {
 				errorMessage = LanguageUtil.get(
