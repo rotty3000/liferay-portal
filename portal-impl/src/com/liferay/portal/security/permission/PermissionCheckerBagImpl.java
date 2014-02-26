@@ -33,32 +33,33 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class PermissionCheckerBagImpl implements PermissionCheckerBag {
+public class PermissionCheckerBagImpl
+	extends UserPermissionCheckerBagImpl implements PermissionCheckerBag {
 
 	public PermissionCheckerBagImpl() {
 	}
 
 	public PermissionCheckerBagImpl(
-		long userId, List<Group> userGroups, List<Organization> userOrgs,
-		List<Group> userOrgGroups, List<Group> userUserGroupGroups,
-		List<Group> groups, List<Role> roles) {
+		long userId, Set<Group> userGroups, List<Organization> userOrgs,
+		Set<Group> userOrgGroups, List<Group> userUserGroupGroups,
+		List<Role> roles) {
 
-		_userId = userId;
-		_userGroups = userGroups;
-		_userOrgs = userOrgs;
-		_userOrgGroups = userOrgGroups;
-		_userUserGroupGroups = userUserGroupGroups;
-		_groups = groups;
+		super(userId, userGroups, userOrgs, userOrgGroups, userUserGroupGroups);
+
 		_roles = roles;
 	}
 
-	@Override
-	public List<Group> getGroups() {
-		return _groups;
+	public PermissionCheckerBagImpl(
+		UserPermissionCheckerBag userPermissionCheckerBag, List<Role> roles) {
+
+		super(userPermissionCheckerBag);
+
+		_roles = roles;
 	}
 
 	@Override
@@ -85,26 +86,6 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 	@Override
 	public List<Role> getRoles() {
 		return _roles;
-	}
-
-	@Override
-	public List<Group> getUserGroups() {
-		return _userGroups;
-	}
-
-	@Override
-	public List<Group> getUserOrgGroups() {
-		return _userOrgGroups;
-	}
-
-	@Override
-	public List<Organization> getUserOrgs() {
-		return _userOrgs;
-	}
-
-	@Override
-	public List<Group> getUserUserGroupGroups() {
-		return _userUserGroupGroups;
 	}
 
 	/**
@@ -179,7 +160,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 			}
 		}
 
-		if (_userGroups.contains(group)) {
+		if (userGroups.contains(group)) {
 			return true;
 		}
 
@@ -249,7 +230,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		}
 
 		if (RoleLocalServiceUtil.hasUserRole(
-				_userId, group.getCompanyId(),
+				userId, group.getCompanyId(),
 				RoleConstants.PORTAL_CONTENT_REVIEWER, true)) {
 
 			return true;
@@ -257,7 +238,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 
 		if (group.isSite()) {
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, group.getGroupId(),
+					userId, group.getGroupId(),
 					RoleConstants.SITE_CONTENT_REVIEWER, true)) {
 
 				return true;
@@ -283,10 +264,10 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 
 		if (group.isSite()) {
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, group.getGroupId(),
+					userId, group.getGroupId(),
 					RoleConstants.SITE_ADMINISTRATOR, true) ||
 				UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, group.getGroupId(), RoleConstants.SITE_OWNER,
+					userId, group.getGroupId(), RoleConstants.SITE_OWNER,
 					true)) {
 
 				return true;
@@ -334,10 +315,10 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 				long organizationGroupId = organization.getGroupId();
 
 				if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-						_userId, organizationGroupId,
+						userId, organizationGroupId,
 						RoleConstants.ORGANIZATION_ADMINISTRATOR, true) ||
 					UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-						_userId, organizationGroupId,
+						userId, organizationGroupId,
 						RoleConstants.ORGANIZATION_OWNER, true)) {
 
 					return true;
@@ -356,7 +337,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 
 		if (group.isSite()) {
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, group.getGroupId(), RoleConstants.SITE_OWNER,
+					userId, group.getGroupId(), RoleConstants.SITE_OWNER,
 					true)) {
 
 				return true;
@@ -396,7 +377,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 				long organizationGroupId = organization.getGroupId();
 
 				if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-						_userId, organizationGroupId,
+						userId, organizationGroupId,
 						RoleConstants.ORGANIZATION_OWNER, true)) {
 
 					return true;
@@ -408,7 +389,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 		else if (group.isUser()) {
 			long userId = group.getClassPK();
 
-			if (userId == _userId) {
+			if (userId == userId) {
 				return true;
 			}
 		}
@@ -424,10 +405,10 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 			long organizationGroupId = organization.getGroupId();
 
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, organizationGroupId,
+					userId, organizationGroupId,
 					RoleConstants.ORGANIZATION_ADMINISTRATOR, true) ||
 				UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, organizationGroupId,
+					userId, organizationGroupId,
 					RoleConstants.ORGANIZATION_OWNER, true)) {
 
 				return true;
@@ -447,7 +428,7 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 			long organizationGroupId = organization.getGroupId();
 
 			if (UserGroupRoleLocalServiceUtil.hasUserGroupRole(
-					_userId, organizationGroupId,
+					userId, organizationGroupId,
 					RoleConstants.ORGANIZATION_OWNER, true)) {
 
 				return true;
@@ -462,17 +443,11 @@ public class PermissionCheckerBagImpl implements PermissionCheckerBag {
 	private Map<Long, Boolean> _contentReviewers = new HashMap<Long, Boolean>();
 	private Map<Long, Boolean> _groupAdmins = new HashMap<Long, Boolean>();
 	private Map<Long, Boolean> _groupOwners = new HashMap<Long, Boolean>();
-	private List<Group> _groups;
 	private Map<Long, Boolean> _organizationAdmins =
 		new HashMap<Long, Boolean>();
 	private Map<Long, Boolean> _organizationOwners =
 		new HashMap<Long, Boolean>();
 	private long[] _roleIds;
 	private List<Role> _roles;
-	private List<Group> _userGroups;
-	private long _userId;
-	private List<Group> _userOrgGroups;
-	private List<Organization> _userOrgs;
-	private List<Group> _userUserGroupGroups;
 
 }
