@@ -76,6 +76,13 @@ import javax.mail.internet.InternetAddress;
  */
 public class SubscriptionSender implements Serializable {
 
+	public void addBaseModelPersistedSubscribers(
+			String className, long baseModelClassPK) {
+
+		_baseModelPersistedSubscribersOVP = new ObjectValuePair<String, Long>(
+			className, baseModelClassPK);
+	}
+
 	public void addFileAttachment(File file) {
 		addFileAttachment(file, null);
 	}
@@ -125,7 +132,14 @@ public class SubscriptionSender implements Serializable {
 			String inferredClassName = null;
 			long inferredClassPK = 0;
 
-			if (_persistestedSubscribersOVPs.size() > 1) {
+			if (_baseModelPersistedSubscribersOVP != null) {
+				inferredClassName = _baseModelPersistedSubscribersOVP.getKey();
+				inferredClassPK = _baseModelPersistedSubscribersOVP.getValue();
+
+				_persistestedSubscribersOVPs.add(
+					_baseModelPersistedSubscribersOVP);
+			}
+			else if (_persistestedSubscribersOVPs.size() > 1) {
 				ObjectValuePair<String, Long> objectValuePair =
 					_persistestedSubscribersOVPs.get(
 						_persistestedSubscribersOVPs.size() - 1);
@@ -798,6 +812,7 @@ public class SubscriptionSender implements Serializable {
 
 	private static Log _log = LogFactoryUtil.getLog(SubscriptionSender.class);
 
+	private ObjectValuePair<String, Long> _baseModelPersistedSubscribersOVP;
 	private List<InternetAddress> _bulkAddresses;
 	private transient ClassLoader _classLoader;
 	private String _className;

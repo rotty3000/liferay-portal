@@ -6489,7 +6489,7 @@ public class JournalArticleLocalServiceImpl
 				JournalFolder.class.getName(), curFolderId);
 		}
 
-		subscriptionSender.addPersistedSubscribers(
+		subscriptionSender.addBaseModelPersistedSubscribers(
 			JournalArticle.class.getName(), article.getGroupId());
 
 		notify(subscriptionSender);

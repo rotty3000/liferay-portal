@@ -2163,7 +2163,7 @@ public class DLAppHelperLocalServiceImpl
 				dlFileEntryType.getFileEntryTypeId());
 		}
 
-		subscriptionSender.addPersistedSubscribers(
+		subscriptionSender.addBaseModelPersistedSubscribers(
 			DLFileEntry.class.getName(), fileEntry.getFileEntryId());
 
 		notify(subscriptionSender);

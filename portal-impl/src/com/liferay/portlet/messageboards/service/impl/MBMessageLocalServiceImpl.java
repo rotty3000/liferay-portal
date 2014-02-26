@@ -2189,7 +2189,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			}
 		}
 
-		subscriptionSender.addPersistedSubscribers(
+		subscriptionSender.addBaseModelPersistedSubscribers(
 			MBThread.class.getName(), message.getThreadId());
 
 		notify(

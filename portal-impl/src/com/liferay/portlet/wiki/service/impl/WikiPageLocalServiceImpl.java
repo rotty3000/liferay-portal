@@ -2555,7 +2555,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 
 		subscriptionSender.addPersistedSubscribers(
 			WikiNode.class.getName(), node.getNodeId());
-		subscriptionSender.addPersistedSubscribers(
+
+		subscriptionSender.addBaseModelPersistedSubscribers(
 			WikiPage.class.getName(), page.getResourcePrimKey());
 
 		notify(subscriptionSender);

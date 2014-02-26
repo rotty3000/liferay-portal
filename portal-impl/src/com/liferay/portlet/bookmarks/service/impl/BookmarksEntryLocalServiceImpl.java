@@ -821,7 +821,7 @@ public class BookmarksEntryLocalServiceImpl
 		subscriptionSender.addPersistedSubscribers(
 			BookmarksFolder.class.getName(), entry.getGroupId());
 
-		subscriptionSender.addPersistedSubscribers(
+		subscriptionSender.addBaseModelPersistedSubscribers(
 			BookmarksEntry.class.getName(), entry.getEntryId());
 
 		notify(subscriptionSender);
