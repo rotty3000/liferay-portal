@@ -16,7 +16,7 @@ package com.liferay.portlet.journalcontent;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.PortletLayoutListener;
+import com.liferay.portal.kernel.portlet.BasePortletLayoutListener;
 import com.liferay.portal.kernel.portlet.PortletLayoutListenerException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UniqueList;
@@ -50,7 +50,7 @@ import javax.portlet.PortletPreferences;
  * @author Raymond Augé
  */
 public class JournalContentPortletLayoutListener
-	implements PortletLayoutListener {
+	extends BasePortletLayoutListener {
 
 	@Override
 	public void onAddToLayout(String portletId, long plid)
@@ -79,15 +79,6 @@ public class JournalContentPortletLayoutListener
 		}
 		catch (Exception e) {
 			throw new PortletLayoutListenerException(e);
-		}
-	}
-
-	@Override
-	public void onMoveInLayout(String portletId, long plid)
-		throws PortletLayoutListenerException {
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("Move " + portletId + " from in " + plid);
 		}
 	}
 

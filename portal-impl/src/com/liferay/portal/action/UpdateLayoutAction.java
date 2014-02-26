@@ -341,13 +341,6 @@ public class UpdateLayoutAction extends JSONAction {
 			ThemeDisplay themeDisplay)
 		throws Exception {
 
-		// We need to get the portlet setup before doing anything else to ensure
-		// that it is created in the database
-
-		PortletPreferences portletSetup =
-			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
-				layout, portletId);
-
 		String[] portletData = StringUtil.split(
 			ParamUtil.getString(request, "portletData"));
 
@@ -369,6 +362,10 @@ public class UpdateLayoutAction extends JSONAction {
 
 		AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(
 			classPK);
+
+		PortletPreferences portletSetup =
+			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+				layout, portletId);
 
 		assetRenderer.setAddToPagePreferences(
 			portletSetup, portletId, themeDisplay);

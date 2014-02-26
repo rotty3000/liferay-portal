@@ -12,21 +12,46 @@
  * details.
  */
 
-package com.liferay.portlet.assetpublisher;
+package com.liferay.portal.kernel.portlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.BasePortletLayoutListener;
-import com.liferay.portal.kernel.portlet.PortletLayoutListenerException;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 /**
- * @author Zsolt Berentey
+ * @author Preston Crary
  */
-public class AssetPublisherPortletLayoutListener
-	extends BasePortletLayoutListener {
+public class BasePortletLayoutListener implements PortletLayoutListener {
+
+	@Override
+	public void onAddToLayout(String portletId, long plid)
+		throws PortletLayoutListenerException {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Add " + portletId + " to layout " + plid);
+		}
+
+		try {
+			Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+				layout, portletId);
+		}
+		catch (Exception e) {
+			throw new PortletLayoutListenerException(e);
+		}
+	}
+
+	@Override
+	public void onMoveInLayout(String portletId, long plid)
+		throws PortletLayoutListenerException {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Move " + portletId + " from in " + plid);
+		}
+	}
 
 	@Override
 	public void onRemoveFromLayout(String portletId, long plid)
@@ -35,19 +60,9 @@ public class AssetPublisherPortletLayoutListener
 		if (_log.isDebugEnabled()) {
 			_log.debug("Remove " + portletId + " from layout " + plid);
 		}
-
-		try {
-			Layout layout = LayoutLocalServiceUtil.getLayout(plid);
-
-			JournalArticleLocalServiceUtil.deleteLayoutArticleReferences(
-				layout.getGroupId(), layout.getUuid());
-		}
-		catch (Exception e) {
-			throw new PortletLayoutListenerException(e);
-		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-		AssetPublisherPortletLayoutListener.class);
+		BasePortletLayoutListener.class);
 
 }
