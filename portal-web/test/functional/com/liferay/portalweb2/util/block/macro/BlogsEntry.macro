@@ -245,6 +245,7 @@
 		<execute action="PGAssetpublisherAddnewblogsentry#type" locator-key1="TITLE_FIELD" value1="${entryTitle}" />
 		<execute action="PGAssetpublisherAddnewblogsentry#type" locator-key1="CONTENT_FIELD" value1="${entryContent}" />
 		<execute action="PGAssetpublisherAddnewblogsentry#assertClick" locator-key1="PUBLISH_BUTTON" value1="Publish" />
+		<execute action="PGAssetpublisherAddnewblogsentry#pause" locator1="5000" />
 		<execute action="PGAssetpublisher#selectFrame" value1="relative=top" />
 
 		<var name="key_assetTitle" value="${entryTitle}" />
@@ -402,6 +403,7 @@
 		<execute action="PGAssetpublisherAddnewblogsentry#type" locator-key1="TITLE_FIELD" value1="${entryTitle}" />
 		<execute action="PGAssetpublisherAddnewblogsentry#type" locator-key1="CONTENT_FIELD" value1="${entryContent}" />
 		<execute action="PGAssetpublisherAddnewblogsentry#assertClick" locator-key1="SUBMIT_FOR_PUBLICATION_BUTTON" value1="Submit for Publication" />
+		<execute action="PGAssetpublisherAddnewblogsentry#pause" locator1="5000" />
 
 		<execute action="PGAssetpublisher#selectFrame" value1="relative=top" />
 

@@ -122,6 +122,19 @@
 		</if>
 
 		<execute action="Dockbar#assertClick" locator1="${portletLocator}" value1="Add" />
+
+		<echo message="Adding ${portletName} portlet..." />
+
+		<if>
+			<or>
+				<equals arg1="${portletName}" arg2="Calendar" />
+				<equals arg1="${portletName}" arg2="Documents and Media" />
+				<equals arg1="${portletName}" arg2="Media Gallery" />
+			</or>
+			<then>
+				<execute action="Dockbar#pause" locator1="30000" />
+			</then>
+		</if>
 	</command>
 
 	<command name="deletePG">
