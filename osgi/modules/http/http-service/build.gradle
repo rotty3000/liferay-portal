@@ -1,0 +1,12 @@
+evaluationDependsOn(':r6-packages')
+
+dependencies {
+	compile fileTree(
+		dir: liferayProjectDir + '/osgi/lib/common/core',
+		include: '*.jar'
+	)
+
+	compile project(':r6-packages')
+}
+
+project.ext.deployDir = project.hasProperty('osgiLibDir') ? project.osgiLibDir + "/portal" : null

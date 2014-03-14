@@ -1,5 +1,6 @@
 .gradle
 
+/http/http-service/build
 /http/r6-packages/build
 /registry/registry-api/build
 /registry/registry-impl/build
