@@ -223,6 +223,12 @@ public class PortletPermissionImpl implements PortletPermission {
 			return false;
 		}
 
+		if (permissionChecker.isGroupAdmin(groupId) ||
+			permissionChecker.isGroupOwner(groupId)) {
+
+			return true;
+		}
+
 		return contains(
 			permissionChecker, groupId, layout, portlet.getPortletId(),
 			actionId, strict);
