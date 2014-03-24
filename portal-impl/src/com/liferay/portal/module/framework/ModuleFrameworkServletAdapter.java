@@ -15,12 +15,16 @@
 package com.liferay.portal.module.framework;
 
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.registry.collections.ServiceTrackerCollections;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceReference;
+import com.liferay.registry.ServiceTracker;
+import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.io.IOException;
 
-import java.util.List;
-
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,11 +37,36 @@ import javax.servlet.http.HttpServletResponse;
 public class ModuleFrameworkServletAdapter extends HttpServlet {
 
 	@Override
+	public void init(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(&(bean.id=" + HttpServlet.class.getName() +
+				")(original.bean=*))");
+
+		_serviceTracker = registry.trackServices(
+			filter, new HttpServletServiceTrackerCustomizer(servletConfig));
+
+		_serviceTracker.open();
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+
+		_serviceTracker.close();
+	}
+
+	@Override
 	protected void service(
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		if (_servlets.isEmpty()) {
+		HttpServlet httpServlet = _serviceTracker.getService();
+
+		if (httpServlet == null) {
 			PortalUtil.sendError(
 				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
 				new ServletException("Module framework is unavailable"),
@@ -46,13 +75,55 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 			return;
 		}
 
-		HttpServlet httpServlet = _servlets.get(0);
-
 		httpServlet.service(request, response);
 	}
 
-	private List<HttpServlet> _servlets = ServiceTrackerCollections.list(
-		HttpServlet.class,
-		"(&(bean.id=" + HttpServlet.class.getName() + ")(original.bean=*))");
+	private ServiceTracker<HttpServlet, HttpServlet> _serviceTracker;
+
+	private class HttpServletServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<HttpServlet, HttpServlet> {
+
+		public HttpServletServiceTrackerCustomizer(
+			ServletConfig servletConfig) {
+
+			_servletConfig = servletConfig;
+		}
+
+		@Override
+		public HttpServlet addingService(
+			ServiceReference<HttpServlet> serviceReference) {
+
+			Registry registry = RegistryUtil.getRegistry();
+
+			HttpServlet httpServlet = registry.getService(serviceReference);
+
+			try {
+				httpServlet.init(_servletConfig);
+			}
+			catch (ServletException e) {
+				e.printStackTrace();
+
+				return null;
+			}
+
+			return httpServlet;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<HttpServlet> serviceReference,
+			HttpServlet httpServlet) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<HttpServlet> serviceReference,
+			HttpServlet httpServlet) {
+
+			httpServlet.destroy();
+		}
+
+		private ServletConfig _servletConfig;
+	}
 
 }
