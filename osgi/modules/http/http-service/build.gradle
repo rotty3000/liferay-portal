@@ -9,4 +9,4 @@ dependencies {
 	compile project(':r6-packages')
 }
 
-project.ext.deployDir = project.hasProperty('osgiLibDir') ? project.osgiLibDir + "/portal" : null
+//project.ext.deployDir = project.hasProperty('osgiLibDir') ? project.osgiLibDir + "/portal" : null
