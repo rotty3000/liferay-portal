@@ -1,0 +1,13 @@
+dependencies {
+	compile fileTree(
+		dir: liferayProjectDir + '/osgi/lib/common/core',
+		include: '*.jar'
+	)
+
+	compile fileTree(
+		dir: liferayProjectDir + '/osgi/lib/common/portal',
+		include: '*.jar'
+	)
+}
+
+project.ext.deployDir = project.hasProperty('osgiLibDir') ? project.osgiLibDir + "/portal" : null

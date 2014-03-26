@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="definitions"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/bootstrap/src"/>
+	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/modules/http/http-adaptor/src/main/java"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/modules/http/http-service/src/main/java"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/modules/http/http-service/src/test/java"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="osgi/modules/http/r6-packages/src/main/java"/>
@@ -323,5 +324,6 @@
 	<classpathentry kind="lib" path="lib/portal/xz.jar"/>
 	<classpathentry kind="lib" path="osgi/lib/common/core/osgi.cmpn.jar"/>
 	<classpathentry kind="lib" path="osgi/lib/common/core/osgi.core.jar"/>
+	<classpathentry kind="lib" path="osgi/lib/common/portal/org.eclipse.equinox.http.servlet-1.1.500-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

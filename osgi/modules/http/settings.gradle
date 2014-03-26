@@ -1,1 +1,1 @@
-include 'http-service', 'r6-packages'
+include 'http-adaptor', 'http-service', 'r6-packages'
