@@ -15,7 +15,9 @@
 package com.liferay.portal.kernel.search;
 
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.Serializable;
 
@@ -245,6 +247,16 @@ public class Field implements Serializable {
 		return _values;
 	}
 
+	public boolean isLazy() {
+		boolean lazy = false;
+
+		if (this instanceof LazyField) {
+			lazy = true;
+		}
+
+		return lazy;
+	}
+
 	public boolean isLocalized() {
 		if (_localizedValues != null) {
 			return true;
@@ -288,6 +300,40 @@ public class Field implements Serializable {
 
 	public void setValues(String[] values) {
 		_values = values;
+	}
+
+	@Override
+	public String toString() {
+		StringBundler sb = new StringBundler(14);
+
+		sb.append(StringPool.OPEN_CURLY_BRACE);
+
+		sb.append("name=");
+		sb.append(getName());
+
+		sb.append(", lazy=");
+		sb.append(isLazy());
+		sb.append(", localized=");
+		sb.append(isLocalized());
+		sb.append(", numeric=");
+		sb.append(isNumeric());
+		sb.append(", tokenized=");
+		sb.append(isTokenized());
+
+		sb.append(", values=");
+
+		String values = StringPool.NULL;
+
+		if (_values != null) {
+			values = StringPool.OPEN_BRACKET.concat(
+				StringUtil.merge(_values)).concat(StringPool.CLOSE_BRACKET);
+		}
+
+		sb.append(values);
+
+		sb.append(StringPool.CLOSE_CURLY_BRACE);
+
+		return sb.toString();
 	}
 
 	private float _boost = 1;
