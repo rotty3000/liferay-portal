@@ -231,8 +231,10 @@ public class Field implements Serializable {
 	}
 
 	public String getValue() {
-		if (ArrayUtil.isNotEmpty(_values)) {
-			return _values[0];
+		String[] values = getValues();
+
+		if (ArrayUtil.isNotEmpty(values)) {
+			return values[0];
 		}
 		else {
 			return null;
