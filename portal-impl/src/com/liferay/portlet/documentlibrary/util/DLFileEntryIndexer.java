@@ -35,12 +35,13 @@ import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.search.LazyField;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
-import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -51,6 +52,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.DoAsUserCallable;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.persistence.GroupActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
@@ -87,6 +89,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -332,133 +335,100 @@ public class DLFileEntryIndexer extends BaseIndexer {
 
 		boolean indexContent = true;
 
-		InputStream is = null;
+		if (PropsValues.DL_FILE_INDEXING_MAX_SIZE == 0) {
+			indexContent = false;
+		}
+		else if (PropsValues.DL_FILE_INDEXING_MAX_SIZE != -1) {
+			if (dlFileEntry.getSize() >
+					PropsValues.DL_FILE_INDEXING_MAX_SIZE) {
 
-		try {
-			if (PropsValues.DL_FILE_INDEXING_MAX_SIZE == 0) {
 				indexContent = false;
 			}
-			else if (PropsValues.DL_FILE_INDEXING_MAX_SIZE != -1) {
-				if (dlFileEntry.getSize() >
-						PropsValues.DL_FILE_INDEXING_MAX_SIZE) {
-
-					indexContent = false;
-				}
-			}
-
-			if (indexContent) {
-				String[] ignoreExtensions = PrefsPropsUtil.getStringArray(
-					PropsKeys.DL_FILE_INDEXING_IGNORE_EXTENSIONS,
-					StringPool.COMMA);
-
-				if (ArrayUtil.contains(
-						ignoreExtensions,
-						StringPool.PERIOD + dlFileEntry.getExtension())) {
-
-					indexContent = false;
-				}
-			}
-
-			if (indexContent) {
-				is = dlFileEntry.getFileVersion().getContentStream(false);
-			}
 		}
-		catch (Exception e) {
+
+		if (indexContent) {
+			String[] ignoreExtensions = PrefsPropsUtil.getStringArray(
+				PropsKeys.DL_FILE_INDEXING_IGNORE_EXTENSIONS, StringPool.COMMA);
+
+			if (ArrayUtil.contains(
+					ignoreExtensions,
+					StringPool.PERIOD + dlFileEntry.getExtension())) {
+
+				indexContent = false;
+			}
 		}
 
 		DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
 
-		try {
-			Document document = getBaseModelDocument(
-				PORTLET_ID, dlFileEntry, dlFileVersion);
+		Document document = getBaseModelDocument(
+			PORTLET_ID, dlFileEntry, dlFileVersion);
 
-			if (indexContent) {
-				if (is != null) {
-					try {
-						document.addFile(
-							Field.CONTENT, is, dlFileEntry.getTitle());
-					}
-					catch (IOException ioe) {
-						throw new SearchException(
-							"Cannot extract text from file" + dlFileEntry);
-					}
-				}
-				else if (_log.isDebugEnabled()) {
-					_log.debug(
-						"Document " + dlFileEntry +
-							" does not have any content");
-				}
-			}
+		if (indexContent) {
+			Callable<String[]> valuesCallback = new DLContentCallback(
+				dlFileEntry);
 
-			document.addKeyword(
-				Field.CLASS_TYPE_ID, dlFileEntry.getFileEntryTypeId());
-			document.addText(Field.DESCRIPTION, dlFileEntry.getDescription());
-			document.addKeyword(Field.FOLDER_ID, dlFileEntry.getFolderId());
-			document.addKeyword(Field.HIDDEN, dlFileEntry.isInHiddenFolder());
-			document.addText(
-				Field.PROPERTIES, dlFileEntry.getLuceneProperties());
-			document.addText(Field.TITLE, dlFileEntry.getTitle());
-			document.addKeyword(
-				Field.TREE_PATH,
-				StringUtil.split(dlFileEntry.getTreePath(), CharPool.SLASH));
+			Field contentField = new LazyField(Field.CONTENT, valuesCallback);
 
-			document.addKeyword(
-				"dataRepositoryId", dlFileEntry.getDataRepositoryId());
-			document.addText(
-				"ddmContent",
-				extractDDMContent(dlFileVersion, LocaleUtil.getSiteDefault()));
-			document.addKeyword("extension", dlFileEntry.getExtension());
-			document.addKeyword(
-				"fileEntryTypeId", dlFileEntry.getFileEntryTypeId());
-			document.addKeyword(
-				"mimeType",
-				StringUtil.replace(
-					dlFileEntry.getMimeType(), CharPool.FORWARD_SLASH,
-					CharPool.UNDERLINE));
-			document.addKeyword("path", dlFileEntry.getTitle());
-			document.addKeyword("readCount", dlFileEntry.getReadCount());
-			document.addKeyword("size", dlFileEntry.getSize());
-
-			ExpandoBridge expandoBridge =
-				ExpandoBridgeFactoryUtil.getExpandoBridge(
-					dlFileEntry.getCompanyId(), DLFileEntry.class.getName(),
-					dlFileVersion.getFileVersionId());
-
-			ExpandoBridgeIndexerUtil.addAttributes(document, expandoBridge);
-
-			addFileEntryTypeAttributes(document, dlFileVersion);
-
-			if (dlFileEntry.isInHiddenFolder()) {
-				Indexer indexer = IndexerRegistryUtil.getIndexer(
-					dlFileEntry.getClassName());
-
-				if (indexer != null) {
-					indexer.addRelatedEntryFields(document, obj);
-
-					document.addKeyword(
-						Field.CLASS_NAME_ID,
-						PortalUtil.getClassNameId(dlFileEntry.getClassName()));
-					document.addKeyword(
-						Field.CLASS_PK, dlFileEntry.getClassPK());
-					document.addKeyword(Field.RELATED_ENTRY, true);
-				}
-			}
-
-			if (_log.isDebugEnabled()) {
-				_log.debug("Document " + dlFileEntry + " indexed successfully");
-			}
-
-			return document;
+			document.add(contentField);
 		}
-		finally {
-			if (is != null) {
-				try {
-					is.close();
-				}
-				catch (IOException ioe) {
-				}
+
+		document.addKeyword(
+			Field.CLASS_TYPE_ID, dlFileEntry.getFileEntryTypeId());
+		document.addText(Field.DESCRIPTION, dlFileEntry.getDescription());
+		document.addKeyword(Field.FOLDER_ID, dlFileEntry.getFolderId());
+		document.addKeyword(Field.HIDDEN, dlFileEntry.isInHiddenFolder());
+		document.addText(Field.PROPERTIES, dlFileEntry.getLuceneProperties());
+		document.addText(Field.TITLE, dlFileEntry.getTitle());
+		document.addKeyword(
+			Field.TREE_PATH,
+			StringUtil.split(dlFileEntry.getTreePath(), CharPool.SLASH));
+
+		document.addKeyword(
+			"dataRepositoryId", dlFileEntry.getDataRepositoryId());
+		document.addText(
+			"ddmContent",
+			extractDDMContent(dlFileVersion, LocaleUtil.getSiteDefault()));
+		document.addKeyword("extension", dlFileEntry.getExtension());
+		document.addKeyword(
+			"fileEntryTypeId", dlFileEntry.getFileEntryTypeId());
+		document.addKeyword(
+			"mimeType",
+			StringUtil.replace(
+				dlFileEntry.getMimeType(), CharPool.FORWARD_SLASH,
+				CharPool.UNDERLINE));
+		document.addKeyword("path", dlFileEntry.getTitle());
+		document.addKeyword("readCount", dlFileEntry.getReadCount());
+		document.addKeyword("size", dlFileEntry.getSize());
+
+		ExpandoBridge expandoBridge =
+			ExpandoBridgeFactoryUtil.getExpandoBridge(
+				dlFileEntry.getCompanyId(), DLFileEntry.class.getName(),
+				dlFileVersion.getFileVersionId());
+
+		ExpandoBridgeIndexerUtil.addAttributes(document, expandoBridge);
+
+		addFileEntryTypeAttributes(document, dlFileVersion);
+
+		if (dlFileEntry.isInHiddenFolder()) {
+			Indexer indexer = IndexerRegistryUtil.getIndexer(
+				dlFileEntry.getClassName());
+
+			if (indexer != null) {
+				indexer.addRelatedEntryFields(document, obj);
+
+				document.addKeyword(
+					Field.CLASS_NAME_ID,
+					PortalUtil.getClassNameId(dlFileEntry.getClassName()));
+				document.addKeyword(Field.CLASS_PK, dlFileEntry.getClassPK());
+				document.addKeyword(Field.RELATED_ENTRY, true);
 			}
 		}
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Document " + dlFileEntry + " indexed successfully");
+		}
+
+		return document;
 	}
 
 	@Override
@@ -681,5 +651,52 @@ public class DLFileEntryIndexer extends BaseIndexer {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(DLFileEntryIndexer.class);
+
+	private static class DLContentCallback
+		extends DoAsUserCallable<DLFileEntry, String[]> {
+
+		DLContentCallback(DLFileEntry dlFileEntry) {
+			super(dlFileEntry);
+		}
+
+		@Override
+		protected String[] doPerform(DLFileEntry dlFileEntry) throws Exception {
+			DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
+
+			InputStream is = null;
+
+			String[] result = null;
+
+			try {
+				is = dlFileVersion.getContentStream(false);
+
+				if (is == null) {
+					if (_log.isDebugEnabled()) {
+						_log.debug(
+							"Document " + dlFileEntry +
+							" does not have any content");
+					}
+
+					return null;
+				}
+
+				result = new String[] {
+					FileUtil.extractText(is, dlFileEntry.getTitle())
+				};
+			}
+			finally {
+				if (is != null) {
+					try {
+						is.close();
+					}
+					catch (IOException ioe) {
+					}
+				}
+			}
+
+			return result;
+		}
+
+	}
 
 }
