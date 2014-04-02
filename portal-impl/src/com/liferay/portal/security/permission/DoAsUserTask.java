@@ -14,42 +14,17 @@
 
 package com.liferay.portal.security.permission;
 
-import com.liferay.portal.model.UserConstants;
-
 /**
- * @author Brian Wing Shun Chan
  * @author László Csontos
  */
-public abstract class DoAsUserThread extends Thread {
+public interface DoAsUserTask<P, R> {
 
-	public DoAsUserThread() {
-		this(UserConstants.USER_ID_DEFAULT);
-	}
+	public long getUserId();
 
-	public DoAsUserThread(long userId) {
-		_doAsUserTask = new AbstractDoAsUserTask<Void, Void>(userId, null) {
+	public boolean hasRun();
 
-			@Override
-			protected Void doPerform(Void parameter) throws Exception {
-				doRun();
+	public boolean isSuccess();
 
-				return null;
-			}
-
-		};
-	}
-
-	public boolean isSuccess() {
-		return _doAsUserTask.isSuccess();
-	}
-
-	@Override
-	public void run() {
-		_doAsUserTask.perform(null);
-	}
-
-	protected abstract void doRun() throws Exception;
-
-	private AbstractDoAsUserTask<?, ?> _doAsUserTask;
+	public R perform(P parameter);
 
 }

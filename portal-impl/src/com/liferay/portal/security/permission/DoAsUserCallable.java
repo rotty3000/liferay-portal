@@ -14,42 +14,27 @@
 
 package com.liferay.portal.security.permission;
 
-import com.liferay.portal.model.UserConstants;
+import java.util.concurrent.Callable;
 
 /**
- * @author Brian Wing Shun Chan
  * @author László Csontos
  */
-public abstract class DoAsUserThread extends Thread {
+public abstract class DoAsUserCallable<P, R>
+	extends AbstractDoAsUserTask<P, R> implements Callable<R> {
 
-	public DoAsUserThread() {
-		this(UserConstants.USER_ID_DEFAULT);
+	public DoAsUserCallable(long userId, P parameter) {
+		super(userId, parameter);
 	}
 
-	public DoAsUserThread(long userId) {
-		_doAsUserTask = new AbstractDoAsUserTask<Void, Void>(userId, null) {
-
-			@Override
-			protected Void doPerform(Void parameter) throws Exception {
-				doRun();
-
-				return null;
-			}
-
-		};
-	}
-
-	public boolean isSuccess() {
-		return _doAsUserTask.isSuccess();
+	public DoAsUserCallable(P parameter) {
+		super(parameter);
 	}
 
 	@Override
-	public void run() {
-		_doAsUserTask.perform(null);
+	public R call() throws Exception {
+		P parameter = getParameter();
+
+		return perform(parameter);
 	}
-
-	protected abstract void doRun() throws Exception;
-
-	private AbstractDoAsUserTask<?, ?> _doAsUserTask;
 
 }
