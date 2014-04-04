@@ -1,0 +1,2 @@
+com.liferay.portal.service.osgi.PortalWSPolicy::true
+com.liferay.portal.service.osgi.externalpolicy.WSDLReferenceDomainExpressionBuilder::true
