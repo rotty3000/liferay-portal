@@ -1,3 +1,8 @@
+#
+# Doesn't work with blueprint - uninstall blueprint support from the container
+#
+
+
 # UNINSTALL
 uninstall file:/work/jax-ws-osgi/osgi-dependencies/dist/commons-logging-1.1.1-OSGi.jar
 uninstall file:/work/jax-ws-osgi/osgi-dependencies/dist/slf4j-jdk14-1.7.5.jar
