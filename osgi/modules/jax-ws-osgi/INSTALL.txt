@@ -1,0 +1,6 @@
+1, go to osgi-dependencies, run build.sh
+2, build project (mvn package)
+3, open install-osgi.script, replace paths with yours
+3, connect to gogo console (telnet localhost 11311)
+4, copy & paste install-osgi.script into gogo console
+5, open http://localhost:11112/soap
