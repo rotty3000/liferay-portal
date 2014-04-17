@@ -1,117 +1,77 @@
-#
-# Doesn't work with blueprint
-#
-# 1. uninstall blueprint support from the container
-#
 
+# First uninstall, if previously installed
 
-# 2. UNINSTALL existing libraries
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/commons-logging-1.1.1-OSGi.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/slf4j-jdk14-1.7.5.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/slf4j-api-1.7.6.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/asm.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/stax2-api-3.1.1.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmlschema-core-2.1.0.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/wsdl4j-1.6.3-OSGi.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/neethi-3.0.3.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/woodstox-core-asl-4.2.0.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/jaxb-impl-2.2.6-OSGi.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-api-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-core-3.0.0-milestone2.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/joda-time-1.6.2.jar
-#uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmltooling-1.3.2-1-OSGi.jar
-#uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/openws-1.4.2-1-OSGi.jar
-#uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/opensaml-2.5.1-1-OSGi.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/opensaml-2.5.1-xmltooling-1.3.2-openws-1.4.2-OSGi.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/commons-codec-1.9.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmlsec-1.9999999.2.0.0-rc1.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/wss4j-1.6.14.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-policy-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-soap-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-databinding-jaxb-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-addr-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-transports-http-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-xml-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-simple-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-jaxws-3.0.0-milestone2.jar
-uninstall file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-security-3.0.0-milestone2.jar
-uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/target/jaxws-test-osgi-1.0.0.jar
-refresh
-lb
-
-
-# PRELOADING (The following jars are required for all CXF usage (see WHICH_JARS in cxf_download_zip/lib))
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/commons-logging-1.1.1-OSGi.jar
-# slf4j needed by other non-cxf components
-install file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/slf4j-jdk14-1.7.5.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/slf4j-api-1.7.6.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/asm.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/stax2-api-3.1.1.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmlschema-core-2.1.0.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/wsdl4j-1.6.3-OSGi.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/neethi-3.0.3.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/woodstox-core-asl-4.2.0.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/jaxb-impl-2.2.6-OSGi.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/slf4j-api-1.7.5.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/slf4j-jdk14-1.7.5.jar
+uninstall file:/tmp/cxf/org.apache.servicemix.bundles.asm-3.3.1_1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/xmlschema-core-2.1.0.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/neethi-3.0.3.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/stax2-api-3.1.1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/woodstox-core-asl-4.2.0.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-core-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/joda-time-2.2.jar
+uninstall file:/tmp/cxf/org.apache.servicemix.bundles.jasypt-1.9.1_2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/commons-codec-1.9.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/xmlsec-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/org.apache.servicemix.bundles.opensaml-2.6.0_3.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-policy-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wss10-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wss11-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wssc-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wsu10-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-common-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-stax-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-dom-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-policy-stax-2.0.0-rc1.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-policy-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-wsdl-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-soap-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-databinding-jaxb-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-addr-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-transports-http-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-xml-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-simple-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-jaxws-3.0.0-milestone2.jar
+uninstall file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-security-3.0.0-milestone2.jar
 
 refresh
-lb
 
-# cxf core packages
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-api-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-core-3.0.0-milestone2.jar
+# Now start
 
-refresh
-lb
+install file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/slf4j-jdk14-1.7.5.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/slf4j-api-1.7.5.jar
+felix:start file:/tmp/cxf/org.apache.servicemix.bundles.asm-3.3.1_1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/xmlschema-core-2.1.0.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/neethi-3.0.3.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/stax2-api-3.1.1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/woodstox-core-asl-4.2.0.jar
 
-# SAML - must be loaded before WS-Security
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/joda-time-1.6.2.jar
-#felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmltooling-1.3.2-1-OSGi.jar
-#felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/openws-1.4.2-1-OSGi.jar
-#felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/opensaml-2.5.1-1-OSGi.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/opensaml-2.5.1-xmltooling-1.3.2-openws-1.4.2-OSGi.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-core-3.0.0-milestone2.jar
 
-
-### WS-Security
-# https://issues.apache.org/jira/browse/SANTUARIO-358 .. using 2.0.0-rc1 (<<slf4j, <<commons-codec)
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/commons-codec-1.9.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/xmlsec-1.9999999.2.0.0-rc1.jar
-### TODO: missing org.apache.xpath + org.apache.xml.utils + org.apache.xml.dtm ^^^ Is it important ???
-
-
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/osgi-dependencies/dist/wss4j-1.6.14.jar
-
-refresh
-lb
-
-# cxf runtime modules - http transport + ws-policy
-
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-policy-3.0.0-milestone2.jar
-
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-soap-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-databinding-jaxb-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-addr-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-transports-http-3.0.0-milestone2.jar
-
-
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-xml-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-simple-3.0.0-milestone2.jar
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-jaxws-3.0.0-milestone2.jar
-# TODO: missing: javax.xml.ws.spi.http ^^??
-felix:start file:/work/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-security-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/joda-time-2.2.jar
+felix:start file:/tmp/cxf/org.apache.servicemix.bundles.jasypt-1.9.1_2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/commons-codec-1.9.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/xmlsec-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/org.apache.servicemix.bundles.opensaml-2.6.0_3.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-policy-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wss10-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wss11-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wssc-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-bindings-wsu10-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-common-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-stax-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-dom-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-policy-stax-2.0.0-rc1.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-policy-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-wsdl-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-soap-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-databinding-jaxb-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-addr-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-transports-http-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-bindings-xml-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-simple-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-frontend-jaxws-3.0.0-milestone2.jar
+felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-rt-ws-security-3.0.0-milestone2.jar
+# felix:start file:/tmp/cxf/apache-cxf-3.0.0-milestone2/lib/cxf-services-sts-core-3.0.0-milestone2.jar ... CXF Security Token Service: ??? later ???
 
 refresh
-lb
-
-
-#For the CXF Security Token Service:
-# - cxf-services-sts-core.jar
-
-# RUN APP
-
-#uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/target/jaxws-test-osgi-1.0.0.jar
-felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/target/jaxws-test-osgi-1.0.0.jar
-
-refresh
-lb
-
-# go to http://localhost:11112/soap

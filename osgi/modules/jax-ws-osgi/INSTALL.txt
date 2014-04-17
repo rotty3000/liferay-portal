@@ -1,6 +1,48 @@
-1, go to osgi-dependencies, run build.sh
-2, build project (mvn package)
-3, open install-osgi.script, replace paths with yours
-3, connect to gogo console (telnet localhost 11311)
-4, copy & paste install-osgi.script into gogo console
-5, open http://localhost:11112/soap
+# 1. download CXF 3.0-milestone2 from https://cxf.apache.org/download.html
+mkdir /tmp/cxf
+cd /tmp/cxf
+# Czech CDN, may be slow from outside Europe
+wget ftp://mirror.hosting90.cz/apache/cxf/3.0.0-milestone2/apache-cxf-3.0.0-milestone2.tar.gz
+
+# 2. Unzip into /tmp/cxf/apache-cxf-3.0.0-milestone2
+tar -xvzf apache-cxf-3.0.0-milestone2.tar.gz
+
+# 3. Workaround missing resource bundle: change MANIFEST.MF of wss4j-ws-security-common-2.0.0-rc1.jar << add following Import-Package declaration: org.apache.xml.security.resource;version="[2.0,3)"
+unzip apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-common-2.0.0-rc1.jar META-INF/MANIFEST.MF
+sed 's/Import-Package: /Import-Package: org.apache.xml.security.resource;version="[2.0,3)",/' -i META-INF/MANIFEST.MF
+zip apache-cxf-3.0.0-milestone2/lib/wss4j-ws-security-common-2.0.0-rc1.jar META-INF/MANIFEST.MF
+rm -r META-INF
+
+# 4. Download OSGi-fied version of packaged JARs, save into /tmp/cxf
+# asm-3.3.1.jar:
+wget http://repo1.maven.org/maven2/org/apache/servicemix/bundles/org.apache.servicemix.bundles.asm/3.3.1_1/org.apache.servicemix.bundles.asm-3.3.1_1.jar -O /tmp/cxf/org.apache.servicemix.bundles.asm-3.3.1_1.jar
+# jasypt-1.9.1.jar:
+wget http://repo1.maven.org/maven2/org/apache/servicemix/bundles/org.apache.servicemix.bundles.jasypt/1.9.1_2/org.apache.servicemix.bundles.jasypt-1.9.1_2.jar -O /tmp/cxf/org.apache.servicemix.bundles.jasypt-1.9.1_2.jar
+# opensaml-2.6.0.jar:
+wget http://repo1.maven.org/maven2/org/apache/servicemix/bundles/org.apache.servicemix.bundles.opensaml/2.6.0_3/org.apache.servicemix.bundles.opensaml-2.6.0_3.jar -O /tmp/cxf/org.apache.servicemix.bundles.opensaml-2.6.0_3.jar
+
+# 5: Initialize keystores in the project
+cd PROJECT_DIR... (/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/)
+cd keys
+./create.sh
+cd ..
+
+# 6. Build application
+mvn clean package
+
+# 7. Install CXF into OSGi using gogo telnet console using install-osgi.script
+
+# 8: Run application
+
+uninstall file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/target/jaxws-test-osgi-1.0.0.jar
+felix:start file:/opt/liferay.git/portal.git/osgi/modules/jax-ws-osgi/target/jaxws-test-osgi-1.0.0.jar
+
+# 9: Go to http://localhost:11112/soap and verify WSDLs to contain some policies
+
+# 10: Install SOAPUI
+# 11: Import testing projects:
+# service-wsdl-soapui-project.xml
+# service2-wsdl-soapui-project.xml
+
+# 12: Configure correct keystore + truststore locations
+# 13: Run getObject requests (SAML request is not yet fully configured though)
