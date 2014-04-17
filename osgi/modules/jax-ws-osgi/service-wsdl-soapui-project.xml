@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="service?wsdl" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="JAXWSServiceImplServiceSoapBinding" type="wsdl" bindingName="{http://remote.service.portal.liferay.com/}JAXWSServiceImplServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:11112/soap/service?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:11112/soap/service?wsdl"><con:part><con:url>http://localhost:11112/soap/service?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="JAXWSServiceImplService" targetNamespace="http://remote.service.portal.liferay.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://remote.service.portal.liferay.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://remote.service.portal.liferay.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getObject" type="tns:getObject"/>
+      <xs:element name="getObjectResponse" type="tns:getObjectResponse"/>
+      <xs:element name="setObject" type="tns:setObject"/>
+      <xs:complexType name="getObject">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="getObjectResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:jaxwsServiceObject"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="jaxwsServiceObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="dateParam" type="xs:dateTime"/>
+          <xs:element name="intParam" type="xs:int"/>
+          <xs:element minOccurs="0" name="stringParam" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="setObject">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="tns:jaxwsServiceObject"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getObject">
+    <wsdl:part element="tns:getObject" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getObjectResponse">
+    <wsdl:part element="tns:getObjectResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setObject">
+    <wsdl:part element="tns:setObject" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="JAXWSService">
+    <wsdl:operation name="getObject">
+      <wsdl:input message="tns:getObject" name="getObject">
+        <wsp:PolicyReference URI="#getObjectPortTypeOpInputPolicy"/>
+      </wsdl:input>
+      <wsdl:output message="tns:getObjectResponse" name="getObjectResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setObject">
+      <wsdl:input message="tns:setObject" name="setObject"></wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="JAXWSServiceImplServiceSoapBinding" type="tns:JAXWSService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getObject">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getObject">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getObjectResponse">
+        <soap:body use="literal"/>
+        <wsp:PolicyReference URI="#getObjectBindingOpOutputPolicy"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setObject">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setObject">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="JAXWSServiceImplService">
+    <wsdl:port binding="tns:JAXWSServiceImplServiceSoapBinding" name="JAXWSServiceImplPort">
+      <soap:address location="http://localhost:11112/soap/service"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsp:Policy wsu:Id="getObjectPortTypeOpInputPolicy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SupportingTokens>
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:NoPassword/>
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SupportingTokens>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="getObjectBindingOpOutputPolicy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedSupportingTokens>
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702/IncludeToken/AlwaysToInitiator">
+              <wsp:Policy>
+                <sp:WssUsernameToken10/>
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:SignedParts/>
+        <sp:EncryptedParts>
+          <sp:Body/>
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:11112/soap/service</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="getObject" bindingOperationName="getObject" type="Request-Response" outputName="getObjectResponse" inputName="getObject" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1" outgoingWss="noPasswordToken"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11112/soap/service</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rem="http://remote.service.portal.liferay.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <rem:getObject/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://remote.service.portal.liferay.com/JAXWSService/getObject"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="setObject" bindingOperationName="setObject" type="One-Way" inputName="setObject" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:11112/soap/service</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:rem="http://remote.service.portal.liferay.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <rem:setObject>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <dateParam>?</dateParam>
+            <intParam>?</intParam>
+            <!--Optional:-->
+            <stringParam>?</stringParam>
+         </arg0>
+      </rem:setObject>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://remote.service.portal.liferay.com/JAXWSService/setObject"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer><con:outgoing><con:name>noPasswordToken</con:name><con:entry type="Username" username="clientUserNameToken" password="clientPassword"><con:configuration><addCreated>false</addCreated><addNonce>false</addNonce><passwordType>PasswordText</passwordType></con:configuration></con:entry></con:outgoing></con:wssContainer><con:sensitiveInformation/></con:soapui-project>

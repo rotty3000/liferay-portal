@@ -1,10 +1,12 @@
 package com.liferay.portal.service.remote;
 
+import javax.jws.WebService;
 import java.util.Date;
 
 /**
  * @author Tomas Polesovsky
  */
+@WebService
 public class JAXWSServiceImpl implements JAXWSService {
 	@Override
 	public JAXWSServiceObject getObject() {
