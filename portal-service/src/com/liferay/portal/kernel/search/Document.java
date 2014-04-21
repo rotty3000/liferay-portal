@@ -33,6 +33,8 @@ public interface Document extends Cloneable, Serializable {
 
 	public void add(Field field);
 
+	public void add(Field field, boolean tokenized);
+
 	public void addDate(String name, Date value);
 
 	public void addDate(String name, Date[] values);

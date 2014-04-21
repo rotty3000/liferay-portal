@@ -76,6 +76,13 @@ public class DocumentImpl implements Document {
 
 	@Override
 	public void add(Field field) {
+		add(field, false);
+	}
+
+	@Override
+	public void add(Field field, boolean tokenized) {
+		field.setTokenized(tokenized);
+
 		_fields.put(field.getName(), field);
 	}
 

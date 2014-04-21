@@ -14,55 +14,42 @@
 
 package com.liferay.portal.security.permission;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.model.User;
-import com.liferay.portal.security.auth.PrincipalThreadLocal;
-import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.model.UserConstants;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author László Csontos
  */
 public abstract class DoAsUserThread extends Thread {
 
+	public DoAsUserThread() {
+		this(UserConstants.USER_ID_DEFAULT);
+	}
+
 	public DoAsUserThread(long userId) {
-		_userId = userId;
+		_doAsUserTask = new AbstractDoAsUserTask<Void, Void>(userId, null) {
+
+			@Override
+			protected Void doPerform(Void parameter) throws Exception {
+				doRun();
+
+				return null;
+			}
+
+		};
 	}
 
 	public boolean isSuccess() {
-		return _success;
+		return _doAsUserTask.isSuccess();
 	}
 
 	@Override
 	public void run() {
-		try {
-			PrincipalThreadLocal.setName(_userId);
-
-			User user = UserLocalServiceUtil.getUserById(_userId);
-
-			PermissionChecker permissionChecker =
-				PermissionCheckerFactoryUtil.create(user);
-
-			PermissionThreadLocal.setPermissionChecker(permissionChecker);
-
-			doRun();
-
-			_success = true;
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-		finally {
-			PrincipalThreadLocal.setName(null);
-			PermissionThreadLocal.setPermissionChecker(null);
-		}
+		_doAsUserTask.perform(null);
 	}
 
 	protected abstract void doRun() throws Exception;
 
-	private static Log _log = LogFactoryUtil.getLog(DoAsUserThread.class);
-
-	private boolean _success;
-	private long _userId;
+	private AbstractDoAsUserTask<?, ?> _doAsUserTask;
 
 }
