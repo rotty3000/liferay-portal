@@ -14,8 +14,12 @@
 
 package com.liferay.osgi.http.adaptor;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.eclipse.equinox.http.servlet.HttpServiceServlet;
@@ -26,6 +30,8 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 
 /**
  * @author Raymond Augé
@@ -39,7 +45,7 @@ public class HttpAdaptor {
 	protected void activate(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
 
-		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+		final Hashtable<String, Object> properties = new Hashtable<String, Object>();
 
 		properties.put("bean.id", HttpServlet.class.getName());
 		properties.put("original.bean", Boolean.TRUE.toString());
@@ -49,15 +55,65 @@ public class HttpAdaptor {
 			HttpServlet.class.getName()
 		};
 
-		_serviceRegistration = bundleContext.registerService(
-			classes, new HttpServiceServlet(), properties);
+		_httpServiceServlet = new HttpServiceServlet();
+
+		ServletConfig servletConfig = new ServletConfig() {
+
+			@Override
+			public String getServletName() {
+				return "Liferay OSGi Proxy Servlet";
+			}
+
+			@Override
+			public ServletContext getServletContext() {
+				return _servletContext;
+			}
+
+			@Override
+			public Enumeration<String> getInitParameterNames() {
+				return properties.keys();
+			}
+
+			@Override
+			public String getInitParameter(String name) {
+				return String.valueOf(properties.get(name));
+			}
+
+		};
+
+		try {
+			_httpServiceServlet.init(servletConfig);
+
+			_serviceRegistration = bundleContext.registerService(
+				classes, _httpServiceServlet, properties);
+		}
+		catch (ServletException se) {
+			throw new RuntimeException(se);
+		}
 	}
 
 	@Deactivate
 	protected void deactivate() {
 		_serviceRegistration.unregister();
+
+		_httpServiceServlet.destroy();
+		_httpServiceServlet = null;
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		target ="(&(bean.id=javax.servlet.ServletContext)(original.bean=*))"
+	)
+	private void setServletContext(ServletContext servletContext) {
+		_servletContext = servletContext;
+	}
+
+	private void unsetServletContext(ServletContext servletContext) {
+		_servletContext = null;
+	}
+
+	private HttpServiceServlet _httpServiceServlet;
+	private ServletContext _servletContext;
 	private ServiceRegistration<?> _serviceRegistration;
 
 }
