@@ -22,11 +22,14 @@ import com.liferay.portal.kernel.portlet.LiferayPortletContext;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletSession;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.PortletBag;
+import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.DynamicServletRequest;
 import com.liferay.portal.kernel.servlet.ProtectedPrincipal;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -63,6 +66,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.ccpp.Profile;
 
@@ -137,6 +141,22 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		setAttribute(JavaConstants.JAVAX_PORTLET_REQUEST, this);
 		setAttribute(JavaConstants.JAVAX_PORTLET_RESPONSE, portletResponse);
 		setAttribute(PortletRequest.LIFECYCLE_PHASE, getLifecycle());
+
+		PortletBag portletBag = PortletBagPool.get(
+			liferayPortletConfig.getPortlet().getRootPortletId());
+
+		// LPS-46552
+
+		javax.portlet.Portlet portlet = portletBag.getPortletInstance();
+
+		_strutsBasedPortlet = ClassUtil.isSubclass(
+			portlet.getClass(), StrutsPortlet.class);
+
+		if (!_strutsBasedPortlet) {
+			_strutsBasedPortlet = ClassUtil.isSubclass(
+				portlet.getClass(),
+				"org.apache.portals.bridges.struts.StrutsPortlet");
+		}
 	}
 
 	@Override
@@ -277,11 +297,29 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	@Override
 	public Enumeration<String> getParameterNames() {
+		Enumeration<String> result = null;
+
 		if (_portletRequestDispatcherRequest != null) {
-			return _portletRequestDispatcherRequest.getParameterNames();
+			result = _portletRequestDispatcherRequest.getParameterNames();
+		}
+		else {
+			result = _request.getParameterNames();
 		}
 
-		return _request.getParameterNames();
+		if (!_strutsBasedPortlet) {
+			return result;
+		}
+
+		List<String> validNames = new ArrayList<String>();
+		while (result.hasMoreElements()) {
+			String parameterName = result.nextElement();
+
+			if (!_CVE_2014_0114.matcher(parameterName).matches()) {
+				validNames.add(parameterName);
+			}
+		}
+
+		return Collections.enumeration(validNames);
 	}
 
 	@Override
@@ -948,6 +986,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 
 	private static Log _log = LogFactoryUtil.getLog(PortletRequestImpl.class);
 
+	private static Pattern _CVE_2014_0114 = Pattern.compile(
+		"(.*\\.|^|.*|\\[('|\"))(c|C)lass(\\.|('|\")]|\\[).*");
+
 	private boolean _invalidSession;
 	private Locale _locale;
 	private HttpServletRequest _originalRequest;
@@ -965,6 +1006,7 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 	private long _remoteUserId;
 	private HttpServletRequest _request;
 	private PortletSessionImpl _session;
+	private boolean _strutsBasedPortlet;
 	private boolean _triggeredByActionURL;
 	private Principal _userPrincipal;
 	private boolean _wapTheme;
