@@ -17,10 +17,10 @@ package com.liferay.portlet.blogs.action;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.SettingsConfigurationAction;
+import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.settings.Settings;
 import com.liferay.portlet.blogs.BlogsSettings;
 
 import javax.portlet.ActionRequest;

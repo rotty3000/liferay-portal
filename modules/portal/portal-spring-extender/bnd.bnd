@@ -1,4 +1,4 @@
-Bundle-Version: 1.0.0
+Bundle-Version: ${plugin.full.version}
 Fragment-Host: org.eclipse.gemini.blueprint.extender
 Import-Package:\
 	com.liferay.portal.bean,\

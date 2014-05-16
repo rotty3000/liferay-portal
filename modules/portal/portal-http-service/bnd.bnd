@@ -1,5 +1,6 @@
 Bundle-Activator: com.liferay.portal.http.service.internal.HttpServiceActivator
 Bundle-Name: Http Service
+Bundle-Version: ${plugin.full.version}
 Export-Package:\
 	com.liferay.portal.http.service.servlet,\
 	com.liferay.portal.http.service.ws.*

@@ -14,14 +14,14 @@
 
 package com.liferay.portlet.shopping;
 
+import com.liferay.portal.kernel.settings.BaseServiceSettings;
+import com.liferay.portal.kernel.settings.FallbackKeys;
+import com.liferay.portal.kernel.settings.LocalizedValuesMap;
+import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.settings.BaseServiceSettings;
-import com.liferay.portal.settings.FallbackKeys;
-import com.liferay.portal.settings.LocalizedValuesMap;
-import com.liferay.portal.settings.Settings;
 
 import java.util.Currency;
 import java.util.Locale;

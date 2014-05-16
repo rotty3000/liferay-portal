@@ -1,0 +1,84 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.portal.kernel.settings;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+/**
+ * @author Iván Zaera
+ */
+public class MemorySettings extends BaseSettings {
+
+	@Override
+	public Settings getDefaultSettings() {
+		return null;
+	}
+
+	@Override
+	public Collection<String> getKeys() {
+		return new HashSet<String>(_map.keySet());
+	}
+
+	@Override
+	public String getValue(String key, String defaultValue) {
+		String[] values = _map.get(key);
+
+		if (values == null) {
+			return defaultValue;
+		}
+
+		return values[0];
+	}
+
+	@Override
+	public String[] getValues(String key, String[] defaultValue) {
+		String[] values = _map.get(key);
+
+		if (values == null) {
+			return defaultValue;
+		}
+
+		return values;
+	}
+
+	@Override
+	public void reset(String key) {
+		_map.remove(key);
+	}
+
+	@Override
+	public Settings setValue(String key, String value) {
+		_map.put(key, new String[] { value });
+
+		return this;
+	}
+
+	@Override
+	public Settings setValues(String key, String[] values) {
+		_map.put(key, values);
+
+		return this;
+	}
+
+	@Override
+	public void store() {
+	}
+
+	private Map<String, String[]> _map = new HashMap<String, String[]>();
+
+}

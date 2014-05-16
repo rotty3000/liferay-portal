@@ -1,5 +1,6 @@
 Bundle-Activator: com.liferay.portal.servlet.jsp.compiler.compiler.internal.JspResolverFactory
 Bundle-ClassPath: ., lib/${original.lib.name}.jar
+Bundle-Version: ${plugin.full.version}
 Class-Path: . lib/${original.lib.name}.jar
 Export-Package:\
 	com.liferay.portal.servlet.jsp.compiler.compiler,\

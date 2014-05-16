@@ -145,8 +145,13 @@
 					'liferay-autocomplete-input': {
 						path: 'autocomplete_input.js',
 						requires: [
+							'liferay-autocomplete-input-base'
+						]
+					},
+					'liferay-autocomplete-input-base': {
+						path: 'autocomplete_input_base.js',
+						requires: [
 							'aui-base',
-							'autocomplete',
 							'autocomplete',
 							'autocomplete-filters',
 							'autocomplete-highlighters'
@@ -542,8 +547,8 @@
 						path: 'menu_toggle.js',
 						requires: [
 							'aui-node',
-							'event-move',
 							'event-outside',
+							'event-tap',
 							'liferay-menu-filter',
 							'liferay-store'
 						]
@@ -590,6 +595,7 @@
 					'liferay-navigation-interaction-touch': {
 						path: 'navigation_interaction_touch.js',
 						requires: [
+							'event-tap',
 							'event-touch',
 							'liferay-navigation-interaction'
 						]

@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.TreeModelFinder;
@@ -514,6 +515,43 @@ public class OrganizationLocalServiceImpl
 		throws SystemException {
 
 		return organizationPersistence.fetchByC_N(companyId, name);
+	}
+
+	@Override
+	public List<Organization> getGroupUserOrganizations(
+			long groupId, long userId)
+		throws PortalException, SystemException {
+
+		List<Long> groupOrganizationIds =
+			groupPersistence.getOrganizationPrimaryKeys(groupId);
+
+		if (groupOrganizationIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<Long> userOrganizationIds =
+			userPersistence.getOrganizationPrimaryKeys(userId);
+
+		if (userOrganizationIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		Set<Long> organizationIds = SetUtil.intersect(
+			groupOrganizationIds, userOrganizationIds);
+
+		if (organizationIds.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<Organization> organizations = new ArrayList<Organization>(
+			organizationIds.size());
+
+		for (Long organizationId : organizationIds) {
+			organizations.add(
+				organizationPersistence.findByPrimaryKey(organizationId));
+		}
+
+		return organizations;
 	}
 
 	@Override

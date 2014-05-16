@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.journal.util;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.diff.DiffHtmlUtil;
@@ -1258,6 +1259,59 @@ public class JournalUtil {
 		return curContent;
 	}
 
+	public static String prepareLocalizedContentForImport(
+			String content, Locale defaultImportLocale)
+		throws LocaleException {
+
+		try {
+			Document oldDocument = SAXReaderUtil.read(content);
+
+			Document newDocument = SAXReaderUtil.read(content);
+
+			Element newRootElement = newDocument.getRootElement();
+
+			Attribute availableLocalesAttribute = newRootElement.attribute(
+				"available-locales");
+
+			String defaultImportLanguageId = LocaleUtil.toLanguageId(
+				defaultImportLocale);
+
+			if (!StringUtil.contains(
+					availableLocalesAttribute.getValue(),
+					defaultImportLanguageId)) {
+
+				availableLocalesAttribute.setValue(
+					availableLocalesAttribute.getValue() + StringPool.COMMA +
+						defaultImportLanguageId);
+
+				_mergeArticleContentUpdate(
+					oldDocument, newRootElement,
+					LocaleUtil.toLanguageId(defaultImportLocale));
+
+				content = DDMXMLUtil.formatXML(newDocument);
+			}
+
+			Attribute defaultLocaleAttribute = newRootElement.attribute(
+				"default-locale");
+
+			Locale defaultContentLocale = LocaleUtil.fromLanguageId(
+				defaultLocaleAttribute.getValue());
+
+			if (!LocaleUtil.equals(defaultContentLocale, defaultImportLocale)) {
+				defaultLocaleAttribute.setValue(defaultImportLanguageId);
+
+				content = DDMXMLUtil.formatXML(newDocument);
+			}
+		}
+		catch (Exception e) {
+			throw new LocaleException(
+				LocaleException.TYPE_CONTENT,
+				"The locale " + defaultImportLocale + " is not available");
+		}
+
+		return content;
+	}
+
 	public static String removeArticleLocale(
 		Document document, String content, String languageId) {
 
@@ -1461,6 +1515,10 @@ public class JournalUtil {
 
 	private static Element _getElementByInstanceId(
 		Document document, String instanceId) {
+
+		if (Validator.isNull(instanceId)) {
+			return null;
+		}
 
 		XPath xPathSelector = SAXReaderUtil.createXPath(
 			"//dynamic-element[@instance-id=" +

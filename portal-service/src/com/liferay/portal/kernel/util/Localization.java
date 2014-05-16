@@ -15,8 +15,8 @@
 package com.liferay.portal.kernel.util;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.settings.Settings;
 import com.liferay.portal.kernel.xml.Document;
-import com.liferay.portal.settings.Settings;
 
 import java.util.Locale;
 import java.util.Map;

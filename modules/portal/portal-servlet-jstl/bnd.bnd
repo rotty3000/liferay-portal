@@ -1,4 +1,5 @@
 Bundle-ClassPath: ., lib/${original.lib.name}.jar
+Bundle-Version: ${plugin.full.version}
 Class-Path: . lib/${original.lib.name}.jar
 Export-Package:\
 	org.apache.taglibs.standard;vendor=glassfish;version="1.2.0",\

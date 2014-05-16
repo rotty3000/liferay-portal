@@ -316,7 +316,6 @@
 				<classpath mode="compile">lib/development/spring-test.jar</classpath>
 				<classpath mode="compile">lib/development/tomcat-coyote.jar</classpath>
 				<classpath mode="compile">lib/development/xmltask.jar</classpath>
-				<classpath mode="compile">lib/global/portal-settings-shared.jar</classpath>
 				<classpath mode="compile">lib/global/portlet.jar</classpath>
 				<classpath mode="compile">lib/portal/abdera.jar</classpath>
 				<classpath mode="compile">lib/portal/alloy-taglib.jar</classpath>
@@ -355,6 +354,8 @@
 				<classpath mode="compile">lib/portal/commons-beanutils.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-codec.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-collections.jar</classpath>
+				<classpath mode="compile">lib/portal/commons-compiler.jar</classpath>
+				<classpath mode="compile">lib/portal/commons-compiler-jdk.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-compress.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-configuration.jar</classpath>
 				<classpath mode="compile">lib/portal/commons-dbcp.jar</classpath>
@@ -408,8 +409,9 @@
 				<classpath mode="compile">lib/portal/jai_core.jar</classpath>
 				<classpath mode="compile">lib/portal/jakarta-regexp.jar</classpath>
 				<classpath mode="compile">lib/portal/jamwiki-core.jar</classpath>
-				<classpath mode="compile">lib/portal/javassist.jar</classpath>
+				<classpath mode="compile">lib/portal/janino.jar</classpath>
 				<classpath mode="compile">lib/portal/java-diff.jar</classpath>
+				<classpath mode="compile">lib/portal/javassist.jar</classpath>
 				<classpath mode="compile">lib/portal/jaxb-impl.jar</classpath>
 				<classpath mode="compile">lib/portal/jaxen.jar</classpath>
 				<classpath mode="compile">lib/portal/jaxrpc.jar</classpath>
@@ -476,7 +478,6 @@
 				<classpath mode="compile">lib/portal/poi.jar</classpath>
 				<classpath mode="compile">lib/portal/portal-ant-shared.jar</classpath>
 				<classpath mode="compile">lib/portal/portal-client.jar</classpath>
-				<classpath mode="compile">lib/portal/portal-settings-impl-shared.jar</classpath>
 				<classpath mode="compile">lib/portal/portals-bridges.jar</classpath>
 				<classpath mode="compile">lib/portal/portletbridge-core.jar</classpath>
 				<classpath mode="compile">lib/portal/portletbridge-portlet.jar</classpath>

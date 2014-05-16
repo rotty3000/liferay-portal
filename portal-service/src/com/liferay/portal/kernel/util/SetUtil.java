@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -221,6 +222,42 @@ public class SetUtil {
 
 	public static Set<String> fromString(String s) {
 		return fromArray(StringUtil.splitLines(s));
+	}
+
+	public static <T> Set<T> intersect(
+		Collection<T> collection1, Collection<T> collection2) {
+
+		if (collection1.isEmpty() || collection2.isEmpty()) {
+			return Collections.emptySet();
+		}
+
+		Set<T> set1 = null;
+
+		if (collection1 instanceof Set) {
+			set1 = (Set<T>)collection1;
+		}
+		else {
+			set1 = new HashSet<T>(collection1);
+		}
+
+		Set<T> set2 = null;
+
+		if (collection2 instanceof Set) {
+			set2 = (Set<T>)collection2;
+		}
+		else {
+			set2 = new HashSet<T>(collection2);
+		}
+
+		if (set1.size() > set2.size()) {
+			set2.retainAll(set1);
+
+			return set2;
+		}
+
+		set1.retainAll(set2);
+
+		return set1;
 	}
 
 }

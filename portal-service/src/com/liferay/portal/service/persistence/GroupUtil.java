@@ -2557,6 +2557,18 @@ public class GroupUtil {
 	}
 
 	/**
+	* Returns the primaryKeys of organizations associated with the group.
+	*
+	* @param pk the primary key of the group
+	* @return List<Long> of the primaryKeys of organizations associated with the group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<java.lang.Long> getOrganizationPrimaryKeys(
+		long pk) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getOrganizationPrimaryKeys(pk);
+	}
+
+	/**
 	* Returns all the organizations associated with the group.
 	*
 	* @param pk the primary key of the group
@@ -2783,6 +2795,18 @@ public class GroupUtil {
 	}
 
 	/**
+	* Returns the primaryKeys of roles associated with the group.
+	*
+	* @param pk the primary key of the group
+	* @return List<Long> of the primaryKeys of roles associated with the group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<java.lang.Long> getRolePrimaryKeys(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getRolePrimaryKeys(pk);
+	}
+
+	/**
 	* Returns all the roles associated with the group.
 	*
 	* @param pk the primary key of the group
@@ -3003,6 +3027,18 @@ public class GroupUtil {
 		java.util.List<com.liferay.portal.model.Role> roles)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().setRoles(pk, roles);
+	}
+
+	/**
+	* Returns the primaryKeys of user groups associated with the group.
+	*
+	* @param pk the primary key of the group
+	* @return List<Long> of the primaryKeys of user groups associated with the group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<java.lang.Long> getUserGroupPrimaryKeys(
+		long pk) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getUserGroupPrimaryKeys(pk);
 	}
 
 	/**
@@ -3228,6 +3264,18 @@ public class GroupUtil {
 		java.util.List<com.liferay.portal.model.UserGroup> userGroups)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().setUserGroups(pk, userGroups);
+	}
+
+	/**
+	* Returns the primaryKeys of users associated with the group.
+	*
+	* @param pk the primary key of the group
+	* @return List<Long> of the primaryKeys of users associated with the group
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<java.lang.Long> getUserPrimaryKeys(long pk)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().getUserPrimaryKeys(pk);
 	}
 
 	/**

@@ -9,6 +9,7 @@
 	<property name="original.lib.url" value="http://search.maven.org/remotecontent?filepath=org/eclipse/jetty/orbit" />
 	<property name="original.lib.version" value="2.1.0.v201110031002" />
 	<property name="osgi.runtime.dependencies" value="javax.*.jar,jetty-*.jar,phidias.jar" />
+	<property name="plugin.full.version" value="7.0.0.1" />
 	<property name="plugin.name" value="com.liferay.portal.servlet.jsp.compiler" />
 	<property name="schemas.dir" value="src/javax/servlet/jsp/resources" />
 	<property name="schemas.url" value="http://svn.apache.org/repos/asf/tomcat/tc7.0.x/trunk/java/javax/servlet/jsp/resources" />

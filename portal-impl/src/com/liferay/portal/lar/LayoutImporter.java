@@ -287,6 +287,14 @@ public class LayoutImporter {
 
 		portletDataContext.setPrivateLayout(privateLayout);
 
+		// Source and target group id
+
+		Map<Long, Long> groupIds =
+			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+				Group.class);
+
+		groupIds.put(portletDataContext.getSourceGroupId(), groupId);
+
 		// Manifest
 
 		ManifestSummary manifestSummary =
@@ -535,9 +543,13 @@ public class LayoutImporter {
 				long layoutId = GetterUtil.getLong(
 					portletElement.attributeValue("layout-id"));
 
+				long plid = LayoutConstants.DEFAULT_PLID;
+
 				Layout layout = layouts.get(layoutId);
 
-				long plid = layout.getPlid();
+				if (layout != null) {
+					plid = layout.getPlid();
+				}
 
 				portletDataContext.setPlid(plid);
 

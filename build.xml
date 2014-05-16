@@ -107,7 +107,7 @@
 
 					<echo
 						append="true"
-						file="${project.dir}/tools/sdk/build.${user.name}.properties"
+						file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties"
 					>
 						app.@{app.server.dir.property}.dir=${temp.app.server.dir}
 					</echo>
@@ -118,7 +118,7 @@
 
 			<echo
 				append="true"
-				file="${project.dir}/tools/sdk/build.${user.name}.properties"
+				file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties"
 			>
 				app.server.type=${app.server.type}
 				auto.deploy.dir=${liferay.home}/osgi/apps
@@ -126,6 +126,9 @@
 				clean.delete.lib=true
 				liferay.home=${liferay.home}
 			</echo>
+
+			<copy file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties" tofile="${project.dir}/tools/sdk/build.${env.HOST}.properties" />
+			<copy file="${project.dir}/tools/sdk/build.${env.COMPUTERNAME}.properties" tofile="${project.dir}/tools/sdk/build.${env.HOSTNAME}.properties" />
 
 			<if>
 				<not>

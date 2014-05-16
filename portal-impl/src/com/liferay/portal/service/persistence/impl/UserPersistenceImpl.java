@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -8048,6 +8049,20 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns the primaryKeys of groups associated with the user.
+	 *
+	 * @param pk the primary key of the user
+	 * @return List<Long> of the primaryKeys of groups associated with the user
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Long> getGroupPrimaryKeys(long pk) throws SystemException {
+		long[] pks = userToGroupTableMapper.getRightPrimaryKeys(pk);
+
+		return ListUtil.toList(pks);
+	}
+
+	/**
 	 * Returns all the groups associated with the user.
 	 *
 	 * @param pk the primary key of the user
@@ -8317,6 +8332,21 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		catch (Exception e) {
 			throw processException(e);
 		}
+	}
+
+	/**
+	 * Returns the primaryKeys of organizations associated with the user.
+	 *
+	 * @param pk the primary key of the user
+	 * @return List<Long> of the primaryKeys of organizations associated with the user
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Long> getOrganizationPrimaryKeys(long pk)
+		throws SystemException {
+		long[] pks = userToOrganizationTableMapper.getRightPrimaryKeys(pk);
+
+		return ListUtil.toList(pks);
 	}
 
 	/**
@@ -8608,6 +8638,20 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns the primaryKeys of roles associated with the user.
+	 *
+	 * @param pk the primary key of the user
+	 * @return List<Long> of the primaryKeys of roles associated with the user
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Long> getRolePrimaryKeys(long pk) throws SystemException {
+		long[] pks = userToRoleTableMapper.getRightPrimaryKeys(pk);
+
+		return ListUtil.toList(pks);
+	}
+
+	/**
 	 * Returns all the roles associated with the user.
 	 *
 	 * @param pk the primary key of the user
@@ -8878,6 +8922,20 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 	}
 
 	/**
+	 * Returns the primaryKeys of teams associated with the user.
+	 *
+	 * @param pk the primary key of the user
+	 * @return List<Long> of the primaryKeys of teams associated with the user
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Long> getTeamPrimaryKeys(long pk) throws SystemException {
+		long[] pks = userToTeamTableMapper.getRightPrimaryKeys(pk);
+
+		return ListUtil.toList(pks);
+	}
+
+	/**
 	 * Returns all the teams associated with the user.
 	 *
 	 * @param pk the primary key of the user
@@ -9145,6 +9203,21 @@ public class UserPersistenceImpl extends BasePersistenceImpl<User>
 		catch (Exception e) {
 			throw processException(e);
 		}
+	}
+
+	/**
+	 * Returns the primaryKeys of user groups associated with the user.
+	 *
+	 * @param pk the primary key of the user
+	 * @return List<Long> of the primaryKeys of user groups associated with the user
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public List<Long> getUserGroupPrimaryKeys(long pk)
+		throws SystemException {
+		long[] pks = userToUserGroupTableMapper.getRightPrimaryKeys(pk);
+
+		return ListUtil.toList(pks);
 	}
 
 	/**

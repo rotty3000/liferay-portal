@@ -5,5 +5,6 @@
 	<import file="../../../tools/sdk/build-common-osgi-plugin.xml" />
 
 	<property name="auto.deploy.dir" value="${app.server.lib.global.dir}" />
+	<property name="plugin.full.version" value="7.0.0.1" />
 	<property name="plugin.name" value="com.liferay.registry.api" />
 </project>

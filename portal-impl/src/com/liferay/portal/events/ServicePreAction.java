@@ -1320,6 +1320,32 @@ public class ServicePreAction extends Action {
 			}
 		}
 		else if (group.isControlPanel() && Validator.isNull(ppid)) {
+			if (Validator.isNull(controlPanelCategory)) {
+				Map<String, List<Portlet>> categoriesMap =
+					PortalUtil.getControlPanelCategoriesMap(request);
+
+				if (categoriesMap.size() == 1) {
+					for (String curCategory : categoriesMap.keySet()) {
+						List<Portlet> categoryPortlets = categoriesMap.get(
+							curCategory);
+
+						if (categoryPortlets.size() == 1) {
+							Portlet firstPortlet = categoryPortlets.get(0);
+
+							PortletURL redirectURL =
+								PortalUtil.getSiteAdministrationURL(
+									request, themeDisplay,
+									firstPortlet.getPortletId());
+
+							response.sendRedirect(redirectURL.toString());
+						}
+					}
+				}
+
+				request.setAttribute(
+					WebKeys.CONTROL_PANEL_CATEGORIES_MAP, categoriesMap);
+			}
+
 			if (controlPanelCategory.startsWith(
 					PortletCategoryKeys.CURRENT_SITE)) {
 
