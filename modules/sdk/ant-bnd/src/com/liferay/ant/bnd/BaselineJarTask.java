@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.util.ant.bnd;
+package com.liferay.ant.bnd;
 
 import aQute.bnd.build.ProjectBuilder;
 import aQute.bnd.differ.Baseline;
@@ -25,10 +25,6 @@ import aQute.bnd.osgi.Resource;
 import aQute.bnd.service.diff.Delta;
 import aQute.bnd.service.diff.Diff;
 import aQute.bnd.version.Version;
-
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
 import java.io.IOException;
@@ -217,10 +213,14 @@ public class BaselineJarTask extends BaseBndTask {
 
 		_reportLevel = project.getProperty("baseline.jar.report.level");
 
-		_reportLevelIsDiff = Validator.equals(_reportLevel, "diff");
-		_reportLevelIsOff = Validator.equals(_reportLevel, "off");
-		_reportLevelIsPersist = Validator.equals(_reportLevel, "persist");
-		_reportLevelIsStandard = Validator.equals(_reportLevel, "standard");
+		if (_reportLevel == null) {
+			_reportLevel = "";
+		}
+
+		_reportLevelIsDiff = _reportLevel.equals("diff");
+		_reportLevelIsOff = _reportLevel.equals("off");
+		_reportLevelIsPersist = _reportLevel.equals("persist");
+		_reportLevelIsStandard = _reportLevel.equals("standard");
 
 		if (_reportLevelIsPersist) {
 			_reportLevelIsDiff = true;
@@ -241,9 +241,8 @@ public class BaselineJarTask extends BaseBndTask {
 			}
 		}
 
-		_reportOnlyDirtyPackages = GetterUtil.getBoolean(
-			project.getProperty("baseline.jar.report.only.dirty.packages"),
-			false);
+		_reportOnlyDirtyPackages = Boolean.parseBoolean(
+			project.getProperty("baseline.jar.report.only.dirty.packages"));
 
 		if ((_sourcePath == null) || !_sourcePath.exists() ||
 			!_sourcePath.isDirectory()) {
@@ -264,10 +263,11 @@ public class BaselineJarTask extends BaseBndTask {
 	}
 
 	protected void doDiff(Diff diff, StringBuffer sb) {
+		String type = String.valueOf(diff.getType());
+
 		String output = String.format(
 			"%s%-3s %-10s %s", sb, getShortDelta(diff.getDelta()),
-			StringUtil.toLowerCase(String.valueOf(diff.getType())),
-			diff.getName());
+			type.toLowerCase(), diff.getName());
 
 		project.log(output, Project.MSG_WARN);
 

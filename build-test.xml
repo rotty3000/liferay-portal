@@ -37,26 +37,6 @@
 	<propertycopy from="testray.build.${testray.build.type}.name" name="testray.build.name" />
 	<propertycopy from="testray.product.${testray.product.type}.version" name="testray.product.version" />
 
-	<trycatch>
-		<try>
-			<taskdef
-				classname="com.liferay.util.ant.FormatTask"
-				classpathref="project.classpath"
-				name="liferay-format"
-			/>
-		</try>
-		<catch>
-			<ant antfile="portal-service/build.xml" target="compile" inheritAll="false" />
-			<ant antfile="util-java/build.xml" target="compile" inheritAll="false" />
-
-			<taskdef
-				classname="com.liferay.util.ant.FormatTask"
-				classpathref="project.classpath"
-				name="liferay-format"
-			/>
-		</catch>
-	</trycatch>
-
 	<macrodef name="prepare-fix-pack-bundle" >
 		<sequential>
 			<if>
@@ -1739,19 +1719,9 @@ tck.url=true</echo>
 	</target>
 
 	<target name="prepare-portal-properties">
-		<liferay-format
-			arguments="portal-impl/src/portal.properties"
-			message="${scm.revert.command}"
-			property="scm.revert.command.formatted"
-		/>
-
-		<exec executable="/bin/sh" os="${os.unix}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
-
-		<exec executable="cmd.exe" os="${os.windows}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
+		<execute>
+			<![CDATA[git checkout -- portal-impl/src/portal.properties]]>
+		</execute>
 
 		<replace file="portal-impl/src/portal.properties">
 			<replacefilter
@@ -2453,43 +2423,22 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 	</target>
 
 	<target name="print-scm-revision">
-		<if>
-			<equals arg1="${scm.tool}" arg2="git" />
-			<then>
-				<echo>Portal GIT ID:</echo>
-				<echo />
+		<echo>Portal GIT ID:</echo>
+		<echo />
 
-				<exec dir="${project.dir}" executable="git">
-					<arg line="log -n 1" />
-				</exec>
+		<exec dir="${project.dir}" executable="git">
+			<arg line="log -n 1" />
+		</exec>
 
-				<echo />
-				<echo>Plugins GIT ID:</echo>
-				<echo />
+		<echo />
+		<echo>Plugins GIT ID:</echo>
+		<echo />
 
-				<exec dir="${lp.plugins.dir}" executable="git">
-					<arg line="log -n 1" />
-				</exec>
+		<exec dir="${lp.plugins.dir}" executable="git">
+			<arg line="log -n 1" />
+		</exec>
 
-				<echo />
-			</then>
-			<else>
-				<echo>Portal SVN Revision:</echo>
-				<echo />
-
-				<exec dir="${project.dir}" executable="svn">
-					<arg line="info" />
-				</exec>
-
-				<echo />
-				<echo>Plugins SVN Revision:</echo>
-				<echo />
-
-				<exec dir="${lp.plugins.dir}" executable="svn">
-					<arg line="info" />
-				</exec>
-			</else>
-		</if>
+		<echo />
 	</target>
 
 	<target name="rebuild-database" depends="generate-test-properties,build-sql-file">
@@ -2705,49 +2654,19 @@ custom.sql.function.isnotnull=CONVERT(VARCHAR,?) IS NOT NULL</echo>
 	</target>
 
 	<target name="revert-test-properties">
-		<liferay-format
-			arguments="portal-impl/test/portal-test.properties"
-			message="${scm.revert.command}"
-			property="scm.revert.command.formatted"
-		/>
-
-		<exec executable="/bin/sh" os="${os.unix}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
-
-		<exec executable="cmd.exe" os="${os.windows}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
+		<execute>
+			<![CDATA[git checkout -- portal-impl/test/portal-test.properties]]>
+		</execute>
 
 		<delete file="portal-impl/test/portal-test-ext.properties" failonerror="false" />
 
-		<liferay-format
-			arguments="portal-impl/test/test-portal-impl.properties"
-			message="${scm.revert.command}"
-			property="scm.revert.command.formatted"
-		/>
+		<execute>
+			<![CDATA[git checkout -- portal-impl/test/test-portal-impl.properties]]>
+		</execute>
 
-		<exec executable="/bin/sh" os="${os.unix}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
-
-		<exec executable="cmd.exe" os="${os.windows}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
-
-		<liferay-format
-			arguments="portal-web/test/test-portal-web.properties"
-			message="${scm.revert.command}"
-			property="scm.revert.command.formatted"
-		/>
-
-		<exec executable="/bin/sh" os="${os.unix}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
-
-		<exec executable="cmd.exe" os="${os.windows}">
-			<arg line="${scm.revert.command.formatted}" />
-		</exec>
+		<execute>
+			<![CDATA[git checkout -- portal-web/test/test-portal-web.properties]]>
+		</execute>
 	</target>
 
 	<target name="run-selenium-smoke-test">
