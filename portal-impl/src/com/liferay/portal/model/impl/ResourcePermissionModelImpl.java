@@ -24,6 +24,7 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.ResourcePermissionModel;
 import com.liferay.portal.model.ResourcePermissionSoap;
+import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;

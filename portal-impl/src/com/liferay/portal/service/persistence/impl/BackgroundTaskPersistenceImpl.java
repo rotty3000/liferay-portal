@@ -41,6 +41,7 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.BackgroundTaskImpl;
 import com.liferay.portal.model.impl.BackgroundTaskModelImpl;
 import com.liferay.portal.service.persistence.BackgroundTaskPersistence;
+import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
 

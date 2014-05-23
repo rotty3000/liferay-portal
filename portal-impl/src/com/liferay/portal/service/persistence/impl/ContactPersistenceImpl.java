@@ -39,6 +39,7 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.ContactImpl;
 import com.liferay.portal.model.impl.ContactModelImpl;
 import com.liferay.portal.service.persistence.ContactPersistence;
+import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
 

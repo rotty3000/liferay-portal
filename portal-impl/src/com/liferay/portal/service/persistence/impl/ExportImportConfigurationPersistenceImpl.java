@@ -40,6 +40,7 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.impl.ExportImportConfigurationImpl;
 import com.liferay.portal.model.impl.ExportImportConfigurationModelImpl;
 import com.liferay.portal.service.persistence.ExportImportConfigurationPersistence;
+import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
 

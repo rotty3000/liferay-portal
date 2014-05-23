@@ -15,32 +15,23 @@
 package com.liferay.portal.kernel.exception;
 
 /**
- * The base class for all exceptions caused by system problems. Examples include
- * database connection errors and file not found errors.
- *
- * <p>
- * System exceptions are always unexpected, and generally indicate that the
- * portal is misconfigured or that a critical service is unavailable.
- * </p>
- *
  * @author Brian Wing Shun Chan
- * @see    PortalException
  */
-public class SystemException extends NestableRuntimeException {
+public class NestableRuntimeException extends RuntimeException {
 
-	public SystemException() {
+	public NestableRuntimeException() {
 		super();
 	}
 
-	public SystemException(String msg) {
+	public NestableRuntimeException(String msg) {
 		super(msg);
 	}
 
-	public SystemException(String msg, Throwable cause) {
+	public NestableRuntimeException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public SystemException(Throwable cause) {
+	public NestableRuntimeException(Throwable cause) {
 		super(cause);
 	}
 

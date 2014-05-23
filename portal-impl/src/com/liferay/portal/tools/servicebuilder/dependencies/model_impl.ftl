@@ -30,7 +30,6 @@ import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.StagedModelType;
@@ -632,7 +631,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 
 		<#if column.userUuid>
 			@Override
-			public String get${column.methodUserUuidName}() throws SystemException {
+			public String get${column.methodUserUuidName}() {
 				try {
 					User user = UserLocalServiceUtil.getUserById(get${column.methodName}());
 
@@ -782,7 +781,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		</#if>
 
 		@Override
-		public TrashEntry getTrashEntry() throws PortalException, SystemException {
+		public TrashEntry getTrashEntry() throws PortalException {
 			if (!isInTrash()) {
 				return null;
 			}
@@ -871,7 +870,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		}
 
 		@Override
-		public boolean isInTrashExplicitly() throws SystemException {
+		public boolean isInTrashExplicitly() {
 			if (!isInTrash()) {
 				return false;
 			}
@@ -886,7 +885,7 @@ public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> imple
 		}
 
 		@Override
-		public boolean isInTrashImplicitly() throws SystemException {
+		public boolean isInTrashImplicitly() {
 			if (!isInTrash()) {
 				return false;
 			}

@@ -35,6 +35,7 @@ import com.liferay.portal.model.ExportImportConfigurationModel;
 import com.liferay.portal.model.ExportImportConfigurationSoap;
 import com.liferay.portal.model.TrashedModel;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 

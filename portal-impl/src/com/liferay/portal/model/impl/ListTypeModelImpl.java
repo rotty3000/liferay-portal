@@ -24,6 +24,7 @@ import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.ListTypeModel;
 import com.liferay.portal.model.ListTypeSoap;
+import com.liferay.portal.model.impl.BaseModelImpl;
 
 import java.io.Serializable;
 

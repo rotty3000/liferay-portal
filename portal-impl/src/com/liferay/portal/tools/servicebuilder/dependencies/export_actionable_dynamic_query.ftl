@@ -9,7 +9,6 @@ import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.ExportImportHelperUtil;
 import com.liferay.portal.kernel.lar.ManifestSummary;
 import com.liferay.portal.kernel.lar.PortletDataContext;
@@ -27,7 +26,7 @@ import com.liferay.portal.util.PortalUtil;
 @Deprecated
 public class ${entity.name}ExportActionableDynamicQuery extends ${entity.name}ActionableDynamicQuery {
 
-	public ${entity.name}ExportActionableDynamicQuery(PortletDataContext portletDataContext) throws SystemException {
+	public ${entity.name}ExportActionableDynamicQuery(PortletDataContext portletDataContext) {
 		_portletDataContext = portletDataContext;
 
 		setCompanyId(_portletDataContext.getCompanyId());
@@ -38,7 +37,7 @@ public class ${entity.name}ExportActionableDynamicQuery extends ${entity.name}Ac
 	}
 
 	@Override
-	public long performCount() throws PortalException, SystemException {
+	public long performCount() throws PortalException {
 		ManifestSummary manifestSummary = _portletDataContext.getManifestSummary();
 
 		StagedModelType stagedModelType = getStagedModelType();
@@ -88,7 +87,7 @@ public class ${entity.name}ExportActionableDynamicQuery extends ${entity.name}Ac
 
 	@Override
 	@SuppressWarnings("unused")
-	protected void performAction(Object object) throws PortalException, SystemException {
+	protected void performAction(Object object) throws PortalException {
 		${entity.name} stagedModel = (${entity.name})object;
 
 		StagedModelDataHandlerUtil.exportStagedModel(_portletDataContext, stagedModel);

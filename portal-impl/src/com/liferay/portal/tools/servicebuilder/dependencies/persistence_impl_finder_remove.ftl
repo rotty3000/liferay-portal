@@ -9,7 +9,6 @@
 	<#list finderColsList as finderCol>
 	 * @param ${finderCol.name} the ${finderCol.humanName}
 	</#list>
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public void removeBy${finder.name}(
@@ -18,7 +17,7 @@
 		${finderCol.type} ${finderCol.name}<#if finderCol_has_next>,</#if>
 	</#list>
 
-	) throws SystemException {
+	) {
 		for (${entity.name} ${entity.varName} : findBy${finder.name}(
 
 		<#list finderColsList as finderCol>
@@ -41,7 +40,6 @@
 	 * @param ${finderCol.name} the ${finderCol.humanName}
 	</#list>
 	 * @return the ${entity.humanName} that was removed
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public ${entity.name} removeBy${finder.name}(
@@ -54,7 +52,7 @@
 		</#if>
 	</#list>
 
-	) throws ${noSuchEntity}Exception, SystemException {
+	) throws ${noSuchEntity}Exception {
 		${entity.name} ${entity.varName} = findBy${finder.name}(
 
 		<#list finderColsList as finderCol>

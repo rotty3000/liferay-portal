@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
@@ -408,10 +407,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param ${entity.PKVarName} the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName} that was removed
 	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} remove(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception, SystemException {
+	public ${entity.name} remove(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception {
 		return remove((Serializable)${entity.PKVarName});
 	}
 
@@ -421,10 +419,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param primaryKey the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName} that was removed
 	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} remove(Serializable primaryKey) throws ${noSuchEntity}Exception, SystemException {
+	public ${entity.name} remove(Serializable primaryKey) throws ${noSuchEntity}Exception {
 		Session session = null;
 
 		try {
@@ -454,7 +451,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	}
 
 	@Override
-	protected ${entity.name} removeImpl(${entity.name} ${entity.varName}) throws SystemException {
+	protected ${entity.name} removeImpl(${entity.name} ${entity.varName}) {
 		${entity.varName} = toUnwrappedModel(${entity.varName});
 
 		<#list entity.columnList as column>
@@ -508,7 +505,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	}
 
 	@Override
-	public ${entity.name} updateImpl(${packagePath}.model.${entity.name} ${entity.varName}) throws SystemException {
+	public ${entity.name} updateImpl(${packagePath}.model.${entity.name} ${entity.varName}) {
 		${entity.varName} = toUnwrappedModel(${entity.varName});
 
 		boolean isNew = ${entity.varName}.isNew();
@@ -774,10 +771,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param primaryKey the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName}
 	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} findByPrimaryKey(Serializable primaryKey) throws ${noSuchEntity}Exception, SystemException {
+	public ${entity.name} findByPrimaryKey(Serializable primaryKey) throws ${noSuchEntity}Exception {
 		${entity.name} ${entity.varName} = fetchByPrimaryKey(primaryKey);
 
 		if (${entity.varName} == null) {
@@ -797,10 +793,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param ${entity.PKVarName} the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName}
 	 * @throws ${packagePath}.${noSuchEntity}Exception if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} findByPrimaryKey(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception, SystemException {
+	public ${entity.name} findByPrimaryKey(${entity.PKClassName} ${entity.PKVarName}) throws ${noSuchEntity}Exception {
 		return findByPrimaryKey((Serializable)${entity.PKVarName});
 	}
 
@@ -809,10 +804,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 *
 	 * @param primaryKey the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName}, or <code>null</code> if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} fetchByPrimaryKey(Serializable primaryKey) throws SystemException {
+	public ${entity.name} fetchByPrimaryKey(Serializable primaryKey) {
 		${entity.name} ${entity.varName} = (${entity.name})EntityCacheUtil.getResult(${entity.name}ModelImpl.ENTITY_CACHE_ENABLED, ${entity.name}Impl.class, primaryKey);
 
 		if (${entity.varName} == _null${entity.name}) {
@@ -852,10 +846,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 *
 	 * @param ${entity.PKVarName} the primary key of the ${entity.humanName}
 	 * @return the ${entity.humanName}, or <code>null</code> if a ${entity.humanName} with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public ${entity.name} fetchByPrimaryKey(${entity.PKClassName} ${entity.PKVarName}) throws SystemException {
+	public ${entity.name} fetchByPrimaryKey(${entity.PKClassName} ${entity.PKVarName}) {
 		return fetchByPrimaryKey((Serializable)${entity.PKVarName});
 	}
 
@@ -863,10 +856,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * Returns all the ${entity.humanNames}.
 	 *
 	 * @return the ${entity.humanNames}
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<${entity.name}> findAll() throws SystemException {
+	public List<${entity.name}> findAll() {
 		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
@@ -880,10 +872,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param start the lower bound of the range of ${entity.humanNames}
 	 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
 	 * @return the range of ${entity.humanNames}
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<${entity.name}> findAll(int start, int end) throws SystemException {
+	public List<${entity.name}> findAll(int start, int end) {
 		return findAll(start, end, null);
 	}
 
@@ -898,10 +889,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of ${entity.humanNames}
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<${entity.name}> findAll(int start, int end, OrderByComparator orderByComparator) throws SystemException {
+	public List<${entity.name}> findAll(int start, int end, OrderByComparator orderByComparator) {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -977,10 +967,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	/**
 	 * Removes all the ${entity.humanNames} from the database.
 	 *
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeAll() throws SystemException {
+	public void removeAll() {
 		for (${entity.name} ${entity.varName} : findAll()) {
 			remove(${entity.varName});
 		}
@@ -990,10 +979,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 	 * Returns the number of ${entity.humanNames}.
 	 *
 	 * @return the number of ${entity.humanNames}
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countAll() throws SystemException {
+	public int countAll() {
 		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
@@ -1030,10 +1018,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 *
 			 * @param pk the primary key of the ${entity.humanName}
 			 * @return List<Long> of the primaryKeys of ${tempEntity.humanNames} associated with the ${entity.humanName}
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public List<Long> get${tempEntity.name}PrimaryKeys(${entity.PKClassName} pk) throws SystemException {
+			public List<Long> get${tempEntity.name}PrimaryKeys(${entity.PKClassName} pk) {
 				long[] pks = ${entity.varName}To${tempEntity.name}TableMapper.getRightPrimaryKeys(pk);
 
 				return ListUtil.toList(pks);
@@ -1044,10 +1031,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 *
 			 * @param pk the primary key of the ${entity.humanName}
 			 * @return the ${tempEntity.humanNames} associated with the ${entity.humanName}
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk) throws SystemException {
+			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk) {
 				return get${tempEntity.names}(pk, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			}
 
@@ -1062,10 +1048,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 * @param start the lower bound of the range of ${entity.humanNames}
 			 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
 			 * @return the range of ${tempEntity.humanNames} associated with the ${entity.humanName}
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end) throws SystemException {
+			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end) {
 				return get${tempEntity.names}(pk, start, end, null);
 			}
 
@@ -1081,10 +1066,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 * @param end the upper bound of the range of ${entity.humanNames} (not inclusive)
 			 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 			 * @return the ordered range of ${tempEntity.humanNames} associated with the ${entity.humanName}
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end, OrderByComparator orderByComparator) throws SystemException {
+			public List<${tempEntity.packagePath}.model.${tempEntity.name}> get${tempEntity.names}(${entity.PKClassName} pk, int start, int end, OrderByComparator orderByComparator) {
 				return ${entity.varName}To${tempEntity.name}TableMapper.getRightBaseModels(pk, start, end, orderByComparator);
 			}
 
@@ -1093,10 +1077,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 *
 			 * @param pk the primary key of the ${entity.humanName}
 			 * @return the number of ${tempEntity.humanNames} associated with the ${entity.humanName}
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public int get${tempEntity.names}Size(${entity.PKClassName} pk) throws SystemException {
+			public int get${tempEntity.names}Size(${entity.PKClassName} pk) {
 				long[] pks = ${entity.varName}To${tempEntity.name}TableMapper.getRightPrimaryKeys(pk);
 
 				return pks.length;
@@ -1108,10 +1091,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 * @param pk the primary key of the ${entity.humanName}
 			 * @param ${tempEntity.varName}PK the primary key of the ${tempEntity.humanName}
 			 * @return <code>true</code> if the ${tempEntity.humanName} is associated with the ${entity.humanName}; <code>false</code> otherwise
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public boolean contains${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) throws SystemException {
+			public boolean contains${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) {
 				return ${entity.varName}To${tempEntity.name}TableMapper.containsTableMapping(pk, ${tempEntity.varName}PK);
 			}
 
@@ -1120,10 +1102,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			 *
 			 * @param pk the primary key of the ${entity.humanName} to check for associations with ${tempEntity.humanNames}
 			 * @return <code>true</code> if the ${entity.humanName} has any ${tempEntity.humanNames} associated with it; <code>false</code> otherwise
-			 * @throws SystemException if a system exception occurred
 			 */
 			@Override
-			public boolean contains${tempEntity.names}(${entity.PKClassName} pk) throws SystemException {
+			public boolean contains${tempEntity.names}(${entity.PKClassName} pk) {
 				if (get${tempEntity.names}Size(pk)> 0) {
 					return true;
 				}
@@ -1140,10 +1121,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName}PK the primary key of the ${tempEntity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void add${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) throws SystemException {
+				public void add${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) {
 					${entity.varName}To${tempEntity.name}TableMapper.addTableMapping(pk, ${tempEntity.varName}PK);
 				}
 
@@ -1152,10 +1132,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName} the ${tempEntity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void add${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName}) throws SystemException {
+				public void add${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName}) {
 					${entity.varName}To${tempEntity.name}TableMapper.addTableMapping(pk, ${tempEntity.varName}.getPrimaryKey());
 				}
 
@@ -1164,10 +1143,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName}PKs the primary keys of the ${tempEntity.humanNames}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void add${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) throws SystemException {
+				public void add${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) {
 					for (${tempEntity.PKClassName} ${tempEntity.varName}PK : ${tempEntity.varName}PKs) {
 						${entity.varName}To${tempEntity.name}TableMapper.addTableMapping(pk, ${tempEntity.varName}PK);
 					}
@@ -1178,10 +1156,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varNames} the ${tempEntity.humanNames}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void add${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) throws SystemException {
+				public void add${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) {
 					for (${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName} : ${tempEntity.varNames}) {
 						${entity.varName}To${tempEntity.name}TableMapper.addTableMapping(pk, ${tempEntity.varName}.getPrimaryKey());
 					}
@@ -1191,10 +1168,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 * Clears all associations between the ${entity.humanName} and its ${tempEntity.humanNames}. Also notifies the appropriate model listeners and clears the mapping table finder cache.
 				 *
 				 * @param pk the primary key of the ${entity.humanName} to clear the associated ${tempEntity.humanNames} from
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void clear${tempEntity.names}(${entity.PKClassName} pk) throws SystemException {
+				public void clear${tempEntity.names}(${entity.PKClassName} pk) {
 					${entity.varName}To${tempEntity.name}TableMapper.deleteLeftPrimaryKeyTableMappings(pk);
 				}
 
@@ -1203,10 +1179,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName}PK the primary key of the ${tempEntity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void remove${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) throws SystemException {
+				public void remove${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.PKClassName} ${tempEntity.varName}PK) {
 					${entity.varName}To${tempEntity.name}TableMapper.deleteTableMapping(pk, ${tempEntity.varName}PK);
 				}
 
@@ -1215,10 +1190,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName} the ${tempEntity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void remove${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName}) throws SystemException {
+				public void remove${tempEntity.name}(${entity.PKClassName} pk, ${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName}) {
 					${entity.varName}To${tempEntity.name}TableMapper.deleteTableMapping(pk, ${tempEntity.varName}.getPrimaryKey());
 				}
 
@@ -1227,10 +1201,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName}PKs the primary keys of the ${tempEntity.humanNames}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void remove${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) throws SystemException {
+				public void remove${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) {
 					for (${tempEntity.PKClassName} ${tempEntity.varName}PK : ${tempEntity.varName}PKs) {
 						${entity.varName}To${tempEntity.name}TableMapper.deleteTableMapping(pk, ${tempEntity.varName}PK);
 					}
@@ -1241,10 +1214,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varNames} the ${tempEntity.humanNames}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void remove${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) throws SystemException {
+				public void remove${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) {
 					for (${tempEntity.packagePath}.model.${tempEntity.name} ${tempEntity.varName} : ${tempEntity.varNames}) {
 						${entity.varName}To${tempEntity.name}TableMapper.deleteTableMapping(pk, ${tempEntity.varName}.getPrimaryKey());
 					}
@@ -1255,10 +1227,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varName}PKs the primary keys of the ${tempEntity.humanNames} to be associated with the ${entity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void set${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) throws SystemException {
+				public void set${tempEntity.names}(${entity.PKClassName} pk, ${tempEntity.PKClassName}[] ${tempEntity.varName}PKs) {
 					Set<Long> new${tempEntity.name}PKsSet = SetUtil.fromArray(${tempEntity.varName}PKs);
 					Set<Long> old${tempEntity.name}PKsSet = SetUtil.fromArray(${entity.varName}To${tempEntity.name}TableMapper.getRightPrimaryKeys(pk));
 
@@ -1282,10 +1253,9 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				 *
 				 * @param pk the primary key of the ${entity.humanName}
 				 * @param ${tempEntity.varNames} the ${tempEntity.humanNames} to be associated with the ${entity.humanName}
-				 * @throws SystemException if a system exception occurred
 				 */
 				@Override
-				public void set${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) throws SystemException {
+				public void set${tempEntity.names}(${entity.PKClassName} pk, List<${tempEntity.packagePath}.model.${tempEntity.name}> ${tempEntity.varNames}) {
 					try {
 						${tempEntity.PKClassName}[] ${tempEntity.varName}PKs = new ${tempEntity.PKClassName}[${tempEntity.varNames}.size()];
 
@@ -1314,7 +1284,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 
 	<#if entity.isHierarchicalTree()>
 		@Override
-		public long countAncestors(${entity.name} ${entity.varName}) throws SystemException {
+		public long countAncestors(${entity.name} ${entity.varName}) {
 			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeColumn.methodName}(), ${entity.varName}.getLeft${pkColumn.methodName}(), ${entity.varName}.getRight${pkColumn.methodName}()};
 
 			Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_ANCESTORS, finderArgs, this);
@@ -1336,7 +1306,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		@Override
-		public long countDescendants(${entity.name} ${entity.varName}) throws SystemException {
+		public long countDescendants(${entity.name} ${entity.varName}) {
 			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeColumn.methodName}(), ${entity.varName}.getLeft${pkColumn.methodName}(), ${entity.varName}.getRight${pkColumn.methodName}()};
 
 			Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_DESCENDANTS, finderArgs, this);
@@ -1358,7 +1328,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		@Override
-		public List<${entity.name}> getAncestors(${entity.name} ${entity.varName}) throws SystemException {
+		public List<${entity.name}> getAncestors(${entity.name} ${entity.varName}) {
 			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeColumn.methodName}(), ${entity.varName}.getLeft${pkColumn.methodName}(), ${entity.varName}.getRight${pkColumn.methodName}()};
 
 			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_GET_ANCESTORS, finderArgs, this);
@@ -1392,7 +1362,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		}
 
 		@Override
-		public List<${entity.name}> getDescendants(${entity.name} ${entity.varName}) throws SystemException {
+		public List<${entity.name}> getDescendants(${entity.name} ${entity.varName}) {
 			Object[] finderArgs = new Object[] {${entity.varName}.get${scopeColumn.methodName}(), ${entity.varName}.getLeft${pkColumn.methodName}(), ${entity.varName}.getRight${pkColumn.methodName}()};
 
 			List<${entity.name}> list = (List<${entity.name}>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_GET_DESCENDANTS, finderArgs, this);
@@ -1436,7 +1406,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 		 * @param force whether to force the rebuild even if the tree is not stale
 		 */
 		@Override
-		public void rebuildTree(long ${scopeColumn.name}, boolean force) throws SystemException {
+		public void rebuildTree(long ${scopeColumn.name}, boolean force) {
 			if (!rebuildTreeEnabled) {
 				return;
 			}
@@ -1475,7 +1445,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			this.rebuildTreeEnabled = rebuildTreeEnabled;
 		}
 
-		protected long countOrphanTreeNodes(long ${scopeColumn.name}) throws SystemException {
+		protected long countOrphanTreeNodes(long ${scopeColumn.name}) {
 			Session session = null;
 
 			try {
@@ -1499,7 +1469,7 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			}
 		}
 
-		protected long rebuildTree(Session session, SQLQuery selectQuery, SQLQuery updateQuery, long ${scopeColumn.name}, long parent${pkColumn.methodName}, long left${pkColumn.methodName}) throws SystemException {
+		protected long rebuildTree(Session session, SQLQuery selectQuery, SQLQuery updateQuery, long ${scopeColumn.name}, long parent${pkColumn.methodName}, long left${pkColumn.methodName}) {
 			long right${pkColumn.methodName} = left${pkColumn.methodName} + 1;
 
 			QueryPos qPos = QueryPos.getInstance(selectQuery);
