@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.blogs.service.impl;
 
+import com.liferay.portal.comment.CommentManagerImpl;
+import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -198,14 +200,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			serviceContext.getAssetTagNames(),
 			serviceContext.getAssetLinkEntryIds());
 
-		// Message boards
+		// Comments
 
-		if (PropsValues.BLOGS_ENTRY_COMMENTS_ENABLED) {
-			mbMessageLocalService.addDiscussionMessage(
-				userId, entry.getUserName(), groupId,
-				BlogsEntry.class.getName(), entryId,
-				WorkflowConstants.ACTION_PUBLISH);
-		}
+		addInitialDiscussion(entry, userId, groupId);
 
 		// Workflow
 
@@ -352,10 +349,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 
 		expandoRowLocalService.deleteRows(entry.getEntryId());
 
-		// Message boards
+		// Comments
 
-		mbMessageLocalService.deleteDiscussionMessages(
-			BlogsEntry.class.getName(), entry.getEntryId());
+		deleteDiscussion(entry);
 
 		// Ratings
 
@@ -1306,6 +1302,36 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 		}
 
 		return entry;
+	}
+
+	protected void addInitialDiscussion(
+			BlogsEntry entry, long userId, long groupId)
+		throws PortalException, SystemException {
+
+		if (PropsValues.BLOGS_ENTRY_COMMENTS_ENABLED) {
+			CommentManager commentManager = getCommentManager();
+
+			commentManager.addInitialDiscussion(
+				userId, groupId, BlogsEntry.class.getName(), entry.getEntryId(),
+				entry.getUserName());
+		}
+	}
+
+	protected void deleteDiscussion(BlogsEntry entry)
+		throws PortalException, SystemException {
+
+		CommentManager commentManager = getCommentManager();
+
+		commentManager.deleteDiscussion(
+			BlogsEntry.class.getName(), entry.getEntryId());
+	}
+
+	protected CommentManager getCommentManager() {
+		CommentManagerImpl commentManager = new CommentManagerImpl();
+
+		commentManager.setMBMessageLocalService(mbMessageLocalService);
+
+		return commentManager;
 	}
 
 	protected String getEntryURL(
