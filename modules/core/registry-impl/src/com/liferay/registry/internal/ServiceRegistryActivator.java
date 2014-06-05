@@ -30,6 +30,10 @@ public class ServiceRegistryActivator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 		Registry registry = new RegistryImpl(bundleContext);
 
+		String id = bundleContext.getBundle().getBundleId() + "";
+		String loc = bundleContext.getBundle().getLocation();
+		
+		
 		RegistryUtil.setRegistry(registry);
 
 		_serviceRegistration = bundleContext.registerService(

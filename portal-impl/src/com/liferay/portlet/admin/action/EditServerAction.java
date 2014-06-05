@@ -634,7 +634,7 @@ public class EditServerAction extends PortletAction {
 			captcha = new ReCaptchaImpl();
 		}
 		else {
-			captcha = new SimpleCaptchaImpl();
+			captcha = CaptchaUtil.getCaptcha();
 		}
 
 		validateCaptcha(actionRequest);

@@ -27,6 +27,10 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
@@ -34,7 +38,6 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -49,16 +52,37 @@ import nl.captcha.text.renderer.WordRenderer;
 /**
  * @author Brian Wing Shun Chan
  * @author Daniel Sanz
+ * @author Peter Fellwock
  */
 public class SimpleCaptchaImpl implements Captcha {
 
 	public SimpleCaptchaImpl() {
+		_initRegistry();
 		initBackgroundProducers();
 		initGimpyRenderers();
 		initNoiseProducers();
 		initTextProducers();
 		initWordRenderers();
 	}
+	
+	
+	private ServiceTracker<?, SimpleCaptchaImpl> _serviceTracker;
+
+	private void _initRegistry() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(&(objectClass=" 
+					+ SimpleCaptchaImpl.class.getName() +
+				")(path=*))");
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();	
+		
+		_log.info("SimpleCaptchaImpl._initRegistry() adds class to registry");
+	}
+
 
 	@Override
 	public void check(HttpServletRequest request) throws CaptchaException {

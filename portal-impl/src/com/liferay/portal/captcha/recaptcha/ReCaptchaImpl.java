@@ -28,13 +28,16 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -46,6 +49,23 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ReCaptchaImpl extends SimpleCaptchaImpl {
 
+	
+	private ServiceTracker<?, ReCaptchaImpl> _serviceTracker;
+	
+	private void _initRegistry() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(&(objectClass=" 
+					+ ReCaptchaImpl.class.getName() +
+				")(path=*))");
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();
+		
+	}
+	
 	@Override
 	public String getTaglibPath() {
 		return _TAGLIB_PATH;

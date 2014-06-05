@@ -14,16 +14,16 @@
 
 package com.liferay.portal.kernel.captcha;
 
-import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
-
 import java.io.IOException;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.registry.RegistryUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -42,10 +42,19 @@ public class CaptchaUtil {
 		getCaptcha().check(portletRequest);
 	}
 
-	public static Captcha getCaptcha() {
+	public static Captcha getCaptcha() {	
+		if(_captcha == null){
+			_getRegistryCaptcha();
+		}
+		
 		PortalRuntimePermission.checkGetBeanProperty(CaptchaUtil.class);
 
 		return _captcha;
+	}
+
+	private static void _getRegistryCaptcha() {
+		/** check with registry **/
+		_captcha = (Captcha) RegistryUtil.getRegistry().getService(Captcha.class);
 	}
 
 	public static String getTaglibPath() {
