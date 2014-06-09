@@ -15,13 +15,16 @@
 package com.liferay.portal.kernel.captcha;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,10 +45,56 @@ public class CaptchaUtil {
 		getCaptcha().check(portletRequest);
 	}
 
-	public static Captcha getCaptcha() {
+	public static Captcha getCaptcha() {	
+		if(_captcha == null){
+			_getRegistryCaptcha();
+		}
+		
 		PortalRuntimePermission.checkGetBeanProperty(CaptchaUtil.class);
 
 		return _captcha;
+	}
+	
+
+	
+	private static ServiceTracker<?, Captcha> _serviceTracker;
+	
+	/** loop through registry **/
+	public static Captcha getCaptcha(String classname){		
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(objectClass=" 
+					+ Captcha.class.getName() +
+				")");
+
+		_serviceTracker = registry.trackServices(filter);
+		_serviceTracker.open();	
+		
+		/** figure out services **/
+		Object[] services =  _serviceTracker.getServices();
+		
+		if(services != null){			
+			for(Object service : services){
+				if(classname.equals(service.getClass().getName())){
+					_captcha = (Captcha) service;					
+					return _captcha;
+				}
+			}			
+		}
+		/** cannot use reflection to instantiate new class due to dual classpath loader  **/
+		return null;
+	}
+	
+	/** dont care which, just grab the highest ranking one **/
+	private static void _getRegistryCaptcha() {
+		/** check with registry **/
+		_captcha = (Captcha) RegistryUtil.getRegistry().getService(Captcha.class);
+	}
+	
+	private static void _setRegistryCaptcha() {
+		/** set into with registry **/
+		RegistryUtil.getRegistry().registerService(Captcha.class.getName(), _captcha);
 	}
 
 	public static String getTaglibPath() {
@@ -77,13 +126,34 @@ public class CaptchaUtil {
 
 		getCaptcha().serveImage(resourceRequest, resourceResponse);
 	}
-
-	public void setCaptcha(Captcha captcha) {
-		PortalRuntimePermission.checkSetBeanProperty(getClass());
-
+	
+	public static void injectCaptcha(Captcha captcha) {
+		_setRegistryCaptcha();		
 		_captcha = captcha;
 	}
-
+	
+	
+	/** member registry asign **/
+	
+	private Registry reg;
+	
+	private void add2Registry(Captcha captcha) {
+		/** set into with registry **/
+		if(reg == null){
+			 reg = RegistryUtil.getRegistry();
+		}		
+		reg.registerService(Captcha.class.getName(), captcha);
+	}
+	
+	
+	/** spring injection section **/
+	public void setCaptcha(Captcha captcha) {
+		PortalRuntimePermission.checkSetBeanProperty(getClass());
+		
+		_captcha = captcha;
+		add2Registry(captcha);
+	}
+	
 	private static Captcha _captcha;
 
 }

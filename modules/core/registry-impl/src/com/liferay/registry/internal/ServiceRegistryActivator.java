@@ -29,7 +29,7 @@ public class ServiceRegistryActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 		Registry registry = new RegistryImpl(bundleContext);
-
+		
 		RegistryUtil.setRegistry(registry);
 
 		_serviceRegistration = bundleContext.registerService(

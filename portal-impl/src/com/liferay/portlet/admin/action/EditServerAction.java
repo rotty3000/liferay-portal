@@ -106,7 +106,6 @@ import com.liferay.portlet.documentlibrary.util.DLPreviewableProcessor;
 import com.liferay.util.log4j.Log4JUtil;
 
 import java.io.File;
-
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -131,6 +130,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class EditServerAction extends PortletAction {
 
@@ -631,10 +631,20 @@ public class EditServerAction extends PortletAction {
 		Captcha captcha = null;
 
 		if (reCaptchaEnabled) {
-			captcha = new ReCaptchaImpl();
+			captcha = CaptchaUtil.getCaptcha(ReCaptchaImpl.class.getName());
+			if(captcha == null){				
+				/** not sure how to decouple this, this should not happen **/
+				captcha = new ReCaptchaImpl();
+				CaptchaUtil.injectCaptcha(captcha);
+			}
 		}
 		else {
-			captcha = new SimpleCaptchaImpl();
+			captcha = CaptchaUtil.getCaptcha(SimpleCaptchaImpl.class.getName());
+			if(captcha == null){
+				/** not sure how to decouple this, this should not happen **/
+				captcha = new SimpleCaptchaImpl();
+				CaptchaUtil.injectCaptcha(captcha);
+			}
 		}
 
 		validateCaptcha(actionRequest);
@@ -651,21 +661,16 @@ public class EditServerAction extends PortletAction {
 
 			portletPreferences.store();
 
-			CaptchaImpl captchaImpl = null;
-
+			
 			Captcha currentCaptcha = CaptchaUtil.getCaptcha();
 
 			if (currentCaptcha instanceof DoPrivilegedBean) {
 				DoPrivilegedBean doPrivilegedBean =
 					(DoPrivilegedBean)currentCaptcha;
 
-				captchaImpl = (CaptchaImpl)doPrivilegedBean.getActualBean();
+				CaptchaImpl captchaImpl = (CaptchaImpl)doPrivilegedBean.getActualBean();
+				captchaImpl.setCaptcha(captcha);
 			}
-			else {
-				captchaImpl = (CaptchaImpl)currentCaptcha;
-			}
-
-			captchaImpl.setCaptcha(captcha);
 		}
 	}
 

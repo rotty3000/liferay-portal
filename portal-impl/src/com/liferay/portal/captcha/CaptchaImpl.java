@@ -25,18 +25,23 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Peter Fellwock
  */
 @DoPrivileged
 public class CaptchaImpl implements Captcha {
@@ -57,7 +62,9 @@ public class CaptchaImpl implements Captcha {
 
 	@Override
 	public String getTaglibPath() {
-		_initialize();
+		if(_captcha == null){
+			_initialize();
+		}
 
 		return _captcha.getTaglibPath();
 	}
@@ -129,8 +136,13 @@ public class CaptchaImpl implements Captcha {
 			if (_captcha != null) {
 				return;
 			}
+			if (_captcha != null) {
+				return;
+			}
+			
 
 			try {
+				/** get from standard process first **/
 				String captchaClassName = PrefsPropsUtil.getString(
 					PropsKeys.CAPTCHA_ENGINE_IMPL,
 					PropsValues.CAPTCHA_ENGINE_IMPL);
@@ -139,16 +151,66 @@ public class CaptchaImpl implements Captcha {
 					_log.info("Initializing " + captchaClassName);
 				}
 
-				_captcha = (Captcha)InstanceFactory.newInstance(
-					ClassLoaderUtil.getPortalClassLoader(), captchaClassName);
-
+				/** instead of of getting from InstanceFactory, get it from Registry first **/
+				_findInRegistry(captchaClassName);
+				
+				/** if not found in registry, instatiate and place back in registry **/
+				if(_captcha == null){
+					_captcha = (Captcha)InstanceFactory.newInstance(
+						ClassLoaderUtil.getPortalClassLoader(), captchaClassName);
+					/** store instance in registry **/
+					_setInRegistry();
+				}
+				
 				_originalCaptcha = _captcha;
+				
 			}
 			catch (Exception e) {
 				_log.error(e, e);
 			}
 		}
 	}
+	
+	
+	private ServiceTracker<?, Captcha> _serviceTracker;
+	
+	private void _findInRegistry(String captchaClassName) {		
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(objectClass=" 
+					+ Captcha.class.getName() +
+				")");
+
+		_serviceTracker = registry.trackServices(filter);
+		_serviceTracker.open();	
+		
+		Object[] services = _serviceTracker.getServices();
+		if(services != null){			
+			for(Object captcha : services){
+				if(captchaClassName.equals(captcha.getClass().getName())){					
+					_captcha = (Captcha) captcha;
+				}
+			}
+		}
+	}
+	
+	/** loop through registry **/
+	private void _findInRegistry() {
+		_findInRegistry(CaptchaImpl.class.getName());
+	}
+	
+	
+	/** once captcha is set, assign it to registry **/
+	private void _setInRegistry(){
+		Registry registry = RegistryUtil.getRegistry();
+		
+		ServiceRegistration<Captcha> serviceRegistration =
+				registry.registerService(
+						Captcha.class.getName(), _captcha);
+		
+	}
+	
 
 	private static Log _log = LogFactoryUtil.getLog(CaptchaImpl.class);
 
