@@ -344,7 +344,6 @@
 		<property name="searchEngines">
 			<util:map>
 				<entry key="GENERIC_ENGINE" value-ref="com.liferay.portal.search.generic.GenericSearchEngineImpl" />
-				<entry key="SYSTEM_ENGINE" value-ref="com.liferay.portal.search.lucene.LuceneSearchEngineImpl" />
 			</util:map>
 		</property>
 	</bean>
