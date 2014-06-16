@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,24 +12,12 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch.connection;
+package com.liferay.portal.messaging;
 
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
-import org.elasticsearch.client.Client;
+import com.liferay.portal.kernel.messaging.DefaultMessageBus;
 
 /**
  * @author Michael C. Han
  */
-public interface ElasticsearchConnection {
-
-	public static final String CLUSTER_NAME = "LiferayElasticSearch";
-
-	public void close();
-
-	public Client getClient();
-
-	public ClusterHealthResponse getClusterHealthResponse();
-
-	public void initialize();
-
+public class OsgiMessageBus extends DefaultMessageBus {
 }

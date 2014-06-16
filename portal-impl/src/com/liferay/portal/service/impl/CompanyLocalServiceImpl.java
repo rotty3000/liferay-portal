@@ -296,6 +296,9 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 
 		checkCompanyKey(companyId);
 
+		//initialize search engines
+		SearchEngineUtil.initialize(companyId);
+
 		// Default user
 
 		User defaultUser = userPersistence.fetchByC_DU(companyId, true);
