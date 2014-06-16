@@ -425,10 +425,6 @@ public class PortalInstances {
 
 			PrincipalThreadLocal.setName(principalName);
 
-			// Search engine
-
-			SearchEngineUtil.initialize(companyId);
-
 			// Initialize display
 
 			if (_log.isDebugEnabled()) {

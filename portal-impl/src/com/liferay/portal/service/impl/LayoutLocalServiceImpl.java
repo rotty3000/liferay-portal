@@ -442,7 +442,7 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 
 		// Message boards
 
-		if (PropsValues.LAYOUT_COMMENTS_ENABLED) {
+		if (PropsValues.LAYOUT_COMMENTS_ENABLED && !group.isControlPanel()) {
 			mbMessageLocalService.addDiscussionMessage(
 				userId, user.getFullName(), groupId, Layout.class.getName(),
 				plid, WorkflowConstants.ACTION_PUBLISH);
