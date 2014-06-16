@@ -16,6 +16,9 @@ package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.util.StringUtil;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Eduardo Lundgren
  */
@@ -36,6 +39,9 @@ public class AggregateUtil {
 
 		content = StringUtil.replace(
 			content, _CSS_PATH_PLACEHOLDERS, _CSS_PATH_TYPES);
+
+		Matcher matcher = _pattern.matcher(content);
+		content = matcher.replaceAll("$1");
 
 		return content;
 	}
@@ -59,5 +65,7 @@ public class AggregateUtil {
 		"url(/", "url('data:", "url(\"data:", "url(data:", "url('", "url(\"",
 		"url("
 	};
+
+	private static Pattern _pattern = Pattern.compile("(@base_url@/css/){2,}");
 
 }
