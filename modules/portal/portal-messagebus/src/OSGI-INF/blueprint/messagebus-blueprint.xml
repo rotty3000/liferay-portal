@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<!-- Message bus -->
+
+	<!-- References -->
+	<service auto-export="all-classes" id="com.liferay.portal.kernel.messaging.MessageBus">
+		<bean class="com.liferay.portal.messaging.OsgiMessageBus" />
+	</service>
+
+</blueprint>

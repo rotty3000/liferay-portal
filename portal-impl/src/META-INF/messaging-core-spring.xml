@@ -11,7 +11,7 @@
 
 	<!-- Message bus -->
 
-	<bean id="com.liferay.portal.kernel.messaging.MessageBus" class="com.liferay.portal.kernel.messaging.DefaultMessageBus" />
+	<bean id="com.liferay.portal.kernel.messaging.MessageBus" class="com.liferay.portal.kernel.messaging.OsgiMessageBusAdapter" />
 	<bean id="com.liferay.portal.kernel.messaging.sender.MessageSender" class="com.liferay.portal.kernel.messaging.sender.DefaultMessageSender">
 		<property name="messageBus" ref="com.liferay.portal.kernel.messaging.MessageBus" />
 	</bean>
