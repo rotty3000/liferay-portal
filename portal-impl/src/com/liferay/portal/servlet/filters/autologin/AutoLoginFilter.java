@@ -18,13 +18,13 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ProtectedServletRequest;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.AutoLogin;
+import com.liferay.portal.security.auth.AutoLoginRegistryUtil;
 import com.liferay.portal.security.pwd.PasswordEncryptorUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.servlet.filters.BasePortalFilter;
@@ -46,6 +46,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
+ * @author Peter Fellwock
  */
 public class AutoLoginFilter extends BasePortalFilter {
 
@@ -59,13 +60,11 @@ public class AutoLoginFilter extends BasePortalFilter {
 
 	public AutoLoginFilter() {
 		for (String autoLoginClassName : PropsValues.AUTO_LOGIN_HOOKS) {
-			AutoLogin autoLogin = (AutoLogin)InstancePool.get(
-				autoLoginClassName);
-
+			AutoLogin autoLogin = (AutoLogin) AutoLoginRegistryUtil.getAutoLogin(autoLoginClassName);
 			_autoLogins.add(autoLogin);
 		}
 	}
-
+	
 	protected String getLoginRemoteUser(
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session, String[] credentials)

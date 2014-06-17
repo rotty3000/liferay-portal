@@ -20,12 +20,22 @@ import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Amos Fong
+ * @author Peter Fellwock
  */
 @DoPrivileged
 public class AuthTokenImpl extends AuthTokenWrapper {
 
 	public AuthTokenImpl() {
-		super((AuthToken)InstancePool.get(PropsValues.AUTH_TOKEN_IMPL));
+		super((AuthToken)triageInstace());
 	}
 
+	private static AuthToken triageInstace() {		
+		String classname = PropsValues.AUTH_TOKEN_IMPL;
+		AuthToken retAuth = AuthTokenRegistryUtil.getAuthToken(classname);
+		if(retAuth == null){
+			retAuth = (AuthToken) InstancePool.get(classname);
+			AuthTokenRegistryUtil.register(classname, retAuth);
+		}
+		return retAuth;
+	}
 }

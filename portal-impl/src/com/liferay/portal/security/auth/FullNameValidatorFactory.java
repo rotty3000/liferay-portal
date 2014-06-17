@@ -17,17 +17,23 @@ package com.liferay.portal.security.auth;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
-import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Amos Fong
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class FullNameValidatorFactory {
 
 	public static FullNameValidator getInstance() {
+		if (_fullNameValidator == null) {
+			_originalFullNameValidator =
+					FullNameValidatorRegistryUtil.getFullNameValidator(
+						PropsValues.USERS_FULL_NAME_VALIDATOR);
+			_fullNameValidator = _originalFullNameValidator;
+		}
+
 		return _fullNameValidator;
 	}
 
@@ -49,11 +55,9 @@ public class FullNameValidatorFactory {
 			_log.debug("Instantiate " + PropsValues.USERS_FULL_NAME_VALIDATOR);
 		}
 
-		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
-
 		_originalFullNameValidator =
-			(FullNameValidator)InstanceFactory.newInstance(
-				classLoader, PropsValues.USERS_FULL_NAME_VALIDATOR);
+			FullNameValidatorRegistryUtil.getFullNameValidator(
+				PropsValues.USERS_FULL_NAME_VALIDATOR);
 
 		_fullNameValidator = _originalFullNameValidator;
 	}

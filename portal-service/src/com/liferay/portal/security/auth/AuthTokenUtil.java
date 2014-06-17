@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Amos Fong
+ * @author Peter Fellwock
  */
 public class AuthTokenUtil {
 
@@ -44,7 +45,13 @@ public class AuthTokenUtil {
 	public static AuthToken getAuthToken() {
 		PortalRuntimePermission.checkGetBeanProperty(AuthTokenUtil.class);
 
-		return _authToken;
+		return AuthTokenRegistryUtil.getAuthToken();
+	}
+	
+	public static AuthToken getAuthToken(String classname) {
+		PortalRuntimePermission.checkGetBeanProperty(AuthTokenUtil.class);
+
+		return AuthTokenRegistryUtil.getAuthToken(classname);
 	}
 
 	public static String getToken(HttpServletRequest request) {
@@ -68,9 +75,7 @@ public class AuthTokenUtil {
 	public void setAuthToken(AuthToken authToken) {
 		PortalRuntimePermission.checkSetBeanProperty(getClass());
 
-		_authToken = authToken;
+		AuthTokenRegistryUtil.register(authToken.getClass().getName(), authToken);
 	}
-
-	private static AuthToken _authToken;
 
 }

@@ -17,17 +17,24 @@ package com.liferay.portal.security.auth;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
-import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class EmailAddressValidatorFactory {
 
 	public static EmailAddressValidator getInstance() {
+		if (_emailAddressValidator == null) {
+			_originalEmailAddressValidator =
+					EmailAddressValidatorRegistryUtil
+					.getEmailAddressValidator(
+						PropsValues.USERS_EMAIL_ADDRESS_VALIDATOR);
+			_emailAddressValidator = _originalEmailAddressValidator;
+		}
+
 		return _emailAddressValidator;
 	}
 
@@ -47,16 +54,16 @@ public class EmailAddressValidatorFactory {
 	}
 
 	public void afterPropertiesSet() throws Exception {
+
+		String classname = PropsValues.USERS_EMAIL_ADDRESS_VALIDATOR;
+
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Instantiate " + PropsValues.USERS_EMAIL_ADDRESS_VALIDATOR);
+			_log.debug("Instantiate " + classname);
 		}
 
-		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
-
 		_originalEmailAddressValidator =
-			(EmailAddressValidator)InstanceFactory.newInstance(
-				classLoader, PropsValues.USERS_EMAIL_ADDRESS_VALIDATOR);
+				EmailAddressValidatorRegistryUtil
+				.getEmailAddressValidator(classname);
 
 		_emailAddressValidator = _originalEmailAddressValidator;
 	}

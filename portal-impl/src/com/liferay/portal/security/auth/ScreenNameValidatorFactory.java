@@ -17,17 +17,23 @@ package com.liferay.portal.security.auth;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
-import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class ScreenNameValidatorFactory {
 
 	public static ScreenNameValidator getInstance() {
+		if (_screenNameValidator == null) {
+			_originalScreenNameValidator =
+					ScreenNameValidatorRegistryUtil.getScreenNameValidator(
+						PropsValues.USERS_SCREEN_NAME_VALIDATOR);
+			_screenNameValidator = _originalScreenNameValidator;
+		}
+
 		return _screenNameValidator;
 	}
 
@@ -45,17 +51,15 @@ public class ScreenNameValidatorFactory {
 	}
 
 	public void afterPropertiesSet() throws Exception {
+		String className = PropsValues.USERS_SCREEN_NAME_VALIDATOR;
+
 		if (_log.isDebugEnabled()) {
-			_log.debug(
-				"Instantiate " + PropsValues.USERS_SCREEN_NAME_VALIDATOR);
+			_log.debug("Instantiate " + className);
 		}
 
-		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
-
 		_originalScreenNameValidator =
-			(ScreenNameValidator)InstanceFactory.newInstance(
-				classLoader, PropsValues.USERS_SCREEN_NAME_VALIDATOR);
-
+				ScreenNameValidatorRegistryUtil.getScreenNameValidator(
+					className);
 		_screenNameValidator = _originalScreenNameValidator;
 	}
 

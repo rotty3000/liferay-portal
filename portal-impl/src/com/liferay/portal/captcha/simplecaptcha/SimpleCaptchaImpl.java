@@ -14,6 +14,23 @@
 
 package com.liferay.portal.captcha.simplecaptcha;
 
+import java.io.IOException;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import nl.captcha.backgrounds.BackgroundProducer;
+import nl.captcha.gimpy.GimpyRenderer;
+import nl.captcha.noise.NoiseProducer;
+import nl.captcha.servlet.CaptchaServletUtil;
+import nl.captcha.text.producer.TextProducer;
+import nl.captcha.text.renderer.WordRenderer;
+
 import com.liferay.portal.kernel.captcha.Captcha;
 import com.liferay.portal.kernel.captcha.CaptchaException;
 import com.liferay.portal.kernel.captcha.CaptchaMaxChallengesException;
@@ -28,24 +45,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
-import java.io.IOException;
-
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletSession;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import nl.captcha.backgrounds.BackgroundProducer;
-import nl.captcha.gimpy.GimpyRenderer;
-import nl.captcha.noise.NoiseProducer;
-import nl.captcha.servlet.CaptchaServletUtil;
-import nl.captcha.text.producer.TextProducer;
-import nl.captcha.text.renderer.WordRenderer;
-
 /**
  * @author Brian Wing Shun Chan
  * @author Daniel Sanz
@@ -59,7 +58,7 @@ public class SimpleCaptchaImpl implements Captcha {
 		initTextProducers();
 		initWordRenderers();
 	}
-
+		
 	@Override
 	public void check(HttpServletRequest request) throws CaptchaException {
 		if (!isEnabled(request)) {

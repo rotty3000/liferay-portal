@@ -102,19 +102,21 @@ import com.liferay.portal.sanitizer.SanitizerImpl;
 import com.liferay.portal.security.auth.AuthFailure;
 import com.liferay.portal.security.auth.AuthPipeline;
 import com.liferay.portal.security.auth.AuthToken;
-import com.liferay.portal.security.auth.AuthTokenUtil;
+import com.liferay.portal.security.auth.AuthTokenRegistryUtil;
 import com.liferay.portal.security.auth.AuthTokenWhitelistUtil;
-import com.liferay.portal.security.auth.AuthTokenWrapper;
 import com.liferay.portal.security.auth.AuthVerifier;
 import com.liferay.portal.security.auth.AuthVerifierConfiguration;
 import com.liferay.portal.security.auth.AuthVerifierPipeline;
 import com.liferay.portal.security.auth.Authenticator;
 import com.liferay.portal.security.auth.AutoLogin;
+import com.liferay.portal.security.auth.AutoLoginRegistryUtil;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.auth.EmailAddressGenerator;
 import com.liferay.portal.security.auth.EmailAddressGeneratorFactory;
+import com.liferay.portal.security.auth.EmailAddressGeneratorRegistryUtil;
 import com.liferay.portal.security.auth.EmailAddressValidator;
 import com.liferay.portal.security.auth.EmailAddressValidatorFactory;
+import com.liferay.portal.security.auth.EmailAddressValidatorRegistryUtil;
 import com.liferay.portal.security.auth.FullNameGenerator;
 import com.liferay.portal.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.security.auth.FullNameValidator;
@@ -144,7 +146,6 @@ import com.liferay.portal.security.pwd.ToolkitWrapper;
 import com.liferay.portal.service.ReleaseLocalServiceUtil;
 import com.liferay.portal.service.ServiceWrapper;
 import com.liferay.portal.service.persistence.BasePersistence;
-import com.liferay.portal.servlet.filters.autologin.AutoLoginFilter;
 import com.liferay.portal.servlet.filters.cache.CacheUtil;
 import com.liferay.portal.spring.aop.ServiceBeanAopCacheManagerUtil;
 import com.liferay.portal.spring.aop.ServiceBeanAopProxy;
@@ -200,6 +201,7 @@ import org.springframework.aop.framework.AdvisedSupport;
  * @author Wesley Gong
  * @author Ryan Park
  * @author Mika Koivisto
+ * @author Peter Fellwock
  */
 public class HookHotDeployListener
 	extends BaseHotDeployListener implements PropsKeys {
@@ -446,10 +448,9 @@ public class HookHotDeployListener
 		}
 
 		if (portalProperties.containsKey(PropsKeys.AUTH_TOKEN_IMPL)) {
-			AuthTokenWrapper authTokenWrapper =
-				(AuthTokenWrapper)AuthTokenUtil.getAuthToken();
-
-			authTokenWrapper.setAuthToken(null);
+			String authTokenClassName = portalProperties.getProperty(
+				PropsKeys.AUTH_TOKEN_IMPL);
+			AuthTokenRegistryUtil.unregister(authTokenClassName);
 		}
 
 		if (portalProperties.containsKey(PropsKeys.CAPTCHA_ENGINE_IMPL)) {
@@ -591,11 +592,21 @@ public class HookHotDeployListener
 		if (portalProperties.containsKey(
 				PropsKeys.USERS_EMAIL_ADDRESS_GENERATOR)) {
 
+			String classname = (String)portalProperties.get(
+				PropsKeys.USERS_EMAIL_ADDRESS_GENERATOR);
+
+			EmailAddressGeneratorRegistryUtil.unregister(classname);
+
 			EmailAddressGeneratorFactory.setInstance(null);
 		}
 
 		if (portalProperties.containsKey(
 				PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR)) {
+
+			String classname = (String)portalProperties.get(
+				PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR);
+
+			EmailAddressValidatorRegistryUtil.unregister(classname);
 
 			EmailAddressValidatorFactory.setInstance(null);
 		}
@@ -824,11 +835,9 @@ public class HookHotDeployListener
 			autoDeployListenersContainer.unregisterAutoDeployListeners();
 		}
 
-		AutoLoginsContainer autoLoginsContainer =
-			_autoLoginsContainerMap.remove(servletContextName);
-
-		if (autoLoginsContainer != null) {
-			autoLoginsContainer.unregisterAutoLogins();
+		/** remove all autLogins from Registry? why? ask Ray **/
+		for (String autoLoginClassName : PropsValues.AUTO_LOGIN_HOOKS) {
+			AutoLoginRegistryUtil.unregister(autoLoginClassName);
 		}
 
 		CustomJspBag customJspBag = _customJspBagsMap.remove(
@@ -1153,18 +1162,16 @@ public class HookHotDeployListener
 			Properties portalProperties)
 		throws Exception {
 
-		AutoLoginsContainer autoLoginsContainer = new AutoLoginsContainer();
-
-		_autoLoginsContainerMap.put(servletContextName, autoLoginsContainer);
-
 		String[] autoLoginClassNames = StringUtil.split(
 			portalProperties.getProperty(AUTO_LOGIN_HOOKS));
 
+		AutoLogin tempAutoLogin = null;
+
 		for (String autoLoginClassName : autoLoginClassNames) {
-			AutoLogin autoLogin = (AutoLogin)newInstance(
+			tempAutoLogin = (AutoLogin)newInstance(
 				portletClassLoader, AutoLogin.class, autoLoginClassName);
 
-			autoLoginsContainer.registerAutoLogin(autoLogin);
+			AutoLoginRegistryUtil.register(autoLoginClassName, tempAutoLogin);
 		}
 	}
 
@@ -1737,10 +1744,7 @@ public class HookHotDeployListener
 			AuthToken authToken = (AuthToken)newInstance(
 				portletClassLoader, AuthToken.class, authTokenClassName);
 
-			AuthTokenWrapper authTokenWrapper =
-				(AuthTokenWrapper)AuthTokenUtil.getAuthToken();
-
-			authTokenWrapper.setAuthToken(authToken);
+			AuthTokenRegistryUtil.register(authTokenClassName, authToken);
 		}
 
 		if (portalProperties.containsKey(PropsKeys.CAPTCHA_ENGINE_IMPL)) {
@@ -2049,6 +2053,9 @@ public class HookHotDeployListener
 					portletClassLoader, EmailAddressGenerator.class,
 					emailAddressGeneratorClassName);
 
+			EmailAddressGeneratorRegistryUtil
+			.register(emailAddressGeneratorClassName, emailAddressGenerator);
+
 			EmailAddressGeneratorFactory.setInstance(emailAddressGenerator);
 		}
 
@@ -2060,9 +2067,12 @@ public class HookHotDeployListener
 					PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR);
 
 			EmailAddressValidator emailAddressValidator =
-				(EmailAddressValidator)newInstance(
-					portletClassLoader, EmailAddressValidator.class,
-					emailAddressValidatorClassName);
+					(EmailAddressValidator)newInstance(
+							portletClassLoader, EmailAddressValidator.class,
+							emailAddressValidatorClassName);
+
+			EmailAddressValidatorRegistryUtil
+			.register(emailAddressValidatorClassName, emailAddressValidator);
 
 			EmailAddressValidatorFactory.setInstance(emailAddressValidator);
 		}
@@ -2848,8 +2858,6 @@ public class HookHotDeployListener
 	private Map<String, AutoDeployListenersContainer>
 		_autoDeployListenersContainerMap =
 			new HashMap<String, AutoDeployListenersContainer>();
-	private Map<String, AutoLoginsContainer> _autoLoginsContainerMap =
-		new HashMap<String, AutoLoginsContainer>();
 	private Map<String, CustomJspBag> _customJspBagsMap =
 		new HashMap<String, CustomJspBag>();
 	private Map<String, DLFileEntryProcessorContainer>
@@ -3038,24 +3046,6 @@ public class HookHotDeployListener
 
 		private List<AutoDeployListener> _autoDeployListeners =
 			new ArrayList<AutoDeployListener>();
-
-	}
-
-	private class AutoLoginsContainer {
-
-		public void registerAutoLogin(AutoLogin autoLogin) {
-			AutoLoginFilter.registerAutoLogin(autoLogin);
-
-			_autoLogins.add(autoLogin);
-		}
-
-		public void unregisterAutoLogins() {
-			for (AutoLogin autoLogin : _autoLogins) {
-				AutoLoginFilter.unregisterAutoLogin(autoLogin);
-			}
-		}
-
-		private List<AutoLogin> _autoLogins = new ArrayList<AutoLogin>();
 
 	}
 

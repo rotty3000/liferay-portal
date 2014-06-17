@@ -17,17 +17,23 @@ package com.liferay.portal.security.auth;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ClassUtil;
-import com.liferay.portal.kernel.util.InstanceFactory;
-import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Michael C. Han
  * @author Shuyang Zhou
+ * @author Peter Fellwock
  */
 public class FullNameGeneratorFactory {
 
 	public static FullNameGenerator getInstance() {
+		if (_fullNameGenerator == null) {
+			_originalFullNameGenerator =
+					FullNameGeneratorRegistryUtil.getFullNameGenerator(
+						PropsValues.USERS_FULL_NAME_GENERATOR);
+			_fullNameGenerator = _originalFullNameGenerator;
+		}
+
 		return _fullNameGenerator;
 	}
 
@@ -49,11 +55,9 @@ public class FullNameGeneratorFactory {
 			_log.debug("Instantiate " + PropsValues.USERS_FULL_NAME_GENERATOR);
 		}
 
-		ClassLoader classLoader = ClassLoaderUtil.getPortalClassLoader();
-
 		_originalFullNameGenerator =
-			(FullNameGenerator)InstanceFactory.newInstance(
-				classLoader, PropsValues.USERS_FULL_NAME_GENERATOR);
+				FullNameGeneratorRegistryUtil.getFullNameGenerator(
+					PropsValues.USERS_FULL_NAME_GENERATOR);
 
 		_fullNameGenerator = _originalFullNameGenerator;
 	}

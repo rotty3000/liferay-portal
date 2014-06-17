@@ -14,6 +14,14 @@
 
 package com.liferay.portal.captcha.recaptcha;
 
+import java.io.IOException;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.liferay.portal.captcha.simplecaptcha.SimpleCaptchaImpl;
 import com.liferay.portal.kernel.captcha.CaptchaException;
 import com.liferay.portal.kernel.captcha.CaptchaTextException;
@@ -28,15 +36,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
-
-import java.io.IOException;
-
-import javax.portlet.PortletRequest;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Tagnaouti Boubker
@@ -141,5 +140,6 @@ public class ReCaptchaImpl extends SimpleCaptchaImpl {
 		"/html/taglib/ui/captcha/recaptcha.jsp";
 
 	private static Log _log = LogFactoryUtil.getLog(ReCaptchaImpl.class);
+
 
 }
