@@ -17,6 +17,8 @@
 <%@ include file="/html/portlet/search/facets/init.jsp" %>
 
 <%
+Hits hits = (Hits)request.getAttribute("search.jsp-hits");
+
 if (termCollectors.isEmpty()) {
 	return;
 }
@@ -42,7 +44,24 @@ boolean showAssetCount = dataJSONObject.getBoolean("showAssetCount", true);
 
 			long curUserId = GetterUtil.getLong(termCollector.getTerm());
 
-			User curUser = UserLocalServiceUtil.getUser(curUserId);
+			User curUser = UserLocalServiceUtil.fetchUser(curUserId);
+
+			String curUserName = null;
+
+			if (curUser != null) {
+				curUserName = curUser.getFullName();
+			}
+			else {
+				for (Document document : hits.toList()) {
+					long assetEntryUserId = GetterUtil.getLong(document.get("userId"));
+
+					if (assetEntryUserId == curUserId) {
+						curUserName = document.get("userName");
+
+						break;
+					}
+				}
+			}
 		%>
 
 			<c:if test="<%= userId == curUserId %>">
@@ -50,7 +69,7 @@ boolean showAssetCount = dataJSONObject.getBoolean("showAssetCount", true);
 					Liferay.Search.tokenList.add(
 						{
 							clearFields: '<%= renderResponse.getNamespace() + HtmlUtil.escapeJS(facet.getFieldId()) %>',
-							text: '<%= HtmlUtil.escapeJS(curUser.getFullName()) %>'
+							text: '<%= HtmlUtil.escapeJS(curUserName) %>'
 						}
 					);
 				</aui:script>
@@ -64,7 +83,7 @@ boolean showAssetCount = dataJSONObject.getBoolean("showAssetCount", true);
 
 			<li class="facet-value <%= (userId == curUserId) ? "active" : StringPool.BLANK %>">
 				<a data-value="<%= curUserId %>" href="javascript:;">
-					<%= HtmlUtil.escape(curUser.getFullName()) %>
+					<%= HtmlUtil.escape(curUserName) %>
 
 					<c:if test="<%= showAssetCount %>">
 						<span class="badge badge-info frequency"><%= termCollector.getFrequency() %></span>

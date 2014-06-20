@@ -65,6 +65,7 @@ Hits hits = indexer.search(searchContext);
 String[] queryTerms = hits.getQueryTerms();
 
 request.setAttribute("search.jsp-highlightEnabled", queryConfig.isHighlightEnabled());
+request.setAttribute("search.jsp-hits", hits);
 request.setAttribute("search.jsp-queryTerms", queryTerms);
 
 boolean showMenu = advancedConfiguration || displayScopeFacet || displayAssetTypeFacet || displayAssetTagsFacet || displayAssetCategoriesFacet || displayFolderFacet || displayUserFacet || displayModifiedRangeFacet;
