@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.microsofttranslator.MicrosoftTranslatorFactoryImpl;
 import com.liferay.portal.model.ModelHintsImpl;
 import com.liferay.portal.model.ModelHintsUtil;
-import com.liferay.portal.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.security.permission.ResourceActionsImpl;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.service.permission.PortletPermissionImpl;
@@ -75,16 +74,6 @@ public class ToolDependencies {
 
 		friendlyURLNormalizerUtil.setFriendlyURLNormalizer(
 			new FriendlyURLNormalizerImpl());
-
-		FullNameGeneratorFactory fullNameGeneratorFactory =
-			new FullNameGeneratorFactory();
-
-		try {
-			fullNameGeneratorFactory.afterPropertiesSet();
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 
 		HtmlUtil htmlUtil = new HtmlUtil();
 

@@ -113,9 +113,7 @@ import com.liferay.portal.security.auth.EmailAddressGeneratorFactory;
 import com.liferay.portal.security.auth.EmailAddressValidator;
 import com.liferay.portal.security.auth.EmailAddressValidatorFactory;
 import com.liferay.portal.security.auth.FullNameGenerator;
-import com.liferay.portal.security.auth.FullNameGeneratorFactory;
 import com.liferay.portal.security.auth.FullNameValidator;
-import com.liferay.portal.security.auth.FullNameValidatorFactory;
 import com.liferay.portal.security.auth.ScreenNameGenerator;
 import com.liferay.portal.security.auth.ScreenNameGeneratorFactory;
 import com.liferay.portal.security.auth.ScreenNameValidator;
@@ -610,15 +608,7 @@ public class HookHotDeployListener
 				PropsKeys.USERS_EMAIL_ADDRESS_VALIDATOR)) {
 
 			EmailAddressValidatorFactory.setInstance(null);
-		}
-
-		if (portalProperties.containsKey(PropsKeys.USERS_FULL_NAME_GENERATOR)) {
-			FullNameGeneratorFactory.setInstance(null);
-		}
-
-		if (portalProperties.containsKey(PropsKeys.USERS_FULL_NAME_VALIDATOR)) {
-			FullNameValidatorFactory.setInstance(null);
-		}
+		}		
 
 		if (portalProperties.containsKey(
 				PropsKeys.USERS_SCREEN_NAME_GENERATOR)) {
@@ -2108,7 +2098,12 @@ public class HookHotDeployListener
 					portletClassLoader, FullNameGenerator.class,
 					fullNameGeneratorClassName);
 
-			FullNameGeneratorFactory.setInstance(fullNameGenerator);
+			ServiceRegistration<FullNameGenerator> serviceRegistration =
+			registry.registerService(FullNameGenerator.class,
+				fullNameGenerator);
+
+			serviceRegistrations.put(fullNameGeneratorClassName,
+				serviceRegistration);
 		}
 
 		if (portalProperties.containsKey(PropsKeys.USERS_FULL_NAME_VALIDATOR)) {
@@ -2120,7 +2115,12 @@ public class HookHotDeployListener
 					portletClassLoader, FullNameValidator.class,
 					fullNameValidatorClassName);
 
-			FullNameValidatorFactory.setInstance(fullNameValidator);
+			ServiceRegistration<FullNameValidator> serviceRegistration =
+			registry.registerService(FullNameValidator.class,
+				fullNameValidator);
+
+			serviceRegistrations.put(fullNameValidatorClassName,
+				serviceRegistration);
 		}
 
 		if (portalProperties.containsKey(
