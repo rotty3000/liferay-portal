@@ -1,0 +1,7 @@
+Bundle-Name: Polls Services
+Export-Package:\
+	com.liferay.portlet.polls.lar
+Include-Resource: classes/
+Liferay-Service: true
+Spring-Context: META-INF/spring/*.xml
+Web-ContextPath: /polls-service
