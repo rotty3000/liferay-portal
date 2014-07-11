@@ -2,6 +2,7 @@
 	facets: [
 		{
 			className: 'com.liferay.portal.kernel.search.facet.ScopeFacet',
+			pluginContext: '',
 			data: {
 				frequencyThreshold: 1,
 				maxTerms: 10,
@@ -16,6 +17,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.AssetEntriesFacet',
+			pluginContext: '',
 			data: {
 				frequencyThreshold: 1,
 				values: [
@@ -40,6 +42,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet',
+			pluginContext: '',
 			data: {
 				displayStyle: 'list',
 				frequencyThreshold: 1,
@@ -55,6 +58,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet',
+			pluginContext: '',
 			data: {
 				displayStyle: 'list',
 				frequencyThreshold: 1,
@@ -70,6 +74,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet',
+			pluginContext: '',
 			data: {
 				frequencyThreshold: 1,
 				maxTerms: 10,
@@ -84,6 +89,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.MultiValueFacet',
+			pluginContext: '',
 			data: {
 				frequencyThreshold: 1,
 				maxTerms: 10,
@@ -98,6 +104,7 @@
 		},
 		{
 			className: 'com.liferay.portal.kernel.search.facet.ModifiedFacet',
+			pluginContext: '',
 			data: {
 				frequencyThreshold: 0,
 				ranges: [

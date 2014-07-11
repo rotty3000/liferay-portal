@@ -94,7 +94,16 @@ public class FacetConfiguration {
 		_weight = weight;
 	}
 
+	public String getPluginContext() {
+		return _pluginContext;
+	}
+
+	public void setPluginContext(String pluginContext) {
+		_pluginContext = pluginContext;
+	}
+
 	private String _className;
+	private String _pluginContext;
 	private JSONObject _dataJSONObject;
 	private String _displayStyle;
 	private String _fieldName;

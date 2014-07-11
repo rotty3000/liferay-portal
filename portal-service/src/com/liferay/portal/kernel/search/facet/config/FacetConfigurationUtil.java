@@ -70,6 +70,7 @@ public class FacetConfigurationUtil {
 		FacetConfiguration facetConfiguration = new FacetConfiguration();
 
 		facetConfiguration.setClassName(facetJSONObject.getString("className"));
+		facetConfiguration.setPluginContext(facetJSONObject.getString("pluginContext"));
 
 		if (facetJSONObject.has("data")) {
 			facetConfiguration.setDataJSONObject(

@@ -14,14 +14,18 @@
 
 package com.liferay.portal.kernel.search.facet.util;
 
+import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
-
-import java.lang.reflect.Constructor;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.kernel.util.ClassLoaderPool;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Raymond Augé
@@ -33,14 +37,24 @@ public class FacetFactoryUtil {
 		throws Exception {
 
 		String className = facetConfiguration.getClassName();
-
-		Constructor<?> constructor = _constructorCache.get(className);
+		String pluginContext = facetConfiguration.getPluginContext();
+		String cacheKey = className.concat(StringPool.AT).concat(pluginContext);
+		
+		Constructor<?> constructor = _constructorCache.get(cacheKey);
 
 		if (constructor == null) {
-			constructor = Class.forName(className).getConstructor(
-				SearchContext.class);
-
-			_constructorCache.put(className, constructor);
+			if (Validator.isNotNull(pluginContext)) {
+				PortalRuntimePermission.checkGetClassLoader(pluginContext);
+				
+				constructor = Class.forName(className, true, 
+						ClassLoaderPool.getClassLoader(pluginContext))
+					.getConstructor(SearchContext.class);
+			} else {
+				constructor = Class.forName(className).getConstructor(
+					SearchContext.class);
+			}
+			
+			_constructorCache.put(cacheKey, constructor);
 		}
 
 		Facet facet = (Facet)constructor.newInstance(searchContext);
