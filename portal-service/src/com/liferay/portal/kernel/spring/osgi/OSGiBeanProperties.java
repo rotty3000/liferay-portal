@@ -30,7 +30,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * OSGi service properties used when publishing spring beans as services.
+ * Provides the OSGi service properties used when publishing Spring beans as
+ * services.
  *
  * @author Raymond Augé
  */
@@ -39,39 +40,49 @@ import java.util.Properties;
 public @interface OSGiBeanProperties {
 
 	/**
-	 * Determines if the prefix is removed from properties.
+	 * Returns <code>true</code> if the property prefix should be removed from
+	 * <code>portal.properties</code>.
+	 *
+	 * @return <code>true</code> if the property prefix should be removed from
+	 *         <code>portal.properties</code>; <code>false</code> otherwise
 	 */
 	public boolean portalPropertiesRemovePrefix() default true;
 
 	/**
-	 * If not blank, this value will be used as the prefix for retrieving
-	 * properties from portal.properties.
+	 * Returns the value of the property prefix used for retrieving properties
+	 * from <code>portal.properties</code>.
+	 *
+	 * @return the value of the property prefix
 	 */
 	public String portalPropertyPrefix() default "";
 
 	/**
-	 * Direct properties.
+	 * Returns the service properties.
 	 *
 	 * <p>
-	 * Each property string is specified as {@code "key=value"}. The type of the
-	 * property value is string.
+	 * Each property string is specified as <code>"key=value"</code>. To specify
+	 * a property with multiple values, use multiple key-value pairs. For
+	 * example, <code>"foo=bar", "foo=baz"</code>.
+	 * </p>
 	 *
-	 * <p>
-	 * To specify a property with multiple values, use multiple key, value
-	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
+	 * @return the service properties
 	 */
 	public String[] property() default {};
 
 	/**
-	 * A conversion helper class for the {@link OSGiBeanProperties} annotation.
+	 * Converts OSGi bean properties from the {@link OSGiBeanProperties}
+	 * annotation into a properties map. This is a helper class.
 	 */
 	public static class Convert {
 
 		/**
-		 * @param  object, possibly annotated with {@link OSGiBeanProperties}
-		 * @return a map, after converting the annotation to properties, which
-		 *         may be empty if there are no properties found, or null if the
-		 *         object was not annotated with {@link OSGiBeanProperties}
+		 * Converts the OSGi bean properties object to a properties map.
+		 *
+		 * @param  object the object that is possibly annotated with {@link 
+		 *         OSGiBeanProperties}
+		 * @return a converted properties map, which may be empty if there are
+		 *         no properties found, or <code>null</code> if the object is
+		 *         not annotated with {@link OSGiBeanProperties}
 		 */
 		public static Map<String, Object> fromObject(Object object) {
 			Class<? extends Object> clazz = object.getClass();
@@ -87,10 +98,12 @@ public @interface OSGiBeanProperties {
 		}
 
 		/**
-		 * @param  osgiBeanProperties an instance of {@link OSGiBeanProperties}
-		 *         which will be read for properties
-		 * @return a map, after converting the annotation to properties, which
-		 *         may be empty if there are no properties found
+		 * Converts the {@link OSGiBeanProperties} instance to a properties map.
+		 *
+		 * @param  osgiBeanProperties the instance of {@link OSGiBeanProperties},
+		 *         which is read for properties
+		 * @return a converted properties map, which may be empty if there are
+		 *         no properties found
 		 */
 		public static Map<String, Object> toMap(
 			OSGiBeanProperties osgiBeanProperties) {
