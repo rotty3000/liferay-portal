@@ -49,7 +49,6 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalFeed;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBMessage;
-import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.shopping.model.ShoppingCategory;
 import com.liferay.portlet.shopping.model.ShoppingItem;
 import com.liferay.portlet.softwarecatalog.model.SCFrameworkVersion;
@@ -277,9 +276,6 @@ public class VerifyResourcePermissions extends VerifyProcess {
 		},
 		new String[] {
 			PasswordPolicy.class.getName(), "PasswordPolicy", "passwordPolicyId"
-		},
-		new String[] {
-			PollsQuestion.class.getName(), "PollsQuestion", "questionId"
 		},
 		new String[] {
 			SCFrameworkVersion.class.getName(), "SCFrameworkVersion",
