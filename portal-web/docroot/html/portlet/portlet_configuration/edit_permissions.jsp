@@ -80,12 +80,12 @@ try {
 	if (ResourceBlockLocalServiceUtil.isSupported(selResource)) {
 		ResourceBlockLocalServiceUtil.verifyResourceBlockId(company.getCompanyId(), selResource, Long.valueOf(resourcePrimKey));
 	}
-	else {
-		if (ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(company.getCompanyId(), selResource, ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey) == 0) {
-			throw new NoSuchResourceException();
-		}
-	}
+
 	resource = ResourceLocalServiceUtil.getResource(company.getCompanyId(), selResource, ResourceConstants.SCOPE_INDIVIDUAL, resourcePrimKey);
+
+	if ((resource == null) && !ResourceBlockLocalServiceUtil.isSupported(selResource)) {
+		throw new NoSuchResourceException();
+	}
 }
 catch (NoSuchResourceException nsre) {
 	boolean portletActions = Validator.isNull(modelResource);

@@ -116,6 +116,7 @@ import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.PublicRenderParameter;
+import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
@@ -153,7 +154,6 @@ import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
-import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.TicketLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
@@ -7615,12 +7615,12 @@ public class PortalImpl implements Portal {
 			return;
 		}
 
-		int count =
-			ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(
+		Resource resource =
+			ResourceLocalServiceUtil.getResource(
 				companyId, name, ResourceConstants.SCOPE_INDIVIDUAL,
 				primaryKey);
 
-		if (count > 0) {
+		if (resource == null) {
 			return;
 		}
 

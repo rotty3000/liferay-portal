@@ -20,6 +20,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.User;
@@ -298,13 +299,13 @@ public class LayoutPermissionImpl
 			}
 		}
 
-		int resourcePermissionsCount =
-			ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(
+		Resource resource =
+			ResourceLocalServiceUtil.getResource(
 				layout.getCompanyId(), Layout.class.getName(),
 				ResourceConstants.SCOPE_INDIVIDUAL,
 				String.valueOf(layout.getPlid()));
 
-		if (resourcePermissionsCount == 0) {
+		if (resource == null) {
 			boolean addGroupPermission = true;
 			boolean addGuestPermission = true;
 

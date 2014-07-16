@@ -18,11 +18,11 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.staging.permission.StagingPermissionUtil;
+import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
-import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 
 /**
@@ -54,13 +54,11 @@ public class DLPermission {
 		}
 
 		try {
-			int count =
-				ResourcePermissionLocalServiceUtil.getResourcePermissionsCount(
-					permissionChecker.getCompanyId(), RESOURCE_NAME,
-					ResourceConstants.SCOPE_INDIVIDUAL,
-					String.valueOf(groupId));
+			Resource resource = ResourceLocalServiceUtil.getResource(
+				permissionChecker.getCompanyId(), RESOURCE_NAME,
+				ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(groupId));
 
-			if (count == 0) {
+			if (resource == null) {
 				ResourceLocalServiceUtil.addResources(
 					permissionChecker.getCompanyId(), groupId, 0, RESOURCE_NAME,
 					groupId, false, true, true);
