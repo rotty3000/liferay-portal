@@ -27,6 +27,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Team;
@@ -173,6 +174,20 @@ public class PermissionImporter {
 
 			roleIdsToActionIds.put(
 				role.getRoleId(), actions.toArray(new String[actions.size()]));
+		}
+
+		List<ResourcePermission> resourcePermissions =
+			ResourcePermissionLocalServiceUtil.getResourcePermissions(
+				companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
+				resourcePrimKey);
+
+		for (ResourcePermission resourcePermission : resourcePermissions) {
+			if (!roleIdsToActionIds.containsKey(
+					resourcePermission.getRoleId())) {
+
+				roleIdsToActionIds.put(
+					resourcePermission.getRoleId(), new String[0]);
+			}
 		}
 
 		if (roleIdsToActionIds.isEmpty()) {

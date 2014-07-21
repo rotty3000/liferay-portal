@@ -442,6 +442,10 @@ public interface PortletDataContext extends Serializable {
 	public List<Element> getReferenceElements(
 		StagedModel parentStagedModel, Class<?> clazz);
 
+	public Map<Long, Set<String>> getRoleToActionIds(
+			String resourceName, String resourcePrimKey, boolean portletActions)
+		throws PortalException;
+
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
 	 *             ExportImportPathUtil#getRootPath(PortletDataContext)}

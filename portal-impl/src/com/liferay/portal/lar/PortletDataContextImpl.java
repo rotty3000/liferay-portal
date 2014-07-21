@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.PrimitiveLongList;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -62,9 +61,9 @@ import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletModel;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.ResourcedModel;
 import com.liferay.portal.model.Role;
-import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.StagedGroupedModel;
 import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.model.Team;
@@ -371,47 +370,27 @@ public class PortletDataContextImpl implements PortletDataContext {
 			return;
 		}
 
+		Map<Long, Set<String>> roleIdsToActionIds = getRoleToActionIds(
+			resourceName, String.valueOf(resourcePK), true);
+
 		List<KeyValuePair> permissions = new ArrayList<KeyValuePair>();
 
-		List<Role> roles = RoleLocalServiceUtil.getGroupRelatedRoles(_groupId);
+		for (Map.Entry<Long, Set<String>> entry :
+				roleIdsToActionIds.entrySet()) {
 
-		PrimitiveLongList roleIds = new PrimitiveLongList(roles.size());
-		Map<Long, String> roleIdsToNames = new HashMap<Long, String>();
+			long roleId = entry.getKey();
+			Set<String> actionIds = entry.getValue();
 
-		for (Role role : roles) {
+			Role role = RoleLocalServiceUtil.getRole(roleId);
+
 			String roleName = role.getName();
 
-			int roleType = role.getType();
-
-			if ((roleType == RoleConstants.TYPE_PROVIDER) && role.isTeam()) {
-				Team team = TeamLocalServiceUtil.getTeam(role.getClassPK());
-
-				roleName = PermissionExporter.ROLE_TEAM_PREFIX + team.getName();
-			}
-
-			roleIds.add(role.getRoleId());
-			roleIdsToNames.put(role.getRoleId(), roleName);
-		}
-
-		List<String> actionIds = ResourceActionsUtil.getModelResourceActions(
-			resourceName);
-
-		Map<Long, Set<String>> roleIdsToActionIds = getActionIds(
-			_companyId, roleIds.getArray(), resourceName, resourcePK,
-			actionIds);
-
-		for (Map.Entry<Long, String> entry : roleIdsToNames.entrySet()) {
-			long roleId = entry.getKey();
-			String name = entry.getValue();
-
-			Set<String> availableActionIds = roleIdsToActionIds.get(roleId);
-
-			if (availableActionIds == null) {
-				availableActionIds = Collections.emptySet();
+			if (role.isTeam()) {
+				roleName = PermissionExporter.ROLE_TEAM_PREFIX + roleName;
 			}
 
 			KeyValuePair permission = new KeyValuePair(
-				name, StringUtil.merge(availableActionIds));
+				roleName, StringUtil.merge(actionIds));
 
 			permissions.add(permission);
 		}
@@ -1204,6 +1183,55 @@ public class PortletDataContextImpl implements PortletDataContext {
 		StagedModel parentStagedModel, Class<?> clazz) {
 
 		return getReferenceElements(parentStagedModel, clazz, 0, null);
+	}
+
+	@Override
+	public Map<Long, Set<String>> getRoleToActionIds(
+			String resourceName, String resourcePrimKey, boolean portletActions)
+		throws PortalException {
+
+		List<String> availableActionIds = null;
+
+		if (portletActions) {
+			availableActionIds = ResourceActionsUtil.getPortletResourceActions(
+				resourceName);
+		}
+		else {
+			availableActionIds = ResourceActionsUtil.getModelResourceActions(
+				resourceName);
+		}
+
+		if (availableActionIds.isEmpty()) {
+			return Collections.emptyMap();
+		}
+
+		Map<Long, Set<String>> roleToActionIds =
+			new HashMap<Long, Set<String>>();
+
+		List<ResourcePermission> resourcePermissions =
+			ResourcePermissionLocalServiceUtil.getResourcePermissions(
+				_companyId, resourceName, ResourceConstants.SCOPE_INDIVIDUAL,
+				resourcePrimKey);
+
+		for (ResourcePermission resourcePermission : resourcePermissions) {
+			if (resourcePermission.getActionIds() == 0) {
+				continue;
+			}
+
+			Set<String> actionIds = new HashSet<String>();
+
+			for (String actionId : availableActionIds) {
+				if (resourcePermission.hasActionId(actionId)) {
+					actionIds.add(actionId);
+				}
+			}
+
+			if (!actionIds.isEmpty()) {
+				roleToActionIds.put(resourcePermission.getRoleId(), actionIds);
+			}
+		}
+
+		return roleToActionIds;
 	}
 
 	/**
