@@ -187,9 +187,18 @@ public class BundleServletContext
 
 		_httpServiceTracker.close();
 
-		_serviceRegistration.unregister();
+		try {
+			_serviceRegistration.unregister();
+		}
+		catch (IllegalStateException ies) {
+			if (_log.isInfoEnabled()) {
+				_log.info("The service is already unregistered");
+			}
+		}
 
-		FileUtil.deltree(_tempDir);
+		if (_tempDir != null) {
+			FileUtil.deltree(_tempDir);
+		}
 	}
 
 	@Override

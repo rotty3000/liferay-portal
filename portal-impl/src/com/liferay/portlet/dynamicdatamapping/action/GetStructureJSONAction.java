@@ -61,6 +61,9 @@ public class GetStructureJSONAction extends Action {
 			ServletResponseUtil.write(response, jsonArray.toString());
 		}
 		catch (Exception e) {
+			response.setContentType(ContentTypes.APPLICATION_JSON);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			jsonObject.putException(e);

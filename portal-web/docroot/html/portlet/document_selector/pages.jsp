@@ -23,8 +23,6 @@ Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 
 request.setAttribute(WebKeys.GROUP, group);
 
-String eventName = ParamUtil.getString(request, "eventName");
-
 boolean showGroupsSelector = ParamUtil.getBoolean(request, "showGroupsSelector");
 %>
 
@@ -47,16 +45,28 @@ if (group.getPrivateLayoutsPageCount() > 0) {
 %>
 
 <liferay-ui:tabs names="<%= tabs1Names %>" refresh="false">
+
+	<%
+	boolean checkContentDisplayPage = ParamUtil.getBoolean(request, "checkContentDisplayPage");
+	String selectedLayoutIds = ParamUtil.getString(request, "selectedLayoutIds");
+
+	LayoutsAdminDisplayContext layoutsAdminDisplayContext = new LayoutsAdminDisplayContext(request, liferayPortletResponse);
+	%>
+
 	<c:if test="<%= group.getPublicLayoutsPageCount() > 0 %>">
 		<liferay-ui:section>
 			<div>
-				<liferay-util:include page="/html/portlet/layouts_admin/tree_js.jsp">
-					<liferay-util:param name="draggableTree" value="<%= Boolean.FALSE.toString() %>" />
-					<liferay-util:param name="expandFirstNode" value="<%= Boolean.TRUE.toString() %>" />
-					<liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-					<liferay-util:param name="saveState" value="<%= Boolean.FALSE.toString() %>" />
-					<liferay-util:param name="treeId" value="treeContainerPublicPages" />
-				</liferay-util:include>
+				<liferay-ui:layouts-tree
+					checkContentDisplayPage="<%= checkContentDisplayPage %>"
+					draggableTree="<%= false %>"
+					groupId="<%= groupId %>"
+					portletURL="<%= layoutsAdminDisplayContext.getEditLayoutURL() %>"
+					rootNodeName="<%= layoutsAdminDisplayContext.getRootNodeName() %>"
+					saveState="<%= false %>"
+					selPlid="<%= layoutsAdminDisplayContext.getSelPlid() %>"
+					selectedLayoutIds="<%= selectedLayoutIds %>"
+					treeId="treeContainerPublicPages"
+				/>
 			</div>
 		</liferay-ui:section>
 	</c:if>
@@ -64,14 +74,18 @@ if (group.getPrivateLayoutsPageCount() > 0) {
 	<c:if test="<%= group.getPrivateLayoutsPageCount() > 0 %>">
 		<liferay-ui:section>
 			<div>
-				<liferay-util:include page="/html/portlet/layouts_admin/tree_js.jsp">
-					<liferay-util:param name="draggableTree" value="<%= Boolean.FALSE.toString() %>" />
-					<liferay-util:param name="expandFirstNode" value="<%= Boolean.TRUE.toString() %>" />
-					<liferay-util:param name="groupId" value="<%= String.valueOf(groupId) %>" />
-					<liferay-util:param name="saveState" value="<%= Boolean.FALSE.toString() %>" />
-					<liferay-util:param name="tabs1" value="private-pages" />
-					<liferay-util:param name="treeId" value="treeContainerPrivatePages" />
-				</liferay-util:include>
+				<liferay-ui:layouts-tree
+					checkContentDisplayPage="<%= checkContentDisplayPage %>"
+					draggableTree="<%= false %>"
+					groupId="<%= groupId %>"
+					portletURL="<%= layoutsAdminDisplayContext.getEditLayoutURL() %>"
+					privateLayout="true"
+					rootNodeName="<%= layoutsAdminDisplayContext.getRootNodeName() %>"
+					saveState="<%= false %>"
+					selPlid="<%= layoutsAdminDisplayContext.getSelPlid() %>"
+					selectedLayoutIds="<%= selectedLayoutIds %>"
+					treeId="treeContainerPrivatePages"
+				/>
 			</div>
 		</liferay-ui:section>
 	</c:if>
@@ -148,6 +162,8 @@ if (group.getPrivateLayoutsPageCount() > 0) {
 
 		var url = link.attr('data-url');
 
+		var uuid = link.attr('data-uuid');
+
 		var selectPageMessage = A.one('#<portlet:namespace />selectPageMessage');
 
 		var button = selectPageMessage.one('.selector-button');
@@ -160,6 +176,10 @@ if (group.getPrivateLayoutsPageCount() > 0) {
 			messageType = 'info';
 
 			button.attr('data-url', url);
+
+			button.attr('data-uuid', uuid);
+
+			button.attr('data-layoutpath', messageText);
 		}
 
 		Liferay.Util.toggleDisabled(button, disabled);
@@ -176,6 +196,10 @@ if (group.getPrivateLayoutsPageCount() > 0) {
 	<c:if test="<%= group.getPrivateLayoutsPageCount() > 0 %>">
 		bindTreeUI('treeContainerPrivatePagesOutput');
 	</c:if>
+
+	<%
+	String eventName = ParamUtil.getString(request, "eventName");
+	%>
 
 	Liferay.Util.selectEntityHandler('#<portlet:namespace />selectPageMessage', '<%= HtmlUtil.escapeJS(eventName) %>');
 </aui:script>

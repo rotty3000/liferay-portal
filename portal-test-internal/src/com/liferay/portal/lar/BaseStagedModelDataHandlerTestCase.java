@@ -305,6 +305,7 @@ public abstract class BaseStagedModelDataHandlerTestCase {
 		portletDataContext.setSourceCompanyGroupId(
 			sourceCompanyGroup.getGroupId());
 
+		portletDataContext.setSourceCompanyId(stagingGroup.getCompanyId());
 		portletDataContext.setSourceGroupId(stagingGroup.getGroupId());
 
 		PortletImporter portletImporter = PortletImporter.getInstance();

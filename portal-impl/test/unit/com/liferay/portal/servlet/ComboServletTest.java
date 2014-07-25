@@ -55,6 +55,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockServletConfig;
 import org.springframework.mock.web.MockServletContext;
 
@@ -191,11 +192,18 @@ public class ComboServletTest extends PowerMockito {
 		).thenReturn(
 			true
 		);
+
+		_mockHttpServletRequest = new MockHttpServletRequest();
+
+		_mockHttpServletRequest.setLocalAddr("localhost");
+		_mockHttpServletRequest.setLocalPort(8080);
+		_mockHttpServletRequest.setScheme("http");
 	}
 
 	@Test
 	public void testGetResourceWithNonexistingPortletId() throws Exception {
-		URL url = _comboServlet.getResourceURL("2345678:/js/javascript.js");
+		URL url = _comboServlet.getResourceURL(
+			_mockHttpServletRequest, "2345678:/js/javascript.js");
 
 		Assert.assertNull(url);
 	}
@@ -204,7 +212,8 @@ public class ComboServletTest extends PowerMockito {
 	public void testGetResourceWithoutPortletId() throws Exception {
 		String path = "/js/javascript.js";
 
-		_comboServlet.getResourceURL("/js/javascript.js");
+		_comboServlet.getResourceURL(
+			_mockHttpServletRequest, "/js/javascript.js");
 
 		verify(_portalServletContext);
 
@@ -214,6 +223,7 @@ public class ComboServletTest extends PowerMockito {
 	@Test
 	public void testGetResourceWithPortletId() throws Exception {
 		_comboServlet.getResourceURL(
+			_mockHttpServletRequest,
 			PortletKeys.ACTIVITIES + ":/js/javascript.js");
 
 		verify(_pluginServletContext);
@@ -228,6 +238,7 @@ public class ComboServletTest extends PowerMockito {
 	private PortletApp _activitiesPortletApp;
 
 	private ComboServlet _comboServlet;
+	private MockHttpServletRequest _mockHttpServletRequest;
 	private MockServletContext _pluginServletContext;
 
 	@Mock

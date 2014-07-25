@@ -57,7 +57,11 @@ if (Validator.isNotNull(script)) {
 		}
 	}
 	else {
-		fieldsJSONArray = DDMXSDUtil.getJSONArray(script);
+		try {
+			fieldsJSONArray = DDMXSDUtil.getJSONArray(script);
+		}
+		catch (Exception e) {
+		}
 	}
 }
 %>
@@ -277,7 +281,7 @@ if (Validator.isNotNull(requestEditStructureURL)) {
 		window,
 		'<portlet:namespace />saveStructure',
 		function() {
-			document.<portlet:namespace />fm.<portlet:namespace />definition.value = window.<portlet:namespace />formBuilder.getContentDefinition();
+			document.<portlet:namespace />fm.<portlet:namespace />definition.value = window.<portlet:namespace />formBuilder.getContentValue();
 
 			submitForm(document.<portlet:namespace />fm);
 		},

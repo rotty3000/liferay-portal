@@ -51,6 +51,7 @@ import com.liferay.portlet.PortletConfigFactoryUtil;
 import java.io.IOException;
 import java.io.Serializable;
 
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -209,7 +210,7 @@ public class ComboServlet extends HttpServlet {
 				byte[] bytes = new byte[0];
 
 				if (Validator.isNotNull(modulePath)) {
-					URL url = getResourceURL(modulePath);
+					URL url = getResourceURL(request, modulePath);
 
 					if (url == null) {
 						response.setHeader(
@@ -359,7 +360,9 @@ public class ComboServlet extends HttpServlet {
 		return fileContentBag._fileContent;
 	}
 
-	protected URL getResourceURL(String modulePath) throws Exception {
+	protected URL getResourceURL(HttpServletRequest request, String modulePath)
+		throws Exception {
+
 		String portletId = getModulePortletId(modulePath);
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
@@ -374,15 +377,32 @@ public class ComboServlet extends HttpServlet {
 
 		String resourcePath = getResourcePath(modulePath);
 
-		URL url = servletContext.getResource(resourcePath);
+		String contextPath = servletContext.getContextPath();
 
-		if (url == null) {
-			throw new ServletException(
-				"Resource " + resourcePath + " does not exist in " +
-					portlet.getContextPath());
+		if (resourcePath.startsWith(contextPath)) {
+			resourcePath = resourcePath.substring(contextPath.length());
 		}
 
-		return url;
+		URL url = servletContext.getResource(resourcePath);
+
+		if (url != null) {
+			return url;
+		}
+
+		url = new URL(
+			request.getScheme(), request.getLocalAddr(), request.getLocalPort(),
+			contextPath + resourcePath);
+
+		HttpURLConnection urlConnection =
+			(HttpURLConnection)url.openConnection();
+
+		if (urlConnection.getResponseCode() == HttpServletResponse.SC_OK) {
+			return url;
+		}
+
+		throw new ServletException(
+			"Resource " + resourcePath + " does not exist in " +
+				portlet.getContextPath());
 	}
 
 	protected String translate(
@@ -413,6 +433,12 @@ public class ComboServlet extends HttpServlet {
 
 	protected boolean validateModuleExtension(String moduleName)
 		throws Exception {
+
+		int index = moduleName.indexOf(CharPool.QUESTION);
+
+		if (index != -1) {
+			moduleName = moduleName.substring(0, index);
+		}
 
 		boolean validModuleExtension = false;
 

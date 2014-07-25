@@ -325,6 +325,7 @@ public class ServiceBuilder {
 				"\t-Dservice.tpl.service_clp_serializer=" + _TPL_ROOT + "service_clp_serializer.ftl\n"+
 				"\t-Dservice.tpl.service_http=" + _TPL_ROOT + "service_http.ftl\n"+
 				"\t-Dservice.tpl.service_impl=" + _TPL_ROOT + "service_impl.ftl\n"+
+				"\t-Dservice.tpl.service_props_util=" + _TPL_ROOT + "service_props_util.ftl\n"+
 				"\t-Dservice.tpl.service_soap=" + _TPL_ROOT + "service_soap.ftl\n"+
 				"\t-Dservice.tpl.service_util=" + _TPL_ROOT + "service_util.ftl\n"+
 				"\t-Dservice.tpl.service_wrapper=" + _TPL_ROOT + "service_wrapper.ftl\n"+
@@ -575,6 +576,8 @@ public class ServiceBuilder {
 			"service_clp_serializer", _tplServiceClpSerializer);
 		_tplServiceHttp = _getTplProperty("service_http", _tplServiceHttp);
 		_tplServiceImpl = _getTplProperty("service_impl", _tplServiceImpl);
+		_tplServicePropsUtil = _getTplProperty(
+			"service_props_util", _tplServicePropsUtil);
 		_tplServiceSoap = _getTplProperty("service_soap", _tplServiceSoap);
 		_tplServiceUtil = _getTplProperty("service_util", _tplServiceUtil);
 		_tplServiceWrapper = _getTplProperty(
@@ -867,6 +870,7 @@ public class ServiceBuilder {
 
 				_createServiceClpMessageListener();
 				_createServiceClpSerializer(exceptionList);
+				_createServicePropsUtil();
 
 				if (Validator.isNotNull(_remotingFileName)) {
 					_createRemotingXml();
@@ -3076,6 +3080,33 @@ public class ServiceBuilder {
 		}
 	}
 
+	private void _createServicePropsUtil() throws Exception {
+		if (!_osgiModule) {
+			return;
+		}
+
+		File file = new File(
+			_implDir + "/" + StringUtil.replace(_propsUtil, ".", "/")
+				+ ".java");
+
+		if (file.exists()) {
+			return;
+		}
+
+		Map<String, Object> context = _getContext();
+
+		int index = _propsUtil.lastIndexOf(".");
+
+		context.put(
+			"servicePropsUtilClassName", _propsUtil.substring(index + 1));
+		context.put(
+			"servicePropsUtilPackagePath", _propsUtil.substring(0, index));
+
+		String content = _processTemplate(_tplServicePropsUtil, context);
+
+		writeFile(file, content);
+	}
+
 	private void _createServiceSoap(Entity entity) throws Exception {
 		JavaClass javaClass = _getJavaClass(
 			_outputPath + "/service/impl/" + entity.getName() +
@@ -5224,6 +5255,8 @@ public class ServiceBuilder {
 		_TPL_ROOT + "service_clp_serializer.ftl";
 	private String _tplServiceHttp = _TPL_ROOT + "service_http.ftl";
 	private String _tplServiceImpl = _TPL_ROOT + "service_impl.ftl";
+	private String _tplServicePropsUtil =
+		_TPL_ROOT + "service_props_util.ftl";
 	private String _tplServiceSoap = _TPL_ROOT + "service_soap.ftl";
 	private String _tplServiceUtil = _TPL_ROOT + "service_util.ftl";
 	private String _tplServiceWrapper = _TPL_ROOT + "service_wrapper.ftl";
