@@ -17,11 +17,15 @@ package com.liferay.taglib.util;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogUtil;
+
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
+
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
 import com.liferay.portal.kernel.servlet.TrackedServletRequest;
+
 import com.liferay.portal.kernel.staging.StagingUtil;
+
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -29,10 +33,13 @@ import com.liferay.portal.kernel.util.ServerDetector;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Theme;
+
 import com.liferay.portal.theme.ThemeDisplay;
+
 import com.liferay.portal.util.CustomJspRegistryUtil;
 
 import com.liferay.portal.util.TagIdResolver;
@@ -45,6 +52,7 @@ import com.liferay.registry.collections.ServiceReferenceMapper;
 import com.liferay.registry.collections.ServiceTrackerMapFactory;
 
 import com.liferay.taglib.FileAvailabilityUtil;
+
 import com.liferay.taglib.servlet.PipingServletResponse;
 
 import com.liferay.taglib.util.TagViewExtension.ExtensionPoint;
@@ -54,8 +62,10 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyContent;
 
