@@ -36,13 +36,20 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.CustomJspRegistryUtil;
 
 import com.liferay.portal.util.TagIdResolver;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceReference;
 
 import com.liferay.registry.collections.ServiceTrackerMap;
+import com.liferay.registry.collections.ServiceReferenceMapper;
 import com.liferay.registry.collections.ServiceTrackerMapFactory;
 
 import com.liferay.taglib.FileAvailabilityUtil;
 import com.liferay.taglib.servlet.PipingServletResponse;
 
+import com.liferay.taglib.util.TagViewExtension.ExtensionPoint;
+
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -386,6 +393,37 @@ public class IncludeTag extends AttributesTagSupport {
 	private static ServiceTrackerMap<String, TagIdResolver>
 		_tagResolvers = ServiceTrackerMapFactory.createObjectServiceTrackerMap(
 			TagIdResolver.class, "target");
+
+	private static
+		ServiceTrackerMap<String, List<TagViewExtension>>
+		_viewExtensions = ServiceTrackerMapFactory.createListServiceTrackerMap(
+			TagViewExtension.class, "(tagId=*)",
+			new ServiceReferenceMapper<String>() {
+
+				@Override
+				public void map(
+					ServiceReference<?> serviceReference,
+					Emitter<String> emitter) {
+
+					Registry registry = RegistryUtil.getRegistry();
+
+					TagViewExtension extension =
+						(TagViewExtension)registry.getService(serviceReference);
+
+					EnumSet<ExtensionPoint> extensionPoints =
+						extension.getExtensionPoints();
+
+					for (ExtensionPoint extensionPoint : extensionPoints) {
+						String prefix = (String)serviceReference.getProperty(
+							"tagId");
+
+						String key = prefix + ":" + extensionPoint;
+
+						emitter.emit(key);
+					}
+				}
+			}
+		);
 
 	private String _page;
 	private boolean _strict;
