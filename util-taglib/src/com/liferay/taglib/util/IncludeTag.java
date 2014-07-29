@@ -34,8 +34,16 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.CustomJspRegistryUtil;
+
+import com.liferay.portal.util.TagIdResolver;
+
+import com.liferay.registry.collections.ServiceTrackerMap;
+import com.liferay.registry.collections.ServiceTrackerMapFactory;
+
 import com.liferay.taglib.FileAvailabilityUtil;
 import com.liferay.taglib.servlet.PipingServletResponse;
+
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -374,6 +382,10 @@ public class IncludeTag extends AttributesTagSupport {
 			PropsUtil.get(PropsKeys.THEME_JSP_OVERRIDE_ENABLED));
 
 	private static Log _log = LogFactoryUtil.getLog(IncludeTag.class);
+
+	private static ServiceTrackerMap<String, TagIdResolver>
+		_tagResolvers = ServiceTrackerMapFactory.createObjectServiceTrackerMap(
+			TagIdResolver.class, "target");
 
 	private String _page;
 	private boolean _strict;
