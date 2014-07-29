@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.servlet.TrackedServletRequest;
 import com.liferay.portal.kernel.staging.StagingUtil;
 
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServerDetector;
@@ -58,6 +59,7 @@ import com.liferay.taglib.servlet.PipingServletResponse;
 import com.liferay.taglib.util.TagViewExtension.ExtensionPoint;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -153,6 +155,38 @@ public class IncludeTag extends AttributesTagSupport {
 		}
 		catch (Exception e) {
 			throw new JspException(e);
+		}
+	}
+
+	private void invokeExtensionAt(
+		TagViewExtension.ExtensionPoint point, boolean ascending) {
+
+		TagIdResolver tagResolver = _tagResolvers.getService(
+			this.getClass().getName());
+
+		if (tagResolver != null) {
+			String extensionId = tagResolver.getId(pageContext, this);
+
+			if (extensionId != null) {
+				List<TagViewExtension> viewExtensions =
+					_viewExtensions.getService(extensionId + ":" + point);
+
+				if (viewExtensions != null) {
+					Iterator<TagViewExtension> iterator;
+
+					if (ascending) {
+						iterator = viewExtensions.iterator();
+					}
+					else {
+						iterator = ListUtil.descendingIterator(viewExtensions);
+					}
+					while (iterator.hasNext()) {
+						TagViewExtension tagViewExtension =  iterator.next();
+
+						tagViewExtension.render(pageContext, point);
+					}
+				}
+			}
 		}
 	}
 
