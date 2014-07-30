@@ -26,6 +26,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -35,6 +36,24 @@ public class ExtensionTag extends TagSupport {
 
 	@Override
 	public int doEndTag() throws JspException {
+		List<ViewExtension> viewExtensions = _extensions.getService(
+			getExtensionId());
+
+		if ((viewExtensions != null) && !viewExtensions.isEmpty()) {
+			for (ViewExtension viewExtension : viewExtensions) {
+				try {
+					viewExtension.render(
+						getPortletRequest(), getPorletResponse());
+				}
+				catch (IllegalStateException ise) {
+					_log.error(ise.getLocalizedMessage(), ise);
+				}
+				catch (IOException ioe) {
+					_log.error(ioe.getLocalizedMessage(), ioe);
+				}
+			}
+		}
+
 		return super.doEndTag();
 	}
 
