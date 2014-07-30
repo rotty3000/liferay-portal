@@ -14,6 +14,13 @@
 
 package com.liferay.portlet.social.service.impl;
 
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.social.model.SocialRequest;
@@ -136,12 +143,16 @@ public class SocialRequestInterpreterLocalServiceImpl
 		SocialRequest request, ThemeDisplay themeDisplay) {
 
 		String className = PortalUtil.getClassName(request.getClassNameId());
+		String requestPortletId = getSocialRequestPortletId(request);
 
 		for (int i = 0; i < _requestInterpreters.size(); i++) {
 			SocialRequestInterpreterImpl requestInterpreter =
 				(SocialRequestInterpreterImpl)_requestInterpreters.get(i);
 
-			if (requestInterpreter.hasClassName(className)) {
+			if ((Validator.isNull(requestPortletId) ||
+				 requestPortletId.equals(requestInterpreter.getPortletId())) &&
+				requestInterpreter.hasClassName(className)) {
+
 				SocialRequestFeedEntry requestFeedEntry =
 					requestInterpreter.interpret(request, themeDisplay);
 
@@ -176,12 +187,16 @@ public class SocialRequestInterpreterLocalServiceImpl
 		SocialRequest request, ThemeDisplay themeDisplay) {
 
 		String className = PortalUtil.getClassName(request.getClassNameId());
+		String requestPortletId = getSocialRequestPortletId(request);
 
 		for (int i = 0; i < _requestInterpreters.size(); i++) {
 			SocialRequestInterpreterImpl requestInterpreter =
 				(SocialRequestInterpreterImpl)_requestInterpreters.get(i);
 
-			if (requestInterpreter.hasClassName(className)) {
+			if ((Validator.isNull(requestPortletId) ||
+				 requestPortletId.equals(requestInterpreter.getPortletId())) &&
+				requestInterpreter.hasClassName(className)) {
+
 				boolean value = requestInterpreter.processConfirmation(
 					request, themeDisplay);
 
@@ -212,12 +227,16 @@ public class SocialRequestInterpreterLocalServiceImpl
 		SocialRequest request, ThemeDisplay themeDisplay) {
 
 		String className = PortalUtil.getClassName(request.getClassNameId());
+		String requestPortletId = getSocialRequestPortletId(request);
 
 		for (int i = 0; i < _requestInterpreters.size(); i++) {
 			SocialRequestInterpreterImpl requestInterpreter =
 				(SocialRequestInterpreterImpl)_requestInterpreters.get(i);
 
-			if (requestInterpreter.hasClassName(className)) {
+			if ((Validator.isNull(requestPortletId) ||
+				 requestPortletId.equals(requestInterpreter.getPortletId())) &&
+				requestInterpreter.hasClassName(className)) {
+
 				boolean value = requestInterpreter.processRejection(
 					request, themeDisplay);
 
@@ -227,6 +246,24 @@ public class SocialRequestInterpreterLocalServiceImpl
 			}
 		}
 	}
+
+	protected String getSocialRequestPortletId(SocialRequest request) {
+		try {
+			JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject(
+				request.getExtraData());
+
+			return extraDataJSONObject.getString("portletId");
+		}
+		catch (JSONException jsone) {
+			_log.error(
+				"Unable to create JSON object from " + request.getExtraData());
+
+			return StringPool.BLANK;
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		SocialRequestInterpreterLocalServiceImpl.class);
 
 	private List<SocialRequestInterpreter> _requestInterpreters =
 		new CopyOnWriteArrayList<SocialRequestInterpreter>();
