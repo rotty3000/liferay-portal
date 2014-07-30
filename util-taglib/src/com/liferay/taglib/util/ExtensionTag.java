@@ -20,6 +20,7 @@ import com.liferay.registry.collections.ServiceTrackerMapFactory;
 import com.liferay.taglib.TagSupport;
 
 import javax.servlet.jsp.JspException;
+import java.util.List;
 
 /**
  * @author Carlos Sierra Andrés
@@ -33,7 +34,14 @@ public class ExtensionTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		return super.doStartTag();
+		List<ViewExtension> viewExtensions = _extensions.getService(
+			getExtensionId());
+
+		if (viewExtensions == null) {
+			return SKIP_BODY;
+		}
+
+		return EVAL_BODY_INCLUDE;
 	}
 
 	public String getExtensionId() {
