@@ -14,6 +14,9 @@
 
 package com.liferay.taglib.util;
 
+import com.liferay.registry.collections.ServiceTrackerMap;
+import com.liferay.registry.collections.ServiceTrackerMapFactory;
+
 import com.liferay.taglib.TagSupport;
 
 import javax.servlet.jsp.JspException;
@@ -42,5 +45,13 @@ public class ExtensionTag extends TagSupport {
 	}
 
 	private String _extensionId;
+
+	private static ServiceTrackerMap<String, List<ViewExtension>>
+		_extensions = ServiceTrackerMapFactory.createListServiceTracker(
+		ViewExtension.class, "extension-id");
+
+	static {
+		_extensions.open();
+	}
 
 }
