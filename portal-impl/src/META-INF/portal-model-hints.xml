@@ -1390,9 +1390,7 @@
 			<sanitize content-type="text/plain" modes="ALL" />
 			<validator name="required" />
 		</field>
-		<field name="subtitle" type="String">
-			<hint-collection name="TEXTAREA" />
-		</field>
+		<field name="subtitle" type="String" />
 		<field name="urlTitle" type="String">
 			<hint name="max-length">150</hint>
 		</field>
