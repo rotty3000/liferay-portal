@@ -57,6 +57,8 @@ public class WabFactory {
 				_webBundleDeployer);
 
 			_bundleContext.addBundleListener(_stoppedBundleListener);
+
+			EventUtil.start(_bundleContext);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
