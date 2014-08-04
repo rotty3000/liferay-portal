@@ -134,6 +134,10 @@
 					<aui:validator name="required" />
 				</aui:input>
 
+				<liferay-ui:extension extensionId="login-form-after-password" />
+
+				JORL
+
 				<span id="<portlet:namespace />passwordCapsLockSpan" style="display: none;"><liferay-ui:message key="caps-lock-is-on" /></span>
 
 				<c:if test="<%= company.isAutoLogin() && !PropsValues.SESSION_DISABLED %>">

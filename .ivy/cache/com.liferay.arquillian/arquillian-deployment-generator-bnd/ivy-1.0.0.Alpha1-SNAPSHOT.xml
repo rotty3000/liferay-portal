@@ -4,7 +4,7 @@
 		module="arquillian-deployment-generator-bnd"
 		revision="1.0.0.Alpha1-SNAPSHOT"
 		status="integration"
-		publication="20140710033217"
+		publication="20140710123217"
 	>
 		<description homepage="" />
 		<m:properties__version.cobertura.plugin>2.6</m:properties__version.cobertura.plugin>
@@ -20,16 +20,16 @@
 		<m:properties__version.org.eclipse.m2e.lifecycle-mapping>1.0.0</m:properties__version.org.eclipse.m2e.lifecycle-mapping>
 		<m:properties__version.jdepend.plugin>2.0-beta-2</m:properties__version.jdepend.plugin>
 		<m:properties__version.taglist.plugin>2.4</m:properties__version.taglist.plugin>
-		<m:properties__version.pmd.plugin>3.0.1</m:properties__version.pmd.plugin>
 		<m:properties__version.compiler.plugin>3.1</m:properties__version.compiler.plugin>
+		<m:properties__version.pmd.plugin>3.0.1</m:properties__version.pmd.plugin>
 		<m:properties__version.javancss.plugin>2.0</m:properties__version.javancss.plugin>
 		<m:properties__version.bundle.plugin>2.3.7</m:properties__version.bundle.plugin>
 		<m:properties__jdk.min.version>${maven.compiler.argument.source}</m:properties__jdk.min.version>
-		<m:properties__version.idlj.plugin>1.2.1</m:properties__version.idlj.plugin>
 		<m:properties__version.idea.plugin>2.2</m:properties__version.idea.plugin>
+		<m:properties__version.idlj.plugin>1.2.1</m:properties__version.idlj.plugin>
 		<m:properties__version.apt.plugin>1.0-alpha-5</m:properties__version.apt.plugin>
-		<m:properties__version.clean.plugin>2.5</m:properties__version.clean.plugin>
 		<m:properties__version.javacc.plugin>2.6</m:properties__version.javacc.plugin>
+		<m:properties__version.clean.plugin>2.5</m:properties__version.clean.plugin>
 		<m:properties__version.failsafe.plugin>${version.surefire.plugin}</m:properties__version.failsafe.plugin>
 		<m:properties__version.buildnumber.plugin>1.2</m:properties__version.buildnumber.plugin>
 		<m:properties__maven.compiler.argument.target>${maven.compiler.target}</m:properties__maven.compiler.argument.target>
@@ -83,7 +83,6 @@
 	</configurations>
 	<publications>
 		<artifact name="arquillian-deployment-generator-bnd" type="jar" ext="jar" conf="master"/>
-		<artifact name="arquillian-deployment-generator-bnd" type="source" ext="jar" conf="sources" m:classifier="sources"/>
 	</publications>
 	<dependencies>
 		<dependency org="org.jboss.arquillian.container" name="arquillian-container-test-spi" rev="1.1.2.Final" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>

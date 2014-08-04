@@ -22,11 +22,14 @@ import com.liferay.registry.collections.ServiceTrackerMap;
 import com.liferay.registry.collections.ServiceTrackerMapFactory;
 import com.liferay.taglib.TagSupport;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.filter.RenderResponseWrapper;
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -36,20 +39,17 @@ public class ExtensionTag extends TagSupport {
 
 	@Override
 	public int doEndTag() throws JspException {
-		List<ViewExtension> viewExtensions = _extensions.getService(
+		List<PortletViewExtension> viewExtensions = _extensions.getService(
 			getExtensionId());
 
 		if ((viewExtensions != null) && !viewExtensions.isEmpty()) {
-			for (ViewExtension viewExtension : viewExtensions) {
+			for (PortletViewExtension viewExtension : viewExtensions) {
 				try {
 					viewExtension.render(
-						getPortletRequest(), getPorletResponse());
+						getRenderRequest(), getRenderResponse());
 				}
-				catch (IllegalStateException ise) {
-					_log.error(ise.getLocalizedMessage(), ise);
-				}
-				catch (IOException ioe) {
-					_log.error(ioe.getLocalizedMessage(), ioe);
+				catch (Exception e) {
+					_log.error(e.getLocalizedMessage(), e);
 				}
 			}
 		}
@@ -57,11 +57,33 @@ public class ExtensionTag extends TagSupport {
 		return super.doEndTag();
 	}
 
-	protected PortletResponse getPorletResponse() {
-		return getFromConstant(JavaConstants.JAVAX_PORTLET_RESPONSE);
+	protected RenderResponse getRenderResponse() throws IOException {
+		final RenderResponse renderResponse = getFromConstant(
+			JavaConstants.JAVAX_PORTLET_RESPONSE);
+
+		return new RenderResponseWrapper(renderResponse) {
+
+			@Override
+			public OutputStream getPortletOutputStream() throws IOException {
+
+				return new OutputStream() {
+
+					@Override
+					public void write(int b) throws IOException {
+						pageContext.getOut().write(b);
+					}
+				};
+			}
+
+			@Override
+			public PrintWriter getWriter() throws IOException {
+				return new PrintWriter(pageContext.getOut(), true);
+			}
+
+		};
 	}
 
-	protected PortletRequest getPortletRequest() {
+	protected RenderRequest getRenderRequest() {
 		return getFromConstant(JavaConstants.JAVAX_PORTLET_REQUEST);
 	}
 
@@ -81,7 +103,7 @@ public class ExtensionTag extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		List<ViewExtension> viewExtensions = _extensions.getService(
+		List<PortletViewExtension> viewExtensions = _extensions.getService(
 			getExtensionId());
 
 		if (viewExtensions == null) {
@@ -103,9 +125,9 @@ public class ExtensionTag extends TagSupport {
 
 	private static Log _log = LogFactoryUtil.getLog(ExtensionTag.class);
 
-	private static ServiceTrackerMap<String, List<ViewExtension>>
+	private static ServiceTrackerMap<String, List<PortletViewExtension>>
 		_extensions = ServiceTrackerMapFactory.createListServiceTracker(
-		ViewExtension.class, "extension-id");
+		PortletViewExtension.class, "extension-id");
 
 	static {
 		_extensions.open();
