@@ -1,0 +1,3 @@
+Bundle-Name: Polls API
+Export-Package: *
+Include-Resource: classes
