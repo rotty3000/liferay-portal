@@ -14,17 +14,17 @@
 
 package com.liferay.taglib.util;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.io.IOException;
 
 /**
  * @author Carlos Sierra Andrés
  */
-public interface ViewExtension {
+public interface PortletViewExtension {
 
 	public void render(
-			PortletRequest portletRequest, PortletResponse portletResponse)
+			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException;
 
 }
