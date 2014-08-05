@@ -28,8 +28,10 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 import java.lang.reflect.InvocationHandler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -63,21 +65,27 @@ public class ModelListenerRegistrationUtil {
 	}
 
 	private <T> ModelListener<T>[] _getModelListeners(Class<T> clazz) {
-		List<ModelListener<?>> modelListeners = _modelListeners.get(clazz);
+		Set<ModelListener<?>> modelListeners = _getModelListenersSet(clazz);
+
+		return modelListeners.toArray(new ModelListener[modelListeners.size()]);
+	}
+
+	private <T> Set<ModelListener<?>> _getModelListenersSet(Class<T> clazz) {
+		Set<ModelListener<?>> modelListeners = _modelListeners.get(clazz);
 
 		if (modelListeners == null) {
-			modelListeners = new ArrayList<ModelListener<?>>();
+			modelListeners = new HashSet<ModelListener<?>>();
 
-			List<ModelListener<?>> previousList = _modelListeners.putIfAbsent(
+			Set<ModelListener<?>> previousList = _modelListeners.putIfAbsent(
 				clazz, modelListeners);
 
 			if (previousList != null) {
 				modelListeners = previousList;
 			}
 		}
-
-		return modelListeners.toArray(new ModelListener[modelListeners.size()]);
+		return modelListeners;
 	}
+
 
 	private <T> void _register(
 		String className, ModelListener<T> modelListener) {
@@ -103,8 +111,8 @@ public class ModelListenerRegistrationUtil {
 	private static ModelListenerRegistrationUtil _instance =
 		new ModelListenerRegistrationUtil();
 
-	private ConcurrentMap<Class<?>, List<ModelListener<?>>> _modelListeners =
-		new ConcurrentHashMap<Class<?>, List<ModelListener<?>>>();
+	private ConcurrentMap<Class<?>, Set<ModelListener<?>>> _modelListeners =
+		new ConcurrentHashMap<Class<?>, Set<ModelListener<?>>>();
 	private Map<String, ServiceRegistration<?>> _serviceRegistrations =
 		new ConcurrentHashMap<String, ServiceRegistration<?>>();
 	private ServiceTracker<ModelListener<?>, ModelListener<?>> _serviceTracker;
@@ -128,18 +136,8 @@ public class ModelListenerRegistrationUtil {
 				return null;
 			}
 
-			List<ModelListener<?>> modelListeners = _modelListeners.get(clazz);
-
-			if (modelListeners == null) {
-				modelListeners = new ArrayList<ModelListener<?>>();
-
-				List<ModelListener<?>> previousModelListeners =
-					_modelListeners.putIfAbsent(clazz, modelListeners);
-
-				if (previousModelListeners != null) {
-					modelListeners = previousModelListeners;
-				}
-			}
+			Set<ModelListener<?>> modelListeners =
+				_getModelListenersSet(clazz);
 
 			modelListeners.add(modelListener);
 
@@ -163,7 +161,7 @@ public class ModelListenerRegistrationUtil {
 
 			Class<?> clazz = _getModelListeners(modelListener);
 
-			List<ModelListener<?>> modelListeners = _modelListeners.get(clazz);
+			Set<ModelListener<?>> modelListeners = _modelListeners.get(clazz);
 
 			if (modelListeners != null) {
 				modelListeners.remove(modelListener);
