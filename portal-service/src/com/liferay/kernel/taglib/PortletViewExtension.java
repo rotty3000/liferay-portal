@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.taglib.util;
+package com.liferay.kernel.taglib;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
