@@ -87,6 +87,9 @@
 			<finder-column name="groupId" />
 			<finder-column name="parentCategoryId" />
 		</finder>
+		<finder name="Name" return-type="ShoppingCategory">
+			<finder-column name="name" />
+		</finder>
 
 		<!-- References -->
 
