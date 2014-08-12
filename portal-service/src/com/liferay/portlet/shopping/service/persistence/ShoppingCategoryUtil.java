@@ -567,6 +567,64 @@ public class ShoppingCategoryUtil {
 	}
 
 	/**
+	* Returns the shopping category where name = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	*
+	* @param name the name
+	* @return the matching shopping category
+	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingCategory findByName(
+		java.lang.String name)
+		throws com.liferay.portlet.shopping.NoSuchCategoryException {
+		return getPersistence().findByName(name);
+	}
+
+	/**
+	* Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param name the name
+	* @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingCategory fetchByName(
+		java.lang.String name) {
+		return getPersistence().fetchByName(name);
+	}
+
+	/**
+	* Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param name the name
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingCategory fetchByName(
+		java.lang.String name, boolean retrieveFromCache) {
+		return getPersistence().fetchByName(name, retrieveFromCache);
+	}
+
+	/**
+	* Removes the shopping category where name = &#63; from the database.
+	*
+	* @param name the name
+	* @return the shopping category that was removed
+	*/
+	public static com.liferay.portlet.shopping.model.ShoppingCategory removeByName(
+		java.lang.String name)
+		throws com.liferay.portlet.shopping.NoSuchCategoryException {
+		return getPersistence().removeByName(name);
+	}
+
+	/**
+	* Returns the number of shopping categories where name = &#63;.
+	*
+	* @param name the name
+	* @return the number of matching shopping categories
+	*/
+	public static int countByName(java.lang.String name) {
+		return getPersistence().countByName(name);
+	}
+
+	/**
 	* Caches the shopping category in the entity cache if it is enabled.
 	*
 	* @param shoppingCategory the shopping category

@@ -418,6 +418,54 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	public int filterCountByG_P(long groupId, long parentCategoryId);
 
 	/**
+	* Returns the shopping category where name = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	*
+	* @param name the name
+	* @return the matching shopping category
+	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory findByName(
+		java.lang.String name)
+		throws com.liferay.portlet.shopping.NoSuchCategoryException;
+
+	/**
+	* Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param name the name
+	* @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory fetchByName(
+		java.lang.String name);
+
+	/**
+	* Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param name the name
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory fetchByName(
+		java.lang.String name, boolean retrieveFromCache);
+
+	/**
+	* Removes the shopping category where name = &#63; from the database.
+	*
+	* @param name the name
+	* @return the shopping category that was removed
+	*/
+	public com.liferay.portlet.shopping.model.ShoppingCategory removeByName(
+		java.lang.String name)
+		throws com.liferay.portlet.shopping.NoSuchCategoryException;
+
+	/**
+	* Returns the number of shopping categories where name = &#63;.
+	*
+	* @param name the name
+	* @return the number of matching shopping categories
+	*/
+	public int countByName(java.lang.String name);
+
+	/**
 	* Caches the shopping category in the entity cache if it is enabled.
 	*
 	* @param shoppingCategory the shopping category

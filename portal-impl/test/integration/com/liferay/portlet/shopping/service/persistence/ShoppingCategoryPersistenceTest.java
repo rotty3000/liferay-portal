@@ -28,15 +28,19 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.util.IntegerWrapper;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.test.TransactionalTestRule;
 import com.liferay.portal.test.runners.LiferayIntegrationJUnitTestRunner;
 import com.liferay.portal.tools.DBUpgrader;
+import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.test.RandomTestUtil;
 
 import com.liferay.portlet.shopping.NoSuchCategoryException;
 import com.liferay.portlet.shopping.model.ShoppingCategory;
+import com.liferay.portlet.shopping.model.impl.ShoppingCategoryModelImpl;
 import com.liferay.portlet.shopping.service.ShoppingCategoryLocalServiceUtil;
 
 import org.junit.After;
@@ -199,6 +203,20 @@ public class ShoppingCategoryPersistenceTest {
 				RandomTestUtil.nextLong());
 
 			_persistence.countByG_P(0L, 0L);
+		}
+		catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testCountByName() {
+		try {
+			_persistence.countByName(StringPool.BLANK);
+
+			_persistence.countByName(StringPool.NULL);
+
+			_persistence.countByName((String)null);
 		}
 		catch (Exception e) {
 			Assert.fail(e.getMessage());
@@ -448,6 +466,23 @@ public class ShoppingCategoryPersistenceTest {
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
 		Assert.assertEquals(0, result.size());
+	}
+
+	@Test
+	public void testResetOriginalValues() throws Exception {
+		if (!PropsValues.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			return;
+		}
+
+		ShoppingCategory newShoppingCategory = addShoppingCategory();
+
+		_persistence.clearCache();
+
+		ShoppingCategoryModelImpl existingShoppingCategoryModelImpl = (ShoppingCategoryModelImpl)_persistence.findByPrimaryKey(newShoppingCategory.getPrimaryKey());
+
+		Assert.assertTrue(Validator.equals(
+				existingShoppingCategoryModelImpl.getName(),
+				existingShoppingCategoryModelImpl.getOriginalName()));
 	}
 
 	protected ShoppingCategory addShoppingCategory() throws Exception {
