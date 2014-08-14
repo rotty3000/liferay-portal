@@ -16,9 +16,11 @@ package com.liferay.portal.security.permission;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PropsValues;
@@ -36,6 +38,11 @@ public abstract class BasePermissionChecker implements PermissionChecker {
 
 	@Override
 	public abstract PermissionChecker clone();
+
+	@Override
+	public long getCompanyGroupId() {
+		return companyGroupId;
+	}
 
 	@Override
 	public long getCompanyId() {
@@ -127,6 +134,16 @@ public abstract class BasePermissionChecker implements PermissionChecker {
 		catch (Exception e) {
 			_log.error(e, e);
 		}
+
+		try {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				user.getCompanyId());
+
+			this.companyGroupId = companyGroup.getGroupId();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
 	}
 
 	@Override
@@ -175,6 +192,7 @@ public abstract class BasePermissionChecker implements PermissionChecker {
 	}
 
 	protected boolean checkGuest = PropsValues.PERMISSIONS_CHECK_GUEST_ENABLED;
+	protected long companyGroupId;
 	protected long defaultUserId;
 	protected Boolean omniadmin;
 	protected Role ownerRole;
