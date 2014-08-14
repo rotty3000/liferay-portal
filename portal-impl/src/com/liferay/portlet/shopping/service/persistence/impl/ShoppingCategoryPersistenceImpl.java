@@ -28,6 +28,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -1824,6 +1826,248 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 
 	private static final String _FINDER_COLUMN_G_P_GROUPID_2 = "shoppingCategory.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_P_PARENTCATEGORYID_2 = "shoppingCategory.parentCategoryId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_NAME = new FinderPath(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCategoryModelImpl.FINDER_CACHE_ENABLED,
+			ShoppingCategoryImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByName", new String[] { String.class.getName() },
+			ShoppingCategoryModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
+			ShoppingCategoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
+			new String[] { String.class.getName() });
+
+	/**
+	 * Returns the shopping category where name = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	 *
+	 * @param name the name
+	 * @return the matching shopping category
+	 * @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	 */
+	@Override
+	public ShoppingCategory findByName(String name)
+		throws NoSuchCategoryException {
+		ShoppingCategory shoppingCategory = fetchByName(name);
+
+		if (shoppingCategory == null) {
+			StringBundler msg = new StringBundler(4);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("name=");
+			msg.append(name);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchCategoryException(msg.toString());
+		}
+
+		return shoppingCategory;
+	}
+
+	/**
+	 * Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param name the name
+	 * @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	 */
+	@Override
+	public ShoppingCategory fetchByName(String name) {
+		return fetchByName(name, true);
+	}
+
+	/**
+	 * Returns the shopping category where name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param name the name
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching shopping category, or <code>null</code> if a matching shopping category could not be found
+	 */
+	@Override
+	public ShoppingCategory fetchByName(String name, boolean retrieveFromCache) {
+		Object[] finderArgs = new Object[] { name };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_NAME,
+					finderArgs, this);
+		}
+
+		if (result instanceof ShoppingCategory) {
+			ShoppingCategory shoppingCategory = (ShoppingCategory)result;
+
+			if (!Validator.equals(name, shoppingCategory.getName())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_SELECT_SHOPPINGCATEGORY_WHERE);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_NAME_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_NAME_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_NAME_NAME_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindName) {
+					qPos.add(name);
+				}
+
+				List<ShoppingCategory> list = q.list();
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
+						finderArgs, list);
+				}
+				else {
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"ShoppingCategoryPersistenceImpl.fetchByName(String, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					ShoppingCategory shoppingCategory = list.get(0);
+
+					result = shoppingCategory;
+
+					cacheResult(shoppingCategory);
+
+					if ((shoppingCategory.getName() == null) ||
+							!shoppingCategory.getName().equals(name)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
+							finderArgs, shoppingCategory);
+					}
+				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ShoppingCategory)result;
+		}
+	}
+
+	/**
+	 * Removes the shopping category where name = &#63; from the database.
+	 *
+	 * @param name the name
+	 * @return the shopping category that was removed
+	 */
+	@Override
+	public ShoppingCategory removeByName(String name)
+		throws NoSuchCategoryException {
+		ShoppingCategory shoppingCategory = findByName(name);
+
+		return remove(shoppingCategory);
+	}
+
+	/**
+	 * Returns the number of shopping categories where name = &#63;.
+	 *
+	 * @param name the name
+	 * @return the number of matching shopping categories
+	 */
+	@Override
+	public int countByName(String name) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_NAME;
+
+		Object[] finderArgs = new Object[] { name };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SHOPPINGCATEGORY_WHERE);
+
+			boolean bindName = false;
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_NAME_NAME_1);
+			}
+			else if (name.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_NAME_NAME_3);
+			}
+			else {
+				bindName = true;
+
+				query.append(_FINDER_COLUMN_NAME_NAME_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindName) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_NAME_NAME_1 = "shoppingCategory.name IS NULL";
+	private static final String _FINDER_COLUMN_NAME_NAME_2 = "shoppingCategory.name = ?";
+	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(shoppingCategory.name IS NULL OR shoppingCategory.name = '')";
 
 	public ShoppingCategoryPersistenceImpl() {
 		setModelClass(ShoppingCategory.class);
@@ -1839,6 +2083,9 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 		EntityCacheUtil.putResult(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCategoryImpl.class, shoppingCategory.getPrimaryKey(),
 			shoppingCategory);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME,
+			new Object[] { shoppingCategory.getName() }, shoppingCategory);
 
 		shoppingCategory.resetOriginalValues();
 	}
@@ -1897,6 +2144,8 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(shoppingCategory);
 	}
 
 	@Override
@@ -1907,6 +2156,49 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 		for (ShoppingCategory shoppingCategory : shoppingCategories) {
 			EntityCacheUtil.removeResult(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 				ShoppingCategoryImpl.class, shoppingCategory.getPrimaryKey());
+
+			clearUniqueFindersCache(shoppingCategory);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(ShoppingCategory shoppingCategory) {
+		if (shoppingCategory.isNew()) {
+			Object[] args = new Object[] { shoppingCategory.getName() };
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME, args,
+				shoppingCategory);
+		}
+		else {
+			ShoppingCategoryModelImpl shoppingCategoryModelImpl = (ShoppingCategoryModelImpl)shoppingCategory;
+
+			if ((shoppingCategoryModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_NAME.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { shoppingCategory.getName() };
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_NAME, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_NAME, args,
+					shoppingCategory);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(ShoppingCategory shoppingCategory) {
+		ShoppingCategoryModelImpl shoppingCategoryModelImpl = (ShoppingCategoryModelImpl)shoppingCategory;
+
+		Object[] args = new Object[] { shoppingCategory.getName() };
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME, args);
+
+		if ((shoppingCategoryModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_NAME.getColumnBitmask()) != 0) {
+			args = new Object[] { shoppingCategoryModelImpl.getOriginalName() };
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_NAME, args);
 		}
 	}
 
@@ -2090,6 +2382,9 @@ public class ShoppingCategoryPersistenceImpl extends BasePersistenceImpl<Shoppin
 		EntityCacheUtil.putResult(ShoppingCategoryModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingCategoryImpl.class, shoppingCategory.getPrimaryKey(),
 			shoppingCategory, false);
+
+		clearUniqueFindersCache(shoppingCategory);
+		cacheUniqueFindersCache(shoppingCategory);
 
 		shoppingCategory.resetOriginalValues();
 

@@ -579,6 +579,7 @@ create unique index IX_FC46FE16 on ShoppingCart (groupId, userId);
 create index IX_54101CC8 on ShoppingCart (userId);
 
 create index IX_1E6464F5 on ShoppingCategory (groupId, parentCategoryId);
+create index IX_59D54FAB on ShoppingCategory (name);
 
 create unique index IX_DC60CFAE on ShoppingCoupon (code_);
 create index IX_3251AF16 on ShoppingCoupon (groupId);
