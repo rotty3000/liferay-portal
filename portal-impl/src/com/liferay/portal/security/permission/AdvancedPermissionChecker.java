@@ -21,6 +21,8 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
@@ -37,6 +39,7 @@ import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
@@ -779,6 +782,31 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		return value;
 	}
 
+	protected long getCompanyId(long groupId, String name, String primKey)
+		throws PrincipalException {
+
+		long companyId = user.getCompanyId();
+
+		if (PERMISSIONS_CHECK_REQUIRE_COMPANY_CONTEXT) {
+			Group group = GroupLocalServiceUtil.fetchGroup(groupId);
+
+			if (group == null) {
+				throw new PrincipalException(
+					"Unable to load group " + groupId + " to obtain target " +
+						"portal instance context for the checked object " +
+						name + " with primary key " + primKey +
+						". For non-site permission checks please provide " +
+						" groupId of GroupLocalService.getCompanyGroup(), " +
+						"please see also portal property " +
+						PropsKeys.PERMISSIONS_CHECK_REQUIRE_COMPANY_CONTEXT);
+			}
+
+			companyId = group.getCompanyId();
+		}
+
+		return companyId;
+	}
+
 	/**
 	 * Returns representations of the resource at each scope level.
 	 *
@@ -912,7 +940,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			}
 		}
 
-		long companyId = user.getCompanyId();
+		long companyId = getCompanyId(groupId, name, primKey);
 
 		List<Resource> resources = getResources(
 			companyId, groupId, name, primKey, actionId);
@@ -986,13 +1014,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 		stopWatch.start();
 
-		long companyId = user.getCompanyId();
-
-		if (groupId > 0) {
-			Group group = GroupLocalServiceUtil.getGroup(groupId);
-
-			companyId = group.getCompanyId();
-		}
+		long companyId = getCompanyId(groupId, name, primKey);
 
 		boolean hasLayoutManagerPermission = true;
 
@@ -1324,6 +1346,11 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 				" " + name + " " + primKey + " " + actionId + " takes " +
 					stopWatch.getTime() + " ms");
 	}
+
+	protected static final boolean PERMISSIONS_CHECK_REQUIRE_COMPANY_CONTEXT =
+		GetterUtil.getBoolean(PropsUtil.get(
+			PropsKeys.PERMISSIONS_CHECK_REQUIRE_COMPANY_CONTEXT),
+			true);
 
 	/**
 	 * @deprecated As of 6.1.0
