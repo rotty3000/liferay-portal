@@ -203,7 +203,8 @@ public class GroupPermissionImpl
 		PermissionChecker permissionChecker, String actionId) {
 
 		return permissionChecker.hasPermission(
-			0, Group.class.getName(), 0, actionId);
+			permissionChecker.getCompanyGroupId(), Group.class.getName(), 0,
+			actionId);
 	}
 
 }

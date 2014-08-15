@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
@@ -28,6 +29,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.BaseModelPermissionChecker;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -150,7 +152,8 @@ public class UserPermissionImpl
 			}
 
 			if (permissionChecker.hasPermission(
-					0, User.class.getName(), userId, actionId)) {
+					getCompanyGroupId(permissionChecker, user),
+					User.class.getName(), userId, actionId)) {
 
 				return true;
 			}
@@ -216,6 +219,34 @@ public class UserPermissionImpl
 		PermissionChecker permissionChecker, long userId, String actionId) {
 
 		return contains(permissionChecker, userId, null, actionId);
+	}
+
+	protected long getCompanyGroupId(
+		PermissionChecker permissionChecker, User user) {
+
+		long companyGroupId = permissionChecker.getCompanyGroupId();
+
+		if (user == null) {
+			return companyGroupId;
+		}
+
+		long companyId = user.getCompanyId();
+
+		if (companyId == permissionChecker.getCompanyId()) {
+			return companyGroupId;
+		}
+
+		try {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				companyId);
+
+			return companyGroup.getGroupId();
+		} catch (PortalException e) {
+			_log.error(
+				"Unable to load default group for company " + companyId, e);
+		}
+
+		return 0;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(UserPermissionImpl.class);
