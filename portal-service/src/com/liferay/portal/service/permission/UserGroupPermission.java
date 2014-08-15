@@ -14,6 +14,7 @@
 
 package com.liferay.portal.service.permission;
 
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -29,5 +30,14 @@ public interface UserGroupPermission {
 
 	public boolean contains(
 		PermissionChecker permissionChecker, long userGroupId, String actionId);
+
+	public void check(
+			PermissionChecker permissionChecker, UserGroup userGroup,
+			String actionId)
+		throws PrincipalException;
+
+	public boolean contains(
+		PermissionChecker permissionChecker, UserGroup userGroup,
+		String actionId);
 
 }

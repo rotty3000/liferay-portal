@@ -15,6 +15,7 @@
 package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -38,6 +39,23 @@ public class LayoutPrototypePermissionUtil {
 
 		return getLayoutPrototypePermission().contains(
 			permissionChecker, layoutPrototypeId, actionId);
+	}
+
+	public static void check(
+			PermissionChecker permissionChecker,
+			LayoutPrototype layoutPrototype, String actionId)
+		throws PrincipalException {
+
+		getLayoutPrototypePermission().check(
+			permissionChecker, layoutPrototype, actionId);
+	}
+
+	public static boolean contains(
+		PermissionChecker permissionChecker,
+		LayoutPrototype layoutPrototype, String actionId) {
+
+		return getLayoutPrototypePermission().contains(
+			permissionChecker, layoutPrototype, actionId);
 	}
 
 	public static LayoutPrototypePermission getLayoutPrototypePermission() {

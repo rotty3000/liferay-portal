@@ -14,6 +14,7 @@
 
 package com.liferay.portal.service.permission;
 
+import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -29,6 +30,15 @@ public interface LayoutPrototypePermission {
 
 	public boolean contains(
 		PermissionChecker permissionChecker, long layoutPrototypeId,
+		String actionId);
+
+	public void check(
+			PermissionChecker permissionChecker,
+			LayoutPrototype layoutPrototype, String actionId)
+		throws PrincipalException;
+
+	public boolean contains(
+		PermissionChecker permissionChecker, LayoutPrototype layoutPrototype,
 		String actionId);
 
 }

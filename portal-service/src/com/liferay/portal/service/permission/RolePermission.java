@@ -14,6 +14,7 @@
 
 package com.liferay.portal.service.permission;
 
+import com.liferay.portal.model.Role;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -32,5 +33,16 @@ public interface RolePermission {
 
 	public boolean contains(
 		PermissionChecker permissionChecker, long roleId, String actionId);
+
+	public void check(
+			PermissionChecker permissionChecker, Role role, String actionId)
+		throws PrincipalException;
+
+	public boolean contains(
+		PermissionChecker permissionChecker, long groupId, Role role,
+		String actionId);
+
+	public boolean contains(
+		PermissionChecker permissionChecker, Role role, String actionId);
 
 }
