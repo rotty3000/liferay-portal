@@ -2,7 +2,7 @@ Bundle-Name: Liferay Portal Registry API
 Bundle-SymbolicName: com.liferay.registry.api
 Bundle-Version: 7.0.0.1
 Export-Package:\
-	com.liferay.registry,\
+	com.liferay.registry;version=7.0.0.1,\
 	com.liferay.registry.collections,\
 	com.liferay.registry.util
 Include-Resource:\
