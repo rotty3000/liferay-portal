@@ -17,6 +17,8 @@ package com.liferay.portal.search.elasticsearch.facet;
 import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 
@@ -24,6 +26,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(immediate = true, property = {"default.facet.processor=true"})
 public class DefaultFacetProcessor
 	implements FacetProcessor<SearchRequestBuilder> {
 

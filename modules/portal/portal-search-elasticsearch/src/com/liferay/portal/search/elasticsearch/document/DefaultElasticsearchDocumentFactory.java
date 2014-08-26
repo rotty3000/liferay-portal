@@ -22,13 +22,15 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.io.IOException;
 
-import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import java.math.BigDecimal;
+
+import org.osgi.service.component.annotations.Component;
 
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
@@ -37,6 +39,7 @@ import org.elasticsearch.common.xcontent.XContentFactory;
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(immediate = true)
 public class DefaultElasticsearchDocumentFactory
 	implements ElasticsearchDocumentFactory {
 

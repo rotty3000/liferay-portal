@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.HitsImpl;
+import com.liferay.portal.kernel.search.IndexSearcher;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -53,6 +54,10 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.time.StopWatch;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -77,6 +82,7 @@ import org.elasticsearch.search.sort.SortOrder;
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(immediate = true, service = IndexSearcher.class)
 public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 
 	@Override
@@ -171,12 +177,19 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
+	@Reference
 	public void setElasticsearchConnectionManager(
 		ElasticsearchConnectionManager elasticsearchConnectionManager) {
 
 		_elasticsearchConnectionManager = elasticsearchConnectionManager;
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		target = "((class.name=" +
+			"com.liferay.portal.search.elasticsearch.facet." +
+			"CompositeFacetProcessor))"
+	)
 	public void setFacetProcessor(
 		FacetProcessor<SearchRequestBuilder> facetProcessor) {
 

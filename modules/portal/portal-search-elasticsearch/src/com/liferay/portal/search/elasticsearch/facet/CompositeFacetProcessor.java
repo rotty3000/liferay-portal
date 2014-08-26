@@ -19,11 +19,21 @@ import com.liferay.portal.kernel.search.facet.Facet;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.liferay.portal.kernel.util.MapUtil;
 import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Michael C. Han
  */
+@Component(immediate = true, property = {
+		"class.name=com.liferay.portal.search.elasticsearch.facet.CompositeFacetProcessor"
+	}
+)
 public class CompositeFacetProcessor
 	implements FacetProcessor<SearchRequestBuilder> {
 
@@ -41,14 +51,37 @@ public class CompositeFacetProcessor
 		facetProcessor.processFacet(searchRequestBuilder, facet);
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.MANDATORY,
+		target = "(&(!(class.name=*))(default.facet.processor=*))"
+	)
 	public void setDefaultFacetProcessor(FacetProcessor defaultFacetProcessor) {
 		_defaultFacetProcessor = defaultFacetProcessor;
 	}
 
-	public void setFacetProcessors(
-		Map<String, FacetProcessor> facetProcessors) {
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(&(!(class.name=" +
+			"com.liferay.portal.search.elasticsearch.facet." +
+			"CompositeFacetProcessor))" +
+			"(!(default.facet.processor=*)))"
+	)
+	public void setFacetProcessor(
+		FacetProcessor facetProcessor, Map<String, Object> properties) {
 
-		_facetProcessors = facetProcessors;
+		String className = MapUtil.getString(properties, "class.name");
+
+		_facetProcessors.put(className, facetProcessor);
+	}
+
+	public void unsetFacetProcessor(
+		FacetProcessor facetProcessor, Map<String, Object> properties) {
+
+		String className = MapUtil.getString(properties, "class.name");
+
+		_facetProcessors.remove(className);
 	}
 
 	private static FacetProcessor _defaultFacetProcessor;

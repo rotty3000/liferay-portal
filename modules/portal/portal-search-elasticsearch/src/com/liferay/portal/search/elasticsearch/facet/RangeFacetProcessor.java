@@ -20,12 +20,20 @@ import com.liferay.portal.kernel.search.facet.Facet;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.StringPool;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.elasticsearch.action.search.SearchRequestBuilder;
 
 /**
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(
+	immediate = true,
+	property = {
+		"class.name=com.liferay.portal.kernel.search.facet.RangeFacet"
+	}
+)
 public class RangeFacetProcessor
 	implements FacetProcessor<SearchRequestBuilder> {
 

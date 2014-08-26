@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseIndexWriter;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
+import com.liferay.portal.kernel.search.IndexWriter;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.PortalRunMode;
@@ -28,6 +29,9 @@ import com.liferay.portal.search.elasticsearch.util.LogUtil;
 
 import java.util.Collection;
 import java.util.concurrent.Future;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -43,6 +47,7 @@ import org.elasticsearch.index.query.QueryBuilders;
  * @author Michael C. Han
  * @author Milen Dyankov
  */
+@Component(immediate = true, service = IndexWriter.class)
 public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 	@Override
@@ -154,12 +159,14 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		}
 	}
 
+	@Reference
 	public void setElasticsearchConnectionManager(
 		ElasticsearchConnectionManager elasticsearchConnectionManager) {
 
 		_elasticsearchConnectionManager = elasticsearchConnectionManager;
 	}
 
+	@Reference
 	public void setElasticsearchUpdateDocumentCommand(
 		ElasticsearchUpdateDocumentCommand elasticsearchUpdateDocumentCommand) {
 

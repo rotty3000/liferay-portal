@@ -31,6 +31,9 @@ import java.util.Map;
 
 import org.apache.commons.lang.time.StopWatch;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -45,8 +48,10 @@ import org.elasticsearch.search.suggest.term.TermSuggestionBuilder;
 /**
  * @author Michael C. Han
  */
+@Component(immediate = true)
 public class ElasticsearchQuerySuggester extends BaseQuerySuggester {
 
+	@Reference
 	public void setElasticsearchConnectionManager(
 		ElasticsearchConnectionManager elasticsearchConnectionManager) {
 
