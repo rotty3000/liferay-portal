@@ -17,14 +17,23 @@ package com.liferay.portal.search.elasticsearch;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.BaseSearchEngine;
+import com.liferay.portal.kernel.search.IndexSearcher;
+import com.liferay.portal.kernel.search.IndexWriter;
+import com.liferay.portal.kernel.search.SearchEngine;
 import com.liferay.portal.kernel.search.SearchException;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.search.elasticsearch.connection.ElasticsearchConnectionManager;
 import com.liferay.portal.search.elasticsearch.index.IndexFactory;
 import com.liferay.portal.search.elasticsearch.util.LogUtil;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthStatus;
@@ -51,6 +60,16 @@ import org.elasticsearch.repositories.RepositoryMissingException;
 /**
  * @author Michael C. Han
  */
+@Component(
+	immediate = true,
+	property = {
+		"clusteredWrite=false",
+		"luceneBased=true",
+		"search.engine.id=SYSTEM_ENGINE",
+		"vendor=Elasticsearch"
+	},
+	service = {ElasticsearchSearchEngine.class, SearchEngine.class}
+)
 public class ElasticsearchSearchEngine extends BaseSearchEngine {
 
 	@Override
@@ -197,14 +216,45 @@ public class ElasticsearchSearchEngine extends BaseSearchEngine {
 		}
 	}
 
+	@Reference
 	public void setElasticsearchConnectionManager(
 		ElasticsearchConnectionManager elasticsearchConnectionManager) {
 
 		_elasticsearchConnectionManager = elasticsearchConnectionManager;
 	}
 
+	@Reference
 	public void setIndexFactory(IndexFactory indexFactory) {
 		_indexFactory = indexFactory;
+	}
+
+	@Override
+	@Reference
+	public void setIndexSearcher(IndexSearcher indexSearcher) {
+		super.setIndexSearcher(indexSearcher);
+	}
+
+	@Override
+	@Reference
+	public void setIndexWriter(IndexWriter indexWriter) {
+		super.setIndexWriter(indexWriter);
+	}
+
+	public void unsetElasticsearchConnectionManager(
+		ElasticsearchConnectionManager elasticsearchConnectionManager) {
+
+		_elasticsearchConnectionManager = null;
+	}
+
+	public void unsetIndexFactory(IndexFactory indexFactory) {
+		_indexFactory = null;
+	}
+
+	@Activate
+	protected void activate(Map<String, Object> properties) {
+		setClusteredWrite(MapUtil.getBoolean(properties, "clusteredWrite"));
+		setLuceneBased(MapUtil.getBoolean(properties, "luceneBased"));
+		setVendor(MapUtil.getString(properties, "vendor"));
 	}
 
 	protected void createBackupRepository(ClusterAdminClient clusterAdminClient)

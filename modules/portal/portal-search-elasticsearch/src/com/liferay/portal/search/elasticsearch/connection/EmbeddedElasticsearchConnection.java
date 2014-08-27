@@ -16,8 +16,16 @@ package com.liferay.portal.search.elasticsearch.connection;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.search.elasticsearch.index.IndexFactory;
+
+import java.util.Map;
 
 import org.apache.commons.lang.time.StopWatch;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -27,6 +35,14 @@ import org.elasticsearch.node.NodeBuilder;
 /**
  * @author Michael C. Han
  */
+@Component(
+	immediate = true,
+	property = {
+		"configFileName=/META-INF/elasticsearch-embedded.yml",
+		"testConfigFileName=/META-INF/elasticsearch-test.yml"
+	},
+	service = ElasticsearchConnection.class
+)
 public class EmbeddedElasticsearchConnection
 	extends BaseElasticsearchConnection {
 
@@ -37,6 +53,23 @@ public class EmbeddedElasticsearchConnection
 		if (_node != null) {
 			_node.close();
 		}
+	}
+
+	@Override
+	@Reference
+	public void setIndexFactory(IndexFactory indexFactory) {
+		super.setIndexFactory(indexFactory);
+	}
+
+	@Activate
+	protected void activate(Map<String, Object> properties) {
+		setClusterName(
+			MapUtil.getString(properties, "clusterName", CLUSTER_NAME));
+		setConfigFileName(MapUtil.getString(properties, "configFileName"));
+		setTestConfigFileName(
+			MapUtil.getString(properties, "testConfigFileName"));
+
+		initialize();
 	}
 
 	@Override
