@@ -14,9 +14,17 @@
 
 package com.liferay.portal.service.permission;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
+import com.liferay.portal.service.PasswordPolicyLocalServiceUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -40,9 +48,46 @@ public class LayoutSetPrototypePermissionImpl
 		PermissionChecker permissionChecker, long layoutSetPrototypeId,
 		String actionId) {
 
+		LayoutSetPrototype layoutSetPrototype = null;
+
+		if (layoutSetPrototypeId != 0) {
+			layoutSetPrototype =
+				LayoutSetPrototypeLocalServiceUtil.fetchLayoutSetPrototype(
+					layoutSetPrototypeId);
+		}
+
+		return contains(permissionChecker, layoutSetPrototype, actionId);
+	}
+
+
+	@Override
+	public void check(
+			PermissionChecker permissionChecker,
+			LayoutSetPrototype layoutSetPrototype, String actionId)
+		throws PrincipalException {
+
+		if (!contains(permissionChecker, layoutSetPrototype, actionId)) {
+			throw new PrincipalException();
+		}
+	}
+
+	@Override
+	public boolean contains(
+		PermissionChecker permissionChecker,
+		LayoutSetPrototype layoutSetPrototype, String actionId) {
+
+		long layoutSetPrototypeId = 0;
+
+		if (layoutSetPrototype != null) {
+			layoutSetPrototypeId = layoutSetPrototype.getLayoutSetPrototypeId();
+		}
+
+		long companyGroupId = getCompanyGroupId(
+			permissionChecker, layoutSetPrototype);
+
 		if (permissionChecker.hasPermission(
-				0, LayoutSetPrototype.class.getName(), layoutSetPrototypeId,
-				actionId)) {
+			companyGroupId, LayoutSetPrototype.class.getName(),
+			layoutSetPrototypeId, actionId)) {
 
 			return true;
 		}
@@ -50,4 +95,36 @@ public class LayoutSetPrototypePermissionImpl
 		return false;
 	}
 
+
+	protected long getCompanyGroupId(
+		PermissionChecker permissionChecker,
+		LayoutSetPrototype layoutSetPrototype) {
+
+		long companyGroupId = permissionChecker.getCompanyGroupId();
+
+		if (layoutSetPrototype == null) {
+			return companyGroupId;
+		}
+
+		long companyId = layoutSetPrototype.getCompanyId();
+
+		if (companyId == permissionChecker.getCompanyId()) {
+			return companyGroupId;
+		}
+
+		try {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				companyId);
+
+			return companyGroup.getGroupId();
+		} catch (PortalException e) {
+			_log.error(
+				"Unable to load default group for company " + companyId, e);
+		}
+
+		return 0;
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		LayoutSetPrototypePermissionImpl.class);
 }

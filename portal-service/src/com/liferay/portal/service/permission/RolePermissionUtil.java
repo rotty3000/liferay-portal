@@ -15,6 +15,7 @@
 package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -43,6 +44,28 @@ public class RolePermissionUtil {
 
 		return getRolePermission().contains(
 			permissionChecker, roleId, actionId);
+	}
+
+	public static void check(
+			PermissionChecker permissionChecker, Role role, String actionId)
+		throws PrincipalException {
+
+		getRolePermission().check(permissionChecker, role, actionId);
+	}
+
+	public static boolean contains(
+		PermissionChecker permissionChecker, long groupId, Role role,
+		String actionId) {
+
+		return getRolePermission().contains(
+			permissionChecker, groupId, role, actionId);
+	}
+
+	public static boolean contains(
+		PermissionChecker permissionChecker, Role role, String actionId) {
+
+		return getRolePermission().contains(
+			permissionChecker, role, actionId);
 	}
 
 	public static RolePermission getRolePermission() {

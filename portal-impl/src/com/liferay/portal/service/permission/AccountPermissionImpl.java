@@ -15,10 +15,15 @@
 package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.Account;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.AccountLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -51,11 +56,11 @@ public class AccountPermissionImpl implements AccountPermission {
 	public boolean contains(
 		PermissionChecker permissionChecker, Account account, String actionId) {
 
-		//long groupId = account.getGroupId();
-		long groupId = 0;
+		long companyGroupId = getCompanyGroupId(permissionChecker, account);
 
 		return permissionChecker.hasPermission(
-			groupId, Account.class.getName(), account.getAccountId(), actionId);
+			companyGroupId, Account.class.getName(), account.getAccountId(),
+			actionId);
 	}
 
 	@Override
@@ -69,4 +74,33 @@ public class AccountPermissionImpl implements AccountPermission {
 		return contains(permissionChecker, account, actionId);
 	}
 
+	protected long getCompanyGroupId(
+		PermissionChecker permissionChecker, Account account) {
+
+		long companyGroupId = permissionChecker.getCompanyGroupId();
+
+		if (account == null) {
+			return companyGroupId;
+		}
+
+		long companyId = account.getCompanyId();
+
+		if (companyId == permissionChecker.getCompanyId()) {
+			return companyGroupId;
+		}
+
+		try {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				companyId);
+
+			return companyGroup.getGroupId();
+		} catch (PortalException e) {
+			_log.error(
+				"Unable to load default group for company " + companyId, e);
+		}
+
+		return 0;
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(AccountPermissionImpl.class);
 }

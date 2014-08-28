@@ -14,6 +14,7 @@
 
 package com.liferay.portal.service.permission;
 
+import com.liferay.portal.model.PasswordPolicy;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -29,6 +30,15 @@ public interface PasswordPolicyPermission {
 
 	public boolean contains(
 		PermissionChecker permissionChecker, long passwordPolicyId,
+		String actionId);
+
+	public void check(
+			PermissionChecker permissionChecker, PasswordPolicy passwordPolicy,
+			String actionId)
+		throws PrincipalException;
+
+	public boolean contains(
+		PermissionChecker permissionChecker, PasswordPolicy passwordPolicy,
 		String actionId);
 
 }

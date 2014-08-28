@@ -62,7 +62,7 @@ public class SCLicensePermission {
 		String actionId) {
 
 		return permissionChecker.hasPermission(
-			GroupConstants.DEFAULT_PARENT_GROUP_ID, SCLicense.class.getName(),
+			permissionChecker.getCompanyGroupId(), SCLicense.class.getName(),
 			license.getLicenseId(), actionId);
 	}
 

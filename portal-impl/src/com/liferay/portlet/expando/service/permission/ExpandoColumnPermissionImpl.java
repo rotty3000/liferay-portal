@@ -15,8 +15,14 @@
 package com.liferay.portlet.expando.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.permission.UserPermissionImpl;
 import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 
@@ -66,8 +72,18 @@ public class ExpandoColumnPermissionImpl implements ExpandoColumnPermission {
 		PermissionChecker permissionChecker, ExpandoColumn column,
 		String actionId) {
 
+		long columnId = 0;
+
+		if (column != null) {
+			columnId = column.getColumnId();
+		}
+
+		long companyGroupId = getCompanyGroupId(
+			permissionChecker, column);
+
+
 		return permissionChecker.hasPermission(
-			0, ExpandoColumn.class.getName(), column.getColumnId(), actionId);
+			companyGroupId, ExpandoColumn.class.getName(), columnId, actionId);
 	}
 
 	@Override
@@ -92,4 +108,34 @@ public class ExpandoColumnPermissionImpl implements ExpandoColumnPermission {
 		return contains(permissionChecker, column, actionId);
 	}
 
+	protected long getCompanyGroupId(
+		PermissionChecker permissionChecker, ExpandoColumn column) {
+
+		long companyGroupId = permissionChecker.getCompanyGroupId();
+
+		if (column == null) {
+			return companyGroupId;
+		}
+
+		long companyId = column.getCompanyId();
+
+		if (companyId == permissionChecker.getCompanyId()) {
+			return companyGroupId;
+		}
+
+		try {
+			Group companyGroup = GroupLocalServiceUtil.getCompanyGroup(
+				companyId);
+
+			return companyGroup.getGroupId();
+		} catch (PortalException e) {
+			_log.error(
+				"Unable to load default group for company " + companyId, e);
+		}
+
+		return 0;
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ExpandoColumnPermissionImpl.class);
 }

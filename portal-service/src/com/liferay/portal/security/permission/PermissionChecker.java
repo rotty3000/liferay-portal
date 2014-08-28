@@ -32,6 +32,8 @@ public interface PermissionChecker extends Cloneable {
 
 	public PermissionChecker clone();
 
+	public long getCompanyGroupId();
+
 	/**
 	 * Returns the primary key of the user's company.
 	 *

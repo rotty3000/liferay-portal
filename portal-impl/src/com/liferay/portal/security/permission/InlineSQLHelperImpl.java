@@ -524,7 +524,7 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		PermissionChecker permissionChecker =
 			PermissionThreadLocal.getPermissionChecker();
 
-		long checkGroupId = 0;
+		long checkGroupId = permissionChecker.getCompanyGroupId();
 
 		if (groupIds.length == 1) {
 			checkGroupId = groupIds[0];
@@ -557,8 +557,14 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 		for (int j = 0; j < groupIds.length; j++) {
 			long groupId = groupIds[j];
 
+			long contextGroupId = groupId;
+
+			if (contextGroupId == 0) {
+				contextGroupId = permissionChecker.getCompanyGroupId();
+			}
+
 			if (!permissionChecker.hasPermission(
-					groupId, className, 0, ActionKeys.VIEW)) {
+				contextGroupId, className, 0, ActionKeys.VIEW)) {
 
 				if ((j > 0) && hasPreviousViewableGroup) {
 					sb.append(" OR ");

@@ -15,6 +15,7 @@
 package com.liferay.portal.service.permission;
 
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -38,6 +39,23 @@ public class UserGroupPermissionUtil {
 
 		return getUserGroupPermission().contains(
 			permissionChecker, userGroupId, actionId);
+	}
+
+	public static void check(
+			PermissionChecker permissionChecker, UserGroup userGroup,
+			String actionId)
+		throws PrincipalException {
+
+		getUserGroupPermission().check(
+			permissionChecker, userGroup, actionId);
+	}
+
+	public static boolean contains(
+		PermissionChecker permissionChecker, UserGroup userGroup,
+		String actionId) {
+
+		return getUserGroupPermission().contains(
+			permissionChecker, userGroup, actionId);
 	}
 
 	public static UserGroupPermission getUserGroupPermission() {

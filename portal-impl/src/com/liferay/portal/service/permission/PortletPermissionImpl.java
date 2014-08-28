@@ -251,7 +251,11 @@ public class PortletPermissionImpl implements PortletPermission {
 			name = portletId;
 			primKey = portletId;
 
-			return permissionChecker.hasPermission(
+			if (groupId == 0) {
+				groupId = permissionChecker.getCompanyGroupId();
+			}
+
+			return permissionChecker.hasPermission( //TODO
 				groupId, name, primKey, actionId);
 		}
 
