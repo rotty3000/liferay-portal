@@ -238,6 +238,8 @@ public class PortletTracker
 		String displayName = GetterUtil.getString(
 			serviceReference.getProperty("javax.portlet.display-name"),
 			portletName);
+		
+		warnPorletProperties(portletName, serviceReference);
 
 		portletModel.setDisplayName(displayName);
 
@@ -284,6 +286,19 @@ public class PortletTracker
 
 			return null;
 		}
+	}
+
+	private void warnPorletProperties(String portletName,
+			ServiceReference<Portlet> serviceReference) {
+
+		String[] unsupportedKeys = PortletPropertyValidator
+			.validatePropertiesKeys(serviceReference.getPropertyKeys());
+
+		for(String key : unsupportedKeys){
+			_log.info("Portlet:" + portletName +
+				" - Incorrect property key:" + key);
+		}
+
 	}
 
 	protected com.liferay.portal.model.Portlet buildPortletModel(
@@ -690,7 +705,7 @@ public class PortletTracker
 			SetUtil.fromArray(new String[] {toLowerCase(PortletMode.VIEW)}));
 
 		List<String> portletModesStrings = StringPlus.asList(
-			serviceReference.getProperty("javax.portlet.portletModes"));
+			serviceReference.getProperty("javax.portlet.portlet-mode"));
 
 		for (String portletModesString : portletModesStrings) {
 			String[] portletModesStringParts = StringUtil.split(
@@ -900,7 +915,7 @@ public class PortletTracker
 				}));
 
 		List<String> windowStatesStrings = StringPlus.asList(
-			serviceReference.getProperty("javax.portlet.windowStates"));
+			serviceReference.getProperty("javax.portlet.window-state"));
 
 		for (String windowStatesString : windowStatesStrings) {
 			String[] windowStatesStringParts = StringUtil.split(
