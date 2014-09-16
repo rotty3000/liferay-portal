@@ -66,6 +66,13 @@ public class UpgradePortletIdTest extends UpgradePortletId {
 
 	@Before
 	public void setUp() throws Exception {
+		for (String portletId : _PORTLET_IDS) {
+			runSQL(
+				"delete from ResourcePermission where name = '" + portletId +
+					"'"
+			);
+		}
+
 		_group = GroupTestUtil.addGroup();
 	}
 
