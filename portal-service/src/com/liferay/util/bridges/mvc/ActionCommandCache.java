@@ -38,6 +38,7 @@ import javax.portlet.PortletResponse;
 
 /**
  * @author Michael C. Han
+ * @author Kamesh Sampath
  */
 public class ActionCommandCache {
 
@@ -185,6 +186,13 @@ public class ActionCommandCache {
 
 			_actionCommandCache.put(actionCommandName, actionCommand);
 
+            if (_log.isDebugEnabled()) {
+                String portletId = (String)serviceReference
+                    .getProperty("javax.portlet.name");
+                _log.debug("Registered command:" + actionCommandName
+                    + " for portlet id:" + portletId);
+            }
+
 			return actionCommand;
 		}
 
@@ -213,6 +221,13 @@ public class ActionCommandCache {
 
 				actionCommands.remove(actionCommand);
 			}
+			
+            if (_log.isDebugEnabled()) {
+                String portletId = (String)serviceReference
+                    .getProperty("javax.portlet.name");
+                _log.debug("Unregistered command:" + actionCommandName
+                    + " for portlet id:" + portletId);
+            }
 		}
 
 	}
