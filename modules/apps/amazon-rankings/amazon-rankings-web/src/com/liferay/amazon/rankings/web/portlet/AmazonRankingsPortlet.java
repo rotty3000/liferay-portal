@@ -14,13 +14,24 @@
 
 package com.liferay.amazon.rankings.web.portlet;
 
+import aQute.bnd.annotation.metatype.Configurable;
+import com.liferay.amazon.rankings.web.AmazonRankingsConfiguration;
+import com.liferay.amazon.rankings.web.model.AmazonRankings;
 import com.liferay.amazon.rankings.web.upgrade.AmazonRankingsUpgrade;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Reference;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
 * @author Raymond Augé
@@ -28,6 +39,8 @@ import org.osgi.service.component.annotations.Reference;
 */
 @Component(
 	immediate = true,
+	configurationPid = "com.liferay.amazon.rankings",
+	configurationPolicy = ConfigurationPolicy.REQUIRE,
 	property = {
 		"com.liferay.portlet.css-class-wrapper=portlet-amazon-rankings",
 		"com.liferay.portlet.display-category=category.shopping",
@@ -50,9 +63,27 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class AmazonRankingsPortlet extends MVCPortlet {
 
+	@Activate
+	protected void activate(Map<String, Object> properties) {
+		_configuration = Configurable.createConfigurable(
+			AmazonRankingsConfiguration.class, properties);
+	}
+
+	@Override
+	public void doView(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		super.doView(renderRequest, renderResponse);
+
+		renderRequest.setAttribute("configuration", _configuration);
+	}
+
 	@Reference(unbind = "-")
 	protected void setAmazonRankingsUpgrade(
 		AmazonRankingsUpgrade amazonRankingsUpgrade) {
 	}
+
+	private AmazonRankingsConfiguration _configuration;
 
 }
