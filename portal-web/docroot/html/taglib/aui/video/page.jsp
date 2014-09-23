@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -11,24 +12,23 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+--%>
 
-package com.liferay.registry.internal;
+<%@ include file="/html/taglib/aui/video/init.jsp" %>
 
-/**
- * @author Raymond Augé
- */
-public class TrackedOne {
+<div class="video <%= cssClass %>" id="<%= id %>"></div>
 
-	public TrackedOne() {}
-
-	public TrackedOne(String key) {
-		this.key = key;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	private String key;
-
-}
+<aui:script use="aui-video">
+	new A.Video(
+		{
+			boundingBox: '#<%= id %>',
+			flashPlayerVersion: '<%= flashPlayerVersion %>',
+			height: <%= height %>,
+			ogvUrl: '<%= ogvURL %>',
+			poster: '<%= poster %>',
+			swfUrl: '<%= swfURL %>',
+			url: '<%= url %>',
+			width: <%= width %>
+		}
+	);
+</aui:script>

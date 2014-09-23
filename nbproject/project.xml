@@ -286,7 +286,6 @@
 				<classpath mode="compile">lib/development/jbi_rt.jar</classpath>
 				<classpath mode="compile">lib/development/jetty-server.jar</classpath>
 				<classpath mode="compile">lib/development/jetty-util.jar</classpath>
-				<classpath mode="compile">lib/development/jhighlight.jar</classpath>
 				<classpath mode="compile">lib/development/jms.jar</classpath>
 				<classpath mode="compile">lib/development/jndi.jar</classpath>
 				<classpath mode="compile">lib/development/jsch.jar</classpath>
@@ -438,6 +437,7 @@
 				<classpath mode="compile">lib/portal/jets3t.jar</classpath>
 				<classpath mode="compile">lib/portal/jfreechart.jar</classpath>
 				<classpath mode="compile">lib/portal/jgroups.jar</classpath>
+				<classpath mode="compile">lib/portal/jhighlight.jar</classpath>
 				<classpath mode="compile">lib/portal/jhlabs-filters.jar</classpath>
 				<classpath mode="compile">lib/portal/jmatio.jar</classpath>
 				<classpath mode="compile">lib/portal/jodconverter.jar</classpath>

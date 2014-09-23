@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -11,24 +12,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+--%>
 
-package com.liferay.registry.internal;
-
-/**
- * @author Raymond Augé
- */
-public class TrackedOne {
-
-	public TrackedOne() {}
-
-	public TrackedOne(String key) {
-		this.key = key;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	private String key;
-
+<%
+if (Validator.isNull(id)) {
+	id = StringUtil.randomId();
 }
+%>

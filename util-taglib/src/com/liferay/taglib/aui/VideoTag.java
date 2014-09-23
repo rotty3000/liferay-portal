@@ -12,23 +12,15 @@
  * details.
  */
 
-package com.liferay.registry.internal;
+package com.liferay.taglib.aui;
+
+import com.liferay.taglib.aui.base.BaseVideoTag;
 
 /**
- * @author Raymond Augé
+ * @author Eduardo Lundgren
+ * @author Bruno Basto
+ * @author Nathan Cavanaugh
+ * @author Julio Camarero
  */
-public class TrackedOne {
-
-	public TrackedOne() {}
-
-	public TrackedOne(String key) {
-		this.key = key;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	private String key;
-
+public class VideoTag extends BaseVideoTag {
 }
