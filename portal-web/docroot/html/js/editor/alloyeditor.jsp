@@ -185,31 +185,6 @@ if (alloyEditorMode.equals("text")) {
 
 		instanceReady: true,
 
-		<c:if test="<%= Validator.isNotNull(onBlurMethod) %>">
-			onBlurCallback: function() {
-				window['<%= HtmlUtil.escapeJS(onBlurMethod) %>'](CKEDITOR.instances['<%= name %>']);
-			},
-		</c:if>
-
-		<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
-			onChangeCallback: function() {
-				var ckEditor = CKEDITOR.instances['<%= name %>'];
-				var dirty = ckEditor.checkDirty();
-
-				if (dirty) {
-					window['<%= HtmlUtil.escapeJS(onChangeMethod) %>'](window['<%= name %>'].getText());
-
-					ckEditor.resetDirty();
-				}
-			},
-		</c:if>
-
-		<c:if test="<%= Validator.isNotNull(onFocusMethod) %>">
-			onFocusCallback: function() {
-				window['<%= HtmlUtil.escapeJS(onFocusMethod) %>'](CKEDITOR.instances['<%= name %>']);
-			},
-		</c:if>
-
 		setHTML: function(value) {
 			CKEDITOR.instances['<%= name %>'].setData(value);
 		}
@@ -247,9 +222,36 @@ if (alloyEditorMode.equals("text")) {
 		window['<%= name %>Config']();
 	}
 
-	<c:if test='<%= alloyEditorMode.equals("text") %>'>
-		var alloyEditor = CKEDITOR.instances['<%= name %>'];
+	var alloyEditor = CKEDITOR.instances['<%= name %>'];
 
+	<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
+		alloyEditor.on(
+			'change',
+			function(event) {
+				window['<%= HtmlUtil.escapeJS(onChangeMethod) %>'](window['<%= name %>'].getHTML());
+			}
+		);
+	</c:if>
+
+	<c:if test="<%= Validator.isNotNull(onBlurMethod) %>">
+		alloyEditor.on(
+			'blur',
+			function(event) {
+				window['<%= HtmlUtil.escapeJS(onBlurMethod) %>'](event.editor);
+			}
+		);
+	</c:if>
+
+	<c:if test="<%= Validator.isNotNull(onFocusMethod) %>">
+		alloyEditor.on(
+			'focus',
+			function(event) {
+				window['<%= HtmlUtil.escapeJS(onFocusMethod) %>'](event.editor);
+			}
+		);
+	</c:if>
+
+	<c:if test='<%= alloyEditorMode.equals("text") %>'>
 		alloyEditor.on(
 			'key',
 			function(event) {
