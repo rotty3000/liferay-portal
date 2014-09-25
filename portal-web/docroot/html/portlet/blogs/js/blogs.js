@@ -5,11 +5,20 @@ AUI.add(
 
 		var STR_CLICK = 'click';
 
+		var STR_CHANGE = 'change';
+
+		var STR_SUFFIX = '...';
+
 		var Blogs = A.Component.create(
 			{
 				ATTRS: {
 					constants: {
 						validator: Lang.isObject
+					},
+
+					descriptionLength: {
+						validator: Lang.isNumber,
+						value: 400
 					},
 
 					editEntryURL: {
@@ -58,6 +67,8 @@ AUI.add(
 						if (!entry || (userEntry && draftEntry)) {
 							instance._initDraftSaveInterval();
 						}
+
+						instance._shortenDescription = true;
 					},
 
 					destructor: function() {
@@ -68,6 +79,18 @@ AUI.add(
 						}
 
 						(new A.EventHandle(instance._eventHandles)).detach();
+					},
+
+					setDescription: function(text) {
+						var instance = this;
+
+						var description = instance._customDescription;
+
+						if (instance._shortenDescription) {
+							description = instance._shorten(text);
+						}
+
+						window[instance.ns('descriptionEditor')].setHTML(description);
 					},
 
 					_bindUI: function() {
@@ -99,7 +122,40 @@ AUI.add(
 							);
 						}
 
+						var customAbstractOptions = instance.one('#entry-abstract-options');
+
+						if (customAbstractOptions) {
+							eventHandles.push(
+								customAbstractOptions.delegate(STR_CHANGE, instance._configureAbstract, '.abstract', instance)
+							);
+						}
+
 						instance._eventHandles = eventHandles;
+					},
+
+					_configureAbstract: function(event) {
+						var instance = this;
+
+						var target = event.target;
+
+						var description = '';
+
+						if (target.getAttribute('value') === 'true') {
+							if (instance._customDescription) {
+								description = instance._customDescription;
+							}
+
+							instance._shortenDescription = false;
+						}
+						else {
+							instance._customDescription = window[instance.ns('descriptionEditor')].getHTML();
+
+							description = window[instance.ns('contentEditor')].getHTML();
+
+							instance._shortenDescription = true;
+						}
+
+						instance.setDescription(description);
 					},
 
 					_getPrincipalForm: function(formName) {
@@ -144,6 +200,12 @@ AUI.add(
 							instance.one('#content').val(contentEditor.getHTML());
 						}
 
+						var descriptionEditor = window[instance.ns('descriptionEditor')];
+
+						if (descriptionEditor) {
+							instance.one('#description').val(descriptionEditor.getHTML());
+						}
+
 						var subtitleEditor = window[instance.ns('subtitleEditor')];
 
 						if (subtitleEditor) {
@@ -168,6 +230,7 @@ AUI.add(
 						var title = window[instance.ns('titleEditor')].getHTML();
 						var subtitle = window[instance.ns('subtitleEditor')].getHTML();
 						var content = window[instance.ns('contentEditor')].getHTML();
+						var description = window[instance.ns('descriptionEditor')].getHTML();
 
 						var form = instance._getPrincipalForm();
 
@@ -272,11 +335,45 @@ AUI.add(
 							instance.one('#title').val(title);
 							instance.one('#subtitle').val(subtitle);
 							instance.one('#content').val(content);
+							instance.one('#description').val(description);
 
 							instance.one('#workflowAction').val(draft ? constants.ACTION_SAVE_DRAFT : constants.ACTION_PUBLISH);
 
 							submitForm(form);
 						}
+					},
+
+					_shorten: function(text) {
+						var instance = this;
+
+						var description = '';
+						var descriptionLength = instance.get('descriptionLength');
+
+						if (text.length <= descriptionLength) {
+							description = text;
+						}
+						else if (descriptionLength < STR_SUFFIX.length) {
+							description = text.substring(0, descriptionLength);
+						}
+						else {
+							var curLength = descriptionLength;
+
+							for (var j = (curLength - STR_SUFFIX.length); j >= 0; j--) {
+								if (text.charAt(j) === ' ') {
+									curLength = j;
+
+									break;
+								}
+							}
+
+							if (curLength == descriptionLength) {
+								curLength = descriptionLength - STR_SUFFIX.length;
+							}
+
+							description = text.substring(0, curLength).concat(STR_SUFFIX);
+						}
+
+						return description;
 					},
 
 					_updateStatus: function(text, className) {
