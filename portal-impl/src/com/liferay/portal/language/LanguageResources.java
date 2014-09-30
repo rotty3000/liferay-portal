@@ -35,8 +35,6 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.io.InputStream;
 
-import java.net.URL;
-
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -46,6 +44,8 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.net.URL;
 
 /**
  * @author Shuyang Zhou
@@ -265,8 +265,10 @@ public class LanguageResources {
 	private LanguageResources() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter languageResourceFilter = registry.getFilter(
-			"(&(objectClass=" + Object.class.getName() + ")(language.id=*))");
+		Filter languageResourceFilter =
+			registry.getFilter(
+				"(&(!(javax.portlet.name=*))((objectClass=" +
+					Object.class.getName() + ")(language.id=*)))");
 
 		_serviceTracker = registry.trackServices(
 			languageResourceFilter,
@@ -282,7 +284,7 @@ public class LanguageResources {
 	private static Map<Locale, Map<String, String>> _languageMaps =
 		new ConcurrentHashMap<Locale, Map<String, String>>(64);
 	private static Locale _nullLocale = new Locale(StringPool.BLANK);
-	private static ServiceTracker<Object, Object> _serviceTracker;
+	private static ServiceTracker<ResourceBundle, ResourceBundle> _serviceTracker;
 	private static Map<Locale, Locale> _superLocales =
 		new ConcurrentHashMap<Locale, Locale>();
 
@@ -336,13 +338,13 @@ public class LanguageResources {
 	}
 
 	private static class LanguageResourceServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer<Object, Object> {
+		implements ServiceTrackerCustomizer<ResourceBundle, ResourceBundle> {
 
 		@Override
-		public Object addingService(ServiceReference<Object> serviceReference) {
+		public ResourceBundle addingService(ServiceReference<ResourceBundle> serviceReference) {
 			Registry registry = RegistryUtil.getRegistry();
 
-			Object object = registry.getService(serviceReference);
+			ResourceBundle resourceBundle = registry.getService(serviceReference);
 
 			String languageId = GetterUtil.getString(
 				serviceReference.getProperty("language.id"), StringPool.BLANK);
@@ -354,10 +356,11 @@ public class LanguageResources {
 			if (Validator.isNotNull(languageId)) {
 				locale = LocaleUtil.fromLanguageId(languageId, true);
 
-				for (String key : serviceReference.getPropertyKeys()) {
-					String value = GetterUtil.getString(
-						serviceReference.getProperty(key));
+				Enumeration<String> keys = resourceBundle.getKeys();
 
+				while(keys.hasMoreElements()) {
+					String key  = keys.nextElement();
+					String value = resourceBundle.getString(key);
 					languageMap.put(key, value);
 				}
 			}
@@ -370,17 +373,17 @@ public class LanguageResources {
 
 			_oldLanguagesMap.put(serviceReference, oldLanguageMap);
 
-			return object;
+			return resourceBundle;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<Object> serviceReference, Object service) {
+			ServiceReference<ResourceBundle> serviceReference, ResourceBundle service) {
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<Object> serviceReference, Object service) {
+			ServiceReference<ResourceBundle> serviceReference, ResourceBundle service) {
 
 			Registry registry = RegistryUtil.getRegistry();
 
@@ -404,9 +407,9 @@ public class LanguageResources {
 			_putLanguageMap(locale, languageMap);
 		}
 
-		private Map<ServiceReference<Object>, Map<String, String>>
+		private Map<ServiceReference<ResourceBundle>, Map<String, String>>
 			_oldLanguagesMap =
-				new HashMap<ServiceReference<Object>, Map<String, String>>();
+				new HashMap<ServiceReference<ResourceBundle>, Map<String, String>>();
 
 	}
 
