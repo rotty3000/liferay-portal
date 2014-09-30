@@ -35,6 +35,8 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.io.InputStream;
 
+import java.net.URL;
+
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -44,8 +46,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import java.net.URL;
 
 /**
  * @author Shuyang Zhou
@@ -265,10 +265,9 @@ public class LanguageResources {
 	private LanguageResources() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter languageResourceFilter =
-			registry.getFilter(
-				"(&(!(javax.portlet.name=*))((objectClass=" +
-					Object.class.getName() + ")(language.id=*)))");
+		Filter languageResourceFilter = registry.getFilter(
+			"(&(objectclass=" + ResourceBundle.class.getName() + ")" +
+				"(language.id=*)(!(javax.portlet.name=*)))");
 
 		_serviceTracker = registry.trackServices(
 			languageResourceFilter,
@@ -341,10 +340,13 @@ public class LanguageResources {
 		implements ServiceTrackerCustomizer<ResourceBundle, ResourceBundle> {
 
 		@Override
-		public ResourceBundle addingService(ServiceReference<ResourceBundle> serviceReference) {
+		public ResourceBundle addingService(
+			ServiceReference<ResourceBundle> serviceReference) {
+
 			Registry registry = RegistryUtil.getRegistry();
 
-			ResourceBundle resourceBundle = registry.getService(serviceReference);
+			ResourceBundle resourceBundle = registry.getService(
+				serviceReference);
 
 			String languageId = GetterUtil.getString(
 				serviceReference.getProperty("language.id"), StringPool.BLANK);
@@ -358,8 +360,8 @@ public class LanguageResources {
 
 				Enumeration<String> keys = resourceBundle.getKeys();
 
-				while(keys.hasMoreElements()) {
-					String key  = keys.nextElement();
+				while (keys.hasMoreElements()) {
+					String key = keys.nextElement();
 					String value = resourceBundle.getString(key);
 					languageMap.put(key, value);
 				}
@@ -378,12 +380,14 @@ public class LanguageResources {
 
 		@Override
 		public void modifiedService(
-			ServiceReference<ResourceBundle> serviceReference, ResourceBundle service) {
+			ServiceReference<ResourceBundle> serviceReference,
+			ResourceBundle service) {
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<ResourceBundle> serviceReference, ResourceBundle service) {
+			ServiceReference<ResourceBundle> serviceReference,
+			ResourceBundle service) {
 
 			Registry registry = RegistryUtil.getRegistry();
 
