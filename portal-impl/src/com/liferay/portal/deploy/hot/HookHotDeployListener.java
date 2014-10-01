@@ -80,7 +80,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.language.LanguageResources;
+import com.liferay.portal.language.LiferayResourceBundle;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.repository.registry.RepositoryClassDefinitionCatalogUtil;
 import com.liferay.portal.repository.util.ExternalRepositoryFactory;
@@ -134,7 +134,6 @@ import com.liferay.registry.ServiceRegistration;
 import com.liferay.taglib.FileAvailabilityUtil;
 
 import java.io.File;
-import java.io.InputStream;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -151,6 +150,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -169,6 +169,7 @@ import org.springframework.aop.framework.AdvisedSupport;
  * @author Mika Koivisto
  * @author Peter Fellwock
  * @author Raymond Augé
+ * @author Kamesh Sampath
  */
 public class HookHotDeployListener
 	extends BaseHotDeployListener implements PropsKeys {
@@ -636,13 +637,6 @@ public class HookHotDeployListener
 
 		if (hotDeployListenersContainer != null) {
 			hotDeployListenersContainer.unregisterHotDeployListeners();
-		}
-
-		LanguagesContainer languagesContainer = _languagesContainerMap.remove(
-			servletContextName);
-
-		if (languagesContainer != null) {
-			languagesContainer.unregisterLanguages();
 		}
 
 		Properties portalProperties = _portalPropertiesMap.remove(
@@ -1210,18 +1204,12 @@ public class HookHotDeployListener
 			Element parentElement)
 		throws Exception {
 
-		LanguagesContainer languagesContainer = new LanguagesContainer();
-
-		_languagesContainerMap.put(servletContextName, languagesContainer);
-
 		List<Element> languagePropertiesElements = parentElement.elements(
 			"language-properties");
 
-		Map<String, String> baseLanguageMap = null;
+		ResourceBundle parentResourceBundle = null;
 
 		for (Element languagePropertiesElement : languagePropertiesElements) {
-			Properties properties = null;
-
 			String languagePropertiesLocation =
 				languagePropertiesElement.getText();
 
@@ -1238,16 +1226,15 @@ public class HookHotDeployListener
 				}
 			}
 
+			ResourceBundle languageResourceBundle;
+			URL url;
+
 			try {
-				URL url = portletClassLoader.getResource(
+				url = portletClassLoader.getResource(
 					languagePropertiesLocation);
 
 				if (url == null) {
 					continue;
-				}
-
-				try (InputStream is = url.openStream()) {
-					properties = PropertiesUtil.load(is, StringPool.UTF8);
 				}
 			}
 			catch (Exception e) {
@@ -1256,33 +1243,32 @@ public class HookHotDeployListener
 				continue;
 			}
 
-			Map<String, String> languageMap = new HashMap<String, String>();
-
-			if (baseLanguageMap != null) {
-				languageMap.putAll(baseLanguageMap);
+			if (parentResourceBundle != null) {
+				languageResourceBundle =
+					new LiferayResourceBundle(
+						parentResourceBundle, url.openStream(),
+						StringPool.UTF8);
 			}
-
-			for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-				String key = (String)entry.getKey();
-				String value = (String)entry.getValue();
-
-				value = LanguageResources.fixValue(value);
-
-				languageMap.put(key, value);
+			else {
+				languageResourceBundle =
+					new LiferayResourceBundle(url.openStream(),
+						StringPool.UTF8);
 			}
 
 			if (locale != null) {
-				languagesContainer.addLanguage(locale, languageMap);
-			}
-			else if (!languageMap.isEmpty()) {
-				baseLanguageMap = languageMap;
-			}
-		}
+				String languageId = LocaleUtil.toLanguageId(locale);
 
-		if (baseLanguageMap != null) {
-			Locale locale = new Locale(StringPool.BLANK);
+				Properties serviceProperties = new Properties();
+				serviceProperties.put("language.id", languageId);
 
-			languagesContainer.addLanguage(locale, baseLanguageMap);
+				registerService(
+					servletContextName, languagePropertiesLocation,
+					ResourceBundle.class, languageResourceBundle,
+					serviceProperties);
+			}
+			else if (languageResourceBundle != null ) {
+				parentResourceBundle = languageResourceBundle;
+			}
 		}
 	}
 
@@ -2474,8 +2460,6 @@ public class HookHotDeployListener
 	private Map<String, HotDeployListenersContainer>
 		_hotDeployListenersContainerMap =
 			new HashMap<String, HotDeployListenersContainer>();
-	private Map<String, LanguagesContainer> _languagesContainerMap =
-		new HashMap<String, LanguagesContainer>();
 	private Map<String, StringArraysContainer> _mergeStringArraysContainerMap =
 		new HashMap<String, StringArraysContainer>();
 	private Map<String, StringArraysContainer>
@@ -2586,33 +2570,6 @@ public class HookHotDeployListener
 
 		private List<HotDeployListener> _hotDeployListeners =
 			new ArrayList<HotDeployListener>();
-
-	}
-
-	private class LanguagesContainer {
-
-		public void addLanguage(
-			Locale locale, Map<String, String> languageMap) {
-
-			Map<String, String> oldLanguageMap =
-				LanguageResources.putLanguageMap(locale, languageMap);
-
-			_languagesMap.put(locale, oldLanguageMap);
-		}
-
-		public void unregisterLanguages() {
-			for (Map.Entry<Locale, Map<String, String>> entry :
-					_languagesMap.entrySet()) {
-
-				Locale locale = entry.getKey();
-				Map<String, String> languageMap = entry.getValue();
-
-				LanguageResources.putLanguageMap(locale, languageMap);
-			}
-		}
-
-		private Map<Locale, Map<String, String>> _languagesMap =
-			new HashMap<Locale, Map<String, String>>();
 
 	}
 
