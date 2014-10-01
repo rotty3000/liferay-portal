@@ -12,27 +12,19 @@
  * details.
  */
 
-package com.liferay.portalweb.portal.util.block.macro;
+package com.liferay.portalweb.util.block.function;
 
 import com.liferay.portalweb.portal.util.liferayselenium.LiferaySelenium;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Michael Hashimoto
  */
-public class BaseMacro {
+public class BaseFunction {
 
-	public BaseMacro(LiferaySelenium liferaySelenium) {
+	public BaseFunction(LiferaySelenium liferaySelenium) {
 		this.liferaySelenium = liferaySelenium;
 	}
 
-	protected Map<String, String> commandScopeVariables;
-	protected Map<String, String> definitionScopeVariables =
-		new HashMap<String, String>();
-	protected Map<String, String> executeScopeVariables;
-	protected Map<String, String> forScopeVariables;
 	protected LiferaySelenium liferaySelenium;
 
 }
