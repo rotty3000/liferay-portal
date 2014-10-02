@@ -3,6 +3,8 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
+		var STR_BLANK = '';
+
 		var STR_CLICK = 'click';
 
 		var STR_CHANGE = 'change';
@@ -68,7 +70,8 @@ AUI.add(
 							instance._initDraftSaveInterval();
 						}
 
-						instance._shortenDescription = true;
+						instance._customDescription = (entry && entry.customDescription) ? entry.description : STR_BLANK;
+						instance._shortenDescription = (!entry || !entry.customDescription);
 					},
 
 					destructor: function() {
@@ -126,7 +129,7 @@ AUI.add(
 
 						if (customAbstractOptions) {
 							eventHandles.push(
-								customAbstractOptions.delegate(STR_CHANGE, instance._configureAbstract, '.abstract', instance)
+								customAbstractOptions.delegate(STR_CHANGE, instance._configureAbstract, 'input[type="radio"]', instance)
 							);
 						}
 
@@ -138,21 +141,14 @@ AUI.add(
 
 						var target = event.target;
 
-						var description = '';
+						var description = instance._customDescription;
 
-						if (target.getAttribute('value') === 'true') {
-							if (instance._customDescription) {
-								description = instance._customDescription;
-							}
+						instance._shortenDescription = (target.val() === 'false');
 
-							instance._shortenDescription = false;
-						}
-						else {
+						if (instance._shortenDescription) {
 							instance._customDescription = window[instance.ns('descriptionEditor')].getHTML();
 
 							description = window[instance.ns('contentEditor')].getHTML();
-
-							instance._shortenDescription = true;
 						}
 
 						instance.setDescription(description);
@@ -177,9 +173,9 @@ AUI.add(
 
 						var entry = instance.get('entry');
 
-						instance._oldContent = entry ? entry.content : '';
-						instance._oldSubtitle = entry ? entry.subtitle : '';
-						instance._oldTitle = entry ? entry.title : '';
+						instance._oldContent = entry ? entry.content : STR_BLANK;
+						instance._oldSubtitle = entry ? entry.subtitle : STR_BLANK;
+						instance._oldTitle = entry ? entry.title : STR_BLANK;
 					},
 
 					_previewEntry: function() {
@@ -235,7 +231,7 @@ AUI.add(
 						var form = instance._getPrincipalForm();
 
 						if (draft && ajax) {
-							var hasData = (content !== '') && (title !== '');
+							var hasData = (content !== STR_BLANK) && (title !== STR_BLANK);
 
 							var hasChanged = (instance._oldContent !== content) || (instance._oldSubtitle !== subtitle) || (instance._oldTitle !== title);
 
@@ -346,34 +342,19 @@ AUI.add(
 					_shorten: function(text) {
 						var instance = this;
 
-						var description = '';
 						var descriptionLength = instance.get('descriptionLength');
 
-						if (text.length <= descriptionLength) {
-							description = text;
-						}
-						else if (descriptionLength < STR_SUFFIX.length) {
-							description = text.substring(0, descriptionLength);
-						}
-						else {
-							var curLength = descriptionLength;
+						if (text.length > descriptionLength) {
+							text = text.substring(0, descriptionLength);
 
-							for (var j = (curLength - STR_SUFFIX.length); j >= 0; j--) {
-								if (text.charAt(j) === ' ') {
-									curLength = j;
+							if (STR_SUFFIX.length < descriptionLength) {
+								var spaceIndex = text.lastIndexOf(' ', (descriptionLength - STR_SUFFIX.length));
 
-									break;
-								}
+								text = text.substring(0, spaceIndex).concat(STR_SUFFIX);
 							}
-
-							if (curLength == descriptionLength) {
-								curLength = descriptionLength - STR_SUFFIX.length;
-							}
-
-							description = text.substring(0, curLength).concat(STR_SUFFIX);
 						}
 
-						return description;
+						return text;
 					},
 
 					_updateStatus: function(text, className) {

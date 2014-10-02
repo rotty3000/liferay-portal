@@ -149,9 +149,9 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 			</p>
 
 			<div id="<portlet:namespace />entryAbstractOptions">
-				<aui:input checked="<%= !customAbstract %>" cssClass="abstract" label='<%= LanguageUtil.format(request, "use-first-x-characters-of-the-content-entry", pageAbstractLength, false) %>' name="customAbstract" type="radio" value="<%= false %>" />
+				<aui:input checked="<%= !customAbstract %>" label='<%= LanguageUtil.format(request, "use-first-x-characters-of-the-content-entry", pageAbstractLength, false) %>' name="customAbstract" type="radio" value="<%= false %>" />
 
-				<aui:input checked="<%= customAbstract %>" cssClass="abstract" label="custom-abstract" name="customAbstract" type="radio" value="<%= true %>" />
+				<aui:input checked="<%= customAbstract %>" label="custom-abstract" name="customAbstract" type="radio" value="<%= true %>" />
 			</div>
 
 			<aui:fieldset cssClass="entry-abstract">
@@ -343,6 +343,8 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 			<c:if test="<%= entry != null %>">
 				entry: {
 					content: '<%= UnicodeFormatter.toString(content) %>',
+					customDescription: <%= customAbstract %>,
+					description: '<%= UnicodeFormatter.toString(description) %>',
 					pending: <%= entry.isPending() %>,
 					status: '<%= entry.getStatus() %>',
 					subtitle: '<%= UnicodeFormatter.toString(subtitle) %>',
