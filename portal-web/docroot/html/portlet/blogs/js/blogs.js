@@ -122,7 +122,7 @@ AUI.add(
 							);
 						}
 
-						var customAbstractOptions = instance.one('#entry-abstract-options');
+						var customAbstractOptions = instance.one('#entryAbstractOptions');
 
 						if (customAbstractOptions) {
 							eventHandles.push(

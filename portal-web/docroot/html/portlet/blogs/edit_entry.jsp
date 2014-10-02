@@ -148,7 +148,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 				<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(PrefsPropsUtil.getLong(PropsKeys.BLOGS_IMAGE_SMALL_MAX_SIZE), locale) %>" key="an-abstract-is-a-brief-summary-of-a-blog-entry" />
 			</p>
 
-			<div id="<portlet:namespace />entry-abstract-options">
+			<div id="<portlet:namespace />entryAbstractOptions">
 				<aui:input checked="<%= !customAbstract %>" cssClass="abstract" label='<%= LanguageUtil.format(request, "use-first-x-characters-of-the-content-entry", pageAbstractLength, false) %>' name="customAbstract" type="radio" value="<%= false %>" />
 				<aui:input checked="<%= customAbstract %>" cssClass="abstract" label="custom-abstract" name="customAbstract" type="radio" value="<%= true %>" />
 			</div>
