@@ -145,7 +145,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 			<h3><liferay-ui:message key="abstract" /></h3>
 
 			<p>
-				<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(PrefsPropsUtil.getLong(PropsKeys.BLOGS_IMAGE_SMALL_MAX_SIZE), locale) %>" key="an-abstract-is-a-brief-summary-of-a-blog-entry.-you-can-place-a-litle-image-x-maximum" />
+				<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(PrefsPropsUtil.getLong(PropsKeys.BLOGS_IMAGE_SMALL_MAX_SIZE), locale) %>" key="an-abstract-is-a-brief-summary-of-a-blog-entry" />
 			</p>
 
 			<div id="<portlet:namespace />entry-abstract-options">
