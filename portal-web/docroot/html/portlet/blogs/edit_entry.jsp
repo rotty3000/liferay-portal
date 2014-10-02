@@ -31,7 +31,7 @@ String subtitle = BeanParamUtil.getString(entry, request, "subtitle");
 String content = BeanParamUtil.getString(entry, request, "content");
 String description = BeanParamUtil.getString(entry, request, "description");
 
-boolean customAbstract = ParamUtil.getBoolean(request, "customAbstract", entry == null ? false : Validator.isNotNull(entry.getDescription()));
+boolean customAbstract = ParamUtil.getBoolean(request, "customAbstract", (entry != null) && Validator.isNotNull(entry.getDescription()) ? true : false);
 
 if (!customAbstract) {
 	description = StringUtil.shorten(content, pageAbstractLength);
@@ -150,6 +150,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 
 			<div id="<portlet:namespace />entryAbstractOptions">
 				<aui:input checked="<%= !customAbstract %>" cssClass="abstract" label='<%= LanguageUtil.format(request, "use-first-x-characters-of-the-content-entry", pageAbstractLength, false) %>' name="customAbstract" type="radio" value="<%= false %>" />
+
 				<aui:input checked="<%= customAbstract %>" cssClass="abstract" label="custom-abstract" name="customAbstract" type="radio" value="<%= true %>" />
 			</div>
 
