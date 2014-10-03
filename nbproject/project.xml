@@ -349,7 +349,6 @@
 				<classpath mode="compile">lib/portal/bsh.jar</classpath>
 				<classpath mode="compile">lib/portal/bsf.jar</classpath>
 				<classpath mode="compile">lib/portal/c3p0.jar</classpath>
-				<classpath mode="compile">lib/portal/cas-client-core.jar</classpath>
 				<classpath mode="compile">lib/portal/ccpp-ri.jar</classpath>
 				<classpath mode="compile">lib/portal/ccpp.jar</classpath>
 				<classpath mode="compile">lib/portal/cglib-nodep.jar</classpath>

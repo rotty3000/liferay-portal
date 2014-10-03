@@ -63,12 +63,6 @@ public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
 	public static final String CAPTCHA_TEXT = "CAPTCHA_TEXT";
 
-	public static final String CAS_FORCE_LOGOUT = "CAS_FORCE_LOGOUT";
-
-	public static final String CAS_LOGIN = "CAS_LOGIN";
-
-	public static final String CAS_NO_SUCH_USER_EXCEPTION = "CAS_NO_SUCH_USER_EXCEPTION";
-
 	public static final String COLOR_SCHEME = "COLOR_SCHEME";
 
 	public static final String COMIC_ENTRY = "COMIC_ENTRY";
