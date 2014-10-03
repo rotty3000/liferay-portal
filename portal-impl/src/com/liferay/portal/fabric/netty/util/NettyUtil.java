@@ -12,23 +12,33 @@
  * details.
  */
 
-package com.liferay.portal.kernel.cache;
+package com.liferay.portal.fabric.netty.util;
 
-import java.io.Serializable;
-
-import java.util.Properties;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.embedded.EmbeddedChannel;
 
 /**
- * @author Tina Tian
+ * @author Shuyang Zhou
  */
-public interface ListenerFactory {
+public class NettyUtil {
 
-	public BootstrapLoader createBootstrapLoader(Properties properties);
+	public static ChannelPipeline createEmptyChannelPipeline() {
+		Channel channel = new EmbeddedChannel(
+			new ChannelInitializer<Channel>() {
 
-	public CacheListener<? extends Serializable, ?> createCacheListener(
-		Properties properties);
+				@Override
+				protected void initChannel(Channel channel) {
+				}
 
-	public CacheManagerListener createCacheManagerListener(
-		Properties properties);
+			});
+
+		ChannelPipeline channelPipeline = channel.pipeline();
+
+		channelPipeline.removeLast();
+
+		return channelPipeline;
+	}
 
 }
