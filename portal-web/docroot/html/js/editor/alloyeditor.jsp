@@ -172,10 +172,17 @@ if (alloyEditorMode.equals("text")) {
 
 					var text = '';
 
-					if (editorElement.childElementCount) {
-						var childElement = editorElement.children[0];
+					var childElement;
 
-						text = childElement.textContent || childElement.innerText;
+					if (editorElement.children.length) {
+						childElement = editorElement.children[0];
+					}
+					else if (editorElement.childNodes.length) {
+						childElement = editorElement.childNodes[0];
+					}
+
+					if (childElement) {
+						text = childElement.textContent || childElement.innerText || childElement;
 					}
 
 					return text;

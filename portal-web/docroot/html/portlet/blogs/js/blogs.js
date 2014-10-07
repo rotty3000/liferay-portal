@@ -70,7 +70,9 @@ AUI.add(
 							instance._initDraftSaveInterval();
 						}
 
-						instance._customDescription = (entry && entry.customDescription) ? entry.description : STR_BLANK;
+						var customDescriptionEnabled = entry && entry.customDescription;
+
+						instance._customDescription = customDescriptionEnabled ? entry.description : STR_BLANK;
 						instance._shortenDescription = (!entry || !entry.customDescription);
 					},
 
@@ -150,6 +152,8 @@ AUI.add(
 
 							description = window[instance.ns('contentEditor')].getHTML();
 						}
+
+						instance._setDescriptionReadOnly(instance._shortenDescription);
 
 						instance.setDescription(description);
 					},
@@ -337,6 +341,15 @@ AUI.add(
 
 							submitForm(form);
 						}
+					},
+
+					_setDescriptionReadOnly: function(readOnly) {
+						var instance = this;
+
+						var descriptionEditorNode = instance.one('#descriptionEditor');
+
+						descriptionEditorNode.attr('contenteditable', !readOnly);
+						descriptionEditorNode.toggleClass('readonly', readOnly);
 					},
 
 					_shorten: function(text) {

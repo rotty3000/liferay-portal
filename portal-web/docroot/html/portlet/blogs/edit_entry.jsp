@@ -160,7 +160,7 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 				</div>
 
 				<div class="entry-description">
-					<liferay-ui:input-editor contents="<%= description %>" editorImpl="<%= EDITOR_TEXT_IMPL_KEY %>" name="description" placeholder="description" />
+					<liferay-ui:input-editor contents="<%= description %>" cssClass='<%= customAbstract ? StringPool.BLANK : "readonly" %>' editorImpl="<%= EDITOR_TEXT_IMPL_KEY %>" name="description" onInitMethod="OnDescriptionEditorInit" placeholder="description" />
 				</div>
 
 				<aui:input name="description" type="hidden" />
@@ -367,6 +367,12 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 
 	window['<portlet:namespace />OnChangeEditor'] = function(html) {
 		blogs.setDescription(html);
+	}
+
+	window['<portlet:namespace />OnDescriptionEditorInit'] = function() {
+		<c:if test="<%= !customAbstract %>">
+			A.one('#<portlet:namespace />descriptionEditor').attr('contenteditable', false);
+		</c:if>
 	}
 
 	Liferay.on('destroyPortlet', clearSaveDraftHandle);
