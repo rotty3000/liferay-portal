@@ -17,8 +17,13 @@
 <%@ include file="/html/taglib/init.jsp" %>
 
 <%
-String displayStyle = (String)request.getAttribute("liferay-ui:app-view-display-style:displayStyle");
+String displayStyle = HtmlUtil.escape((String)request.getAttribute("liferay-ui:app-view-display-style:displayStyle"));
 String[] displayStyles = (String[])request.getAttribute("liferay-ui:app-view-display-style:displayStyles");
+
+for (int i = 0; i < displayStyles.length; i++) {
+	displayStyles[i] = HtmlUtil.escape(displayStyles[i]);
+}
+
 PortletURL displayStyleURL = (PortletURL)request.getAttribute("liferay-ui:app-view-display-style:displayStyleURL");
 String eventName = (String)request.getAttribute("liferay-ui:app-view-display-style:eventName");
 Map<String, String> requestParams = (Map<String, String>)request.getAttribute("liferay-ui:app-view-display-style:requestParams");
