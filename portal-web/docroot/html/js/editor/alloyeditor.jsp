@@ -43,6 +43,7 @@ String configParams = marshallParams(configParamsMap);
 
 String contents = (String)request.getAttribute("liferay-ui:input-editor:contents");
 String contentsLanguageId = (String)request.getAttribute("liferay-ui:input-editor:contentsLanguageId");
+String cssClass = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:cssClass"));
 String cssClasses = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:cssClasses"));
 String editorImpl = (String)request.getAttribute("liferay-ui:input-editor:editorImpl");
 Map<String, String> fileBrowserParamsMap = (Map<String, String>)request.getAttribute("liferay-ui:input-editor:fileBrowserParams");
@@ -66,6 +67,12 @@ String onFocusMethod = (String)request.getAttribute("liferay-ui:input-editor:onF
 
 if (Validator.isNotNull(onFocusMethod)) {
 	onFocusMethod = namespace + onFocusMethod;
+}
+
+String onInitMethod = (String)request.getAttribute("liferay-ui:input-editor:onInitMethod");
+
+if (Validator.isNotNull(onInitMethod)) {
+	onInitMethod = namespace + onInitMethod;
 }
 
 String placeholder = GetterUtil.getString((String)request.getAttribute("liferay-ui:input-editor:placeholder"));
@@ -127,7 +134,7 @@ if (alloyEditorMode.equals("text")) {
 	CKEDITOR.env.isCompatible = true;
 </script>
 
-<div class="alloy-editor alloy-editor-placeholder" data-placeholder="<%= LanguageUtil.get(request, placeholder) %>" id="<%= name %>" name="<%= name %>"><%= contents %></div>
+<div class="alloy-editor alloy-editor-placeholder <%= cssClass %>" contenteditable="true" data-placeholder="<%= LanguageUtil.get(request, placeholder) %>" id="<%= name %>" name="<%= name %>"><%= contents %></div>
 
 <aui:script use="aui-base">
 	window['<%= name %>'] = {
@@ -183,14 +190,12 @@ if (alloyEditorMode.equals("text")) {
 			return window['<%= name %>'].getCkData();
 		},
 
-		instanceReady: true,
+		instanceReady: false,
 
 		setHTML: function(value) {
 			CKEDITOR.instances['<%= name %>'].setData(value);
 		}
 	};
-
-	document.getElementById('<%= name %>').setAttribute('contenteditable', true);
 
 	CKEDITOR.inline(
 		'<%= name %>',
@@ -261,6 +266,17 @@ if (alloyEditorMode.equals("text")) {
 			}
 		);
 	</c:if>
+
+	alloyEditor.on(
+		'instanceReady',
+		function(event) {
+			<c:if test="<%= Validator.isNotNull(onInitMethod) %>">
+				window['<%= HtmlUtil.escapeJS(onInitMethod) %>']();
+			</c:if>
+
+			window['<%= name %>'].instanceReady = true;
+		}
+	);
 
 	var destroyInstance = function(event) {
 		if (event.portletId === '<%= portletId %>') {

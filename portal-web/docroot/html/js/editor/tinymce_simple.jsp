@@ -29,6 +29,12 @@ if (Validator.isNotNull(onChangeMethod)) {
 	onChangeMethod = namespace + onChangeMethod;
 }
 
+String onInitMethod = (String)request.getAttribute("liferay-ui:input-editor:onInitMethod");
+
+if (Validator.isNotNull(onInitMethod)) {
+	onInitMethod = namespace + onInitMethod;
+}
+
 boolean resizable = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:resizable"));
 boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:skipEditorLoading"));
 %>
@@ -106,6 +112,10 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 					A.one(iframeDoc).addClass('aui');
 				}
 			}
+
+			<c:if test="<%= Validator.isNotNull(onInitMethod) %>">
+				window['<%= HtmlUtil.escapeJS(namespace + onInitMethod) %>']();
+			</c:if>
 
 			window['<%= name %>'].instanceReady = true;
 		},

@@ -77,6 +77,12 @@ if (Validator.isNotNull(onFocusMethod)) {
 	onFocusMethod = namespace + onFocusMethod;
 }
 
+String onInitMethod = (String)request.getAttribute("liferay-ui:input-editor:onInitMethod");
+
+if (Validator.isNotNull(onInitMethod)) {
+	onInitMethod = namespace + onInitMethod;
+}
+
 boolean resizable = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:resizable"));
 boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("liferay-ui:input-editor:skipEditorLoading"));
 String toolbarSet = (String)request.getAttribute("liferay-ui:input-editor:toolbarSet");
@@ -338,6 +344,10 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 			</c:if>
 
 			window['<%= name %>']._setStyles();
+
+			<c:if test="<%= Validator.isNotNull(onInitMethod) %>">
+				window['<%= HtmlUtil.escapeJS(namespace + onInitMethod) %>']();
+			</c:if>
 
 			window['<%= name %>'].instanceReady = true;
 		}
