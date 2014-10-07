@@ -572,7 +572,6 @@ public class SAXReaderImpl implements SAXReader {
 			reader.setEntityResolver(new EntityResolver());
 
 			reader.setFeature(_FEATURES_DYNAMIC, validate);
-			reader.setFeature(_FEATURES_EXTERNAL_GENERAL_ENTITIES, validate);
 			reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
 			reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
 			reader.setFeature(_FEATURES_VALIDATION, validate);
@@ -626,9 +625,6 @@ public class SAXReaderImpl implements SAXReader {
 
 	private static final String _FEATURES_DYNAMIC =
 		"http://apache.org/xml/features/validation/dynamic";
-
-	private static final String _FEATURES_EXTERNAL_GENERAL_ENTITIES =
-		"http://xml.org/sax/features/external-general-entities";
 
 	private static final String _FEATURES_LOAD_DTD_GRAMMAR =
 		"http://apache.org/xml/features/nonvalidating/load-dtd-grammar";
