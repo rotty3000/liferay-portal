@@ -64,19 +64,9 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class AmazonRankingsPortlet extends MVCPortlet {
 
-	@Override
-	public void doView(
-			RenderRequest renderRequest, RenderResponse renderResponse)
-		throws IOException, PortletException {
-
-		renderRequest.setAttribute("configuration", _configuration);
-
-		super.doView(renderRequest, renderResponse);
-	}
-
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		_configuration = Configurable.createConfigurable(
+		defaultConfiguration = Configurable.createConfigurable(
 			AmazonRankingsConfiguration.class, properties);
 	}
 
@@ -85,6 +75,6 @@ public class AmazonRankingsPortlet extends MVCPortlet {
 		AmazonRankingsUpgrade amazonRankingsUpgrade) {
 	}
 
-	private AmazonRankingsConfiguration _configuration;
+	public static AmazonRankingsConfiguration defaultConfiguration;
 
 }
