@@ -14,6 +14,7 @@
 
 package com.liferay.osgi.config.admin.portlet;
 
+import com.liferay.osgi.config.admin.ddm.DDMFormFieldFreemarkerRenderer;
 import com.liferay.osgi.config.admin.util.DDMFormBuilder;
 import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -24,6 +25,7 @@ import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.PortletApp;
+import com.liferay.portlet.dynamicdatamapping.render.DDMFormFieldRenderer;
 import com.liferay.util.bridges.freemarker.FreeMarkerPortlet;
 
 import java.io.IOException;
@@ -40,6 +42,7 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -67,13 +70,24 @@ import org.osgi.service.metatype.MetaTypeService;
 public class ConfigAdminPortlet extends FreeMarkerPortlet {
 
 	@Activate
+	@SuppressWarnings("unchecked")
 	public void activate(BundleContext context) {
 		_context = context;
+
+		_serviceRegistration =
+						(ServiceRegistration<DDMFormFieldRenderer>)
+						_context.registerService(
+							DDMFormFieldRenderer.class.getName(),
+							new DDMFormFieldFreemarkerRenderer(
+								context.getBundle()),
+							null);
 	}
 
 	@Deactivate
 	public void deactivate() {
 		_context = null;
+
+		_serviceRegistration.unregister();
 	}
 
 	@Override
@@ -152,7 +166,6 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			path, renderRequest, renderResponse, PortletRequest.RENDER_PHASE);
 	}
 
-
 	@Reference
 	protected void setConfigAdminService(
 		ConfigurationAdmin configurationAdmin) {
@@ -165,11 +178,11 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 		_metaTypeService = metaTypeService;
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(
-		ConfigAdminPortlet.class);
+	private static Log _log = LogFactoryUtil.getLog(ConfigAdminPortlet.class);
 
 	private ConfigurationAdmin _configurationAdmin;
 	private BundleContext _context;
 	private MetaTypeService _metaTypeService;
+	private ServiceRegistration<DDMFormFieldRenderer> _serviceRegistration;
 
 }

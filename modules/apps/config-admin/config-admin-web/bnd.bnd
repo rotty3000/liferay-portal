@@ -12,4 +12,6 @@ Include-Resource:\
 	META-INF/resources=src/META-INF/resources,\
 	@lib/javax.servlet.jsp.jstl.jar!/META-INF/*.tld,\
 	@../../../../util-bridges/util-bridges.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet,\
-	@../../../../util-taglib/util-taglib.jar!/META-INF/*.tld
+	@../../../../util-taglib/util-taglib.jar!/META-INF/*.tld,\
+	@../../../../portal-impl/portal-impl.jar!/com/liferay/portlet/dynamicdatamapping/dependencies/*.ftl,\
+	@../../../../portal-impl/portal-impl.jar!/com/liferay/portlet/dynamicdatamapping/dependencies/**/*.ftl
