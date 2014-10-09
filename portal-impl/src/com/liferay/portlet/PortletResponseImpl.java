@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.URLEncoder;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -571,6 +572,9 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		long plid, String portletName, String lifecycle,
 		boolean includeLinkToLayoutUuid) {
 
+		String linkToLayoutUuid = GetterUtil.getString(
+			_portletSetup.getValue("portletSetupLinkToLayoutUuid", null));
+
 		try {
 			Layout layout = (Layout)_portletRequestImpl.getAttribute(
 				WebKeys.LAYOUT);
@@ -590,9 +594,6 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 					PortletPreferencesFactoryUtil.getStrictLayoutPortletSetup(
 						layout, _portletName);
 			}
-
-			String linkToLayoutUuid = GetterUtil.getString(
-				_portletSetup.getValue("portletSetupLinkToLayoutUuid", null));
 
 			if (PropsValues.PORTLET_CROSS_LAYOUT_INVOCATION_MODE.equals(
 					"render") &&
@@ -703,7 +704,15 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 
 		try {
-			portletURLImpl.setWindowState(_portletRequestImpl.getWindowState());
+			if (Validator.isNotNull(linkToLayoutUuid) &&
+				includeLinkToLayoutUuid) {
+
+				portletURLImpl.setWindowState(LiferayWindowState.MAXIMIZED);
+			}
+			else {
+				portletURLImpl.setWindowState(
+					_portletRequestImpl.getWindowState());
+			}
 		}
 		catch (WindowStateException wse) {
 			_log.error(wse.getMessage());
