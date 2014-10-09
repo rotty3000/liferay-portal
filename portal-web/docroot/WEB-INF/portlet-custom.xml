@@ -910,36 +910,6 @@
 		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
 	</portlet>
 	<portlet>
-		<portlet-name>97</portlet-name>
-		<display-name>Quick Note</display-name>
-		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
-		<init-param>
-			<name>template-path</name>
-			<value>/html/portlet/quick_note/</value>
-		</init-param>
-		<init-param>
-			<name>view-action</name>
-			<value>/quick_note/view</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
-		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
-		<portlet-preferences>
-			<preference>
-				<name>color</name>
-				<value>#FFFFCC</value>
-			</preference>
-		</portlet-preferences>
-		<security-role-ref>
-			<role-name>power-user</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>user</role-name>
-		</security-role-ref>
-	</portlet>
-	<portlet>
 		<portlet-name>98</portlet-name>
 		<display-name>Software Repository</display-name>
 		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>

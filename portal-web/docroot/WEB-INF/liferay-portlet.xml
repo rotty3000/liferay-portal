@@ -725,19 +725,6 @@
 		<system>true</system>
 	</portlet>
 	<portlet>
-		<portlet-name>97</portlet-name>
-		<icon>/html/icons/quick_note.png</icon>
-		<struts-path>quick_note</struts-path>
-		<use-default-template>false</use-default-template>
-		<layout-cacheable>true</layout-cacheable>
-		<instanceable>true</instanceable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/quick_note/css/main.css</header-portlet-css>
-		<css-class-wrapper>portlet-quick-note</css-class-wrapper>
-	</portlet>
-	<portlet>
 		<portlet-name>98</portlet-name>
 		<icon>/html/icons/software_catalog.png</icon>
 		<struts-path>software_catalog</struts-path>
