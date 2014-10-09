@@ -86,6 +86,10 @@ public class BundleServletContext {
 	}
 
 	public Set<String> getResourcePaths(String path) {
+		if ((path != null) && (path.startsWith("/WEB-INF"))) {
+			path = path.replaceFirst("/WEB-INF", "/META-INF");
+		}
+
 		return _bundlePortletApp.getResourcePaths(path);
 	}
 

@@ -1,0 +1,15 @@
+Bundle-Name: Liferay Config Admin
+Bundle-SymbolicName: com.liferay.config.admin.web
+Bundle-Version: 1.0.0
+Import-Package:\
+	${bnd.jsp.support.imports.javax.servlet},\
+	com.liferay.portlet.dynamicdatamapping.io,\
+	com.liferay.portlet.dynamicdatamapping.render,\
+	com.liferay.portlet.dynamicdatamapping.storage,\
+	*
+Include-Resource:\
+	classes,\
+	META-INF/resources=src/META-INF/resources,\
+	@lib/javax.servlet.jsp.jstl.jar!/META-INF/*.tld,\
+	@../../../../util-bridges/util-bridges.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet,\
+	@../../../../util-taglib/util-taglib.jar!/META-INF/*.tld
