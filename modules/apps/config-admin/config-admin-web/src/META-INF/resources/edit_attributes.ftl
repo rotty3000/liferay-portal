@@ -22,17 +22,21 @@
 
 <#assign redirectURL = renderResponse.createRenderURL() />
 
+<@portlet["actionURL"] name="bindAttributes" varImpl="bindAtrributesActionURL">
+		<@portlet["param"] name="servicePID" value="${servicePID}" />
+</@>
+
 <@liferay_ui["header"]
 	backURL="${redirectURL}"
 	title='${editingHeaderTitle}'
 />
 
-<@aui["form"] method="post" name="fmOCDAttribute">
+<@aui["form"] method="post" name="fmOCDAttribute" action="${bindAtrributesActionURL}">
 	<@aui["input"] name="redirect" type="hidden" value="${redirectURL}" />
 	<@aui["input"] name="servicePID" type="hidden" value="${servicePID}" />
 
 	<@aui["fieldset"]>
-		${ddmFormBuilder.ddmFromContentHTML(servicePID, themeDisplay, renderRequest, renderResponse)}
+		${ddmFormBuilder.renderServiceConfigurationForm(servicePID, renderRequest, renderResponse)}
 	</@>
 
 	<@aui["button-row"]>

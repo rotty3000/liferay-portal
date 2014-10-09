@@ -17,8 +17,6 @@ package com.liferay.osgi.config.admin.util;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormFieldOptions;
@@ -60,6 +58,12 @@ public class MetaTypeInfoUtil {
 
 		_addFieldToForm(ddmForm, attributeDefinitions, false);
 
+		if (_ddmFormMap.containsKey(servicePID)) {
+			_ddmFormMap.remove(servicePID);
+		}
+
+		_ddmFormMap.put(servicePID, ddmForm);
+
 		return ddmForm;
 	}
 
@@ -78,6 +82,16 @@ public class MetaTypeInfoUtil {
 		}
 	}
 
+	public static DDMForm getDDMForm(String servicePID) {
+		return _ddmFormMap.get(servicePID);
+	}
+
+	public static ObjectClassDefinition getObjectClassDefintion(
+		String servicePID) {
+
+		return _ocdMap.get(servicePID);
+	}
+
 	private static void _addFieldToForm(
 		DDMForm ddmForm, AttributeDefinition[] attributeDefinitions,
 		boolean required) {
@@ -89,7 +103,7 @@ public class MetaTypeInfoUtil {
 		List<DDMFormField> ddmFormFields = ddmForm.getDDMFormFields();
 
 		for (AttributeDefinition attributeDefinition : attributeDefinitions) {
-			String id = _attributeToID(attributeDefinition);
+			String id = attributeDefinition.getID();
 			String type = _attributeToDDMType(attributeDefinition);
 
 			DDMFormField ddmFormField = new DDMFormField(id, type);
@@ -201,14 +215,6 @@ public class MetaTypeInfoUtil {
 		}
 	}
 
-	private static String _attributeToID(
-		AttributeDefinition attributeDefinition) {
-
-		String id = attributeDefinition.getID();
-
-		return StringUtil.replace(id, StringPool.PERIOD, StringPool.BLANK);
-	}
-
 	private static LocalizedValue _attributeToLabel(
 		AttributeDefinition attributeDefinition) {
 
@@ -300,6 +306,8 @@ public class MetaTypeInfoUtil {
 		"true", "false"
 	};
 
+	private static ConcurrentHashMap<String, DDMForm> _ddmFormMap =
+					new ConcurrentHashMap<String, DDMForm>();
 	private static ConcurrentHashMap<String, ObjectClassDefinition> _ocdMap =
 		new ConcurrentHashMap<String, ObjectClassDefinition>();
 
