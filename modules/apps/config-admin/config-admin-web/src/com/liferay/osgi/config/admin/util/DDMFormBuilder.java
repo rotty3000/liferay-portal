@@ -13,7 +13,6 @@ import com.liferay.portlet.dynamicdatamapping.render.DDMFormRendererUtil;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
-
 public class DDMFormBuilder {
 
 	public String ddmFromContentHTML(
