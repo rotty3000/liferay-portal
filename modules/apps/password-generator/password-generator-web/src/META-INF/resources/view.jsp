@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 int length = ParamUtil.getInteger(request, "length", 8);
