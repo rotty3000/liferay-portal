@@ -14,14 +14,18 @@
 
 package com.liferay.osgi.config.admin.portlet;
 
-import com.liferay.osgi.config.admin.util.DDMFormBuilder;
-import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
+import com.liferay.osgi.config.admin.util.ConfigurableService;
+import com.liferay.osgi.config.admin.util.ConfigurationFormBuilder;
+import com.liferay.osgi.config.admin.util.ConfigurationsHelper;
+import com.liferay.osgi.config.admin.util.ObjectClassDefinitionsHelper;
+import com.liferay.osgi.config.admin.util.ObjectClassDefinitionsIterator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.PortletApp;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -30,6 +34,9 @@ import com.liferay.util.bridges.freemarker.FreeMarkerPortlet;
 import java.io.IOException;
 
 import java.net.URL;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
@@ -41,12 +48,13 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
@@ -69,7 +77,6 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 public class ConfigAdminPortlet extends FreeMarkerPortlet {
 
 	@Activate
-	@SuppressWarnings("unchecked")
 	public void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
 	}
@@ -96,13 +103,27 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		renderRequest.setAttribute(
-			"ocdIterator",
-			new ObjectClassDefinitonsIterator(
-				_bundleContext, _metaTypeService,
-				themeDisplay.getLanguageId()));
+		String languageId = themeDisplay.getLanguageId();
 
-		super.doView(renderRequest, renderResponse);
+		try {
+			ConfigurationsHelper configurationsHelper =
+							new ConfigurationsHelper(
+								_bundleContext, languageId);
+
+			String pidFilter = renderRequest.getParameter("pidFilter");
+
+			List<ConfigurableService> services =
+								configurationsHelper.getConfigurableSevices(
+									themeDisplay.getLanguageId(), pidFilter);
+
+			renderRequest.setAttribute(
+				"ocdIterator", new ObjectClassDefinitionsIterator(services));
+
+			super.doView(renderRequest, renderResponse);
+		}
+		catch (Exception e) {
+			throw new PortletException(e);
+		}
 	}
 
 	@Override
@@ -137,32 +158,62 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			RenderResponse renderResponse)
 		throws IOException, PortletException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String languageId = themeDisplay.getLanguageId();
+
+		String viewType = renderRequest.getParameter("viewType");
+
+		String pid = ParamUtil.getString(renderRequest, "servicePID");
+		String factoryPid = ParamUtil.getString(renderRequest, "factoryPID");
+
+		if (Validator.isNull(pid) && Validator.isNotNull(factoryPid)) {
+			renderRequest.setAttribute("servicePID", StringPool.BLANK);
+			renderRequest.setAttribute("factoryPID", factoryPid);
+		}
+		else if (Validator.isNotNull(pid) && Validator.isNotNull(factoryPid)) {
+			renderRequest.setAttribute("servicePID", pid);
+			renderRequest.setAttribute("factoryPID", factoryPid);
+		}
+		else {
+			renderRequest.setAttribute("servicePID", pid);
+			renderRequest.setAttribute("factoryPID", StringPool.BLANK);
+		}
+
 		if ("/edit_attributes.ftl".equals(path)) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			ObjectClassDefinitionsHelper ocdHelper =
+							new ObjectClassDefinitionsHelper(
+								_bundleContext, languageId);
 
-			String servicePID = ParamUtil.getString(
-				renderRequest, "servicePID");
+			ObjectClassDefinition objectClassDefinition = null;
 
-			ObjectClassDefinitonsIterator objectClassDefinitonsIterator =
-				new ObjectClassDefinitonsIterator(
-					_bundleContext, _metaTypeService,
-					themeDisplay.getLanguageId());
+			//Instances will not have OCD, they need to inherit parents
+			if ((Validator.isNull(pid) ||  Validator.isNotNull(pid))
+					&& Validator.isNotNull(factoryPid)) {
 
-			ObjectClassDefinition objectClassDefinition =
-				objectClassDefinitonsIterator.getObjectClassDefinition(
-					servicePID);
-
-			renderRequest.setAttribute("servicePID", servicePID);
-			renderRequest.setAttribute(
-				"editingHeaderTitle", objectClassDefinition.getName());
-
-			if (_log.isDebugEnabled()) {
-				_log.debug("Editing Service:" + servicePID);
+				objectClassDefinition = ocdHelper.getObjectClassDefinition(
+								factoryPid);
+			}
+			else {
+				objectClassDefinition = ocdHelper.getObjectClassDefinition(pid);
 			}
 
+			if (objectClassDefinition!= null) {
+				renderRequest.setAttribute(
+					"editingHeaderTitle", objectClassDefinition.getName());
+
+				renderRequest.setAttribute(
+					"configurationFormBuilder", new ConfigurationFormBuilder(
+						objectClassDefinition, _configurationAdmin));
+			}
+		}
+		else if ("factoryInstances".equals(viewType)) {
+			List<ConfigurableService> services = _factoryInstances(
+							languageId, factoryPid);
+
 			renderRequest.setAttribute(
-				"ddmFormBuilder", new DDMFormBuilder(objectClassDefinition));
+				"ocdIterator", new ObjectClassDefinitionsIterator(services));
 		}
 
 		include(
@@ -176,15 +227,64 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 		_configurationAdmin = configurationAdmin;
 	}
 
-	@Reference
-	protected void setMetaTypeService(MetaTypeService metaTypeService) {
-		_metaTypeService = metaTypeService;
+	private List<ConfigurableService> _factoryInstances(
+			String languageId, String factoryPid)
+		throws IOException, PortletException {
+
+		List<ConfigurableService> configServices =
+						new ArrayList<ConfigurableService>();
+
+		ConfigurationsHelper configurationsHelper = new ConfigurationsHelper(
+						_bundleContext, languageId);
+
+		ObjectClassDefinitionsHelper ocdHelper =
+						new ObjectClassDefinitionsHelper(
+							_bundleContext, languageId);
+
+		ObjectClassDefinition objectClassDefinition =
+						ocdHelper.getObjectClassDefinition(factoryPid);
+
+		StringBuilder filter = new StringBuilder();
+
+		filter.append(StringPool.OPEN_PARENTHESIS);
+		filter.append(ConfigurationAdmin.SERVICE_FACTORYPID);
+		filter.append(StringPool.EQUAL);
+		filter.append(factoryPid);
+		filter.append(StringPool.CLOSE_PARENTHESIS);
+
+		String name = objectClassDefinition!= null?
+			objectClassDefinition.getName():StringPool.BLANK;
+
+		try {
+			Configuration[] configs =
+							configurationsHelper.getConfigurations(
+				filter.toString());
+
+			if (configs!= null) {
+				for (Configuration configuration : configs) {
+					String instancePid = configuration.getPid();
+
+					String bundleLocation = configuration.getBundleLocation();
+
+					ConfigurableService configurableService =
+									new ConfigurableService(
+										false, factoryPid, name, instancePid);
+					configurableService.setBundleLocation(bundleLocation);
+
+					configServices.add(configurableService);
+				}
+			}
+		}
+		catch (InvalidSyntaxException e) {
+			throw new PortletException(e);
+		}
+
+		return configServices;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ConfigAdminPortlet.class);
 
-	private ConfigurationAdmin _configurationAdmin;
 	private BundleContext _bundleContext;
-	private MetaTypeService _metaTypeService;
+	private ConfigurationAdmin _configurationAdmin;
 
 }

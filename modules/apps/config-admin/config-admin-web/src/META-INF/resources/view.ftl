@@ -18,9 +18,10 @@
 
 <#assign ocdIterator = Request["ocdIterator"] />
 
+<@liferay_ui["message"] key="configuration-successful"/>
+
 <@liferay_ui["search-container"]
 	emptyResultsMessage="no-services-were-found"
-	iteratorURL=showAttributesURL
 	total=ocdIterator.getTotal()
 >
 
@@ -29,40 +30,66 @@
 	/>
 
 	<@liferay_ui["search-container-row"]
-		className="org.osgi.service.metatype.ObjectClassDefinition"
-		keyProperty="ID"
+		className="com.liferay.osgi.config.admin.util.ConfigurableService"
+		keyProperty="pid"
 		modelVar="ocd"
 	>
 
 		<@portlet["renderURL"] varImpl="editURL">
 			<@portlet["param"] name="mvcPath" value="/edit_attributes.ftl" />
-			<@portlet["param"] name="servicePID" value="${ocd.getID()}" />
+			<@portlet["param"] name="servicePID" value="${ocd.getPid()}" />
+			<@portlet["param"] name="factoryPID" value="${ocd.getFactoryPid()}" />
 		</@>
 
-		<@liferay_ui["search-container-column-text"]
-			href=editURL
-			name="ID"
-			value=ocd.getID()
-		/>
+		<@portlet["renderURL"] varImpl="showConfigURL">
+			<@portlet["param"] name="mvcPath" value="/view.ftl" />
+			<@portlet["param"] name="servicePID" value="${ocd.getPid()}" />
+			<@portlet["param"] name="factoryPID" value="${ocd.getFactoryPid()}" />
+			<@portlet["param"] name="viewType" value="factoryInstances" />
+		</@>
 
-		<@liferay_ui["search-container-column-text"]
-			href=editURL
-			name="name"
-			value=ocd.getName()
-		/>
+		<#if ocd.isFactory()>
+
+			<@liferay_ui["search-container-column-text"]
+				href=showConfigURL
+				name="name"
+				value=ocd.getName()
+			/>
+		<#else>
+			<@liferay_ui["search-container-column-text"]
+				href=editURL
+				name="name"
+				value=ocd.getName()	/>
+		</#if>
 
 		<@liferay_ui["search-container-column-text"]
 			align="right"
-			name=""
-		>
+			name="">
+
 			<@liferay_ui["icon-menu"]>
-				<@liferay_ui["icon"]
-					image="edit"
-					label=true
-					message="edit-attributes"
-					method="post"
-					url="${editURL}"
-				/>
+
+				<#if ocd.isFactory()>
+
+					<@portlet["renderURL"] varImpl="creatFactoryConfigURL">
+						<@portlet["param"] name="mvcPath" value="/edit_attributes.ftl" />
+						<@portlet["param"] name="factoryPID" value="${ocd.getPid()}" />
+					</@>
+
+					<@liferay_ui["icon"]
+						image="add"
+						label=true
+						message="create-configuration"
+						method="post"
+						url="${creatFactoryConfigURL}"
+					/>
+				</#if>
+					<@liferay_ui["icon"]
+						image="edit"
+						label=true
+						message="edit-attributes"
+						method="post"
+						url="${editURL}"
+					/>
 			</@>
 		</@>
 	</@>
