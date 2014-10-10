@@ -19,7 +19,6 @@
 <%
 String displayStyle = (String)request.getAttribute("liferay-ui:app-view-display-style:displayStyle");
 String[] displayStyles = (String[])request.getAttribute("liferay-ui:app-view-display-style:displayStyles");
-
 PortletURL displayStyleURL = (PortletURL)request.getAttribute("liferay-ui:app-view-display-style:displayStyleURL");
 String eventName = (String)request.getAttribute("liferay-ui:app-view-display-style:eventName");
 Map<String, String> requestParams = (Map<String, String>)request.getAttribute("liferay-ui:app-view-display-style:requestParams");
