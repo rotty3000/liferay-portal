@@ -175,8 +175,14 @@ public class Time {
 	}
 
 	public static String getRelativeTimeDescription(
-		long milliseconds, Format dateTimeFormat, Locale locale,
-		TimeZone timeZone) {
+		long milliseconds, Locale locale, TimeZone timeZone) {
+
+		return getRelativeTimeDescription(milliseconds, locale, timeZone, null);
+	}
+
+	public static String getRelativeTimeDescription(
+		long milliseconds, Locale locale, TimeZone timeZone,
+		Format dateTimeFormat) {
 
 		Format timeFormat = FastDateFormatFactoryUtil.getTime(locale, timeZone);
 
@@ -213,12 +219,6 @@ public class Time {
 		}
 
 		return dateTimeFormat.format(milliseconds);
-	}
-
-	public static String getRelativeTimeDescription(
-		long milliseconds, Locale locale, TimeZone timeZone) {
-
-		return getRelativeTimeDescription(milliseconds, null, locale, timeZone);
 	}
 
 	public static String getRFC822() {
