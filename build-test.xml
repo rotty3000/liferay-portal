@@ -2899,6 +2899,7 @@ plugins.includes=marketplace-portlet</echo>
 				<delete dir="dist" />
 
 				<ant antfile="build.xml" target="deploy-additional-jars" inheritAll="false" />
+
 				<ant antfile="build.xml" target="update-app-server-scripts" inheritAll="false" />
 
 				<get
