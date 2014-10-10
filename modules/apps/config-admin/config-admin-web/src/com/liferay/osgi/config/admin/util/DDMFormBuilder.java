@@ -14,16 +14,23 @@ import com.liferay.portlet.dynamicdatamapping.render.DDMFormRendererUtil;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
+
+import org.osgi.service.metatype.ObjectClassDefinition;
 public class DDMFormBuilder {
+
+	public DDMFormBuilder(ObjectClassDefinition objectClassDefinition) {
+		_objectClassDefinition = objectClassDefinition;
+	}
 
 	public String renderServiceConfigurationForm(
 		String servicePID, PortletRequest portletRequest,
 		PortletResponse portletResponse) throws PortalException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)
-						portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(servicePID);
+		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(
+			_objectClassDefinition);
 
 		DDMFormFieldRenderingContext ddmFormFieldRenderingContext =
 			new DDMFormFieldRenderingContext();
@@ -36,7 +43,6 @@ public class DDMFormBuilder {
 
 		ddmFormFieldRenderingContext.setPortletNamespace(
 			portletResponse.getNamespace());
-		ddmFormFieldRenderingContext.setNamespace("CA");
 
 		ddmFormFieldRenderingContext.setLocale(themeDisplay.getLocale());
 
@@ -50,5 +56,7 @@ public class DDMFormBuilder {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(DDMFormBuilder.class);
+
+	private ObjectClassDefinition _objectClassDefinition;
 
 }

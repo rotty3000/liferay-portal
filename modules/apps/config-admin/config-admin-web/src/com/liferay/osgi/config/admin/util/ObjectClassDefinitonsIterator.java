@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -32,49 +34,77 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 public class ObjectClassDefinitonsIterator {
 
 	public ObjectClassDefinitonsIterator(
-		BundleContext context, MetaTypeService metaTypeService) {
+		BundleContext bundleCcontext, MetaTypeService metaTypeService,
+		String languageId) {
 
-		_context = context;
+		_bundleCcontext = bundleCcontext;
 		_metaTypeService = metaTypeService;
+		_languageId = languageId;
+
+		_objectClassDefinitions = _getObjectDefinitions();
+	}
+
+	public ObjectClassDefinition getObjectClassDefinition(String servicePID) {
+		return _objectClassDefinitions.get(servicePID);
 	}
 
 	public List<ObjectClassDefinition> getResults(int start, int end)
 		throws PortalException {
 
-		return ListUtil.subList(objectDefinitions(), start, end);
+		List<ObjectClassDefinition> list = new ArrayList<>(
+			_objectClassDefinitions.values());
+
+		return ListUtil.subList(list, start, end);
 	}
 
 	public int getTotal() throws PortalException {
-		return objectDefinitions().size();
+		return _objectClassDefinitions.size();
 	}
 
-	public List<ObjectClassDefinition> objectDefinitions()
-		throws PortalException {
+	protected Map<String, ObjectClassDefinition> _getObjectDefinitions() {
+		Bundle[] bundles = _bundleCcontext.getBundles();
 
-		Bundle[] bundles = _context.getBundles();
-
-		List<ObjectClassDefinition> ocdContainer =
-			new ArrayList<ObjectClassDefinition>();
+		Map<String, ObjectClassDefinition> ocds =
+			new TreeMap<String, ObjectClassDefinition>();
 
 		for (Bundle bundle : bundles) {
-			MetaTypeInformation mInfo = _metaTypeService.getMetaTypeInformation(
-				bundle);
+			MetaTypeInformation metaTypeInformation =
+				_metaTypeService.getMetaTypeInformation(bundle);
 
-			if (mInfo != null) {
-				String[] pids = mInfo.getPids();
-
-				MetaTypeInfoUtil.fillOCD(mInfo, ocdContainer, pids);
-
-				String[] factoryPids = mInfo.getFactoryPids();
-
-				MetaTypeInfoUtil.fillOCD(mInfo, ocdContainer, factoryPids);
+			if (metaTypeInformation == null) {
+				continue;
 			}
+
+			String[] pids = metaTypeInformation.getPids();
+
+			_collectObjectClassDefinition(ocds, metaTypeInformation, pids);
+
+			String[] factoryPids = metaTypeInformation.getFactoryPids();
+
+			_collectObjectClassDefinition(
+				ocds, metaTypeInformation, factoryPids);
 		}
 
-		return ocdContainer;
+		return ocds;
 	}
 
-	private BundleContext _context;
+	protected void _collectObjectClassDefinition(
+		Map<String, ObjectClassDefinition> ocds,
+		MetaTypeInformation metaTypeInformation, String... pids) {
+
+		for (String pid : pids) {
+			ObjectClassDefinition objectClassDefinition =
+				metaTypeInformation.getObjectClassDefinition(pid, _languageId);
+
+			if (objectClassDefinition != null) {
+				ocds.put(pid, objectClassDefinition);
+			}
+		}
+	}
+
+	private BundleContext _bundleCcontext;
+	private String _languageId;
 	private MetaTypeService _metaTypeService;
+	private Map<String, ObjectClassDefinition> _objectClassDefinitions;
 
 }

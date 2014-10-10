@@ -23,13 +23,10 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMFormFieldOptions;
 import com.liferay.portlet.dynamicdatamapping.model.LocalizedValue;
 import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.service.metatype.AttributeDefinition;
-import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
@@ -38,58 +35,27 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  */
 public class MetaTypeInfoUtil {
 
-	public static DDMForm attributeForm(String servicePID) {
+	public static DDMForm attributeForm(
+		ObjectClassDefinition objectClassDefinition) {
+
+		AttributeDefinition[] requiredDefinitions =
+			objectClassDefinition.getAttributeDefinitions(
+				ObjectClassDefinition.REQUIRED);
+		AttributeDefinition[] optionalDefinitions =
+			objectClassDefinition.getAttributeDefinitions(
+				ObjectClassDefinition.OPTIONAL);
+
 		DDMForm ddmForm = new DDMForm();
 
 		ddmForm.setAvailableLocales(
 			SetUtil.fromArray(LanguageUtil.getAvailableLocales()));
-
 		ddmForm.setDefaultLocale(LocaleUtil.getDefault());
 
-		ddmForm.setDefaultLocale(LocaleUtil.getDefault());
+		_addFieldToForm(ddmForm, requiredDefinitions, true);
 
-		AttributeDefinition[] attributeDefinitions = _attributeDefinition(
-			servicePID, ObjectClassDefinition.REQUIRED);
-
-		_addFieldToForm(ddmForm, attributeDefinitions, true);
-
-		attributeDefinitions = _attributeDefinition(
-			servicePID, ObjectClassDefinition.OPTIONAL);
-
-		_addFieldToForm(ddmForm, attributeDefinitions, false);
-
-		if (_ddmFormMap.containsKey(servicePID)) {
-			_ddmFormMap.remove(servicePID);
-		}
-
-		_ddmFormMap.put(servicePID, ddmForm);
+		_addFieldToForm(ddmForm, optionalDefinitions, false);
 
 		return ddmForm;
-	}
-
-	public static void fillOCD(
-		MetaTypeInformation mInfo,
-		Collection<ObjectClassDefinition> ocdContainer, String... pids) {
-
-		for (String pid : pids) {
-			ObjectClassDefinition ocd = mInfo.getObjectClassDefinition(
-				pid, null);
-
-			if (ocd != null) {
-				_ocdMap.put(pid, ocd);
-				ocdContainer.add(ocd);
-			}
-		}
-	}
-
-	public static DDMForm getDDMForm(String servicePID) {
-		return _ddmFormMap.get(servicePID);
-	}
-
-	public static ObjectClassDefinition getObjectClassDefintion(
-		String servicePID) {
-
-		return _ocdMap.get(servicePID);
 	}
 
 	private static void _addFieldToForm(
@@ -140,19 +106,6 @@ public class MetaTypeInfoUtil {
 
 			ddmFormFields.add(ddmFormField);
 		}
-	}
-
-	private static AttributeDefinition[] _attributeDefinition(
-		String servicePID, int filter) {
-
-		AttributeDefinition[] attributeDefinitions = null;
-
-		if (_ocdMap != null) {
-			ObjectClassDefinition ocd = _ocdMap.get(servicePID);
-			attributeDefinitions = ocd.getAttributeDefinitions(filter);
-		}
-
-		return attributeDefinitions;
 	}
 
 	private static String _attributeToDDMDataType(
@@ -305,10 +258,5 @@ public class MetaTypeInfoUtil {
 	private static final String[] _DEFAULT_OPTION_VALUES = {
 		"true", "false"
 	};
-
-	private static ConcurrentHashMap<String, DDMForm> _ddmFormMap =
-					new ConcurrentHashMap<String, DDMForm>();
-	private static ConcurrentHashMap<String, ObjectClassDefinition> _ocdMap =
-		new ConcurrentHashMap<String, ObjectClassDefinition>();
 
 }

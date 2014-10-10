@@ -15,11 +15,14 @@
 package com.liferay.osgi.config.admin.portlet.action;
 
 import com.liferay.osgi.config.admin.util.MetaTypeInfoUtil;
+import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
 import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
@@ -34,22 +37,27 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
  * @author Kamesh Sampath
  */
 
 @Component(
-			immediate = true, service = ActionCommand.class,
-			property = {
-				"action.command.name=bindAttributes", "javax.portlet.name=" +
-				"com_liferay_osgi_config_admin_portlet_" +
-				"ConfigAdminPortlet"
-			})
+	immediate = true, service = ActionCommand.class,
+	property = {
+		"action.command.name=bindAttributes",
+		"javax.portlet.name=com_liferay_osgi_config_admin_portlet_" +
+			"ConfigAdminPortlet"
+	}
+)
 public class BindAttributesAction implements ActionCommand {
 
 	@Override
@@ -63,10 +71,21 @@ public class BindAttributesAction implements ActionCommand {
 			_log.debug("Saving service with PID:" + servicePID);
 		}
 
-		Dictionary<String, Object> serviceProps =
-			new Hashtable<String, Object>();
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-		DDMForm ddmForm = MetaTypeInfoUtil.getDDMForm(servicePID);
+		ObjectClassDefinitonsIterator objectClassDefinitonsIterator =
+			new ObjectClassDefinitonsIterator(
+				_bundleContext, _metaTypeService,
+				themeDisplay.getLanguageId());
+
+		ObjectClassDefinition objectClassDefinition =
+			objectClassDefinitonsIterator.getObjectClassDefinition(servicePID);
+
+		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(objectClassDefinition);
+
+		Dictionary<String, Object> properties =
+			new Hashtable<String, Object>();
 
 		for (DDMFormField ddmFormField : ddmForm.getDDMFormFields()) {
 			String id = ddmFormField.getName();
@@ -77,22 +96,21 @@ public class BindAttributesAction implements ActionCommand {
 				ddmFormField, portletRequest, paramName);
 
 			if (paramValue != null) {
-				serviceProps.put(id, paramValue);
+				properties.put(id, paramValue);
 			}
 		}
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Service Properties to be updated:" + serviceProps);
+			_log.debug("Service Properties to be updated:" + properties);
 		}
 
-		if (!serviceProps.isEmpty()) {
+		if (!properties.isEmpty()) {
 			try {
 				Configuration configuration =
-								_configurationAdmin.getConfiguration(
-									servicePID,"?");
+					_configurationAdmin.getConfiguration(servicePID, "?");
 
 				if (configuration != null) {
-					configuration.update(serviceProps);
+					configuration.update(properties);
 				}
 			}
 			catch (IOException e) {
@@ -103,11 +121,21 @@ public class BindAttributesAction implements ActionCommand {
 		return true;
 	}
 
+	@Activate
+	protected void activate(BundleContext bundleContext) {
+		_bundleContext = bundleContext;
+	}
+
 	@Reference
 	protected void setConfigAdminService(
 		ConfigurationAdmin configurationAdmin) {
 
 		_configurationAdmin = configurationAdmin;
+	}
+
+	@Reference
+	protected void setMetaTypeService(MetaTypeService metaTypeService) {
+		_metaTypeService = metaTypeService;
 	}
 
 	private static Object _toTypedParamValue(
@@ -160,6 +188,8 @@ public class BindAttributesAction implements ActionCommand {
 
 	private static Log _log = LogFactoryUtil.getLog(BindAttributesAction.class);
 
+	private BundleContext _bundleContext;
 	private ConfigurationAdmin _configurationAdmin;
+	private MetaTypeService _metaTypeService;
 
 }
