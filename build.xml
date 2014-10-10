@@ -484,52 +484,7 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 
 		<antcall target="deploy-properties" />
 
-		<copy todir="${app.server.lib.global.dir}">
-			<fileset dir="lib/development" includes="hsql.jar,jtds.jar,mysql.jar,postgresql.jar" />
-			<fileset dir="lib/global" />
-		</copy>
-
-		<if>
-			<isset property="jdbc.drivers.optional.dir" />
-			<then>
-				<copy todir="${app.server.lib.global.dir}">
-					<fileset
-						dir="${jdbc.drivers.optional.dir}"
-						includes="${jdbc.drivers}"
-					/>
-				</copy>
-			</then>
-		</if>
-
-		<copy todir="${app.server.lib.portal.dir}">
-			<fileset dir="lib/portal" />
-		</copy>
-
-		<if>
-			<and>
-				<equals arg1="${app.server.type}" arg2="geronimo" />
-				<equals arg1="${app.server.geronimo.version}" arg2="2.2.1" />
-				<not>
-					<available file="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar" />
-				</not>
-			</and>
-			<then>
-				<mkdir dir="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3" />
-
-				<get
-					dest="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar"
-					src="http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar"
-					verbose="true"
-				/>
-
-				<concat
-					append="true"
-					destfile="${app.server.geronimo.dir}/var/config/artifact_aliases.properties"
-				>
-					org.apache.geronimo.specs/geronimo-el_1.0_spec/1.0.2/jar=org.apache.geronimo.specs/geronimo-el_2.2_spec/1.0.3/jar
-				</concat>
-			</then>
-		</if>
+		<antcall target="deploy-additional-jars" />
 
 		<if>
 			<equals arg1="${app.server.type}" arg2="jboss" />
@@ -573,25 +528,6 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 							<replacetoken><![CDATA[redirectPort="8443" />]]></replacetoken>
 							<replacevalue><![CDATA[redirectPort="8443" URIEncoding="UTF-8" />]]></replacevalue>
 						</replace>
-
-						<move
-							failonerror="false"
-							file="${app.server.dir}/common/lib/hibernate-validator.jar"
-							tofile="${app.server.dir}/common/lib/hibernate-validator.jar.bak"
-						/>
-
-						<move
-							failonerror="false"
-							file="${app.server.dir}/common/lib/slf4j-jboss-logging.jar"
-							tofile="${app.server.dir}/common/lib/slf4j-jboss-logging.jar.bak"
-						/>
-
-						<delete>
-							<fileset
-								dir="${app.server.lib.portal.dir}"
-								includes="jaxrpc.jar,log4j.jar,stax.jar,xercesImpl.jar,xml-apis.jar"
-							/>
-						</delete>
 					</then>
 					<else>
 						<if>
@@ -605,13 +541,6 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 								/>
 							</then>
 						</if>
-
-						<delete>
-							<fileset
-								dir="${app.server.lib.portal.dir}"
-								includes="eclipselink.jar"
-							/>
-						</delete>
 					</else>
 				</if>
 			</then>
@@ -631,112 +560,22 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 						/>
 					</then>
 				</if>
-
-				<copy todir="${app.server.lib.global.dir}">
-					<fileset
-						dir="lib/development"
-						includes="activation.jar,jta.jar,mail.jar,persistence.jar"
-					/>
-				</copy>
 			</then>
 		</if>
 
 		<if>
-			<equals arg1="${app.server.type}" arg2="jonas" />
+			<equals arg1="${app.server.type}" arg2="tomcat" />
 			<then>
-				<delete>
-					<fileset
-						dir="${app.server.lib.portal.dir}"
-						includes="equinox.jar,osgi.core.jar,xalan.jar,xercesImpl.jar,xml-apis.jar"
-					/>
-				</delete>
-			</then>
-		</if>
-
-		<if>
-			<equals arg1="${app.server.type}" arg2="resin" />
-			<then>
-				<ant dir="support-resin" target="deploy" inheritAll="false" />
-
-				<copy todir="${app.server.lib.global.dir}">
-					<fileset
-						dir="lib/development"
-						includes="saxpath.jar"
-					/>
-				</copy>
-			</then>
-		</if>
-
-		<if>
-			<or>
-				<equals arg1="${app.server.type}" arg2="tcserver" />
-				<equals arg1="${app.server.type}" arg2="tomcat" />
-			</or>
-			<then>
-				<if>
-					<equals arg1="${app.server.type}" arg2="tomcat" />
-					<then>
-						<if>
-							<not>
-								<available file="${app.server.dir}/conf/Catalina/localhost/${app.server.tomcat.portal.context}.xml" />
-							</not>
-							<then>
-								<copy
-									file="tools/servers/tomcat/conf/Catalina/localhost/ROOT.xml"
-									tofile="${app.server.dir}/conf/Catalina/localhost/${app.server.tomcat.portal.context}.xml"
-									overwrite="true"
-								/>
-							</then>
-						</if>
-
-						<ant dir="support-tomcat" target="deploy" inheritAll="false" />
-					</then>
-				</if>
-
-				<copy todir="${app.server.lib.endorsed.dir}" flatten="true">
-					<fileset
-						dir="lib"
-						includes="${endorsed.libraries}"
-					/>
-				</copy>
-
 				<if>
 					<not>
-						<equals arg1="${app.server.lib.portal.dir}" arg2="${app.server.lib.global.dir}" />
+						<available file="${app.server.dir}/conf/Catalina/localhost/${app.server.tomcat.portal.context}.xml" />
 					</not>
 					<then>
-						<delete failonerror="false">
-							<fileset
-								dir="${app.server.lib.portal.dir}"
-								includes="ccpp.jar"
-							/>
-						</delete>
-					</then>
-				</if>
-
-				<copy todir="${app.server.lib.global.dir}">
-					<fileset
-						dir="lib/development"
-						includes="activation.jar,jms.jar,jta.jar,mail.jar,persistence.jar"
-					/>
-				</copy>
-
-				<copy todir="${app.server.temp.dir}/liferay/com/liferay/portal/deploy/dependencies">
-					<fileset
-						dir="lib/development"
-						includes="resin.jar,script-10.jar"
-					/>
-				</copy>
-
-				<if>
-					<equals arg1="${app.server.type}" arg2="tomcat" />
-					<then>
-						<delete>
-							<fileset
-								dir="${app.server.lib.portal.dir}"
-								includes="tomcat-juli.jar"
-							/>
-						</delete>
+						<copy
+							file="tools/servers/tomcat/conf/Catalina/localhost/ROOT.xml"
+							tofile="${app.server.dir}/conf/Catalina/localhost/${app.server.tomcat.portal.context}.xml"
+							overwrite="true"
+						/>
 					</then>
 				</if>
 			</then>
@@ -747,31 +586,8 @@ ${app.server.tomcat.dir}, then run "ant -buildfile build-dist.xml unzip-tomcat".
 		<mkdir dir="${app.server.work.dir}" />
 
 		<if>
-			<or>
-				<equals arg1="${app.server.type}" arg2="glassfish" />
-				<equals arg1="${app.server.type}" arg2="websphere" />
-			</or>
-			<then>
-				<tstamp>
-					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
-				</tstamp>
-
-				<jar
-					basedir="${app.server.portal.dir}"
-					jarfile="${tstamp.value}"
-				/>
-
-				<delete dir="${app.server.portal.dir}" />
-
-				<move file="${tstamp.value}" tofile="${app.server.portal.dir}" />
-			</then>
-		</if>
-
-		<if>
 			<equals arg1="${app.server.type}" arg2="websphere" />
 			<then>
-				<ant dir="support-websphere" target="deploy" inheritAll="false" />
-
 				<exec dir="${app.server.websphere.bin.dir}" executable="/bin/sh" os="${os.unix}">
 					<arg line="startServer.sh server1" />
 				</exec>
@@ -845,6 +661,220 @@ print AdminControl.invoke(appManager, 'startApplication', 'liferay-portal')
 		/>
 
 		<antcall target="print-current-time" />
+	</target>
+
+	<target name="deploy-additional-jars">
+		<copy todir="${app.server.lib.global.dir}">
+			<fileset dir="lib/development" includes="hsql.jar,jtds.jar,mysql.jar,postgresql.jar" />
+			<fileset dir="lib/global" />
+		</copy>
+
+		<if>
+			<isset property="jdbc.drivers.optional.dir" />
+			<then>
+				<copy todir="${app.server.lib.global.dir}">
+					<fileset
+						dir="${jdbc.drivers.optional.dir}"
+						includes="${jdbc.drivers}"
+					/>
+				</copy>
+			</then>
+		</if>
+
+		<copy todir="${app.server.lib.portal.dir}">
+			<fileset dir="lib/portal" />
+		</copy>
+
+		<if>
+			<and>
+				<equals arg1="${app.server.type}" arg2="geronimo" />
+				<equals arg1="${app.server.geronimo.version}" arg2="2.2.1" />
+				<not>
+					<available file="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar" />
+				</not>
+			</and>
+			<then>
+				<mkdir dir="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3" />
+
+				<get
+					dest="${app.server.geronimo.dir}/repository/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar"
+					src="http://repo1.maven.org/maven2/org/apache/geronimo/specs/geronimo-el_2.2_spec/1.0.3/geronimo-el_2.2_spec-1.0.3.jar"
+					verbose="true"
+				/>
+
+				<concat
+					append="true"
+					destfile="${app.server.geronimo.dir}/var/config/artifact_aliases.properties"
+				>
+					org.apache.geronimo.specs/geronimo-el_1.0_spec/1.0.2/jar=org.apache.geronimo.specs/geronimo-el_2.2_spec/1.0.3/jar
+				</concat>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="jboss" />
+			<then>
+				<if>
+					<equals arg1="${app.server.jboss.major.version}" arg2="5" />
+					<then>
+						<move
+							failonerror="false"
+							file="${app.server.dir}/common/lib/hibernate-validator.jar"
+							tofile="${app.server.dir}/common/lib/hibernate-validator.jar.bak"
+						/>
+
+						<move
+							failonerror="false"
+							file="${app.server.dir}/common/lib/slf4j-jboss-logging.jar"
+							tofile="${app.server.dir}/common/lib/slf4j-jboss-logging.jar.bak"
+						/>
+
+						<delete>
+							<fileset
+								dir="${app.server.lib.portal.dir}"
+								includes="jaxrpc.jar,log4j.jar,stax.jar,xercesImpl.jar,xml-apis.jar"
+							/>
+						</delete>
+					</then>
+					<else>
+						<delete>
+							<fileset
+								dir="${app.server.lib.portal.dir}"
+								includes="eclipselink.jar"
+							/>
+						</delete>
+					</else>
+				</if>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="jetty" />
+			<then>
+				<copy todir="${app.server.lib.global.dir}">
+					<fileset
+						dir="lib/development"
+						includes="activation.jar,jta.jar,mail.jar,persistence.jar"
+					/>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="jonas" />
+			<then>
+				<delete>
+					<fileset
+						dir="${app.server.lib.portal.dir}"
+						includes="equinox.jar,osgi.core.jar,xalan.jar,xercesImpl.jar,xml-apis.jar"
+					/>
+				</delete>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="resin" />
+			<then>
+				<ant dir="support-resin" target="deploy" inheritAll="false" />
+
+				<copy todir="${app.server.lib.global.dir}">
+					<fileset
+						dir="lib/development"
+						includes="saxpath.jar"
+					/>
+				</copy>
+			</then>
+		</if>
+
+		<if>
+			<or>
+				<equals arg1="${app.server.type}" arg2="tcserver" />
+				<equals arg1="${app.server.type}" arg2="tomcat" />
+			</or>
+			<then>
+				<if>
+					<equals arg1="${app.server.type}" arg2="tomcat" />
+					<then>
+						<ant dir="support-tomcat" target="deploy" inheritAll="false" />
+					</then>
+				</if>
+
+				<copy todir="${app.server.lib.endorsed.dir}" flatten="true">
+					<fileset
+						dir="lib"
+						includes="${endorsed.libraries}"
+					/>
+				</copy>
+
+				<if>
+					<not>
+						<equals arg1="${app.server.lib.portal.dir}" arg2="${app.server.lib.global.dir}" />
+					</not>
+					<then>
+						<delete failonerror="false">
+							<fileset
+								dir="${app.server.lib.portal.dir}"
+								includes="ccpp.jar"
+							/>
+						</delete>
+					</then>
+				</if>
+
+				<copy todir="${app.server.lib.global.dir}">
+					<fileset
+						dir="lib/development"
+						includes="activation.jar,jms.jar,jta.jar,mail.jar,persistence.jar"
+					/>
+				</copy>
+
+				<copy todir="${app.server.temp.dir}/liferay/com/liferay/portal/deploy/dependencies">
+					<fileset
+						dir="lib/development"
+						includes="resin.jar,script-10.jar"
+					/>
+				</copy>
+
+				<if>
+					<equals arg1="${app.server.type}" arg2="tomcat" />
+					<then>
+						<delete>
+							<fileset
+								dir="${app.server.lib.portal.dir}"
+								includes="tomcat-juli.jar"
+							/>
+						</delete>
+					</then>
+				</if>
+			</then>
+		</if>
+
+		<if>
+			<or>
+				<equals arg1="${app.server.type}" arg2="glassfish" />
+				<equals arg1="${app.server.type}" arg2="websphere" />
+			</or>
+			<then>
+				<tstamp>
+					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+				</tstamp>
+
+				<jar
+					basedir="${app.server.portal.dir}"
+					jarfile="${tstamp.value}"
+				/>
+
+				<delete dir="${app.server.portal.dir}" />
+
+				<move file="${tstamp.value}" tofile="${app.server.portal.dir}" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="websphere" />
+			<then>
+				<ant dir="support-websphere" target="deploy" inheritAll="false" />
+			</then>
+		</if>
 	</target>
 
 	<target name="deploy-properties">
