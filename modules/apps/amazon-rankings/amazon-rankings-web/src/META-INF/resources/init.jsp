@@ -51,7 +51,7 @@ WindowState windowState = liferayPortletRequest.getWindowState();
 
 AmazonRankingsConfiguration amazonRankingsConfiguration = (AmazonRankingsConfiguration)renderRequest.getAttribute(AmazonRankingsConfiguration.class.getName());
 
-String[] isbns = portletPreferences.getValues("isbns", configuration.isbns());
+String[] isbns = portletPreferences.getValues("isbns", amazonRankingsConfiguration.isbns());
 
 NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
 %>
