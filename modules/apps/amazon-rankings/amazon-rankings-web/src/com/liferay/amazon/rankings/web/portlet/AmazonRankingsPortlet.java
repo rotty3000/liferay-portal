@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
 * @author Peter Fellwock
 */
 @Component(
-	configurationPid = "com.liferay.amazon.rankings",
+	configurationPid = "com.liferay.amazon.rankings.web",
 	configurationPolicy = ConfigurationPolicy.OPTIONAL,
 	immediate = true,
 	property = {
