@@ -12,33 +12,31 @@
  * details.
  */
 
-package com.liferay.portal.kernel.zip;
+package com.liferay.portal.util.test;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
+import java.net.URL;
+
 /**
- * @author Brian Wing Shun Chan
- * @author Raymond Augé
+ * @author Manuel de la Peña
  */
-public interface ZipWriter {
+public class DependenciesTestUtil {
 
-	public void addEntry(String name, byte[] bytes) throws IOException;
+	public static File getDependencyAsFile(Class<?> clazz, String name)
+		throws Exception {
 
-	public void addEntry(String name, InputStream inputStream)
-		throws IOException;
+		URL url = clazz.getResource("dependencies/" + name);
 
-	public void addEntry(String name, String s) throws IOException;
+		return new File(url.toURI());
+	}
 
-	public void addEntry(String name, StringBuilder sb) throws IOException;
+	public static InputStream getDependencyAsInputStream(
+			Class<?> clazz, String name)
+		throws Exception {
 
-	public void close();
-
-	public byte[] finish() throws IOException;
-
-	public File getFile();
-
-	public String getPath();
+		return clazz.getResourceAsStream("dependencies/" + name);
+	}
 
 }
