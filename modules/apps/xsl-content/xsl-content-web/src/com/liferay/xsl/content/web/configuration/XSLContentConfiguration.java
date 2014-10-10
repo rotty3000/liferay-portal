@@ -22,7 +22,7 @@ import aQute.bnd.annotation.metatype.Meta;
 @Meta.OCD(id = "com.liferay.xsl.content.web", localization = "content.Language")
 public interface XSLContentConfiguration {
 
-	@Meta.AD(id = "xsl.secure.processing.enabled", deflt = "true")
+	@Meta.AD(deflt = "true", id = "xsl.secure.processing.enabled")
 	public boolean isXslSecureProcessingEnabled();
 
 }
