@@ -23,8 +23,8 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ page import="com.liferay.amazon.rankings.web.model.AmazonRankings" %><%@
-page import="com.liferay.amazon.rankings.web.configuration.AmazonRankingsConfiguration" %><%@
+<%@ page import="com.liferay.amazon.rankings.web.configuration.AmazonRankingsConfiguration" %><%@
+page import="com.liferay.amazon.rankings.web.model.AmazonRankings" %><%@
 page import="com.liferay.amazon.rankings.web.util.AmazonRankingsUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.util.CharPool" %><%@
