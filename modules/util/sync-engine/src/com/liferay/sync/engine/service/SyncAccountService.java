@@ -344,9 +344,9 @@ public class SyncAccountService {
 		if (moveFile && Files.exists(filePath)) {
 			File file = filePath.toFile();
 
-			String[] fileList = file.list();
+			String[] files = file.list();
 
-			if (fileList.length > 0) {
+			if (files.length > 0) {
 				return;
 			}
 		}
