@@ -14,6 +14,7 @@
 
 package com.liferay.amazon.rankings.web.util;
 
+import com.liferay.amazon.rankings.web.configuration.AmazonRankingsConfiguration;
 import com.liferay.amazon.rankings.web.model.AmazonRankings;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -45,12 +46,9 @@ import java.util.Map;
 public class AmazonRankingsWebCacheItem implements WebCacheItem {
 
 	public AmazonRankingsWebCacheItem(
-		String amazonAccessKeyId, String amazonAssociateTag,
-		String amazonSecretAccessKey, String isbn) {
+		AmazonRankingsConfiguration amazonRankingsConfiguration, String isbn) {
 
-		_amazonAccessKeyId = amazonAccessKeyId;
-		_amazonAssociateTag = amazonAssociateTag;
-		_amazonSecretAccessKey = amazonSecretAccessKey;
+		_amazonRankingsConfiguration = amazonRankingsConfiguration;
 		_isbn = isbn;
 	}
 
@@ -76,8 +74,10 @@ public class AmazonRankingsWebCacheItem implements WebCacheItem {
 	protected AmazonRankings doConvert(String key) throws Exception {
 		Map<String, String> parameters = new HashMap<String, String>();
 
-		parameters.put("AssociateTag", _amazonAssociateTag);
-		parameters.put("AWSAccessKeyId", _amazonAccessKeyId);
+		parameters.put(
+			"AssociateTag", _amazonRankingsConfiguration.amazonAssociateTag());
+		parameters.put(
+			"AWSAccessKeyId", _amazonRankingsConfiguration.amazonAccessKeyId());
 		parameters.put("IdType", "ASIN");
 		parameters.put("ItemId", _isbn);
 		parameters.put("Operation", "ItemLookup");
@@ -88,7 +88,7 @@ public class AmazonRankingsWebCacheItem implements WebCacheItem {
 
 		String urlWithSignature =
 			AmazonSignedRequestsUtil.generateUrlWithSignature(
-				_amazonSecretAccessKey, parameters);
+				_amazonRankingsConfiguration, parameters);
 
 		String xml = HttpUtil.URLtoString(urlWithSignature);
 
@@ -284,9 +284,7 @@ public class AmazonRankingsWebCacheItem implements WebCacheItem {
 	private static Log _log = LogFactoryUtil.getLog(
 		AmazonRankingsWebCacheItem.class);
 
-	private String _amazonAccessKeyId;
-	private String _amazonAssociateTag;
-	private String _amazonSecretAccessKey;
+	private AmazonRankingsConfiguration _amazonRankingsConfiguration;
 	private String _isbn;
 
 }
