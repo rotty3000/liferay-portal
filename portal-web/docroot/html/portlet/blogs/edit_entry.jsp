@@ -365,17 +365,18 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 		}
 	};
 
+	Liferay.on('destroyPortlet', clearSaveDraftHandle);
+
 	window['<portlet:namespace />OnChangeEditor'] = function(html) {
 		blogs.setDescription(html);
-	}
+	};
 
 	window['<portlet:namespace />OnDescriptionEditorInit'] = function() {
 		<c:if test="<%= !customAbstract %>">
 			A.one('#<portlet:namespace />descriptionEditor').attr('contenteditable', false);
 		</c:if>
-	}
+	};
 
-	Liferay.on('destroyPortlet', clearSaveDraftHandle);
 </aui:script>
 
 <c:if test="<%= (entry != null) && blogsSettings.isEmailEntryUpdatedEnabled() %>">
