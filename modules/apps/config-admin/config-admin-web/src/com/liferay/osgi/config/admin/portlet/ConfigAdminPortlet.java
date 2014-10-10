@@ -14,18 +14,17 @@
 
 package com.liferay.osgi.config.admin.portlet;
 
-import com.liferay.osgi.config.admin.ddm.DDMFormFieldFreemarkerRenderer;
 import com.liferay.osgi.config.admin.util.DDMFormBuilder;
 import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.PortletApp;
-import com.liferay.portlet.dynamicdatamapping.render.DDMFormFieldRenderer;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.freemarker.FreeMarkerPortlet;
 
 import java.io.IOException;
@@ -42,13 +41,13 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.MetaTypeService;
+import org.osgi.service.metatype.ObjectClassDefinition;
 
 /**
  * @author Kamesh Sampath
@@ -71,23 +70,13 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 
 	@Activate
 	@SuppressWarnings("unchecked")
-	public void activate(BundleContext context) {
-		_context = context;
-
-		_serviceRegistration =
-						(ServiceRegistration<DDMFormFieldRenderer>)
-						_context.registerService(
-							DDMFormFieldRenderer.class.getName(),
-							new DDMFormFieldFreemarkerRenderer(
-								context.getBundle()),
-							null);
+	public void activate(BundleContext bundleContext) {
+		_bundleContext = bundleContext;
 	}
 
 	@Deactivate
 	public void deactivate() {
-		_context = null;
-
-		_serviceRegistration.unregister();
+		_bundleContext = null;
 	}
 
 	@Override
@@ -104,9 +93,14 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		renderRequest.setAttribute(
-			"ocdIterator", new ObjectClassDefinitonsIterator(
-				_context, _metaTypeService));
+			"ocdIterator",
+			new ObjectClassDefinitonsIterator(
+				_bundleContext, _metaTypeService,
+				themeDisplay.getLanguageId()));
 
 		super.doView(renderRequest, renderResponse);
 	}
@@ -132,7 +126,7 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			path = StringPool.SLASH.concat(path);
 		}
 
-		Bundle bundle = _context.getBundle();
+		Bundle bundle = _bundleContext.getBundle();
 
 		return bundle.getEntry("META-INF/resources".concat(path));
 	}
@@ -144,22 +138,31 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 		throws IOException, PortletException {
 
 		if ("/edit_attributes.ftl".equals(path)) {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 			String servicePID = ParamUtil.getString(
 				renderRequest, "servicePID");
 
-			String editingHeaderTitle = LanguageUtil.format(
-				getResourceBundle(renderResponse.getLocale()),
-				"editing-service", servicePID);
+			ObjectClassDefinitonsIterator objectClassDefinitonsIterator =
+				new ObjectClassDefinitonsIterator(
+					_bundleContext, _metaTypeService,
+					themeDisplay.getLanguageId());
+
+			ObjectClassDefinition objectClassDefinition =
+				objectClassDefinitonsIterator.getObjectClassDefinition(
+					servicePID);
 
 			renderRequest.setAttribute("servicePID", servicePID);
 			renderRequest.setAttribute(
-				"editingHeaderTitle", editingHeaderTitle);
+				"editingHeaderTitle", objectClassDefinition.getName());
 
 			if (_log.isDebugEnabled()) {
 				_log.debug("Editing Service:" + servicePID);
 			}
 
-			renderRequest.setAttribute("ddmFormBuilder", new DDMFormBuilder());
+			renderRequest.setAttribute(
+				"ddmFormBuilder", new DDMFormBuilder(objectClassDefinition));
 		}
 
 		include(
@@ -181,8 +184,7 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 	private static Log _log = LogFactoryUtil.getLog(ConfigAdminPortlet.class);
 
 	private ConfigurationAdmin _configurationAdmin;
-	private BundleContext _context;
+	private BundleContext _bundleContext;
 	private MetaTypeService _metaTypeService;
-	private ServiceRegistration<DDMFormFieldRenderer> _serviceRegistration;
 
 }

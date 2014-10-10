@@ -32,7 +32,7 @@
 	<@aui["input"] name="servicePID" type="hidden" value="${servicePID}" />
 
 	<@aui["fieldset"]>
-		${ddmFormBuilder.ddmFromContentHTML(servicePID, themeDisplay, renderRequest, renderResponse)}
+		${ddmFormBuilder.renderServiceConfigurationForm(servicePID, renderRequest, renderResponse)}
 	</@>
 
 	<@aui["button-row"]>
