@@ -37,7 +37,7 @@ public class ObjectClassDefinitonsIterator {
 		BundleContext bundleCcontext, MetaTypeService metaTypeService,
 		String languageId) {
 
-		_bundleCcontext = bundleCcontext;
+		_bundleContext = bundleCcontext;
 		_metaTypeService = metaTypeService;
 		_languageId = languageId;
 
@@ -61,8 +61,22 @@ public class ObjectClassDefinitonsIterator {
 		return _objectClassDefinitions.size();
 	}
 
+	protected void _collectObjectClassDefinition(
+		Map<String, ObjectClassDefinition> ocds,
+		MetaTypeInformation metaTypeInformation, String... pids) {
+
+		for (String pid : pids) {
+			ObjectClassDefinition objectClassDefinition =
+				metaTypeInformation.getObjectClassDefinition(pid, _languageId);
+
+			if (objectClassDefinition != null) {
+				ocds.put(pid, objectClassDefinition);
+			}
+		}
+	}
+
 	protected Map<String, ObjectClassDefinition> _getObjectDefinitions() {
-		Bundle[] bundles = _bundleCcontext.getBundles();
+		Bundle[] bundles = _bundleContext.getBundles();
 
 		Map<String, ObjectClassDefinition> ocds =
 			new TreeMap<String, ObjectClassDefinition>();
@@ -88,21 +102,7 @@ public class ObjectClassDefinitonsIterator {
 		return ocds;
 	}
 
-	protected void _collectObjectClassDefinition(
-		Map<String, ObjectClassDefinition> ocds,
-		MetaTypeInformation metaTypeInformation, String... pids) {
-
-		for (String pid : pids) {
-			ObjectClassDefinition objectClassDefinition =
-				metaTypeInformation.getObjectClassDefinition(pid, _languageId);
-
-			if (objectClassDefinition != null) {
-				ocds.put(pid, objectClassDefinition);
-			}
-		}
-	}
-
-	private BundleContext _bundleCcontext;
+	private BundleContext _bundleContext;
 	private String _languageId;
 	private MetaTypeService _metaTypeService;
 	private Map<String, ObjectClassDefinition> _objectClassDefinitions;
