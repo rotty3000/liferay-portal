@@ -610,7 +610,7 @@ public class SyncFileService {
 
 			// Sync files
 
-			if (!syncFile.isFolder() || (syncFile.getTypePK() == 0)) {
+			if (syncFile.isFile() || (syncFile.getTypePK() == 0)) {
 				return syncFile;
 			}
 
