@@ -63,6 +63,7 @@ public class JSONRPCRequest {
 			if (id != null) {
 				jsonrpcRequest._id = Integer.valueOf(id.intValue());
 			}
+
 			jsonrpcRequest._jsonrpc = (String)requestBodyMap.get("jsonrpc");
 			jsonrpcRequest._method = (String)requestBodyMap.get("method");
 			jsonrpcRequest._parameters = (Map<String, ?>)requestBodyMap.get(
