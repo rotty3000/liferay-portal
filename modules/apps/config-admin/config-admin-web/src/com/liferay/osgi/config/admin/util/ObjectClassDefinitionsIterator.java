@@ -16,14 +16,17 @@ package com.liferay.osgi.config.admin.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Version;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.metatype.ObjectClassDefinition;
@@ -31,9 +34,9 @@ import org.osgi.service.metatype.ObjectClassDefinition;
 /**
  * @author Kamesh Sampath
  */
-public class ObjectClassDefinitonsIterator {
+public class ObjectClassDefinitionsIterator {
 
-	public ObjectClassDefinitonsIterator(
+	public ObjectClassDefinitionsIterator(
 		BundleContext bundleCcontext, MetaTypeService metaTypeService,
 		String languageId) {
 
@@ -57,11 +60,43 @@ public class ObjectClassDefinitonsIterator {
 		return ListUtil.subList(list, start, end);
 	}
 
+	public String targetPID(String servicePID){
+
+		return _targetPIDMap.get(servicePID);
+	}
+
 	public int getTotal() throws PortalException {
 		return _objectClassDefinitions.size();
 	}
 
-	protected void _collectObjectClassDefinition(
+	protected void _addToTargetPIDMap(Bundle bundle, String pid){
+
+		StringBuilder targetPID = new StringBuilder(7);
+
+		targetPID.append(pid);
+
+		String bundleSymbolicName = bundle.getSymbolicName();
+
+		targetPID.append(StringPool.PIPE);
+
+		targetPID.append(bundleSymbolicName);
+
+		Version bundleVersion = bundle.getVersion();
+
+		targetPID.append(StringPool.PIPE);
+
+		targetPID.append(bundleVersion.toString());
+
+		String bundleLocation = bundle.getLocation();
+
+		targetPID.append(StringPool.PIPE);
+
+		targetPID.append(bundleLocation);
+
+		_targetPIDMap.put(pid, targetPID.toString());
+	}
+
+	protected void _collectObjectClassDefinition(Bundle bundle,
 		Map<String, ObjectClassDefinition> ocds,
 		MetaTypeInformation metaTypeInformation, String... pids) {
 
@@ -70,6 +105,7 @@ public class ObjectClassDefinitonsIterator {
 				metaTypeInformation.getObjectClassDefinition(pid, _languageId);
 
 			if (objectClassDefinition != null) {
+				_addToTargetPIDMap(bundle, pid);
 				ocds.put(pid, objectClassDefinition);
 			}
 		}
@@ -91,12 +127,14 @@ public class ObjectClassDefinitonsIterator {
 
 			String[] pids = metaTypeInformation.getPids();
 
-			_collectObjectClassDefinition(ocds, metaTypeInformation, pids);
+			_collectObjectClassDefinition(
+				bundle,ocds, metaTypeInformation, pids);
 
 			String[] factoryPids = metaTypeInformation.getFactoryPids();
 
 			_collectObjectClassDefinition(
-				ocds, metaTypeInformation, factoryPids);
+				bundle, ocds, metaTypeInformation, factoryPids);
+
 		}
 
 		return ocds;
@@ -106,5 +144,7 @@ public class ObjectClassDefinitonsIterator {
 	private String _languageId;
 	private MetaTypeService _metaTypeService;
 	private Map<String, ObjectClassDefinition> _objectClassDefinitions;
+	private Map<String,String> _targetPIDMap =
+					new ConcurrentHashMap<String, String>();
 
 }

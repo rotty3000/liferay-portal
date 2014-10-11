@@ -121,7 +121,11 @@ public class MetaTypeFormUtil {
 				ddmFormField.setPredefinedValue(predefinedValue);
 			}
 
-			ddmFormField.setRequired(required);
+			//We dont need to set this for checkbox
+			if (!type.equals("checkbox")){
+				ddmFormField.setRequired(required);
+			}
+
 			ddmFormField.setShowLabel(true);
 
 			int cardinality = attributeDefinition.getCardinality();

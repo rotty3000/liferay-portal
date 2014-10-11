@@ -15,7 +15,7 @@
 package com.liferay.osgi.config.admin.portlet;
 
 import com.liferay.osgi.config.admin.util.ConfigurationFormBuilder;
-import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
+import com.liferay.osgi.config.admin.util.ObjectClassDefinitionsIterator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
@@ -98,7 +98,7 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 
 		renderRequest.setAttribute(
 			"ocdIterator",
-			new ObjectClassDefinitonsIterator(
+			new ObjectClassDefinitionsIterator(
 				_bundleContext, _metaTypeService,
 				themeDisplay.getLanguageId()));
 
@@ -144,13 +144,13 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			String servicePID = ParamUtil.getString(
 				renderRequest, "servicePID");
 
-			ObjectClassDefinitonsIterator objectClassDefinitonsIterator =
-				new ObjectClassDefinitonsIterator(
+			ObjectClassDefinitionsIterator objectClassDefinitionsIterator =
+				new ObjectClassDefinitionsIterator(
 					_bundleContext, _metaTypeService,
 					themeDisplay.getLanguageId());
 
 			ObjectClassDefinition objectClassDefinition =
-				objectClassDefinitonsIterator.getObjectClassDefinition(
+				objectClassDefinitionsIterator.getObjectClassDefinition(
 					servicePID);
 
 			renderRequest.setAttribute("servicePID", servicePID);
@@ -162,7 +162,7 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			}
 
 			renderRequest.setAttribute(
-				"ddmFormBuilder", new ConfigurationFormBuilder(
+				"configurationFormBuilder", new ConfigurationFormBuilder(
 					objectClassDefinition));
 		}
 
