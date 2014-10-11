@@ -14,7 +14,7 @@
 
 package com.liferay.osgi.config.admin.portlet;
 
-import com.liferay.osgi.config.admin.util.DDMFormBuilder;
+import com.liferay.osgi.config.admin.util.ConfigurationFormBuilder;
 import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -162,7 +162,8 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			}
 
 			renderRequest.setAttribute(
-				"ddmFormBuilder", new DDMFormBuilder(objectClassDefinition));
+				"ddmFormBuilder", new ConfigurationFormBuilder(
+					objectClassDefinition));
 		}
 
 		include(
@@ -183,8 +184,8 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 
 	private static Log _log = LogFactoryUtil.getLog(ConfigAdminPortlet.class);
 
-	private ConfigurationAdmin _configurationAdmin;
 	private BundleContext _bundleContext;
+	private ConfigurationAdmin _configurationAdmin;
 	private MetaTypeService _metaTypeService;
 
 }

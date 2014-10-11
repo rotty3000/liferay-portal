@@ -28,9 +28,11 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
 import org.osgi.service.metatype.ObjectClassDefinition;
-public class DDMFormBuilder {
+public class ConfigurationFormBuilder {
 
-	public DDMFormBuilder(ObjectClassDefinition objectClassDefinition) {
+	public ConfigurationFormBuilder(
+		ObjectClassDefinition objectClassDefinition) {
+
 		_objectClassDefinition = objectClassDefinition;
 	}
 
@@ -41,7 +43,7 @@ public class DDMFormBuilder {
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(
+		DDMForm ddmForm = MetaTypeFormUtil.attributeForm(
 			_objectClassDefinition);
 
 		DDMFormFieldRenderingContext ddmFormFieldRenderingContext =
@@ -67,7 +69,8 @@ public class DDMFormBuilder {
 			ddmForm, ddmFormFieldRenderingContext);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DDMFormBuilder.class);
+	private static Log _log = LogFactoryUtil.getLog(
+		ConfigurationFormBuilder.class);
 
 	private ObjectClassDefinition _objectClassDefinition;
 

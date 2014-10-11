@@ -35,7 +35,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Kamesh Sampath TODO: add service tracker for MetaTypeService to
  *         update the map
  */
-public class MetaTypeInfoUtil {
+public class MetaTypeFormUtil {
 
 	public static DDMForm attributeForm(
 		ObjectClassDefinition objectClassDefinition) {

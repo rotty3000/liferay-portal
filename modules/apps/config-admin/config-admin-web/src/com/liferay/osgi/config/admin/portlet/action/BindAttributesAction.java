@@ -14,7 +14,7 @@
 
 package com.liferay.osgi.config.admin.portlet.action;
 
-import com.liferay.osgi.config.admin.util.MetaTypeInfoUtil;
+import com.liferay.osgi.config.admin.util.MetaTypeFormUtil;
 import com.liferay.osgi.config.admin.util.ObjectClassDefinitonsIterator;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -71,21 +71,19 @@ public class BindAttributesAction implements ActionCommand {
 			_log.debug("Saving service with PID:" + servicePID);
 		}
 
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)portletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		ObjectClassDefinitonsIterator objectClassDefinitonsIterator =
 			new ObjectClassDefinitonsIterator(
-				_bundleContext, _metaTypeService,
-				themeDisplay.getLanguageId());
+				_bundleContext, _metaTypeService, themeDisplay.getLanguageId());
 
 		ObjectClassDefinition objectClassDefinition =
 			objectClassDefinitonsIterator.getObjectClassDefinition(servicePID);
 
-		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(objectClassDefinition);
+		DDMForm ddmForm = MetaTypeFormUtil.attributeForm(objectClassDefinition);
 
-		Dictionary<String, Object> properties =
-			new Hashtable<String, Object>();
+		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 
 		for (DDMFormField ddmFormField : ddmForm.getDDMFormFields()) {
 			String id = ddmFormField.getName();
