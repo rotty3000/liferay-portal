@@ -14,6 +14,7 @@
 
 package com.liferay.amazon.rankings.web.util;
 
+import com.liferay.amazon.rankings.web.configuration.AmazonRankingsConfiguration;
 import com.liferay.amazon.rankings.web.model.AmazonRankings;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -32,15 +33,14 @@ import java.util.Calendar;
 public class AmazonRankingsUtil {
 
 	public static AmazonRankings getAmazonRankings(
-		String amazonAccessKeyId, String amazonAssociateTag,
-		String amazonSecretAccessKey, String isbn) {
+		AmazonRankingsConfiguration amazonRankingsConfiguration, String isbn) {
 
 		if (!Validator.isDigit(isbn)) {
 			return null;
 		}
 
 		WebCacheItem wci = new AmazonRankingsWebCacheItem(
-			amazonAccessKeyId, amazonAssociateTag, amazonSecretAccessKey, isbn);
+			amazonRankingsConfiguration, isbn);
 
 		return (AmazonRankings)WebCachePoolUtil.get(
 			AmazonRankingsUtil.class.getName() + StringPool.PERIOD + isbn, wci);

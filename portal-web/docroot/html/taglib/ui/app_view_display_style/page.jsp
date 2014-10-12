@@ -27,7 +27,7 @@ Map<String, String> requestParams = (Map<String, String>)request.getAttribute("l
 <c:if test="<%= displayStyles.length > 1 %>">
 	<span class="display-style-buttons-container" id="<portlet:namespace />displayStyleButtonsContainer">
 		<div class="display-style-buttons" id="<portlet:namespace />displayStyleButtons">
-			<aui:nav-item anchorCssClass="btn btn-default" dropdown="<%= true %>" iconCssClass='<%= "icon-" + _getIcon(displayStyle) %>'>
+			<aui:nav-item anchorCssClass="btn btn-default" dropdown="<%= true %>" iconCssClass='<%= "icon-" + HtmlUtil.escapeAttribute(_getIcon(displayStyle)) %>'>
 
 				<%
 				for (String curDisplayStyle : displayStyles) {
@@ -42,8 +42,8 @@ Map<String, String> requestParams = (Map<String, String>)request.getAttribute("l
 
 							<aui:nav-item
 								href="<%= displayStyleURL.toString() %>"
-								iconCssClass='<%= "icon-" + _getIcon(curDisplayStyle) %>'
-								label="<%= curDisplayStyle %>"
+								iconCssClass='<%= "icon-" + HtmlUtil.escapeAttribute(_getIcon(curDisplayStyle)) %>'
+								label="<%= HtmlUtil.escape(curDisplayStyle) %>"
 							/>
 						</c:when>
 						<c:otherwise>
@@ -57,8 +57,8 @@ Map<String, String> requestParams = (Map<String, String>)request.getAttribute("l
 							<aui:nav-item
 								anchorData="<%= data %>"
 								href="javascript:;"
-								iconCssClass='<%= "icon-" + _getIcon(curDisplayStyle) %>'
-								label="<%= curDisplayStyle %>"
+								iconCssClass='<%= "icon-" + HtmlUtil.escapeAttribute(_getIcon(curDisplayStyle)) %>'
+								label="<%= HtmlUtil.escape(curDisplayStyle) %>"
 							/>
 						</c:otherwise>
 					</c:choose>

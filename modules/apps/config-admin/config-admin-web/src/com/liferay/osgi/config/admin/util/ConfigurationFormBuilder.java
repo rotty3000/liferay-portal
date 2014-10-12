@@ -1,4 +1,16 @@
-
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 package com.liferay.osgi.config.admin.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -16,9 +28,11 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
 import org.osgi.service.metatype.ObjectClassDefinition;
-public class DDMFormBuilder {
+public class ConfigurationFormBuilder {
 
-	public DDMFormBuilder(ObjectClassDefinition objectClassDefinition) {
+	public ConfigurationFormBuilder(
+		ObjectClassDefinition objectClassDefinition) {
+
 		_objectClassDefinition = objectClassDefinition;
 	}
 
@@ -29,7 +43,7 @@ public class DDMFormBuilder {
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		DDMForm ddmForm = MetaTypeInfoUtil.attributeForm(
+		DDMForm ddmForm = MetaTypeFormUtil.attributeForm(
 			_objectClassDefinition);
 
 		DDMFormFieldRenderingContext ddmFormFieldRenderingContext =
@@ -55,8 +69,10 @@ public class DDMFormBuilder {
 			ddmForm, ddmFormFieldRenderingContext);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(DDMFormBuilder.class);
+	private static Log _log = LogFactoryUtil.getLog(
+		ConfigurationFormBuilder.class);
 
 	private ObjectClassDefinition _objectClassDefinition;
+
 
 }

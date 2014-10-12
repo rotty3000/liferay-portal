@@ -14,6 +14,15 @@
  */
 --%>
 
-<%@ include file="/html/portlet/init.jsp" %>
+<%@ taglib uri="/META-INF/aui.tld" prefix="aui" %>
+<%@ taglib uri="/META-INF/liferay-portlet-ext.tld" prefix="liferay-portlet" %>
+<%@ taglib uri="/META-INF/liferay-portlet_2_0.tld" prefix="portlet" %>
+<%@ taglib uri="/META-INF/liferay-theme.tld" prefix="liferay-theme" %>
+<%@ taglib uri="/META-INF/liferay-ui.tld" prefix="liferay-ui" %>
 
-<%@ include file="/html/portlet/password_generator/init-ext.jsp" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
+<liferay-theme:defineObjects />
+<portlet:defineObjects />
+
+<%@ include file="/init-ext.jsp" %>

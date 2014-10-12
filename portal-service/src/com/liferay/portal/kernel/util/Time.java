@@ -177,6 +177,13 @@ public class Time {
 	public static String getRelativeTimeDescription(
 		long milliseconds, Locale locale, TimeZone timeZone) {
 
+		return getRelativeTimeDescription(milliseconds, locale, timeZone, null);
+	}
+
+	public static String getRelativeTimeDescription(
+		long milliseconds, Locale locale, TimeZone timeZone,
+		Format dateTimeFormat) {
+
 		Format timeFormat = FastDateFormatFactoryUtil.getTime(locale, timeZone);
 
 		int daysBetween = DateUtil.getDaysBetween(
@@ -206,10 +213,12 @@ public class Time {
 				false);
 		}
 
-		Format dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"EEEE, MMMMM dd, yyyy", locale, timeZone);
+		if (dateTimeFormat == null) {
+			dateTimeFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
+				"EEEE, MMMMM dd, yyyy", locale, timeZone);
+		}
 
-		return dateFormat.format(milliseconds);
+		return dateTimeFormat.format(milliseconds);
 	}
 
 	public static String getRFC822() {

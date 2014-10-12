@@ -14,6 +14,7 @@
 
 package com.liferay.amazon.rankings.web.util;
 
+import com.liferay.amazon.rankings.web.configuration.AmazonRankingsConfiguration;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -36,13 +37,14 @@ import javax.crypto.spec.SecretKeySpec;
 public class AmazonSignedRequestsUtil {
 
 	public static String generateUrlWithSignature(
-			String amazonSecretAccessKey, Map<String, String> parameters)
+			AmazonRankingsConfiguration amazonRankingsConfiguration,
+			Map<String, String> parameters)
 		throws Exception {
 
 		String canonicalizedParameters = _canonicalizeParameters(parameters);
 
 		String signature = _generateSignature(
-			amazonSecretAccessKey,
+			amazonRankingsConfiguration,
 			"GET\necs.amazonaws.com\n/onca/xml\n" + canonicalizedParameters);
 
 		return "http://ecs.amazonaws.com/onca/xml?" + canonicalizedParameters +
@@ -76,12 +78,18 @@ public class AmazonSignedRequestsUtil {
 	}
 
 	private static String _generateSignature(
-			String amazonSecretAccessKey, String data)
+			AmazonRankingsConfiguration amazonRankingsConfiguration,
+			String data)
 		throws Exception {
 
-		if (Validator.isNull(amazonSecretAccessKey)) {
+		if (Validator.isNull(
+				amazonRankingsConfiguration.amazonSecretAccessKey())) {
+
 			return StringPool.BLANK;
 		}
+
+		String amazonSecretAccessKey =
+			amazonRankingsConfiguration.amazonSecretAccessKey();
 
 		SecretKeySpec secretKeySpec = new SecretKeySpec(
 			amazonSecretAccessKey.getBytes(), _HMAC_SHA256_ALGORITHM);

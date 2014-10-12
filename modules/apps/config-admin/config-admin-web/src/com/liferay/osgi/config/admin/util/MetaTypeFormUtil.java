@@ -14,6 +14,8 @@
 
 package com.liferay.osgi.config.admin.util;
 
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
@@ -33,7 +35,7 @@ import org.osgi.service.metatype.ObjectClassDefinition;
  * @author Kamesh Sampath TODO: add service tracker for MetaTypeService to
  *         update the map
  */
-public class MetaTypeInfoUtil {
+public class MetaTypeFormUtil {
 
 	public static DDMForm attributeForm(
 		ObjectClassDefinition objectClassDefinition) {
@@ -41,6 +43,7 @@ public class MetaTypeInfoUtil {
 		AttributeDefinition[] requiredDefinitions =
 			objectClassDefinition.getAttributeDefinitions(
 				ObjectClassDefinition.REQUIRED);
+
 		AttributeDefinition[] optionalDefinitions =
 			objectClassDefinition.getAttributeDefinitions(
 				ObjectClassDefinition.OPTIONAL);
@@ -82,20 +85,47 @@ public class MetaTypeInfoUtil {
 			ddmFormField.setTip(_attributeToTip(attributeDefinition));
 			ddmFormField.setLocalizable(true);
 
+			//Default values
+			LocalizedValue predefinedValue = _attributeDefaultValue(
+				attributeDefinition);
+
 			DDMFormFieldOptions ddmFormFieldOptions = _getDDMFieldOptions(
 				attributeDefinition);
 
 			if ((type.equals("radio") || type.equals("select")) &&
-				!_hasDDMFormFieldOptionsAvailable(ddmFormFieldOptions)) {
+				_hasDDMFormFieldOptionsAvailable(
+								ddmFormFieldOptions)) {
 
-				_setOptionFieldLabelsAndValues(
-					ddmFormFieldOptions, _DEFAULT_OPTION_LABELS,
-					_DEFAULT_OPTION_VALUES);
+				_setDDMFormFieldOptions(
+					type, ddmFormField, ddmFormFieldOptions);
+
+				if (predefinedValue!= null) {
+					String value = predefinedValue.getValues().get(
+						LocaleUtil.getDefault());
+
+					JSONArray defaultValueJSON =
+									JSONFactoryUtil.createJSONArray();
+					defaultValueJSON.put(value);
+
+					LocalizedValue localizedDefaultValue = new LocalizedValue(
+						LocaleUtil.getDefault());
+
+					localizedDefaultValue.addString(
+						LocaleUtil.getDefault(), defaultValueJSON.toString());
+
+					ddmFormField.setPredefinedValue(localizedDefaultValue);
+				}
+			}
+			else {
+				//Set predefined value
+				ddmFormField.setPredefinedValue(predefinedValue);
 			}
 
-			_setDDMFormFieldOptions(type, ddmFormField, ddmFormFieldOptions);
+			//We dont need to set this for checkbox
+			if (!type.equals("checkbox")){
+				ddmFormField.setRequired(required);
+			}
 
-			ddmFormField.setRequired(required);
 			ddmFormField.setShowLabel(true);
 
 			int cardinality = attributeDefinition.getCardinality();
@@ -106,6 +136,22 @@ public class MetaTypeInfoUtil {
 
 			ddmFormFields.add(ddmFormField);
 		}
+	}
+
+	private static LocalizedValue _attributeDefaultValue(
+		AttributeDefinition attributeDefinition) {
+
+		LocalizedValue value = new LocalizedValue(LocaleUtil.getDefault());
+
+		String[] attributeValues = attributeDefinition.getDefaultValue();
+
+		if (attributeValues!= null) {
+			for (String attributeValue : attributeValues) {
+				value.addString(LocaleUtil.getDefault(), attributeValue);
+			}
+		}
+
+		return value;
 	}
 
 	private static String _attributeToDDMDataType(
@@ -151,7 +197,15 @@ public class MetaTypeInfoUtil {
 
 		switch (type) {
 			case AttributeDefinition.BOOLEAN: {
-				return "radio";
+
+				String[] optionLabels = attributeDefinition.getOptionLabels();
+
+				if ( (optionLabels == null) || (optionLabels.length == 0)) {
+					return "checkbox";
+				}
+				else {
+					return "radio";
+				}
 			}
 
 			default: {
@@ -250,13 +304,5 @@ public class MetaTypeInfoUtil {
 			}
 		}
 	}
-
-	private static final String[] _DEFAULT_OPTION_LABELS = {
-		"default-option-yes", "default-option-no"
-	};
-
-	private static final String[] _DEFAULT_OPTION_VALUES = {
-		"true", "false"
-	};
 
 }
