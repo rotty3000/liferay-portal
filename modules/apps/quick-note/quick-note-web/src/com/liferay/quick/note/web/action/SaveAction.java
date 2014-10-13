@@ -12,57 +12,69 @@
  * details.
  */
 
-package com.liferay.portlet.quicknote.action;
+package com.liferay.quick.note.web.action;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
-import com.liferay.portal.struts.JSONAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portlet.StrictPortletPreferencesImpl;
 
+import java.io.IOException;
+
+import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Alexander Chow
+ * @author Peter Fellwock
  */
-public class SaveAction extends JSONAction {
 
-	@Override
-	public String getJSON(
-			ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
+@Component(
+	immediate = true,
+	property = {
+		"action.command.name=save",
+		"javax.portlet.name=com_liferay_quick_note_web_portlet_QuickNotePortlet"
+	},
+	service = ActionCommand.class
+)
+public class SaveAction implements ActionCommand {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+		@Override
+		public boolean processCommand(
+				PortletRequest portletRequest, PortletResponse portletResponse)
+			throws PortletException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String portletId = ParamUtil.getString(request, "portletId");
+		String portletId = ParamUtil.getString(portletRequest, "portletId");
 
-		PortletPermissionUtil.check(
-			themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
-			portletId, ActionKeys.CONFIGURATION);
+		try {
+			PortletPermissionUtil.check(
+				themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
+				portletId, ActionKeys.CONFIGURATION);
+		}
+		catch (Exception e) {
+			_log.error(e);
+			throw new PortletException(e);
+		}
 
 		PortletPreferences portletPreferences =
 			PortletPreferencesFactoryUtil.getStrictPortletSetup(
 				themeDisplay.getLayout(), portletId);
 
-		if (portletPreferences instanceof StrictPortletPreferencesImpl) {
-			throw new PrincipalException();
-		}
-
-		String color = ParamUtil.getString(request, "color");
-		String data = ParamUtil.getString(request, "data");
+		String color = ParamUtil.getString(portletRequest, "color");
+		String data = ParamUtil.getString(portletRequest, "data");
 
 		if (Validator.isNotNull(color)) {
 			portletPreferences.setValue("color", color);
@@ -72,9 +84,16 @@ public class SaveAction extends JSONAction {
 			portletPreferences.setValue("data", data);
 		}
 
-		portletPreferences.store();
+		try {
+			portletPreferences.store();
+		}
+		catch (IOException ioe) {
+			_log.error("Unable to store portlet preference", ioe);
+		}
 
-		return null;
+		return true;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(SaveAction.class);
 
 }
