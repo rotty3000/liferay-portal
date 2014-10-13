@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Basic</title>
+<link rel="shortcut icon" href="http://sennajs.com/images/favicon.ico">
+
+<!-- Including Senna -->
+<script src="../../build/senna.js"></script>
+</head>
+<body>
+<div id="content">
+	<div id="content-default">
+	</div>
+</div>
+
+<!-- Initializing Senna -->
+<script>
+	var output = document.getElementById("content-default");
+
+	if (typeof(EventSource) !== "undefined") {
+		var source = new EventSource("stream");
+
+		source.onmessage = function(event) {
+			output.innerHTML += event.data + "<br/>";
+		};
+
+		source.addEventListener('close', function(event) {
+			output.innerHTML += event.data + "<hr/>";
+			source.close();
+		}, false);
+	}
+	else {
+		output.innerHTML += "SSE not supported by this browser!";
+	}
+</script>
+</body>
+</html>
