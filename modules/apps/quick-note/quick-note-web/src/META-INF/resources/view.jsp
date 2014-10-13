@@ -14,7 +14,15 @@
  */
 --%>
 
-<%@ include file="/html/portlet/quick_note/init.jsp" %>
+<%@ include file="init.jsp" %>
+
+<%
+ResourceURL saveURL = renderResponse.createResourceURL();
+
+saveURL.setParameter(ActionRequest.ACTION_NAME, "save");
+
+String prefixPortletId = "_" + portletDisplay.getId();
+%>
 
 <div id="<portlet:namespace />pad" style="background: <%= HtmlUtil.escapeAttribute(color) %>;">
 	<c:if test="<%= portletDisplay.isShowConfigurationIcon() %>">
@@ -60,13 +68,13 @@
 					quickNotePad.setStyle('backgroundColor', bgColor);
 
 					A.io.request(
-						'<%= themeDisplay.getPathMain() %>/quick_note/save',
+						'<%= saveURL %>',
 						{
 							data: {
-								color: bgColor,
-								p_auth: Liferay.authToken,
-								p_l_id: '<%= plid %>',
-								portletId: '<%= portletDisplay.getId() %>'
+								<%= prefixPortletId %>_color: bgColor,
+								<%= prefixPortletId %>_p_auth: Liferay.authToken,
+								<%=prefixPortletId %>_p_l_id: '<%= plid %>',
+								<%=prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
 							}
 						}
 					);
@@ -88,13 +96,13 @@
 							event.newVal = instance._toText(event.newVal);
 
 							A.io.request(
-								'<%= themeDisplay.getPathMain() %>/quick_note/save',
+								'<%= saveURL %>',
 								{
 									data: {
-										data: newValue,
-										p_auth: '<%= AuthTokenUtil.getToken(request) %>',
-										p_l_id: '<%= plid %>',
-										portletId: '<%= portletDisplay.getId() %>'
+										<%= prefixPortletId %>_data: newValue,
+										<%=prefixPortletId %>_p_auth: '<%= AuthTokenUtil.getToken(request) %>',
+										<%=prefixPortletId %>_p_l_id: '<%= plid %>',
+										<%=prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
 									}
 								}
 							);

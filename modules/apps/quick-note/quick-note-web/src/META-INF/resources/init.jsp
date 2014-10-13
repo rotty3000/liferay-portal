@@ -14,11 +14,31 @@
  */
 --%>
 
-<%@ include file="/html/portlet/init.jsp" %>
+<%@ taglib uri="/META-INF/aui.tld" prefix="aui" %>
+<%@ taglib uri="/META-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/META-INF/liferay-portlet_2_0.tld" prefix="portlet" %>
+<%@ taglib uri="/META-INF/liferay-theme.tld" prefix="liferay-theme" %>
+<%@ taglib uri="/META-INF/liferay-ui.tld" prefix="liferay-ui" %>
+
+<%@ page contentType="text/html; charset=UTF-8" %>
+
+<%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
+page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
+page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.security.auth.AuthTokenUtil" %>
+
+<%@ page import="javax.portlet.ActionRequest" %><%@
+page import="javax.portlet.ResourceURL" %><%@
+page import="javax.portlet.ValidatorException" %><%@
+page import="javax.portlet.WindowState" %>
+
+<liferay-theme:defineObjects />
+<portlet:defineObjects />
 
 <%
 String color = portletPreferences.getValue("color", "#FFFFCC");
 String data = portletPreferences.getValue("data", LanguageUtil.get(request, "click-to-edit-me"));
 %>
 
-<%@ include file="/html/portlet/quick_note/init-ext.jsp" %>
+<%@ include file="init-ext.jsp" %>
