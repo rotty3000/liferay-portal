@@ -12,9 +12,9 @@
  * details.
  */
 
-package com.liferay.portlet.unitconverter.util;
+package com.liferay.unit.converter.web.util;
 
-import com.liferay.portlet.unitconverter.model.Conversion;
+import com.liferay.unit.converter.web.model.Conversion;
 
 /**
  * @author James Lefeu
