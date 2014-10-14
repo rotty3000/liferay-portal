@@ -14,9 +14,26 @@
  */
 --%>
 
-<%@ include file="/html/portlet/init.jsp" %>
+<%@ taglib uri="/META-INF/aui.tld" prefix="aui" %>
+<%@ taglib uri="/META-INF/c.tld" prefix="c" %>
+<%@ taglib uri="/META-INF/liferay-portlet_2_0.tld" prefix="portlet" %>
+<%@ taglib uri="/META-INF/liferay-theme.tld" prefix="liferay-theme" %>
+<%@ taglib uri="/META-INF/liferay-ui.tld" prefix="liferay-ui" %>
 
-<%@ page import="com.liferay.portlet.unitconverter.model.Conversion" %><%@
-page import="com.liferay.portlet.unitconverter.util.ConverterUtil" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ include file="/html/portlet/unit_converter/init-ext.jsp" %>
+<%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
+page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.unit.converter.web.model.Conversion" %><%@
+page import="com.liferay.unit.converter.web.util.ConverterUtil" %>
+
+<%@ page import="javax.portlet.WindowState" %>
+
+<liferay-theme:defineObjects />
+<portlet:defineObjects />
+
+<%
+WindowState windowState = liferayPortletRequest.getWindowState();
+%>
+
+<%@ include file="init-ext.jsp" %>

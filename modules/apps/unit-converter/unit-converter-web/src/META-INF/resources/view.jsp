@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/unit_converter/init.jsp" %>
+<%@ include file="init.jsp" %>
 
 <%
 int type = ParamUtil.getInteger(request, "type");
@@ -25,9 +25,7 @@ double fromValue = ParamUtil.getDouble(request, "fromValue");
 Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValue);
 %>
 
-<portlet:renderURL var="unitURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-	<portlet:param name="struts_action" value="/unit_converter/view" />
-</portlet:renderURL>
+<portlet:renderURL var="unitURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
 
 <aui:form action="<%= unitURL %>" id="fm" method="post" name="fm">
 	<aui:row>
