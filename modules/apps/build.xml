@@ -15,6 +15,7 @@
 		<dirset dir="password-generator" includes="*" />
 		<dirset dir="polls" includes="*" />
 		<dirset dir="social" includes="*" />
+		<dirset dir="unit-converter" includes="*" />
 		<dirset dir="web-proxy" includes="*" />
 		<dirset dir="xsl-content" includes="*" />
 	</path>
