@@ -69,7 +69,6 @@ page import="com.liferay.portal.kernel.log.LogFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.log.LogUtil" %><%@
 page import="com.liferay.portal.kernel.messaging.DestinationNames" %><%@
 page import="com.liferay.portal.kernel.plugin.PluginPackage" %><%@
-page import="com.liferay.portal.kernel.portlet.DynamicRenderRequest" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletMode" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletRequest" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %><%@
