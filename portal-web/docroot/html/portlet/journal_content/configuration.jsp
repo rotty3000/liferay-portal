@@ -95,7 +95,7 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 
 <liferay-portlet:renderURL portletConfiguration="true" varImpl="configurationRenderURL" />
 
-<aui:form action="<%= configurationActionURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveConfiguration();" %>'>
+<aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
 	<aui:input name="preferences--assetEntryId--" type="hidden" value="<%= journalContentDisplayContext.getAssetEntryId() %>" />
@@ -145,7 +145,7 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 	</aui:button-row>
 </aui:form>
 
-<aui:script use="aui-base">
+<aui:script use="aui-base,liferay-util-list-fields">
 	A.one('#<portlet:namespace />webContentSelector').on(
 		'click',
 		function(event) {
@@ -190,14 +190,14 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 		}
 	);
 
-	Liferay.provide(
-		window,
-		'<portlet:namespace />saveConfiguration',
-		function() {
+	A.one('#<portlet:namespace />fm').on(
+		'submit',
+		function(event) {
+			event.preventDefault();
+
 			document.<portlet:namespace />fm.<portlet:namespace />extensions.value = Liferay.Util.listSelect(document.<portlet:namespace />fm.<portlet:namespace />currentExtensions);
 
 			submitForm(document.<portlet:namespace />fm);
-		},
-		['liferay-util-list-fields']
+		}
 	);
 </aui:script>
