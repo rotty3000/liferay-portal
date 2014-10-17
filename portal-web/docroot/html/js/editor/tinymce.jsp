@@ -62,17 +62,25 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 	window['<%= name %>'] = {
 		onChangeCallbackCounter: 0,
 
+		init: function(value) {
+			if (typeof value != 'string') {
+				value = '';
+			}
+
+			window['<%= name %>'].setHTML(value);
+		},
+
 		destroy: function() {
 			tinyMCE.editors['<%= name %>'].destroy();
 
 			window['<%= name %>'] = null;
 		},
 
-		focus: function() {
-			tinyMCE.editors['<%= name %>'].focus();
+		fileBrowserCallback: function(field_name, url, type) {
 		},
 
-		fileBrowserCallback: function(field_name, url, type) {
+		focus: function() {
+			tinyMCE.editors['<%= name %>'].focus();
 		},
 
 		getHTML: function() {
@@ -86,14 +94,6 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			}
 
 			return data;
-		},
-
-		init: function(value) {
-			if (typeof value != 'string') {
-				value = '';
-			}
-
-			window['<%= name %>'].setHTML(value);
 		},
 
 		initInstanceCallback: function() {
@@ -184,8 +184,8 @@ boolean skipEditorLoading = GetterUtil.getBoolean((String)request.getAttribute("
 			relative_urls: false,
 			remove_script_host: false,
 			theme: 'advanced',
-			theme_advanced_buttons1_add_before: 'fontselect,fontsizeselect,forecolor,backcolor,separator',
 			theme_advanced_buttons2_add: 'separator,media,advhr,separator,preview,print',
+			theme_advanced_buttons1_add_before: 'fontselect,fontsizeselect,forecolor,backcolor,separator',
 			theme_advanced_buttons2_add_before: 'cut,copy,paste,search,replace',
 			theme_advanced_buttons3_add_before: 'tablecontrols,separator',
 			theme_advanced_disable: 'formatselect,styleselect,help',
