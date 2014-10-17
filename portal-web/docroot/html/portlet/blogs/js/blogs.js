@@ -74,6 +74,8 @@ AUI.add(
 
 						instance._customDescription = customDescriptionEnabled ? entry.description : STR_BLANK;
 						instance._shortenDescription = (!entry || !entry.customDescription);
+
+						instance.setDescription(window[instance.ns('contentEditor')].getHTML());
 					},
 
 					destructor: function() {

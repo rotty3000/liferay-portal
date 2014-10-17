@@ -327,34 +327,37 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 </portlet:actionURL>
 
 <aui:script use="liferay-blogs">
-	var blogs = new Liferay.Blogs(
-		{
-			constants: {
-				'ACTION_PUBLISH': '<%= WorkflowConstants.ACTION_PUBLISH %>',
-				'ACTION_SAVE_DRAFT': '<%= WorkflowConstants.ACTION_SAVE_DRAFT %>',
-				'ADD': '<%= Constants.ADD %>',
-				'CMD': '<%= Constants.CMD %>',
-				'STATUS_DRAFT': '<%= WorkflowConstants.STATUS_DRAFT %>',
-				'UPDATE': '<%= Constants.UPDATE %>'
-			},
-			descriptionLength: '<%= pageAbstractLength %>',
-			editEntryURL: '<%= editEntryURL %>',
-
-			<c:if test="<%= entry != null %>">
-				entry: {
-					content: '<%= UnicodeFormatter.toString(content) %>',
-					customDescription: <%= customAbstract %>,
-					description: '<%= UnicodeFormatter.toString(description) %>',
-					pending: <%= entry.isPending() %>,
-					status: '<%= entry.getStatus() %>',
-					subtitle: '<%= UnicodeFormatter.toString(subtitle) %>',
-					title: '<%= UnicodeFormatter.toString(title) %>',
-					userId: '<%= entry.getUserId() %>'
+	var blogs = Liferay.component(
+		'<portlet:namespace />Blogs',
+		new Liferay.Blogs(
+			{
+				constants: {
+					'ACTION_PUBLISH': '<%= WorkflowConstants.ACTION_PUBLISH %>',
+					'ACTION_SAVE_DRAFT': '<%= WorkflowConstants.ACTION_SAVE_DRAFT %>',
+					'ADD': '<%= Constants.ADD %>',
+					'CMD': '<%= Constants.CMD %>',
+					'STATUS_DRAFT': '<%= WorkflowConstants.STATUS_DRAFT %>',
+					'UPDATE': '<%= Constants.UPDATE %>'
 				},
-			</c:if>
+				descriptionLength: '<%= pageAbstractLength %>',
+				editEntryURL: '<%= editEntryURL %>',
 
-			namespace: '<portlet:namespace />'
-		}
+				<c:if test="<%= entry != null %>">
+					entry: {
+						content: '<%= UnicodeFormatter.toString(content) %>',
+						customDescription: <%= customAbstract %>,
+						description: '<%= UnicodeFormatter.toString(description) %>',
+						pending: <%= entry.isPending() %>,
+						status: '<%= entry.getStatus() %>',
+						subtitle: '<%= UnicodeFormatter.toString(subtitle) %>',
+						title: '<%= UnicodeFormatter.toString(title) %>',
+						userId: '<%= entry.getUserId() %>'
+					},
+				</c:if>
+
+				namespace: '<portlet:namespace />'
+			}
+		)
 	);
 
 	var clearSaveDraftHandle = function(event) {
@@ -366,24 +369,27 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 	};
 
 	Liferay.on('destroyPortlet', clearSaveDraftHandle);
+</aui:script>
 
+<aui:script>
 	window['<portlet:namespace />OnChangeEditor'] = function(html) {
-		blogs.setDescription(html);
+		var blogs = Liferay.component('<portlet:namespace />Blogs');
+
+		if (blogs) {
+			blogs.setDescription(html);
+		}
 	};
 
 	window['<portlet:namespace />OnDescriptionEditorInit'] = function() {
 		<c:if test="<%= !customAbstract %>">
-			A.one('#<portlet:namespace />descriptionEditor').attr('contenteditable', false);
+			document.getElementById('<portlet:namespace />descriptionEditor').setAttribute('contenteditable', false);
 		</c:if>
 	};
 
-</aui:script>
-
-<c:if test="<%= (entry != null) && blogsSettings.isEmailEntryUpdatedEnabled() %>">
-	<aui:script>
+	<c:if test="<%= (entry != null) && blogsSettings.isEmailEntryUpdatedEnabled() %>">
 		Liferay.Util.toggleBoxes('<portlet:namespace />sendEmailEntryUpdated', '<portlet:namespace />emailEntryUpdatedCommentWrapper');
-	</aui:script>
-</c:if>
+	</c:if>
+</aui:script>
 
 <%
 if (entry != null) {
