@@ -3745,13 +3745,6 @@ if (ppstate.equals("normal")) {
 		</if>
 
 		<if>
-			<contains string="${hook.plugins.includes}" substring="so-hook" />
-			<then>
-				<echo file="${app.server.portal.dir}/html/portlet/dockbar/license_warning.jsp" />
-			</then>
-		</if>
-
-		<if>
 			<equals arg1="${test.ant.script.actions}" arg2="db-failover" />
 			<then>
 				<ant antfile="build-test-db-failover.xml" target="run-db-failover" />

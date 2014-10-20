@@ -70,6 +70,13 @@ app.server.tomcat.dir=${app.server.parent.dir}/tomcat-7.0.27</echo>
 						<delete file="${lp.plugins.dir}/${plugin.types}/@{plugin}/docroot/WEB-INF/src/portlet-ext.properties" />
 					</else>
 				</if>
+
+				<if>
+					<equals arg1="@{plugin}" arg2="so-portlet" />
+					<then>
+						<echo file="${lp.plugins.dir}/${plugin.types}/@{plugin}/overwrite/META-INF/custom_jsps/html/portlet/dockbar/license_warning.jsp" />
+					</then>
+				</if>
 			</sequential>
 		</for>
 
