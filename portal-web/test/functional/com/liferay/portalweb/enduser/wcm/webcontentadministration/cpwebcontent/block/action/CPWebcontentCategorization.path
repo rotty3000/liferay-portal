@@ -46,12 +46,12 @@
 <!--CATEGORIES_WINDOW-->
 <tr>
 	<td>CATEGORIES_WINDOW_CATEGORY_CHECKBOX</td>
-	<td>//div[contains(@class,'tree-node') and contains(.,'${key_categoryName}')]/i[2]</td>
+	<td>//div[contains(@class,'tree-node') and contains(.,'${key_categoryName}')]/span[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>CATEGORIES_WINDOW_CLOSE_BUTTON</td>
-	<td>//button[contains(@class,'btn close')]</td>
+	<td>//button[contains(@class,'close-content')]</td>
 	<td></td>
 </tr>
 <!---->
