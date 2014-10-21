@@ -287,15 +287,15 @@ public class CompanyLocalServiceTest {
 
 		CompanyLocalServiceUtil.deleteCompany(company);
 
-		int groupsCount = GroupLocalServiceUtil.getGroupsCount(
+		int count = GroupLocalServiceUtil.getGroupsCount(
 			company.getCompanyId(), GroupConstants.ANY_PARENT_GROUP_ID, true);
 
-		Assert.assertEquals(0, groupsCount);
+		Assert.assertEquals(0, count);
 
-		groupsCount = GroupLocalServiceUtil.getGroupsCount(
+		count = GroupLocalServiceUtil.getGroupsCount(
 			company.getCompanyId(), GroupConstants.ANY_PARENT_GROUP_ID, false);
 
-		Assert.assertEquals(0, groupsCount);
+		Assert.assertEquals(0, count);
 	}
 
 	@Test
@@ -304,15 +304,15 @@ public class CompanyLocalServiceTest {
 
 		CompanyLocalServiceUtil.deleteCompany(company);
 
-		int searchCount = LayoutPrototypeLocalServiceUtil.searchCount(
+		int count = LayoutPrototypeLocalServiceUtil.searchCount(
 			company.getCompanyId(), true);
 
-		Assert.assertEquals(0, searchCount);
+		Assert.assertEquals(0, count);
 
-		searchCount = LayoutPrototypeLocalServiceUtil.searchCount(
+		count = LayoutPrototypeLocalServiceUtil.searchCount(
 			company.getCompanyId(), false);
 
-		Assert.assertEquals(0, searchCount);
+		Assert.assertEquals(0, count);
 	}
 
 	@Test
@@ -332,14 +332,14 @@ public class CompanyLocalServiceTest {
 	public void testDeleteCompanyDeletesNonDefaultPasswordPolicies()
 		throws Throwable {
 
-		final Company company = addCompany();
+		Company company = addCompany();
 
 		CompanyLocalServiceUtil.deleteCompany(company);
 
-		int passwordPoliciesCount = PasswordPolicyUtil.countByC_DP(
+		int count = PasswordPolicyUtil.countByC_DP(
 			company.getCompanyId(), false);
 
-		Assert.assertEquals(0, passwordPoliciesCount);
+		Assert.assertEquals(0, count);
 	}
 
 	@Test
@@ -348,12 +348,11 @@ public class CompanyLocalServiceTest {
 
 		CompanyLocalServiceUtil.deleteCompany(company);
 
-		int organizationsCount =
-			OrganizationLocalServiceUtil.getOrganizationsCount(
-				company.getCompanyId(),
-				OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID);
+		int count = OrganizationLocalServiceUtil.getOrganizationsCount(
+			company.getCompanyId(),
+			OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID);
 
-		Assert.assertEquals(0, organizationsCount);
+		Assert.assertEquals(0, count);
 	}
 
 	@Test
@@ -364,7 +363,7 @@ public class CompanyLocalServiceTest {
 
 		for (long companyId : PortalInstances.getCompanyIds()) {
 			if (companyId == company.getCompanyId()) {
-				Assert.fail("Company instance was not deleted.");
+				Assert.fail("Company instance was not deleted");
 			}
 		}
 	}
@@ -385,10 +384,9 @@ public class CompanyLocalServiceTest {
 
 		CompanyLocalServiceUtil.deleteCompany(company);
 
-		int portletsCount = PortletUtil.countByCompanyId(
-			company.getCompanyId());
+		int count = PortletUtil.countByCompanyId(company.getCompanyId());
 
-		Assert.assertEquals(0, portletsCount);
+		Assert.assertEquals(0, count);
 	}
 
 	@Test
