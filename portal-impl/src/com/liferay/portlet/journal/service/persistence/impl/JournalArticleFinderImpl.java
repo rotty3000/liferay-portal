@@ -1523,7 +1523,7 @@ public class JournalArticleFinderImpl
 				sb.append(_AND_OR_CONNECTOR);
 			}
 
-			sb.append(_STRUCTURE_KEY_SQL);
+			sb.append(_DDM_STRUCTURE_KEY_SQL);
 		}
 
 		if (!isNullArray(ddmTemplateKeys)) {
@@ -1531,7 +1531,7 @@ public class JournalArticleFinderImpl
 				sb.append(_AND_OR_CONNECTOR);
 			}
 
-			sb.append(_TEMPLATE_KEY_SQL);
+			sb.append(_DDM_TEMPLATE_KEY_SQL);
 		}
 
 		return StringUtil.replace(
@@ -1540,10 +1540,10 @@ public class JournalArticleFinderImpl
 
 	private static final String _AND_OR_CONNECTOR = "[$AND_OR_CONNECTOR$] ";
 
-	private static final String _STRUCTURE_KEY_SQL =
+	private static final String _DDM_STRUCTURE_KEY_SQL =
 		"(JournalArticle.DDMStructureKey LIKE ? [$AND_OR_NULL_CHECK$]) ";
 
-	private static final String _TEMPLATE_KEY_SQL =
+	private static final String _DDM_TEMPLATE_KEY_SQL =
 		"(JournalArticle.DDMTemplateKey LIKE ? [$AND_OR_NULL_CHECK$]) ";
 
 	private static final String _TYPE_SQL =
