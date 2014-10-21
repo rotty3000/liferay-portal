@@ -71,10 +71,20 @@ public class ConfigurationFormBuilder {
 
 		ddmFormFieldRenderingContext.setLocale(themeDisplay.getLocale());
 
+		String configFieldJSON = DDMFormJSONSerializerUtil.serialize(ddmForm);
+
 		if (_log.isDebugEnabled()) {
 			_log.debug(
-				"DDMForm: " + DDMFormJSONSerializerUtil.serialize(ddmForm));
+				"DDMForm: " + configFieldJSON);
 		}
+
+		portletRequest.setAttribute("configFieldJSON", configFieldJSON);
+
+		portletRequest.setAttribute("scopeGroupId",
+			themeDisplay.getScopeGroupId());
+
+		portletRequest.setAttribute("plId",
+			themeDisplay.getPlid());
 
 		return DDMFormRendererUtil.render(
 			ddmForm, ddmFormFieldRenderingContext);

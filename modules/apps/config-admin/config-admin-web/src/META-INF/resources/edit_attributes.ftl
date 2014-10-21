@@ -39,6 +39,37 @@
 		${configurationFormBuilder.renderServiceConfigurationForm(pid, renderRequest, renderResponse)}
 	</@>
 
+	<#assign configFieldJSON = Request["configFieldJSON"] />
+	<#assign scopeGroupId = Request["scopeGroupId"] />
+	<#assign plId = Request["plId"] />
+
+	<div class="lfr-ddm-container" id="xyz">
+
+		<@aui["input"] name="configFields" type="hidden" />
+
+		<@aui["script"] use="liferay-ddm-form">
+
+			var fromGroupDiv = A.one('div.form-group.field-wrapper');
+
+			var fieldNSValue = fromGroupDiv.getData('fieldnamespace');
+
+			var isRepeatable = true;
+
+			new Liferay.DDM.Form(
+				{
+					container: '#xyz',
+					ddmFormValuesInput: '#<@portlet["namespace"]/>configFields',
+					definition: "${configFieldJSON?js_string}",
+					doAsGroupId: ${scopeGroupId},
+					fieldsNamespace: fieldNSValue,
+					p_l_id: ${plId},
+					portletNamespace: "<@portlet["namespace"]/>",
+					repeatable: isRepeatable
+				}
+			);
+		</@>
+	</div>
+
 	<@aui["input"] name="redirect" type="hidden" value="${redirectURL}" />
 
 	<#if pid??>
