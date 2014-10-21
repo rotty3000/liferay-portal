@@ -89,15 +89,6 @@ public class JournalContentDisplayContext {
 			request.setAttribute(
 				WebKeys.PORTLET_CONFIGURATOR_VISIBILITY, Boolean.TRUE);
 		}
-
-		if ((article != null) && hasViewPermission() &&
-			(articleDisplay != null) && !isExpired() &&
-			isEnableViewCountIncrement()) {
-
-			AssetEntryServiceUtil.incrementViewCounter(
-				JournalArticle.class.getName(),
-				articleDisplay.getResourcePrimKey());
-		}
 	}
 
 	public JournalArticle getArticle() {
@@ -345,6 +336,20 @@ public class JournalContentDisplayContext {
 		}
 
 		return _hasViewPermission;
+	}
+
+	public void incrementViewCounter() throws PortalException {
+		JournalArticle article = getArticle();
+		JournalArticleDisplay articleDisplay = getArticleDisplay();
+
+		if ((article != null) && hasViewPermission() &&
+			(articleDisplay != null) && !isExpired() &&
+			isEnableViewCountIncrement()) {
+
+			AssetEntryServiceUtil.incrementViewCounter(
+				JournalArticle.class.getName(),
+				articleDisplay.getResourcePrimKey());
+		}
 	}
 
 	public boolean isCommentsEnabled() {

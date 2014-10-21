@@ -19,6 +19,8 @@
 <%
 JournalArticle article = journalContentDisplayContext.getArticle();
 JournalArticleDisplay articleDisplay = journalContentDisplayContext.getArticleDisplay();
+
+journalContentDisplayContext.incrementViewCounter();
 %>
 
 <c:choose>
@@ -156,7 +158,7 @@ JournalArticleDisplay articleDisplay = journalContentDisplayContext.getArticleDi
 							<br />
 						</c:if>
 					</c:when>
-					<c:when test="<%= Validator.isNull(journalContentDisplayContext.getArticleId()) %>">
+					<c:when test="<%= Validator.isNotNull(journalContentDisplayContext.getArticleId()) %>">
 						<c:choose>
 							<c:when test="<%= journalContentDisplayContext.isExpired() %>">
 								<div class="alert alert-warning">

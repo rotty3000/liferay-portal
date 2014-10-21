@@ -17,8 +17,6 @@
 <%@ include file="/html/portlet/journal_content/init.jsp" %>
 
 <%
-String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
-
 int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM);
 
 JournalArticle article = journalContentDisplayContext.getArticle();
@@ -26,10 +24,10 @@ JournalArticle article = journalContentDisplayContext.getArticle();
 String type = ParamUtil.getString(request, "type");
 
 if (article != null) {
-	article = article.toEscapedModel();
-
 	type = article.getType();
 }
+
+String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
@@ -48,7 +46,7 @@ if (article != null) {
 		</span>
 
 		<span class="displaying-article-id-holder <%= article == null ? "hide" : StringPool.BLANK %>">
-			<liferay-ui:message key="displaying-content" />: <span class="displaying-article-id"><%= article != null ? article.getTitle(locale) : StringPool.BLANK %></span>
+			<liferay-ui:message key="displaying-content" />: <span class="displaying-article-id"><%= article != null ? HtmlUtil.escape(article.getTitle(locale)) : StringPool.BLANK %></span>
 		</span>
 	</div>
 
