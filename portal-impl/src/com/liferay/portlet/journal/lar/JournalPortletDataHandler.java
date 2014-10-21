@@ -338,14 +338,14 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 	protected ActionableDynamicQuery getArticleActionableDynamicQuery(
 		final PortletDataContext portletDataContext) {
 
-		ExportActionableDynamicQuery exportActionableDynamicQuery =
+		ActionableDynamicQuery actionableDynamicQuery =
 			JournalArticleLocalServiceUtil.getExportActionableDynamicQuery(
 				portletDataContext);
 
 		final ActionableDynamicQuery.AddCriteriaMethod addCriteriaMethod =
-			exportActionableDynamicQuery.getAddCriteriaMethod();
+			actionableDynamicQuery.getAddCriteriaMethod();
 
-		exportActionableDynamicQuery.setAddCriteriaMethod(
+		actionableDynamicQuery.setAddCriteriaMethod(
 			new ActionableDynamicQuery.AddCriteriaMethod() {
 
 				@Override
@@ -386,7 +386,7 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 
 			});
 
-		return exportActionableDynamicQuery;
+		return actionableDynamicQuery;
 	}
 
 	protected ActionableDynamicQuery getDDMStructureActionableDynamicQuery(
