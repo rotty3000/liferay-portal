@@ -198,9 +198,10 @@ public class JournalExportImportTest extends BasePortletExportImportTestCase {
 
 		Assert.assertNotNull(dependentDDMTemplate);
 		Assert.assertEquals(
-			article.getStructureId(), dependentDDMStructure.getStructureKey());
+			article.getDDMStructureKey(),
+			dependentDDMStructure.getStructureKey());
 		Assert.assertEquals(
-			article.getTemplateId(), dependentDDMTemplate.getTemplateKey());
+			article.getDDMTemplateKey(), dependentDDMTemplate.getTemplateKey());
 		Assert.assertEquals(
 			dependentDDMTemplate.getClassPK(),
 			dependentDDMStructure.getStructureId());
