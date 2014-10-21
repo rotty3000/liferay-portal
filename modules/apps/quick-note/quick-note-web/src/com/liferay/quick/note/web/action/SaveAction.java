@@ -57,30 +57,30 @@ public class SaveAction implements ActionCommand {
 		String portletId = ParamUtil.getString(portletRequest, "portletId");
 
 		try {
-		PortletPermissionUtil.check(
-			themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
-			portletId, ActionKeys.CONFIGURATION);
+			PortletPermissionUtil.check(
+				themeDisplay.getPermissionChecker(), themeDisplay.getLayout(),
+				portletId, ActionKeys.CONFIGURATION);
 
-		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getStrictPortletSetup(
-				themeDisplay.getLayout(), portletId);
+			PortletPreferences portletPreferences =
+				PortletPreferencesFactoryUtil.getStrictPortletSetup(
+					themeDisplay.getLayout(), portletId);
 
-		if (portletPreferences instanceof StrictPortletPreferencesImpl) {
-			throw new PrincipalException();
-		}
+			if (portletPreferences instanceof StrictPortletPreferencesImpl) {
+				throw new PrincipalException();
+			}
 
-		String color = ParamUtil.getString(portletRequest, "color");
-		String data = ParamUtil.getString(portletRequest, "data");
+			String color = ParamUtil.getString(portletRequest, "color");
+			String data = ParamUtil.getString(portletRequest, "data");
 
-		if (Validator.isNotNull(color)) {
-			portletPreferences.setValue("color", color);
-		}
+			if (Validator.isNotNull(color)) {
+				portletPreferences.setValue("color", color);
+			}
 
-		if (Validator.isNotNull(data)) {
-			portletPreferences.setValue("data", data);
-		}
+			if (Validator.isNotNull(data)) {
+				portletPreferences.setValue("data", data);
+			}
 
-		portletPreferences.store();
+			portletPreferences.store();
 		}
 		catch (Exception e) {
 			throw new PortletException(e);
