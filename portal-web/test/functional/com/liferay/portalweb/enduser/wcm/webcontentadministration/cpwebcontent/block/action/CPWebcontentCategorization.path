@@ -54,7 +54,11 @@
 	<td>//button[contains(@class,'close-content')]</td>
 	<td></td>
 </tr>
-<!---->
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
 <!--TAGS-->
 <tr>
 	<td>TAGS_BOX</td>
