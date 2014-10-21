@@ -196,7 +196,7 @@ public class JournalContentDisplayContext {
 		return currentExtensions;
 	}
 
-	public DDMTemplate getDDMTemplate() {
+	public DDMTemplate getDDMTemplate() throws PortalException {
 		if (_ddmTemplate != null) {
 			return _ddmTemplate;
 		}
@@ -549,7 +549,7 @@ public class JournalContentDisplayContext {
 		return _showEditArticleIcon;
 	}
 
-	public boolean isShowEditTemplateIcon() {
+	public boolean isShowEditTemplateIcon() throws PortalException {
 		if (_showEditTemplateIcon != null) {
 			return _showEditTemplateIcon;
 		}
