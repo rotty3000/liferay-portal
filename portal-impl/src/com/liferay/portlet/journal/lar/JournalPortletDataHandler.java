@@ -358,30 +358,30 @@ public class JournalPortletDataHandler extends BasePortletDataHandler {
 						return;
 					}
 
-					DynamicQuery articleVersionDynamicQuery =
+					DynamicQuery versionArticleDynamicQuery =
 						DynamicQueryFactoryUtil.forClass(
-							JournalArticle.class, "articleVersion",
+							JournalArticle.class, "versionArticle",
 							PortalClassLoaderUtil.getClassLoader());
 
-					articleVersionDynamicQuery.setProjection(
+					versionArticleDynamicQuery.setProjection(
 						ProjectionFactoryUtil.alias(
-							ProjectionFactoryUtil.max("articleVersion.version"),
-							"articleVersion.version"));
+							ProjectionFactoryUtil.max("versionArticle.version"),
+							"versionArticle.version"));
 
 					// We need to use the "this" default alias to make sure the
 					// database engine handles this subquery as a correlated
 					// subquery
 
-					articleVersionDynamicQuery.add(
+					versionArticleDynamicQuery.add(
 						RestrictionsFactoryUtil.eqProperty(
 							"this.resourcePrimKey",
-							"articleVersion.resourcePrimKey"));
+							"versionArticle.resourcePrimKey"));
 
 					Property versionProperty = PropertyFactoryUtil.forName(
 						"version");
 
 					dynamicQuery.add(
-						versionProperty.eq(articleVersionDynamicQuery));
+						versionProperty.eq(versionArticleDynamicQuery));
 				}
 
 			});
