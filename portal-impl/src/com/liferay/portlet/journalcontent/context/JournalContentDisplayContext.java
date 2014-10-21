@@ -232,7 +232,7 @@ public class JournalContentDisplayContext {
 		if (Validator.isNull(_ddmTemplateKey)) {
 			JournalArticle article = getArticle();
 
-			_ddmTemplateKey = article.getTemplateId();
+			_ddmTemplateKey = article.getDDMTemplateKey();
 		}
 
 		return _ddmTemplateKey;
@@ -252,7 +252,7 @@ public class JournalContentDisplayContext {
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.fetchStructure(
 			article.getGroupId(),
 			PortalUtil.getClassNameId(JournalArticle.class),
-			article.getStructureId(), true);
+			article.getDDMStructureKey(), true);
 
 		_ddmTemplates = DDMTemplateLocalServiceUtil.getTemplates(
 			article.getGroupId(), PortalUtil.getClassNameId(DDMStructure.class),
