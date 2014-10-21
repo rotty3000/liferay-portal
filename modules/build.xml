@@ -17,6 +17,7 @@
 		<dirset dir="apps/social" includes="*" />
 		<dirset dir="apps/web-proxy" includes="*" />
 		<dirset dir="apps/xsl-content" includes="*" />
+		<dirset dir="apps/config-admin" includes="*" />
 		<dirset dir="core" includes="*" />
 		<dirset dir="portal" includes="*" />
 	</path>

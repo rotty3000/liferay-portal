@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portlet.dynamicdatamapping.model.DDMForm;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormField;
 import com.liferay.portlet.dynamicdatamapping.model.DDMFormFieldOptions;
@@ -160,7 +162,18 @@ public class MetaTypeFormUtil {
 			}
 		}
 		else {
-			String[] attributeValues = attributeDefinition.getDefaultValue();
+
+			int cardinality = attributeDefinition.getCardinality();
+
+			String[] attributeValues =null;
+
+			if(cardinality > 1 ){
+				String temp = attributeDefinition.getDefaultValue()[0];
+				attributeValues = StringUtil.split(temp, StringPool.PIPE);
+			}
+			else{
+				attributeValues = attributeDefinition.getDefaultValue();
+			}
 
 			if (attributeValues!= null) {
 				for (String attributeValue : attributeValues) {

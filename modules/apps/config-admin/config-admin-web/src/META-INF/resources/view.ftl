@@ -18,8 +18,6 @@
 
 <#assign ocdIterator = Request["ocdIterator"] />
 
-<@liferay_ui["message"] key="configuration-successful"/>
-
 <@liferay_ui["search-container"]
 	emptyResultsMessage="no-services-were-found"
 	total=ocdIterator.getTotal()

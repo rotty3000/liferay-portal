@@ -18,7 +18,6 @@ import com.liferay.osgi.config.admin.util.ObjectClassDefinitionsHelper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -85,8 +84,8 @@ public class BindConfigurationAction implements ActionCommand {
 			pid = factoryPid;
 		} // updating existing factory instance
 		else if (Validator.isNotNull(pid)&&
-				 Validator.isNotNull(factoryPid) &&
-				 !StringUtil.equalsIgnoreCase(pid, factoryPid)) {
+				Validator.isNotNull(factoryPid) &&
+				!StringUtil.equalsIgnoreCase(pid, factoryPid)) {
 
 			createFactoryConfig = false;
 		}
@@ -124,13 +123,8 @@ public class BindConfigurationAction implements ActionCommand {
 				ConfigurationAdmin.SERVICE_FACTORYPID, factoryPid);
 		}
 
-		String configuredPid = configureTargetService(
+		configureTargetService(
 							pid, createFactoryConfig, bindProperties);
-
-		//TODO Just a sample message placeholder need to more perfect
-		SessionMessages.add(
-			portletRequest, "configurationSuccessful",configuredPid);
-
 		return true;
 	}
 
