@@ -1603,12 +1603,6 @@
 			<forward name="portlet.portlet_sharing.view" path="portlet.portlet_sharing.view" />
 		</action>
 
-		<!-- Quick Note -->
-
-		<action path="/quick_note/save" type="com.liferay.portlet.quicknote.action.SaveAction" />
-
-		<action path="/quick_note/view" forward="portlet.quick_note.view" />
-
 		<!-- Recent Documents -->
 
 		<action path="/recent_documents/get_file" type="com.liferay.portlet.documentlibrary.action.GetFileAction" />
