@@ -15,6 +15,7 @@
 		<dirset dir="apps/password-generator" includes="*" />
 		<dirset dir="apps/polls" includes="*" />
 		<dirset dir="apps/social" includes="*" />
+		<dirset dir="apps/unit-converter" includes="*" />
 		<dirset dir="apps/web-proxy" includes="*" />
 		<dirset dir="apps/xsl-content" includes="*" />
 		<dirset dir="core" includes="*" />

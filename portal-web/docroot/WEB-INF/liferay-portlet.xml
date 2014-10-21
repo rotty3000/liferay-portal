@@ -257,16 +257,6 @@
 		<css-class-wrapper>portlet-translator</css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>27</portlet-name>
-		<icon>/html/icons/unit_converter.png</icon>
-		<struts-path>unit_converter</struts-path>
-		<remoteable>true</remoteable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<css-class-wrapper>portlet-unit-converter</css-class-wrapper>
-	</portlet>
-	<portlet>
 		<portlet-name>28</portlet-name>
 		<icon>/html/icons/bookmarks.png</icon>
 		<struts-path>bookmarks</struts-path>
