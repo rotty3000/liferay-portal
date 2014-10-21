@@ -34,8 +34,6 @@ String casNoSuchUserRedirectURL = PrefsPropsUtil.getString(company.getCompanyId(
 	<liferay-ui:error key="casLoginURLInvalid" message="the-cas-login-url-is-invalid" />
 	<liferay-ui:error key="casLogoutURLInvalid" message="the-cas-logout-url-is-invalid" />
 	<liferay-ui:error key="casNoSuchUserURLInvalid" message="the-cas-no-such-user-url-is-invalid" />
-	<liferay-ui:error key="casServerURLAndServiceURLConflict" message="the-cas-server-url-and-cas-service-url-cannot-both-be-set" />
-	<liferay-ui:error key="casServerURLAndServiceURLNotSet" message="either-the-cas-server-url-or-the-cas-service-url-must-be-set" />
 
 	<aui:input label="enabled" name='<%= "settings--" + PropsKeys.CAS_AUTH_ENABLED + "--" %>' type="checkbox" value="<%= casAuthEnabled %>" />
 
