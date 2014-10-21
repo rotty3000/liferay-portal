@@ -29,7 +29,7 @@
 			WHERE
 				(groupId = ?) AND
 				(classNameId = ?) AND
-				(structureId = ?) AND
+				(DDMStructureKey = ?) AND
 				([$STATUS$])
 		]]>
 	</sql>
@@ -158,7 +158,7 @@
 			WHERE
 				(JournalArticle.groupId = ?) AND
 				(JournalArticle.classNameId = ?) AND
-				(JournalArticle.structureId = ?) AND
+				(JournalArticle.DDMStructureKey = ?) AND
 				([$STATUS$]) AND
 				(tempJournalArticle.id_ IS NULL)
 			ORDER BY

@@ -783,9 +783,9 @@ public class JournalArticleFinderImpl
 						JournalArticleConstants.CLASSNAME_ID_DEFAULT))) {
 
 				sql = StringUtil.replace(
-					sql, "(structureId = ?)",
-					"((structureId = ?) OR (structureId = '') OR " +
-						"(structureId IS NULL))");
+					sql, "(DDMStructureKey = ?)",
+					"((DDMStructureKey = ?) OR (DDMStructureKey = '') OR " +
+						"(DDMStructureKey IS NULL))");
 			}
 
 			if (inlineSQLHelper) {
@@ -973,13 +973,13 @@ public class JournalArticleFinderImpl
 
 			if (!isNullArray(ddmStructureKeys)) {
 				sql = CustomSQLUtil.replaceKeywords(
-					sql, "JournalArticle.structureId", StringPool.LIKE, false,
+					sql, "JournalArticle.DDMStructureKey", StringPool.LIKE, false,
 					ddmStructureKeys);
 			}
 
 			if (!isNullArray(ddmTemplateKeys)) {
 				sql = CustomSQLUtil.replaceKeywords(
-					sql, "JournalArticle.templateId", StringPool.LIKE, false,
+					sql, "JournalArticle.DDMTemplateKey", StringPool.LIKE, false,
 					ddmTemplateKeys);
 			}
 
@@ -1146,10 +1146,10 @@ public class JournalArticleFinderImpl
 						JournalArticleConstants.CLASSNAME_ID_DEFAULT))) {
 
 				sql = StringUtil.replace(
-					sql, "(JournalArticle.structureId = ?)",
-					"((JournalArticle.structureId = ?) OR " +
-						"(JournalArticle.structureId = '') OR" +
-							"(JournalArticle.structureId IS NULL))");
+					sql, "(JournalArticle.DDMStructureKey = ?)",
+					"((JournalArticle.DDMStructureKey = ?) OR " +
+						"(JournalArticle.DDMStructureKey = '') OR" +
+							"(JournalArticle.DDMStructureKey IS NULL))");
 			}
 
 			if (inlineSQLHelper) {
@@ -1326,13 +1326,13 @@ public class JournalArticleFinderImpl
 
 			if (!isNullArray(ddmStructureKeys)) {
 				sql = CustomSQLUtil.replaceKeywords(
-					sql, "JournalArticle.structureId", StringPool.LIKE, false,
+					sql, "JournalArticle.DDMStructureKey", StringPool.LIKE, false,
 					ddmStructureKeys);
 			}
 
 			if (!isNullArray(ddmTemplateKeys)) {
 				sql = CustomSQLUtil.replaceKeywords(
-					sql, "JournalArticle.templateId", StringPool.LIKE, false,
+					sql, "JournalArticle.DDMTemplateKey", StringPool.LIKE, false,
 					ddmTemplateKeys);
 			}
 
@@ -1523,7 +1523,7 @@ public class JournalArticleFinderImpl
 				sb.append(_AND_OR_CONNECTOR);
 			}
 
-			sb.append(_STRUCTURE_ID_SQL);
+			sb.append(_STRUCTURE_KEY_SQL);
 		}
 
 		if (!isNullArray(ddmTemplateKeys)) {
@@ -1531,7 +1531,7 @@ public class JournalArticleFinderImpl
 				sb.append(_AND_OR_CONNECTOR);
 			}
 
-			sb.append(_TEMPLATE_ID_SQL);
+			sb.append(_TEMPLATE_KEY_SQL);
 		}
 
 		return StringUtil.replace(
@@ -1540,11 +1540,11 @@ public class JournalArticleFinderImpl
 
 	private static final String _AND_OR_CONNECTOR = "[$AND_OR_CONNECTOR$] ";
 
-	private static final String _STRUCTURE_ID_SQL =
-		"(JournalArticle.structureId LIKE ? [$AND_OR_NULL_CHECK$]) ";
+	private static final String _STRUCTURE_KEY_SQL =
+		"(JournalArticle.DDMStructureKey LIKE ? [$AND_OR_NULL_CHECK$]) ";
 
-	private static final String _TEMPLATE_ID_SQL =
-		"(JournalArticle.templateId LIKE ? [$AND_OR_NULL_CHECK$]) ";
+	private static final String _TEMPLATE_KEY_SQL =
+		"(JournalArticle.DDMTemplateKey LIKE ? [$AND_OR_NULL_CHECK$]) ";
 
 	private static final String _TYPE_SQL =
 		"(JournalArticle.type_ = ? [$AND_OR_NULL_CHECK$]) ";

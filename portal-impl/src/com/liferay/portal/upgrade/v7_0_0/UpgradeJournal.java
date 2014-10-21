@@ -390,7 +390,7 @@ public class UpgradeJournal extends UpgradeProcess {
 					"DDMStructureKey VARCHAR(75) null");
 
 			runSQL(
-				"alter_column_name JournalArticle templateId DDMtemplateKey " +
+				"alter_column_name JournalArticle templateId DDMTemplateKey " +
 					"VARCHAR(75) null");
 
 			runSQL("alter_column_type JournalArticle description TEXT null");
