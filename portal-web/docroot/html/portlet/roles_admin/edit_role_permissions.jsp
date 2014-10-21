@@ -316,8 +316,12 @@ portletURL.setParameter("roleId", String.valueOf(role.getRoleId()));
 
 				permissionContentContainerNode.unplug(AParseContent);
 
+				var href = event.currentTarget.attr('data-resource-href');
+
+				href = Liferay.Util.addParams('p_p_isolated=true', href);
+
 				A.io.request(
-					event.currentTarget.attr('data-resource-href'),
+					href,
 					{
 						on: {
 							failure: function() {
