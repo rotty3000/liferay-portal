@@ -45,6 +45,7 @@ public abstract class AbstractPortalCache<K extends Serializable, V>
 		put(key, value, DEFAULT_TIME_TO_LIVE);
 	}
 
+	@Override
 	public void put(K key, V value, int timeToLive) {
 		if (key == null) {
 			throw new NullPointerException("Key is null");
