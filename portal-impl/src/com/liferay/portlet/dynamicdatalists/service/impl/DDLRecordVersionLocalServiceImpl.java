@@ -40,7 +40,7 @@ public class DDLRecordVersionLocalServiceImpl
 
 		if (recordVersions.isEmpty()) {
 			throw new NoSuchRecordVersionException(
-				"No record versions found for recordId " + recordId);
+				"No record versions found for record ID " + recordId);
 		}
 
 		recordVersions = ListUtil.copy(recordVersions);
