@@ -509,6 +509,13 @@ public class PortletTracker
 			GetterUtil.getString(
 				get(serviceReference, "css-class-wrapper"),
 				portletModel.getCssClassWrapper()));
+		portletModel.setCustomAttributesDisplayClasses(
+			StringPlus.asList(
+				get(serviceReference, "custom-attributes-display")));
+		portletModel.setDDMDisplayClass(
+			GetterUtil.getString(
+				get(serviceReference, "ddm-display"),
+				portletModel.getDDMDisplayClass()));
 		portletModel.setFacebookIntegration(
 			GetterUtil.getString(
 				get(serviceReference, "facebook-integration"),
@@ -571,6 +578,10 @@ public class PortletTracker
 			GetterUtil.getBoolean(
 				get(serviceReference, "pop-up-print"),
 				portletModel.isPopUpPrint()));
+		portletModel.setPortletLayoutListenerClass(
+			GetterUtil.getString(
+				get(serviceReference, "portlet-layout-listener-class"),
+				portletModel.getPortletLayoutListenerClass()));
 		portletModel.setPreferencesCompanyWide(
 			GetterUtil.getBoolean(
 				get(serviceReference, "preferences-company-wide"),
@@ -630,6 +641,9 @@ public class PortletTracker
 			GetterUtil.getBoolean(
 				get(serviceReference, "show-portlet-inactive"),
 				portletModel.isShowPortletInactive()));
+		portletModel.setSocialActivityInterpreterClasses(
+			StringPlus.asList(
+				get(serviceReference, "social-activity-interpreter-class")));
 		portletModel.setStrutsPath(
 			GetterUtil.getString(
 				get(serviceReference, "struts-path"),
