@@ -157,8 +157,8 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 				<portlet:param name="struts_action" value="/asset_browser/view" />
 				<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
 				<portlet:param name="selectedGroupIds" value="<%= StringUtil.merge(PortalUtil.getSharedContentSiteGroupIds(company.getCompanyId(), scopeGroupId, user.getUserId())) %>" />
-				<portlet:param name="eventName" value="selectContent" />
 				<portlet:param name="typeSelection" value="<%= JournalArticle.class.getName() %>" />
+				<portlet:param name="eventName" value="selectContent" />
 			</liferay-portlet:renderURL>
 
 			Liferay.Util.selectEntity(
