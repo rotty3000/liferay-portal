@@ -152,9 +152,12 @@ public class NettyFabricAgentStubTest {
 
 				@OutputResource
 				private final File _testOutput1 = testFile1;
+
 				private final File _testOutput2 = testFile2;
+
 				@OutputResource
 				private final File _testOutput3 = testFile3;
+
 				@OutputResource
 				private final String _notAFile = "Not a File";
 
@@ -252,7 +255,7 @@ public class NettyFabricAgentStubTest {
 
 		Assert.assertEquals(processCallable.call(), noticeableFuture.get());
 
-		// Ensure no side affect to finish an already finished startup
+		// Ensure no side effect to finish an already finished startup
 
 		nettyFabricAgentStub.finsihStartup(id);
 	}
