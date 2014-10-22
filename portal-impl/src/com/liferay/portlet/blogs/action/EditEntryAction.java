@@ -458,6 +458,7 @@ public class EditEntryAction extends PortletAction {
 
 		String title = ParamUtil.getString(actionRequest, "title");
 		String subtitle = ParamUtil.getString(actionRequest, "subtitle");
+
 		String description = StringPool.BLANK;
 
 		boolean customAbstract = ParamUtil.getBoolean(
