@@ -31,8 +31,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = AmazonRankingsUpgrade.class)
-public class AmazonRankingsUpgrade {
+@Component(immediate = true, service = AmazonRankingsWebUpgrade.class)
+public class AmazonRankingsWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
