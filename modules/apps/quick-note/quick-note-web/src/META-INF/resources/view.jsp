@@ -20,8 +20,6 @@
 ResourceURL saveURL = renderResponse.createResourceURL();
 
 saveURL.setParameter(ActionRequest.ACTION_NAME, "save");
-
-String prefixPortletId = "_" + portletDisplay.getId();
 %>
 
 <div id="<portlet:namespace />pad" style="background: <%= HtmlUtil.escapeAttribute(color) %>;">
@@ -71,10 +69,10 @@ String prefixPortletId = "_" + portletDisplay.getId();
 						'<%= saveURL %>',
 						{
 							data: {
-								<%= prefixPortletId %>_color: bgColor,
-								<%= prefixPortletId %>_p_auth: Liferay.authToken,
-								<%= prefixPortletId %>_p_l_id: '<%= plid %>',
-								<%= prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
+								<portlet:namespace />color: bgColor,
+								<portlet:namespace />p_auth: Liferay.authToken,
+								<portlet:namespace />p_l_id: '<%= plid %>',
+								<portlet:namespace />portletId: '<%= portletDisplay.getId() %>'
 							}
 						}
 					);
@@ -99,10 +97,10 @@ String prefixPortletId = "_" + portletDisplay.getId();
 								'<%= saveURL %>',
 								{
 									data: {
-										<%= prefixPortletId %>_data: newValue,
-										<%= prefixPortletId %>_p_auth: '<%= AuthTokenUtil.getToken(request) %>',
-										<%= prefixPortletId %>_p_l_id: '<%= plid %>',
-										<%= prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
+										<portlet:namespace />data: newValue,
+										<portlet:namespace />p_auth: '<%= AuthTokenUtil.getToken(request) %>',
+										<portlet:namespace />p_l_id: '<%= plid %>',
+										<portlet:namespace />portletId: '<%= portletDisplay.getId() %>'
 									}
 								}
 							);
