@@ -29,6 +29,7 @@ long entryId = BeanParamUtil.getLong(entry, request, "entryId");
 String title = BeanParamUtil.getString(entry, request, "title");
 String subtitle = BeanParamUtil.getString(entry, request, "subtitle");
 String content = BeanParamUtil.getString(entry, request, "content");
+
 String description = BeanParamUtil.getString(entry, request, "description");
 
 boolean customAbstract = ParamUtil.getBoolean(request, "customAbstract", (entry != null) && Validator.isNotNull(entry.getDescription()) ? true : false);
