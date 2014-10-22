@@ -54,7 +54,8 @@ public class UnitConverterUpgrade {
 				return new String[][] {
 					new String[] {
 						"67",
-						"com_liferay_unit_converter_web_portlet_UnitConverterPortlet"
+						"com_liferay_unit_converter_web_portlet_" +
+							"UnitConverterPortlet"
 					}
 				};
 			}
@@ -63,7 +64,7 @@ public class UnitConverterUpgrade {
 
 		_releaseLocalService.updateRelease(
 			"com.liferay.unit.converter.web",
-			Collections.<UpgradeProcess> singletonList(upgradePortletId), 1, 0,
+			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}
 
