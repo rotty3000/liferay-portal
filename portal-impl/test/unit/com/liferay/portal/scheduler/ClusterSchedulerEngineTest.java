@@ -1781,8 +1781,8 @@ public class ClusterSchedulerEngineTest {
 		private String _getFullName(
 			String jobName, String groupName, StorageType storageType) {
 
-			return groupName.concat(StringPool.PERIOD).concat(jobName).concat(
-				storageType.toString());
+			return groupName + StringPool.PERIOD + jobName +
+				storageType.toString();
 		}
 
 		private final Map<String, SchedulerResponse> _defaultJobs;
