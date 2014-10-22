@@ -63,7 +63,7 @@ public class QuickNoteUpgrade {
 
 		_releaseLocalService.updateRelease(
 			"com.liferay.quick.note.web",
-			Collections.<UpgradeProcess> singletonList(upgradePortletId), 1, 0,
+			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}
 
