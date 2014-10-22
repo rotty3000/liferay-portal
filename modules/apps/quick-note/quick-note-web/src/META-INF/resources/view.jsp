@@ -16,12 +16,6 @@
 
 <%@ include file="/init.jsp" %>
 
-<%
-ResourceURL saveURL = renderResponse.createResourceURL();
-
-saveURL.setParameter(ActionRequest.ACTION_NAME, "save");
-%>
-
 <div id="<portlet:namespace />pad" style="background: <%= HtmlUtil.escapeAttribute(color) %>;">
 	<c:if test="<%= portletDisplay.isShowConfigurationIcon() %>">
 		<table width="100%">
@@ -64,6 +58,8 @@ saveURL.setParameter(ActionRequest.ACTION_NAME, "save");
 					var bgColor = box.getStyle('backgroundColor');
 
 					quickNotePad.setStyle('backgroundColor', bgColor);
+
+					<portlet:resourceURL var="saveURL"><portlet:param name="<%= ActionRequest.ACTION_NAME %>" value="save" /></portlet:resourceURL>
 
 					A.io.request(
 						'<%= saveURL %>',
