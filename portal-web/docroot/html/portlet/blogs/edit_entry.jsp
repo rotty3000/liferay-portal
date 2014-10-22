@@ -326,6 +326,26 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 	<portlet:param name="preview" value="false" />
 </portlet:actionURL>
 
+<aui:script>
+	function <portlet:namespace />OnChangeEditor(html) {
+		var blogs = Liferay.component('<portlet:namespace />Blogs');
+
+		if (blogs) {
+			blogs.setDescription(html);
+		}
+	}
+
+	function <portlet:namespace />OnDescriptionEditorInit() {
+		<c:if test="<%= !customAbstract %>">
+			document.getElementById('<portlet:namespace />descriptionEditor').setAttribute('contenteditable', false);
+		</c:if>
+	}
+
+	<c:if test="<%= (entry != null) && blogsSettings.isEmailEntryUpdatedEnabled() %>">
+		Liferay.Util.toggleBoxes('<portlet:namespace />sendEmailEntryUpdated', '<portlet:namespace />emailEntryUpdatedCommentWrapper');
+	</c:if>
+</aui:script>
+
 <aui:script use="liferay-blogs">
 	var blogs = Liferay.component(
 		'<portlet:namespace />Blogs',
@@ -369,26 +389,6 @@ boolean showHeader = ParamUtil.getBoolean(request, "showHeader", true);
 	};
 
 	Liferay.on('destroyPortlet', clearSaveDraftHandle);
-</aui:script>
-
-<aui:script>
-	window['<portlet:namespace />OnChangeEditor'] = function(html) {
-		var blogs = Liferay.component('<portlet:namespace />Blogs');
-
-		if (blogs) {
-			blogs.setDescription(html);
-		}
-	};
-
-	window['<portlet:namespace />OnDescriptionEditorInit'] = function() {
-		<c:if test="<%= !customAbstract %>">
-			document.getElementById('<portlet:namespace />descriptionEditor').setAttribute('contenteditable', false);
-		</c:if>
-	};
-
-	<c:if test="<%= (entry != null) && blogsSettings.isEmailEntryUpdatedEnabled() %>">
-		Liferay.Util.toggleBoxes('<portlet:namespace />sendEmailEntryUpdated', '<portlet:namespace />emailEntryUpdatedCommentWrapper');
-	</c:if>
 </aui:script>
 
 <%

@@ -73,7 +73,7 @@ AUI.add(
 						var customDescriptionEnabled = entry && entry.customDescription;
 
 						instance._customDescription = customDescriptionEnabled ? entry.description : STR_BLANK;
-						instance._shortenDescription = (!entry || !entry.customDescription);
+						instance._shortenDescription = !customDescriptionEnabled;
 
 						instance.setDescription(window[instance.ns('contentEditor')].getHTML());
 					},
