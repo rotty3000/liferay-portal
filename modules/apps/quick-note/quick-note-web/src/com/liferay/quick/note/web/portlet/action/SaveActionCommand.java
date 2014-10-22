@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.quick.note.web.action;
+package com.liferay.quick.note.web.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.ActionCommand;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Component;
 	},
 	service = ActionCommand.class
 )
-public class SaveAction implements ActionCommand {
+public class SaveActionCommand implements ActionCommand {
 
 	@Override
 	public boolean processCommand(
