@@ -236,15 +236,6 @@ if (alloyEditorMode.equals("text")) {
 
 	var alloyEditor = CKEDITOR.instances['<%= name %>'];
 
-	<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
-		alloyEditor.on(
-			'change',
-			function(event) {
-				window['<%= HtmlUtil.escapeJS(onChangeMethod) %>'](window['<%= name %>'].getHTML());
-			}
-		);
-	</c:if>
-
 	<c:if test="<%= Validator.isNotNull(onBlurMethod) %>">
 		alloyEditor.on(
 			'blur',
@@ -254,22 +245,20 @@ if (alloyEditorMode.equals("text")) {
 		);
 	</c:if>
 
+	<c:if test="<%= Validator.isNotNull(onChangeMethod) %>">
+		alloyEditor.on(
+			'change',
+			function(event) {
+				window['<%= HtmlUtil.escapeJS(onChangeMethod) %>'](window['<%= name %>'].getHTML());
+			}
+		);
+	</c:if>
+
 	<c:if test="<%= Validator.isNotNull(onFocusMethod) %>">
 		alloyEditor.on(
 			'focus',
 			function(event) {
 				window['<%= HtmlUtil.escapeJS(onFocusMethod) %>'](event.editor);
-			}
-		);
-	</c:if>
-
-	<c:if test='<%= alloyEditorMode.equals("text") %>'>
-		alloyEditor.on(
-			'key',
-			function(event) {
-				if (event.data.keyCode === 13) {
-					event.cancel();
-				}
 			}
 		);
 	</c:if>
@@ -284,6 +273,17 @@ if (alloyEditorMode.equals("text")) {
 			window['<%= name %>'].instanceReady = true;
 		}
 	);
+
+	<c:if test='<%= alloyEditorMode.equals("text") %>'>
+		alloyEditor.on(
+			'key',
+			function(event) {
+				if (event.data.keyCode === 13) {
+					event.cancel();
+				}
+			}
+		);
+	</c:if>
 
 	var destroyInstance = function(event) {
 		if (event.portletId === '<%= portletId %>') {
