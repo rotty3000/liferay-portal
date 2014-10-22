@@ -64,7 +64,7 @@ public class AmazonRankingsWebUpgrade {
 
 		_releaseLocalService.updateRelease(
 			"com.liferay.amazon.rankings.web",
-			Collections.<UpgradeProcess> singletonList(upgradePortletId), 1, 0,
+			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}
 
