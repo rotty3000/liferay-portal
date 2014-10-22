@@ -1554,6 +1554,7 @@ public class ClusterSchedulerEngineTest {
 			return new ArrayList<SchedulerResponse>(_defaultJobs.values());
 		}
 
+		@Override
 		public List<SchedulerResponse> getScheduledJobs(StorageType storageType)
 			throws SchedulerException {
 
