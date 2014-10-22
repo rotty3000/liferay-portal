@@ -235,33 +235,28 @@ public class JournalTransformerTest {
 		_ddmStructure = DDMStructureTestUtil.addStructure(
 			TestPropsValues.getGroupId(), "name");
 
-		String xsl = "$name.getData()";
-
 		_ddmTemplate = DDMTemplateTestUtil.addTemplate(
 			_ddmStructure.getStructureId(), TemplateConstants.LANG_TYPE_VM,
-			xsl);
+			"$name.getData()");
 
 		String xml = DDMStructureTestUtil.getSampleStructuredContent(
 			"name", "Joe Bloggs");
 
-		String script =
-			"#parse(\"$templatesPath/" +
-				_ddmTemplate.getTemplateKey() + "\")";
-
 		String content = JournalUtil.transform(
 			null, tokens, Constants.VIEW, "en_US", SAXReaderUtil.read(xml),
-			null, script, TemplateConstants.LANG_TYPE_VM);
+			null,
+			"#parse(\"$templatesPath/" +
+				_ddmTemplate.getTemplateKey() + "\")",
+			TemplateConstants.LANG_TYPE_VM);
 
 		Assert.assertEquals("Joe Bloggs", content);
 
-		//journalTemplatePath is deprecated but need to still test until removed
-		String legacyScript =
-			"#parse(\"$journalTemplatesPath/" +
-				_ddmTemplate.getTemplateKey() + "\")";
-
 		content = JournalUtil.transform(
 			null, tokens, Constants.VIEW, "en_US", SAXReaderUtil.read(xml),
-			null, legacyScript, TemplateConstants.LANG_TYPE_VM);
+			null,
+			"#parse(\"$journalTemplatesPath/" +
+				_ddmTemplate.getTemplateKey() + "\")",
+			TemplateConstants.LANG_TYPE_VM);
 
 		Assert.assertEquals("Joe Bloggs", content);
 	}
@@ -271,14 +266,14 @@ public class JournalTransformerTest {
 			TestPropsValues.getGroupId(), (PortletRequestModel)null, null);
 
 		tokens.put(
-			"article_group_id", String.valueOf(TestPropsValues.getGroupId()));
-		tokens.put(
-			"company_id", String.valueOf(TestPropsValues.getCompanyId()));
-		tokens.put(
 			TemplateConstants.CLASS_NAME_ID,
 			String.valueOf(
 				ClassNameLocalServiceUtil.getClassNameId(
 					DDMStructure.class.getName())));
+		tokens.put(
+			"article_group_id", String.valueOf(TestPropsValues.getGroupId()));
+		tokens.put(
+			"company_id", String.valueOf(TestPropsValues.getCompanyId()));
 
 		return tokens;
 	}
