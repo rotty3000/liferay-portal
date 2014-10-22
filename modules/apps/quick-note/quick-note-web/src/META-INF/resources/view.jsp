@@ -73,8 +73,8 @@ String prefixPortletId = "_" + portletDisplay.getId();
 							data: {
 								<%= prefixPortletId %>_color: bgColor,
 								<%= prefixPortletId %>_p_auth: Liferay.authToken,
-								<%=prefixPortletId %>_p_l_id: '<%= plid %>',
-								<%=prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
+								<%= prefixPortletId %>_p_l_id: '<%= plid %>',
+								<%= prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
 							}
 						}
 					);
@@ -100,9 +100,9 @@ String prefixPortletId = "_" + portletDisplay.getId();
 								{
 									data: {
 										<%= prefixPortletId %>_data: newValue,
-										<%=prefixPortletId %>_p_auth: '<%= AuthTokenUtil.getToken(request) %>',
-										<%=prefixPortletId %>_p_l_id: '<%= plid %>',
-										<%=prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
+										<%= prefixPortletId %>_p_auth: '<%= AuthTokenUtil.getToken(request) %>',
+										<%= prefixPortletId %>_p_l_id: '<%= plid %>',
+										<%= prefixPortletId %>_portletId: '<%= portletDisplay.getId() %>'
 									}
 								}
 							);
