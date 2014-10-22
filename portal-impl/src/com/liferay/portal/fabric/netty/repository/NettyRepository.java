@@ -22,8 +22,8 @@ import com.liferay.portal.fabric.netty.util.NettyUtil;
 import com.liferay.portal.fabric.repository.Repository;
 import com.liferay.portal.fabric.repository.RepositoryHelperUtil;
 import com.liferay.portal.kernel.concurrent.AsyncBroker;
+import com.liferay.portal.kernel.concurrent.BaseFutureListener;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
-import com.liferay.portal.kernel.concurrent.FutureListener;
 import com.liferay.portal.kernel.concurrent.NoticeableFuture;
 import com.liferay.portal.kernel.concurrent.NoticeableFutureConverter;
 import com.liferay.portal.kernel.log.Log;
@@ -43,7 +43,6 @@ import java.nio.file.attribute.FileTime;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -136,34 +135,30 @@ public class NettyRepository implements Repository {
 				remoteFilePath, entry.getValue(), deleteAfterFetch);
 
 			noticeableFuture.addFutureListener(
-				new FutureListener<Path>() {
+				new BaseFutureListener<Path>() {
 
 					@Override
-					public void complete(Future<Path> future) {
-						if (future.isCancelled()) {
-							defaultNoticeableFuture.cancel(true);
+					public void completeWithCancel(Future<Path> future) {
+						defaultNoticeableFuture.cancel(true);
+					}
 
-							return;
+					@Override
+					public void completeWithException(
+						Future<Path> future, Throwable throwable) {
+
+						defaultNoticeableFuture.setException(throwable);
+					}
+
+					@Override
+					public void completeWithResult(
+						Future<Path> future, Path localFilePath) {
+
+						if (localFilePath != null) {
+							resultPathMap.put(remoteFilePath, localFilePath);
 						}
 
-						try {
-							Path localFilePath = future.get();
-
-							if (localFilePath != null) {
-								resultPathMap.put(
-									remoteFilePath, localFilePath);
-							}
-
-							if (counter.decrementAndGet() <= 0) {
-								defaultNoticeableFuture.set(resultPathMap);
-							}
-						}
-						catch (Throwable t) {
-							if (t instanceof ExecutionException) {
-								t = t.getCause();
-							}
-
-							defaultNoticeableFuture.setException(t);
+						if (counter.decrementAndGet() <= 0) {
+							defaultNoticeableFuture.set(resultPathMap);
 						}
 					}
 

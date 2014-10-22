@@ -14,7 +14,7 @@
 
 package com.liferay.portal.fabric.netty.rpc;
 
-import com.liferay.portal.kernel.concurrent.FutureListener;
+import com.liferay.portal.kernel.concurrent.BaseFutureListener;
 import com.liferay.portal.kernel.concurrent.NoticeableFuture;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -26,7 +26,6 @@ import io.netty.channel.ChannelFutureListener;
 
 import java.io.Serializable;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -48,33 +47,28 @@ public class RPCRequest<T extends Serializable> extends RPCSerializable {
 			NoticeableFuture<T> noticeableFuture = _rpcCallable.call();
 
 			noticeableFuture.addFutureListener(
-				new FutureListener<T>() {
+				new BaseFutureListener<T>() {
 
 					@Override
-					public void complete(Future<T> future) {
-						if (future.isCancelled()) {
-							sendRPCResponse(
-								channel,
-								new RPCResponse<T>(id, true, null, null));
+					public void completeWithCancel(Future<T> future) {
+						sendRPCResponse(
+							channel, new RPCResponse<T>(id, true, null, null));
+					}
 
-							return;
-						}
+					@Override
+					public void completeWithException(
+						Future<T> future, Throwable throwable) {
 
-						try {
-							sendRPCResponse(
-								channel,
-								new RPCResponse<T>(
-									id, false, future.get(), null));
-						}
-						catch (Throwable throwable) {
-							if (throwable instanceof ExecutionException) {
-								throwable = throwable.getCause();
-							}
+						sendRPCResponse(
+							channel,
+							new RPCResponse<T>(id, false, null, throwable));
+					}
 
-							sendRPCResponse(
-								channel,
-								new RPCResponse<T>(id, false, null, throwable));
-						}
+					@Override
+					public void completeWithResult(Future<T> future, T result) {
+						sendRPCResponse(
+							channel,
+							new RPCResponse<T>(id, false, result, null));
 					}
 
 				});
