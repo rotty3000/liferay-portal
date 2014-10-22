@@ -65,10 +65,7 @@
 						'<%= saveURL %>',
 						{
 							data: {
-								<portlet:namespace />color: bgColor,
-								<portlet:namespace />p_auth: Liferay.authToken,
-								<portlet:namespace />p_l_id: '<%= plid %>',
-								<portlet:namespace />portletId: '<%= portletDisplay.getId() %>'
+								<portlet:namespace />color: bgColor
 							}
 						}
 					);
@@ -93,10 +90,7 @@
 								'<%= saveURL %>',
 								{
 									data: {
-										<portlet:namespace />data: newValue,
-										<portlet:namespace />p_auth: '<%= AuthTokenUtil.getToken(request) %>',
-										<portlet:namespace />p_l_id: '<%= plid %>',
-										<portlet:namespace />portletId: '<%= portletDisplay.getId() %>'
+										<portlet:namespace />data: newValue
 									}
 								}
 							);
