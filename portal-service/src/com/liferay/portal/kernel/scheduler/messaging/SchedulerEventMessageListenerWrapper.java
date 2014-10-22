@@ -146,11 +146,13 @@ public class SchedulerEventMessageListenerWrapper implements MessageListener {
 	/**
 	 * @deprecated As of 7.0.0
 	 */
+	@SuppressWarnings("unused")
 	private String _groupName;
 
 	/**
 	 * @deprecated As of 7.0.0
 	 */
+	@SuppressWarnings("unused")
 	private String _jobName;
 
 	private MessageListener _messageListener;
