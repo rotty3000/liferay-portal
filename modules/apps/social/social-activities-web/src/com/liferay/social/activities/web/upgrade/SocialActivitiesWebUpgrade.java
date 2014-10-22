@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.network.utilities.web.upgrade;
+package com.liferay.social.activities.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -28,10 +28,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
+ * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = NetworkUtilitiesUpgrade.class)
-public class NetworkUtilitiesUpgrade {
+@Component(immediate = true, service = SocialActivitiesWebUpgrade.class)
+public class SocialActivitiesWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -52,9 +53,9 @@ public class NetworkUtilitiesUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"30",
-						"com_liferay_network_utilities_web_portlet_" +
-							"NetworkUtilitiesPortlet"
+						"116",
+						"com_liferay_social_activities_web_portlet_" +
+							"SocialActivitiesPortlet"
 					}
 				};
 			}
@@ -62,7 +63,7 @@ public class NetworkUtilitiesUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.network.utilities.web",
+			"com.liferay.social.activities.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

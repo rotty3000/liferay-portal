@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.web.proxy.web.upgrade;
+package com.liferay.loan.calculator.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -29,11 +29,10 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Raymond Augé
+ * @author Peter Fellwock
  */
-@Component(
-	immediate = true, service = WebProxyUpgrade.class
-)
-public class WebProxyUpgrade {
+@Component(immediate = true, service = LoanCalculatorWebUpgrade.class)
+public class LoanCalculatorWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -54,8 +53,9 @@ public class WebProxyUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"66",
-						"com_liferay_web_proxy_web_portlet_WebProxyPortlet"
+						"61",
+						"com_liferay_loan_calculator_web_portlet_" +
+							"LoanCalculatorPortlet"
 					}
 				};
 			}
@@ -63,7 +63,7 @@ public class WebProxyUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.web.proxy.web",
+			"com.liferay.loan.calculator.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

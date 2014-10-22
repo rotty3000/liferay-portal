@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.loan.calculator.web.upgrade;
+package com.liferay.network.utilities.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -28,11 +28,10 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = LoanCalculatorUpgrade.class)
-public class LoanCalculatorUpgrade {
+@Component(immediate = true, service = NetworkUtilitiesWebUpgrade.class)
+public class NetworkUtilitiesWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -41,7 +40,7 @@ public class LoanCalculatorUpgrade {
 		_releaseLocalService = releaseLocalService;
 	}
 
-	@Reference(target = "(original.bean=true)", unbind = "-")
+	@Reference(target = "(original.bean=*)", unbind = "-")
 	protected void setServletContext(ServletContext servletContext) {
 	}
 
@@ -53,9 +52,9 @@ public class LoanCalculatorUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"61",
-						"com_liferay_loan_calculator_web_portlet_" +
-							"LoanCalculatorPortlet"
+						"30",
+						"com_liferay_network_utilities_web_portlet_" +
+							"NetworkUtilitiesPortlet"
 					}
 				};
 			}
@@ -63,7 +62,7 @@ public class LoanCalculatorUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.loan.calculator.web",
+			"com.liferay.network.utilities.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

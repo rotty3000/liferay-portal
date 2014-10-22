@@ -15,7 +15,7 @@
 package com.liferay.social.activities.web.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.social.activities.web.upgrade.SocialActivitiesUpgrade;
+import com.liferay.social.activities.web.upgrade.SocialActivitiesWebUpgrade;
 
 import javax.portlet.Portlet;
 
@@ -52,8 +52,8 @@ import org.osgi.service.component.annotations.Reference;
 public class SocialActivitiesPortlet extends MVCPortlet {
 
 	@Reference(unbind = "-")
-	protected void setSocialActivitiesUpgrade(
-		SocialActivitiesUpgrade socialActivitiesUpgrade) {
+	protected void setSocialActivitiesWebUpgrade(
+		SocialActivitiesWebUpgrade socialActivitiesWebUpgrade) {
 	}
 
 }

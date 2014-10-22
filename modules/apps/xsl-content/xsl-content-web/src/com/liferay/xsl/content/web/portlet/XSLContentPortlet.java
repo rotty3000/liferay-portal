@@ -18,7 +18,7 @@ import aQute.bnd.annotation.metatype.Configurable;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.xsl.content.web.configuration.XSLContentConfiguration;
-import com.liferay.xsl.content.web.upgrade.XSLContentUpgrade;
+import com.liferay.xsl.content.web.upgrade.XSLContentWebUpgrade;
 
 import java.io.IOException;
 
@@ -90,7 +90,8 @@ public class XSLContentPortlet extends MVCPortlet {
 	}
 
 	@Reference(unbind = "-")
-	protected void setXSLContentUpgrade(XSLContentUpgrade xslContentUpgrade) {
+	protected void setXSLContentWebUpgrade(
+		XSLContentWebUpgrade xslContentWebUpgrade) {
 	}
 
 	private volatile XSLContentConfiguration _xslContentConfiguration;

@@ -17,7 +17,7 @@ package com.liferay.nested.portlets.web.portlet;
 import aQute.bnd.annotation.metatype.Configurable;
 
 import com.liferay.nested.portlets.web.configuration.NestedPortletsConfiguration;
-import com.liferay.nested.portlets.web.upgrade.NestedPortletUpgrade;
+import com.liferay.nested.portlets.web.upgrade.NestedPortletWebUpgrade;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
@@ -223,8 +223,8 @@ public class NestedPortletsPortlet extends MVCPortlet {
 	}
 
 	@Reference(unbind = "-")
-	protected void setNestedPortletUpgrade(
-		NestedPortletUpgrade nestedPortletUpgrade) {
+	protected void setNestedPortletWebUpgrade(
+		NestedPortletWebUpgrade nestedPortletWebUpgrade) {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

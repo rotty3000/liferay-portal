@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.quick.note.web.uprade;
+package com.liferay.web.proxy.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -29,10 +29,11 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Raymond Augé
- * @author Peter Fellwock
  */
-@Component(immediate = true, service = QuickNoteUpgrade.class)
-public class QuickNoteUpgrade {
+@Component(
+	immediate = true, service = WebProxyWebUpgrade.class
+)
+public class WebProxyWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -41,7 +42,7 @@ public class QuickNoteUpgrade {
 		_releaseLocalService = releaseLocalService;
 	}
 
-	@Reference(target = "(original.bean=*)", unbind = "-")
+	@Reference(target = "(original.bean=true)", unbind = "-")
 	protected void setServletContext(ServletContext servletContext) {
 	}
 
@@ -53,8 +54,8 @@ public class QuickNoteUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"97",
-						"com_liferay_quick_note_web_portlet_QuickNotePortlet"
+						"66",
+						"com_liferay_web_proxy_web_portlet_WebProxyPortlet"
 					}
 				};
 			}
@@ -62,7 +63,7 @@ public class QuickNoteUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.quick.note.web",
+			"com.liferay.web.proxy.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

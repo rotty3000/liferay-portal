@@ -15,7 +15,7 @@
 package com.liferay.quick.note.web.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.quick.note.web.uprade.QuickNoteUpgrade;
+import com.liferay.quick.note.web.uprade.QuickNoteWebUpgrade;
 
 import javax.portlet.Portlet;
 
@@ -53,7 +53,8 @@ import org.osgi.service.component.annotations.Reference;
 public class QuickNotePortlet extends MVCPortlet {
 
 	@Reference(unbind = "-")
-	protected void setQuickNoteUpgrade(QuickNoteUpgrade quickNoteUpgrade) {
+	protected void setQuickNoteWebUpgrade(
+		QuickNoteWebUpgrade quickNoteWebUpgrade) {
 	}
 
 }

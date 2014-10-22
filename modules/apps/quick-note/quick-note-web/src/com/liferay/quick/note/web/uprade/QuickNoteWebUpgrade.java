@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.social.activities.web.upgrade;
+package com.liferay.quick.note.web.uprade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -31,8 +31,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = SocialActivitiesUpgrade.class)
-public class SocialActivitiesUpgrade {
+@Component(immediate = true, service = QuickNoteWebUpgrade.class)
+public class QuickNoteWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -53,9 +53,8 @@ public class SocialActivitiesUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"116",
-						"com_liferay_social_activities_web_portlet_" +
-							"SocialActivitiesPortlet"
+						"97",
+						"com_liferay_quick_note_web_portlet_QuickNotePortlet"
 					}
 				};
 			}
@@ -63,7 +62,7 @@ public class SocialActivitiesUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.social.activities.web",
+			"com.liferay.quick.note.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

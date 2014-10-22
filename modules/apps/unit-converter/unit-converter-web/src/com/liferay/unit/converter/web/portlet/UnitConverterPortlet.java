@@ -15,7 +15,7 @@
 package com.liferay.unit.converter.web.portlet;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-import com.liferay.unit.converter.web.upgrade.UnitConverterUpgrade;
+import com.liferay.unit.converter.web.upgrade.UnitConverterWebUpgrade;
 
 import javax.portlet.Portlet;
 
@@ -49,8 +49,8 @@ import org.osgi.service.component.annotations.Reference;
 public class UnitConverterPortlet extends MVCPortlet {
 
 	@Reference(unbind = "-")
-	protected void setUnitConverterUpgrade(
-		UnitConverterUpgrade unitConvertersUpgrade) {
+	protected void setUnitConverterWebUpgrade(
+		UnitConverterWebUpgrade unitConverterWebUpgrade) {
 	}
 
 }

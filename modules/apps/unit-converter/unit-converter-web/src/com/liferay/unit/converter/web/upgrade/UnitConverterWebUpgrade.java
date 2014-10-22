@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.password.generator.web.upgrade;
+package com.liferay.unit.converter.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -31,8 +31,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = PasswordGeneratorUpgrade.class)
-public class PasswordGeneratorUpgrade {
+@Component(immediate = true, service = UnitConverterWebUpgrade.class)
+public class UnitConverterWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -53,9 +53,9 @@ public class PasswordGeneratorUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"70",
-						"com_liferay_password_generator_web_portlet_" +
-							"PasswordGeneratorPortlet"
+						"67",
+						"com_liferay_unit_converter_web_portlet_" +
+							"UnitConverterPortlet"
 					}
 				};
 			}
@@ -63,7 +63,7 @@ public class PasswordGeneratorUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.password.generator.web",
+			"com.liferay.unit.converter.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}
