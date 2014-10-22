@@ -617,7 +617,7 @@ public class HtmlImpl implements Html {
 
 	@Override
 	public String unescape(String text) {
-		return StringUtil.replace(text, "&", ";", _UNESCAPE_MAP);
+		return StringUtil.replace(text, "&", ";", _unescapeMap);
 	}
 
 	@Override
@@ -777,30 +777,30 @@ public class HtmlImpl implements Html {
 
 	private static final char[] _TAG_STYLE = {'s', 't', 'y', 'l', 'e'};
 
-	private static final Map<String, String> _UNESCAPE_MAP =
-		new HashMap<String, String>();
-
 	// See http://www.w3.org/TR/xpath20/#lexical-structure
 
 	private static final char[] _XPATH_TOKENS = {
 		'(', ')', '[', ']', '.', '@', ',', ':', '/', '|', '+', '-', '=', '!',
 		'<', '>', '*', '$', '"', '"', ' ', 9, 10, 13, 133, 8232};
 
+	private static final Map<String, String> _unescapeMap =
+		new HashMap<String, String>();
+
 	static {
-		_UNESCAPE_MAP.put("lt", "<");
-		_UNESCAPE_MAP.put("gt", ">");
-		_UNESCAPE_MAP.put("amp", "&");
-		_UNESCAPE_MAP.put("#034", "\"");
-		_UNESCAPE_MAP.put("#039", "'");
-		_UNESCAPE_MAP.put("#040", "(");
-		_UNESCAPE_MAP.put("#041", ")");
-		_UNESCAPE_MAP.put("#044", ",");
-		_UNESCAPE_MAP.put("#035", "#");
-		_UNESCAPE_MAP.put("#037", "%");
-		_UNESCAPE_MAP.put("#059", ";");
-		_UNESCAPE_MAP.put("#061", "=");
-		_UNESCAPE_MAP.put("#043", "+");
-		_UNESCAPE_MAP.put("#045", "-");
+		_unescapeMap.put("lt", "<");
+		_unescapeMap.put("gt", ">");
+		_unescapeMap.put("amp", "&");
+		_unescapeMap.put("#034", "\"");
+		_unescapeMap.put("#039", "'");
+		_unescapeMap.put("#040", "(");
+		_unescapeMap.put("#041", ")");
+		_unescapeMap.put("#044", ",");
+		_unescapeMap.put("#035", "#");
+		_unescapeMap.put("#037", "%");
+		_unescapeMap.put("#059", ";");
+		_unescapeMap.put("#061", "=");
+		_unescapeMap.put("#043", "+");
+		_unescapeMap.put("#045", "-");
 	}
 
 	private Pattern _pattern = Pattern.compile("([\\s<&]|$)");
