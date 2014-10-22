@@ -17,7 +17,6 @@ package com.liferay.portal.scheduler;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.proxy.BaseProxyBean;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
-import com.liferay.portal.kernel.scheduler.SchedulerException;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.Trigger;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
@@ -99,12 +98,12 @@ public class SchedulerEngineProxyBean
 	}
 
 	@Override
-	public void shutdown() throws SchedulerException {
+	public void shutdown() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void start() throws SchedulerException {
+	public void start() {
 		throw new UnsupportedOperationException();
 	}
 
