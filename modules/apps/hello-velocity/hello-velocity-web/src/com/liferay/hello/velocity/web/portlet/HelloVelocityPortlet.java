@@ -14,7 +14,7 @@
 
 package com.liferay.hello.velocity.web.portlet;
 
-import com.liferay.hello.velocity.web.upgrade.HelloVelocityUpgrade;
+import com.liferay.hello.velocity.web.upgrade.HelloVelocityWebUpgrade;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -91,8 +91,8 @@ public class HelloVelocityPortlet extends VelocityPortlet {
 	}
 
 	@Reference(unbind = "-")
-	protected void setHelloVelocityUpgrade(
-		HelloVelocityUpgrade helloVelocityUpgrade) {
+	protected void setHelloVelocityWebUpgrade(
+		HelloVelocityWebUpgrade helloVelocityWebUpgrade) {
 	}
 
 }

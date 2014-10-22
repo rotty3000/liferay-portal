@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true, service = HelloVelocityUpgrade.class
+	immediate = true, service = HelloVelocityWebUpgrade.class
 )
-public class HelloVelocityUpgrade {
+public class HelloVelocityWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
