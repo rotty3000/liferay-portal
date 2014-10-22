@@ -81,22 +81,28 @@ public class NettyFabricWorkerConfigTest {
 
 	@Test
 	public void testSerialization() throws ProcessException {
-		long id = 10;
+		Builder builder = new Builder();
 
 		List<String> arguments = Arrays.asList("x", "y", "z");
 
-		String bootstrapClassPath = "bootstrapClassPath";
-		String javaExecutable = "java";
-		String runtimeClassPath = "runtimeClassPath";
-
-		Builder builder = new Builder();
-
 		builder.setArguments(arguments);
+
+		String bootstrapClassPath = "bootstrapClassPath";
+
 		builder.setBootstrapClassPath(bootstrapClassPath);
+
+		String javaExecutable = "java";
+
 		builder.setJavaExecutable(javaExecutable);
+
 		builder.setReactClassLoader(
 			NettyFabricWorkerConfigTest.class.getClassLoader());
+
+		String runtimeClassPath = "runtimeClassPath";
+
 		builder.setRuntimeClassPath(runtimeClassPath);
+
+		long id = 10;
 
 		ProcessCallable<String> processCallable =
 			new ReturnProcessCallable<String>("Test ProcessCallable");
