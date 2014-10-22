@@ -65,8 +65,8 @@ public class NettyFabricWorkerConfigTest {
 			Assert.assertEquals("Process callable is null", npe.getMessage());
 		}
 
-		ProcessCallable<String> processCallable = new ReturnProcessCallable(
-			null);
+		ProcessCallable<String> processCallable =
+			new ReturnProcessCallable<String>(null);
 
 		NettyFabricWorkerConfig<String> nettyFabricWorkerConfig =
 			new NettyFabricWorkerConfig<String>(
@@ -98,8 +98,8 @@ public class NettyFabricWorkerConfigTest {
 			NettyFabricWorkerConfigTest.class.getClassLoader());
 		builder.setRuntimeClassPath(runtimeClassPath);
 
-		ProcessCallable<String> processCallable = new ReturnProcessCallable(
-			"Test ProcessCallable");
+		ProcessCallable<String> processCallable =
+			new ReturnProcessCallable<String>("Test ProcessCallable");
 
 		NettyFabricWorkerConfig<String> copyNettyFabricWorkerConfig =
 			(NettyFabricWorkerConfig<String>)SerializableUtil.deserialize(

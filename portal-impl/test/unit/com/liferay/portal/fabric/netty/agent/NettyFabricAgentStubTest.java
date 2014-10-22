@@ -153,6 +153,7 @@ public class NettyFabricAgentStubTest {
 				@OutputResource
 				private final File _testOutput1 = testFile1;
 
+				@SuppressWarnings("unused")
 				private final File _testOutput2 = testFile2;
 
 				@OutputResource
@@ -180,8 +181,8 @@ public class NettyFabricAgentStubTest {
 						return;
 					}
 
-					NettyFabricWorkerConfig nettyFabricWorkerConfig =
-						(NettyFabricWorkerConfig)obj;
+					NettyFabricWorkerConfig<?> nettyFabricWorkerConfig =
+						(NettyFabricWorkerConfig<?>)obj;
 
 					nettyFabricAgentStub.finsihStartup(
 						nettyFabricWorkerConfig.getId());
