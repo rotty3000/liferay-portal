@@ -176,17 +176,17 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		AssetEntry assetEntry = AssetEntryLocalServiceUtil.fetchEntry(
 			assetEntryId);
 
-		JournalArticleAssetRendererFactory journalArticleAssetRendererFactory =
+		JournalArticleAssetRendererFactory articleAssetRendererFactory =
 			(JournalArticleAssetRendererFactory)
 				AssetRendererFactoryRegistryUtil.
 					getAssetRendererFactoryByClassName(
 						JournalArticle.class.getName());
 
-		JournalArticleAssetRenderer journalArticleAssetRenderer =
-			(JournalArticleAssetRenderer)journalArticleAssetRendererFactory.
+		JournalArticleAssetRenderer articleAssetRenderer =
+			(JournalArticleAssetRenderer)articleAssetRendererFactory.
 				getAssetRenderer(assetEntry.getClassPK());
 
-		JournalArticle article = journalArticleAssetRenderer.getArticle();
+		JournalArticle article = articleAssetRenderer.getArticle();
 
 		return StringUtil.toUpperCase(article.getArticleId());
 	}
