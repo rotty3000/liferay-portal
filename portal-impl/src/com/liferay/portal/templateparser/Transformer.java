@@ -155,6 +155,7 @@ public class Transformer {
 		long companyGroupId = 0;
 		long scopeGroupId = 0;
 		long siteGroupId = 0;
+		long classNameId = 0;
 
 		if (themeDisplay != null) {
 			companyId = themeDisplay.getCompanyId();
@@ -179,13 +180,18 @@ public class Transformer {
 				for (String key : contextObjects.keySet()) {
 					template.put(key, contextObjects.get(key));
 				}
+
+				classNameId = GetterUtil.getLong(
+					contextObjects.get(
+						TemplateConstants.TEMPLATE_CLASS_NAME_ID));
 			}
 
 			template.put("company", getCompany(themeDisplay, companyId));
 			template.put("companyId", companyId);
 			template.put("device", getDevice(themeDisplay));
 
-			String templatesPath = getTemplatesPath(companyId, scopeGroupId);
+			String templatesPath = getTemplatesPath(
+				companyId, scopeGroupId, classNameId);
 
 			template.put(
 				"permissionChecker",
@@ -397,14 +403,18 @@ public class Transformer {
 		return templateNodes;
 	}
 
-	protected String getTemplatesPath(long companyId, long groupId) {
-		StringBundler sb = new StringBundler(5);
+	protected String getTemplatesPath(
+		long companyId, long groupId, long classNameId) {
+
+		StringBundler sb = new StringBundler(6);
 
 		sb.append(TemplateConstants.TEMPLATE_SEPARATOR);
 		sb.append(StringPool.SLASH);
 		sb.append(companyId);
 		sb.append(StringPool.SLASH);
 		sb.append(groupId);
+		sb.append(StringPool.SLASH);
+		sb.append(classNameId);
 
 		return sb.toString();
 	}
@@ -562,6 +572,7 @@ public class Transformer {
 			long companyId = 0;
 			long companyGroupId = 0;
 			long articleGroupId = 0;
+			long classNameId = 0;
 
 			if (tokens != null) {
 				companyId = GetterUtil.getLong(tokens.get("company_id"));
@@ -569,6 +580,8 @@ public class Transformer {
 					tokens.get("company_group_id"));
 				articleGroupId = GetterUtil.getLong(
 					tokens.get("article_group_id"));
+				classNameId = GetterUtil.getLong(
+					tokens.get(TemplateConstants.TEMPLATE_CLASS_NAME_ID));
 			}
 
 			long scopeGroupId = 0;
@@ -635,7 +648,7 @@ public class Transformer {
 				template.put("device", getDevice(themeDisplay));
 
 				String templatesPath = getTemplatesPath(
-					companyId, articleGroupId);
+					companyId, articleGroupId, classNameId);
 
 				Locale locale = LocaleUtil.fromLanguageId(languageId);
 
