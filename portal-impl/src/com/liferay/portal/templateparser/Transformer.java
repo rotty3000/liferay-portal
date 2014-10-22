@@ -183,8 +183,7 @@ public class Transformer {
 				}
 
 				classNameId = GetterUtil.getLong(
-					contextObjects.get(
-						TemplateConstants.CLASS_NAME_ID));
+					contextObjects.get(TemplateConstants.CLASS_NAME_ID));
 			}
 
 			template.put("company", getCompany(themeDisplay, companyId));

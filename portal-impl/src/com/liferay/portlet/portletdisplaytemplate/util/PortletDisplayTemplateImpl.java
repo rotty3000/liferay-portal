@@ -340,8 +340,7 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 			ddmTemplateId);
 
 		contextObjects.put(
-			TemplateConstants.CLASS_NAME_ID,
-			ddmTemplate.getClassNameId());
+			TemplateConstants.CLASS_NAME_ID, ddmTemplate.getClassNameId());
 
 		String language = ddmTemplate.getLanguage();
 

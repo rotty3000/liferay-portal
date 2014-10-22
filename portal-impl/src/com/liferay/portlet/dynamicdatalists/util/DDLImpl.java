@@ -337,8 +337,7 @@ public class DDLImpl implements DDL {
 			ddmTemplateId);
 
 		contextObjects.put(
-			TemplateConstants.CLASS_NAME_ID,
-			ddmTemplate.getClassNameId());
+			TemplateConstants.CLASS_NAME_ID, ddmTemplate.getClassNameId());
 
 		return _transformer.transform(
 			themeDisplay, contextObjects, ddmTemplate.getScript(),
