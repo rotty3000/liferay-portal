@@ -14,12 +14,12 @@
 
 package com.liferay.unit.converter.web.util;
 
-import com.liferay.unit.converter.web.model.Conversion;
+import com.liferay.unit.converter.web.model.UnitConverter;
 
 /**
  * @author James Lefeu
  */
-public class ConverterUtil {
+public class UnitConverterUtil {
 
 	public static final int TEMPERATURE_CELSIUS = 1;
 
@@ -47,7 +47,7 @@ public class ConverterUtil {
 		return (fromValue / _VOLUME[fromId]) * _VOLUME[toId];
 	}
 
-	public static Conversion getConversion(
+	public static UnitConverter getUnitConverter(
 		int type, int fromId, int toId, double fromValue) {
 
 		double toValue = 0;
@@ -68,7 +68,7 @@ public class ConverterUtil {
 			toValue = convertTemperature(fromId, toId, fromValue);
 		}
 
-		return new Conversion(type, fromId, toId, fromValue, toValue);
+		return new UnitConverter(type, fromId, toId, fromValue, toValue);
 	}
 
 	private static final double _fromTemperature(int toId, double fromValue) {

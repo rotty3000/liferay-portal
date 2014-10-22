@@ -24,8 +24,8 @@
 
 <%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.unit.converter.web.model.Conversion" %><%@
-page import="com.liferay.unit.converter.web.util.ConverterUtil" %>
+page import="com.liferay.unit.converter.web.model.UnitConverter" %><%@
+page import="com.liferay.unit.converter.web.util.UnitConverterUtil" %>
 
 <%@ page import="javax.portlet.WindowState" %>
 
@@ -36,4 +36,4 @@ page import="com.liferay.unit.converter.web.util.ConverterUtil" %>
 WindowState windowState = liferayPortletRequest.getWindowState();
 %>
 
-<%@ include file="init-ext.jsp" %>
+<%@ include file="/init-ext.jsp" %>

@@ -22,7 +22,7 @@ int fromId = ParamUtil.getInteger(request, "fromUnit");
 int toId = ParamUtil.getInteger(request, "toUnit");
 double fromValue = ParamUtil.getDouble(request, "fromValue");
 
-Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValue);
+UnitConverter unitConverter = UnitConverterUtil.getUnitConverter(type, fromId, toId, fromValue);
 %>
 
 <portlet:renderURL var="unitURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>" />
@@ -30,7 +30,7 @@ Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValu
 <aui:form action="<%= unitURL %>" id="fm" method="post" name="fm">
 	<aui:row>
 		<aui:col xs="6">
-			<aui:input label="from" name="fromValue" size="30" type="number" value="<%= conversion.getFromValue() %>" />
+			<aui:input label="from" name="fromValue" size="30" type="number" value="<%= unitConverter.getFromValue() %>" />
 
 			<aui:select label="" name="fromUnit">
 				<c:if test="<%= type == 0 %>">
@@ -95,7 +95,7 @@ Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValu
 		</aui:col>
 
 		<aui:col xs="6">
-			<aui:input disabled="<%= true %>" label="To" name="toValue" size="30" type="input" value="<%= conversion.getToValue() %>" />
+			<aui:input disabled="<%= true %>" label="To" name="toValue" size="30" type="input" value="<%= unitConverter.getToValue() %>" />
 
 			<aui:select label="" name="toUnit">
 				<c:if test="<%= type == 0 %>">
@@ -247,7 +247,7 @@ Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValu
 		'<liferay-ui:message key="reaumure" />'
 	];
 
-	var conversionTypes = [lengthArray, areaArray, volumeArray, massArray, temperatureArray];
+	var unitConverterTypes = [lengthArray, areaArray, volumeArray, massArray, temperatureArray];
 
 	var selectType = A.one('#<portlet:namespace />type');
 
@@ -256,11 +256,11 @@ Conversion conversion = ConverterUtil.getConversion(type, fromId, toId, fromValu
 		function(event) {
 			var value = event.currentTarget.val();
 
-			var conversionType = conversionTypes[value];
+			var unitConverterType = unitConverterTypes[value];
 
-			if (conversionType) {
-				setBox(document.<portlet:namespace />fm.<portlet:namespace />fromUnit, conversionType);
-				setBox(document.<portlet:namespace />fm.<portlet:namespace />toUnit, conversionType);
+			if (unitConverterType) {
+				setBox(document.<portlet:namespace />fm.<portlet:namespace />fromUnit, unitConverterType);
+				setBox(document.<portlet:namespace />fm.<portlet:namespace />toUnit, unitConverterType);
 			}
 		}
 	);

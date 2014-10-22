@@ -17,16 +17,16 @@ package com.liferay.unit.converter.web.model;
 /**
  * @author James Lefeu
  */
-public class Conversion {
+public class UnitConverter {
 
-	public Conversion(int type, int fromId, int toId, double fromValue) {
+	public UnitConverter(int type, int fromId, int toId, double fromValue) {
 		_type = type;
 		_fromId = fromId;
 		_toId = toId;
 		_fromValue = fromValue;
 	}
 
-	public Conversion(
+	public UnitConverter(
 		int type, int fromId, int toId, double fromValue, double toValue) {
 
 		_type = type;
