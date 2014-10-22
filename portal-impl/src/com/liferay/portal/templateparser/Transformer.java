@@ -184,7 +184,7 @@ public class Transformer {
 
 				classNameId = GetterUtil.getLong(
 					contextObjects.get(
-						TemplateConstants.TEMPLATE_CLASS_NAME_ID));
+						TemplateConstants.CLASS_NAME_ID));
 			}
 
 			template.put("company", getCompany(themeDisplay, companyId));
@@ -582,7 +582,7 @@ public class Transformer {
 				articleGroupId = GetterUtil.getLong(
 					tokens.get("article_group_id"));
 				classNameId = GetterUtil.getLong(
-					tokens.get(TemplateConstants.TEMPLATE_CLASS_NAME_ID));
+					tokens.get(TemplateConstants.CLASS_NAME_ID));
 			}
 
 			long scopeGroupId = 0;

@@ -6521,13 +6521,12 @@ public class JournalArticleLocalServiceImpl
 		}
 
 		tokens.put(
-			"article_resource_pk",
-			String.valueOf(article.getResourcePrimKey()));
-
-		tokens.put(
-			TemplateConstants.TEMPLATE_CLASS_NAME_ID,
+			TemplateConstants.CLASS_NAME_ID,
 			String.valueOf(
 				classNameLocalService.getClassNameId(DDMStructure.class)));
+		tokens.put(
+			"article_resource_pk",
+			String.valueOf(article.getResourcePrimKey()));
 
 		String defaultDDMTemplateKey = article.getDDMTemplateKey();
 

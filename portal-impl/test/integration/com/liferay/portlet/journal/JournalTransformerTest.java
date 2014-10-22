@@ -275,7 +275,7 @@ public class JournalTransformerTest {
 		tokens.put(
 			"company_id", String.valueOf(TestPropsValues.getCompanyId()));
 		tokens.put(
-			TemplateConstants.TEMPLATE_CLASS_NAME_ID,
+			TemplateConstants.CLASS_NAME_ID,
 			String.valueOf(
 				ClassNameLocalServiceUtil.getClassNameId(
 					DDMStructure.class.getName())));
