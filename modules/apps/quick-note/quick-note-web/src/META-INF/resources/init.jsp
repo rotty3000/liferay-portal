@@ -41,4 +41,4 @@ String color = portletPreferences.getValue("color", "#FFFFCC");
 String data = portletPreferences.getValue("data", LanguageUtil.get(request, "click-to-edit-me"));
 %>
 
-<%@ include file="init-ext.jsp" %>
+<%@ include file="/init-ext.jsp" %>
