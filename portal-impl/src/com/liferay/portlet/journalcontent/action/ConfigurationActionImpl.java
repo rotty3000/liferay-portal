@@ -28,19 +28,17 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.ServiceBeanMethodInvocationFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.WebKeys;
+import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
-import com.liferay.portlet.journal.NoSuchArticleException;
+import com.liferay.portlet.journal.asset.JournalArticleAssetRenderer;
+import com.liferay.portlet.journal.asset.JournalArticleAssetRendererFactory;
 import com.liferay.portlet.journal.model.JournalArticle;
-import com.liferay.portlet.journal.model.JournalArticleResource;
-import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil;
 
 import java.lang.reflect.Method;
 
@@ -178,21 +176,17 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		AssetEntry assetEntry = AssetEntryLocalServiceUtil.fetchEntry(
 			assetEntryId);
 
-		JournalArticle article = null;
+		JournalArticleAssetRendererFactory journalArticleAssetRendererFactory =
+			(JournalArticleAssetRendererFactory)
+				AssetRendererFactoryRegistryUtil.
+					getAssetRendererFactoryByClassName(
+						JournalArticle.class.getName());
 
-		try {
-			article = JournalArticleLocalServiceUtil.getArticle(
-				assetEntry.getClassPK());
-		}
-		catch (NoSuchArticleException nsae1) {
-			JournalArticleResource articleResource =
-				JournalArticleResourceLocalServiceUtil.getArticleResource(
-					assetEntry.getClassPK());
+		JournalArticleAssetRenderer journalArticleAssetRenderer =
+			(JournalArticleAssetRenderer)journalArticleAssetRendererFactory.
+				getAssetRenderer(assetEntry.getClassPK());
 
-			article = JournalArticleLocalServiceUtil.getLatestArticle(
-				articleResource.getGroupId(), articleResource.getArticleId(),
-				WorkflowConstants.STATUS_APPROVED);
-		}
+		JournalArticle article = journalArticleAssetRenderer.getArticle();
 
 		return StringUtil.toUpperCase(article.getArticleId());
 	}

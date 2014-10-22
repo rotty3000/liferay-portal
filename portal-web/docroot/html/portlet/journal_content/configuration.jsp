@@ -149,7 +149,7 @@ String ddmTemplateKey = journalContentDisplayContext.getDDMTemplateKey();
 	A.one('#<portlet:namespace />webContentSelector').on(
 		'click',
 		function(event) {
-	        event.preventDefault();
+			event.preventDefault();
 
 			var currentTarget = event.currentTarget;
 
