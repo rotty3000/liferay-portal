@@ -72,7 +72,7 @@ public class DDMTemplateResourceParser implements TemplateResourceParser {
 				_log.debug(
 					"Loading {companyId=" + companyId + ", groupId=" +
 						groupId + ", classNameId=" + classNameId +
-						", ddmTemplateKey=" + ddmTemplateKey + "}");
+							", ddmTemplateKey=" + ddmTemplateKey + "}");
 			}
 
 			DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.fetchTemplate(
