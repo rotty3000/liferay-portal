@@ -22,16 +22,12 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%@ page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
-page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
+<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.security.auth.AuthTokenUtil" %>
 
-<%@ page import="javax.portlet.ActionRequest" %><%@
-page import="javax.portlet.ResourceURL" %><%@
-page import="javax.portlet.ValidatorException" %><%@
-page import="javax.portlet.WindowState" %>
+<%@ page import="javax.portlet.ActionRequest" %>
 
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
