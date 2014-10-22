@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.iframe.web.upgrade;
+package com.liferay.invitation.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true, service = IFrameUpgrade.class
+	immediate = true, service = InvitationWebUpgrade.class
 )
-public class IFrameUpgrade {
+public class InvitationWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -55,7 +55,8 @@ public class IFrameUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"48", "com_liferay_iframe_web_portlet_IFramePortlet"
+						"100",
+						"com_liferay_invitation_web_portlet_InvitationPortlet"
 					}
 				};
 			}
@@ -63,7 +64,7 @@ public class IFrameUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.iframe.web",
+			"com.liferay.invitation.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}

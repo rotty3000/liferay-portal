@@ -14,7 +14,7 @@
 
 package com.liferay.iframe.web.portlet;
 
-import com.liferay.iframe.web.upgrade.IFrameUpgrade;
+import com.liferay.iframe.web.upgrade.IFrameWebUpgrade;
 import com.liferay.iframe.web.util.IFrameUtil;
 import com.liferay.iframe.web.util.IFrameWebKeys;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -135,7 +135,7 @@ public class IFramePortlet extends MVCPortlet {
 	}
 
 	@Reference(unbind = "-")
-	protected void setIFrameUpgrade(IFrameUpgrade iFrameUpgrade) {
+	protected void setIFrameWebUpgrade(IFrameWebUpgrade iFrameWebUpgrade) {
 	}
 
 	protected String transformSrc(

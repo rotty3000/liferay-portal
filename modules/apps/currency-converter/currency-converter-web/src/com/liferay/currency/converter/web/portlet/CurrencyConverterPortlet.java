@@ -14,7 +14,7 @@
 
 package com.liferay.currency.converter.web.portlet;
 
-import com.liferay.currency.converter.web.upgrade.CurrencyConverterUpgrade;
+import com.liferay.currency.converter.web.upgrade.CurrencyConverterWebUpgrade;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
@@ -55,8 +55,8 @@ import org.osgi.service.component.annotations.Reference;
 public class CurrencyConverterPortlet extends MVCPortlet {
 
 	@Reference(unbind = "-")
-	protected void setCurrencyConverterUpgrade(
-		CurrencyConverterUpgrade currencyConverterUpgrade) {
+	protected void setCurrencyConverterWebUpgrade(
+		CurrencyConverterWebUpgrade currencyConverterWebUpgrade) {
 	}
 
 }

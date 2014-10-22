@@ -32,9 +32,9 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true, service = DictionaryUpgrade.class
+	immediate = true, service = DictionaryWebUpgrade.class
 )
-public class DictionaryUpgrade {
+public class DictionaryWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(

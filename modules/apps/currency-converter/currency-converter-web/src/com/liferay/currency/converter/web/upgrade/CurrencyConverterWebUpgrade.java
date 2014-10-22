@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.invitation.web.upgrade;
+package com.liferay.currency.converter.web.upgrade;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -31,10 +31,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(
-	immediate = true, service = InvitationUpgrade.class
-)
-public class InvitationUpgrade {
+@Component(immediate = true, service = CurrencyConverterWebUpgrade.class)
+public class CurrencyConverterWebUpgrade {
 
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
@@ -55,8 +53,9 @@ public class InvitationUpgrade {
 			protected String[][] getRenamePortletIdsArray() {
 				return new String[][] {
 					new String[] {
-						"100",
-						"com_liferay_invitation_web_portlet_InvitationPortlet"
+						"67",
+						"com_liferay_currency_converter_web_portlet_" +
+							"CurrencyConverterPortlet"
 					}
 				};
 			}
@@ -64,7 +63,7 @@ public class InvitationUpgrade {
 		};
 
 		_releaseLocalService.updateRelease(
-			"com.liferay.invitation.web",
+			"com.liferay.currency.converter.web",
 			Collections.<UpgradeProcess>singletonList(upgradePortletId), 1, 0,
 			false);
 	}
