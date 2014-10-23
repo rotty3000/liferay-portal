@@ -50,7 +50,7 @@ public class NettyFabricWorkerBridgeRPCCallable<T extends Serializable>
 
 		if (fabricWorker == null) {
 			throw new ProcessException(
-				"Unable to locate fabric worker with id " + _id);
+				"Unable to locate fabric worker with ID " + _id);
 		}
 
 		NoticeableFuture<T> noticeableFuture = fabricWorker.write(
