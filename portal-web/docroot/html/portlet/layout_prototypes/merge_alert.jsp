@@ -58,9 +58,7 @@ int mergeFailCount = SitesUtil.getMergeFailCount(layoutPrototype);
 	</span>
 
 	<aui:script>
-		var resetButton= AUI.$('#<%= randomNamespace %>resetButton');
-
-		resetButton.on(
+		AUI.$('#<%= randomNamespace %>resetButton').on(
 			'click',
 			function(event) {
 				submitForm(document.hrefFm, '<%= portletURL.toString() %>');
