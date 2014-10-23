@@ -75,7 +75,7 @@ public class DDLRecordServiceTest extends BaseDDLServiceTestCase {
 		Assert.assertTrue(recordVersion.isDraft());
 
 		record = updateRecord(
-			record.getRecordId(), record.getFields(),
+			record.getRecordId(), record.getDDMFormValues(),
 			WorkflowConstants.ACTION_PUBLISH);
 
 		Assert.assertEquals(
