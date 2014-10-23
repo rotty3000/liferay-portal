@@ -55,7 +55,7 @@ public class MinSystemCPULoadFabricAgentSelectorTest {
 			fabricAgentSelector.select(
 				Collections.<FabricAgent>emptySet(), null));
 
-		// null VS null
+		// null vs. null
 
 		FabricAgent fabricAgent1 = createFabricAgent(null);
 		FabricAgent fabricAgent2 = createFabricAgent(null);
@@ -70,7 +70,7 @@ public class MinSystemCPULoadFabricAgentSelectorTest {
 
 		Assert.assertSame(fabricAgent1, iterator.next());
 
-		// null VS 1
+		// null vs. 1
 
 		fabricAgent1 = createFabricAgent(null);
 		fabricAgent2 = createFabricAgent(1D);
@@ -85,7 +85,7 @@ public class MinSystemCPULoadFabricAgentSelectorTest {
 
 		Assert.assertSame(fabricAgent2, iterator.next());
 
-		// 1 VS null
+		// 1 vs. null
 
 		fabricAgent1 = createFabricAgent(1D);
 		fabricAgent2 = createFabricAgent(null);
@@ -100,7 +100,7 @@ public class MinSystemCPULoadFabricAgentSelectorTest {
 
 		Assert.assertSame(fabricAgent1, iterator.next());
 
-		// 1 VS 2
+		// 1 vs. 2
 
 		fabricAgent1 = createFabricAgent(1D);
 		fabricAgent2 = createFabricAgent(2D);
