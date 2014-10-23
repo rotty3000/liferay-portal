@@ -78,6 +78,8 @@ public class MessageSenderJob implements Job {
 
 		message.put(SchedulerEngine.DESTINATION_NAME, destinationName);
 
+		JobKey jobKey = jobDetail.getKey();
+
 		Map<String, Object> jobStateMap = (Map<String, Object>)jobDataMap.get(
 			SchedulerEngine.JOB_STATE);
 
@@ -85,8 +87,6 @@ public class MessageSenderJob implements Job {
 
 		StorageType storageType = StorageType.valueOf(
 			jobDataMap.getString(SchedulerEngine.STORAGE_TYPE));
-
-		JobKey jobKey = jobDetail.getKey();
 
 		if (jobExecutionContext.getNextFireTime() == null) {
 			message.put(SchedulerEngine.DISABLE, true);
