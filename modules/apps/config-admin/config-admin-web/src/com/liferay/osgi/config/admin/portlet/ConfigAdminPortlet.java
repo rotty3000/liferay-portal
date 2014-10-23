@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.PortletApp;
@@ -33,10 +34,10 @@ import com.liferay.util.bridges.freemarker.FreeMarkerPortlet;
 
 import java.io.IOException;
 
-import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import java.net.URL;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
@@ -180,6 +181,8 @@ public class ConfigAdminPortlet extends FreeMarkerPortlet {
 			renderRequest.setAttribute("servicePID", pid);
 			renderRequest.setAttribute("factoryPID", StringPool.BLANK);
 		}
+
+		renderRequest.setAttribute("randomNamespace", StringUtil.randomId());
 
 		if ("/edit_attributes.ftl".equals(path)) {
 			ObjectClassDefinitionsHelper ocdHelper =

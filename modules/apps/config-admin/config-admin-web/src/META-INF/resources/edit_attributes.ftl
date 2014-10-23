@@ -20,7 +20,7 @@
 <#assign editingHeaderTitle = Request["editingHeaderTitle"] />
 <#assign pid = Request["servicePID"] />
 <#assign factoryPid = Request["factoryPID"] />
-
+<#assign randomNamespace = Request["randomNamespace"]/>
 <#assign redirectURL = renderResponse.createRenderURL() />
 
 <@portlet["actionURL"] name="bindConfiguration" varImpl="bindConfigActionURL"/>
@@ -35,9 +35,16 @@
 
 <@aui["form"] method="post" name="fm" action="${bindConfigActionURL}" onSubmit=jsFormSubmit>
 
-	<@aui["fieldset"]>
-		${configurationFormBuilder.renderServiceConfigurationForm(pid, renderRequest, renderResponse)}
-	</@>
+	<div class="lfr-ddm-container" id="${randomNamespace}">
+
+	${configurationFormBuilder.renderServiceConfigurationForm(pid, renderRequest, renderResponse)}
+
+	</div>
+
+
+	<#assign configFieldJSON = Request["configFieldJSON"] />
+	<#assign scopeGroupId = Request["scopeGroupId"] />
+	<#assign plId = Request["plId"] />
 
 	<#assign configFieldJSON = Request["configFieldJSON"] />
 	<#assign scopeGroupId = Request["scopeGroupId"] />
@@ -72,6 +79,10 @@
 
 	<@aui["input"] name="redirect" type="hidden" value="${redirectURL}" />
 
+	<@aui["input"] name="configFields" type="hidden" />
+
+	<@aui["input"] name="fieldNamespace" type="hidden"/>
+
 	<#if pid??>
 	<@aui["input"] name="pid" type="hidden" value="${pid}" />
 	</#if>
@@ -79,10 +90,6 @@
 	<#if factoryPid??>
 	<@aui["input"] name="factoryPid" type="hidden" value="${factoryPid}" />
 	</#if>
-
-
-	<@aui["input"] name="fieldNamespace" type="hidden" value="" />
-
 
 	<@aui["button-row"]>
 		<#assign bindAttributesOnClickValue = renderResponse.getNamespace() + "bindConfig();">
@@ -97,20 +104,33 @@
 </@>
 
 
-<@aui["script"] use="aui-base">
+<@aui["script"] use="aui-base,liferay-ddm-form">
+
+	new Liferay.DDM.Form(
+				{
+					container: '#${randomNamespace}',
+					ddmFormValuesInput: '#<@portlet["namespace"]/>configFields',
+					definition: ${configFieldJSON},
+					doAsGroupId: ${scopeGroupId},
+					p_l_id: ${plId},
+					portletNamespace: '<@portlet["namespace"]/>',
+					repeatable: true
+				}
+			);
+
 	Liferay.provide(
 		window,
 		'<@portlet["namespace"] />deleteConfig',
 		function() {
 			var actionURL = "${deleteConfigActionURL?js_string}";
-			<@portlet["namespace"] />setDDMFieldNamespaceAndSubmit(actionURL);
+			<@portlet["namespace"] />setActionURLAndSubmit(actionURL);
 		},
 		['liferay-util-list-fields']
 	);
 
-	//Set the DDMFormField Namespace and submit the form
+	//Set the actionurl/fieldNamespace and submit the form
 
-	<@portlet["namespace"] />setDDMFieldNamespaceAndSubmit = function(actionURL){
+	<@portlet["namespace"] />setActionURLAndSubmit = function(actionURL){
 
 		var fromGroupDiv = A.one('div.form-group.field-wrapper');
 
@@ -118,12 +138,11 @@
 
 		document.<@portlet["namespace"] />fm.<@portlet["namespace"] />fieldNamespace.value = fieldNSValue;
 
-		if(fieldNSValue){
-			if(actionURL){
-				document.<@portlet["namespace"] />fm.action=actionURL;
-			}
+		if(actionURL && fieldNSValue ){
+			document.<@portlet["namespace"] />fm.action=actionURL;
 			submitForm(document.<@portlet["namespace"] />fm);
 		}
+
 	}
 
 </@>

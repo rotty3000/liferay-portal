@@ -79,6 +79,7 @@ public class MetaTypeFormUtil {
 		for (AttributeDefinition attributeDefinition : attributeDefinitions) {
 			String id = attributeDefinition.getID();
 			String type = _attributeToDDMType(attributeDefinition);
+			int cardinality = attributeDefinition.getCardinality();
 
 			DDMFormField ddmFormField = new DDMFormField(id, type);
 
@@ -122,7 +123,6 @@ public class MetaTypeFormUtil {
 				}
 			}
 			else {
-				//Set predefined value
 				ddmFormField.setPredefinedValue(predefinedValue);
 			}
 
@@ -133,8 +133,6 @@ public class MetaTypeFormUtil {
 			}
 
 			ddmFormField.setShowLabel(true);
-
-			int cardinality = attributeDefinition.getCardinality();
 
 			if (cardinality != 0) {
 				ddmFormField.setRepeatable(true);
