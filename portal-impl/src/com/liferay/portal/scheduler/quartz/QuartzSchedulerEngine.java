@@ -986,6 +986,7 @@ public class QuartzSchedulerEngine implements SchedulerEngine {
 			JobBuilder jobBuilder = JobBuilder.newJob(MessageSenderJob.class);
 
 			jobBuilder.withIdentity(trigger.getJobKey());
+
 			jobBuilder.storeDurably();
 
 			JobDetail jobDetail = jobBuilder.build();
