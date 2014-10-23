@@ -398,20 +398,21 @@ if (feed != null) {
 	contentFieldSelector.on(
 		'change',
 		function() {
+			var rendererTemplateIdValue = '';
+
 			var selectedFeedItemOption = contentFieldSelector.find(':selected');
 
-			var rendererTemplateIdValue = '';
 			var contentFieldValue = selectedFeedItemOption.val();
 
 			var renderedWebContent = '<%= JournalFeedConstants.RENDERED_WEB_CONTENT %>';
 
 			if (selectedFeedItemOption.data('contentfield') === renderedWebContent) {
-				rendererTemplateIdValue = contentFieldValue;
 				contentFieldValue = renderedWebContent;
+				rendererTemplateIdValue = contentFieldValue;
 			}
 
-			form.fm('rendererTemplateId').val(rendererTemplateIdValue);
 			form.fm('contentField').val(contentFieldValue);
+			form.fm('rendererTemplateId').val(rendererTemplateIdValue);
 		}
 	);
 </aui:script>
