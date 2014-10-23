@@ -175,6 +175,13 @@ public class Time {
 	}
 
 	public static String getRelativeTimeDescription(
+		Date date, Locale locale, TimeZone timeZone, Format dateTimeFormat) {
+
+		return getRelativeTimeDescription(
+			date.getTime(), locale, timeZone, dateTimeFormat);
+	}
+
+	public static String getRelativeTimeDescription(
 		long milliseconds, Locale locale, TimeZone timeZone) {
 
 		return getRelativeTimeDescription(milliseconds, locale, timeZone, null);
