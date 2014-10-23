@@ -100,8 +100,8 @@ public class SchedulerEventMessageListenerWrapper implements MessageListener {
 				catch (SchedulerException se) {
 					if (_log.isInfoEnabled()) {
 						_log.info(
-							"Unable to delete job with name '" + jobName +
-								"' in group '" + groupName + "'",
+							"Unable to delete job " + jobName + " in group " +
+								groupName,
 							se);
 					}
 				}
