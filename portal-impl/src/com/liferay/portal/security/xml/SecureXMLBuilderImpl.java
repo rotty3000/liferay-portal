@@ -31,7 +31,7 @@ public class SecureXMLBuilderImpl implements SecureXMLBuilder {
 
 	@Override
 	public XMLInputFactory newXMLInputFactory() {
-		return null;
+		return XMLInputFactory.newFactory();
 	}
 
 	@Override
