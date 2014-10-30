@@ -36,6 +36,8 @@ import com.liferay.portal.security.auth.DefaultFullNameGenerator;
 import com.liferay.portal.security.auth.FullNameGenerator;
 import com.liferay.portal.security.permission.ResourceActionsImpl;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
+import com.liferay.portal.security.xml.SecureXMLBuilderImpl;
+import com.liferay.portal.security.xml.SecureXMLBuilderUtil;
 import com.liferay.portal.service.permission.PortletPermissionImpl;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.util.DigesterImpl;
@@ -109,7 +111,7 @@ public class ToolDependencies {
 
 		ModelHintsImpl modelHintsImpl = new ModelHintsImpl();
 
-		SAXReaderImpl saxReaderImpl = new SAXReaderImpl();
+		SAXReaderImpl saxReaderImpl = SAXReaderImpl.getInstance();
 
 		modelHintsImpl.setSAXReader(saxReaderImpl);
 
@@ -134,6 +136,12 @@ public class ToolDependencies {
 		SAXReaderUtil saxReaderUtil = new SAXReaderUtil();
 
 		saxReaderUtil.setSAXReader(saxReaderImpl);
+
+		SecureXMLBuilderImpl secureXMLBuilderImpl = new SecureXMLBuilderImpl();
+
+		SecureXMLBuilderUtil secureXMLBuilderUtil = new SecureXMLBuilderUtil();
+
+		secureXMLBuilderUtil.setSecureXMLBuilder(secureXMLBuilderImpl);
 
 		SingleVMPoolImpl singleVMPoolImpl = new SingleVMPoolImpl();
 

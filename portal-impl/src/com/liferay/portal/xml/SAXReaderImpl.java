@@ -30,6 +30,8 @@ import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.kernel.xml.Text;
 import com.liferay.portal.kernel.xml.XMLSchema;
 import com.liferay.portal.kernel.xml.XPath;
+import com.liferay.portal.security.xml.SecureXMLBuilder;
+import com.liferay.portal.security.xml.SecureXMLBuilderImpl;
 import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.EntityResolver;
 import com.liferay.portal.util.PropsValues;
@@ -47,8 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.xerces.parsers.SAXParser;
-
 import org.dom4j.DocumentFactory;
 
 /**
@@ -58,6 +58,11 @@ import org.dom4j.DocumentFactory;
 public class SAXReaderImpl implements SAXReader {
 
 	public static SAXReaderImpl getInstance() {
+		if (_instance == null) {
+			_instance = new SAXReaderImpl();
+			_instance.setSecureXMLBuilder(new SecureXMLBuilderImpl());
+		}
+
 		return _instance;
 	}
 
@@ -533,6 +538,10 @@ public class SAXReaderImpl implements SAXReader {
 		return toNewNodes(xPath.selectNodes(nodeImpl.getWrappedNode()));
 	}
 
+	public void setSecureXMLBuilder(SecureXMLBuilder secureXMLBuilder) {
+		this._secureXMLBuilder = secureXMLBuilder;
+	}
+
 	@Override
 	public void sort(List<Node> nodes, String xPathExpression) {
 		org.dom4j.XPath xPath = _documentFactory.createXPath(xPathExpression);
@@ -557,7 +566,8 @@ public class SAXReaderImpl implements SAXReader {
 		}
 
 		try {
-			reader = new org.dom4j.io.SAXReader(new SAXParser(), validate);
+			reader = new org.dom4j.io.SAXReader(
+				_secureXMLBuilder.newXMLReader(), validate);
 
 			reader.setEntityResolver(new EntityResolver());
 
@@ -576,7 +586,8 @@ public class SAXReaderImpl implements SAXReader {
 					"XSD validation is disabled because " + e.getMessage());
 			}
 
-			reader = new org.dom4j.io.SAXReader(false);
+			reader = new org.dom4j.io.SAXReader(
+				_secureXMLBuilder.newXMLReader(), false);
 
 			reader.setEntityResolver(new EntityResolver());
 		}
@@ -642,9 +653,10 @@ public class SAXReaderImpl implements SAXReader {
 
 	private static final Log _log = LogFactoryUtil.getLog(SAXReaderImpl.class);
 
-	private static final SAXReaderImpl _instance = new SAXReaderImpl();
+	private static SAXReaderImpl _instance = null;
 
 	private final DocumentFactory _documentFactory =
 		DocumentFactory.getInstance();
+	private SecureXMLBuilder _secureXMLBuilder;
 
 }
