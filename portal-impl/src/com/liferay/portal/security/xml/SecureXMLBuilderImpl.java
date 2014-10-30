@@ -26,7 +26,7 @@ public class SecureXMLBuilderImpl implements SecureXMLBuilder {
 
 	@Override
 	public DocumentBuilderFactory newDocumentBuilderFactory() {
-		return null;
+		return DocumentBuilderFactory.newInstance();
 	}
 
 	@Override
