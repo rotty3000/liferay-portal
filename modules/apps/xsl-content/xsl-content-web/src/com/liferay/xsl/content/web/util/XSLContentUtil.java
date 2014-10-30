@@ -16,6 +16,7 @@ package com.liferay.xsl.content.web.util;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.security.xml.SecureXMLBuilderUtil;
 import com.liferay.xsl.content.web.configuration.XSLContentConfiguration;
 
 import java.io.ByteArrayInputStream;
@@ -72,17 +73,7 @@ public class XSLContentUtil {
 		throws Exception {
 
 		DocumentBuilderFactory documentBuilderFactory =
-			DocumentBuilderFactory.newInstance();
-
-		documentBuilderFactory.setFeature(
-			"http://apache.org/xml/features/disallow-doctype-decl",
-			!xslContentConfiguration.isXmlDoctypeDeclarationAllowed());
-		documentBuilderFactory.setFeature(
-			"http://xml.org/sax/features/external-general-entities",
-			xslContentConfiguration.isXmlExternalGeneralEntitiesAllowed());
-		documentBuilderFactory.setFeature(
-			"http://xml.org/sax/features/external-parameter-entities",
-			xslContentConfiguration.isXmlExternalGeneralEntitiesAllowed());
+			SecureXMLBuilderUtil.newDocumentBuilderFactory();
 
 		documentBuilderFactory.setNamespaceAware(true);
 
