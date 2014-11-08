@@ -64,7 +64,8 @@ public class VerifyResourcePermissions extends VerifyProcess {
 				verifyResourcedModel(
 					role, verifiableResourcedModel.getModelName(),
 					verifiableResourcedModel.getTableName(),
-					verifiableResourcedModel.getPrimaryKeyColumnName());
+					verifiableResourcedModel.getPrimaryKeyColumnName(),
+					verifiableResourcedModel.getUserIdColumnName());
 			}
 
 			verifyLayout(role);
@@ -168,7 +169,7 @@ public class VerifyResourcePermissions extends VerifyProcess {
 
 	protected void verifyResourcedModel(
 			Role role, String modelName, String tableName,
-			String primaryKeyColumnName)
+			String primaryKeyColumnName, String userIdColumnName)
 		throws Exception {
 
 		Connection con = null;
@@ -198,14 +199,15 @@ public class VerifyResourcePermissions extends VerifyProcess {
 			con = DataAccess.getUpgradeOptimizedConnection();
 
 			ps = con.prepareStatement(
-				"select " + primaryKeyColumnName + ", userId from " +
-					tableName + " where companyId = " + role.getCompanyId());
+				"select " + primaryKeyColumnName + ", " + userIdColumnName +
+					" from " + tableName + " where companyId = " +
+					role.getCompanyId());
 
 			rs = ps.executeQuery();
 
 			for (int i = 0; rs.next(); i++) {
 				long primKey = rs.getLong(primaryKeyColumnName);
-				long userId = rs.getLong("userId");
+				long userId = rs.getLong(userIdColumnName);
 
 				verifyResourcedModel(
 					role.getCompanyId(), modelName, primKey, role, userId, i,
