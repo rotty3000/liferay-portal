@@ -14,13 +14,16 @@
  */
 --%>
 
-<%@ include file="/html/portlet/page_comments/init.jsp" %>
+<%@ include file="/init.jsp" %>
+
+<% com.pfellwock.P.p("\n\n---------------------------------->1"); %>
+
+asdfsfdsadfasdfasd
 
 <c:if test="<%= LayoutPermissionUtil.contains(permissionChecker, layout, ActionKeys.VIEW) %>">
-	<portlet:actionURL var="discussionURL">
-		<portlet:param name="struts_action" value="/page_comments/edit_page_discussion" />
-	</portlet:actionURL>
-
+<% com.pfellwock.P.p("\n\n---------------------------------->2"); %>
+	<portlet:actionURL name="/edit_page_discussion" var="discussionURL" />
+<% com.pfellwock.P.p("\n\n---------------------------------->3"); %>
 	<liferay-ui:discussion
 		className="<%= Layout.class.getName() %>"
 		classPK="<%= layout.getPlid() %>"
@@ -29,4 +32,6 @@
 		redirect="<%= currentURL %>"
 		userId="<%= user.getUserId() %>"
 	/>
+	<% com.pfellwock.P.p("\n\n---------------------------------->4"); %>
 </c:if>
+<% com.pfellwock.P.p("\n\n---------------------------------->5"); %>

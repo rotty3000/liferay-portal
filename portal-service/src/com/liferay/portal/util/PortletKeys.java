@@ -55,7 +55,7 @@ public class PortletKeys {
 
 	public static final String CHAT = "1_WAR_chatportlet";
 
-	public static final String COMMENTS = "196";
+	public static final String COMMENTS = "com_liferay_page_comments_web_portlet_PageCommentsPortlet";
 
 	public static final String CONTROL_PANEL_HOME = "190";
 

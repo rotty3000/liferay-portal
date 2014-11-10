@@ -152,6 +152,8 @@ public class PortletTracker
 			_log.info("Adding " + serviceReference);
 		}
 
+		System.out.println("-------------------------------------------->addingService::" + portletName + "--ID:" + portletId + "--SR:" + serviceReference.getClass().getName());
+		
 		return addingPortlet(serviceReference, portlet, portletName, portletId);
 	}
 
@@ -160,8 +162,10 @@ public class PortletTracker
 		ServiceReference<Portlet> serviceReference,
 		com.liferay.portal.model.Portlet portletModel) {
 
+		System.out.println("-------------------------------------------->removedService::--SR:" + serviceReference.getClass().getName());
 		removedService(serviceReference, portletModel);
 
+		System.out.println("-------------------------------------------->addingService::--SR:" + serviceReference.getClass().getName());
 		addingService(serviceReference);
 	}
 
@@ -1083,7 +1087,10 @@ public class PortletTracker
 
 			_portletLocalService.deployRemotePortlet(
 				companyPortletModel, new String[] {categoryName}, false);
+			System.out.println("---------------------------------------deployPortlet:" + companyPortletModel + ":--cat:" + categoryName);
 		}
+		
+		
 	}
 
 	protected Object get(
