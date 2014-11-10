@@ -19,7 +19,9 @@ Export-Package:\
 	com.liferay.portal.resiliency.service,\
 	com.liferay.portal.search,\
 	com.liferay.portal.security.ac,\
+	com.liferay.portal.security.lang,\
 	com.liferay.portal.service.http,\
+	com.liferay.portal.service.lang,\
 	com.liferay.portal.spring.aop,\
 	com.liferay.portal.spring.bean,\
 	com.liferay.portal.spring.context,\
@@ -29,6 +31,9 @@ Export-Package:\
 	com.liferay.portal.upgrade.v7_0_0,\
 	com.liferay.portal.verify,\
 	com.liferay.portal.xml,\
+	com.liferay.portlet.journal.action,\
+	com.liferay.portlet.journal.model,\
+	com.liferay.portlet.journal.search,\
 	\
 	javax.sql,org.hibernate,\
 	\
