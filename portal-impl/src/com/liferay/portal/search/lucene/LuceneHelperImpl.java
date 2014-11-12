@@ -901,7 +901,7 @@ public class LuceneHelperImpl implements LuceneHelper {
 			for (Term term : terms) {
 				String termValue = term.text();
 
-				if (like) {
+				if (like && queryParser.getField().equals(term.field())) {
 					termValue = termValue.toLowerCase(queryParser.getLocale());
 
 					term = term.createTerm(
