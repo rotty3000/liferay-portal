@@ -898,10 +898,12 @@ public class LuceneHelperImpl implements LuceneHelper {
 
 			float boost = termQuery.getBoost();
 
+			String queryParserField = queryParser.getField();
+
 			for (Term term : terms) {
 				String termValue = term.text();
 
-				if (like && queryParser.getField().equals(term.field())) {
+				if (like && queryParserField.equals(term.field())) {
 					termValue = termValue.toLowerCase(queryParser.getLocale());
 
 					term = term.createTerm(
