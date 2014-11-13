@@ -556,9 +556,13 @@ public class SAXReaderImpl implements SAXReader {
 
 			reader.setEntityResolver(new EntityResolver());
 
+			if (trustedSource) {
+				reader.setFeature(_FEATURES_DISALLOW_DTD, false);
+				reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
+				reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
+			}
+
 			reader.setFeature(_FEATURES_DYNAMIC, validate);
-			reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
-			reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
 			reader.setFeature(_FEATURES_VALIDATION, validate);
 			reader.setFeature(_FEATURES_VALIDATION_SCHEMA, validate);
 			reader.setFeature(
@@ -755,6 +759,9 @@ public class SAXReaderImpl implements SAXReader {
 			}
 		}
 	}
+
+	private static final String _FEATURES_DISALLOW_DTD =
+		"http://apache.org/xml/features/disallow-doctype-decl";
 
 	private static final String _FEATURES_DYNAMIC =
 		"http://apache.org/xml/features/validation/dynamic";
