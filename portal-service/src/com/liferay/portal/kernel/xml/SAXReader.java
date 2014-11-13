@@ -76,33 +76,69 @@ public interface SAXReader {
 
 	public Document read(File file) throws DocumentException;
 
-	public Document read(File file, boolean validate) throws DocumentException;
+	public Document read(File file, boolean validateXSD)
+		throws DocumentException;
 
 	public Document read(InputStream is) throws DocumentException;
 
-	public Document read(InputStream is, boolean validate)
+	public Document read(InputStream is, boolean validateXSD)
 		throws DocumentException;
 
 	public Document read(Reader reader) throws DocumentException;
 
-	public Document read(Reader reader, boolean validate)
+	public Document read(Reader reader, boolean validateXSD)
 		throws DocumentException;
 
 	public Document read(String xml) throws DocumentException;
 
-	public Document read(String xml, boolean validate) throws DocumentException;
+	public Document read(String xml, boolean validateXSD)
+		throws DocumentException;
 
 	public Document read(String xml, XMLSchema xmlSchema)
 		throws DocumentException;
 
 	public Document read(URL url) throws DocumentException;
 
-	public Document read(URL url, boolean validate) throws DocumentException;
+	public Document read(URL url, boolean validateXSD) throws DocumentException;
+
+	public Document readTrusted(File file) throws DocumentException;
+
+	public Document readTrusted(File file, boolean validate)
+		throws DocumentException;
+
+	public Document readTrusted(InputStream is) throws DocumentException;
+
+	public Document readTrusted(InputStream is, boolean validate)
+		throws DocumentException;
+
+	public Document readTrusted(Reader reader) throws DocumentException;
+
+	public Document readTrusted(Reader reader, boolean validate)
+		throws DocumentException;
+
+	public Document readTrusted(String xml) throws DocumentException;
+
+	public Document readTrusted(String xml, boolean validate)
+		throws DocumentException;
+
+	public Document readTrusted(String xml, XMLSchema xmlSchema)
+		throws DocumentException;
+
+	public Document readTrusted(URL url) throws DocumentException;
+
+	public Document readTrusted(URL url, boolean validate)
+		throws DocumentException;
+
+	public Document readTrustedURL(String url)
+		throws DocumentException, MalformedURLException;
+
+	public Document readTrustedURL(String url, boolean validate)
+		throws DocumentException, MalformedURLException;
 
 	public Document readURL(String url)
 		throws DocumentException, MalformedURLException;
 
-	public Document readURL(String url, boolean validate)
+	public Document readURL(String url, boolean validateXSD)
 		throws DocumentException, MalformedURLException;
 
 	public List<Node> selectNodes(
