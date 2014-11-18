@@ -46,7 +46,7 @@ public class WSDDMerger {
 
 		File sourceFile = new File(source);
 
-		Document document = SAXReaderUtil.read(sourceFile);
+		Document document = SAXReaderUtil.readTrusted(sourceFile);
 
 		Element rootElement = document.getRootElement();
 
@@ -60,7 +60,7 @@ public class WSDDMerger {
 
 		File destinationFile = new File(destination);
 
-		document = SAXReaderUtil.read(destinationFile);
+		document = SAXReaderUtil.readTrusted(destinationFile);
 
 		rootElement = document.getRootElement();
 

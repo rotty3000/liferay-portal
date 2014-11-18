@@ -226,7 +226,8 @@ public class VerifyJournal extends VerifyProcess {
 				JournalArticle article =
 					JournalArticleLocalServiceUtil.getArticle(id);
 
-				Document document = SAXReaderUtil.read(article.getContent());
+				Document document = SAXReaderUtil.readTrusted(
+					article.getContent());
 
 				Element rootElement = document.getRootElement();
 

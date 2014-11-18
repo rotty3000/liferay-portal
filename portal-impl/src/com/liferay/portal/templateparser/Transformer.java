@@ -350,8 +350,9 @@ public class Transformer {
 						template.put("request", portletRequestModel.toMap());
 
 						if (langType.equals(TemplateConstants.LANG_TYPE_XSL)) {
-							Document requestDocument = SAXReaderUtil.read(
-								portletRequestModel.toXML());
+							Document requestDocument =
+								SAXReaderUtil.readTrusted(
+									portletRequestModel.toXML());
 
 							Element requestElement =
 								requestDocument.getRootElement();

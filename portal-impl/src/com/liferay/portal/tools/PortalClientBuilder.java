@@ -49,7 +49,7 @@ public class PortalClientBuilder {
 		String fileName, String outputDir, String mappingFile, String url) {
 
 		try {
-			Document document = SAXReaderUtil.read(new File(fileName));
+			Document document = SAXReaderUtil.readTrusted(new File(fileName));
 
 			Element rootElement = document.getRootElement();
 

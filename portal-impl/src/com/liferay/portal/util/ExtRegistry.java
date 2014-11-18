@@ -147,7 +147,7 @@ public class ExtRegistry {
 
 		Set<String> fileNames = new TreeSet<String>();
 
-		Document document = SAXReaderUtil.read(
+		Document document = SAXReaderUtil.readTrusted(
 			servletContext.getResourceAsStream(resourcePath));
 
 		Element rootElement = document.getRootElement();

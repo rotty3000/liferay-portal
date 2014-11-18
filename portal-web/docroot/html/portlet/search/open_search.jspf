@@ -139,7 +139,7 @@ for (int i = 0; i < portlets.size(); i++) {
 
 		xml = XMLFormatter.stripInvalidChars(xml);
 
-		com.liferay.portal.kernel.xml.Document document = SAXReaderUtil.read(xml);
+		com.liferay.portal.kernel.xml.Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

@@ -101,7 +101,7 @@ public class PropfindMethodImpl extends BasePropMethodImpl implements Method {
 						XMLFormatter.toString(xml, StringPool.FOUR_SPACES));
 			}
 
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			Element rootElement = document.getRootElement();
 

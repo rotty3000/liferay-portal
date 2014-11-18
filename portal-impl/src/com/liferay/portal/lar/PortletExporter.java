@@ -973,7 +973,7 @@ public class PortletExporter {
 			}
 		}
 
-		Document document = SAXReaderUtil.read(
+		Document document = SAXReaderUtil.readTrusted(
 			PortletPreferencesFactoryUtil.toXML(jxPortletPreferences));
 
 		Element rootElement = document.getRootElement();
@@ -1110,7 +1110,7 @@ public class PortletExporter {
 
 		serviceElement.addAttribute("service-name", serviceName);
 
-		Document document = SAXReaderUtil.read(
+		Document document = SAXReaderUtil.readTrusted(
 			PortletPreferencesFactoryUtil.toXML(jxPortletPreferences));
 
 		Element rootElement = document.getRootElement();

@@ -1206,7 +1206,8 @@ public class JavadocFormatter {
 
 		String javadocsXmlContent = _fileUtil.read(javadocsXmlFile);
 
-		Document javadocsXmlDocument = _saxReaderUtil.read(javadocsXmlContent);
+		Document javadocsXmlDocument = _saxReaderUtil.readTrusted(
+			javadocsXmlContent);
 
 		tuple = new Tuple(
 			srcDirName, javadocsXmlFile, javadocsXmlContent,

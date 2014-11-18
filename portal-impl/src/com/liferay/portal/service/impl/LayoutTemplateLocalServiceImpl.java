@@ -609,7 +609,7 @@ public class LayoutTemplateLocalServiceImpl
 			return layoutTemplates;
 		}
 
-		Document document = SAXReaderUtil.read(xml, true);
+		Document document = SAXReaderUtil.readTrusted(xml, true);
 
 		Element rootElement = document.getRootElement();
 

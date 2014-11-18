@@ -286,7 +286,7 @@ public class UpgradeJournal extends UpgradeBaseJournal {
 	protected String convertStaticContentToDynamic(String content)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Document newDocument = SAXReaderUtil.createDocument();
 
@@ -381,7 +381,7 @@ public class UpgradeJournal extends UpgradeBaseJournal {
 
 		xml = StringUtil.replace(xml, "[$LOCALE_DEFAULT$]", locale.toString());
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

@@ -178,7 +178,7 @@ public class JournalConverterImpl implements JournalConverter {
 	public Fields getDDMFields(DDMStructure ddmStructure, String content)
 		throws Exception {
 
-		return getDDMFields(ddmStructure, SAXReaderUtil.read(content));
+		return getDDMFields(ddmStructure, SAXReaderUtil.readTrusted(content));
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class JournalConverterImpl implements JournalConverter {
 	public String getDDMXSD(String journalXSD, Locale defaultLocale)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(journalXSD);
+		Document document = SAXReaderUtil.readTrusted(journalXSD);
 
 		Element rootElement = document.getRootElement();
 
@@ -212,7 +212,7 @@ public class JournalConverterImpl implements JournalConverter {
 
 	@Override
 	public String getJournalXSD(String ddmXSD) throws Exception {
-		Document document = SAXReaderUtil.read(ddmXSD);
+		Document document = SAXReaderUtil.readTrusted(ddmXSD);
 
 		Element rootElement = document.getRootElement();
 

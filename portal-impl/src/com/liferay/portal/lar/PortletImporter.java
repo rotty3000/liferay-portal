@@ -429,7 +429,7 @@ public class PortletImporter {
 		try {
 			portletElement = rootElement.element("portlet");
 
-			Document portletDocument = SAXReaderUtil.read(
+			Document portletDocument = SAXReaderUtil.readTrusted(
 				portletDataContext.getZipEntryAsString(
 					portletElement.attributeValue("path")));
 
@@ -549,7 +549,7 @@ public class PortletImporter {
 				List<Element> serviceElements = rootElement.elements("service");
 
 				for (Element serviceElement : serviceElements) {
-					Document serviceDocument = SAXReaderUtil.read(
+					Document serviceDocument = SAXReaderUtil.readTrusted(
 						portletDataContext.getZipEntryAsString(
 							serviceElement.attributeValue("path")));
 
@@ -748,7 +748,8 @@ public class PortletImporter {
 				try {
 					xml = portletDataContext.getZipEntryAsString(path);
 
-					Document preferencesDocument = SAXReaderUtil.read(xml);
+					Document preferencesDocument = SAXReaderUtil.readTrusted(
+						xml);
 
 					element = preferencesDocument.getRootElement();
 				}
@@ -918,7 +919,7 @@ public class PortletImporter {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 
@@ -1003,7 +1004,7 @@ public class PortletImporter {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 
@@ -1053,7 +1054,7 @@ public class PortletImporter {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 
@@ -1127,7 +1128,7 @@ public class PortletImporter {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 
@@ -1238,7 +1239,7 @@ public class PortletImporter {
 		Element rootElement = null;
 
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			rootElement = document.getRootElement();
 		}

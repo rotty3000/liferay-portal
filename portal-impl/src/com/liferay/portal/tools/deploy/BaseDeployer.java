@@ -2009,7 +2009,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			File file = new File(srcDir + "/WEB-INF/" + fileName);
 
 			try {
-				Document doc = SAXReaderUtil.read(file);
+				Document doc = SAXReaderUtil.readTrusted(file);
 
 				String content = doc.formattedString(StringPool.TAB, true);
 
@@ -2033,7 +2033,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			return content;
 		}
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 
@@ -2189,7 +2189,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 		File geronimoWebXml = new File(srcFile + "/WEB-INF/geronimo-web.xml");
 
-		Document document = SAXReaderUtil.read(geronimoWebXml);
+		Document document = SAXReaderUtil.readTrusted(geronimoWebXml);
 
 		Element rootElement = document.getRootElement();
 
@@ -2307,7 +2307,7 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			content = content.substring(0, x) + content.substring(y);
 		}
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 

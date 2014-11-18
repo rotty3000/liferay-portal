@@ -84,7 +84,8 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 		String content, boolean templateDriven, String languageId) {
 
 		try {
-			return getContentByLocale(SAXReaderUtil.read(content), languageId);
+			return getContentByLocale(
+				SAXReaderUtil.readTrusted(content), languageId);
 		}
 		catch (DocumentException de) {
 			if (_log.isWarnEnabled()) {
@@ -220,7 +221,7 @@ public class JournalArticleImpl extends JournalArticleBaseImpl {
 	public Document getDocument() {
 		if (_document == null) {
 			try {
-				_document = SAXReaderUtil.read(getContent());
+				_document = SAXReaderUtil.readTrusted(getContent());
 			}
 			catch (DocumentException de) {
 				if (_log.isWarnEnabled()) {

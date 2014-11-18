@@ -106,7 +106,7 @@ public class DDMXMLImpl implements DDMXML {
 		Document document = null;
 
 		try {
-			document = SAXReaderUtil.read(xml);
+			document = SAXReaderUtil.readTrusted(xml);
 		}
 		catch (DocumentException de) {
 			return null;
@@ -233,7 +233,7 @@ public class DDMXMLImpl implements DDMXML {
 				return xml;
 			}
 
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			Element rootElement = document.getRootElement();
 
@@ -279,7 +279,7 @@ public class DDMXMLImpl implements DDMXML {
 	@Override
 	public String validateXML(String xml) throws PortalException {
 		try {
-			Document document = SAXReaderUtil.read(xml, _xmlSchema);
+			Document document = SAXReaderUtil.readTrusted(xml, _xmlSchema);
 
 			validate(document);
 

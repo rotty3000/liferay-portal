@@ -210,7 +210,7 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 	protected String getTldUri(URL url) {
 		try {
-			Document document = SAXReaderUtil.read(url, false);
+			Document document = SAXReaderUtil.readTrusted(url, false);
 
 			XPath xPath = SAXReaderUtil.createXPath(
 				"/ns:taglib/ns:uri/text()", "ns",

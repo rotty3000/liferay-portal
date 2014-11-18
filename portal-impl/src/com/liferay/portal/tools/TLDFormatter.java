@@ -73,7 +73,7 @@ public class TLDFormatter {
 
 			String content = FileUtil.read(file);
 
-			Document document = SAXReaderUtil.read(
+			Document document = SAXReaderUtil.readTrusted(
 				new UnsyncStringReader(
 					StringUtil.replace(
 						content, "xml/ns/j2ee/web-jsptaglibrary_2_0.xsd",

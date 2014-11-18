@@ -40,7 +40,7 @@ public class UpgradeAssetPublisher extends BaseUpgradePortletPreferences {
 		for (int i = 0; i < manualEntries.length; i++) {
 			String manualEntry = manualEntries[i];
 
-			Document document = SAXReaderUtil.read(manualEntry);
+			Document document = SAXReaderUtil.readTrusted(manualEntry);
 
 			Element rootElement = document.getRootElement();
 

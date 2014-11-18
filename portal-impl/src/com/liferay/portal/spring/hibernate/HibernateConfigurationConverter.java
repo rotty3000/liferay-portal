@@ -56,7 +56,7 @@ public class HibernateConfigurationConverter implements Converter<String> {
 			return input;
 		}
 
-		Document document = SAXReaderUtil.read(input);
+		Document document = SAXReaderUtil.readTrusted(input);
 
 		Element rootElement = document.getRootElement();
 

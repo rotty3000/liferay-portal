@@ -58,7 +58,7 @@ public class InstanceWrapperBuilder {
 		try {
 			File file = new File(xml);
 
-			Document document = SAXReaderUtil.read(file);
+			Document document = SAXReaderUtil.readTrusted(file);
 
 			Element rootElement = document.getRootElement();
 

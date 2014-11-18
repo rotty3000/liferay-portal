@@ -146,7 +146,7 @@ public class Java2WsddTask {
 	private static String _format(String content) throws Exception {
 		content = HtmlUtil.stripComments(content);
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 

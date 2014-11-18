@@ -124,7 +124,8 @@ public abstract class BaseDeployerTestCase {
 
 		Assert.assertNotNull(liferayPluginPackageXML);
 
-		Document document = SAXReaderUtil.read(liferayPluginPackageXML, true);
+		Document document = SAXReaderUtil.readTrusted(
+			liferayPluginPackageXML, true);
 
 		Element rootElement = document.getRootElement();
 

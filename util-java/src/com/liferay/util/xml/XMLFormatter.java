@@ -169,7 +169,10 @@ public class XMLFormatter {
 		XMLReader xmlReader = null;
 
 		if (SecureXMLBuilderUtil.getSecureXMLBuilder() != null) {
-			xmlReader = SecureXMLBuilderUtil.newXMLReader();
+
+// TODO: split up safe and unsafe input
+
+//			xmlReader = SecureXMLBuilderUtil.newXMLReader();
 		}
 
 		SAXReader saxReader = new SAXReader(xmlReader);

@@ -162,7 +162,7 @@ public class FriendlyURLMapperTrackerImpl implements FriendlyURLMapperTracker {
 			String xml = StringUtil.read(
 				classLoader, _portlet.getFriendlyURLRoutes());
 
-			Document document = SAXReaderUtil.read(xml, true);
+			Document document = SAXReaderUtil.readTrusted(xml, true);
 
 			Element rootElement = document.getRootElement();
 

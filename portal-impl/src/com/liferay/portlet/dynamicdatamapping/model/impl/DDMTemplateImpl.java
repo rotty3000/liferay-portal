@@ -42,7 +42,7 @@ public class DDMTemplateImpl extends DDMTemplateBaseImpl {
 		Document document = null;
 
 		try {
-			document = SAXReaderUtil.read(getName());
+			document = SAXReaderUtil.readTrusted(getName());
 
 			if (document != null) {
 				Element rootElement = document.getRootElement();

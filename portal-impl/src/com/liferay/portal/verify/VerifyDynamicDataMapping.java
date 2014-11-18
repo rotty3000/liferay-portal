@@ -508,7 +508,7 @@ public class VerifyDynamicDataMapping extends VerifyProcess {
 	}
 
 	protected String updateFileUploadReferences(String xsd) throws Exception {
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		List<Node> nodes = getDynamicElementNodes(document);
 
@@ -612,7 +612,7 @@ public class VerifyDynamicDataMapping extends VerifyProcess {
 	protected String verifySchema(String xsd, String defaultLanguageId)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		List<Node> nodes = getDynamicElementNodes(document);
 

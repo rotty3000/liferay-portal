@@ -166,7 +166,7 @@ public class SocialConfigurationImpl implements SocialConfiguration {
 
 		xml = JavaFieldsParser.parse(classLoader, xml);
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		DocumentType documentType = document.getDocumentType();
 

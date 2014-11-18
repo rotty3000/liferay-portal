@@ -38,7 +38,7 @@ public class UpgradeAssetPublisher extends BaseUpgradePortletPreferences {
 		for (int i = 0; i < assetEntryXmls.length; i++) {
 			String assetEntryXml = assetEntryXmls[i];
 
-			Document document = SAXReaderUtil.read(assetEntryXml);
+			Document document = SAXReaderUtil.readTrusted(assetEntryXml);
 
 			Element rootElement = document.getRootElement();
 

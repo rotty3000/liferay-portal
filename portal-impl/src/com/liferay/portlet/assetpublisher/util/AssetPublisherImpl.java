@@ -466,7 +466,7 @@ public class AssetPublisherImpl implements AssetPublisher {
 		List<String> missingAssetEntryUuids = new ArrayList<String>();
 
 		for (String assetEntryXml : assetEntryXmls) {
-			Document document = SAXReaderUtil.read(assetEntryXml);
+			Document document = SAXReaderUtil.readTrusted(assetEntryXml);
 
 			Element rootElement = document.getRootElement();
 
@@ -1332,7 +1332,7 @@ public class AssetPublisherImpl implements AssetPublisher {
 		while (itr.hasNext()) {
 			String assetEntryXml = itr.next();
 
-			Document document = SAXReaderUtil.read(assetEntryXml);
+			Document document = SAXReaderUtil.readTrusted(assetEntryXml);
 
 			Element rootElement = document.getRootElement();
 

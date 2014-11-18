@@ -111,7 +111,7 @@ public class ThemeLoader {
 		_servletContext = servletContext;
 
 		try {
-			Document doc = SAXReaderUtil.read(xmls[0], true);
+			Document doc = SAXReaderUtil.readTrusted(xmls[0], true);
 
 			Element root = doc.getRootElement();
 

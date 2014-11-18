@@ -212,7 +212,7 @@ public class DDMXSDImpl implements DDMXSD {
 
 		String xsd = getXSD(classNameId, classPK);
 
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		String xPathExpression = "//dynamic-element[@name=".concat(
 			HtmlUtil.escapeXPathAttribute(fieldName)).concat("]");
@@ -336,7 +336,7 @@ public class DDMXSDImpl implements DDMXSD {
 			String namespace, String mode, boolean readOnly, Locale locale)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		return getHTML(
 			request, response, document.getRootElement(), fields,
@@ -464,7 +464,7 @@ public class DDMXSDImpl implements DDMXSD {
 	@Override
 	public JSONArray getJSONArray(String xml) throws PortalException {
 		try {
-			return getJSONArray(SAXReaderUtil.read(xml));
+			return getJSONArray(SAXReaderUtil.readTrusted(xml));
 		}
 		catch (DocumentException de) {
 			throw new SystemException();
@@ -537,7 +537,7 @@ public class DDMXSDImpl implements DDMXSD {
 
 		String xsd = getXSD(classNameId, classPK);
 
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		String xPathExpression = "//dynamic-element[@name=".concat(
 			HtmlUtil.escapeXPathAttribute(field.getName())).concat("]");
