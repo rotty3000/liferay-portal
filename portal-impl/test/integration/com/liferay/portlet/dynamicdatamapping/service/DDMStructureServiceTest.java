@@ -61,7 +61,7 @@ public class DDMStructureServiceTest extends BaseDDMServiceTestCase {
 		try {
 			addStructure(
 				_CLASS_NAME_ID, null, "Test Structure",
-				readText("ddm-structure-required-element-attribute.xsd"),
+				read("ddm-structure-required-element-attribute.xsd"),
 				storageType, DDMStructureConstants.TYPE_DEFAULT);
 
 			Assert.fail();
@@ -77,8 +77,8 @@ public class DDMStructureServiceTest extends BaseDDMServiceTestCase {
 		try {
 			addStructure(
 				_CLASS_NAME_ID, null, "Test Structure",
-				readText("ddm-structure-duplicate-element-name.xsd"),
-				storageType, DDMStructureConstants.TYPE_DEFAULT);
+				read("ddm-structure-duplicate-element-name.xsd"), storageType,
+				DDMStructureConstants.TYPE_DEFAULT);
 
 			Assert.fail();
 		}
@@ -95,14 +95,14 @@ public class DDMStructureServiceTest extends BaseDDMServiceTestCase {
 		try {
 			DDMStructure parentStructure = addStructure(
 				_CLASS_NAME_ID, null, "Test Parent Structure",
-				readText("ddm-structure-duplicate-element-name.xsd"),
-				storageType, DDMStructureConstants.TYPE_DEFAULT);
+				read("ddm-structure-duplicate-element-name.xsd"), storageType,
+				DDMStructureConstants.TYPE_DEFAULT);
 
 			addStructure(
 				parentStructure.getStructureId(), _CLASS_NAME_ID, null,
 				"Test Structure",
-				readText("ddm-structure-duplicate-element-name.xsd"),
-				storageType, DDMStructureConstants.TYPE_DEFAULT);
+				read("ddm-structure-duplicate-element-name.xsd"), storageType,
+				DDMStructureConstants.TYPE_DEFAULT);
 
 			Assert.fail();
 		}
@@ -139,7 +139,7 @@ public class DDMStructureServiceTest extends BaseDDMServiceTestCase {
 		try {
 			addStructure(
 				_CLASS_NAME_ID, null, "Test Structure",
-				readText("ddm-structure-invalid-element-attribute.xsd"),
+				read("ddm-structure-invalid-element-attribute.xsd"),
 				storageType, DDMStructureConstants.TYPE_DEFAULT);
 
 			Assert.fail();
@@ -328,7 +328,7 @@ public class DDMStructureServiceTest extends BaseDDMServiceTestCase {
 		return DDMStructureLocalServiceUtil.updateStructure(
 			structure.getStructureId(), structure.getParentStructureId(),
 			structure.getNameMap(), structure.getDescriptionMap(),
-			structure.getDefinition(),
+			structure.getDDMForm(),
 			ServiceContextTestUtil.getServiceContext(group.getGroupId()));
 	}
 

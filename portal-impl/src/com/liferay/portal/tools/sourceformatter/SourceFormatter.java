@@ -35,8 +35,8 @@ public class SourceFormatter {
 
 			sourceFormatter.format();
 		}
-		catch (Throwable e) {
-			e.printStackTrace();
+		catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 

@@ -34,6 +34,9 @@ import com.liferay.portlet.documentlibrary.context.DLViewFileVersionDisplayConte
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -54,6 +57,9 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 		FileVersion fileVersion) {
 
 		super(_UUID, parentDLDisplayContext, request, response, fileVersion);
+
+		_googleDocsMetadataHelper = new GoogleDocsMetadataHelper(
+			(DLFileVersion)fileVersion.getModel());
 	}
 
 	@Override
@@ -88,7 +94,7 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 		URLMenuItem urlMenuItem = _insertEditInGoogleURLUIItem(
 			new URLMenuItem(), menuItems);
 
-		urlMenuItem.setTarget("_blank");
+		urlMenuItem.setMethod("GET");
 
 		return menuItems;
 	}
@@ -102,6 +108,26 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 		_insertEditInGoogleURLUIItem(new URLToolbarItem(), toolbarItems);
 
 		return toolbarItems;
+	}
+
+	@Override
+	public void renderPreview(
+			HttpServletRequest request, HttpServletResponse response)
+		throws IOException {
+
+		PrintWriter printWriter = response.getWriter();
+
+		if (!_googleDocsMetadataHelper.containsField(
+				GoogleDocsConstants.DDM_FIELD_NAME_EMBED_URL)) {
+
+			return;
+		}
+
+		printWriter.format(
+			"<iframe frameborder=\"0\" height=\"300\" src=\"%s\" " +
+				"width=\"100%%\"></iframe>",
+			_googleDocsMetadataHelper.getFieldValue(
+				GoogleDocsConstants.DDM_FIELD_NAME_EMBED_URL));
 	}
 
 	private int _getIndex(List<? extends UIItem> uiItems, String key) {
@@ -118,6 +144,12 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 
 	private <T extends URLUIItem> T _insertEditInGoogleURLUIItem(
 		T urlUIItem, List<? super T> urlUIItems) {
+
+		if (!_googleDocsMetadataHelper.containsField(
+				GoogleDocsConstants.DDM_FIELD_NAME_EDIT_URL)) {
+
+			return urlUIItem;
+		}
 
 		int index = _getIndex(
 			(List<? extends UIItem>)urlUIItems, DLUIItemKeys.EDIT);
@@ -142,12 +174,7 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 
 		urlUIItem.setTarget("_blank");
 
-		DLFileVersion dlFileVersion = (DLFileVersion)fileVersion.getModel();
-
-		GoogleDocsMetadataHelper googleDocsMetadataHelper =
-			new GoogleDocsMetadataHelper(dlFileVersion);
-
-		String editURL = googleDocsMetadataHelper.getFieldValue(
+		String editURL = _googleDocsMetadataHelper.getFieldValue(
 			GoogleDocsConstants.DDM_FIELD_NAME_EDIT_URL);
 
 		urlUIItem.setURL(editURL);
@@ -172,5 +199,7 @@ public class GoogleDocsDLViewFileVersionDisplayContext
 
 	private static final UUID _UUID = UUID.fromString(
 		"7B61EA79-83AE-4FFD-A77A-1D47E06EBBE9");
+
+	private GoogleDocsMetadataHelper _googleDocsMetadataHelper;
 
 }

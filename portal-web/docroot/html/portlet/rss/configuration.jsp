@@ -16,8 +16,8 @@
 
 <%@ include file="/html/portlet/rss/init.jsp" %>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
-<liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL" />
+<liferay-portlet:actionURL portletConfiguration="<%= true %>" var="configurationActionURL" />
+<liferay-portlet:renderURL portletConfiguration="<%= true %>" var="configurationRenderURL" />
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
@@ -49,10 +49,14 @@
 			<aui:fieldset cssClass="subscriptions">
 
 				<%
+				String[] urls = rssDisplayContext.getURLs();
+
 				if (urls.length == 0) {
 					urls = new String[1];
-					urls [0] = StringPool.BLANK;
+					urls[0] = StringPool.BLANK;
 				}
+
+				String[] titles = rssDisplayContext.getTitles();
 
 				for (int i = 0; i < urls.length; i++) {
 					String title = StringPool.BLANK;
@@ -79,19 +83,35 @@
 
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="rssFeedsDisplaySettingsPanel" persistState="<%= true %>" title="display-settings">
 			<aui:fieldset>
-				<aui:input name="preferences--showFeedTitle--" type="checkbox" value="<%= showFeedTitle %>" />
+				<div class="display-template">
 
-				<aui:input name="preferences--showFeedPublishedDate--" type="checkbox" value="<%= showFeedPublishedDate %>" />
+					<%
+					TemplateHandler templateHandler = TemplateHandlerRegistryUtil.getTemplateHandler(RSSFeedContext.class.getName());
+					%>
 
-				<aui:input name="preferences--showFeedDescription--" type="checkbox" value="<%= showFeedDescription %>" />
+					<liferay-ui:ddm-template-selector
+						classNameId="<%= PortalUtil.getClassNameId(templateHandler.getClassName()) %>"
+						displayStyle="<%= rssDisplayContext.getDisplayStyle() %>"
+						displayStyleGroupId="<%= rssDisplayContext.getDisplayStyleGroupId() %>"
+						label="display-template"
+						refreshURL="<%= configurationRenderURL.toString() %>"
+						showEmptyOption="<%= true %>"
+					/>
+				</div>
+
+				<aui:input name="preferences--showFeedTitle--" type="checkbox" value="<%= rssDisplayContext.isShowFeedTitle() %>" />
+
+				<aui:input name="preferences--showFeedPublishedDate--" type="checkbox" value="<%= rssDisplayContext.isShowFeedPublishedDate() %>" />
+
+				<aui:input name="preferences--showFeedDescription--" type="checkbox" value="<%= rssDisplayContext.isShowFeedDescription() %>" />
 
 				<%
 				String taglibShowFeedImageOnClick = "if (this.checked) {document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "feedImageAlignment.disabled = '';} else {document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "feedImageAlignment.disabled = 'disabled';}";
 				%>
 
-				<aui:input name="preferences--showFeedImage--" onClick="<%= taglibShowFeedImageOnClick %>" type="checkbox" value="<%= showFeedImage %>" />
+				<aui:input name="preferences--showFeedImage--" onClick="<%= taglibShowFeedImageOnClick %>" type="checkbox" value="<%= rssDisplayContext.isShowFeedImage() %>" />
 
-				<aui:input name="preferences--showFeedItemAuthor--" type="checkbox" value="<%= showFeedItemAuthor %>" />
+				<aui:input name="preferences--showFeedItemAuthor--" type="checkbox" value="<%= rssDisplayContext.isShowFeedItemAuthor() %>" />
 
 				<aui:select label="num-of-entries-per-feed" name="preferences--entriesPerFeed--">
 
@@ -99,7 +119,7 @@
 					for (int i = 1; i < 10; i++) {
 					%>
 
-						<aui:option label="<%= i %>" selected="<%= i == entriesPerFeed %>" />
+						<aui:option label="<%= i %>" selected="<%= i == rssDisplayContext.getEntriesPerFeed() %>" />
 
 					<%
 					}
@@ -113,7 +133,7 @@
 					for (int i = 0; i < 10; i++) {
 					%>
 
-						<aui:option label="<%= i %>" selected="<%= i == expandedEntriesPerFeed %>" />
+						<aui:option label="<%= i %>" selected="<%= i == rssDisplayContext.getExpandedEntriesPerFeed() %>" />
 
 					<%
 					}
@@ -121,9 +141,9 @@
 
 				</aui:select>
 
-				<aui:select disabled="<%= !showFeedImage %>" name="preferences--feedImageAlignment--">
-					<aui:option label="left" selected='<%= feedImageAlignment.equals("left") %>' />
-					<aui:option label="right" selected='<%= feedImageAlignment.equals("right") %>' />
+				<aui:select disabled="<%= !rssDisplayContext.isShowFeedImage() %>" name="preferences--feedImageAlignment--">
+					<aui:option label="left" selected='<%= rssDisplayContext.getFeedImageAlignment().equals("left") %>' />
+					<aui:option label="right" selected='<%= rssDisplayContext.getFeedImageAlignment().equals("right") %>' />
 				</aui:select>
 			</aui:fieldset>
 		</liferay-ui:panel>

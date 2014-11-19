@@ -17,60 +17,35 @@
 <%@ include file="/html/portlet/rss/init.jsp" %>
 
 <%
-String url = ParamUtil.getString(request, "url");
-String title = StringPool.BLANK;
+long portletDisplayDDMTemplateId = PortletDisplayTemplateUtil.getPortletDisplayTemplateDDMTemplateId(rssDisplayContext.getDisplayStyleGroupId(), rssDisplayContext.getDisplayStyle());
+
+List<RSSFeedContext> rssFeedContexts = rssDisplayContext.getRSSFeedContexts();
 %>
 
-<div id="<portlet:namespace />feedsContainer">
+<c:choose>
+	<c:when test="<%= portletDisplayDDMTemplateId > 0 %>">
+		<%= PortletDisplayTemplateUtil.renderDDMTemplate(request, response, portletDisplayDDMTemplateId, rssFeedContexts) %>
+	</c:when>
+	<c:otherwise>
 
-	<%
-	for (int i = 0; i < urls.length; i++) {
-		url = urls[i];
+		<%
+		for (int i = 0; i < rssFeedContexts.size(); i++) {
+			RSSFeedContext rssFeedContext = rssFeedContexts.get(i);
 
-		if (i < titles.length) {
-			title = titles[i];
-		}
-		else {
-			title = StringPool.BLANK;
-		}
+			boolean last = false;
 
-		boolean last = false;
-
-		if (i == (urls.length - 1)) {
-			last = true;
-		}
-	%>
-
-		<%@ include file="/html/portlet/rss/feed.jspf" %>
-
-	<%
-	}
-	%>
-
-</div>
-
-<aui:script use="aui-base">
-	var feedsContainer = A.one('#<portlet:namespace />feedsContainer');
-
-	feedsContainer.delegate(
-		'click',
-		function(event) {
-			var expander = event.currentTarget;
-			var feedContent = expander.get('parentNode').one('.feed-entry-content');
-
-			if (feedContent) {
-				if (expander.hasClass('icon-collapse-alt')) {
-					expander.addClass('icon-expand-alt');
-					expander.removeClass('icon-collapse-alt');
-				}
-				else {
-					expander.addClass('icon-collapse-alt');
-					expander.removeClass('icon-expand-alt');
-				}
-
-				feedContent.toggle();
+			if (i == (rssFeedContexts.size() - 1)) {
+				last = true;
 			}
-		},
-		'.entry-expander'
-	);
-</aui:script>
+
+			SyndFeed syndFeed = rssFeedContext.getSyndFeed();
+		%>
+
+			<%@ include file="/html/portlet/rss/feed.jspf" %>
+
+		<%
+		}
+		%>
+
+	</c:otherwise>
+</c:choose>

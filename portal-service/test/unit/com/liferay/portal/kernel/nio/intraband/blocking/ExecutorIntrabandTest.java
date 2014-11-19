@@ -53,7 +53,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -181,7 +180,7 @@ public class ExecutorIntrabandTest {
 	}
 
 	@Test
-	public void testRegisterChannelDuplex() throws Exception {
+	public void testRegisterChannelDuplexWithErrors() throws Exception {
 
 		// Channel is null
 
@@ -243,35 +242,13 @@ public class ExecutorIntrabandTest {
 				"Channel is of type SelectableChannel and configured in " +
 					"nonblocking mode", iae.getMessage());
 		}
+	}
 
-		// Normal register, with SelectableChannel
+	@Test
+	public void testRegisterChannelDuplexWithNonSelectableChannel()
+		throws Exception {
 
-		socketChannel.configureBlocking(true);
-
-		try {
-			FutureRegistrationReference futureRegistrationReference =
-				(FutureRegistrationReference)_executorIntraband.registerChannel(
-					socketChannel);
-
-			Assert.assertSame(
-				_executorIntraband, futureRegistrationReference.getIntraband());
-			Assert.assertTrue(futureRegistrationReference.isValid());
-
-			futureRegistrationReference.cancelRegistration();
-
-			Assert.assertFalse(futureRegistrationReference.isValid());
-
-			ThreadPoolExecutor threadPoolExecutor =
-				(ThreadPoolExecutor)_executorIntraband.executorService;
-
-			while (threadPoolExecutor.getActiveCount() != 0);
-		}
-		finally {
-			peerSocketChannels[0].close();
-			peerSocketChannels[1].close();
-		}
-
-		// Normal register, with non-SelectableChannel
+		// Normal register, with unselectable channel
 
 		File tempFile = new File("tempFile");
 
@@ -294,11 +271,6 @@ public class ExecutorIntrabandTest {
 			futureRegistrationReference.cancelRegistration();
 
 			Assert.assertFalse(futureRegistrationReference.isValid());
-
-			ThreadPoolExecutor threadPoolExecutor =
-				(ThreadPoolExecutor)_executorIntraband.executorService;
-
-			while (threadPoolExecutor.getActiveCount() != 0);
 		}
 		finally {
 			tempFile.delete();
@@ -306,7 +278,39 @@ public class ExecutorIntrabandTest {
 	}
 
 	@Test
-	public void testRegisterChannelReadWrite() throws Exception {
+	public void testRegisterChannelDuplexWithSelectableChannel()
+		throws Exception {
+
+		// Normal register, with selectable channel
+
+		SocketChannel[] peerSocketChannels =
+			IntrabandTestUtil.createSocketChannelPeers();
+
+		SocketChannel socketChannel = peerSocketChannels[0];
+
+		socketChannel.configureBlocking(true);
+
+		try {
+			FutureRegistrationReference futureRegistrationReference =
+				(FutureRegistrationReference)_executorIntraband.registerChannel(
+					socketChannel);
+
+			Assert.assertSame(
+				_executorIntraband, futureRegistrationReference.getIntraband());
+			Assert.assertTrue(futureRegistrationReference.isValid());
+
+			futureRegistrationReference.cancelRegistration();
+
+			Assert.assertFalse(futureRegistrationReference.isValid());
+		}
+		finally {
+			peerSocketChannels[0].close();
+			peerSocketChannels[1].close();
+		}
+	}
+
+	@Test
+	public void testRegisterChannelReadWriteWithErrors() throws Exception {
 
 		// Gathering byte channel is null
 
@@ -367,40 +371,13 @@ public class ExecutorIntrabandTest {
 				"Gathering byte channel is of type SelectableChannel and " +
 					"configured in nonblocking mode", iae.getMessage());
 		}
+	}
 
-		// Normal register, with SelectableChannel
+	@Test
+	public void testRegisterChannelReadWriteWithNonSelectableChannel()
+		throws Exception {
 
-		sourceChannel.configureBlocking(true);
-		sinkChannel.configureBlocking(true);
-
-		try {
-			FutureRegistrationReference futureRegistrationReference =
-				(FutureRegistrationReference)_executorIntraband.registerChannel(
-					sourceChannel, sinkChannel);
-
-			Assert.assertSame(
-				_executorIntraband, futureRegistrationReference.getIntraband());
-			Assert.assertTrue(futureRegistrationReference.isValid());
-
-			futureRegistrationReference.writeFuture.cancel(true);
-
-			Assert.assertFalse(futureRegistrationReference.isValid());
-
-			futureRegistrationReference.cancelRegistration();
-
-			Assert.assertFalse(futureRegistrationReference.isValid());
-
-			ThreadPoolExecutor threadPoolExecutor =
-				(ThreadPoolExecutor)_executorIntraband.executorService;
-
-			while (threadPoolExecutor.getActiveCount() != 0);
-		}
-		finally {
-			sourceChannel.close();
-			sinkChannel.close();
-		}
-
-		// Normal register, with non-SelectableChannel
+		// Normal register, with unselectable channel
 
 		File tempFile = new File("tempFile");
 
@@ -435,15 +412,47 @@ public class ExecutorIntrabandTest {
 			futureRegistrationReference.cancelRegistration();
 
 			Assert.assertFalse(futureRegistrationReference.isValid());
-
-			ThreadPoolExecutor threadPoolExecutor =
-				(ThreadPoolExecutor)_executorIntraband.executorService;
-
-			while (threadPoolExecutor.getActiveCount() != 0);
 		}
 		finally {
 			readFileChannel.close();
 			writeFileChannel.close();
+		}
+	}
+
+	@Test
+	public void testRegisterChannelReadWriteWithSelectableChannel()
+		throws Exception {
+
+		// Normal register, with selectable channel
+
+		Pipe pipe = Pipe.open();
+
+		SourceChannel sourceChannel = pipe.source();
+		SinkChannel sinkChannel = pipe.sink();
+
+		sourceChannel.configureBlocking(true);
+		sinkChannel.configureBlocking(true);
+
+		try {
+			FutureRegistrationReference futureRegistrationReference =
+				(FutureRegistrationReference)_executorIntraband.registerChannel(
+					sourceChannel, sinkChannel);
+
+			Assert.assertSame(
+				_executorIntraband, futureRegistrationReference.getIntraband());
+			Assert.assertTrue(futureRegistrationReference.isValid());
+
+			futureRegistrationReference.writeFuture.cancel(true);
+
+			Assert.assertFalse(futureRegistrationReference.isValid());
+
+			futureRegistrationReference.cancelRegistration();
+
+			Assert.assertFalse(futureRegistrationReference.isValid());
+		}
+		finally {
+			sourceChannel.close();
+			sinkChannel.close();
 		}
 	}
 

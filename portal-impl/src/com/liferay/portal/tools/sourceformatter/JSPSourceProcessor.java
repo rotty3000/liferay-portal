@@ -18,10 +18,17 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
+
+import com.thoughtworks.qdox.JavaDocBuilder;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -526,13 +533,14 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 
 	protected String formatJSP(
 			String fileName, String absolutePath, String content)
-		throws IOException {
+		throws Exception {
 
 		StringBundler sb = new StringBundler();
 
 		String currentAttributeAndValue = null;
 		String previousAttribute = null;
 		String previousAttributeAndValue = null;
+		String tag = null;
 
 		String currentException = null;
 		String previousException = null;
@@ -677,11 +685,19 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 
 						if (pos != -1) {
 							String attribute = trimmedLine.substring(0, pos);
+							String newLine = formatTagAttributeType(
+								line, tag, trimmedLine);
 
-							if (!trimmedLine.endsWith(StringPool.APOSTROPHE) &&
-								!trimmedLine.endsWith(
-									StringPool.GREATER_THAN) &&
-								!trimmedLine.endsWith(StringPool.QUOTE)) {
+							if (!newLine.equals(line)) {
+								line = newLine;
+
+								readAttributes = false;
+							}
+							else if (!trimmedLine.endsWith(
+										StringPool.APOSTROPHE) &&
+									 !trimmedLine.endsWith(
+										 StringPool.GREATER_THAN) &&
+									 !trimmedLine.endsWith(StringPool.QUOTE)) {
 
 								processErrorMessage(
 									fileName,
@@ -770,6 +786,8 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 
 					if (!trimmedLine.contains(StringPool.GREATER_THAN) &&
 						!trimmedLine.contains(StringPool.SPACE)) {
+
+						tag = trimmedLine.substring(1);
 
 						readAttributes = true;
 					}
@@ -871,6 +889,61 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		return content;
 	}
 
+	@Override
+	protected String formatTagAttributeType(
+			String line, String tag, String attributeAndValue)
+		throws Exception {
+
+		if (!attributeAndValue.endsWith(StringPool.QUOTE) ||
+			attributeAndValue.contains("\"<%=")) {
+
+			return line;
+		}
+
+		if (tag.startsWith("liferay-")) {
+			tag = tag.substring(8);
+		}
+
+		JavaClass tagJavaClass = getTagJavaClass(tag);
+
+		if (tagJavaClass == null) {
+			return line;
+		}
+
+		int pos = attributeAndValue.indexOf("=\"");
+
+		String attribute = attributeAndValue.substring(0, pos);
+
+		String setAttributeMethodName =
+			"set" + TextFormatter.format(attribute, TextFormatter.G);
+
+		for (String dataType : getPrimitiveTagAttributeDataTypes()) {
+			Type javaType = new Type(dataType);
+
+			JavaMethod setAttributeMethod = tagJavaClass.getMethodBySignature(
+				setAttributeMethodName, new Type[] {javaType}, true);
+
+			if (setAttributeMethod != null) {
+				String value = attributeAndValue.substring(
+					pos + 2, attributeAndValue.length() - 1);
+
+				if (!isValidTagAttributeValue(value, dataType)) {
+					return line;
+				}
+
+				String newAttributeAndValue = StringUtil.replace(
+					attributeAndValue,
+					StringPool.QUOTE + value + StringPool.QUOTE,
+					"\"<%= " + value + " %>\"");
+
+				return StringUtil.replace(
+					line, attributeAndValue, newAttributeAndValue);
+			}
+		}
+
+		return line;
+	}
+
 	protected String formatTaglibQuotes(
 		String fileName, String content, String quoteType) {
 
@@ -964,6 +1037,79 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		return duplicateImports;
 	}
 
+	protected Set<String> getPrimitiveTagAttributeDataTypes() {
+		if (_primitiveTagAttributeDataTypes != null) {
+			return _primitiveTagAttributeDataTypes;
+		}
+
+		_primitiveTagAttributeDataTypes = SetUtil.fromArray(
+			new String[] {"boolean", "double", "int", "long"});
+
+		return _primitiveTagAttributeDataTypes;
+	}
+
+	protected JavaClass getTagJavaClass(String tag) throws Exception {
+		JavaClass tagJavaClass = _tagJavaClassesMap.get(tag);
+
+		if (tagJavaClass != null) {
+			return tagJavaClass;
+		}
+
+		String[] tagParts = StringUtil.split(tag, CharPool.COLON);
+
+		if (tagParts.length != 2) {
+			return null;
+		}
+
+		String utilTaglibDirName = getUtilTaglibDirName();
+
+		if (Validator.isNull(utilTaglibDirName)) {
+			return null;
+		}
+
+		String tagName = tagParts[1];
+
+		String tagJavaClassName = TextFormatter.format(
+			tagName, TextFormatter.M);
+
+		tagJavaClassName =
+			TextFormatter.format(tagJavaClassName, TextFormatter.G) + "Tag";
+
+		String tagCategory = tagParts[0];
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(utilTaglibDirName);
+		sb.append("/src/com/liferay/taglib/");
+		sb.append(tagCategory);
+		sb.append(StringPool.SLASH);
+		sb.append(tagJavaClassName);
+		sb.append(".java");
+
+		File tagJavaFile = new File(sb.toString());
+
+		if (!tagJavaFile.exists()) {
+			return null;
+		}
+
+		JavaDocBuilder javaDocBuilder = new JavaDocBuilder();
+
+		javaDocBuilder.addSource(tagJavaFile);
+
+		sb = new StringBundler(4);
+
+		sb.append("com.liferay.taglib.");
+		sb.append(tagCategory);
+		sb.append(StringPool.PERIOD);
+		sb.append(tagJavaClassName);
+
+		tagJavaClass = javaDocBuilder.getClassByName(sb.toString());
+
+		_tagJavaClassesMap.put(tag, tagJavaClass);
+
+		return tagJavaClass;
+	}
+
 	protected String getTaglibRegex(String quoteType) {
 		StringBuilder sb = new StringBuilder();
 
@@ -984,6 +1130,26 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		sb.append("([^>]|%>)*>");
 
 		return sb.toString();
+	}
+
+	protected String getUtilTaglibDirName() {
+		if (_utilTaglibDirName != null) {
+			return _utilTaglibDirName;
+		}
+
+		File utilTaglibDir = getFile("util-taglib", 4);
+
+		if (utilTaglibDir != null) {
+			_utilTaglibDirName = utilTaglibDir.getAbsolutePath();
+
+			_utilTaglibDirName = StringUtil.replace(
+				_utilTaglibDirName, StringPool.BACK_SLASH, StringPool.SLASH);
+		}
+		else {
+			_utilTaglibDirName = StringPool.BLANK;
+		}
+
+		return _utilTaglibDirName;
 	}
 
 	protected String getVariableName(String line) {
@@ -1174,6 +1340,29 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		return false;
 	}
 
+	protected boolean isValidTagAttributeValue(String value, String dataType) {
+		if (dataType.equals("boolean")) {
+			return Validator.isBoolean(value);
+		}
+
+		if (dataType.equals("double")) {
+			try {
+				Double.parseDouble(value);
+			}
+			catch (NumberFormatException nfe) {
+				return false;
+			}
+
+			return true;
+		}
+
+		if (dataType.equals("int") || dataType.equals("long")) {
+			return Validator.isNumber(value);
+		}
+
+		return false;
+	}
+
 	protected void moveFrequentlyUsedImportsToCommonInit(int minCount)
 		throws IOException {
 
@@ -1319,11 +1508,14 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		"(<.*\n*page.import=\".*>\n*)+", Pattern.MULTILINE);
 	private Pattern _jspIncludeFilePattern = Pattern.compile("/.*[.]jsp[f]?");
 	private boolean _moveFrequentlyUsedImportsToCommonInit;
+	private Set<String> _primitiveTagAttributeDataTypes;
 	private Pattern _redirectBackURLPattern = Pattern.compile(
 		"(String redirect = ParamUtil\\.getString\\(request, \"redirect\".*" +
 			"\\);)\n(String backURL = ParamUtil\\.getString\\(request, \"" +
 				"backURL\", redirect\\);)");
 	private boolean _stripJSPImports = true;
+	private Map<String, JavaClass> _tagJavaClassesMap =
+		new HashMap<String, JavaClass>();
 	private Pattern _taglibLanguageKeyPattern1 = Pattern.compile(
 		"(?:confirmation|label|(?:M|m)essage|message key|names|title)=\"[^A-Z" +
 			"<=%\\[\\s]+\"");
@@ -1336,6 +1528,7 @@ public class JSPSourceProcessor extends BaseSourceProcessor {
 		"(liferay-ui:)(?:input-resource) .*id=\"([^<=%\\[\\s]+)\"(?!.*title=" +
 			"(?:'|\").+(?:'|\"))");
 	private List<String> _unusedVariablesExclusions;
+	private String _utilTaglibDirName;
 	private Pattern _xssPattern = Pattern.compile(
 		"\\s+([^\\s]+)\\s*=\\s*(Bean)?ParamUtil\\.getString\\(");
 

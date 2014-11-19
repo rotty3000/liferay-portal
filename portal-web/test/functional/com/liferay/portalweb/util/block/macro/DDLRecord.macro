@@ -20,8 +20,6 @@
 		<var name="key_localizedLanguage" value="${localizedLanguage}" />
 
 		<execute action="CPDynamicdatalistsListEditrecord#assertClick" locator-key1="ADD_TRANSLATION_MENULIST_LANGUAGE" value1="${localizedLanguage}" />
-
-		<execute action="CPDynamicdatalistsListEditrecordtranslation#selectFrame" locator-key1="RECORD_TRANSLATION_IFRAME" />
 	</command>
 
 	<command name="addViaDDLDisplayPG">
@@ -43,6 +41,7 @@
 
 	<command name="deleteRepeatableField">
 		<var name="key_fieldName" value="${fieldName}" />
+		<var name="key_fieldNumber" value="${fieldNumber}" />
 
 		<execute action="CPDynamicdatalistsListAddrecord#click" locator-key1="FIELD_DELETE" />
 	</command>
@@ -74,8 +73,6 @@
 		<var name="key_localizedLanguage" value="${localizedLanguage}" />
 
 		<execute action="CPDynamicdatalistsListEditrecord#assertClick" locator-key1="AVAILABLE_TRANSLATION" value1="${localizedLanguage}" />
-
-		<execute action="CPDynamicdatalistsListEditrecordtranslation#selectFrame" locator-key1="RECORD_TRANSLATION_IFRAME" />
 	</command>
 
 	<command name="editViaRecordViewCP">
@@ -109,12 +106,28 @@
 		<if>
 			<equals arg1="${ddlRecordFieldData}" arg2="No" />
 			<then>
-				<execute action="CPDynamicdatalistsListAddrecord#uncheck" locator-key1="BOOLEAN_CHECKBOX" />
+				<if>
+					<equals arg1="${fieldShowLabel}" arg2="No" />
+					<then>
+						<execute action="CPDynamicdatalistsListAddrecord#uncheck" locator-key1="BOOLEAN_LABEL_HIDDEN_CHECKBOX" />
+					</then>
+					<else>
+						<execute action="CPDynamicdatalistsListAddrecord#uncheck" locator-key1="BOOLEAN_CHECKBOX" />
+					</else>
+				</if>
 			</then>
 			<elseif>
 				<equals arg1="${ddlRecordFieldData}" arg2="Yes" />
 				<then>
-					<execute action="CPDynamicdatalistsListAddrecord#check" locator-key1="BOOLEAN_CHECKBOX" />
+					<if>
+						<equals arg1="${fieldShowLabel}" arg2="No" />
+						<then>
+							<execute action="CPDynamicdatalistsListAddrecord#check" locator-key1="BOOLEAN_LABEL_HIDDEN_CHECKBOX" />
+						</then>
+						<else>
+							<execute action="CPDynamicdatalistsListAddrecord#check" locator-key1="BOOLEAN_CHECKBOX" />
+						</else>
+					</if>
 				</then>
 			</elseif>
 			<else>
@@ -176,7 +189,15 @@
 		<execute action="CPDynamicdatalistsListAddrecord#assertClick" locator-key1="GEOLOCATION_GEOLOCATE" value1="Geolocate" />
 		<execute action="CPDynamicdatalistsListAddrecord#sikuliClick" locator-key1="GEOLOCATION_SHARE_LOCATION_BUTTON_PNG" />
 		<execute action="CPDynamicdatalistsListAddrecord#sikuliClick" locator-key1="GEOLOCATION_SHARE_LOCATION_BUTTON_PNG" />
+		<execute action="CPDynamicdatalistsListAddrecord#pause" locator1="2000" />
 		<execute action="CPDynamicdatalistsListAddrecord#assertTextEquals" locator-key1="GEOLOCATION_LOCATION_LABEL" value1="Location:" />
+
+		<var method="selenium#getText(//div[@data-fieldname='Geolocation']/p/span)" name="coordinates" />
+
+		<var group="0" input="${coordinates}" name="ddlRecordFieldData" pattern="([0.0-9.9]*), ([-0.0-9.9]*)" />
+
+		<echo message="Location coordinates: ${ddlRecordFieldData}" />
+
 		<execute action="CPDynamicdatalistsListAddrecord#assertTextEquals" locator-key1="GEOLOCATION_LOCATION" value1="${ddlRecordFieldData}" />
 	</command>
 
@@ -329,13 +350,6 @@
 		<execute action="CPDynamicdatalistsListAddrecord#assertClick" locator-key1="SAVE_AS_DRAFT_BUTTON" value1="Save as Draft" />
 
 		<execute action="CPDynamicdatalistsList#assertTextEquals" locator-key1="SUCCESS_MESSAGE" value1="Your request completed successfully." />
-	</command>
-
-	<command name="saveTranslation">
-		<execute action="CPDynamicdatalistsListEditrecordtranslation#assertClick" locator-key1="ADD_TRANSLATION_BUTTON" value1="Add Translation" />
-
-		<execute action="CPDynamicdatalistsListEditrecord#selectFrame" value1="relative=top" />
-		<execute action="CPDynamicdatalistsListEditrecord#assertTextEquals" locator-key1="INFO_MESSAGE" value1="The changes in your translations will be available once the content is published." />
 	</command>
 
 	<command name="viewCP">
@@ -531,6 +545,20 @@
 		</if>
 
 		<if>
+			<equals arg1="${field}" arg2="Geolocation" />
+			<then>
+				<var method="selenium#getText(//div[@id='_167_ocerSearchContainer']//tr/td[1]/a)" name="coordinates" />
+
+				<echo message="Location rounded coordinates: ${coordinates}" />
+
+				<var group="1" input="${coordinates}" name="latitude" pattern="Latitude: ([0.0-9.9]*), Longitude: ([-0.0-9.9]*)" />
+				<var group="2" input="${coordinates}" name="longitude" pattern="Latitude: ([0.0-9.9]*), Longitude: ([-0.0-9.9]*)" />
+
+				<var name="ddlRecordFieldData" value="Latitude: ${latitude}, Longitude: ${longitude}" />
+			</then>
+		</if>
+
+		<if>
 			<equals arg1="${field}" arg2="HTML" />
 			<then>
 				<execute action="CPDynamicdatalistsList#assertClick" locator-key1="RECORD_TABLE_COLUMN_ONE_PREVIEW_1" value1="(Preview)" />
@@ -587,7 +615,16 @@
 	<command name="viewViaDDLDisplayPG">
 		<execute action="PGDynamicdatalists#assertTextEquals" locator-key1="HEADER_TITLE" value1="${ddlListName}" />
 		<execute action="PGDynamicdatalists#assertTextEquals" locator-key1="RECORD_TABLE_COLUMN_ONE_NAME" value1="${fieldFieldLabel}" />
-		<execute action="PGDynamicdatalists#assertTextEquals" locator-key1="RECORD_TABLE_COLUMN_ONE_RECORD_1" value1="${ddlRecordFieldData}" />
+
+		<if>
+			<isset var="ddlRecordFieldDataTableDisplay" />
+			<then>
+				<execute action="PGDynamicdatalists#assertTextEquals" locator-key1="RECORD_TABLE_COLUMN_ONE_RECORD_1" value1="${ddlRecordFieldDataTableDisplay}" />
+			</then>
+			<else>
+				<execute action="PGDynamicdatalists#assertTextEquals" locator-key1="RECORD_TABLE_COLUMN_ONE_RECORD_1" value1="${ddlRecordFieldData}" />
+			</else>
+		</if>
 
 		<if>
 			<equals arg1="${userRole}" arg2="Guest" />

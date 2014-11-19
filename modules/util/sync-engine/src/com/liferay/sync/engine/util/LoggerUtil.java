@@ -14,12 +14,15 @@
 
 package com.liferay.sync.engine.util;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+
 import java.net.URL;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.apache.log4j.xml.DOMConfigurator;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael Young
@@ -31,16 +34,29 @@ public class LoggerUtil {
 			PropsValues.SYNC_CONFIGURATION_DIRECTORY,
 			PropsValues.SYNC_LOGGER_CONFIGURATION_FILE);
 
-		if (Files.exists(Paths.get(loggerConfigurationFilePathName))) {
-			DOMConfigurator.configureAndWatch(loggerConfigurationFilePathName);
+		LoggerContext loggerContext =
+			(LoggerContext)LoggerFactory.getILoggerFactory();
+
+		loggerContext.reset();
+
+		JoranConfigurator joranConfigurator = new JoranConfigurator();
+
+		joranConfigurator.setContext(loggerContext);
+
+		try {
+			if (Files.exists(Paths.get(loggerConfigurationFilePathName))) {
+				joranConfigurator.doConfigure(loggerConfigurationFilePathName);
+			}
+			else {
+				ClassLoader classLoader = LoggerUtil.class.getClassLoader();
+
+				URL url = classLoader.getResource(
+					PropsValues.SYNC_LOGGER_CONFIGURATION_FILE);
+
+				joranConfigurator.doConfigure(url);
+			}
 		}
-		else {
-			ClassLoader classLoader = LoggerUtil.class.getClassLoader();
-
-			URL url = classLoader.getResource(
-				PropsValues.SYNC_LOGGER_CONFIGURATION_FILE);
-
-			DOMConfigurator.configure(url);
+		catch (Exception e) {
 		}
 	}
 
