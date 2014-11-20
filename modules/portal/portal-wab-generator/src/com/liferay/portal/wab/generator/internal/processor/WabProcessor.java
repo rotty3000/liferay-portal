@@ -866,7 +866,7 @@ public class WabProcessor {
 
 	protected void processServicePackageName(URI uri, File file) {
 		try {
-			Document document = SAXReaderUtil.read(file);
+			Document document = SAXReaderUtil.readTrusted(file);
 
 			Element rootElement = document.getRootElement();
 
@@ -1047,7 +1047,7 @@ public class WabProcessor {
 		String content = FileUtil.read(file);
 
 		try {
-			return SAXReaderUtil.read(content);
+			return SAXReaderUtil.readTrusted(content);
 		}
 		catch (DocumentException de) {
 			throw new IOException(de);

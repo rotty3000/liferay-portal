@@ -95,7 +95,7 @@ public class MediaWikiImporter implements WikiImporter {
 		InputStream imagesInputStream = inputStreams[2];
 
 		try {
-			Document document = SAXReaderUtil.read(pagesInputStream);
+			Document document = SAXReaderUtil.readTrusted(pagesInputStream);
 
 			Map<String, String> usersMap = readUsersFile(usersInputStream);
 

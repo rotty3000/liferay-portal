@@ -98,7 +98,7 @@ public class XMLAttributesSorter {
 	}
 
 	protected String sortAttributes(String content) throws Exception {
-		Document document = _saxReaderUtil.read(content);
+		Document document = _saxReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 

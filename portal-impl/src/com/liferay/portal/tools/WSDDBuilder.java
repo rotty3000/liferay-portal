@@ -62,7 +62,7 @@ public class WSDDBuilder {
 
 		String content = ServiceBuilder.getContent(_fileName);
 
-		Document document = SAXReaderUtil.read(content, true);
+		Document document = SAXReaderUtil.readTrusted(content, true);
 
 		Element rootElement = document.getRootElement();
 

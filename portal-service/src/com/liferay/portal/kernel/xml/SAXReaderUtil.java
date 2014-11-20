@@ -180,6 +180,76 @@ public class SAXReaderUtil {
 		return getSAXReader().read(url, validate);
 	}
 
+	public static Document readTrusted(File file) throws DocumentException {
+		return getSAXReader().readTrusted(file);
+	}
+
+	public static Document readTrusted(File file, boolean validate)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(file, validate);
+	}
+
+	public static Document readTrusted(InputStream is)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(is);
+	}
+
+	public static Document readTrusted(InputStream is, boolean validate)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(is, validate);
+	}
+
+	public static Document readTrusted(Reader reader) throws DocumentException {
+		return getSAXReader().readTrusted(reader);
+	}
+
+	public static Document readTrusted(Reader reader, boolean validate)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(reader, validate);
+	}
+
+	public static Document readTrusted(String xml) throws DocumentException {
+		return getSAXReader().readTrusted(xml);
+	}
+
+	public static Document readTrusted(String xml, boolean validate)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(xml, validate);
+	}
+
+	public static Document readTrusted(String xml, XMLSchema xmlSchema)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(xml, xmlSchema);
+	}
+
+	public static Document readTrusted(URL url) throws DocumentException {
+		return getSAXReader().readTrusted(url);
+	}
+
+	public static Document readTrusted(URL url, boolean validate)
+		throws DocumentException {
+
+		return getSAXReader().readTrusted(url, validate);
+	}
+
+	public static Document readTrustedURL(String url)
+		throws DocumentException, MalformedURLException {
+
+		return getSAXReader().readTrustedURL(url);
+	}
+
+	public static Document readTrustedURL(String url, boolean validate)
+		throws DocumentException, MalformedURLException {
+
+		return getSAXReader().readTrustedURL(url, validate);
+	}
+
 	public static Document readURL(String url)
 		throws DocumentException, MalformedURLException {
 

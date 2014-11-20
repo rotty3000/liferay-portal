@@ -625,7 +625,7 @@ public class ServiceBuilder {
 
 			String content = getContent(inputFileName);
 
-			Document document = SAXReaderUtil.read(content, true);
+			Document document = SAXReaderUtil.readTrusted(content, true);
 
 			Element rootElement = document.getRootElement();
 
@@ -1776,7 +1776,7 @@ public class ServiceBuilder {
 
 		String content = FileUtil.read(new File(fileName));
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 
@@ -2686,7 +2686,7 @@ public class ServiceBuilder {
 	private void _createRemotingXml() throws Exception {
 		StringBundler sb = new StringBundler();
 
-		Document document = SAXReaderUtil.read(new File(_springFileName));
+		Document document = SAXReaderUtil.readTrusted(new File(_springFileName));
 
 		Element rootElement = document.getRootElement();
 

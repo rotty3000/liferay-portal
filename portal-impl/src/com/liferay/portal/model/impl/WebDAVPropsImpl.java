@@ -132,7 +132,7 @@ public class WebDAVPropsImpl extends WebDAVPropsBaseImpl {
 
 	private Document _getPropsDocument() throws DocumentException {
 		if (_document == null) {
-			_document = SAXReaderUtil.read(getProps());
+			_document = SAXReaderUtil.readTrusted(getProps());
 		}
 
 		return _document;

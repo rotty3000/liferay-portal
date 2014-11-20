@@ -290,7 +290,7 @@ public class InvokerFilterHelper {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(inputStream, true);
+		Document document = SAXReaderUtil.readTrusted(inputStream, true);
 
 		Element rootElement = document.getRootElement();
 

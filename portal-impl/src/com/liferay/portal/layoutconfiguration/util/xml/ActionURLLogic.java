@@ -55,7 +55,7 @@ public class ActionURLLogic extends RuntimeLogic {
 
 	@Override
 	public String processXML(String xml) throws Exception {
-		Document doc = SAXReaderUtil.read(xml);
+		Document doc = SAXReaderUtil.readTrusted(xml);
 
 		Element root = doc.getRootElement();
 

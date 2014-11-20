@@ -77,7 +77,7 @@ public class GetArticleAction extends Action {
 
 			String xml = article.getContentByLocale(languageId);
 
-			Document doc = SAXReaderUtil.read(xml);
+			Document doc = SAXReaderUtil.readTrusted(xml);
 
 			Element root = doc.getRootElement();
 

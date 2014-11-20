@@ -253,7 +253,7 @@ public class AxisServlet extends org.apache.axis.transport.http.AxisServlet {
 				_correctStringArray
 			});
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		return document.formattedString();
 	}

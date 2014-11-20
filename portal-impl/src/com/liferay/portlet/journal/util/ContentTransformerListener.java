@@ -195,7 +195,7 @@ public class ContentTransformerListener extends BaseTransformerListener {
 	 */
 	protected String replace(String xml, Map<String, String> tokens) {
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			replace(document, tokens);
 

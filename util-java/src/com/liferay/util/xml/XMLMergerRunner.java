@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.security.xml.SecureXMLBuilderUtil;
 import com.liferay.util.xml.descriptor.XMLDescriptor;
 
 import java.io.File;
@@ -29,6 +30,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+
+import org.xml.sax.XMLReader;
 
 /**
  * @author Jorge Ferrer
@@ -125,7 +128,16 @@ public class XMLMergerRunner {
 			doctype = slaveDoctype;
 		}
 
-		SAXReader reader = new SAXReader();
+		XMLReader xmlReader = null;
+
+		if (SecureXMLBuilderUtil.getSecureXMLBuilder() != null) {
+
+// TODO: split up safe and unsafe input
+
+//			xmlReader = SecureXMLBuilderUtil.newXMLReader();
+		}
+
+		SAXReader reader = new SAXReader(xmlReader);
 
 		Document masterDoc = reader.read(new UnsyncStringReader(masterXml));
 		Document slaveDoc = reader.read(new UnsyncStringReader(slaveXml));

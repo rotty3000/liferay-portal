@@ -85,7 +85,7 @@ public class LockMethodImpl implements Method {
 					_log.debug("Request XML\n" + XMLFormatter.toString(xml));
 				}
 
-				Document document = SAXReaderUtil.read(xml);
+				Document document = SAXReaderUtil.readTrusted(xml);
 
 				Element rootElement = document.getRootElement();
 

@@ -435,7 +435,7 @@
 			<bean class="com.liferay.portal.util.MethodParametersResolverImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.util.MimeTypes" class="com.liferay.portal.util.MimeTypesImpl" />
+	<bean id="com.liferay.portal.kernel.util.MimeTypes" class="com.liferay.portal.util.MimeTypesImpl" depends-on="com.liferay.portal.security.xml.SecureXMLBuilderUtil" />
 	<bean id="com.liferay.portal.kernel.util.MimeTypesUtil" class="com.liferay.portal.kernel.util.MimeTypesUtil">
 		<property name="mimeTypes" ref="com.liferay.portal.kernel.util.MimeTypes" />
 	</bean>
@@ -502,7 +502,9 @@
 			<bean class="com.liferay.portal.workflow.permission.WorkflowPermissionImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.xml.SAXReader" class="com.liferay.portal.xml.SAXReaderImpl" />
+	<bean id="com.liferay.portal.kernel.xml.SAXReader" class="com.liferay.portal.xml.SAXReaderImpl">
+		<property name="secureXMLBuilder" ref="com.liferay.portal.security.xml.SecureXMLBuilder" />
+	</bean>
 	<bean id="com.liferay.portal.kernel.xml.SAXReaderUtil" class="com.liferay.portal.kernel.xml.SAXReaderUtil">
 		<property name="SAXReader" ref="com.liferay.portal.kernel.xml.SAXReader" />
 	</bean>
@@ -675,6 +677,10 @@
 		<property name="resourceActions" ref="com.liferay.portal.security.permission.ResourceActions" />
 	</bean>
 	<bean id="com.liferay.portal.security.pwd.PasswordPolicyToolkit" class="com.liferay.portal.security.pwd.PasswordPolicyToolkit" />
+	<bean id="com.liferay.portal.security.xml.SecureXMLBuilder" class="com.liferay.portal.security.xml.SecureXMLBuilderImpl" />
+	<bean id="com.liferay.portal.security.xml.SecureXMLBuilderUtil" class="com.liferay.portal.security.xml.SecureXMLBuilderUtil">
+		<property name="secureXMLBuilder" ref="com.liferay.portal.security.xml.SecureXMLBuilder" />
+	</bean>
 	<bean id="com.liferay.portal.service.impl.LayoutLocalServiceHelper" class="com.liferay.portal.service.impl.LayoutLocalServiceHelper" />
 	<bean id="com.liferay.portal.service.permission.AccountPermissionUtil" class="com.liferay.portal.service.permission.AccountPermissionUtil">
 		<property name="accountPermission">

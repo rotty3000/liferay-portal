@@ -190,7 +190,7 @@ public class GetArticlesAction extends Action {
 		for (JournalArticle article : articles) {
 			Element resultEl = resultSetEl.addElement("result");
 
-			Document articleDoc = SAXReaderUtil.read(
+			Document articleDoc = SAXReaderUtil.readTrusted(
 				article.getContentByLocale(languageId));
 
 			resultEl.content().add(articleDoc.getRootElement().createCopy());

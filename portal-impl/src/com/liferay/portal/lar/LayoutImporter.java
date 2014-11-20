@@ -477,7 +477,7 @@ public class LayoutImporter {
 			for (Element portletElement : portletElements) {
 				String portletPath = portletElement.attributeValue("path");
 
-				Document portletDocument = SAXReaderUtil.read(
+				Document portletDocument = SAXReaderUtil.readTrusted(
 					portletDataContext.getZipEntryAsString(portletPath));
 
 				_permissionImporter.checkRoles(
@@ -623,7 +623,7 @@ public class LayoutImporter {
 					"portlet", portletId, manifestSummary);
 			}
 
-			Document portletDocument = SAXReaderUtil.read(
+			Document portletDocument = SAXReaderUtil.readTrusted(
 				portletDataContext.getZipEntryAsString(portletPath));
 
 			portletElement = portletDocument.getRootElement();
@@ -724,7 +724,7 @@ public class LayoutImporter {
 		for (Element serviceElement : serviceElements) {
 			String path = serviceElement.attributeValue("path");
 
-			Document serviceDocument = SAXReaderUtil.read(
+			Document serviceDocument = SAXReaderUtil.readTrusted(
 				portletDataContext.getZipEntryAsString(path));
 
 			serviceElement = serviceDocument.getRootElement();
@@ -1006,7 +1006,7 @@ public class LayoutImporter {
 		Element rootElement = null;
 
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			rootElement = document.getRootElement();
 		}

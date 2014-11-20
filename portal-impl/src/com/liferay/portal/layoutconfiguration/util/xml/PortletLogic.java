@@ -71,7 +71,7 @@ public class PortletLogic extends RuntimeLogic {
 
 	@Override
 	public String processXML(String xml) throws Exception {
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

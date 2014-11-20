@@ -92,7 +92,7 @@ public class AmazonRankingsWebCacheItem implements WebCacheItem {
 
 		String xml = HttpUtil.URLtoString(urlWithSignature);
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

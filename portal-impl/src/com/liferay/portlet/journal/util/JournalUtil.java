@@ -1261,8 +1261,8 @@ public class JournalUtil {
 		String curContent, String newContent, boolean removeNullElements) {
 
 		try {
-			Document curDocument = SAXReaderUtil.read(curContent);
-			Document newDocument = SAXReaderUtil.read(newContent);
+			Document curDocument = SAXReaderUtil.readTrusted(curContent);
+			Document newDocument = SAXReaderUtil.readTrusted(newContent);
 
 			Element curRootElement = curDocument.getRootElement();
 			Element newRootElement = newDocument.getRootElement();
@@ -1296,9 +1296,9 @@ public class JournalUtil {
 		throws LocaleException {
 
 		try {
-			Document oldDocument = SAXReaderUtil.read(content);
+			Document oldDocument = SAXReaderUtil.readTrusted(content);
 
-			Document newDocument = SAXReaderUtil.read(content);
+			Document newDocument = SAXReaderUtil.readTrusted(content);
 
 			Element newRootElement = newDocument.getRootElement();
 
@@ -1408,8 +1408,8 @@ public class JournalUtil {
 
 	public static String removeOldContent(String content, String xsd) {
 		try {
-			Document contentDoc = SAXReaderUtil.read(content);
-			Document xsdDoc = SAXReaderUtil.read(xsd);
+			Document contentDoc = SAXReaderUtil.readTrusted(content);
+			Document xsdDoc = SAXReaderUtil.readTrusted(xsd);
 
 			Element contentRoot = contentDoc.getRootElement();
 

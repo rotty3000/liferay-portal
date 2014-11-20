@@ -215,7 +215,7 @@ public class PermissionImporter {
 			return;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

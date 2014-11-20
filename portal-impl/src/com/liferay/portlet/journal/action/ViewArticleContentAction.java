@@ -108,7 +108,7 @@ public class ViewArticleContentAction extends Action {
 
 				String xml = ParamUtil.getString(uploadServletRequest, "xml");
 
-				Document doc = SAXReaderUtil.read(xml);
+				Document doc = SAXReaderUtil.readTrusted(xml);
 
 				Element root = doc.getRootElement();
 

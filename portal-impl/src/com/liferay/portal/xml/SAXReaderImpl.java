@@ -30,6 +30,8 @@ import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.kernel.xml.Text;
 import com.liferay.portal.kernel.xml.XMLSchema;
 import com.liferay.portal.kernel.xml.XPath;
+import com.liferay.portal.security.xml.SecureXMLBuilder;
+import com.liferay.portal.security.xml.SecureXMLBuilderImpl;
 import com.liferay.portal.util.ClassLoaderUtil;
 import com.liferay.portal.util.EntityResolver;
 import com.liferay.portal.util.PropsValues;
@@ -47,8 +49,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.xerces.parsers.SAXParser;
-
 import org.dom4j.DocumentFactory;
 
 /**
@@ -58,6 +58,11 @@ import org.dom4j.DocumentFactory;
 public class SAXReaderImpl implements SAXReader {
 
 	public static SAXReaderImpl getInstance() {
+		if (_instance == null) {
+			_instance = new SAXReaderImpl();
+			_instance.setSecureXMLBuilder(new SecureXMLBuilderImpl());
+		}
+
 		return _instance;
 	}
 
@@ -335,29 +340,10 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document read(File file, boolean validate) throws DocumentException {
-		ClassLoader classLoader = getClass().getClassLoader();
+	public Document read(File file, boolean validateXSD)
+		throws DocumentException {
 
-		ClassLoader contextClassLoader =
-			ClassLoaderUtil.getContextClassLoader();
-
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
-
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
-
-			return new DocumentImpl(saxReader.read(file));
-		}
-		catch (org.dom4j.DocumentException de) {
-			throw new DocumentException(de.getMessage(), de);
-		}
-		finally {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-			}
-		}
+		return read(file, validateXSD, false);
 	}
 
 	@Override
@@ -366,31 +352,10 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document read(InputStream is, boolean validate)
+	public Document read(InputStream is, boolean validateXSD)
 		throws DocumentException {
 
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		ClassLoader contextClassLoader =
-			ClassLoaderUtil.getContextClassLoader();
-
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
-
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
-
-			return new DocumentImpl(saxReader.read(is));
-		}
-		catch (org.dom4j.DocumentException de) {
-			throw new DocumentException(de.getMessage(), de);
-		}
-		finally {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-			}
-		}
+		return read(is, validateXSD, false);
 	}
 
 	@Override
@@ -399,31 +364,10 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document read(Reader reader, boolean validate)
+	public Document read(Reader reader, boolean validateXSD)
 		throws DocumentException {
 
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		ClassLoader contextClassLoader =
-			ClassLoaderUtil.getContextClassLoader();
-
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
-
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
-
-			return new DocumentImpl(saxReader.read(reader));
-		}
-		catch (org.dom4j.DocumentException de) {
-			throw new DocumentException(de.getMessage(), de);
-		}
-		finally {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-			}
-		}
+		return read(reader, validateXSD, false);
 	}
 
 	@Override
@@ -432,40 +376,17 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document read(String xml, boolean validate)
+	public Document read(String xml, boolean validateXSD)
 		throws DocumentException {
 
-		return read(new XMLSafeReader(xml), validate);
+		return read(new XMLSafeReader(xml), validateXSD);
 	}
 
 	@Override
 	public Document read(String xml, XMLSchema xmlSchema)
 		throws DocumentException {
 
-		ClassLoader classLoader = getClass().getClassLoader();
-
-		ClassLoader contextClassLoader =
-			ClassLoaderUtil.getContextClassLoader();
-
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
-
-			org.dom4j.io.SAXReader saxReader = getSAXReader(xmlSchema);
-
-			Reader reader = new XMLSafeReader(xml);
-
-			return new DocumentImpl(saxReader.read(reader));
-		}
-		catch (org.dom4j.DocumentException de) {
-			throw new DocumentException(de.getMessage(), de);
-		}
-		finally {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-			}
-		}
+		return read(xml, xmlSchema, false);
 	}
 
 	@Override
@@ -474,29 +395,91 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document read(URL url, boolean validate) throws DocumentException {
-		ClassLoader classLoader = getClass().getClassLoader();
+	public Document read(URL url, boolean validateXSD)
+		throws DocumentException {
 
-		ClassLoader contextClassLoader =
-			ClassLoaderUtil.getContextClassLoader();
+		return read(url, validateXSD, false);
+	}
 
-		try {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(classLoader);
-			}
+	@Override
+	public Document readTrusted(File file) throws DocumentException {
+		return readTrusted(file, false);
+	}
 
-			org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+	@Override
+	public Document readTrusted(File file, boolean validate)
+		throws DocumentException {
 
-			return new DocumentImpl(saxReader.read(url));
-		}
-		catch (org.dom4j.DocumentException de) {
-			throw new DocumentException(de.getMessage(), de);
-		}
-		finally {
-			if (contextClassLoader != classLoader) {
-				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
-			}
-		}
+		return read(file, validate, true);
+	}
+
+	@Override
+	public Document readTrusted(InputStream is) throws DocumentException {
+		return readTrusted(is, false);
+	}
+
+	@Override
+	public Document readTrusted(InputStream is, boolean validate)
+		throws DocumentException {
+
+		return read(is, validate, true);
+	}
+
+	@Override
+	public Document readTrusted(Reader reader) throws DocumentException {
+		return readTrusted(reader, false);
+	}
+
+	@Override
+	public Document readTrusted(Reader reader, boolean validate)
+		throws DocumentException {
+
+		return read(reader, validate, true);
+	}
+
+	@Override
+	public Document readTrusted(String xml) throws DocumentException {
+		return readTrusted(new XMLSafeReader(xml));
+	}
+
+	@Override
+	public Document readTrusted(String xml, boolean validate)
+		throws DocumentException {
+
+		return readTrusted(new XMLSafeReader(xml), validate);
+	}
+
+	@Override
+	public Document readTrusted(String xml, XMLSchema xmlSchema)
+		throws DocumentException {
+
+		return read(xml, xmlSchema, true);
+	}
+
+	@Override
+	public Document readTrusted(URL url) throws DocumentException {
+		return readTrusted(url, false);
+	}
+
+	@Override
+	public Document readTrusted(URL url, boolean validate)
+		throws DocumentException {
+
+		return read(url, validate, true);
+	}
+
+	@Override
+	public Document readTrustedURL(String url)
+		throws DocumentException, MalformedURLException {
+
+		return readTrusted(new URL(url), false);
+	}
+
+	@Override
+	public Document readTrustedURL(String url, boolean validate)
+		throws DocumentException, MalformedURLException {
+
+		return readTrusted(new URL(url), validate);
 	}
 
 	@Override
@@ -507,10 +490,10 @@ public class SAXReaderImpl implements SAXReader {
 	}
 
 	@Override
-	public Document readURL(String url, boolean validate)
+	public Document readURL(String url, boolean validateXSD)
 		throws DocumentException, MalformedURLException {
 
-		return read(new URL(url), validate);
+		return read(new URL(url), validateXSD);
 	}
 
 	@Override
@@ -533,6 +516,10 @@ public class SAXReaderImpl implements SAXReader {
 		return toNewNodes(xPath.selectNodes(nodeImpl.getWrappedNode()));
 	}
 
+	public void setSecureXMLBuilder(SecureXMLBuilder secureXMLBuilder) {
+		this._secureXMLBuilder = secureXMLBuilder;
+	}
+
 	@Override
 	public void sort(List<Node> nodes, String xPathExpression) {
 		org.dom4j.XPath xPath = _documentFactory.createXPath(xPathExpression);
@@ -549,7 +536,14 @@ public class SAXReaderImpl implements SAXReader {
 		xPath.sort(toOldNodes(nodes), distinct);
 	}
 
+	@Deprecated
 	protected org.dom4j.io.SAXReader getSAXReader(boolean validate) {
+		return getSAXReader(validate, false);
+	}
+
+	protected org.dom4j.io.SAXReader getSAXReader(
+		boolean validate, boolean trustedSource) {
+
 		org.dom4j.io.SAXReader reader = null;
 
 		if (!PropsValues.XML_VALIDATION_ENABLED) {
@@ -557,14 +551,18 @@ public class SAXReaderImpl implements SAXReader {
 		}
 
 		try {
-			reader = new org.dom4j.io.SAXReader(new SAXParser(), validate);
+			reader = new org.dom4j.io.SAXReader(
+				_secureXMLBuilder.newXMLReader(), validate);
 
 			reader.setEntityResolver(new EntityResolver());
 
+			if (trustedSource) {
+				reader.setFeature(_FEATURES_DISALLOW_DTD, false);
+				reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
+				reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
+			}
+
 			reader.setFeature(_FEATURES_DYNAMIC, validate);
-			reader.setFeature(_FEATURES_EXTERNAL_GENERAL_ENTITIES, validate);
-			reader.setFeature(_FEATURES_LOAD_DTD_GRAMMAR, validate);
-			reader.setFeature(_FEATURES_LOAD_EXTERNAL_DTD, validate);
 			reader.setFeature(_FEATURES_VALIDATION, validate);
 			reader.setFeature(_FEATURES_VALIDATION_SCHEMA, validate);
 			reader.setFeature(
@@ -576,7 +574,8 @@ public class SAXReaderImpl implements SAXReader {
 					"XSD validation is disabled because " + e.getMessage());
 			}
 
-			reader = new org.dom4j.io.SAXReader(false);
+			reader = new org.dom4j.io.SAXReader(
+				_secureXMLBuilder.newXMLReader(), false);
 
 			reader.setEntityResolver(new EntityResolver());
 		}
@@ -584,14 +583,17 @@ public class SAXReaderImpl implements SAXReader {
 		return reader;
 	}
 
-	protected org.dom4j.io.SAXReader getSAXReader(XMLSchema xmlSchema) {
+	protected org.dom4j.io.SAXReader getSAXReader(
+		XMLSchema xmlSchema, boolean trustedSource) {
+
 		boolean validate = true;
 
 		if (!PropsValues.XML_VALIDATION_ENABLED) {
 			validate = false;
 		}
 
-		org.dom4j.io.SAXReader saxReader = getSAXReader(validate);
+		org.dom4j.io.SAXReader saxReader = getSAXReader(
+			validate, trustedSource);
 
 		if ((xmlSchema == null) || (validate == false)) {
 			return saxReader;
@@ -613,11 +615,156 @@ public class SAXReaderImpl implements SAXReader {
 		return saxReader;
 	}
 
+	protected Document read(File file, boolean validate, boolean trustedSource)
+		throws DocumentException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		ClassLoader contextClassLoader =
+			ClassLoaderUtil.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(classLoader);
+			}
+
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				validate, trustedSource);
+
+			return new DocumentImpl(saxReader.read(file));
+		}
+		catch (org.dom4j.DocumentException de) {
+			throw new DocumentException(de.getMessage(), de);
+		}
+		finally {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	protected Document read(
+			InputStream is, boolean validate, boolean trustedSource)
+		throws DocumentException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		ClassLoader contextClassLoader =
+			ClassLoaderUtil.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(classLoader);
+			}
+
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				validate, trustedSource);
+
+			return new DocumentImpl(saxReader.read(is));
+		}
+		catch (org.dom4j.DocumentException de) {
+			throw new DocumentException(de.getMessage(), de);
+		}
+		finally {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	protected Document read(
+			Reader reader, boolean validate, boolean trustedSource)
+		throws DocumentException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		ClassLoader contextClassLoader =
+			ClassLoaderUtil.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(classLoader);
+			}
+
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				validate, trustedSource);
+
+			return new DocumentImpl(saxReader.read(reader));
+		}
+		catch (org.dom4j.DocumentException de) {
+			throw new DocumentException(de.getMessage(), de);
+		}
+		finally {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	protected Document read(
+			String xml, XMLSchema xmlSchema, boolean trustedSource)
+		throws DocumentException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		ClassLoader contextClassLoader =
+			ClassLoaderUtil.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(classLoader);
+			}
+
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				xmlSchema, trustedSource);
+
+			Reader reader = new XMLSafeReader(xml);
+
+			return new DocumentImpl(saxReader.read(reader));
+		}
+		catch (org.dom4j.DocumentException de) {
+			throw new DocumentException(de.getMessage(), de);
+		}
+		finally {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	protected Document read(URL url, boolean validate, boolean trustedSource)
+		throws DocumentException {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		ClassLoader contextClassLoader =
+			ClassLoaderUtil.getContextClassLoader();
+
+		try {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(classLoader);
+			}
+
+			org.dom4j.io.SAXReader saxReader = getSAXReader(
+				validate, trustedSource);
+
+			return new DocumentImpl(saxReader.read(url));
+		}
+		catch (org.dom4j.DocumentException de) {
+			throw new DocumentException(de.getMessage(), de);
+		}
+		finally {
+			if (contextClassLoader != classLoader) {
+				ClassLoaderUtil.setContextClassLoader(contextClassLoader);
+			}
+		}
+	}
+
+	private static final String _FEATURES_DISALLOW_DTD =
+		"http://apache.org/xml/features/disallow-doctype-decl";
+
 	private static final String _FEATURES_DYNAMIC =
 		"http://apache.org/xml/features/validation/dynamic";
-
-	private static final String _FEATURES_EXTERNAL_GENERAL_ENTITIES =
-		"http://xml.org/sax/features/external-general-entities";
 
 	private static final String _FEATURES_LOAD_DTD_GRAMMAR =
 		"http://apache.org/xml/features/nonvalidating/load-dtd-grammar";
@@ -642,9 +789,10 @@ public class SAXReaderImpl implements SAXReader {
 
 	private static final Log _log = LogFactoryUtil.getLog(SAXReaderImpl.class);
 
-	private static final SAXReaderImpl _instance = new SAXReaderImpl();
+	private static SAXReaderImpl _instance = null;
 
 	private final DocumentFactory _documentFactory =
 		DocumentFactory.getInstance();
+	private SecureXMLBuilder _secureXMLBuilder;
 
 }

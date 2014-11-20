@@ -726,7 +726,7 @@ public class PluginPackageUtil {
 			return pluginPackageRepository;
 		}
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 
@@ -1195,7 +1195,7 @@ public class PluginPackageUtil {
 	private PluginPackage _readPluginPackageXml(String xml)
 		throws DocumentException {
 
-		Document document = SAXReaderUtil.read(xml);
+		Document document = SAXReaderUtil.readTrusted(xml);
 
 		Element rootElement = document.getRootElement();
 

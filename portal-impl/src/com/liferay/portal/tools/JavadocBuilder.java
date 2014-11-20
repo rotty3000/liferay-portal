@@ -775,7 +775,7 @@ public class JavadocBuilder {
 		JavaClass javaClass = _getJavaClass(
 			fileName, new UnsyncStringReader(oldContent));
 
-		Document document = _saxReaderUtil.read(javadocFile);
+		Document document = _saxReaderUtil.readTrusted(javadocFile);
 
 		Element rootElement = document.getRootElement();
 

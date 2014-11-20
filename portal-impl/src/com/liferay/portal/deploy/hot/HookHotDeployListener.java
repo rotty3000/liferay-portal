@@ -544,7 +544,7 @@ public class HookHotDeployListener
 
 		_servletContextNames.add(servletContextName);
 
-		Document document = SAXReaderUtil.read(xml, true);
+		Document document = SAXReaderUtil.readTrusted(xml, true);
 
 		Element rootElement = document.getRootElement();
 

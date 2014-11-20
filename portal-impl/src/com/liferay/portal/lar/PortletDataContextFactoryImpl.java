@@ -209,7 +209,7 @@ public class PortletDataContextFactoryImpl
 		Element rootElement = null;
 
 		try {
-			Document document = SAXReaderUtil.read(xml);
+			Document document = SAXReaderUtil.readTrusted(xml);
 
 			rootElement = document.getRootElement();
 		}

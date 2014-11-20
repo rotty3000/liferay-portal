@@ -336,7 +336,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 
 		XPath xPathSelector = SAXReaderUtil.createXPath("//dynamic-content");
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element element = (Element)xPathSelector.selectSingleNode(document);
 
@@ -621,7 +621,7 @@ public class JournalConverterUtilTest extends BaseDDMServiceTestCase {
 		Map<String, Map<Locale, List<String>>> fieldsMap =
 			new HashMap<String, Map<Locale, List<String>>>();
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 

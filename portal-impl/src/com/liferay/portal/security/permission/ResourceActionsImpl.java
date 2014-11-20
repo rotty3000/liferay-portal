@@ -625,7 +625,7 @@ public class ResourceActionsImpl implements ResourceActions {
 			_log.debug("Loading " + source);
 		}
 
-		Document document = SAXReaderUtil.read(inputStream, true);
+		Document document = SAXReaderUtil.readTrusted(inputStream, true);
 
 		DocumentType documentType = document.getDocumentType();
 
@@ -659,7 +659,7 @@ public class ResourceActionsImpl implements ResourceActions {
 	public void read(String servletContextName, InputStream inputStream)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(inputStream, true);
+		Document document = SAXReaderUtil.readTrusted(inputStream, true);
 
 		read(servletContextName, document);
 	}

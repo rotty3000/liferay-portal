@@ -6161,7 +6161,7 @@ public class JournalArticleLocalServiceImpl
 
 	protected Map<String, String> createFieldsValuesMap(String content) {
 		try {
-			Document document = SAXReaderUtil.read(content);
+			Document document = SAXReaderUtil.readTrusted(content);
 
 			Element rootElement = document.getRootElement();
 
@@ -6240,7 +6240,7 @@ public class JournalArticleLocalServiceImpl
 		Document document = null;
 
 		try {
-			document = SAXReaderUtil.read(content);
+			document = SAXReaderUtil.readTrusted(content);
 
 			Element rootElement = document.getRootElement();
 
@@ -7379,7 +7379,7 @@ public class JournalArticleLocalServiceImpl
 		}
 
 		try {
-			SAXReaderUtil.read(content);
+			SAXReaderUtil.readTrusted(content);
 		}
 		catch (DocumentException de) {
 			if (_log.isDebugEnabled()) {

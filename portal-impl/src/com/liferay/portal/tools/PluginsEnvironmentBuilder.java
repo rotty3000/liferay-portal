@@ -198,7 +198,8 @@ public class PluginsEnvironmentBuilder {
 				".xml";
 
 		if (_fileUtil.exists(ivyFileName)) {
-			Document document = _saxReaderUtil.read(new File(ivyFileName));
+			Document document = _saxReaderUtil.readTrusted(
+				new File(ivyFileName));
 
 			Element rootElement = document.getRootElement();
 
@@ -274,7 +275,7 @@ public class PluginsEnvironmentBuilder {
 			StringBundler sb, String content, String ivyDirName)
 		throws Exception {
 
-		Document document = _saxReaderUtil.read(content);
+		Document document = _saxReaderUtil.readTrusted(content);
 
 		Element rootElement = document.getRootElement();
 

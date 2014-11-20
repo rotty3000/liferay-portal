@@ -62,7 +62,7 @@ public class ServiceComponentImpl extends ServiceComponentBaseImpl {
 
 	private Element _getDataEl() throws DocumentException {
 		if (_dataEl == null) {
-			Document doc = SAXReaderUtil.read(getData());
+			Document doc = SAXReaderUtil.readTrusted(getData());
 
 			_dataEl = doc.getRootElement();
 		}

@@ -158,7 +158,7 @@ public class XMLStorageAdapter extends BaseStorageAdapter {
 			DDMContent ddmContent = DDMContentLocalServiceUtil.getContent(
 				classPK);
 
-			Document document = SAXReaderUtil.read(ddmContent.getData());
+			Document document = SAXReaderUtil.readTrusted(ddmContent.getData());
 
 			if ((conditionXPath == null) ||
 				((conditionXPath != null) &&

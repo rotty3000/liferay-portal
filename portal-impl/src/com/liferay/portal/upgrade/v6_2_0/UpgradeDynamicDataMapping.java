@@ -228,7 +228,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	protected String updateXSD(String xsd, String structureKey)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		Element rootElement = document.getRootElement();
 

@@ -671,7 +671,7 @@ public abstract class BasePortletDataHandler implements PortletDataHandler {
 			PortletDataContext portletDataContext, String data)
 		throws DocumentException {
 
-		Document document = SAXReaderUtil.read(data);
+		Document document = SAXReaderUtil.readTrusted(data);
 
 		Element rootElement = document.getRootElement();
 

@@ -54,7 +54,7 @@ public abstract class BaseDeployerTestCase {
 
 		SAXReaderUtil saxReaderUtil = new SAXReaderUtil();
 
-		saxReaderUtil.setSAXReader(new SAXReaderImpl());
+		saxReaderUtil.setSAXReader(SAXReaderImpl.getInstance());
 
 		setUpLiferayPluginPackageProperties();
 	}
@@ -124,7 +124,8 @@ public abstract class BaseDeployerTestCase {
 
 		Assert.assertNotNull(liferayPluginPackageXML);
 
-		Document document = SAXReaderUtil.read(liferayPluginPackageXML, true);
+		Document document = SAXReaderUtil.readTrusted(
+			liferayPluginPackageXML, true);
 
 		Element rootElement = document.getRootElement();
 

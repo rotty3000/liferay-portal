@@ -50,7 +50,7 @@ public class WebXMLDefinitionLoader {
 
 		ClassLoader classLoader = clazz.getClassLoader();
 
-		Document document = SAXReaderUtil.read(
+		Document document = SAXReaderUtil.readTrusted(
 			classLoader.getResource(
 				"com/liferay/portal/wab/extender/internal/dependencies" +
 					"/default-web.xml"));
@@ -72,7 +72,7 @@ public class WebXMLDefinitionLoader {
 		URL url = bundle.getEntry("WEB-INF/web.xml");
 
 		if (url != null) {
-			Document document = SAXReaderUtil.read(url);
+			Document document = SAXReaderUtil.readTrusted(url);
 
 			Element rootElement = document.getRootElement();
 

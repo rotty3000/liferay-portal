@@ -279,7 +279,7 @@ public class DDMStructureTestUtil {
 		Map<String, Map<String, String>> map =
 			new HashMap<String, Map<String, String>>();
 
-		Document document = SAXReaderUtil.read(xsd);
+		Document document = SAXReaderUtil.readTrusted(xsd);
 
 		XPath xPathSelector = SAXReaderUtil.createXPath("//dynamic-element");
 

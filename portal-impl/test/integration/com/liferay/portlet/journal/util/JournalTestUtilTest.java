@@ -191,7 +191,7 @@ public class JournalTestUtilTest {
 
 			String content = JournalUtil.transform(
 				null, getTokens(), Constants.VIEW, "en_US",
-				SAXReaderUtil.read(xml), null,
+				SAXReaderUtil.readTrusted(xml), null,
 				JournalTestUtil.getSampleTemplateXSL(),
 				TemplateConstants.LANG_TYPE_VM);
 
@@ -225,8 +225,9 @@ public class JournalTestUtilTest {
 			"name", "Joe Bloggs");
 
 		String content = JournalUtil.transform(
-			null, getTokens(), Constants.VIEW, "en_US", SAXReaderUtil.read(xml),
-			null, JournalTestUtil.getSampleTemplateXSL(),
+			null, getTokens(), Constants.VIEW, "en_US",
+			SAXReaderUtil.readTrusted(xml), null,
+			JournalTestUtil.getSampleTemplateXSL(),
 			TemplateConstants.LANG_TYPE_VM);
 
 		Assert.assertEquals("Joe Bloggs", content);

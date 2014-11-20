@@ -289,7 +289,7 @@ public class RSSAction extends com.liferay.portal.struts.RSSAction {
 		else if (!contentField.equals(
 					JournalFeedConstants.WEB_CONTENT_DESCRIPTION)) {
 
-			Document document = SAXReaderUtil.read(
+			Document document = SAXReaderUtil.readTrusted(
 				article.getContentByLocale(languageId));
 
 			contentField = HtmlUtil.escapeXPathAttribute(contentField);

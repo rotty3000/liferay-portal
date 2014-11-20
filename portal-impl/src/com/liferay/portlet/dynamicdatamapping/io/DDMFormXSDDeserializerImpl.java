@@ -46,7 +46,7 @@ public class DDMFormXSDDeserializerImpl implements DDMFormXSDDeserializer {
 		throws PortalException {
 
 		try {
-			Document document = SAXReaderUtil.read(serializedDDMForm);
+			Document document = SAXReaderUtil.readTrusted(serializedDDMForm);
 
 			DDMForm ddmForm = new DDMForm();
 

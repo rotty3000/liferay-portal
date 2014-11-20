@@ -445,7 +445,7 @@ public class ActionUtil {
 			String content, String fieldName, int index)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(content);
+		Document document = SAXReaderUtil.readTrusted(content);
 
 		String xPathExpression =
 			"//dynamic-element[@name = " +
