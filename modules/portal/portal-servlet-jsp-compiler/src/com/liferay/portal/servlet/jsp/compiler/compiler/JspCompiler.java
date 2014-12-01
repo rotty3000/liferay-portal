@@ -213,16 +213,15 @@ public class JspCompiler extends Jsr199JavaCompiler {
 			Document document = SAXReaderUtil.read(url, false);
 
 			XPath xPath = SAXReaderUtil.createXPath(
-				"/ns:taglib/ns:uri/text()", "ns",
-				"http://java.sun.com/xml/ns/j2ee");
+				"/*[local-name()='taglib']/*[local-name()='uri']/text()");
 
 			Node node = xPath.selectSingleNode(document);
 
-			if (node != null) {
-				return node.asXML();
+			if (node == null) {
+				return null;
 			}
 
-			return document.valueOf("/taglib/uri/text()");
+			return node.asXML();
 		}
 		catch (DocumentException de) {
 			return null;
