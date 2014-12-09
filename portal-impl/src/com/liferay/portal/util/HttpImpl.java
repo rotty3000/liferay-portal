@@ -15,6 +15,7 @@
 package com.liferay.portal.util;
 
 import com.liferay.portal.kernel.configuration.Filter;
+import com.liferay.portal.kernel.io.DeleteOnCloseFileInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -34,6 +35,7 @@ import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -1170,6 +1172,39 @@ public class HttpImpl implements Http {
 	}
 
 	@Override
+	public InputStream URLtoInputStream(Http.Options options)
+		throws IOException {
+
+		return URLtoInputStream(
+			options.getLocation(), options.getMethod(), options.getHeaders(),
+			options.getCookies(), options.getAuth(), options.getBody(),
+			options.getFileParts(), options.getParts(), options.getResponse(),
+			options.isFollowRedirects(), options.getProgressId(),
+			options.getPortletRequest());
+	}
+
+	@Override
+	public InputStream URLtoInputStream(String location) throws IOException {
+		Http.Options options = new Http.Options();
+
+		options.setLocation(location);
+
+		return URLtoInputStream(options);
+	}
+
+	@Override
+	public InputStream URLtoInputStream(String location, boolean post)
+		throws IOException {
+
+		Http.Options options = new Http.Options();
+
+		options.setLocation(location);
+		options.setPost(post);
+
+		return URLtoInputStream(options);
+	}
+
+	@Override
 	public String URLtoString(Http.Options options) throws IOException {
 		return new String(URLtoByteArray(options));
 	}
@@ -1390,7 +1425,43 @@ public class HttpImpl implements Http {
 			PortletRequest portletRequest)
 		throws IOException {
 
-		byte[] bytes = null;
+		InputStream inputStream = URLtoInputStream(
+			location, method, headers, cookies, auth, body, fileParts, parts,
+			response, followRedirects, progressId, portletRequest);
+
+		if (inputStream == null) {
+			return null;
+		}
+
+		try {
+			long contentLengthLong = response.getContentLengthLong();
+
+			if (contentLengthLong > _MAX_BYTE_ARRAY_LENGTH) {
+				StringBundler sb = new StringBundler(5);
+
+				sb.append("Retrieving ");
+				sb.append(location);
+				sb.append(" yields a file of size ");
+				sb.append(contentLengthLong);
+				sb.append(" bytes, which cannot be converted to a byte array");
+
+				throw new OutOfMemoryError(sb.toString());
+			}
+
+			return FileUtil.getBytes(inputStream);
+		}
+		finally {
+			inputStream.close();
+		}
+	}
+
+	protected InputStream URLtoInputStream(
+			String location, Http.Method method, Map<String, String> headers,
+			Cookie[] cookies, Http.Auth auth, Http.Body body,
+			List<Http.FilePart> fileParts, Map<String, String> parts,
+			Http.Response response, boolean followRedirects, String progressId,
+			PortletRequest portletRequest)
+		throws IOException {
 
 		HttpMethod httpMethod = null;
 		HttpState httpState = null;
@@ -1520,7 +1591,7 @@ public class HttpImpl implements Http {
 				String redirect = locationHeader.getValue();
 
 				if (followRedirects) {
-					return URLtoByteArray(
+					return URLtoInputStream(
 						redirect, Http.Method.GET, headers, cookies, auth, body,
 						fileParts, parts, response, followRedirects, progressId,
 						portletRequest);
@@ -1530,61 +1601,61 @@ public class HttpImpl implements Http {
 				}
 			}
 
-			InputStream inputStream = httpMethod.getResponseBodyAsStream();
+			long contentLengthLong = 0;
 
-			if (inputStream != null) {
-				int contentLength = 0;
+			Header contentLengthHeader = httpMethod.getResponseHeader(
+				HttpHeaders.CONTENT_LENGTH);
 
-				Header contentLengthHeader = httpMethod.getResponseHeader(
-					HttpHeaders.CONTENT_LENGTH);
+			if (contentLengthHeader != null) {
+				contentLengthLong = GetterUtil.getLong(
+					contentLengthHeader.getValue());
 
-				if (contentLengthHeader != null) {
-					contentLength = GetterUtil.getInteger(
-						contentLengthHeader.getValue());
+				response.setContentLengthLong(contentLengthLong);
+
+				if (contentLengthLong > _MAX_BYTE_ARRAY_LENGTH) {
+					response.setContentLength(-1);
+				}
+				else {
+					int contentLength = (int)contentLengthLong;
 
 					response.setContentLength(contentLength);
 				}
+			}
 
-				Header contentType = httpMethod.getResponseHeader(
-					HttpHeaders.CONTENT_TYPE);
+			Header contentType = httpMethod.getResponseHeader(
+				HttpHeaders.CONTENT_TYPE);
 
-				if (contentType != null) {
-					response.setContentType(contentType.getValue());
-				}
-
-				if (Validator.isNotNull(progressId) &&
-					(portletRequest != null)) {
-
-					ProgressInputStream progressInputStream =
-						new ProgressInputStream(
-							portletRequest, inputStream, contentLength,
-							progressId);
-
-					try (UnsyncByteArrayOutputStream
-							unsyncByteArrayOutputStream =
-								new UnsyncByteArrayOutputStream(
-									contentLength)) {
-
-						progressInputStream.readAll(
-							unsyncByteArrayOutputStream);
-
-						bytes =
-							unsyncByteArrayOutputStream.unsafeGetByteArray();
-					}
-					finally {
-						progressInputStream.clearProgress();
-					}
-				}
-				else {
-					bytes = FileUtil.getBytes(inputStream);
-				}
+			if (contentType != null) {
+				response.setContentType(contentType.getValue());
 			}
 
 			for (Header header : httpMethod.getResponseHeaders()) {
 				response.addHeader(header.getName(), header.getValue());
 			}
 
-			return bytes;
+			InputStream inputStream = httpMethod.getResponseBodyAsStream();
+
+			if (Validator.isNotNull(progressId) && (portletRequest != null)) {
+				ProgressInputStream progressInputStream =
+					new ProgressInputStream(
+						portletRequest, inputStream, contentLengthLong,
+						progressId);
+
+				try {
+					File tempFile = FileUtil.createTempFile(
+						progressInputStream);
+
+					return new DeleteOnCloseFileInputStream(tempFile);
+				}
+				finally {
+					progressInputStream.clearProgress();
+				}
+			}
+			else {
+				File tempFile = FileUtil.createTempFile(inputStream);
+
+				return new DeleteOnCloseFileInputStream(tempFile);
+			}
 		}
 		finally {
 			try {
@@ -1609,6 +1680,8 @@ public class HttpImpl implements Http {
 
 	private static final String _DEFAULT_USER_AGENT =
 		"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
+
+	private static final int _MAX_BYTE_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
 	private static final int _MAX_CONNECTIONS_PER_HOST = GetterUtil.getInteger(
 		PropsUtil.get(HttpImpl.class.getName() + ".max.connections.per.host"),
