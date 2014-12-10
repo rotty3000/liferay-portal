@@ -1689,10 +1689,6 @@
 
 		<action path="/site_browser/view" forward="portlet.site_browser.view" />
 
-		<!-- Site Map -->
-
-		<action path="/site_map/view" forward="portlet.site_map.view" />
-
 		<!-- Sites Admin -->
 
 		<action path="/sites_admin/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">

@@ -12,10 +12,11 @@
  * details.
  */
 
-package com.liferay.portlet.sitemap.template;
+package com.liferay.site.map.web.template;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portletdisplaytemplate.BasePortletDisplayTemplateHandler;
+import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Layout;
@@ -29,9 +30,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Juan Fernández
  */
+@Component(
+		immediate = true,
+		property = {
+			"javax.portlet.name=com_liferay_site_map_web_portlet_SiteMapPortlet"
+		},
+		service = TemplateHandler.class
+	)
 public class SiteMapPortletDisplayTemplateHandler
 	extends BasePortletDisplayTemplateHandler {
 
