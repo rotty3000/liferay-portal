@@ -1,4 +1,5 @@
-<%--
+package com.liferay.sites.directory.web.portlet.action;
+
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,11 +13,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/html/portlet/sites_directory/init.jsp" %>
+import com.liferay.portal.kernel.portlet.ConfigurationAction;
+import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 
-<liferay-ui:sites-directory
-	displayStyle="<%= displayStyle %>"
-	sites="<%= sites %>"
-/>
+import org.osgi.service.component.annotations.Component;
+
+/**
+ * @author Peter Fellwock
+ */
+@Component(
+	immediate = true,
+	property = {
+		"javax.portlet.name=com_liferay_sites_directory_web_portlet_SitesDirectoryPortlet"
+	},
+	service = ConfigurationAction.class
+)
+public class SitesDirectoryConfigurationAction
+	extends DefaultConfigurationAction {
+}
