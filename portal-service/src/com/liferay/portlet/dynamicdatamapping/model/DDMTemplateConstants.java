@@ -28,4 +28,6 @@ public class DDMTemplateConstants {
 
 	public static final String TEMPLATE_TYPE_FORM = "form";
 
+	public static final String VERSION_DEFAULT = "1.0";
+
 }
