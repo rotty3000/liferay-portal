@@ -73,7 +73,6 @@
 	<typedef classpathref="lib.classpath" resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 	<taskdef classpathref="lib.classpath" resource="tasks.properties" />
 
-	<taskdef classname="com.liferay.ant.bnd.BaselineJarTask" classpathref="lib.classpath" name="baseline-jar" />
 	<taskdef classname="com.tonicsystems.jarjar.JarJarTask" classpath="${project.dir}/lib/development/jarjar.jar" name="jarjar" />
 	<taskdef classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="${project.dir}/lib/development/xmltask.jar" name="xmltask" />
 
@@ -532,16 +531,17 @@ Please set the environment variable ANT_OPTS to the recommended value of
 
 			<bndexpand propertyfile="@{bndRootFile}" />
 
-			<baseline-jar
-				bndRootFile="@{bndRootFile}"
-				file="@{file}"
-				outputPath="@{outputPath}"
-				sourcePath="@{sourcePath}"
-			>
+			<bnd eclipse="false" failok="false" exceptions="true" inherit="true" output="@{outputPath}">
+				<property name="-sourcepath" value="@{sourcePath}" />
 				<classpath>
-					<pathelement location="@{sourcePath}/classes" />
+					<pathelement location="@{sourcePath}/classes"/>
 				</classpath>
-			</baseline-jar>
+				<bndfiles>
+					<fileset dir="@{sourcePath}">
+						<include name="@{file}"/>
+					</fileset>
+				</bndfiles>
+			</bnd>
 		</sequential>
 	</macrodef>
 
