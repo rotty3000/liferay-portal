@@ -71,6 +71,7 @@ import com.liferay.util.xml.XMLFormatter;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -82,8 +83,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.oro.io.GlobFilenameFilter;
 
 /**
  * @author Brian Wing Shun Chan
@@ -429,7 +428,14 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 		if (PropsValues.AUTO_DEPLOY_COPY_COMMONS_LOGGING) {
 			String[] commonsLoggingJars = pluginLibDir.list(
-				new GlobFilenameFilter("commons-logging*.jar"));
+				new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.matches("commons-logging.*\\.jar");
+					}
+
+				});
 
 			if (ArrayUtil.isEmpty(commonsLoggingJars)) {
 				String portalJarPath =
@@ -445,7 +451,14 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 
 		if (PropsValues.AUTO_DEPLOY_COPY_LOG4J) {
 			String[] log4jJars = pluginLibDir.list(
-				new GlobFilenameFilter("log4j*.jar"));
+				new FilenameFilter() {
+
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.matches("log4j.*\\.jar");
+					}
+
+				});
 
 			if (ArrayUtil.isEmpty(log4jJars)) {
 				String portalJarPath =
@@ -942,13 +955,13 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 			deployDir = jbossPrefix + deployDir;
 		}
 		else if (appServerType.equals(ServerDetector.GERONIMO_ID) ||
-				 appServerType.equals(ServerDetector.GLASSFISH_ID) ||
-				 appServerType.equals(ServerDetector.JETTY_ID) ||
-				 appServerType.equals(ServerDetector.JONAS_ID) ||
-				 appServerType.equals(ServerDetector.OC4J_ID) ||
-				 appServerType.equals(ServerDetector.RESIN_ID) ||
-				 appServerType.equals(ServerDetector.TOMCAT_ID) ||
-				 appServerType.equals(ServerDetector.WEBLOGIC_ID)) {
+				appServerType.equals(ServerDetector.GLASSFISH_ID) ||
+				appServerType.equals(ServerDetector.JETTY_ID) ||
+				appServerType.equals(ServerDetector.JONAS_ID) ||
+				appServerType.equals(ServerDetector.OC4J_ID) ||
+				appServerType.equals(ServerDetector.RESIN_ID) ||
+				appServerType.equals(ServerDetector.TOMCAT_ID) ||
+				appServerType.equals(ServerDetector.WEBLOGIC_ID)) {
 
 			if (unpackWar) {
 				deployDir = deployDir.substring(0, deployDir.length() - 4);

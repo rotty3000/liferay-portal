@@ -42,7 +42,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.oro.io.GlobFilenameFilter;
 import org.apache.tools.ant.DirectoryScanner;
 
 /**
@@ -515,9 +514,16 @@ public class PluginsEnvironmentBuilder {
 		String libDirPath = StringUtil.replace(
 			libDir.getPath(), StringPool.BACK_SLASH, StringPool.SLASH);
 
-		if (libDirPath.contains("/ext/")) {
-			FilenameFilter filenameFilter = new GlobFilenameFilter("*.jar");
+		FilenameFilter filenameFilter = new FilenameFilter() {
 
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".jar");
+			}
+
+		};
+
+		if (libDirPath.contains("/ext/")) {
 			for (String dirName : new String[] {"global", "portal"}) {
 				File file = new File(libDirPath + "/../ext-lib/" + dirName);
 
@@ -560,7 +566,7 @@ public class PluginsEnvironmentBuilder {
 			Collections.sort(portalJars);
 		}
 
-		String[] customJarsArray = libDir.list(new GlobFilenameFilter("*.jar"));
+		String[] customJarsArray = libDir.list(filenameFilter);
 
 		List<String> customJars = null;
 
