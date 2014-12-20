@@ -110,7 +110,8 @@ public class RSSWebCacheItem implements WebCacheItem {
 		return _REFRESH_TIME;
 	}
 
-	private static final long _REFRESH_TIME = Time.MINUTE * 20;
+	private static final long _REFRESH_TIME =
+		PropsValues.RSS_FEED_REFRESH_INTERVAL * Time.MINUTE;
 
 	private final String _url;
 
