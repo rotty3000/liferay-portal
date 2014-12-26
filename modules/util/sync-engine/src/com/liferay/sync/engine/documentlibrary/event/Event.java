@@ -14,6 +14,8 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
+import com.liferay.sync.engine.documentlibrary.handler.Handler;
+
 import java.util.Map;
 
 /**
@@ -21,10 +23,14 @@ import java.util.Map;
  */
 public interface Event extends Runnable {
 
+	public Handler<Void> getHandler();
+
 	public Map<String, Object> getParameters();
 
 	public Object getParameterValue(String key);
 
 	public long getSyncAccountId();
+
+	public String getURLPath();
 
 }

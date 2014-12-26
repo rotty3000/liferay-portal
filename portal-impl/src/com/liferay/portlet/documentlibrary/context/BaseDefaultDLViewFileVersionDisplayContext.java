@@ -465,7 +465,7 @@ public abstract class BaseDefaultDLViewFileVersionDisplayContext
 
 		String javaScript = _processFreeMarkerTemplate(
 			"/com/liferay/portlet/documentlibrary/context/dependencies" +
-				"open_in_ms_office_js.ftl",
+				"/open_in_ms_office_js.ftl",
 			context);
 
 		javascriptMenuItem.setJavascript(javaScript);

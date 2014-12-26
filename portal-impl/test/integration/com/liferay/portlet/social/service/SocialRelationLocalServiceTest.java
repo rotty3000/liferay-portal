@@ -31,17 +31,14 @@ import com.liferay.portlet.social.model.SocialRelationConstants;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 /**
  * @author Brian Wing Shun Chan
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SocialRelationLocalServiceTest {
 
 	@ClassRule
@@ -50,17 +47,19 @@ public class SocialRelationLocalServiceTest {
 		new AggregateTestRule(
 			new LiferayIntegrationTestRule(), MainServletTestRule.INSTANCE);
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUpClass() throws Exception {
+
+		// Users
+
 		for (String screenNamePrefix : new String[] {"dlc", "fra"}) {
 			for (int i = 1; i <= 9; i++) {
 				UserTestUtil.addUser(screenNamePrefix + i, false, null);
 			}
 		}
-	}
 
-	@Test
-	public void testAddRelationWithBiType() throws Exception {
+		// Bi type
+
 		User dlc1User = UserLocalServiceUtil.getUserByScreenName(
 			TestPropsValues.getCompanyId(), "dlc1");
 
@@ -147,10 +146,9 @@ public class SocialRelationLocalServiceTest {
 		SocialRelationLocalServiceUtil.addRelation(
 			dlc1User.getUserId(), dlc2User.getUserId(),
 			SocialRelationConstants.TYPE_BI_ROMANTIC_PARTNER);
-	}
 
-	@Test
-	public void testAddRelationWithUniType() throws Exception {
+		// Uni type
+
 		User fra1User = UserLocalServiceUtil.getUserByScreenName(
 			TestPropsValues.getCompanyId(), "fra1");
 

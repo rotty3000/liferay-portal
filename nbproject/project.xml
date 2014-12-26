@@ -403,7 +403,8 @@
 				<classpath mode="compile">lib/portal/gif89.jar</classpath>
 				<classpath mode="compile">lib/portal/groovy.jar</classpath>
 				<classpath mode="compile">lib/portal/hessian.jar</classpath>
-				<classpath mode="compile">lib/portal/hibernate3.jar</classpath>
+				<classpath mode="compile">lib/portal/hibernate-commons-annotations</classpath>
+				<classpath mode="compile">lib/portal/hibernate-core.jar</classpath>
 				<classpath mode="compile">lib/portal/htmlparser.jar</classpath>
 				<classpath mode="compile">lib/portal/httpclient.jar</classpath>
 				<classpath mode="compile">lib/portal/httpcore.jar</classpath>
@@ -480,6 +481,7 @@
 				<classpath mode="compile">lib/portal/mime4j-core.jar</classpath>
 				<classpath mode="compile">lib/portal/mime4j-dom.jar</classpath>
 				<classpath mode="compile">lib/portal/mimepull.jar</classpath>
+				<classpath mode="compile">lib/portal/monte-cc.jar</classpath>
 				<classpath mode="compile">lib/portal/msnm.jar</classpath>
 				<classpath mode="compile">lib/portal/nekohtml.jar</classpath>
 				<classpath mode="compile">lib/portal/netcdf.jar</classpath>
