@@ -16,6 +16,7 @@ package com.liferay.portal.sharepoint;
 
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.HttpMethods;
+import com.liferay.portal.kernel.servlet.ServletRequestUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.servlet.filters.secure.SecureFilter;
 
@@ -35,32 +36,6 @@ public class SharepointFilter extends SecureFilter {
 		super.init(filterConfig);
 
 		setUsePermissionChecker(true);
-	}
-
-	protected boolean isSharepointRequest(String uri) {
-		if (uri == null) {
-			return false;
-		}
-
-		if (uri.endsWith("*.asmx")) {
-			return true;
-		}
-
-		for (String prefix : _PREFIXES) {
-			if (uri.startsWith(prefix)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	protected boolean isWebDAVRequest(String uri) {
-		if (uri.startsWith("/webdav")) {
-			return true;
-		}
-
-		return false;
 	}
 
 	@Override
@@ -84,7 +59,7 @@ public class SharepointFilter extends SecureFilter {
 			return;
 		}
 
-		if (!isSharepointRequest(request.getRequestURI())) {
+		if (!ServletRequestUtil.isSharepointRequest(request.getRequestURI())) {
 			processFilter(
 				SharepointFilter.class, request, response, filterChain);
 
@@ -114,7 +89,7 @@ public class SharepointFilter extends SecureFilter {
 	protected void setOptionsHeaders(
 		HttpServletRequest request, HttpServletResponse response) {
 
-		if (isWebDAVRequest(request.getRequestURI())) {
+		if (ServletRequestUtil.isWebDAVRequest(request.getRequestURI())) {
 			response.setHeader("MS-Author-Via", "DAV,MS-FP/4.0");
 		}
 		else {
@@ -141,9 +116,5 @@ public class SharepointFilter extends SecureFilter {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Connection", "close");
 	}
-
-	private static final String[] _PREFIXES = new String[] {
-		"/_vti_inf.html", "/_vti_bin", "/sharepoint", "/history", "/resources"
-	};
 
 }

@@ -22,8 +22,35 @@ import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Vilmos Papp
  */
 public class ServletRequestUtil {
+
+	public static boolean isSharepointRequest(String uri) {
+		if (uri == null) {
+			return false;
+		}
+
+		if (uri.endsWith("*.asmx")) {
+			return true;
+		}
+
+		for (String prefix : _PREFIXES) {
+			if (uri.startsWith(prefix)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isWebDAVRequest(String uri) {
+		if (uri.startsWith("/webdav")) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public static void logRequestWrappers(HttpServletRequest request) {
 		HttpServletRequest tempRequest = request;
@@ -44,6 +71,10 @@ public class ServletRequestUtil {
 			}
 		}
 	}
+
+	private static final String[] _PREFIXES = new String[] {
+		"/_vti_inf.html", "/_vti_bin", "/sharepoint", "/history", "/resources"
+	};
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ServletRequestUtil.class);

@@ -19,9 +19,11 @@ import com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil;
 import com.liferay.portal.kernel.concurrent.ConcurrentLFUCache;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.servlet.HttpMethods;
 import com.liferay.portal.kernel.servlet.HttpOnlyCookieServletResponse;
 import com.liferay.portal.kernel.servlet.NonSerializableObjectRequestWrapper;
 import com.liferay.portal.kernel.servlet.SanitizedServletResponse;
+import com.liferay.portal.kernel.servlet.ServletRequestUtil;
 import com.liferay.portal.kernel.servlet.ServletVersionDetector;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.ContextPathUtil;
@@ -72,6 +74,16 @@ public class InvokerFilter extends BasePortalLifecycle implements Filter {
 		request = handleNonSerializableRequest(request);
 
 		HttpServletResponse response = (HttpServletResponse)servletResponse;
+
+		if (request.getMethod().equals(HttpMethods.OPTIONS)) {
+			if (!ServletRequestUtil.isWebDAVRequest(uri) &&
+				!ServletRequestUtil.isSharepointRequest(uri)) {
+
+				response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
+
+				return;
+			}
+		}
 
 		if (ServletVersionDetector.is3_0()) {
 			response =
