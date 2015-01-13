@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateManagerRegistry;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -60,6 +61,12 @@ public class VelocityManager extends BaseTemplateManager {
 	@Override
 	public String getName() {
 		return TemplateConstants.LANG_TYPE_VM;
+	}
+	
+	@Override
+	public String[] getRestrictedVariables() {
+		return PropsUtil.getArray(
+			PropsKeys.VELOCITY_ENGINE_RESTRICTED_VARIABLES);
 	}
 
 	@Override

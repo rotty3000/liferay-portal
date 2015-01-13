@@ -12,18 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.freemarker;
+package com.liferay.portal.template.freemarker;
 
-import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import aQute.bnd.annotation.metatype.Configurable;
+
+import com.liferay.portal.freemarker.configuration.FreemarkerEngineConfiguration;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateException;
+import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.template.BaseTemplateManager;
 import com.liferay.portal.template.RestrictedTemplate;
-import com.liferay.portal.util.PropsValues;
+import com.liferay.portal.template.TemplateContextHelper;
 
 import freemarker.cache.TemplateCache;
 
@@ -35,11 +38,21 @@ import java.lang.reflect.Field;
 
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Mika Koivisto
  * @author Tina Tina
  */
-@DoPrivileged
+@Component(
+		configurationPid = "com.liferay.portal.template.freemarker",
+		configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,
+		service = TemplateManager.class
+)
 public class FreeMarkerManager extends BaseTemplateManager {
 
 	@Override
@@ -59,7 +72,7 @@ public class FreeMarkerManager extends BaseTemplateManager {
 		templateContextHelper = null;
 
 		if (isEnableDebuggerService()) {
-			DebuggerService.shutdown();
+			//DebuggerService.shutdown();
 		}
 	}
 
@@ -71,6 +84,11 @@ public class FreeMarkerManager extends BaseTemplateManager {
 	@Override
 	public String getName() {
 		return TemplateConstants.LANG_TYPE_FTL;
+	}
+
+	@Override
+	public String[] getRestrictedVariables() {
+		return _freemarkerEngineConfiguration.getRestrictedVariables();
 	}
 
 	@Override
@@ -86,7 +104,7 @@ public class FreeMarkerManager extends BaseTemplateManager {
 				Configuration.class, "cache");
 
 			TemplateCache templateCache = new LiferayTemplateCache(
-				_configuration);
+				_configuration, _freemarkerEngineConfiguration);
 
 			field.set(_configuration, templateCache);
 		}
@@ -97,17 +115,18 @@ public class FreeMarkerManager extends BaseTemplateManager {
 
 		_configuration.setDefaultEncoding(StringPool.UTF8);
 		_configuration.setLocalizedLookup(
-			PropsValues.FREEMARKER_ENGINE_LOCALIZED_LOOKUP);
+			_freemarkerEngineConfiguration.getLocalizedLookup());
 		_configuration.setNewBuiltinClassResolver(
 			new LiferayTemplateClassResolver());
 		_configuration.setObjectWrapper(new LiferayObjectWrapper());
 
 		try {
 			_configuration.setSetting(
-				"auto_import", PropsValues.FREEMARKER_ENGINE_MACRO_LIBRARY);
+				"auto_import",
+				_freemarkerEngineConfiguration.getMacroLibrary());
 			_configuration.setSetting(
 				"template_exception_handler",
-				PropsValues.FREEMARKER_ENGINE_TEMPLATE_EXCEPTION_HANDLER);
+				_freemarkerEngineConfiguration.getTemplateExceptionHandler());
 		}
 		catch (Exception e) {
 			throw new TemplateException("Unable to init freemarker manager", e);
@@ -118,6 +137,20 @@ public class FreeMarkerManager extends BaseTemplateManager {
 		}
 	}
 
+	@Reference(unbind = "-")
+	public void setFreeMarkerTemplateContextHelper(
+		TemplateContextHelper freeMarkerTemplateContextHelper) {
+
+		templateContextHelper = freeMarkerTemplateContextHelper;
+	}
+
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_freemarkerEngineConfiguration = Configurable.createConfigurable(
+			FreemarkerEngineConfiguration.class, properties);
+	}
+
 	@Override
 	protected Template doGetTemplate(
 		TemplateResource templateResource,
@@ -126,7 +159,8 @@ public class FreeMarkerManager extends BaseTemplateManager {
 
 		Template template = new FreeMarkerTemplate(
 			templateResource, errorTemplateResource, helperUtilities,
-			_configuration, templateContextHelper, privileged);
+			_configuration, templateContextHelper, privileged,
+			_freemarkerEngineConfiguration.getResourceModificationCheck());
 
 		if (restricted) {
 			template = new RestrictedTemplate(
@@ -147,5 +181,7 @@ public class FreeMarkerManager extends BaseTemplateManager {
 	}
 
 	private Configuration _configuration;
+	private volatile FreemarkerEngineConfiguration
+		_freemarkerEngineConfiguration;
 
 }

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.util.freemarker;
+package com.liferay.portal.template.freemarker;
 
 import com.liferay.portal.kernel.servlet.JSPSupportServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
@@ -69,7 +69,8 @@ public class FreeMarkerTemplateTaglibSupportProvider
 		template.put("Application", servletContextHashModel);
 
 		TemplateHashModel taglibsFactory =
-			FreeMarkerTaglibFactoryUtil.createTaglibFactory(servletContext);
+			FreeMarkerTaglibFactoryUtil.staticCreateTaglibFactory(
+				servletContext);
 
 		template.put("PortletJspTagLibs", taglibsFactory);
 
