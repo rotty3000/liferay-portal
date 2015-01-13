@@ -17,9 +17,9 @@ package com.liferay.taglib.util;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.servlet.JSPSupportServlet;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.servlet.taglib.DynamicIncludeUtil;
+import com.liferay.portal.kernel.template.TaglibFactoryUtilRegistry;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
@@ -36,17 +36,9 @@ import com.liferay.portal.model.Theme;
 import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.taglib.servlet.PipingServletResponse;
-import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
-
-import freemarker.ext.servlet.HttpRequestHashModel;
-import freemarker.ext.servlet.ServletContextHashModel;
-
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateHashModel;
 
 import java.io.Writer;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -278,33 +270,20 @@ public class ThemeUtil {
 
 		// Portal JSP tag library factory
 
-		TemplateHashModel portalTaglib =
-			FreeMarkerTaglibFactoryUtil.createTaglibFactory(servletContext);
-
-		template.put("PortalJspTagLibs", portalTaglib);
+		TaglibFactoryUtilRegistry.getTaglibFactoryUtil().includeTagLib(
+			servletContext, "PortalJspTagLibs", template);
 
 		// Theme JSP tag library factory
 
-		TemplateHashModel themeTaglib =
-			FreeMarkerTaglibFactoryUtil.createTaglibFactory(
-				themeServletContext);
-
-		template.put("ThemeJspTaglibs", themeTaglib);
+		TaglibFactoryUtilRegistry.getTaglibFactoryUtil().includeTagLib(
+			themeServletContext, "ThemeJspTaglibs", template);
+		
 
 		// FreeMarker JSP tag library support
 
-		GenericServlet genericServlet = new JSPSupportServlet(servletContext);
-
-		ServletContextHashModel servletContextHashModel =
-			new ServletContextHashModel(
-				genericServlet, ObjectWrapper.DEFAULT_WRAPPER);
-
-		template.put("Application", servletContextHashModel);
-
-		HttpRequestHashModel httpRequestHashModel = new HttpRequestHashModel(
-			request, response, ObjectWrapper.DEFAULT_WRAPPER);
-
-		template.put("Request", httpRequestHashModel);
+		TaglibFactoryUtilRegistry.getTaglibFactoryUtil()
+			.includeContextHashModel(
+				servletContext, request, response, template);
 
 		// Merge templates
 

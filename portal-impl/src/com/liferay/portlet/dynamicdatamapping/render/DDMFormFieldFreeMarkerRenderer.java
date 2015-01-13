@@ -15,9 +15,8 @@
 package com.liferay.portlet.dynamicdatamapping.render;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.servlet.JSPSupportServlet;
+import com.liferay.portal.kernel.template.TaglibFactoryUtilRegistry;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
@@ -40,18 +39,8 @@ import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMFieldsCounter;
 import com.liferay.portlet.dynamicdatamapping.util.DDMImpl;
-import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
-
-import freemarker.ext.servlet.HttpRequestHashModel;
-import freemarker.ext.servlet.ServletContextHashModel;
-
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateHashModel;
-
-import java.io.Writer;
 
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +48,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -623,39 +611,9 @@ public class DDMFormFieldFreeMarkerRenderer implements DDMFormFieldRenderer {
 
 		template.prepare(request);
 
-		// Tag libraries
+		return TaglibFactoryUtilRegistry.getTaglibFactoryUtil().processFTL(
+			request, response, template);
 
-		Writer writer = new UnsyncStringWriter();
-
-		// Portal JSP tag library factory
-
-		TemplateHashModel portalTaglib =
-			FreeMarkerTaglibFactoryUtil.createTaglibFactory(
-				request.getServletContext());
-
-		template.put("PortalJspTagLibs", portalTaglib);
-
-		// FreeMarker JSP tag library support
-
-		GenericServlet genericServlet = new JSPSupportServlet(
-			request.getServletContext());
-
-		ServletContextHashModel servletContextHashModel =
-			new ServletContextHashModel(
-				genericServlet, ObjectWrapper.DEFAULT_WRAPPER);
-
-		template.put("Application", servletContextHashModel);
-
-		HttpRequestHashModel httpRequestHashModel = new HttpRequestHashModel(
-			request, response, ObjectWrapper.DEFAULT_WRAPPER);
-
-		template.put("Request", httpRequestHashModel);
-
-		// Merge templates
-
-		template.processTemplate(writer);
-
-		return writer.toString();
 	}
 
 	private static final String _DEFAULT_NAMESPACE = "alloy";

@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portletdisplaytemplate.BasePortletDisplayTemplateHandler;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
-import com.liferay.portal.kernel.servlet.JSPSupportServlet;
+import com.liferay.portal.kernel.template.TaglibFactoryUtilRegistry;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.template.TemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandlerRegistryUtil;
@@ -42,21 +42,9 @@ import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUti
 import com.liferay.taglib.servlet.PipingServletResponse;
 import com.liferay.taglib.util.VelocityTaglib;
 import com.liferay.taglib.util.VelocityTaglibImpl;
-import com.liferay.util.freemarker.FreeMarkerTaglibFactoryUtil;
-
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.ext.servlet.HttpRequestHashModel;
-import freemarker.ext.servlet.ServletContextHashModel;
-
-import freemarker.template.ObjectWrapper;
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 
 import java.io.IOException;
-
 import java.lang.reflect.InvocationHandler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -68,8 +56,6 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
-import javax.servlet.GenericServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -397,22 +383,9 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 		Map<String, Object> contextObjects, String variableName,
 		Class<?> variableClass) {
 
-		try {
-			BeansWrapper beansWrapper = BeansWrapper.getDefaultInstance();
-
-			TemplateHashModel templateHashModel =
-				beansWrapper.getStaticModels();
-
-			TemplateModel templateModel = templateHashModel.get(
-				variableClass.getCanonicalName());
-
-			contextObjects.put(variableName, templateModel);
-		}
-		catch (TemplateModelException e) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Variable " + variableName + " registration fail", e);
-			}
-		}
+		TaglibFactoryUtilRegistry.getTaglibFactoryUtil()
+			.addStaticClassSupportFTL(
+				contextObjects, variableName, variableClass);
 	}
 
 	private void _addStaticClassSupportVM(
@@ -427,37 +400,8 @@ public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 			HttpServletResponse response)
 		throws Exception {
 
-		// FreeMarker servlet application
-
-		GenericServlet genericServlet = new JSPSupportServlet(
-			request.getServletContext());
-
-		ServletContextHashModel servletContextHashModel =
-			new ServletContextHashModel(
-				genericServlet, ObjectWrapper.DEFAULT_WRAPPER);
-
-		contextObjects.put(
-			PortletDisplayTemplateConstants.FREEMARKER_SERVLET_APPLICATION,
-			servletContextHashModel);
-
-		// FreeMarker servlet request
-
-		HttpRequestHashModel requestHashModel = new HttpRequestHashModel(
-			request, response, ObjectWrapper.DEFAULT_WRAPPER);
-
-		contextObjects.put(
-			PortletDisplayTemplateConstants.FREEMARKER_SERVLET_REQUEST,
-			requestHashModel);
-
-		// Taglib Liferay hash
-
-		TemplateHashModel taglibLiferayHash =
-			FreeMarkerTaglibFactoryUtil.createTaglibFactory(
-				request.getServletContext());
-
-		contextObjects.put(
-			PortletDisplayTemplateConstants.TAGLIB_LIFERAY_HASH,
-			taglibLiferayHash);
+		TaglibFactoryUtilRegistry.getTaglibFactoryUtil().addTaglibSupportFTL(
+				contextObjects, request, response);
 	}
 
 	private void _addTaglibSupportVM(
