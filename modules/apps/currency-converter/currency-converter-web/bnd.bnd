@@ -4,4 +4,7 @@ Bundle-Version: 1.0.0
 Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources,\
+	@../../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*,\
 	@../../../../util-taglib/util-taglib.jar
+
+-metatype: *

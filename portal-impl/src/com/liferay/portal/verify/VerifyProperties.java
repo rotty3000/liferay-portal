@@ -350,6 +350,34 @@ public class VerifyProperties extends VerifyProcess {
 			"com.liferay.bookmarks.service"
 		},
 
+		// Currency Converter
+
+		new String[] {
+			"currency.converter.symbols", "symbols",
+			"com.liferay.currency.converter.web"
+		},
+
+		
+		// IFrame
+
+		new String[] {
+			"iframe.auth", "auth", "com.liferay.iframe.web"
+		},
+		
+		new String[] {
+			"iframe.auth-type", "auth.type", "com.liferay.iframe.web"
+		},
+		
+		new String[] {
+			"iframe.form-method", "form.method", "com.liferay.iframe.web"
+		},
+		
+		new String[] {
+			"iframe.hidden-variables", "hidden.variables",
+			"com.liferay.iframe.web"
+		},
+		
+
 		// Journal
 
 		new String[] {

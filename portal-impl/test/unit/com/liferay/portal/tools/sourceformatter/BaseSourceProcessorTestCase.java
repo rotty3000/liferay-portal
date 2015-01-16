@@ -75,7 +75,9 @@ public class BaseSourceProcessorTestCase {
 		Tuple tuple = sourceFormatter.format(fullFileName);
 
 		if (tuple == null) {
-			return;
+			throw new IllegalArgumentException(
+				"The file name " + fullFileName +
+					" does not end with a valid extension");
 		}
 
 		List<String> errorMessages = (List<String>)tuple.getObject(1);
