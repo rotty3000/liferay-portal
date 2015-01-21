@@ -1,6 +1,9 @@
 Bundle-Name: Liferay Portal CAS SSO
 Bundle-SymbolicName: com.liferay.portal.sso
 Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.portal.sso.cas.configuration,\
+	com.liferay.portal.sso.cas.util
 Include-Resource:\
 	classes,\
 	@../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*
