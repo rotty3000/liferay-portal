@@ -12,6 +12,10 @@
 
 	<dependencies defaultconf="default">
 		<dependency name="cas-client-core" org="org.jasig.cas.client" rev="3.1.12" />
+		<dependency name="jcip-annotations" org="net.jcip" rev="1.0" />
+		<dependency name="joda-convert" org="org.joda" rev="1.7" />
+		<dependency name="joda-time" org="joda-time" rev="2.7" />
+		<dependency name="opensaml" org="org.opensaml" rev="2.6.1" />
 		<dependency name="org.osgi.compendium" org="org.osgi" rev="5.0.0" />
 		<dependency name="org.osgi.core" org="org.osgi" rev="5.0.0" />
 	</dependencies>
