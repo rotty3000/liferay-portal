@@ -14,8 +14,7 @@
 
 package com.liferay.portal.sso.cas;
 
-import aQute.configurable.Configurable;
-
+import aQute.bnd.annotation.metatype.Configurable;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;

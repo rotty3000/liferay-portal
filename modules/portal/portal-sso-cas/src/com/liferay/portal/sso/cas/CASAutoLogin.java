@@ -14,8 +14,7 @@
 
 package com.liferay.portal.sso.cas;
 
-import aQute.configurable.Configurable;
-
+import aQute.bnd.annotation.metatype.Configurable;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;

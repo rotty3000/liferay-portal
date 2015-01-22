@@ -14,8 +14,7 @@
 
 package com.liferay.portal.sso.cas;
 
-import aQute.configurable.Configurable;
-
+import aQute.bnd.annotation.metatype.Configurable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -56,7 +55,13 @@ import org.osgi.service.component.annotations.Modified;
  * @author Zsolt Balogh
  */
 @Component(
-	immediate = true, properties = {},
+	immediate = true,
+	properties = {
+		"servletContextName=",
+		"servlet-filter-name=SSO CAS Filter",
+		"dispatcher=FORWARD,REQUEST",
+		"url-pattern=/c/portal/login,/c/portal/logout"
+	},
 	service = Filter.class
 )
 public class CASFilter extends BasePortalFilter {
