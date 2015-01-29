@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.security.ntlm;
+package com.liferay.portal.sso.ntlm;
 
 import java.io.Serializable;
 

@@ -12,28 +12,15 @@
  * details.
  */
 
-package com.liferay.portal.security.ntlm;
-
-import com.liferay.portal.kernel.exception.SystemException;
+package com.liferay.portal.sso.ntlm.util;
 
 /**
  * @author Michael C. Han
  */
-public class NtlmLogonException extends SystemException {
+public class WebKeys {
 
-	public NtlmLogonException() {
-	}
+	public static final String NTLM_REMOTE_USER = "NTLM_REMOTE_USER";
 
-	public NtlmLogonException(String msg) {
-		super(msg);
-	}
-
-	public NtlmLogonException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public NtlmLogonException(Throwable cause) {
-		super(cause);
-	}
+	public static final String NTLM_USER_ACCOUNT = "NTLM_USER_ACCOUNT";
 
 }

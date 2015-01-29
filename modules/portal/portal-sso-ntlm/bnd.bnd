@@ -1,0 +1,13 @@
+Bundle-Name: Liferay Portal NTLM SSO
+Bundle-SymbolicName: com.liferay.portal.sso.ntlm
+Bundle-Version: 1.0.0
+libs: ${lsr;lib;*.jar}
+Import-Package:\
+	!javax.microedition.*,\
+	*
+Include-Resource:\
+	${replace;${libs};^;@lib/},\
+	classes,\
+	@../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*
+
+-metatype: *

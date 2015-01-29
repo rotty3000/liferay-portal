@@ -12,23 +12,41 @@
  * details.
  */
 
-package com.liferay.portal.security.auth;
+package com.liferay.portal.sso.ntlm.auth;
 
+import aQute.bnd.annotation.metatype.Configurable;
+
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.AutoLogin;
+import com.liferay.portal.security.auth.BaseAutoLogin;
 import com.liferay.portal.security.exportimport.UserImporterUtil;
+import com.liferay.portal.sso.ntlm.configuration.NTLMConfiguration;
+import com.liferay.portal.sso.ntlm.util.WebKeys;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PrefsPropsUtil;
-import com.liferay.portal.util.PropsValues;
-import com.liferay.portal.util.WebKeys;
+
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
+
 /**
  * @author Bruno Farache
  */
+@Component(immediate = true, service = AutoLogin.class)
 public class NtlmAutoLogin extends BaseAutoLogin {
+
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_ntlmConfiguration = Configurable.createConfigurable(
+			NTLMConfiguration.class, properties);
+	}
 
 	@Override
 	protected String[] doLogin(
@@ -39,7 +57,7 @@ public class NtlmAutoLogin extends BaseAutoLogin {
 
 		if (!PrefsPropsUtil.getBoolean(
 				companyId, PropsKeys.NTLM_AUTH_ENABLED,
-				PropsValues.NTLM_AUTH_ENABLED)) {
+			_ntlmConfiguration.enabled())) {
 
 			return null;
 		}
@@ -70,5 +88,7 @@ public class NtlmAutoLogin extends BaseAutoLogin {
 
 		return credentials;
 	}
+
+	private volatile NTLMConfiguration _ntlmConfiguration;
 
 }
