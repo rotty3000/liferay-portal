@@ -27,9 +27,7 @@ import com.liferay.portal.service.ResourceTypePermissionLocalServiceUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -548,65 +546,34 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 
 		sb.append("(((InlineSQLResourcePermission.primKey = CAST_TEXT(");
 		sb.append(classPKField);
-		sb.append(")) AND ((");
+		sb.append(")) AND (");
 
-		boolean hasPreviousViewableGroup = false;
-
-		List<Long> viewableGroupIds = new ArrayList<>();
+		boolean hasPreviousGroup = false;
 
 		for (int j = 0; j < groupIds.length; j++) {
 			long groupId = groupIds[j];
 
-			if (!permissionChecker.hasPermission(
-					groupId, className, 0, ActionKeys.VIEW)) {
+			if ((j > 0) && hasPreviousGroup) {
+				sb.append(" OR ");
+			}
 
-				if ((j > 0) && hasPreviousViewableGroup) {
-					sb.append(" OR ");
-				}
+			hasPreviousGroup = true;
 
-				hasPreviousViewableGroup = true;
+			sb.append(StringPool.OPEN_PARENTHESIS);
 
-				sb.append(StringPool.OPEN_PARENTHESIS);
-
-				if (Validator.isNull(groupIdField)) {
-					sb.append(
-						classPKField.substring(
-							0, classPKField.lastIndexOf(CharPool.PERIOD)));
-					sb.append(".groupId = ");
-				}
-				else {
-					sb.append(groupIdField);
-					sb.append(" = ");
-				}
-
-				sb.append(groupId);
-				sb.append(StringPool.CLOSE_PARENTHESIS);
+			if (Validator.isNull(groupIdField)) {
+				sb.append(
+					classPKField.substring(
+						0, classPKField.lastIndexOf(CharPool.PERIOD)));
+				sb.append(".groupId = ");
 			}
 			else {
-				viewableGroupIds.add(groupId);
+				sb.append(groupIdField);
+				sb.append(" = ");
 			}
-		}
 
-		sb.append(StringPool.CLOSE_PARENTHESIS);
-
-		if (!viewableGroupIds.isEmpty()) {
-			for (Long viewableGroupId : viewableGroupIds) {
-				sb.append(" OR (");
-
-				if (Validator.isNull(groupIdField)) {
-					sb.append(
-						classPKField.substring(
-							0, classPKField.lastIndexOf(CharPool.PERIOD)));
-					sb.append(".groupId = ");
-				}
-				else {
-					sb.append(groupIdField);
-					sb.append(" = ");
-				}
-
-				sb.append(viewableGroupId);
-				sb.append(StringPool.CLOSE_PARENTHESIS);
-			}
+			sb.append(groupId);
+			sb.append(StringPool.CLOSE_PARENTHESIS);
 		}
 
 		sb.append(")))");
