@@ -40,6 +40,9 @@ public class PoshiRunnerExecutor {
 				if (childElement.attributeValue("function") != null) {
 					runFunctionElement(childElement);
 				}
+				else if (childElement.attributeValue("macro") != null) {
+					runMacroElement(childElement);
+				}
 				else if (childElement.attributeValue("selenium") != null) {
 					runSeleniumElement(childElement);
 				}
@@ -47,8 +50,10 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
-	public static void runFunctionElement(Element element) throws Exception {
-		String classCommandName = element.attributeValue("function");
+	public static void runFunctionElement(Element executeElement)
+		throws Exception {
+
+		String classCommandName = executeElement.attributeValue("function");
 
 		String className =
 			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
@@ -58,10 +63,23 @@ public class PoshiRunnerExecutor {
 			className);
 
 		for (int i = 0; i < locatorCount; i++) {
-			String locator = element.attributeValue("locator" + (i + 1));
-			String value = element.attributeValue("value" + (i + 1));
+			String locator = executeElement.attributeValue("locator" + (i + 1));
+			String value = executeElement.attributeValue("value" + (i + 1));
 
 			if (locator != null) {
+				if (locator.contains("#")) {
+					String pathClassName =
+						PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
+							locator);
+
+					String locatorKey =
+						PoshiRunnerGetterUtil.
+							getCommandNameFromClassCommandName(locator);
+
+					locator = PoshiRunnerContext.getPathLocator(
+						pathClassName + "#" + locatorKey);
+				}
+
 				PoshiRunnerVariablesUtil.putIntoExecuteMap(
 					"locator" + (i + 1), locator);
 			}
@@ -74,25 +92,67 @@ public class PoshiRunnerExecutor {
 
 		PoshiRunnerVariablesUtil.pushCommandMap();
 
-		Element function = PoshiRunnerContext.getFunctionCommandElement(
+		Element commandElement = PoshiRunnerContext.getFunctionCommandElement(
 			classCommandName);
 
-		parseElement(function);
+		parseElement(commandElement);
 
 		PoshiRunnerVariablesUtil.popCommandMap();
 	}
 
-	public static void runSeleniumElement(Element element) throws Exception {
+	public static void runMacroElement(Element executeElement)
+		throws Exception {
+
+		String classCommandName = executeElement.attributeValue("macro");
+
+		String className =
+			PoshiRunnerGetterUtil.getClassNameFromClassCommandName(
+				classCommandName);
+
+		Element rootElement = PoshiRunnerContext.getMacroRootElement(className);
+
+		List<Element> rootVarElements = rootElement.elements("var");
+
+		for (Element rootVarElement : rootVarElements) {
+			String name = rootVarElement.attributeValue("name");
+			String value = rootVarElement.attributeValue("value");
+
+			PoshiRunnerVariablesUtil.putIntoExecuteMap(name, value);
+		}
+
+		List<Element> executeVarElements = executeElement.elements("var");
+
+		for (Element executeVarElement : executeVarElements) {
+			String name = executeVarElement.attributeValue("name");
+			String value = executeVarElement.attributeValue("value");
+
+			PoshiRunnerVariablesUtil.putIntoExecuteMap(name, value);
+		}
+
+		PoshiRunnerVariablesUtil.pushCommandMap();
+
+		Element commandElement = PoshiRunnerContext.getMacroCommandElement(
+			classCommandName);
+
+		parseElement(commandElement);
+
+		PoshiRunnerVariablesUtil.popCommandMap();
+	}
+
+	public static void runSeleniumElement(Element executeElement)
+		throws Exception {
+
 		List<String> arguments = new ArrayList<>();
 		List<Class> parameterClasses = new ArrayList<>();
 
-		String selenium = element.attributeValue("selenium");
+		String selenium = executeElement.attributeValue("selenium");
 
 		int parameterCount = PoshiRunnerContext.getSeleniumParameterCount(
 			selenium);
 
 		for (int i = 0; i < parameterCount; i++) {
-			String argument = element.attributeValue("argument" + (i + 1));
+			String argument = executeElement.attributeValue(
+				"argument" + (i + 1));
 
 			if (argument == null) {
 				if (i == 0) {

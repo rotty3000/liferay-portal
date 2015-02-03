@@ -456,6 +456,44 @@
 				property="liferay.portal.git.id"
 				srcfile="git-commit-portal"
 			/>
+
+			<if>
+				<or>
+					<not>
+						<isset property="env.SOURCE_JOB_BUILD_NUMBER" />
+					</not>
+					<equals arg1="${env.SOURCE_JOB_BUILD_NUMBER}" arg2="1" />
+				</or>
+				<then>
+					<property name="liferay.previous.plugins.git.id" value="${liferay.plugins.git.id}" />
+					<property name="liferay.previous.portal.git.id" value="${liferay.portal.git.id}" />
+				</then>
+				<else>
+					<math
+						datatype="int"
+						operand1="${env.SOURCE_JOB_BUILD_NUMBER}"
+						operand2="1"
+						operation="-"
+						result="previous.build.number"
+					/>
+
+					<property name="previous.commit.id.dir" value="${env.JENKINS_HOME}/jobs/${env.SOURCE_JOB_NAME}/builds/${previous.build.number}" />
+
+					<loadfile failonerror="false" property="liferay.previous.plugins.git.id" srcfile="${previous.commit.id.dir}/git-commit-plugins">
+						<filterchain>
+							<striplinebreaks/>
+						</filterchain>
+					</loadfile>
+
+					<loadfile failonerror="false" property="liferay.previous.portal.git.id" srcfile="${previous.commit.id.dir}/git-commit-portal">
+						<filterchain>
+							<striplinebreaks/>
+						</filterchain>
+					</loadfile>
+				</else>
+			</if>
+
+			<property name="liferay.compare.urls" value="https://github.com/liferay/liferay-plugins-ee/compare/${liferay.previous.plugins.git.id}...${liferay.plugins.git.id},https://github.com/liferay/liferay-portal-ee/compare/${liferay.previous.portal.git.id}...${liferay.portal.git.id}" />
 		</sequential>
 	</macrodef>
 
@@ -503,6 +541,30 @@
 		</sequential>
 	</macrodef>
 
+	<macrodef name="record-testray-job-name">
+		<sequential>
+			<script classpathref="project.classpath" language="beanshell">
+				<![CDATA[
+					import org.apache.commons.lang3.StringUtils;
+
+					String testrayBuildType = project.getProperty("testray.build.type");
+
+					project.setProperty("testray.job.type", StringUtils.capitalize(testrayBuildType));
+				]]>
+			</script>
+
+			<if>
+				<equals arg1="${liferay.portal.bundle}" arg2="latest" />
+				<then>
+					<property name="testray.job.name" value="${testray.job.type} Tester - Portal(${liferay.portal.branch}) - Plugins(${liferay.plugins.branch})" />
+				</then>
+				<else>
+					<property name="testray.job.name" value="${testray.job.type} Tester - Portal(${liferay.portal.branch}) - Plugins(${liferay.plugins.branch}) - ${liferay.portal.bundle}" />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="record-testray-project-name">
 		<sequential>
 			<propertyregex
@@ -528,6 +590,39 @@
 				name="testray.project.name"
 				override="true"
 			/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="record-testray-team-name">
+		<sequential>
+			<script classpathref="project.classpath" language="beanshell">
+				<![CDATA[
+					import org.apache.commons.lang.WordUtils;
+
+					String testrayMainComponentName = project.getProperty("testray.main.component.name");
+					String testrayTeamNamesString = project.getProperty("testray.team.names");
+
+					String[] testrayTeamNames = testrayTeamNamesString.split(",");
+
+					for (String testrayTeamName : testrayTeamNames) {
+						StringBuilder sb = new StringBuilder();
+
+						sb.append("testray.team.");
+						sb.append(testrayTeamName);
+						sb.append(".component.names");
+
+						String testrayTeamComponentNamesString = project.getProperty(sb.toString());
+
+						Set testrayTeamComponentNames = new HashSet(Arrays.asList(testrayTeamComponentNamesString.split(",")));
+
+						if (testrayTeamComponentNames.contains(testrayMainComponentName)) {
+							project.setProperty("testray.team.name", WordUtils.capitalize(testrayTeamName.replace('-', ' ')));
+
+							break;
+						}
+					}
+				]]>
+			</script>
 		</sequential>
 	</macrodef>
 
@@ -892,7 +987,7 @@ create database lportal${database.index} character set utf8;</echo>
 		</if>
 	</target>
 
-	<target name="build-test-results-xml">
+	<target name="build-test-results-xml" depends="generate-test-properties">
 		<record-env-app-server />
 		<record-env-browser />
 		<record-env-database />
@@ -900,13 +995,16 @@ create database lportal${database.index} character set utf8;</echo>
 		<record-env-liferay-portal />
 		<record-env-operating-system />
 		<record-testray-components />
+		<record-testray-job-name />
 		<record-testray-project-name />
+		<record-testray-team-name />
 
 		<property name="test.case.properties">
 			<![CDATA[
 				<properties>
 					<property name="testray.component.names" value="${testray.component.names}" />
 					<property name="testray.main.component.name" value="${testray.main.component.name}" />
+					<property name="testray.team.name" value="${testray.team.name}" />
 					<property name="testray.testcase.description" value="${testray.testcase.description}" />
 					<property name="testray.testcase.name" value="${testray.testcase.name}" />
 					<property name="testray.testcase.priority" value="${testray.testcase.priority}" />
@@ -931,6 +1029,7 @@ create database lportal${database.index} character set utf8;</echo>
 					<property name="browser.version" value="${browser.version}" />
 					<property name="database.type" value="${database.type}" />
 					<property name="database.version" value="${database.version}" />
+					<property name="liferay.compare.urls" value="${liferay.compare.urls}" />
 					<property name="liferay.plugins.git.id" value="${liferay.plugins.git.id}" />
 					<property name="liferay.portal.branch" value="${liferay.portal.branch}" />
 					<property name="liferay.portal.bundle" value="${liferay.portal.bundle}" />
@@ -942,6 +1041,7 @@ create database lportal${database.index} character set utf8;</echo>
 					<property name="testray.build.name" value="${testray.build.name}" />
 					<property name="testray.build.time" value="${testray.build.time}" />
 					<property name="testray.build.type" value="${testray.build.type}" />
+					<property name="testray.job.name" value="${testray.job.name}" />
 					<property name="testray.product.type" value="${testray.product.type}" />
 					<property name="testray.product.version" value="${testray.product.version}" />
 					<property name="testray.project.name" value="${testray.project.name}" />

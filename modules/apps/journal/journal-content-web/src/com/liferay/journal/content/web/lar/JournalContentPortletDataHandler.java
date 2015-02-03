@@ -47,6 +47,7 @@ import javax.portlet.PortletPreferences;
 
 import javax.servlet.ServletContext;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -87,7 +88,8 @@ import org.osgi.service.component.annotations.Reference;
 public class JournalContentPortletDataHandler
 	extends JournalPortletDataHandler {
 
-	public JournalContentPortletDataHandler() {
+	@Activate
+	protected void activate() {
 		setDataLevel(DataLevel.PORTLET_INSTANCE);
 		setDataPortletPreferences("articleId", "ddmTemplateKey", "groupId");
 		setExportControls(

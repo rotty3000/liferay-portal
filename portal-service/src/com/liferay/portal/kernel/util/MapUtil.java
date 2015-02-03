@@ -37,17 +37,86 @@ public class MapUtil {
 		merge(master, copy);
 	}
 
-	public static <K, V> Map<K, V> filter(
-		Map<? extends K, ? extends V> inputMap, Map<K, V> outputMap,
-		PredicateFilter<K> keyPredicateFilter) {
+	public static <K> PredicateFilter<Map.Entry<K, ?>> entryKeyPredicateFilter(
+		final PredicateFilter<K> predicateFilter) {
 
-		for (Map.Entry<? extends K, ? extends V> entry : inputMap.entrySet()) {
-			if (keyPredicateFilter.filter(entry.getKey())) {
+		return new PredicateFilter<Map.Entry<K, ?>>() {
+
+			@Override
+			public boolean filter(Map.Entry<K, ?> entry) {
+				return predicateFilter.filter(entry.getKey());
+			}
+
+		};
+	}
+
+	public static <V> PredicateFilter<Map.Entry<?, V>>
+		entryValuePredicateFilter(final PredicateFilter<V> predicateFilter) {
+
+		return new PredicateFilter<Map.Entry<?, V>>() {
+
+			@Override
+			public boolean filter(Map.Entry<?, V> entry) {
+				return predicateFilter.filter(entry.getValue());
+			}
+
+		};
+	}
+
+	public static <K1, V1, K2 extends K1, V2 extends V1> void filter(
+		Map<? extends K2, ? extends V2> inputMap,
+		Map<? super K2, ? super V2> outputMap,
+		PredicateFilter<? super Map.Entry<K1, V1>> predicateFilter) {
+
+		for (Map.Entry<? extends K2, ? extends V2> entry :
+				inputMap.entrySet()) {
+
+			if (predicateFilter.filter((Map.Entry<K1, V1>)entry)) {
 				outputMap.put(entry.getKey(), entry.getValue());
 			}
 		}
+	}
+
+	public static <K1, V1, K2 extends K1, V2 extends V1> Map<K2, V2> filter(
+		Map<K2, V2> inputMap,
+		PredicateFilter<? super Map.Entry<K1, V1>> predicateFilter) {
+
+		Map<K2, V2> outputMap = new HashMap<>();
+
+		filter(inputMap, outputMap, predicateFilter);
 
 		return outputMap;
+	}
+
+	public static <K, V> void filterByKeys(
+		Map<? extends K, ? extends V> inputMap,
+		Map<? super K, ? super V> outputMap,
+		PredicateFilter<? super K> keyPredicateFilter) {
+
+		filter(
+			inputMap, outputMap, entryKeyPredicateFilter(keyPredicateFilter));
+	}
+
+	public static <K, V> Map<K, V> filterByKeys(
+		Map<K, V> inputMap, PredicateFilter<? super K> keyPredicateFilter) {
+
+		return filter(inputMap, entryKeyPredicateFilter(keyPredicateFilter));
+	}
+
+	public static <K, V> void filterByValues(
+		Map<? extends K, ? extends V> inputMap,
+		Map<? super K, ? super V> outputMap,
+		PredicateFilter<? super V> valuePredicateFilter) {
+
+		filter(
+			inputMap, outputMap,
+			entryValuePredicateFilter(valuePredicateFilter));
+	}
+
+	public static <K, V> Map<K, V> filterByValues(
+		Map<K, V> inputMap, PredicateFilter<? super V> keyPredicateFilter) {
+
+		return filter(inputMap, entryValuePredicateFilter(keyPredicateFilter));
 	}
 
 	public static <T> Map<T, T> fromArray(T... array) {

@@ -29,6 +29,7 @@ Export-Package:\
 	com.liferay.portal.spring.transaction,\
 	com.liferay.portal.systemevent,\
 	com.liferay.portal.template,\
+	com.liferay.portal.tools,\
 	com.liferay.portal.upgrade.v7_0_0,\
 	com.liferay.portal.upload,\
 	com.liferay.portal.verify,\
@@ -36,6 +37,7 @@ Export-Package:\
 	com.liferay.portlet,\
 	com.liferay.portlet.asset,\
 	com.liferay.portlet.asset.model,\
+	com.liferay.portlet.asset.model.impl,\
 	com.liferay.portlet.asset.service,\
 	com.liferay.portlet.asset.service.permission,\
 	com.liferay.portlet.asset.service.persistence,\
@@ -73,6 +75,7 @@ Export-Package:\
 	com.liferay.portlet.trash.service,\
 	com.liferay.portlet.trash.service.persistence,\
 	com.liferay.portlet.trash.util,\
+	com.liferay.portlet.usersadmin.search,\
 	\
 	javax.sql,org.hibernate,\
 	\

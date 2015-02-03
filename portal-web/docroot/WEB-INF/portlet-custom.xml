@@ -1361,27 +1361,6 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>147</portlet-name>
-		<display-name>Asset Category Admin</display-name>
-		<portlet-class>com.liferay.portlet.assetcategoryadmin.AssetCategoryAdminPortlet</portlet-class>
-		<init-param>
-			<name>template-path</name>
-			<value>/html/portlet/asset_category_admin/</value>
-		</init-param>
-		<init-param>
-			<name>view-template</name>
-			<value>/html/portlet/asset_category_admin/view.jsp</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
-		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
-		<security-role-ref>
-			<role-name>administrator</role-name>
-		</security-role-ref>
-	</portlet>
-	<portlet>
 		<portlet-name>149</portlet-name>
 		<display-name>Site Templates</display-name>
 		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
@@ -2102,33 +2081,6 @@
 		<init-param>
 			<name>view-action</name>
 			<value>/sites_directory/view</value>
-		</init-param>
-		<expiration-cache>0</expiration-cache>
-		<supports>
-			<mime-type>text/html</mime-type>
-		</supports>
-		<resource-bundle>com.liferay.portlet.StrutsResourceBundle</resource-bundle>
-		<security-role-ref>
-			<role-name>guest</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>power-user</role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>user</role-name>
-		</security-role-ref>
-	</portlet>
-	<portlet>
-		<portlet-name>185</portlet-name>
-		<display-name>Site Browser</display-name>
-		<portlet-class>com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet</portlet-class>
-		<init-param>
-			<name>template-path</name>
-			<value>/html/portlet/site_browser/</value>
-		</init-param>
-		<init-param>
-			<name>view-template</name>
-			<value>/html/portlet/site_browser/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
