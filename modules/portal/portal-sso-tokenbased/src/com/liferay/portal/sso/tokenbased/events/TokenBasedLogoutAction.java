@@ -112,6 +112,10 @@ public class TokenBasedLogoutAction extends Action {
 			logoutProcessor.getLogoutProcessorType(), logoutProcessor);
 	}
 
+	protected void unsetLogoutProcessor(LogoutProcessor logoutProcessor) {
+		_logoutProcessors.remove(logoutProcessor.getLogoutProcessorType());
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		TokenBasedLogoutAction.class);
 

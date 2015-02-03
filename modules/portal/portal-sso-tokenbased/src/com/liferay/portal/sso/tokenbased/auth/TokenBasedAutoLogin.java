@@ -32,6 +32,7 @@ import com.liferay.portal.sso.tokenbased.configuration.TokenBasedConfiguration;
 import com.liferay.portal.sso.tokenbased.constants.TokenBasedPropsKeys;
 import com.liferay.portal.sso.tokenbased.spi.TokenRetriever;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsValues;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
