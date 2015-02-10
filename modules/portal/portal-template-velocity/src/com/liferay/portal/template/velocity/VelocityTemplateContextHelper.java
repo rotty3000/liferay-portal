@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.portal.velocity;
+package com.liferay.portal.template.velocity;
+
+import aQute.bnd.annotation.metatype.Configurable;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -25,8 +27,8 @@ import com.liferay.portal.model.Theme;
 import com.liferay.portal.service.permission.RolePermissionUtil;
 import com.liferay.portal.template.TemplateContextHelper;
 import com.liferay.portal.template.TemplatePortletPreferences;
+import com.liferay.portal.template.velocity.configuration.VelocityEngineConfiguration;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 
 import java.util.Map;
@@ -42,16 +44,27 @@ import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.apache.velocity.tools.generic.SortTool;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Modified;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Raymond Augé
+ * @author Peter Fellwock
  */
+@Component(
+		configurationPid = "com.liferay.portal.template.velocity",
+		configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,
+		service = {TemplateContextHelper.class, VelocityTemplateContextHelper.class}
+	)
 public class VelocityTemplateContextHelper extends TemplateContextHelper {
 
 	@Override
 	public Set<String> getRestrictedVariables() {
 		return SetUtil.fromArray(
-			PropsValues.VELOCITY_ENGINE_RESTRICTED_VARIABLES);
+			_velocityEngineConfiguration.restrictedVariables());
 	}
 
 	@Override
@@ -117,6 +130,13 @@ public class VelocityTemplateContextHelper extends TemplateContextHelper {
 		}
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_velocityEngineConfiguration = Configurable.createConfigurable(
+			VelocityEngineConfiguration.class, properties);
+	}
+
 	@Override
 	protected void populateExtraHelperUtilities(
 		Map<String, Object> velocityContext) {
@@ -167,5 +187,8 @@ public class VelocityTemplateContextHelper extends TemplateContextHelper {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		VelocityTemplateContextHelper.class);
+
+	private static volatile VelocityEngineConfiguration
+		_velocityEngineConfiguration;
 
 }
