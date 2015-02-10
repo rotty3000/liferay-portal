@@ -1225,7 +1225,7 @@
 				WHERE
 					(Users_Roles.userId = ?)
 			)
-			UNION
+			UNION ALL
 			(
 				SELECT
 					{Role_.*}
