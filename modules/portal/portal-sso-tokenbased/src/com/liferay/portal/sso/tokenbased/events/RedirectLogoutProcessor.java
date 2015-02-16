@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.sso.tokenbased.spi.impl;
+package com.liferay.portal.sso.tokenbased.events;
 
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
