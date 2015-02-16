@@ -12,13 +12,12 @@
  * details.
  */
 
-package com.liferay.portal.sso.tokenbased.spi.impl;
+package com.liferay.portal.sso.tokenbased.auth;
 
 import com.liferay.portal.sso.tokenbased.spi.TokenLocation;
 import com.liferay.portal.sso.tokenbased.spi.TokenRetriever;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,20 +25,18 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = TokenRetriever.class)
-public class SessionTokenRetriever implements TokenRetriever {
+public class CookieTokenRetriever implements TokenRetriever {
 
 	@Override
 	public String getLoginToken(
 		HttpServletRequest request, String userTokenName) {
 
-		HttpSession httpSession = request.getSession();
-
-		return (String)httpSession.getAttribute(userTokenName);
+		return request.getHeader(userTokenName);
 	}
 
 	@Override
 	public TokenLocation getTokenLocation() {
-		return TokenLocation.SESSION;
+		return TokenLocation.COOKIE;
 	}
 
 }

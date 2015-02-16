@@ -12,9 +12,8 @@
  * details.
  */
 
-package com.liferay.portal.sso.tokenbased.spi.impl;
+package com.liferay.portal.sso.tokenbased.auth;
 
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.sso.tokenbased.spi.TokenLocation;
 import com.liferay.portal.sso.tokenbased.spi.TokenRetriever;
 
@@ -26,18 +25,18 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = TokenRetriever.class)
-public class RequestTokenRetriever implements TokenRetriever {
+public class RequestHeaderTokenRetriever implements TokenRetriever {
 
 	@Override
 	public String getLoginToken(
 		HttpServletRequest request, String userTokenName) {
 
-		return ParamUtil.getString(request, userTokenName);
+		return request.getHeader(userTokenName);
 	}
 
 	@Override
 	public TokenLocation getTokenLocation() {
-		return TokenLocation.REQUEST;
+		return TokenLocation.REQUEST_HEADER;
 	}
 
 }
