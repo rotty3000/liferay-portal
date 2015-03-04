@@ -415,6 +415,20 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 				String.valueOf(role.getRoleId()), userRole.getRoleId(),
 				new String[] {ActionKeys.VIEW});
 		}
+
+		// All users should be able to view the dockbar
+
+		ResourcePermission resourcePermission =
+			resourcePermissionLocalService.fetchResourcePermission(
+				companyId, PortletKeys.DOCKBAR, ResourceConstants.SCOPE_COMPANY,
+				String.valueOf(companyId), userRole.getRoleId());
+
+		if (resourcePermission == null) {
+			resourcePermissionLocalService.addResourcePermission(
+				companyId, PortletKeys.DOCKBAR, ResourceConstants.SCOPE_COMPANY,
+				String.valueOf(companyId), userRole.getRoleId(),
+				ActionKeys.VIEW);
+		}
 	}
 
 	/**
@@ -589,7 +603,7 @@ public class RoleLocalServiceImpl extends RoleLocalServiceBaseImpl {
 			role = getRole(
 				group.getCompanyId(), RoleConstants.ORGANIZATION_USER);
 		}
-		else if (group.isUser() || group.isUserGroup()) {
+		else if (group.isUserGroup()) {
 			role = getRole(group.getCompanyId(), RoleConstants.POWER_USER);
 		}
 		else {

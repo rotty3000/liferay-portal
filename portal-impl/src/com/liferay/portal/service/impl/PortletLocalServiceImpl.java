@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.EventDefinition;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletApp;
@@ -147,13 +148,17 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		long companyId = portlet.getCompanyId();
 		String name = portlet.getRootPortletId();
 
+		Group group = groupLocalService.getUserPersonalSiteGroup(companyId);
+
 		int resourcePermissionsCount =
 			resourcePermissionLocalService.getResourcePermissionsCount(
-				companyId, name, ResourceConstants.SCOPE_INDIVIDUAL, name);
+				companyId, name, ResourceConstants.SCOPE_GROUP,
+				String.valueOf(group.getGroupId()));
 
 		if (resourcePermissionsCount == 0) {
 			resourceLocalService.addResources(
-				companyId, 0, 0, name, name, true, false, false);
+				companyId, group.getGroupId(), 0, name, name, true, true,
+				false);
 		}
 
 		if (portlet.isSystem()) {
