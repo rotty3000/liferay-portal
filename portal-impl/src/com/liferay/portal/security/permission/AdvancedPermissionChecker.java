@@ -349,45 +349,9 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 				}
 			}
 
-			UserPermissionCheckerBag userPermissionCheckerBag =
-				PermissionCacheUtil.getUserBag(userId);
-
-			if (userPermissionCheckerBag == null) {
-				Set<Group> userGroups = SetUtil.fromList(
-					GroupLocalServiceUtil.getUserGroups(userId, true));
-
-				List<Organization> userOrgs = getUserOrgs(userId);
-
-				Set<Group> userOrgGroups = SetUtil.fromList(
-					GroupLocalServiceUtil.getOrganizationsGroups(userOrgs));
-
-				List<UserGroup> userUserGroups =
-					UserGroupLocalServiceUtil.getUserUserGroups(userId);
-
-				List<Group> userUserGroupGroups =
-					GroupLocalServiceUtil.getUserGroupsGroups(userUserGroups);
-
-				userPermissionCheckerBag = new UserPermissionCheckerBagImpl(
-					userId, userGroups, userOrgs, userOrgGroups,
-					userUserGroupGroups);
-
-				PermissionCacheUtil.putUserBag(
-					userId, userPermissionCheckerBag);
-			}
-
-			List<Group> groups = userPermissionCheckerBag.getGroups();
-
 			Set<Role> roles = new HashSet<>();
 
-			if (!groups.isEmpty()) {
-				List<Role> userRelatedRoles =
-					RoleLocalServiceUtil.getUserRelatedRoles(userId, groups);
-
-				roles.addAll(userRelatedRoles);
-			}
-			else {
-				roles.addAll(RoleLocalServiceUtil.getUserRoles(userId));
-			}
+			roles.addAll(userPermissionCheckerBag.getUserRoles());
 
 			List<Role> userGroupRoles = RoleLocalServiceUtil.getUserGroupRoles(
 				userId, groupId);
@@ -611,6 +575,47 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			_log.error(e, e);
 
 			return false;
+		}
+	}
+
+	@Override
+	public void init(User user) {
+		super.init(user);
+
+		userPermissionCheckerBag = PermissionCacheUtil.getUserBag(
+			user.getUserId());
+
+		if (userPermissionCheckerBag != null) {
+			return;
+		}
+
+		try {
+			Set<Group> userGroups = SetUtil.fromList(
+				GroupLocalServiceUtil.getUserGroups(user.getUserId(), true));
+
+			List<Organization> userOrgs = getUserOrgs(user.getUserId());
+
+			Set<Group> userOrgGroups = SetUtil.fromList(
+				GroupLocalServiceUtil.getOrganizationsGroups(userOrgs));
+
+			List<UserGroup> userUserGroups =
+				UserGroupLocalServiceUtil.getUserUserGroups(user.getUserId());
+
+			List<Group> userUserGroupGroups =
+				GroupLocalServiceUtil.getUserGroupsGroups(userUserGroups);
+
+			userPermissionCheckerBag = new UserPermissionCheckerBagImpl(
+				user.getUserId(), userGroups, userOrgs, userOrgGroups,
+				userUserGroupGroups);
+
+			PermissionCacheUtil.putUserBag(
+				user.getUserId(), userPermissionCheckerBag);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			userPermissionCheckerBag = new UserPermissionCheckerBagImpl(
+				user.getUserId());
 		}
 	}
 
@@ -1339,6 +1344,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 	protected static final String RESULTS_SEPARATOR = "_RESULTS_SEPARATOR_";
 
 	protected Map<Long, Boolean> companyAdmins = new HashMap<>();
+	protected UserPermissionCheckerBag userPermissionCheckerBag;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		AdvancedPermissionChecker.class);
