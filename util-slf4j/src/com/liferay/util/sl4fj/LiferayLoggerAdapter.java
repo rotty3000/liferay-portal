@@ -32,6 +32,14 @@ public class LiferayLoggerAdapter
 
 	public LiferayLoggerAdapter(Log log) {
 		_log = log;
+
+		_log.setLogWrapperClassName(LiferayLoggerAdapter.class.getName());
+	}
+
+	public LiferayLoggerAdapter(Log log, String name) {
+		this(log);
+
+		this.name = name;
 	}
 
 	@Override
