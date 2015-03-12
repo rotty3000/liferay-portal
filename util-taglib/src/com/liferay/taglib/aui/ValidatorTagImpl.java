@@ -15,13 +15,15 @@
 package com.liferay.taglib.aui;
 
 import com.liferay.portal.kernel.servlet.taglib.aui.ValidatorTag;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelHintsUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.taglib.BaseValidatorTagSupport;
 import com.liferay.taglib.aui.base.BaseValidatorTagImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
@@ -75,7 +77,20 @@ public class ValidatorTagImpl
 		_custom = ModelHintsUtil.isCustomValidator(name);
 
 		if (_custom) {
-			name = ModelHintsUtil.buildCustomValidatorName(name);
+			StringBundler sb = new StringBundler(3);
+
+			String namespace = baseValidatorTagSupport.getInputName();
+
+			sb.append(namespace);
+
+			sb.append(StringPool.UNDERLINE);
+
+			HttpServletRequest request =
+				(HttpServletRequest)pageContext.getRequest();
+
+			sb.append(PortalUtil.getUniqueElementId(request, namespace, name));
+
+			name = sb.toString();
 		}
 
 		ValidatorTag validatorTag = new ValidatorTagImpl(
@@ -113,17 +128,6 @@ public class ValidatorTagImpl
 
 	public void setBody(String body) {
 		_body = body;
-	}
-
-	protected String processCustom(String name) {
-		if (name.equals("custom")) {
-			_custom = true;
-
-			return name.concat(StringPool.UNDERLINE).concat(
-				StringUtil.randomId());
-		}
-
-		return name;
 	}
 
 	private String _body;

@@ -169,6 +169,7 @@ if (Validator.isNotNull(keywords)) {
 			}
 
 			viewContentURL.setParameter("type", trashRenderer.getType());
+			viewContentURL.setParameter("status", String.valueOf(WorkflowConstants.STATUS_IN_TRASH));
 			viewContentURL.setParameter("showActions", Boolean.FALSE.toString());
 			viewContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
 
@@ -205,6 +206,7 @@ if (Validator.isNotNull(keywords)) {
 					viewContentURL.setParameter("redirect", currentURL);
 					viewContentURL.setParameter("trashEntryId", String.valueOf(rootEntry.getEntryId()));
 					viewContentURL.setParameter("type", rootTrashRenderer.getType());
+					viewContentURL.setParameter("status", String.valueOf(WorkflowConstants.STATUS_IN_TRASH));
 					viewContentURL.setParameter("showActions", Boolean.FALSE.toString());
 					viewContentURL.setParameter("showEditURL", Boolean.FALSE.toString());
 
@@ -285,7 +287,6 @@ if (Validator.isNotNull(keywords)) {
 
 	<aui:form action="<%= searchURL.toString() %>" method="get" name="fm">
 		<liferay-portlet:renderURLParams varImpl="searchURL" />
-		<aui:input name="<%= Constants.CMD %>" type="hidden" value="" />
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 		<aui:input name="deleteTrashEntryIds" type="hidden" />
 		<aui:input name="restoreTrashEntryIds" type="hidden" />
