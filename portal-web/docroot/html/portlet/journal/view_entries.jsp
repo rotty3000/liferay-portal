@@ -17,6 +17,9 @@
 <%@ include file="/html/portlet/journal/init.jsp" %>
 
 <%
+String currentFolder = ParamUtil.getString(request, "curFolder");
+String deltaFolder = ParamUtil.getString(request, "deltaFolder");
+
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
 
 long ddmStructureId = 0;
@@ -25,6 +28,8 @@ String ddmStructureName = LanguageUtil.get(request, "basic-web-content");
 
 PortletURL portletURL = liferayPortletResponse.createRenderURL();
 
+portletURL.setParameter("curFolder", currentFolder);
+portletURL.setParameter("deltaFolder", deltaFolder);
 portletURL.setParameter("folderId", String.valueOf(folderId));
 
 ArticleSearch articleSearchContainer = new ArticleSearch(liferayPortletRequest, portletURL);

@@ -19,6 +19,9 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.xml.Document;
@@ -28,6 +31,8 @@ import com.liferay.portal.security.xml.SecureXMLFactoryProviderImpl;
 import com.liferay.portal.security.xml.SecureXMLFactoryProviderUtil;
 import com.liferay.portal.util.LocalizationImpl;
 import com.liferay.portal.xml.SAXReaderImpl;
+import com.liferay.portlet.dynamicdatamapping.util.DDMXMLImplTest;
+import com.liferay.portlet.dynamicdatamapping.util.test.DDMStructureTestUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +63,7 @@ public class UpgradeDynamicDataListsTest extends PowerMockito {
 	public void setUp() {
 		setUpLanguageUtil();
 		setUpLocalizationUtil();
+		setUpPropsUtil();
 		setUpSAXReaderUtil();
 		setUpSecureXMLFactoryProviderUtil();
 	}
@@ -233,10 +239,37 @@ public class UpgradeDynamicDataListsTest extends PowerMockito {
 		localizationUtil.setLocalization(new LocalizationImpl());
 	}
 
+	protected void setUpPropsUtil() {
+		Props props = mock(Props.class);
+
+		when(
+			props.get(PropsKeys.XML_SECURITY_ENABLED)
+		).thenReturn(
+			Boolean.TRUE.toString()
+		);
+
+		when(
+			props.getArray(PropsKeys.XML_SECURITY_WHITELIST)
+		).thenReturn(
+			new String[] {
+				DDMStructureTestUtil.class.getName(),
+				DDMXMLImplTest.class.getName()
+			}
+		);
+
+		PropsUtil.setProps(props);
+	}
+
 	protected void setUpSAXReaderUtil() {
 		SAXReaderUtil saxReaderUtil = new SAXReaderUtil();
 
-		saxReaderUtil.setSecureSAXReader(new SAXReaderImpl());
+		SAXReaderImpl secureSAXReader = new SAXReaderImpl();
+
+		secureSAXReader.setSecure(true);
+
+		saxReaderUtil.setSecureSAXReader(secureSAXReader);
+
+		saxReaderUtil.setUnsecureSAXReader(new SAXReaderImpl());
 	}
 
 	protected void setUpSecureXMLFactoryProviderUtil() {

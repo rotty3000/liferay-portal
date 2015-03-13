@@ -147,7 +147,7 @@ public class InstanceWrapperBuilder {
 				sb.append("> ");
 			}
 
-			sb.append(_getTypeGenericsName(javaMethod.getReturns()));
+			sb.append(_getTypeGenericsName(javaMethod.getReturnType()));
 			sb.append(" ");
 			sb.append(methodName);
 			sb.append(StringPool.OPEN_PARENTHESIS);
@@ -197,7 +197,7 @@ public class InstanceWrapperBuilder {
 
 			sb.append("{\n");
 
-			if (!javaMethod.getReturns().getValue().equals("void")) {
+			if (!javaMethod.getReturnType().getValue().equals("void")) {
 				sb.append("return ");
 			}
 

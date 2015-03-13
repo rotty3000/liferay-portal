@@ -1346,7 +1346,7 @@ public class ServiceBuilder {
 	}
 
 	public String getReturnType(JavaMethod method) {
-		Type returnType = method.getReturns();
+		Type returnType = method.getReturnType();
 
 		return getTypeGenericsName(returnType);
 	}
@@ -1691,7 +1691,7 @@ public class ServiceBuilder {
 	}
 
 	public boolean isSoapMethod(JavaMethod method) {
-		Type returnType = method.getReturns();
+		Type returnType = method.getReturnType();
 
 		String returnTypeGenericsName = getTypeGenericsName(returnType);
 		String returnValueName = returnType.getValue();
@@ -4248,7 +4248,7 @@ public class ServiceBuilder {
 		StringBundler sb = new StringBundler();
 
 		if (!javaMethod.isConstructor()) {
-			sb.append(getTypeGenericsName(javaMethod.getReturns()));
+			sb.append(getTypeGenericsName(javaMethod.getReturnType()));
 			sb.append(StringPool.SPACE);
 		}
 

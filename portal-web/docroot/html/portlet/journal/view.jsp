@@ -45,7 +45,11 @@ request.setAttribute("view.jsp-folder", folder);
 request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 %>
 
-<liferay-ui:trash-undo />
+<portlet:actionURL name="restoreTrashEntries" var="restoreTrashEntriesURL" />
+
+<liferay-ui:trash-undo
+	portletURL="<%= restoreTrashEntriesURL %>"
+/>
 
 <div id="<portlet:namespace />journalContainer">
 	<aui:row cssClass="lfr-app-column-view">
@@ -130,7 +134,7 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 					node: A.one(document.<portlet:namespace />fm)
 				},
 				moveEntryRenderUrl: '<portlet:renderURL><portlet:param name="mvcPath" value="/html/portlet/journal/move_entries.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>',
-				trashLinkId: '<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "_" + PortletKeys.CONTROL_PANEL_MENU + "_portlet_" + PortletKeys.TRASH : StringPool.BLANK %>',
+				trashLinkId: '<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "_" + PortletKeys.CONTROL_PANEL_MENU + "_portlet_" + PortletProviderUtil.getPortletId(TrashEntry.class.getName(), PortletProvider.Action.VIEW) : StringPool.BLANK %>',
 				updateable: true
 			},
 			namespace: '<portlet:namespace />',
