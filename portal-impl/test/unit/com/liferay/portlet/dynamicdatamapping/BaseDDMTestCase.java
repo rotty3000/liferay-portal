@@ -53,6 +53,8 @@ import com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues;
 import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 import com.liferay.portlet.dynamicdatamapping.util.DDMImpl;
+import com.liferay.portlet.dynamicdatamapping.util.DDMXMLImplTest;
+import com.liferay.portlet.dynamicdatamapping.util.test.DDMStructureTestUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -603,13 +605,34 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 			"yyyyMMddHHmmss"
 		);
 
+		when(
+			props.get(PropsKeys.XML_SECURITY_ENABLED)
+		).thenReturn(
+			Boolean.TRUE.toString()
+		);
+
+		when(
+			props.getArray(PropsKeys.XML_SECURITY_WHITELIST)
+		).thenReturn(
+			new String[] {
+				DDMStructureTestUtil.class.getName(),
+				DDMXMLImplTest.class.getName()
+			}
+		);
+
 		PropsUtil.setProps(props);
 	}
 
 	protected void setUpSAXReaderUtil() {
 		SAXReaderUtil saxReaderUtil = new SAXReaderUtil();
 
-		saxReaderUtil.setSecureSAXReader(new SAXReaderImpl());
+		SAXReaderImpl secureSAXReader = new SAXReaderImpl();
+
+		secureSAXReader.setSecure(true);
+
+		saxReaderUtil.setSecureSAXReader(secureSAXReader);
+
+		saxReaderUtil.setUnsecureSAXReader(new SAXReaderImpl());
 	}
 
 	protected void whenLanguageGet(

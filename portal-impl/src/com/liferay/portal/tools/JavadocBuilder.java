@@ -244,9 +244,9 @@ public class JavadocBuilder {
 	private void _addReturnElement(
 		Element methodElement, JavaMethod javaMethod) {
 
-		Type returns = javaMethod.getReturns();
+		Type returnType = javaMethod.getReturnType();
 
-		if ((returns == null) || returns.getValue().equals("void")) {
+		if ((returnType == null) || returnType.getValue().equals("void")) {
 			return;
 		}
 

@@ -19,6 +19,9 @@
 <%
 String browseBy = ParamUtil.getString(request, "browseBy");
 
+String curEntry = ParamUtil.getString(request, "curEntry");
+String deltaEntry = ParamUtil.getString(request, "deltaEntry");
+
 JournalFolder folder = (JournalFolder)request.getAttribute("view.jsp-folder");
 
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
@@ -52,9 +55,11 @@ else if (folderId != JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 
 PortletURL portletURL = liferayPortletResponse.createRenderURL();
 
+portletURL.setParameter("curEntry", curEntry);
+portletURL.setParameter("deltaEntry", deltaEntry);
 portletURL.setParameter("folderId", String.valueOf(folderId));
 
-SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, null, null, "cur2", SearchContainer.DEFAULT_DELTA, portletURL, null, null);
+SearchContainer searchContainer = new SearchContainer(liferayPortletRequest, null, null, "curFolder", SearchContainer.DEFAULT_DELTA, portletURL, null, null);
 
 searchContainer.setTotal(total);
 
