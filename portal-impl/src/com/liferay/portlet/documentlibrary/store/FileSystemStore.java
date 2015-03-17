@@ -14,7 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.store;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -22,7 +21,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
-import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 
@@ -54,12 +52,13 @@ public class FileSystemStore extends BaseStore {
 
 	@Override
 	public void addDirectory(long companyId, long repositoryId, String dirName)
-		throws PortalException {
+		throws DuplicateDirectoryException {
 
 		File dirNameDir = getDirNameDir(companyId, repositoryId, dirName);
 
 		if (dirNameDir.exists()) {
-			throw new DuplicateDirectoryException(dirNameDir.getPath());
+			throw new DuplicateDirectoryException(
+				companyId, repositoryId, dirName);
 		}
 
 		dirNameDir.mkdirs();
@@ -68,14 +67,15 @@ public class FileSystemStore extends BaseStore {
 	@Override
 	public void addFile(
 			long companyId, long repositoryId, String fileName, InputStream is)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		try {
 			File fileNameVersionFile = getFileNameVersionFile(
 				companyId, repositoryId, fileName, VERSION_DEFAULT);
 
 			if (fileNameVersionFile.exists()) {
-				throw new DuplicateFileException(fileNameVersionFile.getPath());
+				throw new DuplicateFileException(
+					companyId, repositoryId, fileName);
 			}
 
 			FileUtil.write(fileNameVersionFile, is);
@@ -93,7 +93,7 @@ public class FileSystemStore extends BaseStore {
 	public void copyFileVersion(
 			long companyId, long repositoryId, String fileName,
 			String fromVersionLabel, String toVersionLabel)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		File fromFileNameVersionFile = getFileNameVersionFile(
 			companyId, repositoryId, fileName, fromVersionLabel);
@@ -117,13 +117,14 @@ public class FileSystemStore extends BaseStore {
 
 	@Override
 	public void deleteDirectory(
-			long companyId, long repositoryId, String dirName)
-		throws PortalException {
+		long companyId, long repositoryId, String dirName) {
 
 		File dirNameDir = getDirNameDir(companyId, repositoryId, dirName);
 
 		if (!dirNameDir.exists()) {
-			throw new NoSuchDirectoryException(dirNameDir.getPath());
+			logFailedDeletion(companyId, repositoryId, dirName);
+
+			return;
 		}
 
 		File parentFile = dirNameDir.getParentFile();
@@ -139,13 +140,13 @@ public class FileSystemStore extends BaseStore {
 	}
 
 	@Override
-	public void deleteFile(long companyId, long repositoryId, String fileName)
-		throws PortalException {
-
+	public void deleteFile(long companyId, long repositoryId, String fileName) {
 		File fileNameDir = getFileNameDir(companyId, repositoryId, fileName);
 
 		if (!fileNameDir.exists()) {
-			throw new NoSuchFileException(fileNameDir.getPath());
+			logFailedDeletion(companyId, repositoryId, fileName);
+
+			return;
 		}
 
 		File parentFile = fileNameDir.getParentFile();
@@ -157,15 +158,16 @@ public class FileSystemStore extends BaseStore {
 
 	@Override
 	public void deleteFile(
-			long companyId, long repositoryId, String fileName,
-			String versionLabel)
-		throws PortalException {
+		long companyId, long repositoryId, String fileName,
+		String versionLabel) {
 
 		File fileNameVersionFile = getFileNameVersionFile(
 			companyId, repositoryId, fileName, versionLabel);
 
 		if (!fileNameVersionFile.exists()) {
-			throw new NoSuchFileException(fileNameVersionFile.getPath());
+			logFailedDeletion(companyId, repositoryId, fileName, versionLabel);
+
+			return;
 		}
 
 		File parentFile = fileNameVersionFile.getParentFile();
@@ -179,7 +181,7 @@ public class FileSystemStore extends BaseStore {
 	public File getFile(
 			long companyId, long repositoryId, String fileName,
 			String versionLabel)
-		throws PortalException {
+		throws NoSuchFileException {
 
 		if (Validator.isNull(versionLabel)) {
 			versionLabel = getHeadVersionLabel(
@@ -190,7 +192,8 @@ public class FileSystemStore extends BaseStore {
 			companyId, repositoryId, fileName, versionLabel);
 
 		if (!fileNameVersionFile.exists()) {
-			throw new NoSuchFileException(fileNameVersionFile.getPath());
+			throw new NoSuchFileException(
+				companyId, repositoryId, fileName, versionLabel);
 		}
 
 		return fileNameVersionFile;
@@ -200,7 +203,7 @@ public class FileSystemStore extends BaseStore {
 	public InputStream getFileAsStream(
 			long companyId, long repositoryId, String fileName,
 			String versionLabel)
-		throws PortalException {
+		throws NoSuchFileException {
 
 		if (Validator.isNull(versionLabel)) {
 			versionLabel = getHeadVersionLabel(
@@ -214,7 +217,8 @@ public class FileSystemStore extends BaseStore {
 			return new FileInputStream(fileNameVersionFile);
 		}
 		catch (FileNotFoundException fnfe) {
-			throw new NoSuchFileException(fileNameVersionFile.getPath(), fnfe);
+			throw new NoSuchFileException(
+				companyId, repositoryId, fileName, fnfe);
 		}
 	}
 
@@ -227,13 +231,12 @@ public class FileSystemStore extends BaseStore {
 
 	@Override
 	public String[] getFileNames(
-			long companyId, long repositoryId, String dirName)
-		throws PortalException {
+		long companyId, long repositoryId, String dirName) {
 
 		File dirNameDir = getDirNameDir(companyId, repositoryId, dirName);
 
 		if (!dirNameDir.exists()) {
-			throw new NoSuchDirectoryException(dirNameDir.getPath());
+			return new String[0];
 		}
 
 		String[] fileNames = FileUtil.listDirs(dirNameDir);
@@ -252,7 +255,7 @@ public class FileSystemStore extends BaseStore {
 
 	@Override
 	public long getFileSize(long companyId, long repositoryId, String fileName)
-		throws PortalException {
+		throws NoSuchFileException {
 
 		String versionLabel = getHeadVersionLabel(
 			companyId, repositoryId, fileName);
@@ -261,7 +264,7 @@ public class FileSystemStore extends BaseStore {
 			companyId, repositoryId, fileName, versionLabel);
 
 		if (!fileNameVersionFile.exists()) {
-			throw new NoSuchFileException(fileNameVersionFile.getPath());
+			throw new NoSuchFileException(companyId, repositoryId, fileName);
 		}
 
 		return fileNameVersionFile.length();
@@ -300,14 +303,15 @@ public class FileSystemStore extends BaseStore {
 	public void updateFile(
 			long companyId, long repositoryId, long newRepositoryId,
 			String fileName)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		File fileNameDir = getFileNameDir(companyId, repositoryId, fileName);
 		File newFileNameDir = getFileNameDir(
 			companyId, newRepositoryId, fileName);
 
 		if (newFileNameDir.exists()) {
-			throw new DuplicateFileException(fileName);
+			throw new DuplicateFileException(
+				companyId, newRepositoryId, fileName);
 		}
 
 		File parentFile = fileNameDir.getParentFile();
@@ -327,14 +331,15 @@ public class FileSystemStore extends BaseStore {
 	public void updateFile(
 			long companyId, long repositoryId, String fileName,
 			String newFileName)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		File fileNameDir = getFileNameDir(companyId, repositoryId, fileName);
 		File newFileNameDir = getFileNameDir(
 			companyId, repositoryId, newFileName);
 
 		if (newFileNameDir.exists()) {
-			throw new DuplicateFileException(newFileName);
+			throw new DuplicateFileException(
+				companyId, repositoryId, newFileName);
 		}
 
 		File parentFile = fileNameDir.getParentFile();
@@ -354,14 +359,15 @@ public class FileSystemStore extends BaseStore {
 	public void updateFile(
 			long companyId, long repositoryId, String fileName,
 			String versionLabel, InputStream is)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		try {
 			File fileNameVersionFile = getFileNameVersionFile(
 				companyId, repositoryId, fileName, versionLabel);
 
 			if (fileNameVersionFile.exists()) {
-				throw new DuplicateFileException(fileNameVersionFile.getPath());
+				throw new DuplicateFileException(
+					companyId, repositoryId, fileName, versionLabel);
 			}
 
 			FileUtil.write(fileNameVersionFile, is);
@@ -375,7 +381,7 @@ public class FileSystemStore extends BaseStore {
 	public void updateFileVersion(
 			long companyId, long repositoryId, String fileName,
 			String fromVersionLabel, String toVersionLabel)
-		throws PortalException {
+		throws DuplicateFileException {
 
 		File fromFileNameVersionFile = getFileNameVersionFile(
 			companyId, repositoryId, fileName, fromVersionLabel);
@@ -384,7 +390,8 @@ public class FileSystemStore extends BaseStore {
 			companyId, repositoryId, fileName, toVersionLabel);
 
 		if (toFileNameVersionFile.exists()) {
-			throw new DuplicateFileException(toFileNameVersionFile.getPath());
+			throw new DuplicateFileException(
+				companyId, repositoryId, fileName, toVersionLabel);
 		}
 
 		boolean renamed = FileUtil.move(
