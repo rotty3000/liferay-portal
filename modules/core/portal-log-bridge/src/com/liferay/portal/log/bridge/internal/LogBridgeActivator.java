@@ -19,12 +19,13 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import org.eclipse.equinox.log.ExtendedLogReaderService;
+import org.eclipse.equinox.log.SynchronousLogListener;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -32,16 +33,17 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Raymond Augé
+ * @author Kamesh Sampath
  */
-public class LogBridge
-	implements BundleActivator, LogListener,
-			   ServiceTrackerCustomizer<LogReaderService, LogReaderService> {
+public class LogBridgeActivator
+	implements BundleActivator, SynchronousLogListener,
+			   ServiceTrackerCustomizer<ExtendedLogReaderService, ExtendedLogReaderService> {
 
 	@Override
-	public LogReaderService addingService(
-		ServiceReference<LogReaderService> serviceReference) {
+	public ExtendedLogReaderService addingService(
+		ServiceReference<ExtendedLogReaderService> serviceReference) {
 
-		LogReaderService logReaderService = _bundleContext.getService(
+		ExtendedLogReaderService logReaderService = _bundleContext.getService(
 			serviceReference);
 
 		logReaderService.addLogListener(this);
@@ -84,14 +86,14 @@ public class LogBridge
 
 	@Override
 	public void modifiedService(
-		ServiceReference<LogReaderService> serviceReference,
-		LogReaderService logReaderService) {
+		ServiceReference<ExtendedLogReaderService> serviceReference,
+		ExtendedLogReaderService logReaderService) {
 	}
 
 	@Override
 	public void removedService(
-		ServiceReference<LogReaderService> serviceReference,
-		LogReaderService logReaderService) {
+		ServiceReference<ExtendedLogReaderService> serviceReference,
+		ExtendedLogReaderService logReaderService) {
 
 		logReaderService.removeLogListener(this);
 	}
@@ -101,7 +103,7 @@ public class LogBridge
 		_bundleContext = bundleContext;
 
 		_serviceTracker = new ServiceTracker<>(
-			bundleContext, LogReaderService.class, this);
+			bundleContext, ExtendedLogReaderService.class, this);
 
 		_serviceTracker.open();
 	}
@@ -116,6 +118,6 @@ public class LogBridge
 	}
 
 	private BundleContext _bundleContext;
-	private ServiceTracker<LogReaderService, LogReaderService> _serviceTracker;
+	private ServiceTracker<ExtendedLogReaderService, ExtendedLogReaderService> _serviceTracker;
 
 }
