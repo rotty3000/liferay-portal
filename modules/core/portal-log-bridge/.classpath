@@ -18,6 +18,6 @@
 	<classpathentry kind="lib" path="/portal-master/util-taglib/util-taglib.jar"/>
 	<classpathentry kind="lib" path="lib/org.osgi.compendium.jar"/>
 	<classpathentry kind="lib" path="lib/org.osgi.core.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.osgi.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi.jar" sourcepath="/Users/kameshs/git/eclipse/equinox/rt.equinox.framework/bundles/org.eclipse.osgi"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,20 +14,11 @@
 
 package com.liferay.portal.log.bridge.internal;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-
 import org.eclipse.equinox.log.ExtendedLogReaderService;
-import org.eclipse.equinox.log.SynchronousLogListener;
-import org.osgi.framework.Bundle;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogReaderService;
-import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -36,52 +27,19 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author Kamesh Sampath
  */
 public class LogBridgeActivator
-	implements BundleActivator, SynchronousLogListener,
-			   ServiceTrackerCustomizer<ExtendedLogReaderService, ExtendedLogReaderService> {
+	implements BundleActivator,
+	ServiceTrackerCustomizer<ExtendedLogReaderService, ExtendedLogReaderService> {
 
 	@Override
 	public ExtendedLogReaderService addingService(
 		ServiceReference<ExtendedLogReaderService> serviceReference) {
 
-		ExtendedLogReaderService logReaderService = _bundleContext.getService(
-			serviceReference);
+		ExtendedLogReaderService extensionLogReaderService =
+			_bundleContext.getService(serviceReference);
 
-		logReaderService.addLogListener(this);
+		extensionLogReaderService.addLogListener(_portalLogListener);
 
-		return logReaderService;
-	}
-
-	@Override
-	public void logged(LogEntry logEntry) {
-		int level = logEntry.getLevel();
-
-		Bundle bundle = logEntry.getBundle();
-
-		String symbolicName = StringUtil.replace(
-			bundle.getSymbolicName(), StringPool.PERIOD, StringPool.UNDERLINE);
-
-		Log log = LogFactoryUtil.getLog("osgi.logging." + symbolicName);
-
-		String message = logEntry.getMessage();
-
-		ServiceReference<?> serviceReference = logEntry.getServiceReference();
-
-		if (serviceReference != null) {
-			message += " " + serviceReference.toString();
-		}
-
-		if ((level == LogService.LOG_DEBUG) && log.isDebugEnabled()) {
-			log.debug(message, logEntry.getException());
-		}
-		else if ((level == LogService.LOG_ERROR) && log.isErrorEnabled()) {
-			log.error(message, logEntry.getException());
-		}
-		else if ((level == LogService.LOG_INFO) && log.isInfoEnabled()) {
-			log.info(message, logEntry.getException());
-		}
-		else if ((level == LogService.LOG_WARNING) && log.isWarnEnabled()) {
-			log.warn(message, logEntry.getException());
-		}
+		return extensionLogReaderService;
 	}
 
 	@Override
@@ -95,7 +53,7 @@ public class LogBridgeActivator
 		ServiceReference<ExtendedLogReaderService> serviceReference,
 		ExtendedLogReaderService logReaderService) {
 
-		logReaderService.removeLogListener(this);
+		logReaderService.removeLogListener(_portalLogListener);
 	}
 
 	@Override
@@ -106,6 +64,8 @@ public class LogBridgeActivator
 			bundleContext, ExtendedLogReaderService.class, this);
 
 		_serviceTracker.open();
+
+		_portalLogListener = new PortalLogListenerImpl();
 	}
 
 	@Override
@@ -114,10 +74,13 @@ public class LogBridgeActivator
 
 		_serviceTracker.close();
 
+		_portalLogListener = null;
+
 		_serviceTracker = null;
 	}
 
 	private BundleContext _bundleContext;
+	private PortalLogListenerImpl _portalLogListener;
 	private ServiceTracker<ExtendedLogReaderService, ExtendedLogReaderService> _serviceTracker;
 
 }

@@ -19,54 +19,119 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 
+import org.eclipse.equinox.log.ExtendedLogEntry;
+import org.eclipse.equinox.log.SynchronousLogListener;
+import org.eclipse.osgi.framework.log.FrameworkLogEntry;
+
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogListener;
-import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Raymond Augé
  * @author Kamesh Sampath
  */
-public class PortalLogListenerImpl implements LogListener{
+public class PortalLogListenerImpl implements SynchronousLogListener {
 
 	@Override
 	public void logged(LogEntry logEntry) {
-		int level = logEntry.getLevel();
+		if (!(logEntry instanceof ExtendedLogEntry)) {
+			return;
+		}
 
-		Bundle bundle = logEntry.getBundle();
+		ExtendedLogEntry extendedLogEntry = (ExtendedLogEntry)logEntry;
 
-		String symbolicName = StringUtil.replace(
-			bundle.getSymbolicName(), StringPool.PERIOD, StringPool.UNDERLINE);
+		Object context = extendedLogEntry.getContext();
 
-		Log log = LogFactoryUtil.getLog("osgi.logging." + symbolicName);
+		if (context instanceof FrameworkLogEntry) {
+			_log((FrameworkLogEntry)context);
+			return;
+		}
+
+		Bundle bundle = extendedLogEntry.getBundle();
+
+		int bundleCode = (int)bundle.getBundleId();
+
+		FrameworkLogEntry frameworkLogEntry = new FrameworkLogEntry(
+				_logEntryTag(bundle), extendedLogEntry.getLevel(), bundleCode,
+				extendedLogEntry.getMessage(), 0,
+				extendedLogEntry.getException(), null);
+
+		_log(frameworkLogEntry);
+	}
+
+	private synchronized void _log(FrameworkLogEntry logEntry) {
+		//TODO need to add ThreadName and other FrameworkLogEntry attribs?
+
+		String logName = logEntry.getEntry();
+
+		Log log = LogFactoryUtil.getLog(logName);
 
 		String message = logEntry.getMessage();
 
-		ServiceReference<?> serviceReference = logEntry.getServiceReference();
+		int level = logEntry.getSeverity();
 
-		if (serviceReference != null) {
-			message += " " + serviceReference.toString();
-		}
+		Throwable throwable = logEntry.getThrowable();
 
 		if ((level == LogService.LOG_DEBUG) && log.isDebugEnabled()) {
-			log.debug(message, logEntry.getException());
+			if (throwable!= null) {
+				log.debug(message, throwable);
+			}
+			else {
+				log.debug(message);
+			}
 		}
 		else if ((level == LogService.LOG_ERROR) && log.isErrorEnabled()) {
-			log.error(message, logEntry.getException());
+			if (throwable!= null) {
+				log.error(message, throwable);
+			}
+			else {
+				log.error(message);
+			}
 		}
 		else if ((level == LogService.LOG_INFO) && log.isInfoEnabled()) {
-			log.info(message, logEntry.getException());
+			if (throwable!= null) {
+				log.info(message, throwable);
+			}
+			else {
+				log.info(message);
+			}
 		}
 		else if ((level == LogService.LOG_WARNING) && log.isWarnEnabled()) {
-			log.warn(message, logEntry.getException());
+			if (throwable!= null) {
+				log.warn(message, throwable);
+			}
+			else {
+				log.warn(message);
+			}
 		}
+
+		// handle the log child entries
+
+		FrameworkLogEntry[] children = logEntry.getChildren();
+
+		if (children!= null) {
+			for (FrameworkLogEntry frameworkLogEntry : children) {
+				_log(frameworkLogEntry);
+			}
+		}
+	}
+
+	private String _logEntryTag(Bundle bundle) {
+		StringBuilder logEntryTag = new StringBuilder("osgi.logging.");
+
+		if (bundle!= null && (bundle.getSymbolicName() != null)) {
+			String bsn = bundle.getSymbolicName();
+
+			logEntryTag.append(
+					StringUtil.replace(
+						bsn, StringPool.PERIOD, StringPool.UNDERLINE));
+		}
+		else {
+			logEntryTag.append("unknown");
+		}
+
+		return logEntryTag.toString();
 	}
 
 }
