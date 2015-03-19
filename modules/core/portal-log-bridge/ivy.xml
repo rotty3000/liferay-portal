@@ -19,5 +19,6 @@
 	<dependencies defaultconf="default">
 		<dependency name="org.osgi.compendium" org="org.osgi" rev="5.0.0" />
 		<dependency name="org.osgi.core" org="org.osgi" rev="5.0.0" />
+		<dependency name="org.eclipse.osgi" org="org.eclipse.osgi" rev="3.10.100-SNAPSHOT" />
 	</dependencies>
 </ivy-module>
