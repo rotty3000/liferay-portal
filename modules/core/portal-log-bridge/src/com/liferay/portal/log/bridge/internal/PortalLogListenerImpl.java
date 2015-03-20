@@ -14,108 +14,92 @@
 
 package com.liferay.portal.log.bridge.internal;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
+import org.eclipse.equinox.log.ExtendedLogEntry;
+import org.eclipse.equinox.log.SynchronousLogListener;
+import org.eclipse.osgi.framework.log.FrameworkLogEntry;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogListener;
-import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Raymond Augé
+ * @author Kamesh Sampath
  */
-public class PortalLogListenerImpl
-	implements BundleActivator, LogListener,
-			   ServiceTrackerCustomizer<LogReaderService, LogReaderService> {
+public class PortalLogListenerImpl implements SynchronousLogListener {
 
-	@Override
-	public LogReaderService addingService(
-		ServiceReference<LogReaderService> serviceReference) {
 
-		LogReaderService logReaderService = _bundleContext.getService(
-			serviceReference);
+	public void logged(LogEntry logEntry) {
+		if (!(logEntry instanceof ExtendedLogEntry)) {
+			return;
+		}
 
-		logReaderService.addLogListener(this);
+		ExtendedLogEntry extendedLogEntry = (ExtendedLogEntry)logEntry;
 
-		return logReaderService;
+		Object context = extendedLogEntry.getContext();
+
+		if (context instanceof FrameworkLogEntry) {
+			FrameworkLogEntry frameworkLogEntry = (FrameworkLogEntry)context;
+
+			_log(
+				frameworkLogEntry.getEntry(), frameworkLogEntry.getSeverity(),
+				frameworkLogEntry.getBundleCode(),
+				frameworkLogEntry.getMessage(), frameworkLogEntry.getContext(),
+				frameworkLogEntry.getThrowable());
+
+			FrameworkLogEntry[] children = frameworkLogEntry.getChildren();
+
+			if ((children != null) && (children.length > 0)) {
+				for (FrameworkLogEntry curFrameworkLogEntry : children) {
+					_log(
+						curFrameworkLogEntry.getEntry(),
+						curFrameworkLogEntry.getSeverity(),
+						curFrameworkLogEntry.getBundleCode(),
+						curFrameworkLogEntry.getMessage(),
+						curFrameworkLogEntry.getContext(),
+						curFrameworkLogEntry.getThrowable());
+				}
+			}
+
+			return;
+		}
+
+		Bundle bundle = extendedLogEntry.getBundle();
+
+		_log(
+			bundle.getSymbolicName(), extendedLogEntry.getLevel(),
+			bundle.getBundleId(), extendedLogEntry.getMessage(),
+			context, extendedLogEntry.getException());
 	}
 
-	@Override
-	public void logged(LogEntry logEntry) {
-		int level = logEntry.getLevel();
+	private synchronized void _log(
+		String category, int level, long bundleId, String message,
+		Object context, Throwable throwable) {
 
-		Bundle bundle = logEntry.getBundle();
-
-		String symbolicName = StringUtil.replace(
-			bundle.getSymbolicName(), StringPool.PERIOD, StringPool.UNDERLINE);
-
-		Log log = LogFactoryUtil.getLog("osgi.logging." + symbolicName);
-
-		String message = logEntry.getMessage();
-
-		ServiceReference<?> serviceReference = logEntry.getServiceReference();
-
-		if (serviceReference != null) {
-			message += " " + serviceReference.toString();
+		if (context == null) {
+			context = "";
 		}
+
+		Logger log = LoggerFactory.getLogger(
+			"osgi.logging.".concat(category.replace('.', '_')));
 
 		if ((level == LogService.LOG_DEBUG) && log.isDebugEnabled()) {
-			log.debug(message, logEntry.getException());
+			log.debug(_FORMAT, message, context, throwable);
 		}
 		else if ((level == LogService.LOG_ERROR) && log.isErrorEnabled()) {
-			log.error(message, logEntry.getException());
+			log.error(_FORMAT, message, context, throwable);
 		}
 		else if ((level == LogService.LOG_INFO) && log.isInfoEnabled()) {
-			log.info(message, logEntry.getException());
+			log.info(_FORMAT, message, context, throwable);
 		}
 		else if ((level == LogService.LOG_WARNING) && log.isWarnEnabled()) {
-			log.warn(message, logEntry.getException());
+			log.warn(_FORMAT, message, context, throwable);
 		}
 	}
 
-	@Override
-	public void modifiedService(
-		ServiceReference<LogReaderService> serviceReference,
-		LogReaderService logReaderService) {
-	}
-
-	@Override
-	public void removedService(
-		ServiceReference<LogReaderService> serviceReference,
-		LogReaderService logReaderService) {
-
-		logReaderService.removeLogListener(this);
-	}
-
-	@Override
-	public void start(BundleContext bundleContext) throws Exception {
-		_bundleContext = bundleContext;
-
-		_serviceTracker = new ServiceTracker<>(
-			bundleContext, LogReaderService.class, this);
-
-		_serviceTracker.open();
-	}
-
-	@Override
-	public void stop(BundleContext bundleContext) throws Exception {
-		_bundleContext = null;
-
-		_serviceTracker.close();
-
-		_serviceTracker = null;
-	}
-
-	private BundleContext _bundleContext;
-	private ServiceTracker<LogReaderService, LogReaderService> _serviceTracker;
+	private static final String _FORMAT = "{} {}";
 
 }
