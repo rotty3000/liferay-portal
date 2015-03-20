@@ -165,10 +165,10 @@ public class InputEditorTag extends IncludeTag {
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
-		if (_contentsLanguageId == null) {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
+		if (_contentsLanguageId == null) {
 			_contentsLanguageId = themeDisplay.getLanguageId();
 		}
 
@@ -182,7 +182,7 @@ public class InputEditorTag extends IncludeTag {
 
 		String editorImpl = EditorUtil.getEditorValue(request, _editorImpl);
 
-		_page = "/html/js/editor/" + editorImpl + ".jsp";
+		_page = themeDisplay.getPathJavaScript() + "/editor/" + editorImpl + ".jsp";
 
 		request.setAttribute(
 			"liferay-ui:input-editor:allowBrowseDocuments",

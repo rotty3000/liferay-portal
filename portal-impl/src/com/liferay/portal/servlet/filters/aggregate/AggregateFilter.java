@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.web.PortalWebResourcesUtil;
 import com.liferay.portal.minifier.MinifierUtil;
 import com.liferay.portal.servlet.filters.IgnoreModuleRequestFilter;
 import com.liferay.portal.servlet.filters.dynamiccss.DynamicCSSUtil;
@@ -45,10 +46,8 @@ import com.liferay.portal.util.PropsValues;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URL;
 import java.net.URLConnection;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -211,9 +210,13 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 			String content = fileServletPaths.getContent();
 
 			if (Validator.isNull(content)) {
+				System.out.println("Filename:" + fileName + " IS BLANK"); 
 				continue;
 			}
 
+			
+			System.out.println("Filename" + fileName + " || content.length:" + content.length());
+			
 			sb.append(content);
 			sb.append(StringPool.NEW_LINE);
 		}
@@ -249,7 +252,7 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 		String minifierType = ParamUtil.getString(request, "minifierType");
 		String bundleId = ParamUtil.getString(
 			request, "bundleId",
-			ParamUtil.getString(request, "minifierBundleId"));
+			ParamUtil.getString(request, "minifierBundleId"));		
 
 		if (Validator.isNull(minifierType) || Validator.isNull(bundleId) ||
 			!ArrayUtil.contains(PropsValues.JAVASCRIPT_BUNDLE_IDS, bundleId)) {
@@ -259,8 +262,11 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 
 		String bundleDirName = PropsUtil.get(
 			PropsKeys.JAVASCRIPT_BUNDLE_DIR, new Filter(bundleId));
-
-		URL bundleDirURL = _servletContext.getResource(bundleDirName);
+		
+		ServletContext resourceServeletContext = 
+				PortalWebResourcesUtil.getServletContext();
+		
+		URL bundleDirURL = resourceServeletContext.getResource(bundleDirName);
 
 		if (bundleDirURL == null) {
 			return null;
@@ -276,7 +282,7 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 			boolean staleCache = false;
 
 			for (String fileName : fileNames) {
-				URL resourceURL = _servletContext.getResource(
+				URL resourceURL = resourceServeletContext.getResource(
 					bundleDirName.concat(StringPool.SLASH).concat(fileName));
 
 				if (resourceURL == null) {
@@ -512,6 +518,22 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 
 		return getJavaScriptContent(resourceURL.toString(), content);
 	}
+	
+	@Override
+	protected boolean isModuleRequest(HttpServletRequest request) {
+		String requestURI = request.getRequestURI();
+		
+		System.out.println("\n\n-----------------------------requestURI>" + requestURI);
+		
+		String frontEndContextPath = PortalWebResourcesUtil.getContextPath();
+		
+		if(requestURI.startsWith(frontEndContextPath)){
+			return false;
+		}
+		
+		return super.isModuleRequest(request);
+	}
+	
 
 	@Override
 	protected void processFilter(

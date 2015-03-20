@@ -47,6 +47,10 @@ public class FileAvailabilityUtil {
 			servletContext);
 
 		Boolean available = availabilities.get(path);
+		
+		if (path.contains("front-end-web")) {
+			return true;
+		}
 
 		if (available != null) {
 			return available;
