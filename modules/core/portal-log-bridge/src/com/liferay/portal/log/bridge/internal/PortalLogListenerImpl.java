@@ -33,7 +33,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Raymond Augé
  */
-public class LogBridge
+public class PortalLogListenerImpl
 	implements BundleActivator, LogListener,
 			   ServiceTrackerCustomizer<LogReaderService, LogReaderService> {
 
