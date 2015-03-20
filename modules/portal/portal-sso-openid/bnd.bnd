@@ -1,0 +1,13 @@
+Bundle-Name: Liferay Portal SSO Open ID
+Bundle-SymbolicName: com.liferay.portal.sso.openid
+Bundle-Version: 1.0.0
+Include-Resource:\
+	classes,\
+	@lib/openid4java
+Include-Resource:\
+	${replace;${libs};^;@lib/},\
+	classes,\
+	META-INF/resources=src/META-INF/resources
+Web-ContextPath: /portal-sso-openid
+
+libs: ${lsr;lib;*.jar}
