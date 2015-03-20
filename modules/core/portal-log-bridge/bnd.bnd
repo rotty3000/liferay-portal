@@ -1,5 +1,6 @@
-Bundle-Activator: ${classes;IMPLEMENTS;org.osgi.framework.BundleActivator}
 Bundle-Name: Liferay Portal Log Bridge
 Bundle-SymbolicName: com.liferay.portal.log.bridge
 Bundle-Version: 1.0.1
 Include-Resource: classes
+Fragment-Host: org.eclipse.osgi; bundle-version="[3.10.0,4.0.0)"; extension:=framework
+Import-Package: !*
