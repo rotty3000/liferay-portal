@@ -464,12 +464,12 @@ public class OpenIdAction extends BaseStrutsPortletAction {
 			actionResponse);
 		HttpSession session = request.getSession();
 
-		LiferayPortletResponse actionResponseImpl =
-			(LiferayPortletResponse)actionResponse;
+		LiferayPortletResponse liferayPortletResponse =
+			PortalUtil.getLiferayPortletResponse(actionResponse);
 
 		String openId = ParamUtil.getString(actionRequest, "openId");
 
-		PortletURL portletURL = actionResponseImpl.createActionURL();
+		PortletURL portletURL = liferayPortletResponse.createActionURL();
 
 		portletURL.setParameter("saveLastPath", Boolean.FALSE.toString());
 		portletURL.setParameter(Constants.CMD, Constants.READ);
