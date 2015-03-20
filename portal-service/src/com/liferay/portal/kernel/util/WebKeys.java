@@ -105,6 +105,10 @@ public interface WebKeys {
 
 	public static final String OSGI_BUNDLE = "OSGI_BUNDLE";
 
+	public static final String OPEN_ID_LOGIN = "OPEN_ID_LOGIN";
+
+	public static final String OPEN_ID_LOGIN_PENDING = "OPEN_ID_LOGIN_PENDING";
+
 	@Distributed(direction = Direction.RESPONSE)
 	public static final String OUTPUT_DATA = "LIFERAY_SHARED_OUTPUT_DATA";
 
