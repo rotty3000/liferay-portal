@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.log.bridge.internal;
+package com.liferay.portal.equinox.log.bridge.internal;
 
 import org.eclipse.equinox.log.ExtendedLogEntry;
 import org.eclipse.equinox.log.SynchronousLogListener;
