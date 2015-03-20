@@ -1,9 +1,13 @@
 Bundle-Name: Liferay Portal SSO Open ID
 Bundle-SymbolicName: com.liferay.portal.sso.openid
 Bundle-Version: 1.0.0
-Include-Resource:\
-	classes,\
-	@lib/openid4java
+Import-Package:\
+	!com.google.inject.internal.asm.util.*,\
+	!net.sf.ehcache.*,\
+	!org.apache.avalon.*,\
+	!org.apache.log.*,\
+	!sun.io.*,\
+	*
 Include-Resource:\
 	${replace;${libs};^;@lib/},\
 	classes,\
