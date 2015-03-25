@@ -12,24 +12,29 @@
  * details.
  */
 
-package com.liferay.portal.cluster;
+package com.liferay.portal.cluster.internal;
 
-import com.liferay.portal.kernel.cluster.ClusterChannel;
-import com.liferay.portal.kernel.cluster.ClusterChannelFactory;
-import com.liferay.portal.kernel.cluster.ClusterReceiver;
+import com.liferay.portal.kernel.cluster.Address;
 
 /**
  * @author Tina Tian
  */
-public class TestClusterChannelFactory implements ClusterChannelFactory {
+public class TestAddress implements Address {
+
+	public TestAddress(String address) {
+		_address = address;
+	}
 
 	@Override
-	public ClusterChannel createClusterChannel(
-		String channelProperties, String clusterName,
-		ClusterReceiver clusterReceiver) {
-
-		return new TestClusterChannel(
-			channelProperties, clusterName, clusterReceiver);
+	public String getDescription() {
+		return _address;
 	}
+
+	@Override
+	public Object getRealAddress() {
+		return _address;
+	}
+
+	private final String _address;
 
 }
