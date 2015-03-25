@@ -42,17 +42,6 @@ public class ClusterMasterExecutorUtil {
 		return _clusterMasterExecutor;
 	}
 
-	public static void initialize() {
-		ClusterMasterExecutor clusterMasterExecutor =
-			getClusterMasterExecutor();
-
-		if (clusterMasterExecutor == null) {
-			return;
-		}
-
-		_clusterMasterExecutor.initialize();
-	}
-
 	public static boolean isEnabled() {
 		ClusterMasterExecutor clusterMasterExecutor =
 			getClusterMasterExecutor();
