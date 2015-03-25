@@ -248,14 +248,6 @@ public class ClusterExecutorImpl
 		return _clusterLinkConfiguration.enabled();
 	}
 
-	@Modified
-	public void modified(Map<String, Object> properties) {
-		_clusterLinkConfiguration = Configurable.createConfigurable(
-			ClusterLinkConfiguration.class, _componentContext.getProperties());
-
-		manageDebugClusterEventListener();
-	}
-
 	@Override
 	public void portalLocalInetSocketAddressConfigured(
 		InetSocketAddress inetSocketAddress, boolean secure) {
@@ -326,13 +318,17 @@ public class ClusterExecutorImpl
 
 	@Deactivate
 	protected void deactivate() {
-		if (!isEnabled()) {
-			return;
+		if (_clusterChannel != null) {
+			_clusterChannel.close();
 		}
 
-		_clusterChannel.close();
+		_clusterChannel = null;
 
-		_executorService.shutdownNow();
+		if (_executorService != null) {
+			_executorService.shutdownNow();
+		}
+
+		_executorService = null;
 
 		_clusterEventListeners.clear();
 		_clusterNodeStatuses.clear();
@@ -340,7 +336,11 @@ public class ClusterExecutorImpl
 		_localClusterNodeStatus = null;
 
 		_componentContext = null;
-		_serviceTracker.close();
+
+		if (_serviceTracker != null) {
+			_serviceTracker.close();
+		}
+
 		_serviceTracker = null;
 	}
 
@@ -501,6 +501,23 @@ public class ClusterExecutorImpl
 		ClusterEvent clusterEvent = ClusterEvent.depart(departClusterNodes);
 
 		fireClusterEvent(clusterEvent);
+	}
+
+	@Modified
+	protected synchronized void modified(Map<String, Object> properties) {
+		_clusterLinkConfiguration = Configurable.createConfigurable(
+			ClusterLinkConfiguration.class, properties);
+
+		if (!_clusterLinkConfiguration.enabled() && (_clusterChannel != null)) {
+			deactivate();
+		}
+		else if (_clusterLinkConfiguration.enabled() &&
+				 (_clusterChannel == null)) {
+
+			initialize();
+		}
+
+		manageDebugClusterEventListener();
 	}
 
 	protected void sendNotifyRequest() {
