@@ -14,13 +14,16 @@
 
 package com.liferay.portal.cluster.internal.jgroups;
 
-import com.liferay.portal.kernel.cluster.ClusterChannel;
-import com.liferay.portal.kernel.cluster.ClusterChannelFactory;
+import com.liferay.portal.cluster.ClusterChannel;
+import com.liferay.portal.cluster.ClusterChannelFactory;
 import com.liferay.portal.kernel.cluster.ClusterReceiver;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Tina Tian
  */
+@Component(immediate = true, service = ClusterChannelFactory.class)
 public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 
 	@Override

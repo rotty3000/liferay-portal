@@ -14,19 +14,21 @@
 
 package com.liferay.portal.cluster.internal;
 
+import aQute.bnd.annotation.metatype.Configurable;
+
+import com.liferay.portal.cluster.ClusterChannel;
+import com.liferay.portal.cluster.ClusterChannelFactory;
+import com.liferay.portal.cluster.configuration.ClusterLinkConfiguration;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterChannel;
-import com.liferay.portal.kernel.cluster.ClusterChannelFactory;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterLink;
 import com.liferay.portal.kernel.cluster.ClusterReceiver;
 import com.liferay.portal.kernel.cluster.Priority;
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
+import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -35,26 +37,21 @@ import com.liferay.portal.util.PropsValues;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
+
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Shuyang Zhou
  */
-@DoPrivileged
+@Component(immediate = true, service = ClusterLink.class)
 public class ClusterLinkImpl implements ClusterLink {
-
-	public void destroy() {
-		if (!isEnabled()) {
-			return;
-		}
-
-		for (ClusterChannel clusterChannel : _transportChannels) {
-			clusterChannel.close();
-		}
-
-		_executorService.shutdownNow();
-	}
 
 	@Override
 	public void initialize() {
@@ -62,7 +59,7 @@ public class ClusterLinkImpl implements ClusterLink {
 			return;
 		}
 
-		_executorService = PortalExecutorManagerUtil.getPortalExecutor(
+		_executorService = _portalExecutorManager.getPortalExecutor(
 			ClusterLinkImpl.class.getName());
 
 		try {
@@ -83,7 +80,7 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	@Override
 	public boolean isEnabled() {
-		return PropsValues.CLUSTER_LINK_ENABLED;
+		return _clusterLinkConfiguration.enabled();
 	}
 
 	@Override
@@ -116,10 +113,26 @@ public class ClusterLinkImpl implements ClusterLink {
 		clusterChannel.sendUnicastMessage(message, address);
 	}
 
-	public void setClusterChannelFactory(
-		ClusterChannelFactory clusterChannelFactory) {
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_clusterLinkConfiguration = Configurable.createConfigurable(
+			ClusterLinkConfiguration.class, properties);
 
-		_clusterChannelFactory = clusterChannelFactory;
+		initialize();
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		if (!isEnabled()) {
+			return;
+		}
+
+		for (ClusterChannel clusterChannel : _transportChannels) {
+			clusterChannel.close();
+		}
+
+		_executorService.shutdownNow();
 	}
 
 	protected ClusterChannel getChannel(Priority priority) {
@@ -209,6 +222,20 @@ public class ClusterLinkImpl implements ClusterLink {
 		}
 	}
 
+	@Reference
+	protected void setClusterChannelFactory(
+		ClusterChannelFactory clusterChannelFactory) {
+
+		_clusterChannelFactory = clusterChannelFactory;
+	}
+
+	@Reference
+	protected void setPortalExecutorManager(
+		PortalExecutorManager portalExecutorManager) {
+
+		_portalExecutorManager = portalExecutorManager;
+	}
+
 	private static final String _LIFERAY_TRANSPORT_CHANNEL_NAME =
 		PropsValues.CLUSTER_LINK_CHANNEL_NAME_PREFIX + "transport-";
 
@@ -217,9 +244,11 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	private int _channelCount;
 	private ClusterChannelFactory _clusterChannelFactory;
+	private volatile ClusterLinkConfiguration _clusterLinkConfiguration;
 	private List<ClusterReceiver> _clusterReceivers;
 	private ExecutorService _executorService;
 	private List<Address> _localTransportAddresses;
+	private PortalExecutorManager _portalExecutorManager;
 	private List<ClusterChannel> _transportChannels;
 
 }
