@@ -16,8 +16,10 @@ package com.liferay.portal.kernel.cluster;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.util.concurrent.Future;
 
@@ -35,11 +37,11 @@ public class ClusterMasterExecutorUtil {
 			return null;
 		}
 
-		return _clusterMasterExecutor.executeOnMaster(methodHandler);
+		return clusterMasterExecutor.executeOnMaster(methodHandler);
 	}
 
 	public static ClusterMasterExecutor getClusterMasterExecutor() {
-		return _clusterMasterExecutor;
+		return _instance._serviceTracker.getService();
 	}
 
 	public static boolean isEnabled() {
@@ -50,7 +52,7 @@ public class ClusterMasterExecutorUtil {
 			return false;
 		}
 
-		return _clusterMasterExecutor.isEnabled();
+		return clusterMasterExecutor.isEnabled();
 	}
 
 	public static boolean isMaster() {
@@ -61,7 +63,7 @@ public class ClusterMasterExecutorUtil {
 			return false;
 		}
 
-		return _clusterMasterExecutor.isMaster();
+		return clusterMasterExecutor.isMaster();
 	}
 
 	public static void registerClusterMasterTokenTransitionListener(
@@ -75,7 +77,7 @@ public class ClusterMasterExecutorUtil {
 			return;
 		}
 
-		_clusterMasterExecutor.registerClusterMasterTokenTransitionListener(
+		clusterMasterExecutor.registerClusterMasterTokenTransitionListener(
 			clusterMasterTokenTransitionListener);
 	}
 
@@ -90,18 +92,22 @@ public class ClusterMasterExecutorUtil {
 			return;
 		}
 
-		_clusterMasterExecutor.unregisterClusterMasterTokenTransitionListener(
+		clusterMasterExecutor.unregisterClusterMasterTokenTransitionListener(
 			clusterMasterTokenTransitionListener);
 	}
 
-	public void setClusterMasterExecutor(
-		ClusterMasterExecutor clusterMasterExecutor) {
+	private ClusterMasterExecutorUtil() {
+		Registry registry = RegistryUtil.getRegistry();
 
-		PortalRuntimePermission.checkSetBeanProperty(getClass());
+		_serviceTracker = registry.trackServices(ClusterMasterExecutor.class);
 
-		_clusterMasterExecutor = clusterMasterExecutor;
+		_serviceTracker.open();
 	}
 
-	private static ClusterMasterExecutor _clusterMasterExecutor;
+	private static final ClusterMasterExecutorUtil _instance =
+		new ClusterMasterExecutorUtil();
+
+	private final ServiceTracker<ClusterMasterExecutor, ClusterMasterExecutor>
+		_serviceTracker;
 
 }
