@@ -43,16 +43,6 @@ public class ClusterLinkUtil {
 		return _clusterLink;
 	}
 
-	public static void initialize() {
-		ClusterLink clusterLink = getClusterLink();
-
-		if (clusterLink == null) {
-			return;
-		}
-
-		clusterLink.initialize();
-	}
-
 	public static void sendMulticastMessage(
 		Message message, Priority priority) {
 

@@ -54,31 +54,6 @@ import org.osgi.service.component.annotations.Reference;
 public class ClusterLinkImpl implements ClusterLink {
 
 	@Override
-	public void initialize() {
-		if (!isEnabled()) {
-			return;
-		}
-
-		_executorService = _portalExecutorManager.getPortalExecutor(
-			ClusterLinkImpl.class.getName());
-
-		try {
-			initChannels();
-		}
-		catch (Exception e) {
-			if (_log.isErrorEnabled()) {
-				_log.error("Unable to initialize channels", e);
-			}
-
-			throw new IllegalStateException(e);
-		}
-
-		for (ClusterReceiver clusterReceiver : _clusterReceivers) {
-			clusterReceiver.openLatch();
-		}
-	}
-
-	@Override
 	public boolean isEnabled() {
 		return _clusterLinkConfiguration.enabled();
 	}
@@ -114,7 +89,6 @@ public class ClusterLinkImpl implements ClusterLink {
 	}
 
 	@Activate
-	@Modified
 	protected void activate(Map<String, Object> properties) {
 		_clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
@@ -124,15 +98,21 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	@Deactivate
 	protected void deactivate() {
-		if (!isEnabled()) {
-			return;
+		if (_transportChannels != null) {
+			for (ClusterChannel clusterChannel : _transportChannels) {
+				clusterChannel.close();
+			}
 		}
 
-		for (ClusterChannel clusterChannel : _transportChannels) {
-			clusterChannel.close();
+		_localTransportAddresses = null;
+		_transportChannels = null;
+		_clusterReceivers = null;
+
+		if (_executorService != null) {
+			_executorService.shutdownNow();
 		}
 
-		_executorService.shutdownNow();
+		_executorService = null;
 	}
 
 	protected ClusterChannel getChannel(Priority priority) {
@@ -194,6 +174,47 @@ public class ClusterLinkImpl implements ClusterLink {
 			_clusterReceivers.add(clusterReceiver);
 			_localTransportAddresses.add(clusterChannel.getLocalAddress());
 			_transportChannels.add(clusterChannel);
+		}
+	}
+
+	protected void initialize() {
+		if (!isEnabled()) {
+			return;
+		}
+
+		_executorService = _portalExecutorManager.getPortalExecutor(
+			ClusterLinkImpl.class.getName());
+
+		try {
+			initChannels();
+		}
+		catch (Exception e) {
+			if (_log.isErrorEnabled()) {
+				_log.error("Unable to initialize channels", e);
+			}
+
+			throw new IllegalStateException(e);
+		}
+
+		for (ClusterReceiver clusterReceiver : _clusterReceivers) {
+			clusterReceiver.openLatch();
+		}
+	}
+
+	@Modified
+	protected synchronized void modified(Map<String, Object> properties) {
+		_clusterLinkConfiguration = Configurable.createConfigurable(
+			ClusterLinkConfiguration.class, properties);
+
+		if (!_clusterLinkConfiguration.enabled() &&
+			(_transportChannels != null)) {
+
+			deactivate();
+		}
+		else if (_clusterLinkConfiguration.enabled() &&
+				 (_transportChannels == null)) {
+
+			initialize();
 		}
 	}
 
