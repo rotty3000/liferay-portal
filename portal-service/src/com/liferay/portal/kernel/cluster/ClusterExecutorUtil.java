@@ -39,16 +39,6 @@ public class ClusterExecutorUtil {
 		clusterExecutor.addClusterEventListener(clusterEventListener);
 	}
 
-	public static void destroy() {
-		ClusterExecutor clusterExecutor = getClusterExecutor();
-
-		if (clusterExecutor == null) {
-			return;
-		}
-
-		clusterExecutor.destroy();
-	}
-
 	public static FutureClusterResponses execute(
 		ClusterRequest clusterRequest) {
 
@@ -93,16 +83,6 @@ public class ClusterExecutorUtil {
 		}
 
 		return clusterExecutor.getLocalClusterNode();
-	}
-
-	public static void initialize() {
-		ClusterExecutor clusterExecutor = getClusterExecutor();
-
-		if (clusterExecutor == null) {
-			return;
-		}
-
-		clusterExecutor.initialize();
 	}
 
 	public static boolean isClusterNodeAlive(String clusterNodeId) {

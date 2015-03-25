@@ -25,6 +25,9 @@ import aQute.bnd.annotation.metatype.Meta;
 public interface ClusterLinkConfiguration {
 
 	@Meta.AD(deflt = "false", required = false)
+	public boolean debugEnabled();
+
+	@Meta.AD(deflt = "false", required = false)
 	public boolean enabled();
 
 }

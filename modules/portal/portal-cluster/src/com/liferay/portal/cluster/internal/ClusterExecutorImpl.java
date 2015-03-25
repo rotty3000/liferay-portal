@@ -14,9 +14,12 @@
 
 package com.liferay.portal.cluster.internal;
 
+import aQute.bnd.annotation.metatype.Configurable;
+
+import com.liferay.portal.cluster.ClusterChannel;
+import com.liferay.portal.cluster.ClusterChannelFactory;
+import com.liferay.portal.cluster.configuration.ClusterLinkConfiguration;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterChannel;
-import com.liferay.portal.kernel.cluster.ClusterChannelFactory;
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
 import com.liferay.portal.kernel.cluster.ClusterException;
@@ -32,7 +35,6 @@ import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.memory.FinalizeManager;
-import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashUtil;
@@ -42,7 +44,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.util.PortalInetSocketAddressEventListener;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.Serializable;
@@ -63,11 +64,27 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
+
 /**
  * @author Tina Tian
  * @author Shuyang Zhou
  */
-@DoPrivileged
+@Component(
+	immediate = true,
+	service = {
+		ClusterExecutor.class, PortalInetSocketAddressEventListener.class
+	}
+)
 public class ClusterExecutorImpl
 	implements ClusterExecutor, PortalInetSocketAddressEventListener {
 
@@ -80,22 +97,6 @@ public class ClusterExecutorImpl
 		}
 
 		_clusterEventListeners.addIfAbsent(clusterEventListener);
-	}
-
-	@Override
-	public void destroy() {
-		if (!isEnabled()) {
-			return;
-		}
-
-		_clusterChannel.close();
-
-		_executorService.shutdownNow();
-
-		_clusterEventListeners.clear();
-		_clusterNodeStatuses.clear();
-		_futureClusterResponses.clear();
-		_localClusterNodeStatus = null;
 	}
 
 	@Override
@@ -198,7 +199,6 @@ public class ClusterExecutorImpl
 		return _localClusterNodeStatus.getClusterNode();
 	}
 
-	@Override
 	public void initialize() {
 		if (!isEnabled()) {
 			return;
@@ -206,16 +206,6 @@ public class ClusterExecutorImpl
 
 		_executorService = PortalExecutorManagerUtil.getPortalExecutor(
 			ClusterExecutorImpl.class.getName());
-
-		PortalUtil.addPortalInetSocketAddressEventListener(this);
-
-		if (PropsValues.CLUSTER_LINK_DEBUG_ENABLED) {
-			addClusterEventListener(new DebuggingClusterEventListenerImpl());
-		}
-
-		if (PropsValues.LIVE_USERS_ENABLED) {
-			addClusterEventListener(new LiveUsersClusterEventListenerImpl());
-		}
 
 		_clusterReceiver = new ClusterRequestReceiver(this);
 
@@ -255,7 +245,15 @@ public class ClusterExecutorImpl
 
 	@Override
 	public boolean isEnabled() {
-		return PropsValues.CLUSTER_LINK_ENABLED;
+		return _clusterLinkConfiguration.enabled();
+	}
+
+	@Modified
+	public void modified(Map<String, Object> properties) {
+		_clusterLinkConfiguration = Configurable.createConfigurable(
+			ClusterLinkConfiguration.class, _componentContext.getProperties());
+
+		manageDebugClusterEventListener();
 	}
 
 	@Override
@@ -296,12 +294,6 @@ public class ClusterExecutorImpl
 		_clusterEventListeners.remove(clusterEventListener);
 	}
 
-	public void setClusterChannelFactory(
-		ClusterChannelFactory clusterChannelFactory) {
-
-		_clusterChannelFactory = clusterChannelFactory;
-	}
-
 	public void setClusterEventListeners(
 		List<ClusterEventListener> clusterEventListeners) {
 
@@ -310,6 +302,46 @@ public class ClusterExecutorImpl
 		}
 
 		_clusterEventListeners.addAllAbsent(clusterEventListeners);
+	}
+
+	@Activate
+	protected void activate(ComponentContext componentContext) {
+		_componentContext = componentContext;
+
+		_clusterLinkConfiguration = Configurable.createConfigurable(
+			ClusterLinkConfiguration.class, _componentContext.getProperties());
+
+		BundleContext bundleContext = _componentContext.getBundleContext();
+
+		_serviceTracker = new ServiceTracker<>(
+			bundleContext, ClusterEventListener.class,
+			new ClusterEventListenerServiceTrackerCustomizer());
+
+		_serviceTracker.open();
+
+		initialize();
+
+		manageDebugClusterEventListener();
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		if (!isEnabled()) {
+			return;
+		}
+
+		_clusterChannel.close();
+
+		_executorService.shutdownNow();
+
+		_clusterEventListeners.clear();
+		_clusterNodeStatuses.clear();
+		_futureClusterResponses.clear();
+		_localClusterNodeStatus = null;
+
+		_componentContext = null;
+		_serviceTracker.close();
+		_serviceTracker = null;
 	}
 
 	protected ClusterNodeResponse executeClusterRequest(
@@ -427,6 +459,22 @@ public class ClusterExecutorImpl
 		return clusterNodeResponse;
 	}
 
+	protected void manageDebugClusterEventListener() {
+		if (_clusterLinkConfiguration.debugEnabled() &&
+			(_debugClusterEventListener == null)) {
+
+			_debugClusterEventListener =
+				new DebuggingClusterEventListenerImpl();
+
+			addClusterEventListener(_debugClusterEventListener);
+		}
+		else if (!_clusterLinkConfiguration.debugEnabled() &&
+				 (_debugClusterEventListener != null)) {
+
+			removeClusterEventListener(_debugClusterEventListener);
+		}
+	}
+
 	protected void memberRemoved(List<Address> departAddresses) {
 		List<ClusterNode> departClusterNodes = new ArrayList<>();
 
@@ -460,6 +508,13 @@ public class ClusterExecutorImpl
 			_localClusterNodeStatus, true);
 
 		_clusterChannel.sendMulticastMessage(clusterRequest);
+	}
+
+	@Reference
+	protected void setClusterChannelFactory(
+		ClusterChannelFactory clusterChannelFactory) {
+
+		_clusterChannelFactory = clusterChannelFactory;
 	}
 
 	private boolean _memberJoined(ClusterNodeStatus clusterNodeStatus) {
@@ -496,14 +551,19 @@ public class ClusterExecutorImpl
 	private ClusterChannelFactory _clusterChannelFactory;
 	private final CopyOnWriteArrayList<ClusterEventListener>
 		_clusterEventListeners = new CopyOnWriteArrayList<>();
+	private volatile ClusterLinkConfiguration _clusterLinkConfiguration;
 	private final Map<String, ClusterNodeStatus> _clusterNodeStatuses =
 		new ConcurrentHashMap<>();
 	private ClusterReceiver _clusterReceiver;
+	private ComponentContext _componentContext;
+	private ClusterEventListener _debugClusterEventListener;
 	private ExecutorService _executorService;
 	private final Map<String, FutureClusterResponses> _futureClusterResponses =
 		new ConcurrentReferenceValueHashMap<>(
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private ClusterNodeStatus _localClusterNodeStatus;
+	private ServiceTracker<ClusterEventListener, ClusterEventListener>
+		_serviceTracker;
 
 	private static class ClusterNodeStatus implements Serializable {
 
@@ -555,6 +615,44 @@ public class ClusterExecutorImpl
 
 		private final Address _address;
 		private final ClusterNode _clusterNode;
+
+	}
+
+	private class ClusterEventListenerServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer
+			<ClusterEventListener, ClusterEventListener> {
+
+		@Override
+		public ClusterEventListener addingService(
+			ServiceReference<ClusterEventListener> serviceReference) {
+
+			BundleContext bundleContext = _componentContext.getBundleContext();
+
+			ClusterEventListener clusterEventListener =
+				bundleContext.getService(serviceReference);
+
+			addClusterEventListener(clusterEventListener);
+
+			return clusterEventListener;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<ClusterEventListener> serviceReference,
+			ClusterEventListener clusterEventListener) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<ClusterEventListener> serviceReference,
+			ClusterEventListener clusterEventListener) {
+
+			BundleContext bundleContext = _componentContext.getBundleContext();
+
+			bundleContext.ungetService(serviceReference);
+
+			removeClusterEventListener(clusterEventListener);
+		}
 
 	}
 
