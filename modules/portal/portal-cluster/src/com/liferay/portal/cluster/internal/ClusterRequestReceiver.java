@@ -15,10 +15,10 @@
 package com.liferay.portal.cluster.internal;
 
 import com.liferay.portal.cluster.BaseClusterReceiver;
+import com.liferay.portal.cluster.ClusterChannel;
 import com.liferay.portal.kernel.cache.Lifecycle;
 import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterChannel;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.cluster.ClusterNodeResponse;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
