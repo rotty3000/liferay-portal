@@ -55,7 +55,7 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	@Override
 	public boolean isEnabled() {
-		return _clusterLinkConfiguration.enabled();
+		return clusterLinkConfiguration.enabled();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
 		initialize();
@@ -203,15 +203,15 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	@Modified
 	protected synchronized void modified(Map<String, Object> properties) {
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
-		if (!_clusterLinkConfiguration.enabled() &&
+		if (!clusterLinkConfiguration.enabled() &&
 			(_transportChannels != null)) {
 
 			deactivate();
 		}
-		else if (_clusterLinkConfiguration.enabled() &&
+		else if (clusterLinkConfiguration.enabled() &&
 				 (_transportChannels == null)) {
 
 			initialize();
@@ -257,6 +257,8 @@ public class ClusterLinkImpl implements ClusterLink {
 		_portalExecutorManager = portalExecutorManager;
 	}
 
+	protected volatile ClusterLinkConfiguration clusterLinkConfiguration;
+
 	private static final String _LIFERAY_TRANSPORT_CHANNEL_NAME =
 		PropsValues.CLUSTER_LINK_CHANNEL_NAME_PREFIX + "transport-";
 
@@ -265,7 +267,6 @@ public class ClusterLinkImpl implements ClusterLink {
 
 	private int _channelCount;
 	private ClusterChannelFactory _clusterChannelFactory;
-	private volatile ClusterLinkConfiguration _clusterLinkConfiguration;
 	private List<ClusterReceiver> _clusterReceivers;
 	private ExecutorService _executorService;
 	private List<Address> _localTransportAddresses;
