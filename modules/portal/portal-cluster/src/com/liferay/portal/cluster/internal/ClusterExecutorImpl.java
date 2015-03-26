@@ -80,6 +80,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * @author Shuyang Zhou
  */
 @Component(
+	configurationPid = "com.liferay.portal.cluster.configuration.ClusterLinkConfiguration",
 	immediate = true,
 	service = {
 		ClusterExecutor.class, PortalInetSocketAddressEventListener.class

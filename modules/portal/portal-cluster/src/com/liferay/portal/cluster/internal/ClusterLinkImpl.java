@@ -49,7 +49,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Shuyang Zhou
  */
-@Component(immediate = true, service = ClusterLink.class)
+@Component(
+	configurationPid = "com.liferay.portal.cluster.configuration.ClusterLinkConfiguration",
+	immediate = true, service = ClusterLink.class
+)
 public class ClusterLinkImpl implements ClusterLink {
 
 	@Override

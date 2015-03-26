@@ -56,7 +56,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 /**
  * @author Michael C. Han
  */
-@Component(immediate = true, service = ClusterMasterExecutor.class)
+@Component(
+	configurationPid = "com.liferay.portal.cluster.configuration.ClusterLinkConfiguration",
+	immediate = true, service = ClusterMasterExecutor.class
+)
 public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 
 	@Override
