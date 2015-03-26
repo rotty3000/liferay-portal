@@ -24,6 +24,15 @@ import aQute.bnd.annotation.metatype.Meta;
 )
 public interface ClusterLinkConfiguration {
 
+	@Meta.AD(deflt = "www.google.com:80", required = false)
+	public String autoDetectAddress();
+
+	@Meta.AD(deflt = "liferay-channel-", required = false)
+	public String channelNamePrefix();
+
+	@Meta.AD(deflt = "liferay-channel-", required = false)
+	public String channelSystemProperties();
+
 	@Meta.AD(deflt = "false", required = false)
 	public boolean debugEnabled();
 
