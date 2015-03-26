@@ -14,40 +14,75 @@
 
 package com.liferay.portal.cluster.internal;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+import com.liferay.portal.kernel.executor.PortalExecutorManager;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.util.PortalImpl;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PropsImpl;
+import com.liferay.portal.uuid.PortalUUIDImpl;
+
+import org.junit.Before;
 
 /**
  * @author Tina Tian
  */
 public class BaseClusterTestCase {
 
-	@Aspect
-	public static class DisableClusterLinkAdvice {
+	@Before
+	public void setUp() {
+		PortalUtil portalUtil = new PortalUtil();
 
-		@Around(
-			"set(* com.liferay.portal.util.PropsValues.CLUSTER_LINK_ENABLED)"
-		)
-		public Object disableClusterLink(
-				ProceedingJoinPoint proceedingJoinPoint)
-			throws Throwable {
+		portalUtil.setPortal(new PortalImpl());
 
-			return proceedingJoinPoint.proceed(new Object[] {Boolean.FALSE});
-		}
+		PortalUUIDUtil portalUUIDUtil = new PortalUUIDUtil();
 
+		portalUUIDUtil.setPortalUUID(new PortalUUIDImpl());
+
+		PropsUtil.setProps(new PropsImpl());
 	}
 
-	@Aspect
-	public static class EnableClusterLinkAdvice {
+	public static class MockPortalExecutorManager
+		implements PortalExecutorManager {
 
-		@Around(
-			"set(* com.liferay.portal.util.PropsValues.CLUSTER_LINK_ENABLED)"
-		)
-		public Object enableClusterLink(ProceedingJoinPoint proceedingJoinPoint)
-			throws Throwable {
+		@Override
+		public ThreadPoolExecutor getPortalExecutor(String name) {
+			return new ThreadPoolExecutor(0, 1) {
+				@Override
+				public void execute(Runnable runnable) {
+					runnable.run();
+				}
 
-			return proceedingJoinPoint.proceed(new Object[] {Boolean.TRUE});
+			};
+		}
+
+		@Override
+		public ThreadPoolExecutor getPortalExecutor(
+			String name, boolean createIfAbsent) {
+
+			return new ThreadPoolExecutor(0, 1) {
+				@Override
+				public void execute(Runnable runnable) {
+					runnable.run();
+				}
+
+			};
+		}
+
+		@Override
+		public ThreadPoolExecutor registerPortalExecutor(
+			String name, ThreadPoolExecutor threadPoolExecutor) {
+
+			return null;
+		}
+
+		@Override
+		public void shutdown() {
+		}
+
+		@Override
+		public void shutdown(boolean interrupt) {
 		}
 
 	}

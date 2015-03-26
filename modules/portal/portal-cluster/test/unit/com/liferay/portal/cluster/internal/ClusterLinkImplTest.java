@@ -15,8 +15,8 @@
 package com.liferay.portal.cluster.internal;
 
 import com.liferay.portal.cluster.ClusterChannel;
+import com.liferay.portal.cluster.configuration.ClusterLinkConfiguration;
 import com.liferay.portal.kernel.cluster.Address;
-import com.liferay.portal.kernel.cluster.ClusterChannel;
 import com.liferay.portal.kernel.cluster.ClusterReceiver;
 import com.liferay.portal.kernel.cluster.Priority;
 import com.liferay.portal.kernel.messaging.Message;
@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.test.rule.AdviseWith;
 import com.liferay.portal.test.rule.AspectJNewEnvTestRule;
-import com.liferay.portal.test.rule.PortalExecutorManagerTestRule;
 
 import java.io.Serializable;
 
@@ -45,7 +44,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -56,19 +54,9 @@ import org.junit.Test;
 @NewEnv(type = NewEnv.Type.CLASSLOADER)
 public class ClusterLinkImplTest extends BaseClusterTestCase {
 
-	@ClassRule
-	@Rule
-	public static final PortalExecutorManagerTestRule aggregateTestRule =
-		PortalExecutorManagerTestRule.INSTANCE;
-
-	@AdviseWith(
-		adviceClasses = {
-			EnableClusterLinkAdvice.class,
-			TransportationConfigurationAdvice.class
-		}
-	)
+	@AdviseWith(adviceClasses = {TransportationConfigurationAdvice.class})
 	@Test
-	public void testDestroy() {
+	public void testDeactivate() {
 		TransportationConfigurationAdvice.setChannelCount(1);
 
 		ClusterLinkImpl clusterLinkImpl = getClusterLinkImpl();
@@ -85,24 +73,18 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 		Assert.assertFalse(clusterChannel.isClosed());
 		Assert.assertFalse(executorService.isShutdown());
 
-		clusterLinkImpl.destroy();
+		clusterLinkImpl.deactivate();
 
 		Assert.assertTrue(clusterChannel.isClosed());
 		Assert.assertTrue(executorService.isShutdown());
 	}
 
-	@AdviseWith(adviceClasses = {DisableClusterLinkAdvice.class})
 	@Test
 	public void testDisabledClusterLink() {
 
 		// Test 1, initialize
 
-		ClusterLinkImpl clusterLinkImpl = new ClusterLinkImpl();
-
-		clusterLinkImpl.setClusterChannelFactory(
-			new TestClusterChannelFactory());
-
-		clusterLinkImpl.initialize();
+		ClusterLinkImpl clusterLinkImpl = getClusterLinkImpl(false);
 
 		List<TestClusterChannel> clusterChannels =
 			TestClusterChannel.getClusterChannels();
@@ -110,7 +92,7 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 		Assert.assertTrue(clusterChannels.isEmpty());
 		Assert.assertNull(clusterLinkImpl.getExecutorService());
 
-		// Test 2, send unitcast message
+		// Test 2, send unicast message
 
 		List<Serializable> multicastMessages =
 			TestClusterChannel.getMulticastMessages();
@@ -134,15 +116,10 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 
 		// Test 4, destroy
 
-		clusterLinkImpl.destroy();
+		clusterLinkImpl.deactivate();
 	}
 
-	@AdviseWith(
-		adviceClasses = {
-			EnableClusterLinkAdvice.class,
-			TransportationConfigurationAdvice.class
-		}
-	)
+	@AdviseWith(adviceClasses = {TransportationConfigurationAdvice.class})
 	@Test
 	public void testGetChannel() {
 		TransportationConfigurationAdvice.setChannelCount(2);
@@ -183,12 +160,7 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 		Assert.assertTrue(clusterChannels.contains(clusterChannel2));
 	}
 
-	@AdviseWith(
-		adviceClasses = {
-			EnableClusterLinkAdvice.class,
-			TransportationConfigurationAdvice.class
-		}
-	)
+	@AdviseWith(adviceClasses = {TransportationConfigurationAdvice.class})
 	@Test
 	public void testInitChannels() {
 		try (CaptureHandler captureHandler =
@@ -241,22 +213,12 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 		}
 	}
 
-	@AdviseWith(
-		adviceClasses = {
-			EnableClusterLinkAdvice.class,
-			TransportationConfigurationAdvice.class
-		}
-	)
+	@AdviseWith(adviceClasses = {TransportationConfigurationAdvice.class})
 	@Test
 	public void testInitialize() {
 		TransportationConfigurationAdvice.setChannelCount(2);
 
-		ClusterLinkImpl clusterLinkImpl = new ClusterLinkImpl();
-
-		clusterLinkImpl.setClusterChannelFactory(
-			new TestClusterChannelFactory());
-
-		clusterLinkImpl.initialize();
+		ClusterLinkImpl clusterLinkImpl = getClusterLinkImpl();
 
 		Assert.assertNotNull(clusterLinkImpl.getExecutorService());
 
@@ -277,12 +239,7 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 		}
 	}
 
-	@AdviseWith(
-		adviceClasses = {
-			EnableClusterLinkAdvice.class,
-			TransportationConfigurationAdvice.class
-		}
-	)
+	@AdviseWith(adviceClasses = {TransportationConfigurationAdvice.class})
 	@Test
 	public void testSendMulticastMessage() {
 		TransportationConfigurationAdvice.setChannelCount(1);
@@ -308,7 +265,6 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 
 	@AdviseWith(
 		adviceClasses = {
-			EnableClusterLinkAdvice.class,
 			TransportationConfigurationAdvice.class
 		}
 	)
@@ -385,10 +341,30 @@ public class ClusterLinkImplTest extends BaseClusterTestCase {
 	}
 
 	protected ClusterLinkImpl getClusterLinkImpl() {
+		return getClusterLinkImpl(true);
+	}
+
+	protected ClusterLinkImpl getClusterLinkImpl(final boolean enabled) {
 		ClusterLinkImpl clusterLinkImpl = new ClusterLinkImpl();
 
 		clusterLinkImpl.setClusterChannelFactory(
 			new TestClusterChannelFactory());
+
+		clusterLinkImpl.setPortalExecutorManager(
+			new MockPortalExecutorManager());
+
+		clusterLinkImpl.clusterLinkConfiguration =
+			new ClusterLinkConfiguration() {
+				@Override
+				public boolean debugEnabled() {
+					return true;
+				}
+
+				@Override
+				public boolean enabled() {
+					return enabled;
+				}
+			};
 
 		clusterLinkImpl.initialize();
 
