@@ -204,44 +204,6 @@ public class ClusterExecutorImpl
 		return _localClusterNodeStatus.getClusterNode();
 	}
 
-	public void initialize(Map<String, Object> properties) {
-		if (!isEnabled()) {
-			return;
-		}
-
-		_channelPropertiesControl = (String)properties.get(
-			_CHANNEL_PROPERTIES_CONTROL);
-
-		if (Validator.isNull(_channelPropertiesControl)) {
-			throw new IllegalStateException(
-				_CHANNEL_PROPERTIES_CONTROL + " not set.");
-		}
-
-		_executorService = _portalExecutorManager.getPortalExecutor(
-			ClusterExecutorImpl.class.getName());
-
-		_clusterReceiver = new ClusterRequestReceiver(this);
-
-		_clusterChannel = _clusterChannelFactory.createClusterChannel(
-			_channelPropertiesControl,
-			clusterLinkConfiguration.channelNamePrefix() + "control",
-			_clusterReceiver);
-
-		ClusterNode localClusterNode = new ClusterNode(
-			PortalUUIDUtil.generate(), _clusterChannel.getBindInetAddress());
-
-		_localClusterNodeStatus = new ClusterNodeStatus(
-			localClusterNode, _clusterChannel.getLocalAddress());
-
-		_memberJoined(_localClusterNodeStatus);
-
-		sendNotifyRequest();
-
-		_clusterReceiver.openLatch();
-
-		manageDebugClusterEventListener();
-	}
-
 	@Override
 	public boolean isClusterNodeAlive(String clusterNodeId) {
 		if (!isEnabled()) {
@@ -325,7 +287,7 @@ public class ClusterExecutorImpl
 
 		_propsServiceTracker.open();
 
-		initialize((Map<String, Object>)_componentContext.getProperties());
+		initialize((Map<String, Object>) _componentContext.getProperties());
 	}
 
 	protected void configurePortalInstanceCommunications(Props props) {
@@ -498,6 +460,44 @@ public class ClusterExecutorImpl
 		return clusterNodeResponse;
 	}
 
+	protected void initialize(Map<String, Object> properties) {
+		if (!isEnabled()) {
+			return;
+		}
+
+		_channelPropertiesControl = (String)properties.get(
+			_CHANNEL_PROPERTIES_CONTROL);
+
+		if (Validator.isNull(_channelPropertiesControl)) {
+			throw new IllegalStateException(
+				_CHANNEL_PROPERTIES_CONTROL + " not set.");
+		}
+
+		_executorService = _portalExecutorManager.getPortalExecutor(
+			ClusterExecutorImpl.class.getName());
+
+		_clusterReceiver = new ClusterRequestReceiver(this);
+
+		_clusterChannel = _clusterChannelFactory.createClusterChannel(
+			_channelPropertiesControl,
+			clusterLinkConfiguration.channelNamePrefix() + "control",
+			_clusterReceiver);
+
+		ClusterNode localClusterNode = new ClusterNode(
+			PortalUUIDUtil.generate(), _clusterChannel.getBindInetAddress());
+
+		_localClusterNodeStatus = new ClusterNodeStatus(
+			localClusterNode, _clusterChannel.getLocalAddress());
+
+		_memberJoined(_localClusterNodeStatus);
+
+		sendNotifyRequest();
+
+		_clusterReceiver.openLatch();
+
+		manageDebugClusterEventListener();
+	}
+
 	protected void manageDebugClusterEventListener() {
 		if (clusterLinkConfiguration.debugEnabled() &&
 			(_debugClusterEventListener == null)) {
@@ -543,9 +543,7 @@ public class ClusterExecutorImpl
 	}
 
 	@Modified
-	protected synchronized void modified(
-		Map<String, Object> properties) {
-
+	protected synchronized void modified(Map<String, Object> properties) {
 		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
@@ -630,6 +628,7 @@ public class ClusterExecutorImpl
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private ClusterNodeStatus _localClusterNodeStatus;
 	private PortalExecutorManager _portalExecutorManager;
+	private volatile Props _props;
 	private ServiceTracker<Props, Props> _propsServiceTracker;
 
 	private static class ClusterNodeStatus implements Serializable {
@@ -714,9 +713,12 @@ public class ClusterExecutorImpl
 			ServiceReference<ClusterEventListener> serviceReference,
 			ClusterEventListener clusterEventListener) {
 
-			BundleContext bundleContext = _componentContext.getBundleContext();
+			if (_componentContext != null) {
+				BundleContext bundleContext =
+					_componentContext.getBundleContext();
 
-			bundleContext.ungetService(serviceReference);
+				bundleContext.ungetService(serviceReference);
+			}
 
 			removeClusterEventListener(clusterEventListener);
 		}
@@ -730,11 +732,11 @@ public class ClusterExecutorImpl
 		public Props addingService(ServiceReference<Props> serviceReference) {
 			BundleContext bundleContext = _componentContext.getBundleContext();
 
-			Props props = bundleContext.getService(serviceReference);
+			_props = bundleContext.getService(serviceReference);
 
-			configurePortalInstanceCommunications(props);
+			configurePortalInstanceCommunications(_props);
 
-			return props;
+			return _props;
 		}
 
 		@Override
@@ -745,6 +747,15 @@ public class ClusterExecutorImpl
 		@Override
 		public void removedService(
 			ServiceReference<Props> serviceReference, Props props) {
+
+			if (_componentContext != null) {
+				BundleContext bundleContext =
+					_componentContext.getBundleContext();
+
+				bundleContext.ungetService(serviceReference);
+			}
+
+			_props = null;
 		}
 
 	}

@@ -386,9 +386,12 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 			ClusterMasterTokenTransitionListener
 				clusterMasterTokenTransitionListener) {
 
-			BundleContext bundleContext = _componentContext.getBundleContext();
+			if (_componentContext != null) {
+				BundleContext bundleContext =
+					_componentContext.getBundleContext();
 
-			bundleContext.ungetService(serviceReference);
+				bundleContext.ungetService(serviceReference);
+			}
 
 			unregisterClusterMasterTokenTransitionListener(
 				clusterMasterTokenTransitionListener);
