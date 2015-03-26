@@ -12,7 +12,9 @@
  * details.
  */
 
-package com.liferay.portal.kernel.cluster;
+package com.liferay.portal.cluster;
+
+import com.liferay.portal.kernel.cluster.Address;
 
 import java.util.List;
 

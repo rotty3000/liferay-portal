@@ -16,7 +16,7 @@ package com.liferay.portal.cluster.internal.jgroups;
 
 import com.liferay.portal.cluster.ClusterChannel;
 import com.liferay.portal.cluster.ClusterChannelFactory;
-import com.liferay.portal.kernel.cluster.ClusterReceiver;
+import com.liferay.portal.cluster.ClusterReceiver;
 
 import org.osgi.service.component.annotations.Component;
 

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.cluster;
 
-import com.liferay.portal.kernel.cluster.ClusterReceiver;
-
 /**
  * @author Tina Tian
  */
