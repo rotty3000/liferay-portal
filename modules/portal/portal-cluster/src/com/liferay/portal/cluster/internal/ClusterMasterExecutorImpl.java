@@ -155,7 +155,7 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 	protected synchronized void activate(ComponentContext componentContext) {
 		_componentContext = componentContext;
 
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, _componentContext.getProperties());
 
 		BundleContext bundleContext = _componentContext.getBundleContext();
@@ -192,7 +192,11 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 		_localClusterNodeId = null;
 
 		_componentContext = null;
-		_serviceTracker.close();
+
+		if (_serviceTracker != null) {
+			_serviceTracker.close();
+		}
+
 		_serviceTracker = null;
 	}
 
@@ -251,7 +255,7 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 	}
 
 	protected void initialize() {
-		if (!_clusterLinkConfiguration.enabled()) {
+		if (!clusterLinkConfiguration.enabled()) {
 			return;
 		}
 
@@ -273,15 +277,15 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 
 	@Modified
 	protected void modified(Map<String, Object> properties) {
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
-		if (!_clusterLinkConfiguration.enabled() &&
+		if (!clusterLinkConfiguration.enabled() &&
 			(_clusterEventListener != null)) {
 
 			deactivate();
 		}
-		else if (_clusterLinkConfiguration.enabled() &&
+		else if (clusterLinkConfiguration.enabled() &&
 				 (_clusterEventListener == null)) {
 
 			initialize();
@@ -309,6 +313,8 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 		_clusterExecutor = clusterExecutor;
 	}
 
+	protected volatile ClusterLinkConfiguration clusterLinkConfiguration;
+
 	private static final String _LOCK_CLASS_NAME =
 		ClusterMasterExecutorImpl.class.getName();
 
@@ -319,7 +325,6 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 
 	private ClusterEventListener _clusterEventListener;
 	private ClusterExecutor _clusterExecutor;
-	private volatile ClusterLinkConfiguration _clusterLinkConfiguration;
 	private final Set<ClusterMasterTokenTransitionListener>
 		_clusterMasterTokenTransitionListeners = new HashSet<>();
 	private ComponentContext _componentContext;
