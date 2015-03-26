@@ -40,11 +40,12 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.MethodHandler;
+import com.liferay.portal.kernel.util.Props;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.util.PortalInetSocketAddressEventListener;
-import com.liferay.portal.util.PropsValues;
 
 import java.io.Serializable;
 
@@ -82,6 +83,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 @Component(
 	configurationPid = "com.liferay.portal.cluster.configuration.ClusterLinkConfiguration",
 	immediate = true,
+	property = {
+		"channel.properties.control=UDP(bind_addr=localhost;mcast_group_addr=239.255.0.1;mcast_port=23301):PING(timeout=2000;num_initial_members=20;break_on_coord_rsp=true):MERGE3(min_interval=10000;max_interval=30000):FD_SOCK:FD_ALL:VERIFY_SUSPECT(timeout=1500):pbcast.NAKACK2(xmit_interval=1000;xmit_table_num_rows=100;xmit_table_msgs_per_row=2000;xmit_table_max_compaction_time=30000;max_msg_batch_size=500;use_mcast_xmit=false;discard_delivered_msgs=true):UNICAST2(max_bytes=10M;xmit_table_num_rows=100;xmit_table_msgs_per_row=2000;xmit_table_max_compaction_time=60000;max_msg_batch_size=500):pbcast.STABLE(stability_delay=1000;desired_avg_gossip=50000;max_bytes=4M):pbcast.GMS(join_timeout=3000;print_local_addr=true;view_bundling=true):UFC(max_credits=2M;min_threshold=0.4):MFC(max_credits=2M;min_threshold=0.4):FRAG2(frag_size=61440):RSVP(resend_interval=2000;timeout=10000)"
+	},
 	service = {
 		ClusterExecutor.class, PortalInetSocketAddressEventListener.class
 	}
@@ -200,9 +204,17 @@ public class ClusterExecutorImpl
 		return _localClusterNodeStatus.getClusterNode();
 	}
 
-	public void initialize() {
+	public void initialize(Map<String, Object> properties) {
 		if (!isEnabled()) {
 			return;
+		}
+
+		_channelPropertiesControl = (String)properties.get(
+			_CHANNEL_PROPERTIES_CONTROL);
+
+		if (Validator.isNull(_channelPropertiesControl)) {
+			throw new IllegalStateException(
+				_CHANNEL_PROPERTIES_CONTROL + " not set.");
 		}
 
 		_executorService = _portalExecutorManager.getPortalExecutor(
@@ -211,22 +223,15 @@ public class ClusterExecutorImpl
 		_clusterReceiver = new ClusterRequestReceiver(this);
 
 		_clusterChannel = _clusterChannelFactory.createClusterChannel(
-			PropsValues.CLUSTER_LINK_CHANNEL_PROPERTIES_CONTROL,
-			_LIFERAY_CONTROL_CHANNEL_NAME, _clusterReceiver);
+			_channelPropertiesControl,
+			clusterLinkConfiguration.channelNamePrefix() + "control",
+			_clusterReceiver);
 
 		ClusterNode localClusterNode = new ClusterNode(
 			PortalUUIDUtil.generate(), _clusterChannel.getBindInetAddress());
 
 		_localClusterNodeStatus = new ClusterNodeStatus(
 			localClusterNode, _clusterChannel.getLocalAddress());
-
-		if (Validator.isNotNull(PropsValues.PORTAL_INSTANCE_PROTOCOL)) {
-			localClusterNode.setPortalProtocol(
-				PropsValues.PORTAL_INSTANCE_PROTOCOL);
-
-			localClusterNode.setPortalInetSocketAddress(
-				getConfiguredPortalInetSocketAddress());
-		}
 
 		_memberJoined(_localClusterNodeStatus);
 
@@ -300,6 +305,7 @@ public class ClusterExecutorImpl
 	}
 
 	@Activate
+	@SuppressWarnings("cast")
 	protected void activate(ComponentContext componentContext) {
 		_componentContext = componentContext;
 
@@ -308,13 +314,34 @@ public class ClusterExecutorImpl
 
 		BundleContext bundleContext = _componentContext.getBundleContext();
 
-		_serviceTracker = new ServiceTracker<>(
+		_clusterEventListenerServiceTracker = new ServiceTracker<>(
 			bundleContext, ClusterEventListener.class,
 			new ClusterEventListenerServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		_clusterEventListenerServiceTracker.open();
 
-		initialize();
+		_propsServiceTracker = new ServiceTracker<>(
+			bundleContext, Props.class, new PropsServiceTrackerCustomizer());
+
+		_propsServiceTracker.open();
+
+		initialize((Map<String, Object>)_componentContext.getProperties());
+	}
+
+	protected void configurePortalInstanceCommunications(Props props) {
+		if ((_localClusterNodeStatus == null) ||
+			Validator.isNull(props.get(PropsKeys.PORTAL_INSTANCE_PROTOCOL))) {
+
+			return;
+		}
+
+		ClusterNode localClusterNode = _localClusterNodeStatus.getClusterNode();
+
+		localClusterNode.setPortalProtocol(
+			props.get(PropsKeys.PORTAL_INSTANCE_PROTOCOL));
+
+		localClusterNode.setPortalInetSocketAddress(
+			getConfiguredPortalInetSocketAddress(props));
 	}
 
 	@Deactivate
@@ -338,11 +365,17 @@ public class ClusterExecutorImpl
 
 		_componentContext = null;
 
-		if (_serviceTracker != null) {
-			_serviceTracker.close();
+		if (_clusterEventListenerServiceTracker != null) {
+			_clusterEventListenerServiceTracker.close();
 		}
 
-		_serviceTracker = null;
+		_clusterEventListenerServiceTracker = null;
+
+		if (_propsServiceTracker != null) {
+			_propsServiceTracker.close();
+		}
+
+		_propsServiceTracker = null;
 	}
 
 	protected ClusterNodeResponse executeClusterRequest(
@@ -387,20 +420,25 @@ public class ClusterExecutorImpl
 		return _clusterChannel;
 	}
 
-	protected InetSocketAddress getConfiguredPortalInetSocketAddress() {
-		if (Validator.isNull(PropsValues.PORTAL_INSTANCE_INET_SOCKET_ADDRESS)) {
+	protected InetSocketAddress getConfiguredPortalInetSocketAddress(
+		Props props) {
+
+		String portalInstanceInetSocketAddress = props.get(
+			PropsKeys.PORTAL_INSTANCE_INET_SOCKET_ADDRESS);
+
+		if (Validator.isNull(portalInstanceInetSocketAddress)) {
 			throw new IllegalArgumentException(
 				"Portal instance host name and port needs to be set in the " +
 					"property \"portal.instance.inet.socket.address\"");
 		}
 
 		String[] parts = StringUtil.split(
-			PropsValues.PORTAL_INSTANCE_INET_SOCKET_ADDRESS, CharPool.COLON);
+			portalInstanceInetSocketAddress, CharPool.COLON);
 
 		if (parts.length != 2) {
 			throw new IllegalArgumentException(
 				"Unable to parse the portal instance host name and port from " +
-					PropsValues.PORTAL_INSTANCE_INET_SOCKET_ADDRESS);
+					portalInstanceInetSocketAddress);
 		}
 
 		InetAddress hostInetAddress = null;
@@ -411,7 +449,7 @@ public class ClusterExecutorImpl
 		catch (UnknownHostException uhe) {
 			throw new IllegalArgumentException(
 				"Unable to parse the portal instance host name and port from " +
-					PropsValues.PORTAL_INSTANCE_INET_SOCKET_ADDRESS, uhe);
+					portalInstanceInetSocketAddress, uhe);
 		}
 
 		int port = -1;
@@ -422,7 +460,7 @@ public class ClusterExecutorImpl
 		catch (NumberFormatException nfe) {
 			throw new IllegalArgumentException(
 				"Unable to parse portal InetSocketAddress port from " +
-					PropsValues.PORTAL_INSTANCE_INET_SOCKET_ADDRESS, nfe);
+					portalInstanceInetSocketAddress, nfe);
 		}
 
 		return new InetSocketAddress(hostInetAddress, port);
@@ -505,7 +543,9 @@ public class ClusterExecutorImpl
 	}
 
 	@Modified
-	protected synchronized void modified(Map<String, Object> properties) {
+	protected synchronized void modified(
+		Map<String, Object> properties) {
+
 		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
@@ -515,7 +555,7 @@ public class ClusterExecutorImpl
 		else if (clusterLinkConfiguration.enabled() &&
 				 (_clusterChannel == null)) {
 
-			initialize();
+			initialize(properties);
 		}
 	}
 
@@ -566,16 +606,19 @@ public class ClusterExecutorImpl
 		return true;
 	}
 
-	private static final String _LIFERAY_CONTROL_CHANNEL_NAME =
-		PropsValues.CLUSTER_LINK_CHANNEL_NAME_PREFIX + "control";
+	private static final String _CHANNEL_PROPERTIES_CONTROL =
+		"channel.properties.control";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ClusterExecutorImpl.class);
 
+	private String _channelPropertiesControl;
 	private ClusterChannel _clusterChannel;
 	private ClusterChannelFactory _clusterChannelFactory;
 	private final CopyOnWriteArrayList<ClusterEventListener>
 		_clusterEventListeners = new CopyOnWriteArrayList<>();
+	private ServiceTracker<ClusterEventListener, ClusterEventListener>
+		_clusterEventListenerServiceTracker;
 	private final Map<String, ClusterNodeStatus> _clusterNodeStatuses =
 		new ConcurrentHashMap<>();
 	private ClusterReceiver _clusterReceiver;
@@ -587,8 +630,7 @@ public class ClusterExecutorImpl
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private ClusterNodeStatus _localClusterNodeStatus;
 	private PortalExecutorManager _portalExecutorManager;
-	private ServiceTracker<ClusterEventListener, ClusterEventListener>
-		_serviceTracker;
+	private ServiceTracker<Props, Props> _propsServiceTracker;
 
 	private static class ClusterNodeStatus implements Serializable {
 
@@ -677,6 +719,32 @@ public class ClusterExecutorImpl
 			bundleContext.ungetService(serviceReference);
 
 			removeClusterEventListener(clusterEventListener);
+		}
+
+	}
+
+	private class PropsServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<Props, Props> {
+
+		@Override
+		public Props addingService(ServiceReference<Props> serviceReference) {
+			BundleContext bundleContext = _componentContext.getBundleContext();
+
+			Props props = bundleContext.getService(serviceReference);
+
+			configurePortalInstanceCommunications(props);
+
+			return props;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<Props> serviceReference, Props props) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<Props> serviceReference, Props props) {
 		}
 
 	}

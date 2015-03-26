@@ -29,8 +29,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -51,7 +49,11 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.portal.cluster.configuration.ClusterLinkConfiguration",
-	immediate = true, service = ClusterLink.class
+	immediate = true,
+	property = {
+		"channel.properties.transport.0=UDP(bind_addr=localhost;mcast_group_addr=239.255.0.2;mcast_port=23302):PING(timeout=2000;num_initial_members=20;break_on_coord_rsp=true):MERGE3(min_interval=10000;max_interval=30000):FD_SOCK:FD_ALL:VERIFY_SUSPECT(timeout=1500):pbcast.NAKACK2(xmit_interval=1000;xmit_table_num_rows=100;xmit_table_msgs_per_row=2000;xmit_table_max_compaction_time=30000;max_msg_batch_size=500;use_mcast_xmit=false;discard_delivered_msgs=true):UNICAST2(max_bytes=10M;xmit_table_num_rows=100;xmit_table_msgs_per_row=2000;xmit_table_max_compaction_time=60000;max_msg_batch_size=500):pbcast.STABLE(stability_delay=1000;desired_avg_gossip=50000;max_bytes=4M):pbcast.GMS(join_timeout=3000;print_local_addr=true;view_bundling=true):UFC(max_credits=2M;min_threshold=0.4):MFC(max_credits=2M;min_threshold=0.4):FRAG2(frag_size=61440):RSVP(resend_interval=2000;timeout=10000)"
+	},
+	service = ClusterLink.class
 )
 public class ClusterLinkImpl implements ClusterLink {
 
@@ -95,7 +97,7 @@ public class ClusterLinkImpl implements ClusterLink {
 		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
-		initialize();
+		initialize(properties);
 	}
 
 	@Deactivate
@@ -138,9 +140,17 @@ public class ClusterLinkImpl implements ClusterLink {
 		return _localTransportAddresses;
 	}
 
-	protected void initChannels() throws Exception {
-		Properties transportProperties = PropsUtil.getProperties(
-			PropsKeys.CLUSTER_LINK_CHANNEL_PROPERTIES_TRANSPORT, true);
+	protected void initChannels(Map<String, Object> properties)
+		throws Exception {
+
+		Properties transportProperties = new Properties();
+
+		for (String propertyKey : properties.keySet()) {
+			if (propertyKey.startsWith(_CHANNEL_PROPERTIES_TRANSPORT)) {
+				transportProperties.put(
+					propertyKey, properties.get(propertyKey));
+			}
+		}
 
 		_channelCount = transportProperties.size();
 
@@ -181,7 +191,7 @@ public class ClusterLinkImpl implements ClusterLink {
 		}
 	}
 
-	protected void initialize() {
+	protected void initialize(Map<String, Object> properties) {
 		if (!isEnabled()) {
 			return;
 		}
@@ -190,7 +200,7 @@ public class ClusterLinkImpl implements ClusterLink {
 			ClusterLinkImpl.class.getName());
 
 		try {
-			initChannels();
+			initChannels(properties);
 		}
 		catch (Exception e) {
 			if (_log.isErrorEnabled()) {
@@ -218,7 +228,7 @@ public class ClusterLinkImpl implements ClusterLink {
 		else if (clusterLinkConfiguration.enabled() &&
 				 (_transportChannels == null)) {
 
-			initialize();
+			initialize(properties);
 		}
 	}
 
@@ -262,6 +272,9 @@ public class ClusterLinkImpl implements ClusterLink {
 	}
 
 	protected volatile ClusterLinkConfiguration clusterLinkConfiguration;
+
+	private static final String _CHANNEL_PROPERTIES_TRANSPORT =
+		"channel.properties.transport";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ClusterLinkImpl.class);
