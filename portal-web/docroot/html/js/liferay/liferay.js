@@ -134,6 +134,11 @@ Liferay = window.Liferay || {};
 
 				if (isNode(form)) {
 					ioConfig.form = form;
+
+					if (ioConfig.form.enctype == 'multipart/form-data') {
+						ioConfig.contentType = false;
+						ioConfig.processData = false;
+					}
 				}
 			},
 
@@ -160,24 +165,37 @@ Liferay = window.Liferay || {};
 	Service.invoke = function(payload, ioConfig) {
 		var instance = this;
 
+		var cmd = JSON.stringify(payload);
+		var p_auth = Liferay.authToken;
+
 		_.defaults(
 			ioConfig,
 			{
-				data: {
-					cmd: JSON.stringify(payload),
-					p_auth: Liferay.authToken
-				},
+				data: {},
 				dataType: 'JSON'
 			}
 		);
 
 		if (ioConfig.form) {
-			_.forEach(
-				$(ioConfig.form).serializeArray(),
-				function(item, index) {
-					ioConfig.data[item.name] = item.value;
-				}
-			);
+			if (ioConfig.form.enctype == 'multipart/form-data') {
+				ioConfig.data = new FormData(ioConfig.form);
+
+				ioConfig.data.append('cmd', cmd);
+				ioConfig.data.append('p_auth', p_auth);
+			}
+			else {
+				ioConfig.data = {
+					cmd: cmd,
+					p_auth: p_auth
+				};
+
+				_.forEach(
+					$(ioConfig.form).serializeArray(),
+					function(item, index) {
+						ioConfig.data[item.name] = item.value;
+					}
+				);
+			}
 
 			delete ioConfig.form;
 		}
