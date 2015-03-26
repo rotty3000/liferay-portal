@@ -31,7 +31,7 @@ import com.liferay.portal.kernel.cluster.ClusterReceiver;
 import com.liferay.portal.kernel.cluster.ClusterRequest;
 import com.liferay.portal.kernel.cluster.FutureClusterResponses;
 import com.liferay.portal.kernel.concurrent.ConcurrentReferenceValueHashMap;
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
+import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.memory.FinalizeManager;
@@ -204,7 +204,7 @@ public class ClusterExecutorImpl
 			return;
 		}
 
-		_executorService = PortalExecutorManagerUtil.getPortalExecutor(
+		_executorService = _portalExecutorManager.getPortalExecutor(
 			ClusterExecutorImpl.class.getName());
 
 		_clusterReceiver = new ClusterRequestReceiver(this);
@@ -232,6 +232,8 @@ public class ClusterExecutorImpl
 		sendNotifyRequest();
 
 		_clusterReceiver.openLatch();
+
+		manageDebugClusterEventListener();
 	}
 
 	@Override
@@ -245,7 +247,7 @@ public class ClusterExecutorImpl
 
 	@Override
 	public boolean isEnabled() {
-		return _clusterLinkConfiguration.enabled();
+		return clusterLinkConfiguration.enabled();
 	}
 
 	@Override
@@ -300,7 +302,7 @@ public class ClusterExecutorImpl
 	protected void activate(ComponentContext componentContext) {
 		_componentContext = componentContext;
 
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, _componentContext.getProperties());
 
 		BundleContext bundleContext = _componentContext.getBundleContext();
@@ -312,8 +314,6 @@ public class ClusterExecutorImpl
 		_serviceTracker.open();
 
 		initialize();
-
-		manageDebugClusterEventListener();
 	}
 
 	@Deactivate
@@ -460,7 +460,7 @@ public class ClusterExecutorImpl
 	}
 
 	protected void manageDebugClusterEventListener() {
-		if (_clusterLinkConfiguration.debugEnabled() &&
+		if (clusterLinkConfiguration.debugEnabled() &&
 			(_debugClusterEventListener == null)) {
 
 			_debugClusterEventListener =
@@ -468,7 +468,7 @@ public class ClusterExecutorImpl
 
 			addClusterEventListener(_debugClusterEventListener);
 		}
-		else if (!_clusterLinkConfiguration.debugEnabled() &&
+		else if (!clusterLinkConfiguration.debugEnabled() &&
 				 (_debugClusterEventListener != null)) {
 
 			removeClusterEventListener(_debugClusterEventListener);
@@ -505,19 +505,17 @@ public class ClusterExecutorImpl
 
 	@Modified
 	protected synchronized void modified(Map<String, Object> properties) {
-		_clusterLinkConfiguration = Configurable.createConfigurable(
+		clusterLinkConfiguration = Configurable.createConfigurable(
 			ClusterLinkConfiguration.class, properties);
 
-		if (!_clusterLinkConfiguration.enabled() && (_clusterChannel != null)) {
+		if (!clusterLinkConfiguration.enabled() && (_clusterChannel != null)) {
 			deactivate();
 		}
-		else if (_clusterLinkConfiguration.enabled() &&
+		else if (clusterLinkConfiguration.enabled() &&
 				 (_clusterChannel == null)) {
 
 			initialize();
 		}
-
-		manageDebugClusterEventListener();
 	}
 
 	protected void sendNotifyRequest() {
@@ -533,6 +531,15 @@ public class ClusterExecutorImpl
 
 		_clusterChannelFactory = clusterChannelFactory;
 	}
+
+	@Reference
+	protected void setPortalExecutorManager(
+		PortalExecutorManager portalExecutorManager) {
+
+		_portalExecutorManager = portalExecutorManager;
+	}
+
+	protected volatile ClusterLinkConfiguration clusterLinkConfiguration;
 
 	private boolean _memberJoined(ClusterNodeStatus clusterNodeStatus) {
 		ClusterNodeStatus oldClusterNodeStatus = _clusterNodeStatuses.put(
@@ -568,7 +575,6 @@ public class ClusterExecutorImpl
 	private ClusterChannelFactory _clusterChannelFactory;
 	private final CopyOnWriteArrayList<ClusterEventListener>
 		_clusterEventListeners = new CopyOnWriteArrayList<>();
-	private volatile ClusterLinkConfiguration _clusterLinkConfiguration;
 	private final Map<String, ClusterNodeStatus> _clusterNodeStatuses =
 		new ConcurrentHashMap<>();
 	private ClusterReceiver _clusterReceiver;
@@ -579,6 +585,7 @@ public class ClusterExecutorImpl
 		new ConcurrentReferenceValueHashMap<>(
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private ClusterNodeStatus _localClusterNodeStatus;
+	private PortalExecutorManager _portalExecutorManager;
 	private ServiceTracker<ClusterEventListener, ClusterEventListener>
 		_serviceTracker;
 
