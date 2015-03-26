@@ -92,9 +92,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 			return;
 		}
 
-		if (!destination.exists()) {
-			destination.mkdirs();
-		}
+		mkdirs(destination);
 
 		File[] fileArray = source.listFiles();
 
@@ -244,10 +242,10 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	@Override
-	public File createTempFolder() {
+	public File createTempFolder() throws IOException {
 		File file = new File(createTempFileName());
 
-		file.mkdirs();
+		mkdirs(file);
 
 		return file;
 	}
@@ -716,10 +714,15 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	@Override
-	public void mkdirs(String pathName) {
+	public void mkdirs(File file) throws IOException {
+		FileUtils.forceMkdir(file);
+	}
+
+	@Override
+	public void mkdirs(String pathName) throws IOException {
 		File file = new File(pathName);
 
-		file.mkdirs();
+		mkdirs(file);
 	}
 
 	@Override
@@ -1020,7 +1023,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		write(new File(pathName, fileName), s, lazy, append);
 	}
 
-	protected void mkdirsParentFile(File file) {
+	protected void mkdirsParentFile(File file) throws IOException {
 		File parentFile = file.getParentFile();
 
 		if (parentFile == null) {
@@ -1028,9 +1031,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		}
 
 		try {
-			if (!parentFile.exists()) {
-				parentFile.mkdirs();
-			}
+			mkdirs(parentFile);
 		}
 		catch (SecurityException se) {
 
