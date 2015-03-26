@@ -26,6 +26,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,8 +195,11 @@ public class AdvancedFileSystemStore extends FileSystemStore {
 
 		File parentFile = fileNameDir.getParentFile();
 
-		if (!parentFile.exists()) {
-			parentFile.mkdirs();
+		try {
+			FileUtil.mkdirs(parentFile);
+		}
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
 		}
 
 		return fileNameDir;

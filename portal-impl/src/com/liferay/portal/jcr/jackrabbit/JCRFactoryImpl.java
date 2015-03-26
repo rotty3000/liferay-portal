@@ -106,7 +106,7 @@ public class JCRFactoryImpl implements JCRFactory {
 				return;
 			}
 
-			repositoryRoot.mkdirs();
+			FileUtil.mkdirs(repositoryRoot);
 
 			File tempFile = new File(
 				SystemProperties.get(SystemProperties.TMP_DIR) +
