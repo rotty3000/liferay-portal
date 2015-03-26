@@ -14,7 +14,6 @@
 
 package com.liferay.portal.cluster.internal;
 
-import com.liferay.portal.cluster.configuration.ClusterLinkConfiguration;
 import com.liferay.portal.kernel.cluster.Address;
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
@@ -36,7 +35,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import org.junit.Assert;
@@ -353,19 +354,35 @@ public class ClusterExecutorImplTest extends BaseClusterTestCase {
 			new MockPortalExecutorManager());
 
 		clusterExecutorImpl.clusterLinkConfiguration =
-			new ClusterLinkConfiguration() {
-				@Override
-				public boolean debugEnabled() {
-					return debugEnabled;
-				}
+			new MockClusterLinkConfiguration(debugEnabled, enabled);
 
-				@Override
-				public boolean enabled() {
-					return enabled;
-				}
-			};
+		Map<String, Object> properties = new Hashtable<>();
 
-		clusterExecutorImpl.initialize();
+		properties.put(
+			"channel.properties.control",
+			"UDP(bind_addr=localhost;mcast_group_addr=239.255.0.1;" +
+				"mcast_port=23301):" +
+				"PING(timeout=2000;num_initial_members=20;" +
+				"break_on_coord_rsp=true):" +
+				"MERGE3(min_interval=10000;max_interval=30000):" +
+				"FD_SOCK:FD_ALL:VERIFY_SUSPECT(timeout=1500):" +
+				"pbcast.NAKACK2(xmit_interval=1000;xmit_table_num_rows=100;" +
+				"xmit_table_msgs_per_row=2000;" +
+				"xmit_table_max_compaction_time=30000;max_msg_batch_size=500;" +
+				"use_mcast_xmit=false;discard_delivered_msgs=true):" +
+				"UNICAST2(max_bytes=10M;xmit_table_num_rows=100;" +
+				"xmit_table_msgs_per_row=2000;" +
+				"xmit_table_max_compaction_time=60000;" +
+				"max_msg_batch_size=500):" +
+				"pbcast.STABLE(stability_delay=1000;desired_avg_gossip=50000;" +
+				"max_bytes=4M):" +
+				"pbcast.GMS(join_timeout=3000;print_local_addr=true;" +
+				"view_bundling=true):UFC(max_credits=2M;min_threshold=0.4):" +
+				"MFC(max_credits=2M;min_threshold=0.4):" +
+				"FRAG2(frag_size=61440):" +
+				"RSVP(resend_interval=2000;timeout=10000)");
+
+		clusterExecutorImpl.initialize(properties);
 
 		return clusterExecutorImpl;
 	}
