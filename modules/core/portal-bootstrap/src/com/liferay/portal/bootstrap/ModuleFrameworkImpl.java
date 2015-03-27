@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -327,7 +328,15 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		ServiceTrackerMapFactoryUtil.setServiceTrackerMapFactory(
 			new ServiceTrackerMapFactoryImpl(_framework.getBundleContext()));
 
+		_setupFrameworkServices(_framework.getBundleContext());
+
 		_setupInitialBundles();
+	}
+
+	private void _setupFrameworkServices(BundleContext bundleContext) {
+		bundleContext.registerService(
+			new String[] {Props.class.getName()}, PropsUtil.getProps(),
+			new HashMapDictionary<String, Object>());
 	}
 
 	@Override
