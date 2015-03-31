@@ -124,7 +124,7 @@ public interface File {
 
 	public void mkdirs(java.io.File file) throws IOException;
 
-	public void mkdirs(String pathName) throws IOException;
+	public void mkdirs(String pathName);
 
 	public boolean move(java.io.File source, java.io.File destination);
 

@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.FileComparator;
 import com.liferay.portal.kernel.util.PwdGenerator;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -719,10 +720,15 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	}
 
 	@Override
-	public void mkdirs(String pathName) throws IOException {
+	public void mkdirs(String pathName) {
 		File file = new File(pathName);
 
-		mkdirs(file);
+		try {
+			mkdirs(file);
+		}
+		catch (IOException ioe) {
+			ReflectionUtil.throwException(ioe);
+		}
 	}
 
 	@Override
