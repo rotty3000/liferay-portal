@@ -318,7 +318,7 @@ public class FileUtil {
 		getFile().mkdirs(file);
 	}
 
-	public static void mkdirs(String pathName) throws IOException {
+	public static void mkdirs(String pathName) {
 		PortalFilePermission.checkCopy(pathName, pathName);
 
 		getFile().mkdirs(pathName);
