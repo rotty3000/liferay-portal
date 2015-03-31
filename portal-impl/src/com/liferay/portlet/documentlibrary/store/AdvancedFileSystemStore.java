@@ -26,7 +26,6 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,20 +188,11 @@ public class AdvancedFileSystemStore extends FileSystemStore {
 
 		File repositoryDir = getRepositoryDir(companyId, repositoryId);
 
-		File fileNameDir = new File(
-			repositoryDir + StringPool.SLASH + sb.toString() +
-				StringPool.SLASH + fileNameFragment + ext);
+		String parentDir = repositoryDir + StringPool.SLASH + sb.toString();
 
-		File parentFile = fileNameDir.getParentFile();
+		FileUtil.mkdirs(parentDir);
 
-		try {
-			FileUtil.mkdirs(parentFile);
-		}
-		catch (IOException ioe) {
-			throw new SystemException(ioe);
-		}
-
-		return fileNameDir;
+		return new File(parentDir + StringPool.SLASH + fileNameFragment + ext);
 	}
 
 	@Override
