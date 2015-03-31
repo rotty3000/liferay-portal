@@ -721,10 +721,10 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 
 	@Override
 	public void mkdirs(String pathName) {
-		File file = new File(pathName);
+		File path = new File(pathName);
 
 		try {
-			mkdirs(file);
+			mkdirs(path);
 		}
 		catch (IOException ioe) {
 			ReflectionUtil.throwException(ioe);
