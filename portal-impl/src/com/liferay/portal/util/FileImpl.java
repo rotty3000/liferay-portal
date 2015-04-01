@@ -723,7 +723,7 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 	public void mkdirs(String pathName) {
 		File path = new File(pathName);
 
-		if (path.exists()) {
+		if (path.exists() && path.isDirectory()) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("Directory " + pathName + " already exists");
 			}
