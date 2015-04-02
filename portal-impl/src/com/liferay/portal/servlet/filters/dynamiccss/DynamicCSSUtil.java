@@ -38,6 +38,7 @@ import com.liferay.portal.service.ThemeLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.tools.SassToCssBuilder;
 import com.liferay.portal.util.ClassLoaderUtil;
+import com.liferay.portal.util.PortalImpl;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.sass.compiler.jni.JniSassCompiler;
@@ -265,8 +266,9 @@ public class DynamicCSSUtil {
 		String contextPath = ContextPathUtil.getContextPath(servletContext);
 
 		if (!contextPath.equals(portalContextPath)) {
-			baseURL = StringPool.SLASH.concat(
-				GetterUtil.getString(servletContext.getServletContextName()));
+			baseURL = PortalImpl.PATH_MODULE.concat(
+				GetterUtil.getString(
+					StringPool.SLASH + servletContext.getServletContextName()));
 		}
 
 		if (baseURL.endsWith(StringPool.SLASH)) {
