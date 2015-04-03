@@ -56,6 +56,14 @@ public class ClusterMasterExecutorUtil {
 	}
 
 	public static ClusterMasterExecutor getClusterMasterExecutor() {
+		try {
+			while (_instance._serviceTracker.getService() == null) {
+				Thread.sleep(500);
+			}
+		}
+		catch (InterruptedException e) {
+		}
+
 		return _instance._serviceTracker.getService();
 	}
 
