@@ -33,7 +33,7 @@ import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.util.MethodHandler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Lock;
-import com.liferay.portal.service.LockLocalServiceUtil;
+import com.liferay.portal.service.LockLocalService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -160,7 +160,7 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 				_clusterExecutor.removeClusterEventListener(
 					_clusterEventListener);
 
-				LockLocalServiceUtil.unlock(
+				_lockLocalService.unlock(
 					_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, _localClusterNodeId);
 			}
 			catch (SystemException se) {
@@ -184,12 +184,12 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 				Lock lock = null;
 
 				if (owner == null) {
-					lock = LockLocalServiceUtil.lock(
+					lock = _lockLocalService.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME,
 						_localClusterNodeId);
 				}
 				else {
-					lock = LockLocalServiceUtil.lock(
+					lock = _lockLocalService.lock(
 						_LOCK_CLASS_NAME, _LOCK_CLASS_NAME, owner,
 						_localClusterNodeId);
 				}
@@ -272,6 +272,11 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 		_clusterExecutor = clusterExecutor;
 	}
 
+	@Reference
+	protected void setLocalLocalService(LockLocalService localLocalService) {
+		_lockLocalService = localLocalService;
+	}
+
 	private static final String _LOCK_CLASS_NAME =
 		ClusterMasterExecutorImpl.class.getName();
 
@@ -286,6 +291,7 @@ public class ClusterMasterExecutorImpl implements ClusterMasterExecutor {
 		_clusterMasterTokenTransitionListeners = new HashSet<>();
 	private boolean _enabled;
 	private volatile String _localClusterNodeId;
+	private LockLocalService _lockLocalService;
 
 	private class ClusterMasterTokenClusterEventListener
 		implements ClusterEventListener {
