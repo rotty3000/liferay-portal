@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class CounterHolder {
 
 	public CounterHolder(long initValue, long rangeMax) {
+		
 		_counter = new AtomicLong(initValue);
 		_rangeMax = rangeMax;
 	}
