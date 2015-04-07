@@ -15,9 +15,13 @@
 package com.liferay.portal.tools;
 
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.tools.servicebuilder.ServiceBuilder;
 import com.liferay.portal.util.FileImpl;
 
@@ -27,6 +31,7 @@ import java.io.InputStreamReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -37,18 +42,35 @@ public class UpgradeTableBuilder {
 
 	public static void main(String[] args) {
 		try {
-			new UpgradeTableBuilder(args[0]);
+			new UpgradeTableBuilder(args);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public UpgradeTableBuilder(String upgradeTableDir) throws Exception {
+	public UpgradeTableBuilder(String[] args) throws Exception {
+		String moduleName = GetterUtil.getString(args[1]);
+
+		boolean module = false;
+
+		if (!Validator.equals(moduleName, "${module.name}")) {
+			module = true;
+		}
+
 		DirectoryScanner ds = new DirectoryScanner();
 
-		ds.setBasedir(".");
-		ds.setIncludes(new String[] {"**\\upgrade\\v**\\util\\*Table.java"});
+		if (module) {
+			ds.setBasedir(_modulePrefix);
+			ds.setIncludes(
+				new String[] {
+					"**\\" + moduleName + "\\upgrade\\v**\\util\\*Table.java"});
+		}
+		else {
+			ds.setBasedir(".");
+			ds.setIncludes(
+				new String[] {"**\\upgrade\\v**\\util\\*Table.java"});
+		}
 
 		ds.scan();
 
@@ -74,21 +96,29 @@ public class UpgradeTableBuilder {
 			x = fileName.indexOf("/", y + 1);
 			y = fileName.indexOf("Table.java", x);
 
+			String upgradeTableDir = args[0];
+
 			String upgradeFileName =
 				upgradeTableDir + "/" + upgradeFileVersion + "/" +
 					fileName.substring(x, y) + "ModelImpl.java";
 
 			if (!_fileUtil.exists(upgradeFileName)) {
-				if (!upgradeFileVersion.equals(ReleaseInfo.getVersion())) {
+				if (!upgradeFileVersion.equals(ReleaseInfo.getVersion()) &&
+					!upgradeFileVersion.equals(_getModuleVersion(moduleName))) {
+
 					continue;
 				}
 
 				upgradeFileName = _findUpgradeFileName(
-					fileName.substring(x, y));
+					fileName.substring(x, y), module);
 
 				if (upgradeFileName == null) {
 					continue;
 				}
+			}
+
+			if (module) {
+				upgradeFileName = _modulePrefix + upgradeFileName;
 			}
 
 			String content = _fileUtil.read(upgradeFileName);
@@ -102,19 +132,49 @@ public class UpgradeTableBuilder {
 
 			String[] addIndexes = _getAddIndexes(
 				upgradeTableDir + "/" + upgradeFileVersion + "/indexes.sql",
-				fileName.substring(x + 1, y));
+				fileName.substring(x + 1, y), module, moduleName);
 
 			content = _getContent(
 				packagePath, className, content, author, addIndexes);
+
+			if (module) {
+				fileName = _modulePrefix + fileName;
+			}
 
 			_fileUtil.write(fileName, content);
 		}
 	}
 
-	private String _findUpgradeFileName(String modelName) {
+	private String _findModuleIndexFileName(String module) {
 		DirectoryScanner ds = new DirectoryScanner();
 
-		ds.setBasedir(".");
+		ds.setBasedir(_modulePrefix);
+		ds.setIncludes(
+			new String[] {
+				"**\\" + module + "-service\\src\\*\\sql\\indexes.sql"});
+
+		ds.scan();
+
+		String[] fileNames = ds.getIncludedFiles();
+
+		if (fileNames.length > 0) {
+			return _modulePrefix + fileNames[0];
+		}
+		else {
+			return null;
+		}
+	}
+
+	private String _findUpgradeFileName(String modelName, boolean module) {
+		DirectoryScanner ds = new DirectoryScanner();
+
+		if (module) {
+			ds.setBasedir(_modulePrefix);
+		}
+		else {
+			ds.setBasedir(".");
+		}
+
 		ds.setIncludes(new String[] {"**\\" + modelName + "ModelImpl.java"});
 
 		ds.scan();
@@ -129,15 +189,20 @@ public class UpgradeTableBuilder {
 		}
 	}
 
-	private String[] _getAddIndexes(String indexesFileName, String tableName)
+	private String[] _getAddIndexes(
+			String indexesFileName, String tableName, boolean module,
+			String moduleName)
 		throws Exception {
 
 		List<String> addIndexes = new ArrayList<String>();
 
 		File indexesFile = new File(indexesFileName);
 
-		if (!indexesFile.exists()) {
+		if (!indexesFile.exists() && !module) {
 			indexesFile = new File("../sql/indexes.sql");
+		}
+		else {
+			indexesFile = new File(_findModuleIndexFileName(moduleName));
 		}
 
 		try (UnsyncBufferedReader unsyncBufferedReader =
@@ -279,6 +344,31 @@ public class UpgradeTableBuilder {
 		return sb.toString();
 	}
 
+	private static String _getModuleVersion(String moduleName)
+		throws Exception {
+
+		DirectoryScanner ds = new DirectoryScanner();
+
+		ds.setBasedir(_modulePrefix);
+		ds.setIncludes(
+			new String[] {"apps\\" + moduleName + "\\*-service\\*.bnd"});
+
+		ds.scan();
+
+		String[] fileNames = ds.getIncludedFiles();
+
+		if (fileNames.length > 0) {
+			String content = _fileUtil.read(_modulePrefix + fileNames[0]);
+
+			Properties properties = PropertiesUtil.load(content);
+
+			return properties.getProperty("Bundle-Version");
+		}
+
+		return StringPool.BLANK;
+	}
+
 	private static FileImpl _fileUtil = FileImpl.getInstance();
+	private static String _modulePrefix = "../modules/";
 
 }

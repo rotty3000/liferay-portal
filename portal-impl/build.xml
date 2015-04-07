@@ -919,6 +919,7 @@ svn://svn.liferay.com/repos/public/alloy/trunk/sandbox/taglibs.
 					newenvironment="true"
 				>
 					<arg value="${upgrade.table.dir}" />
+					<arg value="${module.name}" />
 				</java>
 			</then>
 		</if>
