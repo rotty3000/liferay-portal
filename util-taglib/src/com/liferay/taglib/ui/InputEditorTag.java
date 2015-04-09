@@ -173,6 +173,7 @@ public class InputEditorTag extends IncludeTag {
 		_onBlurMethod = null;
 		_onFocusMethod = null;
 		_onInitMethod = null;
+		_page = null;
 		_placeholder = null;
 		_resizable = true;
 		_showSource = true;
@@ -282,7 +283,15 @@ public class InputEditorTag extends IncludeTag {
 	}
 
 	protected String getPage(String editorName) {
-		return "/html/js/editor/" + editorName + ".jsp";
+		if (_page == null) {
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+			_page = themeDisplay.getPathJavaScript() + "/editor/" +
+				editorName + ".jsp";
+		}
+
+		return _page;
 	}
 
 	@Override
@@ -357,6 +366,7 @@ public class InputEditorTag extends IncludeTag {
 	private String _onChangeMethod;
 	private String _onFocusMethod;
 	private String _onInitMethod;
+	private String _page;
 	private String _placeholder;
 	private boolean _resizable = true;
 	private boolean _showSource = true;
