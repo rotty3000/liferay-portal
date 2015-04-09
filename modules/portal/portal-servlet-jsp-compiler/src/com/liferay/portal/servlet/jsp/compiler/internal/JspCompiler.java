@@ -234,12 +234,13 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 	protected String getTldUri(URL url) {
 		try (InputStream inputStream = url.openStream()) {
-			StringBuilder sb = new StringBuilder();
 			byte[] buffer = new byte[4096];
 			int length = 0;
+			StringBuilder sb = new StringBuilder();
 
 			while ((length = inputStream.read(buffer)) > 0) {
 				String xml = new String(buffer, 0, length);
+
 				sb.append(xml);
 
 				if (xml.indexOf("</uri>") > -1) {
@@ -249,17 +250,17 @@ public class JspCompiler extends Jsr199JavaCompiler {
 
 			String xml = sb.toString();
 
-			int uriStartPos = xml.indexOf("<uri>");
-			int uriEndPos = xml.indexOf("</uri>", uriStartPos);
+			int x = xml.indexOf("<uri>");
+			int y = xml.indexOf("</uri>", x);
 
-			if (uriStartPos < 0) {
+			if (x < 0) {
 				return null;
 			}
 
-			return xml.substring(uriStartPos + 5, uriEndPos);
+			return xml.substring(x + 5, y);
 		}
-		catch (IOException e) {
-			return ReflectionUtil.throwException(e);
+		catch (IOException ioe) {
+			return ReflectionUtil.throwException(ioe);
 		}
 	}
 

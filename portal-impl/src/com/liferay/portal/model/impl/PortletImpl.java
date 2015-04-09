@@ -762,10 +762,6 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	@Override
 	public List<CustomAttributesDisplay> getCustomAttributesDisplayInstances() {
-		if (_customAttributesDisplayClasses.isEmpty()) {
-			return null;
-		}
-
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
 		return portletBag.getCustomAttributesDisplayInstances();
@@ -1288,7 +1284,21 @@ public class PortletImpl extends PortletBaseImpl {
 	 */
 	@Override
 	public String getPortletDataHandlerClass() {
-		return _portletDataHandlerClass;
+		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
+
+		if (portletBag == null) {
+			return _portletDataHandlerClass;
+		}
+
+		PortletDataHandler portletDataHandler = getPortletDataHandlerInstance();
+
+		if (portletDataHandler == null) {
+			return _portletDataHandlerClass;
+		}
+
+		Class<?> clazz = portletDataHandler.getClass();
+
+		return clazz.getName();
 	}
 
 	/**

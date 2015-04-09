@@ -91,13 +91,24 @@ Format format = FastDateFormatFactoryUtil.getSimpleDateFormat(simpleDateFormatPa
 			var datePicker = new A.DatePicker<%= BrowserSnifferUtil.isMobile(request) ? "Native" : StringPool.BLANK %>(
 				{
 					calendar: {
-						<c:if test="<%= lastEnabledDate != null %>">
-							maximumDate: new Date(<%= lastEnabledDate.getTime() %>),
-						</c:if>
 
-						<c:if test="<%= firstEnabledDate != null %>">
-							minimumDate: new Date(<%= firstEnabledDate.getTime() %>)
-						</c:if>
+						<%
+						String calendarOptions = StringPool.BLANK;
+
+						if (lastEnabledDate != null) {
+							calendarOptions += String.format("maximumDate: new Date(%s)", lastEnabledDate.getTime());
+						}
+
+						if (firstEnabledDate != null) {
+							if (Validator.isNotNull(calendarOptions)) {
+								calendarOptions += StringPool.COMMA;
+							}
+
+							calendarOptions += String.format("minimumDate: new Date(%s)", firstEnabledDate.getTime());
+						}
+						%>
+
+						<%= calendarOptions %>
 					},
 					container: '#<%= randomNamespace %>displayDate',
 					mask: '<%= mask %>',

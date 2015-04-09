@@ -69,6 +69,12 @@ public class PortletDataContextFactoryImpl
 		clonePortletDataContext.setManifestSummary(
 			(ManifestSummary)manifestSummary.clone());
 
+		Map<String, Map<?, ?>> newPrimaryKeysMaps =
+			clonePortletDataContext.getNewPrimaryKeysMaps();
+
+		newPrimaryKeysMaps.putAll(
+			clonePortletDataContext.getNewPrimaryKeysMaps());
+
 		clonePortletDataContext.setParameterMap(
 			portletDataContext.getParameterMap());
 		clonePortletDataContext.setPortletId(portletDataContext.getPortletId());

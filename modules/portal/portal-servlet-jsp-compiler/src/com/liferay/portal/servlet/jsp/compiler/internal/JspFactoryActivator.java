@@ -29,14 +29,14 @@ import org.osgi.framework.BundleContext;
 public class JspFactoryActivator implements BundleActivator {
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(BundleContext bundleContext) throws Exception {
 		JspFactory.setDefaultFactory(new JspFactoryImpl());
 
 		JspFactorySwapper.swap();
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext bundleContext) throws Exception {
 		JspFactory.setDefaultFactory(null);
 	}
 

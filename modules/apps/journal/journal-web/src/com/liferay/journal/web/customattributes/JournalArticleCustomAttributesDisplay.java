@@ -12,26 +12,37 @@
  * details.
  */
 
-package com.liferay.wiki.web;
+package com.liferay.journal.web.customattributes;
 
+import com.liferay.journal.web.constants.JournalPortletKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.expando.model.BaseCustomAttributesDisplay;
-import com.liferay.wiki.model.WikiPage;
+import com.liferay.portlet.expando.model.CustomAttributesDisplay;
+import com.liferay.portlet.journal.model.JournalArticle;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Jorge Ferrer
  */
-public class WikiPageCustomAttributesDisplay
+@Component(
+	immediate = true,
+	property = {
+		"javax.portlet.name=" + JournalPortletKeys.JOURNAL
+	},
+	service = CustomAttributesDisplay.class
+)
+public class JournalArticleCustomAttributesDisplay
 	extends BaseCustomAttributesDisplay {
 
 	@Override
 	public String getClassName() {
-		return WikiPage.class.getName();
+		return JournalArticle.class.getName();
 	}
 
 	@Override
 	public String getIconPath(ThemeDisplay themeDisplay) {
-		return themeDisplay.getPathThemeImages() + "/common/pages.png";
+		return themeDisplay.getPathThemeImages() + "/common/history.png";
 	}
 
 }
