@@ -237,6 +237,8 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 		try {
 			ModuleFrameworkUtilAdapter.initFramework();
 
+			ModuleFrameworkUtilAdapter.startFramework();
+
 			_arrayApplicationContext = new ArrayApplicationContext(
 				PropsValues.SPRING_INFRASTRUCTURE_CONFIGS);
 
@@ -247,7 +249,7 @@ public class PortalContextLoaderListener extends ContextLoaderListener {
 			ModuleFrameworkUtilAdapter.registerContext(
 				_arrayApplicationContext);
 
-			ModuleFrameworkUtilAdapter.startFramework();
+			ModuleFrameworkUtilAdapter.startAutoDeploy();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

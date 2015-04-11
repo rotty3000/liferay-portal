@@ -286,6 +286,15 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		bundleStartLevel.setStartLevel(startLevel);
 	}
 
+	@Override
+	public void startAutoDeploy() throws Exception {
+		for (String initialBundle :
+				PropsValues.MODULE_FRAMEWORK_REQUIRED_BUNDLES) {
+
+			_installInitialBundle(initialBundle, "static");
+		}
+	}
+
 	public void startBundle(
 			Bundle bundle, int options, boolean checkPermissions)
 		throws PortalException {
@@ -332,7 +341,11 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		_setUpPrerequisiteFrameworkServices(_framework.getBundleContext());
 
-		_setUpInitialBundles();
+		for (String initialBundle :
+				PropsValues.MODULE_FRAMEWORK_INITIAL_BUNDLES) {
+
+			_installInitialBundle(initialBundle, "portal");
+		}
 	}
 
 	@Override
@@ -680,7 +693,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		return false;
 	}
 
-	private void _installInitialBundle(String location) {
+	private void _installInitialBundle(String location, String subCategory) {
 		boolean start = false;
 		int startLevel = PropsValues.MODULE_FRAMEWORK_BEGINNING_START_LEVEL;
 
@@ -708,7 +721,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			if (!location.startsWith("file:")) {
 				location =
 					"file:" + PropsValues.MODULE_FRAMEWORK_BASE_DIR +
-						"/static/" + location;
+						"/" + subCategory + "/" + location;
 			}
 
 			URL initialBundleURL = new URL(location);
@@ -841,14 +854,6 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		bundleContext.registerService(
 			new String[] {ServletContext.class.getName()}, servletContext,
 			_getProperties(servletContext, "liferayServletContext"));
-	}
-
-	private void _setUpInitialBundles() throws Exception {
-		for (String initialBundle :
-				PropsValues.MODULE_FRAMEWORK_INITIAL_BUNDLES) {
-
-			_installInitialBundle(initialBundle);
-		}
 	}
 
 	private void _setUpPrerequisiteFrameworkServices(

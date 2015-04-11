@@ -79,6 +79,10 @@ public class ModuleFrameworkUtilAdapter {
 			_moduleFramework);
 	}
 
+	public static void startAutoDeploy() throws Exception {
+		_moduleFramework.startAutoDeploy();
+	}
+
 	public static void startBundle(long bundleId) throws PortalException {
 		_moduleFramework.startBundle(bundleId);
 	}

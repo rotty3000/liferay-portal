@@ -1,0 +1,9 @@
+Bundle-Activator: com.liferay.portal.dummy.DummyActivator
+Bundle-Name: Liferay Portal Dummy
+Bundle-SymbolicName: com.liferay.portal.dummy
+Bundle-Version: 1.0.0
+Import-Package:\
+	*
+Include-Resource:\
+	classes
+

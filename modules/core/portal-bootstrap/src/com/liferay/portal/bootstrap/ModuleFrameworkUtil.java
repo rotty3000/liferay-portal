@@ -70,6 +70,10 @@ public class ModuleFrameworkUtil {
 		_moduleFramework = moduleFramework;
 	}
 
+	public static void startAutoDeploy() throws Exception {
+		getModuleFramework().startAutoDeploy();
+	}
+
 	public static void startBundle(long bundleId) throws PortalException {
 		getModuleFramework().startBundle(bundleId);
 	}
