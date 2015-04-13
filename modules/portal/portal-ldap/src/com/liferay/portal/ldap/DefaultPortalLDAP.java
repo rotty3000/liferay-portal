@@ -14,33 +14,8 @@
 
 package com.liferay.portal.ldap;
 
-import aQute.bnd.annotation.metatype.Configurable;
-
-import com.liferay.portal.kernel.ldap.LDAPUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.log.LogUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.PropertiesUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.ldap.configuration.LDAPConfiguration;
-import com.liferay.portal.ldap.exportimport.UserImportTransactionThreadLocal;
-import com.liferay.portal.model.CompanyConstants;
-import com.liferay.portal.security.ldap.LDAPSettingsUtil;
-import com.liferay.portal.security.ldap.PortalLDAP;
-import com.liferay.portal.util.PropsValues;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.naming.Binding;
@@ -60,9 +35,32 @@ import javax.naming.ldap.LdapContext;
 import javax.naming.ldap.PagedResultsControl;
 import javax.naming.ldap.PagedResultsResponseControl;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+
+import com.liferay.portal.kernel.ldap.LDAPUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.log.LogUtil;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropertiesUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.ldap.configuration.LDAPIntegrationConfigurationRegistry;
+import com.liferay.portal.ldap.configuration.LDAPServerConfiguration;
+import com.liferay.portal.ldap.configuration.LDAPServerConfigurationRegistry;
+import com.liferay.portal.ldap.exportimport.UserImportTransactionThreadLocal;
+import com.liferay.portal.model.CompanyConstants;
+import com.liferay.portal.security.ldap.LDAPSettingsUtil;
+import com.liferay.portal.security.ldap.PortalLDAP;
+import com.liferay.portal.util.PropsValues;
 
 /**
  * @author Michael Young
@@ -76,9 +74,9 @@ import org.osgi.service.component.annotations.Modified;
  * @author Marcellus Tavares
  * @author Hugo Huijser
  * @author Edward Han
+ * @author Milen Dyankov
  */
 @Component(
-	configurationPid = "com.liferay.portal.ldap.configuration.LDAPConfiguration",
 	immediate = true, service = PortalLDAP.class
 )
 public class DefaultPortalLDAP implements PortalLDAP {
@@ -86,15 +84,13 @@ public class DefaultPortalLDAP implements PortalLDAP {
 	@Override
 	public LdapContext getContext(long ldapServerId, long companyId)
 		throws Exception {
-
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseProviderURL = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_PROVIDER_URL + postfix);
-		String pricipal = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_SECURITY_PRINCIPAL + postfix);
-		String credentials = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_SECURITY_CREDENTIALS + postfix);
+		
+		String baseProviderURL = _ldapServerConfigurationRegistry.getConfiguration(
+			companyId, ldapServerId).baseProviderUrl();
+		String pricipal = _ldapServerConfigurationRegistry.getConfiguration(
+			companyId, ldapServerId).securityPrincipal();
+		String credentials = _ldapServerConfigurationRegistry.getConfiguration(
+			companyId, ldapServerId).credentials();
 
 		return getContext(companyId, baseProviderURL, pricipal, credentials);
 	}
@@ -109,17 +105,13 @@ public class DefaultPortalLDAP implements PortalLDAP {
 
 		environmentProperties.put(
 			Context.INITIAL_CONTEXT_FACTORY,
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_FACTORY_INITIAL,
-				_ldapConfiguration.factoryInitial()));
+			_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).factoryInitial());
 		environmentProperties.put(Context.PROVIDER_URL, providerURL);
 		environmentProperties.put(Context.SECURITY_PRINCIPAL, principal);
 		environmentProperties.put(Context.SECURITY_CREDENTIALS, credentials);
 		environmentProperties.put(
 			Context.REFERRAL,
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_REFERRAL,
-				_ldapConfiguration.referral()));
+			_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).referral());
 
 		Properties ldapConnectionProperties = PropsUtil.getProperties(
 			PropsKeys.LDAP_CONNECTION_PROPERTY_PREFIX, true);
@@ -150,8 +142,6 @@ public class DefaultPortalLDAP implements PortalLDAP {
 	public Binding getGroup(long ldapServerId, long companyId, String groupName)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
 		LdapContext ldapContext = getContext(ldapServerId, companyId);
 
 		NamingEnumeration<SearchResult> enu = null;
@@ -161,15 +151,11 @@ public class DefaultPortalLDAP implements PortalLDAP {
 				return null;
 			}
 
-			String baseDN = PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_BASE_DN + postfix);
+			LDAPServerConfiguration ldapServerConfig = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+			String baseDN = ldapServerConfig.baseDN();
+			String groupFilter = ldapServerConfig.groupSearchFilter();
 
-			String groupFilter = PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER + postfix);
-
-			LDAPUtil.validateFilter(
-				groupFilter,
-				PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER + postfix);
+			LDAPUtil.validateFilter(groupFilter, "groupSearchFilter");
 
 			StringBundler sb = new StringBundler(
 				Validator.isNotNull(groupFilter) ? 9 : 5);
@@ -295,12 +281,9 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			byte[] cookie, int maxResults, List<SearchResult> searchResults)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseDN = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_DN + postfix);
-		String groupFilter = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER + postfix);
+		LDAPServerConfiguration ldapServerConfig = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+		String baseDN = ldapServerConfig.baseDN();
+		String groupFilter = ldapServerConfig.groupSearchFilter();
 
 		return getGroups(
 			companyId, ldapContext, cookie, maxResults, baseDN, groupFilter,
@@ -314,12 +297,9 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			List<SearchResult> searchResults)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseDN = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_DN + postfix);
-		String groupFilter = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER + postfix);
+		LDAPServerConfiguration ldapServerConfig = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+		String baseDN = ldapServerConfig.baseDN();
+		String groupFilter = ldapServerConfig.groupSearchFilter();
 
 		return getGroups(
 			companyId, ldapContext, cookie, maxResults, baseDN, groupFilter,
@@ -330,10 +310,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 	public String getGroupsDN(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		return PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_GROUPS_DN + postfix);
+		return _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId).groupsDN();
 	}
 
 	@Override
@@ -351,6 +328,11 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			return preferredLDAPServerId;
 		}
 
+		
+		/*
+		 * TODO
+		 * This probably needs to change as well just don't know how yet
+		 */
 		long[] ldapServerIds = StringUtil.split(
 			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
 
@@ -363,10 +345,8 @@ public class DefaultPortalLDAP implements PortalLDAP {
 		boolean hasProperties = false;
 
 		for (int ldapServerId = 0;; ldapServerId++) {
-			String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
 
-			String providerUrl = PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_BASE_PROVIDER_URL + postfix);
+			String providerUrl = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId).baseProviderUrl();
 
 			if (Validator.isNull(providerUrl)) {
 				break;
@@ -396,7 +376,8 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			return attribute;
 		}
 
-		String[] attributeIds = {_getNextRange(attribute.getID())};
+		int rangeSize = _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).rangeSize();
+		String[] attributeIds = {_getNextRange(rangeSize, attribute.getID())};
 
 		while (true) {
 			List<SearchResult> searchResults = new ArrayList<>();
@@ -435,7 +416,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 				if (StringUtil.endsWith(
 						curAttribute.getID(), StringPool.STAR) ||
 					(curAttribute.size() <
-						_ldapConfiguration.rangeSize())) {
+									rangeSize)) {
 
 					break;
 				}
@@ -446,7 +427,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 				}
 			}
 
-			attributeIds[0] = _getNextRange(attributeIds[0]);
+			attributeIds[0] = _getNextRange(rangeSize, attributeIds[0]);
 		}
 
 		return attribute;
@@ -457,10 +438,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			long ldapServerId, long companyId, Binding binding)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseDN = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_DN + postfix);
+		String baseDN = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId).baseDN();
 
 		String name = binding.getName();
 
@@ -494,8 +472,6 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			String emailAddress, boolean checkOriginalEmail)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
 		LdapContext ldapContext = getContext(ldapServerId, companyId);
 
 		NamingEnumeration<SearchResult> enu = null;
@@ -505,14 +481,11 @@ public class DefaultPortalLDAP implements PortalLDAP {
 				return null;
 			}
 
-			String baseDN = PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_BASE_DN + postfix);
+			LDAPServerConfiguration ldapServerConfiguration = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+			String baseDN = ldapServerConfiguration.baseDN();
+			String userFilter = ldapServerConfiguration.userSearchFilter();
 
-			String userFilter = PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER + postfix);
-
-			LDAPUtil.validateFilter(
-				userFilter, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER + postfix);
+			LDAPUtil.validateFilter(userFilter, "userSearchFilter");
 
 			StringBundler sb = new StringBundler(
 				Validator.isNotNull(userFilter) ? 9 : 5);
@@ -666,12 +639,9 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			byte[] cookie, int maxResults, List<SearchResult> searchResults)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseDN = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_DN + postfix);
-		String userFilter = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER + postfix);
+		LDAPServerConfiguration ldapServerConfiguration = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+		String baseDN = ldapServerConfiguration.baseDN();
+		String userFilter = ldapServerConfiguration.userSearchFilter();
 
 		return getUsers(
 			companyId, ldapContext, cookie, maxResults, baseDN, userFilter,
@@ -685,12 +655,9 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			List<SearchResult> searchResults)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String baseDN = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_BASE_DN + postfix);
-		String userFilter = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_IMPORT_USER_SEARCH_FILTER + postfix);
+		LDAPServerConfiguration ldapServerConfiguration = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId);
+		String baseDN = ldapServerConfiguration.baseDN();
+		String userFilter = ldapServerConfiguration.userSearchFilter();
 
 		return getUsers(
 			companyId, ldapContext, cookie, maxResults, baseDN, userFilter,
@@ -701,10 +668,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 	public String getUsersDN(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		return PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_USERS_DN + postfix);
+		return _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId).usersDN();
 	}
 
 	@Override
@@ -846,21 +810,22 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			false);
 
 		NamingEnumeration<SearchResult> enu = null;
-
+		int pageSize = _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).pageSize();
+		
 		try {
 			if (cookie != null) {
 				if (cookie.length == 0) {
 					ldapContext.setRequestControls(
 						new Control[] {
 							new PagedResultsControl(
-								_ldapConfiguration.pageSize(), Control.CRITICAL)
+								pageSize, Control.CRITICAL)
 						});
 				}
 				else {
 					ldapContext.setRequestControls(
 						new Control[] {
 							new PagedResultsControl(
-								_ldapConfiguration.pageSize(), cookie,
+								pageSize, cookie,
 								Control.CRITICAL)
 						});
 				}
@@ -898,11 +863,14 @@ public class DefaultPortalLDAP implements PortalLDAP {
 		return null;
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_ldapConfiguration = Configurable.createConfigurable(
-			LDAPConfiguration.class, properties);
+	@Reference
+	protected void setLDAPIntegrationConfigurationRegistry(LDAPIntegrationConfigurationRegistry configurationRegistry) {
+		_ldapIntegrationConfigurationRegistry = configurationRegistry;
+	}
+
+	@Reference
+	protected void setLDAPServerConfigurationRegistry(LDAPServerConfigurationRegistry configurationRegistry) {
+		_ldapServerConfigurationRegistry = configurationRegistry;
 	}
 
 	private Attributes _getAttributes(
@@ -980,16 +948,16 @@ public class DefaultPortalLDAP implements PortalLDAP {
 		return null;
 	}
 
-	private String _getNextRange(String attributeId) {
+	private String _getNextRange(int rangeSize, String attributeId) {
 		String originalAttributeId = null;
 		int start = 0;
 		int end = 0;
 
 		int x = attributeId.indexOf(CharPool.SEMICOLON);
-
+		
 		if (x < 0) {
 			originalAttributeId = attributeId;
-			end = _ldapConfiguration.rangeSize() - 1;
+			end = rangeSize - 1;
 		}
 		else {
 			int y = attributeId.indexOf(CharPool.EQUAL, x);
@@ -999,8 +967,8 @@ public class DefaultPortalLDAP implements PortalLDAP {
 			start = GetterUtil.getInteger(attributeId.substring(y + 1, z));
 			end = GetterUtil.getInteger(attributeId.substring(z + 1));
 
-			start += _ldapConfiguration.rangeSize();
-			end += _ldapConfiguration.rangeSize();
+			start += rangeSize;
+			end += rangeSize;
 		}
 
 		StringBundler sb = new StringBundler(6);
@@ -1018,6 +986,7 @@ public class DefaultPortalLDAP implements PortalLDAP {
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultPortalLDAP.class);
 
-	private volatile LDAPConfiguration _ldapConfiguration;
+	private volatile LDAPIntegrationConfigurationRegistry _ldapIntegrationConfigurationRegistry;
+	private volatile LDAPServerConfigurationRegistry _ldapServerConfigurationRegistry;
 
 }

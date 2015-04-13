@@ -14,36 +14,31 @@
 
 package com.liferay.portal.ldap;
 
-import aQute.bnd.annotation.metatype.Configurable;
+import java.util.Properties;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.kernel.ldap.LDAPUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.log.LogUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.ldap.configuration.LDAPConfiguration;
+import com.liferay.portal.ldap.configuration.LDAPIntegrationConfigurationRegistry;
+import com.liferay.portal.ldap.configuration.LDAPServerConfigurationRegistry;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.ldap.LDAPSettings;
 import com.liferay.portal.service.UserLocalServiceUtil;
-
-import java.util.Map;
-import java.util.Properties;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
 
 /**
  * @author Edward Han
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
+ * @author Milen Dyankov
  */
 @Component(
-	configurationPid = "com.liferay.portal.ldap.configuration.LDAPConfiguration",
 	immediate = true, service = LDAPSettings.class
 )
 public class DefaultLDAPSettings implements LDAPSettings {
@@ -54,10 +49,8 @@ public class DefaultLDAPSettings implements LDAPSettings {
 			String screenName, String userId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
-		String filter = PrefsPropsUtil.getString(
-			companyId, PropsKeys.LDAP_AUTH_SEARCH_FILTER + postfix);
+		
+		String filter = _ldapServerConfigurationRegistry.getConfiguration(companyId, ldapServerId).filter();
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("Search filter before transformation " + filter);
@@ -86,12 +79,9 @@ public class DefaultLDAPSettings implements LDAPSettings {
 			long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
 		Properties contactExpandoMappings = PropertiesUtil.load(
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_CONTACT_CUSTOM_MAPPINGS + postfix,
-				StringPool.BLANK));
+			_ldapServerConfigurationRegistry.getConfiguration(
+				companyId, ldapServerId).contactCustomMappings());
 
 		LogUtil.debug(_log, contactExpandoMappings);
 
@@ -102,12 +92,9 @@ public class DefaultLDAPSettings implements LDAPSettings {
 	public Properties getContactMappings(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
 		Properties contactMappings = PropertiesUtil.load(
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_CONTACT_MAPPINGS + postfix,
-				StringPool.BLANK));
+			_ldapServerConfigurationRegistry.getConfiguration(
+				companyId, ldapServerId).contactMappings());
 
 		LogUtil.debug(_log, contactMappings);
 
@@ -118,12 +105,9 @@ public class DefaultLDAPSettings implements LDAPSettings {
 	public Properties getGroupMappings(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
 		Properties groupMappings = PropertiesUtil.load(
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_GROUP_MAPPINGS + postfix,
-				StringPool.BLANK));
+			_ldapServerConfigurationRegistry.getConfiguration(
+				companyId, ldapServerId).groupMappings());
 
 		LogUtil.debug(_log, groupMappings);
 
@@ -144,6 +128,11 @@ public class DefaultLDAPSettings implements LDAPSettings {
 
 	@Override
 	public String getPropertyPostfix(long ldapServerId) {
+		/* 
+		 * TODO this method should be removed 
+		 * but currently UI layer and million other things
+		 * depend on it through LDAPSettingsUtil ! 
+		 */
 		return StringPool.PERIOD + ldapServerId;
 	}
 
@@ -151,12 +140,9 @@ public class DefaultLDAPSettings implements LDAPSettings {
 	public Properties getUserExpandoMappings(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
 		Properties userExpandoMappings = PropertiesUtil.load(
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_USER_CUSTOM_MAPPINGS + postfix,
-				StringPool.BLANK));
+			_ldapServerConfigurationRegistry.getConfiguration(
+				companyId, ldapServerId).userCustomMappings());
 
 		LogUtil.debug(_log, userExpandoMappings);
 
@@ -167,12 +153,9 @@ public class DefaultLDAPSettings implements LDAPSettings {
 	public Properties getUserMappings(long ldapServerId, long companyId)
 		throws Exception {
 
-		String postfix = getPropertyPostfix(ldapServerId);
-
 		Properties userMappings = PropertiesUtil.load(
-			PrefsPropsUtil.getString(
-				companyId, PropsKeys.LDAP_USER_MAPPINGS + postfix,
-				StringPool.BLANK));
+			_ldapServerConfigurationRegistry.getConfiguration(
+				companyId, ldapServerId).userMappings());
 
 		LogUtil.debug(_log, userMappings);
 
@@ -181,98 +164,54 @@ public class DefaultLDAPSettings implements LDAPSettings {
 
 	@Override
 	public boolean isExportEnabled(long companyId) {
-		boolean defaultImportUserPasswordAutogenerated =
-			_ldapConfiguration.importUserPasswordAutogenerated();
 
 		if (isImportEnabled(companyId) &&
-			defaultImportUserPasswordAutogenerated) {
+				_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importUserPasswordAutogenerated()) {
 
 			return false;
 		}
 
-		boolean defaultLDAPExportEnabled = _ldapConfiguration.exportEnabled();
-
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_EXPORT_ENABLED,
-				defaultLDAPExportEnabled)) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
+		return _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).exportEnabled();
 	}
 
 	@Override
 	public boolean isExportGroupEnabled(long companyId) {
-		boolean defaultLDAPExportGroupEnabled =
-			_ldapConfiguration.exportGroupEnabled();
 
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_EXPORT_GROUP_ENABLED,
-				defaultLDAPExportGroupEnabled)) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
+		return _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).exportGroupEnabled();
 	}
 
 	@Override
 	public boolean isImportEnabled(long companyId) {
-		boolean defaultLDAPImportEnabled = _ldapConfiguration.importEnabled();
 
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_IMPORT_ENABLED,
-				defaultLDAPImportEnabled)) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
+		return _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importEnabled();
 	}
 
 	@Override
 	public boolean isImportOnStartup(long companyId) {
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_IMPORT_ON_STARTUP,
-				_ldapConfiguration.importOnStartup())) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
+		
+		return _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importOnStartup();
 	}
 
 	@Override
 	public boolean isPasswordPolicyEnabled(long companyId) {
-		boolean defaultLDAPPasswordPolicyEnabled =
-			_ldapConfiguration.passwordPolicyEnabled();
-
-		if (PrefsPropsUtil.getBoolean(
-				companyId, PropsKeys.LDAP_PASSWORD_POLICY_ENABLED,
-				defaultLDAPPasswordPolicyEnabled)) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
+		
+		return _ldapIntegrationConfigurationRegistry.getConfiguration(companyId).passwordPolicyEnabled();
 	}
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_ldapConfiguration = Configurable.createConfigurable(
-			LDAPConfiguration.class, properties);
+	@Reference
+	protected void setLdapIntegrationConfig(LDAPIntegrationConfigurationRegistry configurationRegistry) {
+		_ldapIntegrationConfigurationRegistry = configurationRegistry;
 	}
 
+	@Reference
+	protected void setLdapServerConfig(LDAPServerConfigurationRegistry configurationRegistry) {
+		_ldapServerConfigurationRegistry = configurationRegistry;
+	}
+	
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultLDAPSettings.class);
 
-	private volatile LDAPConfiguration _ldapConfiguration;
+	private volatile LDAPIntegrationConfigurationRegistry _ldapIntegrationConfigurationRegistry;
+	private volatile LDAPServerConfigurationRegistry _ldapServerConfigurationRegistry;
 
 }

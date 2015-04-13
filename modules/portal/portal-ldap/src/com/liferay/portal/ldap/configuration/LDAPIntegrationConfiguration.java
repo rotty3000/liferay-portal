@@ -20,11 +20,15 @@ import aQute.bnd.annotation.metatype.Meta;
  * @author Michael C. Han
  */
 @Meta.OCD(
-	id = "com.liferay.portal.ldap.configuration.LDAPConfiguration",
+	factory=true,
+	id = "com.liferay.portal.ldap.configuration.LDAPIntegrationConfiguration",
 	localization = "content.Language"
 )
-public interface LDAPConfiguration {
+public interface LDAPIntegrationConfiguration {
 
+	@Meta.AD(deflt = "-1", required = true)
+	public int companyId();
+	
 	@Meta.AD(deflt = "false", required = false)
 	public boolean exportEnabled();
 
@@ -52,7 +56,10 @@ public interface LDAPConfiguration {
 	@Meta.AD(deflt = "86400000", required = false)
 	public long importLockExpirationTime();
 
-	@Meta.AD(deflt = "user", optionValues = {"group", "user"}, required = false)
+	@Meta.AD(
+		deflt = "user", 
+//		optionValues = {"group", "user"}, 
+		required = false)
 	public String importMethod();
 
 	@Meta.AD(deflt = "false", required = false)
@@ -77,7 +84,8 @@ public interface LDAPConfiguration {
 	public int rangeSize();
 
 	@Meta.AD(
-		deflt = "follow", optionValues = {"follow", "ingore", "throws"},
+		deflt = "follow", 
+//		optionValues = {"follow", "ingore", "throws"},
 		required = false
 	)
 	public String referral();

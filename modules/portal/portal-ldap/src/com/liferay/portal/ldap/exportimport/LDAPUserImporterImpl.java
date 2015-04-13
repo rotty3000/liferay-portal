@@ -14,7 +14,30 @@
 
 package com.liferay.portal.ldap.exportimport;
 
-import aQute.bnd.annotation.metatype.Configurable;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import javax.naming.Binding;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingEnumeration;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
+import javax.naming.ldap.LdapContext;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.NoSuchUserGroupException;
@@ -38,7 +61,8 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.ldap.configuration.LDAPConfiguration;
+import com.liferay.portal.ldap.configuration.LDAPIntegrationConfiguration;
+import com.liferay.portal.ldap.configuration.LDAPIntegrationConfigurationRegistry;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Contact;
@@ -70,35 +94,6 @@ import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.expando.util.ExpandoConverterUtil;
 
-import java.io.Serializable;
-
-import java.text.ParseException;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.naming.Binding;
-import javax.naming.NameNotFoundException;
-import javax.naming.NamingEnumeration;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-import javax.naming.ldap.LdapContext;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Modified;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
@@ -106,7 +101,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Hugo Huijser
  */
 @Component(
-	configurationPid = "com.liferay.portal.ldap.configuration.LDAPConfiguration",
 	immediate = true,
 	service = {LDAPUserImporter.class, UserImporter.class}
 )
@@ -371,11 +365,13 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 				return;
 			}
+			
+			
 
 			LockLocalServiceUtil.lock(
 				defaultUserId, UserImporterUtil.class.getName(), companyId,
 				LDAPUserImporterImpl.class.getName(), false,
-				_ldapConfiguration.importLockExpirationTime());
+				_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importLockExpirationTime());
 
 			long[] ldapServerIds = StringUtil.split(
 				PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
@@ -439,7 +435,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 			String importMethod = PrefsPropsUtil.getString(
 				companyId, PropsKeys.LDAP_IMPORT_METHOD,
-				_ldapConfiguration.importMethod());
+				_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importMethod());
 
 			if (importMethod.equals(_IMPORT_BY_GROUP)) {
 				importFromLDAPByGroup(
@@ -479,26 +475,22 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 	}
 
 	@Reference
+	protected void setLDAPIntegrationConfigurationRegistry(LDAPIntegrationConfigurationRegistry configurationRegistry) {
+		_ldapIntegrationConfigurationRegistry = configurationRegistry;		
+	}
+
+	@Reference
+	@SuppressWarnings("unchecked")
 	public void setSingleVMPool(SingleVMPool singleVMPool) {
 		_portalCache = (PortalCache<String, Long>)singleVMPool.getCache(
 			UserImporter.class.getName(), false);
-	}
-
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		_ldapConfiguration = Configurable.createConfigurable(
-			LDAPConfiguration.class, properties);
-
-		_ldapUserIgnoreAttributes = SetUtil.fromArray(
-			_ldapConfiguration.userIgnoreAttributes());
 	}
 
 	protected void addRole(
 			long companyId, LDAPGroup ldapGroup, UserGroup userGroup)
 		throws Exception {
 
-		if (!_ldapConfiguration.importCreateRolePerGroup()) {
+		if (!_ldapIntegrationConfigurationRegistry.getConfiguration(companyId).importCreateRolePerGroup()) {
 			return;
 		}
 
@@ -542,15 +534,18 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		boolean autoPassword = ldapUser.isAutoPassword();
 
-		if (!_ldapConfiguration.importUserPasswordEnabled()) {
+		LDAPIntegrationConfiguration ldapConfiguration = _ldapIntegrationConfigurationRegistry.getConfiguration(companyId);
+		
+		
+		if (!ldapConfiguration.importUserPasswordEnabled()) {
 			autoPassword =
-				_ldapConfiguration.
+					ldapConfiguration.
 					importUserPasswordAutogenerated() &&
 					 !PropsValues.AUTH_PIPELINE_ENABLE_LIFERAY_CHECK;
 
 			if (!autoPassword) {
 				String defaultPassword =
-					_ldapConfiguration.importUserPasswordDefault();
+					ldapConfiguration.importUserPasswordDefault();
 
 				if (StringUtil.equalsIgnoreCase(
 						defaultPassword, _USER_PASSWORD_SCREEN_NAME)) {
@@ -788,7 +783,9 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		Long userGroupId = null;
 
-		if (_ldapConfiguration.importGroupCacheEnabled()) {
+		LDAPIntegrationConfiguration ldapConfiguration = _ldapIntegrationConfigurationRegistry.getConfiguration(companyId);
+		
+		if (ldapConfiguration.importGroupCacheEnabled()) {
 			StringBundler sb = new StringBundler(5);
 
 			sb.append(ldapServerId);
@@ -833,7 +830,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 			userGroupId = userGroup.getUserGroupId();
 
-			if (_ldapConfiguration.importGroupCacheEnabled()) {
+			if (ldapConfiguration.importGroupCacheEnabled()) {
 				_portalCache.put(userGroupIdKey, userGroupId);
 			}
 		}
@@ -858,10 +855,13 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		Set<Long> newUserGroupIds = new LinkedHashSet<>();
 
+		LDAPIntegrationConfiguration ldapConfiguration = 
+						_ldapIntegrationConfigurationRegistry.getConfiguration(companyId);
+
 		if (Validator.isNotNull(groupMappingsUser) &&
 			PrefsPropsUtil.getBoolean(
 				companyId, PropsKeys.LDAP_IMPORT_GROUP_SEARCH_FILTER_ENABLED,
-				_ldapConfiguration.importGroupSearchFilterEnabled())) {
+				ldapConfiguration.importGroupSearchFilterEnabled())) {
 
 			String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
 
@@ -1141,7 +1141,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 		Properties expandoMappings) {
 
 		Map<String, Serializable> serializedExpandoAttributes = new HashMap<>();
-
+		
 		for (Map.Entry<String, String[]> expandoAttribute :
 				expandoAttributes.entrySet()) {
 
@@ -1152,7 +1152,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 			}
 
 			if (expandoMappings.containsKey(name) &&
-				!_ldapUserIgnoreAttributes.contains(name)) {
+				!getUserIgnoreAttibutes(expandoBridge.getCompanyId()).contains(name)) {
 
 				int type = expandoBridge.getAttributeType(name);
 
@@ -1222,7 +1222,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		for (String propertyName : _CONTACT_PROPERTY_NAMES) {
 			if (!contactMappings.containsKey(propertyName) ||
-				_ldapUserIgnoreAttributes.contains(propertyName)) {
+				getUserIgnoreAttibutes(user.getCompanyId()).contains(propertyName)) {
 
 				setProperty(ldapContact, contact, propertyName);
 			}
@@ -1230,7 +1230,7 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		for (String propertyName : _USER_PROPERTY_NAMES) {
 			if (!userMappings.containsKey(propertyName) ||
-				_ldapUserIgnoreAttributes.contains(propertyName) ) {
+				getUserIgnoreAttibutes(user.getCompanyId()).contains(propertyName) ) {
 
 				setProperty(ldapUser, user, propertyName);
 			}
@@ -1247,9 +1247,12 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 		boolean passwordReset = ldapUser.isPasswordReset();
 
+		LDAPIntegrationConfiguration ldapConfiguration = 
+						_ldapIntegrationConfigurationRegistry.getConfiguration(companyId);
+
 		if (PrefsPropsUtil.getBoolean(
 				companyId, PropsKeys.LDAP_EXPORT_ENABLED,
-				_ldapConfiguration.exportEnabled())) {
+				ldapConfiguration.exportEnabled())) {
 
 			passwordReset = user.isPasswordReset();
 		}
@@ -1301,8 +1304,8 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 			}
 		}
 
-		if (!_ldapConfiguration.importUserPasswordEnabled()) {
-			password = _ldapConfiguration.importUserPasswordDefault();
+		if (!ldapConfiguration.importUserPasswordEnabled()) {
+			password = ldapConfiguration.importUserPasswordDefault();
 
 			if (StringUtil.equalsIgnoreCase(
 					password, _USER_PASSWORD_SCREEN_NAME)) {
@@ -1367,6 +1370,13 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 		return user;
 	}
 
+	private Set<String> getUserIgnoreAttibutes(long companyId) {
+
+		LDAPIntegrationConfiguration ldapConfiguration = _ldapIntegrationConfigurationRegistry.getConfiguration(companyId);
+		return SetUtil.fromArray(ldapConfiguration.userIgnoreAttributes());
+	}
+
+	
 	private static final String[] _CONTACT_PROPERTY_NAMES = {
 		"aimSn", "birthday", "employeeNumber", "facebookSn", "icqSn",
 		"jabberSn", "male", "msnSn", "mySpaceSn", "prefixId", "skypeSn",
@@ -1390,9 +1400,9 @@ public class LDAPUserImporterImpl implements LDAPUserImporter, UserImporter {
 
 	private AttributesTransformer _attributesTransformer;
 	private long _lastImportTime;
-	private volatile LDAPConfiguration _ldapConfiguration;
+	private volatile LDAPIntegrationConfigurationRegistry _ldapIntegrationConfigurationRegistry;
 	private LDAPToPortalConverter _ldapToPortalConverter;
-	private Set<String> _ldapUserIgnoreAttributes;
+//	private Set<String> _ldapUserIgnoreAttributes;
 	private PortalCache<String, Long> _portalCache;
 
 }
