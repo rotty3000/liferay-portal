@@ -1,0 +1,3 @@
+Bundle-SymbolicName: com.liferay.portal.http.service.test
+Bundle-Name: Http Service Test
+Include-Resource: classes
