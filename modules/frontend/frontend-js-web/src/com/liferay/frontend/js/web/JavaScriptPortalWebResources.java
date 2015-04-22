@@ -14,6 +14,7 @@
 
 package com.liferay.frontend.js.web;
 
+import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResources;
 
 import javax.servlet.ServletContext;
@@ -28,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Fellwock
  */
 @Component(immediate = true, service = PortalWebResources.class)
-public class DefaultPortalWebResources implements PortalWebResources {
+public class JavaScriptPortalWebResources implements PortalWebResources {
 
 	@Override
 	public String getContextPath() {
@@ -38,6 +39,11 @@ public class DefaultPortalWebResources implements PortalWebResources {
 	@Override
 	public long getLastModified() {
 		return _bundle.getLastModified();
+	}
+
+	@Override
+	public String getResourceType() {
+		return PortalWebResourceConstants.RESOURCE_TYPE_JS;
 	}
 
 	@Override

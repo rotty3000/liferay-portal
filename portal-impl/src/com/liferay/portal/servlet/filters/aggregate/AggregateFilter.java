@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.servlet.BrowserSniffer;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.servlet.FileTimestampUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
+import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -264,7 +265,8 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 			PropsKeys.JAVASCRIPT_BUNDLE_DIR, new Filter(bundleId));
 
 		ServletContext portalWebResourcesServletContext =
-			PortalWebResourcesUtil.getServletContext();
+			PortalWebResourcesUtil.getServletContext(
+				PortalWebResourceConstants.RESOURCE_TYPE_JS);
 
 		URL bundleDirURL = portalWebResourcesServletContext.getResource(
 			bundleDirName);
@@ -373,7 +375,12 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 		URL resourceURL = _servletContext.getResource(resourcePath);
 
 		if (resourceURL == null) {
-			return null;
+			resourceURL = PortalWebResourcesUtil.getServletContextResource(
+				resourcePath);
+
+			if (resourceURL == null) {
+				return null;
+			}
 		}
 
 		String cacheCommonFileName = getCacheFileName(request);
@@ -463,8 +470,12 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 		String resourcePath, String content) {
 
 		try {
+			ServletContext cssResourcesServletContext =
+				PortalWebResourcesUtil.getServletContext(
+					PortalWebResourceConstants.RESOURCE_TYPE_CSS);
+
 			content = DynamicCSSUtil.parseSass(
-				_servletContext, request, resourcePath, content);
+				cssResourcesServletContext, request, resourcePath, content);
 		}
 		catch (Exception e) {
 			_log.error("Unable to parse SASS on CSS " + resourcePath, e);
@@ -518,9 +529,7 @@ public class AggregateFilter extends IgnoreModuleRequestFilter {
 	protected boolean isModuleRequest(HttpServletRequest request) {
 		String requestURI = request.getRequestURI();
 
-		String contextPath = PortalWebResourcesUtil.getContextPath();
-
-		if (requestURI.startsWith(contextPath)) {
+		if (PortalWebResourcesUtil.isResourceContextPath(requestURI)) {
 			return false;
 		}
 

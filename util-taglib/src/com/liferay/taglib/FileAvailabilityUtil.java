@@ -14,6 +14,7 @@
 
 package com.liferay.taglib;
 
+import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -44,7 +45,9 @@ public class FileAvailabilityUtil {
 			return true;
 		}
 
-		if (PortalWebResourcesUtil.isResourceAvailable(path)) {
+		if (PortalWebResourcesUtil.isResourceAvailable(
+				path, PortalWebResourceConstants.RESOURCE_TYPE_JS)) {
+
 			return true;
 		}
 
