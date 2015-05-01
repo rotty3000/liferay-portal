@@ -45,6 +45,17 @@
 	<div class="note-content" id="<portlet:namespace />note"><%= StringUtil.replace(HtmlUtil.escape(data), "&lt;br /&gt;", "<br />") %></div>
 </div>
 
+<script>
+	require(
+		'liferay/html/js/liferay/nate.es',
+		function(nate) {
+			nate.log('Tell me?');
+		},
+		function(error) {
+			console.error(error);
+		}
+	);
+</script>
 <c:if test="<%= portletDisplay.isShowConfigurationIcon() %>">
 	<aui:script use="aui-editable-deprecated,aui-io-request">
 		var quickNotePad = A.one('#<portlet:namespace />pad');
