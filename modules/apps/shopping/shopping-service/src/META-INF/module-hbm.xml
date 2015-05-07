@@ -2,15 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
-	<import class="com.liferay.portlet.shopping.model.ShoppingCart" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingCategory" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingCoupon" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingItem" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingItemField" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingItemPrice" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingOrder" />
-	<import class="com.liferay.portlet.shopping.model.ShoppingOrderItem" />
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingCartImpl" table="ShoppingCart">
+	<import class="com.liferay.shopping.model.ShoppingCart" />
+	<import class="com.liferay.shopping.model.ShoppingCategory" />
+	<import class="com.liferay.shopping.model.ShoppingCoupon" />
+	<import class="com.liferay.shopping.model.ShoppingItem" />
+	<import class="com.liferay.shopping.model.ShoppingItemField" />
+	<import class="com.liferay.shopping.model.ShoppingItemPrice" />
+	<import class="com.liferay.shopping.model.ShoppingOrder" />
+	<import class="com.liferay.shopping.model.ShoppingOrderItem" />
+	<class name="com.liferay.shopping.model.impl.ShoppingCartImpl" table="ShoppingCart">
 		<cache usage="read-write" />
 		<id name="cartId" type="long">
 			<generator class="assigned" />
@@ -26,7 +26,7 @@
 		<property name="altShipping" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="insure" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingCategoryImpl" table="ShoppingCategory">
+	<class name="com.liferay.shopping.model.impl.ShoppingCategoryImpl" table="ShoppingCategory">
 		<cache usage="read-write" />
 		<id name="categoryId" type="long">
 			<generator class="assigned" />
@@ -41,7 +41,7 @@
 		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingCouponImpl" table="ShoppingCoupon">
+	<class name="com.liferay.shopping.model.impl.ShoppingCouponImpl" table="ShoppingCoupon">
 		<cache usage="read-write" />
 		<id name="couponId" type="long">
 			<generator class="assigned" />
@@ -64,7 +64,7 @@
 		<property name="discount" type="com.liferay.portal.dao.orm.hibernate.DoubleType" />
 		<property name="discountType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingItemImpl" table="ShoppingItem">
+	<class name="com.liferay.shopping.model.impl.ShoppingItemImpl" table="ShoppingItem">
 		<cache usage="read-write" />
 		<id name="itemId" type="long">
 			<generator class="assigned" />
@@ -103,7 +103,7 @@
 		<property name="largeImageId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="largeImageURL" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingItemFieldImpl" table="ShoppingItemField">
+	<class name="com.liferay.shopping.model.impl.ShoppingItemFieldImpl" table="ShoppingItemField">
 		<cache usage="read-write" />
 		<id name="itemFieldId" type="long">
 			<generator class="assigned" />
@@ -113,7 +113,7 @@
 		<property name="values" type="com.liferay.portal.dao.orm.hibernate.StringType" column="values_" />
 		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingItemPriceImpl" table="ShoppingItemPrice">
+	<class name="com.liferay.shopping.model.impl.ShoppingItemPriceImpl" table="ShoppingItemPrice">
 		<cache usage="read-write" />
 		<id name="itemPriceId" type="long">
 			<generator class="assigned" />
@@ -128,7 +128,7 @@
 		<property name="useShippingFormula" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="status" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingOrderImpl" table="ShoppingOrder">
+	<class name="com.liferay.shopping.model.impl.ShoppingOrderImpl" table="ShoppingOrder">
 		<cache usage="read-write" />
 		<id name="orderId" type="long">
 			<generator class="assigned" />
@@ -184,7 +184,7 @@
 		<property name="sendOrderEmail" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="sendShippingEmail" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 	</class>
-	<class name="com.liferay.portlet.shopping.model.impl.ShoppingOrderItemImpl" table="ShoppingOrderItem">
+	<class name="com.liferay.shopping.model.impl.ShoppingOrderItemImpl" table="ShoppingOrderItem">
 		<cache usage="read-write" />
 		<id name="orderItemId" type="long">
 			<generator class="assigned" />

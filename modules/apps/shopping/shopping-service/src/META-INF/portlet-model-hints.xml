@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="com.liferay.portlet.shopping.model.ShoppingCart">
+	<model name="com.liferay.shopping.model.ShoppingCart">
 		<field name="cartId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -16,7 +16,7 @@
 		<field name="altShipping" type="int" />
 		<field name="insure" type="boolean" />
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingCategory">
+	<model name="com.liferay.shopping.model.ShoppingCategory">
 		<field name="categoryId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -30,7 +30,7 @@
 			<hint-collection name="TEXTAREA" />
 		</field>
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingCoupon">
+	<model name="com.liferay.shopping.model.ShoppingCoupon">
 		<field name="couponId" type="long">
 			<hint name="upper-case">true</hint>
 		</field>
@@ -60,7 +60,7 @@
 		<field name="discount" type="double" />
 		<field name="discountType" type="String" />
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingItem">
+	<model name="com.liferay.shopping.model.ShoppingItem">
 		<field name="itemId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -112,7 +112,7 @@
 			<hint-collection name="URL" />
 		</field>
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingItemField">
+	<model name="com.liferay.shopping.model.ShoppingItemField">
 		<field name="itemFieldId" type="long" />
 		<field name="itemId" type="long" />
 		<field name="name" type="String">
@@ -129,7 +129,7 @@
 			<hint name="display-width">150</hint>
 		</field>
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingItemPrice">
+	<model name="com.liferay.shopping.model.ShoppingItemPrice">
 		<default-hints>
 			<hint name="display-width">50</hint>
 		</default-hints>
@@ -144,7 +144,7 @@
 		<field name="useShippingFormula" type="boolean" />
 		<field name="status" type="int" />
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingOrder">
+	<model name="com.liferay.shopping.model.ShoppingOrder">
 		<default-hints>
 			<hint name="display-width">210</hint>
 		</default-hints>
@@ -206,7 +206,7 @@
 		<field name="sendOrderEmail" type="boolean" />
 		<field name="sendShippingEmail" type="boolean" />
 	</model>
-	<model name="com.liferay.portlet.shopping.model.ShoppingOrderItem">
+	<model name="com.liferay.shopping.model.ShoppingOrderItem">
 		<field name="orderItemId" type="long" />
 		<field name="orderId" type="long" />
 		<field name="itemId" type="String">
