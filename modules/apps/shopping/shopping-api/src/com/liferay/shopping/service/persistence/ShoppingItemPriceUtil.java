@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
-import com.liferay.portlet.shopping.model.ShoppingItemPrice;
+import com.liferay.shopping.model.ShoppingItemPrice;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import java.util.List;
 
 /**
- * The persistence utility for the shopping item price service. This utility wraps {@link com.liferay.portlet.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
+ * The persistence utility for the shopping item price service. This utility wraps {@link com.liferay.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
  *
  * <p>
  * Caching information and settings can be found in <code>portal.properties</code>
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingItemPricePersistence
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl
  * @generated
  */
 @ProviderType
@@ -164,11 +164,11 @@ public class ShoppingItemPriceUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
 	*/
 	public static ShoppingItemPrice findByItemId_First(long itemId,
 		OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException {
+		throws com.liferay.shopping.exception.NoSuchItemPriceException {
 		return getPersistence().findByItemId_First(itemId, orderByComparator);
 	}
 
@@ -190,11 +190,11 @@ public class ShoppingItemPriceUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
 	*/
 	public static ShoppingItemPrice findByItemId_Last(long itemId,
 		OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException {
+		throws com.liferay.shopping.exception.NoSuchItemPriceException {
 		return getPersistence().findByItemId_Last(itemId, orderByComparator);
 	}
 
@@ -217,12 +217,12 @@ public class ShoppingItemPriceUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public static ShoppingItemPrice[] findByItemId_PrevAndNext(
 		long itemPriceId, long itemId,
 		OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException {
+		throws com.liferay.shopping.exception.NoSuchItemPriceException {
 		return getPersistence()
 				   .findByItemId_PrevAndNext(itemPriceId, itemId,
 			orderByComparator);
@@ -280,10 +280,10 @@ public class ShoppingItemPriceUtil {
 	*
 	* @param itemPriceId the primary key of the shopping item price
 	* @return the shopping item price that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public static ShoppingItemPrice remove(long itemPriceId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException {
+		throws com.liferay.shopping.exception.NoSuchItemPriceException {
 		return getPersistence().remove(itemPriceId);
 	}
 
@@ -293,14 +293,14 @@ public class ShoppingItemPriceUtil {
 	}
 
 	/**
-	* Returns the shopping item price with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemPriceException} if it could not be found.
+	* Returns the shopping item price with the primary key or throws a {@link com.liferay.shopping.NoSuchItemPriceException} if it could not be found.
 	*
 	* @param itemPriceId the primary key of the shopping item price
 	* @return the shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public static ShoppingItemPrice findByPrimaryKey(long itemPriceId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException {
+		throws com.liferay.shopping.exception.NoSuchItemPriceException {
 		return getPersistence().findByPrimaryKey(itemPriceId);
 	}
 

@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.service.persistence.BasePersistence;
 
-import com.liferay.portlet.shopping.model.ShoppingCoupon;
+import com.liferay.shopping.model.ShoppingCoupon;
 
 /**
  * The persistence interface for the shopping coupon service.
@@ -28,7 +28,7 @@ import com.liferay.portlet.shopping.model.ShoppingCoupon;
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl
  * @see ShoppingCouponUtil
  * @generated
  */
@@ -86,11 +86,11 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public ShoppingCoupon findByGroupId_First(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Returns the first shopping coupon in the ordered set where groupId = &#63;.
@@ -108,11 +108,11 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public ShoppingCoupon findByGroupId_Last(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Returns the last shopping coupon in the ordered set where groupId = &#63;.
@@ -131,12 +131,12 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public ShoppingCoupon[] findByGroupId_PrevAndNext(long couponId,
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Removes all the shopping coupons where groupId = &#63; from the database.
@@ -154,14 +154,14 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	public int countByGroupId(long groupId);
 
 	/**
-	* Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
+	* Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.shopping.NoSuchCouponException} if it could not be found.
 	*
 	* @param code the code
 	* @return the matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public ShoppingCoupon findByCode(java.lang.String code)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Returns the shopping coupon where code = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -188,7 +188,7 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	* @return the shopping coupon that was removed
 	*/
 	public ShoppingCoupon removeByCode(java.lang.String code)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Returns the number of shopping coupons where code = &#63;.
@@ -225,22 +225,22 @@ public interface ShoppingCouponPersistence extends BasePersistence<ShoppingCoupo
 	*
 	* @param couponId the primary key of the shopping coupon
 	* @return the shopping coupon that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public ShoppingCoupon remove(long couponId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	public ShoppingCoupon updateImpl(ShoppingCoupon shoppingCoupon);
 
 	/**
-	* Returns the shopping coupon with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
+	* Returns the shopping coupon with the primary key or throws a {@link com.liferay.shopping.NoSuchCouponException} if it could not be found.
 	*
 	* @param couponId the primary key of the shopping coupon
 	* @return the shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public ShoppingCoupon findByPrimaryKey(long couponId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException;
+		throws com.liferay.shopping.exception.NoSuchCouponException;
 
 	/**
 	* Returns the shopping coupon with the primary key or returns <code>null</code> if it could not be found.

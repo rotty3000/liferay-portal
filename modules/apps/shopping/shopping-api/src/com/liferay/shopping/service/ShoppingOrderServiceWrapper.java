@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service;
+package com.liferay.shopping.service;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -31,26 +31,6 @@ public class ShoppingOrderServiceWrapper implements ShoppingOrderService,
 	public ShoppingOrderServiceWrapper(
 		ShoppingOrderService shoppingOrderService) {
 		_shoppingOrderService = shoppingOrderService;
-	}
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _shoppingOrderService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_shoppingOrderService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**

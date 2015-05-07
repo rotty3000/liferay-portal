@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model;
+package com.liferay.shopping.model;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -23,8 +23,8 @@ import com.liferay.portal.model.PersistedModel;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingCategoryModel
- * @see com.liferay.portlet.shopping.model.impl.ShoppingCategoryImpl
- * @see com.liferay.portlet.shopping.model.impl.ShoppingCategoryModelImpl
+ * @see com.liferay.shopping.model.impl.ShoppingCategoryImpl
+ * @see com.liferay.shopping.model.impl.ShoppingCategoryModelImpl
  * @generated
  */
 @ProviderType
@@ -32,6 +32,6 @@ public interface ShoppingCategory extends ShoppingCategoryModel, PersistedModel 
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.shopping.model.impl.ShoppingCategoryImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify this interface directly. Add methods to {@link com.liferay.shopping.model.impl.ShoppingCategoryImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 }

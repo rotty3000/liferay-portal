@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
-import com.liferay.portlet.shopping.model.ShoppingItemField;
+import com.liferay.shopping.model.ShoppingItemField;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import java.util.List;
 
 /**
- * The persistence utility for the shopping item field service. This utility wraps {@link com.liferay.portlet.shopping.service.persistence.impl.ShoppingItemFieldPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
+ * The persistence utility for the shopping item field service. This utility wraps {@link com.liferay.shopping.service.persistence.impl.ShoppingItemFieldPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
  *
  * <p>
  * Caching information and settings can be found in <code>portal.properties</code>
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingItemFieldPersistence
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingItemFieldPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingItemFieldPersistenceImpl
  * @generated
  */
 @ProviderType
@@ -164,11 +164,11 @@ public class ShoppingItemFieldUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping item field
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	* @throws com.liferay.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
 	*/
 	public static ShoppingItemField findByItemId_First(long itemId,
 		OrderByComparator<ShoppingItemField> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemFieldException {
+		throws com.liferay.shopping.exception.NoSuchItemFieldException {
 		return getPersistence().findByItemId_First(itemId, orderByComparator);
 	}
 
@@ -190,11 +190,11 @@ public class ShoppingItemFieldUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping item field
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
+	* @throws com.liferay.shopping.NoSuchItemFieldException if a matching shopping item field could not be found
 	*/
 	public static ShoppingItemField findByItemId_Last(long itemId,
 		OrderByComparator<ShoppingItemField> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemFieldException {
+		throws com.liferay.shopping.exception.NoSuchItemFieldException {
 		return getPersistence().findByItemId_Last(itemId, orderByComparator);
 	}
 
@@ -217,12 +217,12 @@ public class ShoppingItemFieldUtil {
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping item field
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
 	*/
 	public static ShoppingItemField[] findByItemId_PrevAndNext(
 		long itemFieldId, long itemId,
 		OrderByComparator<ShoppingItemField> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemFieldException {
+		throws com.liferay.shopping.exception.NoSuchItemFieldException {
 		return getPersistence()
 				   .findByItemId_PrevAndNext(itemFieldId, itemId,
 			orderByComparator);
@@ -280,10 +280,10 @@ public class ShoppingItemFieldUtil {
 	*
 	* @param itemFieldId the primary key of the shopping item field
 	* @return the shopping item field that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
 	*/
 	public static ShoppingItemField remove(long itemFieldId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemFieldException {
+		throws com.liferay.shopping.exception.NoSuchItemFieldException {
 		return getPersistence().remove(itemFieldId);
 	}
 
@@ -293,14 +293,14 @@ public class ShoppingItemFieldUtil {
 	}
 
 	/**
-	* Returns the shopping item field with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemFieldException} if it could not be found.
+	* Returns the shopping item field with the primary key or throws a {@link com.liferay.shopping.NoSuchItemFieldException} if it could not be found.
 	*
 	* @param itemFieldId the primary key of the shopping item field
 	* @return the shopping item field
-	* @throws com.liferay.portlet.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemFieldException if a shopping item field with the primary key could not be found
 	*/
 	public static ShoppingItemField findByPrimaryKey(long itemFieldId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemFieldException {
+		throws com.liferay.shopping.exception.NoSuchItemFieldException {
 		return getPersistence().findByPrimaryKey(itemFieldId);
 	}
 

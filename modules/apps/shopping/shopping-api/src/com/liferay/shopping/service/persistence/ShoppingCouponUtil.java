@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
-import com.liferay.portlet.shopping.model.ShoppingCoupon;
+import com.liferay.shopping.model.ShoppingCoupon;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import java.util.List;
 
 /**
- * The persistence utility for the shopping coupon service. This utility wraps {@link com.liferay.portlet.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
+ * The persistence utility for the shopping coupon service. This utility wraps {@link com.liferay.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
  *
  * <p>
  * Caching information and settings can be found in <code>portal.properties</code>
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingCouponPersistence
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl
  * @generated
  */
 @ProviderType
@@ -164,11 +164,11 @@ public class ShoppingCouponUtil {
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public static ShoppingCoupon findByGroupId_First(long groupId,
 		OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().findByGroupId_First(groupId, orderByComparator);
 	}
 
@@ -190,11 +190,11 @@ public class ShoppingCouponUtil {
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public static ShoppingCoupon findByGroupId_Last(long groupId,
 		OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().findByGroupId_Last(groupId, orderByComparator);
 	}
 
@@ -217,11 +217,11 @@ public class ShoppingCouponUtil {
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public static ShoppingCoupon[] findByGroupId_PrevAndNext(long couponId,
 		long groupId, OrderByComparator<ShoppingCoupon> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence()
 				   .findByGroupId_PrevAndNext(couponId, groupId,
 			orderByComparator);
@@ -247,14 +247,14 @@ public class ShoppingCouponUtil {
 	}
 
 	/**
-	* Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
+	* Returns the shopping coupon where code = &#63; or throws a {@link com.liferay.shopping.NoSuchCouponException} if it could not be found.
 	*
 	* @param code the code
 	* @return the matching shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a matching shopping coupon could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a matching shopping coupon could not be found
 	*/
 	public static ShoppingCoupon findByCode(java.lang.String code)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().findByCode(code);
 	}
 
@@ -287,7 +287,7 @@ public class ShoppingCouponUtil {
 	* @return the shopping coupon that was removed
 	*/
 	public static ShoppingCoupon removeByCode(java.lang.String code)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().removeByCode(code);
 	}
 
@@ -334,10 +334,10 @@ public class ShoppingCouponUtil {
 	*
 	* @param couponId the primary key of the shopping coupon
 	* @return the shopping coupon that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public static ShoppingCoupon remove(long couponId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().remove(couponId);
 	}
 
@@ -346,14 +346,14 @@ public class ShoppingCouponUtil {
 	}
 
 	/**
-	* Returns the shopping coupon with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCouponException} if it could not be found.
+	* Returns the shopping coupon with the primary key or throws a {@link com.liferay.shopping.NoSuchCouponException} if it could not be found.
 	*
 	* @param couponId the primary key of the shopping coupon
 	* @return the shopping coupon
-	* @throws com.liferay.portlet.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCouponException if a shopping coupon with the primary key could not be found
 	*/
 	public static ShoppingCoupon findByPrimaryKey(long couponId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCouponException {
+		throws com.liferay.shopping.exception.NoSuchCouponException {
 		return getPersistence().findByPrimaryKey(couponId);
 	}
 

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model;
+package com.liferay.shopping.model;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -305,8 +305,7 @@ public class ShoppingItemWrapper implements ShoppingItem,
 	}
 
 	@Override
-	public int compareTo(
-		com.liferay.portlet.shopping.model.ShoppingItem shoppingItem) {
+	public int compareTo(com.liferay.shopping.model.ShoppingItem shoppingItem) {
 		return _shoppingItem.compareTo(shoppingItem);
 	}
 
@@ -1189,12 +1188,12 @@ public class ShoppingItemWrapper implements ShoppingItem,
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<com.liferay.portlet.shopping.model.ShoppingItem> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.liferay.shopping.model.ShoppingItem> toCacheModel() {
 		return _shoppingItem.toCacheModel();
 	}
 
 	@Override
-	public com.liferay.portlet.shopping.model.ShoppingItem toEscapedModel() {
+	public com.liferay.shopping.model.ShoppingItem toEscapedModel() {
 		return new ShoppingItemWrapper(_shoppingItem.toEscapedModel());
 	}
 
@@ -1204,7 +1203,7 @@ public class ShoppingItemWrapper implements ShoppingItem,
 	}
 
 	@Override
-	public com.liferay.portlet.shopping.model.ShoppingItem toUnescapedModel() {
+	public com.liferay.shopping.model.ShoppingItem toUnescapedModel() {
 		return new ShoppingItemWrapper(_shoppingItem.toUnescapedModel());
 	}
 

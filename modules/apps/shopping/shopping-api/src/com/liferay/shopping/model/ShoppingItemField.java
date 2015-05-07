@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model;
+package com.liferay.shopping.model;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -23,8 +23,8 @@ import com.liferay.portal.model.PersistedModel;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingItemFieldModel
- * @see com.liferay.portlet.shopping.model.impl.ShoppingItemFieldImpl
- * @see com.liferay.portlet.shopping.model.impl.ShoppingItemFieldModelImpl
+ * @see com.liferay.shopping.model.impl.ShoppingItemFieldImpl
+ * @see com.liferay.shopping.model.impl.ShoppingItemFieldModelImpl
  * @generated
  */
 @ProviderType
@@ -32,6 +32,6 @@ public interface ShoppingItemField extends ShoppingItemFieldModel, PersistedMode
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this interface directly. Add methods to {@link com.liferay.portlet.shopping.model.impl.ShoppingItemFieldImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify this interface directly. Add methods to {@link com.liferay.shopping.model.impl.ShoppingItemFieldImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 }

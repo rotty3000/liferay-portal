@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.service.persistence.BasePersistence;
 
-import com.liferay.portlet.shopping.model.ShoppingItemPrice;
+import com.liferay.shopping.model.ShoppingItemPrice;
 
 /**
  * The persistence interface for the shopping item price service.
@@ -28,7 +28,7 @@ import com.liferay.portlet.shopping.model.ShoppingItemPrice;
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingItemPricePersistenceImpl
  * @see ShoppingItemPriceUtil
  * @generated
  */
@@ -86,11 +86,11 @@ public interface ShoppingItemPricePersistence extends BasePersistence<ShoppingIt
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
 	*/
 	public ShoppingItemPrice findByItemId_First(long itemId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException;
+		throws com.liferay.shopping.exception.NoSuchItemPriceException;
 
 	/**
 	* Returns the first shopping item price in the ordered set where itemId = &#63;.
@@ -108,11 +108,11 @@ public interface ShoppingItemPricePersistence extends BasePersistence<ShoppingIt
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a matching shopping item price could not be found
 	*/
 	public ShoppingItemPrice findByItemId_Last(long itemId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException;
+		throws com.liferay.shopping.exception.NoSuchItemPriceException;
 
 	/**
 	* Returns the last shopping item price in the ordered set where itemId = &#63;.
@@ -131,12 +131,12 @@ public interface ShoppingItemPricePersistence extends BasePersistence<ShoppingIt
 	* @param itemId the item ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public ShoppingItemPrice[] findByItemId_PrevAndNext(long itemPriceId,
 		long itemId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingItemPrice> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException;
+		throws com.liferay.shopping.exception.NoSuchItemPriceException;
 
 	/**
 	* Removes all the shopping item prices where itemId = &#63; from the database.
@@ -181,22 +181,22 @@ public interface ShoppingItemPricePersistence extends BasePersistence<ShoppingIt
 	*
 	* @param itemPriceId the primary key of the shopping item price
 	* @return the shopping item price that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public ShoppingItemPrice remove(long itemPriceId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException;
+		throws com.liferay.shopping.exception.NoSuchItemPriceException;
 
 	public ShoppingItemPrice updateImpl(ShoppingItemPrice shoppingItemPrice);
 
 	/**
-	* Returns the shopping item price with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchItemPriceException} if it could not be found.
+	* Returns the shopping item price with the primary key or throws a {@link com.liferay.shopping.NoSuchItemPriceException} if it could not be found.
 	*
 	* @param itemPriceId the primary key of the shopping item price
 	* @return the shopping item price
-	* @throws com.liferay.portlet.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchItemPriceException if a shopping item price with the primary key could not be found
 	*/
 	public ShoppingItemPrice findByPrimaryKey(long itemPriceId)
-		throws com.liferay.portlet.shopping.exception.NoSuchItemPriceException;
+		throws com.liferay.shopping.exception.NoSuchItemPriceException;
 
 	/**
 	* Returns the shopping item price with the primary key or returns <code>null</code> if it could not be found.

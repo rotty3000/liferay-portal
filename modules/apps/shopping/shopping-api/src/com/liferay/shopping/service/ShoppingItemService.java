@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service;
+package com.liferay.shopping.service;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -31,8 +31,8 @@ import com.liferay.portal.service.BaseService;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingItemServiceUtil
- * @see com.liferay.portlet.shopping.service.base.ShoppingItemServiceBaseImpl
- * @see com.liferay.portlet.shopping.service.impl.ShoppingItemServiceImpl
+ * @see com.liferay.shopping.service.base.ShoppingItemServiceBaseImpl
+ * @see com.liferay.shopping.service.impl.ShoppingItemServiceImpl
  * @generated
  */
 @AccessControlled
@@ -44,20 +44,6 @@ public interface ShoppingItemService extends BaseService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this interface directly. Always use {@link ShoppingItemServiceUtil} to access the shopping item remote service. Add custom service methods to {@link com.liferay.portlet.shopping.service.impl.ShoppingItemServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify or reference this interface directly. Always use {@link ShoppingItemServiceUtil} to access the shopping item remote service. Add custom service methods to {@link com.liferay.shopping.service.impl.ShoppingItemServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public java.lang.String getBeanIdentifier();
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
 }

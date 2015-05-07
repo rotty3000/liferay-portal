@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model.impl;
+package com.liferay.shopping.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -31,9 +31,10 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
-import com.liferay.portlet.shopping.model.ShoppingItem;
-import com.liferay.portlet.shopping.model.ShoppingItemModel;
-import com.liferay.portlet.shopping.model.ShoppingItemSoap;
+
+import com.liferay.shopping.model.ShoppingItem;
+import com.liferay.shopping.model.ShoppingItemModel;
+import com.liferay.shopping.model.ShoppingItemSoap;
 
 import java.io.Serializable;
 
@@ -111,14 +112,14 @@ public class ShoppingItemModelImpl extends BaseModelImpl<ShoppingItem>
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
-	public static final boolean ENTITY_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
-				"value.object.entity.cache.enabled.com.liferay.portlet.shopping.model.ShoppingItem"),
+	public static final boolean ENTITY_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.entity.cache.enabled.com.liferay.shopping.model.ShoppingItem"),
 			true);
-	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
-				"value.object.finder.cache.enabled.com.liferay.portlet.shopping.model.ShoppingItem"),
+	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.finder.cache.enabled.com.liferay.shopping.model.ShoppingItem"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.portal.util.PropsUtil.get(
-				"value.object.column.bitmask.enabled.com.liferay.portlet.shopping.model.ShoppingItem"),
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.com.liferay.shopping.model.ShoppingItem"),
 			true);
 	public static final long CATEGORYID_COLUMN_BITMASK = 1L;
 	public static final long COMPANYID_COLUMN_BITMASK = 2L;
@@ -200,8 +201,8 @@ public class ShoppingItemModelImpl extends BaseModelImpl<ShoppingItem>
 		return models;
 	}
 
-	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.portal.util.PropsUtil.get(
-				"lock.expiration.time.com.liferay.portlet.shopping.model.ShoppingItem"));
+	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
+				"lock.expiration.time.com.liferay.shopping.model.ShoppingItem"));
 
 	public ShoppingItemModelImpl() {
 	}
@@ -1440,7 +1441,7 @@ public class ShoppingItemModelImpl extends BaseModelImpl<ShoppingItem>
 		StringBundler sb = new StringBundler(106);
 
 		sb.append("<model><model-name>");
-		sb.append("com.liferay.portlet.shopping.model.ShoppingItem");
+		sb.append("com.liferay.shopping.model.ShoppingItem");
 		sb.append("</model-name>");
 
 		sb.append(

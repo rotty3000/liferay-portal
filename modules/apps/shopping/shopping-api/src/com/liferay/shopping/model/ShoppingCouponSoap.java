@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model;
+package com.liferay.shopping.model;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -23,10 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This class is used by SOAP remote services, specifically {@link com.liferay.portlet.shopping.service.http.ShoppingCouponServiceSoap}.
+ * This class is used by SOAP remote services, specifically {@link com.liferay.shopping.service.http.ShoppingCouponServiceSoap}.
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.shopping.service.http.ShoppingCouponServiceSoap
+ * @see com.liferay.shopping.service.http.ShoppingCouponServiceSoap
  * @generated
  */
 @ProviderType

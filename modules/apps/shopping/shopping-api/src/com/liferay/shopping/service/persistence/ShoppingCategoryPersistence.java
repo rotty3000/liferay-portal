@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.service.persistence.BasePersistence;
 
-import com.liferay.portlet.shopping.model.ShoppingCategory;
+import com.liferay.shopping.model.ShoppingCategory;
 
 /**
  * The persistence interface for the shopping category service.
@@ -28,7 +28,7 @@ import com.liferay.portlet.shopping.model.ShoppingCategory;
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingCategoryPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingCategoryPersistenceImpl
  * @see ShoppingCategoryUtil
  * @generated
  */
@@ -86,11 +86,11 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a matching shopping category could not be found
 	*/
 	public ShoppingCategory findByGroupId_First(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the first shopping category in the ordered set where groupId = &#63;.
@@ -108,11 +108,11 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a matching shopping category could not be found
 	*/
 	public ShoppingCategory findByGroupId_Last(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the last shopping category in the ordered set where groupId = &#63;.
@@ -131,12 +131,12 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
 	*/
 	public ShoppingCategory[] findByGroupId_PrevAndNext(long categoryId,
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Removes all the shopping categories where groupId = &#63; from the database.
@@ -204,12 +204,12 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param parentCategoryId the parent category ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a matching shopping category could not be found
 	*/
 	public ShoppingCategory findByG_P_First(long groupId,
 		long parentCategoryId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the first shopping category in the ordered set where groupId = &#63; and parentCategoryId = &#63;.
@@ -230,11 +230,11 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param parentCategoryId the parent category ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a matching shopping category could not be found
 	*/
 	public ShoppingCategory findByG_P_Last(long groupId, long parentCategoryId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the last shopping category in the ordered set where groupId = &#63; and parentCategoryId = &#63;.
@@ -256,12 +256,12 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @param parentCategoryId the parent category ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
 	*/
 	public ShoppingCategory[] findByG_P_PrevAndNext(long categoryId,
 		long groupId, long parentCategoryId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingCategory> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Removes all the shopping categories where groupId = &#63; and parentCategoryId = &#63; from the database.
@@ -281,15 +281,15 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	public int countByG_P(long groupId, long parentCategoryId);
 
 	/**
-	* Returns the shopping category where groupId = &#63; and name = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	* Returns the shopping category where groupId = &#63; and name = &#63; or throws a {@link com.liferay.shopping.NoSuchCategoryException} if it could not be found.
 	*
 	* @param groupId the group ID
 	* @param name the name
 	* @return the matching shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a matching shopping category could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a matching shopping category could not be found
 	*/
 	public ShoppingCategory findByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the shopping category where groupId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -319,7 +319,7 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	* @return the shopping category that was removed
 	*/
 	public ShoppingCategory removeByG_N(long groupId, java.lang.String name)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the number of shopping categories where groupId = &#63; and name = &#63;.
@@ -357,22 +357,22 @@ public interface ShoppingCategoryPersistence extends BasePersistence<ShoppingCat
 	*
 	* @param categoryId the primary key of the shopping category
 	* @return the shopping category that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
 	*/
 	public ShoppingCategory remove(long categoryId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	public ShoppingCategory updateImpl(ShoppingCategory shoppingCategory);
 
 	/**
-	* Returns the shopping category with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchCategoryException} if it could not be found.
+	* Returns the shopping category with the primary key or throws a {@link com.liferay.shopping.NoSuchCategoryException} if it could not be found.
 	*
 	* @param categoryId the primary key of the shopping category
 	* @return the shopping category
-	* @throws com.liferay.portlet.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchCategoryException if a shopping category with the primary key could not be found
 	*/
 	public ShoppingCategory findByPrimaryKey(long categoryId)
-		throws com.liferay.portlet.shopping.exception.NoSuchCategoryException;
+		throws com.liferay.shopping.exception.NoSuchCategoryException;
 
 	/**
 	* Returns the shopping category with the primary key or returns <code>null</code> if it could not be found.

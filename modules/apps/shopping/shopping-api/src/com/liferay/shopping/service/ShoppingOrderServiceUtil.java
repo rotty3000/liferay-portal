@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service;
+package com.liferay.shopping.service;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -23,7 +23,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Provides the remote service utility for ShoppingOrder. This utility wraps
- * {@link com.liferay.portlet.shopping.service.impl.ShoppingOrderServiceImpl} and is the
+ * {@link com.liferay.shopping.service.impl.ShoppingOrderServiceImpl} and is the
  * primary access point for service operations in application layer code running
  * on a remote server. Methods of this service are expected to have security
  * checks based on the propagated JAAS credentials because this service can be
@@ -31,8 +31,8 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingOrderService
- * @see com.liferay.portlet.shopping.service.base.ShoppingOrderServiceBaseImpl
- * @see com.liferay.portlet.shopping.service.impl.ShoppingOrderServiceImpl
+ * @see com.liferay.shopping.service.base.ShoppingOrderServiceBaseImpl
+ * @see com.liferay.shopping.service.impl.ShoppingOrderServiceImpl
  * @generated
  */
 @ProviderType
@@ -40,27 +40,8 @@ public class ShoppingOrderServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portlet.shopping.service.impl.ShoppingOrderServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify this class directly. Add custom service methods to {@link com.liferay.shopping.service.impl.ShoppingOrderServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
 	public static ShoppingOrderService getService() {
 		return _serviceTracker.getService();
 	}

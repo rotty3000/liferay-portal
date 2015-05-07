@@ -12,12 +12,12 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model.impl;
+package com.liferay.shopping.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.portlet.shopping.model.ShoppingItem;
-import com.liferay.portlet.shopping.service.ShoppingItemLocalServiceUtil;
+import com.liferay.shopping.model.ShoppingItem;
+import com.liferay.shopping.service.ShoppingItemLocalServiceUtil;
 
 /**
  * The extended model base implementation for the ShoppingItem service. Represents a row in the &quot;ShoppingItem&quot; database table, with each column mapped to a property of this class.

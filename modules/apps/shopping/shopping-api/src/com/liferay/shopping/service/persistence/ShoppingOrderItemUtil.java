@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
-import com.liferay.portlet.shopping.model.ShoppingOrderItem;
+import com.liferay.shopping.model.ShoppingOrderItem;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import java.util.List;
 
 /**
- * The persistence utility for the shopping order item service. This utility wraps {@link com.liferay.portlet.shopping.service.persistence.impl.ShoppingOrderItemPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
+ * The persistence utility for the shopping order item service. This utility wraps {@link com.liferay.shopping.service.persistence.impl.ShoppingOrderItemPersistenceImpl} and provides direct access to the database for CRUD operations. This utility should only be used by the service layer, as it must operate within a transaction. Never access this utility in a JSP, controller, model, or other front-end class.
  *
  * <p>
  * Caching information and settings can be found in <code>portal.properties</code>
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * @author Brian Wing Shun Chan
  * @see ShoppingOrderItemPersistence
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingOrderItemPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingOrderItemPersistenceImpl
  * @generated
  */
 @ProviderType
@@ -165,11 +165,11 @@ public class ShoppingOrderItemUtil {
 	* @param orderId the order ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping order item
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a matching shopping order item could not be found
+	* @throws com.liferay.shopping.NoSuchOrderItemException if a matching shopping order item could not be found
 	*/
 	public static ShoppingOrderItem findByOrderId_First(long orderId,
 		OrderByComparator<ShoppingOrderItem> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderItemException {
+		throws com.liferay.shopping.exception.NoSuchOrderItemException {
 		return getPersistence().findByOrderId_First(orderId, orderByComparator);
 	}
 
@@ -191,11 +191,11 @@ public class ShoppingOrderItemUtil {
 	* @param orderId the order ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping order item
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a matching shopping order item could not be found
+	* @throws com.liferay.shopping.NoSuchOrderItemException if a matching shopping order item could not be found
 	*/
 	public static ShoppingOrderItem findByOrderId_Last(long orderId,
 		OrderByComparator<ShoppingOrderItem> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderItemException {
+		throws com.liferay.shopping.exception.NoSuchOrderItemException {
 		return getPersistence().findByOrderId_Last(orderId, orderByComparator);
 	}
 
@@ -218,12 +218,12 @@ public class ShoppingOrderItemUtil {
 	* @param orderId the order ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping order item
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
 	*/
 	public static ShoppingOrderItem[] findByOrderId_PrevAndNext(
 		long orderItemId, long orderId,
 		OrderByComparator<ShoppingOrderItem> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderItemException {
+		throws com.liferay.shopping.exception.NoSuchOrderItemException {
 		return getPersistence()
 				   .findByOrderId_PrevAndNext(orderItemId, orderId,
 			orderByComparator);
@@ -281,10 +281,10 @@ public class ShoppingOrderItemUtil {
 	*
 	* @param orderItemId the primary key of the shopping order item
 	* @return the shopping order item that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
 	*/
 	public static ShoppingOrderItem remove(long orderItemId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderItemException {
+		throws com.liferay.shopping.exception.NoSuchOrderItemException {
 		return getPersistence().remove(orderItemId);
 	}
 
@@ -294,14 +294,14 @@ public class ShoppingOrderItemUtil {
 	}
 
 	/**
-	* Returns the shopping order item with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderItemException} if it could not be found.
+	* Returns the shopping order item with the primary key or throws a {@link com.liferay.shopping.NoSuchOrderItemException} if it could not be found.
 	*
 	* @param orderItemId the primary key of the shopping order item
 	* @return the shopping order item
-	* @throws com.liferay.portlet.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderItemException if a shopping order item with the primary key could not be found
 	*/
 	public static ShoppingOrderItem findByPrimaryKey(long orderItemId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderItemException {
+		throws com.liferay.shopping.exception.NoSuchOrderItemException {
 		return getPersistence().findByPrimaryKey(orderItemId);
 	}
 

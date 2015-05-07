@@ -12,13 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.service.persistence;
+package com.liferay.shopping.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.service.persistence.BasePersistence;
 
-import com.liferay.portlet.shopping.model.ShoppingOrder;
+import com.liferay.shopping.model.ShoppingOrder;
 
 /**
  * The persistence interface for the shopping order service.
@@ -28,7 +28,7 @@ import com.liferay.portlet.shopping.model.ShoppingOrder;
  * </p>
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.shopping.service.persistence.impl.ShoppingOrderPersistenceImpl
+ * @see com.liferay.shopping.service.persistence.impl.ShoppingOrderPersistenceImpl
  * @see ShoppingOrderUtil
  * @generated
  */
@@ -86,11 +86,11 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByGroupId_First(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the first shopping order in the ordered set where groupId = &#63;.
@@ -108,11 +108,11 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByGroupId_Last(long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the last shopping order in the ordered set where groupId = &#63;.
@@ -131,12 +131,12 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param groupId the group ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
 	*/
 	public ShoppingOrder[] findByGroupId_PrevAndNext(long orderId,
 		long groupId,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Removes all the shopping orders where groupId = &#63; from the database.
@@ -154,14 +154,14 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	public int countByGroupId(long groupId);
 
 	/**
-	* Returns the shopping order where number = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	* Returns the shopping order where number = &#63; or throws a {@link com.liferay.shopping.NoSuchOrderException} if it could not be found.
 	*
 	* @param number the number
 	* @return the matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByNumber(java.lang.String number)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the shopping order where number = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -188,7 +188,7 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @return the shopping order that was removed
 	*/
 	public ShoppingOrder removeByNumber(java.lang.String number)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the number of shopping orders where number = &#63;.
@@ -199,14 +199,14 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	public int countByNumber(java.lang.String number);
 
 	/**
-	* Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	* Returns the shopping order where ppTxnId = &#63; or throws a {@link com.liferay.shopping.NoSuchOrderException} if it could not be found.
 	*
 	* @param ppTxnId the pp txn ID
 	* @return the matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByPPTxnId(java.lang.String ppTxnId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the shopping order where ppTxnId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
@@ -233,7 +233,7 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @return the shopping order that was removed
 	*/
 	public ShoppingOrder removeByPPTxnId(java.lang.String ppTxnId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the number of shopping orders where ppTxnId = &#63;.
@@ -298,12 +298,12 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param ppPaymentStatus the pp payment status
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByG_U_PPPS_First(long groupId, long userId,
 		java.lang.String ppPaymentStatus,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the first shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
@@ -326,12 +326,12 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param ppPaymentStatus the pp payment status
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a matching shopping order could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a matching shopping order could not be found
 	*/
 	public ShoppingOrder findByG_U_PPPS_Last(long groupId, long userId,
 		java.lang.String ppPaymentStatus,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the last shopping order in the ordered set where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63;.
@@ -355,12 +355,12 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	* @param ppPaymentStatus the pp payment status
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
 	*/
 	public ShoppingOrder[] findByG_U_PPPS_PrevAndNext(long orderId,
 		long groupId, long userId, java.lang.String ppPaymentStatus,
 		com.liferay.portal.kernel.util.OrderByComparator<ShoppingOrder> orderByComparator)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Removes all the shopping orders where groupId = &#63; and userId = &#63; and ppPaymentStatus = &#63; from the database.
@@ -410,22 +410,22 @@ public interface ShoppingOrderPersistence extends BasePersistence<ShoppingOrder>
 	*
 	* @param orderId the primary key of the shopping order
 	* @return the shopping order that was removed
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
 	*/
 	public ShoppingOrder remove(long orderId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	public ShoppingOrder updateImpl(ShoppingOrder shoppingOrder);
 
 	/**
-	* Returns the shopping order with the primary key or throws a {@link com.liferay.portlet.shopping.NoSuchOrderException} if it could not be found.
+	* Returns the shopping order with the primary key or throws a {@link com.liferay.shopping.NoSuchOrderException} if it could not be found.
 	*
 	* @param orderId the primary key of the shopping order
 	* @return the shopping order
-	* @throws com.liferay.portlet.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
+	* @throws com.liferay.shopping.NoSuchOrderException if a shopping order with the primary key could not be found
 	*/
 	public ShoppingOrder findByPrimaryKey(long orderId)
-		throws com.liferay.portlet.shopping.exception.NoSuchOrderException;
+		throws com.liferay.shopping.exception.NoSuchOrderException;
 
 	/**
 	* Returns the shopping order with the primary key or returns <code>null</code> if it could not be found.
