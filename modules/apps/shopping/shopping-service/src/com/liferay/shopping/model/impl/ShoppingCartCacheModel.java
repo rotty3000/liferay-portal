@@ -12,7 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.model.impl;
+package com.liferay.shopping.web.model.impl;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.Date;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,15 +26,7 @@ import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
-
 import com.liferay.portlet.shopping.model.ShoppingCart;
-
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
-import java.util.Date;
 
 /**
  * The cache model class for representing ShoppingCart in entity cache.
