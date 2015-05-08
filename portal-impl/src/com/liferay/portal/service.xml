@@ -2130,6 +2130,12 @@
 			<finder-column name="scope" />
 			<finder-column name="primKey" />
 		</finder>
+		<finder name="C_N_S_PI" return-type="Collection" unique="false" db-index="true">
+			<finder-column name="companyId" />
+			<finder-column name="name" />
+			<finder-column name="scope" />
+			<finder-column name="primKeyId" />
+		</finder>
 		<finder name="C_N_S_P_R" return-type="Collection" unique="true">
 			<finder-column name="companyId" />
 			<finder-column name="name" />
@@ -2137,7 +2143,14 @@
 			<finder-column name="primKey" />
 			<finder-column name="roleId" arrayable-operator="OR" />
 		</finder>
-
+		<finder name="C_N_S_PI_R" return-type="Collection" unique="false" db-index="true">
+			<finder-column name="companyId" />
+			<finder-column name="name" />
+			<finder-column name="scope" />
+			<finder-column name="primKeyId" />
+			<finder-column name="roleId" arrayable-operator="OR" />
+		</finder>
+		
 		<!-- References -->
 
 		<reference package-path="com.liferay.portal" entity="Permission" />
