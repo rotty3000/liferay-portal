@@ -2102,6 +2102,7 @@
 		<column name="name" type="String" />
 		<column name="scope" type="int" />
 		<column name="primKey" type="String" />
+		<column name="primKeyId" type="long" />
 		<column name="roleId" type="long" />
 		<column name="ownerId" type="long" />
 		<column name="actionIds" type="long" />
