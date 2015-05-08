@@ -127,4 +127,23 @@ public class ResourcePermissionImpl extends ResourcePermissionBaseImpl {
 		setActionIds(getActionIds() & (~resourceAction.getBitwiseValue()));
 	}
 
+	@Override
+	public void setPrimKey(String primKey) {
+		long primKeyId = 0;
+		
+		try {
+			primKeyId = Long.valueOf(primKey);
+		}
+		catch(NumberFormatException ignore) {}
+		
+		super.setPrimKey(primKey);
+		super.setPrimKeyId(primKeyId);
+	};
+	
+	@Override
+	public void setPrimKeyId(long primKeyId) {
+		super.setPrimKeyId(primKeyId);
+		super.setPrimKey(String.valueOf(primKeyId));
+	};
+	
 }
