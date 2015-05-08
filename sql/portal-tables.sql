@@ -1621,6 +1621,7 @@ create table ResourcePermission (
 	name VARCHAR(255) null,
 	scope INTEGER,
 	primKey VARCHAR(255) null,
+	primKeyId LONG,
 	roleId LONG,
 	ownerId LONG,
 	actionIds LONG

@@ -4323,6 +4323,7 @@ public class ResourcePermissionPersistenceImpl extends BasePersistenceImpl<Resou
 		resourcePermissionImpl.setName(resourcePermission.getName());
 		resourcePermissionImpl.setScope(resourcePermission.getScope());
 		resourcePermissionImpl.setPrimKey(resourcePermission.getPrimKey());
+		resourcePermissionImpl.setPrimKeyId(resourcePermission.getPrimKeyId());
 		resourcePermissionImpl.setRoleId(resourcePermission.getRoleId());
 		resourcePermissionImpl.setOwnerId(resourcePermission.getOwnerId());
 		resourcePermissionImpl.setActionIds(resourcePermission.getActionIds());

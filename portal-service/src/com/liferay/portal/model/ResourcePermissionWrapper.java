@@ -57,6 +57,7 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 		attributes.put("name", getName());
 		attributes.put("scope", getScope());
 		attributes.put("primKey", getPrimKey());
+		attributes.put("primKeyId", getPrimKeyId());
 		attributes.put("roleId", getRoleId());
 		attributes.put("ownerId", getOwnerId());
 		attributes.put("actionIds", getActionIds());
@@ -100,6 +101,12 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 
 		if (primKey != null) {
 			setPrimKey(primKey);
+		}
+
+		Long primKeyId = (Long)attributes.get("primKeyId");
+
+		if (primKeyId != null) {
+			setPrimKeyId(primKeyId);
 		}
 
 		Long roleId = (Long)attributes.get("roleId");
@@ -201,6 +208,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public java.lang.String getPrimKey() {
 		return _resourcePermission.getPrimKey();
+	}
+
+	/**
+	* Returns the prim key ID of this resource permission.
+	*
+	* @return the prim key ID of this resource permission
+	*/
+	@Override
+	public long getPrimKeyId() {
+		return _resourcePermission.getPrimKeyId();
 	}
 
 	/**
@@ -375,6 +392,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public void setPrimKey(java.lang.String primKey) {
 		_resourcePermission.setPrimKey(primKey);
+	}
+
+	/**
+	* Sets the prim key ID of this resource permission.
+	*
+	* @param primKeyId the prim key ID of this resource permission
+	*/
+	@Override
+	public void setPrimKeyId(long primKeyId) {
+		_resourcePermission.setPrimKeyId(primKeyId);
 	}
 
 	/**

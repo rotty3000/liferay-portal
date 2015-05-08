@@ -148,6 +148,20 @@ public interface ResourcePermissionModel extends BaseModel<ResourcePermission>,
 	public void setPrimKey(String primKey);
 
 	/**
+	 * Returns the prim key ID of this resource permission.
+	 *
+	 * @return the prim key ID of this resource permission
+	 */
+	public long getPrimKeyId();
+
+	/**
+	 * Sets the prim key ID of this resource permission.
+	 *
+	 * @param primKeyId the prim key ID of this resource permission
+	 */
+	public void setPrimKeyId(long primKeyId);
+
+	/**
 	 * Returns the role ID of this resource permission.
 	 *
 	 * @return the role ID of this resource permission

@@ -824,6 +824,7 @@
 		<field name="primKey" type="String">
 			<hint name="max-length">255</hint>
 		</field>
+		<field name="primKeyId" type="long" />
 		<field name="roleId" type="long" />
 		<field name="ownerId" type="long" />
 		<field name="actionIds" type="long" />

@@ -70,11 +70,12 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 			{ "name", Types.VARCHAR },
 			{ "scope", Types.INTEGER },
 			{ "primKey", Types.VARCHAR },
+			{ "primKeyId", Types.BIGINT },
 			{ "roleId", Types.BIGINT },
 			{ "ownerId", Types.BIGINT },
 			{ "actionIds", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table ResourcePermission (mvccVersion LONG default 0,resourcePermissionId LONG not null primary key,companyId LONG,name VARCHAR(255) null,scope INTEGER,primKey VARCHAR(255) null,roleId LONG,ownerId LONG,actionIds LONG)";
+	public static final String TABLE_SQL_CREATE = "create table ResourcePermission (mvccVersion LONG default 0,resourcePermissionId LONG not null primary key,companyId LONG,name VARCHAR(255) null,scope INTEGER,primKey VARCHAR(255) null,primKeyId LONG,roleId LONG,ownerId LONG,actionIds LONG)";
 	public static final String TABLE_SQL_DROP = "drop table ResourcePermission";
 	public static final String ORDER_BY_JPQL = " ORDER BY resourcePermission.resourcePermissionId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY ResourcePermission.resourcePermissionId ASC";
@@ -116,6 +117,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		model.setName(soapModel.getName());
 		model.setScope(soapModel.getScope());
 		model.setPrimKey(soapModel.getPrimKey());
+		model.setPrimKeyId(soapModel.getPrimKeyId());
 		model.setRoleId(soapModel.getRoleId());
 		model.setOwnerId(soapModel.getOwnerId());
 		model.setActionIds(soapModel.getActionIds());
@@ -190,6 +192,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		attributes.put("name", getName());
 		attributes.put("scope", getScope());
 		attributes.put("primKey", getPrimKey());
+		attributes.put("primKeyId", getPrimKeyId());
 		attributes.put("roleId", getRoleId());
 		attributes.put("ownerId", getOwnerId());
 		attributes.put("actionIds", getActionIds());
@@ -236,6 +239,12 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 		if (primKey != null) {
 			setPrimKey(primKey);
+		}
+
+		Long primKeyId = (Long)attributes.get("primKeyId");
+
+		if (primKeyId != null) {
+			setPrimKeyId(primKeyId);
 		}
 
 		Long roleId = (Long)attributes.get("roleId");
@@ -379,6 +388,17 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	@JSON
 	@Override
+	public long getPrimKeyId() {
+		return _primKeyId;
+	}
+
+	@Override
+	public void setPrimKeyId(long primKeyId) {
+		_primKeyId = primKeyId;
+	}
+
+	@JSON
+	@Override
 	public long getRoleId() {
 		return _roleId;
 	}
@@ -459,6 +479,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		resourcePermissionImpl.setName(getName());
 		resourcePermissionImpl.setScope(getScope());
 		resourcePermissionImpl.setPrimKey(getPrimKey());
+		resourcePermissionImpl.setPrimKeyId(getPrimKeyId());
 		resourcePermissionImpl.setRoleId(getRoleId());
 		resourcePermissionImpl.setOwnerId(getOwnerId());
 		resourcePermissionImpl.setActionIds(getActionIds());
@@ -571,6 +592,8 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 			resourcePermissionCacheModel.primKey = null;
 		}
 
+		resourcePermissionCacheModel.primKeyId = getPrimKeyId();
+
 		resourcePermissionCacheModel.roleId = getRoleId();
 
 		resourcePermissionCacheModel.ownerId = getOwnerId();
@@ -582,7 +605,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{mvccVersion=");
 		sb.append(getMvccVersion());
@@ -596,6 +619,8 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		sb.append(getScope());
 		sb.append(", primKey=");
 		sb.append(getPrimKey());
+		sb.append(", primKeyId=");
+		sb.append(getPrimKeyId());
 		sb.append(", roleId=");
 		sb.append(getRoleId());
 		sb.append(", ownerId=");
@@ -609,7 +634,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(34);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.model.ResourcePermission");
@@ -638,6 +663,10 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 		sb.append(
 			"<column><column-name>primKey</column-name><column-value><![CDATA[");
 		sb.append(getPrimKey());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>primKeyId</column-name><column-value><![CDATA[");
+		sb.append(getPrimKeyId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>roleId</column-name><column-value><![CDATA[");
@@ -673,6 +702,7 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	private boolean _setOriginalScope;
 	private String _primKey;
 	private String _originalPrimKey;
+	private long _primKeyId;
 	private long _roleId;
 	private long _originalRoleId;
 	private boolean _setOriginalRoleId;

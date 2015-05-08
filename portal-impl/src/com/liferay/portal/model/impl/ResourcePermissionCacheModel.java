@@ -77,7 +77,7 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -91,6 +91,8 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 		sb.append(scope);
 		sb.append(", primKey=");
 		sb.append(primKey);
+		sb.append(", primKeyId=");
+		sb.append(primKeyId);
 		sb.append(", roleId=");
 		sb.append(roleId);
 		sb.append(", ownerId=");
@@ -126,6 +128,7 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 			resourcePermissionImpl.setPrimKey(primKey);
 		}
 
+		resourcePermissionImpl.setPrimKeyId(primKeyId);
 		resourcePermissionImpl.setRoleId(roleId);
 		resourcePermissionImpl.setOwnerId(ownerId);
 		resourcePermissionImpl.setActionIds(actionIds);
@@ -143,6 +146,7 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 		name = objectInput.readUTF();
 		scope = objectInput.readInt();
 		primKey = objectInput.readUTF();
+		primKeyId = objectInput.readLong();
 		roleId = objectInput.readLong();
 		ownerId = objectInput.readLong();
 		actionIds = objectInput.readLong();
@@ -171,6 +175,7 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 			objectOutput.writeUTF(primKey);
 		}
 
+		objectOutput.writeLong(primKeyId);
 		objectOutput.writeLong(roleId);
 		objectOutput.writeLong(ownerId);
 		objectOutput.writeLong(actionIds);
@@ -182,6 +187,7 @@ public class ResourcePermissionCacheModel implements CacheModel<ResourcePermissi
 	public String name;
 	public int scope;
 	public String primKey;
+	public long primKeyId;
 	public long roleId;
 	public long ownerId;
 	public long actionIds;
