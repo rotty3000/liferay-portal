@@ -7,6 +7,8 @@ AUI.add(
 
 		var NAME = 'assetaddonentryselector';
 
+		var STR_ASSET_ADDON_ENTRIES = 'assetAddonEntries';
+
 		var STR_BLANK = '';
 
 		var STR_CHECKED = 'checked';
@@ -15,13 +17,11 @@ AUI.add(
 
 		var STR_DATA_KEY = 'data-key';
 
-		var STR_ENTRIES = 'entries';
-
 		var STR_INPUT = 'input';
 
-		var STR_SELECTED_ENTRIES = 'selectedEntries';
+		var STR_SELECTED_ASSET_ADDON_ENTRIES = 'selectedAssetAddonEntries';
 
-		var TPL_SELECT_ENTRY = '<li>' +
+		var TPL_STR_SELECTED_ASSET_ADDON_ENTRY = '<li>' +
 				'<label>' +
 					'<input {checked} class="toggle-card" data-key={key} data-label={label} type="checkbox">' +
 					'<div class="toggle-card-container">' +
@@ -40,7 +40,7 @@ AUI.add(
 
 		var TPL_SELECT_LIST = '<ul class="list-inline list-unstyled">{entries}</ul>';
 
-		var TPL_SUMMARY_ENTRY = '<li class="list-entry" data-key="{key}" data-label="{label}">' +
+		var TPL_SUMMARY_ASSET_ADDON_ENTRY = '<li class="list-entry" data-key="{key}" data-label="{label}">' +
 				'<span class="label label-entry label-circle">' +
 					'{label}' +
 					'<button class="remove-button" type="button">' +
@@ -52,17 +52,17 @@ AUI.add(
 		var AssetAddonEntrySelector = A.Component.create(
 			{
 				ATTRS: {
+					assetAddonEntries: {
+						setter: '_setAssetAddonEntries',
+						validator: Lang.isArray
+					},
+
 					dialogTitle: {
 						validator: Lang.isString,
 						value: Liferay.Language.get('select-entries')
 					},
 
-					entries: {
-						setter: '_setEntries',
-						validator: Lang.isArray
-					},
-
-					selectedEntries: {
+					selectedAssetAddonEntries: {
 						validator: Lang.isArray
 					}
 				},
@@ -93,7 +93,7 @@ AUI.add(
 						var instance = this;
 
 						instance._eventHandles = [
-							instance.after('selectedEntriesChange', instance._syncUI, instance),
+							instance.after('selectedAssetAddonEntriesChange', instance._syncUI, instance),
 							instance.one('.select-button').on(STR_CLICK, instance._onSelectClick, instance),
 							instance.one('.selected-entries').delegate(STR_CLICK, instance._onSummaryItemRemove, '.remove-button', instance)
 						];
@@ -129,15 +129,15 @@ AUI.add(
 					_getSelectDialogContent: function() {
 						var instance = this;
 
-						var selectedEntries = instance.get(STR_SELECTED_ENTRIES);
+						var selectedAssetAddonEntries = instance.get(STR_SELECTED_ASSET_ADDON_ENTRIES);
 
 						var entriesContent = AArray.reduce(
-							instance.get(STR_ENTRIES),
+							instance.get(STR_ASSET_ADDON_ENTRIES),
 							STR_BLANK,
 							function(previousValue, currentValue) {
-								currentValue.checked = (selectedEntries.indexOf(currentValue.key) !== -1) ? STR_CHECKED : STR_BLANK;
+								currentValue.checked = selectedAssetAddonEntries.indexOf(currentValue.key) !== -1 ? STR_CHECKED : STR_BLANK;
 
-								return previousValue + Lang.sub(TPL_SELECT_ENTRY, currentValue);
+								return previousValue + Lang.sub(TPL_STR_SELECTED_ASSET_ADDON_ENTRY, currentValue);
 							}
 						);
 
@@ -187,21 +187,21 @@ AUI.add(
 					_onSummaryItemRemove: function(event) {
 						var instance = this;
 
-						var selectedEntries = instance.get(STR_SELECTED_ENTRIES);
+						var selectedAssetAddonEntries = instance.get(STR_SELECTED_ASSET_ADDON_ENTRIES);
 
 						var removedItem = event.currentTarget.ancestor('.list-entry').attr(STR_DATA_KEY);
 
-						selectedEntries = AArray.filter(
-							selectedEntries,
+						selectedAssetAddonEntries = AArray.filter(
+							selectedAssetAddonEntries,
 							function(item) {
 								return item !== removedItem;
 							}
 						);
 
-						instance.set(STR_SELECTED_ENTRIES, selectedEntries);
+						instance.set(STR_SELECTED_ASSET_ADDON_ENTRIES, selectedAssetAddonEntries);
 					},
 
-					_setEntries: function(val) {
+					_setAssetAddonEntries: function(val) {
 						var instance = this;
 
 						var entriesMap = {};
@@ -226,28 +226,28 @@ AUI.add(
 					_syncUI: function() {
 						var instance = this;
 
-						var entries = instance.get(STR_ENTRIES);
+						var entries = instance.get(STR_ASSET_ADDON_ENTRIES);
 
-						var selectedEntries = instance.get(STR_SELECTED_ENTRIES);
+						var selectedAssetAddonEntries = instance.get(STR_SELECTED_ASSET_ADDON_ENTRIES);
 
-						var selectedEntriesNode = instance.one('.selected-entries');
+						var selectedAssetAddonEntriesNode = instance.one('.selected-entries');
 
-						selectedEntriesNode.empty();
+						selectedAssetAddonEntriesNode.empty();
 
 						instance._selectDialogContent.all(STR_INPUT).attr(STR_CHECKED, false);
 
 						AArray.each(
-							selectedEntries,
+							selectedAssetAddonEntries,
 							function(item) {
-								selectedEntriesNode.append(
-									Lang.sub(TPL_SUMMARY_ENTRY, instance._entriesMap[item])
+								selectedAssetAddonEntriesNode.append(
+									Lang.sub(TPL_SUMMARY_ASSET_ADDON_ENTRY, instance._entriesMap[item])
 								);
 
 								instance._selectDialogContent.one('input[data-key="' + item + '"]').attr(STR_CHECKED, true);
 							}
 						);
 
-						instance.one(STR_INPUT).val(selectedEntries.join(','));
+						instance.one(STR_INPUT).val(selectedAssetAddonEntries.join(','));
 					},
 
 					_updateSelectedEntries: function() {
@@ -255,15 +255,15 @@ AUI.add(
 
 						var dialog = instance._getSelectDialog();
 
-						var selectedEntries = [];
+						var selectedAssetAddonEntries = [];
 
 						dialog.bodyNode.all('input:checked').each(
 							function(item) {
-								selectedEntries.push(item.attr(STR_DATA_KEY));
+								selectedAssetAddonEntries.push(item.attr(STR_DATA_KEY));
 							}
 						);
 
-						instance.set(STR_SELECTED_ENTRIES, selectedEntries);
+						instance.set(STR_SELECTED_ASSET_ADDON_ENTRIES, selectedAssetAddonEntries);
 
 						instance._hideSelectDialog();
 					}
