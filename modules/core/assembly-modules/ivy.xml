@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+
+<ivy-module
+	version="2.0"
+	xmlns:m2="http://ant.apache.org/ivy/maven"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+>
+	<info module="${plugin.name}" organisation="com.liferay">
+		<extends extendType="configurations,description,info" location="${sdk.dir}/ivy.xml" module="com.liferay.sdk" organisation="com.liferay" revision="latest.integration" />
+	</info>
+
+	<publications>
+		<artifact type="jar" />
+		<artifact type="pom" />
+		<artifact m2:classifier="sources" />
+	</publications>
+
+	<dependencies defaultconf="default">
+		<dependency name="com.liferay.amazon.rankings.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.browser.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.categories.admin.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.categories.navigation.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.publisher.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.tag.admin.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.tags.compiler.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.asset.tags.navigation.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.blogs.editor.config" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.blogs.portlet.toolbar.contributor" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.blogs.ratings.definition" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.bookmarks.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.bookmarks.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.bookmarks.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.comments.editor.config" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.comments.ratings.definition" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.comments.sanitizer" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.configuration.admin.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.currency.converter.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dictionary.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.document.library.google.docs" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.document.library.ratings.definition" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.document.library.repository.cmis" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.document.library.repository.cmis.impl" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.document.library.repository.search" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.lists.form.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.form.renderer" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.form.values.factory" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.form.values.query" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.type.checkbox" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.type.text" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.dynamic.data.mapping.validator" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.hello.velocity.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.iframe.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.invitation.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.item.selector.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.item.selector.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.journal.content.search.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.journal.content.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.journal.ratings.definition" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.journal.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.layout.prototype.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.layout.set.prototype.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.loan.calculator.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.marketplace.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.marketplace.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.marketplace.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.mentions.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.mentions.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.mentions.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.message.boards.ratings.definition" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.nested.portlets.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.network.utilities.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.password.generator.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.polls.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.polls.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.polls.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portlet.css.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.productivity.center.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.productivity.center.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.productivity.center.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.quick.note.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.rss.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.search.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.service.access.control.profile.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.service.access.control.profile.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.browser.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.my.sites.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.navigation.breadcrumb.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.navigation.directory.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.navigation.language.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.navigation.menu.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.navigation.site.map.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.site.teams.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.social.activities.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.social.networking.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.social.networking.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.social.networking.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.translator.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.trash.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.unit.converter.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.web.proxy.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.wiki.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.wiki.item.selector.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.wiki.service" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.wiki.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.workflow.definition.link.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.xsl.content.web" org="com.liferay" rev="1.0.0" />
+	</dependencies>
+</ivy-module>
