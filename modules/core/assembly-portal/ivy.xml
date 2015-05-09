@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<ivy-module
+	version="2.0"
+	xmlns:m2="http://ant.apache.org/ivy/maven"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+>
+	<info module="${plugin.name}" organisation="com.liferay">
+		<extends extendType="configurations,description,info" location="${sdk.dir}/ivy.xml" module="com.liferay.sdk" organisation="com.liferay" revision="latest.integration" />
+	</info>
+
+	<publications>
+		<artifact type="jar" />
+		<artifact type="pom" />
+		<artifact m2:classifier="sources" />
+	</publications>
+
+	<dependencies defaultconf="default">
+		<dependency name="com.liferay.frontend.alloy.editor.config" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.frontend.js.web" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.authenticator.ldap" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.axis.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.cluster" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.cxf.common" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.dependency.manager.tccl" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.executor" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.expression" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.http.service.api" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.jmx" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.json.web.service.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.json.web.service.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.ldap" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.monitoring" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.parser.bbcode" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.portlet.toolbar.contributor.locator" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.portlet.tracker" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.search.elasticsearch" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.servlet.jsp.compiler" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.servlet.jstl" org="com.liferay" rev="1.2.3" />
+		<dependency name="com.liferay.portal.settings" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.soap.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.spring.extender" org="com.liferay" rev="1.0.1" />
+		<dependency name="com.liferay.portal.sso.cas" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.sso.facebook.connect" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.sso.ntlm" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.sso.openid" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.sso.opensso" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.sso.token" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.template.freemarker" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.template.soy" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.template.velocity" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.template.xsl" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.verify.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.wab.extender" org="com.liferay" rev="1.0.0" />
+		<dependency name="com.liferay.portal.wab.generator" org="com.liferay" rev="1.0.0" />
+	</dependencies>
+</ivy-module>
