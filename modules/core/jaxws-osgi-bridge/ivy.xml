@@ -17,6 +17,7 @@
 	</publications>
 
 	<dependencies defaultconf="default">
+		<dependency name="com.liferay.registry.api" org="com.liferay" rev="1.0.0" />
 		<dependency name="jaxws-api" org="javax.xml.ws" rev="2.2.11" />
 	</dependencies>
 </ivy-module>

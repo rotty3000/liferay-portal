@@ -2,7 +2,5 @@
 <!DOCTYPE project>
 
 <project>
-	<property name="import.shared" value="registry-api,registry-impl" />
-
 	<import file="../../../tools/sdk/build-common-osgi-plugin.xml" />
 </project>
