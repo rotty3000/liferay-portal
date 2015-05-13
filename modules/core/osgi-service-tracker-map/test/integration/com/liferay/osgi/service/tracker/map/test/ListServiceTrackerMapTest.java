@@ -146,7 +146,7 @@ public class ListServiceTrackerMapTest {
 	}
 
 	@Test
-	public void testGetServicesIsNullAfterDeregistration() {
+	public void testGetServicesIsEmptyAfterDeregistration() {
 		ServiceTrackerMap<String, List<TrackedOne>> serviceTrackerMap =
 			createServiceTrackerMap(_bundleContext);
 
@@ -155,12 +155,12 @@ public class ListServiceTrackerMapTest {
 		ServiceRegistration<TrackedOne> serviceRegistration2 = registerService(
 			new TrackedOne());
 
-		Assert.assertNotNull(serviceTrackerMap.getService("aTarget"));
+		Assert.assertFalse(serviceTrackerMap.getService("aTarget").isEmpty());
 
 		serviceRegistration1.unregister();
 		serviceRegistration2.unregister();
 
-		Assert.assertNull(serviceTrackerMap.getService("aTarget"));
+		Assert.assertTrue(serviceTrackerMap.getService("aTarget").isEmpty());
 	}
 
 	@Test

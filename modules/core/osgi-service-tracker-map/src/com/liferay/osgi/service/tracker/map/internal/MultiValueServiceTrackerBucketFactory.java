@@ -49,6 +49,11 @@ public class MultiValueServiceTrackerBucketFactory<SR, TS>
 		return new ListServiceTrackerBucket();
 	}
 
+	@Override
+	public List<TS> getNullValue() {
+		return Collections.emptyList();
+	}
+
 	private final Comparator<ServiceReference<SR>> _comparator;
 
 	private class ListServiceTrackerBucket
