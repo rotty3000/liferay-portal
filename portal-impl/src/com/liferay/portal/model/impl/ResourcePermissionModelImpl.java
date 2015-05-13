@@ -94,9 +94,10 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	public static final long COMPANYID_COLUMN_BITMASK = 1L;
 	public static final long NAME_COLUMN_BITMASK = 2L;
 	public static final long PRIMKEY_COLUMN_BITMASK = 4L;
-	public static final long ROLEID_COLUMN_BITMASK = 8L;
-	public static final long SCOPE_COLUMN_BITMASK = 16L;
-	public static final long RESOURCEPERMISSIONID_COLUMN_BITMASK = 32L;
+	public static final long PRIMKEYID_COLUMN_BITMASK = 8L;
+	public static final long ROLEID_COLUMN_BITMASK = 16L;
+	public static final long SCOPE_COLUMN_BITMASK = 32L;
+	public static final long RESOURCEPERMISSIONID_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -394,7 +395,19 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 	@Override
 	public void setPrimKeyId(long primKeyId) {
+		_columnBitmask |= PRIMKEYID_COLUMN_BITMASK;
+
+		if (!_setOriginalPrimKeyId) {
+			_setOriginalPrimKeyId = true;
+
+			_originalPrimKeyId = _primKeyId;
+		}
+
 		_primKeyId = primKeyId;
+	}
+
+	public long getOriginalPrimKeyId() {
+		return _originalPrimKeyId;
 	}
 
 	@JSON
@@ -557,6 +570,10 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 
 		resourcePermissionModelImpl._originalPrimKey = resourcePermissionModelImpl._primKey;
 
+		resourcePermissionModelImpl._originalPrimKeyId = resourcePermissionModelImpl._primKeyId;
+
+		resourcePermissionModelImpl._setOriginalPrimKeyId = false;
+
 		resourcePermissionModelImpl._originalRoleId = resourcePermissionModelImpl._roleId;
 
 		resourcePermissionModelImpl._setOriginalRoleId = false;
@@ -703,6 +720,8 @@ public class ResourcePermissionModelImpl extends BaseModelImpl<ResourcePermissio
 	private String _primKey;
 	private String _originalPrimKey;
 	private long _primKeyId;
+	private long _originalPrimKeyId;
+	private boolean _setOriginalPrimKeyId;
 	private long _roleId;
 	private long _originalRoleId;
 	private boolean _setOriginalRoleId;
