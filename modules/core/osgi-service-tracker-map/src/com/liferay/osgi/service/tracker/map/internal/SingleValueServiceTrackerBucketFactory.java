@@ -46,6 +46,11 @@ public class SingleValueServiceTrackerBucketFactory<SR, TS>
 		return new SingleBucket();
 	}
 
+	@Override
+	public TS getNullValue() {
+		return null;
+	}
+
 	private final Comparator<ServiceReference<SR>> _comparator;
 
 	private class SingleBucket implements ServiceTrackerBucket<SR, TS, TS> {

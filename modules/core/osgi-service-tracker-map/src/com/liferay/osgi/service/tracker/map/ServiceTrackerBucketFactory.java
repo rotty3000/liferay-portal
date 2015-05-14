@@ -21,4 +21,6 @@ public interface ServiceTrackerBucketFactory<SR, TS, R> {
 
 	public ServiceTrackerBucket<SR, TS, R> create();
 
+	public R getNullValue();
+
 }

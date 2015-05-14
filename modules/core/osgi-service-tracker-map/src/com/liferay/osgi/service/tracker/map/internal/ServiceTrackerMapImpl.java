@@ -81,7 +81,7 @@ public class ServiceTrackerMapImpl<K, SR, TS, R>
 			_serviceTrackerBuckets.get(key);
 
 		if (serviceTrackerBucket == null) {
-			return null;
+			return _serviceTrackerMapBucketFactory.getNullValue();
 		}
 
 		return serviceTrackerBucket.getContent();
