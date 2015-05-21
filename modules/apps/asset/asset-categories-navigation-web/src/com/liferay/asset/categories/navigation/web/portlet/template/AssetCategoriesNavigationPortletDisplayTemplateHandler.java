@@ -16,6 +16,7 @@ package com.liferay.asset.categories.navigation.web.portlet.template;
 
 import com.liferay.asset.categories.navigation.web.configuration.AssetCategoriesNavigationWebConfigurationValues;
 import com.liferay.asset.categories.navigation.web.constants.AssetCategoriesNavigationPortletKeys;
+import com.liferay.asset.categories.navigation.web.display.context.AssetCategoriesNavigationDisplayContext;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portletdisplaytemplate.BasePortletDisplayTemplateHandler;
 import com.liferay.portal.kernel.template.TemplateHandler;
@@ -86,6 +87,10 @@ public class AssetCategoriesNavigationPortletDisplayTemplateHandler
 
 		templateVariableGroup.empty();
 
+		templateVariableGroup.addVariable(
+			"asset-categories-navigation-display-context",
+			AssetCategoriesNavigationDisplayContext.class,
+			"assetCategoriesNavigationDisplayContext");
 		templateVariableGroup.addCollectionVariable(
 			"vocabularies", List.class, PortletDisplayTemplateConstants.ENTRIES,
 			"vocabulary", AssetVocabulary.class, "curVocabulary", "name");

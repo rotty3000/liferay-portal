@@ -23,6 +23,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateConstants;
 import com.liferay.rss.web.configuration.RSSWebConfigurationValues;
 import com.liferay.rss.web.constants.RSSPortletKeys;
+import com.liferay.rss.web.display.context.RSSDisplayContext;
 import com.liferay.rss.web.util.RSSFeed;
 
 import java.util.List;
@@ -77,6 +78,9 @@ public class RSSPortletDisplayTemplateHandler
 
 		templateVariableGroup.empty();
 
+		templateVariableGroup.addVariable(
+			"rss-display-context", RSSDisplayContext.class,
+			"rssDisplayContext");
 		templateVariableGroup.addCollectionVariable(
 			"rss-feeds", List.class, PortletDisplayTemplateConstants.ENTRIES,
 			"rss-feed", RSSFeed.class, "curEntry", "getSyndFeed().getTitle()");
