@@ -263,8 +263,7 @@ Set<String> contextNames = JSONWebServiceActionsManagerUtil.getContextNames();
 				var activeServiceNode = services;
 
 				if (query) {
-					AArray.each(
-						results,
+					results.forEach(
 						function(item, index) {
 							var raw = item.raw;
 							var el = raw.el;

@@ -81,11 +81,11 @@ public abstract class BaseDDMTemplateHandler extends BaseTemplateHandler {
 		TemplateVariableGroup templateVariableGroup = new TemplateVariableGroup(
 			"general-variables");
 
+		templateVariableGroup.addVariable("device", Device.class, "device");
 		templateVariableGroup.addVariable(
 			"portal-instance", Company.class, "company");
 		templateVariableGroup.addVariable(
 			"portal-instance-id", null, "companyId");
-		templateVariableGroup.addVariable("device", Device.class, "device");
 		templateVariableGroup.addVariable("site-id", null, "groupId");
 		templateVariableGroup.addVariable(
 			"view-mode", String.class, "viewMode");
