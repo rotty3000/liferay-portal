@@ -225,9 +225,9 @@ AUI.add(
 								},
 								eventName: instance.ns(STR_SELECT_STRUCTURE),
 								groupId: ddm.groupId,
+								mvcPath: '/select_structure.jsp',
 								refererPortletName: ddm.refererPortletName,
 								showAncestorScopes: true,
-								struts_action: '/dynamic_data_mapping/select_structure',
 								title: strings.structures
 							},
 							function(event) {
@@ -267,10 +267,10 @@ AUI.add(
 								},
 								eventName: instance.ns(STR_SELECT_TEMPLATE),
 								groupId: ddm.groupId,
+								mvcPath: '/select_template.jsp',
 								refererPortletName: ddm.refererPortletName,
 								showAncestorScopes: true,
 								resourceClassNameId: ddm.resourceClassNameId,
-								struts_action: '/dynamic_data_mapping/select_template',
 								templateId: ddm.templateId,
 								title: strings.templates
 							},

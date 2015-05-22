@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 
-<project name="build-common-java" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="build-common-java" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<import file="build-common.xml" />
 
-	<macrodef name="clean-common">
-		<element name="clean-extra" optional="true" />
+	<macrodef name="clean">
+		<sequential>
+			<clean-cmd />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="clean-cmd">
+		<element name="clean-post" optional="true" />
 
 		<sequential>
 			<delete dir="classes" />
@@ -13,11 +19,12 @@
 			<delete dir="test-results" />
 			<delete dir="woven-classes" />
 			<delete dir="${doc.dir}/${ant.project.name}/javadocs" />
+			<delete file="${deploy.dir}/${jar.file}.jar" failonerror="false" />
 			<delete file="${jar.file}.jar" failonerror="false" />
 			<delete file="${jar.file}-javadoc.jar" failonerror="false" />
 			<delete file="${jar.file}-sources.jar" failonerror="false" />
 
-			<clean-extra />
+			<clean-post />
 		</sequential>
 	</macrodef>
 
@@ -89,6 +96,45 @@
 					<compile-java-post />
 
 					<echo file="@{javac.destdir}/.touch"></echo>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="deploy">
+		<attribute name="deploy.dir" />
+		<attribute name="jar.file" />
+		<attribute name="src.dir" />
+
+		<sequential>
+			<deploy-cmd
+				deploy.dir="@{deploy.dir}"
+				jar.file="@{jar.file}"
+				src.dir="@{src.dir}"
+			/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="deploy-cmd">
+		<attribute default="true" name="copy.jar" />
+		<attribute name="deploy.dir" />
+		<attribute name="jar.file" />
+		<attribute name="src.dir" />
+		<element name="deploy-post" optional="true" />
+
+		<sequential>
+			<if>
+				<not>
+					<uptodate targetfile="@{deploy.dir}/@{jar.file}.jar">
+						<srcfiles dir="@{src.dir}" includes="bnd.bnd,build.xml,ivy.xml,src/**/*.*" />
+					</uptodate>
+				</not>
+				<then>
+					<jar-marco />
+
+					<copy if:true="@{copy.jar}" file="@{jar.file}.jar" todir="@{deploy.dir}" preservelastmodified="true" />
+
+					<deploy-post />
 				</then>
 			</if>
 		</sequential>
@@ -171,24 +217,20 @@
 		</else>
 	</if>
 
-	<target name="check-deploy-uptodate">
-		<uptodate property="deploy.uptodate" targetfile="${deploy.dir}/${jar.file}.jar">
-			<srcfiles dir="${basedir}" includes="bnd.bnd,build.xml,ivy.xml,src/**/*.*" />
-		</uptodate>
-	</target>
-
 	<target name="clean">
-		<clean-common />
+		<clean />
 	</target>
 
 	<target name="compile">
 		<compile-java />
 	</target>
 
-	<target name="deploy" depends="check-deploy-uptodate" unless="${deploy.uptodate}">
-		<jar-marco />
-
-		<copy file="${jar.file}.jar" todir="${deploy.dir}" preservelastmodified="true" />
+	<target name="deploy">
+		<deploy
+			deploy.dir="${deploy.dir}"
+			jar.file="${jar.file}"
+			src.dir="${basedir}"
+		/>
 	</target>
 
 	<target name="jar">

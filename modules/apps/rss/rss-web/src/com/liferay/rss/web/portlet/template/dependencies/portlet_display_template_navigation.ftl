@@ -2,6 +2,8 @@
 <#assign liferay_portlet = taglibLiferayHash["/WEB-INF/tld/liferay-portlet.tld"] />
 <#assign liferay_ui = taglibLiferayHash["/WEB-INF/tld/liferay-ui.tld"] />
 
+<#assign rssPortletInstanceConfiguration = rssDisplayContext.getRSSPortletInstanceConfiguration() />
+
 <style>
 	.portlet-rss .feed-entry-content {
 		margin-bottom: 20px;
@@ -38,7 +40,7 @@
 										<@aui["a"] href="${htmlUtil.escapeJSLink(rssFeedEntry.getSyndEntryLink())}">${htmlUtil.escape(syndEntry.getTitle())}</@>
 									</div>
 
-									<#if getterUtil.getBoolean(showFeedItemAuthor) && syndEntry.getAuthor()??>
+									<#if rssPortletInstanceConfiguration.showFeedTitle() && syndEntry.getAuthor()??>
 										<div class="feed-entry-author">
 											${htmlUtil.escape(syndEntry.getAuthor())}
 										</div>

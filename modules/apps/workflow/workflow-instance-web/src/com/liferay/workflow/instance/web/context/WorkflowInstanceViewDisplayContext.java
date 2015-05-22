@@ -130,7 +130,7 @@ public class WorkflowInstanceViewDisplayContext
 			HtmlUtil.escape(workflowInstance.getState()));
 	}
 
-	public String getTabs2Param() {
+	public String getTabs2() {
 		return ParamUtil.getString(renderRequest, "tabs2", "pending");
 	}
 
@@ -138,7 +138,7 @@ public class WorkflowInstanceViewDisplayContext
 		PortletURL portletURL = renderResponse.createRenderURL();
 
 		portletURL.setParameter("tabs1", "submissions");
-		portletURL.setParameter("tabs2", getTabs2Param());
+		portletURL.setParameter("tabs2", getTabs2());
 
 		return portletURL;
 	}
@@ -193,7 +193,9 @@ public class WorkflowInstanceViewDisplayContext
 	}
 
 	protected boolean isShowCompletedInstances() {
-		if ("completed".equals(getTabs2Param())) {
+		String tabs2 = getTabs2();
+
+		if (tabs2.equals("completed")) {
 			return true;
 		}
 

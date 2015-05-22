@@ -1244,6 +1244,14 @@
 			ddmURL.setParameter('eventName', config.eventName);
 			ddmURL.setParameter('groupId', config.groupId);
 			ddmURL.setParameter('mode', config.mode);
+
+			if (config.mvcPath) {
+				ddmURL.setParameter('mvcPath', config.mvcPath);
+			}
+			else {
+				ddmURL.setParameter('mvcPath', '/view.jsp');
+			}
+
 			ddmURL.setParameter('portletResourceNamespace', config.portletResourceNamespace);
 
 			if ('redirect' in config) {
@@ -1281,14 +1289,6 @@
 			}
 
 			ddmURL.setParameter('structureAvailableFields', config.structureAvailableFields);
-
-			if (config.struts_action) {
-				ddmURL.setParameter('struts_action', config.struts_action);
-			}
-			else {
-				ddmURL.setParameter('struts_action', '/dynamic_data_mapping/view');
-			}
-
 			ddmURL.setParameter('templateId', config.templateId);
 
 			ddmURL.setPortletId(Liferay.PortletKeys.DYNAMIC_DATA_MAPPING);

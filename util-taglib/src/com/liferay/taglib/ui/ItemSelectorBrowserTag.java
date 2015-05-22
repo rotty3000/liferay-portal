@@ -16,8 +16,12 @@ package com.liferay.taglib.ui;
 
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.util.IncludeTag;
+
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,6 +38,10 @@ public class ItemSelectorBrowserTag extends IncludeTag {
 		_idPrefix = idPrefix;
 	}
 
+	public void setReturnType(ReturnType returnType) {
+		_returnType = returnType;
+	}
+
 	public void setSearchContainer(SearchContainer<?> searchContainer) {
 		_searchContainer = searchContainer;
 	}
@@ -46,12 +54,59 @@ public class ItemSelectorBrowserTag extends IncludeTag {
 		_uploadMessage = uploadMessage;
 	}
 
+	public enum ReturnType {
+
+		BASE_64(Base64.class), FILE_ENTRY(FileEntry.class),
+		URL (java.net.URL.class);
+
+		public static ReturnType parse(Class<?> value) {
+			if (BASE_64.getValue().equals(value)) {
+				return BASE_64;
+			}
+
+			if (FILE_ENTRY.getValue().equals(value)) {
+				return FILE_ENTRY;
+			}
+
+			if (URL.getValue().equals(value)) {
+				return URL;
+			}
+
+			throw new IllegalArgumentException(
+				"Invalid value " + value.getName());
+		}
+
+		public static ReturnType parseFirst(Set<Class<?>> value) {
+			for (Class<?> clazz : value) {
+				try {
+					return parse(clazz);
+				}
+				catch (IllegalArgumentException iae) {
+				}
+			}
+
+			throw new IllegalArgumentException("Invalid value " + value);
+		}
+
+		public Class<?> getValue() {
+			return _value;
+		}
+
+		private ReturnType(Class<?> value) {
+			_value = value;
+		}
+
+		private final Class<?> _value;
+
+	}
+
 	@Override
 	protected void cleanUp() {
 		super.cleanUp();
 
 		_displayStyle = "icon";
 		_idPrefix = null;
+		_returnType = null;
 		_searchContainer = null;
 		_tabName = null;
 		_uploadMessage = null;
@@ -80,6 +135,8 @@ public class ItemSelectorBrowserTag extends IncludeTag {
 		request.setAttribute(
 			"liferay-ui:item-selector-browser:idPrefix", _idPrefix);
 		request.setAttribute(
+			"liferay-ui:item-selector-browser:returnType", _returnType);
+		request.setAttribute(
 			"liferay-ui:item-selector-browser:searchContainer",
 			_searchContainer);
 		request.setAttribute(
@@ -94,6 +151,7 @@ public class ItemSelectorBrowserTag extends IncludeTag {
 
 	private String _displayStyle;
 	private String _idPrefix;
+	private ReturnType _returnType;
 	private SearchContainer<?> _searchContainer;
 	private String _tabName;
 	private String _uploadMessage;

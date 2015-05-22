@@ -18,18 +18,4 @@
 			/>
 		</sequential>
 	</macrodef>
-
-	<target name="clean">
-		<clean-common>
-			<clean-extra>
-				<delete file="${deploy.dir}/${jar.file}.jar" />
-			</clean-extra>
-		</clean-common>
-	</target>
-
-	<target name="deploy">
-		<delete file="${deploy.dir}/support-catalina.jar" />
-
-		<antcall target="build-common-java.deploy" />
-	</target>
 </project>

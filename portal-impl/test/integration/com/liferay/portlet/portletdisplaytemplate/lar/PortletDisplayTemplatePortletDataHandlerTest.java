@@ -15,6 +15,8 @@
 package com.liferay.portlet.portletdisplaytemplate.lar;
 
 import com.liferay.portal.kernel.lar.PortletDataHandler;
+import com.liferay.portal.kernel.portlet.PortletBag;
+import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.lar.test.BasePortletDataHandlerTestCase;
@@ -29,6 +31,8 @@ import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.dynamicdatamapping.util.test.DDMTemplateTestUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
+
+import java.util.List;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -55,12 +59,18 @@ public class PortletDisplayTemplatePortletDataHandlerTest
 
 	@Override
 	protected PortletDataHandler createPortletDataHandler() {
-		return new PortletDisplayTemplatePortletDataHandler();
+		PortletBag portletBag = PortletBagPool.get(
+			PortletKeys.PORTLET_DISPLAY_TEMPLATE);
+
+		List<PortletDataHandler> portletDataHandlerIsntances =
+			portletBag.getPortletDataHandlerInstances();
+
+		return portletDataHandlerIsntances.get(0);
 	}
 
 	@Override
 	protected String getPortletId() {
-		return PortletKeys.PORTLET_DISPLAY_TEMPLATES;
+		return PortletKeys.PORTLET_DISPLAY_TEMPLATE;
 	}
 
 	private final Class<?>[] _DDM_TEMPLATE_CLASSES = {

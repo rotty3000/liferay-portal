@@ -141,6 +141,8 @@ public class JavaScriptExecutor extends BaseScriptingExecutor {
 	@Activate
 	@Modified
 	protected void activate(Map<String, Object> properties) {
+		initScriptingExecutorClassLoader();
+
 		JavaScriptExecutorConfiguration javaScriptExecutorConfiguration =
 			Configurable.createConfigurable(
 				JavaScriptExecutorConfiguration.class, properties);
@@ -169,11 +171,8 @@ public class JavaScriptExecutor extends BaseScriptingExecutor {
 			Context context = Context.enter();
 
 			if (ArrayUtil.isNotEmpty(classLoaders)) {
-				ClassLoader aggregateClassLoader =
-					AggregateClassLoader.getAggregateClassLoader(
-						PortalClassLoaderUtil.getClassLoader(), classLoaders);
-
-				context.setApplicationClassLoader(aggregateClassLoader);
+				context.setApplicationClassLoader(
+					getAggregateClassLoader(classLoaders));
 			}
 
 			compiledScript = context.compileString(script, "script", 0, null);

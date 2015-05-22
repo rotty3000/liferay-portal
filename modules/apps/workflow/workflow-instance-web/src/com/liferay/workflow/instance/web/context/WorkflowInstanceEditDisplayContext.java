@@ -118,7 +118,6 @@ public class WorkflowInstanceEditDisplayContext
 
 		String userName = PortalUtil.getUserName(
 			workflowLog.getAuditUserId(), StringPool.BLANK);
-
 		String actorName = getActorName(workflowLog);
 
 		return new Object[] {
@@ -322,24 +321,24 @@ public class WorkflowInstanceEditDisplayContext
 	}
 
 	protected Role getRole(long roleId) throws PortalException {
-		Role role = _roleMap.get(roleId);
+		Role role = _roles.get(roleId);
 
 		if (role == null) {
 			role = RoleLocalServiceUtil.getRole(roleId);
 
-			_roleMap.put(roleId, role);
+			_roles.put(roleId, role);
 		}
 
 		return role;
 	}
 
 	protected User getUser(long userId) throws PortalException {
-		User user = _userMap.get(userId);
+		User user = _users.get(userId);
 
 		if (user == null) {
 			user = UserLocalServiceUtil.getUser(userId);
 
-			_userMap.put(userId, user);
+			_users.put(userId, user);
 		}
 
 		return user;
@@ -395,8 +394,8 @@ public class WorkflowInstanceEditDisplayContext
 		WorkflowLog.TASK_ASSIGN, WorkflowLog.TASK_COMPLETION,
 		WorkflowLog.TASK_UPDATE, WorkflowLog.TRANSITION);
 
-	private final Map<Long, Role> _roleMap = new HashMap<>();
-	private final Map<Long, User> _userMap = new HashMap<>();
+	private final Map<Long, Role> _roles = new HashMap<>();
+	private final Map<Long, User> _users = new HashMap<>();
 	private List<WorkflowLog> _workflowLogs;
 
 }
