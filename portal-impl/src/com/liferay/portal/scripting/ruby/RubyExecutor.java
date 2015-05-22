@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.scripting.ExecutionException;
 import com.liferay.portal.kernel.scripting.ScriptingContainer;
 import com.liferay.portal.kernel.scripting.ScriptingException;
 import com.liferay.portal.kernel.scripting.ScriptingExecutor;
-import com.liferay.portal.kernel.util.AggregateClassLoader;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
@@ -103,6 +102,8 @@ public class RubyExecutor extends BaseScriptingExecutor {
 	}
 
 	public RubyExecutor() {
+		initScriptingExecutorClassLoader();
+
 		org.jruby.embed.ScriptingContainer scriptingContainer =
 			new org.jruby.embed.ScriptingContainer(
 				LocalContextScope.THREADSAFE);
@@ -218,11 +219,8 @@ public class RubyExecutor extends BaseScriptingExecutor {
 			rubyInstanceConfig.setCurrentDirectory(_basePath);
 
 			if (ArrayUtil.isNotEmpty(classLoaders)) {
-				ClassLoader aggregateClassLoader =
-					AggregateClassLoader.getAggregateClassLoader(
-						ClassLoaderUtil.getPortalClassLoader(), classLoaders);
-
-				rubyInstanceConfig.setLoader(aggregateClassLoader);
+				rubyInstanceConfig.setLoader(
+					getAggregateClassLoader(classLoaders));
 			}
 
 			rubyInstanceConfig.setLoadPaths(_loadPaths);

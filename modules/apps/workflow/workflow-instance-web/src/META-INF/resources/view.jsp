@@ -128,7 +128,7 @@ catch (Exception e) {
 <%
 }
 
-PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, workflowInstanceViewDisplayContext.getTabs2Param()), currentURL);
+PortalUtil.addPortletBreadcrumbEntry(request, LanguageUtil.get(request, workflowInstanceViewDisplayContext.getTabs2()), currentURL);
 %>
 
 <%!

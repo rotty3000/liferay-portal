@@ -344,6 +344,7 @@ if (feed != null) {
 				},
 				eventName: '<portlet:namespace />selectStructure',
 				groupId: <%= themeDisplay.getSiteGroupId() %>,
+				mvcPath: '/select_structure.jsp',
 				refererPortletName: '<%= JournalPortletKeys.JOURNAL %>',
 
 				<%
@@ -353,7 +354,6 @@ if (feed != null) {
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
 
 				showAncestorScopes: true,
-				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(request, "structures") %>'
 			},
 			function(event) {

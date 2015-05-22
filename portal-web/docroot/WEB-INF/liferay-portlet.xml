@@ -167,10 +167,10 @@
 		<autopropagated-parameters>showMountFolder</autopropagated-parameters>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>
-		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
+		<header-portlet-css>/o/ddm-web/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</footer-portlet-javascript>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</footer-portlet-javascript>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_mapping/js/custom_fields.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/o/ddm-web/js/main.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/o/ddm-web/js/custom_fields.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/upload.js</footer-portlet-javascript>
 		<css-class-wrapper>portlet-document-library</css-class-wrapper>
@@ -753,42 +753,6 @@
 		<system>true</system>
 	</portlet>
 	<portlet>
-		<portlet-name>150</portlet-name>
-		<icon>/html/icons/workflow_tasks.png</icon>
-		<struts-path>workflow_tasks</struts-path>
-		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/users_admin/css/main.css</header-portlet-css>
-		<header-portlet-css>/html/portlet/workflow_definitions/css/main.css</header-portlet-css>
-		<css-class-wrapper>portlet-workflow-tasks</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>153</portlet-name>
-		<icon>/html/icons/my_workflow_tasks.png</icon>
-		<struts-path>my_workflow_tasks</struts-path>
-		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
-		<friendly-url-mapping>my_workflow_tasks</friendly-url-mapping>
-		<friendly-url-routes>com/liferay/portlet/workflowtasks/workflow-tasks-friendly-url-routes.xml</friendly-url-routes>
-		<user-notification-handler-class>com.liferay.portlet.workflowtasks.notifications.WorkflowTasksUserNotificationHandler</user-notification-handler-class>
-		<control-panel-entry-category>my</control-panel-entry-category>
-		<control-panel-entry-weight>3.0</control-panel-entry-weight>
-		<control-panel-entry-class>com.liferay.portal.workflow.MyWorkflowTasksControlPanelEntry</control-panel-entry-class>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/users_admin/css/main.css</header-portlet-css>
-		<header-portlet-css>/html/portlet/workflow_definitions/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/html/portlet/workflow_tasks/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>portlet-workflow-tasks</css-class-wrapper>
-	</portlet>
-	<portlet>
 		<portlet-name>156</portlet-name>
 		<icon>/html/icons/group_pages.png</icon>
 		<struts-path>group_pages</struts-path>
@@ -863,25 +827,6 @@
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
-		<portlet-name>166</portlet-name>
-		<struts-path>dynamic_data_mapping</struts-path>
-		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<staged-model-data-handler-class>com.liferay.portlet.dynamicdatamapping.lar.DDMStructureStagedModelDataHandler</staged-model-data-handler-class>
-		<staged-model-data-handler-class>com.liferay.portlet.dynamicdatamapping.lar.DDMTemplateStagedModelDataHandler</staged-model-data-handler-class>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<autopropagated-parameters>refererPortletName,refererWebDAVToken,scopeTitle,showAncestorScopes,showBackURL,showManageTemplates,showToolbar</autopropagated-parameters>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
-		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
-		<header-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</header-portlet-javascript>
-		<header-portlet-javascript>/html/portlet/dynamic_data_mapping/js/custom_fields.js</header-portlet-javascript>
-		<css-class-wrapper>portlet-dynamic-data-mapping</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	<portlet>
 		<portlet-name>167</portlet-name>
 		<icon>/html/icons/dynamic_data_lists.png</icon>
 		<struts-path>dynamic_data_lists</struts-path>
@@ -903,8 +848,8 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/dynamic_data_lists/css/main.css</header-portlet-css>
-		<header-portlet-javascript>/html/portlet/dynamic_data_mapping/js/custom_fields.js</header-portlet-javascript>
-		<header-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</header-portlet-javascript>
+		<header-portlet-javascript>/o/ddm-web/js/custom_fields.js</header-portlet-javascript>
+		<header-portlet-javascript>/o/ddm-web/js/main.js</header-portlet-javascript>
 		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
 		<css-class-wrapper>portlet-dynamic-data-lists</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
@@ -998,27 +943,6 @@
 		<private-session-attributes>false</private-session-attributes>
 		<header-portlet-css>/html/portlet/group_statistics/css/main.css</header-portlet-css>
 		<css-class-wrapper>portlet-group-statistics</css-class-wrapper>
-	</portlet>
-	<portlet>
-		<portlet-name>183</portlet-name>
-		<icon>/html/icons/portlet_display_template.png</icon>
-		<parent-struts-path>dynamic_data_mapping</parent-struts-path>
-		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<portlet-data-handler-class>com.liferay.portlet.portletdisplaytemplate.lar.PortletDisplayTemplatePortletDataHandler</portlet-data-handler-class>
-		<webdav-storage-token>application_display_template</webdav-storage-token>
-		<webdav-storage-class>com.liferay.portlet.portletdisplaytemplate.webdav.ApplicationDisplayTemplateWebDAVStorageImpl</webdav-storage-class>
-		<control-panel-entry-category>site_administration.configuration</control-panel-entry-category>
-		<control-panel-entry-weight>2.0</control-panel-entry-weight>
-		<ddm-display>com.liferay.portlet.portletdisplaytemplate.ddm.PortletDisplayTemplateDDMDisplay</ddm-display>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<autopropagated-parameters>scopeTitle,showAncestorScopes,showManageTemplates,showToolbar</autopropagated-parameters>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
-		<css-class-wrapper>portlet-dynamic-data-mapping</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
 		<portlet-name>186</portlet-name>
@@ -1137,10 +1061,10 @@
 		<private-session-attributes>false</private-session-attributes>
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>
-		<header-portlet-css>/html/portlet/dynamic_data_mapping/css/main.css</header-portlet-css>
+		<header-portlet-css>/o/ddm-web/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</footer-portlet-javascript>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_mapping/js/main.js</footer-portlet-javascript>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_mapping/js/custom_fields.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/o/ddm-web/js/main.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/o/ddm-web/js/custom_fields.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/upload.js</footer-portlet-javascript>
 		<css-class-wrapper>portlet-document-library</css-class-wrapper>

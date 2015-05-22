@@ -108,8 +108,8 @@ if (displayStyle.startsWith(PortletDisplayTemplate.DISPLAY_STYLE_PREFIX)) {
 						width: 1024
 					},
 					groupId: <%= ddmTemplateGroupId %>,
+					mvcPath: '/view_template.jsp',
 					refererPortletName: '<%= PortletKeys.PORTLET_DISPLAY_TEMPLATES %>',
-					struts_action: '/dynamic_data_mapping/view_template',
 					title: '<%= UnicodeLanguageUtil.get(request, "application-display-templates") %>'
 				},
 				function(event) {

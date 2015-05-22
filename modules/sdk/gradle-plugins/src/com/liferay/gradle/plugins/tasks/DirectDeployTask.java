@@ -128,9 +128,8 @@ public class DirectDeployTask extends BasePortalImplToolsTask {
 			webAppType = "layout";
 		}
 
-		return
-			"com.liferay.portal.tools.deploy." +
-				StringUtil.capitalize(webAppType) + "Deployer";
+		return "com.liferay.portal.tools.deploy." +
+			StringUtil.capitalize(webAppType) + "Deployer";
 	}
 
 	@InputFile

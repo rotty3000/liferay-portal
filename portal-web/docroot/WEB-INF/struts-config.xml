@@ -506,49 +506,6 @@
 			<forward name="portlet.dynamic_data_lists.error" path="portlet.dynamic_data_lists.error" />
 		</action>
 
-		<!-- Dynamic Data Mapping -->
-
-		<action path="/dynamic_data_mapping/copy_structure" type="com.liferay.portlet.dynamicdatamapping.action.CopyStructureAction">
-			<forward name="portlet.dynamic_data_mapping.copy_structure" path="portlet.dynamic_data_mapping.copy_structure" />
-			<forward name="portlet.dynamic_data_mapping.error" path="portlet.dynamic_data_mapping.error" />
-		</action>
-
-		<action path="/dynamic_data_mapping/copy_template" type="com.liferay.portlet.dynamicdatamapping.action.CopyTemplateAction">
-			<forward name="portlet.dynamic_data_mapping.copy_template" path="portlet.dynamic_data_mapping.copy_template" />
-			<forward name="portlet.dynamic_data_mapping.error" path="portlet.dynamic_data_mapping.error" />
-		</action>
-
-		<action path="/dynamic_data_mapping/edit_structure" type="com.liferay.portlet.dynamicdatamapping.action.EditStructureAction">
-			<forward name="portlet.dynamic_data_mapping.edit_structure" path="portlet.dynamic_data_mapping.edit_structure" />
-			<forward name="portlet.dynamic_data_mapping.error" path="portlet.dynamic_data_mapping.error" />
-		</action>
-
-		<action path="/dynamic_data_mapping/edit_template" type="com.liferay.portlet.dynamicdatamapping.action.EditTemplateAction">
-			<forward name="portlet.dynamic_data_mapping.edit_template" path="portlet.dynamic_data_mapping.edit_template" />
-			<forward name="portlet.dynamic_data_mapping.error" path="portlet.dynamic_data_mapping.error" />
-		</action>
-
-		<action path="/dynamic_data_mapping/edit_template_display" forward="portlet.dynamicdatamapping.edit_template_display" />
-
-		<action path="/dynamic_data_mapping/get_structure" type="com.liferay.portlet.dynamicdatamapping.action.GetStructureAction" />
-
-		<action path="/dynamic_data_mapping/get_template" type="com.liferay.portlet.dynamicdatamapping.action.GetTemplateAction" />
-
-		<action path="/dynamic_data_mapping/render_structure_field" type="com.liferay.portlet.dynamicdatamapping.action.RenderStructureFieldAction" />
-
-		<action path="/dynamic_data_mapping/select_document_library" type="com.liferay.portlet.documentlibrary.action.ViewAction">
-			<forward name="portlet.document_library.error" path="portlet.document_library.error" />
-			<forward name="portlet.document_library.view" path="portlet.dynamic_data_mapping.select_document_library" />
-		</action>
-
-		<action path="/dynamic_data_mapping/select_structure" forward="portlet.dynamic_data_mapping.select_structure" />
-
-		<action path="/dynamic_data_mapping/select_template" forward="portlet.dynamic_data_mapping.select_template" />
-
-		<action path="/dynamic_data_mapping/view" forward="portlet.dynamic_data_mapping.view" />
-
-		<action path="/dynamic_data_mapping/view_template" forward="portlet.dynamic_data_mapping.view_template" />
-
 		<!-- Expando -->
 
 		<action path="/expando/edit_expando" type="com.liferay.portlet.expando.action.EditExpandoAction">
@@ -1020,16 +977,6 @@
 
 		<!-- My Account -->
 
-		<action path="/my_account/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/my_account/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
 		<action path="/my_account/edit_user" type="com.liferay.portlet.myaccount.action.EditUserAction">
 			<forward name="portlet.users_admin.edit_user" path="portlet.users_admin.edit_user" />
 			<forward name="portlet.users_admin.error" path="portlet.users_admin.error" />
@@ -1069,21 +1016,6 @@
 			<forward name="portlet.my_pages.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
 			<forward name="portlet.my_pages.view" path="portlet.my_account.view" />
 		</action>
-
-		<!-- My Workflow Tasks -->
-
-		<action path="/my_workflow_tasks/edit_workflow_task" type="com.liferay.portlet.workflowtasks.action.EditWorkflowTaskAction">
-			<forward name="portlet.workflow_tasks.edit_workflow_task" path="portlet.workflow_tasks.edit_workflow_task" />
-			<forward name="portlet.workflow_tasks.error" path="portlet.workflow_tasks.error" />
-		</action>
-
-		<action path="/my_workflow_tasks/edit_workflow_task_discussion" type="com.liferay.portlet.workflowtasks.action.EditDiscussionAction">
-			<forward name="portlet.message_boards.error" path="portlet.workflow_tasks.error" />
-		</action>
-
-		<action path="/my_workflow_tasks/view" forward="portlet.workflow_tasks.view" />
-
-		<action path="/my_workflow_tasks/view_content" forward="portlet.workflow_instances.view_content" />
 
 		<!-- News -->
 
@@ -1417,18 +1349,6 @@
 
 		<!-- Users Admin -->
 
-		<action path="/users_admin/add_layout" forward="portlet.layouts_admin.add_layout" />
-
-		<action path="/users_admin/edit_layout_set" type="com.liferay.portlet.layoutsadmin.action.EditLayoutSetAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
-		<action path="/users_admin/edit_layouts" type="com.liferay.portlet.layoutsadmin.action.EditLayoutsAction">
-			<forward name="portlet.layouts_admin.edit_layouts" path="portlet.layouts_admin.edit_layouts" />
-			<forward name="portlet.layouts_admin.error" path="portlet.layouts_admin.error" />
-		</action>
-
 		<action path="/users_admin/edit_organization" type="com.liferay.portlet.usersadmin.action.EditOrganizationAction">
 			<forward name="portlet.users_admin.edit_organization" path="portlet.users_admin.edit_organization" />
 			<forward name="portlet.users_admin.error" path="portlet.users_admin.error" />
@@ -1476,21 +1396,6 @@
 		<action path="/users_admin/view" forward="portlet.users_admin.view" />
 
 		<action path="/users_admin/view_users" forward="portlet.users_admin.view" />
-
-		<!-- Workflow Tasks -->
-
-		<action path="/workflow_tasks/edit_workflow_task" type="com.liferay.portlet.workflowtasks.action.EditWorkflowTaskAction">
-			<forward name="portlet.workflow_tasks.edit_workflow_task" path="portlet.workflow_tasks.edit_workflow_task" />
-			<forward name="portlet.workflow_tasks.error" path="portlet.workflow_tasks.error" />
-		</action>
-
-		<action path="/workflow_tasks/edit_workflow_task_discussion" type="com.liferay.portlet.messageboards.action.EditDiscussionAction">
-			<forward name="portlet.message_boards.error" path="portlet.workflow_tasks.error" />
-		</action>
-
-		<action path="/workflow_tasks/view" forward="portlet.workflow_tasks.view" />
-
-		<action path="/workflow_tasks/view_content" forward="portlet.workflow_instances.view_content" />
 	</action-mappings>
 
 	<!-- Custom Request Processor -->

@@ -160,12 +160,12 @@ portletURL.setParameter("folderId", String.valueOf(folderId));
 					destroyOnHide: true
 				},
 				groupId: <%= scopeGroupId %>,
+				mvcPath: '/view_template.jsp',
 				refererPortletName: '<%= JournalPortletKeys.JOURNAL %>',
 				refererWebDAVToken: '<%= portlet.getWebDAVStorageToken() %>',
 				showAncestorScopes: true,
 				showHeader: false,
 				resourceClassNameId: '<%= PortalUtil.getClassNameId(JournalArticle.class) %>',
-				struts_action: '/dynamic_data_mapping/view_template',
 				title: '<%= UnicodeLanguageUtil.get(request, "templates") %>'
 			}
 		);

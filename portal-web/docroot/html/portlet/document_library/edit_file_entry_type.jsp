@@ -19,8 +19,6 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-String portletResourceNamespace = ParamUtil.getString(request, "portletResourceNamespace");
-
 DLFileEntryType fileEntryType = (DLFileEntryType)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FILE_ENTRY_TYPE);
 
 long fileEntryTypeId = BeanParamUtil.getLong(fileEntryType, request, "fileEntryTypeId");
@@ -96,7 +94,12 @@ String scopeAvailableFields = ParamUtil.getString(request, "scopeAvailableFields
 		</liferay-ui:panel>
 
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="mainMetadataFields" persistState="<%= true %>" title="main-metadata-fields">
-			<%@ include file="/html/portlet/dynamic_data_mapping/form_builder.jspf" %>
+			<liferay-util:include page="/form_builder.jsp" portletId="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>">
+				<portlet:param name="refererPortletName" value="<%= PortletKeys.DOCUMENT_LIBRARY %>" />
+				<portlet:param name="portletResourceNamespace" value="<%= renderResponse.getNamespace() %>" />
+				<portlet:param name="script" value="<%= script %>" />
+				<portlet:param name="fieldsJSONArrayString" value="<%= (fieldsJSONArray != null) ? fieldsJSONArray.toString() : StringPool.BLANK %>" />
+			</liferay-util:include>
 		</liferay-ui:panel>
 
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= false %>" id="additionalMetadataFields" persistState="<%= true %>" title="additional-metadata-fields">
@@ -163,11 +166,11 @@ String scopeAvailableFields = ParamUtil.getString(request, "scopeAvailableFields
 					destroyOnHide: true
 				},
 				eventName: '<portlet:namespace />selectDDMStructure',
+				mvcPath: '/select_structure.jsp',
 				refererPortletName: '<%= PortletKeys.DOCUMENT_LIBRARY %>',
 				showAncestorScopes: true,
 				showManageTemplates: false,
 				showToolbar: true,
-				struts_action: '/dynamic_data_mapping/select_structure',
 				title: '<%= UnicodeLanguageUtil.get(request, "metadata-sets") %>'
 			},
 			function(event) {
