@@ -1,1 +1,1 @@
-alert('Lating Lover!');
+alert('Latin Lover!');
