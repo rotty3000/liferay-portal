@@ -4,3 +4,5 @@ Bundle-Version: 1.0.0
 Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources
+Require-Capability:\
+	osgi.webresource;filter:="(&(osgi.webresource=liferay)(version=1.0.0))"

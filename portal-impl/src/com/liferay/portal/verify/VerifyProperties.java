@@ -16,6 +16,7 @@ package com.liferay.portal.verify;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -27,6 +28,15 @@ import com.liferay.portal.util.PortalInstances;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsUtil;
 import com.liferay.portlet.documentlibrary.store.StoreFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Brian Wing Shun Chan
@@ -58,22 +68,24 @@ public class VerifyProperties extends VerifyProcess {
 
 		// portal.properties
 
+		Properties portalProperties = loadPortalProperties();
+
 		for (String[] keys : _MIGRATED_PORTAL_KEYS) {
 			String oldKey = keys[0];
 			String newKey = keys[1];
 
-			verifyMigratedPortalProperty(oldKey, newKey);
+			verifyMigratedPortalProperty(portalProperties, oldKey, newKey);
 		}
 
 		for (String[] keys : _RENAMED_PORTAL_KEYS) {
 			String oldKey = keys[0];
 			String newKey = keys[1];
 
-			verifyRenamedPortalProperty(oldKey, newKey);
+			verifyRenamedPortalProperty(portalProperties, oldKey, newKey);
 		}
 
 		for (String key : _OBSOLETE_PORTAL_KEYS) {
-			verifyObsoletePortalProperty(key);
+			verifyObsoletePortalProperty(portalProperties, key);
 		}
 
 		for (String[] keys : _MODULARIZED_PORTAL_KEYS) {
@@ -81,7 +93,8 @@ public class VerifyProperties extends VerifyProcess {
 			String newKey = keys[1];
 			String moduleName = keys[2];
 
-			verifyModularizedPortalProperty(oldKey, newKey, moduleName);
+			verifyModularizedPortalProperty(
+				portalProperties, oldKey, newKey, moduleName);
 		}
 
 		// Document library
@@ -93,14 +106,43 @@ public class VerifyProperties extends VerifyProcess {
 		verifyLDAPProperties();
 	}
 
-	protected boolean isPortalProperty(String key) {
-		String value = PropsUtil.get(key);
+	protected InputStream getPropertiesResourceAsStream(String resourceName)
+		throws FileNotFoundException {
 
-		if (value != null) {
-			return true;
+		File propertyFile = new File(resourceName);
+
+		if (propertyFile.exists()) {
+			return new FileInputStream(propertyFile);
 		}
 
-		return false;
+		ClassLoader classLoader = VerifyProperties.class.getClassLoader();
+
+		return classLoader.getResourceAsStream(resourceName);
+	}
+
+	protected Properties loadPortalProperties() {
+		Properties properties = new Properties();
+
+		List<String> propertiesResourceNames = ListUtil.fromArray(
+			PropsUtil.getArray("include-and-override"));
+
+		propertiesResourceNames.add(0, "portal.properties");
+
+		for (String propertyResourceName : propertiesResourceNames) {
+			try (InputStream inputStream = getPropertiesResourceAsStream(
+				propertyResourceName)) {
+
+				if (inputStream != null) {
+					properties.load(inputStream);
+				}
+			}
+			catch (IOException ioe) {
+				_log.error(
+					"Unable to load property " + propertyResourceName, ioe);
+			}
+		}
+
+		return properties;
 	}
 
 	protected void verifyLDAPProperties() throws Exception {
@@ -133,10 +175,11 @@ public class VerifyProperties extends VerifyProcess {
 		}
 	}
 
-	protected void verifyMigratedPortalProperty(String oldKey, String newKey)
+	protected void verifyMigratedPortalProperty(
+			Properties portalProperties, String oldKey, String newKey)
 		throws Exception {
 
-		if (isPortalProperty(oldKey)) {
+		if (portalProperties.containsKey(oldKey)) {
 			_log.error(
 				"Portal property \"" + oldKey +
 					"\" was migrated to the system property \"" + newKey +
@@ -158,18 +201,22 @@ public class VerifyProperties extends VerifyProcess {
 	}
 
 	protected void verifyModularizedPortalProperty(
-			String oldKey, String newKey, String moduleName)
+			Properties portalProperties, String oldKey, String newKey,
+			String moduleName)
 		throws Exception {
 
-		if (isPortalProperty(oldKey)) {
+		if (portalProperties.containsKey(oldKey)) {
 			_log.error(
 				"Portal property \"" + oldKey + "\" was modularized to " +
 					moduleName + " as \"" + newKey);
 		}
 	}
 
-	protected void verifyObsoletePortalProperty(String key) throws Exception {
-		if (isPortalProperty(key)) {
+	protected void verifyObsoletePortalProperty(
+			Properties portalProperties, String key)
+		throws Exception {
+
+		if (portalProperties.containsKey(key)) {
 			_log.error("Portal property \"" + key + "\" is obsolete");
 		}
 	}
@@ -182,10 +229,11 @@ public class VerifyProperties extends VerifyProcess {
 		}
 	}
 
-	protected void verifyRenamedPortalProperty(String oldKey, String newKey)
+	protected void verifyRenamedPortalProperty(
+			Properties portalProperties, String oldKey, String newKey)
 		throws Exception {
 
-		if (isPortalProperty(oldKey)) {
+		if (portalProperties.containsKey(oldKey)) {
 			_log.error(
 				"Portal property \"" + oldKey + "\" was renamed to \"" +
 					newKey + "\"");
@@ -445,34 +493,38 @@ public class VerifyProperties extends VerifyProcess {
 		// CAS
 
 		new String[] {
-			"cas.auth.enabled", "enabled", "com.liferay.portal.sso.cas"
+			"cas.auth.enabled", "enabled", "com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
 			"cas.import.from.ldap", "import.from.ldap",
-			"com.liferay.portal.sso.cas"
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
-			"cas.login.url", "login.url", "com.liferay.portal.sso.cas"
+			"cas.login.url", "login.url", "com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
 			"cas.logout.on.session.expiration", "logout.on.session.expiration",
-			"com.liferay.portal.sso.cas"
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
-			"cas.logout.url", "logout.url", "com.liferay.portal.sso.cas"
+			"cas.logout.url", "logout.url",
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
 			"cas.no.such.user.redirect.url", "no.such.user.redirect.url",
-			"com.liferay.portal.sso.cas"
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
-			"cas.server.name", "server.name", "com.liferay.portal.sso.cas"
+			"cas.server.name", "server.name",
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
-			"cas.server.url", "server.url", "com.liferay.portal.sso.cas"
+			"cas.server.url", "server.url",
+			"com.liferay.portal.security.sso.cas"
 		},
 		new String[] {
-			"cas.service.url", "service.url", "com.liferay.portal.sso.cas"
+			"cas.service.url", "service.url",
+			"com.liferay.portal.security.sso.cas"
 		},
 
 		// Currency Converter
@@ -486,36 +538,36 @@ public class VerifyProperties extends VerifyProcess {
 
 		new String[] {
 			"facebook.connect.auth.enabled", "enabled",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.app.id", "app.id",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.app.secret", "app.secret",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.graph.url", "graph.url",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.oauth.auth.url", "oauth.auth.url",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.oauth.redirect.url", "oauth.redirect.url",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.oauth.token.url", "oauth.token.url",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 		new String[] {
 			"facebook.connect.verified.account.required",
 			"verified.account.required",
-			"com.liferay.portal.sso.facebook.connect"
+			"com.liferay.portal.security.sso.facebook.connect"
 		},
 
 		// FreeMarker Engine
@@ -834,111 +886,118 @@ public class VerifyProperties extends VerifyProcess {
 		// NTLM
 
 		new String[] {
-			"ntlm.auth.enabled", "enabled", "com.liferay.portal.sso.ntlm"
+			"ntlm.auth.enabled", "enabled",
+			"com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
-			"ntlm.auth.domain", "domain", "com.liferay.portal.sso.ntlm"
+			"ntlm.auth.domain", "domain", "com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
 			"ntlm.auth.domain.controller", "domain.controller",
-			"com.liferay.portal.sso.ntlm"
+			"com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
 			"ntlm.auth.domain.controller.name", "domain.controller.name",
-			"com.liferay.portal.sso.ntlm"
+			"com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
 			"ntlm.auth.negotiate.flags", "negotiate.flags",
-			"com.liferay.portal.sso.ntlm"
+			"com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
 			"ntlm.auth.service.account", "service.account",
-			"com.liferay.portal.sso.ntlm"
+			"com.liferay.portal.security.sso.ntlm"
 		},
 		new String[] {
 			"ntlm.auth.service.password", "service.password",
-			"com.liferay.portal.sso.ntlm"
+			"com.liferay.portal.security.sso.ntlm"
 		},
 
 		// OpenID
 
 		new String[] {
-			"open.id.auth.enabled", "enabled", "com.liferay.portal.sso.openid"
+			"open.id.auth.enabled", "enabled",
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
-			"open.id.providers", "providers", "com.liferay.portal.sso.openid"
+			"open.id.providers", "providers",
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.schema[default]", "ax.schema",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.type.email[default]", "ax.type.email",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.type.firstname[default]", "ax.type.firstname",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.type.lastname[default]", "ax.type.lastname",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.schema[yahoo]", "ax.schema",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.type.email[yahoo]", "ax.type.email",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
 			"open.id.ax.type.fullname[yahoo]", "ax.type.fullname",
-			"com.liferay.portal.sso.openid"
+			"com.liferay.portal.security.sso.openid"
 		},
 		new String[] {
-			"open.id.url[yahoo]", "url", "com.liferay.portal.sso.openid"
+			"open.id.url[yahoo]", "url",
+			"com.liferay.portal.security.sso.openid"
 		},
 
 		// OpenSSO
 
 		new String[] {
-			"open.sso.auth.enabled", "enabled", "com.liferay.portal.sso.opensso"
+			"open.sso.auth.enabled", "enabled",
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.email.address.attr", "email.address.attr",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.first.name.attr", "first.name.attr",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.last.name.attr", "last.name.attr",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.import.from.ldap", "import.from.ldap",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
-			"open.sso.login.url", "login.url", "com.liferay.portal.sso.opensso"
+			"open.sso.login.url", "login.url",
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.logout.on.session.expiration",
-			"logout.on.session.expiration", "com.liferay.portal.sso.opensso"
+			"logout.on.session.expiration",
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.logout.url", "logout.url",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.screen.name.attr", "screen.name.attr",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 		new String[] {
 			"open.sso.service.url", "service.url",
-			"com.liferay.portal.sso.opensso"
+			"com.liferay.portal.security.sso.opensso"
 		},
 
 		// Polls
