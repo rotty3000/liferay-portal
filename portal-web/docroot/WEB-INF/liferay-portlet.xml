@@ -168,7 +168,6 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>
 		<header-portlet-css>/o/ddm-web/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/o/ddm-web/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/o/ddm-web/js/custom_fields.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/main.js</footer-portlet-javascript>
@@ -811,29 +810,6 @@
 		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<portlet>
-		<portlet-name>167</portlet-name>
-		<icon>/html/icons/dynamic_data_lists.png</icon>
-		<struts-path>dynamic_data_lists</struts-path>
-		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
-		<control-panel-entry-category>site_administration.content</control-panel-entry-category>
-		<control-panel-entry-weight>8.0</control-panel-entry-weight>
-		<asset-renderer-factory>com.liferay.portlet.dynamicdatalists.asset.DDLRecordAssetRendererFactory</asset-renderer-factory>
-		<ddm-display>com.liferay.portlet.dynamicdatalists.ddm.DDLDDMDisplay</ddm-display>
-		<workflow-handler>com.liferay.portlet.dynamicdatalists.workflow.DDLRecordWorkflowHandler</workflow-handler>
-		<preferences-owned-by-group>true</preferences-owned-by-group>
-		<use-default-template>false</use-default-template>
-		<scopeable>true</scopeable>
-		<private-request-attributes>false</private-request-attributes>
-		<private-session-attributes>false</private-session-attributes>
-		<render-weight>50</render-weight>
-		<header-portlet-css>/html/portlet/dynamic_data_lists/css/main.css</header-portlet-css>
-		<header-portlet-javascript>/o/ddm-web/js/custom_fields.js</header-portlet-javascript>
-		<header-portlet-javascript>/o/ddm-web/js/main.js</header-portlet-javascript>
-		<header-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</header-portlet-javascript>
-		<css-class-wrapper>portlet-dynamic-data-lists</css-class-wrapper>
-		<add-default-resource>true</add-default-resource>
-	</portlet>
-	<portlet>
 		<portlet-name>170</portlet-name>
 		<icon>/html/icons/default.png</icon>
 		<struts-path>staging_bar</struts-path>
@@ -1041,7 +1017,6 @@
 		<render-weight>50</render-weight>
 		<header-portlet-css>/html/portlet/document_library/css/main.css</header-portlet-css>
 		<header-portlet-css>/o/ddm-web/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/html/portlet/dynamic_data_lists/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/o/ddm-web/js/main.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/o/ddm-web/js/custom_fields.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/html/portlet/document_library/js/main.js</footer-portlet-javascript>
@@ -1062,6 +1037,9 @@
 			</trigger>
 		</scheduler-entry>
 		<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+		<control-panel-entry-category>site_administration.configuration</control-panel-entry-category>
+		<control-panel-entry-weight>2.0</control-panel-entry-weight>
+		<control-panel-entry-class>com.liferay.portlet.exportimport.ExportImportControlPanelEntry</control-panel-entry-class>
 		<trash-handler>com.liferay.portlet.exportimport.trash.ExportImportConfigurationTrashHandler</trash-handler>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<use-default-template>false</use-default-template>

@@ -48,7 +48,9 @@
 
 		<execute macro="Portlet#shutdownServer" />
 
-		<execute function="AntCommand" locator1="build-test.xml" value1="start-app-server -Ddelete.liferay.home=false" />
+		<execute macro="Portlet#startServer">
+			<var name="deleteLiferayHome" value="false" />
+		</execute>
 
 		<execute macro="User#firstLoginPG" />
 	</command>
@@ -67,6 +69,7 @@
 		</execute>
 
 		<execute macro="SetupWizard#configureDatabasePG">
+			<var name="databaseNameDefault" value="${databaseNameDefault}" />
 			<var name="databasePassword" value="${databasePassword}" />
 			<var name="databaseType" value="${databaseType}" />
 			<var name="databaseUserName" value="${databaseUserName}" />
@@ -80,7 +83,9 @@
 
 		<execute macro="Portlet#shutdownServer" />
 
-		<execute function="AntCommand" locator1="build-test.xml" value1="start-app-server -Ddelete.liferay.home=false" />
+		<execute macro="Portlet#startServer">
+			<var name="deleteLiferayHome" value="false" />
+		</execute>
 
 		<execute macro="SetupWizard#viewConfiguredDatabaseInConsole">
 			<var name="databaseType" value="${databaseType}" />

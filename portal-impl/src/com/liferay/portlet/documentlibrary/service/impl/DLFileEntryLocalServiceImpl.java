@@ -110,6 +110,7 @@ import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.portlet.expando.model.ExpandoRow;
 import com.liferay.portlet.expando.model.ExpandoTable;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
+import com.liferay.portlet.expando.util.ExpandoBridgeUtil;
 
 import java.awt.image.RenderedImage;
 
@@ -603,14 +604,14 @@ public class DLFileEntryLocalServiceImpl
 
 		int total = dlFileEntryFinder.countByExtraSettings();
 
-		final IntervalActionProcessor intervalActionProcessor =
-			new IntervalActionProcessor(total);
+		final IntervalActionProcessor<Void> intervalActionProcessor =
+			new IntervalActionProcessor<>(total);
 
 		intervalActionProcessor.setPerformIntervalActionMethod(
-			new IntervalActionProcessor.PerformIntervalActionMethod() {
+			new IntervalActionProcessor.PerformIntervalActionMethod<Void>() {
 
 				@Override
-				public void performIntervalAction(int start, int end)
+				public Void performIntervalAction(int start, int end)
 					throws PortalException {
 
 					List<DLFileEntry> dlFileEntries =
@@ -622,6 +623,8 @@ public class DLFileEntryLocalServiceImpl
 
 					intervalActionProcessor.incrementStart(
 						dlFileEntries.size());
+
+					return null;
 				}
 
 			});
@@ -660,6 +663,10 @@ public class DLFileEntryLocalServiceImpl
 		DLFileVersion dlFileVersion = dlFileEntry.getFileVersion();
 
 		DLFileVersion newDlFileVersion = newDlFileEntry.getFileVersion();
+
+		ExpandoBridgeUtil.copyExpandoBridgeAttributes(
+			dlFileVersion.getExpandoBridge(),
+			newDlFileVersion.getExpandoBridge());
 
 		copyFileEntryMetadata(
 			dlFileVersion.getCompanyId(), dlFileVersion.getFileEntryTypeId(),
@@ -962,14 +969,14 @@ public class DLFileEntryLocalServiceImpl
 
 		int total = dlFileEntryPersistence.countByR_F(repositoryId, folderId);
 
-		final IntervalActionProcessor intervalActionProcessor =
-			new IntervalActionProcessor(total);
+		final IntervalActionProcessor<Void> intervalActionProcessor =
+			new IntervalActionProcessor<>(total);
 
 		intervalActionProcessor.setPerformIntervalActionMethod(
-			new IntervalActionProcessor.PerformIntervalActionMethod() {
+			new IntervalActionProcessor.PerformIntervalActionMethod<Void>() {
 
 				@Override
-				public void performIntervalAction(int start, int end)
+				public Void performIntervalAction(int start, int end)
 					throws PortalException {
 
 					List<DLFileEntry> dlFileEntries =
@@ -987,6 +994,8 @@ public class DLFileEntryLocalServiceImpl
 							intervalActionProcessor.incrementStart();
 						}
 					}
+
+					return null;
 				}
 
 			});
@@ -2562,7 +2571,8 @@ public class DLFileEntryLocalServiceImpl
 
 		if (!checkedOut && dlFileVersion.isApproved() &&
 			!Validator.equals(
-				dlFileVersion.getUuid(), serviceContext.getUuid())) {
+				dlFileVersion.getUuid(),
+				serviceContext.getUuidWithoutReset())) {
 
 			autoCheckIn = true;
 		}
@@ -2580,8 +2590,14 @@ public class DLFileEntryLocalServiceImpl
 		}
 
 		if (checkedOut || autoCheckIn) {
+			ExpandoBridge oldExpandoBridge = dlFileVersion.getExpandoBridge();
+
 			dlFileVersion = dlFileVersionLocalService.getLatestFileVersion(
 				fileEntryId, false);
+
+			ExpandoBridgeUtil.setExpandoBridgeAttributes(
+				oldExpandoBridge, dlFileVersion.getExpandoBridge(),
+				serviceContext);
 		}
 
 		try {

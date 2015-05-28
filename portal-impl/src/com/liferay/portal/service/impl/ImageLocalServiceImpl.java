@@ -133,6 +133,17 @@ public class ImageLocalServiceImpl extends ImageLocalServiceBaseImpl {
 	}
 
 	@Override
+	public Image moveImage(long imageId, byte[] bytes) throws PortalException {
+		Image image = updateImage(counterLocalService.increment(), bytes);
+
+		if (imageId > 0) {
+			deleteImage(imageId);
+		}
+
+		return image;
+	}
+
+	@Override
 	public Image updateImage(long imageId, byte[] bytes)
 		throws PortalException {
 

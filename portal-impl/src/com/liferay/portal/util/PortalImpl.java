@@ -14,12 +14,12 @@
 
 package com.liferay.portal.util;
 
-import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.ImageTypeException;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.NoSuchImageException;
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.NoSuchUserException;
+import com.liferay.portal.RSSFeedException;
 import com.liferay.portal.dao.orm.common.SQLTransformer;
 import com.liferay.portal.events.StartupHelperUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
@@ -108,6 +108,7 @@ import com.liferay.portal.model.ColorScheme;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
+import com.liferay.portal.model.Image;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutFriendlyURLComposite;
@@ -203,7 +204,6 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.expando.ValueDataException;
 import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
-import com.liferay.portlet.journal.NoSuchFeedException;
 import com.liferay.portlet.journal.model.JournalArticleConstants;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.login.util.LoginUtil;
@@ -6908,8 +6908,8 @@ public class PortalImpl implements Portal {
 		throws IOException, ServletException {
 
 		sendError(
-			HttpServletResponse.SC_NOT_FOUND, new NoSuchFeedException(),
-			request, response);
+			HttpServletResponse.SC_NOT_FOUND, new RSSFeedException(), request,
+			response);
 	}
 
 	@Override
@@ -7099,13 +7099,13 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public void updateImageId(
-			BaseModel<?> baseModel, boolean image, byte[] bytes,
+			BaseModel<?> baseModel, boolean hasImage, byte[] bytes,
 			String fieldName, long maxSize, int maxHeight, int maxWidth)
 		throws PortalException {
 
 		long imageId = BeanPropertiesUtil.getLong(baseModel, fieldName);
 
-		if (!image) {
+		if (!hasImage) {
 			if (imageId > 0) {
 				ImageLocalServiceUtil.deleteImage(imageId);
 
@@ -7119,14 +7119,8 @@ public class PortalImpl implements Portal {
 			return;
 		}
 
-		if ((maxSize > 0) && ((bytes == null) || (bytes.length > maxSize))) {
+		if ((maxSize > 0) && (bytes.length > maxSize)) {
 			throw new ImageSizeException();
-		}
-
-		if (imageId <= 0) {
-			imageId = CounterLocalServiceUtil.increment();
-
-			BeanPropertiesUtil.setProperty(baseModel, fieldName, imageId);
 		}
 
 		if ((maxHeight > 0) || (maxWidth > 0)) {
@@ -7150,13 +7144,17 @@ public class PortalImpl implements Portal {
 			}
 		}
 
-		ImageLocalServiceUtil.updateImage(imageId, bytes);
+		Image image = ImageLocalServiceUtil.moveImage(imageId, bytes);
+
+		BeanPropertiesUtil.setProperty(
+			baseModel, fieldName, image.getImageId());
 	}
 
 	@Override
 	public PortletMode updatePortletMode(
-		String portletId, User user, Layout layout, PortletMode portletMode,
-		HttpServletRequest request) {
+			String portletId, User user, Layout layout, PortletMode portletMode,
+			HttpServletRequest request)
+		throws PortalException {
 
 		LayoutTypePortlet layoutType =
 			(LayoutTypePortlet)layout.getLayoutType();
@@ -7191,6 +7189,22 @@ public class PortalImpl implements Portal {
 			}
 		}
 		else {
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+			PermissionChecker permissionChecker =
+				themeDisplay.getPermissionChecker();
+
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				getCompanyId(request), portletId);
+
+			if (!PortletPermissionUtil.contains(
+					permissionChecker, getScopeGroupId(request), layout,
+					portlet, ActionKeys.VIEW)) {
+
+				return portletMode;
+			}
+
 			boolean updateLayout = false;
 
 			if (portletMode.equals(LiferayPortletMode.ABOUT) &&
@@ -7201,28 +7215,40 @@ public class PortalImpl implements Portal {
 				updateLayout = true;
 			}
 			else if (portletMode.equals(LiferayPortletMode.CONFIG) &&
-					 !layoutType.hasModeConfigPortletId(portletId)) {
+					 !layoutType.hasModeConfigPortletId(portletId) &&
+					 PortletPermissionUtil.contains(
+						 permissionChecker, getScopeGroupId(request), layout,
+						 portlet, ActionKeys.CONFIGURATION)) {
 
 				layoutType.addModeConfigPortletId(portletId);
 
 				updateLayout = true;
 			}
 			else if (portletMode.equals(PortletMode.EDIT) &&
-					 !layoutType.hasModeEditPortletId(portletId)) {
+					 !layoutType.hasModeEditPortletId(portletId) &&
+					 PortletPermissionUtil.contains(
+						 permissionChecker, getScopeGroupId(request), layout,
+						 portlet, ActionKeys.PREFERENCES)) {
 
 				layoutType.addModeEditPortletId(portletId);
 
 				updateLayout = true;
 			}
 			else if (portletMode.equals(LiferayPortletMode.EDIT_DEFAULTS) &&
-					 !layoutType.hasModeEditDefaultsPortletId(portletId)) {
+					 !layoutType.hasModeEditDefaultsPortletId(portletId) &&
+					 PortletPermissionUtil.contains(
+						 permissionChecker, getScopeGroupId(request), layout,
+						 portlet, ActionKeys.PREFERENCES)) {
 
 				layoutType.addModeEditDefaultsPortletId(portletId);
 
 				updateLayout = true;
 			}
 			else if (portletMode.equals(LiferayPortletMode.EDIT_GUEST) &&
-					 !layoutType.hasModeEditGuestPortletId(portletId)) {
+					 !layoutType.hasModeEditGuestPortletId(portletId) &&
+					 PortletPermissionUtil.contains(
+						 permissionChecker, getScopeGroupId(request), layout,
+						 portlet, ActionKeys.GUEST_PREFERENCES)) {
 
 				layoutType.addModeEditGuestPortletId(portletId);
 

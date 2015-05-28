@@ -18,8 +18,12 @@ import com.liferay.item.selector.web.FlickrItemSelectorCriterion;
 import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 
+import java.net.URL;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
@@ -46,16 +50,24 @@ public class ItemSelectorCriterionSerializerTest {
 
 	@Test
 	public void testGetProperties() {
+		Set<Class<?>> desiredReturnTypes = new HashSet<>();
+
+		desiredReturnTypes.add(URL.class);
+
+		_flickrItemSelectorCriterion.setDesiredReturnTypes(desiredReturnTypes);
+
 		Map<String, String[]> properties =
 			_itemSelectorCriterionSerializer.getProperties();
 
 		String json = properties.get(
 			_PREFIX + ItemSelectorCriterionSerializer.JSON)[0];
 
+		json = _assert(
+			"\"desiredReturnTypes\":[\"" + URL.class.getName() + "\"]", json);
 		json = _assert("\"tags\":[\"me\",\"photo\",\"picture\"]", json);
 		json = _assert("\"user\":\"anonymous\"", json);
 
-		Assert.assertEquals("{,}", json);
+		Assert.assertEquals("{,,}", json);
 	}
 
 	@Test
@@ -65,8 +77,9 @@ public class ItemSelectorCriterionSerializerTest {
 		properties.put(
 			_PREFIX + ItemSelectorCriterionSerializer.JSON,
 			new String[] {
-				"{\"tags\":[\"tag1\",\"tag2\",\"tag3\"],\"user\":" +
-					"\"Joe Bloggs\"}"
+				"{\"desiredReturnTypes\":[\"" + URL.class.getName() +
+					"\"],\"tags\":[\"tag1\",\"tag2\",\"tag3\"],\"user\":" +
+						"\"Joe Bloggs\"}"
 			});
 
 		_itemSelectorCriterionSerializer.setProperties(properties);
@@ -76,6 +89,14 @@ public class ItemSelectorCriterionSerializerTest {
 		Assert.assertArrayEquals(
 			new String[] {"tag1", "tag2", "tag3"},
 			_flickrItemSelectorCriterion.getTags());
+
+		Set<Class<?>> expectedDesiredReturnTypes = new HashSet<>();
+
+		expectedDesiredReturnTypes.add(URL.class);
+
+		Assert.assertEquals(
+			expectedDesiredReturnTypes,
+			_flickrItemSelectorCriterion.getDesiredReturnTypes());
 	}
 
 	private String _assert(String expected, String json) {

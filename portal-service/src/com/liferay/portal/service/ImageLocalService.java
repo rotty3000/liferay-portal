@@ -223,6 +223,9 @@ public interface ImageLocalService extends BaseLocalService,
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj) throws PortalException;
 
+	public com.liferay.portal.model.Image moveImage(long imageId, byte[] bytes)
+		throws PortalException;
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

@@ -2426,17 +2426,19 @@ public class PortalUtil {
 	}
 
 	public static void updateImageId(
-			BaseModel<?> baseModel, boolean image, byte[] bytes,
+			BaseModel<?> baseModel, boolean hasImage, byte[] bytes,
 			String fieldName, long maxSize, int maxHeight, int maxWidth)
 		throws PortalException {
 
 		getPortal().updateImageId(
-			baseModel, image, bytes, fieldName, maxSize, maxHeight, maxWidth);
+			baseModel, hasImage, bytes, fieldName, maxSize, maxHeight,
+			maxWidth);
 	}
 
 	public static PortletMode updatePortletMode(
-		String portletId, User user, Layout layout, PortletMode portletMode,
-		HttpServletRequest request) {
+			String portletId, User user, Layout layout, PortletMode portletMode,
+			HttpServletRequest request)
+		throws PortalException {
 
 		return getPortal().updatePortletMode(
 			portletId, user, layout, portletMode, request);

@@ -99,7 +99,7 @@ AUI.add(
 						var responseText = obj.responseText;
 
 						try {
-							responseText = A.JSON.parse(responseText);
+							responseText = JSON.parse(responseText);
 						}
 						catch (e) {
 						}
@@ -117,7 +117,7 @@ AUI.add(
 								var previewURL = instance.get('previewURL');
 
 								previewURL = Liferay.Util.addParams(instance.get('namespace') + 'tempImageFileName=' + responseText.tempImageFileName, previewURL);
-								previewURL = Liferay.Util.addParams('t=' + Lang.now(), previewURL);
+								previewURL = Liferay.Util.addParams('t=' + Date.now(), previewURL);
 
 								portraitPreviewImg.attr('src', previewURL);
 
@@ -272,7 +272,7 @@ AUI.add(
 
 							var cropRegion = instance._getCropRegion(portraitPreviewImg, region);
 
-							instance._cropRegionNode.val(A.JSON.stringify(cropRegion));
+							instance._cropRegionNode.val(JSON.stringify(cropRegion));
 						}
 					},
 

@@ -4,7 +4,7 @@
 		module="arquillian-container-liferay"
 		revision="1.0.0.Final-SNAPSHOT"
 		status="integration"
-		publication="20150429042742"
+		publication="20150521061229"
 	>
 		<description homepage="">
 		Arquillian Container Adapter for Liferay Portal Server. OSGi incontainer deployment.
@@ -164,67 +164,76 @@
 	<dependencies>
 		<dependency org="biz.aQute.bnd" name="bndlib" rev="2.4.0" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		<dependency org="junit" name="junit" rev="4.12" force="true" conf="test->runtime(*),master(*)"/>
-		<dependency org="org.arquillian.liferay" name="arquillian-container-osgi-with-extensions" rev="1.0.0.Final-SNAPSHOT" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
+		<dependency org="org.arquillian.liferay" name="arquillian-container-osgi-allin" rev="1.0.0.Final-SNAPSHOT" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
+		<dependency org="org.arquillian.liferay" name="arquillian-processor-osgi-allin" rev="1.0.0.Final-SNAPSHOT" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		<dependency org="org.osgi" name="org.osgi.core" rev="5.0.0" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		<dependency org="org.osgi" name="org.osgi.enterprise" rev="5.0.0" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-jboss" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.core" module="arquillian-core-impl-base" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.testng" module="arquillian-testng-standalone" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.config" module="arquillian-config-api" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.test" module="arquillian-test-api" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-cdi" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-impl-base" matcher="exact" rev="1.2.2"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-depchain" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-jboss" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.junit" module="arquillian-junit-standalone" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-initialcontext" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-base" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.junit" module="arquillian-junit-core" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.testng" module="arquillian-testng-container" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-api-nio2" matcher="exact" rev="1.2.2"/>
-		<override org="org.jboss.arquillian.core" module="arquillian-core-api" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api-maven" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.arquillian.config" module="arquillian-config-spi" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-spi" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.as" module="jboss-as-arquillian-container-remote" matcher="exact" rev="7.1.1.Final"/>
-		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-ejb" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.hamcrest" module="hamcrest-core" matcher="exact" rev="1.3"/>
-		<override org="org.jboss.arquillian.protocol" module="arquillian-protocol-servlet" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-spi" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.container" module="arquillian-container-test-impl-base" matcher="exact" rev="1.1.7.Final"/>
-		<override org="junit" module="junit" matcher="exact" rev="4.12"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-javaee" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.container" module="arquillian-container-impl-base" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-impl-maven" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.arquillian.config" module="arquillian-config-impl-base" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-spi-maven" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-spi" matcher="exact" rev="1.2.2"/>
-		<override org="org.jboss.arquillian.core" module="arquillian-core-spi" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.arquillian.protocol" module="arquillian-protocol-jmx" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.spec" module="jboss-javaee-6.0" matcher="exact" rev="2.0.0.Final"/>
+		<override org="org.jboss.spec" module="jboss-javaee-6.0" matcher="exact" rev="2.0.0.Final"/>
 		<override org="org.jboss.spec" module="jboss-javaee-6.0" matcher="exact" rev="2.0.0.Final"/>
 		<override org="org.jboss.spec" module="jboss-javaee-web-6.0" matcher="exact" rev="2.0.0.Final"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-gen" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.spec" module="jboss-javaee-web-6.0" matcher="exact" rev="2.0.0.Final"/>
+		<override org="org.jboss.spec" module="jboss-javaee-web-6.0" matcher="exact" rev="2.0.0.Final"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-spi" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api-maven" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-spi-maven" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-impl-maven" matcher="exact" rev="2.1.1"/>
 		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api-maven-archive" matcher="exact" rev="2.1.1"/>
 		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-impl-maven-archive" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-maven-plugin" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-gradle-depchain" matcher="exact" rev="2.2.0-alpha-2"/>
-		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-resource" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-impl-gradle-embedded-archive" matcher="exact" rev="2.2.0-alpha-2"/>
-		<override org="org.jboss.arquillian.testng" module="arquillian-testng-core" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-javaee" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.arquillian.container" module="arquillian-container-test-api" matcher="exact" rev="1.1.7.Final"/>
 		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-depchain" matcher="exact" rev="2.1.1"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-api" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-gradle-depchain" matcher="exact" rev="2.2.0-alpha-2"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-maven-plugin" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-maven-plugin" matcher="exact" rev="2.1.1"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api-gradle-embedded-archive" matcher="exact" rev="2.2.0-alpha-2"/>
+		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-impl-gradle-embedded-archive" matcher="exact" rev="2.2.0-alpha-2"/>
+		<override org="org.jboss.arquillian.core" module="arquillian-core-api" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.core" module="arquillian-core-spi" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.core" module="arquillian-core-impl-base" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.config" module="arquillian-config-api" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.config" module="arquillian-config-spi" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.config" module="arquillian-config-impl-base" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.test" module="arquillian-test-api" matcher="exact" rev="1.1.7.Final"/>
 		<override org="org.jboss.arquillian.test" module="arquillian-test-spi" matcher="exact" rev="1.1.7.Final"/>
 		<override org="org.jboss.arquillian.test" module="arquillian-test-impl-base" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-depchain" matcher="exact" rev="1.2.2"/>
-		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-base" matcher="exact" rev="2.0.0-alpha-7"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-impl-nio2" matcher="exact" rev="1.2.2"/>
-		<override org="org.jboss.arquillian.junit" module="arquillian-junit-container" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap.resolver" module="shrinkwrap-resolver-api-gradle-embedded-archive" matcher="exact" rev="2.2.0-alpha-2"/>
-		<override org="org.jboss.arquillian.container" module="arquillian-container-test-spi" matcher="exact" rev="1.1.7.Final"/>
-		<override org="org.jboss.shrinkwrap" module="shrinkwrap-depchain-java7" matcher="exact" rev="1.2.2"/>
 		<override org="org.jboss.arquillian.container" module="arquillian-container-spi" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.container" module="arquillian-container-impl-base" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.container" module="arquillian-container-test-api" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.container" module="arquillian-container-test-spi" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.container" module="arquillian-container-test-impl-base" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.junit" module="arquillian-junit-core" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.junit" module="arquillian-junit-container" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.junit" module="arquillian-junit-standalone" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testng" module="arquillian-testng-core" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testng" module="arquillian-testng-container" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testng" module="arquillian-testng-standalone" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.protocol" module="arquillian-protocol-servlet" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.protocol" module="arquillian-protocol-jmx" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-cdi" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-ejb" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-resource" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.arquillian.testenricher" module="arquillian-testenricher-initialcontext" matcher="exact" rev="1.1.7.Final"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-depchain-java7" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-impl-nio2" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-depchain" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-spi" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-api" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-api-nio2" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap" module="shrinkwrap-impl-base" matcher="exact" rev="1.2.2"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-jboss" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-spi" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-base" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-javaee" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-gen" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-javaee" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-impl-jboss" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-depchain" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.shrinkwrap.descriptors" module="shrinkwrap-descriptors-api-base" matcher="exact" rev="2.0.0-alpha-7"/>
+		<override org="org.jboss.as" module="jboss-as-arquillian-container-remote" matcher="exact" rev="7.1.1.Final"/>
+		<override org="org.jboss.as" module="jboss-as-arquillian-container-remote" matcher="exact" rev="7.1.1.Final"/>
+		<override org="org.hamcrest" module="hamcrest-core" matcher="exact" rev="1.3"/>
+		<override org="org.hamcrest" module="hamcrest-core" matcher="exact" rev="1.3"/>
+		<override org="junit" module="junit" matcher="exact" rev="4.12"/>
+		<override org="junit" module="junit" matcher="exact" rev="4.12"/>
 	</dependencies>
 </ivy-module>

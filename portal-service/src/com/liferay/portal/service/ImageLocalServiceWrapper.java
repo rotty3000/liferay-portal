@@ -260,6 +260,12 @@ public class ImageLocalServiceWrapper implements ImageLocalService,
 		return _imageLocalService.getPersistedModel(primaryKeyObj);
 	}
 
+	@Override
+	public com.liferay.portal.model.Image moveImage(long imageId, byte[] bytes)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _imageLocalService.moveImage(imageId, bytes);
+	}
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

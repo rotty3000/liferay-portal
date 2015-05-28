@@ -14,11 +14,25 @@
 
 package com.liferay.frontend.editors.web;
 
+import com.liferay.portal.kernel.editor.Editor;
+
 import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Raymond Augé
+ * @author Roberto Díaz
  */
-@Component(property = {"editor.name=ckeditor_bbcode"}, service = Object.class)
-public class CKEditorBBCodeEditor {
+@Component(service = Editor.class)
+public class CKEditorBBCodeEditor extends BaseEditor {
+
+	@Override
+	public String getName() {
+		return "ckeditor_bbcode";
+	}
+
+	@Override
+	protected String getJspPath() {
+		return "/editors/ckeditor_bbcode.jsp";
+	}
+
 }

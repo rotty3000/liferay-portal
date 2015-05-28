@@ -148,7 +148,7 @@ AUI.add(
 							progressbar.destroy();
 						}
 
-						var data = A.JSON.parse(event.data);
+						var data = JSON.parse(event.data);
 
 						if (data.success) {
 							var image = A.one(instance._editor.element.$).one('[data-random-id="' + data.image.randomId + '"]');
@@ -222,7 +222,7 @@ AUI.add(
 
 						image = A.one(image);
 
-						var randomId = Lang.now() + STR_UNDERSCORE + Liferay.Util.randomInt();
+						var randomId = Date.now() + STR_UNDERSCORE + Liferay.Util.randomInt();
 
 						image.attr('data-random-id', randomId);
 

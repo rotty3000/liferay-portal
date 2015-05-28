@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
+import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portalweb.portal.BaseTestCase;
 import com.liferay.portalweb.portal.util.AntCommands;
@@ -226,7 +226,7 @@ public class LiferaySeleniumHelper {
 		content = "<log4j>" + content + "</log4j>";
 		content = content.replaceAll("log4j:", "");
 
-		Document document = SAXReaderUtil.read(content, true);
+		Document document = UnsecureSAXReaderUtil.read(content, true);
 
 		Element rootElement = document.getRootElement();
 
@@ -1054,15 +1054,11 @@ public class LiferaySeleniumHelper {
 			return true;
 		}
 
-		// LPS-55491, temporary workaround until Michael Han fixes it
-
-		if (line.contains("failure in bulk execution")) {
-			return true;
-		}
-
 		// LPS-55835, temporary workaround while Brian Wulbern investigates it
 
-		if (line.matches("Current URL.*add_panel generates exception:")) {
+		if (line.matches(
+				"Current URL.*add_panel generates exception:[\\s\\S]*")) {
+
 			return true;
 		}
 

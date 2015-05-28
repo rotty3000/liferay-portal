@@ -249,6 +249,12 @@ public class ImageLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+	public static com.liferay.portal.model.Image moveImage(long imageId,
+		byte[] bytes)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().moveImage(imageId, bytes);
+	}
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

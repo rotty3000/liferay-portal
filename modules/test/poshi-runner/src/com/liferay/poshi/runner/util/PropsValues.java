@@ -31,6 +31,9 @@ public class PropsValues {
 	public static final String CLUSTER_NODE_2 = PropsUtil.get(
 		"cluster.node2");
 
+	public static final String COMPONENT_NAMES = PropsUtil.get(
+		"component.names");
+
 	public static final String EMAIL_ADDRESS_1 = PropsUtil.get(
 		"email.address.1");
 
@@ -90,6 +93,8 @@ public class PropsValues {
 	public static final String PORTAL_URL = PropsUtil.get(
 		"portal.url");
 
+	public static final String PRODUCT_NAMES = PropsUtil.get("product.names");
+
 	public static final boolean SAVE_SCREENSHOT = GetterUtil.getBoolean(
 		PropsUtil.get("save.screenshot"));
 
@@ -130,6 +135,9 @@ public class PropsValues {
 
 	public static final String TEST_BASE_DIR_NAME = PropsUtil.get(
 		"test.basedir");
+
+	public static final String TEST_CASE_AVAILABLE_PROPERTY_NAMES =
+		PropsUtil.get("test.case.available.property.names");
 
 	public static final boolean TEST_DATABASE_MINIMAL = GetterUtil.getBoolean(
 		PropsUtil.get("test.database.minimal"));

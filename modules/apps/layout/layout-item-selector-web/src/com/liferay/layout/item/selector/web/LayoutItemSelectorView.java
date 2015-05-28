@@ -34,8 +34,8 @@ import javax.servlet.ServletResponse;
 public class LayoutItemSelectorView
 	implements ItemSelectorView<LayoutItemSelectorCriterion> {
 
-	public static final String ITEM_SELECTED_CALLBACK =
-		LayoutItemSelectorView.class.getName() + "#ITEM_SELECTED_CALLBACK";
+	public static final String ITEM_SELECTED_EVENT_NAME =
+		LayoutItemSelectorView.class.getName() + "#ITEM_SELECTED_EVENT_NAME";
 
 	public static final String LAYOUT_ITEM_SELECTOR_CRITERION =
 		LayoutItemSelectorView.class.getName() +
@@ -61,10 +61,10 @@ public class LayoutItemSelectorView
 	public void renderHTML(
 			ServletRequest request, ServletResponse response,
 			LayoutItemSelectorCriterion layoutItemSelectorCriterion,
-			PortletURL portletURL, String itemSelectedCallback)
+			PortletURL portletURL, String itemSelectedEventName)
 		throws IOException, ServletException {
 
-		request.setAttribute(ITEM_SELECTED_CALLBACK, itemSelectedCallback);
+		request.setAttribute(ITEM_SELECTED_EVENT_NAME, itemSelectedEventName);
 		request.setAttribute(
 			LAYOUT_ITEM_SELECTOR_CRITERION, layoutItemSelectorCriterion);
 		request.setAttribute(PORTLET_URL, portletURL);

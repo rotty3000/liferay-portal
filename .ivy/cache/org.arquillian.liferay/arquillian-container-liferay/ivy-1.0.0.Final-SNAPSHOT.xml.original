@@ -28,7 +28,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.arquillian.liferay</groupId>
-			<artifactId>arquillian-container-osgi-with-extensions</artifactId>
+			<artifactId>arquillian-container-osgi-allin</artifactId>
+			<version>1.0.0.Final-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.arquillian.liferay</groupId>
+			<artifactId>arquillian-processor-osgi-allin</artifactId>
 			<version>1.0.0.Final-SNAPSHOT</version>
 		</dependency>
 		<dependency>
