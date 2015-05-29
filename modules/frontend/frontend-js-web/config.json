@@ -1,0 +1,26 @@
+{
+    "liferay/html/js/liferay/address.es": {
+        "dependencies": ["exports"]
+    },
+    "liferay/html/js/liferay/eduardo.es": {
+        "dependencies": ["exports", "liferay/html/js/liferay/iliyan.es"]
+    },
+    "liferay/html/js/liferay/iliyan.es": {
+        "dependencies": ["exports"]
+    },
+    "liferay/html/js/liferay/nate.es": {
+        "dependencies": ["exports", "liferay/html/js/liferay/address.es", "liferay/html/js/liferay/eduardo.es"]
+    },
+    "liferay/rces/html/js/liferay/address.es": {
+        "dependencies": ["exports"]
+    },
+    "liferay/rces/html/js/liferay/eduardo.es": {
+        "dependencies": ["exports"]
+    },
+    "liferay/rces/html/js/liferay/iliyan.es": {
+        "dependencies": ["exports"]
+    },
+    "liferay/rces/html/js/liferay/nate.es": {
+        "dependencies": ["exports"]
+    }
+}

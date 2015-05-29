@@ -188,9 +188,12 @@
 		</if>
 	</target>
 
-	<target name="jar" depends="build-common.compile,build-alloy-bootstrap,build-alloy">
+	<target name="jar" depends="build-common.compile,build-alloy-bootstrap,build-alloy,transpile-js-files,generate-modules-config">
+
 		<jar-macro
 			module.dir="${basedir}"
 		/>
+
+		<delete dir=".js_cache" />
 	</target>
 </project>

@@ -1,0 +1,8 @@
+Bundle-Name: Liferay JavaScript Module
+Bundle-SymbolicName: com.liferay.javascript.module
+Bundle-Version: 1.0.0
+Include-Resource:\
+	classes,\
+	META-INF/resources=src/META-INF/resources,\
+	META-INF/resources=.js_cache/src/META-INF/resources
+Web-ContextPath: /my-module

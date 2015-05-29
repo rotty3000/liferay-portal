@@ -14,11 +14,24 @@
  */
 --%>
 
-<%@ include file="/portlet/init.jsp" %>
+<%@ include file="/html/portlet/language/init.jsp" %>
 
 <%
-PanelCategoryRegistry panelCategoryRegistry = (PanelCategoryRegistry)request.getAttribute(ProductivityCenterWebKeys.PANEL_CATEGORY_REGISTRY);
-PanelCategory panelCategory = panelCategoryRegistry.getPanelCategory(PanelCategoryKeys.USER_PERSONAL_PANEL);
+Locale[] locales = LocaleUtil.fromLanguageIds(languageIds);
+
+String portletId = portletDisplay.getId();
 %>
 
 <productivity-center-ui:panel panelCategory="<%= panelCategory %>" />
+
+<aui:script>
+	require('liferay/html/js/liferay/address', function(main) {
+		main.log('Hello World!');
+
+		var portletBody = $('#p_p_id_<%= portletId %>_ .portlet-body');
+
+		portletBody.before('<div><strong>Hello World from a ES6 module!</strong></div>');
+	}, function(error) {
+		console.error(error);
+	});
+</aui:script>

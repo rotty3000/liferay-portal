@@ -77,7 +77,11 @@
 						<available file="docroot" type="dir" />
 						<then>
 							<copy todir="${war.file.dest}" preservelastmodified="true">
-								<fileset dir="docroot" excludes="/html/themes/*/_diffs/**" />
+								<fileset dir="docroot">
+									<exclude name="/html/themes/*/_diffs/**" />
+									<exclude name="/html/js/liferay/**/*.js" />
+									<exclude name="/html/portlet/**/*.js" />
+								</fileset>
 							</copy>
 						</then>
 					</elseif>
