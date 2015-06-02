@@ -565,31 +565,8 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			return content;
 		}
 
-		String className = file.getName();
-
-		int pos = className.lastIndexOf(StringPool.PERIOD);
-
-		className = className.substring(0, pos);
-
-		String packagePath = fileName;
-
-		int packagePathX = packagePath.indexOf("/src/");
-
-		if (packagePathX == -1) {
-			packagePathX = packagePath.indexOf("/integration/") + 8;
-		}
-
-		int packagePathY = packagePath.lastIndexOf(StringPool.SLASH);
-
-		if ((packagePathX + 5) >= packagePathY) {
-			packagePath = StringPool.BLANK;
-		}
-		else {
-			packagePath = packagePath.substring(packagePathX + 5, packagePathY);
-		}
-
-		packagePath = StringUtil.replace(
-			packagePath, StringPool.SLASH, StringPool.PERIOD);
+		String className = getClassName(file);
+		String packagePath = getPackagePath(fileName);
 
 		if (packagePath.endsWith(".model")) {
 			if (content.contains("extends " + className + "Model")) {
@@ -911,7 +888,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		newContent = fixIncorrectEmptyLineBeforeCloseCurlyBrace(
 			newContent, fileName);
 
-		pos = newContent.indexOf("\npublic ");
+		int pos = newContent.indexOf("\npublic ");
 
 		if (pos != -1) {
 			String javaClassContent = newContent.substring(pos + 1);
@@ -2202,6 +2179,14 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		return line;
 	}
 
+	protected String getClassName(File file) {
+		String className = file.getName();
+
+		int pos = className.lastIndexOf(StringPool.PERIOD);
+
+		return className.substring(0, pos);
+	}
+
 	protected String getCombinedLinesContent(String content, Pattern pattern) {
 		Matcher matcher = pattern.matcher(content);
 
@@ -2880,6 +2865,28 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		}
 
 		return content.substring(nextLineStartPos, nextLineEndPos);
+	}
+
+	protected String getPackagePath(String fileName) {
+		String packagePath = fileName;
+
+		int packagePathX = packagePath.indexOf("/src/");
+
+		if (packagePathX == -1) {
+			packagePathX = packagePath.indexOf("/integration/") + 8;
+		}
+
+		int packagePathY = packagePath.lastIndexOf(StringPool.SLASH);
+
+		if ((packagePathX + 5) >= packagePathY) {
+			packagePath = StringPool.BLANK;
+		}
+		else {
+			packagePath = packagePath.substring(packagePathX + 5, packagePathY);
+		}
+
+		return StringUtil.replace(
+			packagePath, StringPool.SLASH, StringPool.PERIOD);
 	}
 
 	protected Collection<String> getPluginJavaFiles() {
