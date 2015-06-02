@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -32,7 +33,9 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -960,6 +963,51 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		return new ArrayList<>(fileNames);
 	}
 
+	protected void fillModuleClassesMap(Collection<String> fileNames)
+		throws Exception {
+
+		for (String fileName : fileNames) {
+			if (!fileName.startsWith("modules")) {
+				continue;
+			}
+
+			File file = new File(
+				sourceFormatterArgs.getBaseDirName() + fileName);
+
+			fileName = StringUtil.replace(
+				fileName, StringPool.BACK_SLASH, StringPool.SLASH);
+
+			String moduleName = getModuleName(fileName);
+
+			if (Validator.isNull(moduleName)) {
+				continue;
+			}
+
+			String className = getClassName(file);
+			String content = FileUtil.read(file);
+
+			Pattern pattern = Pattern.compile(
+				"(class|enum|interface)[ \n\t]+" + className);
+
+			Matcher matcher = pattern.matcher(content);
+
+			if (!matcher.find()) {
+				continue;
+			}
+
+			String classType = matcher.group(1);
+
+			if (classType.equals("interface")) {
+				continue;
+			}
+
+			String packagePath = getPackagePath(fileName);
+
+			_moduleClassesMap.put(
+				packagePath + StringPool.PERIOD + className, moduleName);
+		}
+	}
+
 	protected String fixDataAccessConnection(String className, String content) {
 		int x = content.indexOf("package ");
 
@@ -1415,6 +1463,8 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			String packageName = StringPool.BLANK;
 			String regexPattern = StringPool.BLANK;
 
+			String moduleName = getModuleName(fileName);
+
 			while ((line = unsyncBufferedReader.readLine()) != null) {
 				lineCount++;
 
@@ -1424,7 +1474,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 					packageName = line.substring(8, line.length() - 1);
 				}
 
-				if (line.startsWith("import ")) {
+				if (line.startsWith("import ") &&
+					line.endsWith(StringPool.SEMICOLON)) {
+
 					if (line.endsWith(".*;")) {
 						processErrorMessage(
 							fileName, "import: " + fileName + " " + lineCount);
@@ -1437,6 +1489,31 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 
 						if (importPackageName.equals(packageName)) {
 							continue;
+						}
+
+						// LPS-56054
+
+						String importClassName = line.substring(
+							pos + 1, line.length() - 1);
+
+						String importPackageAndClassName =
+							importPackageName + StringPool.PERIOD +
+								importClassName;
+
+						String importModuleName = _moduleClassesMap.get(
+							importPackageAndClassName);
+
+						if (Validator.isNotNull(importModuleName) &&
+							!importModuleName.equals(moduleName) &&
+							content.contains(
+								"new " + importClassName +
+									StringPool.OPEN_PARENTHESIS)) {
+
+							processErrorMessage(
+								fileName,
+								"Import from other module: " +
+									importPackageAndClassName + ": " +
+										fileName + " " + lineCount);
 						}
 					}
 				}
@@ -2851,6 +2928,22 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		return x + 1;
 	}
 
+	protected String getModuleName(String fileName) {
+		if (!fileName.startsWith("modules") ||
+			(StringUtil.count(fileName, StringPool.SLASH) < 3)) {
+
+			return null;
+		}
+
+		int pos = fileName.indexOf(StringPool.SLASH);
+
+		pos = fileName.indexOf(StringPool.SLASH, pos + 1);
+
+		pos = fileName.indexOf(StringPool.SLASH, pos + 1);
+
+		return fileName.substring(0, pos);
+	}
+
 	protected String getNextLine(String content, int lineCount) {
 		int nextLineStartPos = getLineStartPos(content, lineCount + 1);
 
@@ -2958,6 +3051,13 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		};
 
 		fileNames.addAll(getFileNames(excludes, includes));
+
+		try {
+			fillModuleClassesMap(fileNames);
+		}
+		catch (Exception e) {
+			ReflectionUtil.throwException(e);
+		}
 
 		return fileNames;
 	}
@@ -3310,6 +3410,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 	private Pattern _logPattern = Pattern.compile(
 		"\n\tprivate static final Log _log = LogFactoryUtil.getLog\\(\n*" +
 			"\t*(.+)\\.class\\)");
+	private Map<String, String> _moduleClassesMap = new HashMap<>();
 	private Pattern _processCallablePattern = Pattern.compile(
 		"implements ProcessCallable\\b");
 	private List<String> _proxyExclusionFiles;
