@@ -710,14 +710,9 @@
 	<portlet>
 		<portlet-name>130</portlet-name>
 		<display-name>Portal Settings</display-name>
-		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
 		<init-param>
 			<name>template-path</name>
 			<value>/html/portlet/portal_settings/</value>
-		</init-param>
-		<init-param>
-			<name>view-action</name>
-			<value>/portal_settings/view</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
