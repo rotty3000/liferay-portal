@@ -2106,6 +2106,7 @@
 		<column name="roleId" type="long" />
 		<column name="ownerId" type="long" />
 		<column name="actionIds" type="long" />
+		<column name="view" type="boolean" />
 
 		<!-- Finder methods -->
 
@@ -2130,7 +2131,7 @@
 			<finder-column name="scope" />
 			<finder-column name="primKey" />
 		</finder>
-		<finder name="C_N_S_PI" return-type="Collection" unique="false" db-index="true">
+		<finder name="C_N_S_PI_V" return-type="Collection" unique="false" db-index="true">
 			<finder-column name="companyId" />
 			<finder-column name="name" />
 			<finder-column name="scope" />
@@ -2143,14 +2144,15 @@
 			<finder-column name="primKey" />
 			<finder-column name="roleId" arrayable-operator="OR" />
 		</finder>
-		<finder name="C_N_S_PI_R" return-type="Collection" unique="false" db-index="true">
+		<finder name="C_N_S_PI_R_V" return-type="Collection" unique="false" db-index="true">
 			<finder-column name="companyId" />
 			<finder-column name="name" />
 			<finder-column name="scope" />
 			<finder-column name="primKeyId" />
 			<finder-column name="roleId" arrayable-operator="OR" />
+			<finder-column name="view" />
 		</finder>
-		
+
 		<!-- References -->
 
 		<reference package-path="com.liferay.portal" entity="Permission" />
