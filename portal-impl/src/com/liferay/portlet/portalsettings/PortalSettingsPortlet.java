@@ -495,7 +495,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void validateSearchFilters(ActionRequest actionRequest)
+	public void validateSearchFilters(ActionRequest actionRequest)
 		throws Exception {
 
 		String userFilter = ParamUtil.getString(
@@ -508,6 +508,90 @@ public class PortalSettingsPortlet extends MVCPortlet {
 
 		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
 	}
+
+	@Override
+	protected void doDispatch(
+		RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+	
+		if (SessionErrors.contains(
+			renderRequest, DuplicatePasswordPolicyException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, NoSuchPasswordPolicyException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PrincipalException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PasswordPolicyNameException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PrincipalException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, 
+				RequiredPasswordPolicyException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AddressCityException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AccountNameException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AddressStreetException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, AddressZipException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyMxException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyVirtualHostException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyWebIdException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, EmailAddressException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, LocaleException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchCountryException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchListTypeException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchRegionException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, PhoneNumberException.class.getName()) ||
+			SessionErrors.contains( 
+ 				renderRequest, WebsiteURLException.class.getName()) ||
+  			SessionErrors.contains( 
+ 				renderRequest, NoSuchListTypeException.class.getName())) {
+				
+			include("/error.jsp", renderRequest, renderResponse);
+		}
+		else {
+			super.doDispatch(renderRequest, renderResponse);
+		}
+	}
+		
+	@Override
+	protected boolean isSessionErrorException(Throwable cause) {
+		if(cause instanceof DuplicatePasswordPolicyException ||
+		   cause instanceof NoSuchPasswordPolicyException ||
+		   cause instanceof PrincipalException ||
+		   cause instanceof PasswordPolicyNameException ||
+		   cause instanceof PrincipalException ||
+		   cause instanceof RequiredPasswordPolicyException || 
+		   cause instanceof AddressCityException ||
+           cause instanceof AccountNameException ||
+           cause instanceof AddressStreetException ||
+           cause instanceof AddressZipException ||
+           cause instanceof CompanyMxException ||
+           cause instanceof CompanyVirtualHostException ||
+           cause instanceof CompanyWebIdException ||
+           cause instanceof EmailAddressException ||
+           cause instanceof LocaleException ||
+           cause instanceof NoSuchCountryException ||
+           cause instanceof NoSuchListTypeException ||
+           cause instanceof NoSuchRegionException ||
+           cause instanceof PhoneNumberException ||
+           cause instanceof WebsiteURLException || 
+           cause instanceof NoSuchListTypeException) {
+				return true;
+		}
+		return false;
+	}				
 
 	private static final String[] _KEYS = {
 		PropsKeys.LDAP_AUTH_SEARCH_FILTER, PropsKeys.LDAP_BASE_DN,
