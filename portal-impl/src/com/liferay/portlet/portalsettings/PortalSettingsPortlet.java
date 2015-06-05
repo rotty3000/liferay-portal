@@ -427,7 +427,9 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
-	public void validateSocialInteractions(ActionRequest actionRequest) {
+	public void validateSocialInteractions(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+		
 		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
 			actionRequest, "settings--socialInteractionsEnabled--");
 
