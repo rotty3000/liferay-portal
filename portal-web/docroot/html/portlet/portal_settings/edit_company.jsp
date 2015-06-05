@@ -32,8 +32,8 @@ request.setAttribute("phones.classPK", company.getAccountId());
 request.setAttribute("websites.classPK", company.getAccountId());
 %>
 
-<portlet:actionURL name="editCompany" var="editCompanyURL">
-	<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_company.jsp" />
+<portlet:actionURL var="editCompany">
+	<portlet:param name="mvcPath" value="/edit_company.jsp" />
 </portlet:actionURL>
 
 <aui:form action="<%= editCompanyURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
