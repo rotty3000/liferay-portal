@@ -240,6 +240,162 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			SessionErrors.add(actionRequest, "socialInteractionsInvalid");
 		}
 	}
+	
+	public UnicodeProperties addLDAPServer(
+			long companyId, UnicodeProperties properties)
+		throws Exception {
+
+		String defaultPostfix = LDAPSettingsUtil.getPropertyPostfix(0);
+
+		Set<String> defaultKeys = new HashSet<>(_KEYS.length);
+
+		for (String key : _KEYS) {
+			defaultKeys.add(key + defaultPostfix);
+		}
+
+		long ldapServerId = CounterLocalServiceUtil.increment();
+
+		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
+
+		Set<String> keysSet = properties.keySet();
+
+		String[] keys = keysSet.toArray(new String[keysSet.size()]);
+
+		for (String key : keys) {
+			if (defaultKeys.contains(key)) {
+				String value = properties.remove(key);
+
+				if (key.equals(
+						PropsKeys.LDAP_SECURITY_CREDENTIALS + defaultPostfix) &&
+					value.equals(Portal.TEMP_OBFUSCATION_VALUE)) {
+
+					value = PrefsPropsUtil.getString(
+						PropsKeys.LDAP_SECURITY_CREDENTIALS);
+				}
+
+				properties.setProperty(
+					key.replace(defaultPostfix, postfix), value);
+			}
+		}
+
+		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
+			companyId, true);
+
+		String ldapServerIds = portletPreferences.getValue(
+			"ldap.server.ids", StringPool.BLANK);
+
+		ldapServerIds = StringUtil.add(
+			ldapServerIds, String.valueOf(ldapServerId));
+
+		properties.setProperty("ldap.server.ids", ldapServerIds);
+
+		return properties;
+	}
+
+	public void deleteLDAPServer(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+
+		// Remove portletPreferences
+
+		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
+
+		String[] keys = new String[_KEYS.length];
+
+		for (int i = 0; i < _KEYS.length; i++) {
+			keys[i] = _KEYS[i] + postfix;
+		}
+
+		CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
+
+		// Update portletPreferences
+
+		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
+			themeDisplay.getCompanyId(), true);
+
+		UnicodeProperties properties = new UnicodeProperties();
+
+		String ldapServerIds = portletPreferences.getValue(
+			"ldap.server.ids", StringPool.BLANK);
+
+		ldapServerIds = StringUtil.removeFromList(
+			ldapServerIds, String.valueOf(ldapServerId));
+
+		properties.put("ldap.server.ids", ldapServerIds);
+
+		CompanyServiceUtil.updatePreferences(
+			themeDisplay.getCompanyId(), properties);
+	}
+
+	public void updateLDAPServer(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+
+		UnicodeProperties properties = PropertiesParamUtil.getProperties(
+			actionRequest, "settings--");
+
+		validateLDAPServerName(
+			ldapServerId, themeDisplay.getCompanyId(), properties);
+
+		validateSearchFilters(actionRequest);
+
+		if (ldapServerId <= 0) {
+			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
+		}
+
+		CompanyServiceUtil.updatePreferences(
+			themeDisplay.getCompanyId(), properties);
+	}
+
+	public void validateLDAPServerName(
+			long ldapServerId, long companyId, UnicodeProperties properties)
+		throws Exception {
+
+		String ldapServerName = properties.getProperty(
+			"ldap.server.name." + ldapServerId);
+
+		if (Validator.isNull(ldapServerName)) {
+			throw new LDAPServerNameException();
+		}
+
+		long[] existingLDAPServerIds = StringUtil.split(
+			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
+
+		for (long existingLDAPServerId : existingLDAPServerIds) {
+			if (ldapServerId == existingLDAPServerId) {
+				continue;
+			}
+
+			String existingLDAPServerName = PrefsPropsUtil.getString(
+				companyId, "ldap.server.name." + existingLDAPServerId);
+
+			if (ldapServerName.equals(existingLDAPServerName)) {
+				throw new DuplicateLDAPServerNameException();
+			}
+		}
+	}
+
+	public void validateSearchFilters(ActionRequest actionRequest)
+		throws Exception {
+
+		String userFilter = ParamUtil.getString(
+			actionRequest, "importUserSearchFilter");
+
+		LDAPUtil.validateFilter(userFilter, "importUserSearchFilter");
+
+		String groupFilter = ParamUtil.getString(
+			actionRequest, "importGroupSearchFilter");
+
+		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
+	}
 
 	@Override
 	protected void doDispatch(
@@ -324,162 +480,6 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 		return false;
 	}				
-	
-	protected UnicodeProperties addLDAPServer(
-			long companyId, UnicodeProperties properties)
-		throws Exception {
-
-		String defaultPostfix = LDAPSettingsUtil.getPropertyPostfix(0);
-
-		Set<String> defaultKeys = new HashSet<>(_KEYS.length);
-
-		for (String key : _KEYS) {
-			defaultKeys.add(key + defaultPostfix);
-		}
-
-		long ldapServerId = CounterLocalServiceUtil.increment();
-
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		Set<String> keysSet = properties.keySet();
-
-		String[] keys = keysSet.toArray(new String[keysSet.size()]);
-
-		for (String key : keys) {
-			if (defaultKeys.contains(key)) {
-				String value = properties.remove(key);
-
-				if (key.equals(
-						PropsKeys.LDAP_SECURITY_CREDENTIALS + defaultPostfix) &&
-					value.equals(Portal.TEMP_OBFUSCATION_VALUE)) {
-
-					value = PrefsPropsUtil.getString(
-						PropsKeys.LDAP_SECURITY_CREDENTIALS);
-				}
-
-				properties.setProperty(
-					key.replace(defaultPostfix, postfix), value);
-			}
-		}
-
-		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
-			companyId, true);
-
-		String ldapServerIds = portletPreferences.getValue(
-			"ldap.server.ids", StringPool.BLANK);
-
-		ldapServerIds = StringUtil.add(
-			ldapServerIds, String.valueOf(ldapServerId));
-
-		properties.setProperty("ldap.server.ids", ldapServerIds);
-
-		return properties;
-	}
-
-	protected void deleteLDAPServer(ActionRequest actionRequest)
-		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
-
-		// Remove portletPreferences
-
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
-
-		String[] keys = new String[_KEYS.length];
-
-		for (int i = 0; i < _KEYS.length; i++) {
-			keys[i] = _KEYS[i] + postfix;
-		}
-
-		CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
-
-		// Update portletPreferences
-
-		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
-			themeDisplay.getCompanyId(), true);
-
-		UnicodeProperties properties = new UnicodeProperties();
-
-		String ldapServerIds = portletPreferences.getValue(
-			"ldap.server.ids", StringPool.BLANK);
-
-		ldapServerIds = StringUtil.removeFromList(
-			ldapServerIds, String.valueOf(ldapServerId));
-
-		properties.put("ldap.server.ids", ldapServerIds);
-
-		CompanyServiceUtil.updatePreferences(
-			themeDisplay.getCompanyId(), properties);
-	}
-
-	protected void updateLDAPServer(ActionRequest actionRequest)
-		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
-
-		UnicodeProperties properties = PropertiesParamUtil.getProperties(
-			actionRequest, "settings--");
-
-		validateLDAPServerName(
-			ldapServerId, themeDisplay.getCompanyId(), properties);
-
-		validateSearchFilters(actionRequest);
-
-		if (ldapServerId <= 0) {
-			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
-		}
-
-		CompanyServiceUtil.updatePreferences(
-			themeDisplay.getCompanyId(), properties);
-	}
-
-	protected void validateLDAPServerName(
-			long ldapServerId, long companyId, UnicodeProperties properties)
-		throws Exception {
-
-		String ldapServerName = properties.getProperty(
-			"ldap.server.name." + ldapServerId);
-
-		if (Validator.isNull(ldapServerName)) {
-			throw new LDAPServerNameException();
-		}
-
-		long[] existingLDAPServerIds = StringUtil.split(
-			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
-
-		for (long existingLDAPServerId : existingLDAPServerIds) {
-			if (ldapServerId == existingLDAPServerId) {
-				continue;
-			}
-
-			String existingLDAPServerName = PrefsPropsUtil.getString(
-				companyId, "ldap.server.name." + existingLDAPServerId);
-
-			if (ldapServerName.equals(existingLDAPServerName)) {
-				throw new DuplicateLDAPServerNameException();
-			}
-		}
-	}
-
-	protected void validateSearchFilters(ActionRequest actionRequest)
-		throws Exception {
-
-		String userFilter = ParamUtil.getString(
-			actionRequest, "importUserSearchFilter");
-
-		LDAPUtil.validateFilter(userFilter, "importUserSearchFilter");
-
-		String groupFilter = ParamUtil.getString(
-			actionRequest, "importGroupSearchFilter");
-
-		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
-	}
 
 	private static final String[] _KEYS = {
 		PropsKeys.LDAP_AUTH_SEARCH_FILTER, PropsKeys.LDAP_BASE_DN,
