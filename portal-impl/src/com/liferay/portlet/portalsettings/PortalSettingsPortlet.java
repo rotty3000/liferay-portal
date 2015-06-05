@@ -80,7 +80,7 @@ import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 public class PortalSettingsPortlet extends MVCPortlet {
 
 	public void updateCompany(
-		ActionRequest actionRequest, ActionResponse actionRespons) 
+		ActionRequest actionRequest, ActionResponse actionResponse) 
 		throws Exception {
 		
 		long companyId = PortalUtil.getCompanyId(actionRequest);
@@ -202,7 +202,9 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
-	public void validateSocialInteractions(ActionRequest actionRequest) {
+	public void validateSocialInteractions(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+		
 		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
 			actionRequest, "settings--socialInteractionsEnabled--");
 
@@ -241,7 +243,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 	
-	public UnicodeProperties addLDAPServer(
+	protected UnicodeProperties addLDAPServer(
 			long companyId, UnicodeProperties properties)
 		throws Exception {
 
@@ -292,7 +294,8 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		return properties;
 	}
 
-	public void deleteLDAPServer(ActionRequest actionRequest)
+	public void deleteLDAPServer(
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -331,7 +334,8 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			themeDisplay.getCompanyId(), properties);
 	}
 
-	public void updateLDAPServer(ActionRequest actionRequest)
+	public void updateLDAPServer(
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
