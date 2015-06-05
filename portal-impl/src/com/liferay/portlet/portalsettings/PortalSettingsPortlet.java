@@ -13,17 +13,14 @@
  */
 package com.liferay.portlet.portalsettings;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 import com.liferay.portal.AccountNameException;
 import com.liferay.portal.AddressCityException;
@@ -32,17 +29,20 @@ import com.liferay.portal.AddressZipException;
 import com.liferay.portal.CompanyMxException;
 import com.liferay.portal.CompanyVirtualHostException;
 import com.liferay.portal.CompanyWebIdException;
+import com.liferay.portal.DuplicatePasswordPolicyException;
 import com.liferay.portal.EmailAddressException;
 import com.liferay.portal.LocaleException;
 import com.liferay.portal.NoSuchCountryException;
 import com.liferay.portal.NoSuchListTypeException;
+import com.liferay.portal.NoSuchPasswordPolicyException;
 import com.liferay.portal.NoSuchRegionException;
+import com.liferay.portal.PasswordPolicyNameException;
 import com.liferay.portal.PhoneNumberException;
+import com.liferay.portal.RequiredPasswordPolicyException;
 import com.liferay.portal.WebsiteURLException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropertiesParamUtil;
@@ -65,85 +65,10 @@ import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
  */
 public class PortalSettingsPortlet extends MVCPortlet {
 
-	@Override
-	public void processAction(
-			ActionMapping actionMapping, ActionForm actionForm,
-			PortletConfig portletConfig, ActionRequest actionRequest,
-			ActionResponse actionResponse)
+	public void updateCompany(
+		ActionRequest actionRequest, ActionResponse actionRespons) 
 		throws Exception {
-
-		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
-
-		try {
-			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-				validateCAS(actionRequest);
-				validateLDAP(actionRequest);
-				validateSocialInteractions(actionRequest);
-
-				if (!SessionErrors.isEmpty(actionRequest)) {
-					setForward(
-						actionRequest, "portlet.portal_settings.edit_company");
-				}
-				else {
-					updateCompany(actionRequest);
-
-					sendRedirect(actionRequest, actionResponse);
-				}
-			}
-		}
-		catch (Exception e) {
-			if (e instanceof PrincipalException) {
-				SessionErrors.add(actionRequest, e.getClass());
-
-				setForward(actionRequest, "portlet.portal_settings.error");
-			}
-			else if (e instanceof AddressCityException ||
-					 e instanceof AccountNameException ||
-					 e instanceof AddressStreetException ||
-					 e instanceof AddressZipException ||
-					 e instanceof CompanyMxException ||
-					 e instanceof CompanyVirtualHostException ||
-					 e instanceof CompanyWebIdException ||
-					 e instanceof EmailAddressException ||
-					 e instanceof LocaleException ||
-					 e instanceof NoSuchCountryException ||
-					 e instanceof NoSuchListTypeException ||
-					 e instanceof NoSuchRegionException ||
-					 e instanceof PhoneNumberException ||
-					 e instanceof WebsiteURLException) {
-
-				if (e instanceof NoSuchListTypeException) {
-					NoSuchListTypeException nslte = (NoSuchListTypeException)e;
-
-					SessionErrors.add(
-						actionRequest,
-						e.getClass().getName() + nslte.getType());
-				}
-				else {
-					SessionErrors.add(actionRequest, e.getClass(), e);
-				}
-
-				setForward(
-					actionRequest, "portlet.portal_settings.edit_company");
-			}
-			else {
-				throw e;
-			}
-		}
-	}
-
-	@Override
-	public ActionForward render(
-			ActionMapping actionMapping, ActionForm actionForm,
-			PortletConfig portletConfig, RenderRequest renderRequest,
-			RenderResponse renderResponse)
-		throws Exception {
-
-		return actionMapping.findForward(
-			getForward(renderRequest, "portlet.portal_settings.edit_company"));
-	}
-
-	public void updateCompany(ActionRequest actionRequest) throws Exception {
+		
 		long companyId = PortalUtil.getCompanyId(actionRequest);
 
 		String virtualHostname = ParamUtil.getString(
@@ -192,7 +117,9 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		PortalUtil.resetCDNHosts();
 	}
 
-	public void validateCAS(ActionRequest actionRequest) {
+	public void validateCAS(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+		
 		boolean casEnabled = ParamUtil.getBoolean(
 			actionRequest, "settings--" + PropsKeys.CAS_AUTH_ENABLED + "--");
 
@@ -243,7 +170,9 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
-	public void validateLDAP(ActionRequest actionRequest) {
+	public void validateLDAP(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+		
 		if (!PropsValues.LDAP_IMPORT_USER_PASSWORD_AUTOGENERATED) {
 			return;
 		}
@@ -298,4 +227,87 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
+	@Override
+	protected void doDispatch(
+		RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+	
+		if (SessionErrors.contains(
+			renderRequest, DuplicatePasswordPolicyException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, NoSuchPasswordPolicyException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PrincipalException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PasswordPolicyNameException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PrincipalException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, 
+				RequiredPasswordPolicyException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AddressCityException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AccountNameException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, AddressStreetException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, AddressZipException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyMxException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyVirtualHostException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, CompanyWebIdException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, EmailAddressException.class.getName()) ||
+			SessionErrors.contains( 
+				renderRequest, LocaleException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchCountryException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchListTypeException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, NoSuchRegionException.class.getName()) ||
+ 			SessionErrors.contains( 
+				renderRequest, PhoneNumberException.class.getName()) ||
+			SessionErrors.contains( 
+ 				renderRequest, WebsiteURLException.class.getName()) ||
+  			SessionErrors.contains( 
+ 				renderRequest, NoSuchListTypeException.class.getName())) {
+				
+			include("/error.jsp", renderRequest, renderResponse);
+		}
+		else {
+			super.doDispatch(renderRequest, renderResponse);
+		}
+	}
+		
+	@Override
+	protected boolean isSessionErrorException(Throwable cause) {
+		if(cause instanceof DuplicatePasswordPolicyException ||
+		   cause instanceof NoSuchPasswordPolicyException ||
+		   cause instanceof PrincipalException ||
+		   cause instanceof PasswordPolicyNameException ||
+		   cause instanceof PrincipalException ||
+		   cause instanceof RequiredPasswordPolicyException || 
+		   cause instanceof AddressCityException ||
+           cause instanceof AccountNameException ||
+           cause instanceof AddressStreetException ||
+           cause instanceof AddressZipException ||
+           cause instanceof CompanyMxException ||
+           cause instanceof CompanyVirtualHostException ||
+           cause instanceof CompanyWebIdException ||
+           cause instanceof EmailAddressException ||
+           cause instanceof LocaleException ||
+           cause instanceof NoSuchCountryException ||
+           cause instanceof NoSuchListTypeException ||
+           cause instanceof NoSuchRegionException ||
+           cause instanceof PhoneNumberException ||
+           cause instanceof WebsiteURLException || 
+           cause instanceof NoSuchListTypeException) {
+				return true;
+		}
+		return false;
+	}				
 }
