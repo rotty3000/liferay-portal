@@ -156,11 +156,11 @@ for (int i = 0; i < groupMappingArray.length; i++) {
 	title='<%= (ldapServerId == 0) ? "add-ldap-server" : "edit-ldap-server" %>'
 />
 
-<portlet:actionURL name="editLDAPServer" var="editLDAPServerURL">
-	<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_ldap_server.jsp" />
+<portlet:actionURL var="editLDAPServer">
+	<portlet:param name="mvcPath" value="/edit_ldap_server.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= editLDAPServerURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveEntry(false);" %>'>
+<aui:form action="<%= editLDAPServer %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveEntry(false);" %>'>
 	<liferay-ui:error exception="<%= DuplicateLDAPServerNameException.class %>" message="please-enter-a-unique-ldap-server-name" />
 	<liferay-ui:error exception="<%= LDAPFilterException.class %>" message="please-enter-a-valid-ldap-search-filter" />
 	<liferay-ui:error exception="<%= LDAPServerNameException.class %>" message="please-enter-a-valid-ldap-server-name" />
