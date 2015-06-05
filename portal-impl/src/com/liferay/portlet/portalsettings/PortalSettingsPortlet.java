@@ -126,7 +126,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 
 	public void editCompany(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		validateCAS(actionRequest);
