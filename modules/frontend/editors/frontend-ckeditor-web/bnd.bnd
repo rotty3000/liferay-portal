@@ -1,0 +1,10 @@
+Bundle-Name: Liferay Frontend CKEditor Web
+Bundle-SymbolicName: com.liferay.frontend.ckeditor.web
+Bundle-Version: 1.0.0
+Include-Resource:\
+	classes,\
+	META-INF/resources=src/META-INF/resources,\
+	META-INF/resources/html=tmp/META-INF/resources/html
+Web-ContextPath: /frontend-ckeditor-web
+
+-donotcopy: (\.touch|.*_diffs.*)
