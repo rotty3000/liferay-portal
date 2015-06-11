@@ -1624,7 +1624,8 @@ create table ResourcePermission (
 	primKeyId LONG,
 	roleId LONG,
 	ownerId LONG,
-	actionIds LONG
+	actionIds LONG,
+	view BOOLEAN
 );
 
 create table ResourceTypePermission (

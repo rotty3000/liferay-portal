@@ -43,6 +43,7 @@ public class ResourcePermissionSoap implements Serializable {
 		soapModel.setRoleId(model.getRoleId());
 		soapModel.setOwnerId(model.getOwnerId());
 		soapModel.setActionIds(model.getActionIds());
+		soapModel.setView(model.getView());
 
 		return soapModel;
 	}
@@ -178,6 +179,18 @@ public class ResourcePermissionSoap implements Serializable {
 		_actionIds = actionIds;
 	}
 
+	public boolean getView() {
+		return _view;
+	}
+
+	public boolean isView() {
+		return _view;
+	}
+
+	public void setView(boolean view) {
+		_view = view;
+	}
+
 	private long _mvccVersion;
 	private long _resourcePermissionId;
 	private long _companyId;
@@ -188,4 +201,5 @@ public class ResourcePermissionSoap implements Serializable {
 	private long _roleId;
 	private long _ownerId;
 	private long _actionIds;
+	private boolean _view;
 }

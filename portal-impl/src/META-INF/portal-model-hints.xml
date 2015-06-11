@@ -828,6 +828,7 @@
 		<field name="roleId" type="long" />
 		<field name="ownerId" type="long" />
 		<field name="actionIds" type="long" />
+		<field name="view" type="boolean" />
 	</model>
 	<model name="com.liferay.portal.model.ResourceTypePermission">
 		<field name="mvccVersion" type="long" />

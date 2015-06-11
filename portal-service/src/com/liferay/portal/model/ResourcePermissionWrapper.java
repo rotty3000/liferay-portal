@@ -61,6 +61,7 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 		attributes.put("roleId", getRoleId());
 		attributes.put("ownerId", getOwnerId());
 		attributes.put("actionIds", getActionIds());
+		attributes.put("view", getView());
 
 		return attributes;
 	}
@@ -125,6 +126,12 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 
 		if (actionIds != null) {
 			setActionIds(actionIds);
+		}
+
+		Boolean view = (Boolean)attributes.get("view");
+
+		if (view != null) {
+			setView(view);
 		}
 	}
 
@@ -265,6 +272,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 		return _resourcePermission.getScope();
 	}
 
+	/**
+	* Returns the view of this resource permission.
+	*
+	* @return the view of this resource permission
+	*/
+	@Override
+	public boolean getView() {
+		return _resourcePermission.getView();
+	}
+
 	@Override
 	public boolean hasAction(
 		com.liferay.portal.model.ResourceAction resourceAction) {
@@ -294,6 +311,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public boolean isNew() {
 		return _resourcePermission.isNew();
+	}
+
+	/**
+	* Returns <code>true</code> if this resource permission is view.
+	*
+	* @return <code>true</code> if this resource permission is view; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isView() {
+		return _resourcePermission.isView();
 	}
 
 	@Override
@@ -447,6 +474,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public void setScope(int scope) {
 		_resourcePermission.setScope(scope);
+	}
+
+	/**
+	* Sets whether this resource permission is view.
+	*
+	* @param view the view of this resource permission
+	*/
+	@Override
+	public void setView(boolean view) {
+		_resourcePermission.setView(view);
 	}
 
 	@Override
