@@ -21,7 +21,7 @@ Import-Package:\
 	!groovy.*,\
 	!net.fortuna.*,\
 	!org.codehaus.*,\
-	!aQute.*,\
+	com.liferay.calendar.notification,\
 	*
 Liferay-Service: true
 Require-Capability:\
