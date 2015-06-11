@@ -1967,3 +1967,25 @@ The `WikiUtil.getEntries()` method was no longer used, and it contained
 hardcoded references to classes that will be moved into OSGi modules.
 
 ---------------------------------------
+## Removed support for filterFindBy generation or InlinePermissionUtil usage for tables which primary key type is not long
+- **Date:** 2015-Jun-12
+- **JIRA Ticket:** LPS-54590
+
+#### What changed?
+
+Removed ServiceBuilder and inline permission filter support other than long primary key types.
+
+#### Who is affected?
+
+This is affecting the code that is using integer, float, double, boolean, short type primary keys at service.xml and also using inline permissions.
+
+#### How should I update my code?
+
+Change primary key to be long
+
+#### Why was this change made?
+
+Inline permission was using join between two different data types and that did cause significant performance degration at least MySQL and related databases.
+
+---------------------------------------
+
