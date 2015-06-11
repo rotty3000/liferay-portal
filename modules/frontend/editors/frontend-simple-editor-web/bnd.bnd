@@ -1,0 +1,9 @@
+Bundle-Name: Liferay Frontend Simple Editor Web
+Bundle-SymbolicName: com.liferay.frontend.simpleeditor.web
+Bundle-Version: 1.0.0
+Include-Resource:\
+	classes,\
+	META-INF/resources=src/META-INF/resources
+Web-ContextPath: /frontend-simple-editor-web
+
+-donotcopy: (\.touch|.*_diffs.*)
