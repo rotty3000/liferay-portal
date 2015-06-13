@@ -117,7 +117,7 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 	<%
 	PortletURL addServerURL = renderResponse.createRenderURL();
 
-	addServerURL.setParameter("mvcPath", "/edit_ldap_server.jsp");
+	addServerURL.setParameter("mvcPath", "/html/portlet/portal_settings/edit_ldap_server.jsp");
 	addServerURL.setParameter("redirect", authenticationURL);
 	%>
 
@@ -186,8 +186,8 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 							</c:if>
 
 							<portlet:renderURL var="edit">
-								<portlet:param name="mvcPath" value="/edit_ldap_server.jsp" />
-								<portlet:param name="redirect" value="<%= authentication %>" />
+								<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_ldap_server.jsp" />
+								<portlet:param name="redirect" value="<%= authenticationURL %>" />
 								<portlet:param name="ldapServerId" value="<%= String.valueOf(ldapServerId) %>" />
 							</portlet:renderURL>
 
@@ -197,10 +197,9 @@ if (ldapAuthEnabled && (ldapServerIds.length <= 0) && Validator.isNull(PrefsProp
 								url="<%= edit %>"
 							/>
 
-							<portlet:actionURL var="delete">
-								<portlet:param name="mvcPath" value="/edit_ldap_server.jsp" />
-								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
-								<portlet:param name="redirect" value="<%= authentication %>" />
+							<portlet:actionURL var="delete" name="deleteLDAPServer" >
+								<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_ldap_server.jsp" />
+								<portlet:param name="redirect" value="<%= authenticationURL %>" />
 								<portlet:param name="ldapServerId" value="<%= String.valueOf(ldapServerId) %>" />
 							</portlet:actionURL>
 

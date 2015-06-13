@@ -19,7 +19,7 @@
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 
-portletURL.setParameter("mvcPath", "/view.jsp");
+portletURL.setParameter("mvcPath", "/html/portlet/portal_settings/edit_company.jsp");
 
 request.setAttribute("addresses.className", Account.class.getName());
 request.setAttribute("emailAddresses.className", Account.class.getName());
@@ -32,12 +32,11 @@ request.setAttribute("phones.classPK", company.getAccountId());
 request.setAttribute("websites.classPK", company.getAccountId());
 %>
 
-<portlet:actionURL var="editCompany">
-	<portlet:param name="mvcPath" value="/edit_company.jsp" />
+<portlet:actionURL name="editCompany" var="editCompanyURL">
+	<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_company.jsp" />
 </portlet:actionURL>
 
-<aui:form action="<%= editCompany %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
+<aui:form action="<%= editCompanyURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
 	<aui:input name="redirect" type="hidden" />
 
 	<liferay-util:buffer var="htmlTop">
@@ -61,8 +60,6 @@ request.setAttribute("websites.classPK", company.getAccountId());
 <aui:script>
 	function <portlet:namespace />saveCompany() {
 		var form = AUI.$(document.<portlet:namespace />fm);
-
-		form.fm('<%= Constants.CMD %>').val('<%= Constants.UPDATE %>');
 
 		<portlet:namespace />saveLdap();
 		<portlet:namespace />saveLocales();
