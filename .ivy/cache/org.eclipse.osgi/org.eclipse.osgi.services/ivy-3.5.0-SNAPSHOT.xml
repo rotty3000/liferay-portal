@@ -4,7 +4,7 @@
 		module="org.eclipse.osgi.services"
 		revision="3.5.0-SNAPSHOT"
 		status="integration"
-		publication="20150611125351"
+		publication="20150611095351"
 	>
 		<description homepage="" />
 		<m:properties__tycho.scmUrl>scm:git:git://git.eclipse.org/gitroot/equinox/rt.equinox.framework.git</m:properties__tycho.scmUrl>

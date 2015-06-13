@@ -453,6 +453,12 @@ if (Validator.isNotNull(scriptContent)) {
 		function(event) {
 			var form = A.one('#<portlet:namespace />fm');
 
+			<portlet:actionURL name="refreshTemplate" var="refreshTemplateURL">
+				<portlet:param name="mvcPath" value="/edit_template.jsp" />
+			</portlet:actionURL>
+
+			form.attr('action', '<%= refreshTemplateURL %>');
+
 			if (richEditor.getEditor().getSession().getUndoManager().hasUndo()) {
 				Liferay.fire('<portlet:namespace />saveTemplate');
 			}

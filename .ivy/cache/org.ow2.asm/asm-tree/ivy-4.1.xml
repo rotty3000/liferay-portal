@@ -41,10 +41,10 @@
 	<dependencies>
 		<dependency org="org.ow2.asm" name="asm" rev="4.1" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		<override org="org.ow2.asm" module="asm" matcher="exact" rev="4.1"/>
-		<override org="org.ow2.asm" module="asm-tree" matcher="exact" rev="4.1"/>
-		<override org="org.ow2.asm" module="asm-analysis" matcher="exact" rev="4.1"/>
-		<override org="org.ow2.asm" module="asm-commons" matcher="exact" rev="4.1"/>
-		<override org="org.ow2.asm" module="asm-util" matcher="exact" rev="4.1"/>
 		<override org="org.ow2.asm" module="asm-xml" matcher="exact" rev="4.1"/>
+		<override org="org.ow2.asm" module="asm-util" matcher="exact" rev="4.1"/>
+		<override org="org.ow2.asm" module="asm-analysis" matcher="exact" rev="4.1"/>
+		<override org="org.ow2.asm" module="asm-tree" matcher="exact" rev="4.1"/>
+		<override org="org.ow2.asm" module="asm-commons" matcher="exact" rev="4.1"/>
 	</dependencies>
 </ivy-module>

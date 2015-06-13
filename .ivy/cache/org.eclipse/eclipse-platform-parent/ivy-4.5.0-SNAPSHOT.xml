@@ -4,7 +4,7 @@
 		module="eclipse-platform-parent"
 		revision="4.5.0-SNAPSHOT"
 		status="integration"
-		publication="20150611125155"
+		publication="20150611095155"
 	>
 		<description homepage="" />
 		<m:properties__buildType>I</m:properties__buildType>

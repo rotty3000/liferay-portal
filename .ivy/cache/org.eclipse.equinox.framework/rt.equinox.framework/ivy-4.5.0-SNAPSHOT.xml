@@ -4,7 +4,7 @@
 		module="rt.equinox.framework"
 		revision="4.5.0-SNAPSHOT"
 		status="integration"
-		publication="20150611125811"
+		publication="20150611095811"
 	>
 		<description homepage="" />
 		<m:properties__tycho.scmUrl>scm:git:git://git.eclipse.org/gitroot/equinox/rt.equinox.framework.git</m:properties__tycho.scmUrl>
