@@ -80,6 +80,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.servlet.filters.absoluteredirects.AbsoluteRedirectsResponse;
 import com.liferay.portal.servlet.filters.i18n.I18nFilter;
 import com.liferay.portal.setup.SetupWizardSampleDataUtil;
+import com.liferay.portal.setup.SetupWizardUtil;
 import com.liferay.portal.struts.PortletRequestProcessor;
 import com.liferay.portal.struts.StrutsUtil;
 import com.liferay.portal.util.ExtRegistry;
@@ -825,9 +826,17 @@ public class MainServlet extends ActionServlet {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter filter = registry.getFilter("(search.engine.id=SYSTEM_ENGINE)");
+		int length =
+			PropsValues.MODULE_FRAMEWORK_PORTAL_DEPENDENCY_FILTER.length;
 
-		serviceDependencyManager.registerDependencies(filter);
+		Filter[] filters = new Filter[length];
+
+		for (int i = 0; i < length; i++) {
+			filters[i] = registry.getFilter(
+				PropsValues.MODULE_FRAMEWORK_PORTAL_DEPENDENCY_FILTER[i]);
+		}
+
+		serviceDependencyManager.registerDependencies(filters);
 	}
 
 	protected void initExt() throws Exception {
