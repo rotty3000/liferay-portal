@@ -13,18 +13,6 @@
  */
 package com.liferay.portlet.portalsettings;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.AccountNameException;
 import com.liferay.portal.AddressCityException;
@@ -76,20 +64,33 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
+import java.io.IOException;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+
 /**
  * @author Philip Jones
  */
 public class PortalSettingsPortlet extends MVCPortlet {
-	
 
 	public void deleteLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-			
-			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
 
-			long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			long ldapServerId = ParamUtil.getLong(
+				actionRequest, "ldapServerId");
 
 			// Remove portletPreferences
 
@@ -101,12 +102,14 @@ public class PortalSettingsPortlet extends MVCPortlet {
 				keys[i] = _KEYS[i] + postfix;
 			}
 
-			CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
+			CompanyServiceUtil.removePreferences(
+				themeDisplay.getCompanyId(), keys);
 
 			// Update portletPreferences
 
-			PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
-				themeDisplay.getCompanyId(), true);
+			PortletPreferences portletPreferences =
+				PrefsPropsUtil.getPreferences(
+					themeDisplay.getCompanyId(), true);
 
 			UnicodeProperties properties = new UnicodeProperties();
 
@@ -121,31 +124,32 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			CompanyServiceUtil.updatePreferences(
 				themeDisplay.getCompanyId(), properties);
 		}
-	
+
 	public void editCompany(
-			ActionRequest actionRequest, ActionResponse actionResponse) 
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
-				
+
 		validateCAS(actionRequest);
 		validateLDAP(actionRequest);
 		validateSocialInteractions(actionRequest);
 		updateCompany(actionRequest);
-		
+
 		sendRedirect(actionRequest, actionResponse);
-		
+
 		actionRequest.setAttribute(
-			PortletAction.getForwardKey(actionRequest), 
+			PortletAction.getForwardKey(actionRequest),
 			"portlet.portal_settings.edit_company");
 	}
-	
+
 	public void editLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
-			long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+			long ldapServerId = ParamUtil.getLong(
+				actionRequest, "ldapServerId");
 
 			UnicodeProperties properties = PropertiesParamUtil.getProperties(
 				actionRequest, "settings--");
@@ -156,14 +160,14 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			validateSearchFilters(actionRequest);
 
 			if (ldapServerId <= 0) {
-				properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
+				properties = addLDAPServer(
+					themeDisplay.getCompanyId(), properties);
 			}
 
 			CompanyServiceUtil.updatePreferences(
 				themeDisplay.getCompanyId(), properties);
 		}
 
-	
 	protected UnicodeProperties addLDAPServer(
 			long companyId, UnicodeProperties properties)
 		throws Exception {
@@ -214,9 +218,9 @@ public class PortalSettingsPortlet extends MVCPortlet {
 
 		return properties;
 	}
-	
-	protected void updateCompany(ActionRequest actionRequest) 
-			throws PortalException, IOException {
+
+	protected void updateCompany(ActionRequest actionRequest)
+		throws IOException, PortalException {
 
 		long companyId = PortalUtil.getCompanyId(actionRequest);
 
@@ -266,7 +270,6 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		PortalUtil.resetCDNHosts();
 	}
 
-	
 	@Override
 	protected void doDispatch(
 			RenderRequest renderRequest, RenderResponse renderResponse)
@@ -356,7 +359,8 @@ public class PortalSettingsPortlet extends MVCPortlet {
 	protected void validateCAS(ActionRequest actionRequest) {
 
 			boolean casEnabled = ParamUtil.getBoolean(
-				actionRequest, "settings--" + PropsKeys.CAS_AUTH_ENABLED + "--");
+				actionRequest,
+				"settings--" + PropsKeys.CAS_AUTH_ENABLED + "--");
 
 			if (!casEnabled) {
 				return;
@@ -421,11 +425,11 @@ public class PortalSettingsPortlet extends MVCPortlet {
 				actionRequest, "ldapExportAndImportOnPasswordAutogeneration");
 		}
 	}
-	
+
 	protected void validateSocialInteractions(ActionRequest actionRequest) {
 
 		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
-				actionRequest, "settings--socialInteractionsEnabled--");
+			actionRequest, "settings--socialInteractionsEnabled--");
 
 			if (!socialInteractionsEnabled) {
 				return;
@@ -443,7 +447,8 @@ public class PortalSettingsPortlet extends MVCPortlet {
 					actionRequest,
 					"settings--socialInteractionsSocialRelationTypesEnabled--");
 			String socialInteractionsSocialRelationTypes = ParamUtil.getString(
-				actionRequest, "settings--socialInteractionsSocialRelationTypes--");
+				actionRequest,
+				"settings--socialInteractionsSocialRelationTypes--");
 
 			if (socialInteractionsSocialRelationTypesEnabled &&
 				Validator.isNull(socialInteractionsSocialRelationTypes)) {
@@ -461,7 +466,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 				SessionErrors.add(actionRequest, "socialInteractionsInvalid");
 			}
 		}
-	
+
 	protected void validateLDAPServerName(
 			long ldapServerId, long companyId, UnicodeProperties properties)
 		throws Exception {
