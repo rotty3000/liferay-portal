@@ -84,19 +84,19 @@
 		<m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__version>2.0.0.Final</m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__version>
 		<m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__scope>provided</m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__scope>
 		<m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__exclusion_0>org.apache.xalan__xalan</m:dependency.management__org.jboss.spec__jboss-javaee-web-6.0__exclusion_0>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi-maven__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven-archive__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven-archive__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven-archive__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven-archive__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-depchain__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-depchain__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-gradle-depchain__version>2.2.0-alpha-2</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-gradle-depchain__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-gradle-embedded-archive__version>2.2.0-alpha-2</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-gradle-embedded-archive__version>
 		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-maven-plugin__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-maven-plugin__version>
 		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-maven-plugin__scope>runtime</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-maven-plugin__scope>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven-archive__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven-archive__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-gradle-depchain__version>2.2.0-alpha-2</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-gradle-depchain__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven-archive__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-maven-archive__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-depchain__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-depchain__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-maven__version>
+		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi-maven__version>2.0.0</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-spi-maven__version>
 		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-gradle-embedded-archive__version>2.2.0-alpha-2</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-api-gradle-embedded-archive__version>
-		<m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-gradle-embedded-archive__version>2.2.0-alpha-2</m:dependency.management__org.jboss.shrinkwrap.resolver__shrinkwrap-resolver-impl-gradle-embedded-archive__version>
 		<m:dependency.management__org.jboss.arquillian.core__arquillian-core-api__version>1.1.2.Final</m:dependency.management__org.jboss.arquillian.core__arquillian-core-api__version>
 		<m:dependency.management__org.jboss.arquillian.core__arquillian-core-spi__version>1.1.2.Final</m:dependency.management__org.jboss.arquillian.core__arquillian-core-spi__version>
 		<m:dependency.management__org.jboss.arquillian.core__arquillian-core-impl-base__version>1.1.2.Final</m:dependency.management__org.jboss.arquillian.core__arquillian-core-impl-base__version>
