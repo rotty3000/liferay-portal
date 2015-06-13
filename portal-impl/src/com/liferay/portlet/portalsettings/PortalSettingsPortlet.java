@@ -13,6 +13,18 @@
  */
 package com.liferay.portlet.portalsettings;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.AccountNameException;
 import com.liferay.portal.AddressCityException;
@@ -32,6 +44,7 @@ import com.liferay.portal.PasswordPolicyNameException;
 import com.liferay.portal.PhoneNumberException;
 import com.liferay.portal.RequiredPasswordPolicyException;
 import com.liferay.portal.WebsiteURLException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.ldap.DuplicateLDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPServerNameException;
 import com.liferay.portal.kernel.ldap.LDAPUtil;
@@ -53,6 +66,7 @@ import com.liferay.portal.model.Website;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.ldap.LDAPSettingsUtil;
 import com.liferay.portal.service.CompanyServiceUtil;
+import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalUtil;
@@ -62,295 +76,94 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
-import java.io.IOException;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 /**
  * @author Philip Jones
  */
 public class PortalSettingsPortlet extends MVCPortlet {
+	
 
 	public void deleteLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
+			
+			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
+			long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
 
-		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
+			// Remove portletPreferences
 
-		// Remove portletPreferences
+			String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
 
-		String postfix = LDAPSettingsUtil.getPropertyPostfix(ldapServerId);
+			String[] keys = new String[_KEYS.length];
 
-		String[] keys = new String[_KEYS.length];
+			for (int i = 0; i < _KEYS.length; i++) {
+				keys[i] = _KEYS[i] + postfix;
+			}
 
-		for (int i = 0; i < _KEYS.length; i++) {
-			keys[i] = _KEYS[i] + postfix;
+			CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
+
+			// Update portletPreferences
+
+			PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
+				themeDisplay.getCompanyId(), true);
+
+			UnicodeProperties properties = new UnicodeProperties();
+
+			String ldapServerIds = portletPreferences.getValue(
+				"ldap.server.ids", StringPool.BLANK);
+
+			ldapServerIds = StringUtil.removeFromList(
+				ldapServerIds, String.valueOf(ldapServerId));
+
+			properties.put("ldap.server.ids", ldapServerIds);
+
+			CompanyServiceUtil.updatePreferences(
+				themeDisplay.getCompanyId(), properties);
 		}
-
-		CompanyServiceUtil.removePreferences(themeDisplay.getCompanyId(), keys);
-
-		// Update portletPreferences
-
-		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
-			themeDisplay.getCompanyId(), true);
-
-		UnicodeProperties properties = new UnicodeProperties();
-
-		String ldapServerIds = portletPreferences.getValue(
-			"ldap.server.ids", StringPool.BLANK);
-
-		ldapServerIds = StringUtil.removeFromList(
-			ldapServerIds, String.valueOf(ldapServerId));
-
-		properties.put("ldap.server.ids", ldapServerIds);
-
-		CompanyServiceUtil.updatePreferences(
-			themeDisplay.getCompanyId(), properties);
+	
+	public void editCompany(
+			ActionRequest actionRequest, ActionResponse actionResponse) 
+		throws Exception {
+				
+		validateCAS(actionRequest);
+		validateLDAP(actionRequest);
+		validateSocialInteractions(actionRequest);
+		updateCompany(actionRequest);
+		
+		sendRedirect(actionRequest, actionResponse);
+		
+		actionRequest.setAttribute(
+			PortletAction.getForwardKey(actionRequest), 
+			"portlet.portal_settings.edit_company");
 	}
-
-	public void updateCompany(
+	
+	public void editLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		long companyId = PortalUtil.getCompanyId(actionRequest);
+			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-		String virtualHostname = ParamUtil.getString(
-			actionRequest, "virtualHostname");
-		String mx = ParamUtil.getString(actionRequest, "mx");
-		String homeURL = ParamUtil.getString(actionRequest, "homeURL");
-		boolean deleteLogo = ParamUtil.getBoolean(actionRequest, "deleteLogo");
+			long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
 
-		byte[] logoBytes = null;
+			UnicodeProperties properties = PropertiesParamUtil.getProperties(
+				actionRequest, "settings--");
 
-		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
+			validateLDAPServerName(
+				ldapServerId, themeDisplay.getCompanyId(), properties);
 
-		if (fileEntryId > 0) {
-			FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
-				fileEntryId);
+			validateSearchFilters(actionRequest);
 
-			logoBytes = FileUtil.getBytes(fileEntry.getContentStream());
-		}
-
-		String name = ParamUtil.getString(actionRequest, "name");
-		String legalName = ParamUtil.getString(actionRequest, "legalName");
-		String legalId = ParamUtil.getString(actionRequest, "legalId");
-		String legalType = ParamUtil.getString(actionRequest, "legalType");
-		String sicCode = ParamUtil.getString(actionRequest, "sicCode");
-		String tickerSymbol = ParamUtil.getString(
-			actionRequest, "tickerSymbol");
-		String industry = ParamUtil.getString(actionRequest, "industry");
-		String type = ParamUtil.getString(actionRequest, "type");
-		String size = ParamUtil.getString(actionRequest, "size");
-		String languageId = ParamUtil.getString(actionRequest, "languageId");
-		String timeZoneId = ParamUtil.getString(actionRequest, "timeZoneId");
-		List<Address> addresses = UsersAdminUtil.getAddresses(actionRequest);
-		List<EmailAddress> emailAddresses = UsersAdminUtil.getEmailAddresses(
-			actionRequest);
-		List<Phone> phones = UsersAdminUtil.getPhones(actionRequest);
-		List<Website> websites = UsersAdminUtil.getWebsites(actionRequest);
-		UnicodeProperties properties = PropertiesParamUtil.getProperties(
-			actionRequest, "settings--");
-
-		CompanyServiceUtil.updateCompany(
-			companyId, virtualHostname, mx, homeURL, !deleteLogo, logoBytes,
-			name, legalName, legalId, legalType, sicCode, tickerSymbol,
-			industry, type, size, languageId, timeZoneId, addresses,
-			emailAddresses, phones, websites, properties);
-
-		PortalUtil.resetCDNHosts();
-	}
-
-	public void updateLDAPServer(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
-
-		UnicodeProperties properties = PropertiesParamUtil.getProperties(
-			actionRequest, "settings--");
-
-		validateLDAPServerName(
-			ldapServerId, themeDisplay.getCompanyId(), properties);
-
-		validateSearchFilters(actionRequest);
-
-		if (ldapServerId <= 0) {
-			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
-		}
-
-		CompanyServiceUtil.updatePreferences(
-			themeDisplay.getCompanyId(), properties);
-	}
-
-	public void validateCAS(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		boolean casEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--" + PropsKeys.CAS_AUTH_ENABLED + "--");
-
-		if (!casEnabled) {
-			return;
-		}
-
-		String casLoginURL = ParamUtil.getString(
-			actionRequest, "settings--" + PropsKeys.CAS_LOGIN_URL + "--");
-		String casLogoutURL = ParamUtil.getString(
-			actionRequest, "settings--" + PropsKeys.CAS_LOGOUT_URL + "--");
-		String casServerName = ParamUtil.getString(
-			actionRequest, "settings--" + PropsKeys.CAS_SERVER_NAME + "--");
-		String casServerURL = ParamUtil.getString(
-			actionRequest, "settings--" + PropsKeys.CAS_SERVER_URL + "--");
-		String casServiceURL = ParamUtil.getString(
-			actionRequest, "settings--" + PropsKeys.CAS_SERVICE_URL + "--");
-		String casNoSuchUserRedirectURL = ParamUtil.getString(
-			actionRequest,
-			"settings--" + PropsKeys.CAS_NO_SUCH_USER_REDIRECT_URL + "--");
-
-		if (!Validator.isUrl(casLoginURL)) {
-			SessionErrors.add(actionRequest, "casLoginURLInvalid");
-		}
-
-		if (!Validator.isUrl(casLogoutURL)) {
-			SessionErrors.add(actionRequest, "casLogoutURLInvalid");
-		}
-
-		if (Validator.isNull(casServerName)) {
-			SessionErrors.add(actionRequest, "casServerNameInvalid");
-		}
-
-		if (!Validator.isUrl(casServerURL)) {
-			SessionErrors.add(actionRequest, "casServerURLInvalid");
-		}
-
-		if (Validator.isNotNull(casServiceURL) &&
-			!Validator.isUrl(casServiceURL)) {
-
-			SessionErrors.add(actionRequest, "casServiceURLInvalid");
-		}
-
-		if (Validator.isNotNull(casNoSuchUserRedirectURL) &&
-			!Validator.isUrl(casNoSuchUserRedirectURL)) {
-
-			SessionErrors.add(actionRequest, "casNoSuchUserURLInvalid");
-		}
-	}
-
-	public void validateLDAP(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		if (!PropsValues.LDAP_IMPORT_USER_PASSWORD_AUTOGENERATED) {
-			return;
-		}
-
-		boolean ldapExportEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--" + PropsKeys.LDAP_EXPORT_ENABLED + "--");
-		boolean ldapImportEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--" + PropsKeys.LDAP_IMPORT_ENABLED + "--");
-
-		if (ldapExportEnabled && ldapImportEnabled) {
-			SessionErrors.add(
-				actionRequest, "ldapExportAndImportOnPasswordAutogeneration");
-		}
-	}
-
-	public void validateLDAPServerName(
-			long ldapServerId, long companyId, UnicodeProperties properties)
-		throws Exception {
-
-		String ldapServerName = properties.getProperty(
-			"ldap.server.name." + ldapServerId);
-
-		if (Validator.isNull(ldapServerName)) {
-			throw new LDAPServerNameException();
-		}
-
-		long[] existingLDAPServerIds = StringUtil.split(
-			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
-
-		for (long existingLDAPServerId : existingLDAPServerIds) {
-			if (ldapServerId == existingLDAPServerId) {
-				continue;
+			if (ldapServerId <= 0) {
+				properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
 			}
 
-			String existingLDAPServerName = PrefsPropsUtil.getString(
-				companyId, "ldap.server.name." + existingLDAPServerId);
-
-			if (ldapServerName.equals(existingLDAPServerName)) {
-				throw new DuplicateLDAPServerNameException();
-			}
-		}
-	}
-
-	public void validateSearchFilters(ActionRequest actionRequest)
-		throws Exception {
-
-		String userFilter = ParamUtil.getString(
-			actionRequest, "importUserSearchFilter");
-
-		LDAPUtil.validateFilter(userFilter, "importUserSearchFilter");
-
-		String groupFilter = ParamUtil.getString(
-			actionRequest, "importGroupSearchFilter");
-
-		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
-	}
-
-	public void validateSocialInteractions(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
-
-		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--socialInteractionsEnabled--");
-
-		if (!socialInteractionsEnabled) {
-			return;
+			CompanyServiceUtil.updatePreferences(
+				themeDisplay.getCompanyId(), properties);
 		}
 
-		boolean socialInteractionsAnyUserEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--socialInteractionsAnyUserEnabled--");
-
-		if (socialInteractionsAnyUserEnabled) {
-			return;
-		}
-
-		boolean socialInteractionsSocialRelationTypesEnabled =
-			ParamUtil.getBoolean(
-				actionRequest,
-				"settings--socialInteractionsSocialRelationTypesEnabled--");
-		String socialInteractionsSocialRelationTypes = ParamUtil.getString(
-			actionRequest, "settings--socialInteractionsSocialRelationTypes--");
-
-		if (socialInteractionsSocialRelationTypesEnabled &&
-			Validator.isNull(socialInteractionsSocialRelationTypes)) {
-
-			SessionErrors.add(
-				actionRequest, "socialInteractionsSocialRelationTypes");
-		}
-
-		boolean socialInteractionsSitesEnabled = ParamUtil.getBoolean(
-			actionRequest, "settings--socialInteractionsSitesEnabled--");
-
-		if (!socialInteractionsSocialRelationTypesEnabled &&
-			!socialInteractionsSitesEnabled) {
-
-			SessionErrors.add(actionRequest, "socialInteractionsInvalid");
-		}
-	}
-
+	
 	protected UnicodeProperties addLDAPServer(
 			long companyId, UnicodeProperties properties)
 		throws Exception {
@@ -401,7 +214,59 @@ public class PortalSettingsPortlet extends MVCPortlet {
 
 		return properties;
 	}
+	
+	protected void updateCompany(ActionRequest actionRequest) 
+			throws PortalException, IOException {
 
+		long companyId = PortalUtil.getCompanyId(actionRequest);
+
+		String virtualHostname = ParamUtil.getString(
+			actionRequest, "virtualHostname");
+		String mx = ParamUtil.getString(actionRequest, "mx");
+		String homeURL = ParamUtil.getString(actionRequest, "homeURL");
+		boolean deleteLogo = ParamUtil.getBoolean(actionRequest, "deleteLogo");
+
+		byte[] logoBytes = null;
+
+		long fileEntryId = ParamUtil.getLong(actionRequest, "fileEntryId");
+
+		if (fileEntryId > 0) {
+			FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
+				fileEntryId);
+
+			logoBytes = FileUtil.getBytes(fileEntry.getContentStream());
+		}
+
+		String name = ParamUtil.getString(actionRequest, "name");
+		String legalName = ParamUtil.getString(actionRequest, "legalName");
+		String legalId = ParamUtil.getString(actionRequest, "legalId");
+		String legalType = ParamUtil.getString(actionRequest, "legalType");
+		String sicCode = ParamUtil.getString(actionRequest, "sicCode");
+		String tickerSymbol = ParamUtil.getString(
+			actionRequest, "tickerSymbol");
+		String industry = ParamUtil.getString(actionRequest, "industry");
+		String type = ParamUtil.getString(actionRequest, "type");
+		String size = ParamUtil.getString(actionRequest, "size");
+		String languageId = ParamUtil.getString(actionRequest, "languageId");
+		String timeZoneId = ParamUtil.getString(actionRequest, "timeZoneId");
+		List<Address> addresses = UsersAdminUtil.getAddresses(actionRequest);
+		List<EmailAddress> emailAddresses = UsersAdminUtil.getEmailAddresses(
+			actionRequest);
+		List<Phone> phones = UsersAdminUtil.getPhones(actionRequest);
+		List<Website> websites = UsersAdminUtil.getWebsites(actionRequest);
+		UnicodeProperties properties = PropertiesParamUtil.getProperties(
+			actionRequest, "settings--");
+
+		CompanyServiceUtil.updateCompany(
+			companyId, virtualHostname, mx, homeURL, !deleteLogo, logoBytes,
+			name, legalName, legalId, legalType, sicCode, tickerSymbol,
+			industry, type, size, languageId, timeZoneId, addresses,
+			emailAddresses, phones, websites, properties);
+
+		PortalUtil.resetCDNHosts();
+	}
+
+	
 	@Override
 	protected void doDispatch(
 			RenderRequest renderRequest, RenderResponse renderResponse)
@@ -486,6 +351,157 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 
 		return false;
+	}
+
+	protected void validateCAS(ActionRequest actionRequest) {
+
+			boolean casEnabled = ParamUtil.getBoolean(
+				actionRequest, "settings--" + PropsKeys.CAS_AUTH_ENABLED + "--");
+
+			if (!casEnabled) {
+				return;
+			}
+
+			String casLoginURL = ParamUtil.getString(
+				actionRequest, "settings--" + PropsKeys.CAS_LOGIN_URL + "--");
+			String casLogoutURL = ParamUtil.getString(
+				actionRequest, "settings--" + PropsKeys.CAS_LOGOUT_URL + "--");
+			String casServerName = ParamUtil.getString(
+				actionRequest, "settings--" + PropsKeys.CAS_SERVER_NAME + "--");
+			String casServerURL = ParamUtil.getString(
+				actionRequest, "settings--" + PropsKeys.CAS_SERVER_URL + "--");
+			String casServiceURL = ParamUtil.getString(
+				actionRequest, "settings--" + PropsKeys.CAS_SERVICE_URL + "--");
+			String casNoSuchUserRedirectURL = ParamUtil.getString(
+				actionRequest,
+				"settings--" + PropsKeys.CAS_NO_SUCH_USER_REDIRECT_URL + "--");
+
+			if (!Validator.isUrl(casLoginURL)) {
+				SessionErrors.add(actionRequest, "casLoginURLInvalid");
+			}
+
+			if (!Validator.isUrl(casLogoutURL)) {
+				SessionErrors.add(actionRequest, "casLogoutURLInvalid");
+			}
+
+			if (Validator.isNull(casServerName)) {
+				SessionErrors.add(actionRequest, "casServerNameInvalid");
+			}
+
+			if (!Validator.isUrl(casServerURL)) {
+				SessionErrors.add(actionRequest, "casServerURLInvalid");
+			}
+
+			if (Validator.isNotNull(casServiceURL) &&
+				!Validator.isUrl(casServiceURL)) {
+
+				SessionErrors.add(actionRequest, "casServiceURLInvalid");
+			}
+
+			if (Validator.isNotNull(casNoSuchUserRedirectURL) &&
+				!Validator.isUrl(casNoSuchUserRedirectURL)) {
+
+				SessionErrors.add(actionRequest, "casNoSuchUserURLInvalid");
+			}
+		}
+
+	protected void validateLDAP(ActionRequest actionRequest) {
+
+		if (!PropsValues.LDAP_IMPORT_USER_PASSWORD_AUTOGENERATED) {
+			return;
+		}
+
+		boolean ldapExportEnabled = ParamUtil.getBoolean(
+			actionRequest, "settings--" + PropsKeys.LDAP_EXPORT_ENABLED + "--");
+		boolean ldapImportEnabled = ParamUtil.getBoolean(
+			actionRequest, "settings--" + PropsKeys.LDAP_IMPORT_ENABLED + "--");
+
+		if (ldapExportEnabled && ldapImportEnabled) {
+			SessionErrors.add(
+				actionRequest, "ldapExportAndImportOnPasswordAutogeneration");
+		}
+	}
+	
+	protected void validateSocialInteractions(ActionRequest actionRequest) {
+
+		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
+				actionRequest, "settings--socialInteractionsEnabled--");
+
+			if (!socialInteractionsEnabled) {
+				return;
+			}
+
+			boolean socialInteractionsAnyUserEnabled = ParamUtil.getBoolean(
+				actionRequest, "settings--socialInteractionsAnyUserEnabled--");
+
+			if (socialInteractionsAnyUserEnabled) {
+				return;
+			}
+
+			boolean socialInteractionsSocialRelationTypesEnabled =
+				ParamUtil.getBoolean(
+					actionRequest,
+					"settings--socialInteractionsSocialRelationTypesEnabled--");
+			String socialInteractionsSocialRelationTypes = ParamUtil.getString(
+				actionRequest, "settings--socialInteractionsSocialRelationTypes--");
+
+			if (socialInteractionsSocialRelationTypesEnabled &&
+				Validator.isNull(socialInteractionsSocialRelationTypes)) {
+
+				SessionErrors.add(
+					actionRequest, "socialInteractionsSocialRelationTypes");
+			}
+
+			boolean socialInteractionsSitesEnabled = ParamUtil.getBoolean(
+				actionRequest, "settings--socialInteractionsSitesEnabled--");
+
+			if (!socialInteractionsSocialRelationTypesEnabled &&
+				!socialInteractionsSitesEnabled) {
+
+				SessionErrors.add(actionRequest, "socialInteractionsInvalid");
+			}
+		}
+	
+	protected void validateLDAPServerName(
+			long ldapServerId, long companyId, UnicodeProperties properties)
+		throws Exception {
+
+		String ldapServerName = properties.getProperty(
+			"ldap.server.name." + ldapServerId);
+
+		if (Validator.isNull(ldapServerName)) {
+			throw new LDAPServerNameException();
+		}
+
+		long[] existingLDAPServerIds = StringUtil.split(
+			PrefsPropsUtil.getString(companyId, "ldap.server.ids"), 0L);
+
+		for (long existingLDAPServerId : existingLDAPServerIds) {
+			if (ldapServerId == existingLDAPServerId) {
+				continue;
+			}
+
+			String existingLDAPServerName = PrefsPropsUtil.getString(
+				companyId, "ldap.server.name." + existingLDAPServerId);
+
+			if (ldapServerName.equals(existingLDAPServerName)) {
+				throw new DuplicateLDAPServerNameException();
+			}
+		}
+	}
+
+	protected void validateSearchFilters(ActionRequest actionRequest)
+		throws Exception {
+
+		String userFilter = ParamUtil.getString(
+			actionRequest, "importUserSearchFilter");
+
+		LDAPUtil.validateFilter(userFilter, "importUserSearchFilter");
+
+		String groupFilter = ParamUtil.getString(
+			actionRequest, "importGroupSearchFilter");
+
+		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
 	}
 
 	private static final String[] _KEYS = {
