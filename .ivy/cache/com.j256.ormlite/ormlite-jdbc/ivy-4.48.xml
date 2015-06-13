@@ -10,17 +10,17 @@
 		<description homepage="http://ormlite.sourceforge.net/">
 		Lightweight Object Relational Model (ORM) JDBC classes
 		</description>
-		<m:properties__surefire.argLine/>
-		<m:properties__easymock-version>2.3</m:properties__easymock-version>
+		<m:properties__log4j2-version>2.0-beta4</m:properties__log4j2-version>
+		<m:properties__joda-time-version>1.5</m:properties__joda-time-version>
+		<m:properties__slf4j-version>1.7.2</m:properties__slf4j-version>
 		<m:properties__ormlite-version>${project.version}</m:properties__ormlite-version>
 		<m:properties__persistence-api-version>1.0</m:properties__persistence-api-version>
-		<m:properties__joda-time-version>1.5</m:properties__joda-time-version>
+		<m:properties__surefire.argLine/>
+		<m:properties__junit-version>4.8.1</m:properties__junit-version>
+		<m:properties__easymock-version>2.3</m:properties__easymock-version>
 		<m:properties__commons-logging-version>1.1</m:properties__commons-logging-version>
 		<m:properties__h2-version>1.2.128</m:properties__h2-version>
-		<m:properties__junit-version>4.8.1</m:properties__junit-version>
 		<m:properties__log4j-version>1.2.12</m:properties__log4j-version>
-		<m:properties__slf4j-version>1.7.2</m:properties__slf4j-version>
-		<m:properties__log4j2-version>2.0-beta4</m:properties__log4j2-version>
 		<m:properties__project.build.sourceEncoding>UTF-8</m:properties__project.build.sourceEncoding>
 		<m:properties__sonatypeOssDistMgmtSnapshotsUrl>https://oss.sonatype.org/content/repositories/snapshots/</m:properties__sonatypeOssDistMgmtSnapshotsUrl>
 		<m:maven.plugins>org.apache.maven.plugins__maven-enforcer-plugin__1.0|org.apache.maven.plugins__maven-enforcer-plugin__1.0|org.apache.maven.plugins__maven-compiler-plugin__2.3.1|org.apache.maven.plugins__maven-dependency-plugin__2.1|org.apache.maven.plugins__maven-source-plugin__2.1.2|org.apache.maven.plugins__maven-javadoc-plugin__2.7|org.apache.maven.plugins__maven-eclipse-plugin__2.8|org.apache.maven.plugins__maven-jar-plugin__2.3.1|org.apache.maven.plugins__maven-gpg-plugin__1.1|org.codehaus.mojo__cobertura-maven-plugin__2.4|com.google.code.maven-replacer-plugin__replacer__1.5.0</m:maven.plugins>

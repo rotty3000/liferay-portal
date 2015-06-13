@@ -93,52 +93,52 @@
 	<dependencies>
 		<dependency org="org.apache.lucene" name="lucene-core" rev="3.5.0" force="true" conf="compile->compile(*),master(*);runtime->runtime(*)"/>
 		<dependency org="org.apache.lucene" name="lucene-test-framework" rev="3.5.0" force="true" conf="test->runtime(*),master(*)"/>
-		<override org="javax.mail" module="mail" matcher="exact" rev="1.4.1"/>
-		<override org="commons-httpclient" module="commons-httpclient" matcher="exact" rev="3.1"/>
-		<override org="org.apache.uima" module="OpenCalaisAnnotator" matcher="exact" rev="2.3.1"/>
+		<override org="com.ibm.icu" module="icu4j" matcher="exact" rev="4.8.1.1"/>
+		<override org="com.google.guava" module="guava" matcher="exact" rev="r05"/>
+		<override org="commons-beanutils" module="commons-beanutils" matcher="exact" rev="1.7.0"/>
+		<override org="commons-codec" module="commons-codec" matcher="exact" rev="1.5"/>
+		<override org="commons-collections" module="commons-collections" matcher="exact" rev="3.2.1"/>
 		<override org="commons-digester" module="commons-digester" matcher="exact" rev="1.7"/>
-		<override org="javax.activation" module="activation" matcher="exact" rev="1.1"/>
-		<override org="org.apache.velocity" module="velocity" matcher="exact" rev="1.6.4"/>
-		<override org="javax.servlet" module="servlet-api" matcher="exact" rev="2.4"/>
+		<override org="commons-fileupload" module="commons-fileupload" matcher="exact" rev="1.2.1"/>
+		<override org="commons-io" module="commons-io" matcher="exact" rev="1.4"/>
+		<override org="commons-httpclient" module="commons-httpclient" matcher="exact" rev="3.1"/>
+		<override org="commons-lang" module="commons-lang" matcher="exact" rev="2.4"/>
+		<override org="commons-logging" module="commons-logging" matcher="exact" rev="1.1.1"/>
 		<override org="jakarta-regexp" module="jakarta-regexp" matcher="exact" rev="1.4"/>
+		<override org="javax.activation" module="activation" matcher="exact" rev="1.1"/>
+		<override org="javax.mail" module="mail" matcher="exact" rev="1.4.1"/>
+		<override org="jline" module="jline" matcher="exact" rev="0.9.1"/>
+		<override org="junit" module="junit" matcher="exact" rev="4.7"/>
+		<override org="org.apache.ant" module="ant" matcher="exact" rev="1.7.1"/>
+		<override org="org.apache.ant" module="ant-junit" matcher="exact" rev="1.7.1"/>
+		<override org="org.apache.commons" module="commons-compress" matcher="exact" rev="1.2"/>
+		<override org="org.apache.geronimo.specs" module="geronimo-stax-api_1.0_spec" matcher="exact" rev="1.0.1"/>
+		<override org="org.apache.solr" module="solr-commons-csv" matcher="exact" rev="3.5.0"/>
+		<override org="org.apache.solr" module="solr-jsonic" matcher="exact" rev="3.5.0"/>
+		<override org="org.apache.solr" module="solr-langdetect" matcher="exact" rev="3.5.0"/>
+		<override org="org.apache.solr" module="solr-noggit" matcher="exact" rev="3.5.0"/>
 		<override org="org.apache.tika" module="tika-core" matcher="exact" rev="0.10"/>
 		<override org="org.apache.tika" module="tika-parsers" matcher="exact" rev="0.10"/>
+		<override org="org.apache.uima" module="AlchemyAPIAnnotator" matcher="exact" rev="2.3.1"/>
+		<override org="org.apache.uima" module="OpenCalaisAnnotator" matcher="exact" rev="2.3.1"/>
+		<override org="org.apache.uima" module="Tagger" matcher="exact" rev="2.3.1"/>
+		<override org="org.apache.uima" module="WhitespaceTokenizer" matcher="exact" rev="2.3.1"/>
+		<override org="org.apache.uima" module="uimaj-core" matcher="exact" rev="2.3.1"/>
+		<override org="org.apache.velocity" module="velocity" matcher="exact" rev="1.6.4"/>
+		<override org="org.apache.velocity" module="velocity-tools" matcher="exact" rev="2.0"/>
+		<override org="org.apache.solr" module="solr-carrot2-core" matcher="exact" rev="3.5.0"/>
+		<override org="org.codehaus.woodstox" module="wstx-asl" matcher="exact" rev="3.2.7"/>
+		<override org="org.easymock" module="easymock" matcher="exact" rev="2.2"/>
+		<override org="org.mortbay.jetty" module="jetty" matcher="exact" rev="6.1.26-patched-JETTY-1340"/>
 		<override org="org.mortbay.jetty" module="jetty-util" matcher="exact" rev="6.1.26-patched-JETTY-1340"/>
 		<override org="org.mortbay.jetty" module="jsp-2.1-glassfish" matcher="exact" rev="2.1.v20091210"/>
-		<override org="org.apache.commons" module="commons-compress" matcher="exact" rev="1.2"/>
-		<override org="org.apache.uima" module="WhitespaceTokenizer" matcher="exact" rev="2.3.1"/>
-		<override org="org.apache.solr" module="solr-jsonic" matcher="exact" rev="3.5.0"/>
-		<override org="commons-collections" module="commons-collections" matcher="exact" rev="3.2.1"/>
-		<override org="org.apache.solr" module="solr-carrot2-core" matcher="exact" rev="3.5.0"/>
-		<override org="org.slf4j" module="jcl-over-slf4j" matcher="exact" rev="1.6.1"/>
-		<override org="org.apache.solr" module="solr-noggit" matcher="exact" rev="3.5.0"/>
-		<override org="org.apache.velocity" module="velocity-tools" matcher="exact" rev="2.0"/>
-		<override org="org.slf4j" module="log4j-over-slf4j" matcher="exact" rev="1.6.1"/>
-		<override org="org.apache.ant" module="ant" matcher="exact" rev="1.7.1"/>
-		<override org="org.apache.uima" module="uimaj-core" matcher="exact" rev="2.3.1"/>
-		<override org="org.apache.solr" module="solr-langdetect" matcher="exact" rev="3.5.0"/>
 		<override org="org.mortbay.jetty" module="jsp-2.1-jetty" matcher="exact" rev="6.1.26"/>
-		<override org="org.apache.solr" module="solr-commons-csv" matcher="exact" rev="3.5.0"/>
-		<override org="com.ibm.icu" module="icu4j" matcher="exact" rev="4.8.1.1"/>
-		<override org="org.slf4j" module="slf4j-simple" matcher="exact" rev="1.6.1"/>
-		<override org="commons-codec" module="commons-codec" matcher="exact" rev="1.5"/>
-		<override org="commons-lang" module="commons-lang" matcher="exact" rev="2.4"/>
 		<override org="org.mortbay.jetty" module="jsp-api-2.1-glassfish" matcher="exact" rev="2.1.v20091210"/>
+		<override org="org.slf4j" module="jcl-over-slf4j" matcher="exact" rev="1.6.1"/>
+		<override org="org.slf4j" module="log4j-over-slf4j" matcher="exact" rev="1.6.1"/>
 		<override org="org.slf4j" module="slf4j-api" matcher="exact" rev="1.6.1"/>
-		<override org="org.mortbay.jetty" module="jetty" matcher="exact" rev="6.1.26-patched-JETTY-1340"/>
-		<override org="junit" module="junit" matcher="exact" rev="4.7"/>
-		<override org="commons-beanutils" module="commons-beanutils" matcher="exact" rev="1.7.0"/>
-		<override org="org.easymock" module="easymock" matcher="exact" rev="2.2"/>
 		<override org="org.slf4j" module="slf4j-jdk14" matcher="exact" rev="1.6.1"/>
-		<override org="commons-io" module="commons-io" matcher="exact" rev="1.4"/>
-		<override org="commons-logging" module="commons-logging" matcher="exact" rev="1.1.1"/>
-		<override org="jline" module="jline" matcher="exact" rev="0.9.1"/>
-		<override org="com.google.guava" module="guava" matcher="exact" rev="r05"/>
-		<override org="org.apache.geronimo.specs" module="geronimo-stax-api_1.0_spec" matcher="exact" rev="1.0.1"/>
-		<override org="org.apache.ant" module="ant-junit" matcher="exact" rev="1.7.1"/>
-		<override org="org.apache.uima" module="AlchemyAPIAnnotator" matcher="exact" rev="2.3.1"/>
-		<override org="commons-fileupload" module="commons-fileupload" matcher="exact" rev="1.2.1"/>
-		<override org="org.apache.uima" module="Tagger" matcher="exact" rev="2.3.1"/>
-		<override org="org.codehaus.woodstox" module="wstx-asl" matcher="exact" rev="3.2.7"/>
+		<override org="org.slf4j" module="slf4j-simple" matcher="exact" rev="1.6.1"/>
+		<override org="javax.servlet" module="servlet-api" matcher="exact" rev="2.4"/>
 	</dependencies>
 </ivy-module>

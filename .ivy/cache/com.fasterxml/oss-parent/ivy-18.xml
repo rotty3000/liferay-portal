@@ -10,27 +10,27 @@
 		<description homepage="http://github.com/FasterXML/">
 		FasterXML.com parent pom
 		</description>
-		<m:properties__osgi.private/>
-		<m:properties__javac.target.version>1.6</m:properties__javac.target.version>
-		<m:properties__osgi.import>*</m:properties__osgi.import>
-		<m:properties__version.plugin.javadoc>2.8.1</m:properties__version.plugin.javadoc>
-		<m:properties__javac.debuglevel>lines,source,vars</m:properties__javac.debuglevel>
-		<m:properties__generatedSourcesDir>${project.build.directory}/generated-sources</m:properties__generatedSourcesDir>
-		<m:properties__version.plugin.jar>2.5</m:properties__version.plugin.jar>
-		<m:properties__project.reporting.outputEncoding>UTF-8</m:properties__project.reporting.outputEncoding>
+		<m:properties__osgi.dynamicImport/>
 		<m:properties__javadoc.maxmemory>1g</m:properties__javadoc.maxmemory>
-		<m:properties__project.build.resourceEncoding>UTF-8</m:properties__project.build.resourceEncoding>
-		<m:properties__osgi.export>${project.groupId}.*;version=${project.version}</m:properties__osgi.export>
-		<m:properties__javac.src.version>1.6</m:properties__javac.src.version>
 		<m:properties__version.plugin.bundle>2.5.3</m:properties__version.plugin.bundle>
+		<m:properties__project.reporting.outputEncoding>UTF-8</m:properties__project.reporting.outputEncoding>
+		<m:properties__osgi.private/>
+		<m:properties__project.build.resourceEncoding>UTF-8</m:properties__project.build.resourceEncoding>
+		<m:properties__maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssZ</m:properties__maven.build.timestamp.format>
+		<m:properties__version.plugin.jar>2.5</m:properties__version.plugin.jar>
+		<m:properties__osgi.requiredExecutionEnvironment/>
+		<m:properties__osgi.versionpolicy>${range;[===,=+);${@}}</m:properties__osgi.versionpolicy>
 		<m:properties__version.plugin.replacer>1.5.2</m:properties__version.plugin.replacer>
+		<m:properties__javac.target.version>1.6</m:properties__javac.target.version>
+		<m:properties__javac.debuglevel>lines,source,vars</m:properties__javac.debuglevel>
+		<m:properties__osgi.import>*</m:properties__osgi.import>
+		<m:properties__javac.src.version>1.6</m:properties__javac.src.version>
 		<m:properties__version.plugin.surefire>2.17</m:properties__version.plugin.surefire>
 		<m:properties__version.plugin.release>2.4.2</m:properties__version.plugin.release>
-		<m:properties__maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssZ</m:properties__maven.build.timestamp.format>
-		<m:properties__osgi.requiredExecutionEnvironment/>
+		<m:properties__version.plugin.javadoc>2.8.1</m:properties__version.plugin.javadoc>
 		<m:properties__project.build.sourceEncoding>UTF-8</m:properties__project.build.sourceEncoding>
-		<m:properties__osgi.dynamicImport/>
-		<m:properties__osgi.versionpolicy>${range;[===,=+);${@}}</m:properties__osgi.versionpolicy>
+		<m:properties__osgi.export>${project.groupId}.*;version=${project.version}</m:properties__osgi.export>
+		<m:properties__generatedSourcesDir>${project.build.directory}/generated-sources</m:properties__generatedSourcesDir>
 		<m:maven.plugins>org.apache.maven.plugins__maven-enforcer-plugin__1.3.1|org.apache.maven.plugins__maven-compiler-plugin__3.1|org.codehaus.mojo__build-helper-maven-plugin__null|org.apache.maven.plugins__maven-surefire-plugin__2.17|org.apache.felix__maven-bundle-plugin__2.5.3|org.apache.maven.plugins__maven-jar-plugin__2.5|null__maven-site-plugin__null|org.apache.maven.plugins__maven-scm-plugin__1.9.1</m:maven.plugins>
 	</info>
 	<configurations>
