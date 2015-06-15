@@ -66,8 +66,13 @@ public class ConfigurationBeanSettings extends BaseSettings
 		if (object == null) {
 			return null;
 		}
-
-		return (String[])object;
+		
+		if(object instanceof String[]){
+			return (String[])object;
+		}
+		
+		return new String[]{object.toString()};
+		
 	}
 
 	private Object _getProperty(String key) {
