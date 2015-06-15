@@ -33,7 +33,6 @@
 		<dependency conf="default->master" name="org.apache.felix.gogo.command" org="org.apache.felix" rev="0.12.0" />
 		<dependency conf="default->master" name="org.apache.felix.gogo.runtime" org="org.apache.felix" rev="0.10.0" />
 		<dependency conf="default->master" name="org.apache.felix.gogo.shell" org="org.apache.felix" rev="0.10.0" />
-		<dependency conf="default->master" name="org.apache.felix.metatype" org="org.apache.felix" rev="1.0.8" />
 		<dependency conf="default->master" name="org.apache.felix.utils" org="org.apache.felix" rev="1.6.0" />
 		<dependency conf="default->master" name="org.apache.felix.webconsole" org="org.apache.felix" rev="4.2.2" />
 	</dependencies>

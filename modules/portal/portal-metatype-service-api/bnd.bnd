@@ -1,0 +1,8 @@
+Bundle-Description: Includes Metatype Service packages from the OSGi Compendium specification.
+Bundle-Name: Liferay Portal Metatype Service API
+Bundle-SymbolicName: com.liferay.portal.metatype.service.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	org.osgi.service.metatype
+Include-Resource:\
+	@lib/org.eclipse.osgi.services.jar!/org/osgi/service/metatype/**
