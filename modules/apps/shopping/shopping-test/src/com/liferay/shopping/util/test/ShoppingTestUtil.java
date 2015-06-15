@@ -12,20 +12,20 @@
  * details.
  */
 
-package com.liferay.portlet.shopping.util.test;
+package com.liferay.shopping.util.test;
 
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portlet.shopping.model.ShoppingCategory;
-import com.liferay.portlet.shopping.model.ShoppingCategoryConstants;
-import com.liferay.portlet.shopping.model.ShoppingItem;
-import com.liferay.portlet.shopping.model.ShoppingItemField;
-import com.liferay.portlet.shopping.model.ShoppingItemPrice;
-import com.liferay.portlet.shopping.service.ShoppingCategoryServiceUtil;
-import com.liferay.portlet.shopping.service.ShoppingItemServiceUtil;
+import com.liferay.shopping.model.ShoppingCategory;
+import com.liferay.shopping.model.ShoppingCategoryConstants;
+import com.liferay.shopping.model.ShoppingItem;
+import com.liferay.shopping.model.ShoppingItemField;
+import com.liferay.shopping.model.ShoppingItemPrice;
+import com.liferay.shopping.service.ShoppingCategoryServiceUtil;
+import com.liferay.shopping.service.ShoppingItemServiceUtil;
 
 import java.io.File;
 
