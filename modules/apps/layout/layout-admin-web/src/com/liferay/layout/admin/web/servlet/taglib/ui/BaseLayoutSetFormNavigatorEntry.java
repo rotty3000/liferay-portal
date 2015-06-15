@@ -15,21 +15,18 @@
 package com.liferay.layout.admin.web.servlet.taglib.ui;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.servlet.taglib.ui.BaseJSPFormNavigatorEntry;
 import com.liferay.portal.kernel.servlet.taglib.ui.FormNavigatorConstants;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.LayoutSet;
-import com.liferay.portal.servlet.taglib.ui.BaseFormNavigatorEntry;
 
 import java.util.Locale;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Sergio González
  */
 public abstract class BaseLayoutSetFormNavigatorEntry
-	extends BaseFormNavigatorEntry<LayoutSet> {
+	extends BaseJSPFormNavigatorEntry<LayoutSet> {
 
 	@Override
 	public String getCategoryKey() {
@@ -48,14 +45,5 @@ public abstract class BaseLayoutSetFormNavigatorEntry
 	public String getLabel(Locale locale) {
 		return LanguageUtil.get(locale, getKey());
 	}
-
-	@Override
-	protected ServletContext getServletContext(HttpServletRequest request) {
-		return servletContext;
-	}
-
-	protected abstract void setServletContext(ServletContext servletContext);
-
-	protected ServletContext servletContext;
 
 }

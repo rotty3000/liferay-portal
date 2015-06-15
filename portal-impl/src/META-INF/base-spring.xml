@@ -56,6 +56,9 @@
 		<property name="nextMethodInterceptor" ref="systemEventAdvice" />
 	</bean>
 	<bean id="systemEventAdvice" class="com.liferay.portal.systemevent.SystemEventAdvice">
+		<property name="nextMethodInterceptor" ref="serviceContextAdvice" />
+	</bean>
+	<bean id="serviceContextAdvice" class="com.liferay.portal.service.ServiceContextAdvice">
 		<property name="nextMethodInterceptor" ref="transactionAdvice" />
 	</bean>
 	<bean id="counterTransactionAdvice" class="com.liferay.portal.spring.transaction.TransactionInterceptor">
@@ -86,8 +89,8 @@
 		<property name="transactionLifecycleListeners">
 			<list>
 				<util:constant static-field="com.liferay.portal.kernel.cache.ThreadLocalCacheManager.TRANSACTION_LIFECYCLE_LISTENER" />
-				<util:constant static-field="com.liferay.portal.kernel.cache.transactional.TransactionalPortalCacheHelper.TRANSACTION_LIFECYCLE_LISTENER" />
 				<util:constant static-field="com.liferay.portal.spring.hibernate.LastSessionRecorderUtil.TRANSACTION_LIFECYCLE_LISTENER" />
+				<util:constant static-field="com.liferay.portal.kernel.cache.transactional.TransactionalPortalCacheHelper.TRANSACTION_LIFECYCLE_LISTENER" />
 				<util:constant static-field="com.liferay.portal.spring.transaction.TransactionCommitCallbackUtil.TRANSACTION_LIFECYCLE_LISTENER" />
 			</list>
 		</property>
