@@ -148,6 +148,20 @@ public interface ResourcePermissionModel extends BaseModel<ResourcePermission>,
 	public void setPrimKey(String primKey);
 
 	/**
+	 * Returns the prim key ID of this resource permission.
+	 *
+	 * @return the prim key ID of this resource permission
+	 */
+	public long getPrimKeyId();
+
+	/**
+	 * Sets the prim key ID of this resource permission.
+	 *
+	 * @param primKeyId the prim key ID of this resource permission
+	 */
+	public void setPrimKeyId(long primKeyId);
+
+	/**
 	 * Returns the role ID of this resource permission.
 	 *
 	 * @return the role ID of this resource permission
@@ -188,6 +202,27 @@ public interface ResourcePermissionModel extends BaseModel<ResourcePermission>,
 	 * @param actionIds the action IDs of this resource permission
 	 */
 	public void setActionIds(long actionIds);
+
+	/**
+	 * Returns the view of this resource permission.
+	 *
+	 * @return the view of this resource permission
+	 */
+	public boolean getView();
+
+	/**
+	 * Returns <code>true</code> if this resource permission is view.
+	 *
+	 * @return <code>true</code> if this resource permission is view; <code>false</code> otherwise
+	 */
+	public boolean isView();
+
+	/**
+	 * Sets whether this resource permission is view.
+	 *
+	 * @param view the view of this resource permission
+	 */
+	public void setView(boolean view);
 
 	@Override
 	public boolean isNew();

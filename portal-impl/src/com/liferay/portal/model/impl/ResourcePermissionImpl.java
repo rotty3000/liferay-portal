@@ -85,6 +85,7 @@ import com.liferay.portal.service.ResourceActionLocalServiceUtil;
  * </p>
  *
  * @author Brian Wing Shun Chan
+ * @author Sampsa Sohlman
  * @see    ResourceActionImpl
  */
 public class ResourcePermissionImpl extends ResourcePermissionBaseImpl {
@@ -125,6 +126,31 @@ public class ResourcePermissionImpl extends ResourcePermissionBaseImpl {
 				getName(), actionId);
 
 		setActionIds(getActionIds() & (~resourceAction.getBitwiseValue()));
+	}
+
+	@Override
+	public void setActionIds(long actionIds) {
+		super.setView(actionIds % 2 == 1);
+		super.setActionIds(actionIds);
+	}
+
+	@Override
+	public void setPrimKey(String primKey) {
+		long primKeyId = 0;
+
+		try {
+			primKeyId = Long.valueOf(primKey);
+		}
+		catch (NumberFormatException ignore) {}
+
+		super.setPrimKey(primKey);
+		super.setPrimKeyId(primKeyId);
+	}
+
+	@Override
+	public void setPrimKeyId(long primKeyId) {
+		super.setPrimKeyId(primKeyId);
+		super.setPrimKey(String.valueOf(primKeyId));
 	}
 
 }

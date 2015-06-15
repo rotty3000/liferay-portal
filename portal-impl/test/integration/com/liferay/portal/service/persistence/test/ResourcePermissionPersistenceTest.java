@@ -125,11 +125,15 @@ public class ResourcePermissionPersistenceTest {
 
 		newResourcePermission.setPrimKey(RandomTestUtil.randomString());
 
+		newResourcePermission.setPrimKeyId(RandomTestUtil.nextLong());
+
 		newResourcePermission.setRoleId(RandomTestUtil.nextLong());
 
 		newResourcePermission.setOwnerId(RandomTestUtil.nextLong());
 
 		newResourcePermission.setActionIds(RandomTestUtil.nextLong());
+
+		newResourcePermission.setView(RandomTestUtil.randomBoolean());
 
 		_resourcePermissions.add(_persistence.update(newResourcePermission));
 
@@ -147,12 +151,16 @@ public class ResourcePermissionPersistenceTest {
 			newResourcePermission.getScope());
 		Assert.assertEquals(existingResourcePermission.getPrimKey(),
 			newResourcePermission.getPrimKey());
+		Assert.assertEquals(existingResourcePermission.getPrimKeyId(),
+			newResourcePermission.getPrimKeyId());
 		Assert.assertEquals(existingResourcePermission.getRoleId(),
 			newResourcePermission.getRoleId());
 		Assert.assertEquals(existingResourcePermission.getOwnerId(),
 			newResourcePermission.getOwnerId());
 		Assert.assertEquals(existingResourcePermission.getActionIds(),
 			newResourcePermission.getActionIds());
+		Assert.assertEquals(existingResourcePermission.getView(),
+			newResourcePermission.getView());
 	}
 
 	@Test
@@ -204,6 +212,17 @@ public class ResourcePermissionPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_N_S_PI_V() throws Exception {
+		_persistence.countByC_N_S_PI_V(RandomTestUtil.nextLong(),
+			StringPool.BLANK, RandomTestUtil.nextInt(),
+			RandomTestUtil.nextLong());
+
+		_persistence.countByC_N_S_PI_V(0L, StringPool.NULL, 0, 0L);
+
+		_persistence.countByC_N_S_PI_V(0L, (String)null, 0, 0L);
+	}
+
+	@Test
 	public void testCountByC_N_S_P_R() throws Exception {
 		_persistence.countByC_N_S_P_R(RandomTestUtil.nextLong(),
 			StringPool.BLANK, RandomTestUtil.nextInt(), StringPool.BLANK,
@@ -221,6 +240,29 @@ public class ResourcePermissionPersistenceTest {
 			RandomTestUtil.randomString(), RandomTestUtil.nextInt(),
 			RandomTestUtil.randomString(),
 			new long[] { RandomTestUtil.nextLong(), 0L });
+	}
+
+	@Test
+	public void testCountByC_N_S_PI_R_V() throws Exception {
+		_persistence.countByC_N_S_PI_R_V(RandomTestUtil.nextLong(),
+			StringPool.BLANK, RandomTestUtil.nextInt(),
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_N_S_PI_R_V(0L, StringPool.NULL, 0, 0L, 0L,
+			RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_N_S_PI_R_V(0L, (String)null, 0, 0L, 0L,
+			RandomTestUtil.randomBoolean());
+	}
+
+	@Test
+	public void testCountByC_N_S_PI_R_VArrayable() throws Exception {
+		_persistence.countByC_N_S_PI_R_V(RandomTestUtil.nextLong(),
+			RandomTestUtil.randomString(), RandomTestUtil.nextInt(),
+			RandomTestUtil.nextLong(),
+			new long[] { RandomTestUtil.nextLong(), 0L },
+			RandomTestUtil.randomBoolean());
 	}
 
 	@Test
@@ -248,8 +290,9 @@ public class ResourcePermissionPersistenceTest {
 	protected OrderByComparator<ResourcePermission> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("ResourcePermission",
 			"mvccVersion", true, "resourcePermissionId", true, "companyId",
-			true, "name", true, "scope", true, "primKey", true, "roleId", true,
-			"ownerId", true, "actionIds", true);
+			true, "name", true, "scope", true, "primKey", true, "primKeyId",
+			true, "roleId", true, "ownerId", true, "actionIds", true, "view",
+			true);
 	}
 
 	@Test
@@ -492,11 +535,15 @@ public class ResourcePermissionPersistenceTest {
 
 		resourcePermission.setPrimKey(RandomTestUtil.randomString());
 
+		resourcePermission.setPrimKeyId(RandomTestUtil.nextLong());
+
 		resourcePermission.setRoleId(RandomTestUtil.nextLong());
 
 		resourcePermission.setOwnerId(RandomTestUtil.nextLong());
 
 		resourcePermission.setActionIds(RandomTestUtil.nextLong());
+
+		resourcePermission.setView(RandomTestUtil.randomBoolean());
 
 		_resourcePermissions.add(_persistence.update(resourcePermission));
 

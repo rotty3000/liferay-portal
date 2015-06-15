@@ -57,9 +57,11 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 		attributes.put("name", getName());
 		attributes.put("scope", getScope());
 		attributes.put("primKey", getPrimKey());
+		attributes.put("primKeyId", getPrimKeyId());
 		attributes.put("roleId", getRoleId());
 		attributes.put("ownerId", getOwnerId());
 		attributes.put("actionIds", getActionIds());
+		attributes.put("view", getView());
 
 		return attributes;
 	}
@@ -102,6 +104,12 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 			setPrimKey(primKey);
 		}
 
+		Long primKeyId = (Long)attributes.get("primKeyId");
+
+		if (primKeyId != null) {
+			setPrimKeyId(primKeyId);
+		}
+
 		Long roleId = (Long)attributes.get("roleId");
 
 		if (roleId != null) {
@@ -118,6 +126,12 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 
 		if (actionIds != null) {
 			setActionIds(actionIds);
+		}
+
+		Boolean view = (Boolean)attributes.get("view");
+
+		if (view != null) {
+			setView(view);
 		}
 	}
 
@@ -204,6 +218,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	}
 
 	/**
+	* Returns the prim key ID of this resource permission.
+	*
+	* @return the prim key ID of this resource permission
+	*/
+	@Override
+	public long getPrimKeyId() {
+		return _resourcePermission.getPrimKeyId();
+	}
+
+	/**
 	* Returns the primary key of this resource permission.
 	*
 	* @return the primary key of this resource permission
@@ -248,6 +272,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 		return _resourcePermission.getScope();
 	}
 
+	/**
+	* Returns the view of this resource permission.
+	*
+	* @return the view of this resource permission
+	*/
+	@Override
+	public boolean getView() {
+		return _resourcePermission.getView();
+	}
+
 	@Override
 	public boolean hasAction(
 		com.liferay.portal.model.ResourceAction resourceAction) {
@@ -277,6 +311,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public boolean isNew() {
 		return _resourcePermission.isNew();
+	}
+
+	/**
+	* Returns <code>true</code> if this resource permission is view.
+	*
+	* @return <code>true</code> if this resource permission is view; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isView() {
+		return _resourcePermission.isView();
 	}
 
 	@Override
@@ -378,6 +422,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	}
 
 	/**
+	* Sets the prim key ID of this resource permission.
+	*
+	* @param primKeyId the prim key ID of this resource permission
+	*/
+	@Override
+	public void setPrimKeyId(long primKeyId) {
+		_resourcePermission.setPrimKeyId(primKeyId);
+	}
+
+	/**
 	* Sets the primary key of this resource permission.
 	*
 	* @param primaryKey the primary key of this resource permission
@@ -420,6 +474,16 @@ public class ResourcePermissionWrapper implements ResourcePermission,
 	@Override
 	public void setScope(int scope) {
 		_resourcePermission.setScope(scope);
+	}
+
+	/**
+	* Sets whether this resource permission is view.
+	*
+	* @param view the view of this resource permission
+	*/
+	@Override
+	public void setView(boolean view) {
+		_resourcePermission.setView(view);
 	}
 
 	@Override
