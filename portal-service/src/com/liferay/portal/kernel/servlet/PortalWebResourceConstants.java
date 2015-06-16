@@ -31,4 +31,6 @@ public class PortalWebResourceConstants {
 
 	public static final String RESOURCE_TYPE_THEMES = "themes";
 
+	public static final String RESOURCE_TYPE_TINYMCE = "tinymce";
+
 }
