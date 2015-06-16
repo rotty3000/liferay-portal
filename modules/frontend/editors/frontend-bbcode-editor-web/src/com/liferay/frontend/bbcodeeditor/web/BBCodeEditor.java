@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.frontend.editors.web;
+package com.liferay.frontend.bbcodeeditor.web;
 
 import com.liferay.portal.kernel.editor.Editor;
 
