@@ -14,7 +14,7 @@
 
 package com.liferay.portal.configuration.persistence.test;
 
-import com.liferay.portal.configuration.persistence.ConfigurationPersistenceManager;
+import com.liferay.portal.configuration.persistence.internal.ConfigurationPersistenceManager;
 import com.liferay.portal.kernel.test.rule.Sync;
 
 import java.io.IOException;
