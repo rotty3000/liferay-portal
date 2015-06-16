@@ -29,6 +29,8 @@ public class PortalWebResourceConstants {
 
 	public static final String RESOURCE_TYPE_JS = "js";
 
+	public static final String RESOURCE_TYPE_SIMPLE_EDITOR = "simple";
+
 	public static final String RESOURCE_TYPE_THEMES = "themes";
 
 	public static final String RESOURCE_TYPE_TINYMCE = "tinymce";
