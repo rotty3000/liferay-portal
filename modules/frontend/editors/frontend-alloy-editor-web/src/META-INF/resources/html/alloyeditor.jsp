@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/editors/init.jsp" %>
+<%@ include file="/html/init.jsp" %>
 
 <%
 String portletId = portletDisplay.getRootPortletId();
@@ -73,19 +73,17 @@ EditorOptions editorOptions = null;
 if (data != null) {
 	editorOptions = (EditorOptions)data.get("editorOptions");
 }
+
+String alloyEditorPath = PortalWebResourcesUtil.getContextPath(PortalWebResourceConstants.RESOURCE_TYPE_ALLOYEDITOR);
 %>
 
 <c:if test="<%= !skipEditorLoading %>">
 	<liferay-util:html-top outputKey="js_editor_alloyeditor_skip_editor_loading">
-		<link href="<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathEditors() + "/editors/alloyeditor/assets/alloy-editor-ocean.css") %>" rel="stylesheet" type="text/css" />
+		<link href="<%= PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + alloyEditorPath + "/html/alloyeditor/assets/alloy-editor-ocean.css") %>" rel="stylesheet" type="text/css" />
 
-		<%
-		long javaScriptLastModified = PortalWebResourcesUtil.getLastModified(PortalWebResourceConstants.RESOURCE_TYPE_EDITORS);
-		%>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + PortalWebResourcesUtil.getContextPath(PortalWebResourceConstants.RESOURCE_TYPE_CKEDITOR) + "/html/ckeditor/ckeditor.js", PortalWebResourcesUtil.getLastModified(PortalWebResourceConstants.RESOURCE_TYPE_CKEDITOR))) %>" type="text/javascript"></script>
 
-		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathEditors() + "/editors/ckeditor/ckeditor.js", javaScriptLastModified)) %>" type="text/javascript"></script>
-
-		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathEditors() + "/editors/alloyeditor/liferay-alloy-editor-no-ckeditor-min.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + alloyEditorPath + "/html/alloyeditor/liferay-alloy-editor-no-ckeditor-min.js", PortalWebResourcesUtil.getLastModified(PortalWebResourceConstants.RESOURCE_TYPE_ALLOYEDITOR))) %>" type="text/javascript"></script>
 
 		<script type="text/javascript">
 			Liferay.namespace('EDITORS')['<%= editorName %>'] = true;
