@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/editors/init.jsp" %>
+<%@ include file="/html/init.jsp" %>
 
 <%
 String portletId = portletDisplay.getRootPortletId();
@@ -88,13 +88,15 @@ if (editorOptions != null) {
 		</style>
 
 		<%
-		long javaScriptLastModified = PortalWebResourcesUtil.getLastModified(PortalWebResourceConstants.RESOURCE_TYPE_EDITORS);
+		long javaScriptLastModified = PortalWebResourcesUtil.getLastModified(PortalWebResourceConstants.RESOURCE_TYPE_CKEDITOR);
+
+		String ckeditorPath = PortalWebResourcesUtil.getContextPath(PortalWebResourceConstants.RESOURCE_TYPE_CKEDITOR);
 		%>
 
-		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathEditors() + "/editors/ckeditor/ckeditor.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+		<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + ckeditorPath + "/html/ckeditor/ckeditor.js", javaScriptLastModified)) %>" type="text/javascript"></script>
 
 		<c:if test="<%= inlineEdit && Validator.isNotNull(inlineEditSaveURL) %>">
-			<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + themeDisplay.getPathEditors() + "/editors/ckeditor/main.js", javaScriptLastModified)) %>" type="text/javascript"></script>
+			<script src="<%= HtmlUtil.escape(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNHost() + ckeditorPath + "/html/ckeditor/main.js", javaScriptLastModified)) %>" type="text/javascript"></script>
 		</c:if>
 
 		<script type="text/javascript">
