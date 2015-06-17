@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.frontend.editors.web.servlet.taglib;
+package com.liferay.frontend.ckeditor.web.servlet.taglib;
 
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import com.liferay.portal.kernel.util.StreamUtil;
