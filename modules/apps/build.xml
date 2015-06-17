@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE project>
 
 <project>
@@ -37,6 +38,7 @@
 		<dirset dir="password-generator" includes="*" />
 		<dirset dir="password-policies-admin" includes="*" />
 		<dirset dir="polls" includes="*" />
+		<dirset dir="portal-settings" includes="*" />
 		<dirset dir="portlet-css" includes="*" />
 		<dirset dir="portlet-display-template" includes="*" />
 		<dirset dir="product-menu" includes="*" />
