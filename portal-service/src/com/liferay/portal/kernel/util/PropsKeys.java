@@ -1657,6 +1657,8 @@ public interface PropsKeys {
 
 	public static final String MODULE_FRAMEWORK_INITIAL_BUNDLES = "module.framework.initial.bundles";
 
+	public static final String MODULE_FRAMEWORK_PORTAL_DEPENDENCY_FILTER = "module.framework.portal.dependency.filter";
+
 	public static final String MODULE_FRAMEWORK_PORTAL_DIR = "module.framework.portal.dir";
 
 	public static final String MODULE_FRAMEWORK_PROPERTIES = "module.framework.properties.";

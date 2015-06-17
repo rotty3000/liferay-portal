@@ -825,9 +825,17 @@ public class MainServlet extends ActionServlet {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter filter = registry.getFilter("(search.engine.id=SYSTEM_ENGINE)");
+		int length =
+			PropsValues.MODULE_FRAMEWORK_PORTAL_DEPENDENCY_FILTER.length;
 
-		serviceDependencyManager.registerDependencies(filter);
+		Filter[] filters = new Filter[length];
+
+		for (int i = 0; i < length; i++) {
+			filters[i] = registry.getFilter(
+				PropsValues.MODULE_FRAMEWORK_PORTAL_DEPENDENCY_FILTER[i]);
+		}
+
+		serviceDependencyManager.registerDependencies(filters);
 	}
 
 	protected void initExt() throws Exception {
