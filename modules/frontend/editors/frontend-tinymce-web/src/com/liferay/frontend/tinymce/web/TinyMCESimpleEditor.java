@@ -32,7 +32,7 @@ public class TinyMCESimpleEditor extends BaseEditor {
 
 	@Override
 	protected String getJspPath() {
-		return "/editors/tinymce_simple.jsp";
+		return "/html/tinymce_simple.jsp";
 	}
 
 }
