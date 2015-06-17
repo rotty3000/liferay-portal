@@ -14,9 +14,7 @@
 
 package com.liferay.portal.kernel.editor;
 
-import com.liferay.portal.kernel.editor.Editor;
-import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,12 +23,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class BaseEditor implements Editor {
 
-	@Override
 	public String getJspPath(HttpServletRequest request) {
-		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		return themeDisplay.getPathEditors() + getJspPath();
+		return PortalWebResourcesUtil.getContextPath(
+			getResourceType()) + getJspPath();
 	}
 
 	protected abstract String getJspPath();
