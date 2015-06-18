@@ -49,7 +49,7 @@ import org.apache.struts.Globals;
 public class I18nFilter extends BasePortalFilter {
 
 	public static final String SKIP_FILTER =
-		I18nFilter.class.getName() + "SKIP_FILTER";
+		I18nFilter.class.getName() + "#SKIP_FILTER";
 
 	public static Set<String> getLanguageIds() {
 		return _languageIds;

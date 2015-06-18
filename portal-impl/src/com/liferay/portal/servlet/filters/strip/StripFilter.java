@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletResponse;
 public class StripFilter extends BasePortalFilter {
 
 	public static final String SKIP_FILTER =
-		StripFilter.class.getName() + "SKIP_FILTER";
+		StripFilter.class.getName() + "#SKIP_FILTER";
 
 	public StripFilter() {
 		if (PropsValues.MINIFIER_INLINE_CONTENT_CACHE_SIZE > 0) {

@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.BufferCacheServletResponse;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
-import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -105,16 +104,20 @@ public class DynamicCSSFilter extends IgnoreModuleRequestFilter {
 		URL resourceURL = _servletContext.getResource(requestPath);
 
 		if (resourceURL == null) {
-			resourceURL = PortalWebResourcesUtil.getServletContextResource(
-				requestPath);
+			ServletContext resourceServletContext =
+				PortalWebResourcesUtil.getPathServletContext(requestPath);
+
+			if (resourceServletContext != null) {
+				resourceURL = PortalWebResourcesUtil.getResource(
+					resourceServletContext, requestPath);
+			}
 
 			if (resourceURL == null) {
 				return null;
 			}
 
 			bundleResource = true;
-			servletContext = PortalWebResourcesUtil.getServletContext(
-				PortalWebResourceConstants.RESOURCE_TYPE_CSS);
+			servletContext = resourceServletContext;
 		}
 
 		String cacheCommonFileName = getCacheFileName(request);
@@ -227,7 +230,7 @@ public class DynamicCSSFilter extends IgnoreModuleRequestFilter {
 	protected boolean isModuleRequest(HttpServletRequest request) {
 		String requestURI = request.getRequestURI();
 
-		if (PortalWebResourcesUtil.isResourceContextPath(requestURI)) {
+		if (PortalWebResourcesUtil.hasContextPath(requestURI)) {
 			return false;
 		}
 

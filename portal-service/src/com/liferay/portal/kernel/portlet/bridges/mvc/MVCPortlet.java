@@ -57,6 +57,7 @@ public class MVCPortlet extends LiferayPortlet {
 		super.destroy();
 
 		_mvcActionCommandCache.close();
+		_mvcRenderCommandCache.close();
 		_mvcResourceCommandCache.close();
 	}
 
@@ -197,6 +198,11 @@ public class MVCPortlet extends LiferayPortlet {
 			MVCActionCommand.EMPTY, getInitParameter("action.package.prefix"),
 			getPortletName(), MVCActionCommand.class.getName(),
 			"ActionCommand");
+		_mvcRenderCommandCache = new MVCCommandCache(
+			MVCRenderCommand.EMPTY,
+			getInitParameter("mvc.render.command.package.prefix"),
+			getPortletName(), MVCRenderCommand.class.getName(),
+			"RenderCommand");
 		_mvcResourceCommandCache = new MVCCommandCache(
 			MVCResourceCommand.EMPTY,
 			getInitParameter("resource.package.prefix"), getPortletName(),
@@ -233,6 +239,30 @@ public class MVCPortlet extends LiferayPortlet {
 		if (copyRequestParameters) {
 			PortalUtil.copyRequestParameters(actionRequest, actionResponse);
 		}
+	}
+
+	@Override
+	public void render(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		String mvcRenderCommandName = ParamUtil.getString(
+			renderRequest, "mvcRenderCommandName");
+
+		MVCRenderCommand mvcRenderCommand =
+			(MVCRenderCommand)_mvcRenderCommandCache.getMVCCommand(
+				mvcRenderCommandName);
+
+		if (mvcRenderCommand != MVCRenderCommand.EMPTY) {
+			String mvcPath = mvcRenderCommand.render(
+				renderRequest, renderResponse);
+
+			if (Validator.isNotNull(mvcPath)) {
+				renderRequest.setAttribute(_MVC_PATH, mvcPath);
+			}
+		}
+
+		super.render(renderRequest, renderResponse);
 	}
 
 	@Override
@@ -399,6 +429,10 @@ public class MVCPortlet extends LiferayPortlet {
 	protected String getPath(PortletRequest portletRequest) {
 		String mvcPath = portletRequest.getParameter("mvcPath");
 
+		if (mvcPath == null) {
+			mvcPath = (String)portletRequest.getAttribute(_MVC_PATH);
+		}
+
 		// Check deprecated parameter
 
 		if (mvcPath == null) {
@@ -518,9 +552,13 @@ public class MVCPortlet extends LiferayPortlet {
 		return null;
 	}
 
+	private static final String _MVC_PATH =
+		MVCPortlet.class.getName() + "#MVC_PATH";
+
 	private static final Log _log = LogFactoryUtil.getLog(MVCPortlet.class);
 
 	private MVCCommandCache _mvcActionCommandCache;
+	private MVCCommandCache _mvcRenderCommandCache;
 	private MVCCommandCache _mvcResourceCommandCache;
 
 }
