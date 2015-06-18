@@ -132,7 +132,8 @@ public class PortletKeys {
 
 	public static final String PORTAL_INSTANCES = "135";
 
-	public static final String PORTAL_SETTINGS = "130";
+	public static final String PORTAL_SETTINGS = 
+		"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet";
 
 	public static final String PORTLET_CONFIGURATION = "86";
 
