@@ -62,9 +62,7 @@ public class FileAvailabilityUtil {
 		catch (Exception e) {
 		}
 
-		if ((url == null) &&
-			!PortalWebResourcesUtil.isResourceAvailable(path)) {
-
+		if ((url == null) && !PortalWebResourcesUtil.isAvailable(path)) {
 			available = Boolean.FALSE;
 		}
 		else {

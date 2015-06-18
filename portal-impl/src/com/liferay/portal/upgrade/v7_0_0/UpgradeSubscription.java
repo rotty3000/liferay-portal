@@ -26,12 +26,10 @@ import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
-import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBThread;
-import com.liferay.portlet.shopping.model.ShoppingOrder;
 import com.liferay.portlet.softwarecatalog.model.SCProductEntry;
 
 import java.sql.Connection;
@@ -187,8 +185,6 @@ public class UpgradeSubscription extends UpgradeProcess {
 		_getGroupIdSQLPartsMap.put(
 			BlogsEntry.class.getName(), "BlogsEntry,groupId,entryId");
 		_getGroupIdSQLPartsMap.put(
-			DDMStructure.class.getName(), "DDMStructure,groupId,structureId");
-		_getGroupIdSQLPartsMap.put(
 			DLFileEntry.class.getName(), "DLFileEntry,groupId,fileEntryId");
 		_getGroupIdSQLPartsMap.put(
 			DLFileEntryType.class.getName(),
@@ -207,8 +203,6 @@ public class UpgradeSubscription extends UpgradeProcess {
 			SCProductEntry.class.getName(),
 			"SCProductEntry,groupId,productEntryId");
 		_getGroupIdSQLPartsMap.put(
-			ShoppingOrder.class.getName(), "ShoppingOrder,groupId,orderId");
-		_getGroupIdSQLPartsMap.put(
 			WorkflowInstance.class.getName(),
 			"WorkflowInstance,groupId,workflowInstanceId");
 		_getGroupIdSQLPartsMap.put(
@@ -217,6 +211,9 @@ public class UpgradeSubscription extends UpgradeProcess {
 		_getGroupIdSQLPartsMap.put(
 			"com.liferay.bookmarks.model.BookmarksFolder",
 			"BookmarksFolder,groupId,folderId");
+		_getGroupIdSQLPartsMap.put(
+			"com.liferay.portlet.dynamicdatamapping.model.DDMStructure",
+			"DDMStructure,groupId,structureId");
 		_getGroupIdSQLPartsMap.put(
 			"com.liferay.portlet.wiki.model.WikiNode",
 			"WikiNode,groupId,nodeId");
