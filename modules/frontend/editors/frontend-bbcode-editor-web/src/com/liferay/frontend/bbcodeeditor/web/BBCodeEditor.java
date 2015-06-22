@@ -14,6 +14,7 @@
 
 package com.liferay.frontend.bbcodeeditor.web;
 
+import com.liferay.portal.kernel.editor.BaseEditor;
 import com.liferay.portal.kernel.editor.Editor;
 import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 
