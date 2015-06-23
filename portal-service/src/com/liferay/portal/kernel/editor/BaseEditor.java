@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.frontend.editors.web;
+package com.liferay.portal.kernel.editor;
 
 import com.liferay.portal.kernel.editor.Editor;
 import com.liferay.portal.kernel.util.WebKeys;
