@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.frontend.editors.web.editor.configuration;
+package com.liferay.frontend.alloyeditor.web.editor.configuration;
 
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.item.selector.ItemSelectorCriterion;
