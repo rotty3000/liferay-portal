@@ -5,6 +5,8 @@ Include-Resource:\
 	classes,\
 	META-INF/resources=src/META-INF/resources,\
 	META-INF/resources/html=tmp/META-INF/resources/html
+Provide-Capability:\
+	liferay.editor;liferay.editor="ckeditor";version:Version=${plugin.full.version}
 Web-ContextPath: /frontend-ckeditor-web
 
 -donotcopy: (\.touch|.*_diffs.*)
