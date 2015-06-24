@@ -5354,6 +5354,7 @@ if (ppstate.equals("normal")) {
 							"modules/portal/portal-json-web-service-extender/test/integration/**/*Test.java",
 							"modules/portal/portal-template-freemarker/test/integration/**/*Test.java",
 							"modules/util/osgi-util/test/integration/**/*Test.java",
+							"portal-service/test/unit/com/liferay/portal/log/assertor/PortalLogAssertorTest.java",
 							"*/pacl/test/[\\w]+Test.class",
 							"**/*ServiceHttpTest.java",
 							"**/*ServiceJsonTest.java",
@@ -6389,7 +6390,13 @@ ANT_OPTS=${env.ANT_OPTS}</echo>
 
 		<antcall target="rebuild-database" inheritAll="false" />
 
+		<antcall target="delete-liferay-home" />
+
 		<ant dir="modules" target="test-class-group" inheritAll="false" />
+
+		<ant dir="portal-service" target="test-class" inheritAll="false">
+			<property name="test.class" value="PortalLogAssertorTest" />
+		</ant>
 
 		<ant antfile="build-test-tck.xml" target="record-test-tck-package-names" />
 

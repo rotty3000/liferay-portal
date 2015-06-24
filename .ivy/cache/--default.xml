@@ -7,7 +7,7 @@
 		revision="working@bchan-yosemite-1"
 		conf="default"
 		confs="default"
-		date="20150617121813"/>
+		date="20150623211512"/>
 	<dependencies>
 		<module organisation="com.liferay" name="com.liferay.arquillian.extension">
 			<revision name="1.0.0-SNAPSHOT" status="integration" pubdate="20150130073350" resolver="liferay-public" artresolver="default" homepage="" downloaded="false" searched="false" default="false" conf="system, default, optional, compile, *, provided, runtime, javadoc, sources, master" position="20">

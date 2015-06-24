@@ -16,6 +16,7 @@ package com.liferay.portal.search.elasticsearch.connection;
 
 import aQute.bnd.annotation.metatype.Configurable;
 
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch.configuration.ElasticsearchConfiguration;
 
 import java.util.HashMap;
@@ -113,15 +114,33 @@ public class ElasticsearchConnectionManager {
 	}
 
 	@Activate
-	@Modified
 	protected void activate(Map<String, Object> properties) {
 		_elasticsearchConfiguration = Configurable.createConfigurable(
 			ElasticsearchConfiguration.class, properties);
 
-		OperationMode newOperationMode = OperationMode.valueOf(
-			_elasticsearchConfiguration.operationMode());
+		_clusterName = _elasticsearchConfiguration.clusterName();
 
-		if (newOperationMode.equals(_operationMode)) {
+		_operationMode = _elasticsearchConfiguration.operationMode();
+
+		if (!_elasticsearchConnections.containsKey(_operationMode)) {
+			throw new IllegalArgumentException(
+				"No connection available for: " + _operationMode);
+		}
+	}
+
+	@Modified
+	protected synchronized void modified(Map<String, Object> properties) {
+		_elasticsearchConfiguration = Configurable.createConfigurable(
+			ElasticsearchConfiguration.class, properties);
+
+		OperationMode newOperationMode =
+			_elasticsearchConfiguration.operationMode();
+
+		if (Validator.equals(
+				_elasticsearchConfiguration.clusterName(), _clusterName) &&
+			Validator.equals(
+				_elasticsearchConfiguration.operationMode(), _operationMode)) {
+
 			return;
 		}
 
@@ -130,16 +149,20 @@ public class ElasticsearchConnectionManager {
 				"No connection available for: " + newOperationMode);
 		}
 
-		if (_operationMode != null) {
-			ElasticsearchConnection elasticsearchConnection =
-				_elasticsearchConnections.get(_operationMode);
+		ElasticsearchConnection elasticsearchConnection =
+			_elasticsearchConnections.get(_operationMode);
 
-			elasticsearchConnection.close();
-		}
+		boolean closed = elasticsearchConnection.close();
 
+		_clusterName = _elasticsearchConfiguration.clusterName();
 		_operationMode = newOperationMode;
+
+		if (closed) {
+			getClient();
+		}
 	}
 
+	private String _clusterName;
 	private volatile ElasticsearchConfiguration _elasticsearchConfiguration;
 	private final Map<OperationMode, ElasticsearchConnection>
 		_elasticsearchConnections = new HashMap<>();
