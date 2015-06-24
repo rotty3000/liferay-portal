@@ -30,7 +30,7 @@
 	%>
 
 		<liferay-ui:section>
-			<liferay-util:include page='<%= "authentication/" + _getSectionJsp(section) + ".jsp" %>' portletId="<%= portletDisplay.getRootPortletId() %>" />
+			<liferay-util:include page='<%= "/authentication/" + _getSectionJsp(section) + ".jsp" %>' portletId="<%= portletDisplay.getRootPortletId() %>" />
 		</liferay-ui:section>
 
 	<%
