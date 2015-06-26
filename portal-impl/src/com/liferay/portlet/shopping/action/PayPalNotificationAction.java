@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.shopping.NoSuchOrderException;
 import com.liferay.portlet.shopping.ShoppingGroupServiceSettings;
 import com.liferay.portlet.shopping.model.ShoppingOrder;
 import com.liferay.portlet.shopping.service.ShoppingOrderLocalServiceUtil;
@@ -191,15 +190,15 @@ public class PayPalNotificationAction extends Action {
 
 		String ppTxnId = ParamUtil.getString(request, "txn_id");
 
-		try {
-			ShoppingOrderLocalServiceUtil.getPayPalTxnIdOrder(ppTxnId);
+		ShoppingOrder shoppingOrder =
+			ShoppingOrderLocalServiceUtil.fetchPayPalTxnIdOrder(ppTxnId);
 
-			return false;
+		if (shoppingOrder == null) {
+			return true;
 		}
-		catch (NoSuchOrderException nsoe) {
+		else {
+			return true;
 		}
-
-		return true;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

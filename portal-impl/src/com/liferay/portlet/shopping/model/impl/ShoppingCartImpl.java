@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portlet.shopping.NoSuchCouponException;
 import com.liferay.portlet.shopping.model.ShoppingCartItem;
 import com.liferay.portlet.shopping.model.ShoppingCoupon;
 import com.liferay.portlet.shopping.service.ShoppingCartLocalServiceUtil;
@@ -40,19 +39,13 @@ public class ShoppingCartImpl extends ShoppingCartBaseImpl {
 
 	@Override
 	public ShoppingCoupon getCoupon() throws PortalException {
-		ShoppingCoupon coupon = null;
-
 		if (Validator.isNotNull(getCouponCodes())) {
 			String code = StringUtil.split(getCouponCodes())[0];
 
-			try {
-				coupon = ShoppingCouponLocalServiceUtil.getCoupon(code);
-			}
-			catch (NoSuchCouponException nsce) {
-			}
+			return ShoppingCouponLocalServiceUtil.fetchCoupon(code);
 		}
 
-		return coupon;
+		return null;
 	}
 
 	@Override

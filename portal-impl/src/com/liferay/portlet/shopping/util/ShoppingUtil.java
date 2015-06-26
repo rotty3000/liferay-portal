@@ -33,7 +33,6 @@ import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.shopping.NoSuchCartException;
 import com.liferay.portlet.shopping.ShoppingGroupServiceSettings;
 import com.liferay.portlet.shopping.model.ShoppingCart;
 import com.liferay.portlet.shopping.model.ShoppingCartItem;
@@ -684,12 +683,10 @@ public class ShoppingUtil {
 					cart.getAltShipping(), cart.isInsure());
 			}
 			else {
-				try {
-					cart = ShoppingCartLocalServiceUtil.getCart(
-						themeDisplay.getUserId(),
-						themeDisplay.getScopeGroupId());
-				}
-				catch (NoSuchCartException nsce) {
+				cart = ShoppingCartLocalServiceUtil.fetchCart(
+					themeDisplay.getUserId(), themeDisplay.getScopeGroupId());
+
+				if (cart == null) {
 					cart = getCart(themeDisplay);
 
 					cart = ShoppingCartLocalServiceUtil.updateCart(
