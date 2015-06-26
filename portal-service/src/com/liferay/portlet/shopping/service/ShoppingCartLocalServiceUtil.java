@@ -181,6 +181,11 @@ public class ShoppingCartLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
+	public static com.liferay.portlet.shopping.model.ShoppingCart fetchCart(
+		long userId, long groupId) {
+		return getService().fetchCart(userId, groupId);
+	}
+
 	public static com.liferay.portlet.shopping.model.ShoppingCart fetchShoppingCart(
 		long cartId) {
 		return getService().fetchShoppingCart(cartId);

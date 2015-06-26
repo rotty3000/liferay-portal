@@ -206,6 +206,11 @@ public class ShoppingCouponLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
+	public static com.liferay.portlet.shopping.model.ShoppingCoupon fetchCoupon(
+		java.lang.String code) {
+		return getService().fetchCoupon(code);
+	}
+
 	public static com.liferay.portlet.shopping.model.ShoppingCoupon fetchShoppingCoupon(
 		long couponId) {
 		return getService().fetchShoppingCoupon(couponId);

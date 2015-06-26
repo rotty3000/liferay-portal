@@ -188,6 +188,12 @@ public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService
 	}
 
 	@Override
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchCart(
+		long userId, long groupId) {
+		return _shoppingCartLocalService.fetchCart(userId, groupId);
+	}
+
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCart fetchShoppingCart(
 		long cartId) {
 		return _shoppingCartLocalService.fetchShoppingCart(cartId);

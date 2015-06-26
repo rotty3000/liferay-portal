@@ -217,6 +217,12 @@ public class ShoppingCouponLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchCoupon(
+		java.lang.String code) {
+		return _shoppingCouponLocalService.fetchCoupon(code);
+	}
+
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchShoppingCoupon(
 		long couponId) {
 		return _shoppingCouponLocalService.fetchShoppingCoupon(couponId);
