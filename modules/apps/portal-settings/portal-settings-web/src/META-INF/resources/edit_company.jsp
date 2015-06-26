@@ -19,7 +19,7 @@
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 
-portletURL.setParameter("mvcPath", "edit_company.jsp");
+portletURL.setParameter("mvcPath", "/edit_company.jsp");
 
 request.setAttribute("addresses.className", Account.class.getName());
 request.setAttribute("emailAddresses.className", Account.class.getName());
@@ -33,7 +33,7 @@ request.setAttribute("websites.classPK", company.getAccountId());
 %>
 
 <portlet:actionURL name="editCompany" var="editCompanyURL">
-	<portlet:param name="mvcPath" value="edit_company.jsp" />
+	<portlet:param name="mvcPath" value="/edit_company.jsp" />
 </portlet:actionURL>
 
 <aui:form action="<%= editCompanyURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
