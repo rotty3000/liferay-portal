@@ -267,6 +267,19 @@ public class ShoppingOrderLocalServiceImpl
 	}
 
 	@Override
+	public ShoppingOrder fetchLatestOrder(long userId, long groupId) {
+		return shoppingOrderPersistence.fetchByG_U_PPPS_First(
+			groupId, userId, ShoppingOrderConstants.STATUS_LATEST, null);
+	}
+
+	@Override
+	public ShoppingOrder fetchPayPalTxnIdOrder(String ppTxnId)
+		throws PortalException {
+
+		return shoppingOrderPersistence.fetchByPPTxnId(ppTxnId);
+	}
+
+	@Override
 	public ShoppingOrder getLatestOrder(long userId, long groupId)
 		throws PortalException {
 
