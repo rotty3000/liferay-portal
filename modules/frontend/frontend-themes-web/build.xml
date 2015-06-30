@@ -7,7 +7,7 @@
 	<property name="alloy-font-awesome.version" value="2.0" />
 	<property name="css.dir" value="../frontend-css-web/src/META-INF/resources/html/css" />
 	<property name="frontend.js.web.dir" value="../frontend-js-web" />
-	<property name="lexicon.version" value="0.1.1" />
+	<property name="lexicon.version" value="0.1.3" />
 	<property name="themes.dir" value="src/META-INF/resources/html/themes" />
 	<property name="third.party.dir" value="../../../portal-web/third-party" />
 
@@ -192,14 +192,14 @@
 				<replaceregexp match="^// INSERT CUSTOM VARS" replace="@import &quot;../../aui_variables&quot;;" byline="true">
 					<fileset
 						dir="${lexicon.deploy.theme.dir}"
-						includes="atlas.scss,bootstrap.scss,lexicon.scss"
+						includes="atlas.scss,bootstrap.scss,lexicon-base.scss"
 					/>
 				</replaceregexp>
 
 				<replaceregexp match="^// INSERT CUSTOM EXTENSIONS" replace="@import &quot;../../aui_custom&quot;;${line.separator}@import &quot;../../liferay_custom&quot;;${line.separator}@import &quot;../alloy-font-awesome/scss/font-awesome&quot;;" byline="true">
 					<fileset
 						dir="${lexicon.deploy.theme.dir}"
-						includes="atlas.scss,bootstrap.scss,lexicon.scss"
+						includes="atlas.scss,bootstrap.scss,lexicon-base.scss"
 					/>
 				</replaceregexp>
 			</then>

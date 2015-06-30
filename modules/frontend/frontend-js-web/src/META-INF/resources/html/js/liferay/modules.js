@@ -8,7 +8,7 @@
 
 	var INPUT_EL = document.createElement('input');
 
-	var PATH_EDITORS = LiferayAUI.getEditorsPath();
+	var PATH_CKEDITOR = LiferayAUI.getCKEditorPath();
 
 	var PATH_JAVASCRIPT = LiferayAUI.getJavaScriptRootPath();
 
@@ -41,14 +41,14 @@
 		filter: Liferay.AUI.getFilter(),
 		groups: {
 			editor: {
-				base: PATH_EDITORS + '/editors/',
+				base: PATH_CKEDITOR + '/html/',
 				combine: COMBINE,
 				modules: {
 					'inline-editor-ckeditor': {
 						path: 'ckeditor/main.js'
 					}
 				},
-				root: PATH_EDITORS + '/editors/'
+				root: PATH_CKEDITOR + '/html/'
 			},
 
 			liferay: {
@@ -518,6 +518,13 @@
 						path: 'item_selector_dialog.js',
 						requires: [
 							'aui-component'
+						]
+					},
+					'liferay-item-selector-url': {
+						path: 'item_selector_url.js',
+						requires: [
+							'liferay-item-viewer',
+							'liferay-portlet-base'
 						]
 					},
 					'liferay-item-viewer': {

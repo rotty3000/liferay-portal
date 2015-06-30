@@ -1,0 +1,10 @@
+Bundle-Name: Liferay Frontend TinyMCE Web
+Bundle-SymbolicName: com.liferay.frontend.tinymce.web
+Bundle-Version: 1.0.0
+Include-Resource:\
+	classes,\
+	META-INF/resources=src/META-INF/resources,\
+	META-INF/resources/html=tmp/META-INF/resources/html
+Web-ContextPath: /frontend-tinymce-web
+
+-donotcopy: (\.touch|.*_diffs.*)

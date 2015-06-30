@@ -413,7 +413,7 @@ public class XMLSourceProcessor extends BaseSourceProcessor {
 	protected List<String> doGetFileNames() throws Exception {
 		String[] excludes = new String[] {
 			"**/.bnd/**", "**/.idea/**", "**/.ivy/**", "**/bin/**",
-			"**/logs/**", "**/portal-impl/**/*.action",
+			"**/javadocs-*.xml", "**/logs/**", "**/portal-impl/**/*.action",
 			"**/portal-impl/**/*.function", "**/portal-impl/**/*.macro",
 			"**/portal-impl/**/*.testcase", "**/test-classes/unit/**",
 			"**/test-results/**", "**/test/unit/**"
@@ -1306,7 +1306,8 @@ public class XMLSourceProcessor extends BaseSourceProcessor {
 		"\\n[\\t]++\\<tear-down\\>([\\s\\S]*?)\\</tear-down\\>" +
 			"[\\n|\\t]*?(?:[^(?:/\\>)]*?--\\>)*+\\n");
 	private final Pattern _poshiVariableLinePattern = Pattern.compile(
-		"([\\t]*+)(\\<var name=\\\"([^\\\"]*)\\\".*?/\\>.*+(?:\\</var\\>)??)");
+		"([\\t]*+)(\\<var.*?name=\\\"([^\\\"]*)\\\".*?/\\>" +
+			".*+(?:\\</var\\>)??)");
 	private final Pattern _poshiVariablesBlockPattern = Pattern.compile(
 		"((?:[\\t]*+\\<var.*?\\>\\n[\\t]*+){2,}?)" +
 			"(?:(?:\\n){1,}+|\\</execute\\>)");

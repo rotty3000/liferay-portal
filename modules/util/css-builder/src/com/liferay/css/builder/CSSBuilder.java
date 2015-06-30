@@ -245,6 +245,8 @@ public class CSSBuilder {
 
 			try {
 				_sassCompiler = new JniSassCompiler();
+
+				System.out.println("Using native Sass compiler");
 			}
 			catch (Throwable t) {
 				System.out.println(
@@ -256,6 +258,8 @@ public class CSSBuilder {
 		else {
 			try {
 				_sassCompiler = new RubySassCompiler();
+
+				System.out.println("Using ruby Sass compiler");
 			}
 			catch (Exception e) {
 				System.out.println(

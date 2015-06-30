@@ -14,15 +14,17 @@
 
 package com.liferay.journal.upgrade;
 
+import com.liferay.journal.service.configuration.configurator.JournalServiceConfigurator;
 import com.liferay.journal.upgrade.v1_0_0.UpgradeClassNames;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.service.ReleaseLocalService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletContext;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -34,6 +36,25 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true, service = JournalServiceUpgrade.class)
 public class JournalServiceUpgrade {
 
+	protected void deleteTempImages() throws Exception {
+		if (_log.isDebugEnabled()) {
+			_log.debug("Delete temporary images");
+		}
+
+		DB db = DBFactoryUtil.getDB();
+
+		db.runSQL(
+			"delete from Image where imageId IN (SELECT articleImageId FROM " +
+				"JournalArticleImage where tempImage = TRUE)");
+
+		db.runSQL("delete from JournalArticleImage where tempImage = TRUE");
+	}
+
+	@Reference(unbind = "-")
+	protected void setJournalServiceConfigurator(
+		JournalServiceConfigurator journalServiceConfigurator) {
+	}
+
 	@Reference(unbind = "-")
 	protected void setReleaseLocalService(
 		ReleaseLocalService releaseLocalService) {
@@ -41,19 +62,20 @@ public class JournalServiceUpgrade {
 		_releaseLocalService = releaseLocalService;
 	}
 
-	@Reference(target = "(original.bean=*)", unbind = "-")
-	protected void setServletContext(ServletContext servletContext) {
-	}
-
 	@Activate
-	protected void upgrade() throws PortalException {
+	protected void upgrade() throws Exception {
 		List<UpgradeProcess> upgradeProcesses = new ArrayList<>();
 
 		upgradeProcesses.add(new UpgradeClassNames());
 
 		_releaseLocalService.updateRelease(
 			"com.liferay.journal.service", upgradeProcesses, 1, 1, false);
+
+		deleteTempImages();
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		JournalServiceUpgrade.class);
 
 	private ReleaseLocalService _releaseLocalService;
 

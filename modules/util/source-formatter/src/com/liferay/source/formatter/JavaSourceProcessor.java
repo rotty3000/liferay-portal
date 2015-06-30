@@ -911,6 +911,22 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 					fileName);
 		}
 
+		// LPS-56706
+
+		if (portalSource && absolutePath.contains("/modules/") &&
+			absolutePath.contains("/test/integration/") &&
+			newContent.contains("@RunWith(Arquillian.class)") &&
+			newContent.contains("import org.powermock.")) {
+
+			processErrorMessage(
+				fileName,
+				"Do not use PowerMock inside Arquillian tests: " + fileName);
+		}
+
+		// LPS-48156
+
+		newContent = checkPrincipalException(newContent);
+
 		newContent = getCombinedLinesContent(
 			newContent, _combinedLinesPattern1);
 		newContent = getCombinedLinesContent(

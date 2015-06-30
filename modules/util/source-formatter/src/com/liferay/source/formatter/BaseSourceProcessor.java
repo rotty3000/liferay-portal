@@ -377,7 +377,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 			_portalLanguageProperties = new Properties();
 
 			File portalLanguagePropertiesFile = new File(
-				getFile("portal-impl", 4), "src/content/Language.properties");
+				getFile("portal-impl", 5), "src/content/Language.properties");
 
 			InputStream inputStream = new FileInputStream(
 				portalLanguagePropertiesFile);
@@ -418,6 +418,23 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 				}
 			}
 		}
+	}
+
+	protected String checkPrincipalException(String content) {
+		String newContent = content;
+
+		Matcher matcher = principalExceptionPattern.matcher(content);
+
+		while (matcher.find()) {
+			String match = matcher.group();
+
+			String replacement = StringUtil.replace(
+				match, "class.getName", "getNestedClasses");
+
+			newContent = StringUtil.replace(newContent, match, replacement);
+		}
+
+		return newContent;
 	}
 
 	protected void checkStringBundler(
@@ -1537,6 +1554,9 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 	protected static Pattern languageKeyPattern = Pattern.compile(
 		"LanguageUtil.(?:get|format)\\([^;%]+|Liferay.Language.get\\('([^']+)");
 	protected static boolean portalSource;
+	protected static Pattern principalExceptionPattern = Pattern.compile(
+		"SessionErrors\\.contains\\(\n?\t*(renderR|r)equest, " +
+			"PrincipalException\\.class\\.getName\\(\\)");
 	protected static Pattern sessionKeyPattern = Pattern.compile(
 		"SessionErrors.(?:add|contains|get)\\([^;%&|!]+|".concat(
 			"SessionMessages.(?:add|contains|get)\\([^;%&|!]+"),
@@ -1663,7 +1683,7 @@ public abstract class BaseSourceProcessor implements SourceProcessor {
 	}
 
 	private boolean _isPortalSource() {
-		if (getFile("portal-impl", 4) != null) {
+		if (getFile("portal-impl", 5) != null) {
 			return true;
 		}
 		else {
