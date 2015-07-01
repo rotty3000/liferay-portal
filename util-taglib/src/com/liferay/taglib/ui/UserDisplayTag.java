@@ -154,29 +154,27 @@ public class UserDisplayTag extends TagSupport {
 	}
 
 	protected String getEndPage() {
-		if (Validator.isNull(_endPage)) {
-			if (Validator.isNull(_view)) {
-				return "/html/taglib/ui/user_display/end.jsp";
-			}
-
-			return "/html/taglib/ui/user_display/" + _view + "/end.jsp";
-		}
-		else {
+		if (Validator.isNotNull(_endPage)) {
 			return _endPage;
 		}
+
+		if (Validator.isNotNull(_view)) {
+			return "/html/taglib/ui/user_display/" + _view + "/end.jsp";
+		}
+
+		return "/html/taglib/ui/user_display/end.jsp";
 	}
 
 	protected String getStartPage() {
-		if (Validator.isNull(_startPage)) {
-			if (Validator.isNull(_view)) {
-				return "/html/taglib/ui/user_display/start.jsp";
-			}
-
-			return "/html/taglib/ui/user_display/" + _view + "/start.jsp";
-		}
-		else {
+		if (Validator.isNotNull(_startPage)) {
 			return _startPage;
 		}
+
+		if (Validator.isNotNull(_view)) {
+			return "/html/taglib/ui/user_display/" + _view + "/start.jsp";
+		}
+
+		return "/html/taglib/ui/user_display/start.jsp";
 	}
 
 	private boolean _author;
