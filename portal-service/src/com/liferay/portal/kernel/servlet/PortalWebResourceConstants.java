@@ -19,12 +19,20 @@ package com.liferay.portal.kernel.servlet;
  */
 public class PortalWebResourceConstants {
 
-	public static final String RESOURCE_TYPE_CSS = "css";
+	public static final String RESOURCE_TYPE_ALLOYEDITOR = "alloyeditor";
 
-	public static final String RESOURCE_TYPE_EDITORS = "editors";
+	public static final String RESOURCE_TYPE_BBCODE_EDITOR = "bbcode";
+
+	public static final String RESOURCE_TYPE_CKEDITOR = "ckeditor";
+
+	public static final String RESOURCE_TYPE_CSS = "css";
 
 	public static final String RESOURCE_TYPE_JS = "js";
 
+	public static final String RESOURCE_TYPE_SIMPLE_EDITOR = "simple";
+
 	public static final String RESOURCE_TYPE_THEMES = "themes";
+
+	public static final String RESOURCE_TYPE_TINYMCE = "tinymce";
 
 }

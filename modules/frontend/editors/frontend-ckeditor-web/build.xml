@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project>
+	<import file="../../../../tools/sdk/build-common-osgi-plugin.xml" />
+
+	<property name="auto.deploy.dir" value="${liferay.home}/osgi/modules" />
+
+	<property name="ckeditor.file" value="ckeditor_4.4.5_liferay.zip" />
+	<property name="html.editor.dir" value="src/META-INF/resources/html" />
+	<property name="import.shared" value="../../apps/item-selector/item-selector-api,../../apps/item-selector/item-selector-criteria-api,../../apps/layout/layout-item-selector-api" />
+	<property name="scayt.file" value="scayt_4.4.5.zip" />
+	<property name="third.party.dir" value="../../../../portal-web/third-party" />
+	<property name="wsc.file" value="wsc_4.4.5.zip" />
+
+	<target name="build-ckeditor">
+		<if>
+			<not>
+				<uptodate
+					srcfile="${third.party.dir}/${ckeditor.file}"
+					targetfile="tmp/META-INF/resources/html/ckeditor"
+				/>
+			</not>
+			<then>
+				<delete dir="tmp/META-INF/resources/html/ckeditor" />
+
+				<unzip src="${third.party.dir}/${ckeditor.file}" dest="tmp/META-INF/resources/html" />
+
+				<copy todir="tmp/META-INF/resources/html/ckeditor" overwrite="true" preservelastmodified="true">
+					<fileset dir="${html.editor.dir}/ckeditor_diffs" />
+				</copy>
+
+				<antcall target="build-ckeditor-plugins-scayt" />
+
+				<antcall target="build-ckeditor-plugins-wsc" />
+			</then>
+			<else>
+				<copy todir="tmp/META-INF/resources/html/ckeditor" preservelastmodified="true">
+					<fileset dir="${html.editor.dir}/ckeditor_diffs" />
+				</copy>
+			</else>
+		</if>
+	</target>
+
+	<target name="build-ckeditor-plugins-bbcode">
+		<concat destfile="${html.editor.dir}/ckeditor_diffs/plugins/bbcode/bbcode_parser.js">
+			<filelist
+				dir="${html.editor.dir}/ckeditor_diffs/plugins/bbcode"
+				files="bbcode_utils.js,lexer.js,parser.js,converter.js"
+			/>
+		</concat>
+	</target>
+
+	<target name="build-ckeditor-plugins-scayt">
+		<if>
+			<not>
+				<available file="${third.party.dir}/${scayt.file}" />
+			</not>
+			<then>
+				<mirrors-get
+					dest="${third.party.dir}/${scayt.file}"
+					src="http://download.ckeditor.com/scayt/releases/${scayt.file}"
+				/>
+			</then>
+		</if>
+
+		<unzip
+			dest="tmp/META-INF/resources/html/ckeditor/plugins"
+			src="${third.party.dir}/${scayt.file}"
+		/>
+	</target>
+
+	<target name="build-ckeditor-plugins-wsc">
+		<if>
+			<not>
+				<available file="${third.party.dir}/${wsc.file}" />
+			</not>
+			<then>
+				<mirrors-get
+					dest="${third.party.dir}/${wsc.file}"
+					src="http://download.ckeditor.com/wsc/releases/${wsc.file}"
+				/>
+			</then>
+		</if>
+
+		<unzip
+			dest="tmp/META-INF/resources/html/ckeditor/plugins"
+			src="${third.party.dir}/${wsc.file}"
+		/>
+	</target>
+
+	<target name="jar" depends="build-common.compile,build-ckeditor">
+		<jar-macro
+			module.dir="${basedir}"
+		/>
+	</target>
+</project>

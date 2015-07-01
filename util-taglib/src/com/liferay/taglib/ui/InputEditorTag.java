@@ -20,7 +20,6 @@ import com.liferay.portal.kernel.editor.configuration.EditorConfigurationFactory
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.DirectRequestDispatcherFactoryUtil;
-import com.liferay.portal.kernel.servlet.PortalWebResourceConstants;
 import com.liferay.portal.kernel.servlet.PortalWebResourcesUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -289,6 +288,12 @@ public class InputEditorTag extends IncludeTag {
 		return editor.getName();
 	}
 
+	protected String getEditorResourceType() {
+		Editor editor = getEditor(request);
+
+		return editor.getResourceType();
+	}
+
 	@Override
 	protected String getPage() {
 		Editor editor = getEditor(request);
@@ -299,8 +304,7 @@ public class InputEditorTag extends IncludeTag {
 	@Override
 	protected RequestDispatcher getRequestDispatcher(String page) {
 		return DirectRequestDispatcherFactoryUtil.getRequestDispatcher(
-			PortalWebResourcesUtil.getServletContext(
-				PortalWebResourceConstants.RESOURCE_TYPE_EDITORS),
+			PortalWebResourcesUtil.getServletContext(getEditorResourceType()),
 			page);
 	}
 
