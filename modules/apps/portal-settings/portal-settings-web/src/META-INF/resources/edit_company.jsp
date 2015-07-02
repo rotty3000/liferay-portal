@@ -32,12 +32,10 @@ request.setAttribute("phones.classPK", company.getAccountId());
 request.setAttribute("websites.classPK", company.getAccountId());
 %>
 
-<portlet:actionURL name="editCompany" var="editCompanyURL">
-	<portlet:param name="mvcPath" value="/edit_company.jsp" />
-</portlet:actionURL>
+<portlet:actionURL name="editCompany" var="editCompanyURL" />
 
 <aui:form action="<%= editCompanyURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
-	<aui:input name="redirect" type="hidden" />
+    <aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 
 	<liferay-util:buffer var="htmlTop">
 		<div class="company-info">
