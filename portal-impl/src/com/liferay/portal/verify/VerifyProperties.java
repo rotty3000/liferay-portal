@@ -264,6 +264,26 @@ public class VerifyProperties extends VerifyProcess {
 		new String[] {
 			"finalize.manager.thread.enabled",
 			"com.liferay.portal.kernel.memory.FinalizeManager.thread.enabled"
+		},
+		new String[] {
+			"http.header.secure.x.content.type.options",
+			"http.header.secure.x.content.type.options"
+		},
+		new String[] {
+			"http.header.secure.x.content.type.options.urls.excludes",
+			"http.header.secure.x.content.type.options.urls.excludes"
+		},
+		new String[] {
+			"http.header.secure.x.frame.options",
+			"http.header.secure.x.frame.options"
+		},
+		new String[] {
+			"http.header.secure.x.frame.options.255",
+			"http.header.secure.x.frame.options.255"
+		},
+		new String[] {
+			"http.header.secure.x.xss.protection",
+			"http.header.secure.x.xss.protection"
 		}
 	};
 
@@ -611,6 +631,19 @@ public class VerifyProperties extends VerifyProcess {
 		new String[] {
 			"currency.converter.symbols", "symbols",
 			"com.liferay.currency.converter.web"
+		},
+
+		// Dynamic Data Lists
+
+		new String[] {
+			"dynamic.data.lists.error.template",
+			"dynamic.data.lists.error.template",
+			"com.liferay.dynamic.data.lists.web"
+		},
+		new String[] {
+			"dynamic.data.lists.storage.type",
+			"dynamic.data.lists.storage.type",
+			"com.liferay.dynamic.data.lists.web"
 		},
 
 		// Facebook Connect
@@ -1440,6 +1473,7 @@ public class VerifyProperties extends VerifyProcess {
 		"company.settings.form.miscellaneous", "company.settings.form.social",
 		"convert.processes", "discussion.thread.view",
 		"dl.file.entry.read.count.enabled",
+		"dynamic.data.lists.record.set.force.autogenerate.key",
 		"dynamic.data.lists.template.language.parser[ftl]",
 		"dynamic.data.lists.template.language.parser[vm]",
 		"dynamic.data.lists.template.language.parser[xsl]",

@@ -95,6 +95,7 @@ public abstract class BaseSearcher extends BaseIndexer {
 	 *             BooleanQuery, SearchContext)}
 	 */
 	@Deprecated
+	@Override
 	protected void doPostProcessSearchQuery(
 			Indexer indexer, BooleanQuery searchQuery,
 			SearchContext searchContext)

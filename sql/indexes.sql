@@ -45,6 +45,8 @@ create index IX_14D5A20D on AssetLink (entryId1, type_);
 create index IX_91F132C on AssetLink (entryId2, type_);
 
 create unique index IX_D63322F9 on AssetTag (groupId, name);
+create index IX_84C501E4 on AssetTag (uuid_, companyId);
+create unique index IX_B6ACB166 on AssetTag (uuid_, groupId);
 
 create index IX_50702693 on AssetTagStats (classNameId);
 create unique index IX_56682CC4 on AssetTagStats (tagId, classNameId);
@@ -127,7 +129,7 @@ create index IX_A90FF72A on DDMStructureLayout (uuid_, companyId);
 create unique index IX_C9A0402C on DDMStructureLayout (uuid_, groupId);
 
 create unique index IX_E43143A3 on DDMStructureLink (classNameId, classPK, structureId);
-create unique index IX_C803899D on DDMStructureLink (classPK);
+create index IX_EB4F2D96 on DDMStructureLink (classNameId, structureId);
 create index IX_17692B58 on DDMStructureLink (structureId);
 
 create index IX_17B3C96C on DDMStructureVersion (structureId, status);
@@ -175,9 +177,6 @@ create index IX_D49AB5D1 on DLFileEntryMetadata (uuid_);
 create unique index IX_5B6BEF5F on DLFileEntryType (groupId, fileEntryTypeKey);
 create index IX_5B03E942 on DLFileEntryType (uuid_, companyId);
 create unique index IX_1399D844 on DLFileEntryType (uuid_, groupId);
-
-create index IX_8373EC7C on DLFileEntryTypes_DDMStructures (fileEntryTypeId);
-create index IX_F147CF3F on DLFileEntryTypes_DDMStructures (structureId);
 
 create index IX_5BB6AD6C on DLFileEntryTypes_DLFolders (fileEntryTypeId);
 create index IX_6E00A2EC on DLFileEntryTypes_DLFolders (folderId);
