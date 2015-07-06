@@ -44,6 +44,7 @@ import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.PageContext;
 
 /**
  * @author Brian Wing Shun Chan
@@ -136,6 +137,14 @@ public class InputEditorTag extends IncludeTag {
 
 	public void setOnInitMethod(String onInitMethod) {
 		_onInitMethod = onInitMethod;
+	}
+
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		super.setPageContext(pageContext);
+
+		servletContext = PortalWebResourcesUtil.getServletContext(
+			PortalWebResourceConstants.RESOURCE_TYPE_EDITORS);
 	}
 
 	public void setPlaceholder(String placeholder) {
