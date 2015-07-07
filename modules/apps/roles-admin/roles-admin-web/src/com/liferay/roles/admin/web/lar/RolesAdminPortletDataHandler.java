@@ -20,12 +20,14 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.xml.Element;
+import com.liferay.portal.lar.PortletDataHandler;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.model.impl.RoleImpl;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.exportimport.lar.BasePortletDataHandler;
 import com.liferay.portlet.exportimport.lar.DataLevel;
 import com.liferay.portlet.exportimport.lar.PortletDataContext;
@@ -39,10 +41,16 @@ import java.util.List;
 
 import javax.portlet.PortletPreferences;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Michael C. Han
  * @author David Mendez Gonzalez
  */
+@Component(
+	property = {"javax.portlet.name=" + PortletKeys.ROLES_ADMIN},
+	service = PortletDataHandler.class
+)
 public class RolesAdminPortletDataHandler extends BasePortletDataHandler {
 
 	public static final String NAMESPACE = "roles_admin";
