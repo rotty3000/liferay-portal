@@ -36,6 +36,7 @@
 		<dirset dir="apps/password-generator" includes="*" />
 		<dirset dir="apps/password-policies-admin" includes="*" />
 		<dirset dir="apps/polls" includes="*" />
+		<dirset dir="apps/portal-settings" includes="*" />
 		<dirset dir="apps/portlet-css" includes="*" />
 		<dirset dir="apps/portlet-display-template" includes="*" />
 		<dirset dir="apps/product-menu" includes="*" />
@@ -48,7 +49,7 @@
 		<dirset dir="apps/site-navigation" includes="*" />
 		<dirset dir="apps/social" excludes="social-networking-*" includes="*" />
 		<dirset dir="apps/social-office" includes="*" />
-		<dirset dir="apps/staging-bar" includes="*" />
+		<dirset dir="apps/staging" includes="*" />
 		<dirset dir="apps/translator" includes="*" />
 		<dirset dir="apps/trash" includes="*" />
 		<dirset dir="apps/unit-converter" includes="*" />
