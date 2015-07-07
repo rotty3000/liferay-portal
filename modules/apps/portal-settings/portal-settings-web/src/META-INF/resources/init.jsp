@@ -73,7 +73,6 @@ page import="com.liferay.portal.kernel.util.UnicodeProperties" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.model.*" %><%@
 page import="com.liferay.portal.model.impl.*" %><%@
-page import="com.liferay.portal.security.auth.PrincipalException" %><%@
 page import="com.liferay.portal.security.ldap.LDAPSettingsUtil" %><%@
 page import="com.liferay.portal.security.ldap.PortalLDAPUtil" %><%@
 page import="com.liferay.portal.security.permission.ResourceActionsUtil" %><%@

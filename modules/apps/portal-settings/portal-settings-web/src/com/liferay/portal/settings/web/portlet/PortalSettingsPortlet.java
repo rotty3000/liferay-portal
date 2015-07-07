@@ -301,11 +301,11 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			SessionErrors.contains(
 				renderRequest, NoSuchPasswordPolicyException.class.getName()) ||
 			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
+				renderRequest, PrincipalException.getNestedClasses()) ||
 			SessionErrors.contains(
 				renderRequest, PasswordPolicyNameException.class.getName()) ||
 			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
+				renderRequest, PrincipalException.getNestedClasses()) ||
 			SessionErrors.contains(
 				renderRequest,
 				RequiredPasswordPolicyException.class.getName()) ||

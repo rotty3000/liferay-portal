@@ -53,7 +53,7 @@ public class PortalSettingWebUpgrade {
 				return new String[][] {
 					new String[] {
 						"130",
-						"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet"
+				"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet"
 					}
 				};
 			}
