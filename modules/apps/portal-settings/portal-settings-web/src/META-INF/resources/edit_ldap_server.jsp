@@ -326,11 +326,6 @@ for (int i = 0; i < groupMappingArray.length; i++) {
 	}
 
 	function <portlet:namespace />saveLdap() {
-
-console.log("philip jones - saveLdap()");	
-debugger;
-
-	       
 		var userMappingFields = ['emailAddress', 'firstName', 'fullName', 'group', 'jobTitle', 'lastName', 'middleName', 'password', 'portrait', 'screenName', 'status', 'uuid'];
 		var userMappingFieldValues = ['userMappingEmailAddress', 'userMappingFirstName', 'userMappingFullName', 'userMappingGroup', 'userMappingJobTitle', 'userMappingLastName', 'userMappingMiddleName', 'userMappingPassword', 'userMappingPortrait', 'userMappingScreenName', 'userMappingStatus', 'userMappingUuid'];
 
@@ -346,11 +341,8 @@ debugger;
 		var groupMapping = <portlet:namespace />mapValues(groupMappingFields, groupMappingFieldValues);
 
 		form.fm('settings--<%= PropsKeys.LDAP_GROUP_MAPPINGS + postfix %>--').val(groupMapping);
-        try {
-    		submitForm(form);
-    	} catch (TypeError te) {
-    	    console.log("philip jones - error " + te);
-    	}
+
+		submitForm(form);
 	}
 
 	function <portlet:namespace />updateDefaultLdap() {
