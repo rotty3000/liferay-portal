@@ -134,6 +134,7 @@ import com.liferay.portal.model.VirtualHost;
 import com.liferay.portal.model.VirtualLayoutConstants;
 import com.liferay.portal.model.impl.CookieRemotePreference;
 import com.liferay.portal.model.impl.VirtualLayout;
+import com.liferay.portal.module.framework.ModuleFrameworkServletAdapter;
 import com.liferay.portal.plugin.PluginPackageUtil;
 import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.auth.AuthTokenWhitelistUtil;
@@ -222,6 +223,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -3570,6 +3572,16 @@ public class PortalImpl implements Portal {
 			persistentHttpServletRequestWrappers = new ArrayList<>();
 
 		HttpServletRequest originalRequest = request;
+
+		if (Proxy.isProxyClass(request.getClass())) {
+			HttpServletRequest moduleFrameworkRequest =
+				(HttpServletRequest)request.getAttribute(
+					ModuleFrameworkServletAdapter.REQUEST);
+
+			if (moduleFrameworkRequest != null) {
+				originalRequest = moduleFrameworkRequest;
+			}
+		}
 
 		while (originalRequest.getClass().getName().startsWith(
 					"com.liferay.")) {
