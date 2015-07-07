@@ -66,6 +66,11 @@ public class ShoppingCartLocalServiceImpl
 	}
 
 	@Override
+	public ShoppingCart fetchCart(long userId, long groupId) {
+		return shoppingCartPersistence.fetchByG_U(groupId, userId);
+	}
+
+	@Override
 	public ShoppingCart getCart(long userId, long groupId)
 		throws PortalException {
 
@@ -175,7 +180,7 @@ public class ShoppingCartLocalServiceImpl
 				}
 			}
 			catch (NoSuchCouponException nsce) {
-				throw new NoSuchCouponException(couponCodesArray[i]);
+				throw new NoSuchCouponException(couponCodesArray[i], nsce);
 			}
 
 			// Temporarily disable stacking of coupon codes

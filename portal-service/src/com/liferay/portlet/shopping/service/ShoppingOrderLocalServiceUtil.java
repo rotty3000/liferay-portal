@@ -206,6 +206,17 @@ public class ShoppingOrderLocalServiceUtil {
 		return getService().dynamicQueryCount(dynamicQuery, projection);
 	}
 
+	public static com.liferay.portlet.shopping.model.ShoppingOrder fetchLatestOrder(
+		long userId, long groupId) {
+		return getService().fetchLatestOrder(userId, groupId);
+	}
+
+	public static com.liferay.portlet.shopping.model.ShoppingOrder fetchPayPalTxnIdOrder(
+		java.lang.String ppTxnId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().fetchPayPalTxnIdOrder(ppTxnId);
+	}
+
 	public static com.liferay.portlet.shopping.model.ShoppingOrder fetchShoppingOrder(
 		long orderId) {
 		return getService().fetchShoppingOrder(orderId);

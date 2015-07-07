@@ -166,6 +166,10 @@ public interface ShoppingCartLocalService extends BaseLocalService,
 		com.liferay.portal.kernel.dao.orm.Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portlet.shopping.model.ShoppingCart fetchCart(
+		long userId, long groupId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.shopping.model.ShoppingCart fetchShoppingCart(
 		long cartId);
 

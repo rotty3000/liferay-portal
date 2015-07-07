@@ -218,6 +218,19 @@ public class ShoppingOrderLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchLatestOrder(
+		long userId, long groupId) {
+		return _shoppingOrderLocalService.fetchLatestOrder(userId, groupId);
+	}
+
+	@Override
+	public com.liferay.portlet.shopping.model.ShoppingOrder fetchPayPalTxnIdOrder(
+		java.lang.String ppTxnId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _shoppingOrderLocalService.fetchPayPalTxnIdOrder(ppTxnId);
+	}
+
+	@Override
 	public com.liferay.portlet.shopping.model.ShoppingOrder fetchShoppingOrder(
 		long orderId) {
 		return _shoppingOrderLocalService.fetchShoppingOrder(orderId);

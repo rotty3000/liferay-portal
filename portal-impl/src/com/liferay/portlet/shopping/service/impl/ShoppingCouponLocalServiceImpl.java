@@ -140,6 +140,13 @@ public class ShoppingCouponLocalServiceImpl
 	}
 
 	@Override
+	public ShoppingCoupon fetchCoupon(String code) {
+		code = StringUtil.toUpperCase(code.trim());
+
+		return shoppingCouponPersistence.fetchByCode(code);
+	}
+
+	@Override
 	public ShoppingCoupon getCoupon(long couponId) throws PortalException {
 		return shoppingCouponPersistence.findByPrimaryKey(couponId);
 	}

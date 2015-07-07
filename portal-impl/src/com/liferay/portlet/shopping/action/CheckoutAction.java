@@ -37,7 +37,6 @@ import com.liferay.portlet.shopping.CCExpirationException;
 import com.liferay.portlet.shopping.CCNameException;
 import com.liferay.portlet.shopping.CCNumberException;
 import com.liferay.portlet.shopping.CCTypeException;
-import com.liferay.portlet.shopping.NoSuchOrderException;
 import com.liferay.portlet.shopping.ShippingCityException;
 import com.liferay.portlet.shopping.ShippingCountryException;
 import com.liferay.portlet.shopping.ShippingEmailAddressException;
@@ -193,16 +192,17 @@ public class CheckoutAction extends CartAction {
 	protected boolean hasLatestOrder(ActionRequest actionRequest)
 		throws Exception {
 
-		try {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-			ShoppingOrderLocalServiceUtil.getLatestOrder(
+		ShoppingOrder shoppingOrder =
+			ShoppingOrderLocalServiceUtil.fetchLatestOrder(
 				themeDisplay.getUserId(), themeDisplay.getScopeGroupId());
 
-			return true;
+		if (shoppingOrder == null) {
+			return false;
 		}
-		catch (NoSuchOrderException nsoe) {
+		else {
 			return false;
 		}
 	}

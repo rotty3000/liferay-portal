@@ -180,6 +180,10 @@ public interface ShoppingCouponLocalService extends BaseLocalService,
 		com.liferay.portal.kernel.dao.orm.Projection projection);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchCoupon(
+		java.lang.String code);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portlet.shopping.model.ShoppingCoupon fetchShoppingCoupon(
 		long couponId);
 
