@@ -14,6 +14,7 @@
 
 package com.liferay.journal.util.impl;
 
+import com.liferay.journal.configuration.JournalGroupServiceConfiguration;
 import com.liferay.journal.configuration.JournalServiceConfigurationKeys;
 import com.liferay.journal.configuration.JournalServiceConfigurationValues;
 import com.liferay.journal.model.JournalArticle;
@@ -60,7 +61,6 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -487,319 +487,23 @@ public class JournalUtil {
 		return new DiffVersionsInfo(diffVersions, nextVersion, previousVersion);
 	}
 
-	public static Map<Locale, String> getEmailArticleAddedBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleAddedBody",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_ADDED_BODY,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_ADDED_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleAddedEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleAddedEnabled = preferences.getValue(
-			"emailArticleAddedEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleAddedEnabled)) {
-			return GetterUtil.getBoolean(emailArticleAddedEnabled);
-		}
-		else {
-			return
-				JournalServiceConfigurationValues.EMAIL_ARTICLE_ADDED_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleAddedSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleAddedSubject",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_ADDED_SUBJECT,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_ADDED_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
 	public static boolean getEmailArticleAnyEventEnabled(
-		PortletPreferences preferences) {
+		JournalGroupServiceConfiguration journalGroupServiceConfiguration) {
 
-		if (getEmailArticleAddedEnabled(preferences) ||
-			getEmailArticleApprovalDeniedEnabled(preferences) ||
-			getEmailArticleApprovalGrantedEnabled(preferences) ||
-			getEmailArticleApprovalRequestedEnabled(preferences) ||
-			getEmailArticleReviewEnabled(preferences) ||
-			getEmailArticleUpdatedEnabled(preferences)) {
+		if (journalGroupServiceConfiguration.emailArticleAddedEnabled() ||
+			journalGroupServiceConfiguration.
+				emailArticleApprovalDeniedEnabled() ||
+			journalGroupServiceConfiguration.
+				emailArticleApprovalGrantedEnabled() ||
+			journalGroupServiceConfiguration.
+				emailArticleApprovalRequestedEnabled() ||
+			journalGroupServiceConfiguration.emailArticleReviewEnabled() ||
+			journalGroupServiceConfiguration.emailArticleUpdatedEnabled()) {
 
 			return true;
 		}
 
 		return false;
-	}
-
-	public static Map<Locale, String> getEmailArticleApprovalDeniedBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalDeniedBody",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_APPROVAL_DENIED_BODY,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_DENIED_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleApprovalDeniedEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleApprovalDeniedEnabled = preferences.getValue(
-			"emailArticleApprovalDeniedEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleApprovalDeniedEnabled)) {
-			return GetterUtil.getBoolean(emailArticleApprovalDeniedEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_DENIED_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleApprovalDeniedSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalDeniedSubject",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_APPROVAL_DENIED_SUBJECT,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_DENIED_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleApprovalGrantedBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalGrantedBody",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_APPROVAL_GRANTED_BODY,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_GRANTED_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleApprovalGrantedEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleApprovalGrantedEnabled = preferences.getValue(
-			"emailArticleApprovalGrantedEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleApprovalGrantedEnabled)) {
-			return GetterUtil.getBoolean(emailArticleApprovalGrantedEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_GRANTED_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleApprovalGrantedSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalGrantedSubject",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_APPROVAL_GRANTED_SUBJECT,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_GRANTED_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleApprovalRequestedBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalRequestedBody",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_APPROVAL_REQUESTED_BODY,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_REQUESTED_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleApprovalRequestedEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleApprovalRequestedEnabled = preferences.getValue(
-			"emailArticleApprovalRequestedEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleApprovalRequestedEnabled)) {
-			return GetterUtil.getBoolean(emailArticleApprovalRequestedEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_REQUESTED_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String>
-		getEmailArticleApprovalRequestedSubjectMap(
-			PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleApprovalRequestedSubject",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_APPROVAL_REQUESTED_SUBJECT,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_APPROVAL_REQUESTED_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleMovedFromFolderBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleMovedFromFolderBody",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_MOVED_FROM_FOLDER_BODY,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_FROM_FOLDER_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleMovedFromFolderEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleMovedFromFolderEnabled = preferences.getValue(
-			"emailArticleMovedFromFolderEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleMovedFromFolderEnabled)) {
-			return GetterUtil.getBoolean(emailArticleMovedFromFolderEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_FROM_FOLDER_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleMovedFromFolderSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleMovedFromFolderSubject",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_MOVED_FROM_FOLDER_SUBJECT,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_FROM_FOLDER_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleMovedToFolderBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleMovedToFolderBody",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_MOVED_TO_FOLDER_BODY,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_TO_FOLDER_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleMovedToFolderEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleMovedToFolderEnabled = preferences.getValue(
-			"emailArticleMovedToFolderEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleMovedToFolderEnabled)) {
-			return GetterUtil.getBoolean(emailArticleMovedToFolderEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_TO_FOLDER_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleMovedToFolderSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleMovedToFolderSubject",
-			JournalServiceConfigurationKeys.
-				EMAIL_ARTICLE_MOVED_TO_FOLDER_SUBJECT,
-			JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_MOVED_TO_FOLDER_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleReviewBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleReviewBody",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_REVIEW_BODY,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_REVIEW_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleReviewEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleReviewEnabled = preferences.getValue(
-			"emailArticleReviewEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleReviewEnabled)) {
-			return GetterUtil.getBoolean(emailArticleReviewEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_REVIEW_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleReviewSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleReviewSubject",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_REVIEW_SUBJECT,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_REVIEW_SUBJECT,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static Map<Locale, String> getEmailArticleUpdatedBodyMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleUpdatedBody",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_UPDATED_BODY,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_UPDATED_BODY,
-			JournalUtil.class.getClassLoader());
-	}
-
-	public static boolean getEmailArticleUpdatedEnabled(
-		PortletPreferences preferences) {
-
-		String emailArticleUpdatedEnabled = preferences.getValue(
-			"emailArticleUpdatedEnabled", StringPool.BLANK);
-
-		if (Validator.isNotNull(emailArticleUpdatedEnabled)) {
-			return GetterUtil.getBoolean(emailArticleUpdatedEnabled);
-		}
-		else {
-			return JournalServiceConfigurationValues.
-				EMAIL_ARTICLE_UPDATED_ENABLED;
-		}
-	}
-
-	public static Map<Locale, String> getEmailArticleUpdatedSubjectMap(
-		PortletPreferences preferences) {
-
-		return LocalizationUtil.getLocalizationMap(
-			preferences, "emailArticleUpdatedSubject",
-			JournalServiceConfigurationKeys.EMAIL_ARTICLE_UPDATED_SUBJECT,
-			JournalServiceConfigurationValues.EMAIL_ARTICLE_UPDATED_SUBJECT,
-			JournalUtil.class.getClassLoader());
 	}
 
 	public static Map<String, String> getEmailDefinitionTerms(

@@ -569,7 +569,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			}
 		}
 
-		String newContent = content;
+		String newContent = trimContent(content, false);
 
 		if (newContent.contains("$\n */")) {
 			processErrorMessage(fileName, "*: " + fileName);
@@ -1412,8 +1412,6 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 			while ((line = unsyncBufferedReader.readLine()) != null) {
 				lineCount++;
 
-				line = trimLine(line, false);
-
 				if (line.startsWith("package ")) {
 					packageName = line.substring(8, line.length() - 1);
 				}
@@ -1699,6 +1697,42 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 								StringPool.OPEN_PARENTHESIS);
 
 							if (openParenthesisCount >= closeParenthesisCount) {
+								processErrorMessage(
+									fileName,
+									"line break: " + fileName + " " +
+										lineCount);
+							}
+						}
+					}
+
+					if (previousLine.endsWith(StringPool.OPEN_PARENTHESIS) ||
+						previousLine.endsWith(StringPool.PLUS)) {
+
+						int x = -1;
+
+						while (true) {
+							x = strippedQuotesLine.indexOf(
+								StringPool.COMMA_AND_SPACE, x + 1);
+
+							if (x == -1) {
+								break;
+							}
+
+							int closeParenthesisCount = StringUtil.count(
+								strippedQuotesLine.substring(0, x),
+								StringPool.CLOSE_PARENTHESIS);
+							int openParenthesisCount = StringUtil.count(
+								strippedQuotesLine.substring(0, x),
+								StringPool.OPEN_PARENTHESIS);
+
+							if ((previousLine.endsWith(
+									StringPool.OPEN_PARENTHESIS) &&
+								 (openParenthesisCount <
+									 closeParenthesisCount)) ||
+								(previousLine.endsWith(StringPool.PLUS) &&
+								 (openParenthesisCount <=
+									 closeParenthesisCount))) {
+
 								processErrorMessage(
 									fileName,
 									"line break: " + fileName + " " +

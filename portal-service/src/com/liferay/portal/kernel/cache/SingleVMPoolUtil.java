@@ -14,8 +14,13 @@
 
 package com.liferay.portal.kernel.cache;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.Serializable;
 
@@ -30,41 +35,60 @@ public class SingleVMPoolUtil {
 		getSingleVMPool().clear();
 	}
 
-	public static <K extends Serializable, V> PortalCache<K, V> getCache(
+	public static <K extends Serializable, V> PortalCache<K, V> getPortalCache(
 		String portalCacheName) {
 
-		return (PortalCache<K, V>)getSingleVMPool().getCache(portalCacheName);
+		return (PortalCache<K, V>)getSingleVMPool().getPortalCache(
+			portalCacheName);
 	}
 
-	public static <K extends Serializable, V> PortalCache<K, V> getCache(
+	public static <K extends Serializable, V> PortalCache<K, V> getPortalCache(
 		String portalCacheName, boolean blocking) {
 
-		return (PortalCache<K, V>)getSingleVMPool().getCache(
+		return (PortalCache<K, V>)getSingleVMPool().getPortalCache(
 			portalCacheName, blocking);
 	}
 
 	public static <K extends Serializable, V> PortalCacheManager<K, V>
-		getCacheManager() {
+		getPortalCacheManager() {
 
-		return (PortalCacheManager<K, V>)getSingleVMPool().getCacheManager();
+		return (PortalCacheManager<K, V>)getSingleVMPool().
+			getPortalCacheManager();
 	}
 
 	public static SingleVMPool getSingleVMPool() {
 		PortalRuntimePermission.checkGetBeanProperty(SingleVMPoolUtil.class);
 
-		return _singleVMPool;
+		SingleVMPool singleVMPool = _instance._serviceTracker.getService();
+
+		if (singleVMPool == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("There are no instances of SingleVMPool registered");
+			}
+
+			return null;
+		}
+
+		return singleVMPool;
 	}
 
-	public static void removeCache(String portalCacheName) {
-		getSingleVMPool().removeCache(portalCacheName);
+	public static void removePortalCache(String portalCacheName) {
+		getSingleVMPool().removePortalCache(portalCacheName);
 	}
 
-	public void setSingleVMPool(SingleVMPool singleVMPool) {
-		PortalRuntimePermission.checkSetBeanProperty(getClass());
+	private SingleVMPoolUtil() {
+		Registry registry = RegistryUtil.getRegistry();
 
-		_singleVMPool = singleVMPool;
+		_serviceTracker = registry.trackServices(SingleVMPool.class);
+
+		_serviceTracker.open();
 	}
 
-	private static SingleVMPool _singleVMPool;
+	private static final Log _log = LogFactoryUtil.getLog(
+		SingleVMPoolUtil.class);
+
+	private static final SingleVMPoolUtil _instance = new SingleVMPoolUtil();
+
+	private final ServiceTracker<SingleVMPool, SingleVMPool> _serviceTracker;
 
 }

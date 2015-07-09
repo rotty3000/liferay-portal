@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.social.SocialActivityManagerUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -892,9 +893,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		extraDataJSONObject.put("rootMessageId", thread.getRootMessageId());
 		extraDataJSONObject.put("title", message.getSubject());
 
-		socialActivityLocalService.addActivity(
-			userId, thread.getGroupId(), MBThread.class.getName(),
-			thread.getThreadId(), SocialActivityConstants.TYPE_MOVE_TO_TRASH,
+		SocialActivityManagerUtil.addActivity(
+			userId, thread, SocialActivityConstants.TYPE_MOVE_TO_TRASH,
 			extraDataJSONObject.toString(), 0);
 
 		return thread;
@@ -1010,10 +1010,8 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		extraDataJSONObject.put("rootMessageId", thread.getRootMessageId());
 		extraDataJSONObject.put("title", message.getSubject());
 
-		socialActivityLocalService.addActivity(
-			userId, thread.getGroupId(), MBThread.class.getName(),
-			thread.getThreadId(),
-			SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
+		SocialActivityManagerUtil.addActivity(
+			userId, thread, SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
 			extraDataJSONObject.toString(), 0);
 	}
 
@@ -1178,6 +1176,22 @@ public class MBThreadLocalServiceImpl extends MBThreadLocalServiceBaseImpl {
 		indexer.reindex(message.getThread());
 
 		return thread;
+	}
+
+	@Override
+	public MBThread updateMessageCount(long threadId) {
+		MBThread mbThread = mbThreadPersistence.fetchByPrimaryKey(threadId);
+
+		if (mbThread == null) {
+			return null;
+		}
+
+		int messageCount = mbMessageLocalService.getThreadMessagesCount(
+			threadId, WorkflowConstants.STATUS_APPROVED);
+
+		mbThread.setMessageCount(messageCount);
+
+		return mbThreadPersistence.update(mbThread);
 	}
 
 	@Override

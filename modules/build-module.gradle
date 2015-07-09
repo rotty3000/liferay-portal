@@ -1,4 +1,5 @@
 apply plugin: "com.liferay.plugin"
+apply plugin: "eclipse"
 
 liferay {
 	appServerParentDir = rootProject.file("../../bundles")
@@ -15,26 +16,34 @@ afterEvaluate {
 	project.ext.set("plugin.full.version", project.version.toString())
 }
 
-compileJava {
-	options.encoding = "ISO-8859-1"
-	options.warnings = false
-}
-
 configurations {
 	portal
-
-	portalTest {
-		extendsFrom portal
-	}
+	portalTest
 }
 
 dependencies {
 	portal files(appServerClassesPortalDir)
 	portal fileTree(dir: appServerLibPortalDir, include: "*.jar")
 	portal fileTree(dir: liferay.appServerLibGlobalDir, include: "*.jar")
-	portal fileTree(dir: new File(sdkDir, "lib"), includes: ["activation.jar", "javax.servlet-api.jar", "jsp-api.jar", "net.sf.jargs.jar", "qdox.jar"])
+	portal group: "com.liferay", name: "net.sf.jargs", version: "1.0"
+	portal group: "com.thoughtworks.qdox", name: "qdox", version: "1.12.1"
+	portal group: "javax.activation", name: "activation", version: "1.1"
+	portal group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
+	portal group: "javax.servlet.jsp", name: "jsp-api", version: "2.1"
 
 	portalTest fileTree(dir: new File(moduleFrameworkBaseDir, "test"), include: "portal-test*.jar")
+}
+
+eclipseClasspath {
+	ext {
+		autoClean = false
+	}
+}
+
+eclipseProject {
+	ext {
+		autoClean = false
+	}
 }
 
 ext {
@@ -55,21 +64,19 @@ sourceSets {
 	}
 
 	test {
-		compileClasspath += configurations.portalTest
-		runtimeClasspath += configurations.portalTest
+		compileClasspath += configurations.portal + configurations.portalTest
+		runtimeClasspath += configurations.portal + configurations.portalTest
 	}
 
 	testIntegration {
-		compileClasspath += configurations.portalTest
-		runtimeClasspath += configurations.portalTest
+		compileClasspath += configurations.portal + configurations.portalTest
+		runtimeClasspath += configurations.portal + configurations.portalTest
 	}
 }
 
 group = "com.liferay"
 
-if (project.path in [":util:css-builder"]) {
-	apply plugin: "com.liferay.maven.plugin.builder"
-
+pluginManager.withPlugin("com.liferay.maven.plugin.builder") {
 	afterEvaluate {
 		buildPluginDescriptor {
 			pomArtifactId = bundle.instructions["Bundle-SymbolicName"]
@@ -78,5 +85,42 @@ if (project.path in [":util:css-builder"]) {
 
 	buildPluginDescriptor {
 		configurationScopeMapping "provided", "provided"
+
+		ext {
+			autoClean = false
+		}
 	}
+}
+
+pluginManager.withPlugin("com.moowork.node") {
+	File nodejsDir = new File(liferay.tmpDir, "nodejs")
+
+	task setupNpmCache(type: NpmTask)
+
+	node {
+		download = true
+		nodeModulesDir = nodejsDir
+		npmVersion = project.properties["nodejs.npm.version"]
+		version = project.properties["nodejs.version"]
+		workDir = nodejsDir
+	}
+
+	npmSetup {
+		finalizedBy setupNpmCache
+	}
+
+	setupNpmCache {
+		args = ["config", "set", "cache", new File(nodejsDir, ".cache"), "--global"]
+	}
+
+	tasks.withType(NpmTask) {
+		if (it != npmSetup) {
+			dependsOn npmSetup
+		}
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+	options.warnings = false
 }

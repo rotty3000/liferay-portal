@@ -14,16 +14,14 @@
 
 package com.liferay.portal.kernel.cache.transactional;
 
-import com.liferay.portal.cache.test.TestCacheListener;
-import com.liferay.portal.cache.test.TestCacheReplicator;
 import com.liferay.portal.cache.test.TestPortalCache;
+import com.liferay.portal.cache.test.TestPortalCacheListener;
+import com.liferay.portal.cache.test.TestPortalCacheReplicator;
 import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.cache.PortalCacheHelperUtil;
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
-import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -37,33 +35,27 @@ import java.util.Properties;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Shuyang Zhou
  */
-@NewEnv(type = NewEnv.Type.CLASSLOADER)
 public class TransactionalPortalCacheTest {
 
 	@ClassRule
-	@Rule
-	public static final AggregateTestRule aggregateTestRule =
-		new AggregateTestRule(
-			new CodeCoverageAssertor() {
+	public static final CodeCoverageAssertor codeCoverageAssertor =
+		new CodeCoverageAssertor() {
 
-				@Override
-				public void appendAssertClasses(List<Class<?>> assertClasses) {
-					Class<TransactionalPortalCacheHelper> clazz =
-						TransactionalPortalCacheHelper.class;
+			@Override
+			public void appendAssertClasses(List<Class<?>> assertClasses) {
+				Class<TransactionalPortalCacheHelper> clazz =
+					TransactionalPortalCacheHelper.class;
 
-					assertClasses.add(clazz);
-					assertClasses.addAll(
-						Arrays.asList(clazz.getDeclaredClasses()));
-				}
+				assertClasses.add(clazz);
+				assertClasses.addAll(Arrays.asList(clazz.getDeclaredClasses()));
+			}
 
-			},
-			NewEnvTestRule.INSTANCE);
+		};
 
 	@Before
 	public void setUp() {
@@ -74,16 +66,19 @@ public class TransactionalPortalCacheTest {
 
 		_portalCache.put(_KEY_1, _VALUE_1);
 
-		_testCacheListener = new TestCacheListener<>();
+		_testCacheListener = new TestPortalCacheListener<>();
 
-		_portalCache.registerCacheListener(_testCacheListener);
+		_portalCache.registerPortalCacheListener(_testCacheListener);
 
-		_testCacheReplicator = new TestCacheReplicator<>();
+		_testCacheReplicator = new TestPortalCacheReplicator<>();
 
-		_portalCache.registerCacheListener(_testCacheReplicator);
+		_portalCache.registerPortalCacheListener(_testCacheReplicator);
+
+		ReflectionTestUtil.setFieldValue(
+			TransactionalPortalCacheHelper.class, "_transactionalCacheEnabled",
+			null);
 	}
 
-	@NewEnv(type = NewEnv.Type.NONE)
 	@Test
 	public void testConstructor() {
 		new TransactionalPortalCacheHelper();
@@ -93,19 +88,107 @@ public class TransactionalPortalCacheTest {
 	public void testNoneTransactionalCache1() {
 		setEnableTransactionalCache(false);
 
-		TransactionalPortalCacheHelper.begin();
+		Assert.assertFalse(TransactionalPortalCacheHelper.isEnabled());
 
-		TransactionalPortalCacheHelper.rollback();
-
-		TransactionalPortalCacheHelper.commit();
-
-		testNoneTransactionalCache2();
+		doTestNoneTransactionalCache();
 	}
 
 	@Test
 	public void testNoneTransactionalCache2() {
 		setEnableTransactionalCache(true);
 
+		doTestNoneTransactionalCache();
+	}
+
+	@Test
+	public void testTransactionalCacheWithoutTTL() {
+		setEnableTransactionalCache(true);
+
+		doTestTransactionalCache(false);
+	}
+
+	@Test
+	public void testTransactionalCacheWithParameterValidation() {
+		setEnableTransactionalCache(true);
+
+		TransactionalPortalCacheHelper.begin();
+
+		// Get
+
+		Assert.assertEquals(_VALUE_1, _transactionalPortalCache.get(_KEY_1));
+		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
+
+		// Get with null key
+
+		try {
+			_transactionalPortalCache.get(null);
+
+			Assert.fail();
+		}
+		catch (NullPointerException npe) {
+			Assert.assertEquals("Key is null", npe.getMessage());
+		}
+
+		// Put
+
+		_transactionalPortalCache.put(_KEY_1, _VALUE_2);
+
+		Assert.assertEquals(_VALUE_2, _transactionalPortalCache.get(_KEY_1));
+		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
+
+		// Put with null key
+
+		try {
+			_transactionalPortalCache.put(null, _VALUE_1);
+
+			Assert.fail();
+		}
+		catch (NullPointerException npe) {
+			Assert.assertEquals("Key is null", npe.getMessage());
+		}
+
+		// Put with null value
+
+		try {
+			_transactionalPortalCache.put(_KEY_1, null);
+
+			Assert.fail();
+		}
+		catch (NullPointerException npe) {
+			Assert.assertEquals("Value is null", npe.getMessage());
+		}
+
+		// Put with negative ttl
+
+		try {
+			_transactionalPortalCache.put(_KEY_1, _VALUE_1, -1);
+
+			Assert.fail();
+		}
+		catch (IllegalArgumentException iae) {
+			Assert.assertEquals("Time to live is negative", iae.getMessage());
+		}
+
+		// Remove
+
+		_transactionalPortalCache.remove(_KEY_1);
+
+		Assert.assertNull(_transactionalPortalCache.get(_KEY_1));
+		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
+
+		// Remove with null key
+
+		try {
+			_transactionalPortalCache.remove(null);
+
+			Assert.fail();
+		}
+		catch (NullPointerException npe) {
+			Assert.assertEquals("Key is null", npe.getMessage());
+		}
+	}
+
+	protected void doTestNoneTransactionalCache() {
 		Assert.assertEquals(_VALUE_1, _transactionalPortalCache.get(_KEY_1));
 		Assert.assertNull(_transactionalPortalCache.get(_KEY_2));
 		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
@@ -289,94 +372,6 @@ public class TransactionalPortalCacheTest {
 		_testCacheReplicator.assertPut(_KEY_2, _VALUE_2);
 
 		_testCacheReplicator.reset();
-	}
-
-	@Test
-	public void testTransactionalCacheWithoutTTL() {
-		setEnableTransactionalCache(true);
-
-		doTestTransactionalCache(false);
-	}
-
-	@Test
-	public void testTransactionalCacheWithParameterValidation() {
-		setEnableTransactionalCache(true);
-
-		TransactionalPortalCacheHelper.begin();
-
-		// Get
-
-		Assert.assertEquals(_VALUE_1, _transactionalPortalCache.get(_KEY_1));
-		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
-
-		// Get with null key
-
-		try {
-			_transactionalPortalCache.get(null);
-
-			Assert.fail();
-		}
-		catch (NullPointerException npe) {
-			Assert.assertEquals("Key is null", npe.getMessage());
-		}
-
-		// Put
-
-		_transactionalPortalCache.put(_KEY_1, _VALUE_2);
-
-		Assert.assertEquals(_VALUE_2, _transactionalPortalCache.get(_KEY_1));
-		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
-
-		// Put with null key
-
-		try {
-			_transactionalPortalCache.put(null, _VALUE_1);
-
-			Assert.fail();
-		}
-		catch (NullPointerException npe) {
-			Assert.assertEquals("Key is null", npe.getMessage());
-		}
-
-		// Put with null value
-
-		try {
-			_transactionalPortalCache.put(_KEY_1, null);
-
-			Assert.fail();
-		}
-		catch (NullPointerException npe) {
-			Assert.assertEquals("Value is null", npe.getMessage());
-		}
-
-		// Put with negative ttl
-
-		try {
-			_transactionalPortalCache.put(_KEY_1, _VALUE_1, -1);
-
-			Assert.fail();
-		}
-		catch (IllegalArgumentException iae) {
-			Assert.assertEquals("Time to live is negative", iae.getMessage());
-		}
-
-		// Remove
-
-		_transactionalPortalCache.remove(_KEY_1);
-
-		Assert.assertNull(_transactionalPortalCache.get(_KEY_1));
-		Assert.assertEquals(_VALUE_1, _portalCache.get(_KEY_1));
-
-		// Remove with null key
-
-		try {
-			_transactionalPortalCache.remove(null);
-
-			Assert.fail();
-		}
-		catch (NullPointerException npe) {
-			Assert.assertEquals("Key is null", npe.getMessage());
-		}
 	}
 
 	protected void doTestTransactionalCache(boolean ttl) {
@@ -780,8 +775,8 @@ public class TransactionalPortalCacheTest {
 	private static final String _VALUE_2 = "VALUE_2";
 
 	private PortalCache<String, String> _portalCache;
-	private TestCacheListener<String, String> _testCacheListener;
-	private TestCacheReplicator<String, String> _testCacheReplicator;
+	private TestPortalCacheListener<String, String> _testCacheListener;
+	private TestPortalCacheReplicator<String, String> _testCacheReplicator;
 	private TransactionalPortalCache<String, String> _transactionalPortalCache;
 
 	private class TestProps implements Props {

@@ -1417,6 +1417,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>emailBodyLocalizedValuesMap</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>emailDefinitionTerms</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -1433,6 +1438,11 @@
 		</attribute>
 		<attribute>
 			<name>emailSubject</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>emailSubjectLocalizedValuesMap</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -1963,6 +1973,11 @@
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
+		<attribute>
+			<name>view</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<tag>
 		<description>Creates an icon to associate with deactivating an item.</description>
@@ -2173,6 +2188,11 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
+		</attribute>
+		<attribute>
+			<name>view</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
 	<tag>

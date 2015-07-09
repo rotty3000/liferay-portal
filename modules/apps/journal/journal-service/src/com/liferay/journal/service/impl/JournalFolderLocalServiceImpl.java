@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.social.SocialActivityManagerUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -627,9 +628,8 @@ public class JournalFolderLocalServiceImpl
 
 		extraDataJSONObject.put("title", title);
 
-		socialActivityLocalService.addActivity(
-			userId, folder.getGroupId(), JournalFolder.class.getName(),
-			folder.getFolderId(), SocialActivityConstants.TYPE_MOVE_TO_TRASH,
+		SocialActivityManagerUtil.addActivity(
+			userId, folder, SocialActivityConstants.TYPE_MOVE_TO_TRASH,
 			extraDataJSONObject.toString(), 0);
 
 		return folder;
@@ -732,10 +732,8 @@ public class JournalFolderLocalServiceImpl
 
 		extraDataJSONObject.put("title", folder.getName());
 
-		socialActivityLocalService.addActivity(
-			userId, folder.getGroupId(), JournalFolder.class.getName(),
-			folder.getFolderId(),
-			SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
+		SocialActivityManagerUtil.addActivity(
+			userId, folder, SocialActivityConstants.TYPE_RESTORE_FROM_TRASH,
 			extraDataJSONObject.toString(), 0);
 	}
 

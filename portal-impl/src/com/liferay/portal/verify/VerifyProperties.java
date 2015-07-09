@@ -626,6 +626,13 @@ public class VerifyProperties extends VerifyProcess {
 			"com.liferay.portal.security.sso.cas"
 		},
 
+		// Cluster Link
+
+		new String[] {
+			"cluster.link.debug.enabled", "cluster.link.debug.enabled",
+			"com.liferay.portal.cluster"
+		},
+
 		// Currency Converter
 
 		new String[] {

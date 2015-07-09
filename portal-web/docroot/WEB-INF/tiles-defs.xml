@@ -112,10 +112,6 @@
 		<put name="portlet_content" value="/portlet/admin/edit_document_library_extra_settings.jsp" />
 	</definition>
 
-	<definition name="portlet.admin.edit_instance" extends="portlet.admin">
-		<put name="portlet_content" value="/portlet/admin/edit_instance.jsp" />
-	</definition>
-
 	<definition name="portlet.admin.error" extends="portlet.admin">
 		<put name="portlet_content" value="/portlet/admin/error.jsp" />
 	</definition>
@@ -316,6 +312,22 @@
 		<put name="portlet_content" value="/portlet/document_library_display/view.jsp" />
 	</definition>
 
+	<!-- Expando -->
+
+	<definition name="portlet.expando" extends="portlet" />
+
+	<definition name="portlet.expando.edit_expando" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/edit_expando.jsp" />
+	</definition>
+
+	<definition name="portlet.expando.view" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/view.jsp" />
+	</definition>
+
+	<definition name="portlet.expando.view_attributes" extends="portlet.expando">
+		<put name="portlet_content" value="/portlet/expando/view_attributes.jsp" />
+	</definition>
+
 	<!-- Export Import -->
 
 	<definition name="portlet.export_import" extends="portlet" />
@@ -368,30 +380,6 @@
 		<put name="portlet_content" value="/portlet/group_statistics/add_activity_counter.jsp" />
 	</definition>
 
-	<!-- Image Gallery Display -->
-
-	<definition name="portlet.image_gallery_display" extends="portlet" />
-
-	<definition name="portlet.image_gallery_display.embedded_player" extends="portlet.image_gallery_display">
-		<put name="portlet_content" value="/portlet/image_gallery_display/embedded_player.jsp" />
-	</definition>
-
-	<definition name="portlet.image_gallery_display.search" extends="portlet.image_gallery_display">
-		<put name="portlet_content" value="/portlet/image_gallery_display/search.jsp" />
-	</definition>
-
-	<definition name="portlet.image_gallery_display.select_folder" extends="portlet.image_gallery_display">
-		<put name="portlet_content" value="/portlet/image_gallery_display/select_folder.jsp" />
-	</definition>
-
-	<definition name="portlet.image_gallery_display.view" extends="portlet.image_gallery_display">
-		<put name="portlet_content" value="/portlet/image_gallery_display/view.jsp" />
-	</definition>
-
-	<definition name="portlet.image_gallery_display.view_slide_show" extends="portlet.image_gallery_display">
-		<put name="portlet_content" value="/portlet/image_gallery_display/view_slide_show.jsp" />
-	</definition>
-
 	<!-- Image Uploader -->
 
 	<definition name="portlet.image_uploader" extends="portlet" />
@@ -406,6 +394,22 @@
 
 	<definition name="portlet.invitation.view" extends="portlet.invitation">
 		<put name="portlet_content" value="/portlet/invitation/view.jsp" />
+	</definition>
+
+	<!-- Layouts Admin -->
+
+	<definition name="portlet.layouts_admin" extends="portlet" />
+
+	<definition name="portlet.layouts_admin.add_layout" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/add_layout.jsp" />
+	</definition>
+
+	<definition name="portlet.layouts_admin.edit_layouts" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/view.jsp" />
+	</definition>
+
+	<definition name="portlet.layouts_admin.error" extends="portlet.layouts_admin">
+		<put name="portlet_content" value="/portlet/layouts_admin/error.jsp" />
 	</definition>
 
 	<!-- Login -->
@@ -544,22 +548,6 @@
 
 	<definition name="portlet.mobile_device_rules.view_rules" extends="portlet.mobile_device_rules">
 		<put name="portlet_content" value="/portlet/mobile_device_rules/view_rules.jsp" />
-	</definition>
-
-	<!-- Monitoring -->
-
-	<definition name="portlet.monitoring" extends="portlet" />
-
-	<definition name="portlet.monitoring.edit_session" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/edit_session.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.error" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/error.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.view" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/view.jsp" />
 	</definition>
 
 	<!-- My Account -->
