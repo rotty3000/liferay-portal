@@ -1,17 +1,5 @@
-/**
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
 package com.liferay.portlet.portalsettings;
+
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -66,7 +54,6 @@ import com.liferay.portal.model.Website;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.ldap.LDAPSettingsUtil;
 import com.liferay.portal.service.CompanyServiceUtil;
-import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalUtil;
@@ -76,11 +63,8 @@ import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
 
-/**
- * @author Philip Jones
- */
 public class PortalSettingsPortlet extends MVCPortlet {
-	
+
 
 	public void deleteLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -126,7 +110,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 
 	public void editCompany(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		validateCAS(actionRequest);
@@ -135,38 +119,32 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		updateCompany(actionRequest);
 
 		sendRedirect(actionRequest, actionResponse);
-
-		actionRequest.setAttribute(
-			PortletAction.getForwardKey(actionRequest),
-			"portlet.portal_settings.edit_company");
 	}
 
 	public void editLDAPServer(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-			long ldapServerId = ParamUtil.getLong(
-				actionRequest, "ldapServerId");
+		long ldapServerId = ParamUtil.getLong(actionRequest, "ldapServerId");
 
-			UnicodeProperties properties = PropertiesParamUtil.getProperties(
-				actionRequest, "settings--");
+		UnicodeProperties properties = PropertiesParamUtil.getProperties(
+			actionRequest, "settings--");
 
-			validateLDAPServerName(
-				ldapServerId, themeDisplay.getCompanyId(), properties);
+		validateLDAPServerName(
+			ldapServerId, themeDisplay.getCompanyId(), properties);
 
-			validateSearchFilters(actionRequest);
+		validateSearchFilters(actionRequest);
 
-			if (ldapServerId <= 0) {
-				properties = addLDAPServer(
-					themeDisplay.getCompanyId(), properties);
-			}
-
-			CompanyServiceUtil.updatePreferences(
-				themeDisplay.getCompanyId(), properties);
+		if (ldapServerId <= 0) {
+			properties = addLDAPServer(themeDisplay.getCompanyId(), properties);
 		}
+
+		CompanyServiceUtil.updatePreferences(
+			themeDisplay.getCompanyId(), properties);
+	}
 
 	protected UnicodeProperties addLDAPServer(
 			long companyId, UnicodeProperties properties)
@@ -425,11 +403,11 @@ public class PortalSettingsPortlet extends MVCPortlet {
 				actionRequest, "ldapExportAndImportOnPasswordAutogeneration");
 		}
 	}
-	
+
 	protected void validateSocialInteractions(ActionRequest actionRequest) {
 
 		boolean socialInteractionsEnabled = ParamUtil.getBoolean(
-				actionRequest, "settings--socialInteractionsEnabled--");
+			actionRequest, "settings--socialInteractionsEnabled--");
 
 			if (!socialInteractionsEnabled) {
 				return;
@@ -495,7 +473,7 @@ public class PortalSettingsPortlet extends MVCPortlet {
 		}
 	}
 
-	public void validateSearchFilters(ActionRequest actionRequest)
+	protected void validateSearchFilters(ActionRequest actionRequest)
 		throws Exception {
 
 		String userFilter = ParamUtil.getString(
@@ -507,92 +485,6 @@ public class PortalSettingsPortlet extends MVCPortlet {
 			actionRequest, "importGroupSearchFilter");
 
 		LDAPUtil.validateFilter(groupFilter, "importGroupSearchFilter");
-	}
-
-	@Override
-	protected void doDispatch(
-		RenderRequest renderRequest, RenderResponse renderResponse)
-		throws IOException, PortletException {
-
-		if (SessionErrors.contains(
-				renderRequest,
-				DuplicatePasswordPolicyException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, NoSuchPasswordPolicyException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, PasswordPolicyNameException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, PrincipalException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest,
-				RequiredPasswordPolicyException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, AddressCityException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, AccountNameException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, AddressStreetException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, AddressZipException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, CompanyMxException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, CompanyVirtualHostException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, CompanyWebIdException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, EmailAddressException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, LocaleException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, NoSuchCountryException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, NoSuchListTypeException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, NoSuchRegionException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, PhoneNumberException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, WebsiteURLException.class.getName()) ||
-			SessionErrors.contains(
-				renderRequest, NoSuchListTypeException.class.getName())) {
-
-			include("/error.jsp", renderRequest, renderResponse);
-		}
-		else {
-			super.doDispatch(renderRequest, renderResponse);
-		}
-	}
-
-	@Override
-	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof DuplicatePasswordPolicyException ||
-			cause instanceof NoSuchPasswordPolicyException ||
-		   cause instanceof PrincipalException ||
-		   cause instanceof PasswordPolicyNameException ||
-		   cause instanceof PrincipalException ||
-		   cause instanceof RequiredPasswordPolicyException ||
-		   cause instanceof AddressCityException ||
-		   cause instanceof AccountNameException ||
-		   cause instanceof AddressStreetException ||
-		   cause instanceof AddressZipException ||
-		   cause instanceof CompanyMxException ||
-		   cause instanceof CompanyVirtualHostException ||
-		   cause instanceof CompanyWebIdException ||
-		   cause instanceof EmailAddressException ||
-		   cause instanceof LocaleException ||
-		   cause instanceof NoSuchCountryException ||
-		   cause instanceof NoSuchListTypeException ||
-		   cause instanceof NoSuchRegionException ||
-		   cause instanceof PhoneNumberException ||
-		   cause instanceof WebsiteURLException ||
-		   cause instanceof NoSuchListTypeException) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private static final String[] _KEYS = {
