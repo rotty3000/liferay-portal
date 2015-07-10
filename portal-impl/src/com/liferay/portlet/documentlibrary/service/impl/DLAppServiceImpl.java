@@ -38,7 +38,7 @@ import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
-import com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil;
+import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -768,7 +768,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 				TrashCapability.class);
 
 			if (trashCapability.isInTrash(folder)) {
-				trashCapability.deleteFolder(folder);
+				trashEntryService.deleteEntry(
+					DLFolderConstants.getClassName(), folder.getFolderId());
 
 				return;
 			}
@@ -809,7 +810,8 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 				TrashCapability.class);
 
 			if (trashCapability.isInTrash(folder)) {
-				trashCapability.deleteFolder(folder);
+				trashEntryService.deleteEntry(
+					DLFolderConstants.getClassName(), folder.getFolderId());
 
 				return;
 			}
@@ -3268,7 +3270,7 @@ public class DLAppServiceImpl extends DLAppServiceBaseImpl {
 			}
 		}
 
-		TransactionCommitCallbackRegistryUtil.registerCallback(
+		TransactionCommitCallbackUtil.registerCallback(
 			new Callable<Void>() {
 
 				@Override

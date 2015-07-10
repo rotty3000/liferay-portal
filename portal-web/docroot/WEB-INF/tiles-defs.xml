@@ -112,10 +112,6 @@
 		<put name="portlet_content" value="/portlet/admin/edit_document_library_extra_settings.jsp" />
 	</definition>
 
-	<definition name="portlet.admin.edit_instance" extends="portlet.admin">
-		<put name="portlet_content" value="/portlet/admin/edit_instance.jsp" />
-	</definition>
-
 	<definition name="portlet.admin.error" extends="portlet.admin">
 		<put name="portlet_content" value="/portlet/admin/error.jsp" />
 	</definition>
@@ -368,7 +364,7 @@
 		<put name="portlet_content" value="/portlet/group_statistics/add_activity_counter.jsp" />
 	</definition>
 
-	<!-- Image Gallery Display -->
+		<!-- Image Gallery Display -->
 
 	<definition name="portlet.image_gallery_display" extends="portlet" />
 
@@ -544,22 +540,6 @@
 
 	<definition name="portlet.mobile_device_rules.view_rules" extends="portlet.mobile_device_rules">
 		<put name="portlet_content" value="/portlet/mobile_device_rules/view_rules.jsp" />
-	</definition>
-
-	<!-- Monitoring -->
-
-	<definition name="portlet.monitoring" extends="portlet" />
-
-	<definition name="portlet.monitoring.edit_session" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/edit_session.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.error" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/error.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.view" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/view.jsp" />
 	</definition>
 
 	<!-- My Account -->

@@ -52,7 +52,8 @@ public class CSSSourceProcessor extends BaseSourceProcessor {
 		String[] excludes = {
 			"**/.ivy/**", "**/.sass-cache/**", "**/__MACOSX/**",
 			"**/aui_deprecated.css", "**/expected/**", "**/js/aui/**",
-			"**/js/editor/**", "**/js/misc/**", "**/VAADIN/**"
+			"**/js/editor/**", "**/js/misc/**", "**/tools/node**",
+			"**/VAADIN/**"
 		};
 
 		return getFileNames(excludes, getIncludes());

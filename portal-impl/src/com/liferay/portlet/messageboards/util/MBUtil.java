@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil;
+import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -39,7 +39,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
@@ -986,25 +985,14 @@ public class MBUtil {
 
 			@Override
 			public Void call() throws Exception {
-				MBCategory category =
-					MBCategoryLocalServiceUtil.fetchMBCategory(categoryId);
-
-				if (category == null) {
-					return null;
-				}
-
-				int messageCount = _getMessageCount(category);
-
-				category.setMessageCount(messageCount);
-
-				MBCategoryLocalServiceUtil.updateMBCategory(category);
+				MBCategoryLocalServiceUtil.updateMessageCount(categoryId);
 
 				return null;
 			}
 
 		};
 
-		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
+		TransactionCommitCallbackUtil.registerCallback(callable);
 	}
 
 	public static void updateCategoryStatistics(final long categoryId) {
@@ -1012,31 +1000,14 @@ public class MBUtil {
 
 			@Override
 			public Void call() throws Exception {
-				MBCategory category =
-					MBCategoryLocalServiceUtil.fetchMBCategory(categoryId);
-
-				if (category == null) {
-					return null;
-				}
-
-				int messageCount = _getMessageCount(category);
-
-				int threadCount =
-					MBThreadLocalServiceUtil.getCategoryThreadsCount(
-						category.getGroupId(), category.getCategoryId(),
-						WorkflowConstants.STATUS_APPROVED);
-
-				category.setMessageCount(messageCount);
-				category.setThreadCount(threadCount);
-
-				MBCategoryLocalServiceUtil.updateMBCategory(category);
+				MBCategoryLocalServiceUtil.updateStatistics(categoryId);
 
 				return null;
 			}
 
 		};
 
-		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
+		TransactionCommitCallbackUtil.registerCallback(callable);
 	}
 
 	public static void updateCategoryThreadCount(final long categoryId) {
@@ -1044,28 +1015,14 @@ public class MBUtil {
 
 			@Override
 			public Void call() throws Exception {
-				MBCategory category =
-					MBCategoryLocalServiceUtil.fetchMBCategory(categoryId);
-
-				if (category == null) {
-					return null;
-				}
-
-				int threadCount =
-					MBThreadLocalServiceUtil.getCategoryThreadsCount(
-						category.getGroupId(), category.getCategoryId(),
-						WorkflowConstants.STATUS_APPROVED);
-
-				category.setThreadCount(threadCount);
-
-				MBCategoryLocalServiceUtil.updateMBCategory(category);
+				MBCategoryLocalServiceUtil.updateThreadCount(categoryId);
 
 				return null;
 			}
 
 		};
 
-		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
+		TransactionCommitCallbackUtil.registerCallback(callable);
 	}
 
 	public static void updateThreadMessageCount(final long threadId) {
@@ -1073,27 +1030,14 @@ public class MBUtil {
 
 			@Override
 			public Void call() throws Exception {
-				MBThread thread = MBThreadLocalServiceUtil.fetchThread(
-					threadId);
-
-				if (thread == null) {
-					return null;
-				}
-
-				int messageCount =
-					MBMessageLocalServiceUtil.getThreadMessagesCount(
-						threadId, WorkflowConstants.STATUS_APPROVED);
-
-				thread.setMessageCount(messageCount);
-
-				MBThreadLocalServiceUtil.updateMBThread(thread);
+				MBThreadLocalServiceUtil.updateMessageCount(threadId);
 
 				return null;
 			}
 
 		};
 
-		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
+		TransactionCommitCallbackUtil.registerCallback(callable);
 	}
 
 	private static String[] _findThreadPriority(
@@ -1123,12 +1067,6 @@ public class MBUtil {
 		}
 
 		return null;
-	}
-
-	private static int _getMessageCount(MBCategory category) {
-		return MBMessageLocalServiceUtil.getCategoryMessagesCount(
-			category.getGroupId(), category.getCategoryId(),
-			WorkflowConstants.STATUS_APPROVED);
 	}
 
 	private static String[] _getMessageIdStringParts(String messageIdString) {

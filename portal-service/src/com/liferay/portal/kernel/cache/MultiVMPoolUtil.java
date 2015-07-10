@@ -14,8 +14,13 @@
 
 package com.liferay.portal.kernel.cache;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.Serializable;
 
@@ -30,41 +35,61 @@ public class MultiVMPoolUtil {
 		getMultiVMPool().clear();
 	}
 
-	public static <K extends Serializable, V extends Serializable>
-		PortalCache<K, V> getCache(String portalCacheName) {
+	public static MultiVMPool getMultiVMPool() {
+		PortalRuntimePermission.checkGetBeanProperty(MultiVMPoolUtil.class);
 
-		return (PortalCache<K, V>)getMultiVMPool().getCache(portalCacheName);
+		MultiVMPool multiVMPool = _instance._serviceTracker.getService();
+
+		if (multiVMPool == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("There are no instances of MultiVMPool registered");
+			}
+
+			return null;
+		}
+
+		return multiVMPool;
 	}
 
 	public static <K extends Serializable, V extends Serializable>
-		PortalCache<K, V> getCache(String portalCacheName, boolean blocking) {
+		PortalCache<K, V> getPortalCache(String portalCacheName) {
 
-		return (PortalCache<K, V>)getMultiVMPool().getCache(
+		return (PortalCache<K, V>)getMultiVMPool().getPortalCache(
+			portalCacheName);
+	}
+
+	public static <K extends Serializable, V extends Serializable>
+		PortalCache<K, V> getPortalCache(
+			String portalCacheName, boolean blocking) {
+
+		return (PortalCache<K, V>)getMultiVMPool().getPortalCache(
 			portalCacheName, blocking);
 	}
 
 	public static <K extends Serializable, V extends Serializable>
-		PortalCacheManager<K, V> getCacheManager() {
+		PortalCacheManager<K, V> getPortalCacheManager() {
 
-		return (PortalCacheManager<K, V>)getMultiVMPool().getCacheManager();
+		return (PortalCacheManager<K, V>)getMultiVMPool().
+			getPortalCacheManager();
 	}
 
-	public static MultiVMPool getMultiVMPool() {
-		PortalRuntimePermission.checkGetBeanProperty(MultiVMPoolUtil.class);
-
-		return _multiVMPool;
+	public static void removePortalCache(String portalCacheName) {
+		getMultiVMPool().removePortalCache(portalCacheName);
 	}
 
-	public static void removeCache(String portalCacheName) {
-		getMultiVMPool().removeCache(portalCacheName);
+	private MultiVMPoolUtil() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		_serviceTracker = registry.trackServices(MultiVMPool.class);
+
+		_serviceTracker.open();
 	}
 
-	public void setMultiVMPool(MultiVMPool multiVMPool) {
-		PortalRuntimePermission.checkSetBeanProperty(getClass());
+	private static final Log _log = LogFactoryUtil.getLog(
+		MultiVMPoolUtil.class);
 
-		_multiVMPool = multiVMPool;
-	}
+	private static final MultiVMPoolUtil _instance = new MultiVMPoolUtil();
 
-	private static MultiVMPool _multiVMPool;
+	private final ServiceTracker<MultiVMPool, MultiVMPool> _serviceTracker;
 
 }

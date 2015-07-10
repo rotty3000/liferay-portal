@@ -341,11 +341,12 @@
 		</execute>
 
 		<execute macro="SitePage#copyApplicationsFromPageToPagePG">
+			<var name="pageName" value="Blog Page" />
 			<var name="sitePageName" value="Site Page" />
 		</execute>
 	</command>
 
-	<command name="DeleteSitePages" priority="5">
+	<command known-issues="LPS-56875" name="DeleteSitePages" priority="5">
 		<execute macro="Page#gotoCP">
 			<var name="portletName" value="Sites" />
 		</execute>
@@ -436,6 +437,13 @@
 		</execute>
 
 		<execute macro="SitePage#embeddedPageTypePG" />
+
+		<execute macro="Navigator#gotoSpecificURLPage">
+			<var name="pageName" value="Site Page" />
+			<var name="url" value="http://localhost:8080/web/site-name" />
+		</execute>
+
+		<execute macro="Page#viewEmbeddedPagePG" />
 	</command>
 
 	<command name="SavePortletPageType" priority="4">

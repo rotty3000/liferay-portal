@@ -260,8 +260,6 @@ if (recurrence != null) {
 		return '<liferay-ui:message key="repeat" /> ' + (summary[0].toLowerCase() + summary.slice(1));
 	};
 
-	window.<portlet:namespace />recurrenceDialog;
-
 	window.<portlet:namespace />openRecurrenceDialog = function(visible) {
 		recurrenceContainerNode.toggle(visible);
 

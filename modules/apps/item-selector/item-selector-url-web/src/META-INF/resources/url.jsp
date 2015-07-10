@@ -21,18 +21,10 @@ ItemSelectorURLViewDisplayContext itemSelectorURLViewDisplayContext = (ItemSelec
 %>
 
 <aui:row cssClass="lfr-item-viewer" id="itemSelectorUrlContainer">
-	<aui:col cssClass="col-md-offset-2" width="<%= 60 %>">
-		<h4><%= LanguageUtil.get(resourceBundle, "enter-url") %></h4>
+	<aui:col cssClass="url-view" width="<%= 60 %>">
+		<aui:input helpMessage='<%= LanguageUtil.format(request, "for-example-x", "http://www.liferay.com/liferay.png", false) %>' label='<%= LanguageUtil.get(resourceBundle, "image-url") %>' name="urlInput" placeholder="http://" />
 
-		<p><%= LanguageUtil.get(resourceBundle, "enter-url-that-contains-the-image-you-want-to-add") %></p>
-
-		<div class="col-md-12">
-			<aui:input label="" name="urlInput" placeholder="http://" wrapperCssClass="col-md-10" />
-
-			<aui:button cssClass="btn-primary" name="previewBtn" value='<%= LanguageUtil.get(resourceBundle, "enter") %>'/>
-		</div>
-
-		<em><%= LanguageUtil.format(request, "for-example-x", "http://www.liferay.com/liferay.png", false) %></em>
+		<aui:button disabled="<%= true %>" name="previewBtn" value='<%= LanguageUtil.get(resourceBundle, "enter") %>'/>
 	</aui:col>
 </aui:row>
 

@@ -41,14 +41,6 @@
 			<bean class="com.liferay.portal.bean.ConstantsBeanFactoryImpl" />
 		</property>
 	</bean>
-	<bean id="com.liferay.portal.kernel.cache.MultiVMPool" class="com.liferay.portal.cache.MultiVMPoolImpl" />
-	<bean id="com.liferay.portal.kernel.cache.MultiVMPoolUtil" class="com.liferay.portal.kernel.cache.MultiVMPoolUtil">
-		<property name="multiVMPool" ref="com.liferay.portal.kernel.cache.MultiVMPool" />
-	</bean>
-	<bean id="com.liferay.portal.kernel.cache.SingleVMPool" class="com.liferay.portal.cache.SingleVMPoolImpl" />
-	<bean id="com.liferay.portal.kernel.cache.SingleVMPoolUtil" class="com.liferay.portal.kernel.cache.SingleVMPoolUtil">
-		<property name="singleVMPool" ref="com.liferay.portal.kernel.cache.SingleVMPool" />
-	</bean>
 	<bean id="com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil" class="com.liferay.portal.kernel.cache.key.CacheKeyGeneratorUtil">
 		<property name="cacheKeyGenerators">
 			<map>
@@ -88,16 +80,12 @@
 	</bean>
 	<bean id="com.liferay.portal.kernel.dao.orm.EntityCacheUtil" class="com.liferay.portal.kernel.dao.orm.EntityCacheUtil">
 		<property name="entityCache">
-			<bean class="com.liferay.portal.dao.orm.common.EntityCacheImpl">
-				<property name="multiVMPool" ref="com.liferay.portal.kernel.cache.MultiVMPool" />
-			</bean>
+			<bean class="com.liferay.portal.dao.orm.common.EntityCacheImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.dao.orm.FinderCacheUtil" class="com.liferay.portal.kernel.dao.orm.FinderCacheUtil">
 		<property name="finderCache">
-			<bean class="com.liferay.portal.dao.orm.common.FinderCacheImpl">
-				<property name="multiVMPool" ref="com.liferay.portal.kernel.cache.MultiVMPool" />
-			</bean>
+			<bean class="com.liferay.portal.dao.orm.common.FinderCacheImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.dao.orm.PortalCustomSQLUtil" class="com.liferay.portal.kernel.dao.orm.PortalCustomSQLUtil">
@@ -250,6 +238,7 @@
 			</set>
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.resiliency.spi.cache.SPIPortalCacheManagerConfigurator" class="com.liferay.portal.resiliency.spi.cache.SPIPortalCacheManagerConfiguratorImpl" />
 	<bean id="com.liferay.portal.kernel.sanitizer.SanitizerUtil" class="com.liferay.portal.kernel.sanitizer.SanitizerUtil">
 		<property name="sanitizer">
 			<bean class="com.liferay.portal.sanitizer.SanitizerImpl" />
@@ -275,6 +264,15 @@
 			<bean class="com.liferay.portal.servlet.DirectServletRegistryImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.kernel.social.SocialActivityManagerUtil" class="com.liferay.portal.kernel.social.SocialActivityManagerUtil">
+		<property name="socialActivityManager">
+			<bean class="com.liferay.portal.social.SocialActivityManagerImpl" init-method="activate">
+				<constructor-arg>
+					<bean class="com.liferay.portal.social.DefaultSocialActivityManager" />
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil" class="com.liferay.portal.kernel.spring.orm.LastSessionRecorderHelperUtil">
 		<property name="lastSessionRecorderHelper">
 			<bean class="com.liferay.portal.spring.hibernate.LastSessionRecorderHelperImpl" />
@@ -287,11 +285,6 @@
 	</bean>
 	<bean id="com.liferay.portal.kernel.spring.util.SpringFactoryUtil" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil">
 		<property name="springFactory" ref="com.liferay.portal.kernel.spring.util.SpringFactory" />
-	</bean>
-	<bean id="com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil" class="com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil">
-		<property name="transactionCallbackRegistry">
-			<bean class="com.liferay.portal.spring.transaction.TransactionCommitCallbackRegistryImpl" />
-		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.transaction.TransactionInvokerUtil" class="com.liferay.portal.kernel.transaction.TransactionInvokerUtil">
 		<property name="transactionInvoker">
@@ -412,9 +405,7 @@
 	</bean>
 	<bean id="com.liferay.portal.kernel.webcache.WebCachePoolUtil" class="com.liferay.portal.kernel.webcache.WebCachePoolUtil">
 		<property name="webCachePool">
-			<bean class="com.liferay.portal.webcache.WebCachePoolImpl">
-				<property name="singleVMPool" ref="com.liferay.portal.kernel.cache.SingleVMPool" />
-			</bean>
+			<bean class="com.liferay.portal.webcache.WebCachePoolImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.kernel.webdav.methods.MethodFactoryRegistryUtil" class="com.liferay.portal.kernel.webdav.methods.MethodFactoryRegistryUtil">
@@ -497,6 +488,9 @@
 	<bean id="com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil" class="com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil">
 		<property name="portletFileRepository" ref="com.liferay.portal.portletfilerepository.PortletFileRepository" />
 	</bean>
+	<bean id="com.liferay.portal.repository.liferayrepository.social.LiferayFileEntrySocialActivityManager" class="com.liferay.portal.repository.liferayrepository.social.LiferayFileEntrySocialActivityManager" />
+	<bean id="com.liferay.portal.repository.liferayrepository.social.LiferayFileShortcutSocialActivityManager" class="com.liferay.portal.repository.liferayrepository.social.LiferayFileShortcutSocialActivityManager" />
+	<bean id="com.liferay.portal.repository.liferayrepository.social.LiferayFolderSocialActivityManager" class="com.liferay.portal.repository.liferayrepository.social.LiferayFolderSocialActivityManager" />
 	<bean id="com.liferay.portal.repository.registry.RepositoryClassDefinitionCatalog" class="com.liferay.portal.repository.registry.RepositoryClassDefinitionCatalogImpl" init-method="loadDefaultRepositoryDefiners">
 		<property name="legacyExternalRepositoryFactory">
 			<bean class="com.liferay.portal.repository.external.LegacyExternalRepositoryFactory" />
@@ -733,6 +727,7 @@
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.struts.DoIncludeJSPDynamicInclude" class="com.liferay.portal.struts.DoIncludeJSPDynamicInclude" />
+	<bean id="com.liferay.portal.subscription.social.SubscriptionSocialActivityManager" class="com.liferay.portal.subscription.social.SubscriptionSocialActivityManager" />
 	<bean id="com.liferay.portal.util.CustomJspRegistryUtil" class="com.liferay.portal.util.CustomJspRegistryUtil">
 		<property name="customJspRegistry">
 			<bean class="com.liferay.portal.util.CustomJspRegistryImpl" />
@@ -796,9 +791,7 @@
 	<bean class="com.liferay.portal.verify.model.WebSiteVerifiableModel" />
 	<bean id="com.liferay.portal.webserver.WebServerServletTokenUtil" class="com.liferay.portal.webserver.WebServerServletTokenUtil">
 		<property name="webServerServletToken">
-			<bean class="com.liferay.portal.webserver.WebServerServletTokenImpl">
-				<property name="multiVMPool" ref="com.liferay.portal.kernel.cache.MultiVMPool" />
-			</bean>
+			<bean class="com.liferay.portal.webserver.WebServerServletTokenImpl" />
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.workflow.LayoutRevisionWorkflowHandler" class="com.liferay.portal.workflow.LayoutRevisionWorkflowHandler" />
@@ -818,6 +811,7 @@
 	<bean id="com.liferay.portlet.asset.lar.AssetCategoryStagedModelDataHandler" class="com.liferay.portlet.asset.lar.AssetCategoryStagedModelDataHandler" />
 	<bean id="com.liferay.portlet.asset.lar.AssetVocabularyStagedModelDataHandler" class="com.liferay.portlet.asset.lar.AssetVocabularyStagedModelDataHandler" />
 	<bean id="com.liferay.portlet.asset.lar.AssetTagStagedModelDataHandler" class="com.liferay.portlet.asset.lar.AssetTagStagedModelDataHandler" />
+	<bean id="com.liferay.portlet.asset.social.AssetEntrySocialActivityManager" class="com.liferay.portlet.asset.social.AssetEntrySocialActivityManager" />
 	<bean id="com.liferay.portlet.asset.util.AssetCategoryIndexer" class="com.liferay.portlet.asset.util.AssetCategoryIndexer" />
 	<bean id="com.liferay.portlet.asset.util.AssetEntryIndexer" class="com.liferay.portlet.asset.util.AssetEntryIndexer" />
 	<bean id="com.liferay.portlet.asset.util.AssetVocabularyIndexer" class="com.liferay.portlet.asset.util.AssetVocabularyIndexer" />
@@ -1061,6 +1055,8 @@
 	</bean>
 	<bean id="com.liferay.portlet.layoutsetprototypes.lar.LayoutSetPrototypeStagedModelDataHandler" class="com.liferay.portlet.layoutsetprototypes.lar.LayoutSetPrototypeStagedModelDataHandler" />
 	<bean id="com.liferay.portlet.messageboards.asset.MBMessageAssetRendererFactory" class="com.liferay.portlet.messageboards.asset.MBMessageAssetRendererFactory" />
+	<bean id="com.liferay.portlet.messageboards.social.MBMessageSocialActivityManager" class="com.liferay.portlet.messageboards.social.MBMessageSocialActivityManager" />
+	<bean id="com.liferay.portlet.messageboards.social.MBThreadSocialActivityManager" class="com.liferay.portlet.messageboards.social.MBThreadSocialActivityManager" />
 	<bean id="com.liferay.portlet.messageboards.service.permission.MBCategoryPermission" class="com.liferay.portlet.messageboards.service.permission.MBCategoryPermission" />
 	<bean id="com.liferay.portlet.messageboards.service.permission.MBDiscussionPermission" class="com.liferay.portlet.messageboards.service.permission.MBDiscussionPermission" />
 	<bean id="com.liferay.portlet.messageboards.service.permission.MBMessagePermission" class="com.liferay.portlet.messageboards.service.permission.MBMessagePermission" />
@@ -1086,10 +1082,6 @@
 	</bean>
 	<bean id="com.liferay.portlet.passwordpoliciesadmin.lar.PasswordPolicyStagedModelDataHandler" class="com.liferay.portlet.passwordpoliciesadmin.lar.PasswordPolicyStagedModelDataHandler" />
 	<bean id="com.liferay.portlet.portletconfiguration.PortletConfigurationViewPortletProvider" class="com.liferay.portlet.portletconfiguration.PortletConfigurationViewPortletProvider" />
-	<bean id="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplate" class="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateImpl" />
-	<bean id="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil" class="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil">
-		<property name="portletDisplayTemplate" ref="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplate" />
-	</bean>
 	<bean id="com.liferay.portlet.rolesadmin.util.RolesAdmin" class="com.liferay.portlet.rolesadmin.util.RolesAdminImpl" />
 	<bean id="com.liferay.portlet.rolesadmin.util.RolesAdminUtil" class="com.liferay.portlet.rolesadmin.util.RolesAdminUtil">
 		<property name="rolesAdmin" ref="com.liferay.portlet.rolesadmin.util.RolesAdmin" />

@@ -16,6 +16,7 @@ package com.liferay.gradle.plugins.tasks;
 
 import aQute.bnd.osgi.Constants;
 
+import com.liferay.gradle.plugins.LiferayJavaPlugin;
 import com.liferay.gradle.plugins.LiferayPlugin;
 import com.liferay.gradle.plugins.extensions.LiferayExtension;
 import com.liferay.gradle.plugins.extensions.LiferayOSGiExtension;
@@ -45,6 +46,8 @@ import nebula.plugin.extraconfigurations.ProvidedBasePlugin;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.WarPlugin;
 import org.gradle.api.tasks.TaskAction;
@@ -168,9 +171,11 @@ public class InitGradleTask extends DefaultTask {
 		if (!isOverwrite() && buildGradleFile.exists() &&
 			(buildGradleFile.length() > 0)) {
 
-			throw new GradleException(
+			_logger.error(
 				"Unable to automatically upgrade build.gradle in \"" +
 					_project.getPath() + "\"");
+
+			return;
 		}
 
 		_liferayExtension = GradleUtil.getExtension(
@@ -189,6 +194,7 @@ public class InitGradleTask extends DefaultTask {
 		List<String> contents = new ArrayList<>();
 
 		addContents(contents, getBuildGradleDependencies());
+		addContents(contents, getBuildGradleDeploy());
 		addContents(contents, getBuildGradleLiferay());
 		addContents(contents, getBuildGradleProperties());
 
@@ -277,7 +283,8 @@ public class InitGradleTask extends DefaultTask {
 				String name = (String)dependencyNode.attribute("name");
 
 				boolean optional = false;
-				boolean transitive = true;
+				boolean transitive = getNodeAttribute(
+					dependencyNode, "transitive", true);
 
 				if (Validator.isNotNull(conf)) {
 					if (conf.startsWith("default")) {
@@ -353,7 +360,7 @@ public class InitGradleTask extends DefaultTask {
 						"Unable to find project dependency " + projectFileName;
 
 					if (isIgnoreMissingDependencies()) {
-						System.out.println(message);
+						_logger.error(message);
 
 						continue;
 					}
@@ -427,7 +434,7 @@ public class InitGradleTask extends DefaultTask {
 					fileName);
 
 				if (portalDependencyNotation == null) {
-					System.out.println(
+					_logger.error(
 						"Unable to find portal dependency " + fileName);
 				}
 				else {
@@ -464,12 +471,14 @@ public class InitGradleTask extends DefaultTask {
 
 				String group = (String)dependencyNode.attribute("org");
 				String name = (String)dependencyNode.attribute("name");
+				boolean transitive = getNodeAttribute(
+					dependencyNode, "transitive", true);
 				String version = (String)dependencyNode.attribute("rev");
 
 				contents.add(
 					wrapDependency(
 						JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME, group, name,
-						true, version));
+						transitive, version));
 			}
 		}
 
@@ -487,6 +496,29 @@ public class InitGradleTask extends DefaultTask {
 		addContents(contents, getBuildDependenciesTestCompile());
 
 		return wrapContents(contents, 0, " {", "dependencies", "}", false);
+	}
+
+	protected List<String> getBuildGradleDeploy() {
+		String osgiRuntimeDependencies = getBuildXmlProperty(
+			"osgi.runtime.dependencies");
+
+		if (Validator.isNull(osgiRuntimeDependencies)) {
+			return Collections.emptyList();
+		}
+
+		List<String> contents = new ArrayList<>();
+
+		String[] osgiRuntimeDependenciesArray = osgiRuntimeDependencies.split(
+			",");
+
+		for (String osgiRuntimeDependency : osgiRuntimeDependenciesArray) {
+			contents.add("\t\tinclude \"" + osgiRuntimeDependency + "\"");
+		}
+
+		contents = wrapContents(contents, 1, " {", "from(\"lib\")", "}", true);
+
+		return wrapContents(
+			contents, 0, " {", LiferayJavaPlugin.DEPLOY_TASK_NAME, "}", false);
 	}
 
 	protected List<String> getBuildGradleLiferay() {
@@ -601,6 +633,18 @@ public class InitGradleTask extends DefaultTask {
 		}
 
 		return (Node)nodeList.get(0);
+	}
+
+	protected boolean getNodeAttribute(
+		Node node, String name, boolean defaultValue) {
+
+		String value = (String)node.attribute(name);
+
+		if (Validator.isNull(value)) {
+			return defaultValue;
+		}
+
+		return Boolean.parseBoolean(value);
 	}
 
 	protected String getServiceJarFileName(String deploymentContext) {
@@ -764,6 +808,9 @@ public class InitGradleTask extends DefaultTask {
 
 		return sb.toString();
 	}
+
+	private static final Logger _logger = Logging.getLogger(
+		InitGradleTask.class);
 
 	private Node _buildXmlNode;
 	private boolean _ignoreMissingDependencies;

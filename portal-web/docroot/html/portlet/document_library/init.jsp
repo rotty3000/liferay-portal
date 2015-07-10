@@ -45,7 +45,7 @@ page import="com.liferay.portlet.documentlibrary.NoSuchMetadataSetException" %><
 page import="com.liferay.portlet.documentlibrary.RepositoryNameException" %><%@
 page import="com.liferay.portlet.documentlibrary.RequiredFileEntryTypeException" %><%@
 page import="com.liferay.portlet.documentlibrary.SourceFileNameException" %><%@
-page import="com.liferay.portlet.documentlibrary.action.EditFileEntryAction" %><%@
+page import="com.liferay.portlet.documentlibrary.action.EditFileEntryMVCActionCommand" %><%@
 page import="com.liferay.portlet.documentlibrary.display.context.DLDisplayContextProviderUtil" %><%@
 page import="com.liferay.portlet.documentlibrary.display.context.DLEditFileEntryDisplayContext" %><%@
 page import="com.liferay.portlet.documentlibrary.display.context.DLFilePicker" %><%@
@@ -82,7 +82,6 @@ page import="com.liferay.portlet.dynamicdatamapping.search.StructureSearchTerms"
 page import="com.liferay.portlet.dynamicdatamapping.service.DDMStorageLinkLocalServiceUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.storage.DDMFormValues" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.storage.StorageEngineUtil" %><%@
-page import="com.liferay.portlet.dynamicdatamapping.util.DDMFormValuesToFieldsConverterUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.DDMUtil" %><%@
 page import="com.liferay.portlet.dynamicdatamapping.util.comparator.StructureStructureKeyComparator" %>
 

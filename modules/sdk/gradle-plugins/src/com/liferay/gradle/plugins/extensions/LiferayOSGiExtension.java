@@ -16,9 +16,9 @@ package com.liferay.gradle.plugins.extensions;
 
 import aQute.bnd.osgi.Constants;
 
-import com.liferay.ant.bnd.plugin.BowerAnalyzerPlugin;
-import com.liferay.ant.bnd.plugin.JspAnalyzerPlugin;
-import com.liferay.ant.bnd.plugin.SassAnalyzerPlugin;
+import com.liferay.ant.bnd.bower.BowerAnalyzerPlugin;
+import com.liferay.ant.bnd.jsp.JspAnalyzerPlugin;
+import com.liferay.ant.bnd.sass.SassAnalyzerPlugin;
 import com.liferay.gradle.util.GradleUtil;
 import com.liferay.gradle.util.StringUtil;
 import com.liferay.gradle.util.Validator;
