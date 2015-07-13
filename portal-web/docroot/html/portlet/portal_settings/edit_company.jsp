@@ -19,7 +19,7 @@
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
 
-portletURL.setParameter("struts_action", "/portal_settings/view");
+portletURL.setParameter("mvcPath", "/html/portlet/portal_settings/edit_company.jsp");
 
 request.setAttribute("addresses.className", Account.class.getName());
 request.setAttribute("emailAddresses.className", Account.class.getName());
@@ -32,8 +32,8 @@ request.setAttribute("phones.classPK", company.getAccountId());
 request.setAttribute("websites.classPK", company.getAccountId());
 %>
 
-<portlet:actionURL var="editCompanyURL">
-	<portlet:param name="struts_action" value="/portal_settings/edit_company" />
+<portlet:actionURL name="editCompany" var="editCompanyURL">
+	<portlet:param name="mvcPath" value="/html/portlet/portal_settings/edit_company.jsp" />
 </portlet:actionURL>
 
 <aui:form action="<%= editCompanyURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveCompany();" %>'>
@@ -61,8 +61,6 @@ request.setAttribute("websites.classPK", company.getAccountId());
 <aui:script>
 	function <portlet:namespace />saveCompany() {
 		var form = AUI.$(document.<portlet:namespace />fm);
-
-		form.fm('<%= Constants.CMD %>').val('<%= Constants.UPDATE %>');
 
 		<portlet:namespace />saveLdap();
 		<portlet:namespace />saveLocales();
