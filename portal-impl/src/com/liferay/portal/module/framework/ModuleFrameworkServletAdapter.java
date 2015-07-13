@@ -32,6 +32,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ModuleFrameworkServletAdapter extends HttpServlet {
 
+	public static String REQUEST =
+		ModuleFrameworkServletAdapter.class + ".REQUEST";
+
 	@Override
 	protected void service(
 			HttpServletRequest request, HttpServletResponse response)
@@ -47,6 +50,8 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 		}
 
 		HttpServlet httpServlet = _servlets.get(0);
+
+		request.setAttribute(REQUEST, request);
 
 		httpServlet.service(request, response);
 	}

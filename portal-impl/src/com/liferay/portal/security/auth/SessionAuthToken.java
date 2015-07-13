@@ -25,6 +25,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.SecurityPortletContainerWrapper;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -140,18 +141,27 @@ public class SessionAuthToken implements AuthToken {
 	protected String getSessionAuthenticationToken(
 		HttpServletRequest request, String key, boolean createToken) {
 
-		HttpSession session = request.getSession();
+		HttpServletRequest portalRequest = PortalUtil.getOriginalServletRequest(
+			request);
+
+		while (portalRequest instanceof HttpServletRequestWrapper) {
+			portalRequest =
+				(HttpServletRequest)
+					((HttpServletRequestWrapper)portalRequest).getRequest();
+		}
+
+		HttpSession portalSession = portalRequest.getSession();
 
 		String tokenKey = WebKeys.AUTHENTICATION_TOKEN.concat(key);
 
-		String sessionAuthenticationToken = (String)session.getAttribute(
+		String sessionAuthenticationToken = (String)portalSession.getAttribute(
 			tokenKey);
 
 		if (createToken && Validator.isNull(sessionAuthenticationToken)) {
 			sessionAuthenticationToken = PwdGenerator.getPassword(
 				PropsValues.AUTH_TOKEN_LENGTH);
 
-			session.setAttribute(tokenKey, sessionAuthenticationToken);
+			portalSession.setAttribute(tokenKey, sessionAuthenticationToken);
 		}
 
 		return sessionAuthenticationToken;
