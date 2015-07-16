@@ -47,6 +47,7 @@
 		<dirset dir="quick-note" includes="*" />
 		<dirset dir="ratings" includes="*" />
 		<dirset dir="roles" includes="*" />
+		<dirset dir="roles-admin" includes="*" />
 		<dirset dir="rss" includes="*" />
 		<dirset dir="search" includes="*" />
 		<dirset dir="service-access-control-profile" includes="*" />
