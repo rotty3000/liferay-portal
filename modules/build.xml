@@ -48,6 +48,7 @@
 		<dirset dir="apps/quick-note" includes="*" />
 		<dirset dir="apps/ratings" includes="*" />
 		<dirset dir="apps/roles" includes="*" />
+		<dirset dir="apps/roles-admin" includes="*" />
 		<dirset dir="apps/rss" includes="*" />
 		<dirset dir="apps/search" includes="*" />
 		<dirset dir="apps/service-access-control-profile" includes="*" />
