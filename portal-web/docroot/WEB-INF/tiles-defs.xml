@@ -308,22 +308,6 @@
 		<put name="portlet_content" value="/portlet/mobile_device_rules/view_rules.jsp" />
 	</definition>
 
-	<!-- Monitoring -->
-
-	<definition name="portlet.monitoring" extends="portlet" />
-
-	<definition name="portlet.monitoring.edit_session" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/edit_session.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.error" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/error.jsp" />
-	</definition>
-
-	<definition name="portlet.monitoring.view" extends="portlet.monitoring">
-		<put name="portlet_content" value="/portlet/monitoring/view.jsp" />
-	</definition>
-
 	<!-- My Account -->
 
 	<definition name="portlet.my_account" extends="portlet" />
