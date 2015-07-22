@@ -40,6 +40,7 @@
 		<dirset dir="password-policies-admin" includes="*" />
 		<dirset dir="polls" includes="*" />
 		<dirset dir="portal-instances" includes="*" />
+		<dirset dir="portal-settings" includes="*" />
 		<dirset dir="portlet-configuration" includes="*" />
 		<dirset dir="portlet-css" includes="*" />
 		<dirset dir="portlet-display-template" includes="*" />
