@@ -26,12 +26,12 @@ public class UpgradeLastPublishDate
 	protected void doUpgrade() throws Exception {
 		runSQL("alter table BookmarksEntry add lastPublishDate DATE null");
 
-		super.updateLastPublishDates(
+		updateLastPublishDates(
 			BookmarksPortletKeys.BOOKMARKS, "BookmarksEntry");
 
 		runSQL("alter table BookmarksFolder add lastPublishDate DATE null");
 
-		super.updateLastPublishDates(
+		updateLastPublishDates(
 			BookmarksPortletKeys.BOOKMARKS, "BookmarksFolder");
 	}
 
