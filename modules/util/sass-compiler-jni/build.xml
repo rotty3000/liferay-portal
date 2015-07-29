@@ -112,19 +112,35 @@ make -j5${line.separator}</echo>
 	</target>
 
 	<target name="build-libsass-linux-x86">
+        <touch file="tmp/libsass-${libsass.version}/build.sh" mkdirs="true" />
+
+        <echo append="true" file="tmp/libsass-${libsass.version}/build.sh">LIBSASS_VERSION=&quot;${libsass.version}&quot;${line.separator}
+            autoreconf --force --install${line.separator}
+            ./configure --disable-tests --enable-shared${line.separator}
+            make -j5${line.separator}</echo>
+
 		<build-libsass
 			libsass.lib.input.file="libsass.so"
+            libsass.lib.input.dir=".libs"
 			libsass.lib.output.file="libliferaysass.so"
-			libsass.make.exe="make CXX=g++-4.6 CC=gcc-4.4 shared"
+			libsass.make.exe="./build.sh"
 			libsass.resources.dir="linux-x86"
 		/>
 	</target>
 
 	<target name="build-libsass-linux-x86-64">
-		<build-libsass
+        <touch file="tmp/libsass-${libsass.version}/build.sh" mkdirs="true" />
+
+        <echo append="true" file="tmp/libsass-${libsass.version}/build.sh">LIBSASS_VERSION=&quot;${libsass.version}&quot;${line.separator}
+autoreconf --force --install${line.separator}
+./configure --disable-tests --enable-shared${line.separator}
+make -j5${line.separator}</echo>
+
+        <build-libsass
 			libsass.lib.input.file="libsass.so"
+			libsass.lib.input.dir=".libs"
 			libsass.lib.output.file="libliferaysass.so"
-			libsass.make.exe="make CXX=g++-4.6 CC=gcc-4.4 shared"
+			libsass.make.exe="./build.sh"
 			libsass.resources.dir="linux-x86-64"
 		/>
 	</target>
