@@ -145,7 +145,7 @@ public class ResourceBundleTracker implements Closeable {
 			registry.ungetService(serviceReference);
 
 			_resourceBundles.remove(
-				(String)serviceReference.getProperty("language.id"));
+				serviceReference.getProperty("language.id"));
 		}
 
 	}
