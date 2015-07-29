@@ -118,7 +118,7 @@ public class PortletKeys {
 	public static final String NESTED_PORTLETS =
 		"com_liferay_nested_portlets_web_portlet_NestedPortletsPortlet";
 
-	public static final String PLUGINS_ADMIN = "132";
+	public static final String PLUGINS_ADMIN = "com_liferay_pluginsadmin_web_portlet_PluginsAdminPortlet";
 
 	public static final String PORTAL = "90";
 
