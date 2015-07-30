@@ -703,9 +703,10 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			}
 		}
 
-		request = new SharedSessionServletRequest(
-			PortalUtil.getOriginalServletRequest(request),
-			!portlet.isPrivateSessionAttributes());
+		if (warFile) {
+			request = new SharedSessionServletRequest(
+				request, !portlet.isPrivateSessionAttributes());
+		}
 
 		String dynamicQueryString = (String)request.getAttribute(
 			DynamicServletRequest.DYNAMIC_QUERY_STRING);
