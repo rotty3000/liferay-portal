@@ -679,12 +679,15 @@ public class ResourcePermissionLocalServiceImpl
 		// See LPS-47464
 
 		BaseModel baseModel = null;
+
 		try {
 			baseModel = PortalUtil.getBaseModel(
 				firstResource.getName(), firstResource.getPrimKey());
 		}
-		catch (Exception e){
+		catch (Exception e) {
+
 			// Portal throws exception if model does not exist
+
 		}
 
 		if ((baseModel != null) &&
