@@ -616,7 +616,7 @@
 	<portlet>
 		<portlet-name>164</portlet-name>
 		<display-name>Fast Login</display-name>
-		<portlet-class>com.liferay.portlet.StrutsPortlet</portlet-class>
+		<portlet-class>com.liferay.portlet.login.LoginPortlet</portlet-class>
 		<init-param>
 			<name>config-template</name>
 			<value>/html/portlet/login/configuration.jsp</value>
@@ -627,7 +627,7 @@
 		</init-param>
 		<init-param>
 			<name>view-action</name>
-			<value>/login/login</value>
+			<value>/login/login/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>

@@ -14,6 +14,8 @@
 
 package com.liferay.portlet.login.action;
 
+import java.io.IOException;
+
 import com.liferay.portal.CompanyMaxUsersException;
 import com.liferay.portal.ContactNameException;
 import com.liferay.portal.EmailAddressException;
@@ -26,10 +28,14 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -41,7 +47,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
-import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -54,25 +59,24 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 /**
  * @author Sergio González
+ * @author Peter Fellwock
  */
-public class CreateAnonymousAccountAction extends PortletAction {
+
+@OSGiBeanProperties(
+	property = {
+		"javax.portlet.name=" + PortletKeys.FAST_LOGIN,
+		"mvc.command.name=/login/create_anonymous_account"
+	}
+)
+public class CreateAnonymousAccountAction  extends BaseMVCActionCommand {
 
 	@Override
-	public void processAction(
-			ActionMapping actionMapping, ActionForm actionForm,
-			PortletConfig portletConfig, ActionRequest actionRequest,
-			ActionResponse actionResponse)
+	protected void doProcessAction(
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
@@ -85,6 +89,9 @@ public class CreateAnonymousAccountAction extends PortletAction {
 				company.getCompanyId(), PropsKeys.COMPANY_SECURITY_STRANGERS);
 		}
 
+		PortletConfig portletConfig = (PortletConfig)actionRequest.getAttribute(
+			JavaConstants.JAVAX_PORTLET_CONFIG);
+		
 		String portletName = portletConfig.getPortletName();
 
 		if (!portletName.equals(PortletKeys.FAST_LOGIN)) {
@@ -165,34 +172,6 @@ public class CreateAnonymousAccountAction extends PortletAction {
 		}
 	}
 
-	@Override
-	public ActionForward render(
-			ActionMapping actionMapping, ActionForm actionForm,
-			PortletConfig portletConfig, RenderRequest renderRequest,
-			RenderResponse renderResponse)
-		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		Company company = themeDisplay.getCompany();
-
-		if (!company.isStrangers()) {
-			return actionMapping.findForward("portlet.login.login");
-		}
-
-		String portletName = portletConfig.getPortletName();
-
-		if (!portletName.equals(PortletKeys.FAST_LOGIN)) {
-			return actionMapping.findForward("portlet.login.login");
-		}
-
-		renderResponse.setTitle(themeDisplay.translate("anonymous-account"));
-
-		return actionMapping.findForward(
-			"portlet.login.create_anonymous_account");
-	}
-
 	protected void addAnonymousUser(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
@@ -269,10 +248,14 @@ public class CreateAnonymousAccountAction extends PortletAction {
 		}
 	}
 
+	/** not sure about this method????
+	
 	@Override
 	protected boolean isCheckMethodOnProcessAction() {
 		return _CHECK_METHOD_ON_PROCESS_ACTION;
 	}
+	
+	**/
 
 	protected JSONObject updateIncompleteUser(
 			ActionRequest actionRequest, ActionResponse actionResponse)
@@ -323,6 +306,16 @@ public class CreateAnonymousAccountAction extends PortletAction {
 		}
 
 		return jsonObject;
+	}
+	
+
+	private void writeJSON(ActionRequest actionRequest,
+			ActionResponse actionResponse, JSONObject jsonObject)
+		throws IOException {
+
+		JSONPortletResponseUtil.writeJSON(
+			actionRequest, actionResponse, jsonObject);
+		
 	}
 
 	private static final boolean _CHECK_METHOD_ON_PROCESS_ACTION = false;

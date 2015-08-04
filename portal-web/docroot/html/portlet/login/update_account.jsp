@@ -65,7 +65,7 @@ String jobTitle = BeanParamUtil.getString(selUser, request, "jobTitle");
 
 <div class="anonymous-account">
 	<portlet:actionURL var="createAccountURL">
-		<portlet:param name="struts_action" value="/login/create_account" />
+		<portlet:param name="mvcRenderCommandName" value="/login/create_account" />
 	</portlet:actionURL>
 
 	<aui:form action="<%= createAccountURL %>" method="post" name="fm">

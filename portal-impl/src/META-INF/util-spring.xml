@@ -24,6 +24,12 @@
 			<bean class="com.liferay.portal.audit.AuditMessageFactoryImpl" />
 		</property>
 	</bean>
+	<bean id="com.liferay.portlet.login.action.CreateAccountMVCRenderCommand" class="com.liferay.portlet.login.action.CreateAccountMVCRenderCommand" />
+	<bean id="com.liferay.portlet.login.action.CreateAnonymousAccountMVCRenderCommand" class="com.liferay.portlet.login.action.CreateAnonymousAccountMVCRenderCommand" />
+	<bean id="com.liferay.portlet.login.action.ForgotPasswordMVCRenderCommand" class="com.liferay.portlet.login.action.ForgotPasswordMVCRenderCommand" />
+	<bean id="com.liferay.portlet.login.action.LoginActionMVCRenderCommand" class="com.liferay.portlet.login.action.LoginActionMVCRenderCommand" />
+	<bean id="com.liferay.portlet.login.action.LoginAction" class="com.liferay.portlet.login.action.LoginAction" />
+	
 	<bean id="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistry" class="com.liferay.portal.backgroundtask.BackgroundTaskStatusRegistryImpl" />
 	<bean id="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistryUtil" class="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistryUtil">
 		<property name="backgroundTaskStatusRegistry" ref="com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusRegistry" />

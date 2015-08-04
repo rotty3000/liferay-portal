@@ -31,7 +31,7 @@ if (reminderAttempts == null) {
 %>
 
 <portlet:actionURL var="forgotPasswordURL">
-	<portlet:param name="struts_action" value="/login/forgot_password" />
+	<portlet:param name="mvcRenderCommandName" value="/login/forgot_password" />
 </portlet:actionURL>
 
 <aui:form action="<%= forgotPasswordURL %>" method="post" name="fm">

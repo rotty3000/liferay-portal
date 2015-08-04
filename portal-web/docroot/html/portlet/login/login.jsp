@@ -48,7 +48,7 @@
 		%>
 
 		<portlet:actionURL secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="loginURL">
-			<portlet:param name="struts_action" value="/login/login" />
+			<portlet:param name="mvcRenderCommandName" value="/login/login" />
 		</portlet:actionURL>
 
 		<aui:form action="<%= loginURL %>" autocomplete='<%= PropsValues.COMPANY_SECURITY_LOGIN_FORM_AUTOCOMPLETE ? "on" : "off" %>' cssClass="sign-in-form" method="post" name="fm">

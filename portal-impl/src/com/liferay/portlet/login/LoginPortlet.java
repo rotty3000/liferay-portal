@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,24 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/html/portlet/login/init.jsp" %>
+package com.liferay.portlet.login;
 
-<%
-String mvcRenderCommandName = ParamUtil.getString(request, "mvcRenderCommandName");
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
-boolean showCreateAccountIcon = false;
+/**
+ * @author Peter Fellwock
+ */
 
-if (!mvcRenderCommandName.equals("/login/create_account") && company.isStrangers() && !portletName.equals(PortletKeys.FAST_LOGIN)) {
-	showCreateAccountIcon = true;
+public class LoginPortlet extends MVCPortlet {
+	
 }
-%>
-
-<c:if test="<%= showCreateAccountIcon %>">
-	<liferay-ui:icon
-		iconCssClass="icon-plus"
-		message="create-account"
-		url="<%= PortalUtil.getCreateAccountURL(request, themeDisplay) %>"
-	/>
-</c:if>
