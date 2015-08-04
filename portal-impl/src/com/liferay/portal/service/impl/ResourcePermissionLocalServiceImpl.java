@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.Resource;
 import com.liferay.portal.model.ResourceAction;
 import com.liferay.portal.model.ResourceConstants;
@@ -42,6 +43,7 @@ import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 import com.liferay.portal.service.base.ResourcePermissionLocalServiceBaseImpl;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.ResourcePermissionsThreadLocal;
 import com.liferay.util.dao.orm.CustomSQLUtil;
@@ -676,7 +678,17 @@ public class ResourcePermissionLocalServiceImpl
 
 		// See LPS-47464
 
-		if (resourcePermissionPersistence.countByC_N_S_P(
+		BaseModel baseModel = null;
+		try {
+			baseModel = PortalUtil.getBaseModel(
+				firstResource.getName(), firstResource.getPrimKey());
+		}
+		catch (Exception e){
+			// Portal throws exception if model does not exist
+		}
+
+		if ((baseModel != null) &&
+			resourcePermissionPersistence.countByC_N_S_P(
 				firstResource.getCompanyId(), firstResource.getName(),
 				firstResource.getScope(), firstResource.getPrimKey()) < 1) {
 
