@@ -188,6 +188,10 @@
 		</sequential>
 	</macrodef>
 
+	<target name="build-ckeditor-plugins-bbcode">
+		<build-ckeditor-plugins-bbcode />
+	</target>
+
 	<target name="compile">
 		<compile
 			module.dir="${basedir}"

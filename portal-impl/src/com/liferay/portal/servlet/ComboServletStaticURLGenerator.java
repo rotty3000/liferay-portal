@@ -54,7 +54,13 @@ public class ComboServletStaticURLGenerator {
 						continue;
 					}
 
-					if (_visitedURLs.contains(portletResource)) {
+					String url = portletResource;
+
+					if (!HttpUtil.hasProtocol(portletResource)) {
+						url = portlet.getContextPath() + portletResource;
+					}
+
+					if (_visitedURLs.contains(url)) {
 						continue;
 					}
 
@@ -74,7 +80,7 @@ public class ComboServletStaticURLGenerator {
 						timestamp = Math.max(timestamp, portlet.getTimestamp());
 					}
 
-					_visitedURLs.add(portletResource);
+					_visitedURLs.add(url);
 				}
 			}
 		}

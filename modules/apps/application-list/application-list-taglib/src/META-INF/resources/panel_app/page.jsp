@@ -35,11 +35,16 @@ PortletURL portletURL = panelApp.getPortletURL(request);
 	>
 
 		<%
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("navigation", true);
+
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(themeDisplay.getCompanyId(), panelApp.getPortletId());
 		%>
 
 		<aui:a
 			ariaRole="menuitem"
+			data="<%= data %>"
 			href="<%= portletURL.toString() %>"
 			id='<%= "portlet_" + panelApp.getPortletId() %>'
 			label="<%= PortalUtil.getPortletTitle(portlet, application, locale) %>"

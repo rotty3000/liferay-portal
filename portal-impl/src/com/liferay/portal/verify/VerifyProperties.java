@@ -751,6 +751,39 @@ public class VerifyProperties extends VerifyProcess {
 			"com.liferay.dynamic.data.lists.web"
 		},
 
+		// Dynamic Data Mapping
+
+		new String[] {
+			"dynamic.data.mapping.image.extensions",
+			"dynamic.data.mapping.image.extensions",
+			"com.liferay.dynamic.data.mapping.service"
+		},
+		new String[] {
+			"dynamic.data.mapping.image.small.max.size",
+			"dynamic.data.mapping.image.small.max.size",
+			"com.liferay.dynamic.data.mapping.service"
+		},
+		new String[] {
+			"dynamic.data.mapping.structure.force.autogenerate.key",
+			"dynamic.data.mapping.structure.force.autogenerate.key",
+			"com.liferay.dynamic.data.mapping.web"
+		},
+		new String[] {
+			"dynamic.data.mapping.template.force.autogenerate.key",
+			"dynamic.data.mapping.template.force.autogenerate.key",
+			"com.liferay.dynamic.data.mapping.web"
+		},
+		new String[] {
+			"dynamic.data.mapping.template.language.default",
+			"dynamic.data.mapping.template.language.default",
+			"com.liferay.dynamic.data.mapping.web"
+		},
+		new String[] {
+			"dynamic.data.mapping.template.language.content",
+			"dynamic.data.mapping.template.language.content",
+			"com.liferay.dynamic.data.mapping.web"
+		},
+
 		// Facebook Connect
 
 		new String[] {
@@ -1519,6 +1552,25 @@ public class VerifyProperties extends VerifyProcess {
 			"com.liferay.exportimport.web"
 		},
 
+		// Social Activity
+
+		new String[] {
+			"social.activity.contribution.increments",
+			"contribution.increments", "com.liferay.social.activity"
+		},
+		new String[] {
+			"social.activity.contribution.limit.values",
+			"contribution.limit.values", "com.liferay.social.activity"
+		},
+		new String[] {
+			"social.activity.participation.increments",
+			"participation.increments", "com.liferay.social.activity"
+		},
+		new String[] {
+			"social.activity.participation.limit.values",
+			"participation.limit.values", "com.liferay.social.activity"
+		},
+
 		// Tags Compiler
 
 		new String[] {
@@ -1727,7 +1779,8 @@ public class VerifyProperties extends VerifyProcess {
 		"users.form.add.miscellaneous", "users.form.my.account.identification",
 		"users.form.my.account.main", "users.form.my.account.miscellaneous",
 		"users.form.update.identification", "users.form.update.main",
-		"users.form.update.miscellaneous", "webdav.storage.class",
+		"users.form.update.miscellaneous", "vaadin.resources.path",
+		"vaadin.theme", "vaadin.widgetset", "webdav.storage.class",
 		"webdav.storage.show.edit.url", "webdav.storage.show.view.url",
 		"webdav.storage.tokens", "wiki.email.page.added.signature",
 		"wiki.email.page.updated.signature", "xss.allow"
