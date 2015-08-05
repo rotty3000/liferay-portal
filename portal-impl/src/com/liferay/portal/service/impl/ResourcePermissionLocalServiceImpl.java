@@ -676,7 +676,10 @@ public class ResourcePermissionLocalServiceImpl
 
 		// See LPS-47464
 
-		if (resourcePermissionPersistence.countByC_N_S_P(
+		String resourceName = firstResource.getName();
+
+		if (resourceName.contains(".model.") &&
+			resourcePermissionPersistence.countByC_N_S_P(
 				firstResource.getCompanyId(), firstResource.getName(),
 				firstResource.getScope(), firstResource.getPrimKey()) < 1) {
 
