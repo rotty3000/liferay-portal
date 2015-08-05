@@ -30,9 +30,7 @@ if (reminderAttempts == null) {
 }
 %>
 
-<portlet:actionURL var="forgotPasswordURL">
-	<portlet:param name="struts_action" value="/login/forgot_password" />
-</portlet:actionURL>
+<portlet:actionURL name="/login/forgot_password" var="forgotPasswordURL" />
 
 <aui:form action="<%= forgotPasswordURL %>" method="post" name="fm">
 	<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />

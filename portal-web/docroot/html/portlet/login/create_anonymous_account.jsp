@@ -16,9 +16,7 @@
 
 <%@ include file="/html/portlet/login/init.jsp" %>
 
-<portlet:actionURL var="createAnonymousAccountURL">
-	<portlet:param name="struts_action" value="/login/create_anonymous_account" />
-</portlet:actionURL>
+<portlet:actionURL name="/login/create_anonymous_account" var="createAnonymousAccountURL" />
 
 <aui:form action="<%= createAnonymousAccountURL %>" method="post" name="fm">
 	<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
