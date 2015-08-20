@@ -19,10 +19,7 @@ import aQute.bnd.annotation.metatype.Meta;
 /**
  * @author Carlos Sierra Andrés
  */
-@Meta.OCD(
-	factory = true,
-	id = CXFEndpointPublisherConfiguration.CONFIG_PID
-)
+@Meta.OCD(factory = true, id = CXFEndpointPublisherConfiguration.CONFIG_PID)
 public interface CXFEndpointPublisherConfiguration {
 
 	public static String CONFIG_PID =
