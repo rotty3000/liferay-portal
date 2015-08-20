@@ -100,15 +100,18 @@ public class RestExtender {
 			restExtenderConfiguration.jaxRsApplicationFilterStrings();
 
 		if (jaxRsApplicationFilterStrings == null) {
-			return;
-		}
-
-		for (String jaxRsApplicationFilterString :
-				jaxRsApplicationFilterStrings) {
-
 			addTCCLServiceDependency(
-				false, Application.class, jaxRsApplicationFilterString,
-				"addApplication", "removeApplication");
+				false, Application.class, null, "addApplication",
+				"removeApplication");
+		}
+		else {
+			for (String jaxRsApplicationFilterString :
+					jaxRsApplicationFilterStrings) {
+
+				addTCCLServiceDependency(
+					false, Application.class, jaxRsApplicationFilterString,
+					"addApplication", "removeApplication");
+			}
 		}
 	}
 
@@ -152,6 +155,12 @@ public class RestExtender {
 		boolean required, Class<?> clazz, String filter, String addName,
 		String removeName) {
 
+		if ((clazz == null) && (filter == null)) {
+			throw new IllegalArgumentException(
+				"You must provide either a class or a filter for the " +
+					"dependency");
+		}
+
 		ServiceDependency serviceDependency =
 			_dependencyManager.createTCCLServiceDependency();
 
@@ -162,7 +171,12 @@ public class RestExtender {
 			serviceDependency.setService(filter);
 		}
 		else {
-			serviceDependency.setService(clazz, filter);
+			if (filter == null) {
+				serviceDependency.setService(clazz);
+			}
+			else {
+				serviceDependency.setService(clazz, filter);
+			}
 		}
 
 		_component.add(serviceDependency);
