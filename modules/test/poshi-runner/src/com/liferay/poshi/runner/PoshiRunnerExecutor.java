@@ -14,6 +14,7 @@
 
 package com.liferay.poshi.runner;
 
+import com.liferay.poshi.runner.exception.PoshiRunnerWarningException;
 import com.liferay.poshi.runner.logger.CommandLoggerHandler;
 import com.liferay.poshi.runner.logger.SummaryLoggerHandler;
 import com.liferay.poshi.runner.logger.XMLLoggerHandler;
@@ -257,13 +258,23 @@ public class PoshiRunnerExecutor {
 
 		PoshiRunnerVariablesUtil.pushCommandMap();
 
-		parseElement(commandElement);
-
-		PoshiRunnerVariablesUtil.popCommandMap();
+		try {
+			parseElement(commandElement);
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		finally {
+			PoshiRunnerVariablesUtil.popCommandMap();
+		}
 	}
 
 	public static void runFunctionExecuteElement(Element executeElement)
 		throws Exception {
+
+		if (_functionExecuteElement == null) {
+			_functionExecuteElement = executeElement;
+		}
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
 
@@ -335,8 +346,9 @@ public class PoshiRunnerExecutor {
 			}
 		}
 
-		CommandLoggerHandler.startCommand(executeElement);
 		SummaryLoggerHandler.startSummary(executeElement);
+
+		CommandLoggerHandler.startCommand(executeElement);
 
 		PoshiRunnerStackTraceUtil.pushStackTrace(executeElement);
 
@@ -346,23 +358,46 @@ public class PoshiRunnerExecutor {
 		try {
 			runFunctionCommandElement(classCommandName, commandElement);
 		}
-		catch (Exception e) {
-			PoshiRunnerStackTraceUtil.popStackTrace();
+		catch (Throwable t) {
+			String warningMessage = _getWarningFromThrowable(t);
 
-			PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
+			if (warningMessage != null) {
+				_functionWarningMessage = warningMessage;
+			}
+			else {
+				PoshiRunnerStackTraceUtil.popStackTrace();
 
-			CommandLoggerHandler.failCommand(executeElement);
-			SummaryLoggerHandler.failSummary(executeElement, e.getMessage());
+				PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
 
-			throw e;
+				SummaryLoggerHandler.failSummary(
+					_functionExecuteElement, t.getMessage());
+
+				CommandLoggerHandler.failCommand(_functionExecuteElement);
+
+				throw t;
+			}
 		}
 
 		PoshiRunnerStackTraceUtil.popStackTrace();
 
 		PoshiRunnerStackTraceUtil.setCurrentElement(executeElement);
 
-		CommandLoggerHandler.passCommand(executeElement);
-		SummaryLoggerHandler.passSummary(executeElement);
+		if (_functionExecuteElement == executeElement) {
+			if (_functionWarningMessage != null) {
+				SummaryLoggerHandler.warnSummary(
+					_functionExecuteElement, _functionWarningMessage);
+
+				CommandLoggerHandler.warnCommand(_functionExecuteElement);
+			}
+			else {
+				SummaryLoggerHandler.passSummary(executeElement);
+
+				CommandLoggerHandler.passCommand(executeElement);
+			}
+
+			_functionExecuteElement = null;
+			_functionWarningMessage = null;
+		}
 	}
 
 	public static void runIfElement(Element element) throws Exception {
@@ -841,6 +876,28 @@ public class PoshiRunnerExecutor {
 		}
 	}
 
+	private static String _getWarningFromThrowable(Throwable throwable) {
+		Class clazz = PoshiRunnerWarningException.class;
+
+		String classCanonicalName = clazz.getCanonicalName();
+
+		String throwableString = throwable.toString();
+
+		if (throwableString.contains(classCanonicalName)) {
+			return throwable.getMessage();
+		}
+
+		Throwable cause = throwable.getCause();
+
+		if (cause != null) {
+			return _getWarningFromThrowable(cause);
+		}
+
+		return null;
+	}
+
+	private static Element _functionExecuteElement;
+	private static String _functionWarningMessage;
 	private static final Pattern _locatorKeyPattern = Pattern.compile(
 		"\\S#\\S");
 	private static Object _returnObject;

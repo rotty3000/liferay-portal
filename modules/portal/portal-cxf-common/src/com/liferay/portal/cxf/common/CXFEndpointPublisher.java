@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 @Component(
 	configurationPid = "com.liferay.portal.cxf.common.configuration.CXFEndpointPublisherConfiguration",
-	configurationPolicy = ConfigurationPolicy.REQUIRE
+	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true
 )
 public class CXFEndpointPublisher {
 

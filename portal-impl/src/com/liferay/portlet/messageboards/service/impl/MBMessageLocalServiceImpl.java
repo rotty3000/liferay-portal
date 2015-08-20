@@ -199,6 +199,16 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		serviceContext.setAttribute("className", className);
 		serviceContext.setAttribute("classPK", String.valueOf(classPK));
 
+		Date now = new Date();
+
+		if (serviceContext.getCreateDate() == null) {
+			serviceContext.setCreateDate(now);
+		}
+
+		if (serviceContext.getModifiedDate() == null) {
+			serviceContext.setModifiedDate(now);
+		}
+
 		MBMessage message = addMessage(
 			userId, userName, groupId, categoryId, threadId, parentMessageId,
 			subject, body, PropsValues.DISCUSSION_COMMENTS_FORMAT,

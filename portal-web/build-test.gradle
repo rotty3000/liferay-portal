@@ -2,7 +2,9 @@ import com.liferay.gradle.util.GradleUtil
 
 buildscript {
 	repositories {
-		mavenLocal()
+		if (!Boolean.getBoolean("maven.local.ignore")) {
+			mavenLocal()
+		}
 
 		maven {
 			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
@@ -10,7 +12,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.poshi.runner", version: "1.0.6"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.poshi.runner", version: "1.0.7"
 	}
 }
 
@@ -65,7 +67,9 @@ poshiRunner {
 }
 
 repositories {
-	mavenLocal()
+	if (!Boolean.getBoolean("maven.local.ignore")) {
+		mavenLocal()
+	}
 
 	maven {
 		url "http://cdn.repository.liferay.com/nexus/content/groups/public"
@@ -80,7 +84,7 @@ copyLocalPoshi {
 	configure(startParameter) {
 		configureOnDemand = true
 		gradleUserHomeDir = file("../.gradle")
-		projectProperties = ["destinationDir": new File(buildDir, "poshi")]
+		projectProperties = ["destinationDir": localPoshiDir]
 	}
 
 	dir = file("../modules/test/poshi-runner")
@@ -93,8 +97,9 @@ runPoshi {
 
 if (GradleUtil.getProperty(project, "local", false)) {
 	dependencies {
-		poshiRunner fileTree(dir: localPoshiDir, include: "*.jar")
+		poshiRunner fileTree(localPoshiDir) {
+			builtBy copyLocalPoshi
+			include "*.jar"
+		}
 	}
-
-	[runPoshi, validatePoshi, writePoshiProperties]*.dependsOn copyLocalPoshi
 }

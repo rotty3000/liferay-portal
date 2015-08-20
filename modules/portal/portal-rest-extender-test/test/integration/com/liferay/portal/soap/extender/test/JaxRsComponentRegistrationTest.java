@@ -40,6 +40,13 @@ public class JaxRsComponentRegistrationTest {
 		Assert.assertEquals("Hello.", StringUtil.read(url.openStream()));
 	}
 
+	@Test
+	public void testIsRegisteredInDefault() throws Exception {
+		URL url = new URL(_url, "/o/rest/testApp/sayHello");
+
+		Assert.assertEquals("Hello.", StringUtil.read(url.openStream()));
+	}
+
 	@ArquillianResource
 	private URL _url;
 
