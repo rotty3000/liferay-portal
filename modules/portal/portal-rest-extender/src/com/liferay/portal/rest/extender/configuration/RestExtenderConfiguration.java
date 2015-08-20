@@ -19,11 +19,12 @@ import aQute.bnd.annotation.metatype.Meta;
 /**
  * @author Carlos Sierra Andrés
  */
-@Meta.OCD(
-	factory = true,
-	id = "com.liferay.portal.rest.extender.configuration.RestExtenderConfiguration"
-)
+@Meta.OCD(factory = true, id = RestExtenderConfiguration.CONFIG_PID)
 public interface RestExtenderConfiguration {
+
+	public static String CONFIG_PID =
+		"com.liferay.portal.rest.extender.configuration." +
+			"RestExtenderConfiguration";
 
 	@Meta.AD(required = false)
 	public String[] contextPaths();
