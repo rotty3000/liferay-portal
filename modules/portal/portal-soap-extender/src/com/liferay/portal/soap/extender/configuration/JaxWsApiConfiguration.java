@@ -28,7 +28,7 @@ public interface JaxWsApiConfiguration {
 	@Meta.AD(required = true)
 	public String contextPath();
 
-	@Meta.AD(deflt = "10000", required = true)
+	@Meta.AD(deflt = "10000", required=false)
 	public long timeout();
 
 }
