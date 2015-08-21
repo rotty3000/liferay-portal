@@ -108,6 +108,8 @@ public class SoapExtender {
 		if (jaxWsHandlerFilterStrings == null) {
 			addTCCLServiceDependency(
 				false, Handler.class, null, "addHandler", "removeHandler");
+
+			return;
 		}
 		else {
 			for (String jaxWsHandlerFilterString : jaxWsHandlerFilterStrings) {
