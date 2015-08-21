@@ -19,11 +19,12 @@ import aQute.bnd.annotation.metatype.Meta;
 /**
  * @author Carlos Sierra Andrés
  */
-@Meta.OCD(
-	factory = true,
-	id = "com.liferay.portal.soap.extender.configuration.SoapExtenderConfiguration"
-)
+@Meta.OCD(factory = true, id = SoapExtenderConfiguration.CONFIG_PID)
 public interface SoapExtenderConfiguration {
+
+	public static final String CONFIG_PID =
+		"com.liferay.portal.soap.extender.configuration." +
+			"SoapExtenderConfiguration";
 
 	@Meta.AD(required = false)
 	public String[] contextPaths();
