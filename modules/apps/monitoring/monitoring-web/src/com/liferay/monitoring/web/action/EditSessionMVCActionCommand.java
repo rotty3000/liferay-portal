@@ -12,7 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.monitoring.action;
+package com.liferay.monitoring.web.action;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.servlet.http.HttpSession;
+
+import org.osgi.service.component.annotations.Component;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -20,7 +26,6 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.PortalSessionContext;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -28,16 +33,11 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-
-import javax.servlet.http.HttpSession;
-
 /**
  * @author Brian Wing Shun Chan
  * @author Philip Jones
  */
-@OSGiBeanProperties(
+@Component(
 	property = {
 		"javax.portlet.name=" + PortletKeys.MONITORING,
 		"mvc.command.name=/monitoring/edit_session"
@@ -63,7 +63,7 @@ public class EditSessionMVCActionCommand extends BaseMVCActionCommand {
 				PrincipalException.MustBeCompanyAdmin.class.getName());
 
 			actionResponse.setRenderParameter(
-				"mvcPath", "/html/portlet/monitoring/error.jsp" );
+				"mvcPath", "/monitoring/error.jsp" );
 
 			return;
 		}
