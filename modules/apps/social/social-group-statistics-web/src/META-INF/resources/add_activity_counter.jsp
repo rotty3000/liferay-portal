@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-groupStatisticsPortletInstanceConfiguration = settingsFactory.getSettings(GroupStatisticsPortletInstanceConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), new PortletInstanceSettingsLocator(themeDisplay.getLayout(), portletDisplay.getPortletResource())));
+socialGroupStatisticsPortletInstanceConfiguration = settingsFactory.getSettings(SocialGroupStatisticsPortletInstanceConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), new PortletInstanceSettingsLocator(themeDisplay.getLayout(), portletDisplay.getPortletResource())));
 
 String displayActivityCounterName = "";
 String chartType = "";
@@ -26,20 +26,20 @@ String dataRange = "";
 
 int index = ParamUtil.getInteger(request, "index");
 
-String[] displayActivityCounterNames = groupStatisticsPortletInstanceConfiguration.displayActivityCounterName();
+String[] displayActivityCounterNames = socialGroupStatisticsPortletInstanceConfiguration.displayActivityCounterName();
 
 if (index < displayActivityCounterNames.length) {
 	displayActivityCounterName = displayActivityCounterNames[index];
 
-	String[] chartTypes = groupStatisticsPortletInstanceConfiguration.chartType();
+	String[] chartTypes = socialGroupStatisticsPortletInstanceConfiguration.chartType();
 
 	chartType = chartTypes[index];
 
-	String[] chartWidths = groupStatisticsPortletInstanceConfiguration.chartWidth();
+	String[] chartWidths = socialGroupStatisticsPortletInstanceConfiguration.chartWidth();
 
 	chartWidth = GetterUtil.getInteger(chartWidths[index], chartWidth);
 
-	String[] dataRanges = groupStatisticsPortletInstanceConfiguration.dataRange();
+	String[] dataRanges = socialGroupStatisticsPortletInstanceConfiguration.dataRange();
 
 	dataRange = dataRanges[index];
 }

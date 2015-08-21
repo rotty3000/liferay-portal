@@ -17,9 +17,9 @@
 <%@ include file="/init.jsp" %>
 
 <%
-groupStatisticsPortletInstanceConfiguration = settingsFactory.getSettings(GroupStatisticsPortletInstanceConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), new PortletInstanceSettingsLocator(themeDisplay.getLayout(), portletDisplay.getPortletResource())));
+socialGroupStatisticsPortletInstanceConfiguration = settingsFactory.getSettings(SocialGroupStatisticsPortletInstanceConfiguration.class, new ParameterMapSettingsLocator(request.getParameterMap(), new PortletInstanceSettingsLocator(themeDisplay.getLayout(), portletDisplay.getPortletResource())));
 
-String[] displayActivityCounterNames = groupStatisticsPortletInstanceConfiguration.displayActivityCounterName();
+String[] displayActivityCounterNames = socialGroupStatisticsPortletInstanceConfiguration.displayActivityCounterName();
 
 int displayActivityCounterNameIndexCount = displayActivityCounterNames.length;
 
@@ -64,7 +64,7 @@ if (displayActivityCounterNameIndexCount == 0) {
 				{
 					contentBox: '#<portlet:namespace />displayActivityCounterNames > fieldset',
 					namespace: '<portlet:namespace />',
-					url: '<liferay-portlet:renderURL portletName="<%= GroupStatisticsPortletKeys.GROUP_STATISTICS %>" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><liferay-portlet:param name="mvcPath" value="/add_activity_counter.jsp" /><liferay-portlet:param name="index" value="<%= String.valueOf(displayActivityCounterNameIndexCount) %>" /></liferay-portlet:renderURL>'
+					url: '<liferay-portlet:renderURL portletName="<%= SocialGroupStatisticsPortletKeys.SOCIAL_GROUP_STATISTICS %>" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><liferay-portlet:param name="mvcPath" value="/add_activity_counter.jsp" /><liferay-portlet:param name="index" value="<%= String.valueOf(displayActivityCounterNameIndexCount) %>" /></liferay-portlet:renderURL>'
 				}
 			).render();
 		</aui:script>
