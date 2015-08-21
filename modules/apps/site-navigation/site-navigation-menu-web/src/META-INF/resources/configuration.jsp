@@ -29,8 +29,8 @@
 			<div class="display-template">
 				<liferay-ddm:template-selector
 					className="<%= NavItem.class.getName() %>"
-					displayStyle="<%= navigationMenuDisplayContext.getDisplayStyle() %>"
-					displayStyleGroupId="<%= navigationMenuDisplayContext.getDisplayStyleGroupId() %>"
+					displayStyle="<%= siteNavigationMenuDisplayContext.getDisplayStyle() %>"
+					displayStyleGroupId="<%= siteNavigationMenuDisplayContext.getDisplayStyleGroupId() %>"
 					refreshURL="<%= configurationRenderURL %>"
 				/>
 			</div>
@@ -52,7 +52,7 @@
 							for (String bulletStyleOption : bulletStyleOptions) {
 							%>
 
-								<aui:option label="<%= bulletStyleOption %>" selected="<%= Validator.equals(navigationMenuDisplayContext.getBulletStyle(), bulletStyleOption) %>" />
+								<aui:option label="<%= bulletStyleOption %>" selected="<%= Validator.equals(siteNavigationMenuDisplayContext.getBulletStyle(), bulletStyleOption) %>" />
 
 							<%
 							}
@@ -65,14 +65,14 @@
 
 			<aui:fieldset column="<%= true %>">
 				<div class="" id="<portlet:namespace />customDisplayOptions">
-					<aui:select label="header" name="preferences--headerType--" value="<%= navigationMenuDisplayContext.getHeaderType() %>">
+					<aui:select label="header" name="preferences--headerType--" value="<%= siteNavigationMenuDisplayContext.getHeaderType() %>">
 						<aui:option label="none" />
 						<aui:option label="portlet-title" />
 						<aui:option label="root-layout" />
 						<aui:option label="breadcrumb" />
 					</aui:select>
 
-					<aui:select label="root-layout" name="preferences--rootLayoutType--" value="<%= navigationMenuDisplayContext.getRootLayoutType() %>">
+					<aui:select label="root-layout" name="preferences--rootLayoutType--" value="<%= siteNavigationMenuDisplayContext.getRootLayoutType() %>">
 						<aui:option label="parent-at-level" value="absolute" />
 						<aui:option label="relative-parent-up-by" value="relative" />
 					</aui:select>
@@ -83,7 +83,7 @@
 						for (int i = 0; i <= 4; i++) {
 						%>
 
-							<aui:option label="<%= i %>" selected="<%= navigationMenuDisplayContext.getRootLayoutLevel() == i %>" />
+							<aui:option label="<%= i %>" selected="<%= siteNavigationMenuDisplayContext.getRootLayoutLevel() == i %>" />
 
 						<%
 						}
@@ -91,14 +91,14 @@
 
 					</aui:select>
 
-					<aui:select name="preferences--includedLayouts--" value="<%= navigationMenuDisplayContext.getIncludedLayouts() %>">
+					<aui:select name="preferences--includedLayouts--" value="<%= siteNavigationMenuDisplayContext.getIncludedLayouts() %>">
 						<aui:option label="auto" />
 						<aui:option label="all" />
 					</aui:select>
 
 					<aui:select name="preferences--nestedChildren--">
-						<aui:option label="yes" selected="<%= navigationMenuDisplayContext.isNestedChildren() %>" value="1" />
-						<aui:option label="no" selected="<%= !navigationMenuDisplayContext.isNestedChildren() %>" value="0" />
+						<aui:option label="yes" selected="<%= siteNavigationMenuDisplayContext.isNestedChildren() %>" value="1" />
+						<aui:option label="no" selected="<%= !siteNavigationMenuDisplayContext.isNestedChildren() %>" value="0" />
 					</aui:select>
 				</div>
 			</aui:fieldset>
