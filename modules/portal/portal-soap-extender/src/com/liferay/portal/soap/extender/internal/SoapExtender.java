@@ -106,13 +106,15 @@ public class SoapExtender {
 			soapExtenderConfiguration.jaxWsHandlerFilterStrings();
 
 		if (jaxWsHandlerFilterStrings == null) {
-			return;
-		}
-
-		for (String jaxWsHandlerFilterString : jaxWsHandlerFilterStrings) {
 			addTCCLServiceDependency(
-				false, Handler.class, jaxWsHandlerFilterString, "addHandler",
-				"removeHandler");
+				false, Handler.class, null, "addHandler", "removeHandler");
+		}
+		else {
+			for (String jaxWsHandlerFilterString : jaxWsHandlerFilterStrings) {
+				addTCCLServiceDependency(
+					false, Handler.class, jaxWsHandlerFilterString,
+					"addHandler", "removeHandler");
+			}
 		}
 	}
 
@@ -149,8 +151,14 @@ public class SoapExtender {
 	}
 
 	protected ServiceDependency addTCCLServiceDependency(
-		boolean required, Class<?> clazz, String filterString, String addName,
+		boolean required, Class<?> clazz, String filter, String addName,
 		String removeName) {
+
+		if ((clazz == null) && (filter == null)) {
+			throw new IllegalArgumentException(
+				"You must provide either a class or a filter for the " +
+					"dependency");
+		}
 
 		ServiceDependency serviceDependency =
 			_dependencyManager.createTCCLServiceDependency();
@@ -159,10 +167,15 @@ public class SoapExtender {
 		serviceDependency.setRequired(required);
 
 		if (clazz == null) {
-			serviceDependency.setService(filterString);
+			serviceDependency.setService(filter);
 		}
 		else {
-			serviceDependency.setService(clazz, filterString);
+			if (filter == null) {
+				serviceDependency.setService(clazz);
+			}
+			else {
+				serviceDependency.setService(clazz, filter);
+			}
 		}
 
 		_component.add(serviceDependency);
