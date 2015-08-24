@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/monitoring/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 PortletURL portletURL = renderResponse.createRenderURL();
