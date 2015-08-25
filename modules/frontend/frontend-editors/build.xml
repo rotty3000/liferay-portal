@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project>
+	<path id="plugins.includes.path">
+		<dirset dir="frontend-alloyeditor-web" includes="*" />
+		<dirset dir="frontend-bbcode-web" includes="*" />
+		<dirset dir="frontend-ckeditor-web" includes="*" />
+		<dirset dir="frontend-simple-web" includes="*" />
+		<dirset dir="frontend-tinymce-web" includes="*" />
+	</path>
+
+	<pathconvert pathsep="," property="plugins.includes.path" refid="plugins.includes.path" targetos="unix" />
+
+	<import file="../../../tools/sdk/build-common-plugins.xml" />
+</project>

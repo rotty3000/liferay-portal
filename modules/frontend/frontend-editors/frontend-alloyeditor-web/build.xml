@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project>
+	<import file="../../../../tools/sdk/build-common-osgi-plugin.xml" />
+
+	<property name="auto.deploy.dir" value="${liferay.home}/osgi/modules" />
+
+	<property name="alloyeditor.version" value="0.4.0-alpha.1" />
+	<property name="editor.dir" value="src/META-INF/resources" />
+	<property name="import.shared" value="../../apps/item-selector/item-selector-api,../../apps/item-selector/item-selector-criteria-api,../../apps/layout/layout-item-selector-api" />
+	<property name="third.party.dir" value="../../../../portal-web/third-party" />
+
+	<macrodef name="build-alloy-editor">
+		<sequential>
+			<path id="alloyeditor.zip.path">
+				<fileset dir="${third.party.dir}">
+					<include name="alloy-editor-${alloyeditor.version}.zip" />
+				</fileset>
+			</path>
+
+			<property name="alloyeditor.zip.path" refid="alloyeditor.zip.path" />
+
+			<basename file="${alloyeditor.zip.path}" property="alloyeditor.file" />
+
+			<if>
+				<not>
+					<uptodate
+						srcfile="${third.party.dir}/${alloyeditor.file}"
+						targetfile="tmp/META-INF/resources/alloyeditor"
+					/>
+				</not>
+				<then>
+					<delete dir="tmp/META-INF/resources/alloyeditor" />
+
+					<echo>${alloyeditor.file}</echo>
+
+					<unzip src="${third.party.dir}/${alloyeditor.file}" dest="tmp/META-INF/resources/_tmp" />
+
+					<copy todir="tmp/META-INF/resources/alloyeditor" overwrite="true" preservelastmodified="true">
+						<fileset dir="tmp/META-INF/resources/_tmp/alloy-editor" />
+					</copy>
+
+					<delete dir="tmp/META-INF/resources/_tmp" />
+				</then>
+			</if>
+
+			<copy todir="tmp/META-INF/resources/alloyeditor" preservelastmodified="true">
+				<fileset dir="${editor.dir}/alloyeditor_diffs" />
+			</copy>
+
+			<for param="alloy.editor.file">
+				<path>
+					<fileset dir="tmp/META-INF/resources/alloyeditor" includes="alloy-editor*.js" />
+				</path>
+				<sequential>
+					<basename property="alloy.editor.file.name" file="@{alloy.editor.file}" suffix=".js" />
+
+					<concat destfile="tmp/META-INF/resources/alloyeditor/liferay-${alloy.editor.file.name}.js">
+						<fileset file="@{alloy.editor.file}" />
+						<fileset dir="${editor.dir}/alloyeditor_diffs/buttons" >
+							<include name="**/*.js" />
+						</fileset>
+					</concat>
+
+					<var name="alloy.editor.file.name" unset="true" />
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<target name="compile">
+		<compile
+			module.dir="${basedir}"
+		/>
+
+		<build-alloy-editor />
+	</target>
+</project>

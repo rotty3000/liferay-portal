@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project>
+	<import file="../../../../tools/sdk/build-common-osgi-plugin.xml" />
+
+	<property name="auto.deploy.dir" value="${liferay.home}/osgi/modules" />
+
+	<property name="editor.dir" value="src/META-INF/resources" />
+	<property name="import.shared" value="../../apps/item-selector/item-selector-api,../../apps/item-selector/item-selector-criteria-api,../../apps/layout/layout-item-selector-api" />
+	<property name="third.party.dir" value="../../../../portal-web/third-party" />
+	<property name="tinymce.file" value="tinymce_4.1.7.zip" />
+
+	<macrodef name="build-tinymce">
+		<sequential>
+			<if>
+				<not>
+					<uptodate
+						srcfile="${third.party.dir}/${tinymce.file}"
+						targetfile="tmp/META-INF/resources/tiny_mce"
+					/>
+				</not>
+				<then>
+					<delete dir="tmp/META-INF/resources/tiny_mce" />
+					<delete dir="tmp/META-INF/resources/tinymce" />
+
+					<unzip src="${third.party.dir}/${tinymce.file}" dest="tmp/META-INF/resources" />
+
+					<move todir="tmp/META-INF/resources/tiny_mce" preservelastmodified="true">
+						<fileset dir="tmp/META-INF/resources/tinymce/js/tinymce">
+							<include name="*/**" />
+						</fileset>
+					</move>
+
+					<copy todir="tmp/META-INF/resources/tiny_mce" overwrite="true" preservelastmodified="true">
+						<fileset dir="${editor.dir}/tiny_mce_diffs" />
+					</copy>
+
+					<delete dir="tmp/META-INF/resources/tinymce" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<target name="compile">
+		<compile
+			module.dir="${basedir}"
+		/>
+
+		<build-tinymce />
+	</target>
+</project>
