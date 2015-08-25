@@ -465,6 +465,14 @@ public class RolesAdminPortlet extends MVCPortlet {
 					ResourceConstants.SCOPE_GROUP_TEMPLATE,
 					String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID),
 					roleId, actionId);
+
+				Map<Long, String[]> roleIdsToActionIds = new HashMap<>();
+
+				roleIdsToActionIds.put(roleId, new String[] {actionId});
+
+				ResourcePermissionServiceUtil.setIndividualResourcePermissions(
+					groupId, companyId, selResource, String.valueOf(groupId),
+					roleIdsToActionIds);
 			}
 			else if (scope == ResourceConstants.SCOPE_GROUP) {
 				ResourcePermissionServiceUtil.removeResourcePermissions(
