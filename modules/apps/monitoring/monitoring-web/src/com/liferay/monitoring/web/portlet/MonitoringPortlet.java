@@ -14,40 +14,40 @@
 
 package com.liferay.monitoring.web.portlet;
 
+import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+
 import javax.portlet.Portlet;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 /**
  * @author Philip Jones
  */
 @Component(
-        immediate = true,
-        property = {
-                "com.liferay.portlet.control-panel-entry-category=users",
-                "com.liferay.portlet.control-panel-entry-weight=5.0",
-                "com.liferay.portlet.css-class-wrapper=portlet-users-admin",
-                "com.liferay.portlet.display-category=category.hidden",
-                "com.liferay.portlet.header-portlet-css=/css/main.scss",
-                "com.liferay.portlet.icon=/icons/monitoring.png",
-                "com.liferay.portlet.preferences-owned-by-group=true",
-                "com.liferay.portlet.private-request-attributes=false",
-                "com.liferay.portlet.private-session-attributes=false",
-                "com.liferay.portlet.render-weight=50",
-                "com.liferay.portlet.use-default-template=true",
-                "javax.portlet.display-name=Monitoring",
-                "javax.portlet.expiration-cache=0",
-                "javax.portlet.init-param.template-path=/",
-                "javax.portlet.init-param.view-template=/view.jsp",
-                "javax.portlet.name=" + MonitoringPortletKeys.MONITORING,
-                "javax.portlet.resource-bundle=content.Language",
-                "javax.portlet.security-role-ref=administrator",
-                "javax.portlet.supports.mime-type=text/html"
-       },
-        service = Portlet.class
+	immediate = true,
+	property = {
+		"com.liferay.portlet.control-panel-entry-category=users",
+		"com.liferay.portlet.control-panel-entry-weight=5.0",
+		"com.liferay.portlet.css-class-wrapper=portlet-users-admin",
+		"com.liferay.portlet.display-category=category.hidden",
+		"com.liferay.portlet.header-portlet-css=/css/main.scss",
+		"com.liferay.portlet.icon=/icons/monitoring.png",
+		"com.liferay.portlet.preferences-owned-by-group=true",
+		"com.liferay.portlet.private-request-attributes=false",
+		"com.liferay.portlet.private-session-attributes=false",
+		"com.liferay.portlet.render-weight=50",
+		"com.liferay.portlet.use-default-template=true",
+		"javax.portlet.display-name=Monitoring",
+		"javax.portlet.expiration-cache=0",
+		"javax.portlet.init-param.template-path=/",
+		"javax.portlet.init-param.view-template=/view.jsp",
+		"javax.portlet.name=" + MonitoringPortletKeys.MONITORING,
+		"javax.portlet.resource-bundle=content.Language",
+		"javax.portlet.security-role-ref=administrator",
+		"javax.portlet.supports.mime-type=text/html"
+	},
+	service = Portlet.class
 )
 public class MonitoringPortlet extends MVCPortlet {
 }

@@ -14,13 +14,13 @@
 
 package com.liferay.monitoring.web.action;
 
+import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
-
-import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 
 /**
  * @author Philip Jones

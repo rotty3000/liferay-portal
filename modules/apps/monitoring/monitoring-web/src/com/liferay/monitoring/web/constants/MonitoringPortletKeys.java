@@ -20,5 +20,6 @@ package com.liferay.monitoring.web.constants;
 public class MonitoringPortletKeys {
 
 	public static final String MONITORING =
-			"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet";
+		"com_liferay_portal_settings_web_portlet_PortalSettingsPortlet";
+
 }
