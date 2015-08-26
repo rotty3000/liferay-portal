@@ -37,7 +37,7 @@ public class EditSessionMVCRenderCommand implements MVCRenderCommand {
 	public String render(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		return "/monitoring/edit_session.jsp";
+		return "/edit_session.jsp";
 	}
 
 }

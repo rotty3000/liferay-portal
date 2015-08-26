@@ -37,7 +37,7 @@ public class MonitoringViewMVCRenderCommand implements MVCRenderCommand {
 	public String render(
 		RenderRequest renderRequest, RenderResponse renderResponse) {
 
-		return "/monitoring/view.jsp";
+		return "/view.jsp";
 	}
 
 }
