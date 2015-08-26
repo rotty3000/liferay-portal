@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -30,7 +31,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebKeys;
 
 /**
@@ -39,7 +39,7 @@ import com.liferay.portal.util.WebKeys;
  */
 @Component(
 	property = {
-		"javax.portlet.name=" + PortletKeys.MONITORING,
+		"javax.portlet.name=" + MonitoringPortletKeys.MONITORING,
 		"mvc.command.name=/monitoring/edit_session"
 	},
 	service = MVCActionCommand.class

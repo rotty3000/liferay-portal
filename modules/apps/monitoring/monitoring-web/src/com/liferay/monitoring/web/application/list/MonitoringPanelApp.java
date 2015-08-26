@@ -14,14 +14,14 @@
 
 package com.liferay.monitoring.web.application.list;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 import com.liferay.application.list.BaseControlPanelEntryPanelApp;
 import com.liferay.application.list.PanelApp;
 import com.liferay.application.list.constants.PanelCategoryKeys;
+import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
 import com.liferay.portal.service.PortletLocalService;
-import com.liferay.portal.util.PortletKeys;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Eudaldo Alonso
@@ -38,7 +38,7 @@ public class MonitoringPanelApp extends BaseControlPanelEntryPanelApp {
 
 	@Override
 	public String getPortletId() {
-		return PortletKeys.MONITORING;
+		return MonitoringPortletKeys.MONITORING;
 	}
 
 	@Reference(unbind = "-")

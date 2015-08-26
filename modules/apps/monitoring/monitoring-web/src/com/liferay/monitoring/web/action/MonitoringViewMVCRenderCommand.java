@@ -19,15 +19,15 @@ import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.monitoring.web.constants.MonitoringPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-import com.liferay.portal.util.PortletKeys;
 
 /**
  * @author Philip Jones
  */
 @Component(
 	property = {
-		"javax.portlet.name=" + PortletKeys.MONITORING,
+		"javax.portlet.name=" + MonitoringPortletKeys.MONITORING,
 		"mvc.command.name=/monitoring/view"
 	}
 )
