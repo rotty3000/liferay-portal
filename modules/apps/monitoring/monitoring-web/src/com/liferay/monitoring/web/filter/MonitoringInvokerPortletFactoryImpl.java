@@ -12,19 +12,36 @@
  * details.
  */
 
-package com.liferay.portlet;
+package com.liferay.monitoring.web.filter;
 
 import com.liferay.portal.kernel.monitoring.PortletMonitoringControl;
+import com.liferay.portlet.InvokerFilterContainer;
+import com.liferay.portlet.InvokerPortlet;
+import com.liferay.portlet.InvokerPortletFactory;
+import com.liferay.portlet.InvokerPortletFactoryImpl;
 
 import javax.portlet.Portlet;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Shuyang Zhou
+ * @author Philip Jones
  */
-public class MonitoringPortletFactoryImpl extends InvokerPortletFactoryImpl {
+@Component(
+	immediate = true,
+	property = {
+		"javax.portlet.name=" +
+		"com_liferay_monitoring_web_filter_MonitoringInvokerPortletFactoryImpl"
+	},
+	service = InvokerPortletFactory.class
+)
+public class MonitoringInvokerPortletFactoryImpl
+	extends InvokerPortletFactoryImpl {
 
 	@Override
 	public InvokerPortlet create(
@@ -40,7 +57,8 @@ public class MonitoringPortletFactoryImpl extends InvokerPortletFactoryImpl {
 			invokerFilterContainer, checkAuthToken, facesPortlet, strutsPortlet,
 			strutsBridgePortlet);
 
-		return new MonitoringPortlet(invokerPortlet, _portletMonitoringControl);
+		return new MonitoringInvokerPortlet(
+			invokerPortlet, _portletMonitoringControl);
 	}
 
 	@Override
@@ -53,9 +71,11 @@ public class MonitoringPortletFactoryImpl extends InvokerPortletFactoryImpl {
 		InvokerPortlet invokerPortlet = super.create(
 			portletModel, portlet, portletContext, invokerFilterContainer);
 
-		return new MonitoringPortlet(invokerPortlet, _portletMonitoringControl);
+		return new MonitoringInvokerPortlet(
+			invokerPortlet, _portletMonitoringControl);
 	}
 
+	@Reference(unbind = "-")
 	public void setPortletMonitoringControl(
 		PortletMonitoringControl portletMonitoringControl) {
 
