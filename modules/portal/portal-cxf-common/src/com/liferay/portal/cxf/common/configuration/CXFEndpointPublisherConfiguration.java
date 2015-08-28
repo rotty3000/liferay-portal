@@ -19,11 +19,12 @@ import aQute.bnd.annotation.metatype.Meta;
 /**
  * @author Carlos Sierra Andrés
  */
-@Meta.OCD(
-	factory = true,
-	id = "com.liferay.portal.cxf.common.configuration.CXFEndpointPublisherConfiguration"
-)
+@Meta.OCD(factory = true, id = CXFEndpointPublisherConfiguration.CONFIG_PID)
 public interface CXFEndpointPublisherConfiguration {
+
+	public static String CONFIG_PID =
+		"com.liferay.portal.cxf.common.configuration." +
+			"CXFEndpointPublisherConfiguration";
 
 	@Meta.AD(
 		deflt = "auth.verifier.PortalSessionAuthVerifier.urls.includes=*",

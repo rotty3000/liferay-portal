@@ -32,9 +32,15 @@ if ((folder == null) && (folderId != JournalFolderConstants.DEFAULT_PARENT_FOLDE
 	}
 }
 
-int total = JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, folderId, WorkflowConstants.STATUS_ANY);
+String keywords = ParamUtil.getString(request, "keywords");
+
+boolean advancedSearch = ParamUtil.getBoolean(liferayPortletRequest, ArticleDisplayTerms.ADVANCED_SEARCH);
+
+boolean search = Validator.isNotNull(keywords) || advancedSearch;
 
 boolean showSelectAll = false;
+
+int total = JournalFolderServiceUtil.getFoldersAndArticlesCount(scopeGroupId, folderId, WorkflowConstants.STATUS_ANY);
 
 if (total > 0) {
 	showSelectAll = true;
@@ -86,15 +92,8 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 				<aui:input name="newFolderId" type="hidden" />
 
 				<div class="journal-container" id="<portlet:namespace />entriesContainer">
-
-					<%
-					String keywords = ParamUtil.getString(request, "keywords");
-
-					boolean advancedSearch = ParamUtil.getBoolean(liferayPortletRequest, ArticleDisplayTerms.ADVANCED_SEARCH);
-					%>
-
 					<c:choose>
-						<c:when test="<%= Validator.isNotNull(keywords) || advancedSearch %>">
+						<c:when test="<%= search %>">
 							<liferay-util:include page="/search_resources.jsp" servletContext="<%= application %>" />
 						</c:when>
 						<c:otherwise>
@@ -106,6 +105,10 @@ request.setAttribute("view.jsp-folderId", String.valueOf(folderId));
 		</aui:col>
 	</aui:row>
 </div>
+
+<c:if test="<%= !search %>">
+	<liferay-util:include page="/add_button.jsp" servletContext="<%= application %>" />
+</c:if>
 
 <aui:script>
 	function <portlet:namespace />toggleActionsButton() {
