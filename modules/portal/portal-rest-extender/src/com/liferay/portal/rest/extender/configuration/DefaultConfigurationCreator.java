@@ -81,7 +81,6 @@ public class DefaultConfigurationCreator {
 
 			_cxfConfiguration.update(properties);
 		}
-
 	}
 
 	private ConfigurationAdmin _configurationAdmin;
