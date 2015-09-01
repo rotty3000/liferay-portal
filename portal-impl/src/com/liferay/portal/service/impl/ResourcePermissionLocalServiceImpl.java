@@ -664,6 +664,8 @@ public class ResourcePermissionLocalServiceImpl
 			return false;
 		}
 
+		// See LPS-47464
+
 		int size = resources.size();
 
 		if (size < 2) {
@@ -683,15 +685,6 @@ public class ResourcePermissionLocalServiceImpl
 		if (lastResource.getScope() != ResourceConstants.SCOPE_COMPANY) {
 			throw new IllegalArgumentException(
 				"The last resource must be a company scope");
-		}
-
-		// See LPS-47464
-
-		if (resourcePermissionPersistence.countByC_N_S_P(
-				firstResource.getCompanyId(), firstResource.getName(),
-				firstResource.getScope(), firstResource.getPrimKey()) < 1) {
-
-			return false;
 		}
 
 		// Iterate the list of resources in reverse order to test permissions
