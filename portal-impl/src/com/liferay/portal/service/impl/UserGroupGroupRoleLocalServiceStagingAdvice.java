@@ -17,36 +17,30 @@ package com.liferay.portal.service.impl;
 /**
  * @author Tomas Polesovsky
  */
-public class TeamLocalServiceStagingAdvice extends LiveGroupStagingAdvice {
+public class UserGroupGroupRoleLocalServiceStagingAdvice
+	extends LiveGroupStagingAdvice {
 
 	@Override
 	public void replaceStagingGroupIds(String methodName, Object[] arguments) {
-		if (methodName.equals("addTeam") && (arguments.length > 1)) {
+		if (methodName.equals("addUserGroupGroupRoles")) {
 			replaceGroupId(arguments, 1);
 		}
-		else if (methodName.equals("deleteTeams")) {
-			replaceGroupId(arguments, 0);
-		}
-		else if (methodName.equals("fetchTeamByUuidAndGroupId")) {
+		else if (methodName.equals("deleteUserGroupGroupRoles")) {
 			replaceGroupId(arguments, 1);
 		}
-		else if (methodName.equals("getGroupTeams")) {
+		else if (methodName.equals("deleteUserGroupGroupRolesByGroupId")) {
 			replaceGroupId(arguments, 0);
 		}
-		else if (methodName.equals("getTeam")) {
-			replaceGroupId(arguments, 0);
-		}
-		else if (methodName.equals("getTeamByUuidAndGroupId")) {
+		else if (methodName.equals("getUserGroupGroupRoles") &&
+				 (arguments.length == 2) && (arguments[1] instanceof Long)) {
+
 			replaceGroupId(arguments, 1);
 		}
-		else if (methodName.equals("getUserTeams") && (arguments.length == 2)) {
+		else if (methodName.equals("getUserGroupGroupRolesByGroupAndRole")) {
+			replaceGroupId(arguments, 0);
+		}
+		else if (methodName.equals("hasUserGroupGroupRole")) {
 			replaceGroupId(arguments, 1);
-		}
-		else if (methodName.equals("search")) {
-			replaceGroupId(arguments, 0);
-		}
-		else if (methodName.equals("searchCount")) {
-			replaceGroupId(arguments, 0);
 		}
 	}
 
