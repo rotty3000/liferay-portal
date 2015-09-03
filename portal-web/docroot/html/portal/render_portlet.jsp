@@ -314,6 +314,16 @@ if (layout.isLayoutPrototypeLinkActive()) {
 	showPortletCssIcon = false;
 }
 
+// Portlets in a full page cannot be moved
+
+LayoutTypeController layoutTypeController = layoutTypePortlet.getLayoutTypeController();
+
+if (layoutTypeController.isFullPageDisplayable()) {
+	showCloseIcon = false;
+	showMaxIcon = false;
+	showMinIcon = false;
+}
+
 long previousScopeGroupId = themeDisplay.getScopeGroupId();
 
 if (Validator.isNotNull(portletResource)) {

@@ -224,8 +224,10 @@ import java.io.Serializable;
 
 import java.lang.reflect.Method;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 
 import java.sql.Connection;
@@ -236,6 +238,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -326,27 +329,26 @@ public class PortalImpl implements Portal {
 
 		_computerName = computerName;
 
-		String computerAddress = null;
-
 		try {
-			InetAddress inetAddress = InetAddress.getByName(_computerName);
+			List<NetworkInterface> networkInterfaces = Collections.list(
+				NetworkInterface.getNetworkInterfaces());
 
-			computerAddress = inetAddress.getHostAddress();
-		}
-		catch (UnknownHostException uhe) {
-		}
+			for (NetworkInterface networkInterface : networkInterfaces) {
+				List<InetAddress> inetAddresses = Collections.list(
+					networkInterface.getInetAddresses());
 
-		if (Validator.isNull(computerAddress)) {
-			try {
-				InetAddress inetAddress = InetAddress.getLocalHost();
-
-				computerAddress = inetAddress.getHostAddress();
-			}
-			catch (UnknownHostException uhe) {
+				for (InetAddress inetAddress : inetAddresses) {
+					if (inetAddress instanceof Inet4Address) {
+						_computerAddresses.add(inetAddress.getHostAddress());
+					}
+				}
 			}
 		}
+		catch (Exception e) {
+			_log.error("Unable to determine server's IP addresses");
 
-		_computerAddress = computerAddress;
+			_log.error(e, e);
+		}
 
 		// Paths
 
@@ -893,9 +895,8 @@ public class PortalImpl implements Portal {
 
 				String hostAddress = inetAddress.getHostAddress();
 
-				String serverIp = getComputerAddress();
-
-				boolean serverIpIsHostAddress = serverIp.equals(hostAddress);
+				boolean serverIpIsHostAddress = _computerAddresses.contains(
+					hostAddress);
 
 				for (String ip : allowedIps) {
 					if ((serverIpIsHostAddress && ip.equals("SERVER_IP")) ||
@@ -1600,8 +1601,8 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public String getComputerAddress() {
-		return _computerAddress;
+	public Set<String> getComputerAddresses() {
+		return _computerAddresses;
 	}
 
 	@Override
@@ -2654,6 +2655,13 @@ public class PortalImpl implements Portal {
 	public HttpServletRequest getHttpServletRequest(
 		PortletRequest portletRequest) {
 
+		if (portletRequest instanceof LiferayPortletRequest) {
+			LiferayPortletRequest liferayPortletRequest =
+				(LiferayPortletRequest)portletRequest;
+
+			return liferayPortletRequest.getHttpServletRequest();
+		}
+
 		PortletRequestImpl portletRequestImpl =
 			PortletRequestImpl.getPortletRequestImpl(portletRequest);
 
@@ -2663,6 +2671,13 @@ public class PortalImpl implements Portal {
 	@Override
 	public HttpServletResponse getHttpServletResponse(
 		PortletResponse portletResponse) {
+
+		if (portletResponse instanceof LiferayPortletResponse) {
+			LiferayPortletResponse liferayPortletResponse =
+				(LiferayPortletResponse)portletResponse;
+
+			return liferayPortletResponse.getHttpServletResponse();
+		}
 
 		PortletResponseImpl portletResponseImpl =
 			PortletResponseImpl.getPortletResponseImpl(portletResponse);
@@ -3180,6 +3195,10 @@ public class PortalImpl implements Portal {
 	public LiferayPortletRequest getLiferayPortletRequest(
 		PortletRequest portletRequest) {
 
+		if (portletRequest instanceof LiferayPortletRequest) {
+			return (LiferayPortletRequest)portletRequest;
+		}
+
 		PortletRequestImpl portletRequestImpl =
 			PortletRequestImpl.getPortletRequestImpl(portletRequest);
 
@@ -3189,6 +3208,10 @@ public class PortalImpl implements Portal {
 	@Override
 	public LiferayPortletResponse getLiferayPortletResponse(
 		PortletResponse portletResponse) {
+
+		if (portletResponse instanceof LiferayPortletResponse) {
+			return (LiferayPortletResponse)portletResponse;
+		}
 
 		PortletResponseImpl portletResponseImpl =
 			PortletResponseImpl.getPortletResponseImpl(portletResponse);
@@ -8448,7 +8471,7 @@ public class PortalImpl implements Portal {
 	private final Pattern _bannedResourceIdPattern = Pattern.compile(
 		PropsValues.PORTLET_RESOURCE_ID_BANNED_PATHS_REGEXP,
 		Pattern.CASE_INSENSITIVE);
-	private final String _computerAddress;
+	private final Set<String> _computerAddresses = new HashSet<>();
 	private final String _computerName;
 	private String[] _customSqlKeys;
 	private String[] _customSqlValues;

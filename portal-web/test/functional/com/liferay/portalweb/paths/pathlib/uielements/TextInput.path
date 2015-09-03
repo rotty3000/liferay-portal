@@ -195,7 +195,7 @@
 </tr>
 <tr>
 	<td>KEYWORDS</td>
-	<td>//input[@title='keywords']</td>
+	<td>//input[contains(@title,'keywords')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -411,6 +411,11 @@
 <tr>
 	<td>TOTAL_PAID</td>
 	<td>//div[label[contains(.,'Total Paid')]]//input[@type='input']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>TRASH_ENTRIES_MAX_AGE</td>
+	<td>//input[contains(@id,'trashEntriesMaxAge')]</td>
 	<td></td>
 </tr>
 <tr>
