@@ -17,35 +17,26 @@ package com.liferay.portal.service.impl;
 /**
  * @author Tomas Polesovsky
  */
-public class TeamLocalServiceStagingAdvice extends LiveGroupStagingAdvice {
+public class UserLocalServiceStagingAdvice extends LiveGroupStagingAdvice {
+
+	public UserLocalServiceStagingAdvice() {
+		initGroupServiceBuilderMethods("User");
+	}
 
 	@Override
 	public void replaceStagingGroupIds(String methodName, Object[] arguments) {
-		if (methodName.equals("addTeam") && (arguments.length > 1)) {
-			replace(arguments, 1);
-		}
-		else if (methodName.equals("deleteTeams")) {
+		if (methodName.equals("getGroupUserIds")) {
 			replace(arguments, 0);
 		}
-		else if (methodName.equals("fetchTeamByUuidAndGroupId")) {
+		else if (methodName.equals("searchSocial") && (arguments.length == 5) &&
+				 (arguments[1] instanceof Long[])) {
+
 			replace(arguments, 1);
 		}
-		else if (methodName.equals("getGroupTeams")) {
+		else if (methodName.equals("searchSocial") && (arguments.length == 6)) {
 			replace(arguments, 0);
 		}
-		else if (methodName.equals("getTeam") && (arguments.length == 2)) {
-			replace(arguments, 0);
-		}
-		else if (methodName.equals("getTeamByUuidAndGroupId")) {
-			replace(arguments, 1);
-		}
-		else if (methodName.equals("getUserTeams") && (arguments.length == 2)) {
-			replace(arguments, 1);
-		}
-		else if (methodName.equals("search")) {
-			replace(arguments, 0);
-		}
-		else if (methodName.equals("searchCount")) {
+		else if (methodName.equals("unsetGroupTeamsUsers")) {
 			replace(arguments, 0);
 		}
 	}
