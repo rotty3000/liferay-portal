@@ -28,9 +28,11 @@ File appServerClassesPortalDir = new File(liferay.appServerPortalDir, "WEB-INF/c
 File appServerLibPortalDir = new File(liferay.appServerPortalDir, "WEB-INF/lib")
 File moduleFrameworkBaseDir = new File(liferay.liferayHome, "osgi")
 
-group = "com.liferay"
 distsDirName = FileUtil.relativize(rootProject.file("../tools/sdk/dist2"), buildDir)
+group = "com.liferay"
 libsDirName = distsDirName
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
 
 afterEvaluate {
 	project.ext.set("app.server.lib.portal.dir", project.relativePath(appServerLibPortalDir))

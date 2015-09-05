@@ -1,4 +1,5 @@
 FileTree fileTree = fileTree(rootDir) {
+	exclude "**/bin/**"
 	exclude "sdk/*/samples/build.gradle"
 
 	if (Boolean.getBoolean("portal.build")) {
@@ -42,6 +43,7 @@ FileTree fileTree = fileTree(rootDir) {
 		include "apps/message-boards/*/build.gradle"
 		include "apps/microblogs/*/build.gradle"
 		include "apps/mobile-device-rules/*/build.gradle"
+		include "apps/monitoring/*/build.gradle"
 		include "apps/my-account/*/build.gradle"
 		include "apps/nested-portlets/*/build.gradle"
 		include "apps/network-utilities/*/build.gradle"
