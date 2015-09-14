@@ -658,8 +658,8 @@ public class DLFileEntryLocalServiceImpl
 
 		copyFileEntryMetadata(
 			dlFileVersion.getCompanyId(), dlFileVersion.getFileEntryTypeId(),
-			fileEntryId, newDlFileVersion.getFileVersionId(),
-			dlFileVersion.getFileVersionId(), serviceContext);
+			fileEntryId, dlFileVersion.getFileVersionId(),
+			newDlFileVersion.getFileVersionId(), serviceContext);
 
 		return newDlFileEntry;
 	}
@@ -2572,6 +2572,9 @@ public class DLFileEntryLocalServiceImpl
 
 		dlFileEntryMetadataLocalService.deleteFileVersionFileEntryMetadata(
 			dlFileVersion.getFileVersionId());
+
+		assetEntryLocalService.deleteEntry(
+			DLFileEntryConstants.getClassName(), dlFileVersion.getPrimaryKey());
 
 		DLStoreUtil.deleteFile(
 			dlFileEntry.getCompanyId(), dlFileEntry.getDataRepositoryId(),

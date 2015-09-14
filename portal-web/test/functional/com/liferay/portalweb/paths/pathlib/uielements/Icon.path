@@ -55,7 +55,7 @@
 </tr>
 <tr>
 	<td>DELETE</td>
-	<td>//a[contains(@href,'deleteEntries')]</td>
+	<td>//a/span[contains(@class,'icon-trash')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -119,6 +119,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>LIST_VERTICAL_ELLIPSIS</td>
+	<td>//tr[contains(@class,'info')]//span[contains(@class,'icon-ellipsis-vertical')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>LOCALIZED_FLAG</td>
 	<td>//li[@role='menuitem' and @data-value='${key_localizationName}']/a</td>
 	<td></td>
@@ -126,6 +131,11 @@
 <tr>
 	<td>MOVE</td>
 	<td>//a[contains(@href,'editEntry')]/span[contains(@class,'icon-move')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>PENCIL</td>
+	<td>//a[contains(@class,'btn icon-monospaced btn-default')]/i[contains(@class,'icon-pencil')]</td>
 	<td></td>
 </tr>
 <tr>

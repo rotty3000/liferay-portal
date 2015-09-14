@@ -1665,13 +1665,14 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		boolean defaultRequiresNamespacedParameters = GetterUtil.getBoolean(
 			servletContext.getInitParameter(
-				"portlet-requires-namespaced-parameters"),
+				"com.liferay.portlet.requires-namespaced-parameters"),
 			portletModel.isRequiresNamespacedParameters());
 
 		portletModel.setRequiresNamespacedParameters(
 			GetterUtil.getBoolean(
 				portletElement.elementText("requires-namespaced-parameters"),
 				defaultRequiresNamespacedParameters));
+
 		portletModel.setActionTimeout(
 			GetterUtil.getInteger(
 				portletElement.elementText("action-timeout"),

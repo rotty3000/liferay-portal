@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.util.UpgradeProcessUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Release;
@@ -83,7 +84,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 	}
 
 	@Override
-	public Release addRelease(String servletContextName, String version) {
+	public Release addRelease(String servletContextName, String schemaVersion) {
 		Release release = null;
 
 		if (servletContextName.equals(
@@ -103,7 +104,7 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		release.setCreateDate(now);
 		release.setModifiedDate(now);
 		release.setServletContextName(servletContextName);
-		release.setVersion(version);
+		release.setSchemaVersion(schemaVersion);
 
 		if (servletContextName.equals(
 				ReleaseConstants.DEFAULT_SERVLET_CONTEXT_NAME)) {
@@ -171,7 +172,8 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 		DB db = DBFactoryUtil.getDB();
 
 		try {
-			db.runSQL("alter table Release_ add version VARCHAR(75) null");
+			db.runSQL(
+				"alter table Release_ add schemaVersion VARCHAR(75) null");
 
 			populateVersion();
 		}
@@ -331,14 +333,15 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 
 	@Override
 	public void updateRelease(
-		String servletContextName, String version, String previousVersion) {
+		String servletContextName, String schemaVersion,
+		String previousSchemaVersion) {
 
 		Release release = releaseLocalService.fetchRelease(servletContextName);
 
 		if (release == null) {
-			if (previousVersion.equals("0.0.0")) {
+			if (previousSchemaVersion.equals("0.0.0")) {
 				release = releaseLocalService.addRelease(
-					servletContextName, previousVersion);
+					servletContextName, previousSchemaVersion);
 			}
 			else {
 				throw new IllegalStateException(
@@ -346,14 +349,19 @@ public class ReleaseLocalServiceImpl extends ReleaseLocalServiceBaseImpl {
 			}
 		}
 
-		if (!previousVersion.equals(release.getVersion())) {
-			throw new IllegalStateException(
-				"Unable to update release because the previous version " +
-					previousVersion + " does not match the expected version " +
-						release.getVersion());
+		if (!previousSchemaVersion.equals(release.getSchemaVersion())) {
+			StringBundler sb = new StringBundler(5);
+
+			sb.append("Unable to update release because the previous schema ");
+			sb.append("version ");
+			sb.append(previousSchemaVersion);
+			sb.append(" does not match the expected schema version ");
+			sb.append(release.getSchemaVersion());
+
+			throw new IllegalStateException(sb.toString());
 		}
 
-		release.setVersion(version);
+		release.setSchemaVersion(schemaVersion);
 
 		releasePersistence.update(release);
 	}

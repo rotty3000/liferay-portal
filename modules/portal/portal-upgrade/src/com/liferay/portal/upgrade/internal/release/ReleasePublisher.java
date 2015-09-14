@@ -52,7 +52,7 @@ public final class ReleasePublisher {
 
 		properties.put(
 			"release.bundle.symbolic.name", release.getBundleSymbolicName());
-		properties.put("release.version", release.getVersion());
+		properties.put("release.schema.version", release.getSchemaVersion());
 
 		ServiceRegistration<Release> newServiceRegistration =
 			_bundleContext.registerService(Release.class, release, properties);

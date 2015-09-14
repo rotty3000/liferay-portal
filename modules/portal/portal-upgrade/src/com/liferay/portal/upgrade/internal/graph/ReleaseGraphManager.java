@@ -37,12 +37,12 @@ public class ReleaseGraphManager {
 			new UpgradeProcessEdgeFactory(upgradeInfos));
 
 		for (UpgradeInfo upgradeInfo : upgradeInfos) {
-			_directedGraph.addVertex(upgradeInfo.getFromVersionString());
-			_directedGraph.addVertex(upgradeInfo.getToVersionString());
+			_directedGraph.addVertex(upgradeInfo.getFromSchemaVersionString());
+			_directedGraph.addVertex(upgradeInfo.getToSchemaVersionString());
 
 			_directedGraph.addEdge(
-				upgradeInfo.getFromVersionString(),
-				upgradeInfo.getToVersionString(),
+				upgradeInfo.getFromSchemaVersionString(),
+				upgradeInfo.getToSchemaVersionString(),
 				new UpgradeProcessEdge(upgradeInfo));
 		}
 	}

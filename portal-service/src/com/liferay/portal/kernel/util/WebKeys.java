@@ -204,6 +204,8 @@ public interface WebKeys {
 
 	public static final String SEARCH_CONTAINER_RESULT_ROW_ENTRY = "SEARCH_CONTAINER_RESULT_ROW_ENTRY";
 
+	public static final String SEARCH_ENTRY_HREF = "SEARCH_ENTRY_HREF";
+
 	public static final String SEARCH_SEARCH_RESULTS = "SEARCH_SEARCH_RESULTS";
 
 	public static final String SERVLET_CONTEXT_INCLUDE_FILTER_PATH = "SERVLET_CONTEXT_INCLUDE_FILTER_PATH";

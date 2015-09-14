@@ -52,22 +52,24 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 		Set<Role> userRoles) {
 
 		_userId = userId;
-		_userGroups = userGroups;
-		_userOrgs = userOrgs;
-		_userOrgGroups = userOrgGroups;
-		_userUserGroupGroups = userUserGroupGroups;
-		_userRoles = userRoles;
+		_userGroups = Collections.unmodifiableSet(userGroups);
+		_userOrgs = Collections.unmodifiableList(userOrgs);
+		_userOrgGroups = Collections.unmodifiableSet(userOrgGroups);
+		_userUserGroupGroups = Collections.unmodifiableList(
+			userUserGroupGroups);
+		_userRoles = Collections.unmodifiableSet(userRoles);
 	}
 
 	public UserPermissionCheckerBagImpl(
 		UserPermissionCheckerBag userPermissionCheckerBag, Set<Role> roles) {
 
-		this(
-			userPermissionCheckerBag.getUserId(),
-			userPermissionCheckerBag.getUserGroups(),
-			userPermissionCheckerBag.getUserOrgs(),
-			userPermissionCheckerBag.getUserOrgGroups(),
-			userPermissionCheckerBag.getUserUserGroupGroups(), roles);
+		_userId = userPermissionCheckerBag.getUserId();
+		_userGroups = userPermissionCheckerBag.getUserGroups();
+		_userOrgs = userPermissionCheckerBag.getUserOrgs();
+		_userOrgGroups = userPermissionCheckerBag.getUserOrgGroups();
+		_userUserGroupGroups =
+			userPermissionCheckerBag.getUserUserGroupGroups();
+		_userRoles = Collections.unmodifiableSet(roles);
 	}
 
 	@Override
@@ -99,6 +101,8 @@ public class UserPermissionCheckerBagImpl implements UserPermissionCheckerBag {
 					_groups.addAll(groupsItem);
 				}
 			}
+
+			_groups = Collections.unmodifiableList(_groups);
 		}
 
 		return _groups;

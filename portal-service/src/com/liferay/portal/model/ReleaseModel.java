@@ -134,19 +134,19 @@ public interface ReleaseModel extends BaseModel<Release>, MVCCModel {
 	public void setServletContextName(String servletContextName);
 
 	/**
-	 * Returns the version of this release.
+	 * Returns the schema version of this release.
 	 *
-	 * @return the version of this release
+	 * @return the schema version of this release
 	 */
 	@AutoEscape
-	public String getVersion();
+	public String getSchemaVersion();
 
 	/**
-	 * Sets the version of this release.
+	 * Sets the schema version of this release.
 	 *
-	 * @param version the version of this release
+	 * @param schemaVersion the schema version of this release
 	 */
-	public void setVersion(String version);
+	public void setSchemaVersion(String schemaVersion);
 
 	/**
 	 * Returns the build number of this release.

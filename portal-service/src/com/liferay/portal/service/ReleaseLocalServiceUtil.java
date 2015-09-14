@@ -58,8 +58,8 @@ public class ReleaseLocalServiceUtil {
 	}
 
 	public static com.liferay.portal.model.Release addRelease(
-		java.lang.String servletContextName, java.lang.String version) {
-		return getService().addRelease(servletContextName, version);
+		java.lang.String servletContextName, java.lang.String schemaVersion) {
+		return getService().addRelease(servletContextName, schemaVersion);
 	}
 
 	/**
@@ -285,6 +285,13 @@ public class ReleaseLocalServiceUtil {
 	}
 
 	public static void updateRelease(java.lang.String servletContextName,
+		java.lang.String schemaVersion, java.lang.String previousSchemaVersion) {
+		getService()
+			.updateRelease(servletContextName, schemaVersion,
+			previousSchemaVersion);
+	}
+
+	public static void updateRelease(java.lang.String servletContextName,
 		java.util.List<com.liferay.portal.kernel.upgrade.UpgradeProcess> upgradeProcesses,
 		int buildNumber, int previousBuildNumber, boolean indexOnUpgrade)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -300,11 +307,6 @@ public class ReleaseLocalServiceUtil {
 		getService()
 			.updateRelease(servletContextName, upgradeProcesses,
 			unfilteredPortalProperties);
-	}
-
-	public static void updateRelease(java.lang.String servletContextName,
-		java.lang.String version, java.lang.String previousVersion) {
-		getService().updateRelease(servletContextName, version, previousVersion);
 	}
 
 	public static ReleaseLocalService getService() {

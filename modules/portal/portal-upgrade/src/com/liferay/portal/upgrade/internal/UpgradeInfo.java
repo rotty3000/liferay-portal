@@ -24,20 +24,20 @@ import com.liferay.portal.kernel.util.StringBundler;
 public class UpgradeInfo {
 
 	public UpgradeInfo(
-		String fromVersionString, String toVersionString,
+		String fromSchemaVersionString, String toSchemaVersionString,
 		UpgradeStep upgradeStep) {
 
-		_fromVersionString = fromVersionString;
-		_toVersionString = toVersionString;
+		_fromSchemaVersionString = fromSchemaVersionString;
+		_toSchemaVersionString = toSchemaVersionString;
 		_upgradeStep = upgradeStep;
 	}
 
-	public String getFromVersionString() {
-		return _fromVersionString;
+	public String getFromSchemaVersionString() {
+		return _fromSchemaVersionString;
 	}
 
-	public String getToVersionString() {
-		return _toVersionString;
+	public String getToSchemaVersionString() {
+		return _toSchemaVersionString;
 	}
 
 	public UpgradeStep getUpgradeStep() {
@@ -48,10 +48,10 @@ public class UpgradeInfo {
 	public String toString() {
 		StringBundler sb = new StringBundler(7);
 
-		sb.append("{fromVersionString=");
-		sb.append(_fromVersionString);
-		sb.append(", toVersionString=");
-		sb.append(_toVersionString);
+		sb.append("{fromSchemaVersionString=");
+		sb.append(_fromSchemaVersionString);
+		sb.append(", toSchemaVersionString=");
+		sb.append(_toSchemaVersionString);
 		sb.append(", upgradeStep=");
 		sb.append(_upgradeStep);
 		sb.append("}");
@@ -59,8 +59,8 @@ public class UpgradeInfo {
 		return sb.toString();
 	}
 
-	private final String _fromVersionString;
-	private final String _toVersionString;
+	private final String _fromSchemaVersionString;
+	private final String _toSchemaVersionString;
 	private final UpgradeStep _upgradeStep;
 
 }

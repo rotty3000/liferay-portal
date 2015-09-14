@@ -38,7 +38,7 @@ public class ReleaseSoap implements Serializable {
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setServletContextName(model.getServletContextName());
-		soapModel.setVersion(model.getVersion());
+		soapModel.setSchemaVersion(model.getSchemaVersion());
 		soapModel.setBuildNumber(model.getBuildNumber());
 		soapModel.setBuildDate(model.getBuildDate());
 		soapModel.setVerified(model.getVerified());
@@ -136,12 +136,12 @@ public class ReleaseSoap implements Serializable {
 		_servletContextName = servletContextName;
 	}
 
-	public String getVersion() {
-		return _version;
+	public String getSchemaVersion() {
+		return _schemaVersion;
 	}
 
-	public void setVersion(String version) {
-		_version = version;
+	public void setSchemaVersion(String schemaVersion) {
+		_schemaVersion = schemaVersion;
 	}
 
 	public int getBuildNumber() {
@@ -193,7 +193,7 @@ public class ReleaseSoap implements Serializable {
 	private Date _createDate;
 	private Date _modifiedDate;
 	private String _servletContextName;
-	private String _version;
+	private String _schemaVersion;
 	private int _buildNumber;
 	private Date _buildDate;
 	private boolean _verified;
