@@ -1,5 +1,5 @@
 <definition component-name="portal-user-management-and-portal-configuration">
-	<property name="testray.main.component.name" value="Administration" />
+	<property name="testray.main.component.name" value="Roles" />
 
 	<set-up>
 		<execute macro="User#firstLoginPG" />
@@ -1047,7 +1047,6 @@
 		</execute>
 
 		<execute macro="DDLRecord#populateFieldDocumentsAndMediaChooseFromDocumentLibrary">
-			<var name="ddlRecordFieldData" value="Document Title" />
 			<var name="document" value="Document_1.txt" />
 			<var name="fieldFieldLabel" value="Resume" />
 			<var name="fieldName" value="Resume" />
@@ -1885,7 +1884,7 @@
 		<execute function="AssertElementNotPresent" locator1="MessageBoards#ADD_CATEGORY_BUTTON" />
 		<execute function="AssertElementNotPresent" locator1="MessageBoards#PERMISSIONS_BUTTON" />
 
-		<execute macro="BlogsEntry#addPGViaAP">
+		<execute macro="Blogs#addViaAP">
 			<var name="entryContent" value="This is a movie blog by usersn2" />
 			<var name="entryTitle" value="Movie Blog" />
 		</execute>

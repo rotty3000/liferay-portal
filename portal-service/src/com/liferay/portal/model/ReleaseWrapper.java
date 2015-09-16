@@ -56,7 +56,7 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("servletContextName", getServletContextName());
-		attributes.put("version", getVersion());
+		attributes.put("schemaVersion", getSchemaVersion());
 		attributes.put("buildNumber", getBuildNumber());
 		attributes.put("buildDate", getBuildDate());
 		attributes.put("verified", getVerified());
@@ -98,10 +98,10 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 			setServletContextName(servletContextName);
 		}
 
-		String version = (String)attributes.get("version");
+		String schemaVersion = (String)attributes.get("schemaVersion");
 
-		if (version != null) {
-			setVersion(version);
+		if (schemaVersion != null) {
+			setSchemaVersion(schemaVersion);
 		}
 
 		Integer buildNumber = (Integer)attributes.get("buildNumber");
@@ -231,6 +231,16 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 	}
 
 	/**
+	* Returns the schema version of this release.
+	*
+	* @return the schema version of this release
+	*/
+	@Override
+	public java.lang.String getSchemaVersion() {
+		return _release.getSchemaVersion();
+	}
+
+	/**
 	* Returns the servlet context name of this release.
 	*
 	* @return the servlet context name of this release
@@ -268,16 +278,6 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 	@Override
 	public boolean getVerified() {
 		return _release.getVerified();
-	}
-
-	/**
-	* Returns the version of this release.
-	*
-	* @return the version of this release
-	*/
-	@Override
-	public java.lang.String getVersion() {
-		return _release.getVersion();
 	}
 
 	@Override
@@ -418,6 +418,16 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 	}
 
 	/**
+	* Sets the schema version of this release.
+	*
+	* @param schemaVersion the schema version of this release
+	*/
+	@Override
+	public void setSchemaVersion(java.lang.String schemaVersion) {
+		_release.setSchemaVersion(schemaVersion);
+	}
+
+	/**
 	* Sets the servlet context name of this release.
 	*
 	* @param servletContextName the servlet context name of this release
@@ -455,16 +465,6 @@ public class ReleaseWrapper implements Release, ModelWrapper<Release> {
 	@Override
 	public void setVerified(boolean verified) {
 		_release.setVerified(verified);
-	}
-
-	/**
-	* Sets the version of this release.
-	*
-	* @param version the version of this release
-	*/
-	@Override
-	public void setVersion(java.lang.String version) {
-		_release.setVersion(version);
 	}
 
 	@Override

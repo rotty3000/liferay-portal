@@ -703,6 +703,7 @@
 	<command name="deleteCP">
 		<execute macro="WebContent#moveToRecycleBinCP">
 			<var name="webContentTitle" value="${webContentTitle}" />
+			<var name="webContentTitleEscapeCharacter" value="${webContentTitleEscapeCharacter}" />
 		</execute>
 
 		<execute macro="Page#gotoContentCP">
@@ -917,10 +918,13 @@
 	<command name="moveToRecycleBinCP">
 		<execute macro="WebContent#viewTitle">
 			<var name="webContentTitle" value="${webContentTitle}" />
+			<var name="webContentTitleEscapeCharacter" value="${webContentTitleEscapeCharacter}" />
 		</execute>
 
 		<if>
-			<isset var="webContentTitleEscapeCharacter" />
+			<not>
+				<contains string="${webContentTitleEscapeCharacter}" substring="{webContentTitleEscapeCharacter}" />
+			</not>
 			<then>
 				<var name="key_webContentTitle" value="${webContentTitleEscapeCharacter}" />
 			</then>
@@ -930,20 +934,18 @@
 		</if>
 
 		<execute function="Click" locator1="WC#ENTRY_DESCRIPTIVE_MENULIST_ICON" />
-		<execute function="AssertClick#assertPartialTextClickAt" locator1="MenuItem#MOVE_TO_THE_RECYCLE_BIN_2" value1="Move to the Recycle Bin" />
+		<execute function="AssertClick#assertPartialTextClickAt" locator1="MenuItem#MOVE_TO_THE_RECYCLE_BIN" value1="Move to the Recycle Bin" />
 		<execute function="AssertTextEquals#assertPartialText" locator1="Message#SUCCESS_RECYCLE_BIN" value1="The Web Content Article ${webContentTitle} was moved to the Recycle Bin. Undo" />
 	</command>
 
-	<command name="moveToRecycleBinViaActionsMenuCP">
+	<command name="moveToRecycleBinViaDeleteIconCP">
 		<execute macro="WebContent#changeDisplayStyle">
 			<var name="displayStyle" value="Descriptive" />
 		</execute>
 
 		<execute function="Check" locator1="CPWebcontent#TOOLBAR_SELECT_ALL_CHECKBOX" />
 
-		<execute function="AssertClick" locator1="CPWebcontent#TOOLBAR_ACTIONS" value1="Actions" />
-
-		<execute function="AssertClick" locator1="CPWebcontent#ACTION_MENULIST_MOVE_TO_THE_RECYCLE_BIN" value1="Move to the Recycle Bin" />
+		<execute function="Click" locator1="Icon#DELETE" />
 
 		<execute function="AssertTextEquals#assertPartialText" locator1="CPWebcontent#SUCCESS_MESSAGE_RECYCLE_BIN" value1="moved to the Recycle Bin. Undo" />
 	</command>
@@ -1422,7 +1424,9 @@
 
 	<command name="viewTitle">
 		<if>
-			<isset var="webContentTitleEscapeCharacter" />
+			<not>
+				<contains string="${webContentTitleEscapeCharacter}" substring="{webContentTitleEscapeCharacter}" />
+			</not>
 			<then>
 				<var name="key_webContentTitle" value="${webContentTitleEscapeCharacter}" />
 			</then>

@@ -68,22 +68,23 @@ public class ReleaseManager {
 		ReleaseGraphManager releaseGraphManager = new ReleaseGraphManager(
 			_serviceTrackerMap.getService(bundleSymbolicName));
 
-		String versionString = getVersionString(bundleSymbolicName);
+		String schemaVersionString = getSchemaVersionString(bundleSymbolicName);
 
 		executeUpgradeInfos(
 			bundleSymbolicName,
-			releaseGraphManager.getUpgradeInfos(versionString));
+			releaseGraphManager.getUpgradeInfos(schemaVersionString));
 	}
 
 	public void execute(String bundleSymbolicName, String toVersionString) {
-		String version = getVersionString(bundleSymbolicName);
+		String schemaVersionString = getSchemaVersionString(bundleSymbolicName);
 
 		ReleaseGraphManager releaseGraphManager = new ReleaseGraphManager(
 			_serviceTrackerMap.getService(bundleSymbolicName));
 
 		executeUpgradeInfos(
 			bundleSymbolicName,
-			releaseGraphManager.getUpgradeInfos(version, toVersionString));
+			releaseGraphManager.getUpgradeInfos(
+				schemaVersionString, toVersionString));
 	}
 
 	public void list() {
@@ -98,7 +99,7 @@ public class ReleaseManager {
 
 		System.out.println(
 			"Registered upgrade processes for " + bundleSymbolicName + " " +
-				getVersionString(bundleSymbolicName));
+				getSchemaVersionString(bundleSymbolicName));
 
 		for (UpgradeInfo upgradeProcess : upgradeProcesses) {
 			System.out.println("\t" + upgradeProcess);
@@ -173,14 +174,14 @@ public class ReleaseManager {
 		}
 	}
 
-	protected String getVersionString(String bundleSymbolicName) {
+	protected String getSchemaVersionString(String bundleSymbolicName) {
 		Release release = _releaseLocalService.fetchRelease(bundleSymbolicName);
 
-		if ((release == null) || Validator.isNull(release.getVersion())) {
+		if ((release == null) || Validator.isNull(release.getSchemaVersion())) {
 			return "0.0.0";
 		}
 
-		return release.getVersion();
+		return release.getSchemaVersion();
 	}
 
 	@Reference
@@ -236,8 +237,9 @@ public class ReleaseManager {
 						});
 
 					_releaseLocalService.updateRelease(
-						_bundleSymbolicName, upgradeInfo.getToVersionString(),
-						upgradeInfo.getFromVersionString());
+						_bundleSymbolicName,
+						upgradeInfo.getToSchemaVersionString(),
+						upgradeInfo.getFromSchemaVersionString());
 				}
 				catch (Exception e) {
 					throw new RuntimeException(e);

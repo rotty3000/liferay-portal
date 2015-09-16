@@ -16,7 +16,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath group: "com.liferay", name: "com.liferay.gradle.util", version: "1.0.18"
+		classpath group: "com.liferay", name: "com.liferay.gradle.util", version: "1.0.19"
 	}
 }
 
@@ -28,7 +28,7 @@ File appServerClassesPortalDir = new File(liferay.appServerPortalDir, "WEB-INF/c
 File appServerLibPortalDir = new File(liferay.appServerPortalDir, "WEB-INF/lib")
 File moduleFrameworkBaseDir = new File(liferay.liferayHome, "osgi")
 
-distsDirName = FileUtil.relativize(rootProject.file("../tools/sdk/dist2"), buildDir)
+distsDirName = FileUtil.relativize(rootProject.file("../tools/sdk/dist"), buildDir)
 group = "com.liferay"
 libsDirName = distsDirName
 sourceCompatibility = "1.7"
@@ -208,6 +208,12 @@ jsTranspiler {
 	lfrAmdLoaderVersion = project.properties["nodejs.lfr.amd.loader.version"]
 }
 
+node {
+	npmArgs "--fetch-retries", "10"
+	npmArgs "--fetch-retry-maxtimeout", "120000"
+	npmArgs "--fetch-retry-mintimeout", "60000"
+}
+
 repositories {
 	if (!Boolean.getBoolean("maven.local.ignore")) {
 		mavenLocal()
@@ -278,5 +284,17 @@ if (gradle.hasProperty("testClassGroupIndex")) {
 
 		jvmArgs "-Dtest.class.group.index=" + gradle.testClassGroupIndex
 		jvmArgs "-Dtest.class.groups=" + gradle.testClassGroups
+	}
+}
+
+if (System.getenv("JENKINS_HOME")) {
+	node {
+		nodeUrl = "https://nodejs.org/dist/v${nodeVersion}/node-v${nodeVersion}-linux-x64.tar.gz"
+	}
+
+	startTestableTomcat {
+		ext {
+			deleteLiferayHome = false
+		}
 	}
 }

@@ -50,8 +50,8 @@ public class ReleaseLocalServiceWrapper implements ReleaseLocalService,
 
 	@Override
 	public com.liferay.portal.model.Release addRelease(
-		java.lang.String servletContextName, java.lang.String version) {
-		return _releaseLocalService.addRelease(servletContextName, version);
+		java.lang.String servletContextName, java.lang.String schemaVersion) {
+		return _releaseLocalService.addRelease(servletContextName, schemaVersion);
 	}
 
 	/**
@@ -300,6 +300,13 @@ public class ReleaseLocalServiceWrapper implements ReleaseLocalService,
 
 	@Override
 	public void updateRelease(java.lang.String servletContextName,
+		java.lang.String schemaVersion, java.lang.String previousSchemaVersion) {
+		_releaseLocalService.updateRelease(servletContextName, schemaVersion,
+			previousSchemaVersion);
+	}
+
+	@Override
+	public void updateRelease(java.lang.String servletContextName,
 		java.util.List<com.liferay.portal.kernel.upgrade.UpgradeProcess> upgradeProcesses,
 		int buildNumber, int previousBuildNumber, boolean indexOnUpgrade)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -314,13 +321,6 @@ public class ReleaseLocalServiceWrapper implements ReleaseLocalService,
 		throws java.lang.Exception {
 		_releaseLocalService.updateRelease(servletContextName,
 			upgradeProcesses, unfilteredPortalProperties);
-	}
-
-	@Override
-	public void updateRelease(java.lang.String servletContextName,
-		java.lang.String version, java.lang.String previousVersion) {
-		_releaseLocalService.updateRelease(servletContextName, version,
-			previousVersion);
 	}
 
 	/**

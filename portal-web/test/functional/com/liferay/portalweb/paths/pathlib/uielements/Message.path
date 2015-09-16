@@ -94,6 +94,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>INFO_5</td>
+	<td>//div[contains(@class,'text') and contains(@class,'white-box')]/span</td>
+	<td></td>
+</tr>
+<tr>
 	<td>INFO_ADD_EXPLANATION</td>
 	<td>//div[contains(@id,'explanationPost')]/div[@class='alert alert-info']</td>
 	<td></td>
@@ -136,6 +141,11 @@
 <tr>
 	<td>NO_COMMENTS</td>
 	<td>//div[contains(.,'No comments yet')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>RECYCLE_BIN_RESTORE_SUCCESS</td>
+	<td>//div[contains(@class,'alert-success')][2]</td>
 	<td></td>
 </tr>
 <tr>

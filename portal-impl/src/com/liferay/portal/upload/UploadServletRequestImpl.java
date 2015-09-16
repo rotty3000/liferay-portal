@@ -445,7 +445,11 @@ public class UploadServletRequestImpl
 		while (enu.hasMoreElements()) {
 			String name = enu.nextElement();
 
-			map.put(name, getParameterValues(name));
+			String[] values = getParameterValues(name);
+
+			if (values != null) {
+				map.put(name, values);
+			}
 		}
 
 		return map;
