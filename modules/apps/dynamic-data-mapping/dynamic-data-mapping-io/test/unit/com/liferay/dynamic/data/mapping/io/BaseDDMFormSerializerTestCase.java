@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.io;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -135,11 +136,15 @@ public abstract class BaseDDMFormSerializerTestCase extends BaseDDMTestCase {
 	}
 
 	protected void createNotEmptyValidation(DDMFormField ddmFormField) {
-		ddmFormField.setValidationExpression(
+		DDMFormFieldValidation ddmFormFieldValidation =
+			new DDMFormFieldValidation();
+
+		ddmFormFieldValidation.setErrorMessage(
+			"Field " + ddmFormField.getName() + " must not be empty.");
+		ddmFormFieldValidation.setExpression(
 			"!" + ddmFormField.getName() + ".isEmpty()");
 
-		ddmFormField.setValidationMessage(
-			"Field " + ddmFormField.getName() + " must not be empty.");
+		ddmFormField.setDDMFormFieldValidation(ddmFormFieldValidation);
 	}
 
 	protected DDMFormField createRadioDDMFormField(String name) {

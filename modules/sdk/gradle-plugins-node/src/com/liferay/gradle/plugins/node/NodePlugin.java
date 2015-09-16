@@ -16,6 +16,8 @@ package com.liferay.gradle.plugins.node;
 
 import com.liferay.gradle.plugins.node.tasks.DownloadNodeTask;
 import com.liferay.gradle.plugins.node.tasks.ExecuteNodeTask;
+import com.liferay.gradle.plugins.node.tasks.ExecuteNpmTask;
+import com.liferay.gradle.plugins.node.tasks.PublishNodeModuleTask;
 import com.liferay.gradle.util.GradleUtil;
 
 import java.io.File;
@@ -38,13 +40,24 @@ public class NodePlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
-		NodeExtension nodeExtension = GradleUtil.addExtension(
+		final NodeExtension nodeExtension = GradleUtil.addExtension(
 			project, EXTENSION_NAME, NodeExtension.class);
 
 		addTaskDownloadNode(project);
 
 		configureTasksDownloadNode(project, nodeExtension);
 		configureTasksExecuteNode(project, nodeExtension);
+		configureTasksPublishNodeModule(project);
+
+		project.afterEvaluate(
+			new Action<Project>() {
+
+				@Override
+				public void execute(Project project) {
+					configureTasksExecuteNpm(project, nodeExtension);
+				}
+
+			});
 	}
 
 	protected DownloadNodeTask addTaskDownloadNode(Project project) {
@@ -108,6 +121,60 @@ public class NodePlugin implements Plugin<Project> {
 			});
 	}
 
+	protected void configureTaskExecuteNpmArgs(
+		ExecuteNpmTask executeNpmTask, NodeExtension nodeExtension) {
+
+		executeNpmTask.args(nodeExtension.getNpmArgs());
+	}
+
+	protected void configureTaskPublishNodeModuleDescription(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		final Project project = publishNodeModuleTask.getProject();
+
+		publishNodeModuleTask.setModuleDescription(
+			new Callable<String>() {
+
+				@Override
+				public String call() throws Exception {
+					return project.getDescription();
+				}
+
+		});
+	}
+
+	protected void configureTaskPublishNodeModuleName(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		final Project project = publishNodeModuleTask.getProject();
+
+		publishNodeModuleTask.setModuleName(
+			new Callable<String>() {
+
+				@Override
+				public String call() throws Exception {
+					return project.getName();
+				}
+
+			});
+	}
+
+	protected void configureTaskPublishNodeModuleVersion(
+		PublishNodeModuleTask publishNodeModuleTask) {
+
+		final Project project = publishNodeModuleTask.getProject();
+
+		publishNodeModuleTask.setModuleVersion(
+			new Callable<Object>() {
+
+				@Override
+				public Object call() throws Exception {
+					return project.getVersion();
+				}
+
+			});
+	}
+
 	protected void configureTasksDownloadNode(
 		Project project, final NodeExtension nodeExtension) {
 
@@ -142,6 +209,44 @@ public class NodePlugin implements Plugin<Project> {
 				@Override
 				public void execute(ExecuteNodeTask executeNodeTask) {
 					configureTaskExecuteNodeDir(executeNodeTask, nodeExtension);
+				}
+
+			});
+	}
+
+	protected void configureTasksExecuteNpm(
+		Project project, final NodeExtension nodeExtension) {
+
+		TaskContainer taskContainer = project.getTasks();
+
+		taskContainer.withType(
+			ExecuteNpmTask.class,
+			new Action<ExecuteNpmTask>() {
+
+				@Override
+				public void execute(ExecuteNpmTask executeNpmTask) {
+					configureTaskExecuteNpmArgs(executeNpmTask, nodeExtension);
+				}
+
+			});
+	}
+
+	protected void configureTasksPublishNodeModule(Project project) {
+		TaskContainer taskContainer = project.getTasks();
+
+		taskContainer.withType(
+			PublishNodeModuleTask.class,
+			new Action<PublishNodeModuleTask>() {
+
+				@Override
+				public void execute(
+					PublishNodeModuleTask publishNodeModuleTask) {
+
+					configureTaskPublishNodeModuleDescription(
+						publishNodeModuleTask);
+					configureTaskPublishNodeModuleName(publishNodeModuleTask);
+					configureTaskPublishNodeModuleVersion(
+						publishNodeModuleTask);
 				}
 
 			});

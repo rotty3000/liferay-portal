@@ -9,7 +9,7 @@
 		<execute macro="WebContent#tearDownCP" />
 	</tear-down>
 
-	<command known-issues="LPS-56754" name="DeleteWebcontent" priority="4">
+	<command name="DeleteWebcontent" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 		</execute>
@@ -111,7 +111,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-56754" name="MoveFolderWithWebContentToRecycleBin" priority="4">
+	<command name="MoveFolderWithWebContentToRecycleBin" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 			<var name="siteScopeName" value="Liferay" />
@@ -175,7 +175,7 @@
 		</execute>
 	</command>
 
-	<command name="RecycleWebContentViaActionsMenu" priority="3">
+	<command name="RecycleWebContentViaDeleteIcon" priority="3">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 			<var name="siteScopeName" value="Liferay" />
@@ -199,7 +199,7 @@
 			<var name="siteScopeName" value="Liferay" />
 		</execute>
 
-		<execute macro="WebContent#moveToRecycleBinViaActionsMenuCP" />
+		<execute macro="WebContent#moveToRecycleBinViaDeleteIconCP" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
@@ -281,7 +281,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-56754" name="ViewDuplicateAssetNamesInRecycleBin" priority="4">
+	<command name="ViewDuplicateAssetNamesInRecycleBin" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 			<var name="siteScopeName" value="Liferay" />
@@ -305,7 +305,7 @@
 			<var name="siteScopeName" value="Liferay" />
 		</execute>
 
-		<execute macro="WebContent#moveToRecycleBinViaActionsMenuCP" />
+		<execute macro="WebContent#moveToRecycleBinViaDeleteIconCP" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Recycle Bin" />
@@ -341,7 +341,7 @@
 			<var name="siteScopeName" value="Liferay" />
 		</execute>
 
-		<execute macro="WebContent#moveToRecycleBinViaActionsMenuCP" />
+		<execute macro="WebContent#moveToRecycleBinViaDeleteIconCP" />
 
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Recycle Bin" />

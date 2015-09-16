@@ -1744,8 +1744,8 @@ public class PortalImpl implements Portal {
 			WebKeys.THEME_DISPLAY);
 
 		LiferayPortletURL liferayPortletURL = new PortletURLImpl(
-			request, portletId, getControlPanelLayout(themeDisplay, group),
-			lifecycle);
+			request, portletId,
+			getControlPanelLayout(themeDisplay, group, portletId), lifecycle);
 
 		if (refererPlid > 0) {
 			liferayPortletURL.setRefererPlid(refererPlid);
@@ -1780,7 +1780,7 @@ public class PortalImpl implements Portal {
 
 		LiferayPortletURL liferayPortletURL = new PortletURLImpl(
 			portletRequest, portletId,
-			getControlPanelLayout(themeDisplay, group), lifecycle);
+			getControlPanelLayout(themeDisplay, group, portletId), lifecycle);
 
 		if (refererPlid > 0) {
 			liferayPortletURL.setRefererPlid(refererPlid);
@@ -2412,7 +2412,7 @@ public class PortalImpl implements Portal {
 	@Override
 	public Portlet getFirstMyAccountPortlet(ThemeDisplay themeDisplay) {
 		List<Portlet> portlets = getControlPanelPortlets(
-			PortletCategoryKeys.MY, themeDisplay);
+			PortletCategoryKeys.USER_MY_ACCOUNT, themeDisplay);
 
 		if (portlets.isEmpty()) {
 			return null;
@@ -3595,15 +3595,7 @@ public class PortalImpl implements Portal {
 			return portletTitle;
 		}
 
-		StringBundler sb = new StringBundler(5);
-
-		sb.append(portletTitle);
-		sb.append(StringPool.SPACE);
-		sb.append(StringPool.OPEN_PARENTHESIS);
-		sb.append(newScopeName);
-		sb.append(StringPool.CLOSE_PARENTHESIS);
-
-		return sb.toString();
+		return StringUtil.appendParentheticalSuffix(portletTitle, newScopeName);
 	}
 
 	@Override
@@ -3792,8 +3784,7 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public long getPlidFromPortletId(
-			long groupId, boolean privateLayout, String portletId)
-		throws PortalException {
+		long groupId, boolean privateLayout, String portletId) {
 
 		long plid = LayoutConstants.DEFAULT_PLID;
 
@@ -3852,9 +3843,7 @@ public class PortalImpl implements Portal {
 	}
 
 	@Override
-	public long getPlidFromPortletId(long groupId, String portletId)
-		throws PortalException {
-
+	public long getPlidFromPortletId(long groupId, String portletId) {
 		long plid = getPlidFromPortletId(groupId, false, portletId);
 
 		if (plid == LayoutConstants.DEFAULT_PLID) {
@@ -7567,8 +7556,7 @@ public class PortalImpl implements Portal {
 	}
 
 	protected long doGetPlidFromPortletId(
-			long groupId, boolean privateLayout, String portletId)
-		throws PortalException {
+		long groupId, boolean privateLayout, String portletId) {
 
 		long scopeGroupId = groupId;
 
@@ -7754,7 +7742,7 @@ public class PortalImpl implements Portal {
 	}
 
 	protected Layout getControlPanelLayout(
-		ThemeDisplay themeDisplay, Group group) {
+		ThemeDisplay themeDisplay, Group group, String portletId) {
 
 		Layout layout = null;
 
@@ -7770,14 +7758,46 @@ public class PortalImpl implements Portal {
 		}
 
 		if (group == null) {
-			long groupId = themeDisplay.getDoAsGroupId();
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+				themeDisplay.getCompanyId(), portletId);
 
-			if (groupId > 0) {
-				group = GroupLocalServiceUtil.fetchGroup(groupId);
+			String portletCategory = portlet.getControlPanelEntryCategory();
+
+			if (portletCategory.equals(
+					PortletCategoryKeys.CONTROL_PANEL_APPS) ||
+				portletCategory.equals(
+					PortletCategoryKeys.CONTROL_PANEL_CONFIGURATION) ||
+				portletCategory.equals(
+					PortletCategoryKeys.CONTROL_PANEL_USERS)) {
+
+				return layout;
 			}
+			else if (portletCategory.equals(
+						PortletCategoryKeys.USER_MY_ACCOUNT)) {
 
-			if (group == null) {
-				group = themeDisplay.getScopeGroup();
+				User user = null;
+
+				try {
+					user = UserLocalServiceUtil.getUser(
+						themeDisplay.getUserId());
+				}
+				catch (PortalException pe) {
+					_log.error(
+						"Unable to get user " + themeDisplay.getUserId());
+				}
+
+				group = user.getGroup();
+			}
+			else {
+				long groupId = themeDisplay.getDoAsGroupId();
+
+				if (groupId > 0) {
+					group = GroupLocalServiceUtil.fetchGroup(groupId);
+				}
+
+				if (group == null) {
+					group = themeDisplay.getScopeGroup();
+				}
 			}
 		}
 

@@ -1887,9 +1887,21 @@ module.framework.base.dir=${project.dir}/osgi]]></echo>
 				</then>
 				<elseif>
 					<or>
-						<contains string="@{liferay.portal.bundle}" substring="6.2.10" />
 						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.2" />
 						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.3" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.1" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.2" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.3" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.4" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.5" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.6" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.7" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.8" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.9" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.10" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.11" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.12" />
+						<equals arg1="@{liferay.portal.bundle}" arg2="6.2.10.13" />
 					</or>
 					<then>
 						<echo file="app.server.${user.name}.properties" append="true">
@@ -2227,7 +2239,9 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 						</then>
 					</if>
 
-					<antcall target="delete-liferay-home" />
+					<antcall target="delete-liferay-home">
+						<param name="keep.hsqldb" value="true" />
+					</antcall>
 
 					<if>
 						<equals arg1="${test.ant.launched.by.selenium}" arg2="true" />
@@ -2635,6 +2649,16 @@ create database lportal${database.index} character set utf8;</echo>
 							<replacevalue></replacevalue>
 						</replace>
 					</then>
+					<elseif>
+						<equals arg1="${database.type}" arg2="oracle" />
+						<then>
+							<replace file="create.sql">
+								<replacetoken>grant connect,resource to &amp;1;</replacetoken>
+								<replacevalue>grant connect,resource to &amp;1;
+	grant unlimited tablespace to &amp;1;</replacevalue>
+							</replace>
+						</then>
+					</elseif>
 					<elseif>
 						<equals arg1="${database.type}" arg2="sybase" />
 						<then>
@@ -3167,6 +3191,25 @@ go]]></replacevalue>
 			</elseif>
 			<elseif>
 				<and>
+					<equals arg1="${database.type}" arg2="oracle" />
+					<equals arg1="${database.version}" arg2="12" />
+				</and>
+				<then>
+					<delete includeemptydirs="true" failonerror="false">
+						<fileset
+							dir="${app.server.lib.global.dir}"
+							includes="${jdbc.oracle.driver}"
+						/>
+					</delete>
+
+					<mirrors-get
+						dest="${todir}"
+						src="${test.jdbc.drivers.url}/oracle/12.1.0.2/${jdbc.oracle.driver}"
+					/>
+				</then>
+			</elseif>
+			<elseif>
+				<and>
 					<equals arg1="${database.type}" arg2="postgresql" />
 					<not>
 						<available file="${app.server.lib.global.dir}/${jdbc.postgresql.driver}" />
@@ -3240,7 +3283,12 @@ go]]></replacevalue>
 					</then>
 				</if>
 
-				<delete dir="${test.app.server.liferay.home}/data" />
+				<delete failonerror="false" includeemptydirs="true">
+					<fileset dir="${test.app.server.liferay.home}/data">
+						<exclude name="hsql/lportal.properties" if:true="${keep.hsqldb}" />
+						<exclude name="hsql/lportal.script" if:true="${keep.hsqldb}" />
+					</fileset>
+				</delete>
 				<delete dir="${test.app.server.liferay.home}/logs" />
 				<delete dir="${test.app.server.liferay.home}/osgi/state" />
 
@@ -4028,6 +4076,22 @@ osb.lcs.portlet.oauth.consumer.secret=${osb.lcs.portlet.oauth.consumer.secret}</
 		</copy>
 	</target>
 
+	<target name="prepare-log4j-ext-xml">
+		<if>
+			<equals arg1="${database.type}" arg2="hsql" />
+			<then>
+				<echo file="${app.server.classes.portal.dir}/META-INF/portal-log4j-ext.xml"><![CDATA[<?xml version="1.0"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<category name="com.liferay.portal.spring.hibernate.DialectDetector">
+		<priority value="ERROR" />
+	</category>
+</log4j:configuration>]]></echo>
+			</then>
+		</if>
+	</target>
+
 	<target name="prepare-portal-ext-properties">
 		<prepare-fix-pack-bundle />
 
@@ -4409,7 +4473,7 @@ hot.deploy.dependency.management.enabled=false</echo>
 			<elseif>
 				<equals arg1="${app.server.type}" arg2="glassfish" />
 				<then>
-					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.glassfish.portal.war.dir}" />
+					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.glassfish.portal.war.name}" />
 				</then>
 			</elseif>
 			<elseif>
@@ -4492,15 +4556,30 @@ module.framework.properties.osgi.console=11312</echo>
 
 		<echo append="true" file="${test.ext.properties.file}">
 			component.names=${component.names}
-			ignore.errors.file.name=${project.dir}/portal-web/test-ignorable-error-lines.xml
+			ignore.errors.file.name=${project.dir.unix}/portal-web/test-ignorable-error-lines.xml
 			product.names=${product.names}
-			project.dir=${project.dir}
+			project.dir=${project.dir.unix}
 			test.case.available.property.names=${test.case.available.property.names}
 			test.console.log.file.name=${liferay.home}/logs/liferay.${current.date}.xml
-			test.console.shut.down.file.name=${project.dir}/console-shut-down
+			test.console.shut.down.file.name=${project.dir.unix}/console-shut-down
 			test.dependencies.dir.name=dependencies
-			test.poshi.warnings.file.name=${project.dir}/poshi-warnings.xml
+			test.poshi.warnings.file.name=${project.dir.unix}/poshi-warnings.xml
 		</echo>
+
+		<if>
+			<and>
+				<isset property="test.batch.max.group.size" />
+				<isset property="test.batch.property.name" />
+				<isset property="test.batch.property.value" />
+			</and>
+			<then>
+				<echo append="true" file="${test.ext.properties.file}">
+					test.batch.max.group.size=${test.batch.max.group.size}
+					test.batch.property.name=${test.batch.property.name}
+					test.batch.property.value=${test.batch.property.value}
+				</echo>
+			</then>
+		</if>
 
 		<if>
 			<isset property="test.class" />
@@ -5693,11 +5772,10 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 							<get-database-property property.name="database.password" />
 							<get-database-property property.name="database.username" />
 
-							<exec executable="${oracle.sqlplus.executable}" failonerror="true">
-								<arg value="${oracle.admin.user}/${oracle.admin.password}" />
-								<arg value="@create.sql" />
-								<arg value="${database.username}" />
-								<arg value="${database.password}" />
+							<exec executable="su" failonerror="true">
+								<arg value="-c" />
+								<arg value="${oracle.sqlplus.executable} ${oracle.admin.user}/${oracle.admin.password} as sysdba @create.sql ${database.username} ${database.password}" />
+								<arg value="oracle" />
 							</exec>
 						</then>
 					</elseif>
@@ -6059,7 +6137,7 @@ if (ppstate.equals("normal")) {
 		</execute>
 	</target>
 
-	<target name="run-poshi-evaluate-console" depends="prepare-selenium">
+	<target name="run-poshi-evaluate-console">
 		<antcall target="prepare-poshi-runner-properties" inheritall="false" />
 
 		<gradle-execute failonerror="false" task="evaluatePoshiConsole">
@@ -6069,7 +6147,7 @@ if (ppstate.equals("normal")) {
 		</gradle-execute>
 	</target>
 
-	<target name="run-poshi-runner" depends="prepare-selenium">
+	<target name="run-poshi-runner">
 		<property name="test.console.log.file.name" value="${liferay.home}/logs/liferay.${current.date}.xml" />
 
 		<gradle-execute failonerror="false" task="runPoshi">
@@ -6105,7 +6183,7 @@ if (ppstate.equals("normal")) {
 		<antcall target="stop-selenium" />
 	</target>
 
-	<target name="run-selenium-test">
+	<target name="run-selenium-test" depends="prepare-selenium">
 		<if>
 			<and>
 				<equals arg1="${test.class}" arg2="PortalWebTestSuite" />
@@ -6123,8 +6201,6 @@ if (ppstate.equals("normal")) {
 				</ant>
 			</then>
 		</if>
-
-		<ant dir="portal-impl" target="compile-test" inheritAll="false" />
 
 		<if>
 			<equals arg1="${database.type}" arg2="hsql" />
@@ -6151,6 +6227,8 @@ jdbc.default.password=${database.mysql.password}</echo>
 				<antcall target="run-poshi-runner" />
 			</then>
 			<else>
+				<ant dir="portal-impl" target="compile-test" inheritAll="false" />
+
 				<if>
 					<contains string="${test.class}" substring="#" />
 					<then>
@@ -6246,6 +6324,16 @@ jdbc.default.password=${database.mysql.password}</echo>
 						<copy todir="${jenkins.shared.results.dir}/${job.name}/builds/${env.BUILD_NUMBER}/screenshots">
 							<fileset dir="portal-web/test-results/functional/screenshots" erroronmissingdir="false" />
 						</copy>
+					</then>
+				</if>
+
+				<if>
+					<available file="${liferay.home}/logs/liferay.${current.date}.log" />
+					<then>
+						<copy
+							file="${liferay.home}/logs/liferay.${current.date}.log"
+							tofile="${jenkins.shared.results.dir}/${job.name}/builds/${env.BUILD_NUMBER}/liferay.log"
+						/>
 					</then>
 				</if>
 
@@ -6445,8 +6533,6 @@ jdbc.default.password=${database.mysql.password}</echo>
 				<stop-app-server />
 			</then>
 		</if>
-
-		<antcall target="prepare-selenium" />
 
 		<remake-dir dir="${selenium.output.dir}" />
 

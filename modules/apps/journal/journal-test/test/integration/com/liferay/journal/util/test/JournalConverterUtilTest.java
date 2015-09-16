@@ -111,7 +111,8 @@ public class JournalConverterUtilTest {
 	public void setUp() throws Exception {
 		_group = GroupTestUtil.addGroup();
 
-		_ddmStructureTestHelper = new DDMStructureTestHelper(_group);
+		_ddmStructureTestHelper = new DDMStructureTestHelper(
+			PortalUtil.getClassNameId(JournalArticle.class), _group);
 
 		long classNameId = PortalUtil.getClassNameId(JournalArticle.class);
 
@@ -213,7 +214,7 @@ public class JournalConverterUtilTest {
 		fields.put(multiListField);
 
 		Field fieldsDisplayField = getFieldsDisplayField(
-			_ddmStructure.getStructureId(), "multi-list_INSTANCE_9X5wVsSv");
+			_ddmStructure.getStructureId(), "multi_list_INSTANCE_9X5wVsSv");
 
 		fields.put(fieldsDisplayField);
 
@@ -472,7 +473,7 @@ public class JournalConverterUtilTest {
 		expectedFields.put(multiListField);
 
 		Field fieldsDisplayField = getFieldsDisplayField(
-			_ddmStructure.getStructureId(), "multi-list_INSTANCE_9X5wVsSv");
+			_ddmStructure.getStructureId(), "multi_list_INSTANCE_9X5wVsSv");
 
 		expectedFields.put(fieldsDisplayField);
 
@@ -747,7 +748,7 @@ public class JournalConverterUtilTest {
 		Field field = new Field();
 
 		field.setDDMStructureId(ddmStructureId);
-		field.setName("multi-list");
+		field.setName("multi_list");
 
 		field.addValue(_enLocale, "[\"a\"]");
 

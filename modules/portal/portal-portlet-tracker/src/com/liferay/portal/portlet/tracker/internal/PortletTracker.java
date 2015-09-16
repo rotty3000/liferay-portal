@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.language.UTF8Control;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
@@ -34,6 +33,7 @@ import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -54,7 +54,7 @@ import com.liferay.portal.service.CompanyLocalService;
 import com.liferay.portal.service.PortletLocalService;
 import com.liferay.portal.service.ResourceActionLocalService;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.PortletCategoryKeys;
+import com.liferay.portal.util.PortletCategoryUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.WebAppPool;
 import com.liferay.portal.util.WebKeys;
@@ -377,9 +377,8 @@ public class PortletTracker
 		}
 
 		for (Locale locale : LanguageUtil.getAvailableLocales()) {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(
-				portletModel.getResourceBundle(), locale, classLoader,
-				UTF8Control.INSTANCE);
+			ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
+				portletModel.getResourceBundle(), locale, classLoader);
 
 			Dictionary<String, Object> properties = new HashMapDictionary<>();
 
@@ -531,19 +530,8 @@ public class PortletTracker
 			get(serviceReference, "control-panel-entry-category"),
 			portletModel.getControlPanelEntryCategory());
 
-		if (Validator.equals(controlPanelEntryCategory, "content")) {
-			controlPanelEntryCategory =
-				PortletCategoryKeys.SITE_ADMINISTRATION_CONTENT;
-		}
-		else if (Validator.equals(controlPanelEntryCategory, "marketplace")) {
-			controlPanelEntryCategory = PortletCategoryKeys.APPS;
-		}
-		else if (Validator.equals(controlPanelEntryCategory, "portal")) {
-			controlPanelEntryCategory = PortletCategoryKeys.USERS;
-		}
-		else if (Validator.equals(controlPanelEntryCategory, "server")) {
-			controlPanelEntryCategory = PortletCategoryKeys.APPS;
-		}
+		controlPanelEntryCategory = PortletCategoryUtil.getPortletCategoryKey(
+			controlPanelEntryCategory);
 
 		portletModel.setControlPanelEntryCategory(controlPanelEntryCategory);
 
@@ -660,10 +648,15 @@ public class PortletTracker
 			portletModel.setRenderWeight(1);
 		}
 
+		boolean defaultRequiresNamespacedParameters = GetterUtil.getBoolean(
+			get(serviceReference, "requires-namespaced-parameters"),
+			portletModel.isRequiresNamespacedParameters());
+
 		portletModel.setRequiresNamespacedParameters(
 			GetterUtil.getBoolean(
-				get(serviceReference, "requires-namespaced-parameters"),
-				portletModel.isRequiresNamespacedParameters()));
+				serviceReference.getProperty("requires-namespaced-parameters"),
+				defaultRequiresNamespacedParameters));
+
 		portletModel.setRestoreCurrentView(
 			GetterUtil.getBoolean(
 				get(serviceReference, "restore-current-view"),
@@ -710,22 +703,18 @@ public class PortletTracker
 		com.liferay.portal.model.Portlet portletModel) {
 
 		String portletInfoTitle = GetterUtil.getString(
-			serviceReference.getProperty("javax.portlet.info.title"),
-			portletModel.getPortletId());
+			serviceReference.getProperty("javax.portlet.info.title"));
 
 		String portletDisplayName = GetterUtil.getString(
 			serviceReference.getProperty("javax.portlet.display-name"),
 			portletInfoTitle);
 
 		String portletInfoShortTitle = GetterUtil.getString(
-			serviceReference.getProperty("javax.portlet.info.short-title"),
-			portletModel.getPortletId());
+			serviceReference.getProperty("javax.portlet.info.short-title"));
 		String portletInfoKeyWords = GetterUtil.getString(
-			serviceReference.getProperty("javax.portlet.info.keywords"),
-			portletModel.getPortletId());
+			serviceReference.getProperty("javax.portlet.info.keywords"));
 		String portletDescription = GetterUtil.getString(
-			serviceReference.getProperty("javax.portlet.description"),
-			portletModel.getPortletId());
+			serviceReference.getProperty("javax.portlet.description"));
 
 		PortletInfo portletInfo = new PortletInfo(
 			portletDisplayName, portletInfoShortTitle, portletInfoKeyWords,

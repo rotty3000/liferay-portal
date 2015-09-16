@@ -1,5 +1,5 @@
 <definition component-name="portal-user-management-and-portal-configuration">
-	<property name="testray.main.component.name" value="Administration" />
+	<property name="testray.main.component.name" value="Users and Organizations" />
 
 	<set-up>
 		<execute macro="User#firstLoginPG" />
@@ -1109,7 +1109,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-57335" name="ViewContentInLocationOrganizationSite" priority="4">
+	<command name="ViewContentInLocationOrganizationSite" priority="4">
 		<execute macro="Page#gotoCP">
 			<var name="portletName" value="Roles" />
 		</execute>

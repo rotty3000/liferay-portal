@@ -21,7 +21,7 @@ ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_
 
 JournalArticle article = (JournalArticle)row.getObject();
 
-PortletURL rowURL = (PortletURL)request.getAttribute("view_entries.jsp-rowURL");
+String href = (String)request.getAttribute(WebKeys.SEARCH_ENTRY_HREF);
 
 AssetRendererFactory<JournalArticle> assetRendererFactory = AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClass(JournalArticle.class);
 
@@ -33,7 +33,7 @@ data.put("placement", "top");
 data.put("toggle", "tooltip");
 %>
 
-<aui:a data="<%= data %>" href="<%= rowURL.toString() %>" title="<%= HtmlUtil.escape(article.getTitle(locale)) %>">
+<aui:a data="<%= data %>" href="<%= href %>" title="<%= HtmlUtil.escape(article.getTitle(locale)) %>">
 	<%= HtmlUtil.escape(article.getTitle(locale)) %>
 </aui:a>
 

@@ -124,7 +124,7 @@ public class ReleasePersistenceTest {
 
 		newRelease.setServletContextName(RandomTestUtil.randomString());
 
-		newRelease.setVersion(RandomTestUtil.randomString());
+		newRelease.setSchemaVersion(RandomTestUtil.randomString());
 
 		newRelease.setBuildNumber(RandomTestUtil.nextInt());
 
@@ -152,8 +152,8 @@ public class ReleasePersistenceTest {
 			Time.getShortTimestamp(newRelease.getModifiedDate()));
 		Assert.assertEquals(existingRelease.getServletContextName(),
 			newRelease.getServletContextName());
-		Assert.assertEquals(existingRelease.getVersion(),
-			newRelease.getVersion());
+		Assert.assertEquals(existingRelease.getSchemaVersion(),
+			newRelease.getSchemaVersion());
 		Assert.assertEquals(existingRelease.getBuildNumber(),
 			newRelease.getBuildNumber());
 		Assert.assertEquals(Time.getShortTimestamp(
@@ -200,9 +200,9 @@ public class ReleasePersistenceTest {
 	protected OrderByComparator<Release> getOrderByComparator() {
 		return OrderByComparatorFactoryUtil.create("Release_", "mvccVersion",
 			true, "releaseId", true, "createDate", true, "modifiedDate", true,
-			"servletContextName", true, "version", true, "buildNumber", true,
-			"buildDate", true, "verified", true, "state", true, "testString",
-			true);
+			"servletContextName", true, "schemaVersion", true, "buildNumber",
+			true, "buildDate", true, "verified", true, "state", true,
+			"testString", true);
 	}
 
 	@Test
@@ -424,7 +424,7 @@ public class ReleasePersistenceTest {
 
 		release.setServletContextName(RandomTestUtil.randomString());
 
-		release.setVersion(RandomTestUtil.randomString());
+		release.setSchemaVersion(RandomTestUtil.randomString());
 
 		release.setBuildNumber(RandomTestUtil.nextInt());
 

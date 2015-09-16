@@ -15,14 +15,15 @@
 package com.liferay.dynamic.data.mapping.registry;
 
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.registry.annotations.DDMForm;
 import com.liferay.dynamic.data.mapping.registry.annotations.DDMFormField;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.language.UTF8Control;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -149,20 +150,21 @@ public class DDMFormFactoryHelper {
 		return "text";
 	}
 
-	public String getDDMFormFieldValidationExpression() {
+	public DDMFormFieldValidation getDDMFormFieldValidation() {
+		DDMFormFieldValidation ddmFormFieldValidation =
+			new DDMFormFieldValidation();
+
 		if (Validator.isNotNull(_ddmFormField.validationExpression())) {
-			return _ddmFormField.validationExpression();
+			ddmFormFieldValidation.setExpression(
+				_ddmFormField.validationExpression());
 		}
 
-		return StringPool.TRUE;
-	}
-
-	public String getDDMFormFieldValidationMessage() {
-		if (Validator.isNotNull(_ddmFormField.validationMessage())) {
-			return _ddmFormField.validationMessage();
+		if (Validator.isNotNull(_ddmFormField.validationErrorMessage())) {
+			ddmFormFieldValidation.setErrorMessage(
+				_ddmFormField.validationErrorMessage());
 		}
 
-		return StringPool.BLANK;
+		return ddmFormFieldValidation;
 	}
 
 	public String getDDMFormFieldVisibilityExpression() {
@@ -195,14 +197,13 @@ public class DDMFormFactoryHelper {
 
 	protected ResourceBundle getResourceBundle(Locale locale) {
 		try {
-			return ResourceBundle.getBundle(
-				getResourceBundleBaseName(_clazz), locale,
-				_clazz.getClassLoader(), UTF8Control.INSTANCE);
+			return ResourceBundleUtil.getBundle(
+				getResourceBundleBaseName(_clazz), locale, _clazz);
 		}
 		catch (Exception e) {
-			return ResourceBundle.getBundle(
+			return ResourceBundleUtil.getBundle(
 				getResourceBundleBaseName(_clazz), locale,
-				PortalClassLoaderUtil.getClassLoader(), UTF8Control.INSTANCE);
+				PortalClassLoaderUtil.getClassLoader());
 		}
 	}
 

@@ -32,8 +32,10 @@
 						"en_US":""
 					},
 					"type": "ddm-integer",
-					"validationExpression" : "Integer == 0",
-					"validationMessage": "Integer must be equals to zero",
+					"validation" : {
+						"errorMessage": "Integer must be equal to zero.",
+						"expression": "Integer == 0"
+					},
 					"visibilityExpression": "false"
 				}
 			],
@@ -48,8 +50,10 @@
 				"en_US": ""
 			},
 			"type": "text",
-			"validationExpression": "false",
-			"validationMessage": "This field is never valid",
+			"validation" : {
+				"errorMessage": "This field is never valid.",
+				"expression": "false"
+			},
 			"visibilityExpression": "true"
 		},
 		{
@@ -72,8 +76,10 @@
 				"en_US": ""
 			},
 			"type": "checkbox",
-			"validationExpression": "Boolean",
-			"validationMessage": "This field must be checked",
+			"validation" : {
+				"errorMessage": "This field must be checked.",
+				"expression": "Boolean"
+			},
 			"visibilityExpression": "!Boolean"
 		}
 	]

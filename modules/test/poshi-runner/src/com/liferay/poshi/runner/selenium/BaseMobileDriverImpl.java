@@ -395,7 +395,7 @@ public abstract class BaseMobileDriverImpl
 
 	@Override
 	public boolean isNotSelectedLabel(String selectLocator, String pattern) {
-		throw new UnsupportedOperationException();
+		return WebDriverHelper.isNotSelectedLabel(this, selectLocator, pattern);
 	}
 
 	@Override
@@ -420,7 +420,7 @@ public abstract class BaseMobileDriverImpl
 
 	@Override
 	public boolean isSelectedLabel(String selectLocator, String pattern) {
-		throw new UnsupportedOperationException();
+		return WebDriverHelper.isSelectedLabel(this, selectLocator, pattern);
 	}
 
 	@Override
@@ -734,7 +734,7 @@ public abstract class BaseMobileDriverImpl
 
 	@Override
 	public void waitForConfirmation(String pattern) throws Exception {
-		throw new UnsupportedOperationException();
+		LiferaySeleniumHelper.waitForConfirmation(this, pattern);
 	}
 
 	@Override

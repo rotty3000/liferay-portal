@@ -91,8 +91,8 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable,
 		sb.append(modifiedDate);
 		sb.append(", servletContextName=");
 		sb.append(servletContextName);
-		sb.append(", version=");
-		sb.append(version);
+		sb.append(", schemaVersion=");
+		sb.append(schemaVersion);
 		sb.append(", buildNumber=");
 		sb.append(buildNumber);
 		sb.append(", buildDate=");
@@ -136,11 +136,11 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable,
 			releaseImpl.setServletContextName(servletContextName);
 		}
 
-		if (version == null) {
-			releaseImpl.setVersion(StringPool.BLANK);
+		if (schemaVersion == null) {
+			releaseImpl.setSchemaVersion(StringPool.BLANK);
 		}
 		else {
-			releaseImpl.setVersion(version);
+			releaseImpl.setSchemaVersion(schemaVersion);
 		}
 
 		releaseImpl.setBuildNumber(buildNumber);
@@ -174,7 +174,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable,
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 		servletContextName = objectInput.readUTF();
-		version = objectInput.readUTF();
+		schemaVersion = objectInput.readUTF();
 		buildNumber = objectInput.readInt();
 		buildDate = objectInput.readLong();
 		verified = objectInput.readBoolean();
@@ -197,11 +197,11 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable,
 			objectOutput.writeUTF(servletContextName);
 		}
 
-		if (version == null) {
+		if (schemaVersion == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
 		else {
-			objectOutput.writeUTF(version);
+			objectOutput.writeUTF(schemaVersion);
 		}
 
 		objectOutput.writeInt(buildNumber);
@@ -222,7 +222,7 @@ public class ReleaseCacheModel implements CacheModel<Release>, Externalizable,
 	public long createDate;
 	public long modifiedDate;
 	public String servletContextName;
-	public String version;
+	public String schemaVersion;
 	public int buildNumber;
 	public long buildDate;
 	public boolean verified;

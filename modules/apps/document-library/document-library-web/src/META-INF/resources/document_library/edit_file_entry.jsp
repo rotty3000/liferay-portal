@@ -319,17 +319,15 @@ else {
 			</c:if>
 		</div>
 
+		<div class="alert alert-danger hide" id="<portlet:namespace />fileTitleError">
+			<liferay-ui:message key="you-must-specify-a-file-or-a-title" />
+		</div>
+
 		<%@ include file="/document_library/edit_file_entry_picker.jspf" %>
 
-		<aui:input name="title">
-			<aui:validator errorMessage="you-must-specify-a-file-or-a-title" name="custom">
-				function(val, fieldNode, ruleValue) {
-					return ((val != '') || A.one('#<portlet:namespace />file').val() != '');
-				}
-			</aui:validator>
-		</aui:input>
+		<aui:input name="title" />
 
-		<c:if test="<%= ((folder == null) || folder.isSupportsMetadata()) %>">
+		<c:if test="<%= (folder == null) || folder.isSupportsMetadata() %>">
 			<aui:input name="description" />
 
 			<c:if test="<%= (folder == null) || (folder.getModel() instanceof DLFolder) %>">
@@ -427,7 +425,7 @@ else {
 			</liferay-ui:custom-attributes-available>
 		</c:if>
 
-		<c:if test="<%= ((folder == null) || folder.isSupportsSocial()) %>">
+		<c:if test="<%= (folder == null) || folder.isSupportsSocial() %>">
 			<liferay-ui:panel defaultState="closed" extended="<%= false %>" id="dlFileEntryCategorizationPanel" persistState="<%= true %>" title="categorization">
 				<aui:fieldset>
 					<aui:input classPK="<%= assetClassPK %>" classTypePK="<%= fileEntryTypeId %>" model="<%= DLFileEntry.class %>" name="categories" type="assetCategories" />
@@ -499,9 +497,11 @@ else {
 
 <aui:script>
 	function <portlet:namespace />changeFileEntryType() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.PREVIEW %>';
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm);
+		form.fm('<%= Constants.CMD %>').val('<%= Constants.PREVIEW %>');
+
+		submitForm(form);
 	}
 
 	function <portlet:namespace />cancelCheckOut() {
@@ -509,9 +509,11 @@ else {
 	}
 
 	function <portlet:namespace />checkIn() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.UPDATE_AND_CHECKIN %>';
+		var form = AUI.$(document.<portlet:namespace />fm);
 
-		submitForm(document.<portlet:namespace />fm);
+		form.fm('<%= Constants.CMD %>').val('<%= Constants.UPDATE_AND_CHECKIN %>');
+
+		submitForm(form);
 	}
 
 	function <portlet:namespace />checkOut() {
@@ -519,19 +521,44 @@ else {
 	}
 
 	function <portlet:namespace />getSuggestionsContent() {
-		return document.<portlet:namespace />fm.<portlet:namespace />title.value + ' ' + document.<portlet:namespace />fm.<portlet:namespace />description.value;
+		var form = AUI.$(document.<portlet:namespace />fm);
+
+		return form.fm('title').val() + ' ' + form.fm('description').val();
 	}
 
 	function <portlet:namespace />saveFileEntry(draft) {
-		<%= HtmlUtil.escape(uploadProgressId) %>.startProgress();
+		var $ = AUI.$;
 
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (fileEntry == null) ? Constants.ADD : Constants.UPDATE %>';
+		var className = 'alert alert-danger';
 
-		if (draft) {
-			document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_SAVE_DRAFT %>';
+		var fileTitleErrorNode = $('#<portlet:namespace />fileTitleError');
+
+		var form = $(document.<portlet:namespace />fm);
+
+		fileTitleErrorNode.addClass(className + ' hide');
+
+		var fileValue = form.fm('file').val();
+
+		var hasFieldValue = !!(fileValue || form.fm('title').val());
+
+		if (hasFieldValue) {
+			if (fileValue) {
+				<%= HtmlUtil.escape(uploadProgressId) %>.startProgress();
+			}
+
+			form.fm('<%= Constants.CMD %>').val('<%= (fileEntry == null) ? Constants.ADD : Constants.UPDATE %>');
+
+			if (draft) {
+				form.fm('workflowAction').val('<%= WorkflowConstants.ACTION_SAVE_DRAFT %>');
+			}
+
+			submitForm(form);
 		}
+		else {
+			fileTitleErrorNode.addClass(className + ' show');
 
-		submitForm(document.<portlet:namespace />fm);
+			window.location.hash = '<portlet:namespace />fileTitleError';
+		}
 	}
 
 	function <portlet:namespace />validateTitle() {

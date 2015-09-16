@@ -39,11 +39,12 @@ public class DLItemSelectorViewDisplayContext<T extends ItemSelectorCriterion> {
 
 	public DLItemSelectorViewDisplayContext(
 		T itemSelectorCriterion, DLItemSelectorView<T> dlItemSelectorView,
-		String itemSelectedEventName, PortletURL portletURL) {
+		String itemSelectedEventName, boolean search, PortletURL portletURL) {
 
 		_itemSelectorCriterion = itemSelectorCriterion;
 		_dlItemSelectorView = dlItemSelectorView;
 		_itemSelectedEventName = itemSelectedEventName;
+		_search = search;
 		_portletURL = portletURL;
 	}
 
@@ -72,6 +73,8 @@ public class DLItemSelectorViewDisplayContext<T extends ItemSelectorCriterion> {
 		PortletURL portletURL = PortletURLUtil.clone(
 			_portletURL, liferayPortletResponse);
 
+		portletURL.setParameter(
+			"repositoryId", String.valueOf(getRepositoryId(request)));
 		portletURL.setParameter(
 			"folderId", String.valueOf(getFolderId(request)));
 		portletURL.setParameter(
@@ -107,9 +110,14 @@ public class DLItemSelectorViewDisplayContext<T extends ItemSelectorCriterion> {
 		return portletURL;
 	}
 
+	public boolean isSearch() {
+		return _search;
+	}
+
 	private final DLItemSelectorView<T> _dlItemSelectorView;
 	private final String _itemSelectedEventName;
 	private final T _itemSelectorCriterion;
 	private final PortletURL _portletURL;
+	private final boolean _search;
 
 }

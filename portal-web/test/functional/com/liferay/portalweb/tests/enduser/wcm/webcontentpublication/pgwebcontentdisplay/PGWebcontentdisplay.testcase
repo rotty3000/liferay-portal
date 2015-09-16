@@ -73,7 +73,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-56754" name="AddPortletWCDSite" priority="4">
+	<command name="AddPortletWCDSite" priority="4">
 		<execute macro="Page#gotoCP">
 			<var name="portletName" value="Sites" />
 		</execute>
@@ -268,7 +268,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-56568" name="AddWithStructure" priority="4">
+	<command name="AddWithStructure" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 		</execute>
@@ -338,7 +338,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-56568" name="ChangeTemplate" priority="4">
+	<command name="ChangeTemplate" priority="4">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 		</execute>
@@ -829,7 +829,7 @@
 		</execute>
 	</command>
 
-	<command known-issues="LPS-54964" name="ViewEditTemplate" priority="4">
+	<command name="ViewEditTemplate" priority="4">
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Web Content Display Page" />
 		</execute>
