@@ -109,8 +109,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 
 					configureBundleExtensionDefaults(
 						project, liferayOSGiExtension);
-
-					configureTaskUnzipJar(project);
 				}
 
 			});
@@ -806,6 +804,7 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		super.configureTasks(project, liferayExtension);
 
 		configureTaskBuildXSD(project);
+		configureTaskUnzipJar(project);
 	}
 
 	protected void configureTasksBuildTaglibs(Project project) {
