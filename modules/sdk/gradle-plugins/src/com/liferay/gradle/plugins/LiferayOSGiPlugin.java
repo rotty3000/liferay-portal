@@ -164,6 +164,21 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		directDeployTask.setAppServerDeployDir(
 			directDeployTask.getTemporaryDir());
 		directDeployTask.setAppServerType("tomcat");
+
+		directDeployTask.setWebAppFile(
+			new Callable<File>() {
+
+				@Override
+				public File call() throws Exception {
+					Jar jar = (Jar)GradleUtil.getTask(
+						project, JavaPlugin.JAR_TASK_NAME);
+
+					return FileUtil.replaceExtension(
+						jar.getArchivePath(), War.WAR_EXTENSION);
+				}
+
+			});
+
 		directDeployTask.setWebAppType("portlet");
 
 		directDeployTask.doFirst(
@@ -552,26 +567,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 			project, SourceSet.MAIN_SOURCE_SET_NAME, classesDir, srcDir);
 	}
 
-	protected void configureTaskAutoUpdateXml(Project project) {
-		DirectDeployTask directDeployTask =
-			(DirectDeployTask)GradleUtil.getTask(
-				project, AUTO_UPDATE_XML_TASK_NAME);
-
-		configureTaskAutoUpdateXmlWebAppFile(directDeployTask);
-	}
-
-	protected void configureTaskAutoUpdateXmlWebAppFile(
-		DirectDeployTask directDeployTask) {
-
-		Jar jar = (Jar)GradleUtil.getTask(
-			directDeployTask.getProject(), JavaPlugin.JAR_TASK_NAME);
-
-		File warFile = FileUtil.replaceExtension(
-			jar.getArchivePath(), War.WAR_EXTENSION);
-
-		directDeployTask.setWebAppFile(warFile);
-	}
-
 	@Override
 	protected void configureTaskBuildCSSDocrootDirName(
 		BuildCSSTask buildCSSTask) {
@@ -809,8 +804,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		super.configureTasks(project, liferayExtension);
 
 		configureTaskBuildXSD(project);
-
-		configureTaskAutoUpdateXml(project);
 	}
 
 	protected void configureTasksBuildTaglibs(Project project) {
