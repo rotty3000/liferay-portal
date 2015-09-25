@@ -1462,7 +1462,9 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 		}
 	}
 
-	protected void configureTaskJar(Project project) {
+	protected void configureTaskJar(
+		Project project, LiferayExtension liferayExtension) {
+
 		Jar jar = (Jar)GradleUtil.getTask(project, JavaPlugin.JAR_TASK_NAME);
 
 		configureTaskJarDependsOn(jar);
@@ -1620,7 +1622,7 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 		configureTaskFormatWSDL(project);
 		configureTaskFormatXSD(project);
 		configureTaskInitGradle(project);
-		configureTaskJar(project);
+		configureTaskJar(project, liferayExtension);
 		configureTaskSetupTestableTomcat(project, liferayExtension);
 		configureTaskStartTestableTomcat(project, liferayExtension);
 		configureTaskTestIntegration(project, liferayExtension);
