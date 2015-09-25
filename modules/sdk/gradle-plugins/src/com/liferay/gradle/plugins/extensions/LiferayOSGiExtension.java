@@ -20,13 +20,20 @@ import com.liferay.ant.bnd.bower.BowerAnalyzerPlugin;
 import com.liferay.ant.bnd.jsp.JspAnalyzerPlugin;
 import com.liferay.ant.bnd.sass.SassAnalyzerPlugin;
 import com.liferay.ant.bnd.spring.SpringDependencyAnalyzerPlugin;
+import com.liferay.gradle.util.FileUtil;
 import com.liferay.gradle.util.GradleUtil;
 import com.liferay.gradle.util.StringUtil;
 import com.liferay.gradle.util.Validator;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.compile.CompileOptions;
@@ -39,6 +46,31 @@ public class LiferayOSGiExtension extends LiferayExtension {
 
 	public LiferayOSGiExtension(Project project) {
 		super(project);
+
+		_bndFile = project.file("bnd.bnd");
+
+		Map<String, String> bundleInstructions = new HashMap<>();
+
+		Properties properties = null;
+
+		try {
+			properties = FileUtil.readProperties(_bndFile);
+		}
+		catch (IOException ioe) {
+			throw new GradleException("Unable to read " + _bndFile, ioe);
+		}
+
+		for (String key : properties.stringPropertyNames()) {
+			String value = properties.getProperty(key);
+
+			bundleInstructions.put(key, value);
+		}
+
+		_bundleInstructions = Collections.unmodifiableMap(bundleInstructions);
+	}
+
+	public File getBndFile() {
+		return _bndFile;
 	}
 
 	public Map<String, String> getBundleDefaultInstructions() {
@@ -82,6 +114,10 @@ public class LiferayOSGiExtension extends LiferayExtension {
 		return map;
 	}
 
+	public Map<String, String> getBundleInstructions() {
+		return _bundleInstructions;
+	}
+
 	public boolean isAutoUpdateXml() {
 		return _autoUpdateXml;
 	}
@@ -105,5 +141,7 @@ public class LiferayOSGiExtension extends LiferayExtension {
 	};
 
 	private boolean _autoUpdateXml = true;
+	private final File _bndFile;
+	private final Map<String, String> _bundleInstructions;
 
 }
