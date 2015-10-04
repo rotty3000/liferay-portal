@@ -24,7 +24,7 @@ import com.liferay.portal.kernel.monitoring.Level;
 import com.liferay.portal.kernel.monitoring.MonitoringControl;
 import com.liferay.portal.kernel.monitoring.MonitoringException;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
@@ -33,9 +33,10 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
 
 /**
  * @author Michael C. Han
@@ -46,10 +47,13 @@ public class MonitoringMessageListener
 
 	public void afterPropertiesSet() {
 		Registry registry = RegistryUtil.getRegistry();
+		
+		Filter filter = registry.getFilter(
+			"(&(namespace=*)(objectClass=" + 
+				DataSampleProcessor.class.getName() + "))");
 
 		_serviceTracker = registry.trackServices(
-			DataSampleProcessor.class,
-			new DataSampleProcessorServiceTrackerCustomizer());
+			filter, new DataSampleProcessorServiceTrackerCustomizer());
 
 		_serviceTracker.open();
 	}
@@ -183,16 +187,7 @@ public class MonitoringMessageListener
 			DataSampleProcessor<DataSample> dataSampleProcessor =
 				registry.getService(serviceReference);
 
-			if (Validator.isNotNull(namespace)) {
-				registerDataSampleProcessor(namespace, dataSampleProcessor);
-			}
-			else {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"No namespace defined for service " +
-							dataSampleProcessor.getClass());
-				}
-			}
+			registerDataSampleProcessor(namespace, dataSampleProcessor);
 
 			return dataSampleProcessor;
 		}
@@ -211,19 +206,9 @@ public class MonitoringMessageListener
 			String namespace = (String)serviceReference.getProperty(
 				"namespace");
 
-			if (Validator.isNull(namespace)) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(
-						"No namespace defined for service " +
-							dataSampleProcessor.getClass());
-				}
-
-				return;
-			}
-
 			Registry registry = RegistryUtil.getRegistry();
 
-			dataSampleProcessor = registry.getService(serviceReference);
+			registry.ungetService(serviceReference);
 
 			unregisterDataSampleProcessor(namespace, dataSampleProcessor);
 		}

@@ -16,7 +16,6 @@ package com.liferay.portlet.ratings.definition;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.ratings.RatingsType;
 import com.liferay.registry.Registry;
@@ -25,9 +24,12 @@ import com.liferay.registry.ServiceReference;
 import com.liferay.registry.ServiceTrackerCustomizer;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerMap;
+import com.liferay.registry.util.StringPlus;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
 import java.util.Map;
 
 /**
@@ -75,25 +77,8 @@ public class PortletRatingsDefinitionUtil {
 		public PortletRatingsDefinitionValues addingService(
 			ServiceReference<PortletRatingsDefinition> serviceReference) {
 
-			String[] classNames = null;
-
-			Object modelClassName = serviceReference.getProperty(
-				"model.class.name");
-
-			if (modelClassName instanceof Object[]) {
-				classNames = (String[])modelClassName;
-			}
-			else {
-				classNames = new String[] {(String)modelClassName};
-			}
-
-			if (ArrayUtil.isEmpty(classNames)) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Property \"model.class.name\" is not set");
-				}
-
-				return null;
-			}
+			List<String> classNames = StringPlus.asList(
+				serviceReference.getProperty("model.class.name"));
 
 			Registry registry = RegistryUtil.getRegistry();
 
@@ -122,7 +107,8 @@ public class PortletRatingsDefinitionUtil {
 			}
 
 			return new PortletRatingsDefinitionValues(
-				classNames, defaultRatingsType, portletId);
+				classNames.toArray(new String[classNames.size()]), 
+				defaultRatingsType, portletId);
 		}
 
 		@Override

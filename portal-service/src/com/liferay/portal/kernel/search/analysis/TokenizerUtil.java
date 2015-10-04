@@ -47,6 +47,8 @@ public class TokenizerUtil {
 		Registry registry = RegistryUtil.getRegistry();
 
 		_serviceTracker = registry.trackServices(Tokenizer.class);
+		
+		_serviceTracker.open();
 	}
 
 	private static final TokenizerUtil _instance = new TokenizerUtil();

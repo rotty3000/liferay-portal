@@ -26,6 +26,7 @@ import com.liferay.registry.collections.ServiceTrackerMap;
 
 import java.util.Iterator;
 import java.util.List;
+
 import java.util.Map;
 
 /**
@@ -72,7 +73,7 @@ public class EditorConfigProvider
 		<String, List<EditorConfigContributor>>
 			_serviceTrackerMap = ServiceTrackerCollections.multiValueMap(
 				EditorConfigContributor.class,
-				"(|(editor.config.key=*)(editor.name=*)" +
+				"(&(|(editor.config.key=*)(editor.name=*))" +
 					"(javax.portlet.name=*)(objectClass=" +
 						EditorConfigContributor.class.getName() + "))",
 				_serviceReferenceMapper);

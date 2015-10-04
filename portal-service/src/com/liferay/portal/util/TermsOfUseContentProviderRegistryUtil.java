@@ -14,22 +14,20 @@
 
 package com.liferay.portal.util;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * @author Eduardo Garcia
@@ -55,18 +53,6 @@ public class TermsOfUseContentProviderRegistryUtil {
 		getTermsOfUseContentProviders() {
 
 		return _instance._getTermsOfUseContentProviders();
-	}
-
-	public static void register(
-		TermsOfUseContentProvider termsOfUseContentProvider) {
-
-		_instance._register(termsOfUseContentProvider);
-	}
-
-	public static void unregister(
-		TermsOfUseContentProvider termsOfUseContentProvider) {
-
-		_instance._unregister(termsOfUseContentProvider);
 	}
 
 	private TermsOfUseContentProviderRegistryUtil() {
@@ -106,35 +92,9 @@ public class TermsOfUseContentProviderRegistryUtil {
 		return ListUtil.fromMapValues(_termsOfUseContentProviders);
 	}
 
-	private void _register(
-		TermsOfUseContentProvider termsOfUseContentProvider) {
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<TermsOfUseContentProvider> serviceRegistration =
-			registry.registerService(
-				TermsOfUseContentProvider.class, termsOfUseContentProvider);
-
-		_serviceRegistrations.put(
-			termsOfUseContentProvider, serviceRegistration);
-	}
-
-	private void _unregister(
-		TermsOfUseContentProvider termsOfUseContentProvider) {
-
-		ServiceRegistration<TermsOfUseContentProvider> serviceRegistration =
-			_serviceRegistrations.remove(termsOfUseContentProvider);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final TermsOfUseContentProviderRegistryUtil _instance =
 		new TermsOfUseContentProviderRegistryUtil();
 
-	private final ServiceRegistrationMap<TermsOfUseContentProvider>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker<TermsOfUseContentProvider,
 		TermsOfUseContentProvider> _serviceTracker;
 	private final Map<String, TermsOfUseContentProvider>

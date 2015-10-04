@@ -27,30 +27,15 @@ import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.StringServiceRegistrationMap;
-import com.liferay.registry.collections.StringServiceRegistrationMapImpl;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class PollerProcessorUtil {
-
-	public static void addPollerProcessor(
-		String portletId, PollerProcessor pollerProcessor) {
-
-		_instance._addPollerProcessor(portletId, pollerProcessor);
-	}
-
-	public static void deletePollerProcessor(String portletId) {
-		_instance._deletePollerProcessor(portletId);
-	}
 
 	public static PollerProcessor getPollerProcessor(String portletId) {
 		return _instance._getPollerProcessor(portletId);
@@ -67,31 +52,6 @@ public class PollerProcessorUtil {
 			filter, new PollerProcessorServiceTrackerCustomizer());
 
 		_serviceTracker.open();
-	}
-
-	private void _addPollerProcessor(
-		String portletId, PollerProcessor pollerProcessor) {
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		Map<String, Object> properties = new HashMap<>();
-
-		properties.put("javax.portlet.name", portletId);
-
-		ServiceRegistration<PollerProcessor> serviceRegistration =
-			registry.registerService(
-				PollerProcessor.class, pollerProcessor, properties);
-
-		_serviceRegistrations.put(portletId, serviceRegistration);
-	}
-
-	private void _deletePollerProcessor(String portletId) {
-		ServiceRegistration<PollerProcessor> serviceRegistration =
-			_serviceRegistrations.remove(portletId);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
 	}
 
 	private PollerProcessor _getPollerProcessor(String portletId) {
@@ -157,8 +117,6 @@ public class PollerProcessorUtil {
 
 			});
 
-	private final StringServiceRegistrationMap<PollerProcessor>
-		_serviceRegistrations = new StringServiceRegistrationMapImpl<>();
 	private final ServiceTracker<PollerProcessor, PollerProcessor>
 		_serviceTracker;
 

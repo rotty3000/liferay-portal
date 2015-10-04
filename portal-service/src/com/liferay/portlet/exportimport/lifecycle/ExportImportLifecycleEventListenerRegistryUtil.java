@@ -17,14 +17,10 @@ package com.liferay.portlet.exportimport.lifecycle;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,28 +38,6 @@ public class ExportImportLifecycleEventListenerRegistryUtil {
 		getSyncExportImportLifecycleListeners() {
 
 		return _instance._getSyncExportImportLifecycleListeners();
-	}
-
-	public static void register(
-		ExportImportLifecycleListener exportImportLifecycleListener) {
-
-		_instance._register(exportImportLifecycleListener);
-	}
-
-	public static void unregister(
-		ExportImportLifecycleListener exportImportLifecycleListener) {
-
-		_instance._unregister(exportImportLifecycleListener);
-	}
-
-	public static void unregister(
-		List<ExportImportLifecycleListener> exportImportLifecycleListeners) {
-
-		for (ExportImportLifecycleListener exportImportLifecycleListener :
-				exportImportLifecycleListeners) {
-
-			unregister(exportImportLifecycleListener);
-		}
 	}
 
 	private ExportImportLifecycleEventListenerRegistryUtil() {
@@ -88,38 +62,11 @@ public class ExportImportLifecycleEventListenerRegistryUtil {
 		return _syncExportImportLifecycleListeners;
 	}
 
-	private void _register(
-		ExportImportLifecycleListener exportImportLifecycleListener) {
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<ExportImportLifecycleListener> serviceRegistration =
-			registry.registerService(
-				ExportImportLifecycleListener.class,
-				exportImportLifecycleListener);
-
-		_serviceRegistrations.put(
-			exportImportLifecycleListener, serviceRegistration);
-	}
-
-	private void _unregister(
-		ExportImportLifecycleListener exportImportLifecycleListener) {
-
-		ServiceRegistration<ExportImportLifecycleListener> serviceRegistration =
-			_serviceRegistrations.remove(exportImportLifecycleListener);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final ExportImportLifecycleEventListenerRegistryUtil
 		_instance = new ExportImportLifecycleEventListenerRegistryUtil();
 
 	private final Set<ExportImportLifecycleListener>
 		_asyncExportImportLifecycleListeners = new HashSet<>();
-	private final ServiceRegistrationMap<ExportImportLifecycleListener>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker
 		<ExportImportLifecycleListener, ExportImportLifecycleListener>
 			_serviceTracker;

@@ -14,22 +14,20 @@
 
 package com.liferay.portlet.exportimport.lar;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * Provides a utility facade to the staged model data handler registry
@@ -64,44 +62,6 @@ public class StagedModelDataHandlerRegistryUtil {
 		return _instance._getStagedModelDataHandlers();
 	}
 
-	/**
-	 * Registers the staged model data handler.
-	 *
-	 * @param stagedModelDataHandler the staged model data handler to register
-	 */
-	public static void register(
-		StagedModelDataHandler<?> stagedModelDataHandler) {
-
-		_instance._register(stagedModelDataHandler);
-	}
-
-	/**
-	 * Unregisters the staged model data handlers.
-	 *
-	 * @param stagedModelDataHandlers the staged model data handlers to
-	 *        unregister
-	 */
-	public static void unregister(
-		List<StagedModelDataHandler<?>> stagedModelDataHandlers) {
-
-		for (StagedModelDataHandler<?> stagedModelDataHandler :
-				stagedModelDataHandlers) {
-
-			unregister(stagedModelDataHandler);
-		}
-	}
-
-	/**
-	 * Unregisters the staged model data handler.
-	 *
-	 * @param stagedModelDataHandler the staged model data handler to unregister
-	 */
-	public static void unregister(
-		StagedModelDataHandler<?> stagedModelDataHandler) {
-
-		_instance._unregister(stagedModelDataHandler);
-	}
-
 	private StagedModelDataHandlerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
@@ -126,31 +86,9 @@ public class StagedModelDataHandlerRegistryUtil {
 		return ListUtil.fromCollection(values);
 	}
 
-	private void _register(StagedModelDataHandler<?> stagedModelDataHandler) {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<StagedModelDataHandler<?>> serviceRegistration =
-			registry.registerService(
-				(Class<StagedModelDataHandler<?>>)(Class<?>)
-					StagedModelDataHandler.class, stagedModelDataHandler);
-
-		_serviceRegistrations.put(stagedModelDataHandler, serviceRegistration);
-	}
-
-	private void _unregister(StagedModelDataHandler<?> stagedModelDataHandler) {
-		ServiceRegistration<StagedModelDataHandler<?>> serviceRegistration =
-			_serviceRegistrations.remove(stagedModelDataHandler);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final StagedModelDataHandlerRegistryUtil _instance =
 		new StagedModelDataHandlerRegistryUtil();
 
-	private final ServiceRegistrationMap<StagedModelDataHandler<?>>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final
 		ServiceTracker<StagedModelDataHandler<?>, StagedModelDataHandler<?>>
 			_serviceTracker;

@@ -14,23 +14,22 @@
 
 package com.liferay.portlet.exportimport.controller;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 import com.liferay.registry.util.StringPlus;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * @author Daniel Kocsis
@@ -50,22 +49,15 @@ public class ExportImportControllerRegistryUtil {
 		return _instance._getImportController(className);
 	}
 
-	public static void register(ExportImportController exportImportController) {
-		_instance._register(exportImportController);
-	}
-
-	public static void unregister(
-		ExportImportController exportImportController) {
-
-		_instance._unregister(exportImportController);
-	}
-
 	private ExportImportControllerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
+		Filter filter = registry.getFilter(
+			"(&(model.class.name=*)(objectClass=" +
+				ExportImportController.class.getName() + "))");
+
 		_serviceTracker = registry.trackServices(
-			ExportImportController.class,
-			new ExportImportControllerServiceTrackerCustomizer());
+			filter, new ExportImportControllerServiceTrackerCustomizer());
 
 		_serviceTracker.open();
 	}
@@ -85,25 +77,6 @@ public class ExportImportControllerRegistryUtil {
 		return _importControllers.get(className);
 	}
 
-	private void _register(ExportImportController exportImportController) {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<ExportImportController> serviceRegistration =
-			registry.registerService(
-				ExportImportController.class, exportImportController);
-
-		_serviceRegistrations.put(exportImportController, serviceRegistration);
-	}
-
-	private void _unregister(ExportImportController exportImportController) {
-		ServiceRegistration<ExportImportController> serviceRegistration =
-			_serviceRegistrations.remove(exportImportController);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final ExportImportControllerRegistryUtil _instance =
 		new ExportImportControllerRegistryUtil();
 
@@ -113,8 +86,6 @@ public class ExportImportControllerRegistryUtil {
 		new ConcurrentHashMap<>();
 	private final Map<String, ImportController> _importControllers =
 		new ConcurrentHashMap<>();
-	private final ServiceRegistrationMap<ExportImportController>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker<ExportImportController, ExportImportController>
 		_serviceTracker;
 

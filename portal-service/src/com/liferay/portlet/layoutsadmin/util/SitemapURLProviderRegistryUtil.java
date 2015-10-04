@@ -14,22 +14,20 @@
 
 package com.liferay.portlet.layoutsadmin.util;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * @author Eduardo Garcia
@@ -43,22 +41,6 @@ public class SitemapURLProviderRegistryUtil {
 
 	public static List<SitemapURLProvider> getSitemapURLProviders() {
 		return _instance._getSitemapURLProviders();
-	}
-
-	public static void register(SitemapURLProvider sitemapURLProvider) {
-		_instance._register(sitemapURLProvider);
-	}
-
-	public static void unregister(
-		List<SitemapURLProvider> sitemapURLProviders) {
-
-		for (SitemapURLProvider sitemapURLProvider : sitemapURLProviders) {
-			unregister(sitemapURLProvider);
-		}
-	}
-
-	public static void unregister(SitemapURLProvider sitemapURLProvider) {
-		_instance._unregister(sitemapURLProvider);
 	}
 
 	private SitemapURLProviderRegistryUtil() {
@@ -81,30 +63,9 @@ public class SitemapURLProviderRegistryUtil {
 		return ListUtil.fromCollection(values);
 	}
 
-	private void _register(SitemapURLProvider sitemapURLProvider) {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<SitemapURLProvider> serviceRegistration =
-			registry.registerService(
-				SitemapURLProvider.class, sitemapURLProvider);
-
-		_serviceRegistrations.put(sitemapURLProvider, serviceRegistration);
-	}
-
-	private void _unregister(SitemapURLProvider sitemapURLProvider) {
-		ServiceRegistration<SitemapURLProvider> serviceRegistration =
-			_serviceRegistrations.remove(sitemapURLProvider);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final SitemapURLProviderRegistryUtil _instance =
 		new SitemapURLProviderRegistryUtil();
 
-	private final ServiceRegistrationMap<SitemapURLProvider>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final
 		ServiceTracker<SitemapURLProvider, SitemapURLProvider> _serviceTracker;
 	private final Map<String, SitemapURLProvider>

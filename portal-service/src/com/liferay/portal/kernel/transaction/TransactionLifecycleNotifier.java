@@ -144,6 +144,10 @@ public class TransactionLifecycleNotifier {
 			ServiceReference<TransactionLifecycleListener> serviceReference,
 			TransactionLifecycleListener transactionLifecycleListener) {
 
+			Registry registry = RegistryUtil.getRegistry();
+			
+			registry.ungetService(serviceReference);
+
 			_transactionLifecycleListeners.remove(transactionLifecycleListener);
 		}
 

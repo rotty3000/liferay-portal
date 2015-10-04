@@ -14,23 +14,22 @@
 
 package com.liferay.portal.security.permission;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 import com.liferay.registry.util.StringPlus;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * @author Gergely Mathe
@@ -48,35 +47,15 @@ public class PermissionUpdateHandlerRegistryUtil {
 		return _instance._getPermissionUpdateHandlers();
 	}
 
-	public static void register(
-		PermissionUpdateHandler permissionUpdateHandler) {
-
-		_instance._register(permissionUpdateHandler);
-	}
-
-	public static void unregister(
-		List<PermissionUpdateHandler> permissionUpdateHandlers) {
-
-		for (PermissionUpdateHandler permissionUpdateHandler :
-				permissionUpdateHandlers) {
-
-			unregister(permissionUpdateHandler);
-		}
-	}
-
-	public static void unregister(
-		PermissionUpdateHandler permissionUpdateHandler) {
-
-		_instance._unregister(permissionUpdateHandler);
-	}
-
 	private PermissionUpdateHandlerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
+		Filter filter = registry.getFilter(
+			"(&(model.class.name=*)(objectClass=" + 
+				PermissionUpdateHandler.class.getName() + "))");
+
 		_serviceTracker = registry.trackServices(
-			(Class<PermissionUpdateHandler>)(Class<?>)
-				PermissionUpdateHandler.class,
-			new PermissionUpdateHandlerServiceTrackerCustomizer());
+			filter, new PermissionUpdateHandlerServiceTrackerCustomizer());
 
 		_serviceTracker.open();
 	}
@@ -94,34 +73,11 @@ public class PermissionUpdateHandlerRegistryUtil {
 		return ListUtil.fromCollection(values);
 	}
 
-	private void _register(PermissionUpdateHandler permissionUpdateHandler) {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<PermissionUpdateHandler>
-			serviceRegistration = registry.registerService(
-				(Class<PermissionUpdateHandler>)(Class<?>)
-					PermissionUpdateHandler.class,
-				permissionUpdateHandler);
-
-		_serviceRegistrations.put(permissionUpdateHandler, serviceRegistration);
-	}
-
-	private void _unregister(PermissionUpdateHandler permissionUpdateHandler) {
-		ServiceRegistration<PermissionUpdateHandler> serviceRegistration =
-			_serviceRegistrations.remove(permissionUpdateHandler);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final PermissionUpdateHandlerRegistryUtil _instance =
 		new PermissionUpdateHandlerRegistryUtil();
 
 	private final Map<String, PermissionUpdateHandler>
 		_permissionUpdateHandlers = new ConcurrentHashMap<>();
-	private final ServiceRegistrationMap<PermissionUpdateHandler>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker
 		<PermissionUpdateHandler, PermissionUpdateHandler> _serviceTracker;
 

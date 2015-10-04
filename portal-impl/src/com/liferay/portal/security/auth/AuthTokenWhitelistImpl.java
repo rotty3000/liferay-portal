@@ -38,8 +38,9 @@ import com.liferay.util.Encryptor;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import java.util.Map;
 
 /**
  * @author Raymond Augé
@@ -58,7 +59,7 @@ public class AuthTokenWhitelistImpl implements AuthTokenWhitelist {
 
 		_serviceTracker = registry.trackServices(
 			registry.getFilter(
-				"(&(" + PropsKeys.AUTH_TOKEN_IGNORE_ACTIONS+"=*)" +
+				"(&(" + PropsKeys.AUTH_TOKEN_IGNORE_ACTIONS + "=*)" +
 					"(objectClass=java.lang.Object))"),
 			new AuthTokenIgnoreActionsServiceTrackerCustomizer());
 
@@ -254,7 +255,6 @@ public class AuthTokenWhitelistImpl implements AuthTokenWhitelist {
 
 			properties.put(
 				PropsKeys.AUTH_TOKEN_IGNORE_ACTIONS, authTokenIgnoreAction);
-			properties.put("objectClass", Object.class.getName());
 
 			ServiceRegistration<Object> serviceRegistration =
 				registry.registerService(

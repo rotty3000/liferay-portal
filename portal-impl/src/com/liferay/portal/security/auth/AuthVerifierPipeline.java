@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
@@ -36,10 +35,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,11 +71,8 @@ public class AuthVerifierPipeline {
 	private AuthVerifierPipeline() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		Filter filter = registry.getFilter(
-			"(objectClass=" + AuthVerifier.class.getName() + ")");
-
 		_serviceTracker = registry.trackServices(
-			filter, new AuthVerifierTrackerCustomizer());
+			AuthVerifier.class, new AuthVerifierTrackerCustomizer());
 
 		_serviceTracker.open();
 	}

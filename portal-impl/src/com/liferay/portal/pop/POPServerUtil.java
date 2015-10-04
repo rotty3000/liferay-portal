@@ -29,11 +29,8 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,16 +40,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  */
 public class POPServerUtil {
-
-	public static void addListener(MessageListener listener) throws Exception {
-		_instance._addListener(listener);
-	}
-
-	public static void deleteListener(MessageListener listener)
-		throws Exception {
-
-		_instance._deleteListener(listener);
-	}
 
 	public static List<MessageListener> getListeners() {
 		return _instance._getListeners();
@@ -70,40 +57,6 @@ public class POPServerUtil {
 			new MessageListenerServiceTrackerCustomizer());
 
 		_serviceTracker.open();
-	}
-
-	private void _addListener(MessageListener listener) {
-		if (listener == null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Do not add null listener");
-			}
-
-			return;
-		}
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<MessageListener> serviceRegistration =
-			registry.registerService(MessageListener.class, listener);
-
-		_serviceRegistrations.put(listener, serviceRegistration);
-	}
-
-	private void _deleteListener(MessageListener listener) {
-		if (listener == null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Do not delete null listener");
-			}
-
-			return;
-		}
-
-		ServiceRegistration<MessageListener> serviceRegistration =
-			_serviceRegistrations.remove(listener);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
 	}
 
 	private List<MessageListener> _getListeners() {
@@ -146,8 +99,6 @@ public class POPServerUtil {
 	private static final POPServerUtil _instance = new POPServerUtil();
 
 	private final List<MessageListener> _listeners = new ArrayList<>();
-	private final ServiceRegistrationMap<MessageListener>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker<MessageListener, MessageListenerWrapper>
 		_serviceTracker;
 
@@ -171,8 +122,6 @@ public class POPServerUtil {
 
 			MessageListenerWrapper messageListenerWrapper =
 				new MessageListenerWrapper(messageListener);
-
-			_deleteListener(messageListenerWrapper);
 
 			_listeners.add(messageListenerWrapper);
 

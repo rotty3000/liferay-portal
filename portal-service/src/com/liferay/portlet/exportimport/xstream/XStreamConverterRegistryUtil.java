@@ -17,11 +17,8 @@ package com.liferay.portlet.exportimport.xstream;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
-import com.liferay.registry.collections.ServiceRegistrationMap;
-import com.liferay.registry.collections.ServiceRegistrationMapImpl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,14 +30,6 @@ public class XStreamConverterRegistryUtil {
 
 	public static Set<XStreamConverter> getXStreamConverters() {
 		return _instance._getXStreamConverters();
-	}
-
-	public static void register(XStreamConverter xStreamConverter) {
-		_instance._register(xStreamConverter);
-	}
-
-	public static void unregister(XStreamConverter xStreamConverter) {
-		_instance._unregister(xStreamConverter);
 	}
 
 	private XStreamConverterRegistryUtil() {
@@ -57,29 +46,9 @@ public class XStreamConverterRegistryUtil {
 		return _xStreamConverters;
 	}
 
-	private void _register(XStreamConverter xStreamConverter) {
-		Registry registry = RegistryUtil.getRegistry();
-
-		ServiceRegistration<XStreamConverter> serviceRegistration =
-			registry.registerService(XStreamConverter.class, xStreamConverter);
-
-		_serviceRegistrations.put(xStreamConverter, serviceRegistration);
-	}
-
-	private void _unregister(XStreamConverter xStreamConverter) {
-		ServiceRegistration<XStreamConverter> serviceRegistration =
-			_serviceRegistrations.remove(xStreamConverter);
-
-		if (serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-	}
-
 	private static final XStreamConverterRegistryUtil _instance =
 		new XStreamConverterRegistryUtil();
 
-	private final ServiceRegistrationMap<XStreamConverter>
-		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
 	private final ServiceTracker <XStreamConverter, XStreamConverter>
 		_serviceTracker;
 	private final Set<XStreamConverter> _xStreamConverters = new HashSet<>();
