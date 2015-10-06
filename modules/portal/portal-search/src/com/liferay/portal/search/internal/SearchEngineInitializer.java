@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
+import com.liferay.portal.kernel.search.background.task.ReindexStatusMessageSenderUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.util.PropsValues;
 
@@ -88,6 +89,8 @@ public class SearchEngineInitializer implements Runnable {
 		stopWatch.start();
 
 		try {
+			ReindexStatusMessageSenderUtil.sendStatusMessage("hi");
+
 			SearchEngineUtil.removeCompany(_companyId);
 
 			SearchEngineUtil.initialize(_companyId);
@@ -134,7 +137,7 @@ public class SearchEngineInitializer implements Runnable {
 			_log.info("Reindexing with " + indexer.getClass() + " started");
 		}
 
-		indexer.reindex(new String[] {String.valueOf(_companyId)});
+		indexer.reindex(new String[]{String.valueOf(_companyId)});
 
 		_usedSearchEngineIds.add(indexer.getSearchEngineId());
 
