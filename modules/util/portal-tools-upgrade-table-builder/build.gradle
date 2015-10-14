@@ -6,5 +6,5 @@ dependencies {
 }
 
 liferay {
-	deployDir = file("../../../tools/sdk/dependencies/${bundle.instructions['Bundle-SymbolicName']}/lib")
+	deployDir = file("../../../tools/sdk/dependencies/${bundleInstructions['Bundle-SymbolicName']}/lib")
 }

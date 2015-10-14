@@ -273,7 +273,7 @@ whip {
 pluginManager.withPlugin("com.liferay.maven.plugin.builder") {
 	afterEvaluate {
 		buildPluginDescriptor {
-			pomArtifactId = bundle.instructions["Bundle-SymbolicName"]
+			pomArtifactId = liferay.bundleInstructions["Bundle-SymbolicName"]
 		}
 	}
 
