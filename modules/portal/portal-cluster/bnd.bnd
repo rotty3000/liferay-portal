@@ -4,7 +4,7 @@ Bundle-Version: 1.0.0
 DynamicImport-Package:\
 	com.liferay.portal.kernel.*,\
 	com.liferay.portal.model.*
-Export-Package: com.liferay.portal.cluster.*;version=${plugin.full.version}
+Export-Package: com.liferay.portal.cluster.*;version=${plugin-full-version}
 Import-Package:\
 	!bsf.*,\
 	!bsh.*,\

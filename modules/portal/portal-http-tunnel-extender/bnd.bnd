@@ -8,4 +8,4 @@ Include-Resource:\
 Provide-Capability:\
 	liferay.extender;\
 	liferay.extender="http.tunnel.extender";\
-	version:Version="${plugin.full.version}"
+	version:Version="${plugin-full-version}"

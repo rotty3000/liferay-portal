@@ -9,8 +9,8 @@ Export-Package:\
 	com.liferay.social.networking.wall.social.*
 Include-Resource:\
 	classes,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class
 Liferay-Service: true
 Require-Capability:\
 	liferay.extender;\
