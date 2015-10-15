@@ -33,10 +33,6 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 afterEvaluate {
-	project.ext.set("app.server.lib.portal.dir", project.relativePath(appServerLibPortalDir))
-	project.ext.set("app.server.portal.dir", project.relativePath(liferay.appServerPortalDir))
-	project.ext.set("plugin.full.version", project.version.toString())
-
 	if (project.hasProperty("snapshot") && !project.version.endsWith("-SNAPSHOT")) {
 		project.version = project.version + "-SNAPSHOT"
 	}
@@ -184,6 +180,14 @@ ideaModule {
 	}
 }
 
+jar {
+	manifest {
+		attributes "app-server-lib-portal-dir": relativePath(appServerLibPortalDir)
+		attributes "app-server-portal-dir": relativePath(liferay.appServerPortalDir)
+		attributes "plugin-full-version": project.version.toString()
+	}
+}
+
 jsModuleConfigGenerator {
 	version = project.properties["nodejs.lfr.module.config.generator.version"]
 }
@@ -268,7 +272,7 @@ whip {
 pluginManager.withPlugin("com.liferay.maven.plugin.builder") {
 	afterEvaluate {
 		buildPluginDescriptor {
-			pomArtifactId = bundle.instructions["Bundle-SymbolicName"]
+			pomArtifactId = liferay.bundleInstructions["Bundle-SymbolicName"]
 		}
 	}
 
