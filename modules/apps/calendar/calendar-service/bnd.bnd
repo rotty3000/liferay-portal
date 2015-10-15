@@ -14,13 +14,13 @@ Export-Package:\
 Include-Resource:\
 	classes,\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
-	@${app.server.lib.portal.dir}/backport-concurrent.jar,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/RSSThreadLocal.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/RSSUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/portlet/PortletProps.class,\
+	@${app-server-lib-portal-dir}/backport-concurrent.jar,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/RSSThreadLocal.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/RSSUtil.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/portlet/PortletProps.class,\
 	@lib/net.fortuna.ical4j.jar
 Import-Package:\
 	!edu.emory.*,\
