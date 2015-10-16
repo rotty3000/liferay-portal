@@ -1,5 +1,5 @@
 dependencies {
-	compile group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "2.4.1"
+	compile group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "3.0.0"
 	compile project(":portal:portal-scripting-api")
 
 	provided group: "org.jruby", name: "jruby-complete", version: "1.7.20.1"
