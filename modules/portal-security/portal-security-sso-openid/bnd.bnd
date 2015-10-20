@@ -10,7 +10,6 @@ Import-Package:\
 	!sun.io.*,\
 	*
 Include-Resource:\
-	classes,\
 	META-INF/resources=src/main/resources/META-INF/resources,\
 	@lib/guice.jar,\
 	@lib/httpclient.jar,\

@@ -5,4 +5,3 @@ DynamicImport-Package: *
 Export-Package:\
 	com.liferay.portal.cache.ehcache,\
 	com.liferay.portal.cache.ehcache.event
-Include-Resource: classes

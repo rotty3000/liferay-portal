@@ -5,5 +5,4 @@ Import-Package:\
 	com.liferay.portal.workflow,\
 	*
 Include-Resource:\
-	classes,\
 	META-INF/resources=src/META-INF/resources

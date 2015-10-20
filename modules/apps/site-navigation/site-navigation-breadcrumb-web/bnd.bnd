@@ -3,7 +3,6 @@ Bundle-SymbolicName: com.liferay.site.navigation.breadcrumb.web
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.site.navigation.breadcrumb.web.constants
 Include-Resource:\
-	classes,\
 	META-INF/resources=src/META-INF/resources
 Require-Capability:\
 	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/ddm";version:Version="1.0.0"

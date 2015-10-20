@@ -5,5 +5,4 @@ Import-Package:\
 	com.liferay.message.boards.web.constants,\
 	*
 Include-Resource:\
-	classes,\
 	test-classes/integration

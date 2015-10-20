@@ -8,6 +8,5 @@ Import-Package:\
 	!org.incava.util.diff.*,\
 	*
 Include-Resource:\
-	classes,\
 	@lib/org.jamwiki.jar
 Web-ContextPath: /wiki-engine-mediawiki

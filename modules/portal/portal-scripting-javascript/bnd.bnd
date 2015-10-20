@@ -7,5 +7,4 @@ Import-Package:\
 	!org.apache.xmlbeans.*,\
 	*
 Include-Resource: \
-	classes,\
 	@lib/rhino.jar

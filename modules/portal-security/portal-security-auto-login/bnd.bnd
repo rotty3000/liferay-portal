@@ -6,5 +6,3 @@ Export-Package: \
 	com.liferay.portal.security.auto.login.remember.me,\
 	com.liferay.portal.security.auto.login.request.parameter,\
 	com.liferay.portal.security.auto.login.request.header
-Import-Package: *
-Include-Resource: classes

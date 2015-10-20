@@ -5,4 +5,3 @@ Export-Package:\
 	com.liferay.document.library.events,\
 	com.liferay.document.library.lar.xstream,\
 	com.liferay.document.library.verify
-Include-Resource: classes

@@ -5,5 +5,4 @@ Import-Package:\
 	!javax.microedition.*,\
 	*
 Include-Resource:\
-	classes,\
 	@lib/jcifs.jar

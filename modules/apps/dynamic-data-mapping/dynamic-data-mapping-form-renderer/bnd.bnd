@@ -3,7 +3,6 @@ Bundle-SymbolicName: com.liferay.dynamic.data.mapping.form.renderer
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.dynamic.data.mapping.form.renderer
 Include-Resource:\
-	classes,\
 	META-INF=src/META-INF
 JS-Config: /META-INF/resources/js/config.js
 Web-ContextPath: /ddm-form-renderer

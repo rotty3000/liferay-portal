@@ -1,5 +1,4 @@
 Bundle-Name: Liferay Wiki Engine Text
 Bundle-SymbolicName: com.liferay.wiki.engine.text
 Bundle-Version: 1.0.0
-Include-Resource: classes
 Web-ContextPath: /wiki-engine-text

@@ -6,6 +6,5 @@ Import-Package:\
 	!org.junit.experimental.theories,\
 	*
 Include-Resource:\
-	classes,\
 	test-classes/integration/,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/xml/XMLUtil.class

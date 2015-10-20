@@ -6,4 +6,3 @@ Export-Package:\
 	com.liferay.exportimport.portlet.preferences.processor,\
 	com.liferay.exportimport.staged.model.repository,\
 	com.liferay.exportimport.xstream.configurator
-Include-Resource: classes

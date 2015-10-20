@@ -5,4 +5,3 @@ Export-Package: com.liferay.dynamic.data.mapping.form.values.factory
 Import-Package:\
 	com.liferay.dynamic.data.mapping.form.renderer,\
 	*
-Include-Resource: classes

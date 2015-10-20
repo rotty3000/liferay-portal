@@ -7,7 +7,6 @@ Export-Package:\
 	com.liferay.blogs.web.lar,\
 	com.liferay.blogs.web.social
 Include-Resource:\
-	classes,\
 	META-INF/resources=src/META-INF/resources
 JS-Config: /META-INF/resources/blogs/js/config.js
 Require-Capability:\

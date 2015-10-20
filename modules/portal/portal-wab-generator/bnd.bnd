@@ -6,5 +6,4 @@ Import-Package:\
 	!com.liferay.util.xml,\
 	*
 Include-Resource: \
-	classes, \
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/xml/XMLUtil.class
