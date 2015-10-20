@@ -1622,6 +1622,10 @@ public class PortalUtil {
 		return getPortal().getPortletNamespace(portletId);
 	}
 
+	public static Map<String, String> getPortletNamespacesMap(long companyId) {
+		return getPortal().getPortletNamespacesMap(companyId);
+	}
+
 	public static String getPortletTitle(Portlet portlet, Locale locale) {
 		return getPortal().getPortletTitle(portlet, locale);
 	}

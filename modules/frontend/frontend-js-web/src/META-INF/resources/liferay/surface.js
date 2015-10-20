@@ -90,7 +90,7 @@ AUI.add(
 			getPortletBoundaryId: function(portletId) {
 				var instance = this;
 
-				return 'p_p_id_' + portletId + '_';
+				return 'p_p_id' + Liferay.PortletNamespaces[portletId];
 			},
 
 			getPortletBoundaryIds: function(portletIds) {

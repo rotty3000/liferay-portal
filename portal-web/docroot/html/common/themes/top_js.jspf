@@ -124,6 +124,26 @@
 				PORTLET_SHARING: '<%= PortletKeys.PORTLET_SHARING %>'
 			},
 
+			PortletNamespaces: {
+
+				<%
+				Map<String, String> portletNamespacesMap = PortalUtil.getPortletNamespacesMap(themeDisplay.getCompanyId());
+
+				Iterator<Map.Entry<String, String>> itr = portletNamespacesMap.entrySet().iterator();
+
+				while (itr.hasNext()) {
+					Map.Entry<String, String> entry = itr.next();
+
+					out.print("'" + entry.getKey() + "' : '" + entry.getValue() + "'");
+
+					if (itr.hasNext()) {
+						out.print(",");
+					}
+				}
+				%>
+
+			},
+
 			PropsValues: {
 				NTLM_AUTH_ENABLED: <%= PrefsPropsUtil.getBoolean(themeDisplay.getCompanyId(), PropsKeys.NTLM_AUTH_ENABLED, PropsValues.NTLM_AUTH_ENABLED) %>
 			},

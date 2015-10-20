@@ -4372,8 +4372,40 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getPortletNamespace(String portletId) {
-		return StringPool.UNDERLINE.concat(portletId).concat(
-			StringPool.UNDERLINE);
+		String hash = StringUtil.toHexString(portletId.hashCode());
+
+		return StringPool.UNDERLINE.concat(hash).concat(StringPool.UNDERLINE);
+	}
+
+	@Override
+	public Map<String, String> getPortletNamespacesMap(long companyId) {
+		Map<String, String> companyPortletNamespaces =
+			_portletNamespacesMap.get(companyId);
+
+		if (companyPortletNamespaces != null) {
+			return Collections.unmodifiableMap(companyPortletNamespaces);
+		}
+
+		companyPortletNamespaces = new HashMap<>();
+
+		List<Portlet> portlets = PortletLocalServiceUtil.getPortlets(
+			companyId, false, false);
+
+		for (Portlet portlet : portlets) {
+			if (!portlet.isActive() || !portlet.isReady() ||
+				portlet.isUndeployedPortlet()) {
+
+				continue;
+			}
+
+			companyPortletNamespaces.put(
+				portlet.getPortletId(),
+				getPortletNamespace(portlet.getPortletId()));
+		}
+
+		_portletNamespacesMap.put(companyId, companyPortletNamespaces);
+
+		return Collections.unmodifiableMap(companyPortletNamespaces);
 	}
 
 	@Override
@@ -8256,6 +8288,9 @@ public class PortalImpl implements Portal {
 
 	private static final Map<Long, String> _cdnHostHttpMap =
 		new ConcurrentHashMap<>();
+	private static final Map<Long, Map<String, String>> _portletNamespacesMap =
+		new ConcurrentHashMap<>();
+
 	private static final MethodHandler _resetCDNHostsMethodHandler =
 		new MethodHandler(new MethodKey(PortalUtil.class, "resetCDNHosts"));
 	private static final Date _upTime = new Date();
@@ -8391,6 +8426,8 @@ public class PortalImpl implements Portal {
 
 	}
 
+	private static final Map<Long, String> _cdnHostHttpsMap =
+		new ConcurrentHashMap<>();
 	private class PortalInetSocketAddressEventListenerServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
 			<PortalInetSocketAddressEventListener,
@@ -8437,8 +8474,5 @@ public class PortalImpl implements Portal {
 		}
 
 	}
-
-	private static final Map<Long, String> _cdnHostHttpsMap =
-		new ConcurrentHashMap<>();
 
 }

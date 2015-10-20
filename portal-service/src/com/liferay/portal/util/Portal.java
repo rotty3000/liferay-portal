@@ -1022,6 +1022,8 @@ public interface Portal {
 
 	public String getPortletNamespace(String portletId);
 
+	public Map<String, String> getPortletNamespacesMap(long companyId);
+
 	public String getPortletTitle(Portlet portlet, Locale locale);
 
 	public String getPortletTitle(
