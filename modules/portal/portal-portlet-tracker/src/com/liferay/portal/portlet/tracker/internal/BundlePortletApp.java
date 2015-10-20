@@ -206,6 +206,13 @@ public class BundlePortletApp implements PortletApp, ServletContextListener {
 	}
 
 	@Override
+	public void setCustomUserAttributes(
+		Map<String, String> customUserAttributes) {
+
+		_portletApp.setCustomUserAttributes(customUserAttributes);
+	}
+
+	@Override
 	public void setDefaultNamespace(String defaultNamespace) {
 		_portletApp.setDefaultNamespace(defaultNamespace);
 	}

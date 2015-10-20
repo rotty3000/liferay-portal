@@ -61,7 +61,6 @@ import com.liferay.portal.util.WebAppPool;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.InvokerPortlet;
 import com.liferay.portlet.PortletBagFactory;
-import com.liferay.portlet.PortletContextBag;
 import com.liferay.portlet.PortletContextBagPool;
 import com.liferay.portlet.PortletInstanceFactory;
 import com.liferay.registry.util.StringPlus;
@@ -124,6 +123,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Raymond Augé
+ * @author Peter Fellwock
  */
 @Component(immediate = true, service = PortletTracker.class)
 public class PortletTracker
@@ -299,8 +299,11 @@ public class PortletTracker
 		collectJxPortletFeatures(serviceReference, portletModel);
 		collectLiferayFeatures(serviceReference, portletModel);
 
-		PortletContextBag portletContextBag = new PortletContextBag(
+		BundlePortletContextBag portletContextBag = new BundlePortletContextBag(
 			bundlePortletApp.getServletContextName());
+
+		bundlePortletApp.setCustomUserAttributes(
+			portletContextBag.getCustomUserAttributesDefinitions());
 
 		PortletContextBagPool.put(
 			bundlePortletApp.getServletContextName(), portletContextBag);

@@ -81,6 +81,9 @@ public interface PortletApp extends Serializable {
 
 	public void removePortlet(Portlet portletModel);
 
+	public void setCustomUserAttributes(
+		Map<String, String> customUserAttributes);
+
 	public void setDefaultNamespace(String defaultNamespace);
 
 	public void setServletContext(ServletContext servletContext);
