@@ -9,6 +9,7 @@ Import-Package:\
 	!org.json.simple.*,\
 	!org.relaxng.datatype.*,\
 	*
+
 -includeresource.bundle:\
 	@lib/chemistry-opencmis-client-api.jar,\
 	@lib/chemistry-opencmis-client-bindings.jar,\

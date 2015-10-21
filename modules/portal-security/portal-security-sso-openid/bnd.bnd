@@ -9,6 +9,8 @@ Import-Package:\
 	!org.apache.log.*,\
 	!sun.io.*,\
 	*
+Web-ContextPath: /portal-security-sso-openid
+
 -includeresource.bundle:\
 	META-INF/resources=src/main/resources/META-INF/resources,\
 	@lib/guice.jar,\
@@ -17,4 +19,3 @@ Import-Package:\
 	@lib/nekohtml.jar,\
 	@lib/openid4java.jar,\
 	@lib/org.apache.xml.resolver.jar
-Web-ContextPath: /portal-security-sso-openid

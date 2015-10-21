@@ -5,9 +5,10 @@ Export-Package:\
 	com.liferay.dynamic.data.lists.web.asset,\
 	com.liferay.dynamic.data.lists.web.constants,\
 	com.liferay.dynamic.data.lists.web.lar
--includeresource.bundle:\
-	META-INF/resources=src/META-INF/resources
 Require-Capability:\
 	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/ddm";version:Version="1.0.0",\
 	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/frontend";version:Version="1.0.0"
 Web-ContextPath: /ddl-web
+
+-includeresource.bundle:\
+	META-INF/resources=src/META-INF/resources

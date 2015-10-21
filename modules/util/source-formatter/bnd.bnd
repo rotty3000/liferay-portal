@@ -7,6 +7,7 @@ Import-Package:\
 	!org.apache.maven.plugin,\
 	!org.apache.tools.ant.*,\
 	*
+
 -includeresource.bundle:\
 	{META-INF/maven/plugin.xml=src/main/resources/META-INF/maven/plugin.xml},\
 	@../../../lib/portal/xercesImpl.jar!/org/apache/xerces/xni/XNIException.class,\

@@ -1,5 +1,6 @@
 Bundle-Name: Liferay Portal Bootstrap
 Bundle-SymbolicName: com.liferay.portal.bootstrap
 Bundle-Version: 1.0.0
+
 -includeresource.bundle:\
 	META-INF/system.packages.extra.mf=tmp/META-INF/MANIFEST.MF

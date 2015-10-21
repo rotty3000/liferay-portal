@@ -1,7 +1,8 @@
 Bundle-Name: Liferay Site Navigation Directory Web
 Bundle-SymbolicName: com.liferay.site.navigation.directory.web
 Bundle-Version: 1.0.0
--includeresource.bundle:\
-	META-INF/resources=src/META-INF/resources
 Require-SchemaVersion: 1.0.0
 Web-ContextPath: /site-navigation-directory-web
+
+-includeresource.bundle:\
+	META-INF/resources=src/META-INF/resources

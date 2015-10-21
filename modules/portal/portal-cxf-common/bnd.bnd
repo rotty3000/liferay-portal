@@ -14,7 +14,7 @@ Bundle-ClassPath:\
 Bundle-Name: Liferay Portal CXF Common
 Bundle-SymbolicName: com.liferay.portal.cxf.common
 Bundle-Version: 1.0.0
-Export-Package: \
+Export-Package:\
 	javax.wsdl.*;version="1.2",\
 	org.apache.cxf.*;version="3.0.3",\
 	org.apache.ws.commons.schema.*;version="2.1.0"
@@ -38,6 +38,7 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!org.springframework.*,\
 	*
+
 -includeresource.bundle:\
 	lib/=lib/cxf-core.jar,\
 	lib/=lib/cxf-rt-bindings-soap.jar,\

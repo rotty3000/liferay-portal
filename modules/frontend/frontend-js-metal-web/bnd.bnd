@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Frontend JS Metal Web
 Bundle-SymbolicName: com.liferay.frontend.js.metal.web
 Bundle-Version: 1.0.0
+JS-Submodules: true
+
 -includeresource.bundle:\
 	bower.json
-JS-Submodules: true

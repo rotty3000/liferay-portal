@@ -1,7 +1,8 @@
 Bundle-Name: Liferay Dynamic Data Mapping Type Select
 Bundle-SymbolicName: com.liferay.dynamic.data.mapping.type.select
 Bundle-Version: 1.0.0
--includeresource.bundle:\
-	META-INF/resources=src/META-INF/resources
 JS-Config: /META-INF/resources/config.js
 Web-ContextPath: /ddm-type-select
+
+-includeresource.bundle:\
+	META-INF/resources=src/META-INF/resources

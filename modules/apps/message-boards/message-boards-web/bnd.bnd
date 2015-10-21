@@ -6,6 +6,7 @@ Export-Package:\
 	com.liferay.message.boards.web.lar,\
 	com.liferay.message.boards.web.social,\
 	com.liferay.message.boards.web.trash
+Web-ContextPath: /message-boards-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
-Web-ContextPath: /message-boards-web

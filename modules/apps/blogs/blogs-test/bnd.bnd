@@ -1,5 +1,6 @@
 Bundle-Name: Liferay Blogs Test
 Bundle-SymbolicName: com.liferay.blogs.test
 Bundle-Version: 1.0.0
+
 -includeresource.bundle:\
 	test-classes/integration/

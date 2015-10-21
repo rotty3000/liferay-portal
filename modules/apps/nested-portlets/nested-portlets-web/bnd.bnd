@@ -1,7 +1,8 @@
 Bundle-Name: Liferay Nested Portlets Web
 Bundle-SymbolicName: com.liferay.nested.portlets.web
 Bundle-Version: 1.0.0
--includeresource.bundle:\
-	META-INF/resources=src/META-INF/resources
 Require-SchemaVersion: 1.0.0
 Web-ContextPath: /nested-portlets-web
+
+-includeresource.bundle:\
+	META-INF/resources=src/META-INF/resources

@@ -4,6 +4,7 @@ Bundle-Version: 1.0.0
 Import-Package:\
 	com.liferay.portal.kernel.servlet;resolution:="optional",\
 	*
+
 -includeresource.bundle:\
 	@lib/json.jar,\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/log/*,\

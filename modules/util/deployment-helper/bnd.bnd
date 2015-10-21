@@ -6,6 +6,8 @@ Import-Package:\
 	!org.apache.maven.plugin.*,\
 	!org.apache.tools.ant.*,\
 	*
+Main-Class: com.liferay.deployment.helper.DeploymentHelper
+
 -includeresource.bundle:\
 	@lib/slf4j-api.jar,\
 	@lib/slf4j-simple.jar,\
@@ -14,4 +16,3 @@ Import-Package:\
 	@../../../portal-impl/portal-impl.jar!/com/liferay/portal/tools/ArgumentsUtil.class,\
 	@../../../portal-service/portal-service.jar!/com/liferay/portal/kernel/util/GetterUtil.class,\
 	@../../../portal-service/portal-service.jar!/com/liferay/portal/kernel/util/Validator.class
-Main-Class: com.liferay.deployment.helper.DeploymentHelper

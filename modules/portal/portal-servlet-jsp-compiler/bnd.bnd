@@ -57,8 +57,7 @@ Import-Package:\
 	org.xml.sax.helpers,\
 	*
 Provide-Capability:\
-	liferay.extender;\
-	liferay.extender="jsp.extender";version:Version="${Bundle-Version}"
+	liferay.extender;liferay.extender="jsp.extender";version:Version="${Bundle-Version}"
 
 -includeresource:\
 	@lib/javax.servlet.jsp.jar,\

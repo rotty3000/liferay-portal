@@ -1,8 +1,8 @@
 Bundle-Name: Liferay Frontend Editor Simple Web
 Bundle-SymbolicName: com.liferay.frontend.editor.simple.web
 Bundle-Version: 1.0.0
--includeresource.bundle:\
-	META-INF/resources=src/main/resources/META-INF/resources
 Web-ContextPath: /frontend-editor-simple-web
 
 -donotcopy: (\.touch|.*_diffs.*)
+-includeresource.bundle:\
+	META-INF/resources=src/main/resources/META-INF/resources

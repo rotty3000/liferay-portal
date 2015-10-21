@@ -5,6 +5,7 @@ Import-Package:\
 	!com.liferay.util.xml,\
 	!org.junit.experimental.theories,\
 	*
+
 -includeresource.bundle:\
 	test-classes/integration/,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/xml/XMLUtil.class

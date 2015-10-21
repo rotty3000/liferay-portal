@@ -5,9 +5,10 @@ Export-Package: com.liferay.search.web.constants.*
 Import-Package:\
 	!com.liferay.util.xml,\
 	*
+Require-SchemaVersion: 1.0.0
+Web-ContextPath: /search-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/PropertyComparator.class,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/xml/XMLUtil.class
-Require-SchemaVersion: 1.0.0
-Web-ContextPath: /search-web

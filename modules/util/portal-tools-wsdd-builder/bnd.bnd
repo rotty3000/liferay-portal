@@ -4,6 +4,8 @@ Bundle-Version: 1.0.4
 Import-Package:\
 	!org.apache.maven.plugin.*,\
 	*
+Main-Class: com.liferay.portal.tools.wsdd.merger.WSDDBuilder
+
 -includeresource.bundle:\
 	{META-INF/maven/plugin.xml=src/main/resources/META-INF/maven/plugin.xml},\
 	@../../../lib/portal/xercesImpl.jar!/org/apache/xerces/xni/XNIException.class,\
@@ -54,4 +56,3 @@ Import-Package:\
 	@../../../util-java/util-java.jar!/com/liferay/util/xml/Dom4jUtil.class,\
 	@../../../util-java/util-java.jar!/com/liferay/util/xml/XMLSafeReader.class,\
 	@../../../util-java/util-java.jar!/com/liferay/util/xml/XMLUtil.class
-Main-Class: com.liferay.portal.tools.wsdd.merger.WSDDBuilder

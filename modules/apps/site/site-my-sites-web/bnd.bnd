@@ -2,6 +2,7 @@ Bundle-Name: Liferay Site My Sites Web
 Bundle-SymbolicName: com.liferay.site.my.sites.web
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.site.my.sites.web.constants
+Require-SchemaVersion: 1.0.0
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
-Require-SchemaVersion: 1.0.0

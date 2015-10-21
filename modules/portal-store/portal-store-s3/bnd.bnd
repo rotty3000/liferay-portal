@@ -12,6 +12,7 @@ Import-Package:\
 	!org.ietf.jgss,\
 	!org.joda.convert,\
 	*
+
 -includeresource.bundle:\
 	@lib/aws-java-sdk-core.jar,\
 	@lib/aws-java-sdk-kms.jar,\

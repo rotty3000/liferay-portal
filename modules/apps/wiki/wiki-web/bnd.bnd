@@ -54,11 +54,12 @@ Import-Package:\
 	org.apache.struts.config.*,\
 	org.apache.struts.util,\
 	*
+Require-Capability:\
+	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/ddm";version:Version="1.0.0"
+Web-ContextPath: /wiki-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/RSSUtil.class,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/bean/PortletBeanLocatorUtil.class,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/portlet/PortletProps.class
-Require-Capability:\
-	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/ddm";version:Version="1.0.0"
-Web-ContextPath: /wiki-web

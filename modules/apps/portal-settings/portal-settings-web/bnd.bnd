@@ -1,9 +1,10 @@
 Bundle-Name: Portal Settings Web
 Bundle-SymbolicName: com.liferay.portal.settings.web
 Bundle-Version: 1.0.0
+Require-SchemaVersion: 1.0.0
+Web-ContextPath: /portlet-settings-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	META-INF/resources/users_admin/css=@lib/com.liferay.users.admin.web.jar!/META-INF/resources/css,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/ContentUtil.class
-Require-SchemaVersion: 1.0.0
-Web-ContextPath: /portlet-settings-web

@@ -12,7 +12,8 @@ Import-Package:\
 	!org.slf4j.spi,\
 	!org.zeroturnaround.javarebel,\
 	*
+Web-ContextPath: /document-library-google-docs
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@lib/org.freemarker.jar
-Web-ContextPath: /document-library-google-docs

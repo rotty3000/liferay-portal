@@ -1,4 +1,4 @@
-Bundle-ClassPath: \
+Bundle-ClassPath:\
 	.,\
 	lib/antlr-runtime.jar,\
 	lib/asm-commons.jar,\
@@ -63,6 +63,7 @@ Import-Package:\
 	!org.junit.*,\
 	!sun.security.*,\
 	*
+
 -includeresource.bundle:\
 	lib/antlr-runtime.jar=lib/antlr-runtime.jar,\
 	lib/asm-commons.jar=lib/asm-commons.jar,\

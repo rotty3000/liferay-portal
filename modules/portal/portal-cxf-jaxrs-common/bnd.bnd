@@ -34,6 +34,7 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!org.springframework.*,\
 	*
+
 -includeresource.bundle:\
 	lib/=lib/cxf-rt-frontend-jaxrs.jar,\
 	lib/=lib/cxf-rt-rs-extension-providers.jar,\

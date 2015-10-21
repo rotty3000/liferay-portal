@@ -6,6 +6,7 @@ Import-Package:\
 	!javax.microedition.io,\
 	!org.objectweb.asm.util,\
 	*
+
 -includeresource.bundle:\
 	@lib/aopalliance.jar,\
 	@lib/args4j.jar,\

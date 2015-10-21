@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Portlet CSS Web
 Bundle-SymbolicName: com.liferay.portlet.css.web
 Bundle-Version: 1.0.0
+Web-ContextPath: /portlet-css-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
-Web-ContextPath: /portlet-css-web

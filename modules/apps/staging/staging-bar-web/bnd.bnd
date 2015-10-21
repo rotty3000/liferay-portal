@@ -1,7 +1,8 @@
 Bundle-Name: Staging Bar Web
 Bundle-SymbolicName: com.liferay.staging.bar.web
 Bundle-Version: 1.0.0
--includeresource.bundle:\
-	META-INF/resources=src/META-INF/resources
 Require-Capability:\
 	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/staging";version:Version="1.0.0"
+
+-includeresource.bundle:\
+	META-INF/resources=src/META-INF/resources

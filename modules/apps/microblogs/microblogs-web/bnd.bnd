@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Microblogs Web
 Bundle-SymbolicName: com.liferay.microblogs.web
 Bundle-Version: 1.0.0
+Web-ContextPath: /microblogs-web
+
 -includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
-Web-ContextPath: /microblogs-web

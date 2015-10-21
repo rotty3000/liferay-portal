@@ -13,6 +13,8 @@ Import-Package:\
 	!org.intabulas.sandler.*,\
 	!org.jgroups.*,\
 	*
+Web-ContextPath: /wiki-engine-jspwiki
+
 -includeresource.bundle:\
 	@../../../../lib/portal/ecs.jar,\
 	@../../../../lib/portal/freshcookies-security.jar,\
@@ -20,4 +22,3 @@ Import-Package:\
 	@../../../../lib/portal/jspwiki.jar,\
 	@../../../../lib/portal/oro.jar,\
 	@../../../../lib/portal/oscache.jar
-Web-ContextPath: /wiki-engine-jspwiki

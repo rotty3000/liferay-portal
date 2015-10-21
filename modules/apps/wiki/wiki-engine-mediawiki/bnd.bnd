@@ -7,6 +7,7 @@ Import-Package:\
 	!org.apache.commons.pool.impl.*,\
 	!org.incava.util.diff.*,\
 	*
+Web-ContextPath: /wiki-engine-mediawiki
+
 -includeresource.bundle:\
 	@lib/org.jamwiki.jar
-Web-ContextPath: /wiki-engine-mediawiki

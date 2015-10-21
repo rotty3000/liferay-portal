@@ -11,5 +11,6 @@ Import-Package:\
 	!org.apache.logging.*,\
 	!org.mozilla.javascript.*,\
 	*
+
 -includeresource.bundle:\
 	@lib/jgroups.jar

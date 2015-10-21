@@ -7,4 +7,6 @@ Import-Package:\
 	!com.sun.*,\
 	org.apache.taglibs.standard.*;version=${plugin-full-version},\
 	*
--includeresource.bundle: @lib/javax.servlet.jsp.jstl.jar
+
+-includeresource.bundle:\
+	@lib/javax.servlet.jsp.jstl.jar
