@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Portlet Configuration Web
 Bundle-SymbolicName: com.liferay.portlet.configuration.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources

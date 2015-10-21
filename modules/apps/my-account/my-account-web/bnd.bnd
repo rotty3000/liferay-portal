@@ -1,6 +1,6 @@
 Bundle-Name: Liferay My Account Web
 Bundle-SymbolicName: com.liferay.my.account.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	content=../../users-admin/users-admin-web/src/content,\
 	META-INF/resources=../../users-admin/users-admin-web/src/META-INF/resources

@@ -38,7 +38,7 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!org.springframework.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	lib/=lib/cxf-core.jar,\
 	lib/=lib/cxf-rt-bindings-soap.jar,\
 	lib/=lib/cxf-rt-databinding-jaxb.jar,\

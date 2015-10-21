@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Social Activities Web
 Bundle-SymbolicName: com.liferay.social.activities.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/RSSThreadLocal.class,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/RSSUtil.class

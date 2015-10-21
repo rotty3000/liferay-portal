@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Site Navigation Menu Web
 Bundle-SymbolicName: com.liferay.site.navigation.menu.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
 Require-SchemaVersion: 1.0.0
 Web-ContextPath: /site-navigation-menu-web

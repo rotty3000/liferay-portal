@@ -5,7 +5,7 @@ Import-Package:\
 	!org.apache.maven.plugin.*,\
 	!org.apache.tools.ant.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	{META-INF/maven/plugin.xml=src/main/resources/META-INF/maven/plugin.xml},\
 	@../../../portal-impl/portal-impl.jar!/com/liferay/portal/tools/ArgumentsMap.class,\
 	@../../../portal-impl/portal-impl.jar!/com/liferay/portal/tools/ArgumentsUtil.class,\

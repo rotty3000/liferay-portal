@@ -27,7 +27,7 @@ Import-Package:\
 	!org.jboss.netty.*,\
 	!org.relaxng.datatype.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	lib/commons-io.jar=lib/commons-io.jar,\
 	lib/httpclient.jar=lib/httpclient.jar,\
 	lib/httpcore.jar=lib/httpcore.jar,\

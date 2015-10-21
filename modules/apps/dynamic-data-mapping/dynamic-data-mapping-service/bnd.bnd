@@ -13,7 +13,7 @@ Export-Package:\
 	com.liferay.dynamic.data.mapping.template,\
 	com.liferay.dynamic.data.mapping.util.impl,\
 	com.liferay.dynamic.data.mapping.webdav
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class,\

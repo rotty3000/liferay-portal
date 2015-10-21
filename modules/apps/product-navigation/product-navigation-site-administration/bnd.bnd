@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Product Navigation Site Administration
 Bundle-SymbolicName: com.liferay.product.navigation.site.administration
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
 Web-ContextPath: /product-navigation-site-administration

@@ -12,5 +12,5 @@ Import-Package: \
 	!javax.mail.*,\
 	!javax.transaction.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/quartz.jar

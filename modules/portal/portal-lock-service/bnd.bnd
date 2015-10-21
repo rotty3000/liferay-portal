@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Portal Lock Service
 Bundle-SymbolicName: com.liferay.portal.lock.service
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class

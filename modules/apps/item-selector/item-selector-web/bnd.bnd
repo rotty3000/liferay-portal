@@ -2,5 +2,5 @@ Bundle-Name: Liferay Item Selector Web
 Bundle-SymbolicName: com.liferay.item.selector.web
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.item.selector.web.constants
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources

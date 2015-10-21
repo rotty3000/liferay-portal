@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Flags Page Flags Web
 Bundle-SymbolicName: com.liferay.flags.page.flags.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources
 Web-ContextPath: /page-flags-web

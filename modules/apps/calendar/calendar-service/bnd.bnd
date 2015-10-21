@@ -11,7 +11,7 @@ Export-Package:\
 	com.liferay.calendar.upgrade.*,\
 	com.liferay.calendar.util,\
 	com.liferay.calendar.workflow
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	@${app-server-lib-portal-dir}/backport-concurrent.jar,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\

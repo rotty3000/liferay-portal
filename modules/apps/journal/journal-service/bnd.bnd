@@ -19,7 +19,7 @@ Export-Package:\
 	com.liferay.journal.util.impl,\
 	com.liferay.journal.verify,\
 	com.liferay.journal.workflow
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	resource-actions/default.xml=classes/META-INF/resource-actions/default.xml,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/ContentUtil.class,\

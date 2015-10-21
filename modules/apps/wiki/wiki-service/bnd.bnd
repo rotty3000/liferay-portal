@@ -41,7 +41,7 @@ Import-Package:\
 	!org.intabulas.sandler.*,\
 	!org.jgroups.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	@../../../../lib/portal/antlr2.jar,\
 	@../../../../lib/portal/antlr3.jar,\

@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Social Requests Web
 Bundle-SymbolicName: com.liferay.social.requests.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources

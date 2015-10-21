@@ -6,7 +6,7 @@ Import-Package:\
 	com.sun.syndication.feed,\
 	com.sun.syndication.feed.module,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/RSSUtil.class
 Require-Capability:\

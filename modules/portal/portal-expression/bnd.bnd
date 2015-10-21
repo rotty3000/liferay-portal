@@ -7,6 +7,6 @@ Import-Package:\
 	!org.apache.tools.ant.types.*,\
 	*
 Export-Package: com.liferay.portal.expression
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/commons-compiler.jar,\
 	@lib/janino.jar

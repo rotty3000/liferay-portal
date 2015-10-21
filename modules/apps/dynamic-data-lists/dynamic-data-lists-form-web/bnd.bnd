@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Dynamic Data Lists Form Web
 Bundle-SymbolicName: com.liferay.dynamic.data.lists.form.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/log4j/Log4JUtil.class
 JS-Config: /META-INF/resources/admin/js/config.js

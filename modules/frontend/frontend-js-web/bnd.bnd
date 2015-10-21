@@ -72,7 +72,7 @@ Import-Package:\
 	com.liferay.portlet.usergroupsadmin.search,\
 	com.liferay.portlet.usersadmin.util,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/main/resources/META-INF/resources,\
 	META-INF/resources=tmp/META-INF/resources
 Web-ContextPath: /frontend-js-web

@@ -8,7 +8,7 @@ Import-Package:\
 	com.liferay.portal.kernel.workflow.comparator,\
 	com.liferay.portal.kernel.workflow.messaging,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\
 	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\

@@ -54,7 +54,7 @@ Import-Package:\
 	org.apache.struts.config.*,\
 	org.apache.struts.util,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/bean/PortletBeanLocatorUtil.class,\
 	@../../../../util-java/util-java.jar!/com/liferay/util/portlet/PortletProps.class

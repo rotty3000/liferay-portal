@@ -7,7 +7,7 @@ Export-Package:\
 Import-Package:\
 	javax.servlet;version='[2.3.0,4.0.0)',\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources,\
 	@lib/javax.servlet.jsp.jstl.jar!/META-INF/*.tld
 Require-Capability:\

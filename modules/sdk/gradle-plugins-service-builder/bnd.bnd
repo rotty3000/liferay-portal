@@ -2,5 +2,5 @@ Bundle-Name: Liferay Gradle Plugins Service Builder
 Bundle-SymbolicName: com.liferay.gradle.plugins.service.builder
 Bundle-Version: 1.0.6
 Export-Package: com.liferay.gradle.plugins.service.builder
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/com.liferay.portal.tools.service.builder.jar!/com/liferay/portal/tools/service/builder/ServiceBuilderArgs.class

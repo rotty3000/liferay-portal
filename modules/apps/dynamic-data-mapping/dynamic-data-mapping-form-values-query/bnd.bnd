@@ -7,6 +7,6 @@ Import-Package:\
 	!javax.print.*,\
 	!javax.swing.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/antlr4-runtime.jar,\
 	@lib/org.abego.treelayout.core.jar

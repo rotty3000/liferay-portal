@@ -8,6 +8,6 @@ Import-Package:\
 	!org.apache.ivy.*,\
 	!org.fusesource.jansi.*,\
 	*
-Include-Resource: \
+-includeresource.bundle: \
 	@lib/antlr.jar,\
 	@lib/groovy.jar

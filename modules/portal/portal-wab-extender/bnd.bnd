@@ -15,7 +15,7 @@ Import-Package:\
 	org.xml.sax,\
 	org.xml.sax.helpers,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/extender/*,\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/log/*,\
 	@../../../portal-service/portal-service.jar!/com/liferay/portal/kernel/util/GetterUtil.class,\

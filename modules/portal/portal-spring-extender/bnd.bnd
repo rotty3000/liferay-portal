@@ -66,7 +66,7 @@ Import-Package:\
 	org.springframework.web.servlet.config,\
 	\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/extender/*,\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/log/*
 Provide-Capability:\

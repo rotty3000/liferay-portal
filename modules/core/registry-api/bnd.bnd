@@ -10,5 +10,5 @@ Import-Package:\
 	com.liferay.registry;version=${@},\
 	com.liferay.registry.collections;version=${@},\
 	com.liferay.registry.util;version=${@}
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/biz.aQute.bnd.jar!/aQute/lib/filter/*

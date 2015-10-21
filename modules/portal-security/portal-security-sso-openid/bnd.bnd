@@ -9,7 +9,7 @@ Import-Package:\
 	!org.apache.log.*,\
 	!sun.io.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/main/resources/META-INF/resources,\
 	@lib/guice.jar,\
 	@lib/httpclient.jar,\

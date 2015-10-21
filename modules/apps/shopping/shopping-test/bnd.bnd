@@ -4,5 +4,5 @@ Bundle-Version: 1.0.0
 Import-Package:\
 	!org.junit.experimental.theories,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	test-classes/integration

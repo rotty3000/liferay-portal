@@ -17,5 +17,5 @@ Export-Package:\
 Import-Package:\
        !org.joda.*,\
        *
-Include-Resource:\
+-includeresource.bundle:\
        @lib/com.google.ical.jar

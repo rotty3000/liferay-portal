@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Ratings Page Ratings Web
 Bundle-SymbolicName: com.liferay.ratings.page.ratings.web
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	META-INF/resources=src/META-INF/resources

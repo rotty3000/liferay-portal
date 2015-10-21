@@ -2,7 +2,7 @@ Bundle-Name: Liferay Sass Compiler JNI
 Bundle-SymbolicName: com.liferay.sass.compiler.jni
 Bundle-Version: 2.0.1
 Export-Package: com.liferay.sass.compiler.jni
-Include-Resource:\
+-includeresource.bundle:\
 	@lib/jna.jar,\
 	@lib/jnaerator-runtime.jar,\
 	@lib/ochafik-util.jar

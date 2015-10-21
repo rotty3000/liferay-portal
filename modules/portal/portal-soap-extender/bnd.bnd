@@ -30,7 +30,7 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!net.sf.cglib.proxy.*,\
 	*
-Include-Resource:\
+-includeresource.bundle:\
 	lib/=lib/cxf-rt-bindings-xml.jar,\
 	lib/=lib/cxf-rt-frontend-jaxws.jar,\
 	lib/=lib/cxf-rt-frontend-simple.jar,\

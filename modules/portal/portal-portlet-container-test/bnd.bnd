@@ -1,7 +1,7 @@
 Bundle-Name: Liferay Portal Portlet Container Test
 Bundle-SymbolicName: com.liferay.portal.portlet.container.test
 Bundle-Version: 1.0.0
-Include-Resource:\
+-includeresource.bundle:\
 	test-classes/integration,\
 	@../../../util-java/util-java.jar!/com/liferay/util/Encryptor*.class
 Require-Capability:\

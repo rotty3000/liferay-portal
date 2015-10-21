@@ -6,5 +6,5 @@ Import-Package:\
 	!javax.swing.*,\
 	!org.apache.xmlbeans.*,\
 	*
-Include-Resource: \
+-includeresource.bundle: \
 	@lib/rhino.jar
