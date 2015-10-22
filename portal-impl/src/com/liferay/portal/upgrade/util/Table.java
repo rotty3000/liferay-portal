@@ -152,7 +152,7 @@ public class Table {
 
 		Path tempFilePath = Files.createTempFile(
 			Paths.get(SystemProperties.get(SystemProperties.TMP_DIR)),
-			"/temp-db-" + _tableName + "-", null);
+			"temp-db-" + _tableName + "-", null);
 
 		String tempFileName = tempFilePath.toString();
 
