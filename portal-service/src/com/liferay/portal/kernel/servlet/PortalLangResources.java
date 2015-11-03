@@ -12,28 +12,13 @@
  * details.
  */
 
-package com.liferay.calendar.exception;
-
-import com.liferay.portal.kernel.exception.PortalException;
+package com.liferay.portal.kernel.servlet;
 
 /**
- * @author Eduardo Lundgren
+ * @author Michael Bradford
  */
-public class CalendarBookingTitleException extends PortalException {
+public interface PortalLangResources {
 
-	public CalendarBookingTitleException() {
-	}
-
-	public CalendarBookingTitleException(String msg) {
-		super(msg);
-	}
-
-	public CalendarBookingTitleException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public CalendarBookingTitleException(Throwable cause) {
-		super(cause);
-	}
+	public Class getLangResourceBundleClass();
 
 }

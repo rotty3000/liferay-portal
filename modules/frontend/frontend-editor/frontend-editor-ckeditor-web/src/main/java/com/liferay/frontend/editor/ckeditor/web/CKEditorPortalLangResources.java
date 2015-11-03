@@ -12,21 +12,21 @@
  * details.
  */
 
-package com.liferay.wiki.upgrade.v1_0_0;
+package com.liferay.frontend.editor.ckeditor.web;
 
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.frontend.editor.lang.FrontendEditorLang;
+import com.liferay.portal.kernel.servlet.PortalLangResources;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Akos Thurzo
+ * @author Michael Bradford
  */
-public class UpgradeWikiPageResource extends UpgradeProcess {
+@Component(immediate = true, service = PortalLangResources.class)
+public class CKEditorPortalLangResources implements PortalLangResources {
 
-	@Override
-	protected void doUpgrade() throws Exception {
-		runSQL(
-			"update WikiPageResource set groupId = (select max(groupId) from " +
-				"WikiPage where WikiPage.resourcePrimKey = " +
-					"WikiPageResource.resourcePrimKey)");
+	public Class getLangResourceBundleClass() {
+		return FrontendEditorLang.class;
 	}
 
 }

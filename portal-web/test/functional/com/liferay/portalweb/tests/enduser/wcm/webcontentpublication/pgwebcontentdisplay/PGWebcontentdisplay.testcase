@@ -104,6 +104,8 @@
 	</command>
 
 	<command name="AddWebContent" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Web Content Display Page" />
 		</execute>
@@ -114,7 +116,7 @@
 		</execute>
 	</command>
 
-	<command name="AddWebContentPortalScopeCurrentPage" priority="4">
+	<command name="AddWebContentPortalScopeCurrentPage" priority="3">
 		<execute macro="Page#gotoPG">
 			<var name="pageName" value="Web Content Display Page" />
 		</execute>
@@ -448,6 +450,8 @@
 	</command>
 
 	<command name="RemoveWCDPortletSite" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Portlet#deletePG">
 			<var name="portletName" value="Web Content Display" />
 		</execute>
@@ -507,6 +511,8 @@
 	</command>
 
 	<command name="SelectWebContent" priority="5">
+		<property name="portal.acceptance" value="true" />
+
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 		</execute>
@@ -537,7 +543,7 @@
 		</execute>
 	</command>
 
-	<command name="SelectWebContentScopeGlobal" priority="4">
+	<command name="SelectWebContentScopeGlobal" priority="3">
 		<execute macro="Page#gotoContentCP">
 			<var name="portletName" value="Web Content" />
 			<var name="siteScopeName" value="Global" />

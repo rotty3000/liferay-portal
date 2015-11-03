@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.language.LanguageWrapper;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
+import com.liferay.portal.kernel.servlet.PortalLangResourcesUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.CookieKeys;
@@ -920,6 +921,15 @@ public class LanguageImpl implements Language, Serializable {
 		}
 
 		String value = ResourceBundleUtil.getString(resourceBundle, key);
+
+		if (value == null) {
+			ResourceBundle langResourceBundle =
+				PortalLangResourcesUtil.getLangResourceBundle(resourceBundle);
+
+			if (langResourceBundle != null) {
+				value = ResourceBundleUtil.getString(langResourceBundle, key);
+			}
+		}
 
 		if (value != null) {
 			return LanguageResources.fixValue(value);

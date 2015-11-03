@@ -14,7 +14,7 @@
 
 package com.liferay.portal.cache.ehcache.internal;
 
-import com.liferay.portal.cache.AbstractPortalCache;
+import com.liferay.portal.cache.BasePortalCache;
 import com.liferay.portal.cache.ehcache.internal.event.PortalCacheCacheEventListener;
 import com.liferay.portal.kernel.cache.PortalCacheManager;
 
@@ -33,7 +33,7 @@ import net.sf.ehcache.event.RegisteredEventListeners;
  * @author Shuyang Zhou
  */
 public class EhcachePortalCache<K extends Serializable, V>
-	extends AbstractPortalCache<K, V> {
+	extends BasePortalCache<K, V> {
 
 	public EhcachePortalCache(
 		PortalCacheManager<K, V> portalCacheManager, Ehcache ehcache) {
@@ -46,7 +46,7 @@ public class EhcachePortalCache<K extends Serializable, V>
 			ehcache.getCacheEventNotificationService();
 
 		registeredEventListeners.registerListener(
-			new PortalCacheCacheEventListener<K, V>(
+			new PortalCacheCacheEventListener<>(
 				aggregatedPortalCacheListener, this),
 			NotificationScope.ALL);
 	}
