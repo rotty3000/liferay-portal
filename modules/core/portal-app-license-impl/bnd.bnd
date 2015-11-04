@@ -1,0 +1,9 @@
+Bundle-Name: Liferay Portal App License Impl
+Bundle-SymbolicName: com.liferay.portal.app.license.impl
+Bundle-Version: 1.0.0
+Include-Resource: classes
+Import-Package:\
+	com.liferay.portal.app.license
+Private-Package:\
+	com.liferay.portal.app.liferaypackage,\
+	com.liferay.portal.app.liferaypackage.servlet.filters
