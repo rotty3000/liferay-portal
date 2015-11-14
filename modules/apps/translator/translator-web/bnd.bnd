@@ -1,7 +1,5 @@
 Bundle-Name: Liferay Translator Web
 Bundle-SymbolicName: com.liferay.translator.web
 Bundle-Version: 1.0.0
-Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources,\
-	@../../../../portal-service/portal-service.jar!/com/liferay/portal/kernel/util/ReflectionUtil.class
+-includeresource.bundle:\
+	@../../../../portal-service/portal-service.jar!/com/liferay/portal/kernel/util/ReflectionUtil*.class

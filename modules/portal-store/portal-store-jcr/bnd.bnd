@@ -7,8 +7,8 @@ Import-Package:\
 	!org.apache.lucene.*,\
 	!org.apache.tika.*,\
 	*
-Include-Resource:\
-	classes,\
+
+-includeresource.bundle:\
 	@lib/concurrent.jar,\
 	@lib/jackrabbit-api.jar,\
 	@lib/jackrabbit-core.jar,\

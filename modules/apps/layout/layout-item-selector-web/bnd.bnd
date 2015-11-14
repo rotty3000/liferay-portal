@@ -1,5 +1,4 @@
 Bundle-Name: Liferay Layout Item Selector Web
 Bundle-SymbolicName: com.liferay.layout.item.selector.web
 Bundle-Version: 1.0.0
-Include-Resource: classes
 Web-ContextPath: /layout-item-selector-web

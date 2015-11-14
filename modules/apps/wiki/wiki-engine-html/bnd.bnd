@@ -1,7 +1,5 @@
 Bundle-Name: Liferay Wiki Engine HTML
 Bundle-SymbolicName: com.liferay.wiki.engine.html
 Bundle-Version: 1.0.0
-Include-Resource:\
-	classes,\
-	@../../../../lib/portal/jericho-html.jar
+Conditional-Package: net.htmlparser.jericho.*
 Web-ContextPath: /wiki-engine-html

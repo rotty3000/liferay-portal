@@ -16,7 +16,6 @@ Import-Package:\
 	!org.zeroturnaround.javarebel,\
 	com.liferay.portal.template,\
 	*
-Include-Resource:\
-	classes,\
+-includeresource.bundle:\
 	@lib/velocity.jar,\
 	@lib/velocity-tools.jar

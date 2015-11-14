@@ -13,6 +13,5 @@ Export-Package:\
 	com.liferay.exportimport.staged.model.repository.base,\
 	com.liferay.exportimport.staging,\
 	com.liferay.exportimport.xstream
-Include-Resource:\
-	classes,\
-	@../../../../util-java/util-java.jar!/com/liferay/util/xml/DocUtil.class
+-includeresource.bundle:\
+	@../../../../util-java/util-java.jar!/com/liferay/util/xml/DocUtil*.class

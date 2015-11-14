@@ -16,13 +16,11 @@ package com.liferay.wiki.configuration;
 
 import aQute.bnd.annotation.metatype.Meta;
 
-import com.liferay.configuration.admin.ConfigurationAdmin;
 import com.liferay.portal.kernel.settings.LocalizedValuesMap;
 
 /**
  * @author Iván Zaera
  */
-@ConfigurationAdmin(category = "collaboration")
 @Meta.OCD(id = "com.liferay.wiki.configuration.WikiGroupServiceConfiguration")
 public interface WikiGroupServiceConfiguration {
 

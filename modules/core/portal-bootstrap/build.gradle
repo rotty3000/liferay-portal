@@ -1,33 +1,40 @@
+import aQute.bnd.gradle.BundleTaskConvention
+
 import com.liferay.gradle.util.FileUtil
+import com.liferay.gradle.util.copy.StripPathSegmentsAction
 
-import org.dm.gradle.plugins.bundle.JarBuilder
+configurations {
+	dummy
+}
 
-task buildSystemPackagesExtraManifest
+task buildSystemPackagesExtraManifest(type: Jar)
 task copySystemPackagesExtraManifest(type: Copy)
 
 File systemPackagesExtraBndFile = file("system.packages.extra.bnd")
 File systemPackagesExtraManifestFile = file("system.packages.extra.mf")
 
 buildSystemPackagesExtraManifest {
-	dependsOn classes
+	convention.plugins.bundle = new BundleTaskConvention(it)
+	bndfile = systemPackagesExtraBndFile
+	configuration = configurations.dummy
 	dependsOn copyLibs
+	destinationDir = new File(temporaryDir, "bundle")
 
-	doLast {
-		JarBuilder jarBuilder = bundle.jarBuilderFactory.create()
+    doLast {
+        buildBundle()
+		copy {
+			eachFile new StripPathSegmentsAction(1)
+			from zipTree(archivePath)
+			include "META-INF/MANIFEST.MF"
+			into systemPackagesExtraManifestFile.parentFile
 
-		jarBuilder.withBase projectDir
-
-		Map<String, String> properties = liferay.bundleDefaultInstructions
-
-		properties["-include"] = relativePath(systemPackagesExtraBndFile)
-
-		jarBuilder.withProperties properties
-		jarBuilder.withSourcepath sourceSets.main.allSource.srcDirs
-
-		systemPackagesExtraManifestFile.withOutputStream {
-			jarBuilder.writeManifestTo it
+			rename {
+				systemPackagesExtraManifestFile.name
+			}
 		}
-	}
+    }
+
+	from sourceSets.main.output
 }
 
 copySystemPackagesExtraManifest {
@@ -47,6 +54,7 @@ dependencies {
 	compile group: "com.liferay.portal", name: "portal-impl", version: liferay.portalVersion
 	compile group: "com.liferay.portal", name: "portal-service", version: liferay.portalVersion
 	compile group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"
+	compile group: "javax.xml.ws", name: "jaxws-api", version: "2.2.11"
 	compile group: "org.springframework", name: "spring-beans", version: "3.2.10.RELEASE"
 	compile group: "org.springframework", name: "spring-context", version: "3.2.10.RELEASE"
 	compile project(":core:jaxws-osgi-bridge")

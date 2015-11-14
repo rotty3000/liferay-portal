@@ -10,10 +10,10 @@ Import-Package:\
 	!sun.misc.*,\
 	!sun.nio.cs*,\
 	*
-Include-Resource: \
-	classes,\
-	@lib/jruby-complete.jar
+
 -fixupmessages:\
 	"The default package '.' is not permitted by the Import-Package ...";is:=ignore,\
 	"The JAR is empty: ...";is:=ignore,\
 	"While setting properties ...";is:=ignore
+-includeresource.bundle:\
+	@lib/jruby-complete.jar

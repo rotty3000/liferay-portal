@@ -1,19 +1,12 @@
 Bundle-Activator: com.liferay.portal.cxf.jaxrs.common.activator.CXFJaxRsBundleActivator
-Bundle-ClassPath:\
-	.,\
-	lib/cxf-rt-frontend-jaxrs.jar,\
-	lib/cxf-rt-rs-extension-providers.jar,\
-	lib/javax.annotation-api.jar,\
-	lib/javax.json-api.jar,\
-	lib/javax.ws.rs-api.jar,\
-	lib/jettison.jar
+Bundle-ClassPath: .
 Bundle-Name: Liferay Portal CXF JAX-RS Common
 Bundle-SymbolicName: com.liferay.portal.cxf.jaxrs.common
 Bundle-Version: 1.0.0
 Export-Package:\
 	javax.json.*,\
 	javax.ws.rs.*,\
-	org.apache.cxf.*;version="3.0.3"
+	org.apache.cxf.*
 Import-Package:\
 	!com.sun.*,\
 	!javax.validation.*,\
@@ -34,11 +27,11 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!org.springframework.*,\
 	*
-Include-Resource:\
-	classes,\
-	lib/=lib/cxf-rt-frontend-jaxrs.jar,\
-	lib/=lib/cxf-rt-rs-extension-providers.jar,\
-	lib/=lib/javax.annotation-api.jar,\
-	lib/=lib/javax.json-api.jar,\
-	lib/=lib/javax.ws.rs-api.jar,\
-	lib/=lib/jettison.jar
+
+-includeresource.bundle:\
+	lib/=lib/cxf-rt-frontend-jaxrs.jar;lib:=true,\
+	lib/=lib/cxf-rt-rs-extension-providers.jar;lib:=true,\
+	lib/=lib/javax.annotation-api.jar;lib:=true,\
+	lib/=lib/javax.json-api.jar;lib:=true,\
+	lib/=lib/javax.ws.rs-api.jar;lib:=true,\
+	lib/=lib/jettison.jar;lib:=true

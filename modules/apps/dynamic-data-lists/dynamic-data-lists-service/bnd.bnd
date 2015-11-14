@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Dynamic Data Lists Service
 Bundle-SymbolicName: com.liferay.dynamic.data.lists.service
 Bundle-Version: 1.0.0
+Conditional-Package: com.liferay.util.dao.orm
 Export-Package:\
 	com.liferay.dynamic.data.lists.configuration,\
 	com.liferay.dynamic.data.lists.exporter.impl,\
@@ -10,16 +11,12 @@ Export-Package:\
 	com.liferay.dynamic.data.lists.service.configuration.configurator,\
 	com.liferay.dynamic.data.lists.service.permission,\
 	com.liferay.dynamic.data.lists.workflow
-Include-Resource:\
-	classes,\
-	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class
+-includeresource.bundle:\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/ContentUtil*.class
 Liferay-Service: true
 Require-Capability:\
 	liferay.extender;\
-	filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
+		filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
 Require-SchemaVersion: 1.0.0
 Spring-Context: META-INF/spring
 -spring-dependency: com.liferay.portal.spring.extender.service.ServiceReference

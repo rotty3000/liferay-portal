@@ -189,7 +189,7 @@ Export-Package:\
 	org.w3c.dom.*;version='1.0',\
 	org.xml.sax.*;version='2.0.2',\
 	*
-Include-Resource:\
+-includeresource:\
 	@lib/com.liferay.registry.api.jar,\
 	@lib/jaxws-api.jar,\
 	@../../../lib/development/jms.jar,\

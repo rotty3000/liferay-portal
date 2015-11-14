@@ -1,10 +1,5 @@
 Bundle-Name: Liferay Layout Set Prototype Web
 Bundle-SymbolicName: com.liferay.layout.set.prototype.web
 Bundle-Version: 1.0.0
-Export-package: com.liferay.layout.set.prototype.web.lar
-Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources
-Require-Capability:\
-	osgi.extender;osgi.extender="jsp.taglib";uri="http://liferay.com/tld/frontend";version:Version="1.0.0"
+Export-Package: com.liferay.layout.set.prototype.web.lar
 Require-SchemaVersion: 1.0.0

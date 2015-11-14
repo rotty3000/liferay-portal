@@ -1,7 +1,7 @@
 import com.liferay.gradle.util.FileUtil
 
 task deploy(type: Zip, overwrite: true)
-task jar(type: Jar, overwrite: true)
+task reJar(type: Jar)
 
 String gradleVersion = version.substring(0, version.lastIndexOf('.'))
 
@@ -33,6 +33,11 @@ deploy {
 }
 
 jar {
+	deleteAllActions()
+	dependsOn = [reJar]
+}
+
+reJar {
 	baseName = "gradle-resources-http"
 	duplicatesStrategy = "exclude"
 	from sourceSets.main.output

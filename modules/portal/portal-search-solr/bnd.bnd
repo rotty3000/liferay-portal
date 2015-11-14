@@ -1,19 +1,4 @@
-Bundle-ClassPath: \
-	.,\
-	lib/commons-io.jar,\
-	lib/httpclient.jar,\
-	lib/httpcore.jar,\
-	lib/httpmime.jar,\
-	lib/lucene-analyzers-common.jar,\
-	lib/lucene-core.jar,\
-	lib/lucene-queries.jar,\
-	lib/lucene-queryparser.jar,\
-	lib/lucene-suggest.jar,\
-	lib/noggit.jar,\
-	lib/solr-solrj.jar,\
-	lib/stax2-api.jar,\
-	lib/woodstox-core-asl.jar,\
-	lib/zookeeper.jar
+Bundle-ClassPath: .
 Bundle-Name: Liferay Portal Search Solr
 Bundle-SymbolicName: com.liferay.portal.search.solr
 Bundle-Version: 1.0.0
@@ -27,19 +12,19 @@ Import-Package:\
 	!org.jboss.netty.*,\
 	!org.relaxng.datatype.*,\
 	*
-Include-Resource:\
-	classes,\
-	lib/commons-io.jar=lib/commons-io.jar,\
-	lib/httpclient.jar=lib/httpclient.jar,\
-	lib/httpcore.jar=lib/httpcore.jar,\
-	lib/httpmime.jar=lib/httpmime.jar,\
-	lib/lucene-analyzers-common.jar=lib/lucene-analyzers-common.jar,\
-	lib/lucene-core.jar=lib/lucene-core.jar,\
-	lib/lucene-queries.jar=lib/lucene-queries.jar,\
-	lib/lucene-queryparser.jar=lib/lucene-queryparser.jar,\
-	lib/lucene-suggest.jar=lib/lucene-suggest.jar,\
-	lib/noggit.jar=lib/noggit.jar,\
-	lib/solr-solrj.jar=lib/solr-solrj.jar,\
-	lib/stax2-api.jar=lib/stax2-api.jar,\
-	lib/woodstox-core-asl.jar=lib/woodstox-core-asl.jar,\
-	lib/zookeeper.jar=lib/zookeeper.jar
+
+-includeresource.bundle:\
+	lib/commons-io.jar=lib/commons-io.jar;lib:=true,\
+	lib/httpclient.jar=lib/httpclient.jar;lib:=true,\
+	lib/httpcore.jar=lib/httpcore.jar;lib:=true,\
+	lib/httpmime.jar=lib/httpmime.jar;lib:=true,\
+	lib/lucene-analyzers-common.jar=lib/lucene-analyzers-common.jar;lib:=true,\
+	lib/lucene-core.jar=lib/lucene-core.jar;lib:=true,\
+	lib/lucene-queries.jar=lib/lucene-queries.jar;lib:=true,\
+	lib/lucene-queryparser.jar=lib/lucene-queryparser.jar;lib:=true,\
+	lib/lucene-suggest.jar=lib/lucene-suggest.jar;lib:=true,\
+	lib/noggit.jar=lib/noggit.jar;lib:=true,\
+	lib/solr-solrj.jar=lib/solr-solrj.jar;lib:=true,\
+	lib/stax2-api.jar=lib/stax2-api.jar;lib:=true,\
+	lib/woodstox-core-asl.jar=lib/woodstox-core-asl.jar;lib:=true,\
+	lib/zookeeper.jar=lib/zookeeper.jar;lib:=true

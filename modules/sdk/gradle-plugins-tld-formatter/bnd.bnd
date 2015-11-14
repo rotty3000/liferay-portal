@@ -2,6 +2,6 @@ Bundle-Name: Liferay Gradle Plugins TLD Formatter
 Bundle-SymbolicName: com.liferay.gradle.plugins.tld.formatter
 Bundle-Version: 1.0.2
 Export-Package: com.liferay.gradle.plugins.tld.formatter
-Include-Resource:\
-	classes,\
-	@lib/com.liferay.tld.formatter.jar!/com/liferay/tld/formatter/TLDFormatterArgs.class
+
+-includeresource.bundle:\
+	@lib/com.liferay.tld.formatter.jar!/com/liferay/tld/formatter/TLDFormatterArgs*.class

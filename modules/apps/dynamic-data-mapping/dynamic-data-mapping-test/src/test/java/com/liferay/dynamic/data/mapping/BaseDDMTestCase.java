@@ -584,7 +584,8 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 						InvocationOnMock invocationOnMock)
 					throws Throwable {
 
-					return DDMFormFieldTypeSettingsTestUtil.getSettings();
+					return (Class<? extends DDMFormFieldTypeSettings>)
+						DDMFormFieldTypeSettingsTestUtil.getSettings();
 				}
 
 			}

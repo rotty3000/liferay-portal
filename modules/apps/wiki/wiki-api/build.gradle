@@ -1,6 +1,5 @@
 dependencies {
-	compile group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "2.4.1"
-	compile project(":apps:configuration-admin:configuration-admin-api")
+	compile group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "3.0.0"
 	compile project(":apps:item-selector:item-selector-api")
 	compile project(":apps:item-selector:item-selector-criteria-api")
 	compile project(":portal:portal-settings")

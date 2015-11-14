@@ -2,6 +2,6 @@ Bundle-Name: Liferay Gradle Plugins Upgrade Table Builder
 Bundle-SymbolicName: com.liferay.gradle.plugins.upgrade.table.builder
 Bundle-Version: 1.0.3
 Export-Package: com.liferay.gradle.plugins.upgrade.table.builder
-Include-Resource:\
-	classes,\
-	@lib/com.liferay.portal.tools.upgrade.table.builder.jar!/com/liferay/portal/tools/upgrade/table/builder/UpgradeTableBuilderArgs.class
+
+-includeresource.bundle:\
+	@lib/com.liferay.portal.tools.upgrade.table.builder.jar!/com/liferay/portal/tools/upgrade/table/builder/UpgradeTableBuilderArgs*.class

@@ -1,7 +1,4 @@
 Bundle-Name: Liferay Portal SSO Facebook Connect
 Bundle-SymbolicName: com.liferay.portal.security.sso.facebook.connect
 Bundle-Version: 1.0.0
-Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources
 Web-ContextPath: /portal-security-sso-facebook-connect
