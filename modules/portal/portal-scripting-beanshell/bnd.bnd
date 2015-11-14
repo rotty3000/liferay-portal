@@ -5,6 +5,6 @@ DynamicImport-Package: *
 Import-Package:\
 	!org.apache.bsf.*,\
 	*
-Include-Resource: \
-	classes,\
+
+-includeresource.bundle:\
 	@lib/bsh.jar

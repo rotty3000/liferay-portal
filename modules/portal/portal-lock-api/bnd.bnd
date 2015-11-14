@@ -5,4 +5,3 @@ Export-Package:\
 	com.liferay.portal.lock.model.*,\
 	com.liferay.portal.lock.service.*,\
 	com.liferay.portal.lock.exception.*
-Include-Resource: classes

@@ -1,9 +1,6 @@
 Bundle-Name: Liferay Portal Cache Ehcache Provider
 Bundle-SymbolicName: com.liferay.portal.cache.ehcache.provider
 Bundle-Version: 1.0.0
-DynamicImport-Package:\
-	com.liferay.portal.cache.ehcache.cluster,\
-	com.liferay.portal.cache.io
 Export-Package:\
 	net.sf.ehcache,\
 	net.sf.ehcache.bootstrap,\
@@ -43,9 +40,11 @@ Import-Package:\
 	!org.terracotta.toolkit.search.attribute,\
 	!org.terracotta.toolkit.store,\
 	!sun.misc,\
+	com.liferay.portal.cache.ehcache.cluster,\
+	com.liferay.portal.cache.io,\
 	*
-Include-Resource:\
-	classes,\
+
+-includeresource.bundle:\
 	@lib/ehcache.jar!/com/*,\
 	@lib/ehcache.jar!/net/*,\
 	@lib/ehcache.jar!/org/*,\

@@ -2,13 +2,11 @@ Bundle-Name: Liferay Search Web
 Bundle-SymbolicName: com.liferay.search.web
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.search.web.constants.*
+-includeresource.bundle:\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/PropertyComparator*.class,\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/xml/XMLUtil*.class
 Import-Package:\
 	!com.liferay.util.xml,\
 	*
-Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/PropertyComparator.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/xml/XMLUtil.class
 Require-SchemaVersion: 1.0.0
 Web-ContextPath: /search-web

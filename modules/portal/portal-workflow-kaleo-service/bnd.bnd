@@ -1,25 +1,15 @@
 Bundle-Name: Liferay Portal Workflow Kaleo Service
 Bundle-SymbolicName: com.liferay.portal.workflow.kaleo.service
 Bundle-Version: 1.0.0
+Conditional-Package: com.liferay.util.dao.orm
 Export-Package:  \
 	com.liferay.portal.workflow.kaleo.model,\
 	com.liferay.portal.workflow.kaleo.runtime,\
 	com.liferay.portal.workflow.kaleo.runtime.action,\
 	com.liferay.portal.workflow.kaleo.runtime.util,\
 	com.liferay.portal.workflow.kaleo.util
-Import-Package:\
-	com.liferay.portal.kernel.messaging.config,\
-	com.liferay.portal.kernel.messaging.proxy,\
-	com.liferay.portal.kernel.scheduler.messaging,\
-	com.liferay.portal.kernel.workflow.comparator,\
-	com.liferay.portal.kernel.workflow.messaging,\
-	*
-Include-Resource:\
-	classes,\
-	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/ContentUtil.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class,\
+-includeresource.bundle:\
+	@${app-server-lib-portal-dir}/util-java.jar!/com/liferay/util/ContentUtil*.class,\
 	@lib/jabsorb.jar
 Liferay-Service: true
 Require-Capability:\

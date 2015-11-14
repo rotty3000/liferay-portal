@@ -3,4 +3,3 @@ Bundle-Name: Liferay Portal Configuration Persistence
 Bundle-SymbolicName: com.liferay.portal.configuration.persistence
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.portal.configuration.persistence
-Include-Resource: classes

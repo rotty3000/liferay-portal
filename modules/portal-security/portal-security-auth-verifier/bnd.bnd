@@ -7,8 +7,8 @@ Export-Package:\
 	com.liferay.portal.security.auth.verifier.portal.session,\
 	com.liferay.portal.security.auth.verifier.request.parameter,\
 	com.liferay.portal.security.auth.verifier.tunnel
-Include-Resource: \
-	classes,\
-	@../../../util-java/util-java.jar!/com/liferay/util/Encryptor.class,\
-	@../../../util-java/util-java.jar!/com/liferay/util/EncryptorException.class
--metatype-inherit: True
+
+-includeresource.bundle:\
+	@../../../util-java/util-java.jar!/com/liferay/util/Encryptor*.class,\
+	@../../../util-java/util-java.jar!/com/liferay/util/EncryptorException*.class
+-metatype-inherit: true

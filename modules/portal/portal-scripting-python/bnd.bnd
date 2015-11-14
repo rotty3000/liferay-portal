@@ -1,9 +1,9 @@
-Bundle-ClassPath: .,lib/jython-standalone.jar
+Bundle-ClassPath: .
 Bundle-Name: Liferay Portal Scripting Python
 Bundle-SymbolicName: com.liferay.portal.scripting.python
 Bundle-Version: 1.0.0
 DynamicImport-Package: *
-Import-Package: \
+Import-Package:\
 	!com.informix.*,\
 	!com.kenai.jnr.*,\
 	!junit.framework.*,\
@@ -14,10 +14,10 @@ Import-Package: \
 	!sun.io.*,\
 	!sun.misc.*,\
 	*
-Include-Resource: \
-	classes,\
-	lib/jython-standalone.jar=lib/jython-standalone.jar
+
 -fixupmessages:\
 	"The default package '.' is not permitted by the Import-Package ...";is:=ignore,\
 	"The JAR is empty: ...";is:=ignore,\
 	"While setting properties ...";is:=ignore
+-includeresource.bundle:\
+	lib/jython-standalone.jar=lib/jython-standalone.jar;lib:=true

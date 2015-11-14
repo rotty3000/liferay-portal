@@ -1,10 +1,12 @@
 Bundle-Name: Liferay Portal Servlet JSTL
 Bundle-SymbolicName: com.liferay.portal.servlet.jstl
 Bundle-Version: 1.2.3
-Export-Package: org.apache.taglibs.standard.*;version=${plugin.full.version}
-Implementation-Version: ${plugin.full.version}
+Export-Package: org.apache.taglibs.standard.*
+Implementation-Version: ${plugin-full-version}
 Import-Package:\
 	!com.sun.*,\
-	org.apache.taglibs.standard.*;version=${plugin.full.version},\
+	org.apache.taglibs.standard.*,\
 	*
-Include-Resource: @lib/javax.servlet.jsp.jstl.jar
+
+-includeresource.bundle:\
+	@lib/javax.servlet.jsp.jstl.jar

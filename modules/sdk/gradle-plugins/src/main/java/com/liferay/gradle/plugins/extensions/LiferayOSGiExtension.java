@@ -15,18 +15,26 @@
 package com.liferay.gradle.plugins.extensions;
 
 import aQute.bnd.osgi.Constants;
+import aQute.lib.spring.SpringComponent;
 
 import com.liferay.ant.bnd.bower.BowerAnalyzerPlugin;
 import com.liferay.ant.bnd.jsp.JspAnalyzerPlugin;
 import com.liferay.ant.bnd.sass.SassAnalyzerPlugin;
 import com.liferay.ant.bnd.spring.SpringDependencyAnalyzerPlugin;
+import com.liferay.gradle.util.FileUtil;
 import com.liferay.gradle.util.GradleUtil;
 import com.liferay.gradle.util.StringUtil;
 import com.liferay.gradle.util.Validator;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.compile.CompileOptions;
@@ -39,10 +47,35 @@ public class LiferayOSGiExtension extends LiferayExtension {
 
 	public LiferayOSGiExtension(Project project) {
 		super(project);
+
+		_bndFile = project.file("bnd.bnd");
+
+		Map<String, String> bundleInstructions = new HashMap<>();
+
+		Properties properties = null;
+
+		try {
+			properties = FileUtil.readProperties(_bndFile);
+		}
+		catch (IOException ioe) {
+			throw new GradleException("Unable to read " + _bndFile, ioe);
+		}
+
+		for (String key : properties.stringPropertyNames()) {
+			String value = properties.getProperty(key);
+
+			bundleInstructions.put(key, value);
+		}
+
+		_bundleInstructions = Collections.unmodifiableMap(bundleInstructions);
 	}
 
-	public Map<String, String> getBundleDefaultInstructions() {
-		Map<String, String> map = new HashMap<>();
+	public File getBndFile() {
+		return _bndFile;
+	}
+
+	public Map<String, Object> getBundleDefaultInstructions() {
+		Map<String, Object> map = new HashMap<>();
 
 		map.put(Constants.BUNDLE_SYMBOLICNAME, project.getName());
 		map.put(Constants.BUNDLE_VENDOR, "Liferay, Inc.");
@@ -61,25 +94,55 @@ public class LiferayOSGiExtension extends LiferayExtension {
 		JavaCompile javaCompile = (JavaCompile)GradleUtil.getTask(
 			project, JavaPlugin.COMPILE_JAVA_TASK_NAME);
 
-		CompileOptions compileOptions = javaCompile.getOptions();
+		final CompileOptions compileOptions = javaCompile.getOptions();
 
-		map.put("Javac-Debug", _getOnOffValue(compileOptions.isDebug()));
+		map.put(
+			"Javac-Debug",
+			new Object() {
+
+				@Override
+				public String toString() {
+					return _getOnOffValue(compileOptions.isDebug());
+				}
+
+			});
+
 		map.put(
 			"Javac-Deprecation",
-			_getOnOffValue(compileOptions.isDeprecation()));
+			new Object() {
 
-		String encoding = compileOptions.getEncoding();
+				@Override
+				public String toString() {
+					return _getOnOffValue(compileOptions.isDeprecation());
+				}
 
-		if (Validator.isNull(encoding)) {
-			encoding = System.getProperty("file.encoding");
-		}
+			});
 
-		map.put("Javac-Encoding", encoding);
+		map.put(
+			"Javac-Encoding",
+			new Object() {
+
+				@Override
+				public String toString() {
+					String encoding = compileOptions.getEncoding();
+
+					if (Validator.isNull(encoding)) {
+						encoding = System.getProperty("file.encoding");
+					}
+
+					return encoding;
+				}
+
+			});
 
 		map.put("-jsp", "*.jsp,*.jspf");
 		map.put("-sass", "*");
 
 		return map;
+	}
+
+	public Map<String, String> getBundleInstructions() {
+		return _bundleInstructions;
 	}
 
 	public boolean isAutoUpdateXml() {
@@ -100,10 +163,12 @@ public class LiferayOSGiExtension extends LiferayExtension {
 
 	private static final String[] _BND_PLUGIN_CLASS_NAMES = {
 		BowerAnalyzerPlugin.class.getName(), JspAnalyzerPlugin.class.getName(),
-		SassAnalyzerPlugin.class.getName(),
+		SassAnalyzerPlugin.class.getName(), SpringComponent.class.getName(),
 		SpringDependencyAnalyzerPlugin.class.getName()
 	};
 
 	private boolean _autoUpdateXml = true;
+	private final File _bndFile;
+	private final Map<String, String> _bundleInstructions;
 
 }

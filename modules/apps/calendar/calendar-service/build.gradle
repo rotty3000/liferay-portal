@@ -14,6 +14,7 @@ dependencies {
 	compile project(":apps:export-import:export-import-service")
 	compile project(":portal:portal-upgrade")
 
+	provided group: "backport-util-concurrent", name: "backport-util-concurrent", version: "3.1"
 	provided group: "com.liferay", name: "com.google.ical", version: "20110304"
 	provided group: "com.liferay", name: "net.fortuna.ical4j", version: "1.0"
 	provided group: "com.liferay.portal", name: "util-java", version: liferay.portalVersion

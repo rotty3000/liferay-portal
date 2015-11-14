@@ -1,19 +1,14 @@
 Bundle-Name: Liferay Document Library Google Docs
 Bundle-SymbolicName: com.liferay.document.library.google.docs
 Bundle-Version: 1.0.0
+Conditional-Package: freemarker.*
 Import-Package:\
 	!com.sun.org.apache.xml.internal.utils,\
 	!com.sun.org.apache.xpath.internal,\
 	!com.sun.org.apache.xpath.internal.objects,\
+	!javax.swing.*,\
 	!org.apache.log,\
-	!org.mozilla.javascript,\
-	!org.python.core,\
-	!org.python.util,\
 	!org.slf4j.spi,\
 	!org.zeroturnaround.javarebel,\
 	*
-Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources,\
-	@lib/org.freemarker.jar
 Web-ContextPath: /document-library-google-docs

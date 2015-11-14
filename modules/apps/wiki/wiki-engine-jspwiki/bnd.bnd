@@ -13,8 +13,7 @@ Import-Package:\
 	!org.intabulas.sandler.*,\
 	!org.jgroups.*,\
 	*
-Include-Resource:\
-	classes,\
+-includeresource.bundle:\
 	@../../../../lib/portal/ecs.jar,\
 	@../../../../lib/portal/freshcookies-security.jar,\
 	@../../../../lib/portal/jsonrpc.jar,\

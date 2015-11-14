@@ -10,4 +10,3 @@ Export-Package:\
 	com.liferay.journal.service.persistence,\
 	com.liferay.journal.util,\
 	com.liferay.journal.util.comparator
-Include-Resource: classes

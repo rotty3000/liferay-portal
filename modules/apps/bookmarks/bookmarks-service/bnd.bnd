@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Bookmarks Service
 Bundle-SymbolicName: com.liferay.bookmarks.service
 Bundle-Version: 1.0.0
+Conditional-Package: com.liferay.util.dao.orm
 Export-Package:\
 	com.liferay.bookmarks.asset,\
 	com.liferay.bookmarks.customattributes,\
@@ -15,15 +16,10 @@ Export-Package:\
 	com.liferay.bookmarks.trash,\
 	com.liferay.bookmarks.util,\
 	com.liferay.bookmarks.verify
-Include-Resource:\
-	classes,\
-	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@${app.server.lib.portal.dir}/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class
 Liferay-Service: true
 Require-Capability:\
 	liferay.extender;\
-	filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
+		filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
 Require-SchemaVersion: 1.0.0
 Spring-Context: META-INF/spring
 -spring-dependency: com.liferay.portal.spring.extender.service.ServiceReference

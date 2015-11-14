@@ -1,6 +1,7 @@
 Bundle-Name: Liferay Wiki Service
 Bundle-SymbolicName: com.liferay.wiki.service
 Bundle-Version: 1.0.0
+Conditional-Package: com.liferay.util.dao.orm
 Export-Package:\
 	com.liferay.wiki.asset,\
 	com.liferay.wiki.engine.impl,\
@@ -41,9 +42,7 @@ Import-Package:\
 	!org.intabulas.sandler.*,\
 	!org.jgroups.*,\
 	*
-Include-Resource:\
-	classes,\
-	custom-sql/default.xml=classes/META-INF/custom-sql/default.xml,\
+-includeresource.bundle:\
 	@../../../../lib/portal/antlr2.jar,\
 	@../../../../lib/portal/antlr3.jar,\
 	@../../../../lib/portal/bnd.jar!/aQute/bnd/annotation/metatype/*,\
@@ -56,13 +55,11 @@ Include-Resource:\
 	@../../../../lib/portal/oro.jar,\
 	@../../../../lib/portal/oscache.jar,\
 	@../../../../lib/portal/stringtemplate.jar,\
-	@../../../../util-java/util-java.jar!/com/liferay/util/RSSThreadLocal.class,\
-	@../../../../util-java/util-java.jar!/com/liferay/util/RSSUtil.class,\
-	@../../../../util-java/util-java.jar!/com/liferay/util/dao/orm/CustomSQL.class,\
-	@../../../../util-java/util-java.jar!/com/liferay/util/dao/orm/CustomSQLUtil.class
+	@../../../../util-java/util-java.jar!/com/liferay/util/RSSThreadLocal*.class,\
+	@../../../../util-java/util-java.jar!/com/liferay/util/RSSUtil*.class
 Liferay-Service: true
 Require-Capability:\
-	liferay.extender;\
-	filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
+	liferay.extender;filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
 Spring-Context: META-INF/spring
+
 -spring-dependency: com.liferay.portal.spring.extender.service.ServiceReference

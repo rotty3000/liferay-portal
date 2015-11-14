@@ -1,23 +1,11 @@
-Bundle-ClassPath:\
-	.,\
-	lib/cxf-core.jar,\
-	lib/cxf-rt-bindings-soap.jar,\
-	lib/cxf-rt-databinding-jaxb.jar,\
-	lib/cxf-rt-transports-http.jar,\
-	lib/cxf-rt-wsdl.jar,\
-	lib/cxf-tools-common.jar,\
-	lib/cxf-tools-validator.jar,\
-	lib/stax2-api.jar,\
-	lib/woodstox-core-asl.jar,\
-	lib/wsdl4j.jar,\
-	lib/xmlschema-core.jar
+Bundle-ClassPath: .
 Bundle-Name: Liferay Portal CXF Common
 Bundle-SymbolicName: com.liferay.portal.cxf.common
 Bundle-Version: 1.0.0
-Export-Package: \
-	javax.wsdl.*;version="1.2",\
-	org.apache.cxf.*;version="3.0.3",\
-	org.apache.ws.commons.schema.*;version="2.1.0"
+Export-Package:\
+	javax.wsdl.*,\
+	org.apache.cxf.*,\
+	org.apache.ws.commons.schema.*
 Import-Package:\
 	!com.sun.*,\
 	!javax.validation.*,\
@@ -38,16 +26,16 @@ Import-Package:\
 	!org.slf4j.spi.*,\
 	!org.springframework.*,\
 	*
-Include-Resource:\
-	classes,\
-	lib/=lib/cxf-core.jar,\
-	lib/=lib/cxf-rt-bindings-soap.jar,\
-	lib/=lib/cxf-rt-databinding-jaxb.jar,\
-	lib/=lib/cxf-rt-transports-http.jar,\
-	lib/=lib/cxf-rt-wsdl.jar,\
-	lib/=lib/cxf-tools-common.jar,\
-	lib/=lib/cxf-tools-validator.jar,\
-	lib/=lib/stax2-api.jar,\
-	lib/=lib/woodstox-core-asl.jar,\
-	lib/=lib/wsdl4j.jar,\
-	lib/=lib/xmlschema-core.jar
+
+-includeresource.bundle:\
+	lib/=lib/cxf-core.jar;lib:=true,\
+	lib/=lib/cxf-rt-bindings-soap.jar;lib:=true,\
+	lib/=lib/cxf-rt-databinding-jaxb.jar;lib:=true,\
+	lib/=lib/cxf-rt-transports-http.jar;lib:=true,\
+	lib/=lib/cxf-rt-wsdl.jar;lib:=true,\
+	lib/=lib/cxf-tools-common.jar;lib:=true,\
+	lib/=lib/cxf-tools-validator.jar;lib:=true,\
+	lib/=lib/stax2-api.jar;lib:=true,\
+	lib/=lib/woodstox-core-asl.jar;lib:=true,\
+	lib/=lib/wsdl4j.jar;lib:=true,\
+	lib/=lib/xmlschema-core.jar;lib:=true

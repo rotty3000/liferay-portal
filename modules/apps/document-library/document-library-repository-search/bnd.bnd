@@ -1,18 +1,12 @@
-Bundle-ClassPath:\
-	.,\
-	lib/lucene-analyzers-common.jar,\
-	lib/lucene-core.jar,\
-	lib/lucene-queries.jar,\
-	lib/lucene-queryparser.jar,\
-	lib/lucene-sandbox.jar
+Bundle-ClassPath: .
 Bundle-Name: Liferay Document Library Repository Search
 Bundle-SymbolicName: com.liferay.document.library.repository.search
 Bundle-Version: 1.0.0
 Export-Package: com.liferay.document.library.repository.search.util
-Include-Resource:\
-	classes,\
-	lib/lucene-analyzers-common.jar=lib/lucene-analyzers-common.jar,\
-	lib/lucene-core.jar=lib/lucene-core.jar,\
-	lib/lucene-queries.jar=lib/lucene-queries.jar,\
-	lib/lucene-queryparser.jar=lib/lucene-queryparser.jar,\
-	lib/lucene-sandbox.jar=lib/lucene-sandbox.jar
+
+-includeresource.bundle:\
+	lib/lucene-analyzers-common.jar=lib/lucene-analyzers-common.jar;lib:=true,\
+	lib/lucene-core.jar=lib/lucene-core.jar;lib:=true,\
+	lib/lucene-queries.jar=lib/lucene-queries.jar;lib:=true,\
+	lib/lucene-queryparser.jar=lib/lucene-queryparser.jar;lib:=true,\
+	lib/lucene-sandbox.jar=lib/lucene-sandbox.jar;lib:=true

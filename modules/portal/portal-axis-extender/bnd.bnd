@@ -12,7 +12,7 @@ Import-Package:\
 	!org.omg.*,\
 	!sun.awt.image.codec,\
 	*
-Include-Resource:\
-	classes,\
+
+-includeresource.bundle:\
 	@../../../lib/portal/axis.jar,\
 	@../../../lib/portal/wsdl4j.jar
