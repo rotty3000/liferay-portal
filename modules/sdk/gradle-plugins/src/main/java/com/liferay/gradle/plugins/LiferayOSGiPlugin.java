@@ -92,21 +92,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		configureTaskBuildCSS(project);
 		configureTasksBuildService(project);
 		configureVersion(project);
-
-		project.afterEvaluate(
-			new Action<Project>() {
-
-				@Override
-				public void execute(Project project) {
-					LiferayOSGiExtension liferayOSGiExtension =
-						GradleUtil.getExtension(
-							project, LiferayOSGiExtension.class);
-
-					configureBundleExtensionDefaults(
-						project, liferayOSGiExtension);
-				}
-
-			});
 	}
 
 	protected void addCleanDeployedFile(

@@ -45,10 +45,6 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 afterEvaluate {
-	project.ext.set("app.server.lib.portal.dir", project.relativePath(appServerLibPortalDir))
-	project.ext.set("app.server.portal.dir", project.relativePath(liferay.appServerPortalDir))
-	project.ext.set("plugin.full.version", project.version.toString())
-
 	if (project.hasProperty("snapshot") && !project.version.endsWith("-SNAPSHOT")) {
 		project.version = project.version + "-SNAPSHOT"
 	}
@@ -98,6 +94,9 @@ configurations {
 		}
 	}
 
+	bnd {
+	}
+
 	portal
 	xmltask
 
@@ -143,6 +142,10 @@ dependencies {
 	tldFormatter group: "com.liferay", name: "com.liferay.tld.formatter", version: "default"
 	xmlFormatter group: "com.liferay", name: "com.liferay.xml.formatter", version: "default"
 	xmltask rootProject.files("../lib/development/xmltask.jar")
+
+	bnd configurations.compile.filter {
+		it.type == "jar"
+	}
 }
 
 eclipse {
@@ -212,6 +215,17 @@ idea {
 ideaModule {
 	ext {
 		autoClean = false
+	}
+}
+
+jar {
+	configuration = configurations.bnd
+
+	manifest {
+		attributes "app-server-lib-portal-dir": relativePath(appServerLibPortalDir)
+		attributes "app-server-portal-dir": relativePath(liferay.appServerPortalDir)
+		attributes "plugin-full-version": project.version.toString()
+		attributes "-include": "-" + relativePath(rootProject.file("build-module.bnd"))
 	}
 }
 
@@ -310,7 +324,7 @@ pluginManager.withPlugin("com.liferay.alloy.taglib") {
 pluginManager.withPlugin("com.liferay.maven.plugin.builder") {
 	afterEvaluate {
 		buildPluginDescriptor {
-			pomArtifactId = bundle.instructions["Bundle-SymbolicName"]
+			pomArtifactId = liferay.bundleInstructions["Bundle-SymbolicName"]
 		}
 	}
 

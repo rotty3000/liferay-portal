@@ -1481,6 +1481,7 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 				project, TEST_INTEGRATION_SOURCE_SET_NAME);
 
 			jar.dependsOn(sourceSet.getClassesTaskName());
+			jar.from(sourceSet.getOutput());
 		}
 	}
 
