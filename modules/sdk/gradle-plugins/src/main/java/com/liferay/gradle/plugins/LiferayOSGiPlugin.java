@@ -14,6 +14,8 @@
 
 package com.liferay.gradle.plugins;
 
+import aQute.bnd.gradle.BndBuilderPlugin;
+import aQute.bnd.gradle.BundleTaskConvention;
 import aQute.bnd.osgi.Constants;
 
 import com.liferay.gradle.plugins.css.builder.BuildCSSTask;
@@ -37,17 +39,12 @@ import groovy.lang.Closure;
 
 import java.io.File;
 
+import java.lang.reflect.Method;
+
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Callable;
-
-import org.dm.gradle.plugins.bundle.BundleExtension;
-import org.dm.gradle.plugins.bundle.BundlePlugin;
-import org.dm.gradle.plugins.bundle.BundleUtils;
-import org.dm.gradle.plugins.bundle.JarBuilder;
 
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
@@ -55,24 +52,22 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.java.archives.Manifest;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 import org.gradle.api.plugins.BasePlugin;
 import org.gradle.api.plugins.BasePluginConvention;
+import org.gradle.api.plugins.Convention;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.Delete;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetOutput;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskInputs;
-import org.gradle.api.tasks.TaskOutputs;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.bundling.War;
-import org.gradle.internal.Factory;
 
 /**
  * @author Andrea Di Giorgi
@@ -95,21 +90,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		configureTaskBuildCSS(project);
 		configureTasksBuildService(project);
 		configureVersion(project);
-
-		project.afterEvaluate(
-			new Action<Project>() {
-
-				@Override
-				public void execute(Project project) {
-					LiferayOSGiExtension liferayOSGiExtension =
-						GradleUtil.getExtension(
-							project, LiferayOSGiExtension.class);
-
-					configureBundleExtensionDefaults(
-						project, liferayOSGiExtension);
-				}
-
-			});
 	}
 
 	protected void addCleanDeployedFile(
@@ -339,65 +319,43 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 	protected Jar addTaskBuildWSDDJar(final BuildWSDDTask buildWSDDTask) {
 		Project project = buildWSDDTask.getProject();
 
-		final Jar jar = GradleUtil.addTask(
-			project, buildWSDDTask.getName() + "Jar", Jar.class);
+		final Jar jar = _createBundleTask(
+			project, buildWSDDTask.getName() + "Jar");
 
 		jar.dependsOn(buildWSDDTask);
 
-		String taskName = buildWSDDTask.getName();
+		Manifest manifest = jar.getManifest();
 
-		if (taskName.equals(WSDDBuilderPlugin.BUILD_WSDD_TASK_NAME)) {
-			jar.setAppendix("wsdd");
-		}
-		else {
-			jar.setAppendix("wsdd-" + taskName);
-		}
+		LiferayOSGiExtension liferayOSGiExtension = GradleUtil.getExtension(
+			project, LiferayOSGiExtension.class);
 
-		jar.deleteAllActions();
+		Map<String, Object> properties =
+			liferayOSGiExtension.getBundleDefaultInstructions();
 
-		jar.doLast(
-			new Action<Task>() {
+		String bundleName = getBundleInstruction(
+			project, Constants.BUNDLE_NAME);
+
+		properties.put(Constants.BUNDLE_NAME, bundleName + " WSDD descriptors");
+
+		String bundleSymbolicName = getBundleInstruction(
+			project, Constants.BUNDLE_SYMBOLICNAME);
+
+		properties.put(
+			Constants.BUNDLE_SYMBOLICNAME, bundleSymbolicName + ".wsdd");
+		properties.put(Constants.FRAGMENT_HOST, bundleSymbolicName);
+		properties.put(
+			Constants.IMPORT_PACKAGE,
+			"javax.servlet,javax.servlet.http");
+
+		properties.put(
+			Constants.INCLUDERESOURCE,
+			new Object() {
 
 				@Override
-				public void execute(Task task) {
-					Project project = task.getProject();
-
-					BundleExtension bundleExtension = GradleUtil.getExtension(
-						project, BundleExtension.class);
-
-					Factory<JarBuilder> jarBuilderFactory =
-						bundleExtension.getJarBuilderFactory();
-
-					JarBuilder jarBuilder = jarBuilderFactory.create();
-
-					jarBuilder.withBase(BundleUtils.getBase(project));
-
-					LiferayOSGiExtension liferayOSGiExtension =
-						GradleUtil.getExtension(
-							project, LiferayOSGiExtension.class);
-
-					Map<String, String> properties =
-						liferayOSGiExtension.getBundleDefaultInstructions();
-
-					String bundleName = getBundleInstruction(
-						project, Constants.BUNDLE_NAME);
-
-					properties.put(
-						Constants.BUNDLE_NAME,
-						bundleName + " WSDD descriptors");
-
-					String bundleSymbolicName = getBundleInstruction(
-						project, Constants.BUNDLE_SYMBOLICNAME);
-
-					properties.put(
-						Constants.BUNDLE_SYMBOLICNAME,
-						bundleSymbolicName + ".wsdd");
-					properties.put(Constants.FRAGMENT_HOST, bundleSymbolicName);
-					properties.put(
-						Constants.IMPORT_PACKAGE,
-						"javax.servlet,javax.servlet.http");
-
+				public String toString() {
 					StringBuilder sb = new StringBuilder();
+
+					Project project = buildWSDDTask.getProject();
 
 					sb.append("WEB-INF/=");
 					sb.append(
@@ -409,22 +367,21 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 							project, buildWSDDTask.getOutputDir()));
 					sb.append(";filter:=*.wsdd");
 
-					properties.put(Constants.INCLUDE_RESOURCE, sb.toString());
-
-					jarBuilder.withProperties(properties);
-
-					jarBuilder.withSourcepath(BundleUtils.getSources(project));
-					jarBuilder.withTrace(bundleExtension.isTrace());
-					jarBuilder.withVersion(BundleUtils.getVersion(project));
-
-					TaskOutputs taskOutputs = task.getOutputs();
-
-					FileCollection fileCollection = taskOutputs.getFiles();
-
-					jarBuilder.writeJarTo(fileCollection.getSingleFile());
+					return sb.toString();
 				}
 
 			});
+
+		manifest.attributes(properties);
+
+		String taskName = buildWSDDTask.getName();
+
+		if (taskName.equals(WSDDBuilderPlugin.BUILD_WSDD_TASK_NAME)) {
+			jar.setAppendix("wsdd");
+		}
+		else {
+			jar.setAppendix("wsdd-" + taskName);
+		}
 
 		buildWSDDTask.finalizedBy(jar);
 
@@ -523,11 +480,9 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 
 	@Override
 	protected void applyPlugins(Project project) {
-		GradleUtil.applyPlugin(project, BundlePlugin.class);
-
-		configureBundleExtension(project);
-
 		super.applyPlugins(project);
+
+		GradleUtil.applyPlugin(project, BndBuilderPlugin.class);
 	}
 
 	protected void configureArchivesBaseName(Project project) {
@@ -538,50 +493,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 			project, Constants.BUNDLE_SYMBOLICNAME);
 
 		basePluginConvention.setArchivesBaseName(bundleSymbolicName);
-	}
-
-	protected void configureBundleExtension(Project project) {
-		replaceJarBuilderFactory(project);
-
-		Map<String, String> bundleInstructions = getBundleInstructions(project);
-
-		Properties bundleProperties = null;
-
-		try {
-			bundleProperties = FileUtil.readProperties(project, "bnd.bnd");
-		}
-		catch (Exception e) {
-			throw new GradleException("Unable to read bundle properties", e);
-		}
-
-		Enumeration<Object> keys = bundleProperties.keys();
-
-		while (keys.hasMoreElements()) {
-			String key = (String)keys.nextElement();
-
-			String value = bundleProperties.getProperty(key);
-
-			bundleInstructions.put(key, value);
-		}
-	}
-
-	protected void configureBundleExtensionDefaults(
-		Project project, LiferayOSGiExtension liferayOSGiExtension) {
-
-		Map<String, String> bundleInstructions = getBundleInstructions(project);
-
-		Map<String, String> bundleDefaultInstructions =
-			liferayOSGiExtension.getBundleDefaultInstructions();
-
-		for (Map.Entry<String, String> entry :
-				bundleDefaultInstructions.entrySet()) {
-
-			String key = entry.getKey();
-
-			if (!bundleInstructions.containsKey(key)) {
-				bundleInstructions.put(key, entry.getValue());
-			}
-		}
 	}
 
 	protected void configureJspCExtension(final Project project) {
@@ -703,6 +614,41 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 	}
 
 	@Override
+	protected void configureTaskJar(
+		Project project, LiferayExtension liferayExtension) {
+
+		super.configureTaskJar(project, liferayExtension);
+
+		Jar jar = (Jar)GradleUtil.getTask(project, JavaPlugin.JAR_TASK_NAME);
+
+		LiferayOSGiExtension liferayOSGiExtension =
+			(LiferayOSGiExtension)liferayExtension;
+
+		configureTaskJarManifest(jar, liferayOSGiExtension);
+		configureTaskJarBndFile(jar, liferayOSGiExtension);
+	}
+
+	protected void configureTaskJarBndFile(
+		Jar jar, LiferayOSGiExtension liferayOSGiExtension) {
+
+		Convention convention = jar.getConvention();
+
+		BundleTaskConvention bundleTaskConvention = convention.getPlugin(
+			BundleTaskConvention.class);
+
+		bundleTaskConvention.setBndfile(liferayOSGiExtension.getBndFile());
+	}
+
+	protected void configureTaskJarManifest(
+		Jar jar, LiferayOSGiExtension liferayOSGiExtension) {
+
+		Manifest manifest = jar.getManifest();
+
+		manifest.attributes(
+			liferayOSGiExtension.getBundleDefaultInstructions());
+	}
+
+	@Override
 	protected void configureTaskPublishNodeModule(
 		PublishNodeModuleTask publishNodeModuleTask) {
 
@@ -791,10 +737,10 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 	}
 
 	protected Map<String, String> getBundleInstructions(Project project) {
-		BundleExtension bundleExtension = GradleUtil.getExtension(
-			project, BundleExtension.class);
+		LiferayOSGiExtension liferayOSGiExtension = GradleUtil.getExtension(
+			project, LiferayOSGiExtension.class);
 
-		return (Map<String, String>)bundleExtension.getInstructions();
+		return liferayOSGiExtension.getBundleInstructions();
 	}
 
 	@Override
@@ -834,14 +780,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		return new File(project.getBuildDir(), "unzipped-jar");
 	}
 
-	protected void replaceJarBuilderFactory(Project project) {
-		BundleExtension bundleExtension = GradleUtil.getExtension(
-			project, BundleExtension.class);
-
-		bundleExtension.setJarBuilderFactory(
-			new LiferayJarBuilderFactory(project));
-	}
-
 	protected void touchFile(File file, long time) {
 		boolean success = file.setLastModified(time);
 
@@ -865,6 +803,52 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		}
 	}
 
+	/**
+	 * See https://github.com/bndtools/bnd/commit/7a016b7
+	 */
+	private Jar _createBundleTask(Project project, String name) {
+		Jar jar = GradleUtil.addTask(project, name, Jar.class);
+
+		final BundleTaskConvention bundleTaskConvention =
+			new BundleTaskConvention(jar);
+
+		// Intentionally set a wrong value, otherwise Bnd will use the bnd.bnd
+		// file in the project dir
+
+		bundleTaskConvention.setBndfile(jar.getTemporaryDir());
+
+		Convention convention = jar.getConvention();
+
+		Map<String, Object> plugins = convention.getPlugins();
+
+		plugins.put("bundle", bundleTaskConvention);
+
+		jar.doLast(
+			new Action<Task>() {
+
+				@Override
+				public void execute(Task task) {
+					try {
+						Method buildBundleMethod =
+							BundleTaskConvention.class.getDeclaredMethod(
+								"buildBundle");
+
+						if (!buildBundleMethod.isAccessible()) {
+							buildBundleMethod.setAccessible(true);
+						}
+
+						buildBundleMethod.invoke(bundleTaskConvention);
+					}
+					catch (Exception e) {
+						throw new GradleException(e.getMessage(), e);
+					}
+				}
+
+			});
+
+		return jar;
+	}
+
 	private String _getRelativePath(Project project, File file) {
 		String relativePath = project.relativePath(file);
 
@@ -873,61 +857,5 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 
 	private static final Logger _logger = Logging.getLogger(
 		LiferayOSGiPlugin.class);
-
-	private static class LiferayJarBuilder extends JarBuilder {
-
-		public void addClasspath(File file) {
-			try {
-				builder.addClasspath(file);
-			}
-			catch (Exception e) {
-				throw new GradleException(e.getMessage(), e);
-			}
-		}
-
-		@Override
-		public JarBuilder withClasspath(Object files) {
-
-			// Prevent JarBuilderFactoryDecorator from adding
-			// configurations.runtime.files.
-
-			return this;
-		}
-
-		@Override
-		public JarBuilder withResources(Object files) {
-
-			// Prevent JarBuilderFactoryDecorator from adding
-			// sourceSets.main.output.classesDir/resourcesDir.
-
-			return this;
-		}
-
-	}
-
-	private static class LiferayJarBuilderFactory
-		implements Factory<JarBuilder> {
-
-		public LiferayJarBuilderFactory(Project project) {
-			_project = project;
-		}
-
-		@Override
-		public JarBuilder create() {
-			LiferayJarBuilder liferayJarBuilder = new LiferayJarBuilder();
-
-			SourceSet sourceSet = GradleUtil.getSourceSet(
-				_project, SourceSet.MAIN_SOURCE_SET_NAME);
-
-			SourceSetOutput sourceSetOutput = sourceSet.getOutput();
-
-			liferayJarBuilder.addClasspath(sourceSetOutput.getClassesDir());
-
-			return liferayJarBuilder;
-		}
-
-		private final Project _project;
-
-	}
 
 }

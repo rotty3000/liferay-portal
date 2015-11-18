@@ -1402,10 +1402,13 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 		}
 	}
 
-	protected void configureTaskJar(Project project) {
+	protected void configureTaskJar(
+		Project project, LiferayExtension liferayExtension) {
+
 		Jar jar = (Jar)GradleUtil.getTask(project, JavaPlugin.JAR_TASK_NAME);
 
 		configureTaskJarDependsOn(jar);
+		configureTaskJarFrom(jar);
 		configureTaskJarDuplicatesStrategy(jar);
 	}
 
@@ -1424,6 +1427,22 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 
 	protected void configureTaskJarDuplicatesStrategy(Jar jar) {
 		jar.setDuplicatesStrategy(DuplicatesStrategy.EXCLUDE);
+	}
+
+	protected void configureTaskJarFrom(Jar jar) {
+		Project project = jar.getProject();
+
+		if (isTestProject(project)) {
+			SourceSet sourceSet = GradleUtil.getSourceSet(
+				project, SourceSet.TEST_SOURCE_SET_NAME);
+
+			jar.from(sourceSet.getOutput());
+
+			sourceSet = GradleUtil.getSourceSet(
+				project, TEST_INTEGRATION_SOURCE_SET_NAME);
+
+			jar.from(sourceSet.getOutput());
+		}
 	}
 
 	protected void configureTaskPublishNodeModule(
@@ -1557,7 +1576,7 @@ public class LiferayJavaPlugin implements Plugin<Project> {
 		configureTaskClean(project);
 		configureTaskDeploy(project, liferayExtension);
 		configureTaskInitGradle(project);
-		configureTaskJar(project);
+		configureTaskJar(project, liferayExtension);
 		configureTaskSetupTestableTomcat(project, liferayExtension);
 		configureTaskStartTestableTomcat(project, liferayExtension);
 		configureTaskTestIntegration(project, liferayExtension);
