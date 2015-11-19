@@ -320,6 +320,12 @@ public class PortletTracker
 			bundlePortletApp.getServletContext());
 		portletBagFactory.setWARFile(true);
 
+		Thread thread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = thread.getContextClassLoader();
+
+		thread.setContextClassLoader(bundleWiring.getClassLoader());
+
 		try {
 			portletBagFactory.create(portletModel);
 
@@ -355,6 +361,9 @@ public class PortletTracker
 				e);
 
 			return null;
+		}
+		finally {
+			thread.setContextClassLoader(contextClassLoader);
 		}
 	}
 
@@ -1199,7 +1208,7 @@ public class PortletTracker
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/*");
 
 		return bundleContext.registerService(
-			Filter.class, new RestrictPortletServletRequestFilter(),
+			Filter.class, new RestrictPortletServletRequestFilter(classLoader),
 			properties);
 	}
 
@@ -1456,6 +1465,10 @@ public class PortletTracker
 
 	private class RestrictPortletServletRequestFilter implements Filter {
 
+		public RestrictPortletServletRequestFilter(ClassLoader classLoader) {
+			_classLoader = classLoader;
+		}
+
 		@Override
 		public void destroy() {
 		}
@@ -1466,10 +1479,18 @@ public class PortletTracker
 				FilterChain filterChain)
 			throws IOException, ServletException {
 
+			Thread thread = Thread.currentThread();
+
+			ClassLoader contextClassLoader = thread.getContextClassLoader();
+
+			thread.setContextClassLoader(_classLoader);
+
 			try {
 				filterChain.doFilter(servletRequest, servletResponse);
 			}
 			finally {
+				thread.setContextClassLoader(contextClassLoader);
+
 				PortletRequest portletRequest =
 					(PortletRequest)servletRequest.getAttribute(
 						JavaConstants.JAVAX_PORTLET_REQUEST);
@@ -1505,6 +1526,8 @@ public class PortletTracker
 		@Override
 		public void init(FilterConfig filterConfig) throws ServletException {
 		}
+
+		private final ClassLoader _classLoader;
 
 	}
 
