@@ -164,12 +164,18 @@ public class ResourceBundleTrackerTest {
 
 		serviceRegistrationA.unregister();
 
+		portletResourceBundleA = portletConfig.getResourceBundle(
+			new Locale("th", "TH", "TH"));
+
 		Assert.assertFalse(portletResourceBundleA.containsKey("th_TH_TH"));
 		Assert.assertEquals(
 			"th_TH",
 			ResourceBundleUtil.getString(portletResourceBundleA, "common-key"));
 
 		serviceRegistrationB.unregister();
+
+		portletResourceBundleA = portletConfig.getResourceBundle(
+			new Locale("th", "TH", "TH"));
 
 		Assert.assertFalse(portletResourceBundleA.containsKey("th_TH"));
 		Assert.assertEquals(
@@ -178,12 +184,18 @@ public class ResourceBundleTrackerTest {
 
 		serviceRegistrationC.unregister();
 
+		portletResourceBundleA = portletConfig.getResourceBundle(
+			new Locale("th", "TH", "TH"));
+
 		Assert.assertFalse(portletResourceBundleA.containsKey("th"));
 		Assert.assertEquals(
 			"root-bundle",
 			ResourceBundleUtil.getString(portletResourceBundleA, "common-key"));
 
 		serviceRegistrationD.unregister();
+
+		portletResourceBundleA = portletConfig.getResourceBundle(
+			new Locale("th", "TH", "TH"));
 
 		Assert.assertFalse(portletResourceBundleA.containsKey("root-bundle"));
 		Assert.assertFalse(portletResourceBundleA.containsKey("common-key"));
