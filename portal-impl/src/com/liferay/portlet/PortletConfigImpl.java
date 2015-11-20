@@ -65,8 +65,6 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		}
 
 		_portletName = portletName;
-
-		_resourceBundles = new ConcurrentHashMap<>();
 	}
 
 	@Override
@@ -146,15 +144,9 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		ResourceBundle resourceBundle = null;
 
 		if (Validator.isNull(resourceBundleClassName)) {
-			String resourceBundleId = _portlet.getPortletId();
-
-			resourceBundle = _resourceBundles.get(resourceBundleId);
-
 			if (resourceBundle == null) {
 				resourceBundle = new PortletResourceBundle(
 					_portlet.getPortletInfo());
-
-				_resourceBundles.put(resourceBundleId, resourceBundle);
 			}
 
 			return resourceBundle;
@@ -166,10 +158,6 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		sb.append(locale.getLanguage());
 		sb.append(locale.getCountry());
 		sb.append(locale.getVariant());
-
-		String resourceBundleId = sb.toString();
-
-		resourceBundle = _resourceBundles.get(resourceBundleId);
 
 		if (resourceBundle == null) {
 			if (!_portletApp.isWARFile() &&
@@ -187,8 +175,6 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 
 			resourceBundle = new PortletResourceBundle(
 				resourceBundle, _portlet.getPortletInfo());
-
-			_resourceBundles.put(resourceBundleId, resourceBundle);
 		}
 
 		return resourceBundle;
@@ -236,6 +222,5 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 	private final PortletApp _portletApp;
 	private final PortletContext _portletContext;
 	private final String _portletName;
-	private final Map<String, ResourceBundle> _resourceBundles;
 
 }
