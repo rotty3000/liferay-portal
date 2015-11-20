@@ -47,7 +47,7 @@ public class TestResourceBundle extends ResourceBundle {
 
 	@Override
 	public Enumeration<String> getKeys() {
-		return Collections .enumeration(_map.keySet());
+		return Collections.enumeration(_map.keySet());
 	}
 
 	@Override
