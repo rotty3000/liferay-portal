@@ -63,7 +63,7 @@ public class ResourceBundleTracker implements Closeable {
 				resourceBundles.addAll(service);
 			}
 
-			int indexOfUnderline = languageId.indexOf(StringPool.UNDERLINE);
+			int indexOfUnderline = languageId.lastIndexOf(StringPool.UNDERLINE);
 
 			if (indexOfUnderline > 0) {
 				languageId = languageId.substring(0, indexOfUnderline);
@@ -71,6 +71,13 @@ public class ResourceBundleTracker implements Closeable {
 			else {
 				break;
 			}
+		}
+
+		List<ResourceBundle> defaultResourceBundle =
+			_serviceTrackerMap.getService("");
+
+		if (defaultResourceBundle != null) {
+			resourceBundles.addAll(defaultResourceBundle);
 		}
 
 		return new AggregateResourceBundle(
