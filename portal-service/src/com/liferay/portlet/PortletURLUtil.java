@@ -276,7 +276,11 @@ public class PortletURLUtil {
 			sb.append(settingsScope);
 		}
 
-		String namespace = PortalUtil.getPortletNamespace(portletId);
+		String namespace = StringPool.BLANK;
+
+		if (portlet.isRequiresNamespacedParameters()) {
+			namespace = PortalUtil.getPortletNamespace(portletId);
+		}
 
 		Map<String, String[]> parameters = request.getParameterMap();
 
