@@ -12,8 +12,12 @@
  * details.
  */
 
-package com.liferay.portal.configurator.extender;
+package com.liferay.portal.configurator.extender.internal;
 
+import com.liferay.portal.configurator.extender.BundleStorage;
+import com.liferay.portal.configurator.extender.ConfigurationDescriptionFactory;
+import com.liferay.portal.configurator.extender.NamedConfigurationContent;
+import com.liferay.portal.configurator.extender.NamedConfigurationContentFactory;
 import com.liferay.portal.configurator.extender.internal.ConfiguratorExtension;
 
 import java.io.IOException;
