@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.osgi.service.tracker.collections.internal;
+package com.liferay.osgi.service.tracker.collections;
 
 import org.osgi.framework.ServiceReference;
 

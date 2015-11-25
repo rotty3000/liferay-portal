@@ -14,7 +14,7 @@
 
 package com.liferay.osgi.service.tracker.collections.map;
 
-import com.liferay.osgi.service.tracker.collections.internal.ServiceReferenceServiceTuple;
+import com.liferay.osgi.service.tracker.collections.ServiceReferenceServiceTuple;
 
 /**
  * @author Carlos Sierra Andrés
