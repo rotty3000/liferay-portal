@@ -19,6 +19,7 @@ import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
 import com.liferay.dynamic.data.lists.service.permission.DDLRecordSetPermission;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -85,6 +86,12 @@ public class DDLFormDisplayContext {
 			return _showConfigurationIcon;
 		}
 
+		if (isFormShared()) {
+			_showConfigurationIcon = false;
+
+			return _showConfigurationIcon;
+		}
+
 		ThemeDisplay themeDisplay = getThemeDisplay();
 
 		_showConfigurationIcon = PortletPermissionUtil.contains(
@@ -135,6 +142,10 @@ public class DDLFormDisplayContext {
 		}
 
 		return _hasViewPermission;
+	}
+
+	protected boolean isFormShared() {
+		return ParamUtil.getBoolean(_renderRequest, "shared");
 	}
 
 	private Boolean _hasViewPermission;

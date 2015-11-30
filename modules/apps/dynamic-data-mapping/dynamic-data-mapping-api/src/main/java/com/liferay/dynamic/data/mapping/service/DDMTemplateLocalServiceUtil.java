@@ -453,6 +453,11 @@ public class DDMTemplateLocalServiceUtil {
 			includeAncestorTemplates);
 	}
 
+	public static com.liferay.dynamic.data.mapping.model.DDMTemplate fetchTemplate(
+		long templateId) {
+		return getService().fetchTemplate(templateId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
 		return getService().getActionableDynamicQuery();
 	}
