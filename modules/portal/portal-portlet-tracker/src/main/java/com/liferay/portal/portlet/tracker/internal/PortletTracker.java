@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.portlet.RestrictPortletServletRequest;
 import com.liferay.portal.kernel.servlet.PortletServlet;
+import com.liferay.portal.kernel.util.AggregateResourceBundle;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -43,6 +44,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.kernel.xml.SAXReader;
+import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.EventDefinition;
@@ -80,6 +82,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -278,8 +281,11 @@ public class PortletTracker
 		ServiceRegistrations serviceRegistrations = getServiceRegistrations(
 			bundle);
 
+		PassThroughClassLoader passThroughClassLoader =
+			new PassThroughClassLoader(bundleWiring.getClassLoader());
+
 		BundlePortletApp bundlePortletApp = createBundlePortletApp(
-			bundle, bundleWiring.getClassLoader(), serviceRegistrations);
+			bundle, passThroughClassLoader, serviceRegistrations);
 
 		com.liferay.portal.model.Portlet portletModel = buildPortletModel(
 			bundlePortletApp, portletId);
@@ -308,10 +314,16 @@ public class PortletTracker
 		PortletBagFactory portletBagFactory = new BundlePortletBagFactory(
 			portlet);
 
-		portletBagFactory.setClassLoader(bundleWiring.getClassLoader());
+		portletBagFactory.setClassLoader(passThroughClassLoader);
 		portletBagFactory.setServletContext(
 			bundlePortletApp.getServletContext());
 		portletBagFactory.setWARFile(true);
+
+		Thread thread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = thread.getContextClassLoader();
+
+		thread.setContextClassLoader(bundleWiring.getClassLoader());
 
 		try {
 			portletBagFactory.create(portletModel);
@@ -319,11 +331,11 @@ public class PortletTracker
 			checkWebResources(
 				bundle.getBundleContext(),
 				bundlePortletApp.getServletContextName(),
-				bundleWiring.getClassLoader(), serviceRegistrations);
+				passThroughClassLoader, serviceRegistrations);
 
 			checkResourceBundles(
-				bundle.getBundleContext(), bundleWiring.getClassLoader(),
-				portletModel, serviceRegistrations);
+				bundle.getBundleContext(), passThroughClassLoader, portletModel,
+				serviceRegistrations);
 
 			List<Company> companies = _companyLocalService.getCompanies();
 
@@ -348,6 +360,9 @@ public class PortletTracker
 				e);
 
 			return null;
+		}
+		finally {
+			thread.setContextClassLoader(contextClassLoader);
 		}
 	}
 
@@ -378,8 +393,26 @@ public class PortletTracker
 		}
 
 		for (Locale locale : LanguageUtil.getAvailableLocales()) {
-			ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-				portletModel.getResourceBundle(), locale, classLoader);
+			ResourceBundle resourceBundle;
+
+			try {
+				resourceBundle = ResourceBundleUtil.getBundle(
+					portletModel.getResourceBundle(), locale, classLoader);
+
+				resourceBundle = new AggregateResourceBundle(
+					resourceBundle,
+					LanguageResources.getResourceBundle(locale));
+			}
+			catch (MissingResourceException mre) {
+				if (_log.isInfoEnabled()) {
+					_log.info(
+						"Portlet " + portletModel.getPortletName() + " does " +
+							"not have translations for available locale " +
+						locale);
+				}
+
+				resourceBundle = LanguageResources.getResourceBundle(locale);
+			}
 
 			Dictionary<String, Object> properties = new HashMapDictionary<>();
 
@@ -1174,7 +1207,7 @@ public class PortletTracker
 			HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN, "/*");
 
 		return bundleContext.registerService(
-			Filter.class, new RestrictPortletServletRequestFilter(),
+			Filter.class, new RestrictPortletServletRequestFilter(classLoader),
 			properties);
 	}
 
@@ -1431,6 +1464,10 @@ public class PortletTracker
 
 	private class RestrictPortletServletRequestFilter implements Filter {
 
+		public RestrictPortletServletRequestFilter(ClassLoader classLoader) {
+			_classLoader = classLoader;
+		}
+
 		@Override
 		public void destroy() {
 		}
@@ -1441,10 +1478,18 @@ public class PortletTracker
 				FilterChain filterChain)
 			throws IOException, ServletException {
 
+			Thread thread = Thread.currentThread();
+
+			ClassLoader contextClassLoader = thread.getContextClassLoader();
+
+			thread.setContextClassLoader(_classLoader);
+
 			try {
 				filterChain.doFilter(servletRequest, servletResponse);
 			}
 			finally {
+				thread.setContextClassLoader(contextClassLoader);
+
 				PortletRequest portletRequest =
 					(PortletRequest)servletRequest.getAttribute(
 						JavaConstants.JAVAX_PORTLET_REQUEST);
@@ -1480,6 +1525,8 @@ public class PortletTracker
 		@Override
 		public void init(FilterConfig filterConfig) throws ServletException {
 		}
+
+		private final ClassLoader _classLoader;
 
 	}
 
