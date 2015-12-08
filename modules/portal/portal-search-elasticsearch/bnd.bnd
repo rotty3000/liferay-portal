@@ -64,7 +64,6 @@ Import-Package:\
 	!sun.security.*,\
 	*
 Include-Resource:\
-	classes,\
 	lib/antlr-runtime.jar=lib/antlr-runtime.jar,\
 	lib/asm-commons.jar=lib/asm-commons.jar,\
 	lib/asm.jar=lib/asm.jar,\
