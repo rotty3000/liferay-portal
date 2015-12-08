@@ -12,5 +12,4 @@ Import-Package:\
 	!org.mozilla.javascript.*,\
 	*
 Include-Resource:\
-	classes,\
 	@lib/jgroups.jar
