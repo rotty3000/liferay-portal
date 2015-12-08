@@ -5,4 +5,3 @@ Export-Package:\
 	com.liferay.flags,\
 	com.liferay.flags.messaging,\
 	com.liferay.flags.service
-Include-Resource: classes

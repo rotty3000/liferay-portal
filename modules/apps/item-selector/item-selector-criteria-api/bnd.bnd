@@ -9,4 +9,3 @@ Export-Package:\
 	com.liferay.item.selector.criteria.upload.criterion,\
 	com.liferay.item.selector.criteria.video.criterion,\
 	com.liferay.item.selector.criteria.url.criterion
-Include-Resource: classes
