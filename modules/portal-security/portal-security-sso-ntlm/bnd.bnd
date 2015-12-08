@@ -7,7 +7,5 @@ Import-Package:\
 	!javax.microedition.*,\
 	*
 Include-Resource:\
-	classes,\
-	META-INF/resources=src/main/resources/META-INF/resources,\
 	@lib/jcifs.jar
 Web-ContextPath: /portal-security-sso-ntlm

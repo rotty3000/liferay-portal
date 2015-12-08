@@ -6,5 +6,4 @@ Import-Package:\
 	!org.apache.bsf.*,\
 	*
 Include-Resource: \
-	classes,\
 	@lib/bsh.jar

@@ -59,8 +59,6 @@ Import-Package:\
 	org.apache.struts.util,\
 	*
 Include-Resource:\
-	WEB-INF/classes/portlet.properties=docroot/WEB-INF/src/portlet.properties,\
-	WEB-INF/classes/resource-actions=docroot/WEB-INF/src/resource-actions,\
 	WEB-INF/classes/=@docroot/WEB-INF/lib/util-java.jar!/com/liferay/util/CreditCard.class,\
 	WEB-INF/classes/=@docroot/WEB-INF/lib/util-java.jar!/com/liferay/util/State.class,\
 	WEB-INF/classes/=@docroot/WEB-INF/lib/util-java.jar!/com/liferay/util/StateUtil.class,\
