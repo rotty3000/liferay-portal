@@ -1,3 +1,4 @@
+-exportcontents: ${packages;ANNOTATED;org.osgi.annotation.versioning.Version}
 -includeresource:\
 	-src/main/resources,\
 	-test-classes/integration,\
