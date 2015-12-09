@@ -214,6 +214,14 @@ idea {
 	}
 }
 
+jar {
+	manifest {
+		attributes(
+			"-include": "-" + relativePath(rootProject.file("build-module.bnd")),
+		)
+	}
+}
+
 jsModuleConfigGenerator {
 	version = "1.1.7"
 }
