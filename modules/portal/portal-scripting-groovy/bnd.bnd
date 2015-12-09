@@ -9,6 +9,5 @@ Import-Package:\
 	!org.fusesource.jansi.*,\
 	*
 Include-Resource: \
-	classes,\
 	@lib/antlr.jar,\
 	@lib/groovy.jar
