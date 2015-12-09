@@ -154,6 +154,8 @@ dependencies {
 
 	sourceFormatter group: "com.liferay", name: "com.liferay.source.formatter", version: "default"
 
+	testCompile group: "com.liferay.portal", name: "portal-test", version: liferay.portalVersion
+	testCompile group: "com.liferay.portal", name: "portal-test-internal", version: liferay.portalVersion
 	testCompile group: "org.powermock", name: "powermock-api-mockito", version: "1.6.1"
 	testCompile group: "org.powermock", name: "powermock-core", version: "1.6.1"
 	testCompile group: "org.powermock", name: "powermock-module-junit4", version: "1.6.1"
