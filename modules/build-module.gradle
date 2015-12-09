@@ -203,6 +203,14 @@ idea {
 	}
 }
 
+jar {
+	manifest {
+		attributes(
+			"-include": "-" + relativePath(rootProject.file("build-module.bnd")),
+		)
+	}
+}
+
 jspC {
 	jspCVersion = project.properties["com.liferay.jasper.jspc.version"]
 }
