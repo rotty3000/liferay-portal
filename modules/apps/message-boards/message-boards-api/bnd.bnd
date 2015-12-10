@@ -1,5 +1,6 @@
 Bundle-Name: Liferay Message Boards API
 Bundle-SymbolicName: com.liferay.message.boards.api
 Bundle-Version: 1.0.0
-Export-Package: com.liferay.message.boards.*
-Include-Resource: classes
+Export-Package:\
+	com.liferay.message.boards.configuration,\
+	com.liferay.message.boards.display.context

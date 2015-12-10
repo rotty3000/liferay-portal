@@ -15,7 +15,6 @@ Import-Package: \
 	!sun.misc.*,\
 	*
 Include-Resource: \
-	classes,\
 	lib/jython-standalone.jar=lib/jython-standalone.jar
 -fixupmessages:\
 	"The default package '.' is not permitted by the Import-Package ...";is:=ignore,\

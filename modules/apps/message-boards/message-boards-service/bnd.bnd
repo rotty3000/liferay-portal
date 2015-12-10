@@ -1,4 +1,3 @@
 Bundle-Name: Liferay Message Boards Service
 Bundle-SymbolicName: com.liferay.message.boards.service
 Bundle-Version: 1.0.0
-Include-Resource: classes
