@@ -13,5 +13,4 @@ Import-Package: \
 	!javax.transaction.*,\
 	*
 Include-Resource:\
-	classes,\
 	@lib/quartz.jar

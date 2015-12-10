@@ -3,5 +3,3 @@ Bundle-SymbolicName: com.liferay.frontend.editor.lang
 Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.frontend.editor.lang
-Include-Resource:\
-	classes
