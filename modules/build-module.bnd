@@ -1,5 +1,4 @@
 -includeresource:\
-	-src/main/resources,\
 	-test-classes/integration,\
 	${def;Include-Resource}
 -plugin.springcomponent: aQute.lib.spring.SpringComponent

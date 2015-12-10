@@ -33,8 +33,6 @@ import com.liferay.gradle.util.Validator;
 import com.liferay.gradle.util.copy.ExcludeExistingFileAction;
 import com.liferay.gradle.util.copy.RenameDependencyClosure;
 
-import groovy.lang.Closure;
-
 import java.io.File;
 
 import java.util.Arrays;
@@ -48,7 +46,6 @@ import org.dm.gradle.plugins.bundle.BundleExtension;
 import org.dm.gradle.plugins.bundle.BundlePlugin;
 import org.dm.gradle.plugins.bundle.BundleUtils;
 import org.dm.gradle.plugins.bundle.JarBuilder;
-
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.Project;
@@ -66,13 +63,14 @@ import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.Delete;
 import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetOutput;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.TaskInputs;
 import org.gradle.api.tasks.TaskOutputs;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.bundling.War;
 import org.gradle.internal.Factory;
+
+import groovy.lang.Closure;
 
 /**
  * @author Andrea Di Giorgi
@@ -540,8 +538,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 	}
 
 	protected void configureBundleExtension(Project project) {
-		replaceJarBuilderFactory(project);
-
 		Map<String, String> bundleInstructions = getBundleInstructions(project);
 
 		Properties bundleProperties = null;
@@ -833,14 +829,6 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		return new File(project.getBuildDir(), "unzipped-jar");
 	}
 
-	protected void replaceJarBuilderFactory(Project project) {
-		BundleExtension bundleExtension = GradleUtil.getExtension(
-			project, BundleExtension.class);
-
-		bundleExtension.setJarBuilderFactory(
-			new LiferayJarBuilderFactory(project));
-	}
-
 	protected void touchFile(File file, long time) {
 		boolean success = file.setLastModified(time);
 
@@ -872,61 +860,5 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 
 	private static final Logger _logger = Logging.getLogger(
 		LiferayOSGiPlugin.class);
-
-	private static class LiferayJarBuilder extends JarBuilder {
-
-		public void addClasspath(File file) {
-			try {
-				builder.addClasspath(file);
-			}
-			catch (Exception e) {
-				throw new GradleException(e.getMessage(), e);
-			}
-		}
-
-		@Override
-		public JarBuilder withClasspath(Object files) {
-
-			// Prevent JarBuilderFactoryDecorator from adding
-			// configurations.runtime.files.
-
-			return this;
-		}
-
-		@Override
-		public JarBuilder withResources(Object files) {
-
-			// Prevent JarBuilderFactoryDecorator from adding
-			// sourceSets.main.output.classesDir/resourcesDir.
-
-			return this;
-		}
-
-	}
-
-	private static class LiferayJarBuilderFactory
-		implements Factory<JarBuilder> {
-
-		public LiferayJarBuilderFactory(Project project) {
-			_project = project;
-		}
-
-		@Override
-		public JarBuilder create() {
-			LiferayJarBuilder liferayJarBuilder = new LiferayJarBuilder();
-
-			SourceSet sourceSet = GradleUtil.getSourceSet(
-				_project, SourceSet.MAIN_SOURCE_SET_NAME);
-
-			SourceSetOutput sourceSetOutput = sourceSet.getOutput();
-
-			liferayJarBuilder.addClasspath(sourceSetOutput.getClassesDir());
-
-			return liferayJarBuilder;
-		}
-
-		private final Project _project;
-
-	}
 
 }
