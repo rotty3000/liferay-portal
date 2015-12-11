@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Portal Messaging
 Bundle-SymbolicName: com.liferay.portal.messaging
 Bundle-Version: 1.0.0
-Export-Package: com.liferay.portal.messaging
+Export-Package: com.liferay.portal.messaging;-noimport:=true
 Include-Resource: classes
