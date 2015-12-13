@@ -5,3 +5,5 @@ Include-Resource:\
 	bower.json,\
 	classes
 JS-Submodules: true
+Provide-Capability:\
+	soy;type="metal";version:Version="1.0.0"
