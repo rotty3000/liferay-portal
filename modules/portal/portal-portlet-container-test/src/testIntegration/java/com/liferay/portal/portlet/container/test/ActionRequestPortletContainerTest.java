@@ -30,6 +30,9 @@ import com.liferay.portal.util.test.PortletContainerTestUtil;
 import com.liferay.portal.util.test.PortletContainerTestUtil.Response;
 import com.liferay.portlet.PortletURLImpl;
 import com.liferay.portlet.SecurityPortletContainerWrapper;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
 import com.liferay.util.Encryptor;
 
 import java.io.IOException;
@@ -101,10 +104,17 @@ public class ActionRequestPortletContainerTest
 
 	@Test
 	public void testAuthTokenIgnoreOrigins() throws Exception {
-		String[] authTokenIgnoreOrigins =
-			ReflectionTestUtil.getAndSetFieldValue(
-				PropsValues.class, "AUTH_TOKEN_IGNORE_ORIGINS",
-				new String[] {SecurityPortletContainerWrapper.class.getName()});
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put(
+			"auth.token.ignore.origins",
+			new String[] {SecurityPortletContainerWrapper.class.getName()});
+		properties.put("whitelistName", "auth.token.ignore.origins");
+
+		ServiceRegistration<Object> serviceRegistration =
+			registry.registerService(Object.class, new Object(), properties);
 
 		try {
 			AuthTokenWhitelistUtil.resetOriginCSRFWhitelist();
@@ -127,9 +137,9 @@ public class ActionRequestPortletContainerTest
 			Assert.assertTrue(testPortlet.isCalledAction());
 		}
 		finally {
-			ReflectionTestUtil.setFieldValue(
-				PropsValues.class, "AUTH_TOKEN_IGNORE_ORIGINS",
-				authTokenIgnoreOrigins);
+			if (serviceRegistration != null) {
+				serviceRegistration.unregister();
+			}
 
 			AuthTokenWhitelistUtil.resetOriginCSRFWhitelist();
 		}
@@ -137,10 +147,16 @@ public class ActionRequestPortletContainerTest
 
 	@Test
 	public void testAuthTokenIgnorePortlets() throws Exception {
-		String[] authTokenIgnorePortlets =
-			ReflectionTestUtil.getAndSetFieldValue(
-				PropsValues.class, "AUTH_TOKEN_IGNORE_PORTLETS",
-				new String[] {TEST_PORTLET_ID});
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put(
+			"auth.token.ignore.portlets", new String[] {TEST_PORTLET_ID});
+		properties.put("whitelistName", "auth.token.ignore.portlets");
+
+		ServiceRegistration<Object> serviceRegistration =
+			registry.registerService(Object.class, new Object(), properties);
 
 		try {
 			AuthTokenWhitelistUtil.resetPortletCSRFWhitelist();
@@ -163,9 +179,9 @@ public class ActionRequestPortletContainerTest
 			Assert.assertTrue(testPortlet.isCalledAction());
 		}
 		finally {
-			ReflectionTestUtil.setFieldValue(
-				PropsValues.class, "AUTH_TOKEN_IGNORE_PORTLETS",
-				authTokenIgnorePortlets);
+			if (serviceRegistration != null) {
+				serviceRegistration.unregister();
+			}
 
 			AuthTokenWhitelistUtil.resetPortletCSRFWhitelist();
 		}
@@ -236,31 +252,7 @@ public class ActionRequestPortletContainerTest
 
 	@Test
 	public void testPortalAuthenticationToken() throws Exception {
-		testPortlet = new TestPortlet() {
-
-			@Override
-			public void serveResource(
-					ResourceRequest resourceRequest,
-					ResourceResponse resourceResponse)
-				throws IOException {
-
-				PrintWriter printWriter = resourceResponse.getWriter();
-
-				PortletURL portletURL = resourceResponse.createActionURL();
-
-				String queryString = HttpUtil.getQueryString(
-					portletURL.toString());
-
-				Map<String, String[]> parameterMap = HttpUtil.getParameterMap(
-					queryString);
-
-				String portalAuthenticationToken = MapUtil.getString(
-					parameterMap, "p_auth");
-
-				printWriter.write(portalAuthenticationToken);
-			}
-
-		};
+		testPortlet = new ActionRequestTestPortlet();
 
 		setUpPortlet(
 			testPortlet, new HashMapDictionary<String, Object>(),
@@ -350,31 +342,7 @@ public class ActionRequestPortletContainerTest
 
 	@Test
 	public void testXCSRFToken() throws Exception {
-		testPortlet = new TestPortlet() {
-
-			@Override
-			public void serveResource(
-					ResourceRequest resourceRequest,
-					ResourceResponse resourceResponse)
-				throws IOException {
-
-				PrintWriter printWriter = resourceResponse.getWriter();
-
-				PortletURL portletURL = resourceResponse.createActionURL();
-
-				String queryString = HttpUtil.getQueryString(
-					portletURL.toString());
-
-				Map<String, String[]> parameterMap = HttpUtil.getParameterMap(
-					queryString);
-
-				String portalAuthenticationToken = MapUtil.getString(
-					parameterMap, "p_auth");
-
-				printWriter.write(portalAuthenticationToken);
-			}
-
-		};
+		testPortlet = new ActionRequestTestPortlet();
 
 		setUpPortlet(
 			testPortlet, new HashMapDictionary<String, Object>(),
@@ -408,6 +376,31 @@ public class ActionRequestPortletContainerTest
 
 		Assert.assertEquals(200, response.getCode());
 		Assert.assertTrue(testPortlet.isCalledAction());
+	}
+
+	private class ActionRequestTestPortlet extends TestPortlet {
+
+		@Override
+		public void serveResource(
+				ResourceRequest resourceRequest,
+				ResourceResponse resourceResponse)
+			throws IOException {
+
+			PrintWriter printWriter = resourceResponse.getWriter();
+
+			PortletURL portletURL = resourceResponse.createActionURL();
+
+			String queryString = HttpUtil.getQueryString(portletURL.toString());
+
+			Map<String, String[]> parameterMap = HttpUtil.getParameterMap(
+				queryString);
+
+			String portalAuthenticationToken = MapUtil.getString(
+				parameterMap, "p_auth");
+
+			printWriter.write(portalAuthenticationToken);
+		}
+
 	}
 
 }
