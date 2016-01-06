@@ -622,7 +622,7 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 			while (iterator.hasNext()) {
 				File file = iterator.next();
 
-				if (_classpathFiles.contains(file)) {
+				if (_classpathFiles.contains(file) || !file.exists()) {
 					iterator.remove();
 
 					continue;
@@ -649,7 +649,7 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 			while (iterator.hasNext()) {
 				File file = iterator.next();
 
-				if (_resourceFiles.contains(file)) {
+				if (_resourceFiles.contains(file) || !file.exists()) {
 					iterator.remove();
 
 					continue;
