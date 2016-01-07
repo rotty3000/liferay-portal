@@ -350,7 +350,7 @@ public class BowerAnalyzerPlugin implements AnalyzerPlugin {
 
 			@Override
 			public void mergeWith(Parameters other, boolean override) {
-				for (Map.Entry<String,Attrs> entry : other.entrySet()) {
+				for (Map.Entry<String, Attrs> entry : other.entrySet()) {
 					Attrs existing = get(entry.getKey());
 
 					if (existing == null) {
