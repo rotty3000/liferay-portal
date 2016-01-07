@@ -109,9 +109,8 @@ public class ActionRequestPortletContainerTest
 		Map<String, Object> properties = new HashMap<>();
 
 		properties.put(
-			"auth.token.ignore.origins",
-			new String[] {SecurityPortletContainerWrapper.class.getName()});
-		properties.put("whitelistName", "auth.token.ignore.origins");
+			PropsKeys.AUTH_TOKEN_IGNORE_ORIGINS,
+			SecurityPortletContainerWrapper.class.getName());
 
 		ServiceRegistration<Object> serviceRegistration =
 			registry.registerService(Object.class, new Object(), properties);
@@ -152,8 +151,7 @@ public class ActionRequestPortletContainerTest
 		Map<String, Object> properties = new HashMap<>();
 
 		properties.put(
-			"auth.token.ignore.portlets", new String[] {TEST_PORTLET_ID});
-		properties.put("whitelistName", "auth.token.ignore.portlets");
+			PropsKeys.AUTH_TOKEN_IGNORE_PORTLETS, TEST_PORTLET_ID);
 
 		ServiceRegistration<Object> serviceRegistration =
 			registry.registerService(Object.class, new Object(), properties);
