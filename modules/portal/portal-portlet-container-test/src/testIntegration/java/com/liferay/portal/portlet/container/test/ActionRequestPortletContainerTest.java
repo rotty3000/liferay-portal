@@ -48,6 +48,7 @@ import javax.portlet.ResourceResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ecs.html.S;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -56,6 +57,13 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Raymond Augé
@@ -129,29 +137,64 @@ public class ActionRequestPortletContainerTest
 
 	@Test
 	public void testAuthTokenIgnorePortlets() throws Exception {
-		Dictionary<String, Object> properties = new HashMapDictionary<>();
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-		properties.put(
-			PropsKeys.AUTH_TOKEN_IGNORE_PORTLETS, TEST_PORTLET_ID);
+		BundleContext bundleContext = bundle.getBundleContext();
 
-		registerService(Object.class, new Object(), properties);
+		ServiceTracker<Object, Object> serviceTracker =
+			new ServiceTracker<>(bundleContext, bundleContext.createFilter("(&(objectClass=Object)(auth.token.ignore.portlets=*))"), new ServiceTrackerCustomizer<Object, Object>() {
+				@Override
+				public Object addingService(ServiceReference<Object> reference) {
+					System.out.println("adding");
 
-		setUpPortlet(
-			testPortlet, new HashMapDictionary<String, Object>(),
-			TEST_PORTLET_ID);
+					return null;
+				}
 
-		HttpServletRequest httpServletRequest =
-			PortletContainerTestUtil.getHttpServletRequest(group, layout);
+				@Override
+				public void modifiedService(ServiceReference<Object> reference, Object service) {
+					System.out.println("modified");
 
-		PortletURL portletURL = new PortletURLImpl(
-			httpServletRequest, TEST_PORTLET_ID, layout.getPlid(),
-			PortletRequest.ACTION_PHASE);
+				}
 
-		Response response = PortletContainerTestUtil.request(
-			portletURL.toString());
+				@Override
+				public void removedService(ServiceReference<Object> reference, Object service) {
+					System.out.println("removing");
+				}
+			});
+		serviceTracker.open();;
 
-		Assert.assertEquals(200, response.getCode());
-		Assert.assertTrue(testPortlet.isCalledAction());
+
+		try {
+			Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+			properties.put(
+				PropsKeys.AUTH_TOKEN_IGNORE_PORTLETS, TEST_PORTLET_ID);
+
+			ServiceRegistration<?> serviceRegistration = registerService(Object.class, new Object(), properties);
+
+			setUpPortlet(
+				testPortlet, new HashMapDictionary<String, Object>(),
+				TEST_PORTLET_ID);
+
+			HttpServletRequest httpServletRequest =
+				PortletContainerTestUtil.getHttpServletRequest(group, layout);
+
+			PortletURL portletURL = new PortletURLImpl(
+				httpServletRequest, TEST_PORTLET_ID, layout.getPlid(),
+				PortletRequest.ACTION_PHASE);
+
+			Response response = PortletContainerTestUtil.request(
+				portletURL.toString());
+
+			serviceRegistration.unregister();
+
+			Assert.assertEquals(200, response.getCode());
+			Assert.assertTrue(testPortlet.isCalledAction());
+			Thread.currentThread().sleep(5000);
+		}
+		finally {
+			serviceTracker.close();
+		}
 	}
 
 	@Test

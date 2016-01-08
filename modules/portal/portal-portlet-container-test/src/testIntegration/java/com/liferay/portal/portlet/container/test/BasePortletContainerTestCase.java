@@ -66,13 +66,17 @@ public class BasePortletContainerTestCase {
 		for (ServiceRegistration<?> serviceRegistration :
 				serviceRegistrations) {
 
-			serviceRegistration.unregister();
+			try {
+				serviceRegistration.unregister();
+			}
+			catch (Exception e) {
+			}
 		}
 
 		serviceRegistrations.clear();
 	}
 
-	protected void registerService(
+	protected ServiceRegistration<?> registerService(
 		Class<?> clazz, Object object, Dictionary<String, Object> properties) {
 
 		Assert.assertNotNull(properties);
@@ -87,6 +91,8 @@ public class BasePortletContainerTestCase {
 				properties);
 
 		serviceRegistrations.add(serviceRegistration);
+
+		return serviceRegistration;
 	}
 
 	protected void setUpPortlet(
