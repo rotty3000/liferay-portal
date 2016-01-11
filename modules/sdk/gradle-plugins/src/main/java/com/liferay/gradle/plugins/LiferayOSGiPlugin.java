@@ -486,7 +486,13 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 	protected void configureBundleExtension(Project project) {
 		replaceJarBuilderFactory(project);
 
-		Map<String, String> bundleInstructions = getBundleInstructions(project);
+		BundleExtension bundleExtension = GradleUtil.getExtension(
+			project, BundleExtension.class);
+
+		bundleExtension.setIncludeTransitiveDependencies(true);
+
+		Map<String, String> bundleInstructions = getBundleInstructions(
+			bundleExtension);
 
 		Properties bundleProperties = null;
 
@@ -578,11 +584,17 @@ public class LiferayOSGiPlugin extends LiferayJavaPlugin {
 		return bundleInstructions.get(key);
 	}
 
+	protected Map<String, String> getBundleInstructions(
+		BundleExtension bundleExtension) {
+
+		return (Map<String, String>)bundleExtension.getInstructions();
+	}
+
 	protected Map<String, String> getBundleInstructions(Project project) {
 		BundleExtension bundleExtension = GradleUtil.getExtension(
 			project, BundleExtension.class);
 
-		return (Map<String, String>)bundleExtension.getInstructions();
+		return getBundleInstructions(bundleExtension);
 	}
 
 	@Override
