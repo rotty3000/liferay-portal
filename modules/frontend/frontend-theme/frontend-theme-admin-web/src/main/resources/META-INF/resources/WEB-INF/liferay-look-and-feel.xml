@@ -9,11 +9,10 @@
 		<company-includes />
 		<company-excludes />
 	</company-limit>
-	<theme id="mobile" name="Mobile">
-		<root-path>/wap/themes/${theme-id}</root-path>
-		<settings>
-			<setting configurable="true" key="bullet-style" options="dots,arrows" type="select" value="dots" />
-		</settings>
-		<wap-theme>true</wap-theme>
+	<theme id="admin" name="Admin">
+		<root-path>/admin</root-path>
+		<template-extension>ftl</template-extension>
+		<control-panel-theme>true</control-panel-theme>
+		<page-theme>false</page-theme>
 	</theme>
 </look-and-feel>
