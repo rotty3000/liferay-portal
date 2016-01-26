@@ -3,6 +3,5 @@ Export-Package: com.liferay.util.bridges.*
 Import-Package:\
 	com.liferay.*,\
 	*;resolution:=optional
-Include-Resource: classes
 
 -baseline: *;version="6.2.0"
