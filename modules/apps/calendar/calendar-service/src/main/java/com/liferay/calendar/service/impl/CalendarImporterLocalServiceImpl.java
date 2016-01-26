@@ -50,7 +50,7 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetLink;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.model.AssetVocabulary;
-import com.liferay.portlet.calendar.model.CalEvent;
+import com.liferay.calendar.model.CalEvent;
 import com.liferay.portlet.messageboards.model.MBDiscussion;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageConstants;
@@ -175,39 +175,39 @@ public class CalendarImporterLocalServiceImpl
 		for (long companyId : PortalUtil.getCompanyIds()) {
 			for (int scope : scopes) {
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar", "ADD_EVENT",
+					companyId, "com.liferay.calendar", "ADD_EVENT",
 					"com.liferay.calendar.model.Calendar", "MANAGE_BOOKINGS",
 					scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar", "ADD_EVENT",
+					companyId, "com.liferay.calendar", "ADD_EVENT",
 					"com.liferay.calendar.model.Calendar",
 					"VIEW_BOOKING_DETAILS", scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar", "PERMISSIONS",
+					companyId, "com.liferay.calendar", "PERMISSIONS",
 					"com.liferay.calendar.model.Calendar", "PERMISSIONS",
 					scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar.model.CalEvent",
+					companyId, "com.liferay.calendar.model.CalEvent",
 					"ADD_DISCUSSION",
 					"com.liferay.calendar.model.CalendarBooking",
 					"ADD_DISCUSSION", scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar.model.CalEvent",
+					companyId, "com.liferay.calendar.model.CalEvent",
 					"DELETE_DISCUSSION",
 					"com.liferay.calendar.model.CalendarBooking",
 					"DELETE_DISCUSSION", scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar.model.CalEvent",
+					companyId, "com.liferay.calendar.model.CalEvent",
 					"PERMISSIONS", "com.liferay.calendar.model.CalendarBooking",
 					"PERMISSIONS", scope);
 
 				importResourcePermissions(
-					companyId, "com.liferay.portlet.calendar.model.CalEvent",
+					companyId, "com.liferay.calendar.model.CalEvent",
 					"UPDATE_DISCUSSION",
 					"com.liferay.calendar.model.CalendarBooking",
 					"UPDATE_DISCUSSION", scope);

@@ -51,8 +51,7 @@ public interface CalendarImporterLocalService extends BaseLocalService {
 	*/
 	public java.lang.String getOSGiServiceIdentifier();
 
-	public void importCalEvent(
-		com.liferay.portlet.calendar.model.CalEvent calEvent)
+	public void importCalEvent(com.liferay.calendar.model.CalEvent calEvent)
 		throws PortalException;
 
 	public void importCalEvents() throws PortalException;

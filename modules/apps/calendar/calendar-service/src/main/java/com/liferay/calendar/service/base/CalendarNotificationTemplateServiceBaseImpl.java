@@ -16,6 +16,8 @@ package com.liferay.calendar.service.base;
 
 import com.liferay.calendar.model.CalendarNotificationTemplate;
 import com.liferay.calendar.service.CalendarNotificationTemplateService;
+import com.liferay.calendar.service.persistence.CalEventFinder;
+import com.liferay.calendar.service.persistence.CalEventPersistence;
 import com.liferay.calendar.service.persistence.CalendarBookingFinder;
 import com.liferay.calendar.service.persistence.CalendarBookingPersistence;
 import com.liferay.calendar.service.persistence.CalendarFinder;
@@ -363,6 +365,61 @@ public abstract class CalendarNotificationTemplateServiceBaseImpl
 	}
 
 	/**
+	 * Returns the cal event local service.
+	 *
+	 * @return the cal event local service
+	 */
+	public com.liferay.calendar.service.CalEventLocalService getCalEventLocalService() {
+		return calEventLocalService;
+	}
+
+	/**
+	 * Sets the cal event local service.
+	 *
+	 * @param calEventLocalService the cal event local service
+	 */
+	public void setCalEventLocalService(
+		com.liferay.calendar.service.CalEventLocalService calEventLocalService) {
+		this.calEventLocalService = calEventLocalService;
+	}
+
+	/**
+	 * Returns the cal event persistence.
+	 *
+	 * @return the cal event persistence
+	 */
+	public CalEventPersistence getCalEventPersistence() {
+		return calEventPersistence;
+	}
+
+	/**
+	 * Sets the cal event persistence.
+	 *
+	 * @param calEventPersistence the cal event persistence
+	 */
+	public void setCalEventPersistence(CalEventPersistence calEventPersistence) {
+		this.calEventPersistence = calEventPersistence;
+	}
+
+	/**
+	 * Returns the cal event finder.
+	 *
+	 * @return the cal event finder
+	 */
+	public CalEventFinder getCalEventFinder() {
+		return calEventFinder;
+	}
+
+	/**
+	 * Sets the cal event finder.
+	 *
+	 * @param calEventFinder the cal event finder
+	 */
+	public void setCalEventFinder(CalEventFinder calEventFinder) {
+		this.calEventFinder = calEventFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -593,6 +650,12 @@ public abstract class CalendarNotificationTemplateServiceBaseImpl
 	protected CalendarResourcePersistence calendarResourcePersistence;
 	@BeanReference(type = CalendarResourceFinder.class)
 	protected CalendarResourceFinder calendarResourceFinder;
+	@BeanReference(type = com.liferay.calendar.service.CalEventLocalService.class)
+	protected com.liferay.calendar.service.CalEventLocalService calEventLocalService;
+	@BeanReference(type = CalEventPersistence.class)
+	protected CalEventPersistence calEventPersistence;
+	@BeanReference(type = CalEventFinder.class)
+	protected CalEventFinder calEventFinder;
 	@ServiceReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@ServiceReference(type = com.liferay.portal.service.ClassNameLocalService.class)

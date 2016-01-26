@@ -350,7 +350,7 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 	}
 
 	protected static final String RESOURCE_NAME =
-		"com.liferay.portlet.calendar";
+		"com.liferay.calendar";
 
 	private CalendarBookingLocalService _calendarBookingLocalService;
 	private CalendarLocalService _calendarLocalService;

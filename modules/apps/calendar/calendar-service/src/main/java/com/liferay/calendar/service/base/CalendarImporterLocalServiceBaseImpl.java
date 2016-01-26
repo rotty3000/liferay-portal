@@ -17,6 +17,8 @@ package com.liferay.calendar.service.base;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.calendar.service.CalendarImporterLocalService;
+import com.liferay.calendar.service.persistence.CalEventFinder;
+import com.liferay.calendar.service.persistence.CalEventPersistence;
 import com.liferay.calendar.service.persistence.CalendarBookingFinder;
 import com.liferay.calendar.service.persistence.CalendarBookingPersistence;
 import com.liferay.calendar.service.persistence.CalendarFinder;
@@ -49,7 +51,6 @@ import com.liferay.portlet.asset.service.persistence.AssetCategoryPersistence;
 import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
 import com.liferay.portlet.asset.service.persistence.AssetLinkPersistence;
 import com.liferay.portlet.asset.service.persistence.AssetVocabularyPersistence;
-import com.liferay.portlet.calendar.service.persistence.CalEventPersistence;
 import com.liferay.portlet.messageboards.service.persistence.MBDiscussionPersistence;
 import com.liferay.portlet.messageboards.service.persistence.MBMessagePersistence;
 import com.liferay.portlet.messageboards.service.persistence.MBThreadPersistence;
@@ -305,6 +306,61 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	public void setCalendarResourceFinder(
 		CalendarResourceFinder calendarResourceFinder) {
 		this.calendarResourceFinder = calendarResourceFinder;
+	}
+
+	/**
+	 * Returns the cal event local service.
+	 *
+	 * @return the cal event local service
+	 */
+	public com.liferay.calendar.service.CalEventLocalService getCalEventLocalService() {
+		return calEventLocalService;
+	}
+
+	/**
+	 * Sets the cal event local service.
+	 *
+	 * @param calEventLocalService the cal event local service
+	 */
+	public void setCalEventLocalService(
+		com.liferay.calendar.service.CalEventLocalService calEventLocalService) {
+		this.calEventLocalService = calEventLocalService;
+	}
+
+	/**
+	 * Returns the cal event persistence.
+	 *
+	 * @return the cal event persistence
+	 */
+	public CalEventPersistence getCalEventPersistence() {
+		return calEventPersistence;
+	}
+
+	/**
+	 * Sets the cal event persistence.
+	 *
+	 * @param calEventPersistence the cal event persistence
+	 */
+	public void setCalEventPersistence(CalEventPersistence calEventPersistence) {
+		this.calEventPersistence = calEventPersistence;
+	}
+
+	/**
+	 * Returns the cal event finder.
+	 *
+	 * @return the cal event finder
+	 */
+	public CalEventFinder getCalEventFinder() {
+		return calEventFinder;
+	}
+
+	/**
+	 * Sets the cal event finder.
+	 *
+	 * @param calEventFinder the cal event finder
+	 */
+	public void setCalEventFinder(CalEventFinder calEventFinder) {
+		this.calEventFinder = calEventFinder;
 	}
 
 	/**
@@ -799,43 +855,6 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the cal event local service.
-	 *
-	 * @return the cal event local service
-	 */
-	public com.liferay.portlet.calendar.service.CalEventLocalService getCalEventLocalService() {
-		return calEventLocalService;
-	}
-
-	/**
-	 * Sets the cal event local service.
-	 *
-	 * @param calEventLocalService the cal event local service
-	 */
-	public void setCalEventLocalService(
-		com.liferay.portlet.calendar.service.CalEventLocalService calEventLocalService) {
-		this.calEventLocalService = calEventLocalService;
-	}
-
-	/**
-	 * Returns the cal event persistence.
-	 *
-	 * @return the cal event persistence
-	 */
-	public CalEventPersistence getCalEventPersistence() {
-		return calEventPersistence;
-	}
-
-	/**
-	 * Sets the cal event persistence.
-	 *
-	 * @param calEventPersistence the cal event persistence
-	 */
-	public void setCalEventPersistence(CalEventPersistence calEventPersistence) {
-		this.calEventPersistence = calEventPersistence;
-	}
-
-	/**
 	 * Returns the message boards discussion local service.
 	 *
 	 * @return the message boards discussion local service
@@ -1126,6 +1145,12 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	protected CalendarResourcePersistence calendarResourcePersistence;
 	@BeanReference(type = CalendarResourceFinder.class)
 	protected CalendarResourceFinder calendarResourceFinder;
+	@BeanReference(type = com.liferay.calendar.service.CalEventLocalService.class)
+	protected com.liferay.calendar.service.CalEventLocalService calEventLocalService;
+	@BeanReference(type = CalEventPersistence.class)
+	protected CalEventPersistence calEventPersistence;
+	@BeanReference(type = CalEventFinder.class)
+	protected CalEventFinder calEventFinder;
 	@ServiceReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@ServiceReference(type = com.liferay.portal.service.ClassNameLocalService.class)
@@ -1178,10 +1203,6 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	protected com.liferay.portlet.asset.service.AssetVocabularyLocalService assetVocabularyLocalService;
 	@ServiceReference(type = AssetVocabularyPersistence.class)
 	protected AssetVocabularyPersistence assetVocabularyPersistence;
-	@ServiceReference(type = com.liferay.portlet.calendar.service.CalEventLocalService.class)
-	protected com.liferay.portlet.calendar.service.CalEventLocalService calEventLocalService;
-	@ServiceReference(type = CalEventPersistence.class)
-	protected CalEventPersistence calEventPersistence;
 	@ServiceReference(type = com.liferay.portlet.messageboards.service.MBDiscussionLocalService.class)
 	protected com.liferay.portlet.messageboards.service.MBDiscussionLocalService mbDiscussionLocalService;
 	@ServiceReference(type = MBDiscussionPersistence.class)

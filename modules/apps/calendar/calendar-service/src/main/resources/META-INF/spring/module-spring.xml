@@ -17,4 +17,7 @@
 	<bean id="com.liferay.calendar.service.CalendarResourceService" class="com.liferay.calendar.service.impl.CalendarResourceServiceImpl" />
 	<bean id="com.liferay.calendar.service.persistence.CalendarResourcePersistence" class="com.liferay.calendar.service.persistence.impl.CalendarResourcePersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.calendar.service.persistence.CalendarResourceFinder" class="com.liferay.calendar.service.persistence.impl.CalendarResourceFinderImpl" parent="basePersistence" />
+	<bean id="com.liferay.calendar.service.CalEventLocalService" class="com.liferay.calendar.service.impl.CalEventLocalServiceImpl" />
+	<bean id="com.liferay.calendar.service.persistence.CalEventPersistence" class="com.liferay.calendar.service.persistence.impl.CalEventPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.calendar.service.persistence.CalEventFinder" class="com.liferay.calendar.service.persistence.impl.CalEventFinderImpl" parent="basePersistence" />
 </beans>

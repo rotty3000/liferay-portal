@@ -17,8 +17,8 @@ package com.liferay.calendar.model.listener;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portlet.calendar.model.CalEvent;
-import com.liferay.portlet.calendar.service.CalEventLocalService;
+import com.liferay.calendar.model.CalEvent;
+import com.liferay.calendar.service.CalEventLocalService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

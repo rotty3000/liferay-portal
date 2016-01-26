@@ -1,3 +1,10 @@
+create index IX_D6FD9496 on CalEvent (companyId);
+create index IX_4FDDD2BF on CalEvent (groupId, repeating);
+create index IX_FD93CBFA on CalEvent (groupId, type_[$COLUMN_LENGTH:75$], repeating);
+create index IX_F6006202 on CalEvent (remindBy);
+create index IX_299639C6 on CalEvent (uuid_[$COLUMN_LENGTH:75$], companyId);
+create unique index IX_5CCE79C8 on CalEvent (uuid_[$COLUMN_LENGTH:75$], groupId);
+
 create index IX_97FC174E on Calendar (groupId, calendarResourceId, defaultCalendar);
 create index IX_F0FAF226 on Calendar (resourceBlockId);
 create index IX_97656498 on Calendar (uuid_[$COLUMN_LENGTH:75$], companyId);

@@ -45,8 +45,7 @@ public class CalendarImporterLocalServiceWrapper
 	}
 
 	@Override
-	public void importCalEvent(
-		com.liferay.portlet.calendar.model.CalEvent calEvent)
+	public void importCalEvent(com.liferay.calendar.model.CalEvent calEvent)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_calendarImporterLocalService.importCalEvent(calEvent);
 	}

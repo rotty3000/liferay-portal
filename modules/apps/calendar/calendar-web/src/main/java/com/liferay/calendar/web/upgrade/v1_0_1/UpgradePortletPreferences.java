@@ -15,13 +15,13 @@
 package com.liferay.calendar.web.upgrade.v1_0_1;
 
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.calendar.model.CalEvent;
 import com.liferay.portal.kernel.upgrade.BaseUpgradePortletPreferences;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portlet.calendar.model.CalEvent;
 
 import javax.portlet.PortletPreferences;
 
