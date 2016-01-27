@@ -1,7 +1,6 @@
 Bundle-Name: Liferay Portal WAB Extender
 Bundle-SymbolicName: com.liferay.portal.wab.extender
 Bundle-Version: 1.0.0
-Export-Package: com.liferay.portal.wab.extender.ws.axis
 Include-Resource:\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/extender/*,\
 	@lib/org.apache.felix.utils.jar!/org/apache/felix/utils/log/*,\
