@@ -1,9 +1,6 @@
 Bundle-Name: Liferay Configuration Admin Web
 Bundle-SymbolicName: com.liferay.configuration.admin.web
 Bundle-Version: 1.0.0
-Include-Resource:\
-	@../../../../util-bridges/util-bridges.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\
-	@../../../../util-taglib/util-taglib.jar!/META-INF/*.tld
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: Configuration Framework
 Private-Package: com.liferay.configuration.admin.web.*
