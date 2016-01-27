@@ -22,6 +22,8 @@ deploy {
 	from("lib") {
 		include "org.apache.felix.dependencymanager.jar"
 		include "org.apache.felix.dependencymanager.shell.jar"
+		include "stax2-api.jar"
+		include "woodstox-core-asl.jar"
 	}
 }
 
