@@ -4,9 +4,6 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.exportimport.web.constants,\
 	com.liferay.exportimport.web.trash
-Import-Package:\
-	javax.servlet;version='[2.3.0,4.0.0)',\
-	*
 Include-Resource:\
 	content=../../staging/staging-lang/src/main/resources/content,\
 	META-INF/resources=src/main/resources/META-INF/resources,\

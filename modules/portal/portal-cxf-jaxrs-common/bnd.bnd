@@ -13,7 +13,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	javax.json.*,\
 	javax.ws.rs.*,\
-	org.apache.cxf.*;version="3.0.3"
+	org.apache.cxf.jaxrs.*;version="3.0.3"
 Import-Package:\
 	!com.sun.*,\
 	!javax.validation.*,\
