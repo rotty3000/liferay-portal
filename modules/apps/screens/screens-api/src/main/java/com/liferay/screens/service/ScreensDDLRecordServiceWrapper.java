@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link ScreensDDLRecordService}.
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensDDLRecordService
  * @generated
  */

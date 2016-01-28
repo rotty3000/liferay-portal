@@ -1388,6 +1388,10 @@ ${output.content}</echo>
 				<if>
 					<contains string="${build.services.output.txt.content}" substring="Writing " />
 					<then>
+						<exec executable="git">
+							<arg value="diff" />
+						</exec>
+
 						<fail>
 .
 

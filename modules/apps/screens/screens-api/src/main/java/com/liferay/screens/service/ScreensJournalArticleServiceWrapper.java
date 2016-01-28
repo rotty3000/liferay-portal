@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link ScreensJournalArticleService}.
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensJournalArticleService
  * @generated
  */

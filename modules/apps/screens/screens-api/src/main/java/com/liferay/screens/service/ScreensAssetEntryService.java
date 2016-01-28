@@ -31,7 +31,7 @@ import com.liferay.portal.service.BaseService;
  * service are expected to have security checks based on the propagated JAAS
  * credentials because this service can be accessed remotely.
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensAssetEntryServiceUtil
  * @see com.liferay.screens.service.base.ScreensAssetEntryServiceBaseImpl
  * @see com.liferay.screens.service.impl.ScreensAssetEntryServiceImpl

@@ -47,7 +47,7 @@ import com.liferay.screens.service.ScreensAssetEntryServiceUtil;
  * The HTTP utility is only generated for remote services.
  * </p>
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensAssetEntryServiceSoap
  * @see HttpPrincipal
  * @see ScreensAssetEntryServiceUtil

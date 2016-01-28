@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.trash.TrashRenderer;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.ContainerModel;
 import com.liferay.portal.model.SystemEvent;
 import com.liferay.portal.model.TrashedModel;
@@ -229,6 +230,18 @@ public class TestTrashHandler implements TrashHandler {
 
 	@Override
 	public TrashEntry getTrashEntry(long classPK) {
+		return null;
+	}
+
+	@Override
+	public int getTrashModelsCount(long classPK) {
+		return 0;
+	}
+
+	@Override
+	public List<TrashRenderer> getTrashModelTrashRenderers(
+		long classPK, int start, int end, OrderByComparator<?> obc) {
+
 		return null;
 	}
 

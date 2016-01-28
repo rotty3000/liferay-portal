@@ -47,7 +47,7 @@ import com.liferay.screens.service.ScreensJournalArticleServiceUtil;
  * The HTTP utility is only generated for remote services.
  * </p>
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensJournalArticleServiceSoap
  * @see HttpPrincipal
  * @see ScreensJournalArticleServiceUtil

@@ -47,7 +47,7 @@ import com.liferay.screens.service.ScreensDDLRecordServiceUtil;
  * The HTTP utility is only generated for remote services.
  * </p>
  *
- * @author José Manuel Navarro
+ * @author Brian Wing Shun Chan
  * @see ScreensDDLRecordServiceSoap
  * @see HttpPrincipal
  * @see ScreensDDLRecordServiceUtil
