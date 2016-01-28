@@ -374,7 +374,8 @@ public class WabProcessor {
 		return Validator.isNotNull(bundleSymbolicName);
 	}
 
-	protected void processBundleClasspath(Analyzer analyzer)
+	protected void processBundleClasspath(
+			Analyzer analyzer, Properties pluginPackageProperties)
 		throws IOException {
 
 		// Class path order is critical
@@ -385,8 +386,6 @@ public class WabProcessor {
 			"ext/WEB-INF/classes", new File(_pluginDir, "ext/WEB-INF/classes"));
 		classPath.put(
 			"WEB-INF/classes", new File(_pluginDir, "WEB-INF/classes"));
-
-		Properties pluginPackageProperties = getPluginPackageProperties();
 
 		String[] portalDependencyJars = StringUtil.split(
 			pluginPackageProperties.getProperty(
@@ -601,6 +600,18 @@ public class WabProcessor {
 			}
 
 			analyzer.setProperty(processedKey, value);
+		}
+	}
+
+	protected void processExtraPluginPackageProperties(
+		Analyzer analyzer, Properties pluginPackageProperties) {
+
+		for (Object key : pluginPackageProperties.keySet()) {
+			String keyStr = (String)key;
+
+			String value = pluginPackageProperties.getProperty(keyStr);
+
+			analyzer.setProperty(keyStr, value);
 		}
 	}
 
@@ -1077,9 +1088,12 @@ public class WabProcessor {
 
 		processBundleVersion(analyzer);
 
-		processBundleClasspath(analyzer);
+		Properties pluginPackageProperties = getPluginPackageProperties();
+
+		processBundleClasspath(analyzer, pluginPackageProperties);
 		processBundleSymbolicName(analyzer);
 		processExtraHeaders(analyzer);
+		processExtraPluginPackageProperties(analyzer, pluginPackageProperties);
 
 		processBundleManifestVersion(analyzer);
 
