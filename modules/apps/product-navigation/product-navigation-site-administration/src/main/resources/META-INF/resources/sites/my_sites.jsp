@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(liferayPortletRequest, liferayPortletResponse, null);
+SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(request, liferayPortletRequest, liferayPortletResponse, null);
 
 List<Group> mySiteGroups = siteAdministrationPanelCategoryDisplayContext.getMySites();
 %>
@@ -53,7 +53,7 @@ List<Group> mySiteGroups = siteAdministrationPanelCategoryDisplayContext.getMySi
 			}
 		}
 
-		SiteAdministrationPanelCategoryDisplayContext groupSiteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(liferayPortletRequest, liferayPortletResponse, mySiteGroup);
+		SiteAdministrationPanelCategoryDisplayContext groupSiteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(request, liferayPortletRequest, liferayPortletResponse, mySiteGroup);
 	%>
 
 		<c:choose>

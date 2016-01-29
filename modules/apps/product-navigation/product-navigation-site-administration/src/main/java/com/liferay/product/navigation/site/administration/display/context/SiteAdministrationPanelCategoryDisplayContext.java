@@ -59,6 +59,7 @@ import javax.servlet.http.HttpSession;
 public class SiteAdministrationPanelCategoryDisplayContext {
 
 	public SiteAdministrationPanelCategoryDisplayContext(
+			HttpServletRequest httpServletRequest,
 			PortletRequest portletRequest, PortletResponse portletResponse,
 			Group group)
 		throws PortalException {
@@ -70,12 +71,12 @@ public class SiteAdministrationPanelCategoryDisplayContext {
 			_group = group;
 		}
 
-		_panelCategory = (PanelCategory)_portletRequest.getAttribute(
+		_panelCategory = (PanelCategory)httpServletRequest.getAttribute(
 			ApplicationListWebKeys.PANEL_CATEGORY);
 		_panelCategoryHelper =
-			(PanelCategoryHelper)_portletRequest.getAttribute(
+			(PanelCategoryHelper)httpServletRequest.getAttribute(
 				ApplicationListWebKeys.PANEL_CATEGORY_HELPER);
-		_themeDisplay = (ThemeDisplay)_portletRequest.getAttribute(
+		_themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 	}
 
@@ -258,12 +259,8 @@ public class SiteAdministrationPanelCategoryDisplayContext {
 			return _notificationsCount;
 		}
 
-		SiteAdministrationPanelCategory siteAdministrationPanelCategory =
-			(SiteAdministrationPanelCategory)_portletRequest.getAttribute(
-				ApplicationListWebKeys.PANEL_CATEGORY);
-
 		_notificationsCount = _panelCategoryHelper.getNotificationsCount(
-			siteAdministrationPanelCategory.getKey(),
+			_panelCategory.getKey(),
 			_themeDisplay.getPermissionChecker(), getGroup(),
 			_themeDisplay.getUser());
 

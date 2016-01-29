@@ -175,7 +175,10 @@ public class SessionMessages {
 	}
 
 	public static boolean contains(HttpServletRequest request, String key) {
-		return contains(request.getSession(false), key);
+		HttpServletRequest originalServletRequest =
+			PortalUtil.getOriginalServletRequest(request);
+
+		return contains(originalServletRequest.getSession(false), key);
 	}
 
 	public static boolean contains(HttpSession session, Class<?> clazz) {

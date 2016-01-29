@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(liferayPortletRequest, liferayPortletResponse, null);
+SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(request, liferayPortletRequest, liferayPortletResponse, null);
 
 PanelCategory panelCategory = siteAdministrationPanelCategoryDisplayContext.getPanelCategory();
 %>

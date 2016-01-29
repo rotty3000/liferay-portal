@@ -24,7 +24,7 @@ String siteName = GetterUtil.getString(request.getAttribute("my_sites.jsp-siteGr
 boolean showPrivateLabel = (Boolean)request.getAttribute("my_sites.jsp-showPrivateLabel");
 boolean showStagingLabel = (Boolean)request.getAttribute("my_sites.jsp-showStagingLabel");
 
-SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(liferayPortletRequest, liferayPortletResponse, siteGroup);
+SiteAdministrationPanelCategoryDisplayContext siteAdministrationPanelCategoryDisplayContext = new SiteAdministrationPanelCategoryDisplayContext(request, liferayPortletRequest, liferayPortletResponse, siteGroup);
 %>
 
 <li class="list-group-item selectable-site">
