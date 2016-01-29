@@ -60,10 +60,11 @@ public class FacetFactoryUtil {
 	public FacetFactoryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			FacetFactory.class, new FacetFactoryServiceTrackerCustomizer());
+		ServiceTracker<FacetFactory, FacetFactory> serviceTracker =
+			registry.trackServices(
+				FacetFactory.class, new FacetFactoryServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -73,7 +74,6 @@ public class FacetFactoryUtil {
 
 	private final Map<String, FacetFactory> _facetFactories =
 		new ConcurrentHashMap<>();
-	private final ServiceTracker<FacetFactory, FacetFactory> _serviceTracker;
 
 	private class FacetFactoryServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<FacetFactory, FacetFactory> {

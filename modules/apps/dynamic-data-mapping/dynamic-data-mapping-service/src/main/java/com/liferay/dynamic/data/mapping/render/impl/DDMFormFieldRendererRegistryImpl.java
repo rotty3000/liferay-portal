@@ -29,7 +29,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
@@ -45,7 +44,7 @@ public class DDMFormFieldRendererRegistryImpl
 
 		_bundleContext = bundle.getBundleContext();
 
-		_serviceTracker = ServiceTrackerFactory.open(
+		ServiceTrackerFactory.open(
 			_bundleContext,
 			"(&(objectClass=" + DDMFormFieldRenderer.class.getName() +
 				")(!(objectClass=" + clazz.getName() + ")))",
@@ -82,8 +81,6 @@ public class DDMFormFieldRendererRegistryImpl
 	private final
 		Map<DDMFormFieldRenderer, ServiceRegistration<DDMFormFieldRenderer>>
 			_serviceRegistrations = new ConcurrentHashMap<>();
-	private final ServiceTracker<DDMFormFieldRenderer, DDMFormFieldRenderer>
-		_serviceTracker;
 
 	private class DDMFormFieldRendererServiceTrackerCustomizer
 		implements

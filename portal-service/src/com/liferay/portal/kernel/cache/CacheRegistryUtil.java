@@ -49,11 +49,12 @@ public class CacheRegistryUtil {
 	private CacheRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			CacheRegistryItem.class,
-			new CacheRegistryItemServiceTrackerCustomizer());
+		ServiceTracker<CacheRegistryItem, CacheRegistryItem> serviceTracker =
+			registry.trackServices(
+				CacheRegistryItem.class,
+				new CacheRegistryItemServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private void _clear() {
@@ -106,8 +107,6 @@ public class CacheRegistryUtil {
 	private volatile boolean _active = true;
 	private final Map<String, CacheRegistryItem> _cacheRegistryItems =
 		new ConcurrentHashMap<>();
-	private final ServiceTracker<CacheRegistryItem, CacheRegistryItem>
-		_serviceTracker;
 
 	private class CacheRegistryItemServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer

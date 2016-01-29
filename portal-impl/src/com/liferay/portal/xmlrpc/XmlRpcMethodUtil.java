@@ -51,10 +51,10 @@ public class XmlRpcMethodUtil {
 	private XmlRpcMethodUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
+		ServiceTracker<Method, Method> serviceTracker = registry.trackServices(
 			Method.class, new MethodServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -64,7 +64,6 @@ public class XmlRpcMethodUtil {
 
 	private final Map<String, Map<String, Method>> _methodRegistry =
 		new ConcurrentHashMap<>();
-	private final ServiceTracker<Method, Method> _serviceTracker;
 
 	private class MethodServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<Method, Method> {

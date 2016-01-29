@@ -49,10 +49,11 @@ public class OpenSearchRegistryUtil {
 	private OpenSearchRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			OpenSearch.class, new OpenSearchServiceTrackerCustomizer());
+		ServiceTracker<OpenSearch, OpenSearch> serviceTracker =
+			registry.trackServices(
+				OpenSearch.class, new OpenSearchServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private static final OpenSearchRegistryUtil _instance =
@@ -60,7 +61,6 @@ public class OpenSearchRegistryUtil {
 
 	private final Map<String, OpenSearch> _openSearchInstances =
 		new ConcurrentHashMap<>();
-	private final ServiceTracker<OpenSearch, OpenSearch> _serviceTracker;
 
 	private class OpenSearchServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<OpenSearch, OpenSearch> {

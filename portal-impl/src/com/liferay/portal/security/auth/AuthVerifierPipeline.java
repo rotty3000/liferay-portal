@@ -75,10 +75,10 @@ public class AuthVerifierPipeline {
 		Filter filter = registry.getFilter(
 			"(objectClass=" + AuthVerifier.class.getName() + ")");
 
-		_serviceTracker = registry.trackServices(
-			filter, new AuthVerifierTrackerCustomizer());
+		ServiceTracker<AuthVerifier, AuthVerifierConfiguration> serviceTracker =
+			registry.trackServices(filter, new AuthVerifierTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private AuthVerifierResult _createGuestVerificationResult(
@@ -295,8 +295,6 @@ public class AuthVerifierPipeline {
 
 	private final List<AuthVerifierConfiguration> _authVerifierConfigurations =
 		new CopyOnWriteArrayList<>();
-	private final ServiceTracker<AuthVerifier, AuthVerifierConfiguration>
-		_serviceTracker;
 
 	private class AuthVerifierTrackerCustomizer
 		implements

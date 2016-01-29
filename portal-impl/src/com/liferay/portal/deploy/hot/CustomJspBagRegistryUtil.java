@@ -251,10 +251,11 @@ public class CustomJspBagRegistryUtil {
 			"(&(context.id=*)(context.name=*)(objectClass=" +
 				CustomJspBag.class.getName() + "))");
 
-		_serviceTracker = registry.trackServices(
-			filter, new CustomJspBagRegistryUtilServiceTrackerCustomizer());
+		ServiceTracker<CustomJspBag, CustomJspBag> serviceTracker =
+			registry.trackServices(
+				filter, new CustomJspBagRegistryUtilServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -265,7 +266,6 @@ public class CustomJspBagRegistryUtil {
 
 	private final Map<ServiceReference<CustomJspBag>, CustomJspBag>
 		_customJspBagsMap = new ConcurrentHashMap<>();
-	private final ServiceTracker<CustomJspBag, CustomJspBag> _serviceTracker;
 
 	private class CustomJspBagRegistryUtilServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<CustomJspBag, CustomJspBag> {

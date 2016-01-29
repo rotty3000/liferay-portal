@@ -62,11 +62,12 @@ public class FriendlyURLResolverRegistryUtil {
 	private FriendlyURLResolverRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			FriendlyURLResolver.class,
-			new FriendlyURLResolverServiceTrackerCustomizer());
+		ServiceTracker<FriendlyURLResolver, FriendlyURLResolver>
+			serviceTracker = registry.trackServices(
+				FriendlyURLResolver.class,
+				new FriendlyURLResolverServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private FriendlyURLResolver _getFriendlyURLResolver(String urlSeparator) {
@@ -109,8 +110,6 @@ public class FriendlyURLResolverRegistryUtil {
 		new ConcurrentHashMap<>();
 	private final ServiceRegistrationMap<FriendlyURLResolver>
 		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
-	private final ServiceTracker<FriendlyURLResolver, FriendlyURLResolver>
-		_serviceTracker;
 
 	private class FriendlyURLResolverServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer

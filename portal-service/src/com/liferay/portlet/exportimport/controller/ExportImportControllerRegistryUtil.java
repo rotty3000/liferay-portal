@@ -63,11 +63,12 @@ public class ExportImportControllerRegistryUtil {
 	private ExportImportControllerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			ExportImportController.class,
-			new ExportImportControllerServiceTrackerCustomizer());
+		ServiceTracker<ExportImportController, ExportImportController>
+			serviceTracker = registry.trackServices(
+				ExportImportController.class,
+				new ExportImportControllerServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private ExportController _getExportController(String className) {
@@ -115,8 +116,6 @@ public class ExportImportControllerRegistryUtil {
 		new ConcurrentHashMap<>();
 	private final ServiceRegistrationMap<ExportImportController>
 		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
-	private final ServiceTracker<ExportImportController, ExportImportController>
-		_serviceTracker;
 
 	private class ExportImportControllerServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer

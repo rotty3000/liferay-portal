@@ -78,11 +78,12 @@ public class XStreamConfiguratorRegistryUtil {
 
 		_bundleContext = bundle.getBundleContext();
 
-		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext, XStreamConfigurator.class,
-			new XStreamConfiguratorServiceTrackerCustomizer());
+		ServiceTracker<XStreamConfigurator, XStreamConfigurator>
+			serviceTracker = ServiceTrackerFactory.open(
+				_bundleContext, XStreamConfigurator.class,
+				new XStreamConfiguratorServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private Set<XStreamConfigurator> _getXStreamConfigurators() {
@@ -93,8 +94,6 @@ public class XStreamConfiguratorRegistryUtil {
 		_instance = new XStreamConfiguratorRegistryUtil();
 
 	private final BundleContext _bundleContext;
-	private final ServiceTracker<XStreamConfigurator, XStreamConfigurator>
-		_serviceTracker;
 	private final Set<XStreamConfigurator>
 		_xStreamConfigurators = new ConcurrentHashSet<>();
 

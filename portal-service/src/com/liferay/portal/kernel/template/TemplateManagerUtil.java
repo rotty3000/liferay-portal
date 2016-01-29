@@ -116,10 +116,11 @@ public class TemplateManagerUtil {
 			"(&(language.type=*)(objectClass=" +
 				TemplateManager.class.getName() + "))");
 
-		_serviceTracker = registry.trackServices(
-			filter, new TemplateManagerServiceTrackerCustomizer());
+		ServiceTracker<TemplateManager, TemplateManager> serviceTracker =
+			registry.trackServices(
+				filter, new TemplateManagerServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private void _destroy() {
@@ -284,8 +285,6 @@ public class TemplateManagerUtil {
 	private static final TemplateManagerUtil _instance =
 		new TemplateManagerUtil();
 
-	private final ServiceTracker<TemplateManager, TemplateManager>
-		_serviceTracker;
 	private final Map<String, Set<String>> _supportedLanguageTypes =
 		new ConcurrentHashMap<>();
 	private final Map<ServiceReference<TemplateManager>, TemplateManager>

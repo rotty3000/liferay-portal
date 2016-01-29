@@ -51,12 +51,12 @@ public class AuthPublicPathRegistry {
 	private AuthPublicPathRegistry() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
+		ServiceTracker<Object, Object> serviceTracker = registry.trackServices(
 			registry.getFilter(
 				"(&(auth.public.path=*)(objectClass=java.lang.Object))"),
 			new AuthPublicTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private boolean _contains(String path) {
@@ -97,7 +97,6 @@ public class AuthPublicPathRegistry {
 	private final Set<String> _paths = new ConcurrentHashSet<>();
 	private final StringServiceRegistrationMap<Object>
 		_serviceRegistrations = new StringServiceRegistrationMapImpl<>();
-	private final ServiceTracker<Object, Object> _serviceTracker;
 
 	private class AuthPublicTrackerCustomizer
 		implements ServiceTrackerCustomizer<Object, Object> {

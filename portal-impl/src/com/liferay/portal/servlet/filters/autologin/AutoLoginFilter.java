@@ -58,10 +58,10 @@ public class AutoLoginFilter extends BasePortalFilter {
 	public AutoLoginFilter() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
+		ServiceTracker<?, AutoLogin> serviceTracker = registry.trackServices(
 			AutoLogin.class, new AutoLoginServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	protected String getLoginRemoteUser(
@@ -282,8 +282,6 @@ public class AutoLoginFilter extends BasePortalFilter {
 
 	private static final List<AutoLogin> _autoLogins =
 		new CopyOnWriteArrayList<>();
-
-	private final ServiceTracker<?, AutoLogin> _serviceTracker;
 
 	private class AutoLoginServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<AutoLogin, AutoLogin> {
