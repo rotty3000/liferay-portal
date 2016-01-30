@@ -76,16 +76,16 @@ public class PortletResourcesUtil {
 	private PortletResourcesUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			Portlet.class, new PortletResourcesServiceTrackerCustomizer());
+		ServiceTracker<Portlet, Portlet> serviceTracker =
+			registry.trackServices(
+				Portlet.class, new PortletResourcesServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private static final PortletResourcesUtil _instance =
 		new PortletResourcesUtil();
 
-	private final ServiceTracker<Portlet, Portlet> _serviceTracker;
 	private final Map<ServiceReference<Portlet>, ServletContext>
 		_servletContexts = new ConcurrentHashMap<>();
 

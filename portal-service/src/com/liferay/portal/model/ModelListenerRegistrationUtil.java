@@ -60,10 +60,11 @@ public class ModelListenerRegistrationUtil {
 		Filter filter = registry.getFilter(
 			"(objectClass=" + ModelListener.class.getName() + ")");
 
-		_serviceTracker = registry.trackServices(
-			filter, new ModelListenerTrackerCustomizer());
+		ServiceTracker<ModelListener<?>, ModelListener<?>> serviceTracker =
+			registry.trackServices(
+				filter, new ModelListenerTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private <T> ModelListener<T>[] _getModelListeners(Class<T> clazz) {
@@ -110,8 +111,6 @@ public class ModelListenerRegistrationUtil {
 		_modelListeners = new ConcurrentHashMap<>();
 	private final Map<String, ServiceRegistration<?>> _serviceRegistrations =
 		new ConcurrentHashMap<>();
-	private final ServiceTracker<ModelListener<?>, ModelListener<?>>
-		_serviceTracker;
 
 	private class ModelListenerTrackerCustomizer
 		implements

@@ -64,10 +64,11 @@ public class TrashHandlerRegistryUtil {
 	private TrashHandlerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			TrashHandler.class, new TrashHandlerServiceTrackerCustomizer());
+		ServiceTracker<TrashHandler, TrashHandler> serviceTracker =
+			registry.trackServices(
+				TrashHandler.class, new TrashHandlerServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private TrashHandler _getTrashHandler(String className) {
@@ -101,7 +102,6 @@ public class TrashHandlerRegistryUtil {
 
 	private final ServiceRegistrationMap<TrashHandler> _serviceRegistrations =
 		new ServiceRegistrationMapImpl<>();
-	private final ServiceTracker<TrashHandler, TrashHandler> _serviceTracker;
 	private final Map<String, TrashHandler> _trashHandlers =
 		new ConcurrentSkipListMap<>();
 

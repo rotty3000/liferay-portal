@@ -96,10 +96,10 @@ public class SSOUtil {
 	private SSOUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
+		ServiceTracker<SSO, SSO> serviceTracker = registry.trackServices(
 			SSO.class, new SSOServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private String _getSessionExpirationRedirectUrl(long companyId) {
@@ -159,7 +159,6 @@ public class SSOUtil {
 
 	private static final SSOUtil _instance = new SSOUtil();
 
-	private final ServiceTracker<SSO, SSO> _serviceTracker;
 	private final Map<ServiceReference<SSO>, SSO> _ssoMap =
 		new ConcurrentSkipListMap<>(Collections.reverseOrder());
 

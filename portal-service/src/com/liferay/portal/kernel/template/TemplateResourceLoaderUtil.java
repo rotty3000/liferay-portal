@@ -82,11 +82,12 @@ public class TemplateResourceLoaderUtil {
 	private TemplateResourceLoaderUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			TemplateResourceLoader.class,
-			new TemplateResourceLoaderTrackerCustomizer());
+		ServiceTracker<TemplateResourceLoader, TemplateResourceLoader>
+			serviceTracker = registry.trackServices(
+				TemplateResourceLoader.class,
+				new TemplateResourceLoaderTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private void _clearCache() {
@@ -165,8 +166,6 @@ public class TemplateResourceLoaderUtil {
 	private static final TemplateResourceLoaderUtil _instance =
 		new TemplateResourceLoaderUtil();
 
-	private final ServiceTracker<TemplateResourceLoader, TemplateResourceLoader>
-		_serviceTracker;
 	private final Map<String, TemplateResourceLoader> _templateResourceLoaders =
 		new ConcurrentHashMap<>();
 

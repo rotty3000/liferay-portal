@@ -251,11 +251,12 @@ public class WorkflowHandlerRegistryUtil {
 	private WorkflowHandlerRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			(Class<WorkflowHandler<?>>)(Class<?>)WorkflowHandler.class,
-			new WorkflowHandlerServiceTrackerCustomizer());
+		ServiceTracker<WorkflowHandler<?>, WorkflowHandler<?>> serviceTracker =
+			registry.trackServices(
+				(Class<WorkflowHandler<?>>)(Class<?>)WorkflowHandler.class,
+				new WorkflowHandlerServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private List<WorkflowHandler<?>> _getScopeableWorkflowHandlers() {
@@ -323,8 +324,6 @@ public class WorkflowHandlerRegistryUtil {
 		new ConcurrentSkipListMap<>();
 	private final ServiceRegistrationMap<WorkflowHandler<?>>
 		_serviceRegistrations = new ServiceRegistrationMapImpl<>();
-	private final ServiceTracker<WorkflowHandler<?>, WorkflowHandler<?>>
-		_serviceTracker;
 	private final Map<String, WorkflowHandler<?>> _workflowHandlerMap =
 		new TreeMap<>();
 

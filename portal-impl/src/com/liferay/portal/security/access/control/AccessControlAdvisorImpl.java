@@ -39,11 +39,12 @@ public class AccessControlAdvisorImpl implements AccessControlAdvisor {
 	public AccessControlAdvisorImpl() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			AccessControlPolicy.class,
-			new AccessControlPolicyTrackerCustomizer());
+		ServiceTracker<?, AccessControlPolicy> serviceTracker =
+			registry.trackServices(
+				AccessControlPolicy.class,
+				new AccessControlPolicyTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	@Override
@@ -74,7 +75,6 @@ public class AccessControlAdvisorImpl implements AccessControlAdvisor {
 
 	private final List<AccessControlPolicy> _accessControlPolicies =
 		new CopyOnWriteArrayList<>();
-	private final ServiceTracker<?, AccessControlPolicy> _serviceTracker;
 
 	private class AccessControlPolicyTrackerCustomizer
 		implements

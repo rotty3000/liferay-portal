@@ -28,7 +28,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
@@ -43,7 +42,7 @@ public class StorageAdapterRegistryImpl implements StorageAdapterRegistry {
 
 		_bundleContext = bundle.getBundleContext();
 
-		_serviceTracker = ServiceTrackerFactory.open(
+		ServiceTrackerFactory.open(
 			_bundleContext,
 			"(&(objectClass=" + StorageAdapter.class.getName() +
 				")(!(objectClass=" + clazz.getName() + ")))",
@@ -78,8 +77,6 @@ public class StorageAdapterRegistryImpl implements StorageAdapterRegistry {
 
 	private final BundleContext _bundleContext;
 	private String _defaultStorageType;
-	private final ServiceTracker<StorageAdapter, StorageAdapter>
-		_serviceTracker;
 	private final Map<String, StorageAdapter> _storageAdaptersMap =
 		new ConcurrentHashMap<>();
 

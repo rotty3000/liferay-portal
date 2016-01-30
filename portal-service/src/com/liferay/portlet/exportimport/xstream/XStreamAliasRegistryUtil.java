@@ -46,10 +46,11 @@ public class XStreamAliasRegistryUtil {
 	private XStreamAliasRegistryUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			XStreamAlias.class, new XStreamAliasServiceTrackerCustomizer());
+		ServiceTracker<XStreamAlias, XStreamAlias> serviceTracker =
+			registry.trackServices(
+				XStreamAlias.class, new XStreamAliasServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private Map<Class<?>, String> _getAliases() {
@@ -83,7 +84,6 @@ public class XStreamAliasRegistryUtil {
 
 	private final ServiceRegistrationMap<XStreamAlias> _serviceRegistrations =
 		new ServiceRegistrationMapImpl<>();
-	private final ServiceTracker<XStreamAlias, XStreamAlias> _serviceTracker;
 	private final Map<Class<?>, String> _xstreamAliases =
 		new ConcurrentHashMap<>();
 

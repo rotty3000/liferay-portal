@@ -29,7 +29,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
@@ -63,7 +62,7 @@ public class DDMDisplayRegistryUtil {
 
 		_bundleContext = bundle.getBundleContext();
 
-		_serviceTracker = ServiceTrackerFactory.open(
+		ServiceTrackerFactory.open(
 			_bundleContext, DDMDisplay.class,
 			new DDMDisplayServiceTrackerCustomizer());
 	}
@@ -106,7 +105,6 @@ public class DDMDisplayRegistryUtil {
 		new ConcurrentHashMap<>();
 	private final Map<DDMDisplay, ServiceRegistration<DDMDisplay>>
 		_serviceRegistrations = new ConcurrentHashMap<>();
-	private final ServiceTracker<DDMDisplay, DDMDisplay> _serviceTracker;
 
 	private class DDMDisplayServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer<DDMDisplay, DDMDisplay> {

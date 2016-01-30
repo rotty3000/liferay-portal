@@ -161,11 +161,12 @@ public class PortalWebResourcesUtil {
 	private PortalWebResourcesUtil() {
 		Registry registry = RegistryUtil.getRegistry();
 
-		_serviceTracker = registry.trackServices(
-			PortalWebResources.class,
-			new PortalWebResourcesServiceTrackerCustomizer());
+		ServiceTracker<PortalWebResources, PortalWebResources> serviceTracker =
+			registry.trackServices(
+				PortalWebResources.class,
+				new PortalWebResourcesServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private Collection<PortalWebResources> _getPortalWebResourcesList() {
@@ -177,8 +178,6 @@ public class PortalWebResourcesUtil {
 
 	private final Map<ServiceReference<PortalWebResources>, PortalWebResources>
 		_portalWebResourcesMap = new ConcurrentHashMap<>();
-	private final ServiceTracker<PortalWebResources, PortalWebResources>
-		_serviceTracker;
 
 	private class PortalWebResourcesServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer

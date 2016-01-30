@@ -68,10 +68,10 @@ public class StrutsActionRegistryUtil {
 				")(objectClass=" + StrutsPortletAction.class.getName() +
 					"))(path=*))");
 
-		_serviceTracker = registry.trackServices(
+		ServiceTracker<?, Action> serviceTracker = registry.trackServices(
 			filter, new ActionServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private Action _getAction(String path) {
@@ -144,7 +144,6 @@ public class StrutsActionRegistryUtil {
 		new StrutsActionRegistryUtil();
 
 	private final Map<String, Action> _actions = new ConcurrentHashMap<>();
-	private final ServiceTracker<?, Action> _serviceTracker;
 	private final StringServiceRegistrationMap<StrutsAction>
 		_strutsActionServiceRegistrations =
 			new StringServiceRegistrationMapImpl<>();

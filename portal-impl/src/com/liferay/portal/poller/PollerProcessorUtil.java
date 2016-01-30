@@ -63,10 +63,11 @@ public class PollerProcessorUtil {
 			"(&(javax.portlet.name=*)(objectClass=" +
 				PollerProcessor.class.getName() + "))");
 
-		_serviceTracker = registry.trackServices(
-			filter, new PollerProcessorServiceTrackerCustomizer());
+		ServiceTracker<PollerProcessor, PollerProcessor> serviceTracker =
+			registry.trackServices(
+				filter, new PollerProcessorServiceTrackerCustomizer());
 
-		_serviceTracker.open();
+		serviceTracker.open();
 	}
 
 	private void _addPollerProcessor(
@@ -159,8 +160,6 @@ public class PollerProcessorUtil {
 
 	private final StringServiceRegistrationMap<PollerProcessor>
 		_serviceRegistrations = new StringServiceRegistrationMapImpl<>();
-	private final ServiceTracker<PollerProcessor, PollerProcessor>
-		_serviceTracker;
 
 	private static class PollerProcessorTargetLocator implements TargetLocator {
 

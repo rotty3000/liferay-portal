@@ -25,7 +25,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
@@ -72,7 +71,7 @@ public class RuleGroupProcessorUtil {
 
 		_bundleContext = bundle.getBundleContext();
 
-		_serviceTracker = ServiceTrackerFactory.open(
+		ServiceTrackerFactory.open(
 			_bundleContext, RuleGroupProcessor.class,
 			new RuleGroupProcessorServiceTrackerCustomizer());
 	}
@@ -86,8 +85,6 @@ public class RuleGroupProcessorUtil {
 
 	private final BundleContext _bundleContext;
 	private RuleGroupProcessor _ruleGroupProcessor;
-	private final ServiceTracker<RuleGroupProcessor, RuleGroupProcessor>
-		_serviceTracker;
 
 	private class RuleGroupProcessorServiceTrackerCustomizer
 		implements ServiceTrackerCustomizer
