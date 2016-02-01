@@ -701,10 +701,8 @@ public class PortalImpl implements Portal {
 			groupId = getScopeGroupId(layout, portlet.getPortletId());
 		}
 
-		addDefaultResource(
-			themeDisplay.getCompanyId(), groupId, layout, portlet, true);
-		addDefaultResource(
-			themeDisplay.getCompanyId(), groupId, layout, portlet, false);
+		addRootModelResource(
+			themeDisplay.getCompanyId(), groupId, portlet);
 	}
 
 	@Override
@@ -712,8 +710,9 @@ public class PortalImpl implements Portal {
 			long companyId, Layout layout, Portlet portlet)
 		throws PortalException {
 
-		addDefaultResource(companyId, layout, portlet, true);
-		addDefaultResource(companyId, layout, portlet, false);
+		long groupId = getScopeGroupId(layout, portlet.getPortletId());
+
+		addRootModelResource(companyId, groupId, portlet);
 	}
 
 	@Override
@@ -7115,6 +7114,7 @@ public class PortalImpl implements Portal {
 		return windowState;
 	}
 
+	@Deprecated
 	protected void addDefaultResource(
 			long companyId, Layout layout, Portlet portlet,
 			boolean portletActions)
@@ -7122,36 +7122,32 @@ public class PortalImpl implements Portal {
 
 		long groupId = getScopeGroupId(layout, portlet.getPortletId());
 
-		addDefaultResource(companyId, groupId, layout, portlet, portletActions);
+		addRootModelResource(companyId, groupId, portlet);
 	}
 
+	@Deprecated
 	protected void addDefaultResource(
 			long companyId, long groupId, Layout layout, Portlet portlet,
 			boolean portletActions)
 		throws PortalException {
 
+		addRootModelResource(companyId, groupId, portlet);
+	}
+
+	protected void addRootModelResource(
+			long companyId, long groupId, Portlet portlet)
+		throws PortalException {
+
 		String rootPortletId = portlet.getRootPortletId();
 
-		String portletPrimaryKey = PortletPermissionUtil.getPrimaryKey(
-			layout.getPlid(), portlet.getPortletId());
+		Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 
-		String name = null;
-		String primaryKey = null;
-
-		if (portletActions) {
-			name = rootPortletId;
-			primaryKey = portletPrimaryKey;
+		if ((group != null) && group.isStagingGroup()) {
+			groupId = group.getLiveGroupId();
 		}
-		else {
-			Group group = GroupLocalServiceUtil.fetchGroup(groupId);
 
-			if ((group != null) && group.isStagingGroup()) {
-				groupId = group.getLiveGroupId();
-			}
-
-			name = ResourceActionsUtil.getPortletBaseResource(rootPortletId);
-			primaryKey = String.valueOf(groupId);
-		}
+		String name = ResourceActionsUtil.getPortletBaseResource(rootPortletId);
+		String primaryKey = String.valueOf(groupId);
 
 		if (Validator.isNull(name)) {
 			return;
@@ -7166,21 +7162,8 @@ public class PortalImpl implements Portal {
 			return;
 		}
 
-		boolean addGuestPermissions = true;
-
-		if (portletActions) {
-			Group layoutGroup = layout.getGroup();
-
-			if (layout.isPrivateLayout() && !layoutGroup.isLayoutPrototype() &&
-				!layoutGroup.isLayoutSetPrototype()) {
-
-				addGuestPermissions = false;
-			}
-		}
-
 		ResourceLocalServiceUtil.addResources(
-			companyId, groupId, 0, name, primaryKey, portletActions, true,
-			addGuestPermissions);
+			companyId, groupId, 0, name, primaryKey, false, true, true);
 	}
 
 	protected String buildI18NPath(Locale locale) {
