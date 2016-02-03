@@ -77,7 +77,6 @@ Export-Package:\
 	com.liferay.portlet.trash.util,\
 	com.liferay.portlet.usersadmin.search
 Import-Package: *
-Include-Resource: classes
 Private-Package: com.liferay.*.dependencies
 
 -baseline:

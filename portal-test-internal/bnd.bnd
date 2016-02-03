@@ -23,7 +23,6 @@ Export-Package:\
 	com.liferay.portlet.trash.test
 Import-Package: *;resolution:=optional
 Include-Resource:\
-	classes,\
 	@${project.dir}/../lib/development/dumbster.jar,\
 	@${project.dir}/../lib/portal/commons-compress.jar,\
 	@${project.dir}/../lib/portal/httpclient.jar,\

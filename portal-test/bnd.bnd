@@ -24,7 +24,6 @@ Export-Package:\
 	org.springframework.mock.web.portlet
 Import-Package: *;resolution:=optional
 Include-Resource:\
-	classes,\
 	@${project.dir}/../lib/development/hamcrest-core.jar,\
 	@${project.dir}/../lib/development/junit.jar,\
 	@${project.dir}/../lib/development/spring-test.jar,\
