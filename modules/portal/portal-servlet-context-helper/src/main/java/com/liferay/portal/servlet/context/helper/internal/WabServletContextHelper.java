@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.wab.extender.internal;
+package com.liferay.portal.servlet.context.helper.internal;
 
 import com.liferay.osgi.util.BundleUtil;
 import com.liferay.portal.kernel.util.CharPool;

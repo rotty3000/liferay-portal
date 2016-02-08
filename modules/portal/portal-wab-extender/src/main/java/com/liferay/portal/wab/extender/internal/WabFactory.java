@@ -18,6 +18,7 @@ import aQute.bnd.annotation.metatype.Configurable;
 
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.util.ReflectionUtil;
+import com.liferay.portal.servlet.context.helper.ServletContextHelperFactory;
 import com.liferay.portal.wab.extender.internal.configuration.WabExtenderConfiguration;
 import com.liferay.portal.wab.extender.internal.event.EventUtil;
 
@@ -89,7 +90,7 @@ public class WabFactory extends AbstractExtender {
 		try {
 			_webBundleDeployer = new WebBundleDeployer(
 				_bundleContext, properties, _saxParserFactory, _eventUtil,
-				_logger);
+				_logger, _servletContextHelperFactory);
 
 			super.start(_bundleContext);
 		}
@@ -140,6 +141,13 @@ public class WabFactory extends AbstractExtender {
 		_saxParserFactory = saxParserFactory;
 	}
 
+	@Reference(unbind = "-")
+	protected void setServletContextHelperFactory(
+		ServletContextHelperFactory servletContextHelperFactory) {
+
+		_servletContextHelperFactory = servletContextHelperFactory;
+	}
+
 	@Override
 	protected void warn(Bundle bundle, String message, Throwable t) {
 		_logger.log(Logger.LOG_WARNING, "[" + bundle + "] " + message, t);
@@ -161,6 +169,7 @@ public class WabFactory extends AbstractExtender {
 	private EventUtil _eventUtil;
 	private Logger _logger;
 	private SAXParserFactory _saxParserFactory;
+	private ServletContextHelperFactory _servletContextHelperFactory;
 	private WabExtenderConfiguration _wabExtenderConfiguration;
 	private WebBundleDeployer _webBundleDeployer;
 

@@ -15,6 +15,7 @@
 package com.liferay.portal.wab.extender.internal;
 
 import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.portal.servlet.context.helper.ServletContextHelperFactory;
 import com.liferay.portal.wab.extender.internal.adapter.FilterExceptionAdapter;
 import com.liferay.portal.wab.extender.internal.adapter.ServletContextListenerExceptionAdapter;
 import com.liferay.portal.wab.extender.internal.adapter.ServletExceptionAdapter;
@@ -72,7 +73,8 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 public class WabBundleProcessor implements ServletContextListener {
 
 	public WabBundleProcessor(
-		Bundle bundle, String contextPath, Logger logger) {
+		Bundle bundle, String contextPath, Logger logger,
+		ServletContextHelperFactory servletContextHelperFactory) {
 
 		_bundle = bundle;
 		_contextPath = contextPath;
@@ -91,6 +93,8 @@ public class WabBundleProcessor implements ServletContextListener {
 		_contextName = _contextPath.substring(1);
 
 		_bundleContext = _bundle.getBundleContext();
+
+		_servletContextHelperFactory = servletContextHelperFactory;
 	}
 
 	@Override
@@ -356,7 +360,9 @@ public class WabBundleProcessor implements ServletContextListener {
 		}
 
 		_serviceRegistration = _bundleContext.registerService(
-			ServletContextHelper.class, new WabServletContextHelper(_bundle),
+			ServletContextHelper.class,
+			_servletContextHelperFactory.createServletContextHelper(
+				_bundle, ServletContextHelperFactory.TYPE.WAB),
 			properties);
 	}
 
@@ -577,6 +583,7 @@ public class WabBundleProcessor implements ServletContextListener {
 		new ConcurrentSkipListSet<>();
 	private final Logger _logger;
 	private ServiceRegistration<ServletContextHelper> _serviceRegistration;
+	private final ServletContextHelperFactory _servletContextHelperFactory;
 	private ServiceRegistration<ServletContext> _servletContextRegistration;
 	private final Set<ServiceRegistration<Servlet>> _servletRegistrations =
 		new ConcurrentSkipListSet<>();

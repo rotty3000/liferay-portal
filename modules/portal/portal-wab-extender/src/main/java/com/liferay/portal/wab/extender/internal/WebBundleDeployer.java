@@ -14,6 +14,7 @@
 
 package com.liferay.portal.wab.extender.internal;
 
+import com.liferay.portal.servlet.context.helper.ServletContextHelperFactory;
 import com.liferay.portal.wab.extender.internal.event.EventUtil;
 
 import java.util.Dictionary;
@@ -36,7 +37,8 @@ public class WebBundleDeployer {
 	public WebBundleDeployer(
 			BundleContext bundleContext, Dictionary<String, Object> properties,
 			SAXParserFactory saxParserFactory, EventUtil eventUtil,
-			Logger logger)
+			Logger logger,
+			ServletContextHelperFactory servletContextHelperFactory)
 		throws Exception {
 
 		_bundleContext = bundleContext;
@@ -44,6 +46,7 @@ public class WebBundleDeployer {
 		_saxParserFactory = saxParserFactory;
 		_eventUtil = eventUtil;
 		_logger = logger;
+		_servletContextHelperFactory = servletContextHelperFactory;
 	}
 
 	public void close() {
@@ -71,7 +74,7 @@ public class WebBundleDeployer {
 
 		try {
 			WabBundleProcessor newWabBundleProcessor = new WabBundleProcessor(
-				bundle, contextPath, _logger);
+				bundle, contextPath, _logger, _servletContextHelperFactory);
 
 			WabBundleProcessor oldWabBundleProcessor =
 				_wabBundleProcessors.putIfAbsent(bundle, newWabBundleProcessor);
@@ -137,6 +140,7 @@ public class WebBundleDeployer {
 	private final Logger _logger;
 	private final Dictionary<String, Object> _properties;
 	private final SAXParserFactory _saxParserFactory;
+	private final ServletContextHelperFactory _servletContextHelperFactory;
 	private final ConcurrentMap<Bundle, WabBundleProcessor>
 		_wabBundleProcessors = new ConcurrentHashMap<>();
 
