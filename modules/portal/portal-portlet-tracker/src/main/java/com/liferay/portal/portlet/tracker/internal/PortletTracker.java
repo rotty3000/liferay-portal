@@ -63,6 +63,7 @@ import com.liferay.portal.kernel.xml.QName;
 import com.liferay.portal.kernel.xml.SAXReader;
 import com.liferay.portal.language.LanguageResources;
 import com.liferay.portal.model.impl.PublicRenderParameterImpl;
+import com.liferay.portal.servlet.context.helper.ServletContextHelperFactory;
 import com.liferay.portal.servlet.jsp.compiler.JspServlet;
 import com.liferay.portal.util.WebAppPool;
 import com.liferay.portlet.PortletBagFactory;
@@ -1067,7 +1068,8 @@ public class PortletTracker
 		ServiceRegistrations serviceRegistrations) {
 
 		ServletContextHelper servletContextHelper =
-			new BundlePortletServletContextHelper(bundle);
+			_servletContextHelperFactory.createServletContextHelper(
+				bundle, ServletContextHelperFactory.TYPE.PORTLET);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -1343,6 +1345,13 @@ public class PortletTracker
 		_saxReader = saxReader;
 	}
 
+	@Reference(unbind = "-")
+	protected void setServletContextHelperFactory(
+		ServletContextHelperFactory servletContextHelperFactory) {
+
+		_servletContextHelperFactory = servletContextHelperFactory;
+	}
+
 	protected String toLowerCase(Object object) {
 		String string = String.valueOf(object);
 
@@ -1401,6 +1410,7 @@ public class PortletTracker
 		_serviceRegistrations = new ConcurrentHashMap<>();
 	private ServiceTracker<Portlet, com.liferay.portal.kernel.model.Portlet>
 		_serviceTracker;
+	private ServletContextHelperFactory _servletContextHelperFactory;
 
 	private static class JspServletWrapper extends HttpServlet {
 

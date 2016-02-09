@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.portal.portlet.tracker.internal;
+package com.liferay.portal.servlet.context.helper.internal;
 
 import com.liferay.osgi.util.BundleUtil;
 
