@@ -14,7 +14,6 @@ Import-Package:\
 	!org.apache.oro.text.perl,\
 	!org.slf4j.spi,\
 	!org.zeroturnaround.javarebel,\
-	com.liferay.portal.template,\
 	*
 Include-Resource:\
 	@lib/velocity.jar,\
