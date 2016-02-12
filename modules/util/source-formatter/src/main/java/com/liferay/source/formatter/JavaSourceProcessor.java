@@ -944,6 +944,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 		if (portalSource) {
 			fileNames = getPortalJavaFiles();
 
+			_checkRegistryInTestClasses = GetterUtil.getBoolean(
+				System.getProperty(
+					"source.formatter.check.registry.in.test.classes"));
 			_checkUnprocessedExceptions = GetterUtil.getBoolean(
 				System.getProperty(
 					"source.formatter.check.unprocessed.exceptions"));
@@ -2485,8 +2488,9 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 
 		if (!absolutePath.contains("/modules/core/portal-bootstrap") &&
 			!absolutePath.contains("/modules/core/registry-") &&
-			!absolutePath.contains("/test/") &&
-			!absolutePath.contains("/testIntegration/")) {
+			(_checkRegistryInTestClasses ||
+			 (!absolutePath.contains("/test/") &&
+			  !absolutePath.contains("/testIntegration/")))) {
 
 			Matcher matcher = _registryImportPattern.matcher(content);
 
@@ -3971,6 +3975,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 	private Pattern _catchExceptionPattern = Pattern.compile(
 		"\n(\t+)catch \\((.+Exception) (.+)\\) \\{\n");
 	private List<String> _checkJavaFieldTypesExcludes;
+	private boolean _checkRegistryInTestClasses;
 	private List<String> _checkTabsExcludes;
 	private boolean _checkUnprocessedExceptions;
 	private final Pattern _classPattern = Pattern.compile(
