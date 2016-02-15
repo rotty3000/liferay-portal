@@ -9,9 +9,13 @@ Export-Package:\
 	org.quartz.impl.triggers
 Import-Package:\
 	!com.mchange.v2.c3p0.*,\
+	\
 	!javax.ejb.*,\
+	\
 	!javax.jms.*,\
+	\
 	!javax.mail.*,\
+	\
 	!javax.transaction.*,\
 	*
 Include-Resource: @lib/quartz.jar
