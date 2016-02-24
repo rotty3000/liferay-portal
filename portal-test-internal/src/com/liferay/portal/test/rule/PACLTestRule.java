@@ -163,8 +163,7 @@ public class PACLTestRule implements TestRule {
 
 		mockServletContext.setServletContextName("a-test-hook");
 
-		HotDeployEvent hotDeployEvent = getHotDeployEvent(
-			mockServletContext);
+		HotDeployEvent hotDeployEvent = getHotDeployEvent(mockServletContext);
 
 		HotDeployUtil.fireDeployEvent(hotDeployEvent);
 

@@ -29,7 +29,6 @@ import javax.servlet.ServletContextListener;
 public class PluginContextListener
 	extends BasePortalLifecycle implements ServletContextListener {
 
-
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		ServletContext servletContext = servletContextEvent.getServletContext();
@@ -44,7 +43,7 @@ public class PluginContextListener
 		servletContext = servletContextEvent.getServletContext();
 
 		ClassLoaderPool.register(
-			servletContext.getServletContextName(), 
+			servletContext.getServletContextName(),
 			servletContext.getClassLoader());
 
 		ServletContextPool.put(
