@@ -200,9 +200,7 @@ public class ExtHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
-	protected void installExt(ServletContext servletContext)
-		throws Exception {
-
+	protected void installExt(ServletContext servletContext) throws Exception {
 		String servletContextName = servletContext.getServletContextName();
 
 		String globalLibDir = PortalUtil.getGlobalLibDir();
