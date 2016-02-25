@@ -14,7 +14,13 @@
 
 package com.liferay.portal.osgi.web.wab.generator.internal.processor;
 
+import aQute.bnd.header.Attrs;
 import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Descriptors.PackageRef;
+import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.JarResource;
+import aQute.bnd.osgi.Packages;
+import aQute.bnd.version.Version;
 
 import com.liferay.portal.events.GlobalStartupAction;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
@@ -425,6 +431,16 @@ public class WabProcessor {
 
 		// Class path order is critical
 
+		String bundleClassPath = analyzer.getProperty(
+			Constants.BUNDLE_CLASSPATH);
+
+		analyzer.setProperty(
+			Constants.BUNDLE_CLASSPATH,
+			Analyzer.append(bundleClassPath, "ext/WEB-INF/classes"));
+		analyzer.setProperty(
+			Constants.BUNDLE_CLASSPATH,
+			Analyzer.append(bundleClassPath, "WEB-INF/classes"));
+
 		Map<String, File> classPath = new LinkedHashMap<>();
 
 		classPath.put(
@@ -443,10 +459,30 @@ public class WabProcessor {
 		processFiles(
 			_pluginDir, _pluginDir.toURI(), classPath, portalDependencyJars);
 
-		analyzer.setProperty(
-			Constants.BUNDLE_CLASSPATH, StringUtil.merge(classPath.keySet()));
-
 		Collection<File> files = classPath.values();
+
+		Jar wab = analyzer.getJar();
+
+		for (File file : files) {
+			if (file.isFile() && file.getName().endsWith(".jar")) {
+				Jar jar = new Jar(file);
+
+				jar.setDoNotTouchManifest();
+
+				analyzer.removeClose(jar);
+
+				String path = "WEB-INF/lib/" + file.getName();
+
+				wab.putResource(path, new JarResource(jar));
+
+				bundleClassPath = analyzer.getProperty(
+					Constants.BUNDLE_CLASSPATH);
+
+				analyzer.setProperty(
+					Constants.BUNDLE_CLASSPATH,
+					Analyzer.append(bundleClassPath, path));
+			}
+		}
 
 		analyzer.setClasspath(files.toArray(new File[classPath.size()]));
 	}
@@ -484,6 +520,34 @@ public class WabProcessor {
 			}
 			else {
 				_bundleVersion = "1.0.0";
+			}
+		}
+
+		if (!Version.isVersion(_bundleVersion)) {
+
+			// Check if it's in Maven format and convert it to OSGi.
+
+			Matcher matcher = _versionPatternMaven.matcher(_bundleVersion);
+
+			if (matcher.matches()) {
+				StringBuilder sb = new StringBuilder();
+
+				sb.append(matcher.group(1));
+				sb.append(".");
+				sb.append(matcher.group(3));
+				sb.append(".");
+				sb.append(matcher.group(5));
+				sb.append(".");
+				sb.append(matcher.group(7));
+
+				_bundleVersion = sb.toString();
+			}
+			else {
+
+				// Use the entire spring as only the qualifier since we can't
+				// decipher it.
+
+				_bundleVersion = "0.0.0." + _bundleVersion;
 			}
 		}
 
@@ -718,23 +782,28 @@ public class WabProcessor {
 			analyzer.setProperty(Constants.IMPORT_PACKAGE, packageName);
 		}
 		else {
-			StringBundler sb = new StringBundler(
-				(_importPackageNames.size() * 3) + 1);
+			analyzer.setProperty(Constants.IMPORT_PACKAGE, "*");
+		}
 
-			for (String importPackageName : _importPackageNames) {
-				if (Validator.isNull(importPackageName)) {
-					continue;
-				}
+		Packages packages = analyzer.getReferred();
 
-				sb.append(importPackageName);
-				sb.append(";resolution:=\"optional\"");
-				sb.append(StringPool.COMMA);
+		for (String importPackageName : _importPackageNames) {
+			if (Validator.isNull(importPackageName)) {
+				continue;
 			}
 
-			sb.append("*;resolution:=\"optional\"");
+			PackageRef packageRef = analyzer.getPackageRef(importPackageName);
 
-			analyzer.setProperty(Constants.IMPORT_PACKAGE, sb.toString());
+			Matcher matcher = _packagePattern.matcher(packageRef.getFQN());
+
+			if (matcher.matches() && !packages.containsKey(packageRef)) {
+				packages.put(
+					packageRef,
+					new Attrs(Attrs.create("resolution:", "optional")));
+			}
 		}
+
+		//sb.append("*;resolution:=\"optional\"");
 	}
 
 	protected void processLiferayPortletXML() throws IOException {
@@ -1250,6 +1319,13 @@ public class WabProcessor {
 
 	private static final Log _log = LogFactoryUtil.getLog(WabProcessor.class);
 
+	private static final Pattern _packagePattern = Pattern.compile(
+		"[_A-Za-z$][_A-Za-z0-9$]*(\\.[_A-Za-z$][_A-Za-z0-9$]*)*");
+	private static final Pattern _tldPackagesPattern = Pattern.compile(
+		"<[^>]+?-class>\\p{Space}*?(.*?)\\p{Space}*?</[^>]+?-class>");
+	private static final Pattern _versionPatternMaven = Pattern.compile(
+		"(\\d{1,9})(\\.(\\d{1,9})(\\.(\\d{1,9})(-([-_\\da-zA-Z]+))?)?)?");
+
 	private String _bundleVersion;
 	private final ClassLoader _classLoader;
 	private String _context;
@@ -1262,7 +1338,5 @@ public class WabProcessor {
 	private File _pluginDir;
 	private PluginPackage _pluginPackage;
 	private String _servicePackageName;
-	private final Pattern _tldPackagesPattern = Pattern.compile(
-		"<[^>]+?-class>\\p{Space}*?(.*?)\\p{Space}*?</[^>]+?-class>");
 
 }
