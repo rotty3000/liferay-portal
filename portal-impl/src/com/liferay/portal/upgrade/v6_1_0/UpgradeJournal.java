@@ -21,10 +21,8 @@ import com.liferay.portal.upgrade.v6_1_0.util.JournalArticleTable;
 import com.liferay.portal.upgrade.v6_1_0.util.JournalStructureTable;
 import com.liferay.portal.upgrade.v6_1_0.util.JournalTemplateTable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Juan Fernández
@@ -34,41 +32,20 @@ public class UpgradeJournal extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try {
-			runSQL("alter_column_type JournalArticle title STRING null");
+		alterColumnType(JournalArticleTable.class, "title", "STRING null");
 
-			runSQL("alter_column_type JournalStructure name STRING null");
-			runSQL(
-				"alter_column_type JournalStructure description STRING null");
+		alterColumnType(
+			JournalStructureTable.class, new String[] {"name", "STRING null"},
+			new String[] {"description", "STRING null"});
 
-			runSQL("alter_column_type JournalTemplate name STRING null");
-			runSQL("alter_column_type JournalTemplate description STRING null");
-		}
-		catch (SQLException sqle) {
-			upgradeTable(
-				JournalArticleTable.TABLE_NAME,
-				JournalArticleTable.TABLE_COLUMNS,
-				JournalArticleTable.TABLE_SQL_CREATE,
-				JournalArticleTable.TABLE_SQL_ADD_INDEXES);
-
-			upgradeTable(
-				JournalStructureTable.TABLE_NAME,
-				JournalStructureTable.TABLE_COLUMNS,
-				JournalStructureTable.TABLE_SQL_CREATE,
-				JournalStructureTable.TABLE_SQL_ADD_INDEXES);
-
-			upgradeTable(
-				JournalTemplateTable.TABLE_NAME,
-				JournalTemplateTable.TABLE_COLUMNS,
-				JournalTemplateTable.TABLE_SQL_CREATE,
-				JournalTemplateTable.TABLE_SQL_ADD_INDEXES);
-		}
+		alterColumnType(
+			JournalTemplateTable.class, new String[] {"name", "STRING null"},
+			new String[] {"description", "STRING null"});
 
 		updateStructureXsd();
 	}
 
 	protected void updateStructureXsd() throws Exception {
-		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
@@ -79,9 +56,7 @@ public class UpgradeJournal extends UpgradeProcess {
 						"'%image_gallery%'");
 		}
 		catch (Exception e) {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
-			ps = con.prepareStatement(
+			ps = connection.prepareStatement(
 				"select id_, xsd from JournalStructure where xsd like " +
 					"'%image_gallery%'");
 
@@ -98,19 +73,16 @@ public class UpgradeJournal extends UpgradeProcess {
 			}
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(ps, rs);
 		}
 	}
 
 	protected void updateStructureXsd(long id, String xsd) throws Exception {
-		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
-			ps = con.prepareStatement(
+			ps = connection.prepareStatement(
 				"update JournalStructure set xsd = ? where id_ = ?");
 
 			ps.setString(1, xsd);
@@ -119,7 +91,7 @@ public class UpgradeJournal extends UpgradeProcess {
 			ps.executeUpdate();
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(ps, rs);
 		}
 	}
 

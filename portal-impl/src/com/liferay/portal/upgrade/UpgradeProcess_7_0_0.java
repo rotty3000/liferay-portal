@@ -43,6 +43,7 @@ import com.liferay.portal.upgrade.v7_0_0.UpgradePortletId;
 import com.liferay.portal.upgrade.v7_0_0.UpgradePostgreSQL;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeRatings;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeRelease;
+import com.liferay.portal.upgrade.v7_0_0.UpgradeRepository;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeRepositoryEntry;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeResourcePermission;
 import com.liferay.portal.upgrade.v7_0_0.UpgradeSchema;
@@ -92,6 +93,7 @@ public class UpgradeProcess_7_0_0 extends UpgradeProcess {
 		upgrade(UpgradePostgreSQL.class);
 		upgrade(UpgradeRatings.class);
 		upgrade(UpgradeRelease.class);
+		upgrade(UpgradeRepository.class);
 		upgrade(UpgradeRepositoryEntry.class);
 		upgrade(UpgradeResourcePermission.class);
 		upgrade(UpgradeSharding.class);

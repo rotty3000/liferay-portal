@@ -19,10 +19,8 @@ import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.upgrade.v6_1_0.util.GroupTable;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * @author Hugo Huijser
@@ -32,28 +30,18 @@ public class UpgradeGroup extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		try {
-			runSQL("alter_column_type Group_ name VARCHAR(150) null");
-		}
-		catch (SQLException sqle) {
-			upgradeTable(
-				GroupTable.TABLE_NAME, GroupTable.TABLE_COLUMNS,
-				GroupTable.TABLE_SQL_CREATE, GroupTable.TABLE_SQL_ADD_INDEXES);
-		}
+		alterColumnType(GroupTable.class, "name", "VARCHAR(150) null");
 
 		updateName();
 		updateSite();
 	}
 
 	protected long getClassNameId(String className) throws Exception {
-		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
-			ps = con.prepareStatement(
+			ps = connection.prepareStatement(
 				"select classNameId from ClassName_ where value = ?");
 
 			ps.setString(1, className);
@@ -67,7 +55,7 @@ public class UpgradeGroup extends UpgradeProcess {
 			return 0;
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(ps, rs);
 		}
 	}
 
@@ -75,13 +63,10 @@ public class UpgradeGroup extends UpgradeProcess {
 		long organizationClassNameId = getClassNameId(
 			"com.liferay.portal.model.Organization");
 
-		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
 			StringBundler sb = new StringBundler(4);
 
 			sb.append("select Group_.groupId, Group_.classPK, ");
@@ -91,7 +76,7 @@ public class UpgradeGroup extends UpgradeProcess {
 
 			String sql = sb.toString();
 
-			ps = con.prepareStatement(sql);
+			ps = connection.prepareStatement(sql);
 
 			ps.setLong(1, organizationClassNameId);
 
@@ -106,20 +91,17 @@ public class UpgradeGroup extends UpgradeProcess {
 			}
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(ps, rs);
 		}
 	}
 
 	protected void updateName(long groupId, long classPK, String name)
 		throws Exception {
 
-		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
-			ps = con.prepareStatement(
+			ps = connection.prepareStatement(
 				"update Group_ set name = ? where groupId = ?");
 
 			StringBundler sb = new StringBundler(3);
@@ -134,7 +116,7 @@ public class UpgradeGroup extends UpgradeProcess {
 			ps.executeUpdate();
 		}
 		finally {
-			DataAccess.cleanUp(con, ps);
+			DataAccess.cleanUp(ps);
 		}
 	}
 
@@ -149,19 +131,16 @@ public class UpgradeGroup extends UpgradeProcess {
 		long organizationClassNameId = getClassNameId(
 			"com.liferay.portal.model.Organization");
 
-		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		try {
-			con = DataAccess.getUpgradeOptimizedConnection();
-
 			String sql =
 				"select distinct Group_.groupId from Group_ inner join " +
 					"Layout on Layout.groupId = Group_.groupId where " +
 						"classNameId = ?";
 
-			ps = con.prepareStatement(sql);
+			ps = connection.prepareStatement(sql);
 
 			ps.setLong(1, organizationClassNameId);
 
@@ -175,7 +154,7 @@ public class UpgradeGroup extends UpgradeProcess {
 			}
 		}
 		finally {
-			DataAccess.cleanUp(con, ps, rs);
+			DataAccess.cleanUp(ps, rs);
 		}
 	}
 

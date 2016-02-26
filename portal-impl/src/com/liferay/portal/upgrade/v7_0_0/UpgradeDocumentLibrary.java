@@ -37,7 +37,6 @@ import com.liferay.portal.upgrade.v7_0_0.util.DLFolderTable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -48,6 +47,27 @@ import java.util.Map;
  */
 public class UpgradeDocumentLibrary extends UpgradeProcess {
 
+	protected void addClassName(long classNameId, String className)
+		throws Exception {
+
+		PreparedStatement ps = null;
+
+		try {
+			ps = connection.prepareStatement(
+				"insert into ClassName_ (mvccVersion, classNameId, value) " +
+					"values (?, ?, ?)");
+
+			ps.setLong(1, 0);
+			ps.setLong(2, classNameId);
+			ps.setString(3, className);
+
+			ps.executeUpdate();
+		}
+		finally {
+			DataAccess.cleanUp(ps);
+		}
+	}
+
 	protected void addDDMStructureLink(
 			long ddmStructureLinkId, long classNameId, long classPK,
 			long ddmStructureId)
@@ -56,8 +76,6 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 		PreparedStatement ps = null;
 
 		try {
-			connection = DataAccess.getUpgradeOptimizedConnection();
-
 			ps = connection.prepareStatement(
 				"insert into DDMStructureLink (structureLinkId, classNameId, " +
 					"classPK, structureId) values (?, ?, ?, ?)");
@@ -100,15 +118,7 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 
 		// DLFolder
 
-		try {
-			runSQL("alter_column_type DLFolder name VARCHAR(255) null");
-		}
-		catch (SQLException sqle) {
-			upgradeTable(
-				DLFolderTable.TABLE_NAME, DLFolderTable.TABLE_COLUMNS,
-				DLFolderTable.TABLE_SQL_CREATE,
-				DLFolderTable.TABLE_SQL_ADD_INDEXES);
-		}
+		alterColumnType(DLFolderTable.class, "name", "VARCHAR(255) null");
 
 		updateRepositoryClassNameIds();
 	}
@@ -525,6 +535,14 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 			LiferayRepository.class);
 		long portletRepositoryClassNameId = PortalUtil.getClassNameId(
 			PortletRepository.class);
+
+		if (portletRepositoryClassNameId == 0) {
+			portletRepositoryClassNameId = increment();
+
+			addClassName(
+				portletRepositoryClassNameId,
+				PortletRepository.class.getName());
+		}
 
 		PreparedStatement ps = null;
 

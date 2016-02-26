@@ -21,7 +21,12 @@ import com.liferay.portal.kernel.util.StringBundler;
 
 import java.io.IOException;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Brian Wing Shun Chan
@@ -88,8 +93,32 @@ public abstract class UpgradeCompanyId extends UpgradeProcess {
 			}
 		}
 
+		protected List<Long> getCompanyIds() throws SQLException {
+			List<Long> companyIds = new ArrayList<>();
+
+			try (PreparedStatement ps = connection.prepareStatement(
+					"select companyId from Company");
+				ResultSet rs = ps.executeQuery()) {
+
+				while (rs.next()) {
+					long companyId = rs.getLong(1);
+
+					companyIds.add(companyId);
+				}
+			}
+
+			return companyIds;
+		}
+
 		protected String getSelectSQL(
-			String foreignTableName, String foreignColumnName) {
+				String foreignTableName, String foreignColumnName)
+			throws SQLException {
+
+			List<Long> companyIds = getCompanyIds();
+
+			if (companyIds.size() == 1) {
+				return String.valueOf(companyIds.get(0));
+			}
 
 			StringBundler sb = new StringBundler(10);
 
@@ -120,7 +149,8 @@ public abstract class UpgradeCompanyId extends UpgradeProcess {
 		}
 
 		protected String getUpdateSQL(
-			String foreignTableName, String foreignColumnName) {
+				String foreignTableName, String foreignColumnName)
+			throws SQLException {
 
 			return getUpdateSQL(
 				getSelectSQL(foreignTableName, foreignColumnName));

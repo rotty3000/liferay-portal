@@ -376,6 +376,10 @@
 		<priority value="ERROR" />
 	</category>
 
+	<category name="com.liferay.portal.kernel.util.LoggingTimer">
+		<priority value="INFO" />
+	</category>
+
 	<category name="com.liferay.portal.kernel.util.ReferenceRegistry">
 		<priority value="WARN" />
 	</category>

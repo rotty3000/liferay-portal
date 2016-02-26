@@ -28,8 +28,8 @@
 			</then>
 		</if>
 
-		<execute function="AssertClick" locator1="Button#SAVE" value1="Save" />
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Button#clickSave" />
+		<execute macro="Alert#viewSuccessMessage" />
 	</command>
 
 	<command name="configureFlaggableSettingsPG">
@@ -55,8 +55,8 @@
 			</then>
 		</if>
 
-		<execute function="AssertClick" locator1="Button#SAVE" value1="Save" />
-		<execute macro="Alert#viewSetupUpdatedSuccessMessage" />
+		<execute macro="Button#clickSave" />
+		<execute macro="Alert#viewSuccessMessage" />
 	</command>
 
 	<command name="viewADTColorByPopularityPG">

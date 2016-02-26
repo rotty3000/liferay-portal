@@ -25,17 +25,21 @@ import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.StagedModel;
-import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
+import com.liferay.portal.kernel.service.PortletLocalService;
 import com.liferay.portal.kernel.util.LongWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Michael C. Han
  */
+@Component(
+	immediate = true, service = PortletDataHandlerStatusMessageSender.class
+)
 public class PortletDataHandlerStatusMessageSenderImpl
 	implements PortletDataHandlerStatusMessageSender {
 
@@ -61,7 +65,7 @@ public class PortletDataHandlerStatusMessageSenderImpl
 
 		message.put("portletId", portletId);
 
-		Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
+		Portlet portlet = _portletLocalService.getPortletById(portletId);
 
 		if (portlet != null) {
 			PortletDataHandler portletDataHandler =
@@ -145,14 +149,11 @@ public class PortletDataHandlerStatusMessageSenderImpl
 			"modelDeletionCounters", new HashMap<>(modelDeletionCounters));
 	}
 
-	@Reference(unbind = "-")
-	protected void setBackgroundTaskStatusMessageSender(
-		BackgroundTaskStatusMessageSender backgroundTaskStatusMessageSender) {
-
-		_backgroundTaskStatusMessageSender = backgroundTaskStatusMessageSender;
-	}
-
-	private volatile BackgroundTaskStatusMessageSender
+	@Reference
+	private BackgroundTaskStatusMessageSender
 		_backgroundTaskStatusMessageSender;
+
+	@Reference
+	private PortletLocalService _portletLocalService;
 
 }
