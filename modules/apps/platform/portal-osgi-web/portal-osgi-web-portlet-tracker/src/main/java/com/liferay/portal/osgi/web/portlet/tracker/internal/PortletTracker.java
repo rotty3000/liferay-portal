@@ -981,7 +981,7 @@ public class PortletTracker
 			getServletContextHelperRegistration(bundle, serviceRegistrations);
 
 		ServiceReference<ServletContextHelper> serviceReference =
-			servletContextHelperRegistration.getServiceReference();
+			servletContextHelperRegistration.getServletContextHelperReference();
 
 		String servletContextName = GetterUtil.getString(
 			serviceReference.getProperty(

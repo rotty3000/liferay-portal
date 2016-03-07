@@ -355,7 +355,8 @@ public class WabBundleProcessor {
 			_bundleContext.getService(_serviceReference);
 
 		ServiceRegistration<ServletContextHelper> serviceRegistration =
-			servletContextHelperRegistration.getServiceRegistration();
+			servletContextHelperRegistration.
+				getServletContextHelperRegistration();
 
 		ServiceReference<ServletContextHelper> serviceReference =
 			serviceRegistration.getReference();
