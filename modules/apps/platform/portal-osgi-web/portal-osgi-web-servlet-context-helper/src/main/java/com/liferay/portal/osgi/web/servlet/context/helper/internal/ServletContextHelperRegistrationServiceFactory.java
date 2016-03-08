@@ -67,17 +67,20 @@ public class ServletContextHelperRegistrationServiceFactory
 		CustomServletContextHelper customServletContextHelper =
 			new CustomServletContextHelper(bundle);
 
-		ServiceRegistration<?> serviceRegistration =
-			bundleContext.registerService(
-				new String[] {
-					ServletContextHelper.class.getName(),
-					ServletContextListener.class.getName()
-				},
-				customServletContextHelper, properties);
+		ServiceRegistration<ServletContextHelper>
+			servletContextHelperRegistration =
+				bundleContext.registerService(
+					ServletContextHelper.class, customServletContextHelper,
+					properties);
+		ServiceRegistration<ServletContextListener>
+			servletContextListenerRegistration =
+				bundleContext.registerService(
+					ServletContextListener.class, customServletContextHelper,
+					properties);
 
 		return new ServletContextHelperRegistrationImpl(
-			(ServiceRegistration<ServletContextHelper>)serviceRegistration,
-			customServletContextHelper);
+			servletContextHelperRegistration,
+			servletContextListenerRegistration, customServletContextHelper);
 	}
 
 	@Override

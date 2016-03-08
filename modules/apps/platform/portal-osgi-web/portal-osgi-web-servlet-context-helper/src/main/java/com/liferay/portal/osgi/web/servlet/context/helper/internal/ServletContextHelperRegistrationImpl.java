@@ -17,6 +17,7 @@ package com.liferay.portal.osgi.web.servlet.context.helper.internal;
 import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextHelperRegistration;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextListener;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -29,21 +30,16 @@ public class ServletContextHelperRegistrationImpl
 	implements ServletContextHelperRegistration {
 
 	public ServletContextHelperRegistrationImpl(
-		ServiceRegistration<ServletContextHelper> serviceRegistration,
+		ServiceRegistration<ServletContextHelper>
+			servletContextHelperRegistration,
+		ServiceRegistration<ServletContextListener>
+			servletContextListenerRegistration,
 		CustomServletContextHelper customServletContextHelper) {
 
-		_serviceRegistration = serviceRegistration;
+		_servletContextHelperRegistration = servletContextHelperRegistration;
+		_servletContextListenerRegistration =
+			servletContextListenerRegistration;
 		_customServletContextHelper = customServletContextHelper;
-	}
-
-	@Override
-	public ServiceReference<ServletContextHelper> getServiceReference() {
-		return _serviceRegistration.getReference();
-	}
-
-	@Override
-	public ServiceRegistration<ServletContextHelper> getServiceRegistration() {
-		return _serviceRegistration;
 	}
 
 	@Override
@@ -51,8 +47,38 @@ public class ServletContextHelperRegistrationImpl
 		return _customServletContextHelper.getServletContext();
 	}
 
+	@Override
+	public ServiceReference<ServletContextHelper>
+		getServletContextHelperReference() {
+
+		return _servletContextHelperRegistration.getReference();
+	}
+
+	@Override
+	public ServiceReference<ServletContextListener>
+		getServletContextListenerReference() {
+
+		return _servletContextListenerRegistration.getReference();
+	}
+
+	@Override
+	public ServiceRegistration<ServletContextHelper>
+		getServletContextHelperRegistration() {
+
+		return _servletContextHelperRegistration;
+	}
+
+	@Override
+	public ServiceRegistration<ServletContextListener>
+		getServletContextListenerRegistration() {
+
+		return _servletContextListenerRegistration;
+	}
+
 	private final CustomServletContextHelper _customServletContextHelper;
 	private final ServiceRegistration<ServletContextHelper>
-		_serviceRegistration;
+		_servletContextHelperRegistration;
+	private final ServiceRegistration<ServletContextListener>
+		_servletContextListenerRegistration;
 
 }
