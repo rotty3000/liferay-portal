@@ -1055,6 +1055,8 @@ public class WabProcessor {
 
 			_importPackageNames.add(
 				"com.liferay.portal.osgi.web.wab.generator");
+			_importPackageNames.add(
+				"org.eclipse.core.runtime;liferay-spring-compat:=provisional");
 
 			File metaInfDir = new File(uri.resolve("WEB-INF/classes/META-INF"));
 
