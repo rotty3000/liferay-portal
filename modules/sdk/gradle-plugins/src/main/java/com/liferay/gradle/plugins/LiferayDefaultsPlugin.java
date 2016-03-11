@@ -91,7 +91,9 @@ import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.DuplicatesStrategy;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.file.SourceDirectorySet;
+import org.gradle.api.internal.GradleInternal;
 import org.gradle.api.internal.artifacts.publish.ArchivePublishArtifact;
+import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.invocation.Gradle;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -125,7 +127,9 @@ import org.gradle.api.tasks.testing.TestTaskReports;
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat;
 import org.gradle.api.tasks.testing.logging.TestLogEvent;
 import org.gradle.api.tasks.testing.logging.TestLoggingContainer;
+import org.gradle.execution.ProjectConfigurer;
 import org.gradle.external.javadoc.MinimalJavadocOptions;
+import org.gradle.internal.service.ServiceRegistry;
 import org.gradle.plugins.ide.eclipse.EclipsePlugin;
 import org.gradle.plugins.ide.eclipse.model.EclipseClasspath;
 import org.gradle.plugins.ide.eclipse.model.EclipseModel;
@@ -359,6 +363,28 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 						project, message, false, ignored);
 				}
 
+				private String _getGradlewCommand(
+					String gradlewRelativePath, String command, boolean daemon,
+					String ... arguments) {
+
+					StringBuilder sb = new StringBuilder();
+
+					sb.append(gradlewRelativePath);
+					sb.append(' ');
+					sb.append(command);
+
+					if (daemon) {
+						sb.append(" --daemon");
+					}
+
+					for (String argument : arguments) {
+						sb.append(' ');
+						sb.append(argument);
+					}
+
+					return sb.toString();
+				}
+
 				private String _getGitCommitCommand(
 					Project project, String message, boolean all,
 					boolean ignored) {
@@ -422,16 +448,27 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 					String gradlewRelativePath = project.relativePath(
 						gradlewFile);
 
+					boolean daemon = true;
+
+					String daemonString = GradleUtil.getTaskPrefixedProperty(
+						task, "daemon");
+
+					if (Validator.isNotNull(daemonString)) {
+						daemon = Boolean.parseBoolean(daemonString);
+					}
+
 					commands.add(
-						gradlewRelativePath + " " +
-							BasePlugin.UPLOAD_ARCHIVES_TASK_NAME + " -P" +
-								_SNAPSHOT_PROPERTY_NAME);
+						_getGradlewCommand(
+							gradlewRelativePath,
+							BasePlugin.UPLOAD_ARCHIVES_TASK_NAME, daemon,
+							"-P" + _SNAPSHOT_PROPERTY_NAME));
 
 					// Publish release
 
 					commands.add(
-						gradlewRelativePath + " " +
-							BasePlugin.UPLOAD_ARCHIVES_TASK_NAME);
+						_getGradlewCommand(
+							gradlewRelativePath,
+							BasePlugin.UPLOAD_ARCHIVES_TASK_NAME, daemon));
 
 					// Commit "prep next"
 
@@ -470,19 +507,22 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 
 			});
 
+		if (gitRepoDir != null) {
+			task.onlyIf(new LeafArtifactSpec(gitRepoDir));
+		}
+
 		task.setDescription(
 			"Prints the artifact publish commands if this project has been " +
 				"changed since the last publish.");
 
-		configureTaskEnabledIfStale(
-			task, gitRepoDir, recordArtifactTask, testProject);
+		configureTaskEnabledIfStale(task, recordArtifactTask, testProject);
 
 		return task;
 	}
 
 	protected Task addTaskPrintStaleArtifact(
-		File gitRepoDir, File portalRootDir,
-		WritePropertiesTask recordArtifactTask, boolean testProject) {
+		File portalRootDir, WritePropertiesTask recordArtifactTask,
+		boolean testProject) {
 
 		Project project = recordArtifactTask.getProject();
 
@@ -507,8 +547,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 				"since the last publish.");
 		task.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
 
-		configureTaskEnabledIfStale(
-			task, gitRepoDir, recordArtifactTask, testProject);
+		configureTaskEnabledIfStale(task, recordArtifactTask, testProject);
 
 		return task;
 	}
@@ -880,6 +919,34 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		Configuration configuration = GradleUtil.getConfiguration(
 			project, JavaPlugin.COMPILE_CONFIGURATION_NAME);
 
+		DependencySet dependencySet = configuration.getAllDependencies();
+
+		GradleInternal gradle = (GradleInternal)project.getGradle();
+
+		ServiceRegistry serviceRegistry = gradle.getServices();
+
+		ProjectConfigurer projectConfigurer = serviceRegistry.get(
+			ProjectConfigurer.class);
+
+		for (ProjectDependency projectDependency :
+				dependencySet.withType(ProjectDependency.class)) {
+
+			ProjectInternal dependencyProject =
+				(ProjectInternal)projectDependency.getDependencyProject();
+
+			projectConfigurer.configure(dependencyProject);
+
+			if (!hasPlugin(dependencyProject, BasePlugin.class)) {
+				continue;
+			}
+
+			String name = getArchivesBaseName(dependencyProject);
+			String version = String.valueOf(dependencyProject.getVersion());
+
+			includeResource = includeResource.replace(
+				name + "-*.", name + "-" + version + ".");
+		}
+
 		ResolvedConfiguration resolvedConfiguration =
 			configuration.getResolvedConfiguration();
 
@@ -899,25 +966,20 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 	protected void configureConfiguration(Configuration configuration) {
 		DependencySet dependencySet = configuration.getDependencies();
 
-		dependencySet.all(
-			new Action<Dependency>() {
+		dependencySet.withType(
+			ModuleDependency.class,
+			new Action<ModuleDependency>() {
 
 				@Override
-				public void execute(Dependency dependency) {
-					if (!(dependency instanceof ModuleDependency)) {
-						return;
-					}
-
-					ModuleDependency moduleDependency =
-						(ModuleDependency)dependency;
-
-					String group = moduleDependency.getGroup();
+				public void execute(ModuleDependency moduleDependency) {
 					String name = moduleDependency.getName();
 
-					if (group.equals("com.liferay") &&
-						(name.equals(
+					if (name.equals(
+							"com.liferay.arquillian.arquillian-container-" +
+								"liferay") ||
+						name.equals(
 							"com.liferay.arquillian.extension.junit.bridge") ||
-						 name.equals("com.liferay.jasper.jspc"))) {
+						name.equals("com.liferay.jasper.jspc")) {
 
 						moduleDependency.exclude(
 							Collections.singletonMap(
@@ -982,7 +1044,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		addTaskPrintArtifactPublishCommands(
 			gitRepoDir, portalRootDir, recordArtifactTask, testProject);
 		addTaskPrintStaleArtifact(
-			gitRepoDir, portalRootDir, recordArtifactTask, testProject);
+			portalRootDir, recordArtifactTask, testProject);
 
 		final ReplaceRegexTask updateFileVersionsTask =
 			addTaskUpdateFileVersions(project, gitRepoDir);
@@ -1280,15 +1342,11 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 	}
 
 	protected void configureTaskEnabledIfStale(
-		Task task, File gitRepoDir, WritePropertiesTask recordArtifactTask,
+		Task task, WritePropertiesTask recordArtifactTask,
 		boolean testProject) {
 
 		if (testProject) {
 			task.setEnabled(false);
-		}
-
-		if (gitRepoDir != null) {
-			task.onlyIf(new LeafArtifactSpec(gitRepoDir));
 		}
 
 		task.onlyIf(new OutOfDateArtifactSpec(recordArtifactTask));
@@ -1573,6 +1631,13 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		return s.replaceAll("[\\Q\\{}()[]*+?.|^$\\E]", "\\\\$0");
 	}
 
+	protected String getArchivesBaseName(Project project) {
+		BasePluginConvention basePluginConvention = GradleUtil.getConvention(
+			project, BasePluginConvention.class);
+
+		return basePluginConvention.getArchivesBaseName();
+	}
+
 	protected String getArtifactRemoteURL(
 			AbstractArchiveTask abstractArchiveTask, boolean cdn)
 		throws Exception {
@@ -1673,12 +1738,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		sb.append("group: \"");
 		sb.append(project.getGroup());
 		sb.append("\", name: \"");
-
-		BasePluginConvention basePluginConvention = GradleUtil.getConvention(
-			project, BasePluginConvention.class);
-
-		sb.append(basePluginConvention.getArchivesBaseName());
-
+		sb.append(getArchivesBaseName(project));
 		sb.append("\", version: \"");
 		sb.append(project.getVersion());
 		sb.append('"');
@@ -1692,12 +1752,7 @@ public class LiferayDefaultsPlugin extends BaseDefaultsPlugin<LiferayPlugin> {
 		sb.append("group: \"");
 		sb.append(project.getGroup());
 		sb.append("\", name: \"");
-
-		BasePluginConvention basePluginConvention = GradleUtil.getConvention(
-			project, BasePluginConvention.class);
-
-		sb.append(basePluginConvention.getArchivesBaseName());
-
+		sb.append(getArchivesBaseName(project));
 		sb.append("\", version: \"");
 
 		return Pattern.quote(sb.toString()) + "(\\d.+)\"";

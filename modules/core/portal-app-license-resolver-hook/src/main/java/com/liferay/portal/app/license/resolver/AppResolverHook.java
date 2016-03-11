@@ -14,16 +14,17 @@
 
 package com.liferay.portal.app.license.resolver;
 
-import aQute.bnd.header.Attrs;
-import aQute.bnd.header.OSGiHeader;
-
 import com.liferay.portal.app.license.AppLicenseVerifier;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
+import java.io.IOException;
+
+import java.net.URL;
+
 import java.util.Collection;
-import java.util.Dictionary;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.SortedMap;
 
 import org.osgi.framework.Bundle;
@@ -91,17 +92,9 @@ public class AppResolverHook implements ResolverHook {
 
 		Bundle bundle = bundleRevision.getBundle();
 
-		Dictionary<String, String> headers = bundle.getHeaders();
+		Properties properties = _getAppLicenseProperties(bundle);
 
-		String xLiferayMarketplace = headers.get("X-Liferay-Marketplace");
-
-		if (xLiferayMarketplace == null) {
-			return;
-		}
-
-		Attrs attrs = OSGiHeader.parseProperties(xLiferayMarketplace);
-
-		String productId = attrs.get("productId");
+		String productId = (String)properties.get("product-id");
 
 		if (productId == null) {
 			return;
@@ -109,7 +102,7 @@ public class AppResolverHook implements ResolverHook {
 
 		boolean verified = false;
 
-		String licenseVersion = attrs.get("licenseVersion");
+		String licenseVersion = (String)properties.get("license-version");
 
 		Filter filter = FrameworkUtil.createFilter(
 			"(version=" + licenseVersion + ")");
@@ -127,11 +120,12 @@ public class AppResolverHook implements ResolverHook {
 			AppLicenseVerifier appLicenseVerifier = serviceReferences.get(
 				serviceReference);
 
-			String productType = attrs.get("productType");
-			String productVersion = attrs.get("productVersion");
+			String productType = (String)properties.get("product-type");
+			String productVersionId = (String)properties.get(
+				"product-version-id");
 
 			appLicenseVerifier.verify(
-				bundle, productId, productType, productVersion);
+				bundle, productId, productType, productVersionId);
 
 			verified = true;
 
@@ -142,6 +136,20 @@ public class AppResolverHook implements ResolverHook {
 			throw new Exception(
 				"Unable to resolve " + AppLicenseVerifier.class.getName());
 		}
+	}
+
+	private Properties _getAppLicenseProperties(Bundle bundle)
+		throws IOException {
+
+		Properties properties = new Properties();
+
+		URL url = bundle.getEntry("/META-INF/marketplace.properties");
+
+		if (url != null) {
+			properties.load(url.openStream());
+		}
+
+		return properties;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

@@ -3,6 +3,7 @@ dependencies {
 	provided group: "com.liferay", name: "com.liferay.application.list.api", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.bnd.util", version: "1.0.1"
 	provided group: "com.liferay", name: "com.liferay.exportimport.api", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.exportimport.service", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "1.0.1"
 	provided group: "com.liferay", name: "com.liferay.portal.upgrade", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.portlet.display.template", version: "1.0.0"
@@ -17,8 +18,7 @@ dependencies {
 	provided project(":apps:forms-and-workflow:dynamic-data-mapping:dynamic-data-mapping-io")
 	provided project(":apps:forms-and-workflow:dynamic-data-mapping:dynamic-data-mapping-service")
 	provided project(":apps:forms-and-workflow:dynamic-data-mapping:dynamic-data-mapping-validator")
-	provided project(":apps:foundation:frontend:frontend-taglib")
-	provided project(":apps:web-experience:export-import:export-import-service")
+	provided project(":apps:foundation:frontend-taglib:frontend-taglib-web")
 }
 
 liferay {

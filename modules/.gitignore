@@ -1,4 +1,4 @@
-/*/*/*/*/*/*/*/*/*/*/favicon.ico
+/*/*/*/*/*/*/*/*/*/favicon.ico
 /*/*/*/*/*/*/*/*/*/portal/aui_deprecated.css
 /*/*/*/*/*/.classpath
 /*/*/*/*/*/.js-cache
@@ -69,8 +69,8 @@
 /*/*/test-coverage
 /*/*/test-results
 /*/*/tmp
-/apps/foundation/frontend/frontend-theme/*/build_gradle
-/apps/foundation/frontend/frontend-theme/*/dist
-/apps/foundation/frontend/frontend-theme/*/liferay-theme.json
+/apps/foundation/frontend-theme/*/build_gradle
+/apps/foundation/frontend-theme/*/dist
+/apps/foundation/frontend-theme/*/liferay-theme.json
 npm-debug.log
 uptodate.properties
