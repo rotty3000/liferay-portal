@@ -340,11 +340,19 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 				"_log.is" + StringUtil.upperCaseFirstLetter(matcher.group(2)) +
 					"Enabled()";
 
-			if (!codeBlock.contains(s)) {
+			if (codeBlock.contains(s) ^ !s.equals("_log.isErrorEnabled()")) {
 				int lineCount = getLineCount(content, matcher.start(1));
 
-				processErrorMessage(
-					fileName, "Use " + s + ": " + fileName + " " + lineCount);
+				if (codeBlock.contains(s)) {
+					processErrorMessage(
+						fileName,
+						"Do not use _log.isErrorEnabled(): " + fileName + " " +
+							lineCount);
+				}
+				else {
+					processErrorMessage(
+						fileName, "Use " + s + ": " + fileName + " " + lineCount);
+				}
 			}
 		}
 	}
@@ -2237,6 +2245,17 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 						ifClause = StringPool.BLANK;
 					}
 					else if (line.endsWith(StringPool.SEMICOLON)) {
+						String trimmedIfClause = StringUtil.trim(ifClause);
+
+						if (!trimmedIfClause.startsWith("while ") &&
+							!trimmedIfClause.contains("{\t")) {
+
+							processErrorMessage(
+								fileName,
+								"Incorrect if statement: " + fileName + " " +
+									lineCount);
+						}
+
 						ifClause = StringPool.BLANK;
 					}
 				}
@@ -2895,6 +2914,21 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 								lineLength, lineCount, previousLine, null,
 								tabDiff, false, true, i + 1);
 						}
+					}
+				}
+			}
+
+			if (trimmedPreviousLine.equals("return") &&
+				line.endsWith(StringPool.OPEN_PARENTHESIS)) {
+
+				for (int i = 0;; i++) {
+					String nextLine = getNextLine(content, lineCount + i);
+
+					if (nextLine.endsWith(StringPool.SEMICOLON)) {
+						return getCombinedLinesContent(
+							content, fileName, line, trimmedLine,
+							lineLength, lineCount, previousLine, null,
+							tabDiff, false, true, i + 1);
 					}
 				}
 			}
@@ -4000,7 +4034,7 @@ public class JavaSourceProcessor extends BaseSourceProcessor {
 	private List<String> _javaTermSortExcludes;
 	private List<String> _lineLengthExcludes;
 	private Pattern _logLevelPattern = Pattern.compile(
-		"\n(\t+)_log.(debug|info|trace|warn)\\(");
+		"\n(\t+)_log.(debug|error|info|trace|warn)\\(");
 	private Pattern _logPattern = Pattern.compile(
 		"\n\tprivate static final Log _log = LogFactoryUtil.getLog\\(\n*" +
 			"\t*(.+)\\.class\\)");

@@ -924,6 +924,8 @@ public class PortletTracker
 		ServletContextHelperRegistration servletContextHelperRegistration =
 			getServletContextHelperRegistration(bundle, serviceRegistrations);
 
+		servletContextHelperRegistration.initDefaults(false);
+
 		ServletContext servletContext =
 			servletContextHelperRegistration.getServletContext();
 

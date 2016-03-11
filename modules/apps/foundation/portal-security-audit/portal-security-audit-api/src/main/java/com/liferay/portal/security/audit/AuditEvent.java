@@ -90,4 +90,6 @@ public interface AuditEvent {
 
 	public void setUserUuid(String userUuid);
 
+	public AuditEvent toEscapedModel();
+
 }

@@ -104,6 +104,11 @@ public class JavaSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testIncorrectIfStatement() throws Exception {
+		test("IncorrectIfStatement.testjava", "Incorrect if statement:", 23);
+	}
+
+	@Test
 	public void testIncorrectImports() throws Exception {
 		test("IncorrectImports1.testjava");
 		test(
@@ -181,11 +186,12 @@ public class JavaSourceProcessorTest extends BaseSourceProcessorTestCase {
 		test(
 			"Levels.testjava",
 			new String[] {
+				"Do not use _log.isErrorEnabled():",
 				"Use _log.isDebugEnabled():", "Use _log.isDebugEnabled():",
 				"Use _log.isInfoEnabled():", "Use _log.isTraceEnabled():",
 				"Use _log.isWarnEnabled():"
 			},
-			new Integer[] {26, 31, 43, 48, 58});
+			new Integer[] {27, 36, 41, 53, 58, 68});
 	}
 
 	@Test
