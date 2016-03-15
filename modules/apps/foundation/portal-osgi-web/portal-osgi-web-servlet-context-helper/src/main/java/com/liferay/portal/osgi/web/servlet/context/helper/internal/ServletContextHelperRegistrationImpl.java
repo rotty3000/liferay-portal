@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextHelperRegistration;
+import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextWrapper;
 import com.liferay.portal.osgi.web.servlet.jsp.compiler.JspServlet;
 
 import java.io.IOException;
@@ -125,7 +126,7 @@ public class ServletContextHelperRegistrationImpl
 	}
 
 	@Override
-	public ServletContext getServletContext() {
+	public ServletContextWrapper getServletContext() {
 		return _customServletContextHelper.getServletContext();
 	}
 
@@ -262,7 +263,10 @@ public class ServletContextHelperRegistrationImpl
 			new String[] {"*.jsp", "*.jspx"});
 
 		return bundleContext.registerService(
-			Servlet.class, new JspServletWrapper(), properties);
+			Servlet.class,
+			new JspServletWrapper(
+				_customServletContextHelper.getServletContext()),
+			properties);
 	}
 
 	protected ServiceRegistration<Servlet> createPortletServlet(
@@ -406,6 +410,10 @@ public class ServletContextHelperRegistrationImpl
 
 	private static class JspServletWrapper extends HttpServlet {
 
+		public JspServletWrapper(ServletContext servletContext) {
+			_servletContext = servletContext;
+		}
+
 		@Override
 		public void destroy() {
 			_servlet.destroy();
@@ -417,8 +425,37 @@ public class ServletContextHelperRegistrationImpl
 		}
 
 		@Override
-		public void init(ServletConfig servletConfig) throws ServletException {
-			_servlet.init(servletConfig);
+		public void init(final ServletConfig servletConfig)
+			throws ServletException {
+
+			ServletConfig wrappedServletConfig = new ServletConfig() {
+
+				@Override
+				public String getServletName() {
+					return servletConfig.getServletName();
+				}
+
+				@Override
+				public ServletContext getServletContext() {
+					if (_servletContext != null) {
+						return _servletContext;
+					}
+
+					return servletConfig.getServletContext();
+				}
+
+				@Override
+				public Enumeration<String> getInitParameterNames() {
+					return servletConfig.getInitParameterNames();
+				}
+
+				@Override
+				public String getInitParameter(String name) {
+					return servletConfig.getInitParameter(name);
+				}
+
+			};
+			_servlet.init(wrappedServletConfig);
 		}
 
 		@Override
@@ -430,6 +467,7 @@ public class ServletContextHelperRegistrationImpl
 		}
 
 		private final Servlet _servlet = new JspServlet();
+		private final ServletContext _servletContext;
 
 	}
 

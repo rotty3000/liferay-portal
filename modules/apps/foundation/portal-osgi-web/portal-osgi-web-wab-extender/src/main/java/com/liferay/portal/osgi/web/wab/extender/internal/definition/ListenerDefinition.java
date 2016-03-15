@@ -14,21 +14,19 @@
 
 package com.liferay.portal.osgi.web.wab.extender.internal.definition;
 
-import java.util.EventListener;
-
 /**
  * @author Raymond Augé
  */
 public class ListenerDefinition {
 
-	public EventListener getEventListener() {
-		return _eventListener;
+	public String getClassName() {
+		return _className;
 	}
 
-	public void setEventListener(EventListener eventListener) {
-		_eventListener = eventListener;
+	public void setClassName(String className) {
+		_className = className;
 	}
 
-	private EventListener _eventListener;
+	private String _className;
 
 }

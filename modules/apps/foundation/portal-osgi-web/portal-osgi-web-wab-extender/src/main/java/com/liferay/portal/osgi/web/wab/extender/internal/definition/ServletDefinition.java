@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.Servlet;
-
 /**
  * @author Raymond Augé
  */
@@ -30,8 +28,8 @@ public class ServletDefinition {
 		_urlPatterns.add(urlPattern);
 	}
 
-	public List<String> getErrorPages() {
-		return _errorPages;
+	public String getClassName() {
+		return _className;
 	}
 
 	public Map<String, String> getInitParameters() {
@@ -46,10 +44,6 @@ public class ServletDefinition {
 		return _name;
 	}
 
-	public Servlet getServlet() {
-		return _servlet;
-	}
-
 	public List<String> getURLPatterns() {
 		return _urlPatterns;
 	}
@@ -62,8 +56,8 @@ public class ServletDefinition {
 		_asyncSupported = asyncSupported;
 	}
 
-	public void setErrorPages(List<String> errorPages) {
-		_errorPages.addAll(errorPages);
+	public void setClassName(String className) {
+		_className = className;
 	}
 
 	public void setInitParameter(String name, String value) {
@@ -82,20 +76,15 @@ public class ServletDefinition {
 		_name = name;
 	}
 
-	public void setServlet(Servlet servlet) {
-		_servlet = servlet;
-	}
-
 	public void setURLPatterns(List<String> urlPatterns) {
 		_urlPatterns = urlPatterns;
 	}
 
 	private boolean _asyncSupported;
-	private final List<String> _errorPages = new ArrayList<>();
+	private String _className;
 	private Map<String, String> _initParameters = new HashMap<>();
 	private String _jspFile;
 	private String _name;
-	private Servlet _servlet;
 	private List<String> _urlPatterns = new ArrayList<>();
 
 }

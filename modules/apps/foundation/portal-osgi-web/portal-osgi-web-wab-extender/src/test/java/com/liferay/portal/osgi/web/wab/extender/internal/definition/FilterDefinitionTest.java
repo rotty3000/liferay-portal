@@ -75,10 +75,12 @@ public class FilterDefinitionTest {
 	}
 
 	@Test
-	public void testSetFilter() {
-		_filterDefinition.setFilter(_filter);
+	public void testSetFilterClassName() {
+		Class<?> filterClass = _filter.getClass();
+		_filterDefinition.setClassName(filterClass.getName());
 
-		Assert.assertEquals(_filter, _filterDefinition.getFilter());
+		Assert.assertEquals(
+			filterClass.getName(), _filterDefinition.getClassName());
 	}
 
 	@Test

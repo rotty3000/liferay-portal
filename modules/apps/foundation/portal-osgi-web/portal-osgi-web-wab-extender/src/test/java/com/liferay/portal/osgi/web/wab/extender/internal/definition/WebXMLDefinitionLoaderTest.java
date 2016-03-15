@@ -16,7 +16,6 @@ package com.liferay.portal.osgi.web.wab.extender.internal.definition;
 
 import java.net.URL;
 
-import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
 
@@ -78,9 +77,12 @@ public class WebXMLDefinitionLoaderTest {
 		Assert.assertEquals(numfOfListeners, listenerDefinitions.size());
 
 		for (ListenerDefinition listenerDefinition : listenerDefinitions) {
-			EventListener eventListener = listenerDefinition.getEventListener();
+			String listenerClassName = listenerDefinition.getClassName();
 
-			Assert.assertTrue(eventListener instanceof ServletContextListener);
+			Assert.assertEquals(
+				"com.liferay.portal.osgi.web.wab.extender.internal.definition" +
+					".MockServletContextListener",
+				listenerClassName);
 		}
 
 		Map<String, ServletDefinition> servletDefinitions =

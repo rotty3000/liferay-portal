@@ -15,7 +15,6 @@
 package com.liferay.portal.osgi.web.wab.extender.internal.definition;
 
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.osgi.web.wab.extender.internal.WabBundleProcessor;
 
 import java.io.InputStream;
 
@@ -23,14 +22,10 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import javax.servlet.Filter;
-import javax.servlet.Servlet;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -99,7 +94,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			_filterMapping.dispatchers.add(dispatcher);
 		}
 		else if (qName.equals("filter")) {
-			if (_filterDefinition.getFilter() != null) {
+			if (_filterDefinition.getClassName() != null) {
 				_webXMLDefinition.setFilterDefinition(
 					_filterDefinition.getName(), _filterDefinition);
 			}
@@ -109,9 +104,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 		else if (qName.equals("filter-class")) {
 			String filterClassName = String.valueOf(_stack.pop());
 
-			Filter filter = _getFilterInstance(filterClassName.trim());
-
-			_filterDefinition.setFilter(filter);
+			_filterDefinition.setClassName(filterClassName);
 		}
 		else if (qName.equals("filter-mapping")) {
 			Map<String, FilterDefinition> filterDefinitions =
@@ -167,12 +160,9 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			String jspFile = String.valueOf(_stack.pop());
 
 			_servletDefinition.setJSPFile(jspFile);
-
-			_servletDefinition.setServlet(
-				new WabBundleProcessor.JspServletWrapper(jspFile));
 		}
 		else if (qName.equals("listener")) {
-			if (_listenerDefinition.getEventListener() != null) {
+			if (_listenerDefinition.getClassName() != null) {
 				_webXMLDefinition.addListenerDefinition(_listenerDefinition);
 			}
 
@@ -181,10 +171,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 		else if (qName.equals("listener-class")) {
 			String listenerClassName = String.valueOf(_stack.pop());
 
-			EventListener eventListener = _getListenerInstance(
-				listenerClassName);
-
-			_listenerDefinition.setEventListener(eventListener);
+			_listenerDefinition.setClassName(listenerClassName);
 		}
 		else if (qName.equals("param-name")) {
 			_paramName = String.valueOf(_stack.pop());
@@ -195,17 +182,17 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			_paramValue = _paramValue.trim();
 		}
 		else if (qName.equals("servlet")) {
-			_webXMLDefinition.setServletDefinition(
-				_servletDefinition.getName(), _servletDefinition);
+			if (_servletDefinition.getClassName() != null) {
+				_webXMLDefinition.setServletDefinition(
+					_servletDefinition.getName(), _servletDefinition);
+			}
 
 			_servletDefinition = null;
 		}
 		else if (qName.equals("servlet-class")) {
 			String servletClassName = String.valueOf(_stack.pop());
 
-			Servlet servlet = _getServletInstance(servletClassName.trim());
-
-			_servletDefinition.setServlet(servlet);
+			_servletDefinition.setClassName(servletClassName);
 		}
 		else if (qName.equals("servlet-mapping")) {
 			Map<String, ServletDefinition> servletDefinitions =
@@ -321,62 +308,6 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 		}
 		else if (Arrays.binarySearch(_LEAVES, qName) > -1) {
 			_stack.push(new StringBuilder());
-		}
-	}
-
-	private Filter _getFilterInstance(String filterClassName) {
-		try {
-			Class<?> clazz = _bundle.loadClass(filterClassName);
-
-			Class<? extends Filter> filterClass = clazz.asSubclass(
-				Filter.class);
-
-			return filterClass.newInstance();
-		}
-		catch (Exception e) {
-			_logger.log(
-				Logger.LOG_ERROR,
-				"Bundle " + _bundle + " is unable to load filter " +
-					filterClassName);
-
-			return null;
-		}
-	}
-
-	private EventListener _getListenerInstance(String listenerClassName) {
-		try {
-			Class<?> clazz = _bundle.loadClass(listenerClassName);
-
-			Class<? extends EventListener> eventListenerClass =
-				clazz.asSubclass(EventListener.class);
-
-			return eventListenerClass.newInstance();
-		}
-		catch (Exception e) {
-			_logger.log(
-				Logger.LOG_ERROR,
-				"Bundle " + _bundle + " is unable to load listener " +
-					listenerClassName);
-
-			return null;
-		}
-	}
-
-	private Servlet _getServletInstance(String servletClassName) {
-		try {
-			Class<?> clazz = _bundle.loadClass(servletClassName);
-
-			Class<? extends Servlet> servletClass = clazz.asSubclass(
-				Servlet.class);
-
-			return servletClass.newInstance();
-		}
-		catch (Exception e) {
-			_logger.log(
-				Logger.LOG_ERROR,
-				_bundle + " unable to load servlet " + servletClassName, e);
-
-			return null;
 		}
 	}
 

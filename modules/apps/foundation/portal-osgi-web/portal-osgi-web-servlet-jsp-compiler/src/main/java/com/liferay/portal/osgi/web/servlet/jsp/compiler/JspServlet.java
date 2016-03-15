@@ -37,34 +37,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestAttributeListener;
-import javax.servlet.ServletRequestListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionListener;
 import javax.servlet.jsp.JspFactory;
 
 import org.apache.jasper.runtime.JspFactoryImpl;
@@ -73,10 +64,8 @@ import org.apache.jasper.xmlparser.ParserUtils;
 import org.apache.jasper.xmlparser.TreeNode;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
@@ -92,14 +81,6 @@ public class JspServlet extends HttpServlet {
 	@Override
 	public void destroy() {
 		_jspServlet.destroy();
-
-		for (ServiceRegistration<?> serviceRegistration :
-				_serviceRegistrations) {
-
-			serviceRegistration.unregister();
-		}
-
-		_serviceRegistrations.clear();
 	}
 
 	@Override
@@ -334,31 +315,9 @@ public class JspServlet extends HttpServlet {
 	}
 
 	protected void addListener(
-		String listenerClassName, BundleContext bundleContext,
-		ServletContext servletContext) {
+		String listenerClassName, ServletContext servletContext) {
 
-		try {
-			Class<?> clazz = _bundle.loadClass(listenerClassName);
-
-			String[] classNames = getListenerClassNames(clazz);
-
-			Dictionary<String, Object> properties = new Hashtable<>();
-
-			properties.put(
-				"osgi.http.whiteboard.context.select",
-				servletContext.getServletContextName());
-			properties.put(
-				"osgi.http.whiteboard.listener", Boolean.TRUE.toString());
-
-			ServiceRegistration<?> serviceRegistration =
-				bundleContext.registerService(
-					classNames, clazz.newInstance(), properties);
-
-			_serviceRegistrations.add(serviceRegistration);
-		}
-		catch (Exception e) {
-			log("Unable to create listener " + listenerClassName, e);
-		}
+		servletContext.addListener(listenerClassName);
 	}
 
 	protected void collectTaglibProviderBundles(List<Bundle> bundles) {
@@ -383,42 +342,6 @@ public class JspServlet extends HttpServlet {
 				}
 			}
 		}
-	}
-
-	protected String[] getListenerClassNames(Class<?> clazz) {
-		List<String> classNames = new ArrayList<>();
-
-		if (ServletContextListener.class.isAssignableFrom(clazz)) {
-			classNames.add(ServletContextListener.class.getName());
-		}
-
-		if (ServletContextAttributeListener.class.isAssignableFrom(clazz)) {
-			classNames.add(ServletContextAttributeListener.class.getName());
-		}
-
-		if (ServletRequestListener.class.isAssignableFrom(clazz)) {
-			classNames.add(ServletRequestListener.class.getName());
-		}
-
-		if (ServletRequestAttributeListener.class.isAssignableFrom(clazz)) {
-			classNames.add(ServletRequestAttributeListener.class.getName());
-		}
-
-		if (HttpSessionListener.class.isAssignableFrom(clazz)) {
-			classNames.add(HttpSessionListener.class.getName());
-		}
-
-		if (HttpSessionAttributeListener.class.isAssignableFrom(clazz)) {
-			classNames.add(HttpSessionAttributeListener.class.getName());
-		}
-
-		if (classNames.isEmpty()) {
-			throw new IllegalArgumentException(
-				clazz.getName() + " does not implement one of the supported " +
-					"servlet listener interfaces");
-		}
-
-		return classNames.toArray(new String[classNames.size()]);
 	}
 
 	protected void scanTLDs(ServletContext servletContext) {
@@ -471,9 +394,7 @@ public class JspServlet extends HttpServlet {
 						continue;
 					}
 
-					addListener(
-						listenerClassName, _bundle.getBundleContext(),
-						servletContext);
+					addListener(listenerClassName, servletContext);
 				}
 			}
 			catch (Exception e) {
@@ -501,8 +422,6 @@ public class JspServlet extends HttpServlet {
 	private JspBundleClassloader _jspBundleClassloader;
 	private final HttpServlet _jspServlet =
 		new org.apache.jasper.servlet.JspServlet();
-	private final List<ServiceRegistration<?>> _serviceRegistrations =
-		new CopyOnWriteArrayList<>();
 
 	private class JspServletContextInvocationHandler
 		implements InvocationHandler {

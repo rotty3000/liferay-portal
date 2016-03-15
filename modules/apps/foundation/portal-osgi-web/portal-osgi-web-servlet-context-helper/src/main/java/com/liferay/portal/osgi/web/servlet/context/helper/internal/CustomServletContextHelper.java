@@ -17,6 +17,7 @@ package com.liferay.portal.osgi.web.servlet.context.helper.internal;
 import com.liferay.osgi.util.BundleUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextWrapper;
 
 import java.io.IOException;
 
@@ -57,7 +58,8 @@ public class CustomServletContextHelper
 
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		_servletContext = servletContextEvent.getServletContext();
+		_servletContext = new ServletContextWrapper(
+			_bundle, servletContextEvent.getServletContext());
 	}
 
 	@Override
@@ -94,7 +96,7 @@ public class CustomServletContextHelper
 		return url;
 	}
 
-	public ServletContext getServletContext() {
+	public ServletContextWrapper getServletContext() {
 		return _servletContext;
 	}
 
@@ -150,7 +152,7 @@ public class CustomServletContextHelper
 	}
 
 	private final Bundle _bundle;
-	private ServletContext _servletContext;
+	private ServletContextWrapper _servletContext;
 	private final String _string;
 	private final boolean _wabShapedBundle;
 

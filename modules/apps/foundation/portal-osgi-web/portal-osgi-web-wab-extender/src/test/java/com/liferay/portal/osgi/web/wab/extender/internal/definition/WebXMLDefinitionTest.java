@@ -14,7 +14,6 @@
 
 package com.liferay.portal.osgi.web.wab.extender.internal.definition;
 
-import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +84,7 @@ public class WebXMLDefinitionTest {
 		for (int i = 0; i < count; i++) {
 			ListenerDefinition listenerDefinition = new ListenerDefinition();
 
-			listenerDefinition.setEventListener(new EventListener() {});
+			listenerDefinition.setClassName("test." + i);
 
 			_webXmlDefinition.addListenerDefinition(listenerDefinition);
 		}

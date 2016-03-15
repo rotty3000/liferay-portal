@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.Filter;
-
 /**
  * @author Raymond Augé
  */
@@ -38,12 +36,12 @@ public class FilterDefinition {
 		_urlPatterns.add(urlPattern);
 	}
 
-	public List<String> getDispatchers() {
-		return _dispatchers;
+	public String getClassName() {
+		return _className;
 	}
 
-	public Filter getFilter() {
-		return _filter;
+	public List<String> getDispatchers() {
+		return _dispatchers;
 	}
 
 	public Map<String, String> getInitParameters() {
@@ -52,10 +50,6 @@ public class FilterDefinition {
 
 	public String getName() {
 		return _name;
-	}
-
-	public int getPriority() {
-		return _priority;
 	}
 
 	public List<String> getServletNames() {
@@ -74,12 +68,12 @@ public class FilterDefinition {
 		_asyncSupported = asyncSupported;
 	}
 
-	public void setDispatchers(List<String> dispatchers) {
-		_dispatchers.addAll(dispatchers);
+	public void setClassName(String className) {
+		_className = className;
 	}
 
-	public void setFilter(Filter filter) {
-		_filter = filter;
+	public void setDispatchers(List<String> dispatchers) {
+		_dispatchers.addAll(dispatchers);
 	}
 
 	public void setInitParameter(String key, String value) {
@@ -94,10 +88,6 @@ public class FilterDefinition {
 		_name = name;
 	}
 
-	public void setPriority(int priority) {
-		_priority = priority;
-	}
-
 	public void setServletNames(List<String> servletNames) {
 		_servletNames.addAll(servletNames);
 	}
@@ -107,11 +97,10 @@ public class FilterDefinition {
 	}
 
 	private boolean _asyncSupported;
+	private String _className;
 	private final List<String> _dispatchers = new ArrayList<>();
-	private Filter _filter;
 	private final Map<String, String> _initParameters = new HashMap<>();
 	private String _name;
-	private int _priority;
 	private final List<String> _servletNames = new ArrayList<>();
 	private final List<String> _urlPatterns = new ArrayList<>();
 

@@ -97,10 +97,13 @@ public class ServletDefinitionTest {
 	}
 
 	@Test
-	public void testSetServlet() {
-		_servletDefinition.setServlet(_servlet);
+	public void testSetServletClassName() {
+		Class<?> servletClass = _servlet.getClass();
 
-		Assert.assertEquals(_servlet, _servletDefinition.getServlet());
+		_servletDefinition.setClassName(servletClass.getName());
+
+		Assert.assertEquals(
+			servletClass.getName(), _servletDefinition.getClassName());
 	}
 
 	@Test

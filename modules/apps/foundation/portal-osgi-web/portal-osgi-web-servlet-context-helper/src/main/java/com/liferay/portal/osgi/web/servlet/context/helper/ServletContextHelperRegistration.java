@@ -16,7 +16,6 @@ package com.liferay.portal.osgi.web.servlet.context.helper;
 
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 
 import org.osgi.framework.ServiceReference;
@@ -29,7 +28,7 @@ public interface ServletContextHelperRegistration {
 
 	public void close();
 
-	public ServletContext getServletContext();
+	public ServletContextWrapper getServletContext();
 
 	public ServiceReference<ServletContextHelper>
 		getServletContextHelperSeviceReference();
