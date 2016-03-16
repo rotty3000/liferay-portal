@@ -29,6 +29,7 @@ import com.liferay.registry.collections.StringServiceRegistrationMapImpl;
 import com.liferay.registry.util.StringPlus;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -151,13 +152,13 @@ public abstract class BaseAuthTokenWhitelist implements AuthTokenWhitelist {
 	}
 
 	protected void destroy() {
-		for (ServiceRegistration<Object> serviceRegistration :
+		for (ServiceRegistration<?> serviceRegistration :
 				serviceRegistrations.values()) {
 
 			serviceRegistration.unregister();
 		}
 
-		for (ServiceTracker<Object, Object> serviceTracker : serviceTrackers) {
+		for (ServiceTracker<?, ?> serviceTracker : serviceTrackers) {
 			serviceTracker.close();
 		}
 	}
@@ -177,14 +178,15 @@ public abstract class BaseAuthTokenWhitelist implements AuthTokenWhitelist {
 		serviceRegistrations.put(StringUtil.merge(values), serviceRegistration);
 	}
 
-	protected ServiceTracker<Object, Object> trackWhitelistServices(
+	protected ServiceTracker<Object, Collection<String>> trackWhitelistServices(
 		String whitelistName, Set<String> whiteList) {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		ServiceTracker<Object, Object> serviceTracker = registry.trackServices(
-			registry.getFilter("(" + whitelistName + "=*)"),
-			new TokenWhitelistTrackerCustomizer(whitelistName, whiteList));
+		ServiceTracker<Object, Collection<String>>
+			serviceTracker = registry.trackServices(
+				registry.getFilter("(" + whitelistName + "=*)"),
+				new TokenWhitelistTrackerCustomizer(whitelistName, whiteList));
 
 		serviceTracker.open();
 
@@ -195,11 +197,11 @@ public abstract class BaseAuthTokenWhitelist implements AuthTokenWhitelist {
 
 	protected final StringServiceRegistrationMap<Object> serviceRegistrations =
 		new StringServiceRegistrationMapImpl<>();
-	protected final List<ServiceTracker<Object, Object>> serviceTrackers =
-		new ArrayList<>();
+	protected final List<ServiceTracker<Object, Collection<String>>>
+		serviceTrackers = new ArrayList<>();
 
 	private static class TokenWhitelistTrackerCustomizer
-		implements ServiceTrackerCustomizer<Object, Object> {
+		implements ServiceTrackerCustomizer<Object, Collection<String>> {
 
 		public TokenWhitelistTrackerCustomizer(
 			String whitelistName, Set<String> whitelist) {
@@ -209,32 +211,31 @@ public abstract class BaseAuthTokenWhitelist implements AuthTokenWhitelist {
 		}
 
 		@Override
-		public Object addingService(ServiceReference<Object> serviceReference) {
+		public Collection<String> addingService(
+			ServiceReference<Object> serviceReference) {
+
 			List<String> authTokenIgnoreActions = StringPlus.asList(
 				serviceReference.getProperty(_whitelistName));
 
 			_whitelist.addAll(authTokenIgnoreActions);
 
-			Registry registry = RegistryUtil.getRegistry();
-
-			return registry.getService(serviceReference);
+			return authTokenIgnoreActions;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<Object> serviceReference, Object object) {
+			ServiceReference<Object> serviceReference,
+			Collection<String> strings) {
 
-			removedService(serviceReference, object);
+			removedService(serviceReference, strings);
 
 			addingService(serviceReference);
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<Object> serviceReference, Object object) {
-
-			List<String> authTokenIgnoreActions = StringPlus.asList(
-				serviceReference.getProperty(_whitelistName));
+			ServiceReference<Object> serviceReference,
+			Collection<String> authTokenIgnoreActions) {
 
 			_whitelist.removeAll(authTokenIgnoreActions);
 		}

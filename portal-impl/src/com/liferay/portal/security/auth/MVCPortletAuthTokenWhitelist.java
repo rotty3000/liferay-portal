@@ -37,6 +37,8 @@ import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
 import com.liferay.registry.util.StringPlus;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -213,11 +215,12 @@ public class MVCPortletAuthTokenWhitelist extends BaseAuthTokenWhitelist {
 
 		Registry registry = RegistryUtil.getRegistry();
 
-		ServiceTracker<Object, Object> serviceTracker = registry.trackServices(
-			registry.getFilter(
-				"(&(&(" + whitelistName + "=*)(javax.portlet.name=*))" +
-					"(objectClass=" + serviceClass.getName() + "))"),
-			new TokenWhitelistTrackerCustomizer(whiteList));
+		ServiceTracker<Object, Collection<String>> serviceTracker =
+			registry.trackServices(
+				registry.getFilter(
+					"(&(&(" + whitelistName + "=*)(javax.portlet.name=*))" +
+						"(objectClass=" + serviceClass.getName() + "))"),
+				new TokenWhitelistTrackerCustomizer(whiteList));
 
 		serviceTracker.open();
 
@@ -263,57 +266,52 @@ public class MVCPortletAuthTokenWhitelist extends BaseAuthTokenWhitelist {
 		new ConcurrentHashSet<>();
 
 	private class TokenWhitelistTrackerCustomizer
-		implements ServiceTrackerCustomizer<Object, Object> {
+		implements ServiceTrackerCustomizer<Object, Collection<String>> {
 
 		public TokenWhitelistTrackerCustomizer(Set<String> whitelist) {
 			_whitelist = whitelist;
 		}
 
 		@Override
-		public Object addingService(ServiceReference<Object> serviceReference) {
+		public Collection<String> addingService(
+			ServiceReference<Object> serviceReference) {
+
 			List<String> whitelistActions = StringPlus.asList(
 				serviceReference.getProperty("mvc.command.name"));
 
 			List<String> portletNames = StringPlus.asList(
 				serviceReference.getProperty("javax.portlet.name"));
 
+			Collection<String> whitelistValues = new ArrayList<>();
+
 			for (String portletName : portletNames) {
 				for (String whitelistAction : whitelistActions) {
-					_whitelist.add(
+					whitelistValues.add(
 						getWhitelistValue(portletName, whitelistAction));
 				}
 			}
 
-			Registry registry = RegistryUtil.getRegistry();
+			_whitelist.addAll(whitelistValues);
 
-			return registry.getService(serviceReference);
+			return whitelistValues;
 		}
 
 		@Override
 		public void modifiedService(
-			ServiceReference<Object> serviceReference, Object object) {
+			ServiceReference<Object> serviceReference,
+			Collection<String> whitelistValues) {
 
-			removedService(serviceReference, object);
+			removedService(serviceReference, whitelistValues);
 
 			addingService(serviceReference);
 		}
 
 		@Override
 		public void removedService(
-			ServiceReference<Object> serviceReference, Object object) {
+			ServiceReference<Object> serviceReference,
+			Collection<String> whitelistValues) {
 
-			List<String> whitelistActions = StringPlus.asList(
-				serviceReference.getProperty("mvc.command.name"));
-
-			List<String> portletNames = StringPlus.asList(
-				serviceReference.getProperty("javax.portlet.name"));
-
-			for (String portletName : portletNames) {
-				for (String whitelistAction : whitelistActions) {
-					_whitelist.remove(
-						getWhitelistValue(portletName, whitelistAction));
-				}
-			}
+			_whitelist.removeAll(whitelistValues);
 		}
 
 		private final Set<String> _whitelist;
