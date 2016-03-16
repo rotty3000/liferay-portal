@@ -12,23 +12,25 @@
  * details.
  */
 
-package com.liferay.portal.osgi.web.servlet.context.helper;
+package com.liferay.portal.osgi.web.wab.extender.internal.adapter;
 
-import java.util.Map;
+import com.liferay.portal.osgi.web.wab.extender.internal.definition.ListenerDefinition;
 
-import javax.servlet.ServletContext;
+import java.util.List;
+
+import org.osgi.framework.Bundle;
 
 /**
  * @author Raymond Augé
  */
-public interface ServletContextHelperRegistration {
+public interface ModifiableServletContext {
 
-	public void close();
+	public Bundle getBundle();
 
-	public ServletContext getServletContext();
+	public List<ListenerDefinition> getListenerDefinitions();
 
-	public boolean isWabShapedBundle();
+	public void registerFilters();
 
-	public void setProperties(Map<String, String> contextParameters);
+	public void registerServlets();
 
 }
