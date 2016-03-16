@@ -50,8 +50,6 @@ public class PortalLifecycleUtil {
 				portalLifecycle.portalInit();
 			}
 		}
-
-		PortalInitableUtil.flushInitables();
 	}
 
 	public static void register(PortalLifecycle portalLifecycle) {
