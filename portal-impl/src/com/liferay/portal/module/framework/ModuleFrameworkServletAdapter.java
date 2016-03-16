@@ -15,11 +15,12 @@
 package com.liferay.portal.module.framework;
 
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.registry.collections.ServiceTrackerCollections;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
-
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +33,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ModuleFrameworkServletAdapter extends HttpServlet {
 
+	public ModuleFrameworkServletAdapter() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		Filter filter = registry.getFilter(
+			"(&(bean.id=" + HttpServlet.class.getName() + ")(objectClass=" +
+				HttpServlet.class.getName() + ")(original.bean=*))");
+
+		_serviceTracker = registry.trackServices(filter);
+
+		_serviceTracker.open();
+	}
+
 	@Override
 	protected void service(
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
-		if (_servlets.isEmpty()) {
+		if (_serviceTracker.isEmpty()) {
 			PortalUtil.sendError(
 				HttpServletResponse.SC_SERVICE_UNAVAILABLE,
 				new ServletException("Module framework is unavailable"),
@@ -46,15 +59,11 @@ public class ModuleFrameworkServletAdapter extends HttpServlet {
 			return;
 		}
 
-		HttpServlet httpServlet = _servlets.get(0);
+		HttpServlet httpServlet = _serviceTracker.getService();
 
 		httpServlet.service(request, response);
 	}
 
-	private final List<HttpServlet> _servlets =
-		ServiceTrackerCollections.openList(
-			HttpServlet.class,
-			"(&(bean.id=" + HttpServlet.class.getName() +
-				")(original.bean=*))");
+	private final ServiceTracker<HttpServlet, HttpServlet> _serviceTracker;
 
 }

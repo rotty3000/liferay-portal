@@ -214,6 +214,8 @@ import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
 import com.liferay.registry.ServiceTracker;
 import com.liferay.registry.ServiceTrackerCustomizer;
+import com.liferay.registry.collections.ServiceTrackerCollections;
+import com.liferay.registry.collections.ServiceTrackerList;
 import com.liferay.sites.kernel.util.Sites;
 import com.liferay.sites.kernel.util.SitesUtil;
 import com.liferay.social.kernel.model.SocialRelationConstants;
@@ -257,7 +259,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
@@ -534,16 +535,6 @@ public class PortalImpl implements Portal {
 					new AlwaysAllowDoAsUserServiceTrackerCustomizer());
 
 			alwaysAllowDoAsUserServiceTracker.open();
-
-			ServiceTracker
-				<PortalInetSocketAddressEventListener,
-					PortalInetSocketAddressEventListener>
-						portalInetSocketAddressEventListenerServiceTracker =
-							registry.trackServices(
-								PortalInetSocketAddressEventListener.class,
-								new PortalInetSocketAddressEventListenerServiceTrackerCustomizer());
-
-			portalInetSocketAddressEventListenerServiceTracker.open();
 		}
 		catch (NullPointerException npe) {
 		}
@@ -8108,8 +8099,10 @@ public class PortalImpl implements Portal {
 	private final String _pathProxy;
 	private final Map<String, Long> _plidToPortletIdMap =
 		new ConcurrentHashMap<>();
-	private final Set<PortalInetSocketAddressEventListener>
-		_portalInetSocketAddressEventListeners = new CopyOnWriteArraySet<>();
+	private final ServiceTrackerList<PortalInetSocketAddressEventListener>
+		_portalInetSocketAddressEventListeners =
+			ServiceTrackerCollections.openList(
+				PortalInetSocketAddressEventListener.class);
 	private final AtomicReference<InetSocketAddress>
 		_portalLocalInetSocketAddress = new AtomicReference<>();
 
@@ -8208,53 +8201,6 @@ public class PortalImpl implements Portal {
 					"There are " + _alwaysAllowDoAsUsers.size() +
 						" alway sallow do as user instances");
 			}
-		}
-
-	}
-
-	private class PortalInetSocketAddressEventListenerServiceTrackerCustomizer
-		implements ServiceTrackerCustomizer
-			<PortalInetSocketAddressEventListener,
-				PortalInetSocketAddressEventListener> {
-
-		@Override
-		public PortalInetSocketAddressEventListener addingService(
-			ServiceReference<PortalInetSocketAddressEventListener>
-				serviceReference) {
-
-			Registry registry = RegistryUtil.getRegistry();
-
-			PortalInetSocketAddressEventListener
-				portalInetSocketAddressEventListener = registry.getService(
-					serviceReference);
-
-			addPortalInetSocketAddressEventListener(
-				portalInetSocketAddressEventListener);
-
-			return portalInetSocketAddressEventListener;
-		}
-
-		@Override
-		public void modifiedService(
-			ServiceReference<PortalInetSocketAddressEventListener>
-				serviceReference,
-			PortalInetSocketAddressEventListener
-				portalInetSocketAddressEventListener) {
-		}
-
-		@Override
-		public void removedService(
-			ServiceReference<PortalInetSocketAddressEventListener>
-				serviceReference,
-			PortalInetSocketAddressEventListener
-				portalInetSocketAddressEventListener) {
-
-			Registry registry = RegistryUtil.getRegistry();
-
-			registry.ungetService(serviceReference);
-
-			removePortalInetSocketAddressEventListener(
-				portalInetSocketAddressEventListener);
 		}
 
 	}

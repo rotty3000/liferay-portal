@@ -22,12 +22,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.InstancePool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.registry.collections.ServiceTrackerCollections;
+import com.liferay.registry.collections.ServiceTrackerMap;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,18 +92,11 @@ public class EventsProcessorUtil {
 	}
 
 	protected Collection<LifecycleAction> _getLifecycleActions(String key) {
-		Collection<LifecycleAction> lifecycleActions = _lifecycleActions.get(
+		List<LifecycleAction> lifecycleActions = _lifecycleActions.getService(
 			key);
 
 		if (lifecycleActions == null) {
-			Map<String, Object> properties = new HashMap<>();
-
-			properties.put("key", key);
-
-			lifecycleActions = ServiceTrackerCollections.openList(
-				LifecycleAction.class, "(key=" + key + ")", properties);
-
-			_lifecycleActions.putIfAbsent(key, lifecycleActions);
+			lifecycleActions = Collections.emptyList();
 		}
 
 		return lifecycleActions;
@@ -167,7 +159,8 @@ public class EventsProcessorUtil {
 	private static final EventsProcessorUtil _instance =
 		new EventsProcessorUtil();
 
-	private final ConcurrentMap<String, Collection<LifecycleAction>>
-		_lifecycleActions = new ConcurrentHashMap<>();
+	private final ServiceTrackerMap<String, List<LifecycleAction>>
+		_lifecycleActions = ServiceTrackerCollections.openMultiValueMap(
+			LifecycleAction.class, "key");
 
 }
