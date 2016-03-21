@@ -162,7 +162,7 @@ public class ExtHotDeployListener extends BaseHotDeployListener {
 			return;
 		}
 
-		installExt(servletContext);
+		installExt(servletContext, hotDeployEvent.getContextClassLoader());
 
 		FileAvailabilityUtil.clearAvailabilities();
 
@@ -200,14 +200,16 @@ public class ExtHotDeployListener extends BaseHotDeployListener {
 		}
 	}
 
-	protected void installExt(ServletContext servletContext) throws Exception {
+	protected void installExt(
+			ServletContext servletContext, ClassLoader portletClassLoader)
+		throws Exception {
+
 		String servletContextName = servletContext.getServletContextName();
 
 		String globalLibDir = PortalUtil.getGlobalLibDir();
 		String portalWebDir = PortalUtil.getPortalWebDir();
 		String portalLibDir = PortalUtil.getPortalLibDir();
-		String pluginWebDir = WebDirDetector.getRootDir(
-			servletContext.getClassLoader());
+		String pluginWebDir = WebDirDetector.getRootDir(portletClassLoader);
 
 		copyJar(servletContext, globalLibDir, "ext-service");
 		copyJar(servletContext, portalLibDir, "ext-impl");
