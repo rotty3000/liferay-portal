@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1458514113418
+Bnd-LastModified: 1458578753189
 Bundle-ManifestVersion: 2
 Bundle-Name: portal-bootstrap
 Bundle-SymbolicName: portal-bootstrap
 Bundle-Vendor: Liferay, Inc.
 Bundle-Version: 1.0.0
-Created-By: 1.7.0_71 (Oracle Corporation)
+Created-By: 1.7.0_95 (Oracle Corporation)
 Export-Package: com.liferay.ibm.icu;version="4.0.1",com.liferay.ibm.ic
  u.impl;version="4.0.1";uses:="com.liferay.ibm.icu.math,com.liferay.ib
  m.icu.text,com.liferay.ibm.icu.util",com.liferay.ibm.icu.impl.coll;ve
@@ -2526,7 +2526,7 @@ Export-Package: com.liferay.ibm.icu;version="4.0.1",com.liferay.ibm.ic
  portal.deploy.auto;uses:="com.liferay.portal.kernel.deploy.auto,com.l
  iferay.portal.kernel.deploy.auto.context,com.liferay.portal.kernel.pl
  ugin,com.liferay.portal.tools.deploy";version="1.0.0",com.liferay.por
- tal.deploy.hot;version="1.0.2";uses:="com.liferay.portal.kernel.confi
+ tal.deploy.hot;version="1.1.0";uses:="com.liferay.portal.kernel.confi
  guration,com.liferay.portal.kernel.deploy.hot,com.liferay.portal.kern
  el.model,com.liferay.portal.kernel.plugin,com.liferay.portal.kernel.s
  ecurity.pacl,com.liferay.portal.kernel.service,com.liferay.portal.ker
@@ -2686,7 +2686,7 @@ Export-Package: com.liferay.ibm.icu;version="4.0.1",com.liferay.ibm.ic
  deploy.auto;version="7.0.0";uses:="com.liferay.portal.kernel.deploy.a
  uto.context,com.liferay.portal.kernel.exception",com.liferay.portal.k
  ernel.deploy.auto.context;version="6.3.0";uses:="com.liferay.portal.k
- ernel.plugin",com.liferay.portal.kernel.deploy.hot;version="7.0.0";us
+ ernel.plugin",com.liferay.portal.kernel.deploy.hot;version="7.1.0";us
  es:="com.liferay.portal.kernel.exception,com.liferay.portal.kernel.me
  ssaging,com.liferay.portal.kernel.plugin,com.liferay.portal.kernel.ut
  il,javax.servlet",com.liferay.portal.kernel.diff;version="1.0.0";uses
@@ -3057,7 +3057,7 @@ Export-Package: com.liferay.ibm.icu;version="4.0.1",com.liferay.ibm.ic
  l.kernel.exception,com.liferay.portal.kernel.model,com.liferay.portal
  .kernel.service,com.liferay.portal.kernel.service.persistence,com.lif
  eray.portal.kernel.util,javax.sql",com.liferay.portal.kernel.servlet;
- version="7.0.0";uses:="com.liferay.portal.kernel.log,com.liferay.port
+ version="7.1.0";uses:="com.liferay.portal.kernel.log,com.liferay.port
  al.kernel.util,javax.portlet,javax.servlet,javax.servlet.http",com.li
  feray.portal.kernel.servlet.filters.compoundsessionid;version="7.0.0"
  ;uses:="com.liferay.portal.kernel.servlet,javax.servlet.http",com.lif
@@ -4597,7 +4597,7 @@ Import-Package: aQute.bnd.annotation;version="[1.44,2)",aQute.bnd.anno
  spring,com.liferay.portal.dao.jdbc.util,com.liferay.portal.dao.orm.co
  mmon,com.liferay.portal.dao.orm.hibernate;version="[1.0,2)",com.lifer
  ay.portal.dao.orm.hibernate.event,com.liferay.portal.deploy,com.lifer
- ay.portal.deploy.hot;version="[1.0,2)",com.liferay.portal.fabric.agen
+ ay.portal.deploy.hot;version="[1.1,2)",com.liferay.portal.fabric.agen
  t,com.liferay.portal.fabric.agent.selectors,com.liferay.portal.fabric
  .client,com.liferay.portal.fabric.local.agent,com.liferay.portal.fabr
  ic.local.worker,com.liferay.portal.fabric.netty.codec.serialization,c
@@ -4633,7 +4633,7 @@ Import-Package: aQute.bnd.annotation;version="[1.44,2)",aQute.bnd.anno
  ray.portal.kernel.dao.search;version="[7.0,8)",com.liferay.portal.ker
  nel.deploy;version="[6.3,6.4)",com.liferay.portal.kernel.deploy.auto;
  version="[7.0,8)",com.liferay.portal.kernel.deploy.auto.context;versi
- on="[6.3,7)",com.liferay.portal.kernel.deploy.hot;version="[7.0,8)",c
+ on="[6.3,7)",com.liferay.portal.kernel.deploy.hot;version="[7.1,8)",c
  om.liferay.portal.kernel.diff;version="[1.0,2)",com.liferay.portal.ke
  rnel.display.context;version="[1.0,2)",com.liferay.portal.kernel.disp
  lay.context.util;version="[1.0,2)",com.liferay.portal.kernel.editor.c
@@ -4761,7 +4761,7 @@ Import-Package: aQute.bnd.annotation;version="[1.44,2)",aQute.bnd.anno
  .portal.kernel.service.permission;version="[1.0,1.1)",com.liferay.por
  tal.kernel.service.persistence;version="[1.0,1.1)",com.liferay.portal
  .kernel.service.persistence.impl;version="[1.0,2)",com.liferay.portal
- .kernel.servlet;version="[7.0,8)",com.liferay.portal.kernel.servlet.f
+ .kernel.servlet;version="[7.1,8)",com.liferay.portal.kernel.servlet.f
  ilters.compoundsessionid;version="[7.0,8)",com.liferay.portal.kernel.
  servlet.filters.invoker;version="[7.0,8)",com.liferay.portal.kernel.s
  ervlet.taglib;version="[7.0,8)",com.liferay.portal.kernel.servlet.tag
