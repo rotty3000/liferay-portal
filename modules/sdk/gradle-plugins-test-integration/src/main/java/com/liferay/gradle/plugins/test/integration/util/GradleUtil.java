@@ -12,26 +12,25 @@
  * details.
  */
 
-package com.liferay.journal.kernel.util;
+package com.liferay.gradle.plugins.test.integration.util;
 
-import com.liferay.portal.kernel.util.ProxyFactory;
+import java.io.File;
 
-import java.util.Locale;
+import org.gradle.api.Project;
 
 /**
- * @author Marcellus Tavares
- * @author Bruno Basto
- * @author Leonardo Barros
+ * @author Andrea Di Giorgi
  */
-public class JournalConverterManagerUtil {
+public class GradleUtil extends com.liferay.gradle.util.GradleUtil {
 
-	public static String getDDMXSD(String journalXSD, Locale defaultLocale)
-		throws Exception {
+	public static File toFile(Project project, Object object) {
+		object = toObject(object);
 
-		return _journalConverterManager.getDDMXSD(journalXSD, defaultLocale);
+		if (object == null) {
+			return null;
+		}
+
+		return project.file(object);
 	}
-
-	private static final JournalConverterManager _journalConverterManager =
-		ProxyFactory.newServiceTrackedInstance(JournalConverterManager.class);
 
 }
