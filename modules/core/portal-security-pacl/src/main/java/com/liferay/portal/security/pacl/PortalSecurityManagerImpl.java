@@ -428,10 +428,6 @@ public class PortalSecurityManagerImpl
 		initClass(GeneratingPACLPolicy.class);
 		initClass(InactivePACLPolicy.class);
 		initClass(LenientPermissionCollection.class);
-		initClass(PACLAdvice.class);
-		initClass(PACLBeanHandler.class);
-		initClass(PACLClassLoaderUtil.class);
-		initClass(PACLClassUtil.class);
 		initClass(PACLConnectionHandler.class);
 		initClass(PACLContext.class);
 		initClass(PACLDataSource.class);

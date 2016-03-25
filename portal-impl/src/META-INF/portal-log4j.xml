@@ -496,18 +496,6 @@
 		<priority value="DEBUG" />
 	</category>
 
-	<category name="com.liferay.portal.security.pacl.PACLAdvice">
-		<priority value="ERROR" />
-	</category>
-
-	<category name="com.liferay.portal.security.pacl.PACLBeanHandler">
-		<priority value="ERROR" />
-	</category>
-
-	<category name="com.liferay.portal.security.pacl.PACLClassUtil">
-		<priority value="ERROR" />
-	</category>
-
 	<category name="com.liferay.portal.security.pacl.PACLPolicyManager">
 		<priority value="INFO" />
 	</category>
