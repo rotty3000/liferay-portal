@@ -26,9 +26,10 @@ import com.liferay.portal.kernel.util.Validator;
 public class UpgradeInfo {
 
 	public UpgradeInfo(
-		String fromSchemaVersionString, String toSchemaVersionString,
-		UpgradeStep upgradeStep) {
+		String bundleSymbolicName, String fromSchemaVersionString,
+		String toSchemaVersionString, UpgradeStep upgradeStep) {
 
+		_bundleSymbolicName = bundleSymbolicName;
 		_fromSchemaVersionString = fromSchemaVersionString;
 		_toSchemaVersionString = toSchemaVersionString;
 		_upgradeStep = upgradeStep;
@@ -59,6 +60,10 @@ public class UpgradeInfo {
 		return false;
 	}
 
+	public String getBundleSymbolicName() {
+		return _bundleSymbolicName;
+	}
+
 	public String getFromSchemaVersionString() {
 		return _fromSchemaVersionString;
 	}
@@ -73,8 +78,9 @@ public class UpgradeInfo {
 
 	@Override
 	public int hashCode() {
-		int hash = HashUtil.hash(0, _fromSchemaVersionString);
+		int hash = HashUtil.hash(0, _bundleSymbolicName);
 
+		hash = HashUtil.hash(hash, _fromSchemaVersionString);
 		hash = HashUtil.hash(hash, _toSchemaVersionString);
 		hash = HashUtil.hash(hash, _upgradeStep);
 
@@ -85,7 +91,9 @@ public class UpgradeInfo {
 	public String toString() {
 		StringBundler sb = new StringBundler(7);
 
-		sb.append("{fromSchemaVersionString=");
+		sb.append("{bundleSymbolicName=");
+		sb.append(_bundleSymbolicName);
+		sb.append(", fromSchemaVersionString=");
 		sb.append(_fromSchemaVersionString);
 		sb.append(", toSchemaVersionString=");
 		sb.append(_toSchemaVersionString);
@@ -96,6 +104,7 @@ public class UpgradeInfo {
 		return sb.toString();
 	}
 
+	private final String _bundleSymbolicName;
 	private final String _fromSchemaVersionString;
 	private final String _toSchemaVersionString;
 	private final UpgradeStep _upgradeStep;

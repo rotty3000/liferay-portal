@@ -14,6 +14,8 @@
 
 package com.liferay.portal.test.rule;
 
+import com.liferay.portal.kernel.backgroundtask.BackgroundTaskManager;
+import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.BaseTestRule;
 import com.liferay.portal.kernel.test.rule.BaseTestRule.StatementWrapper;
@@ -32,6 +34,10 @@ import com.liferay.portal.test.rule.callback.SybaseDumpTransactionLogTestCallbac
 import com.liferay.portal.test.rule.callback.UniqueStringRandomizerBumperTestCallback;
 import com.liferay.portal.util.InitUtil;
 import com.liferay.portal.util.PropsUtil;
+import com.liferay.registry.Filter;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 import com.liferay.util.log4j.Log4JUtil;
 
 import java.util.ArrayList;
@@ -63,6 +69,7 @@ public class LiferayIntegrationTestRule extends AggregateTestRule {
 		testRules.add(_sybaseDumpTransactionLogTestRule);
 		testRules.add(_clearThreadLocalTestRule);
 		testRules.add(_uniqueStringRandomizerBumperTestRule);
+		testRules.add(_waitingTestRule);
 		testRules.add(_mainServletTestRule);
 		testRules.add(_companyProviderTestRule);
 		testRules.add(_deleteAfterTestRunTestRule);
@@ -143,5 +150,57 @@ public class LiferayIntegrationTestRule extends AggregateTestRule {
 		new BaseTestRule<>(SybaseDumpTransactionLogTestCallback.INSTANCE);
 	private static final TestRule _uniqueStringRandomizerBumperTestRule =
 		new BaseTestRule<>(UniqueStringRandomizerBumperTestCallback.INSTANCE);
+	private static final TestRule _waitingTestRule = new WaitingTestRule();
+
+	private static class WaitingTestRule implements TestRule {
+
+		@Override
+		public Statement apply(Statement statement, Description description) {
+			return new StatementWrapper(statement) {
+
+				@Override
+				public void evaluate() throws Throwable {
+					Registry registry = RegistryUtil.getRegistry();
+
+					ServiceTracker<?, ?> serviceTracker =
+						registry.trackServices(BackgroundTaskManager.class);
+
+					serviceTracker.open();
+
+					try {
+						serviceTracker.waitForService(120 * 1000L);
+					}
+					catch (InterruptedException ie) {
+						throw new RuntimeException(ie);
+					}
+
+					serviceTracker.close();
+
+					Filter filter = registry.getFilter(
+						"(&(objectClass=" + Release.class.getName() +
+						")(release.bundle.symbolic.name=" +
+						"com.liferay.document.library.service)" +
+						"(release.schema.verified=true))");
+
+					serviceTracker = registry.trackServices(filter);
+
+					serviceTracker.open();
+
+					try {
+						serviceTracker.waitForService(120 * 1000L);
+					}
+					catch (InterruptedException ie) {
+						throw new RuntimeException(ie);
+					}
+
+					serviceTracker.close();
+
+					statement.evaluate();
+				}
+
+			};
+		}
+
+	}
 
 }

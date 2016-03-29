@@ -39,14 +39,16 @@ public class ExceptionRetryAcceptor implements RetryAcceptor {
 
 			ClassLoader classLoader = clazz.getClassLoader();
 
-			try {
-				Class<?> exceptionClass = classLoader.loadClass(name);
+			if (classLoader != null) {
+				try {
+					Class<?> exceptionClass = classLoader.loadClass(name);
 
-				if (exceptionClass.isInstance(t)) {
-					return true;
+					if (exceptionClass.isInstance(t)) {
+						return true;
+					}
 				}
-			}
-			catch (ClassNotFoundException cnfe) {
+				catch (ClassNotFoundException cnfe) {
+				}
 			}
 
 			Throwable cause = t.getCause();

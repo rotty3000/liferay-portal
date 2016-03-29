@@ -247,7 +247,7 @@ public class ReleaseGraphManagerTest {
 
 	protected UpgradeInfo createUpgradeInfo(String from, String to) {
 		return new UpgradeInfo(
-			from, to, new TestUpgradeStep(from + " -> " + to));
+			"test", from, to, new TestUpgradeStep(from + " -> " + to));
 	}
 
 	private static class TestUpgradeStep implements UpgradeStep {

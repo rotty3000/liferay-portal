@@ -50,7 +50,8 @@ public class UpgradeStepRegistratorTracker {
 			new ArrayList<>();
 
 		List<UpgradeInfo> upgradeInfos = createUpgradeInfos(
-			fromSchemaVersionString, toSchemaVersionString, upgradeSteps);
+			bundleSymbolicName, fromSchemaVersionString, toSchemaVersionString,
+			upgradeSteps);
 
 		for (UpgradeInfo upgradeInfo : upgradeInfos) {
 			ServiceRegistration<UpgradeStep> serviceRegistration = _register(
@@ -63,8 +64,8 @@ public class UpgradeStepRegistratorTracker {
 	}
 
 	protected static List<UpgradeInfo> createUpgradeInfos(
-		String fromSchemaVersionString, String toSchemaVersionString,
-		UpgradeStep... upgradeSteps) {
+		String bundleSymbolicName, String fromSchemaVersionString,
+		String toSchemaVersionString, UpgradeStep... upgradeSteps) {
 
 		if (ArrayUtil.isEmpty(upgradeSteps)) {
 			return Collections.emptyList();
@@ -81,7 +82,7 @@ public class UpgradeStepRegistratorTracker {
 				toSchemaVersionString + "-step" + (i - upgradeSteps.length + 1);
 
 			UpgradeInfo upgradeInfo = new UpgradeInfo(
-				upgradeInfoFromSchemaVersionString,
+				bundleSymbolicName, upgradeInfoFromSchemaVersionString,
 				upgradeInfoToSchemaVersionString, upgradeStep);
 
 			upgradeInfos.add(upgradeInfo);
@@ -91,8 +92,8 @@ public class UpgradeStepRegistratorTracker {
 		}
 
 		UpgradeInfo upgradeInfo = new UpgradeInfo(
-			upgradeInfoFromSchemaVersionString, toSchemaVersionString,
-			upgradeSteps[upgradeSteps.length - 1]);
+			bundleSymbolicName, upgradeInfoFromSchemaVersionString,
+			toSchemaVersionString, upgradeSteps[upgradeSteps.length - 1]);
 
 		upgradeInfos.add(upgradeInfo);
 
@@ -109,11 +110,11 @@ public class UpgradeStepRegistratorTracker {
 	}
 
 	protected List<UpgradeInfo> createUpgradeInfos(
-		String fromSchemaVersionString, String toSchemaVersionString,
-		Collection<UpgradeStep> upgradeSteps) {
+		String bundleSymbolicName, String fromSchemaVersionString,
+		String toSchemaVersionString, Collection<UpgradeStep> upgradeSteps) {
 
 		return createUpgradeInfos(
-			fromSchemaVersionString, toSchemaVersionString,
+			bundleSymbolicName, fromSchemaVersionString, toSchemaVersionString,
 			upgradeSteps.toArray(new UpgradeStep[upgradeSteps.size()]));
 	}
 
@@ -162,11 +163,22 @@ public class UpgradeStepRegistratorTracker {
 				return null;
 			}
 
+			List<UpgradeInfo> upgradeInfos = new ArrayList<>();
+
+			upgradeStepRegistrator.register(
+				new UpgradeStepRegistry(upgradeInfos));
+
+			Collections.reverse(upgradeInfos);
+
 			Collection<ServiceRegistration<UpgradeStep>> serviceRegistrations =
 				new ArrayList<>();
 
-			upgradeStepRegistrator.register(
-				new UpgradeStepRegistry(serviceRegistrations));
+			for (UpgradeInfo upgradeInfo : upgradeInfos) {
+				serviceRegistrations.add(
+					_register(
+						_bundleContext, upgradeInfo.getBundleSymbolicName(),
+						upgradeInfo));
+			}
 
 			return serviceRegistrations;
 		}
@@ -195,11 +207,8 @@ public class UpgradeStepRegistratorTracker {
 
 		private class UpgradeStepRegistry implements Registry {
 
-			public UpgradeStepRegistry(
-				Collection<ServiceRegistration<UpgradeStep>>
-					serviceRegistrations) {
-
-				_serviceRegistrations = serviceRegistrations;
+			public UpgradeStepRegistry(Collection<UpgradeInfo> upgradeInfos) {
+				_upgradeInfos = upgradeInfos;
 			}
 
 			@Override
@@ -208,20 +217,13 @@ public class UpgradeStepRegistratorTracker {
 				String toSchemaVersionString, UpgradeStep... upgradeSteps) {
 
 				List<UpgradeInfo> upgradeInfos = createUpgradeInfos(
-					fromSchemaVersionString, toSchemaVersionString,
-					upgradeSteps);
+					bundleSymbolicName, fromSchemaVersionString,
+					toSchemaVersionString, upgradeSteps);
 
-				for (UpgradeInfo upgradeInfo : upgradeInfos) {
-					ServiceRegistration<UpgradeStep> serviceRegistration =
-						_register(
-							_bundleContext, bundleSymbolicName, upgradeInfo);
-
-					_serviceRegistrations.add(serviceRegistration);
-				}
+				_upgradeInfos.addAll(upgradeInfos);
 			}
 
-			private final Collection<ServiceRegistration<UpgradeStep>>
-				_serviceRegistrations;
+			private final Collection<UpgradeInfo> _upgradeInfos;
 
 		}
 
