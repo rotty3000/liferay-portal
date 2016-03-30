@@ -807,10 +807,17 @@ public class ParamUtil {
 		PortletRequest portletRequest, String param, String[] defaultValue,
 		boolean split) {
 
-		HttpServletRequest request = PortalUtil.getHttpServletRequest(
-			portletRequest);
+		String[] values = portletRequest.getParameterValues(param);
 
-		return getParameterValues(request, param, defaultValue, split);
+		if (values == null) {
+			return defaultValue;
+		}
+
+		if (split && (values.length == 1)) {
+			return StringUtil.split(values[0]);
+		}
+
+		return values;
 	}
 
 	public static short getShort(HttpServletRequest request, String param) {

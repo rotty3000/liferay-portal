@@ -49,6 +49,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyContent;
@@ -370,7 +371,8 @@ public class IncludeTag extends AttributesTagSupport {
 			DirectRequestDispatcherFactoryUtil.getRequestDispatcher(
 				servletContext, page);
 
-		requestDispatcher.include(request, response);
+		requestDispatcher.include(
+			new IncludeTagRequest(request, page), response);
 	}
 
 	protected boolean isCleanUpSetAttributes() {
@@ -498,5 +500,50 @@ public class IncludeTag extends AttributesTagSupport {
 	private boolean _strict;
 	private TrackedServletRequest _trackedRequest;
 	private boolean _useCustomPage = true;
+
+	private class IncludeTagRequest extends HttpServletRequestWrapper {
+
+		public IncludeTagRequest(
+			HttpServletRequest request, String servletPath) {
+
+			super(request);
+
+			_servletPath = servletPath;
+		}
+
+		@Override
+		public Object getAttribute(String name) {
+			if (RequestDispatcher.INCLUDE_SERVLET_PATH.equals(name)) {
+				return _servletPath;
+			}
+
+			return super.getAttribute(name);
+		}
+
+		@Override
+		public void removeAttribute(String name) {
+			if (RequestDispatcher.INCLUDE_SERVLET_PATH.equals(name)) {
+				_servletPath = null;
+
+				return;
+			}
+
+			super.removeAttribute(name);
+		}
+
+		@Override
+		public void setAttribute(String name, Object value) {
+			if (RequestDispatcher.INCLUDE_SERVLET_PATH.equals(name)) {
+				_servletPath = (String)value;
+
+				return;
+			}
+
+			super.setAttribute(name, value);
+		}
+
+		private String _servletPath;
+
+	}
 
 }
