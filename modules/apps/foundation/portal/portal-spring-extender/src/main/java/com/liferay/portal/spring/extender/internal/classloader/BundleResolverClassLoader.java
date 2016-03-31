@@ -58,7 +58,9 @@ public class BundleResolverClassLoader extends ClassLoader {
 			}
 		}
 
-		throw new ClassNotFoundException(name);
+		ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+
+		return systemClassLoader.loadClass(name);
 	}
 
 	@Override
