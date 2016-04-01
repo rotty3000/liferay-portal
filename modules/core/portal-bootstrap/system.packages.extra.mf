@@ -3368,7 +3368,7 @@ Export-Package: com.liferay.ibm.icu;version="4.0.1",com.liferay.ibm.ic
  al.kernel.security.permission,com.liferay.portal.kernel.service.persi
  stence,com.liferay.portal.kernel.service.persistence.impl,com.liferay
  .portal.kernel.util,com.liferay.portal.model.impl";version="1.0.0",co
- m.liferay.portal.servlet;version="1.0.2";uses:="com.liferay.portal.fa
+ m.liferay.portal.servlet;version="1.1.0";uses:="com.liferay.portal.fa
  cebook,com.liferay.portal.kernel.exception,com.liferay.portal.kernel.
  model,com.liferay.portal.kernel.plugin,com.liferay.portal.kernel.secu
  rity.pacl,com.liferay.portal.kernel.servlet,com.liferay.portal.kernel
