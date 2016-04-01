@@ -95,7 +95,9 @@ public class JspBundleClassloader extends URLClassLoader {
 			}
 		}
 
-		throw new ClassNotFoundException(name);
+		ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+
+		return systemClassLoader.loadClass(name);
 	}
 
 	@Override
