@@ -6297,6 +6297,8 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public boolean isSecure(HttpServletRequest request) {
+		request = PortalUtil.getOriginalServletRequest(request);
+
 		boolean secure = false;
 
 		if (PropsValues.WEB_SERVER_FORWARDED_PROTOCOL_ENABLED) {

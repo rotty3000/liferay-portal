@@ -61,6 +61,9 @@ public class DirectRequestDispatcher implements RequestDispatcher {
 		servletRequest = DynamicServletRequest.addQueryString(
 			(HttpServletRequest)servletRequest, _queryString);
 
+		servletRequest = new DirectRequestDispatcherRequest(
+			(HttpServletRequest)servletRequest, _path, null);
+
 		_servlet.service(servletRequest, servletResponse);
 	}
 

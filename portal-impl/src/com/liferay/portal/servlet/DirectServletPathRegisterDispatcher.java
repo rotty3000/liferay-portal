@@ -22,6 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Shuyang Zhou
@@ -62,6 +63,9 @@ public class DirectServletPathRegisterDispatcher implements RequestDispatcher {
 			RequestDispatcher.INCLUDE_SERVLET_PATH, _path);
 
 		servletRequest.setAttribute(WebKeys.SERVLET_PATH, _path);
+
+		servletRequest = new DirectRequestDispatcherRequest(
+			(HttpServletRequest)servletRequest, _path, null);
 
 		try {
 			_requestDispatcher.include(servletRequest, servletResponse);
