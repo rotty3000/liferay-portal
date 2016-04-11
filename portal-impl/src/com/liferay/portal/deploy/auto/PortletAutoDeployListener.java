@@ -98,6 +98,7 @@ public class PortletAutoDeployListener extends BaseAutoDeployListener {
 				"WEB-INF/liferay-layout-templates.xml") &&
 			!pluginAutoDeployListenerHelper.isThemePlugin() &&
 			!pluginAutoDeployListenerHelper.isWebPlugin() &&
+			!pluginAutoDeployListenerHelper.isWAB() &&
 			file.getName().endsWith(".war")) {
 
 			_waiDeployer = true;

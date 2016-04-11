@@ -14,14 +14,26 @@
 
 package com.liferay.portal.deploy.auto;
 
+import aQute.bnd.header.OSGiHeader;
+import aQute.bnd.header.Parameters;
+import aQute.bnd.osgi.Constants;
+
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import java.util.Iterator;
+import java.util.Set;
+import java.util.jar.Attributes;
+import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
@@ -163,6 +175,53 @@ public class PluginAutoDeployListenerHelper {
 		}
 
 		return false;
+	}
+
+	public boolean isWAB() throws AutoDeployException {
+		if (!isMatchingFileExtension(".war")) {
+			return false;
+		}
+
+		JarInputStream jarInputStream = null;
+
+		Manifest manifest = null;
+
+		try {
+			jarInputStream = new JarInputStream(new FileInputStream(_file));
+
+			manifest = jarInputStream.getManifest();
+		}
+		catch (IOException ioe) {
+			throw new AutoDeployException(ioe);
+		}
+		finally {
+			StreamUtil.cleanUp(jarInputStream);
+		}
+
+		if (manifest == null) {
+			return false;
+		}
+
+		Attributes attributes = manifest.getMainAttributes();
+
+		String bundleSymbolicNameAttributeValue = attributes.getValue(
+			Constants.BUNDLE_SYMBOLICNAME);
+
+		Parameters bundleSymbolicNameMap = OSGiHeader.parseHeader(
+			bundleSymbolicNameAttributeValue);
+
+		Set<String> bundleSymbolicNameSet = bundleSymbolicNameMap.keySet();
+
+		if (bundleSymbolicNameSet.isEmpty()) {
+			return false;
+		}
+
+		Iterator<String> bundleSymbolicNameIterator =
+			bundleSymbolicNameSet.iterator();
+
+		String bundleSymbolicName = bundleSymbolicNameIterator.next();
+
+		return Validator.isNotNull(bundleSymbolicName);
 	}
 
 	public boolean isWarOrZip() {
