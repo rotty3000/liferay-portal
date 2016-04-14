@@ -293,7 +293,19 @@ public class SearchEngineHelperImpl implements SearchEngineHelper {
 	protected void addSearchEngineConfigurator(
 		SearchEngineConfigurator searchEngineConfigurator) {
 
-		searchEngineConfigurator.afterPropertiesSet();
+		Thread currentThread = Thread.currentThread();
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		try {
+			Class<?> clazz = searchEngineConfigurator.getClass();
+
+			currentThread.setContextClassLoader(clazz.getClassLoader());
+
+			searchEngineConfigurator.afterPropertiesSet();
+		}
+		finally {
+			currentThread.setContextClassLoader(contextClassLoader);
+		}
 	}
 
 	protected void removeSearchEngineConfigurator(
