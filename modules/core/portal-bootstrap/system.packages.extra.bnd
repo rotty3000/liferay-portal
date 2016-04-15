@@ -76,10 +76,35 @@ Export-Package:\
 	com.sun.syndication.io.impl;version='1.0',\
 	com.thoughtworks.xstream.*;version='1.4.7',\
 	java_cup.runtime.*;version='2.7.1',\
+	javax.activation.*;version='1.1',\
 	javax.jms.*;version='1.1',\
 	javax.mail.*;version='1.4',\
+	javax.management.*;version='1.4',\
+	javax.management.remote.*;version='1.5',\
+	javax.management.remote.rmi.*;version='1.5',\
+	javax.naming.*;version='1.6',\
+	javax.naming.directory.*;version='1.6',\
+	javax.naming.directory.event.*;version='1.6',\
+	javax.naming.directory.ldap.*;version='1.6',\
 	javax.portlet.*;version='2.0',\
+	javax.net.*;version='1.6',\
+	javax.net.ssl.*;version='1.6',\
+	javax.rmi.*;version='1.4',\
+	javax.security.auth.*;version='1.6',\
+	javax.security.auth.callback.*;version='1.6',\
+	javax.security.auth.kerberos.*;version='1.6',\
+	javax.security.auth.login.*;version='1.6',\
+	javax.security.auth.spi.*;version='1.6',\
+	javax.security.auth.x509.*;version='1.6',\
+	javax.security.cert.*;version='1.6',\
+	javax.script;version='1.6',\
 	javax.servlet.*;version='3.0',\
+	javax.sql.*;version='1.4',\
+	javax.sql.rowset.*;version='1.7',\
+	javax.sql.rowset.serial.*;version='1.7',\
+	javax.sql.rowset.spi.*;version='1.7',\
+	javax.transaction.*;version='1.1',\
+	javax.transaction.xa.*;version='1.1',\
 	javax.xml;version='1.4',\
 	javax.xml.crypto.*;version='1.4.5',\
 	javax.xml.datatype.*;version='1.4',\
@@ -88,7 +113,9 @@ Export-Package:\
 	javax.xml.parsers.*;version='1.4',\
 	javax.xml.rpc.*;version='1.1',\
 	javax.xml.stream.*;version='1.0',\
+	javax.xml.stream.events.*;version='1.0',\
 	javax.xml.transform.*;version='1.4',\
+	javax.xml.transform.stax.*;version='1.4',\
 	javax.xml.validation.*;version='1.4',\
 	javax.xml.xpath.*;version='1.4',\
 	jodd.bean.*;version='3.6.4',\
@@ -205,7 +232,9 @@ Import-Package: !*
 	@lib/com.liferay.osgi.service.tracker.collections.jar,\
 	@lib/com.liferay.portal.app.license.api.jar,\
 	@lib/com.liferay.registry.api.jar,\
+	@../../../lib/development/activation.jar,\
 	@../../../lib/development/jms.jar,\
+	@../../../lib/development/jta.jar,\
 	@../../../lib/development/mail.jar,\
 	@../../../lib/development/servlet-api.jar,\
 	@../../../lib/global/portlet.jar,\
