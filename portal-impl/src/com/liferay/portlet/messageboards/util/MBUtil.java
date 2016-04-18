@@ -852,7 +852,7 @@ public class MBUtil {
 		}
 
 		if (!message.isApproved() &&
-			!Validator.equals(message.getUserId(), themeDisplay.getUserId()) &&
+			(message.getUserId() != themeDisplay.getUserId()) &&
 			!permissionChecker.isContentReviewer(
 				themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId())) {
 

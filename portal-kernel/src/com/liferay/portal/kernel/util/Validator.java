@@ -32,13 +32,9 @@ import java.util.regex.Pattern;
 public class Validator {
 
 	/**
-	 * Returns <code>true</code> if the booleans are equal.
-	 *
-	 * @param  boolean1 the first boolean
-	 * @param  boolean2 the second boolean
-	 * @return <code>true</code> if the booleans are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(boolean boolean1, boolean boolean2) {
 		if (boolean1 == boolean2) {
 			return true;
@@ -49,13 +45,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the bytes are equal.
-	 *
-	 * @param  byte1 the first byte
-	 * @param  byte2 the second byte
-	 * @return <code>true</code> if the bytes are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(byte byte1, byte byte2) {
 		if (byte1 == byte2) {
 			return true;
@@ -66,13 +58,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the characters are equal.
-	 *
-	 * @param  char1 the first character
-	 * @param  char2 the second character
-	 * @return <code>true</code> if the characters are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(char char1, char char2) {
 		if (char1 == char2) {
 			return true;
@@ -83,13 +71,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the doubles are equal.
-	 *
-	 * @param  double1 the first double
-	 * @param  double2 the second double
-	 * @return <code>true</code> if the doubles are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(double double1, double double2) {
 		if (Double.compare(double1, double2) == 0) {
 			return true;
@@ -100,13 +84,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the floats are equal.
-	 *
-	 * @param  float1 the first float
-	 * @param  float2 the second float
-	 * @return <code>true</code> if the floats are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(float float1, float float2) {
 		if (Float.compare(float1, float2) == 0) {
 			return true;
@@ -117,13 +97,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the integers are equal.
-	 *
-	 * @param  int1 the first integer
-	 * @param  int2 the second integer
-	 * @return <code>true</code> if the integers are equal; <code>false</code>
-	 *         otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(int int1, int int2) {
 		if (int1 == int2) {
 			return true;
@@ -134,13 +110,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the long integers are equal.
-	 *
-	 * @param  long1 the first long integer
-	 * @param  long2 the second long integer
-	 * @return <code>true</code> if the long integers are equal;
-	 *         <code>false</code> otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(long long1, long long2) {
 		if (long1 == long2) {
 			return true;
@@ -172,13 +144,9 @@ public class Validator {
 	}
 
 	/**
-	 * Returns <code>true</code> if the short integers are equal.
-	 *
-	 * @param  short1 the first short integer
-	 * @param  short2 the second short integer
-	 * @return <code>true</code> if the short integers are equal;
-	 *         <code>false</code> otherwise
+	 * @deprecated As of 7.0.0
 	 */
+	@Deprecated
 	public static boolean equals(short short1, short short2) {
 		if (short1 == short2) {
 			return true;

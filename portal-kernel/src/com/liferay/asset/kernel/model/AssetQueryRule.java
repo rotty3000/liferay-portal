@@ -43,8 +43,8 @@ public class AssetQueryRule {
 
 		AssetQueryRule assetQueryRule = (AssetQueryRule)obj;
 
-		if (Validator.equals(_contains, assetQueryRule._contains) &&
-			Validator.equals(_andOperator, assetQueryRule._andOperator) &&
+		if ((_contains == assetQueryRule._contains) &&
+			(_andOperator == assetQueryRule._andOperator) &&
 			Validator.equals(_name, assetQueryRule._name)) {
 
 			return true;

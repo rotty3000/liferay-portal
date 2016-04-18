@@ -68,6 +68,19 @@ public class StringUtil_IW {
 		return StringUtil.containsIgnoreCase(s, text, delimiter);
 	}
 
+	public int count(java.lang.String s, char c) {
+		return StringUtil.count(s, c);
+	}
+
+	public int count(java.lang.String s, int start, int end, char c) {
+		return StringUtil.count(s, start, end, c);
+	}
+
+	public int count(java.lang.String s, int start, int end,
+		java.lang.String text) {
+		return StringUtil.count(s, start, end, text);
+	}
+
 	public int count(java.lang.String s, java.lang.String text) {
 		return StringUtil.count(s, text);
 	}
@@ -370,6 +383,14 @@ public class StringUtil_IW {
 		return StringUtil.remove(s, element, delimiter);
 	}
 
+	public java.lang.String removeChar(java.lang.String s, char oldSub) {
+		return StringUtil.removeChar(s, oldSub);
+	}
+
+	public java.lang.String removeChars(java.lang.String s, char... oldSubs) {
+		return StringUtil.removeChars(s, oldSubs);
+	}
+
 	public java.lang.String removeFromList(java.lang.String s,
 		java.lang.String element) {
 		return StringUtil.removeFromList(s, element);
@@ -380,6 +401,16 @@ public class StringUtil_IW {
 		return StringUtil.removeFromList(s, element, delimiter);
 	}
 
+	public java.lang.String removeSubstring(java.lang.String s,
+		java.lang.String oldSub) {
+		return StringUtil.removeSubstring(s, oldSub);
+	}
+
+	public java.lang.String removeSubstrings(java.lang.String s,
+		java.lang.String... oldSubs) {
+		return StringUtil.removeSubstrings(s, oldSubs);
+	}
+
 	public java.lang.String replace(java.lang.String s, char oldSub, char newSub) {
 		return StringUtil.replace(s, oldSub, newSub);
 	}
@@ -387,6 +418,16 @@ public class StringUtil_IW {
 	public java.lang.String replace(java.lang.String s, char oldSub,
 		java.lang.String newSub) {
 		return StringUtil.replace(s, oldSub, newSub);
+	}
+
+	public java.lang.String replace(java.lang.String s, char[] oldSubs,
+		char[] newSubs) {
+		return StringUtil.replace(s, oldSubs, newSubs);
+	}
+
+	public java.lang.String replace(java.lang.String s, char[] oldSubs,
+		java.lang.String[] newSubs) {
+		return StringUtil.replace(s, oldSubs, newSubs);
 	}
 
 	public java.lang.String replace(java.lang.String s,

@@ -22,30 +22,58 @@ public class Validator_IW {
 		return _instance;
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(boolean boolean1, boolean boolean2) {
 		return Validator.equals(boolean1, boolean2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(byte byte1, byte byte2) {
 		return Validator.equals(byte1, byte2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(char char1, char char2) {
 		return Validator.equals(char1, char2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(double double1, double double2) {
 		return Validator.equals(double1, double2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(float float1, float float2) {
 		return Validator.equals(float1, float2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(int int1, int int2) {
 		return Validator.equals(int1, int2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(long long1, long long2) {
 		return Validator.equals(long1, long2);
 	}
@@ -54,6 +82,10 @@ public class Validator_IW {
 		return Validator.equals(obj1, obj2);
 	}
 
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
 	public boolean equals(short short1, short short2) {
 		return Validator.equals(short1, short2);
 	}

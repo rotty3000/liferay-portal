@@ -58,7 +58,7 @@ public class SearchResult {
 
 		SearchResult searchResult = (SearchResult)obj;
 
-		if (Validator.equals(_classPK, searchResult._classPK) &&
+		if ((_classPK == searchResult._classPK) &&
 			Validator.equals(_className, searchResult._className)) {
 
 			return true;

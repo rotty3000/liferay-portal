@@ -133,17 +133,20 @@ public class ParamUtil_IW {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
 
-	public float get(com.liferay.portal.kernel.service.ServiceContext serviceContext,
+	public float get(
+		com.liferay.portal.kernel.service.ServiceContext serviceContext,
 		java.lang.String param, float defaultValue) {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
 
-	public int get(com.liferay.portal.kernel.service.ServiceContext serviceContext,
+	public int get(
+		com.liferay.portal.kernel.service.ServiceContext serviceContext,
 		java.lang.String param, int defaultValue) {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
 
-	public long get(com.liferay.portal.kernel.service.ServiceContext serviceContext,
+	public long get(
+		com.liferay.portal.kernel.service.ServiceContext serviceContext,
 		java.lang.String param, long defaultValue) {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
@@ -154,7 +157,8 @@ public class ParamUtil_IW {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
 
-	public short get(com.liferay.portal.kernel.service.ServiceContext serviceContext,
+	public short get(
+		com.liferay.portal.kernel.service.ServiceContext serviceContext,
 		java.lang.String param, short defaultValue) {
 		return ParamUtil.get(serviceContext, param, defaultValue);
 	}
@@ -830,7 +834,8 @@ public class ParamUtil_IW {
 		ParamUtil.print(portletRequest);
 	}
 
-	public void print(com.liferay.portal.kernel.service.ServiceContext serviceContext) {
+	public void print(
+		com.liferay.portal.kernel.service.ServiceContext serviceContext) {
 		ParamUtil.print(serviceContext);
 	}
 

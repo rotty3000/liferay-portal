@@ -36,8 +36,6 @@ import com.liferay.portal.util.PropsValues;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
-import org.apache.struts.Globals;
-
 /**
  * @author Michael Young
  */
@@ -75,10 +73,6 @@ public class PortalSessionDestroyer extends BasePortalLifecycle {
 			if (userIdObj == null) {
 				return;
 			}
-
-			// Language
-
-			session.removeAttribute(Globals.LOCALE_KEY);
 
 			// Live users
 

@@ -19,7 +19,9 @@ import java.lang.reflect.Method;
 /**
  * @author Shuyang Zhou
  * @author Brian Wing Shun Chan
+ * @deprecated As of 7.0.0, with no direct replacement
  */
+@Deprecated
 public class MethodTargetClassKey {
 
 	public MethodTargetClassKey(Method method, Class<?> targetClass) {

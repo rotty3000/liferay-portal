@@ -66,10 +66,10 @@ public class NotificationRecipient {
 		NotificationRecipient notificationRecipient =
 			(NotificationRecipient)obj;
 
-		if (Validator.equals(_companyId, notificationRecipient._companyId) &&
+		if ((_companyId == notificationRecipient._companyId) &&
 			Validator.equals(
 				_emailAddress, notificationRecipient._emailAddress) &&
-			Validator.equals(_userId, notificationRecipient._userId)) {
+			(_userId == notificationRecipient._userId)) {
 
 			return true;
 		}

@@ -76,7 +76,7 @@ public class CookieUtil {
 			return false;
 		}
 
-		if (!Validator.equals(cookie1.getMaxAge(), cookie2.getMaxAge())) {
+		if (cookie1.getMaxAge() != cookie2.getMaxAge()) {
 			return false;
 		}
 
@@ -88,7 +88,7 @@ public class CookieUtil {
 			return false;
 		}
 
-		if (!Validator.equals(cookie1.getSecure(), cookie2.getSecure())) {
+		if (cookie1.getSecure() != cookie2.getSecure()) {
 			return false;
 		}
 
@@ -96,11 +96,11 @@ public class CookieUtil {
 			return false;
 		}
 
-		if (!Validator.equals(cookie1.getVersion(), cookie2.getVersion())) {
+		if (cookie1.getVersion() != cookie2.getVersion()) {
 			return false;
 		}
 
-		if (!Validator.equals(cookie1.isHttpOnly(), cookie2.isHttpOnly())) {
+		if (cookie1.isHttpOnly() != cookie2.isHttpOnly()) {
 			return false;
 		}
 

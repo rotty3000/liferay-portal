@@ -101,7 +101,7 @@ public class NavItem implements Serializable {
 
 		NavItem navItem = (NavItem)obj;
 
-		if (Validator.equals(getLayoutId(), navItem.getLayoutId())) {
+		if (getLayoutId() == navItem.getLayoutId()) {
 			return true;
 		}
 

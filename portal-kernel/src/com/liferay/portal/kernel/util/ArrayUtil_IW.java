@@ -450,6 +450,10 @@ public class ArrayUtil_IW {
 		return ArrayUtil.remove(array, value);
 	}
 
+	public <T> T[] remove(T[] array, T value) {
+		return ArrayUtil.remove(array, value);
+	}
+
 	public java.lang.String[] removeByPrefix(java.lang.String[] array,
 		java.lang.String prefix) {
 		return ArrayUtil.removeByPrefix(array, prefix);
