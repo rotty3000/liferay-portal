@@ -32,6 +32,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import java.util.ArrayList;
@@ -104,7 +105,10 @@ public class LPKGVerifierImpl implements LPKGVerifier {
 			File indexFile = new File(
 				targetPlatformDir, tempIndexFile.getName());
 
-			Files.copy(tempIndexFile.toPath(), indexFile.toPath());
+			Files.copy(
+				tempIndexFile.toPath(), indexFile.toPath(),
+				StandardCopyOption.COPY_ATTRIBUTES,
+				StandardCopyOption.REPLACE_EXISTING);
 		}
 		catch (Exception e) {
 			if (e instanceof LPKGVerifyException) {
