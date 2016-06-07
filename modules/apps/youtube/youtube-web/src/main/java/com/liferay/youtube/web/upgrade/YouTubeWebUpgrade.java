@@ -35,10 +35,12 @@ public class YouTubeWebUpgrade implements UpgradeStepRegistrator {
 		BaseUpgradeWebModuleRelease upgradeWebModuleRelease =
 			new BaseUpgradeWebModuleRelease() {
 
+				@Override
 				protected String getBundleSymbolicName() {
 					return "com.liferay.youtube.web";
 				}
 
+				@Override
 				protected String[] getPortletIds() {
 					return new String[] {"1_WAR_youtubeportlet"};
 				}

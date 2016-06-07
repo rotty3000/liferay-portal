@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Mobile Device Rules Service
 Bundle-SymbolicName: com.liferay.mobile.device.rules.service
-Bundle-Version: 1.0.4
+Bundle-Version: 1.1.2
 Export-Package:\
 	com.liferay.mobile.device.rules.lar,\
 	com.liferay.mobile.device.rules.model.impl,\

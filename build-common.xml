@@ -261,6 +261,33 @@
 		<contains casesensitive="false" string="${os.name}" substring="Windows" />
 	</condition>
 
+	<exec executable="git" outputproperty="liferay.releng.branch">
+		<arg value="rev-parse" />
+		<arg value="--abbrev-ref" />
+		<arg value="HEAD" />
+	</exec>
+
+	<condition property="liferay.releng.ee">
+		<or>
+			<istrue value="${ee.override}" />
+			<matches pattern="ee-.+" string="${liferay.releng.branch}" />
+		</or>
+	</condition>
+
+	<condition else="Liferay" property="liferay.releng.app.title.prefix" value="Liferay CE">
+		<istrue value="${liferay.releng.ee}" />
+	</condition>
+
+	<condition else="false" property="liferay.releng.public">
+		<not>
+			<istrue value="${liferay.releng.ee}" />
+		</not>
+	</condition>
+
+	<condition else="false" property="liferay.releng.supported">
+		<istrue value="${liferay.releng.ee}" />
+	</condition>
+
 	<property name="definitions.dir" value="${project.dir}/definitions" />
 
 	<xmlcatalog id="dtd.catalog">
@@ -945,6 +972,7 @@ Please set the environment variable ANT_OPTS to the recommended value of
 				<sysproperty file="woven-classes" key="junit.aspectj.dump" />
 				<sysproperty key="junit.code.coverage" value="${junit.code.coverage}" />
 				<sysproperty if:true="${jvm.debug}" key="jvm.debug" value="true" />
+				<sysproperty key="liferay.lib.portal.dir" value="${app.server.tomcat.lib.portal.dir}" />
 				<sysproperty key="whip.agent" value="${whip.agent}" />
 				<sysproperty file="test-coverage/@{test.type}/whip.dat" key="whip.datafile" />
 				<sysproperty key="whip.instrument.dump" value="${whip.instrument.dump}" />
@@ -1468,33 +1496,6 @@ rerun your task.
 				<istrue value="${jsp.precompile}" />
 			</condition>
 
-			<exec executable="git" outputproperty="liferay.releng.branch">
-				<arg value="rev-parse" />
-				<arg value="--abbrev-ref" />
-				<arg value="HEAD" />
-			</exec>
-
-			<condition property="liferay.releng.ee">
-				<or>
-					<istrue value="${ee.override}" />
-					<matches pattern="ee-.+" string="${liferay.releng.branch}" />
-				</or>
-			</condition>
-
-			<condition else="Liferay" property="liferay.releng.app.title.prefix" value="Liferay CE">
-				<istrue value="${liferay.releng.ee}" />
-			</condition>
-
-			<condition else="false" property="liferay.releng.public">
-				<not>
-					<istrue value="${liferay.releng.ee}" />
-				</not>
-			</condition>
-
-			<condition else="false" property="liferay.releng.supported">
-				<istrue value="${liferay.releng.ee}" />
-			</condition>
-
 			<echoproperties destfile="${gradle.properties.file}" >
 				<propertyset>
 					<propertyref name="app.server.type" />
@@ -1517,6 +1518,7 @@ rerun your task.
 					<propertyref name="sass.precision" />
 					<propertyref name="source.formatter.max.line.length" />
 					<propertyref name="source.formatter.processor.thread.count" />
+					<propertyref name="timeout.app.server.wait" />
 					<propertyref prefix="ivy.pom." />
 					<propertyref prefix="sonatype." />
 					<propertyref regex="^\s*app\.server\.(?:glassfish|jboss|jetty|jonas|resin|tcat|tcserver|tomcat|weblogic|websphere|wildfly).*\.dir" />

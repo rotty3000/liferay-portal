@@ -36,10 +36,12 @@ public class WikiNavigationWebUpgrade implements UpgradeStepRegistrator {
 		BaseUpgradeWebModuleRelease upgradeWebModuleRelease =
 			new BaseUpgradeWebModuleRelease() {
 
+				@Override
 				protected String getBundleSymbolicName() {
 					return "com.liferay.wiki.navigation.web";
 				}
 
+				@Override
 				protected String[] getPortletIds() {
 					return new String[] {
 						"1_WAR_wikinavigationportlet",

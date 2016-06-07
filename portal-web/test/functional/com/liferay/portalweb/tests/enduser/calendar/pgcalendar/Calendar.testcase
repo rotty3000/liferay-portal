@@ -2431,7 +2431,7 @@
 		</execute>
 
 		<execute macro="CalendarEvent#deleteRepeatingEventViaAgendaView">
-			<var name="deleteOptionSet" value="All Events in the Series" />
+			<var name="deleteOptionSet" value="Entire Series" />
 			<var name="eventTitle" value="${eventTitle}" />
 			<var name="eventType" value="${eventType}" />
 		</execute>
@@ -2468,7 +2468,7 @@
 		</execute>
 
 		<execute macro="CalendarEvent#deleteRepeatingEventViaAgendaView">
-			<var name="deleteOptionSet" value="All Following" />
+			<var name="deleteOptionSet" value="Following Events" />
 			<var name="eventTitle" value="${eventTitle}" />
 			<var name="eventType" value="${eventType}" />
 		</execute>
@@ -2527,7 +2527,7 @@
 		</execute>
 
 		<execute macro="CalendarEvent#deleteRepeatingEventViaAgendaView">
-			<var name="deleteOptionSet" value="Only This Instance" />
+			<var name="deleteOptionSet" value="Single Event" />
 			<var name="eventTitle" value="${eventTitle}" />
 			<var name="eventType" value="${eventType}" />
 		</execute>
@@ -3202,7 +3202,7 @@
 		</execute>
 
 		<execute macro="CalendarScheduler#saveRepeatingEvent">
-			<var name="saveOption" value="All Events in the Series" />
+			<var name="saveOption" value="Entire Series" />
 		</execute>
 
 		<execute macro="Navigator#gotoPage">
@@ -3260,7 +3260,7 @@
 		</execute>
 
 		<execute macro="CalendarEvent#publishRepeating">
-			<var name="saveOption" value="All Following" />
+			<var name="saveOption" value="Following Events" />
 		</execute>
 
 		<execute macro="CalendarEvent#viewTitle">
@@ -5344,6 +5344,7 @@
 
 		<execute macro="MyAccount#configureDisplaySettingsLanguage">
 			<var name="languageName" value="español (España)" />
+			<var name="languagePageDisplayMessage" value="Mostrar la página en español (España)." />
 			<var name="myAccount" value="My Account" />
 			<var name="saveButton" value="Save" />
 			<var name="successMessage" value="Su petición ha terminado con éxito." />
@@ -5371,6 +5372,7 @@
 		<execute macro="MyAccount#configureDisplaySettingsLanguageLocalized">
 			<var name="category" value="Mi cuenta" />
 			<var name="languageName" value="English (United States)" />
+			<var name="languagePageDisplayMessage" value="Display the page in English (United States)." />
 			<var name="portlet" value="Mi cuenta" />
 			<var name="saveButton" value="Guardar" />
 			<var name="successMessage" value="Your request completed successfully." />
@@ -5540,6 +5542,16 @@
 		</execute>
 
 		<execute macro="ProductMenu#gotoControlPanelUsers">
+			<var name="portlet" value="Roles" />
+		</execute>
+
+		<execute macro="Role#definePermissionCP">
+			<var name="permissionDefinitionKey" value="SITE_ADMIN_PAGES_SITE_PAGES_RESOURCE_PERMISSIONS_PAGE_UPDATE_CHECKBOX" />
+			<var name="permissionDefinitionValue" value="Update" />
+			<var name="roleName" value="assigned" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoControlPanelUsers">
 			<var name="portlet" value="Users and Organizations" />
 		</execute>
 
@@ -5595,10 +5607,6 @@
 
 		<execute macro="Navigator#gotoPage">
 			<var name="pageName" value="${pageName}" />
-		</execute>
-
-		<execute macro="ProductMenu#gotoSite">
-			<var name="site" value="Site C" />
 		</execute>
 
 		<execute macro="ProductMenu#gotoSite">

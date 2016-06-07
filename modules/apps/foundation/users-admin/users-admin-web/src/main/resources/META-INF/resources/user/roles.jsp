@@ -615,6 +615,7 @@ String organizationRoleSyncEntitiesEventName = liferayPortletResponse.getNamespa
 			'<portlet:namespace />selectRole',
 			function(roleId, name, searchContainer, groupName, groupId, iconCssClass) {
 				var A = AUI();
+				var LString = A.Lang.String;
 
 				var searchContainerName = '<portlet:namespace />' + searchContainer + 'SearchContainer';
 
@@ -622,7 +623,7 @@ String organizationRoleSyncEntitiesEventName = liferayPortletResponse.getNamespa
 
 				var rowColumns = [];
 
-				rowColumns.push('<i class="' + iconCssClass + '"></i> ' + name);
+				rowColumns.push('<i class="' + iconCssClass + '"></i> ' + LString.escapeHTML(name));
 
 				if (groupName) {
 					rowColumns.push(groupName);

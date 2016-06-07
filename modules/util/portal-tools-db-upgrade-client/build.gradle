@@ -8,7 +8,3 @@ deploy {
 		include "*.properties"
 	}
 }
-
-liferay {
-	deployDir = file("${liferayHome}/tools/${projectDir.name}")
-}

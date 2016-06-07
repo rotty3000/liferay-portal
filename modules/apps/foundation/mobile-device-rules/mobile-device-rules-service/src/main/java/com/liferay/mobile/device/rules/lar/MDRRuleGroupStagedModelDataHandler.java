@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.xml.Element;
 
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -94,6 +95,24 @@ public class MDRRuleGroupStagedModelDataHandler
 		portletDataContext.addClassedModel(
 			ruleGroupElement, ExportImportPathUtil.getModelPath(ruleGroup),
 			ruleGroup);
+	}
+
+	@Override
+	protected void doImportMissingReference(
+		PortletDataContext portletDataContext, String uuid, long groupId,
+		long ruleGroupId) {
+
+		MDRRuleGroup existingRuleGroup = fetchMissingReference(uuid, groupId);
+
+		if (existingRuleGroup == null) {
+			return;
+		}
+
+		Map<Long, Long> ruleGroupIds =
+			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+				MDRRuleGroup.class);
+
+		ruleGroupIds.put(ruleGroupId, existingRuleGroup.getRuleGroupId());
 	}
 
 	@Override

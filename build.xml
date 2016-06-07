@@ -51,6 +51,8 @@
 				/>
 			</delete>
 
+			<delete file="${liferay.home}/.liferay-home" />
+
 			<delete dir="${liferay.home}/data/elasticsearch" />
 
 			<delete failonerror="false">
@@ -233,6 +235,8 @@
 
 		<ant dir="portal-web" inheritAll="false" target="deploy" />
 
+		<touch file="${liferay.home}/.liferay-home" />
+
 		<copy todir="${liferay.home}/data/hypersonic">
 			<fileset dir="sql">
 				<include name="${database.name}.properties" />
@@ -270,11 +274,11 @@
 
 		<antcall target="install-portal-snapshots" />
 
-		<if>
-			<equals arg1="${build.modules.deploy.enabled}" arg2="true" />
-			<then>
-				<stopwatch name="modules.stopwatch" />
+		<stopwatch name="modules.stopwatch" />
 
+		<if>
+			<equals arg1="${build.marketplace.apps.enabled}" arg2="true" />
+			<then>
 				<gradle-execute dir="${project.dir}/modules/core/registry-api" task="deploy">
 					<arg value="--parallel" />
 				</gradle-execute>
@@ -313,10 +317,42 @@
 						</gradle-execute>
 					</else>
 				</if>
-
-				<stopwatch action="elapsed" name="modules.stopwatch" />
 			</then>
+			<else>
+				<gradle-execute dir="${project.dir}/modules/core" task="deploy">
+					<arg value="--parallel" />
+					<arg value="-Dportal.build=true" />
+				</gradle-execute>
+
+				<gradle-execute dir="${project.dir}/modules" task="deployTool">
+					<arg value="--parallel" />
+					<arg value="-Dportal.build=true" />
+					<arg value="deployConfigs" />
+				</gradle-execute>
+
+				<if>
+					<equals arg1="${jsp.precompile}" arg2="on" />
+					<then>
+						<if>
+							<equals arg1="${jsp.precompile.parallel}" arg2="on" />
+							<then>
+								<gradle-execute dir="${project.dir}/modules" task="compileJSP">
+									<arg value="--parallel" />
+									<arg value="-Dportal.build=true" />
+								</gradle-execute>
+							</then>
+							<else>
+								<gradle-execute dir="${project.dir}/modules" task="compileJSP">
+									<arg value="-Dportal.build=true" />
+								</gradle-execute>
+							</else>
+						</if>
+					</then>
+				</if>
+			</else>
 		</if>
+
+		<stopwatch action="elapsed" name="modules.stopwatch" />
 
 		<if>
 			<and>

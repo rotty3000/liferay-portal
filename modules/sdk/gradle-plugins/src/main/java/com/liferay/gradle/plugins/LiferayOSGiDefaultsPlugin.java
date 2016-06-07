@@ -161,6 +161,8 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		"https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/" +
 			"public";
 
+	public static final String DEPLOY_TOOL_TASK_NAME = "deployTool";
+
 	public static final String INSTALL_CACHE_TASK_NAME = "installCache";
 
 	public static final String JAR_JAVADOC_TASK_NAME = "jarJavadoc";
@@ -188,6 +190,7 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 			project.getRootProject(), "portal-impl");
 		final boolean publishing = isPublishing(project);
 		boolean testProject = isTestProject(project);
+		boolean deployToTools = isDeployToTools(project);
 
 		applyPlugins(project);
 
@@ -234,6 +237,10 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 		addTaskCopyLibs(project);
 
+		if (isDeployToTools(project)) {
+			addTaskDeployTool(project);
+		}
+
 		final Jar jarJavadocTask = addTaskJarJavadoc(project);
 		final Jar jarSourcesTask = addTaskJarSources(project, testProject);
 		final Jar jarTLDDocTask = addTaskJarTLDDoc(project);
@@ -246,7 +253,7 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		configureBasePlugin(project, portalRootDir);
 		configureBundleDefaultInstructions(project, portalRootDir, publishing);
 		configureConfigurations(project);
-		configureDeployDir(project);
+		configureDeployDir(project, deployToTools);
 		configureJavaPlugin(project);
 		configureProject(project);
 		configureRepositories(project);
@@ -477,6 +484,14 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 				});
 
+			String ignoreFailures = GradleUtil.getTaskPrefixedProperty(
+				baselineTask, "ignoreFailures");
+
+			if (Validator.isNotNull(ignoreFailures)) {
+				baselineTask.setIgnoreFailures(
+					Boolean.parseBoolean(ignoreFailures));
+			}
+
 			baselineTask.setNewJarFile(
 				new Callable<File>() {
 
@@ -677,6 +692,19 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		classesTask.dependsOn(copy);
 
 		return copy;
+	}
+
+	protected Task addTaskDeployTool(Project project) {
+		Task task = project.task(DEPLOY_TOOL_TASK_NAME);
+
+		Task deployTask = GradleUtil.getTask(
+			project, LiferayBasePlugin.DEPLOY_TASK_NAME);
+
+		task.dependsOn(deployTask);
+		task.setDescription("Alias for " + deployTask);
+		task.setGroup(BasePlugin.BUILD_GROUP);
+
+		return task;
 	}
 
 	protected InstallCacheTask addTaskInstallCache(final Project project) {
@@ -1096,11 +1124,14 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 		Map<String, Object> bundleDefaultInstructions = new HashMap<>();
 
-		bundleDefaultInstructions.put("-check", "all");
+		bundleDefaultInstructions.put("-check", "exports");
 		bundleDefaultInstructions.put(Constants.BUNDLE_VENDOR, "Liferay, Inc.");
 		bundleDefaultInstructions.put(
 			Constants.DONOTCOPY,
 			"(" + LiferayOSGiExtension.DONOTCOPY_DEFAULT + "|.touch" + ")");
+		bundleDefaultInstructions.put(
+			Constants.FIXUPMESSAGES + ".deprecated",
+			"annotations are deprecated");
 		bundleDefaultInstructions.put(Constants.SOURCES, "false");
 
 		if (publishing) {
@@ -1242,7 +1273,9 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		configuration.setTransitive(transitive);
 	}
 
-	protected void configureDeployDir(final Project project) {
+	protected void configureDeployDir(
+		final Project project, final boolean deployToTools) {
+
 		final LiferayExtension liferayExtension = GradleUtil.getExtension(
 			project, LiferayExtension.class);
 
@@ -1251,6 +1284,12 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 				@Override
 				public File call() throws Exception {
+					if (deployToTools) {
+						return new File(
+							liferayExtension.getLiferayHome(),
+							"tools/" + project.getName());
+					}
+
 					if (FileUtil.exists(project, ".lfrbuild-static")) {
 						return new File(
 							liferayExtension.getLiferayHome(), "osgi/static");
@@ -2099,6 +2138,14 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		sourceDirectorySet = sourceSet.getAllSource();
 
 		if (!sourceDirectorySet.isEmpty()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected boolean isDeployToTools(Project project) {
+		if (FileUtil.exists(project, ".lfrbuild-tool")) {
 			return true;
 		}
 

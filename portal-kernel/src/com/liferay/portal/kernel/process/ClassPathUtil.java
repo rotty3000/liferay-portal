@@ -169,7 +169,7 @@ public class ClassPathUtil {
 
 		builder.setArguments(Arrays.asList("-Djava.awt.headless=true"));
 		builder.setBootstrapClassPath(_globalClassPath);
-		builder.setReactClassLoader(PortalClassLoaderUtil.getClassLoader());
+		builder.setReactClassLoader(classLoader);
 		builder.setRuntimeClassPath(_portalClassPath);
 
 		_portalProcessConfig = builder.build();

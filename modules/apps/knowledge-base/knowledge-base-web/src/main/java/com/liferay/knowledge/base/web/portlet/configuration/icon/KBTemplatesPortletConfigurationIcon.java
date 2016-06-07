@@ -67,7 +67,7 @@ public class KBTemplatesPortletConfigurationIcon
 
 	@Override
 	public double getWeight() {
-		return 101;
+		return 102;
 	}
 
 	@Override

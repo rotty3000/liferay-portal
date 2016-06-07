@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedInputStream;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.lpkg.StaticLPKGResolver;
 import com.liferay.portal.kernel.module.framework.ThrowableCollector;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -246,7 +247,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			_log.debug("Initializing the OSGi framework");
 		}
 
-		_initFelixFileInstallDirs();
+		_initRequiredStartupDirs();
 
 		List<ServiceLoaderCondition> serviceLoaderConditions =
 			ServiceLoader.load(ServiceLoaderCondition.class);
@@ -833,9 +834,9 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		return false;
 	}
 
-	private void _initFelixFileInstallDirs() {
+	private void _initRequiredStartupDirs() {
 		if (_log.isDebugEnabled()) {
-			_log.debug("Initializing Felix file install directories");
+			_log.debug("Initializing required startup directories");
 		}
 
 		String[] dirNames = StringUtil.split(_getFelixFileInstallDir());
@@ -843,6 +844,8 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		for (String dirName : dirNames) {
 			FileUtil.mkdirs(dirName);
 		}
+
+		FileUtil.mkdirs(PropsValues.MODULE_FRAMEWORK_BASE_DIR + "/static");
 	}
 
 	private Bundle _installInitialBundle(
@@ -1027,10 +1030,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		final List<Bundle> bundles = new ArrayList<>();
 
-		final List<Path> lpkgPaths = new ArrayList<>();
+		final List<Path> jarPaths = new ArrayList<>();
 
 		Files.walkFileTree(
-			Paths.get(PropsValues.MODULE_FRAMEWORK_BASE_DIR, "/static/"),
+			Paths.get(PropsValues.MODULE_FRAMEWORK_BASE_DIR, "static"),
 			new SimpleFileVisitor<Path>() {
 
 				@Override
@@ -1044,7 +1047,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 						fileNamePath.toString());
 
 					if (fileName.endsWith(".jar")) {
-						lpkgPaths.add(filePath.toAbsolutePath());
+						jarPaths.add(filePath.toAbsolutePath());
 					}
 
 					return FileVisitResult.CONTINUE;
@@ -1052,12 +1055,22 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 			});
 
-		Collections.sort(lpkgPaths);
+		Path utilTaglibPath = Paths.get(
+			PropsValues.LIFERAY_LIB_PORTAL_DIR, "util-taglib.jar");
 
-		for (Path lpkgPath : lpkgPaths) {
-			try (InputStream inputStream = Files.newInputStream(lpkgPath)) {
+		if (Files.exists(utilTaglibPath)) {
+			jarPaths.add(utilTaglibPath);
+		}
+		else {
+			_log.error("Missing " + utilTaglibPath);
+		}
+
+		Collections.sort(jarPaths);
+
+		for (Path jarPath : jarPaths) {
+			try (InputStream inputStream = Files.newInputStream(jarPath)) {
 				Bundle bundle = _installInitialBundle(
-					lpkgPath.toString(), inputStream);
+					jarPath.toString(), inputStream);
 
 				if (bundle != null) {
 					bundles.add(bundle);
@@ -1067,7 +1080,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		File file = new File(
 			bundleContext.getProperty("lpkg.deployer.dir") + StringPool.SLASH +
-				"static.lpkg");
+				StaticLPKGResolver.getStaticLPKGFileName());
 
 		if (file.exists()) {
 			try (ZipFile zipFile = new ZipFile(file)) {

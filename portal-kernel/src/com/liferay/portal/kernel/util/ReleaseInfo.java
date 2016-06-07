@@ -154,7 +154,7 @@ public class ReleaseInfo {
 
 	private static final String _CODE_NAME = "Wilberforce";
 
-	private static final String _DATE = "April 29, 2016";
+	private static final String _DATE = "June 6, 2016";
 
 	private static final String _NAME = "Liferay Community Edition Portal";
 

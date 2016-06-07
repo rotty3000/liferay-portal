@@ -54,6 +54,7 @@ public class KaleoTaskLocalServiceImpl extends KaleoTaskLocalServiceBaseImpl {
 		kaleoTask.setKaleoDefinitionId(kaleoDefinitionId);
 		kaleoTask.setKaleoNodeId(kaleoNodeId);
 		kaleoTask.setName(task.getName());
+		kaleoTask.setDescription(task.getDescription());
 
 		kaleoTaskPersistence.update(kaleoTask);
 

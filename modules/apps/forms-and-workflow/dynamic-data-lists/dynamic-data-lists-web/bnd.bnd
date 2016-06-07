@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Dynamic Data Lists Web
 Bundle-SymbolicName: com.liferay.dynamic.data.lists.web
-Bundle-Version: 1.1.3
+Bundle-Version: 1.1.4
 Export-Package:\
 	com.liferay.dynamic.data.lists.web.asset,\
 	com.liferay.dynamic.data.lists.web.lar
