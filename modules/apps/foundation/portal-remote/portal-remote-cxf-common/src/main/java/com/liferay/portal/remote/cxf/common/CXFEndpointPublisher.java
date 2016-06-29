@@ -176,7 +176,7 @@ public class CXFEndpointPublisher {
 
 			properties.put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
-				contextName);
+				"(osgi.http.whiteboard.context.name=" + contextName + ")");
 			properties.put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
 				CXFNonSpringServlet.class.getName());
