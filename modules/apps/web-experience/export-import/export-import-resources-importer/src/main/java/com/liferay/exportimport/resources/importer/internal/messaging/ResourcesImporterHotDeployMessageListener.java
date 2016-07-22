@@ -23,6 +23,7 @@ import com.liferay.exportimport.resources.importer.internal.util.PluginPackagePr
 import com.liferay.osgi.service.tracker.collections.map.ServiceReferenceMapper;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMap;
 import com.liferay.osgi.service.tracker.collections.map.ServiceTrackerMapFactory;
+import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -43,8 +44,10 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import javax.servlet.ServletContext;
 
@@ -58,6 +61,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Ryan Park
@@ -73,6 +78,16 @@ public class ResourcesImporterHotDeployMessageListener
 
 	@Activate
 	protected void activate(final BundleContext bundleContext) {
+		_bundleContext = bundleContext;
+
+		_messageQueue = new LinkedList<>();
+
+		_serviceTracker = ServiceTrackerFactory.open(
+			_bundleContext,
+			"(objectClass=com.liferay.portal.osgi.web.portlet.tracker." +
+				"internal.PortletTracker)",
+			new PortletTrackerServiceTrackerCustomizer());
+
 		_serviceTrackerMap = ServiceTrackerMapFactory.openSingleValueMap(
 			bundleContext, ServletContext.class, null,
 			new ServiceReferenceMapper<String, ServletContext>() {
@@ -124,6 +139,7 @@ public class ResourcesImporterHotDeployMessageListener
 			_destination.destroy();
 		}
 
+		_serviceTracker.close();
 		_serviceTrackerMap.close();
 	}
 
@@ -171,6 +187,12 @@ public class ResourcesImporterHotDeployMessageListener
 
 	@Override
 	protected void onDeploy(Message message) throws Exception {
+		if (_portletTracker == null) {
+			_messageQueue.add(message);
+
+			return;
+		}
+
 		initialize(message);
 	}
 
@@ -298,11 +320,58 @@ public class ResourcesImporterHotDeployMessageListener
 	private static final Log _log = LogFactoryUtil.getLog(
 		ResourcesImporterHotDeployMessageListener.class);
 
+	private BundleContext _bundleContext;
 	private CompanyLocalService _companyLocalService;
 	private Destination _destination;
 	private DestinationFactory _destinationFactory;
 	private ImporterFactory _importerFactory;
+	private Queue<Message> _messageQueue;
+	private Object _portletTracker;
 	private ServiceRegistration<Destination> _serviceRegistration;
+	private ServiceTracker<Object, Object> _serviceTracker;
 	private ServiceTrackerMap<String, ServletContext> _serviceTrackerMap;
+
+	private class PortletTrackerServiceTrackerCustomizer
+		implements ServiceTrackerCustomizer<Object, Object> {
+
+		@Override
+		public Object addingService(ServiceReference<Object> serviceReference) {
+			_portletTracker = _bundleContext.getService(serviceReference);
+
+			while (!_messageQueue.isEmpty()) {
+				Message message = _messageQueue.remove();
+
+				try {
+					initialize(message);
+				}
+				catch (Exception e) {
+					String servletContextName = message.getString(
+						"servletContextName");
+
+					_log.error(
+						"Unable to import resources for " + servletContextName);
+				}
+			}
+
+			return _portletTracker;
+		}
+
+		@Override
+		public void modifiedService(
+			ServiceReference<Object> serviceReference, Object portletTracker) {
+		}
+
+		@Override
+		public void removedService(
+			ServiceReference<Object> serviceReference, Object portletTracker) {
+
+			_bundleContext.ungetService(serviceReference);
+
+			_messageQueue.clear();
+
+			_portletTracker = null;
+		}
+
+	}
 
 }
