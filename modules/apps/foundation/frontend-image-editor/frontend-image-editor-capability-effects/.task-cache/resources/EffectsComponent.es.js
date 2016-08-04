@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-effects@1.0.3/EffectsComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/async/async', 'metal/src/core', 'metal-promise/src/promise/Promise', './EffectsComponent.soy', './EffectsControls.soy'], function (exports, _Component2, _Soy, _async, _core, _Promise, _EffectsComponent, _EffectsControls) {
+define("frontend-image-editor-capability-effects@1.0.4/EffectsComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/async/async', 'metal/src/core', 'metal-promise/src/promise/Promise', './EffectsComponent.soy', './EffectsControls.soy'], function (exports, _Component2, _Soy, _async, _core, _Promise, _EffectsComponent, _EffectsControls) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

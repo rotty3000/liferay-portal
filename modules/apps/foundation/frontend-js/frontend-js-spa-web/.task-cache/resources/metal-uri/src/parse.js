@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/metal-uri/src/parse", ['exports', 'metal/src/metal', './parseFromAnchor'], function (exports, _metal, _parseFromAnchor) {
+define("frontend-js-spa-web@1.0.10/metal-uri/src/parse", ['exports', 'metal/src/metal', './parseFromAnchor'], function (exports, _metal, _parseFromAnchor) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

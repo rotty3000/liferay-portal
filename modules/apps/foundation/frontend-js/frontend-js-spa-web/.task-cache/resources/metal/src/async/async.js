@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/metal/src/async/async", ['exports'], function (exports) {
+define("frontend-js-spa-web@1.0.10/metal/src/async/async", ['exports'], function (exports) {
 	/*!
   * Polyfill from Google's Closure Library.
   * Copyright 2013 The Closure Library Authors. All Rights Reserved.

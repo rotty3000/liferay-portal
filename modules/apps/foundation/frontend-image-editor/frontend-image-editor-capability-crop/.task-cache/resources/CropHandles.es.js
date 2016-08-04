@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-crop@1.0.3/CropHandles.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/async/async', 'metal/src/core', 'metal-dom/src/dom', 'metal-drag-drop/src/Drag', 'metal-position/src/Position', './CropHandles.soy'], function (exports, _Component2, _Soy, _async, _core, _dom, _Drag, _Position, _CropHandles) {
+define("frontend-image-editor-capability-crop@1.0.4/CropHandles.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/async/async', 'metal/src/core', 'metal-dom/src/dom', 'metal-drag-drop/src/Drag', 'metal-position/src/Position', './CropHandles.soy'], function (exports, _Component2, _Soy, _async, _core, _dom, _Drag, _Position, _CropHandles) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

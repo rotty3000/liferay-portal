@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/senna/src/senna", ['exports', './app/App', './screen/HtmlScreen', './screen/RequestScreen', './route/Route', './screen/Screen'], function (exports, _App, _HtmlScreen, _RequestScreen, _Route, _Screen) {
+define("frontend-js-spa-web@1.0.10/senna/src/senna", ['exports', './app/App', './screen/HtmlScreen', './screen/RequestScreen', './route/Route', './screen/Screen'], function (exports, _App, _HtmlScreen, _RequestScreen, _Route, _Screen) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {

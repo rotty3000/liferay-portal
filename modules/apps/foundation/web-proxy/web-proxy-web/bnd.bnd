@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Web Proxy Web
 Bundle-SymbolicName: com.liferay.web.proxy.web
-Bundle-Version: 1.0.4
+Bundle-Version: 1.0.5
 Web-ContextPath: /web-proxy-web
 -includeresource:\
 	@concurrent-[0-9]*.jar,\

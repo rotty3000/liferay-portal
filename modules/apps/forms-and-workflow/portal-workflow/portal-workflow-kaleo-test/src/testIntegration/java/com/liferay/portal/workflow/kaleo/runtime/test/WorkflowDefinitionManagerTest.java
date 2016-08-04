@@ -69,7 +69,7 @@ public class WorkflowDefinitionManagerTest {
 
 				if (count >= 5) {
 					throw new IllegalStateException(
-						"Unable to get the reference to workflow definition " +
+						"Unable to get reference to a workflow definition " +
 							"manager");
 				}
 

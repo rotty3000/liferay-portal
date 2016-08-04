@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-rotate@1.0.3/RotateComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-promise/src/promise/Promise', './RotateComponent.soy', './RotateControls.soy'], function (exports, _Component2, _Soy, _core, _Promise, _RotateComponent, _RotateControls) {
+define("frontend-image-editor-capability-rotate@1.0.4/RotateComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-promise/src/promise/Promise', './RotateComponent.soy', './RotateControls.soy'], function (exports, _Component2, _Soy, _core, _Promise, _RotateComponent, _RotateControls) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

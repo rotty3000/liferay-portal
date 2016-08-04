@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-saturation@1.0.3/SaturationComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-debounce/src/debounce', 'metal-promise/src/promise/Promise', 'metal-slider/src/Slider', './SaturationComponent.soy', './SaturationControls.soy'], function (exports, _Component2, _Soy, _core, _debounce, _Promise, _Slider, _SaturationComponent, _SaturationControls) {
+define("frontend-image-editor-capability-saturation@1.0.4/SaturationComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-debounce/src/debounce', 'metal-promise/src/promise/Promise', 'metal-slider/src/Slider', './SaturationComponent.soy', './SaturationControls.soy'], function (exports, _Component2, _Soy, _core, _debounce, _Promise, _Slider, _SaturationComponent, _SaturationControls) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

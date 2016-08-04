@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-crop@1.0.3/CropComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-promise/src/promise/Promise', './CropComponent.soy', './CropControls.soy'], function (exports, _Component2, _Soy, _core, _Promise, _CropComponent, _CropControls) {
+define("frontend-image-editor-capability-crop@1.0.4/CropComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-promise/src/promise/Promise', './CropComponent.soy', './CropControls.soy'], function (exports, _Component2, _Soy, _core, _Promise, _CropComponent, _CropControls) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

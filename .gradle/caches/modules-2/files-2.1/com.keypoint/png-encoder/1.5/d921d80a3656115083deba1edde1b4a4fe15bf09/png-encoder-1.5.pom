@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.keypoint</groupId>
+  <artifactId>png-encoder</artifactId>
+  <packaging>jar</packaging>
+  <version>1.5</version>
+  <name>com.keypoint.PngEncoder</name>
+  <url>http://catcode.com/pngencoder/</url>
+  <description>com.keypoint.PngEncoder - a Java class to convert Image objects to PNG byte arrays</description>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>http://catcode.com/pngencoder/</connection>
+  </scm>
+  <dependencies>
+  </dependencies>
+</project>

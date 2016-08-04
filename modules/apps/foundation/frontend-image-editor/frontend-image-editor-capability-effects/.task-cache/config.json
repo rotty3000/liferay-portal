@@ -1,11 +1,11 @@
 {
-    "frontend-image-editor-capability-effects@1.0.3/EffectsComponent.es": {
+    "frontend-image-editor-capability-effects@1.0.4/EffectsComponent.es": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy", "metal/src/async/async", "metal/src/core", "metal-promise/src/promise/Promise", "./EffectsComponent.soy", "./EffectsControls.soy"]
     },
-    "frontend-image-editor-capability-effects@1.0.3/EffectsComponent.soy": {
+    "frontend-image-editor-capability-effects@1.0.4/EffectsComponent.soy": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy"]
     },
-    "frontend-image-editor-capability-effects@1.0.3/EffectsControls.soy": {
+    "frontend-image-editor-capability-effects@1.0.4/EffectsControls.soy": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy"]
     }
 }

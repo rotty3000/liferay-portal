@@ -1,14 +1,14 @@
 {
-    "frontend-image-editor-capability-contrast@1.0.3/ContrastComponent.es": {
+    "frontend-image-editor-capability-contrast@1.0.4/ContrastComponent.es": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy", "metal/src/core", "metal-debounce/src/debounce", "metal-promise/src/promise/Promise", "metal-slider/src/Slider", "./ContrastComponent.soy", "./ContrastControls.soy"]
     },
-    "frontend-image-editor-capability-contrast@1.0.3/ContrastComponent.soy": {
+    "frontend-image-editor-capability-contrast@1.0.4/ContrastComponent.soy": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy"]
     },
-    "frontend-image-editor-capability-contrast@1.0.3/ContrastControls.soy": {
+    "frontend-image-editor-capability-contrast@1.0.4/ContrastControls.soy": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy"]
     },
-    "frontend-image-editor-capability-contrast@1.0.3/metal-slider/src/Slider.soy": {
+    "frontend-image-editor-capability-contrast@1.0.4/metal-slider/src/Slider.soy": {
         "dependencies": ["exports", "metal-component/src/Component", "metal-soy/src/Soy"]
     }
 }

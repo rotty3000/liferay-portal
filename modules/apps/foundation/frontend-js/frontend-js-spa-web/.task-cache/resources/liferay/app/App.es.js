@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/liferay/app/App.es", ['exports', 'senna/src/app/App', 'metal/src/core', 'metal-dom/src/dom', '../util/Utils.es', '../surface/Surface.es'], function (exports, _App2, _core, _dom, _Utils, _Surface) {
+define("frontend-js-spa-web@1.0.10/liferay/app/App.es", ['exports', 'senna/src/app/App', 'metal/src/core', 'metal-dom/src/dom', '../util/Utils.es', '../surface/Surface.es'], function (exports, _App2, _core, _dom, _Utils, _Surface) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

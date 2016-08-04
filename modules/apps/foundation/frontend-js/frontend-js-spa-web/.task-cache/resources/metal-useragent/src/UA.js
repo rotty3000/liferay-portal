@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/metal-useragent/src/UA", ['exports'], function (exports) {
+define("frontend-js-spa-web@1.0.10/metal-useragent/src/UA", ['exports'], function (exports) {
 	'use strict';
 
 	/**

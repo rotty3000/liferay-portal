@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/senna/src/cacheable/Cacheable", ['exports', 'metal/src/metal'], function (exports, _metal) {
+define("frontend-js-spa-web@1.0.10/senna/src/cacheable/Cacheable", ['exports', 'metal/src/metal'], function (exports, _metal) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

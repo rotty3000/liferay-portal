@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Export Import Web
 Bundle-SymbolicName: com.liferay.exportimport.web
-Bundle-Version: 1.0.11
+Bundle-Version: 1.0.12
 Export-Package:\
 	com.liferay.exportimport.web.constants,\
 	com.liferay.exportimport.web.trash

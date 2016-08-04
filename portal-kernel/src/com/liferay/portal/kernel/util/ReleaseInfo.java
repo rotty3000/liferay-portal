@@ -150,13 +150,13 @@ public class ReleaseInfo {
 		return _VERSION;
 	}
 
-	private static final String _BUILD = "7001";
+	private static final String _BUILD = "7002";
 
 	private static final int _BUILD_NUMBER = GetterUtil.getInteger(_BUILD);
 
 	private static final String _CODE_NAME = "Wilberforce";
 
-	private static final String _DATE = "June 10, 2016";
+	private static final String _DATE = "August 5, 2016";
 
 	private static final String _NAME = "Liferay Community Edition Portal";
 
@@ -170,9 +170,9 @@ public class ReleaseInfo {
 
 	private static final String _VENDOR = "Liferay, Inc.";
 
-	private static final String _VERSION = "7.0.1";
+	private static final String _VERSION = "7.0.2";
 
-	private static final String _VERSION_DISPLAY_NAME = "7.0.1 GA2";
+	private static final String _VERSION_DISPLAY_NAME = "7.0.2 GA3";
 
 	private static String _releaseInfo;
 	private static String _serverInfo;

@@ -271,22 +271,15 @@ if (showSource) {
 				onFocusMethod: window['<%= HtmlUtil.escapeJS(onFocusMethod) %>'],
 				onInitMethod: window['<%= HtmlUtil.escapeJS(onInitMethod) %>'],
 				plugins: plugins,
-				textMode: <%= (editorOptions != null) ? editorOptions.isTextMode() : Boolean.FALSE.toString() %>
+				textMode: <%= (editorOptions != null) ? editorOptions.isTextMode() : Boolean.FALSE.toString() %>,
+
+				<%
+				boolean useCustomDataProcessor = (editorOptionsDynamicAttributes != null) && GetterUtil.getBoolean(editorOptionsDynamicAttributes.get("useCustomDataProcessor"));
+				%>
+
+				useCustomDataProcessor: <%= useCustomDataProcessor %>
 			}
 		).render();
-
-		<%
-		boolean useCustomDataProcessor = (editorOptionsDynamicAttributes != null) && GetterUtil.getBoolean(editorOptionsDynamicAttributes.get("useCustomDataProcessor"));
-		%>
-
-		<c:if test="<%= useCustomDataProcessor %>">
-			alloyEditor.getNativeEditor().on(
-				'customDataProcessorLoaded',
-				function() {
-					alloyEditor.setHTML(getInitialContent());
-				}
-			);
-		</c:if>
 
 		<liferay-util:dynamic-include key='<%= "com.liferay.frontend.editor.alloyeditor.web#" + editorName + "#onEditorCreate" %>' />
 	};
@@ -377,7 +370,6 @@ if (showSource) {
 				alloyEditor.setHTML(value);
 			}
 		}
-
 	};
 
 	Liferay.fire(

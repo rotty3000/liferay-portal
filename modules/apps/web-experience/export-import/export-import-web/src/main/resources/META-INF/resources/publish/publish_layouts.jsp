@@ -190,71 +190,73 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 
 		<div id="<portlet:namespace />publishOptions">
 			<div class="export-dialog-tree">
+				<div class="container-fluid-1280">
 
-				<%
-				String taskExecutorClassName = localPublishing ? BackgroundTaskExecutorNames.LAYOUT_STAGING_BACKGROUND_TASK_EXECUTOR : BackgroundTaskExecutorNames.LAYOUT_REMOTE_STAGING_BACKGROUND_TASK_EXECUTOR;
+					<%
+					String taskExecutorClassName = localPublishing ? BackgroundTaskExecutorNames.LAYOUT_STAGING_BACKGROUND_TASK_EXECUTOR : BackgroundTaskExecutorNames.LAYOUT_REMOTE_STAGING_BACKGROUND_TASK_EXECUTOR;
 
-				int incompleteBackgroundTaskCount = BackgroundTaskManagerUtil.getBackgroundTasksCount(stagingGroupId, taskExecutorClassName, false);
+					int incompleteBackgroundTaskCount = BackgroundTaskManagerUtil.getBackgroundTasksCount(stagingGroupId, taskExecutorClassName, false);
 
-				incompleteBackgroundTaskCount += BackgroundTaskManagerUtil.getBackgroundTasksCount(liveGroupId, taskExecutorClassName, false);
-				%>
+					incompleteBackgroundTaskCount += BackgroundTaskManagerUtil.getBackgroundTasksCount(liveGroupId, taskExecutorClassName, false);
+					%>
 
-				<div class="<%= incompleteBackgroundTaskCount == 0 ? "hide" : "in-progress" %>" id="<portlet:namespace />incompleteProcessMessage">
-					<liferay-util:include page="/incomplete_processes_message.jsp" servletContext="<%= application %>">
-						<liferay-util:param name="incompleteBackgroundTaskCount" value="<%= String.valueOf(incompleteBackgroundTaskCount) %>" />
-					</liferay-util:include>
-				</div>
+					<div class="<%= incompleteBackgroundTaskCount == 0 ? "hide" : "in-progress" %>" id="<portlet:namespace />incompleteProcessMessage">
+						<liferay-util:include page="/incomplete_processes_message.jsp" servletContext="<%= application %>">
+							<liferay-util:param name="incompleteBackgroundTaskCount" value="<%= String.valueOf(incompleteBackgroundTaskCount) %>" />
+						</liferay-util:include>
+					</div>
 
-				<%
-				String scheduleCMD = StringPool.BLANK;
-				String unscheduleCMD = StringPool.BLANK;
+					<%
+					String scheduleCMD = StringPool.BLANK;
+					String unscheduleCMD = StringPool.BLANK;
 
-				if (cmd.equals(Constants.PUBLISH_TO_LIVE)) {
-					scheduleCMD = "schedule_publish_to_live";
-					unscheduleCMD = "unschedule_publish_to_live";
-				}
-				else if (cmd.equals(Constants.PUBLISH_TO_REMOTE)) {
-					scheduleCMD = "schedule_publish_to_remote";
-					unscheduleCMD = "unschedule_publish_to_remote";
-				}
-				else if (cmd.equals("copy_from_live")) {
-					scheduleCMD = "schedule_copy_from_live";
-					unscheduleCMD = "unschedule_copy_from_live";
-				}
-				%>
+					if (cmd.equals(Constants.PUBLISH_TO_LIVE)) {
+						scheduleCMD = "schedule_publish_to_live";
+						unscheduleCMD = "unschedule_publish_to_live";
+					}
+					else if (cmd.equals(Constants.PUBLISH_TO_REMOTE)) {
+						scheduleCMD = "schedule_publish_to_remote";
+						unscheduleCMD = "unschedule_publish_to_remote";
+					}
+					else if (cmd.equals("copy_from_live")) {
+						scheduleCMD = "schedule_copy_from_live";
+						unscheduleCMD = "unschedule_copy_from_live";
+					}
+					%>
 
-				<aui:fieldset-group markupView="lexicon">
-					<aui:fieldset>
-						<c:choose>
-							<c:when test="<%= exportImportConfiguration == null %>">
-								<aui:input name="name" placeholder="process-name-placeholder" />
-							</c:when>
-							<c:otherwise>
-								<aui:input name="name" value="<%= exportImportConfiguration.getName() %>" />
-							</c:otherwise>
-						</c:choose>
-					</aui:fieldset>
-
-					<aui:fieldset collapsible="<%= true %>" cssClass="options-group" label="date">
-						<%@ include file="/publish/publish_layouts_scheduler.jspf" %>
-					</aui:fieldset>
-
-					<c:if test="<%= !group.isCompany() %>">
-						<liferay-staging:select-pages action="<%= Constants.PUBLISH %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" groupId="<%= groupId %>" privateLayout="<%= privateLayout %>" treeId="<%= treeId %>" />
-					</c:if>
-
-					<liferay-staging:content cmd="<%= cmd %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" type="<%= localPublishing ? Constants.PUBLISH_TO_LIVE : Constants.PUBLISH_TO_REMOTE %>" />
-
-					<liferay-staging:deletions cmd="<%= Constants.PUBLISH %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" />
-
-					<liferay-staging:permissions action="<%= Constants.PUBLISH %>" descriptionCSSClass="permissions-description" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" global="<%= group.isCompany() %>" labelCSSClass="permissions-label" />
-
-					<c:if test="<%= !localPublishing %>">
-						<aui:fieldset collapsed="<%= true %>" collapsible="<%= true %>" cssClass="options-group" label="remote-live-connection-settings">
-							<liferay-staging:remote-options disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" privateLayout="<%= privateLayout %>" />
+					<aui:fieldset-group markupView="lexicon">
+						<aui:fieldset>
+							<c:choose>
+								<c:when test="<%= exportImportConfiguration == null %>">
+									<aui:input name="name" placeholder="process-name-placeholder" />
+								</c:when>
+								<c:otherwise>
+									<aui:input name="name" value="<%= exportImportConfiguration.getName() %>" />
+								</c:otherwise>
+							</c:choose>
 						</aui:fieldset>
-					</c:if>
-				</aui:fieldset-group>
+
+						<aui:fieldset collapsible="<%= true %>" cssClass="options-group" label="date">
+							<%@ include file="/publish/publish_layouts_scheduler.jspf" %>
+						</aui:fieldset>
+
+						<c:if test="<%= !group.isCompany() %>">
+							<liferay-staging:select-pages action="<%= Constants.PUBLISH %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" groupId="<%= groupId %>" privateLayout="<%= privateLayout %>" treeId="<%= treeId %>" />
+						</c:if>
+
+						<liferay-staging:content cmd="<%= cmd %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" type="<%= localPublishing ? Constants.PUBLISH_TO_LIVE : Constants.PUBLISH_TO_REMOTE %>" />
+
+						<liferay-staging:deletions cmd="<%= Constants.PUBLISH %>" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" />
+
+						<liferay-staging:permissions action="<%= Constants.PUBLISH %>" descriptionCSSClass="permissions-description" disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" global="<%= group.isCompany() %>" labelCSSClass="permissions-label" />
+
+						<c:if test="<%= !localPublishing %>">
+							<aui:fieldset collapsed="<%= true %>" collapsible="<%= true %>" cssClass="options-group" label="remote-live-connection-settings">
+								<liferay-staging:remote-options disableInputs="<%= configuredPublish %>" exportImportConfigurationId="<%= exportImportConfigurationId %>" privateLayout="<%= privateLayout %>" />
+							</aui:fieldset>
+						</c:if>
+					</aui:fieldset-group>
+				</div>
 			</div>
 
 			<aui:button-row>

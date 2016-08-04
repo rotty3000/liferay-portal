@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Contacts Web
 Bundle-SymbolicName: com.liferay.contacts.web
-Bundle-Version: 1.0.12
+Bundle-Version: 1.0.13
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 -dsannotations-options: inherit

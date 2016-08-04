@@ -1,4 +1,4 @@
-define("frontend-image-editor-capability-contrast@1.0.3/ContrastComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-debounce/src/debounce', 'metal-promise/src/promise/Promise', 'metal-slider/src/Slider', './ContrastComponent.soy', './ContrastControls.soy'], function (exports, _Component2, _Soy, _core, _debounce, _Promise, _Slider, _ContrastComponent, _ContrastControls) {
+define("frontend-image-editor-capability-contrast@1.0.4/ContrastComponent.es", ['exports', 'metal-component/src/Component', 'metal-soy/src/Soy', 'metal/src/core', 'metal-debounce/src/debounce', 'metal-promise/src/promise/Promise', 'metal-slider/src/Slider', './ContrastComponent.soy', './ContrastControls.soy'], function (exports, _Component2, _Soy, _core, _debounce, _Promise, _Slider, _ContrastComponent, _ContrastControls) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

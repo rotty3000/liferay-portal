@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/liferay/util/Utils.es", ['exports'], function (exports) {
+define("frontend-js-spa-web@1.0.10/liferay/util/Utils.es", ['exports'], function (exports) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

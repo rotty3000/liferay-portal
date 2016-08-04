@@ -1,6 +1,6 @@
 Bundle-Name: Liferay My Account Web
 Bundle-SymbolicName: com.liferay.my.account.web
-Bundle-Version: 1.0.3
+Bundle-Version: 1.0.4
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 -dsannotations-options: inherit

@@ -1,0 +1,6 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>commons-javaflow</groupId>
+  <artifactId>commons-javaflow</artifactId>
+  <version>20060411</version>
+</project>

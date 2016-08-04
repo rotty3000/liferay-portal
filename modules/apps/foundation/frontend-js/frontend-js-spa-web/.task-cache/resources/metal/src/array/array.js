@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/metal/src/array/array", ['exports', '../core'], function (exports, _core) {
+define("frontend-js-spa-web@1.0.10/metal/src/array/array", ['exports', '../core'], function (exports, _core) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

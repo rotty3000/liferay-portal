@@ -260,7 +260,7 @@ public class PortalSecurityManagerImpl
 			return;
 		}
 
-		Class<?> stack[] = getClassContext();
+		Class<?>[] stack = getClassContext();
 
 		// Stack depth of 4 should be the caller of one of the methods in
 		// java.lang.Class that invoked the checkMember access. The stack should
@@ -316,7 +316,7 @@ public class PortalSecurityManagerImpl
 			// succeed. In all cases, the thread local is purged to avoid later
 			// erroneous successes.
 
-			Class<?> stack[] = getClassContext();
+			Class<?>[] stack = getClassContext();
 
 			// [2] someCaller
 			// [1] java.lang.reflect.AccessibleObject
@@ -680,7 +680,7 @@ public class PortalSecurityManagerImpl
 			final boolean addContextClassLoader) {
 
 			return AccessController.doPrivileged(
-				new PrivilegedAction<ClassLoader> () {
+				new PrivilegedAction<ClassLoader>() {
 
 					@Override
 					public ClassLoader run() {
@@ -722,7 +722,7 @@ public class PortalSecurityManagerImpl
 			final String servletContextName) {
 
 			return AccessController.doPrivileged(
-				new PrivilegedAction<ClassLoader> () {
+				new PrivilegedAction<ClassLoader>() {
 
 					@Override
 					public ClassLoader run() {
@@ -1353,7 +1353,7 @@ public class PortalSecurityManagerImpl
 
 			try {
 				return AccessController.doPrivileged(
-					new PrivilegedExceptionAction<ReferenceEntry> () {
+					new PrivilegedExceptionAction<ReferenceEntry>() {
 
 						@Override
 						public ReferenceEntry run() throws Exception {

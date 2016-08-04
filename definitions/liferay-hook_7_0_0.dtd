@@ -47,6 +47,7 @@ default.regular.theme.id
 dl.file.entry.drafts.enabled
 dl.file.entry.processors
 dl.repository.impl
+dl.store.antivirus.enabled
 dl.store.antivirus.impl
 dl.store.impl
 field.enable.com.liferay.portal.kernel.model.Contact.birthday

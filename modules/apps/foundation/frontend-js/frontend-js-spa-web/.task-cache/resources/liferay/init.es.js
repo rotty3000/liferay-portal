@@ -1,4 +1,4 @@
-define("frontend-js-spa-web@1.0.9/liferay/init.es", ['exports', './screen/ActionURLScreen.es', './app/App.es', 'metal/src/async/async', 'senna/src/globals/globals', './screen/RenderURLScreen.es', 'metal-uri/src/Uri', 'senna/src/utils/utils'], function (exports, _ActionURLScreen, _App, _async, _globals, _RenderURLScreen, _Uri, _utils) {
+define("frontend-js-spa-web@1.0.10/liferay/init.es", ['exports', './screen/ActionURLScreen.es', './app/App.es', 'metal/src/async/async', 'senna/src/globals/globals', './screen/RenderURLScreen.es', 'metal-uri/src/Uri', 'senna/src/utils/utils'], function (exports, _ActionURLScreen, _App, _async, _globals, _RenderURLScreen, _Uri, _utils) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {

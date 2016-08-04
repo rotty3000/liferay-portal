@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Portal Language Servlet Filter
 Bundle-SymbolicName: com.liferay.portal.language.servlet.filter
-Bundle-Version: 2.0.2
+Bundle-Version: 2.0.3
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 -includeresource:\
