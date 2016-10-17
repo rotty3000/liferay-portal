@@ -343,30 +343,11 @@ public class WSRPAdminPortlet extends MVCPortlet {
 		}
 	}
 
-	@Reference(unbind = "-")
-	protected void setWSRPConsumerLocalService(
-		WSRPConsumerLocalService wSRPConsumerLocalService) {
-
-		_wSRPConsumerLocalService = wSRPConsumerLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setWSRPConsumerPortletLocalService(
-		WSRPConsumerPortletLocalService wSRPConsumerPortletLocalService) {
-
-		_wSRPConsumerPortletLocalService = wSRPConsumerPortletLocalService;
-	}
-
-	@Reference(unbind = "-")
-	protected void setWSRPProducerLocalService(
-		WSRPProducerLocalService wSRPProducerLocalService) {
-
-		_wSRPProducerLocalService = wSRPProducerLocalService;
-	}
-
-	private static WSRPConsumerLocalService _wSRPConsumerLocalService;
-	private static WSRPConsumerPortletLocalService
-		_wSRPConsumerPortletLocalService;
-	private static WSRPProducerLocalService _wSRPProducerLocalService;
+	@Reference
+	private WSRPConsumerLocalService _wSRPConsumerLocalService;
+	@Reference
+	private WSRPConsumerPortletLocalService _wSRPConsumerPortletLocalService;
+	@Reference
+	private WSRPProducerLocalService _wSRPProducerLocalService;
 
 }
