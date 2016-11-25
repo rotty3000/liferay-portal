@@ -363,7 +363,7 @@ request.setAttribute("view.jsp-viewCategory", Boolean.TRUE.toString());
 							delta="<%= rssDelta %>"
 							displayStyle="<%= rssDisplayStyle %>"
 							feedType="<%= rssFeedType %>"
-							message="subscribe-to-recent-posts"
+							message="rss"
 							url="<%= MBUtil.getRSSURL(plid, 0, 0, groupThreadsUserId, themeDisplay) %>"
 						/>
 					</c:if>

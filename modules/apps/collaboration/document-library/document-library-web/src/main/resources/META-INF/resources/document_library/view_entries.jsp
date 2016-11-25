@@ -382,7 +382,7 @@ if (portletTitleBasedNavigation && (folderId != DLFolderConstants.DEFAULT_PARENT
 								>
 									<aui:a href="<%= rowURL.toString() %>"><%= latestFileVersion.getTitle() %></aui:a>
 
-									<c:if test="<%= fileEntry.hasLock() %>">
+									<c:if test="<%= fileEntry.hasLock() || fileEntry.isCheckedOut() %>">
 										<span>
 											<aui:icon cssClass="icon-monospaced" image="lock" markupView="lexicon" message="locked" />
 										</span>

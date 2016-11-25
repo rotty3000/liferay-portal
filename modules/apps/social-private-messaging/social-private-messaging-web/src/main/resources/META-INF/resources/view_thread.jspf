@@ -17,6 +17,12 @@
 <%
 String backURL = ParamUtil.getString(request, "backURL");
 
+if (Validator.isNull(backURL)) {
+	PortletURL portletURL = renderResponse.createRenderURL();
+
+	backURL = portletURL.toString();
+}
+
 String subject = PrivateMessagingUtil.getThreadSubject(mbThreadId);
 
 boolean hasExistingRecipients = false;

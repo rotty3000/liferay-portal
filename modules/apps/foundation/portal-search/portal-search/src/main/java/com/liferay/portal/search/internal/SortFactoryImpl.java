@@ -55,10 +55,10 @@ public class SortFactoryImpl implements SortFactory {
 		Class<?> clazz, int type, String orderByCol, boolean inferSortField,
 		String orderByType) {
 
-		String sortField = orderByCol;
+		String sortFieldName = orderByCol;
 
 		if (inferSortField) {
-			sortField = getSortField(orderByCol, type, clazz);
+			sortFieldName = getSortField(orderByCol, type, clazz);
 		}
 
 		if (Validator.isNull(orderByType)) {
@@ -66,7 +66,8 @@ public class SortFactoryImpl implements SortFactory {
 		}
 
 		return new Sort(
-			sortField, type, !StringUtil.equalsIgnoreCase(orderByType, "asc"));
+			sortFieldName, type,
+			!StringUtil.equalsIgnoreCase(orderByType, "asc"));
 	}
 
 	@Override

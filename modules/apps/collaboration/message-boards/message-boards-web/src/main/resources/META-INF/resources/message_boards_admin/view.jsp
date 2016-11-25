@@ -207,7 +207,7 @@ request.setAttribute("view.jsp-entriesSearchContainer", searchContainer);
 					delta="<%= rssDelta %>"
 					displayStyle="<%= rssDisplayStyle %>"
 					feedType="<%= rssFeedType %>"
-					message="subscribe-to-recent-posts"
+					message="rss"
 					url="<%= MBUtil.getRSSURL(plid, 0, 0, groupThreadsUserId, themeDisplay) %>"
 				/>
 			</c:if>

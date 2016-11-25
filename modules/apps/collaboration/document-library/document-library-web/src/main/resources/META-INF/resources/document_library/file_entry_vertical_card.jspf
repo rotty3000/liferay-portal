@@ -27,7 +27,7 @@
 				<aui:icon cssClass="icon-monospaced" image="shortcut" markupView="lexicon" message="shortcut" />
 			</div>
 		</c:when>
-		<c:when test="<%= fileEntry.hasLock() %>">
+		<c:when test="<%= fileEntry.hasLock() || fileEntry.isCheckedOut() %>">
 			<div class="file-icon-color-0 sticker sticker-right">
 				<aui:icon cssClass="icon-monospaced" image="lock" markupView="lexicon" message="locked" />
 			</div>

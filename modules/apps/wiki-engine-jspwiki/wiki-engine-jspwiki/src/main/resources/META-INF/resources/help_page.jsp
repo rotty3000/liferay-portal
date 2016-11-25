@@ -22,8 +22,8 @@
 	</h4>
 
 	<pre>
-	//italics//
-	**bold**
+	''italics''
+	__bold__
 	</pre>
 
 	<h4>
@@ -31,9 +31,9 @@
 	</h4>
 
 	<pre>
-	== Large heading ==
-	=== Medium heading ===
-	==== Small heading ====
+	!!!Large heading
+	!!Medium heading
+	!Small heading
 	</pre>
 
 	<h4>
@@ -41,8 +41,8 @@
 	</h4>
 
 	<pre>
-	[[Link to a page]]
-	[[http://www.liferay.com|Link to website]]
+	[Link to a page]
+	[http://www.liferay.com|Link to website]
 	</pre>
 
 	<h4>
@@ -61,8 +61,8 @@
 	</h4>
 
 	<pre>
-	{{attached-image.png}}
-	{{Page Name/other-image.jpg|label}}
+	[attached-image.png]
+	[Page Name/other-image.jpg|label]
 	</pre>
 
 	<h4>
@@ -70,7 +70,7 @@
 	</h4>
 
 	<pre>
-	&lt;&lt;TableOfContents&gt;&gt;
+	{{TableOfContents}}
 	{{{ Preformatted }}}
 	</pre>
 

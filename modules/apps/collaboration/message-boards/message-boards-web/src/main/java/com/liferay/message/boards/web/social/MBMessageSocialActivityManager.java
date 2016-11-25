@@ -14,7 +14,6 @@
 
 package com.liferay.message.boards.web.social;
 
-import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.message.boards.kernel.model.MBDiscussion;
 import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.service.MBDiscussionLocalService;
@@ -47,7 +46,7 @@ public class MBMessageSocialActivityManager
 
 	@Override
 	public void deleteActivities(MBMessage message) throws PortalException {
-		deleteDiscussionSocialActivities(BlogsEntry.class.getName(), message);
+		deleteDiscussionSocialActivities(message.getClassName(), message);
 	}
 
 	protected void deleteDiscussionSocialActivities(
