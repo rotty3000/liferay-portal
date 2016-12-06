@@ -104,12 +104,9 @@ public class UserPermissionImpl
 				if ((actionId.equals(ActionKeys.DELETE) ||
 					 actionId.equals(ActionKeys.IMPERSONATE) ||
 					 actionId.equals(ActionKeys.PERMISSIONS) ||
-					 actionId.equals(ActionKeys.UPDATE) ||
-					 actionId.equals(ActionKeys.VIEW)) &&
-					!permissionChecker.isOmniadmin() &&
-					(PortalUtil.isOmniadmin(user) ||
-					 (!permissionChecker.isCompanyAdmin() &&
-					  PortalUtil.isCompanyAdmin(user)))) {
+					 actionId.equals(ActionKeys.UPDATE)) &&
+					PortalUtil.isOmniadmin(user) &&
+					!permissionChecker.isOmniadmin()) {
 
 					return false;
 				}
