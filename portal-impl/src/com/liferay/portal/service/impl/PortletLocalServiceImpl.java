@@ -1188,6 +1188,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 		if (existingPortlet != null) {
 			boolean active = existingPortlet.isActive();
+
 			portlet.setActive(active);
 		}
 
