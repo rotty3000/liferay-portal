@@ -49,6 +49,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -561,9 +562,16 @@ public class WabProcessor {
 		}
 
 		if (_log.isWarnEnabled() && (portalDependencyJars.length > 0)) {
-			_log.warn(
-				"The property \"portal-dependency-jars\" is deprecated. " +
-					"Specified JARs may not be included in the class path.");
+			Set<String> problemJars = SetUtil.fromArray(portalDependencyJars);
+
+			problemJars.removeAll(_exportedPortalDependencyJars);
+
+			if (!problemJars.isEmpty()) {
+				_log.warn(
+					"The property \"portal-dependency-jars\" is deprecated. " +
+						"Including " + StringUtil.merge(problemJars) +
+							" may cause runtime exceptions.");
+			}
 		}
 
 		processFiles(
@@ -860,7 +868,9 @@ public class WabProcessor {
 
 				String jar = path.substring("WEB-INF/lib/".length());
 
-				if (ArrayUtil.contains(portalDependencyJars, jar)) {
+				if (ArrayUtil.contains(portalDependencyJars, jar) &&
+					_exportedPortalDependencyJars.contains(jar)) {
+
 					_ignoredResources.add(path);
 
 					continue;
@@ -1418,6 +1428,26 @@ public class WabProcessor {
 	private static final Log _log = LogFactoryUtil.getLog(WabProcessor.class);
 
 	private static final DSAnnotations _dsAnnotations = new DSAnnotations();
+	private static final Set<String> _exportedPortalDependencyJars =
+		SetUtil.fromArray(new String[] {
+			"asm-debug-all.jar", "aspectj-rt.jar", "bnd.jar", "ccpp.jar",
+			"commons-beanutils.jar", "commons-chain.jar", "commons-codec.jar",
+			"commons-collections.jar", "commons-discovery.jar",
+			"commons-httpclient.jar", "commons-lang.jar", "commons-logging.jar",
+			"dom4j.jar", "hibernate-commons-annotations.jar",
+			"hibernate-core.jar", "jaxen.jar", "jaxrpc.jar", "jdom.jar",
+			"jodd.jar", "json-java.jar", "liferay-icu4j.jar",
+			"log4j-extras.jar", "log4j.jar", "rome.jar", "slf4j-api.jar",
+			"spring-aop.jar", "spring-aspects.jar", "spring-beans.jar",
+			"spring-context-support.jar", "spring-context.jar",
+			"spring-core.jar", "spring-expression.jar", "spring-jdbc.jar",
+			"spring-jms.jar", "spring-orm.jar", "spring-oxm.jar",
+			"spring-tx.jar", "spring-web.jar", "spring-webmvc-portlet.jar",
+			"spring-webmvc.jar", "struts-core.jar", "struts-extras.jar",
+			"struts-taglib.jar", "struts-tiles.jar", "tika-core.jar",
+			"tika-parsers.jar", "xalan.jar", "xercesImpl.jar", "xml-apis.jar",
+			"xmlsec.jar", "xstream.jar"
+		});
 	private static final MetatypeAnnotations _metatypeAnnotations =
 		new MetatypeAnnotations();
 	private static final MetatypePlugin _metatypePlugin = new MetatypePlugin();
