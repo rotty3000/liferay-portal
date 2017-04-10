@@ -21,6 +21,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Shuyang Zhou
  */
 @Deprecated
-public abstract class BaseProxyBean extends com.liferay.messaging.BaseProxyBean {
+public abstract class BaseProxyBean extends com.liferay.messaging.proxy.BaseProxyBean {
 
 }

@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.config;
  * @author Michael C. Han
  */
 @Deprecated
-public class PluginMessagingConfigurator extends com.liferay.messaging.PluginMessagingConfigurator {
+public class PluginMessagingConfigurator extends com.liferay.messaging.config.PluginMessagingConfigurator {
 
 }

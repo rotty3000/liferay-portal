@@ -21,5 +21,5 @@ package com.liferay.portal.kernel.messaging.async;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Deprecated
-public @interface Async extends com.liferay.messaging.Async {
+public @interface Async extends com.liferay.messaging.async.Async {
 }

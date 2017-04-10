@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class MessagingProxyInvocationHandler implements com.liferay.messaging.MessagingProxyInvocationHandler {
+public class MessagingProxyInvocationHandler implements com.liferay.messaging.proxy.MessagingProxyInvocationHandler {
 
 }

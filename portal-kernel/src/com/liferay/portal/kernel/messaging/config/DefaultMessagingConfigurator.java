@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.messaging.config;
  */
 @Deprecated
 public class DefaultMessagingConfigurator
-	extends com.liferay.messaging.DefaultMessagingConfigurator {
+	extends com.liferay.messaging.config.DefaultMessagingConfigurator {
 
 }
