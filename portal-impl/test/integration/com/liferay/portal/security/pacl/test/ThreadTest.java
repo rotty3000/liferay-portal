@@ -14,11 +14,11 @@
 
 package com.liferay.portal.security.pacl.test;
 
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.test.rule.PACLTestRule;
 
