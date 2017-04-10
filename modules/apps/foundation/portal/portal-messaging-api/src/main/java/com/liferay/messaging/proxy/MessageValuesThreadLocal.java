@@ -14,7 +14,7 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 
 import java.util.HashMap;
