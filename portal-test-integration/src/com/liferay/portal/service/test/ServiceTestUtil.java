@@ -14,18 +14,18 @@
 
 package com.liferay.portal.service.test;
 
+import com.liferay.messaging.BaseDestination;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusUtil;
+import com.liferay.messaging.SynchronousDestination;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseDestination;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.model.Portlet;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;

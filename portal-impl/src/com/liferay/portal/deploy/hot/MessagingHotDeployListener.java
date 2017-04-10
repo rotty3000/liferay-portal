@@ -14,12 +14,12 @@
 
 package com.liferay.portal.deploy.hot;
 
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.deploy.hot.BaseHotDeployListener;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 
 import javax.servlet.ServletContext;
 

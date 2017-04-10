@@ -14,42 +14,22 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import java.io.Serializable;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Michael C. Han
  */
-public class MessageBatch implements Serializable {
+@Deprecated
+public class MessageBatch extends com.liferay.messaging.MessageBatch {
 
 	public MessageBatch(int initialSize) {
-		this(null, initialSize);
+		super(initialSize);
 	}
 
 	public MessageBatch(String messageBatchId) {
-		this(messageBatchId, 10);
+		super(messageBatchId);
 	}
 
 	public MessageBatch(String messageBatchId, int initialSize) {
-		_messageBatchId = messageBatchId;
-		_messages = new ArrayList<>(initialSize);
+		super(messageBatchId, initialSize);
 	}
-
-	public void addMessage(Message message) {
-		_messages.add(message);
-	}
-
-	public String getMessageBatchId() {
-		return _messageBatchId;
-	}
-
-	public List<Message> getMessages() {
-		return _messages;
-	}
-
-	private final String _messageBatchId;
-	private final List<Message> _messages;
 
 }

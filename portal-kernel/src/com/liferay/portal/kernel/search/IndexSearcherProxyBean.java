@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.portal.kernel.messaging.proxy.BaseMultiDestinationProxyBean;
-import com.liferay.portal.kernel.messaging.proxy.ProxyRequest;
+import com.liferay.messaging.proxy.BaseMultiDestinationProxyBean;
+import com.liferay.messaging.proxy.ProxyRequest;
 import com.liferay.portal.kernel.search.suggest.Suggester;
 import com.liferay.portal.kernel.search.suggest.SuggesterResults;
 
