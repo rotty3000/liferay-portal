@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class InvokerMessageListener implements com.liferay.messaging.InvokerMessageListener {
+public class InvokerMessageListener extends com.liferay.messaging.InvokerMessageListener {
 
 }

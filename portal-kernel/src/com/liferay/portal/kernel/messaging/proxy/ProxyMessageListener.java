@@ -21,6 +21,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Igor Spasic
  */
 @Deprecated
-public class ProxyMessageListener implements com.liferay.messaging.proxy.ProxyMessageListener {
+public class ProxyMessageListener extends com.liferay.messaging.proxy.ProxyMessageListener {
 
 }
