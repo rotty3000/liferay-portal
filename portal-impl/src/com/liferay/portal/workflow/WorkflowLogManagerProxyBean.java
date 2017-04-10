@@ -14,7 +14,7 @@
 
 package com.liferay.portal.workflow;
 
-import com.liferay.portal.kernel.messaging.proxy.BaseProxyBean;
+import com.liferay.messaging.proxy.BaseProxyBean;
 import com.liferay.portal.kernel.spring.osgi.OSGiBeanProperties;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowLog;

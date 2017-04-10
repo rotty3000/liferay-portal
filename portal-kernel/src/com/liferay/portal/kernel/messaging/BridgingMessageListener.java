@@ -14,27 +14,10 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
-
 /**
  * @author Michael C. Han
  */
-public class BridgingMessageListener implements MessageListener {
-
-	public BridgingMessageListener() {
-	}
-
-	@Override
-	public void receive(Message message) {
-		_singleDestinationMessageSender.send(message);
-	}
-
-	public void setSingleDestinationMessageSender(
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-
-		_singleDestinationMessageSender = singleDestinationMessageSender;
-	}
-
-	private SingleDestinationMessageSender _singleDestinationMessageSender;
-
+@Deprecated
+public class BridgingMessageListener
+	extends com.liferay.messaging.BridgingMessageListener {
 }
