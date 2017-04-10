@@ -14,11 +14,11 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusException;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.MessageListenerException;
 import com.liferay.portal.kernel.nio.intraband.BaseAsyncDatagramReceiveHandler;
 import com.liferay.portal.kernel.nio.intraband.Datagram;
 import com.liferay.portal.kernel.nio.intraband.Intraband;

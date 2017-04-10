@@ -14,81 +14,11 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
-
 /**
  * @author Michael C. Han
  * @author Shuyang Zhou
  */
-public abstract class BaseMultiDestinationProxyBean {
-
-	public void afterPropertiesSet() {
-		_synchronousMessageSender =
-			SingleDestinationMessageSenderFactoryUtil.
-				getSynchronousMessageSender(_mode);
-	}
-
-	public abstract String getDestinationName(ProxyRequest proxyRequest);
-
-	public void send(ProxyRequest proxyRequest) {
-		MessageBusUtil.sendMessage(
-			getDestinationName(proxyRequest), buildMessage(proxyRequest));
-	}
-
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link MessageBusUtil#getMessageBus)
-	 */
-	@Deprecated
-	public void setMessageBus(MessageBus messageBus) {
-	}
-
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link
-	 *             #setSynchronousMessageSenderMode(
-	 *             SynchronousMessageSender.Mode)}
-	 */
-	@Deprecated
-	public void setSynchronousMessageSender(
-		SynchronousMessageSender synchronousMessageSender) {
-	}
-
-	public void setSynchronousMessageSenderMode(
-		SynchronousMessageSender.Mode mode) {
-
-		_mode = mode;
-	}
-
-	public Object synchronousSend(ProxyRequest proxyRequest) throws Exception {
-		ProxyResponse proxyResponse =
-			(ProxyResponse)_synchronousMessageSender.send(
-				getDestinationName(proxyRequest), buildMessage(proxyRequest));
-
-		if (proxyResponse == null) {
-			return proxyRequest.execute(this);
-		}
-		else if (proxyResponse.hasError()) {
-			throw proxyResponse.getException();
-		}
-		else {
-			return proxyResponse.getResult();
-		}
-	}
-
-	protected Message buildMessage(ProxyRequest proxyRequest) {
-		Message message = new Message();
-
-		message.setPayload(proxyRequest);
-
-		MessageValuesThreadLocal.populateMessageFromThreadLocals(message);
-
-		return message;
-	}
-
-	private SynchronousMessageSender.Mode _mode;
-	private SynchronousMessageSender _synchronousMessageSender;
-
+@Deprecated
+public abstract class BaseMultiDestinationProxyBean
+	extends com.liferay.messaging.proxy.BaseMultiDestinationProxyBean {
 }
