@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class DummyMessageListener implements com.liferay.messaging.DummyMessageListener {
+public class DummyMessageListener extends com.liferay.messaging.DummyMessageListener {
 
 }

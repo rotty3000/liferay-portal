@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Michael C. Han
  */
 @Deprecated
-public class ProxyModeThreadLocalCloseable implements com.liferay.messaging.proxy.ProxyModeThreadLocalCloseable {
+public class ProxyModeThreadLocalCloseable extends com.liferay.messaging.proxy.ProxyModeThreadLocalCloseable {
 
 }

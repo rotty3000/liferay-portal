@@ -21,6 +21,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class ProxyRequest implements com.liferay.messaging.proxy.ProxyRequest {
+public class ProxyRequest extends com.liferay.messaging.proxy.ProxyRequest {
 
 }

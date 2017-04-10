@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class DestinationWrapper implements com.liferay.messaging.DestinationWrapper {
+public class DestinationWrapper extends com.liferay.messaging.DestinationWrapper {
 
 }

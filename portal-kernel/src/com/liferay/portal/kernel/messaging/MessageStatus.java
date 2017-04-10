@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class MessageStatus implements com.liferay.messaging.MessageStatus {
+public class MessageStatus extends com.liferay.messaging.MessageStatus {
 
 }
