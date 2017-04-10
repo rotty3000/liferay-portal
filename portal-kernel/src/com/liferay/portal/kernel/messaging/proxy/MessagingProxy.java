@@ -22,6 +22,6 @@ package com.liferay.portal.kernel.messaging.proxy;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Deprecated
-public @interface MessagingProxy extends com.liferay.messaging.MessagingProxy {
+public @interface MessagingProxy extends com.liferay.messaging.proxy.MessagingProxy {
 
 }

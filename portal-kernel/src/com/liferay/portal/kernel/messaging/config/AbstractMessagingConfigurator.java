@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.messaging.config;
  */
 @Deprecated
 public abstract class AbstractMessagingConfigurator
-	extends com.liferay.messaging.AbstractMessagingConfigurator {
+	extends com.liferay.messaging.config.AbstractMessagingConfigurator {
 
 }

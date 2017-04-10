@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Tina Tian
  */
 @Deprecated
-public class MessageValuesThreadLocal extends com.liferay.messaging.MessageValuesThreadLocal {
+public class MessageValuesThreadLocal extends com.liferay.messaging.proxy.MessageValuesThreadLocal {
 
 }
