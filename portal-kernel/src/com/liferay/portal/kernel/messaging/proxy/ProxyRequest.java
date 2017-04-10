@@ -14,22 +14,6 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
-import com.liferay.portal.kernel.annotation.AnnotationLocator;
-import com.liferay.portal.kernel.util.MethodKey;
-import com.liferay.portal.kernel.util.StringBundler;
-
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author Micha Kiener
  * @author Michael C. Han

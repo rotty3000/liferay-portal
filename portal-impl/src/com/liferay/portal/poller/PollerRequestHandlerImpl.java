@@ -14,14 +14,14 @@
 
 package com.liferay.portal.poller;
 
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusUtil;
+import com.liferay.messaging.MessageListener;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.BrowserTracker;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.poller.PollerHeader;

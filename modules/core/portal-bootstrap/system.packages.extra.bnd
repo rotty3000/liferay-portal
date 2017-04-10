@@ -343,6 +343,7 @@ Import-Package: !*
 	@../../../lib/portal/xstream.jar,\
 	@../../../portal-impl/portal-impl.jar,\
 	@../../../portal-kernel/portal-kernel.jar,\
+	@lib/com.liferay.messaging.api.jar,\
 	@lib/com.liferay.osgi.felix.util.jar,\
 	@lib/com.liferay.osgi.service.tracker.collections.jar,\
 	@lib/com.liferay.portal.app.license.api.jar,\
