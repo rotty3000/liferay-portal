@@ -17,13 +17,13 @@ package com.liferay.document.library.kernel.util;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
+import com.liferay.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.io.FileFilter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -1168,21 +1168,21 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 		}
 		else if ((index == THUMBNAIL_INDEX_CUSTOM_1) &&
 				 ((PrefsPropsUtil.getInteger(
-					 PropsKeys.
-						 DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT) > 0) ||
-				  (PrefsPropsUtil.getInteger(
-					  PropsKeys.
-						  DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH) > 0))) {
+					PropsKeys.
+						DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_HEIGHT) > 0) ||
+				(PrefsPropsUtil.getInteger(
+					PropsKeys.
+						DL_FILE_ENTRY_THUMBNAIL_CUSTOM_1_MAX_WIDTH) > 0))) {
 
 			return true;
 		}
 		else if ((index == THUMBNAIL_INDEX_CUSTOM_2) &&
 				 ((PrefsPropsUtil.getInteger(
-					 PropsKeys.
-						 DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_HEIGHT) > 0) ||
-				  (PrefsPropsUtil.getInteger(
-					  PropsKeys.
-						  DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_WIDTH) > 0))) {
+					PropsKeys.
+						DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_HEIGHT) > 0) ||
+				(PrefsPropsUtil.getInteger(
+					PropsKeys.
+						DL_FILE_ENTRY_THUMBNAIL_CUSTOM_2_MAX_WIDTH) > 0))) {
 
 			return true;
 		}
