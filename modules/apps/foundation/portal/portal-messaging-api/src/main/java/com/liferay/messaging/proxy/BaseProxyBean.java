@@ -14,12 +14,12 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationSynchronousMessageSender;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusUtil;
+import com.liferay.messaging.sender.SingleDestinationMessageSender;
+import com.liferay.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
+import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 
 /**
  * @author Micha Kiener
