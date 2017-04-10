@@ -2,5 +2,5 @@ Bundle-Name: Liferay Messaging API
 Bundle-SymbolicName: com.liferay.messaging.api
 Bundle-Version: 1.0.0
 Export-Package:\
-	com.liferay.messaging,\
+	com.liferay.messaging
 -includeresource: @biz.aQute.bndlib-[0-9]*.jar!/aQute/lib/filter/*
