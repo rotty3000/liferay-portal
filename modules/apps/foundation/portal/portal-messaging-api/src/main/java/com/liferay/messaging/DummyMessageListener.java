@@ -14,8 +14,8 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Brian Wing Shun Chan
@@ -24,12 +24,12 @@ public class DummyMessageListener implements MessageListener {
 
 	@Override
 	public void receive(Message message) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Received " + message);
+		if (_logger.isInfoEnabled()) {
+			_logger.info("Received " + message);
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DummyMessageListener.class);
 
 }

@@ -14,10 +14,11 @@
 
 package com.liferay.messaging;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
 import com.liferay.messaging.sender.SynchronousMessageSender;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalMessageBusPermission;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
@@ -199,7 +200,7 @@ public class MessageBusUtil {
 		_synchronousMessageSenderMode = synchronousMessageSenderMode;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(MessageBusUtil.class);
+	private static final Logger _logger = LoggerFactory.getLogger(MessageBusUtil.class);
 
 	private static volatile MessageBus _messageBus =
 		ServiceProxyFactory.newServiceTrackedInstance(

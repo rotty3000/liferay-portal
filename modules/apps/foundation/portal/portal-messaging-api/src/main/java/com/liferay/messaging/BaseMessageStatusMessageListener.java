@@ -14,8 +14,9 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
 
 /**
@@ -35,7 +36,7 @@ public abstract class BaseMessageStatusMessageListener
 			doReceive(message, messageStatus);
 		}
 		catch (Exception e) {
-			_log.error(
+			_logger.error(
 				"Unable to process request " + message.getDestinationName(), e);
 
 			messageStatus.setException(e);
@@ -55,7 +56,7 @@ public abstract class BaseMessageStatusMessageListener
 			Message message, MessageStatus messageStatus)
 		throws Exception;
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		BaseMessageStatusMessageListener.class);
 
 	private SingleDestinationMessageSender _statusSender;

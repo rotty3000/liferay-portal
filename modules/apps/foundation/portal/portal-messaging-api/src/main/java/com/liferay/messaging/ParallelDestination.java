@@ -14,14 +14,15 @@
 
 package com.liferay.messaging;
 
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.liferay.portal.kernel.cache.thread.local.Lifecycle;
 import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.CentralizedThreadLocal;
-
-import java.util.Set;
 
 /**
  * <p>
@@ -52,7 +53,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 						messageListener.receive(message);
 					}
 					catch (MessageListenerException mle) {
-						_log.error("Unable to process message " + message, mle);
+						_logger.error("Unable to process message " + message, mle);
 					}
 					finally {
 						if (Thread.currentThread() != currentThread) {
@@ -70,7 +71,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		ParallelDestination.class);
 
 }

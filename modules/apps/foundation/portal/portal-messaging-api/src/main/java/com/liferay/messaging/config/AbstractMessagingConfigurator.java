@@ -14,6 +14,17 @@
 
 package com.liferay.messaging.config;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationEventListener;
@@ -22,8 +33,6 @@ import com.liferay.messaging.DestinationFactoryUtil;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusEventListener;
 import com.liferay.messaging.MessageListener;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
 import com.liferay.portal.kernel.nio.intraband.messaging.DestinationConfigurationProcessCallable;
 import com.liferay.portal.kernel.nio.intraband.rpc.IntrabandRPCUtil;
@@ -39,15 +48,6 @@ import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceRegistrar;
 import com.liferay.registry.dependency.ServiceDependencyListener;
 import com.liferay.registry.dependency.ServiceDependencyManager;
-
-import java.lang.reflect.Method;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Michael C. Han
@@ -353,8 +353,8 @@ public abstract class AbstractMessagingConfigurator
 					destinationConfiguration.getDestinationName());
 			}
 			catch (SecurityException se) {
-				if (_log.isInfoEnabled()) {
-					_log.info(
+				if (_logger.isInfoEnabled()) {
+					_logger.info(
 						"Rejecting destination " +
 							destinationConfiguration.getDestinationName());
 				}
@@ -383,8 +383,8 @@ public abstract class AbstractMessagingConfigurator
 				PortalMessageBusPermission.checkListen(destinationName);
 			}
 			catch (SecurityException se) {
-				if (_log.isInfoEnabled()) {
-					_log.info("Rejecting destination " + destinationName);
+				if (_logger.isInfoEnabled()) {
+					_logger.info("Rejecting destination " + destinationName);
 				}
 
 				continue;
@@ -417,7 +417,11 @@ public abstract class AbstractMessagingConfigurator
 		}
 	}
 
+	/*
 	private static final Log _log = LogFactoryUtil.getLog(
+		AbstractMessagingConfigurator.class);
+	*/
+	private static final Logger _logger = LoggerFactory.getLogger(
 		AbstractMessagingConfigurator.class);
 
 	private final Set<DestinationConfiguration> _destinationConfigurations =
@@ -474,7 +478,7 @@ public abstract class AbstractMessagingConfigurator
 					sb.append(" on MPI for ");
 					sb.append(_destinationName);
 
-					_log.error(sb.toString(), e);
+					_logger.error(sb.toString(), e);
 				}
 			}
 

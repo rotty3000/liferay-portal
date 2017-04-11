@@ -4,6 +4,7 @@ targetCompatibility = "1.8"
 dependencies {
 	provided group: "com.liferay", name: "com.liferay.registry.api", version: "1.1.0"
 	provided group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.2"
 }
 
 liferay {

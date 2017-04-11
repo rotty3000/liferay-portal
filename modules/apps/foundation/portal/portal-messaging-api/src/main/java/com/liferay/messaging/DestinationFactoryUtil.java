@@ -14,11 +14,12 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ServiceProxyFactory;
-
 import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 /**
  * @author Michael C. Han
@@ -46,7 +47,7 @@ public class DestinationFactoryUtil {
 		return _destinationFactory;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DestinationFactoryUtil.class);
 
 	private static volatile DestinationFactory _destinationFactory =
