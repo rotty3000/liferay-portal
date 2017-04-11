@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Shuyang Zhou
  */
 @Deprecated
-public abstract class BaseAsyncDestination extends com.liferay.messaging.BaseAsyncDestination {
-
+public abstract class BaseAsyncDestination
+	extends com.liferay.messaging.BaseAsyncDestination {
 }

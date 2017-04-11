@@ -21,5 +21,4 @@ package com.liferay.portal.kernel.messaging;
 @Deprecated
 public abstract class BaseMessageStatusMessageListener
 	extends com.liferay.messaging.BaseMessageStatusMessageListener {
-
 }

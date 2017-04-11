@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class GlobalMessageBusEventListener extends com.liferay.messaging.GlobalMessageBusEventListener {
-
+public class GlobalMessageBusEventListener
+	extends com.liferay.messaging.GlobalMessageBusEventListener {
 }

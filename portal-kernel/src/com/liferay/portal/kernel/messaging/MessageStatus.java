@@ -19,5 +19,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public class MessageStatus extends com.liferay.messaging.MessageStatus {
-
 }

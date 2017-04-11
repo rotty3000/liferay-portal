@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class MessageBusException extends com.liferay.messaging.MessageBusException {
-
+public class MessageBusException
+	extends com.liferay.messaging.MessageBusException {
 }

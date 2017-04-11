@@ -14,12 +14,18 @@
 
 package com.liferay.portal.kernel.messaging.async;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * @author Shuyang Zhou
  */
+@Deprecated
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@Deprecated
-public @interface Async extends com.liferay.messaging.async.Async {
+public @interface Async {
 }

@@ -20,4 +20,16 @@ package com.liferay.portal.kernel.messaging;
 @Deprecated
 public class MessageBatch extends com.liferay.messaging.MessageBatch {
 
+	public MessageBatch(int initialSize) {
+		super(initialSize);
+	}
+
+	public MessageBatch(String messageBatchId) {
+		super(messageBatchId);
+	}
+
+	public MessageBatch(String messageBatchId, int initialSize) {
+		super(messageBatchId, initialSize);
+	}
+
 }

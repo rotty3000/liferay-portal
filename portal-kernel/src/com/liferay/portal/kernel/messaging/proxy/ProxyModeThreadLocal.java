@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class ProxyModeThreadLocal extends com.liferay.messaging.proxy.ProxyModeThreadLocal {
-
+public class ProxyModeThreadLocal
+	extends com.liferay.messaging.proxy.ProxyModeThreadLocal {
 }

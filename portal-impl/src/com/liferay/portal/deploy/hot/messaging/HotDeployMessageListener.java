@@ -14,10 +14,10 @@
 
 package com.liferay.portal.deploy.hot.messaging;
 
+import com.liferay.messaging.BaseMessageListener;
+import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
 
 /**
  * @author Brian Wing Shun Chan

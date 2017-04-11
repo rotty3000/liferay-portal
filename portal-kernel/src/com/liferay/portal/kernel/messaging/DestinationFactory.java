@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public interface DestinationFactory extends com.liferay.messaging.DestinationFactory {
-
+public interface DestinationFactory
+	extends com.liferay.messaging.DestinationFactory {
 }

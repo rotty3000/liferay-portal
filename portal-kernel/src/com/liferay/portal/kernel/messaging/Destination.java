@@ -19,5 +19,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public interface Destination extends com.liferay.messaging.Destination {
-
 }

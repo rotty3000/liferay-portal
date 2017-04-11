@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class MessageListenerException extends com.liferay.messaging.MessageListenerException {
-
+public class MessageListenerException
+	extends com.liferay.messaging.MessageListenerException {
 }

@@ -23,6 +23,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class ParallelDestination extends com.liferay.messaging.ParallelDestination {
-
+public class ParallelDestination
+	extends com.liferay.messaging.ParallelDestination {
 }

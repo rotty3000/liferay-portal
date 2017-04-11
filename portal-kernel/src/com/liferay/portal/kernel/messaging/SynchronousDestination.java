@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class SynchronousDestination extends com.liferay.messaging.SynchronousDestination {
-
+public class SynchronousDestination
+	extends com.liferay.messaging.SynchronousDestination {
 }

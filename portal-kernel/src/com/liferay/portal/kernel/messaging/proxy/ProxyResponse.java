@@ -20,6 +20,5 @@ package com.liferay.portal.kernel.messaging.proxy;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class ProxyResponse extends com.liferay.messaging.proxy.ProxyResponse  {
-
+public class ProxyResponse extends com.liferay.messaging.proxy.ProxyResponse {
 }

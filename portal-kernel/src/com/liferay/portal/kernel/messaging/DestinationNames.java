@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public interface DestinationNames extends com.liferay.messaging.DestinationNames {
-
+public interface DestinationNames
+	extends com.liferay.messaging.DestinationNames {
 }

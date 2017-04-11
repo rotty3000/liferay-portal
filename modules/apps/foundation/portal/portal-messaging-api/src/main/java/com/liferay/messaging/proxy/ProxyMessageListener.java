@@ -14,12 +14,12 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusUtil;
 import com.liferay.messaging.MessageListener;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 /**

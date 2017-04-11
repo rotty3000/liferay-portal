@@ -50,17 +50,17 @@ public class SingleDestinationMessageSenderFactoryUtil {
 			getSynchronousMessageSender(mode);
 	}
 
+	protected SingleDestinationMessageSenderFactoryUtil() {
+	}
+
 	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
+	 * @deprecated As of 1.0.0, with no direct replacement
 	 */
 	@Deprecated
 	protected SingleDestinationMessageSenderFactory
 		getSingleDestinationMessageSenderFactory() {
 
 		return _singleDestinationMessageSenderFactory;
-	}
-
-	private SingleDestinationMessageSenderFactoryUtil() {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

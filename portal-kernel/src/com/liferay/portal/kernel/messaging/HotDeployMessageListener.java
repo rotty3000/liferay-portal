@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class HotDeployMessageListener extends com.liferay.messaging.HotDeployMessageListener {
-
+public class HotDeployMessageListener
+	extends com.liferay.messaging.HotDeployMessageListener {
 }

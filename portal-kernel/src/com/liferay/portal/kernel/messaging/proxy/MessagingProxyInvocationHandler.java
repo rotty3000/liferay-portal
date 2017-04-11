@@ -14,10 +14,17 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
+import com.liferay.messaging.proxy.BaseProxyBean;
+
 /**
  * @author Shuyang Zhou
  */
 @Deprecated
-public class MessagingProxyInvocationHandler extends com.liferay.messaging.proxy.MessagingProxyInvocationHandler {
+public class MessagingProxyInvocationHandler
+	extends com.liferay.messaging.proxy.MessagingProxyInvocationHandler {
+
+	public MessagingProxyInvocationHandler(BaseProxyBean baseProxyBean) {
+		super(baseProxyBean);
+	}
 
 }

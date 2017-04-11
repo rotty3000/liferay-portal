@@ -35,15 +35,15 @@ public class DestinationFactoryUtil {
 		return _destinationFactory.getDestinationTypes();
 	}
 
+	protected DestinationFactoryUtil() {
+	}
+
 	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
+	 * @deprecated As of 1.0.0, with no direct replacement
 	 */
 	@Deprecated
 	protected DestinationFactory getDestinationFactory() {
 		return _destinationFactory;
-	}
-
-	private DestinationFactoryUtil() {
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

@@ -14,8 +14,6 @@
 
 package com.liferay.messaging.config;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationEventListener;
@@ -24,6 +22,8 @@ import com.liferay.messaging.DestinationFactoryUtil;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusEventListener;
 import com.liferay.messaging.MessageListener;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
 import com.liferay.portal.kernel.nio.intraband.messaging.DestinationConfigurationProcessCallable;
 import com.liferay.portal.kernel.nio.intraband.rpc.IntrabandRPCUtil;
@@ -251,7 +251,7 @@ public abstract class AbstractMessagingConfigurator
 
 	/**
 	 * @param      replacementDestinations
-	 * @deprecated As of 7.0.0, replaced by {@link #setDestinations(List)}
+	 * @deprecated As of 1.0.0, replaced by {@link #setDestinations(List)}
 	 */
 	@Deprecated
 	@Override

@@ -20,5 +20,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public class MessageBusUtil extends com.liferay.messaging.MessageBusUtil {
-
 }

@@ -20,4 +20,6 @@ package com.liferay.portal.kernel.messaging.proxy;
 @Deprecated
 public enum ProxyMode {
 
+	ASYNC, SYNC
+
 }

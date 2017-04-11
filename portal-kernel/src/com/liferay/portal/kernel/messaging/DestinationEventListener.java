@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public interface DestinationEventListener extends com.liferay.messaging.DestinationEventListener {
-
+public interface DestinationEventListener
+	extends com.liferay.messaging.DestinationEventListener {
 }

@@ -24,5 +24,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public class SerialDestination extends com.liferay.messaging.SerialDestination {
-
 }

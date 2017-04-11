@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging.config;
  * @author Shuyang Zhou
  */
 @Deprecated
-public class MessagingConfiguratorRegistry extends com.liferay.messaging.config.MessagingConfiguratorRegistry {
-
+public class MessagingConfiguratorRegistry
+	extends com.liferay.messaging.config.MessagingConfiguratorRegistry {
 }

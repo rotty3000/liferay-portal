@@ -14,10 +14,17 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.messaging.Destination;
+
 /**
  * @author Shuyang Zhou
  */
 @Deprecated
-public class DestinationWrapper extends com.liferay.messaging.DestinationWrapper {
+public class DestinationWrapper
+	extends com.liferay.messaging.DestinationWrapper {
+
+	public DestinationWrapper(Destination destination) {
+		super(destination);
+	}
 
 }

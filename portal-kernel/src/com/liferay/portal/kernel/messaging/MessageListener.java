@@ -19,5 +19,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public interface MessageListener extends com.liferay.messaging.MessageListener {
-
 }

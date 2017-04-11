@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public class DestinationStatistics extends com.liferay.messaging.DestinationStatistics {
-
+public class DestinationStatistics
+	extends com.liferay.messaging.DestinationStatistics {
 }

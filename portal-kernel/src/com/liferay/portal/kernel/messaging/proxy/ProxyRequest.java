@@ -22,5 +22,4 @@ package com.liferay.portal.kernel.messaging.proxy;
  */
 @Deprecated
 public class ProxyRequest extends com.liferay.messaging.proxy.ProxyRequest {
-
 }

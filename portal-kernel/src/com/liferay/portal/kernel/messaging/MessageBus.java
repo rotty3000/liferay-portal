@@ -19,5 +19,4 @@ package com.liferay.portal.kernel.messaging;
  */
 @Deprecated
 public interface MessageBus extends com.liferay.messaging.MessageBus {
-
 }

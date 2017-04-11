@@ -18,6 +18,13 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class DestinationConfiguration extends com.liferay.messaging.DestinationConfiguration {
+public class DestinationConfiguration
+	extends com.liferay.messaging.DestinationConfiguration {
+
+	public DestinationConfiguration(
+		String destinationType, String destinationName) {
+
+		super(destinationType, destinationName);
+	}
 
 }

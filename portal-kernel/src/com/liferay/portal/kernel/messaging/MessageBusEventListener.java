@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Shuyang Zhou
  */
 @Deprecated
-public interface MessageBusEventListener extends com.liferay.messaging.MessageBusEventListener {
-
+public interface MessageBusEventListener
+	extends com.liferay.messaging.MessageBusEventListener {
 }

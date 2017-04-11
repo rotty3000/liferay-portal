@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class BridgingMessageListener extends com.liferay.messaging.BridgingMessageListener {
-
+public class BridgingMessageListener
+	extends com.liferay.messaging.BridgingMessageListener {
 }

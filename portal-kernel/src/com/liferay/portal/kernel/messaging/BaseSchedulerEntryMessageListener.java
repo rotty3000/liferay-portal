@@ -21,5 +21,4 @@ package com.liferay.portal.kernel.messaging;
 @Deprecated
 public abstract class BaseSchedulerEntryMessageListener
 	extends com.liferay.messaging.BaseSchedulerEntryMessageListener {
-
 }

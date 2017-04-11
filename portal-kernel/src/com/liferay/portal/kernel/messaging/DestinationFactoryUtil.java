@@ -18,6 +18,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  */
 @Deprecated
-public class DestinationFactoryUtil extends com.liferay.messaging.DestinationFactoryUtil {
-
+public class DestinationFactoryUtil
+	extends com.liferay.messaging.DestinationFactoryUtil {
 }
