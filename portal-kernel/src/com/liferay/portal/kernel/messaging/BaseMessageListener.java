@@ -19,6 +19,6 @@ package com.liferay.portal.kernel.messaging;
  * @author Brian Wing Shun Chan
  */
 @Deprecated
-public abstract class BaseMessageListener extends com.liferay.messaging.MessageListener {
+public abstract class BaseMessageListener extends com.liferay.messaging.BaseMessageListener {
 
 }
