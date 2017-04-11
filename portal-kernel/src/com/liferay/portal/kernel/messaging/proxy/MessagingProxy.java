@@ -14,13 +14,6 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * @author Michael C. Han
  */
@@ -28,12 +21,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-public @interface MessagingProxy {
-
-	public static final String LOCAL_MESSAGE = "LOCAL_MESSAGE";
-
-	public boolean local() default false;
-
-	public ProxyMode mode();
+@Deprecated
+public @interface MessagingProxy extends com.liferay.messaging.proxy.MessagingProxy {
 
 }

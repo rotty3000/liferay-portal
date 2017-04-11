@@ -17,16 +17,7 @@ package com.liferay.portal.kernel.messaging;
 /**
  * @author Shuyang Zhou
  */
-public abstract class MessageRunnable implements Runnable {
-
-	public MessageRunnable(Message message) {
-		_message = message;
-	}
-
-	public Message getMessage() {
-		return _message;
-	}
-
-	private final Message _message;
+@Deprecated
+public abstract class MessageRunnable extends com.liferay.messaging.MessageRunnable {
 
 }
