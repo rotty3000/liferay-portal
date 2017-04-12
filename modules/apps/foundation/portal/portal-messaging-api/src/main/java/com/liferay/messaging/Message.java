@@ -14,19 +14,19 @@
 
 package com.liferay.messaging;
 
+import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.osgi.util.converter.Converting;
+import org.osgi.util.converter.StandardConverter;
+
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.TransientValue;
-
-import java.io.Serializable;
-
-import java.nio.ByteBuffer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -118,7 +118,8 @@ public class Message implements Cloneable, Serializable {
 			value = ((Boolean)object).booleanValue();
 		}
 		else {
-			value = GetterUtil.getBoolean((String)object);
+			Converting converting = _converter.convert(object);
+			value = converting.to(Boolean.class);
 		}
 
 		return value;
@@ -137,7 +138,8 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).doubleValue();
 		}
 		else {
-			value = GetterUtil.getDouble((String)object);
+			Converting converting = _converter.convert(object);
+			value = converting.to(Double.class);
 		}
 
 		return value;
@@ -152,7 +154,8 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).intValue();
 		}
 		else {
-			value = GetterUtil.getInteger((String)object);
+			Converting converting = _converter.convert(object);
+			value = converting.to(Integer.class);
 		}
 
 		return value;
@@ -167,7 +170,8 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).longValue();
 		}
 		else {
-			value = GetterUtil.getLong((String)object);
+			Converting converting = _converter.convert(object);
+			value = converting.to(Long.class);
 		}
 
 		return value;
@@ -190,7 +194,8 @@ public class Message implements Cloneable, Serializable {
 	}
 
 	public String getString(String key) {
-		return GetterUtil.getString(String.valueOf(get(key)));
+		Converting converting = _converter.convert(String.valueOf(get(key)));
+		return converting.to(String.class);
 	}
 
 	public Map<String, Object> getValues() {
@@ -278,6 +283,7 @@ public class Message implements Cloneable, Serializable {
 		return sb.toString();
 	}
 
+	private StandardConverter _converter;
 	private String _destinationName;
 	private Object _payload;
 	private Object _response;
