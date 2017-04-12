@@ -14,12 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.util.StringBundler;
-
 import java.io.Serializable;
-
 import java.util.Objects;
+
+import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 
 /**
  * @author Michael C. Han
@@ -135,7 +133,7 @@ public class DestinationConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBuilder sb = new StringBuilder(13);
 
 		sb.append("{_destinationName=");
 		sb.append(_destinationName);
