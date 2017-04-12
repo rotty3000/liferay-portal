@@ -49,7 +49,7 @@ public abstract class BaseProxyBean {
 	}
 
 	/**
-	 * @deprecated As of 1.0.0, replaced by {@link #setDestinationName)
+	 * @deprecated As of 1.0.0, replaced by {@link #setDestinationName}
 	 */
 	@Deprecated
 	public void setSingleDestinationMessageSender(
