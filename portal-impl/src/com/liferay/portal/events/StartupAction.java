@@ -14,6 +14,7 @@
 
 package com.liferay.portal.events;
 
+import com.liferay.messaging.MessageBus;
 import com.liferay.portal.fabric.server.FabricServerUtil;
 import com.liferay.portal.jericho.CachedLoggerProvider;
 import com.liferay.portal.kernel.dao.db.DB;
@@ -24,7 +25,6 @@ import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.executor.PortalExecutorManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.SystemDataType;

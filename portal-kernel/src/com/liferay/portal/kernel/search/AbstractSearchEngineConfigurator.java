@@ -14,18 +14,18 @@
 
 package com.liferay.portal.kernel.search;
 
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationFactory;
+import com.liferay.messaging.DestinationFactoryUtil;
+import com.liferay.messaging.InvokerMessageListener;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageListener;
 import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
 import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.DestinationFactory;
-import com.liferay.portal.kernel.messaging.DestinationFactoryUtil;
-import com.liferay.portal.kernel.messaging.InvokerMessageListener;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.search.messaging.BaseSearchEngineMessageListener;
 import com.liferay.portal.kernel.search.messaging.SearchReaderMessageListener;

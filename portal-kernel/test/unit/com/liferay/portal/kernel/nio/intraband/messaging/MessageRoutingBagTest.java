@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
+import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 

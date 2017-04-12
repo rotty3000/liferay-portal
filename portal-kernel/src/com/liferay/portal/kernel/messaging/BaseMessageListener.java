@@ -18,21 +18,7 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
  */
-public abstract class BaseMessageListener implements MessageListener {
-
-	@Override
-	public void receive(Message message) throws MessageListenerException {
-		try {
-			doReceive(message);
-		}
-		catch (MessageListenerException mle) {
-			throw mle;
-		}
-		catch (Exception e) {
-			throw new MessageListenerException(e);
-		}
-	}
-
-	protected abstract void doReceive(Message message) throws Exception;
-
+@Deprecated
+public abstract class BaseMessageListener
+	extends com.liferay.messaging.BaseMessageListener {
 }
