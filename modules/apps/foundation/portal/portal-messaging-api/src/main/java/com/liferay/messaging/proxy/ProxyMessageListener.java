@@ -73,7 +73,7 @@ public class ProxyMessageListener implements MessageListener {
 				responseMessage.setPayload(proxyResponse);
 
 				if (_logger.isDebugEnabled() && (proxyResponseException != null)) {
-					_logger.debug(proxyResponseException, proxyResponseException);
+					_logger.debug(proxyResponseException.toString(), proxyResponseException);
 				}
 
 				_messageBus.sendMessage(
@@ -83,7 +83,7 @@ public class ProxyMessageListener implements MessageListener {
 				if (proxyResponseException != null) {
 					if (_logger.isWarnEnabled()) {
 						_logger.warn(
-							proxyResponseException, proxyResponseException);
+							proxyResponseException.toString(), proxyResponseException);
 					}
 				}
 

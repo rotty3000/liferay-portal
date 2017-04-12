@@ -417,10 +417,6 @@ public abstract class AbstractMessagingConfigurator
 		}
 	}
 
-	/*
-	private static final Log _log = LogFactoryUtil.getLog(
-		AbstractMessagingConfigurator.class);
-	*/
 	private static final Logger _logger = LoggerFactory.getLogger(
 		AbstractMessagingConfigurator.class);
 
