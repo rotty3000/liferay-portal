@@ -31,6 +31,10 @@ import com.liferay.portal.kernel.util.TransientValue;
  * @author Michael C. Han
  */
 public class Message implements Cloneable, Serializable {
+	
+	public Message() {
+		_converter = new StandardConverter();
+	}
 
 	public static Message fromByteArray(byte[] bytes)
 		throws ClassNotFoundException {
