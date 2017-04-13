@@ -7,5 +7,3 @@ Export-Package:\
 	com.liferay.messaging.config,\
 	com.liferay.messaging.proxy,\
 	com.liferay.messaging.sender
-Import-Package:\
-	org.osgi.util.converter
