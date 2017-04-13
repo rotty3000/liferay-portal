@@ -19,12 +19,10 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.util.converter.Converting;
 import org.osgi.util.converter.StandardConverter;
 
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.TransientValue;
 
@@ -118,8 +116,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Boolean)object).booleanValue();
 		}
 		else {
-			Converting converting = _converter.convert(object);
-			value = converting.to(Boolean.class);
+			value = _converter.convert(object).to(boolean.class);
 		}
 
 		return value;
@@ -138,8 +135,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).doubleValue();
 		}
 		else {
-			Converting converting = _converter.convert(object);
-			value = converting.to(Double.class);
+			value = _converter.convert(object).to(double.class);
 		}
 
 		return value;
@@ -154,8 +150,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).intValue();
 		}
 		else {
-			Converting converting = _converter.convert(object);
-			value = converting.to(Integer.class);
+			value = _converter.convert(object).to(int.class);
 		}
 
 		return value;
@@ -170,8 +165,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).longValue();
 		}
 		else {
-			Converting converting = _converter.convert(object);
-			value = converting.to(Long.class);
+			value = _converter.convert(object).to(long.class);
 		}
 
 		return value;
@@ -194,8 +188,7 @@ public class Message implements Cloneable, Serializable {
 	}
 
 	public String getString(String key) {
-		Converting converting = _converter.convert(String.valueOf(get(key)));
-		return converting.to(String.class);
+		return _converter.convert(String.valueOf(get(key))).to(String.class);
 	}
 
 	public Map<String, Object> getValues() {
@@ -277,7 +270,8 @@ public class Message implements Cloneable, Serializable {
 		sb.append(", payload=");
 		sb.append(_payload);
 		sb.append(", values=");
-		sb.append(MapUtil.toString(_values, null, ".*[pP]assword.*"));
+		//sb.append(MapUtil.toString(_values, null, ".*[pP]assword.*"));
+		sb.append(_converter.convert(_values).to(String.class));
 		sb.append("}");
 
 		return sb.toString();
