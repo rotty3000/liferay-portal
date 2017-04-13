@@ -6,4 +6,5 @@ Export-Package:\
 	com.liferay.messaging.async,\
 	com.liferay.messaging.config,\
 	com.liferay.messaging.proxy,\
-	com.liferay.messaging.sender
+	com.liferay.messaging.sender,\
+	org.osgi.dto
