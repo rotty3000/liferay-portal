@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
+import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.messaging.Message;
 
 import java.io.Externalizable;
 import java.io.IOException;

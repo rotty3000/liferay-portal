@@ -14,12 +14,12 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationWrapper;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.proxy.MessagingProxy;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationWrapper;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusUtil;
+import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.proxy.MessagingProxy;
 import com.liferay.portal.kernel.nio.intraband.Datagram;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
