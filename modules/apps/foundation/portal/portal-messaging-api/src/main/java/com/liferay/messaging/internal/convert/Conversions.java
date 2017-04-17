@@ -13,6 +13,8 @@ import org.osgi.util.converter.StandardConverter;
 
 public class Conversions {
 
+	public static final String BLANK = "";
+	public static final String[] BOOLEANS = {"true", "t", "y", "on", "1"};
 	public static final boolean DEFAULT_BOOLEAN = false;
 	public static final double DEFAULT_DOUBLE = 0.0;
 	public static final int DEFAULT_INTEGER = 0;
@@ -75,7 +77,7 @@ public class Conversions {
 			rule(
 				new Rule<String, Boolean>(
 					o -> {
-						if (Arrays.asList("true", "t", "y", "on", "1").contains(o)) {
+						if (Arrays.asList(BOOLEANS).contains(o)) {
 							return true;
 						}
 						return false;

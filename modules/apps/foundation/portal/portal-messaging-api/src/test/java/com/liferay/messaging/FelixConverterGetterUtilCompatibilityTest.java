@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.liferay.messaging.internal.convert.Conversions;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
 
 public class FelixConverterGetterUtilCompatibilityTest {
 
@@ -20,11 +18,11 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		Assert.assertTrue(Conversions.getBoolean(Boolean.TRUE));
 		Assert.assertFalse(Conversions.getBoolean(null, false));
 		Assert.assertTrue(Conversions.getBoolean(null, true));
-		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK));
-		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK, false));
-		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK, true));
+		Assert.assertFalse(Conversions.getBoolean(Conversions.BLANK));
+		Assert.assertFalse(Conversions.getBoolean(Conversions.BLANK, false));
+		Assert.assertFalse(Conversions.getBoolean(Conversions.BLANK, true));
 
-		for (String s : GetterUtil.BOOLEANS) {
+		for (String s : Conversions.BOOLEANS) {
 			Assert.assertTrue(Conversions.getBoolean(s));
 			Assert.assertTrue(Conversions.getBoolean(s, true));
 			Assert.assertTrue(Conversions.getBoolean(s, false));
@@ -37,38 +35,38 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		// Wrong first char
 
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_DOUBLE, Conversions.getDouble("e12.3"),
-			GetterUtil.DEFAULT_DOUBLE);
+			Conversions.DEFAULT_DOUBLE, Conversions.getDouble("e12.3"),
+			Conversions.DEFAULT_DOUBLE);
 
 		// Wrong middle char
 
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_DOUBLE, Conversions.getDouble("12e.3"),
-			GetterUtil.DEFAULT_DOUBLE);
+			Conversions.DEFAULT_DOUBLE, Conversions.getDouble("12e.3"),
+			Conversions.DEFAULT_DOUBLE);
 
 		// Start with '+'
 
 		Assert.assertEquals(
-			12.3, Conversions.getDouble("+12.3"), GetterUtil.DEFAULT_DOUBLE);
+			12.3, Conversions.getDouble("+12.3"), Conversions.DEFAULT_DOUBLE);
 
 		// Start with '-'
 
 		Assert.assertEquals(
-			-12.3, Conversions.getDouble("-12.3"), GetterUtil.DEFAULT_DOUBLE);
+			-12.3, Conversions.getDouble("-12.3"), Conversions.DEFAULT_DOUBLE);
 
 		// Maximum double
 
 		Assert.assertEquals(
 			Double.MAX_VALUE,
 			Conversions.getDouble(Double.toString(Double.MAX_VALUE)),
-			GetterUtil.DEFAULT_DOUBLE);
+			Conversions.DEFAULT_DOUBLE);
 
 		// Minimum double
 
 		Assert.assertEquals(
 			Double.MIN_VALUE,
 			Conversions.getDouble(Double.toString(Double.MIN_VALUE)),
-			GetterUtil.DEFAULT_DOUBLE);
+			Conversions.DEFAULT_DOUBLE);
 
 		/*
 		// Locale aware
@@ -251,9 +249,9 @@ public class FelixConverterGetterUtilCompatibilityTest {
 	@Test
 	public void testGetString() {
 		Assert.assertEquals(
-			StringPool.BLANK, Conversions.getString(StringPool.BLANK));
+			Conversions.BLANK, Conversions.getString(Conversions.BLANK));
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_STRING, Conversions.getString(null));
+			Conversions.DEFAULT_STRING, Conversions.getString(null));
 		Assert.assertEquals(
 			"default", Conversions.getString(null, "default"));
 		Assert.assertEquals(
