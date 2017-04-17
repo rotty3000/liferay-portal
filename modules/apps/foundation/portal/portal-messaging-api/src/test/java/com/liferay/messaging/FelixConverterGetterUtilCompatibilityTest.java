@@ -1,19 +1,10 @@
 package com.liferay.messaging;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.osgi.util.converter.Converter;
-import org.osgi.util.converter.ConverterBuilder;
-import org.osgi.util.converter.Rule;
-import org.osgi.util.converter.StandardConverter;
 
 import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.portal.kernel.util.GetterUtil;
