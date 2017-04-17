@@ -25,7 +25,7 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK, true));
 
 		for (String s : GetterUtil.BOOLEANS) {
-			Assert.assertTrue(Conversions.getBoolean(s, true));
+			Assert.assertTrue(Conversions.getBoolean(s));
 			Assert.assertTrue(Conversions.getBoolean(s, true));
 			Assert.assertTrue(Conversions.getBoolean(s, false));
 		}
