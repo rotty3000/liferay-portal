@@ -22,12 +22,16 @@ public class Conversions {
 	public static final short DEFAULT_SHORT = 0;
 	public static final String DEFAULT_STRING = "";
 
+	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
+		return _instance._converter.convert(object).defaultValue(defaultValue).to(clazz);
+	}
+
 	public static boolean getBoolean(Object object) {
 		return getBoolean(object, DEFAULT_BOOLEAN);
 	}
 
 	public static boolean getBoolean(Object object, boolean defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(boolean.class);
+		return convert(object, defaultValue, boolean.class);
 	}
 
 	public static double getDouble(Object object) {
@@ -35,7 +39,7 @@ public class Conversions {
 	}
 
 	public static double getDouble(Object object, double defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(double.class);
+		return convert(object, defaultValue, double.class);
 	}
 
 	public static int getInteger(Object object) {
@@ -43,7 +47,7 @@ public class Conversions {
 	}
 
 	public static int getInteger(Object object, int defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(int.class);
+		return convert(object, defaultValue, int.class);
 	}
 
 	public static long getLong(Object object) {
@@ -51,7 +55,7 @@ public class Conversions {
 	}
 
 	public static long getLong(Object object, long defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(long.class);
+		return convert(object, defaultValue, long.class);
 	}
 
 	public static short getShort(Object object) {
@@ -59,7 +63,7 @@ public class Conversions {
 	}
 
 	public static short getShort(Object object, short defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(short.class);
+		return convert(object, defaultValue, short.class);
 	}
 
 	public static String getString(Object object) {
@@ -67,7 +71,7 @@ public class Conversions {
 	}
 
 	public static String getString(Object object, String defaultValue) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(String.class);
+		return convert(object, defaultValue, String.class);
 	}
 
 	private Conversions() {
