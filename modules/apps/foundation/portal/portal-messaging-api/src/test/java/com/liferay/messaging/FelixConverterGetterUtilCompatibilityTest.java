@@ -15,82 +15,28 @@ import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
 
+import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
 public class FelixConverterGetterUtilCompatibilityTest {
 
-	@Before
-	public void setUp() {
-		ConverterBuilder builder = new StandardConverter().newConverterBuilder();
-
-		final Pattern passwordPattern = Pattern.compile("(?i).*password.*");
-		final class PasswordMap extends LinkedHashMap<Object, Object> {
-			public PasswordMap(Map<?, ?> map) {
-				super(map);
-			}
-		}
-
-		_converter = builder.
-			rule(
-				new Rule<String, Boolean>(
-					o -> {
-						if (Arrays.asList("true", "t", "y", "on", "1").contains(o)) {
-							return true;
-						}
-						return false;
-					}
-				) {}
-			).
-			rule(
-				new Rule<Map<?, ?>, String>(
-					o -> {
-						if (o instanceof PasswordMap) {
-							return null;
-						}
-						Map<Object, Object> copy = new PasswordMap(o);
-						for (Map.Entry<Object, Object> entry : copy.entrySet()) {
-							Matcher matcher = passwordPattern.matcher(String.valueOf(entry.getKey()));
-
-							if (matcher.matches()) {
-								entry.setValue("********");
-							}
-						}
-						return _converter.convert(copy).to(String.class);
-					}
-				) {}
-			).
-			rule(
-				new Rule<Object, String>(
-					o -> {
-						if (o.getClass().equals(Object.class)) {
-							throw new RuntimeException();
-						}
-						return null;
-					}
-				) {}
-			).
-			build();
-	}
-
-	private Converter _converter;
-
 	@Test
 	public void testGetBoolean() {
-		Assert.assertFalse(_converter.convert("false").to(boolean.class));
-		Assert.assertTrue(_converter.convert("true").to(boolean.class));
-		Assert.assertFalse(_converter.convert(Boolean.FALSE).to(boolean.class));
-		Assert.assertTrue(_converter.convert(Boolean.TRUE).to(boolean.class));
-		Assert.assertFalse(_converter.convert(null).defaultValue(false).to(boolean.class));
-		Assert.assertTrue(_converter.convert(null).defaultValue(true).to(boolean.class));
-		Assert.assertFalse(_converter.convert(StringPool.BLANK).to(boolean.class));
-		Assert.assertFalse(_converter.convert(StringPool.BLANK).defaultValue(false).to(boolean.class));
-		Assert.assertFalse(_converter.convert(StringPool.BLANK).defaultValue(true).to(boolean.class));
+		Assert.assertFalse(Conversions.getBoolean("false"));
+		Assert.assertTrue(Conversions.getBoolean("true"));
+		Assert.assertFalse(Conversions.getBoolean(Boolean.FALSE));
+		Assert.assertTrue(Conversions.getBoolean(Boolean.TRUE));
+		Assert.assertFalse(Conversions.getBoolean(null, false));
+		Assert.assertTrue(Conversions.getBoolean(null, true));
+		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK));
+		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK, false));
+		Assert.assertFalse(Conversions.getBoolean(StringPool.BLANK, true));
 
 		for (String s : GetterUtil.BOOLEANS) {
-			Assert.assertTrue(_converter.convert(s).defaultValue(true).to(boolean.class));
-			Assert.assertTrue(_converter.convert(s).defaultValue(true).to(boolean.class));
-			Assert.assertTrue(_converter.convert(s).defaultValue(false).to(boolean.class));
+			Assert.assertTrue(Conversions.getBoolean(s, true));
+			Assert.assertTrue(Conversions.getBoolean(s, true));
+			Assert.assertTrue(Conversions.getBoolean(s, false));
 		}
 	}
 
@@ -100,37 +46,37 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		// Wrong first char
 
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_DOUBLE, _converter.convert("e12.3").defaultValue(GetterUtil.DEFAULT_DOUBLE).to(double.class),
+			GetterUtil.DEFAULT_DOUBLE, Conversions.getDouble("e12.3"),
 			GetterUtil.DEFAULT_DOUBLE);
 
 		// Wrong middle char
 
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_DOUBLE, _converter.convert("12e.3").defaultValue(GetterUtil.DEFAULT_DOUBLE).to(double.class),
+			GetterUtil.DEFAULT_DOUBLE, Conversions.getDouble("12e.3"),
 			GetterUtil.DEFAULT_DOUBLE);
 
 		// Start with '+'
 
 		Assert.assertEquals(
-			12.3, _converter.convert("+12.3").to(double.class), GetterUtil.DEFAULT_DOUBLE);
+			12.3, Conversions.getDouble("+12.3"), GetterUtil.DEFAULT_DOUBLE);
 
 		// Start with '-'
 
 		Assert.assertEquals(
-			-12.3, _converter.convert("-12.3").to(double.class), GetterUtil.DEFAULT_DOUBLE);
+			-12.3, Conversions.getDouble("-12.3"), GetterUtil.DEFAULT_DOUBLE);
 
 		// Maximum double
 
 		Assert.assertEquals(
 			Double.MAX_VALUE,
-			_converter.convert(Double.toString(Double.MAX_VALUE)).to(double.class),
+			Conversions.getDouble(Double.toString(Double.MAX_VALUE)),
 			GetterUtil.DEFAULT_DOUBLE);
 
 		// Minimum double
 
 		Assert.assertEquals(
 			Double.MIN_VALUE,
-			_converter.convert(Double.toString(Double.MIN_VALUE)).to(double.class),
+			Conversions.getDouble(Double.toString(Double.MIN_VALUE)),
 			GetterUtil.DEFAULT_DOUBLE);
 
 		/*
@@ -158,49 +104,49 @@ public class FelixConverterGetterUtilCompatibilityTest {
 
 		// Wrong first char
 
-		int result = _converter.convert("e123").defaultValue(-1).to(int.class);
+		int result = Conversions.getInteger("e123", -1);
 
 		Assert.assertEquals(-1, result);
 
 		// Wrong middle char
 
-		result = _converter.convert("12e3").defaultValue(-1).to(int.class);
+		result = Conversions.getInteger("12e3", -1);
 
 		Assert.assertEquals(-1, result);
 
 		// Start with '+'
 
-		result = _converter.convert("+123").defaultValue(-1).to(int.class);
+		result = Conversions.getInteger("+123", -1);
 
 		Assert.assertEquals(123, result);
 
 		// Start with '-'
 
-		result = _converter.convert("-123").defaultValue(-1).to(int.class);
+		result = Conversions.getInteger("-123", -1);
 
 		Assert.assertEquals(-123, result);
 
 		// Maximum int
 
-		result = _converter.convert(Integer.toString(Integer.MAX_VALUE)).defaultValue(-1).to(int.class);
+		result = Conversions.getInteger(Integer.toString(Integer.MAX_VALUE), -1);
 
 		Assert.assertEquals(Integer.MAX_VALUE, result);
 
 		// Minimum int
 
-		result = _converter.convert(Integer.toString(Integer.MIN_VALUE)).defaultValue(-1).to(int.class);
+		result = Conversions.getInteger(Integer.toString(Integer.MIN_VALUE), -1);
 
 		Assert.assertEquals(Integer.MIN_VALUE, result);
 
 		// Larger than maximum int
 
-		result = _converter.convert(Integer.toString(Integer.MAX_VALUE) + "0").defaultValue(-1).to(int.class);
+		result = Conversions.getInteger(Integer.toString(Integer.MAX_VALUE) + "0", -1);
 
 		Assert.assertEquals(-1, result);
 
 		// Smaller than minimum int
 
-		result = _converter.convert(Integer.toString(Integer.MIN_VALUE) + "0").defaultValue(-1).to(int.class);
+		result = Conversions.getInteger(Integer.toString(Integer.MIN_VALUE) + "0", -1);
 
 		Assert.assertEquals(-1, result);
 	}
@@ -210,49 +156,49 @@ public class FelixConverterGetterUtilCompatibilityTest {
 
 		// Wrong first char
 
-		long result = _converter.convert("e123").defaultValue(-1L).to(long.class);
+		long result = Conversions.getLong("e123", -1L);
 
 		Assert.assertEquals(-1L, result);
 
 		// Wrong middle char
 
-		result = _converter.convert("12e3").defaultValue(-1L).to(long.class);
+		result = Conversions.getLong("12e3", -1L);
 
 		Assert.assertEquals(-1L, result);
 
 		// Start with '+'
 
-		result = _converter.convert("+123").defaultValue(-1L).to(long.class);
+		result = Conversions.getLong("+123", -1L);
 
 		Assert.assertEquals(123L, result);
 
 		// Start with '-'
 
-		result = _converter.convert("-123").defaultValue(-1L).to(long.class);
+		result = Conversions.getLong("-123", -1L);
 
 		Assert.assertEquals(-123L, result);
 
 		// Maximum long
 
-		result = _converter.convert(Long.toString(Long.MAX_VALUE)).defaultValue(-1L).to(long.class);
+		result = Conversions.getLong(Long.toString(Long.MAX_VALUE), -1L);
 
 		Assert.assertEquals(Long.MAX_VALUE, result);
 
 		// Minimum long
 
-		result = _converter.convert(Long.toString(Long.MIN_VALUE)).defaultValue(-1L).to(long.class);
+		result = Conversions.getLong(Long.toString(Long.MIN_VALUE), -1L);
 
 		Assert.assertEquals(Long.MIN_VALUE, result);
 
 		// Larger than maximum long
 
-		result = _converter.convert(Long.toString(Long.MAX_VALUE) + "0").defaultValue(-1L).to(long.class);
+		result = Conversions.getLong(Long.toString(Long.MAX_VALUE) + "0", -1L);
 
 		Assert.assertEquals(-1L, result);
 
 		// Smaller than minimum long
 
-		result = _converter.convert(Long.toString(Long.MIN_VALUE) + "0").defaultValue(-1L).to(long.class);
+		result = Conversions.getLong(Long.toString(Long.MIN_VALUE) + "0", -1L);
 
 		Assert.assertEquals(-1L, result);
 	}
@@ -262,51 +208,51 @@ public class FelixConverterGetterUtilCompatibilityTest {
 
 		// Wrong first char
 
-		short result = _converter.convert("e123").defaultValue((short)-1).to(short.class);
+		short result = Conversions.getShort("e123", (short)-1);
 
 		Assert.assertEquals((short)-1, result);
 
 		// Wrong middle char
 
-		result = _converter.convert("12e3").defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort("12e3", (short)-1);
 
 		Assert.assertEquals((short)-1, result);
 
 		// Start with '+'
 
-		result = _converter.convert("+123").defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort("+123", (short)-1);
 
 		Assert.assertEquals((short)123, result);
 
 		// Start with '-'
 
-		result = _converter.convert("-123").defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort("-123", (short)-1);
 
 		Assert.assertEquals((short)-123, result);
 
 		// Maximum short
 
-		result = _converter.convert(Short.toString(Short.MAX_VALUE)).defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort(Short.toString(Short.MAX_VALUE), (short)-1);
 
 		Assert.assertEquals(Short.MAX_VALUE, result);
 
 		// Minimum short
 
-		result = _converter.convert(Short.toString(Short.MIN_VALUE)).defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort(Short.toString(Short.MIN_VALUE), (short)-1);
 
 		Assert.assertEquals(Short.MIN_VALUE, result);
 
 		// Larger than maximum short
 
-		result = _converter.convert(
-			Short.toString(Short.MAX_VALUE) + "0").defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort(
+			Short.toString(Short.MAX_VALUE) + "0", (short)-1);
 
 		Assert.assertEquals((short)-1, result);
 
 		// Smaller than minimum short
 
-		result = _converter.convert(
-			Short.toString(Short.MIN_VALUE) + "0").defaultValue((short)-1).to(short.class);
+		result = Conversions.getShort(
+			Short.toString(Short.MIN_VALUE) + "0", (short)-1);
 
 		Assert.assertEquals((short)-1, result);
 	}
@@ -314,31 +260,32 @@ public class FelixConverterGetterUtilCompatibilityTest {
 	@Test
 	public void testGetString() {
 		Assert.assertEquals(
-			StringPool.BLANK,
-			_converter.convert(StringPool.BLANK).defaultValue(StringPool.BLANK).to(String.class));
+			StringPool.BLANK, Conversions.getString(StringPool.BLANK));
 		Assert.assertEquals(
-			GetterUtil.DEFAULT_STRING,
-			_converter.convert(null).defaultValue(GetterUtil.DEFAULT_STRING).to(String.class));
+			GetterUtil.DEFAULT_STRING, Conversions.getString(null));
 		Assert.assertEquals(
-			"default", _converter.convert(null).defaultValue("default").to(String.class));
+			"default", Conversions.getString(null, "default"));
 		Assert.assertEquals(
-			"default", _converter.convert(new Object()).defaultValue("default").to(String.class));
-		Assert.assertEquals("test", _converter.convert("test").to(String.class));
+			"default", Conversions.getString(new Object(), "default"));
+		Assert.assertEquals("test", Conversions.getString("test"));
 	}
 
 	@Test
 	public void testMapPasswordEscaping() {
 		Map<String, Object> map = new HashMap<>();
 		map.put("password", "secret");
-		Assert.assertEquals("{password=********}", _converter.convert(map).to(String.class));
+
+		Assert.assertEquals("{password=********}", Conversions.getString(map));
 
 		map = new HashMap<>();
 		map.put("Password", "secret");
-		Assert.assertEquals("{Password=********}", _converter.convert(map).to(String.class));
+
+		Assert.assertEquals("{Password=********}", Conversions.getString(map));
 
 		map = new HashMap<>();
 		map.put("somepASSwordString", "secret");
-		Assert.assertEquals("{somepASSwordString=********}", _converter.convert(map).to(String.class));
+
+		Assert.assertEquals("{somepASSwordString=********}", Conversions.getString(map));
 	}
 
 }
