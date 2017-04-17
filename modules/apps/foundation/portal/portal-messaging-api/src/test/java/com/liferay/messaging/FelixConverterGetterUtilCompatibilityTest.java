@@ -10,30 +10,41 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeRule;
+import org.osgi.util.function.Function;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 
 public class FelixConverterGetterUtilCompatibilityTest {
 	
-	@Before
-	public void setUp() {
-		StandardConverter standardConverter = new StandardConverter();
-		
-		ConverterBuilder stringConverterBuilder = standardConverter.newConverterBuilder();
-		stringConverterBuilder = stringConverterBuilder.rule(new TypeRule<Object, String>(Object.class, String.class, o -> {
+	/*
+	 * TODO: Decide where these builder functions that return conversion
+	 * functions should live. E.g., buildToStringConversionFunction(String).
+	 * 
+	 * TODO: Decide where the helper functions (e.g., get(String, boolean) and
+	 * _parseInt(String, int) should live.
+	 */
+
+	public Function<Object, String> buildToStringConversionFunction(
+			String defaultValue) {
+
+		Function<Object, String> conversionFunction = o -> {
 			if (!(o instanceof String)) {
-				return "";
+				return defaultValue;
 			}
 			return (String) o;
-		}));
-		_stringConverter = stringConverterBuilder.build();
+		};
+		return conversionFunction;
+	}
+		
+	public Function<Object, Double> buildToDoubleConversionFunction(
+			double defaultValue) {
 
-		ConverterBuilder doubleConverterBuilder = standardConverter.newConverterBuilder();
-		doubleConverterBuilder = doubleConverterBuilder.rule(new TypeRule<Object, Double>(Object.class, Double.class, o -> {
+		Function<Object, Double> conversionFunction = o -> {
 			if (o instanceof String) {
-				/* 
-				 * TODO: Must not invoke any outside function. This call to a static helper function must go.
-				 * Must move the contents of the get function inside here somehow.
+				/*
+				 * TODO: Must not invoke any outside function. This call to a
+				 * static helper function must go. Maybe move the contents of
+				 * the get function inside here somehow.
 				 */
 				double value = get((String)o, 0.0);
 				return value;
@@ -49,16 +60,20 @@ public class FelixConverterGetterUtilCompatibilityTest {
 				return number.doubleValue();
 			}
 
-			return 0.0;
-		}));
-		_doubleConverter = doubleConverterBuilder.build();
+			return defaultValue;
+		};
+		return conversionFunction;
+	}
+		
+	public Function<Object, Integer> buildToIntegerConversionFunction(
+			int defaultValue) {
 
-		ConverterBuilder intConverterBuilder = standardConverter.newConverterBuilder();
-		intConverterBuilder = intConverterBuilder.rule(new TypeRule<Object, Integer>(Object.class, Integer.class, o -> {
+		Function<Object, Integer> conversionFunction = o -> {
 			if (o instanceof String) {
-				/* 
-				 * TODO: Must not invoke any outside function. This call to a static helper function must go.
-				 * Must move the contents of the get function inside here somehow.
+				/*
+				 * TODO: Must not invoke any outside function. This call to a
+				 * static helper function must go. Maybe move the contents of
+				 * the parse function inside here somehow.
 				 */
 				int value = _parseInt(((String)o).trim(), 0);
 				return value;
@@ -74,16 +89,20 @@ public class FelixConverterGetterUtilCompatibilityTest {
 				return number.intValue();
 			}
 
-			return 0;
-		}));
-		_intConverter = intConverterBuilder.build();
+			return defaultValue;
+		};
+		return conversionFunction;
+	}
+		
+	public Function<Object, Long> buildToLongConversionFunction(
+			long defaultValue) {
 
-		ConverterBuilder longConverterBuilder = standardConverter.newConverterBuilder();
-		longConverterBuilder = longConverterBuilder.rule(new TypeRule<Object, Long>(Object.class, Long.class, o -> {
+		Function<Object, Long> conversionFunction = o -> {
 			if (o instanceof String) {
-				/* 
-				 * TODO: Must not invoke any outside function. This call to a static helper function must go.
-				 * Must move the contents of the get function inside here somehow.
+				/*
+				 * TODO: Must not invoke any outside function. This call to a
+				 * static helper function must go. Maybe move the contents of
+				 * the parse function inside here somehow.
 				 */
 				long value = _parseLong(((String)o).trim(), 0);
 				return value;
@@ -99,16 +118,20 @@ public class FelixConverterGetterUtilCompatibilityTest {
 				return number.longValue();
 			}
 
-			return 0L;
-		}));
-		_longConverter = longConverterBuilder.build();
+			return defaultValue;
+		};
+		return conversionFunction;
+	}
+		
+	public Function<Object, Boolean> buildToBooleanConversionFunction(
+			boolean defaultValue) {
 
-		ConverterBuilder booleanConverterBuilder = standardConverter.newConverterBuilder();
-		booleanConverterBuilder = booleanConverterBuilder.rule(new TypeRule<Object, Boolean>(Object.class, Boolean.class, o -> {
+		Function<Object, Boolean> conversionFunction = o -> {
 			if (o instanceof String) {
-				/* 
-				 * TODO: Must not invoke any outside function. This call to a static helper function must go.
-				 * Must move the contents of the get function inside here somehow.
+				/*
+				 * TODO: Must not invoke any outside function. This call to a
+				 * static helper function must go. Maybe move the contents of
+				 * the get function inside here somehow.
 				 */
 				boolean value = get((String)o, false);
 				return value;
@@ -117,7 +140,53 @@ public class FelixConverterGetterUtilCompatibilityTest {
 				return (Boolean)o;
 			}
 			return false;
-		}));
+		};
+		return conversionFunction;
+	}
+		
+	@Before
+	public void setUp() {
+		StandardConverter standardConverter = new StandardConverter();
+		
+		ConverterBuilder stringConverterBuilder =
+				standardConverter.newConverterBuilder();
+		stringConverterBuilder = stringConverterBuilder.rule(
+				new TypeRule<Object, String>(
+						Object.class, String.class,
+						buildToStringConversionFunction("")));
+		_stringConverter = stringConverterBuilder.build();
+
+		ConverterBuilder doubleConverterBuilder =
+				standardConverter.newConverterBuilder();
+		doubleConverterBuilder =
+				doubleConverterBuilder.rule(
+						new TypeRule<Object, Double>(
+								Object.class, Double.class,
+								buildToDoubleConversionFunction(0.0)));
+		_doubleConverter = doubleConverterBuilder.build();
+
+		ConverterBuilder intConverterBuilder = standardConverter.newConverterBuilder();
+		intConverterBuilder =
+				intConverterBuilder.rule(
+						new TypeRule<Object, Integer>(
+								Object.class, Integer.class,
+								buildToIntegerConversionFunction(0)));
+		_intConverter = intConverterBuilder.build();
+
+		ConverterBuilder longConverterBuilder = standardConverter.newConverterBuilder();
+		longConverterBuilder =
+				longConverterBuilder.rule(
+						new TypeRule<Object, Long>(
+								Object.class, Long.class,
+								buildToLongConversionFunction(0L)));
+		_longConverter = longConverterBuilder.build();
+
+		ConverterBuilder booleanConverterBuilder = standardConverter.newConverterBuilder();
+		booleanConverterBuilder =
+				booleanConverterBuilder.rule(
+						new TypeRule<Object, Boolean>(
+								Object.class, Boolean.class,
+								buildToBooleanConversionFunction(false)));
 		_booleanConverter = booleanConverterBuilder.build();
 	}
 
@@ -152,13 +221,12 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		String doubleString7 = "0.12345";
 		doubleStrings.add(doubleString7);
 		String doubleString8 = "-0.12345";
-		doubleStrings.add(doubleString8);
-		String doubleString9 = "abc";
+		doubleStrings.add(doubleString8); String doubleString9 = "abc";
 		doubleStrings.add(doubleString9);
 		String doubleString10 = "abc.ef";
 		doubleStrings.add(doubleString10);
 		
-		double delta = 0.001;
+		double delta = 1e-10; // TODO: Choose a standard delta value to use instead of this arbitrary one
 		for (String doubleString : doubleStrings) {
 			double getterDouble = GetterUtil.getDouble(doubleString);
 			double converterDouble = _doubleConverter.convert(doubleString).to(Double.class);
@@ -183,26 +251,6 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			float getterFloat = GetterUtil.getFloat(f);
 			float converterFloat = _doubleConverter.convert(f).to(Float.class);
 			Assert.assertEquals(getterFloat, converterFloat, delta);
-		}
-
-		List<Float> doubles = new ArrayList<Float>();
-		float double1 = 0.0f;
-		floats.add(double1);
-		float double2 = 12.345f;
-		floats.add(double2);
-		float double3 = -12.345f;
-		floats.add(double3);
-		float double4 = - 12.345f;
-		floats.add(double4);
-		float double5 = 0.12345f;
-		floats.add(double5);
-		float double6 = -0.12345f;
-		floats.add(double6);
-
-		for (double d : doubles) {
-			double getterDouble = GetterUtil.getDouble(d);
-			double converterDouble = _doubleConverter.convert(d).to(Double.class);
-			Assert.assertEquals(getterDouble, converterDouble, delta);
 		}
 	}
 
@@ -647,6 +695,7 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			return -result;
 		}
 	}
+
 	private Converter _booleanConverter;
 	private Converter _doubleConverter;
 	private Converter _stringConverter;
