@@ -19,8 +19,7 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osgi.util.converter.StandardConverter;
-
+import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -31,10 +30,6 @@ import com.liferay.portal.kernel.util.TransientValue;
  * @author Michael C. Han
  */
 public class Message implements Cloneable, Serializable {
-	
-	public Message() {
-		_converter = new StandardConverter();
-	}
 
 	public static Message fromByteArray(byte[] bytes)
 		throws ClassNotFoundException {
@@ -120,7 +115,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Boolean)object).booleanValue();
 		}
 		else {
-			value = _converter.convert(object).to(boolean.class);
+			value = Conversions.getBoolean(object);
 		}
 
 		return value;
@@ -139,7 +134,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).doubleValue();
 		}
 		else {
-			value = _converter.convert(object).to(double.class);
+			value = Conversions.getDouble(object);
 		}
 
 		return value;
@@ -154,7 +149,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).intValue();
 		}
 		else {
-			value = _converter.convert(object).to(int.class);
+			value = Conversions.getInteger(object);
 		}
 
 		return value;
@@ -169,7 +164,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).longValue();
 		}
 		else {
-			value = _converter.convert(object).to(long.class);
+			value = Conversions.getLong(object);
 		}
 
 		return value;
@@ -192,7 +187,7 @@ public class Message implements Cloneable, Serializable {
 	}
 
 	public String getString(String key) {
-		return _converter.convert(String.valueOf(get(key))).to(String.class);
+		return Conversions.getString(String.valueOf(get(key)));
 	}
 
 	public Map<String, Object> getValues() {
@@ -274,14 +269,12 @@ public class Message implements Cloneable, Serializable {
 		sb.append(", payload=");
 		sb.append(_payload);
 		sb.append(", values=");
-		//sb.append(MapUtil.toString(_values, null, ".*[pP]assword.*"));
-		sb.append(_converter.convert(_values).to(String.class));
+		sb.append(Conversions.getString(_values));
 		sb.append("}");
 
 		return sb.toString();
 	}
 
-	private StandardConverter _converter;
 	private String _destinationName;
 	private Object _payload;
 	private Object _response;
