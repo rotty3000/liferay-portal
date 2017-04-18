@@ -1,4 +1,4 @@
-package com.liferay.messaging;
+package com.liferay.messaging.internal.convert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.liferay.messaging.internal.convert.Conversions;
 
-public class FelixConverterGetterUtilCompatibilityTest {
+public class GetterConversionsTest {
 
 	@Test
 	public void testGetBoolean() {
