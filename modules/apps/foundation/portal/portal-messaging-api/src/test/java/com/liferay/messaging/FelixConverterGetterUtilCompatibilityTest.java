@@ -201,6 +201,12 @@ public class FelixConverterGetterUtilCompatibilityTest {
 		String getterObjectString = GetterUtil.getString(object);
 		String converterObjectString = _stringConverter.convert(object).to(String.class);
 		Assert.assertEquals(getterObjectString, converterObjectString);
+		
+		/*
+		// Test getter util vs standard converter fails
+		String standardConverterObjectString = new StandardConverter().convert(object).to(String.class);
+		Assert.assertEquals(getterObjectString, standardConverterObjectString);
+		*/
 	}
 
 	@Test
@@ -231,6 +237,12 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			double getterDouble = GetterUtil.getDouble(doubleString);
 			double converterDouble = _doubleConverter.convert(doubleString).to(Double.class);
 			Assert.assertEquals(getterDouble, converterDouble, delta);
+
+			/*
+			// Test getter util vs standard converter fails
+			double standardConverterDouble = new StandardConverter().convert(doubleString).to(Double.class);
+			Assert.assertEquals(getterDouble, standardConverterDouble, delta);
+			*/
 		}
 
 		List<Float> floats = new ArrayList<Float>();
@@ -284,6 +296,12 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			int getterInt = GetterUtil.getInteger(intString);
 			int converterInt = _intConverter.convert(intString).to(Integer.class);
 			Assert.assertEquals(getterInt, converterInt);
+
+			/*
+			// Test getter util vs standard converter fails
+			int standardConverterInt = new StandardConverter().convert(intString).to(Integer.class);
+			Assert.assertEquals(getterInt, standardConverterInt);
+			*/
 		}
 		
 		List<Integer> ints = new ArrayList<Integer>();
@@ -373,6 +391,12 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			long getterLong = GetterUtil.getLong(intString);
 			long converterLong = _longConverter.convert(intString).to(Long.class);
 			Assert.assertEquals(getterLong, converterLong);
+
+			/*
+			// Test getter util vs standard converter fails
+			long standardConverterLong = new StandardConverter().convert(intString).to(Long.class);
+			Assert.assertEquals(getterLong, standardConverterLong);
+			*/
 		}
 		
 		List<Integer> ints = new ArrayList<Integer>();
@@ -456,6 +480,10 @@ public class FelixConverterGetterUtilCompatibilityTest {
 			boolean getterBoolean = GetterUtil.getBoolean(strings.get(i), false);
 			boolean converterBoolean = _booleanConverter.convert(strings.get(i)).to(Boolean.class);
 			Assert.assertEquals(getterBoolean, converterBoolean);
+
+			// Test getter util vs standard converter fails
+			boolean standardConverterBoolean = new StandardConverter().convert(strings.get(i)).to(Boolean.class);
+			Assert.assertEquals(getterBoolean, standardConverterBoolean);
 		}
 		
 		boolean b1 = false;
