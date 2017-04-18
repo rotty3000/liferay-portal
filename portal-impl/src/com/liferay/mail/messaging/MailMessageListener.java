@@ -16,10 +16,10 @@ package com.liferay.mail.messaging;
 
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.util.HookFactory;
+import com.liferay.messaging.BaseMessageListener;
+import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.security.auth.EmailAddressGenerator;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.MethodHandler;

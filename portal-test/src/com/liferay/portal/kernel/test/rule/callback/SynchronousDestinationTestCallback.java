@@ -14,17 +14,17 @@
 
 package com.liferay.portal.kernel.test.rule.callback;
 
+import com.liferay.messaging.BaseAsyncDestination;
+import com.liferay.messaging.BaseDestination;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusUtil;
+import com.liferay.messaging.SynchronousDestination;
+import com.liferay.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.messaging.BaseAsyncDestination;
-import com.liferay.portal.kernel.messaging.BaseDestination;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
-import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
 import com.liferay.portal.kernel.search.SearchEngineHelperUtil;
 import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
