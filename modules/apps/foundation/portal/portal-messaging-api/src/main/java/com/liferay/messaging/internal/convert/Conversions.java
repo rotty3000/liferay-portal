@@ -21,6 +21,7 @@ public class Conversions {
 	public static final long DEFAULT_LONG = 0;
 	public static final short DEFAULT_SHORT = 0;
 	public static final String DEFAULT_STRING = "";
+	public static final String PASSWORD_MASK = "********";
 
 	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
 		return _instance._converter.convert(object).defaultValue(defaultValue).to(clazz);
@@ -77,7 +78,7 @@ public class Conversions {
 	private Conversions() {
 		ConverterBuilder builder = new StandardConverter().newConverterBuilder();
 
-		_converter = builder.
+		final Converter rootConverter = builder.
 			rule(
 				new Rule<String, Boolean>(
 					o -> {
@@ -85,24 +86,6 @@ public class Conversions {
 							return true;
 						}
 						return false;
-					}
-				) {}
-			).
-			rule(
-				new Rule<Map<?, ?>, String>(
-					o -> {
-						if (o instanceof PasswordMap) {
-							return null;
-						}
-						Map<Object, Object> copy = new PasswordMap(o);
-						for (Map.Entry<Object, Object> entry : copy.entrySet()) {
-							Matcher matcher = _passwordPattern.matcher(String.valueOf(entry.getKey()));
-
-							if (matcher.matches()) {
-								entry.setValue("********");
-							}
-						}
-						return _converter.convert(copy).to(String.class);
 					}
 				) {}
 			).
@@ -117,6 +100,27 @@ public class Conversions {
 				) {}
 			).
 			build();
+
+		builder = rootConverter.newConverterBuilder();
+
+		_converter = builder.
+			rule(
+				new Rule<Map<String, Object>, String>(
+					o -> {
+						Map<String, Object> copy = new LinkedHashMap<>(o);
+						for (Map.Entry<String, Object> entry : copy.entrySet()) {
+							Matcher matcher = _passwordPattern.matcher(
+								String.valueOf(entry.getKey()));
+
+							if (matcher.matches()) {
+								entry.setValue(PASSWORD_MASK);
+							}
+						}
+						return rootConverter.convert(copy).to(String.class);
+					}
+				) {}
+			).
+			build();
 	}
 
 	private static final Conversions _instance = new Conversions();
@@ -125,12 +129,5 @@ public class Conversions {
 		"(?i).*password.*");
 
 	private Converter _converter;
-
-	private final class PasswordMap extends LinkedHashMap<Object, Object> {
-		public PasswordMap(Map<?, ?> map) {
-			super(map);
-		}
-	}
-
 
 }
