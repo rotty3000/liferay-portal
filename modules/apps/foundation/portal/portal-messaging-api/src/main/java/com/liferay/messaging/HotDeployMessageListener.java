@@ -20,7 +20,7 @@ import java.util.Set;
 import org.osgi.util.converter.Converting;
 import org.osgi.util.converter.StandardConverter;
 
-import com.liferay.portal.kernel.util.SetUtil;
+import com.liferay.messaging.internal.convert.Conversions;
 
 /**
  * @author Brian Wing Shun Chan
@@ -36,7 +36,7 @@ public class HotDeployMessageListener extends BaseMessageListener {
 			_servletContextNames = Collections.emptySet();
 		}
 		else {
-			_servletContextNames = SetUtil.fromArray(servletContextNames);
+			_servletContextNames = Conversions.setFromArray(servletContextNames);
 		}
 	}
 

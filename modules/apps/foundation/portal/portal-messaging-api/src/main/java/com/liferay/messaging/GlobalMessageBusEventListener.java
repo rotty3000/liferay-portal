@@ -14,10 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.util.SetUtil;
-
 import java.util.List;
 import java.util.Set;
+
+import com.liferay.messaging.internal.convert.Conversions;
 
 /**
  * @author Michael C. Han
@@ -39,7 +39,7 @@ public class GlobalMessageBusEventListener implements MessageBusEventListener {
 	}
 
 	public void setIgnoredDestinations(List<String> ignoredDestinations) {
-		_ignoredDestinations = SetUtil.fromList(ignoredDestinations);
+		_ignoredDestinations = Conversions.setFromList(ignoredDestinations);
 	}
 
 	public void setMessageListener(MessageListener messageListener) {

@@ -1,8 +1,12 @@
 package com.liferay.messaging.internal.convert;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +26,38 @@ public class Conversions {
 	public static final short DEFAULT_SHORT = 0;
 	public static final String DEFAULT_STRING = "";
 	public static final String PASSWORD_MASK = "********";
+	
+	public static <T> Set<T> setFromArray(T[] array) {
+		// TODO: figure out how to use the Felix converter to convert from array to set
+		// return _instance._converter.convert(array).defaultValue(new HashSet<T>()).to(Set<T>.class);
+		if ((array == null ) || (array.length == 0)) {
+			return new HashSet<T>();
+		}
+
+		Set<T> set = new HashSet<T>(array.length);
+
+		for (int i = 0; i < array.length; i++) {
+			set.add(array[i]);
+		}
+
+		return set;
+	}
+
+	public static <T> Set<T> setFromList(List<T> list) {
+		// TODO: figure out how to use the Felix converter to convert from array to list
+		// return _instance._converter.convert(list).defaultValue(new HashSet<T>()).to(Set<T>.class);
+		if ((list == null) || (list.size() == 0)) {
+			return new HashSet<T>();
+		}
+
+		Set<T> set = new HashSet<T>(list.size());
+
+		for (T t : list) {
+			set.add(t);
+		}
+
+		return set;
+	}
 
 	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
 		return _instance._converter.convert(object).defaultValue(defaultValue).to(clazz);
