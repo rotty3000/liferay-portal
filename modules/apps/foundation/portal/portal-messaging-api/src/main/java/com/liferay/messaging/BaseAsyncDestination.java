@@ -32,7 +32,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
@@ -325,7 +325,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 		if ((permissionChecker == null) && Validator.isNotNull(principalName)) {
 			try {
-				User user = UserLocalServiceUtil.fetchUser(
+				User user = _userLocalService.fetchUser(
 					PrincipalThreadLocal.getUserId());
 
 				permissionChecker = PermissionCheckerFactoryUtil.create(user);
@@ -368,6 +368,9 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	private static final Logger _logger = LoggerFactory.getLogger(
 		BaseAsyncDestination.class);
+	
+	@com.liferay.portal.spring.extender.service.ServiceReference(type = UserLocalService.class)
+	private UserLocalService _userLocalService;
 
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
