@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalMessageBusPermission;
 import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
@@ -465,7 +464,7 @@ public abstract class AbstractMessagingConfigurator
 							_destinationName));
 				}
 				catch (Exception e) {
-					StringBundler sb = new StringBundler(4);
+					StringBuilder sb = new StringBuilder(4);
 
 					sb.append("Unable to install ");
 					sb.append(

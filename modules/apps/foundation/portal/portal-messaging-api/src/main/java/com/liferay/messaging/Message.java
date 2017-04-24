@@ -22,7 +22,6 @@ import java.util.Map;
 import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.TransientValue;
 
 /**
@@ -256,7 +255,7 @@ public class Message implements Cloneable, Serializable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(13);
+		StringBuilder sb = new StringBuilder(13);
 
 		sb.append("{destinationName=");
 		sb.append(_destinationName);

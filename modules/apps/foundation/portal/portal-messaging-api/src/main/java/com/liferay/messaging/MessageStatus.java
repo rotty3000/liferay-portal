@@ -15,7 +15,6 @@
 package com.liferay.messaging;
 
 import com.liferay.portal.kernel.util.StackTraceUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 
 import java.io.Serializable;
 
@@ -68,7 +67,7 @@ public class MessageStatus implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBuilder sb = new StringBuilder(11);
 
 		sb.append("{startTime=");
 		sb.append(_startTime);
