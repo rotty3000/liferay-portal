@@ -15,7 +15,6 @@
 package com.liferay.messaging;
 
 import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Collections;
@@ -26,6 +25,8 @@ import java.util.Set;
  * @author Shuyang Zhou
  */
 public abstract class BaseDestination implements Destination {
+	
+	public static final String BLANK = "";
 
 	@Override
 	public boolean addDestinationEventListener(
@@ -222,7 +223,7 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	protected Set<MessageListener> messageListeners = new ConcurrentHashSet<>();
-	protected String name = StringPool.BLANK;
+	protected String name = BLANK;
 
 	private final Set<DestinationEventListener> _destinationEventListeners =
 		new ConcurrentHashSet<>();

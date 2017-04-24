@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.kernel.security.pacl.permission.PortalMessageBusPermission;
 import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.registry.Filter;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
@@ -53,6 +52,8 @@ import com.liferay.registry.dependency.ServiceDependencyManager;
  */
 public abstract class AbstractMessagingConfigurator
 	implements MessagingConfigurator {
+	
+	public static final String NULL = "null";
 
 	public void afterPropertiesSet() {
 		final ServiceDependencyManager serviceDependencyManager =
@@ -285,7 +286,7 @@ public abstract class AbstractMessagingConfigurator
 			operatingClassLoader);
 
 		if ((servletContextName != null) &&
-			!servletContextName.equals(StringPool.NULL)) {
+			!servletContextName.equals(NULL)) {
 
 			MessagingConfiguratorRegistry.registerMessagingConfigurator(
 				servletContextName, this);
