@@ -17,8 +17,8 @@ package com.liferay.messaging;
 import java.util.Collections;
 import java.util.Set;
 
+import com.liferay.messaging.internal.concurrent.ConcurrentHashSet;
 import com.liferay.messaging.internal.validator.Validator;
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
 
 /**
  * @author Michael C. Han
