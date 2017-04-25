@@ -21,7 +21,7 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusUtil;
 import com.liferay.messaging.MessageListener;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.messaging.internal.validator.Validator;
 
 /**
  * @author Micha Kiener

@@ -14,11 +14,11 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.util.Validator;
-
 import java.util.Collections;
 import java.util.Set;
+
+import com.liferay.messaging.internal.validator.Validator;
+import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
 
 /**
  * @author Michael C. Han
