@@ -1,8 +1,8 @@
 package com.liferay.messaging.internal.convert;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +13,7 @@ import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
 import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
+import org.osgi.util.converter.TypeReference;
 
 public class Conversions {
 
@@ -27,35 +28,11 @@ public class Conversions {
 	public static final String PASSWORD_MASK = "********";
 	
 	public static <T> Set<T> setFromArray(T[] array) {
-		// TODO: figure out how to use the Felix converter to convert from array to set
-		// return _instance._converter.convert(array).defaultValue(new HashSet<T>()).to(Set<T>.class);
-		if ((array == null ) || (array.length == 0)) {
-			return new HashSet<T>();
-		}
-
-		Set<T> set = new HashSet<T>(array.length);
-
-		for (int i = 0; i < array.length; i++) {
-			set.add(array[i]);
-		}
-
-		return set;
+		return _instance._converter.convert(array).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
 	}
 
 	public static <T> Set<T> setFromList(List<T> list) {
-		// TODO: figure out how to use the Felix converter to convert from array to list
-		// return _instance._converter.convert(list).defaultValue(new HashSet<T>()).to(Set<T>.class);
-		if ((list == null) || (list.size() == 0)) {
-			return new HashSet<T>();
-		}
-
-		Set<T> set = new HashSet<T>(list.size());
-
-		for (T t : list) {
-			set.add(t);
-		}
-
-		return set;
+		return _instance._converter.convert(list).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
 	}
 
 	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
