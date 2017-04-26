@@ -14,7 +14,7 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.messaging.internal.exception.PortalException;
 
 /**
  * @author Brian Wing Shun Chan
