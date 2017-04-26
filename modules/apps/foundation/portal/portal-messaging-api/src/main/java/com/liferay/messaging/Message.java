@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.liferay.messaging.internal.convert.Conversions;
+import com.liferay.messaging.internal.util.TransientValue;
 import com.liferay.portal.kernel.io.Deserializer;
 import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.util.TransientValue;
 
 /**
  * @author Brian Wing Shun Chan
