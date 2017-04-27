@@ -14,7 +14,7 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.portal.kernel.util.AutoResetThreadLocal;
+import com.liferay.messaging.internal.util.AutoResetThreadLocal;
 
 /**
  * @author Shuyang Zhou
