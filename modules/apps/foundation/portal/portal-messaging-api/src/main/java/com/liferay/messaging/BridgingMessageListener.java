@@ -14,7 +14,7 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
+import com.liferay.messaging.sender.SingleDestinationMessageSender;
 
 /**
  * @author Michael C. Han

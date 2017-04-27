@@ -17,7 +17,7 @@ package com.liferay.messaging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender;
+import com.liferay.messaging.sender.SingleDestinationMessageSender;
 
 /**
  * @author Michael C. Han
