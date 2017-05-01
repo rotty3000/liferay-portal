@@ -77,6 +77,13 @@ File Name | Description
 `.lfrbuild-static` | Deploys the module to `${liferay home}/osgi/static`.
 `.lfrbuild-tool` | Deploys the module to `${liferay.home}/tools/${module.dir.name}`.
 
+### Faro
+
+File Name | Description
+--------- | -----------
+`.lfrbuild-faro-connector` | Deploys the module to the Faro client portal directory.
+`.lfrbuild-faro-site` | Deploys the module to the Faro site portal directory.
+
 ### Release
 
 File Name | Description
@@ -128,3 +135,19 @@ closure arguments.
 	* Order assignments alphabetically, leaving an empty line after multiple
 	calls to the same method (e.g., after multiple `dependsOn` declarations) or if
 	the assignment has a closure.
+
+## Subrepositories
+
+### `gradle.properties`
+
+The following settings are available to you in the `gradle.properties` file of a
+Liferay subrepository (e.g., [com-liferay-journal](https://github.com/liferay/com-liferay-journal/blob/master/gradle.properties)).
+
+Property Name | Mandatory | Description
+------------- | --------- | -----------
+`com.liferay.source.formatter.version` | No | The version of Source Formatter to use in the subrepository. If the property is not set, the latest version is used.
+`project.group` | No | The group ID of the artifacts that are published from the subrepository. If this property is not set, the default value `com.liferay` is used.
+`project.path.prefix` | Yes | The project path of the Gradle prefix. It must start with a `':'` character and be equal to the relative path of the subrepository directory inside the main Liferay repository, with path components separated by `':'` characters instead of slashes.
+`systemProp.repository.private.password` | No | The password used to access the private Maven repository. If set, this property must be equal to the `build.repository.private.password` property value in `build.properties`.
+`systemProp.repository.private.url` | No | The URL of the private Maven repository. If set, this property must be equal to the `build.repository.private.url` property value in `build.properties`.
+`systemProp.repository.private.username` | No | The username used to access the private Maven repository. If set, this property must be equal to the `build.repository.private.username` property value in `build.properties`.

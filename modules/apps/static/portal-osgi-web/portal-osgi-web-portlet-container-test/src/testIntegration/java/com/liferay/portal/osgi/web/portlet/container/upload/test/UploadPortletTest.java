@@ -243,6 +243,7 @@ public class UploadPortletTest extends BasePortletContainerTestCase {
 		themeDisplay.setCompany(company);
 
 		themeDisplay.setLayout(layout);
+		themeDisplay.setLayoutSet(layout.getLayoutSet());
 		themeDisplay.setPlid(layout.getPlid());
 
 		themeDisplay.setPortalURL(TestPropsValues.PORTAL_URL);

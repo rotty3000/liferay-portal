@@ -14,9 +14,9 @@
 
 package com.liferay.portal.messaging.proxy;
 
-import com.liferay.portal.kernel.messaging.proxy.BaseMultiDestinationProxyBean;
-import com.liferay.portal.kernel.messaging.proxy.ProxyModeThreadLocal;
-import com.liferay.portal.kernel.messaging.proxy.ProxyRequest;
+import com.liferay.messaging.proxy.BaseMultiDestinationProxyBean;
+import com.liferay.messaging.proxy.ProxyModeThreadLocal;
+import com.liferay.messaging.proxy.ProxyRequest;
 import com.liferay.portal.kernel.spring.aop.InvocationHandlerFactory;
 
 import java.lang.reflect.InvocationHandler;

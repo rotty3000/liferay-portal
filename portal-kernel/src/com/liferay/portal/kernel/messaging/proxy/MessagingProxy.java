@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 /**
  * @author Michael C. Han
  */
+@Deprecated
 @Documented
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

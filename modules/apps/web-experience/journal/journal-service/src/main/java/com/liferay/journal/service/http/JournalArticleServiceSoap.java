@@ -70,6 +70,30 @@ import java.util.Map;
  */
 @ProviderType
 public class JournalArticleServiceSoap {
+	public static void subscribe(long groupId, long articleId)
+		throws RemoteException {
+		try {
+			JournalArticleServiceUtil.subscribe(groupId, articleId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static void unsubscribe(long groupId, long articleId)
+		throws RemoteException {
+		try {
+			JournalArticleServiceUtil.unsubscribe(groupId, articleId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	/**
 	* Adds a web content article without any images.
 	*

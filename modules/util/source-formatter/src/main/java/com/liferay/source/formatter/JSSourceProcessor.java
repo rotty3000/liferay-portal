@@ -14,12 +14,6 @@
 
 package com.liferay.source.formatter;
 
-import com.liferay.source.formatter.checks.JSStylingCheck;
-import com.liferay.source.formatter.checks.JSWhitespaceCheck;
-import com.liferay.source.formatter.checks.LanguageKeysCheck;
-import com.liferay.source.formatter.checks.SourceCheck;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,25 +37,6 @@ public class JSSourceProcessor extends BaseSourceProcessor {
 		return _INCLUDES;
 	}
 
-	@Override
-	protected List<SourceCheck> getSourceChecks() {
-		return _sourceChecks;
-	}
-
-	@Override
-	protected void populateSourceChecks() throws Exception {
-		_sourceChecks.add(new JSWhitespaceCheck());
-
-		_sourceChecks.add(new JSStylingCheck());
-
-		if (portalSource) {
-			_sourceChecks.add(
-				new LanguageKeysCheck(getPortalLanguageProperties()));
-		}
-	}
-
 	private static final String[] _INCLUDES = {"**/*.js"};
-
-	private final List<SourceCheck> _sourceChecks = new ArrayList<>();
 
 }

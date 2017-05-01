@@ -14,35 +14,11 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import com.liferay.portal.kernel.scheduler.SchedulerEntryImpl;
-import com.liferay.portal.kernel.scheduler.Trigger;
-
 /**
  * @author Brian Wing Shun Chan
  * @deprecated As of 7.0.0
  */
 @Deprecated
 public abstract class BaseSchedulerEntryMessageListener
-	extends BaseMessageListener {
-
-	public BaseSchedulerEntryMessageListener() {
-		Class<?> clazz = getClass();
-
-		schedulerEntryImpl.setEventListenerClass(clazz.getName());
-	}
-
-	public String getDescription() {
-		return schedulerEntryImpl.getDescription();
-	}
-
-	public String getEventListenerClass() {
-		return schedulerEntryImpl.getEventListenerClass();
-	}
-
-	public Trigger getTrigger() {
-		return schedulerEntryImpl.getTrigger();
-	}
-
-	protected SchedulerEntryImpl schedulerEntryImpl = new SchedulerEntryImpl();
-
+	extends com.liferay.messaging.BaseSchedulerEntryMessageListener {
 }

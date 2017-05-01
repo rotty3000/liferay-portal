@@ -116,6 +116,9 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 		<div class="sidebar-header">
 			<ul class="sidebar-header-actions">
 				<li>
+					<liferay-util:include page="/subscribe.jsp" servletContext="<%= application %>" />
+				</li>
+				<li>
 					<liferay-util:include page="/article_action.jsp" servletContext="<%= application %>" />
 				</li>
 			</ul>
@@ -188,11 +191,13 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(articles)) {
 			Date reviewDate = article.getReviewDate();
 			%>
 
-			<h5><liferay-ui:message key="display-date" /></h5>
+			<c:if test="<%= article.getDisplayDate() != null %>">
+				<h5><liferay-ui:message key="display-date" /></h5>
 
-			<p>
-				<%= dateFormatDateTime.format(article.getDisplayDate()) %>
-			</p>
+				<p>
+					<%= dateFormatDateTime.format(article.getDisplayDate()) %>
+				</p>
+			</c:if>
 
 			<h5><liferay-ui:message key="expiration-date" /></h5>
 

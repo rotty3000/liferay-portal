@@ -19,9 +19,9 @@ import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.model.MBMessageConstants;
 import com.liferay.message.boards.kernel.service.MBMessageLocalServiceUtil;
 import com.liferay.message.boards.kernel.service.MBMessageServiceUtil;
+import com.liferay.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
@@ -58,8 +58,7 @@ import javax.mail.internet.InternetAddress;
 public class MailingListMessageListener extends BaseMessageListener {
 
 	@Override
-	protected void doReceive(
-			com.liferay.portal.kernel.messaging.Message message)
+	protected void doReceive(com.liferay.messaging.Message message)
 		throws Exception {
 
 		MailingListRequest mailingListRequest =

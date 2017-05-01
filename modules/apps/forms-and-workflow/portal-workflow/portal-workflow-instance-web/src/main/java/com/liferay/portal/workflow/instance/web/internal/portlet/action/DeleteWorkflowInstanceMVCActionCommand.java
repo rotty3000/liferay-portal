@@ -132,13 +132,6 @@ public class DeleteWorkflowInstanceMVCActionCommand
 			themeDisplay.getCompanyId(), workflowInstanceId);
 	}
 
-	@Reference(unbind = "-")
-	protected void setWorkflowInstanceLinkLocalService(
-		WorkflowInstanceLinkLocalService workflowInstanceLinkLocalService) {
-
-		_workflowInstanceLinkLocalService = workflowInstanceLinkLocalService;
-	}
-
 	protected void updateEntryStatus(Map<String, Serializable> workflowContext)
 		throws Exception {
 
@@ -169,6 +162,7 @@ public class DeleteWorkflowInstanceMVCActionCommand
 	@Reference
 	private Portal _portal;
 
+	@Reference
 	private WorkflowInstanceLinkLocalService _workflowInstanceLinkLocalService;
 
 }

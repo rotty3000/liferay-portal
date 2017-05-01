@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Frontend Image Editor Web
 Bundle-SymbolicName: com.liferay.frontend.image.editor.web
-Bundle-Version: 1.0.9
+Bundle-Version: 1.0.11
 Require-Capability:\
 	soy;\
 		filter:="(type=metal)"

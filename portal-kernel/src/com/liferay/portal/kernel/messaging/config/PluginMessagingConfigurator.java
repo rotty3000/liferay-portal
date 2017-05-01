@@ -14,35 +14,10 @@
 
 package com.liferay.portal.kernel.messaging.config;
 
-import com.liferay.portal.kernel.portlet.PortletClassLoaderUtil;
-import com.liferay.portal.kernel.util.ClassLoaderPool;
-
 /**
  * @author Michael C. Han
  */
-public class PluginMessagingConfigurator extends AbstractMessagingConfigurator {
-
-	@Override
-	public void afterPropertiesSet() {
-		_servletContextName = PortletClassLoaderUtil.getServletContextName();
-
-		super.afterPropertiesSet();
-	}
-
-	@Override
-	protected ClassLoader getOperatingClassloader() {
-		ClassLoader classLoader = ClassLoaderPool.getClassLoader(
-			_servletContextName);
-
-		if (classLoader == null) {
-			Thread currentThread = Thread.currentThread();
-
-			classLoader = currentThread.getContextClassLoader();
-		}
-
-		return classLoader;
-	}
-
-	private String _servletContextName;
-
+@Deprecated
+public class PluginMessagingConfigurator
+	extends com.liferay.messaging.config.PluginMessagingConfigurator {
 }

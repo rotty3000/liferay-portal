@@ -203,6 +203,12 @@
 		<execute function="AssertElementPresent" locator1="AdaptiveMedia#IMAGE_VARIANT_SOURCE_URL" />
 	</command>
 
+	<command name="viewNoImageResolution">
+		<var name="key_imageName" value="${imageName}" />
+
+		<execute function="AssertElementNotPresent" locator1="AdaptiveMediaTable#NAME" />
+	</command>
+
 	<command name="viewNumberOfOptimizedImages">
 		<execute function="Click" locator1="AdaptiveMediaTable#INFO_ICON" />
 

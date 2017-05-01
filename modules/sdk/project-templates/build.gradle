@@ -49,6 +49,7 @@ dependencies {
 	projectTemplates project(":sdk:project-templates-service-builder")
 	projectTemplates project(":sdk:project-templates-service-wrapper")
 	projectTemplates project(":sdk:project-templates-simulation-panel-entry")
+	projectTemplates project(":sdk:project-templates-soy-portlet")
 	projectTemplates project(":sdk:project-templates-template-context-contributor")
 	projectTemplates project(":sdk:project-templates-theme")
 	projectTemplates project(":sdk:project-templates-theme-contributor")
@@ -103,6 +104,7 @@ test {
 	systemProperty "maven.debug", System.properties["maven.debug"]
 	systemProperty "maven.repo.local", System.properties["maven.repo.local"]
 	systemProperty "repository.url", System.properties["repository.url"]
+	systemProperty "test.debug.bundle.diffs", System.properties["test.debug.bundle.diffs"]
 
 	systemProperties projectTemplateTokens
 }

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -62,10 +63,11 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
 /**
- * @author Michael Young
- * @author Brian Wing Shun Chan
- * @author Edward Han
- * @author Manuel de la Peña
+ * @author     Michael Young
+ * @author     Brian Wing Shun Chan
+ * @author     Edward Han
+ * @author     Manuel de la Peña
+ * @deprecated As of 2.0.0, with no direct replacement
  */
 @Component(
 	configurationPid = "com.liferay.portal.store.jcr.configuration.JCRStoreConfiguration",
@@ -73,6 +75,7 @@ import org.osgi.service.component.annotations.Modified;
 	property = "store.type=com.liferay.portal.store.jcr.JCRStore",
 	service = Store.class
 )
+@Deprecated
 public class JCRStore extends BaseStore {
 
 	@Override
@@ -852,6 +855,16 @@ public class JCRStore extends BaseStore {
 	@Activate
 	protected void activate(Map<String, Object> properties)
 		throws RepositoryException {
+
+		if (_log.isWarnEnabled()) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append("Liferay is configured via the portal property ");
+			sb.append("\"dl.store.impl\" to use JCR to persist documents. ");
+			sb.append("JCR is deprecated and is not supported.");
+
+			_log.warn(sb);
+		}
 
 		_jcrStoreConfiguration = ConfigurableUtil.createConfigurable(
 			JCRStoreConfiguration.class, properties);

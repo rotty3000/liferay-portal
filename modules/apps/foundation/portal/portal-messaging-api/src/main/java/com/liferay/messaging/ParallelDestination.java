@@ -1,0 +1,77 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.messaging;
+
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.liferay.messaging.internal.util.CentralizedThreadLocal;
+import com.liferay.portal.kernel.cache.thread.local.Lifecycle;
+import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+
+/**
+ * <p>
+ * Destination that delivers a message to a list of message listeners in
+ * parallel.
+ * </p>
+ *
+ * @author Michael C. Han
+ */
+public class ParallelDestination extends BaseAsyncDestination {
+
+	@Override
+	protected void dispatch(
+		Set<MessageListener> messageListeners, final Message message) {
+
+		final Thread currentThread = Thread.currentThread();
+
+		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+
+		for (final MessageListener messageListener : messageListeners) {
+			Runnable runnable = new MessageRunnable(message) {
+
+				@Override
+				public void run() {
+					try {
+						populateThreadLocalsFromMessage(message);
+
+						messageListener.receive(message);
+					}
+					catch (MessageListenerException mle) {
+						_logger.error("Unable to process message " + message, mle);
+					}
+					finally {
+						if (Thread.currentThread() != currentThread) {
+							ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
+
+							CentralizedThreadLocal.
+								clearShortLivedThreadLocals();
+						}
+					}
+				}
+
+			};
+
+			threadPoolExecutor.execute(runnable);
+		}
+	}
+
+	private static final Logger _logger = LoggerFactory.getLogger(
+		ParallelDestination.class);
+
+}

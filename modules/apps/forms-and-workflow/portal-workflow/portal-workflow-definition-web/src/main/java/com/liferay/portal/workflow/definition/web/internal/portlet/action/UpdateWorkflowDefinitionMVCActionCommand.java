@@ -27,15 +27,17 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionFileException;
-import com.liferay.portal.kernel.workflow.WorkflowDefinitionManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowDefinitionManager;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Leonardo Barros
@@ -59,31 +61,30 @@ public class UpdateWorkflowDefinitionMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		long companyId = themeDisplay.getCompanyId();
-
-		String content = ParamUtil.getString(actionRequest, "content");
 		String name = ParamUtil.getString(actionRequest, "name");
+		int version = ParamUtil.getInteger(actionRequest, "version");
 		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
 			actionRequest, "title");
-		int version = ParamUtil.getInteger(actionRequest, "version");
+
+		String content = ParamUtil.getString(actionRequest, "content");
 
 		if (Validator.isNull(content)) {
 			throw new WorkflowDefinitionFileException();
 		}
 
 		WorkflowDefinition workflowDefinition =
-			WorkflowDefinitionManagerUtil.getWorkflowDefinition(
-				companyId, name, version);
+			workflowDefinitionManager.getWorkflowDefinition(
+				themeDisplay.getCompanyId(), name, version);
 
-		if (workflowDefinition.getContent().equals(content)) {
-			WorkflowDefinitionManagerUtil.updateTitle(
-				companyId, themeDisplay.getUserId(), name, version,
-				getTitle(titleMap));
+		if (Objects.equals(workflowDefinition.getContent(), content)) {
+			workflowDefinitionManager.updateTitle(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(), name,
+				version, getTitle(titleMap));
 		}
 		else {
-			WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
-				companyId, themeDisplay.getUserId(), getTitle(titleMap),
-				content.getBytes());
+			workflowDefinitionManager.deployWorkflowDefinition(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+				getTitle(titleMap), content.getBytes());
 		}
 
 		sendRedirect(actionRequest, actionResponse);
@@ -112,5 +113,8 @@ public class UpdateWorkflowDefinitionMVCActionCommand
 
 		return value;
 	}
+
+	@Reference
+	protected WorkflowDefinitionManager workflowDefinitionManager;
 
 }

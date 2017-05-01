@@ -1,3 +1,9 @@
+afterEvaluate {
+	transpileJS {
+		soyDependencies = []
+	}
+}
+
 configJSModules {
 	dependsOn transpileJS
 	include "**/*.js*"
@@ -7,5 +13,6 @@ configJSModules {
 transpileJS {
 	skipWhenEmpty = false
 	sourceDir = npmInstall.nodeModulesDir
+	soySrcIncludes = "metal*/src/**/*.soy"
 	srcIncludes = "metal*/src/**/*.js"
 }

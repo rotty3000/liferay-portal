@@ -14,44 +14,34 @@
 
 package com.liferay.ant.bnd.resource.bundle;
 
-import aQute.bnd.header.Attrs;
-import aQute.bnd.header.Parameters;
 import aQute.bnd.osgi.Analyzer;
-import aQute.bnd.osgi.Constants;
-import aQute.bnd.osgi.Jar;
 import aQute.bnd.service.AnalyzerPlugin;
 
 /**
  * @author Carlos Sierra Andrés
+ * @author Gregory Amerson
  */
 public class ResourceBundleLoaderAnalyzerPlugin implements AnalyzerPlugin {
 
 	@Override
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
-		Jar jar = analyzer.getJar();
+		boolean modified = false;
 
-		if (!jar.exists("content/Language.properties")) {
-			return false;
+		for (AnalyzerPlugin analyzerPlugin : _analyzerPlugins) {
+			if (analyzerPlugin.analyzeJar(analyzer)) {
+				modified = true;
+			}
 		}
 
-		Parameters provideCapabilityHeaders = new Parameters(
-			analyzer.getProperty(Constants.PROVIDE_CAPABILITY));
-
-		Parameters parameters = new Parameters();
-
-		Attrs attrs = new Attrs();
-
-		attrs.put("bundle.symbolic.name", analyzer.getBsn());
-		attrs.put("resource.bundle.base.name", "content.Language");
-
-		parameters.add("liferay.resource.bundle", attrs);
-
-		provideCapabilityHeaders.mergeWith(parameters, false);
-
-		analyzer.setProperty(
-			Constants.PROVIDE_CAPABILITY, provideCapabilityHeaders.toString());
-
-		return true;
+		return modified;
 	}
+
+	protected static final String LIFERAY_RESOURCE_BUNDLE =
+		"liferay.resource.bundle";
+
+	private final AnalyzerPlugin[] _analyzerPlugins = new AnalyzerPlugin[] {
+		new AggregateResourceBundleLoaderAnalyzerPlugin(),
+		new ProvidesResourceBundleLoaderAnalyzerPlugin()
+	};
 
 }

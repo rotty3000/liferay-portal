@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.kernel.util.Portal;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +28,7 @@ import org.apache.cxf.jaxrs.ext.ContextProvider;
 import org.apache.cxf.message.Message;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Adam Brandizzi
@@ -39,7 +40,7 @@ public class UserContextProvider implements ContextProvider<User> {
 	@Override
 	public User createContext(Message message) {
 		try {
-			return PortalUtil.getUser(
+			return _portal.getUser(
 				(HttpServletRequest)message.getContextualProperty(
 					"HTTP.REQUEST"));
 		}
@@ -54,5 +55,8 @@ public class UserContextProvider implements ContextProvider<User> {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		UserContextProvider.class);
+
+	@Reference
+	private Portal _portal;
 
 }

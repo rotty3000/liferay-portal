@@ -941,9 +941,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 			return;
 		}
 
-		Map<String, String[]> portletPreferencesMap = preferences.getMap();
+		Enumeration<String> enumeration = preferences.getNames();
 
-		if (portletPreferencesMap.isEmpty()) {
+		if (!enumeration.hasMoreElements()) {
 			if (publicRenderParametersMap.isEmpty()) {
 				return;
 			}

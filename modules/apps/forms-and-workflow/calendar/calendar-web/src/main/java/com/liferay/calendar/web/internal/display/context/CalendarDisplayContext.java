@@ -14,10 +14,12 @@
 
 package com.liferay.calendar.web.internal.display.context;
 
+import com.liferay.calendar.constants.CalendarActionKeys;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.CalendarLocalService;
 import com.liferay.calendar.service.CalendarService;
+import com.liferay.calendar.service.permission.CalendarPermission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -45,6 +47,55 @@ public class CalendarDisplayContext {
 		_calendarService = calendarService;
 		_calendarLocalService = calendarLocalService;
 		_themeDisplay = themeDisplay;
+	}
+
+	public Calendar getDefaultCalendar(
+		List<Calendar> groupCalendars, List<Calendar> userCalendars) {
+
+		Calendar defaultCalendar = null;
+
+		for (Calendar groupCalendar : groupCalendars) {
+			if (groupCalendar.isDefaultCalendar() &&
+				CalendarPermission.contains(
+					_themeDisplay.getPermissionChecker(), groupCalendar,
+					CalendarActionKeys.MANAGE_BOOKINGS)) {
+
+				defaultCalendar = groupCalendar;
+			}
+		}
+
+		if (defaultCalendar == null) {
+			for (Calendar userCalendar : userCalendars) {
+				if (userCalendar.isDefaultCalendar()) {
+					defaultCalendar = userCalendar;
+				}
+			}
+		}
+
+		if (defaultCalendar == null) {
+			for (Calendar groupCalendar : groupCalendars) {
+				if (CalendarPermission.contains(
+						_themeDisplay.getPermissionChecker(), groupCalendar,
+						CalendarActionKeys.MANAGE_BOOKINGS)) {
+
+					defaultCalendar = groupCalendar;
+				}
+			}
+		}
+
+		if (defaultCalendar == null) {
+			for (Calendar groupCalendar : groupCalendars) {
+				if (groupCalendar.isDefaultCalendar() &&
+					CalendarPermission.contains(
+						_themeDisplay.getPermissionChecker(), groupCalendar,
+						CalendarActionKeys.VIEW_BOOKING_DETAILS)) {
+
+					defaultCalendar = groupCalendar;
+				}
+			}
+		}
+
+		return defaultCalendar;
 	}
 
 	public List<Calendar> getOtherCalendars(User user, long[] calendarIds)

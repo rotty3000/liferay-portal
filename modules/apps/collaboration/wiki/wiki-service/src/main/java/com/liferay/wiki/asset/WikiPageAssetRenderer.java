@@ -16,7 +16,8 @@ package com.liferay.wiki.asset;
 
 import com.liferay.asset.kernel.model.AssetRendererFactory;
 import com.liferay.asset.kernel.model.BaseJSPAssetRenderer;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -72,17 +73,10 @@ public class WikiPageAssetRenderer
 	}
 
 	public WikiPageAssetRenderer(
-			WikiPage page, WikiEngineRenderer wikiEngineRenderer)
-		throws PortalException {
+		WikiPage page, WikiEngineRenderer wikiEngineRenderer) {
 
 		_page = page;
 		_wikiEngineRenderer = wikiEngineRenderer;
-
-		_wikiGroupServiceOverriddenConfiguration =
-			ConfigurationProviderUtil.getConfiguration(
-				WikiGroupServiceOverriddenConfiguration.class,
-				new GroupServiceSettingsLocator(
-					page.getGroupId(), WikiConstants.SERVICE_NAME));
 	}
 
 	@Override
@@ -102,6 +96,21 @@ public class WikiPageAssetRenderer
 
 	@Override
 	public String getDiscussionPath() {
+		if (_wikiGroupServiceOverriddenConfiguration == null) {
+			try {
+				_wikiGroupServiceOverriddenConfiguration =
+					ConfigurationProviderUtil.getConfiguration(
+						WikiGroupServiceOverriddenConfiguration.class,
+						new GroupServiceSettingsLocator(
+							_page.getGroupId(), WikiConstants.SERVICE_NAME));
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+
+				return null;
+			}
+		}
+
 		if (_wikiGroupServiceOverriddenConfiguration.pageCommentsEnabled()) {
 			return "edit_page_discussion";
 		}
@@ -326,9 +335,12 @@ public class WikiPageAssetRenderer
 		return true;
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		WikiPageAssetRenderer.class);
+
 	private final WikiPage _page;
 	private final WikiEngineRenderer _wikiEngineRenderer;
-	private final WikiGroupServiceOverriddenConfiguration
+	private WikiGroupServiceOverriddenConfiguration
 		_wikiGroupServiceOverriddenConfiguration;
 
 }

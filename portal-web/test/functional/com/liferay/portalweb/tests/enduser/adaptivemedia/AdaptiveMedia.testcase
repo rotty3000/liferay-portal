@@ -239,7 +239,7 @@
 		<execute macro="Button#clickPublish" />
 	</command>
 
-	<command name="CannotAddNonNumericWidthOrHeight">
+	<command name="CannotAddNonNumericWidthOrHeight" priority="5">
 		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="Adaptive Media" />
 		</execute>
@@ -257,7 +257,7 @@
 		<execute function="AssertElementPresent" locator1="Message#EMPTY_INFO" />
 	</command>
 
-	<command name="EditAndDeleteDisabledAMI">
+	<command name="EditAndDeleteDisabledAMI" priority="5">
 		<execute macro="ProductMenu#gotoControlPanelConfiguration">
 			<var name="portlet" value="Adaptive Media" />
 		</execute>
@@ -453,6 +453,85 @@
 
 		<execute macro="AdaptiveMedia#viewImageVariantID">
 			<var name="imageVariantID" value="custom-id" />
+		</execute>
+	</command>
+
+	<command name="ViewImageResolutionAcrossSites" priority="4">
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Adaptive Media" />
+		</execute>
+
+		<execute macro="AdaptiveMedia#addImageResolution">
+			<var name="imageName" value="This should appear on a new site" />
+			<var name="maxHeight" value="400" />
+			<var name="maxWidth" value="300" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoControlPanelSites">
+			<var name="portlet" value="Sites" />
+		</execute>
+
+		<execute macro="Site#addBlankCP">
+			<var name="siteName" value="New Site with AM" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoSite">
+			<var name="site" value="New Site with AM" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Adaptive Media" />
+		</execute>
+
+		<execute macro="AdaptiveMedia#viewImageResolutionTableEntry">
+			<var name="imageName" value="This should appear on a new site" />
+			<var name="maxHeight" value="400" />
+			<var name="maxWidth" value="300" />
+			<var name="percentOptimized" value="0" />
+		</execute>
+	</command>
+
+	<command name="ViewNoImageResolutionInNewVirtualInstance" priority="4">
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Virtual Instances" />
+		</execute>
+
+		<execute macro="PortalInstances#addCP">
+			<var name="mailDomain" value="www.able.com" />
+			<var name="virtualHost" value="www.able.com" />
+			<var name="webId" value="www.able.com" />
+		</execute>
+
+		<execute macro="PortalInstances#viewCP">
+			<var name="virtualHost" value="www.able.com" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Adaptive Media" />
+		</execute>
+
+		<execute macro="AdaptiveMedia#addImageResolution">
+			<var name="imageName" value="This should not appear on new virtual instance" />
+			<var name="maxHeight" value="300" />
+			<var name="maxWidth" value="300" />
+		</execute>
+
+		<execute macro="User#firstLoginPG">
+			<var name="password" value="test" />
+			<var name="userEmailAddress" value="test@www.able.com" />
+			<var name="virtualHostsURL" value="http://www.able.com:8080" />
+		</execute>
+
+		<execute macro="Navigator#openSpecificURL">
+			<var name="url" value="http://www.able.com:8080" />
+		</execute>
+
+		<execute macro="ProductMenu#gotoControlPanelConfiguration">
+			<var name="portlet" value="Adaptive Media" />
+		</execute>
+
+		<execute macro="AdaptiveMedia#viewNoImageResolution">
+			<var name="imageName" value="This should not appear on new virtual instance" />
 		</execute>
 	</command>
 </definition>

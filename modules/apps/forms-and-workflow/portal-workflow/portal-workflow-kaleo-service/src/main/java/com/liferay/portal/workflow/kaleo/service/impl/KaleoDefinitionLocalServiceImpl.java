@@ -216,11 +216,15 @@ public class KaleoDefinitionLocalServiceImpl
 		for (KaleoDefinitionVersion kaleoDefinitionVersion :
 				kaleoDefinitionVersions) {
 
-			if ((new BigDecimal(kaleoDefinitionVersion.getVersion()).compareTo(
-					new BigDecimal(version)) >= 0) &&
-				(new BigDecimal(kaleoDefinitionVersion.getVersion()).compareTo(
-					new BigDecimal(version + 1)) < 0)) {
+			BigDecimal kaleoDefinitionVersionBigDecimal = new BigDecimal(
+				kaleoDefinitionVersion.getVersion());
 
+			int value1 = kaleoDefinitionVersionBigDecimal.compareTo(
+				new BigDecimal(version));
+			int value2 = kaleoDefinitionVersionBigDecimal.compareTo(
+				new BigDecimal(version + 1));
+
+			if ((value1 >= 0) && (value2 < 0)) {
 				kaleoDefinitionVersionPersistence.remove(
 					kaleoDefinitionVersion);
 			}

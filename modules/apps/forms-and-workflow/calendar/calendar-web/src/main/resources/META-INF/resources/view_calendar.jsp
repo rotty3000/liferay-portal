@@ -299,7 +299,8 @@ boolean columnOptionsVisible = GetterUtil.getBoolean(SessionClicks.get(request, 
 
 				calendars: <%= otherCalendarsJSONArray %>,
 				scheduler: <portlet:namespace />scheduler,
-				simpleMenu: window.<portlet:namespace />calendarsMenu
+				simpleMenu: window.<portlet:namespace />calendarsMenu,
+				visible: <%= !displaySchedulerOnly %>
 			}
 		).render();
 	</c:if>

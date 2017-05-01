@@ -49,18 +49,18 @@ public class RevertWorkflowDefinitionMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		long companyId = themeDisplay.getCompanyId();
-
 		String name = ParamUtil.getString(actionRequest, "name");
 		int version = ParamUtil.getInteger(actionRequest, "version");
 
 		WorkflowDefinition workflowDefinition =
 			WorkflowDefinitionManagerUtil.getWorkflowDefinition(
-				companyId, name, version);
+				themeDisplay.getCompanyId(), name, version);
 
-		WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
-			companyId, themeDisplay.getUserId(), workflowDefinition.getTitle(),
-			workflowDefinition.getContent().getBytes());
+		String content = workflowDefinition.getContent();
+
+		workflowDefinitionManager.deployWorkflowDefinition(
+			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+			workflowDefinition.getTitle(), content.getBytes());
 	}
 
 }

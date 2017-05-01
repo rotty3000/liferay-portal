@@ -215,20 +215,8 @@ CalendarDisplayContext calendarDisplayContext = (CalendarDisplayContext)renderRe
 
 if (calendarDisplayContext != null) {
 	otherCalendars = calendarDisplayContext.getOtherCalendars(user, calendarIds);
-}
 
-for (Calendar groupCalendar : groupCalendars) {
-	if (groupCalendar.isDefaultCalendar() && CalendarPermission.contains(themeDisplay.getPermissionChecker(), groupCalendar, CalendarActionKeys.MANAGE_BOOKINGS)) {
-		defaultCalendar = groupCalendar;
-	}
-}
-
-if (defaultCalendar == null) {
-	for (Calendar userCalendar : userCalendars) {
-		if (userCalendar.isDefaultCalendar()) {
-			defaultCalendar = userCalendar;
-		}
-	}
+	defaultCalendar = calendarDisplayContext.getDefaultCalendar(groupCalendars, userCalendars);
 }
 
 TimeZone userTimeZone = CalendarUtil.getCalendarBookingDisplayTimeZone(calendarBooking, TimeZone.getTimeZone(timeZoneId));

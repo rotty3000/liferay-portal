@@ -50,6 +50,7 @@
 				<action-key>DELETE_DISCUSSION</action-key>
 				<action-key>EXPIRE</action-key>
 				<action-key>PERMISSIONS</action-key>
+				<action-key>SUBSCRIBE</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>UPDATE_DISCUSSION</action-key>
 				<action-key>VIEW</action-key>
@@ -65,6 +66,7 @@
 			<guest-unsupported>
 				<action-key>DELETE_DISCUSSION</action-key>
 				<action-key>EXPIRE</action-key>
+				<action-key>SUBSCRIBE</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>UPDATE_DISCUSSION</action-key>
 			</guest-unsupported>

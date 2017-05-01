@@ -22,13 +22,14 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
-import com.liferay.portal.kernel.workflow.WorkflowTaskManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowTaskManager;
 import com.liferay.portal.workflow.task.web.internal.permission.WorkflowTaskPermissionChecker;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Leonardo Barros
@@ -48,7 +49,7 @@ public class AssignTaskMVCActionCommand
 			long workflowTaskId, ThemeDisplay themeDisplay)
 		throws Exception {
 
-		WorkflowTask workflowTask = WorkflowTaskManagerUtil.getWorkflowTask(
+		WorkflowTask workflowTask = workflowTaskManager.getWorkflowTask(
 			themeDisplay.getCompanyId(), workflowTaskId);
 
 		long groupId = MapUtil.getLong(
@@ -82,10 +83,13 @@ public class AssignTaskMVCActionCommand
 
 		checkWorkflowTaskAssignmentPermission(workflowTaskId, themeDisplay);
 
-		WorkflowTaskManagerUtil.assignWorkflowTaskToUser(
+		workflowTaskManager.assignWorkflowTaskToUser(
 			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
 			workflowTaskId, assigneeUserId, comment, null, null);
 	}
+
+	@Reference
+	protected WorkflowTaskManager workflowTaskManager;
 
 	private final WorkflowTaskPermissionChecker _workflowTaskPermissionChecker =
 		new WorkflowTaskPermissionChecker();

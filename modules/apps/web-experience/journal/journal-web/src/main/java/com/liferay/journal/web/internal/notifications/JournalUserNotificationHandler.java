@@ -25,7 +25,9 @@ import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.portal.kernel.notifications.UserNotificationHandler;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -56,8 +58,9 @@ public class JournalUserNotificationHandler
 
 		String title = StringPool.BLANK;
 
-		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-			"content.Language", getClass());
+		ResourceBundle resourceBundle =
+			_resourceBundleLoader.loadResourceBundle(
+				LocaleUtil.toLanguageId(serviceContext.getLocale()));
 
 		JournalArticleAssetRenderer journalArticleAssetRenderer =
 			(JournalArticleAssetRenderer)assetRenderer;
@@ -94,17 +97,44 @@ public class JournalUserNotificationHandler
 		}
 		else if (notificationType ==
 					JournalArticleConstants.
+						NOTIFICATION_TYPE_MOVE_ENTRY_FROM_TRASH) {
+
+			title = ResourceBundleUtil.getString(
+				resourceBundle, "x-restored-a-web-content-from-the-recycle-bin",
+				userFullName);
+		}
+		else if (notificationType ==
+					JournalArticleConstants.
 						NOTIFICATION_TYPE_MOVE_ENTRY_TO_FOLDER) {
 
 			title = ResourceBundleUtil.getString(
 				resourceBundle, "x-moved-a-web-content-to-a-folder",
 				userFullName);
 		}
+		else if (notificationType ==
+					JournalArticleConstants.
+						NOTIFICATION_TYPE_MOVE_ENTRY_TO_TRASH) {
+
+			title = ResourceBundleUtil.getString(
+				resourceBundle, "x-moved-a-web-content-to-the-recycle-bin",
+				userFullName);
+		}
 
 		return title;
 	}
 
+	@Reference(
+		target = "(bundle.symbolic.name=com.liferay.journal.web)", unbind = "-"
+	)
+	protected void setResourceBundleLoader(
+		ResourceBundleLoader resourceBundleLoader) {
+
+		_resourceBundleLoader = resourceBundleLoader;
+	}
+
 	@Reference
 	private Portal _portal;
+
+	private ResourceBundleLoader _resourceBundleLoader;
 
 }

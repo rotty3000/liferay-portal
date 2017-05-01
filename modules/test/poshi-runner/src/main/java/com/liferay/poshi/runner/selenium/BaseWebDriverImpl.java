@@ -47,10 +47,8 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -1006,45 +1004,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	}
 
 	@Override
-	public String getCurrentDay() {
-		Calendar calendar = Calendar.getInstance();
-
-		return StringUtil.valueOf(calendar.get(Calendar.DATE));
-	}
-
-	@Override
-	public String getCurrentDayName() {
-		Calendar calendar = Calendar.getInstance();
-
-		return StringUtil.valueOf(
-			calendar.getDisplayName(
-				Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US));
-	}
-
-	@Override
-	public String getCurrentHour() {
-		Calendar calendar = Calendar.getInstance();
-
-		return StringUtil.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-	}
-
-	@Override
-	public String getCurrentMonth() {
-		Calendar calendar = Calendar.getInstance();
-
-		return StringUtil.valueOf(calendar.get(Calendar.MONTH) + 1);
-	}
-
-	@Override
 	public String getCurrentUrl() {
 		return _webDriver.getCurrentUrl();
-	}
-
-	@Override
-	public String getCurrentYear() {
-		Calendar calendar = Calendar.getInstance();
-
-		return StringUtil.valueOf(calendar.get(Calendar.YEAR));
 	}
 
 	@Override

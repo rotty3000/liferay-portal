@@ -15,16 +15,9 @@
 package com.liferay.portal.workflow.kaleo.runtime.internal.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
-import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.workflow.kaleo.KaleoTaskAssignmentFactory;
 import com.liferay.portal.workflow.kaleo.definition.DelayDuration;
 import com.liferay.portal.workflow.kaleo.definition.DurationScale;
 import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
@@ -52,7 +45,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -123,14 +115,6 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 					configuredKaleoTaskAssignment, executionContext);
 
 			kaleoTaskAssignments.addAll(calculatedKaleoTaskAssignments);
-		}
-
-		if (kaleoTaskAssignments.isEmpty()) {
-			Collection<KaleoTaskAssignment> organizationKaleoTaskAssignments =
-				getOrganizationKaleoTaskAssignments(
-					configuredKaleoTaskAssignments, executionContext);
-
-			kaleoTaskAssignments.addAll(organizationKaleoTaskAssignments);
 		}
 
 		return _kaleoTaskInstanceTokenLocalService.addKaleoTaskInstanceToken(
@@ -230,66 +214,11 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 		remainingPathElements.add(pathElement);
 	}
 
-	protected Collection<KaleoTaskAssignment>
-			getOrganizationKaleoTaskAssignments(
-				Collection<KaleoTaskAssignment> kaleoTaskAssignments,
-				ExecutionContext executionContext)
-		throws PortalException {
-
-		long userId = executionContext.getKaleoInstanceToken().getUserId();
-
-		User user = _userLocalService.getUser(userId);
-
-		List<Organization> organizations = user.getOrganizations();
-
-		Collection<KaleoTaskAssignment> organizationKaleoTaskAssignments =
-			new HashSet<>();
-
-		for (KaleoTaskAssignment kaleoTaskAssignment : kaleoTaskAssignments) {
-			String assigneeClassName =
-				kaleoTaskAssignment.getAssigneeClassName();
-
-			if (!assigneeClassName.equals(Role.class.getName())) {
-				continue;
-			}
-
-			long roleId = kaleoTaskAssignment.getAssigneeClassPK();
-
-			Role role = _roleLocalService.getRole(roleId);
-
-			if (role.getType() != RoleConstants.TYPE_ORGANIZATION) {
-				continue;
-			}
-
-			for (Organization organization : organizations) {
-				KaleoTaskAssignment organizationKaleoTaskAssignment =
-					_kaleoTaskAssignmentFactory.createKaleoTaskAssignment();
-
-				organizationKaleoTaskAssignment.setGroupId(
-					organization.getGroup().getGroupId());
-				organizationKaleoTaskAssignment.setCompanyId(
-					kaleoTaskAssignment.getCompanyId());
-				organizationKaleoTaskAssignment.setAssigneeClassName(
-					kaleoTaskAssignment.getAssigneeClassName());
-				organizationKaleoTaskAssignment.setAssigneeClassPK(
-					kaleoTaskAssignment.getAssigneeClassPK());
-
-				organizationKaleoTaskAssignments.add(
-					organizationKaleoTaskAssignment);
-			}
-		}
-
-		return organizationKaleoTaskAssignments;
-	}
-
 	@Reference
 	private DueDateCalculator _dueDateCalculator;
 
 	@Reference
 	private KaleoLogLocalService _kaleoLogLocalService;
-
-	@Reference
-	private KaleoTaskAssignmentFactory _kaleoTaskAssignmentFactory;
 
 	@Reference
 	private KaleoTaskInstanceTokenLocalService
@@ -299,15 +228,9 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 	private KaleoTaskLocalService _kaleoTaskLocalService;
 
 	@Reference
-	private RoleLocalService _roleLocalService;
-
-	@Reference
 	private TaskAssignerUtil _taskAssignerUtil;
 
 	@Reference
 	private TaskAssignmentSelectorRegistry _taskAssignmentSelectorRegistry;
-
-	@Reference
-	private UserLocalService _userLocalService;
 
 }

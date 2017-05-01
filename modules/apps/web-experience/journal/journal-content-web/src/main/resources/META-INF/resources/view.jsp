@@ -36,11 +36,7 @@ AssetRendererFactory<JournalArticle> assetRendererFactory = AssetRendererFactory
 						<liferay-ui:message key="this-application-is-not-visible-to-users-yet" />
 					</div>
 
-					<%
-					Group scopeGroup = themeDisplay.getScopeGroup();
-					%>
-
-					<c:if test="<%= !scopeGroup.isStaged() || scopeGroup.isStagingGroup() %>">
+					<c:if test="<%= journalContentDisplayContext.isShowSelectArticleLink() %>">
 						<div>
 							<aui:a href="javascript:;" onClick="<%= portletDisplay.getURLConfigurationJS() %>"><liferay-ui:message key="select-web-content-to-make-it-visible" /></aui:a>
 						</div>
@@ -48,8 +44,46 @@ AssetRendererFactory<JournalArticle> assetRendererFactory = AssetRendererFactory
 				</div>
 			</c:when>
 			<c:otherwise>
-				<div class="alert alert-danger">
-					<liferay-ui:message key="the-selected-web-content-no-longer-exists" />
+
+				<%
+				JournalArticle selectedArticle = journalContentDisplayContext.getSelectedArticle();
+				%>
+
+				<div class="alert alert-warning text-center">
+					<c:choose>
+						<c:when test="<%= (selectedArticle != null) && selectedArticle.isInTrash() %>">
+							<liferay-ui:message arguments="<%= HtmlUtil.escape(selectedArticle.getTitle(locale)) %>" key="the-web-content-article-x-was-moved-to-the-recycle-bin" />
+						</c:when>
+						<c:otherwise>
+							<liferay-ui:message key="the-selected-web-content-no-longer-exists" />
+						</c:otherwise>
+					</c:choose>
+
+					<c:if test="<%= journalContentDisplayContext.isShowSelectArticleLink() %>">
+						<liferay-util:buffer var="selectJournalArticleLink">
+							<aui:a href="javascript:;" label="select-another" onClick="<%= portletDisplay.getURLConfigurationJS() %>" />
+						</liferay-util:buffer>
+
+						<div>
+							<c:choose>
+								<c:when test="<%= journalContentDisplayContext.hasRestorePermission() %>">
+									<portlet:actionURL name="restoreJournalArticle" var="restoreJournalArticleURL">
+										<portlet:param name="classPK" value="<%= String.valueOf(JournalArticleAssetRenderer.getClassPK(selectedArticle)) %>" />
+										<portlet:param name="redirect" value="<%= currentURL %>" />
+									</portlet:actionURL>
+
+									<liferay-util:buffer var="restoreJournalArticleLink">
+										<aui:a href="<%= restoreJournalArticleURL %>" label="undo" />
+									</liferay-util:buffer>
+
+									<liferay-ui:message arguments="<%= new String[] {restoreJournalArticleLink, selectJournalArticleLink} %>" key="do-you-want-to-x-or-x-web-content" />
+								</c:when>
+								<c:otherwise>
+									<liferay-ui:message arguments="<%= selectJournalArticleLink %>" key="do-you-want-to-x-web-content" />
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</c:if>
 				</div>
 			</c:otherwise>
 		</c:choose>

@@ -18,6 +18,7 @@ import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.document.library.web.internal.display.context.logic.UIItemsBuilder;
 import com.liferay.document.library.web.internal.portlet.action.ActionUtil;
+import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigurationIcon;
 import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
@@ -129,7 +130,7 @@ public class OpenInMSOfficeFileEntryPortletConfigurationIcon
 					themeDisplay.getLocale());
 
 			UIItemsBuilder uiItemsBuilder = new UIItemsBuilder(
-				request, fileVersion, resourceBundle);
+				request, fileVersion, resourceBundle, _dlTrashUtil);
 
 			return uiItemsBuilder.isOpenInMsOfficeActionAvailable();
 		}
@@ -149,19 +150,15 @@ public class OpenInMSOfficeFileEntryPortletConfigurationIcon
 		return true;
 	}
 
-	@Reference(
-		target = "(bundle.symbolic.name=com.liferay.document.library.web)",
-		unbind = "-"
-	)
-	protected void setResourceBundleLoader(
-		ResourceBundleLoader resourceBundleLoader) {
-
-		_resourceBundleLoader = resourceBundleLoader;
-	}
+	@Reference
+	private DLTrashUtil _dlTrashUtil;
 
 	@Reference
 	private Portal _portal;
 
+	@Reference(
+		target = "(bundle.symbolic.name=com.liferay.document.library.web)"
+	)
 	private ResourceBundleLoader _resourceBundleLoader;
 
 }

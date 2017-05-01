@@ -28,6 +28,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,23 @@ public class DBInspector {
 
 	public DBInspector(Connection connection) {
 		_connection = connection;
+	}
+
+	public String getCatalog() throws SQLException {
+		return _connection.getCatalog();
+	}
+
+	public String getSchema() {
+		try {
+			return _connection.getSchema();
+		}
+		catch (Throwable t) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(t, t);
+			}
+
+			return null;
+		}
 	}
 
 	public boolean hasColumn(String tableName, String columnName)
@@ -76,7 +94,7 @@ public class DBInspector {
 		DatabaseMetaData databaseMetaData = _connection.getMetaData();
 
 		try (ResultSet rs = databaseMetaData.getColumns(
-				null, null, tableName, columnName)) {
+				getCatalog(), getSchema(), tableName, columnName)) {
 
 			if (!rs.next()) {
 				return false;
@@ -207,7 +225,7 @@ public class DBInspector {
 		try {
 			DatabaseMetaData metadata = _connection.getMetaData();
 
-			rs = metadata.getTables(null, null, tableName, null);
+			rs = metadata.getTables(getCatalog(), getSchema(), tableName, null);
 
 			while (rs.next()) {
 				return true;

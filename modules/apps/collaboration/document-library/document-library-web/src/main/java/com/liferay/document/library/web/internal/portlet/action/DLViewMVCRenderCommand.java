@@ -21,6 +21,7 @@ import com.liferay.document.library.kernel.service.DLFolderLocalService;
 import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.document.library.web.constants.DLWebKeys;
 import com.liferay.document.library.web.internal.portlet.toolbar.contributor.DLPortletToolbarContributor;
+import com.liferay.document.library.web.internal.util.DLTrashUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -67,16 +68,9 @@ public class DLViewMVCRenderCommand extends GetFolderMVCRenderCommand {
 		return super.render(renderRequest, renderResponse);
 	}
 
-	@Reference(unbind = "-")
-	public void setDLAppService(DLAppService dlAppService) {
-		_dlAppService = dlAppService;
-	}
-
-	@Reference(unbind = "-")
-	public void setDLFolderLocalService(
-		DLFolderLocalService dlFolderLocalService) {
-
-		_dlFolderLocalService = dlFolderLocalService;
+	@Override
+	protected DLTrashUtil getDLTrashUtil() {
+		return _dlTrashUtil;
 	}
 
 	@Override
@@ -110,15 +104,16 @@ public class DLViewMVCRenderCommand extends GetFolderMVCRenderCommand {
 			dlFolder.getRepositoryId(), dlFolder.getFolderId());
 	}
 
-	@Reference(unbind = "-")
-	protected void setDLPortletToolbarContributor(
-		DLPortletToolbarContributor dlPortletToolbarContributor) {
-
-		_dlPortletToolbarContributor = dlPortletToolbarContributor;
-	}
-
+	@Reference
 	private DLAppService _dlAppService;
+
+	@Reference
 	private DLFolderLocalService _dlFolderLocalService;
+
+	@Reference
 	private DLPortletToolbarContributor _dlPortletToolbarContributor;
+
+	@Reference
+	private DLTrashUtil _dlTrashUtil;
 
 }

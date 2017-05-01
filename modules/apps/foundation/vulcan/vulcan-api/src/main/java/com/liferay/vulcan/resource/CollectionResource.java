@@ -30,7 +30,7 @@ import javax.ws.rs.core.Context;
 public interface CollectionResource<T> extends Resource<T> {
 
 	@Path("/{id}")
-	public SingleResource<T> getCollectionItemResource(
+	public SingleResource<T> getCollectionItemSingleResource(
 		@PathParam("id") String id);
 
 	@GET

@@ -25,6 +25,6 @@ import java.util.function.BiConsumer;
  */
 public interface ResourceMapper {
 
-	public void mapResources(BiConsumer<String, Resource<?>> mapFunction);
+	public void mapResources(BiConsumer<String, Resource<?>> biConsumer);
 
 }
