@@ -65,6 +65,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.workflow.WorkflowDefinitionManagerUtil;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowInstance;
 import com.liferay.portal.kernel.workflow.WorkflowInstanceManagerUtil;
@@ -79,6 +80,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.log4j.Level;
 
@@ -113,10 +115,18 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 			String className, long classPK, long typePK)
 		throws PortalException {
 
+		activateWorkflow(className, classPK, typePK, "Single Approver", 1);
+	}
+
+	protected void activateWorkflow(
+			String className, long classPK, long typePK,
+			String workflowDefinitionName, int workflowDefinitionVersion)
+		throws PortalException {
+
 		WorkflowDefinitionLinkLocalServiceUtil.updateWorkflowDefinitionLink(
 			adminUser.getUserId(), TestPropsValues.getCompanyId(),
 			group.getGroupId(), className, classPK, typePK,
-			"Single Approver@1");
+			workflowDefinitionName, workflowDefinitionVersion);
 	}
 
 	protected BlogsEntry addBlogsEntry() throws PortalException {
@@ -241,11 +251,18 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 	protected void assignWorkflowTaskToUser(User user, User assigneeUser)
 		throws Exception {
 
+		assignWorkflowTaskToUser(user, assigneeUser, null);
+	}
+
+	protected void assignWorkflowTaskToUser(
+			User user, User assigneeUser, String taskName)
+		throws Exception {
+
 		try (CaptureAppender captureAppender =
 				Log4JLoggerTestUtil.configureLog4JLogger(
 					_MAIL_ENGINE_CLASS_NAME, Level.OFF)) {
 
-			WorkflowTask workflowTask = getWorkflowTask();
+			WorkflowTask workflowTask = getWorkflowTask(taskName, false);
 
 			PermissionChecker userPermissionChecker =
 				PermissionCheckerFactoryUtil.create(user);
@@ -296,11 +313,18 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 	protected void completeWorkflowTask(User user, String transition)
 		throws Exception {
 
+		completeWorkflowTask(user, transition, null);
+	}
+
+	protected void completeWorkflowTask(
+			User user, String transition, String taskName)
+		throws Exception {
+
 		try (CaptureAppender captureAppender =
 				Log4JLoggerTestUtil.configureLog4JLogger(
 					_MAIL_ENGINE_CLASS_NAME, Level.OFF)) {
 
-			WorkflowTask workflowTask = getWorkflowTask();
+			WorkflowTask workflowTask = getWorkflowTask(taskName, false);
 
 			PermissionChecker userPermissionChecker =
 				PermissionCheckerFactoryUtil.create(user);
@@ -325,6 +349,14 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 		ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
 
 		return ddmFormValues;
+	}
+
+	protected void createJoinXorWorkflow() throws Exception {
+		String content = read("join-xor-definition.xml");
+
+		WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
+			adminUser.getCompanyId(), adminUser.getUserId(), "Join Xor",
+			content.getBytes());
 	}
 
 	protected User createUser(String roleName) throws Exception {
@@ -352,15 +384,38 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 			group.getGroupId(), className, classPK, typePK, null);
 	}
 
+	protected String getBasePath() {
+		return "com/liferay/portal/workflow/kaleo/dependencies/";
+	}
+
 	protected WorkflowTask getWorkflowTask() throws WorkflowException {
+		return getWorkflowTask(null, false);
+	}
+
+	protected WorkflowTask getWorkflowTask(String taskName, boolean completed)
+		throws WorkflowException {
+
 		List<WorkflowTask> workflowTasks =
 			WorkflowTaskManagerUtil.getWorkflowTasksBySubmittingUser(
-				adminUser.getCompanyId(), adminUser.getUserId(), false,
+				adminUser.getCompanyId(), adminUser.getUserId(), completed,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+		for (WorkflowTask workflowTask : workflowTasks) {
+			if (Objects.equals(taskName, workflowTask.getName())) {
+				return workflowTask;
+			}
+		}
 
 		Assert.assertEquals(workflowTasks.toString(), 1, workflowTasks.size());
 
 		return workflowTasks.get(0);
+	}
+
+	protected String read(String fileName) throws Exception {
+		Class<?> clazz = getClass();
+
+		return StringUtil.read(
+			clazz.getClassLoader(), getBasePath() + fileName);
 	}
 
 	protected void setUpUsers() throws Exception {

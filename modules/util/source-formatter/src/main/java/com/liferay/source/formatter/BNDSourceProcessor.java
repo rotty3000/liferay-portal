@@ -14,22 +14,6 @@
 
 package com.liferay.source.formatter;
 
-import com.liferay.source.formatter.checks.BNDBundleNameCheck;
-import com.liferay.source.formatter.checks.BNDCapabilityCheck;
-import com.liferay.source.formatter.checks.BNDDefinitionKeysCheck;
-import com.liferay.source.formatter.checks.BNDDirectoryNameCheck;
-import com.liferay.source.formatter.checks.BNDExportsCheck;
-import com.liferay.source.formatter.checks.BNDImportsCheck;
-import com.liferay.source.formatter.checks.BNDIncludeResourceCheck;
-import com.liferay.source.formatter.checks.BNDLineBreaksCheck;
-import com.liferay.source.formatter.checks.BNDRangeCheck;
-import com.liferay.source.formatter.checks.BNDSchemaVersionCheck;
-import com.liferay.source.formatter.checks.BNDStylingCheck;
-import com.liferay.source.formatter.checks.BNDWebContextPathCheck;
-import com.liferay.source.formatter.checks.BNDWhitespaceCheck;
-import com.liferay.source.formatter.checks.SourceCheck;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,41 +31,6 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 		return _INCLUDES;
 	}
 
-	@Override
-	protected List<SourceCheck> getModuleSourceChecks() {
-		return _moduleSourceChecks;
-	}
-
-	@Override
-	protected List<SourceCheck> getSourceChecks() {
-		return _sourceChecks;
-	}
-
-	@Override
-	protected void populateModuleSourceChecks() throws Exception {
-		_moduleSourceChecks.add(new BNDBundleNameCheck());
-		_moduleSourceChecks.add(new BNDDirectoryNameCheck());
-		_moduleSourceChecks.add(new BNDExportsCheck());
-		_moduleSourceChecks.add(new BNDIncludeResourceCheck());
-		_moduleSourceChecks.add(new BNDWebContextPathCheck());
-	}
-
-	@Override
-	protected void populateSourceChecks() {
-		_sourceChecks.add(new BNDWhitespaceCheck());
-
-		_sourceChecks.add(new BNDCapabilityCheck());
-		_sourceChecks.add(new BNDDefinitionKeysCheck());
-		_sourceChecks.add(new BNDImportsCheck());
-		_sourceChecks.add(new BNDLineBreaksCheck());
-		_sourceChecks.add(new BNDRangeCheck());
-		_sourceChecks.add(new BNDSchemaVersionCheck());
-		_sourceChecks.add(new BNDStylingCheck());
-	}
-
 	private static final String[] _INCLUDES = new String[] {"**/*.bnd"};
-
-	private final List<SourceCheck> _moduleSourceChecks = new ArrayList<>();
-	private final List<SourceCheck> _sourceChecks = new ArrayList<>();
 
 }

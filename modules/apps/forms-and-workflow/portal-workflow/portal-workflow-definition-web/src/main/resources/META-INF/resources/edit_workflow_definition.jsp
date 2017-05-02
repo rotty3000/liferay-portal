@@ -21,14 +21,14 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 WorkflowDefinition workflowDefinition = (WorkflowDefinition)request.getAttribute(WebKeys.WORKFLOW_DEFINITION);
 
-String content = StringPool.BLANK;
 String name = StringPool.BLANK;
 int version = 0;
+String content = StringPool.BLANK;
 
 if (workflowDefinition != null) {
-	content = workflowDefinition.getContent();
 	name = workflowDefinition.getName();
 	version = workflowDefinition.getVersion();
+	content = workflowDefinition.getContent();
 }
 
 portletDisplay.setShowBackIcon(true);
@@ -90,9 +90,9 @@ renderResponse.setTitle((workflowDefinition == null) ? LanguageUtil.get(request,
 	<div class="sidenav-content">
 		<aui:form action="<%= editWorkflowDefinitionURL %>" method="post" name="fm">
 			<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-			<aui:input name="content" type="hidden" value="<%= content %>" />
 			<aui:input name="name" type="hidden" value="<%= name %>" />
 			<aui:input name="version" type="hidden" value="<%= version %>" />
+			<aui:input name="content" type="hidden" value="<%= content %>" />
 
 			<div class="card-horizontal">
 				<div class="card-row-padded">

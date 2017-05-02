@@ -14,12 +14,6 @@
 
 package com.liferay.source.formatter;
 
-import com.liferay.source.formatter.checks.SQLEmptyLinesCheck;
-import com.liferay.source.formatter.checks.SQLStylingCheck;
-import com.liferay.source.formatter.checks.SourceCheck;
-import com.liferay.source.formatter.checks.WhitespaceCheck;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,21 +32,6 @@ public class SQLSourceProcessor extends BaseSourceProcessor {
 		return _INCLUDES;
 	}
 
-	@Override
-	protected List<SourceCheck> getSourceChecks() {
-		return _sourceChecks;
-	}
-
-	@Override
-	protected void populateSourceChecks() {
-		_sourceChecks.add(new WhitespaceCheck());
-
-		_sourceChecks.add(new SQLEmptyLinesCheck());
-		_sourceChecks.add(new SQLStylingCheck());
-	}
-
 	private static final String[] _INCLUDES = new String[] {"**/*.sql"};
-
-	private final List<SourceCheck> _sourceChecks = new ArrayList<>();
 
 }

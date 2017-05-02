@@ -108,12 +108,6 @@ public class SourceFormatter {
 					GitUtil.getLocalChangesFileNames(baseDirName));
 			}
 
-			String copyrightFileName = ArgumentsUtil.getString(
-				arguments, "source.copyright.file",
-				SourceFormatterArgs.COPYRIGHT_FILE_NAME);
-
-			sourceFormatterArgs.setCopyrightFileName(copyrightFileName);
-
 			String fileNamesString = ArgumentsUtil.getString(
 				arguments, "source.files", StringPool.BLANK);
 
@@ -390,7 +384,7 @@ public class SourceFormatter {
 			SourceFormatterUtil.filterFileNames(
 				_allFileNames,
 				excludesList.toArray(new String[excludesList.size()]),
-				new String[] {"**/modules/**/" + _PROPERTIES_FILE_NAME});
+				new String[] {"**/" + _PROPERTIES_FILE_NAME});
 
 		for (String modulePropertiesFileName : modulePropertiesFileNames) {
 			InputStream inputStream = new FileInputStream(

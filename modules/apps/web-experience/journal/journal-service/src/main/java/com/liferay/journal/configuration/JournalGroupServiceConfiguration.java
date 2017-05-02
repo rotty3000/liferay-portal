@@ -99,6 +99,12 @@ public interface JournalGroupServiceConfiguration {
 	)
 	public LocalizedValuesMap emailArticleMovedFromFolderBody();
 
+	@Meta.AD(
+		deflt = "${resource:com/liferay/journal/dependencies/email_article_moved_from_trash_body.tmpl}",
+		required = false
+	)
+	public LocalizedValuesMap emailArticleMovedFromTrashBody();
+
 	@Meta.AD(deflt = "true", required = false)
 	public boolean emailArticleMovedFromFolderEnabled();
 
@@ -107,6 +113,12 @@ public interface JournalGroupServiceConfiguration {
 		required = false
 	)
 	public LocalizedValuesMap emailArticleMovedFromFolderSubject();
+
+	@Meta.AD(
+		deflt = "${resource:com/liferay/journal/dependencies/email_article_moved_from_trash_subject.tmpl}",
+		required = false
+	)
+	public LocalizedValuesMap emailArticleMovedFromTrashSubject();
 
 	@Meta.AD(
 		deflt = "${resource:com/liferay/journal/dependencies/email_article_moved_to_folder_body.tmpl}",
@@ -122,6 +134,21 @@ public interface JournalGroupServiceConfiguration {
 		required = false
 	)
 	public LocalizedValuesMap emailArticleMovedToFolderSubject();
+
+	@Meta.AD(
+		deflt = "${resource:com/liferay/journal/dependencies/email_article_moved_to_trash_body.tmpl}",
+		required = false
+	)
+	public LocalizedValuesMap emailArticleMovedToTrashBody();
+
+	@Meta.AD(deflt = "true", required = false)
+	public boolean emailArticleMovedToTrashEnabled();
+
+	@Meta.AD(
+		deflt = "${resource:com/liferay/journal/dependencies/email_article_moved_to_trash_subject.tmpl}",
+		required = false
+	)
+	public LocalizedValuesMap emailArticleMovedToTrashSubject();
 
 	@Meta.AD(
 		deflt = "${resource:com/liferay/journal/dependencies/email_article_review_body.tmpl}",

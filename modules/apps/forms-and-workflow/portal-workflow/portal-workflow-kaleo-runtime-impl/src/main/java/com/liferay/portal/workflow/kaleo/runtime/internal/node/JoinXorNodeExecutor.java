@@ -15,6 +15,7 @@
 package com.liferay.portal.workflow.kaleo.runtime.internal.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
@@ -163,6 +164,11 @@ public class JoinXorNodeExecutor extends BaseNodeExecutor {
 			KaleoTaskInstanceToken kaleoTaskInstanceToken,
 			ServiceContext serviceContext)
 		throws PortalException {
+
+		_kaleoTaskAssignmentInstanceLocalService.
+			assignKaleoTaskAssignmentInstance(
+				kaleoTaskInstanceToken, User.class.getName(),
+				serviceContext.getUserId(), serviceContext);
 
 		long kaleoTaskInstanceTokenId =
 			kaleoTaskInstanceToken.getKaleoTaskInstanceTokenId();

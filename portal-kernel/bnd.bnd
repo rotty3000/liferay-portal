@@ -1,10 +1,10 @@
 Bundle-Name: ${manifest.bundle.name}
 Bundle-SymbolicName: ${manifest.bundle.symbolic.name}
-Bundle-Version: 2.27.0
+Bundle-Version: 2.28.0
 Export-Package:\
 	!com.liferay.portal.kernel.test.*,\
 	\
 	com.liferay.*
 Import-Package: *
 Include-Resource: classes
--baseline: *;file=${project.dir}/.bnd/ant-baseline-cache/com.liferay.portal.kernel-2.26.0.jar
+-baseline: *;file=${project.dir}/.bnd/ant-baseline-cache/com.liferay.portal.kernel-2.27.0.jar

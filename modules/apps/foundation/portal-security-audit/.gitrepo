@@ -4,8 +4,8 @@
 [subrepo]
 	autopull = false
 	cmdver = liferay
-	commit = 1554bcd26de056ea259cf61954a604b1a874d0c7
+	commit = fec3cc088000f69fc1f6b7fe502d8468e160f0f3
 	mergebuttonmergecommits = false
 	mode = push
-	parent = ddeabaec6a9ebfdc36b463269035348282e1936e
+	parent = fd414b62f0c507948e8717180efa88331cab76a4
 	remote = git@github.com:liferay/com-liferay-portal-security-audit.git

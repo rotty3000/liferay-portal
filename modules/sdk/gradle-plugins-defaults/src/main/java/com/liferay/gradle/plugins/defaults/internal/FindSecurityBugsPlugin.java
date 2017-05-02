@@ -35,12 +35,14 @@ import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.reporting.ReportingExtension;
 import org.gradle.api.specs.Spec;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetOutput;
 import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.language.base.plugins.LifecycleBasePlugin;
 
 /**
  * @author Andrea Di Giorgi
@@ -71,9 +73,11 @@ public class FindSecurityBugsPlugin implements Plugin<Project> {
 		WriteFindBugsProjectTask writeFindBugsProjectTask =
 			_addTaskWriteFindBugsProject(project);
 
-		_addTaskFindSecurityBugs(
+		Task findSecurityBugsTask = _addTaskFindSecurityBugs(
 			writeFindBugsProjectTask, findSecurityBugsConfiguration,
 			findSecurityBugsPluginsConfiguration);
+
+		_checkTaskCheck(findSecurityBugsTask);
 	}
 
 	private FindSecurityBugsPlugin() {
@@ -291,6 +295,7 @@ public class FindSecurityBugsPlugin implements Plugin<Project> {
 
 		javaExec.setClasspath(classpath);
 		javaExec.setDescription("Runs FindSecurityBugs on this project.");
+		javaExec.setGroup(JavaBasePlugin.VERIFICATION_GROUP);
 		javaExec.setMain("edu.umd.cs.findbugs.FindBugs2");
 
 		javaExec.systemProperty(
@@ -390,6 +395,14 @@ public class FindSecurityBugsPlugin implements Plugin<Project> {
 		writeFindBugsProjectTask.setSrcDirs(srcDirs);
 
 		return writeFindBugsProjectTask;
+	}
+
+	private void _checkTaskCheck(Task findSecurityBugsTask) {
+		Task task = GradleUtil.getTask(
+			findSecurityBugsTask.getProject(),
+			LifecycleBasePlugin.CHECK_TASK_NAME);
+
+		task.dependsOn(findSecurityBugsTask);
 	}
 
 	private static final String _FIND_SECURITY_BUGS_EXCLUDE_FILE_NAME =

@@ -1960,6 +1960,11 @@ public class JournalArticleServiceUtil {
 		getService().restoreArticleFromTrash(resourcePrimKey);
 	}
 
+	public static void subscribe(long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().subscribe(groupId, articleId);
+	}
+
 	/**
 	* Subscribes the user to changes in elements that belong to the web content
 	* article's DDM structure.
@@ -1972,6 +1977,11 @@ public class JournalArticleServiceUtil {
 		long ddmStructureId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		getService().subscribeStructure(groupId, userId, ddmStructureId);
+	}
+
+	public static void unsubscribe(long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().unsubscribe(groupId, articleId);
 	}
 
 	/**

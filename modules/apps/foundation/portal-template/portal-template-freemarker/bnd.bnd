@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Portal Template FreeMarker
 Bundle-SymbolicName: com.liferay.portal.template.freemarker
-Bundle-Version: 2.0.21
+Bundle-Version: 2.0.22
 Export-Package:\
 	freemarker,\
 	\

@@ -223,7 +223,12 @@ AUI.add(
 											if (calendarResourceId == instance.get('groupCalendarResourceId') && item.get('permissions').MANAGE_BOOKINGS) {
 												defaultCalendar = item;
 											}
-											else if (calendarResourceId == instance.get('userCalendarResourceId') && defaultCalendar == null) {
+
+											if (defaultCalendar == null && calendarResourceId == instance.get('userCalendarResourceId')) {
+												defaultCalendar = item;
+											}
+
+											if (defaultCalendar == null && calendarResourceId == instance.get('groupCalendarResourceId') && item.get('permissions').VIEW_BOOKING_DETAILS) {
 												defaultCalendar = item;
 											}
 										}

@@ -277,6 +277,11 @@ public class LayoutLocalServiceStagingAdvice implements MethodInterceptor {
 				friendlyURLMap, iconImage, iconBytes, serviceContext);
 		}
 
+		layoutLocalService.updateAsset(
+			serviceContext.getUserId(), layout,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
+
 		if (parentLayoutId != layout.getParentLayoutId()) {
 			int priority = layoutLocalServiceHelper.getNextPriority(
 				groupId, privateLayout, parentLayoutId,

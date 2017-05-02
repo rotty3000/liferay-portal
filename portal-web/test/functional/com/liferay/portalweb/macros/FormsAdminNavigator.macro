@@ -1,5 +1,6 @@
 <definition>
 	<var name="formName" value="Created Form Name" />
+	<var name="rowIndexNumber" value="1" />
 
 	<command name="gotoAddDataProvider">
 		<execute function="Click" locator1="FormsAdmin#DATA_PROVIDER_PLUS_BUTTON" />
@@ -93,9 +94,11 @@
 	</command>
 
 	<command name="gotoView">
-		<execute function="AssertElementPresent" locator1="Icon#BODY_VERTICAL_ELLIPSIS" />
+		<var name="key_rowIndexNumber" value="${rowIndexNumber}" />
 
-		<execute function="Click#waitForMenuToggleJSClick" locator1="Icon#BODY_VERTICAL_ELLIPSIS" />
+		<execute function="AssertElementPresent" locator1="Icon#ROW_VERTICAL_ELLIPSIS_N" />
+
+		<execute function="Click#waitForMenuToggleJSClick" locator1="Icon#ROW_VERTICAL_ELLIPSIS_N" />
 
 		<var name="key_formName" value="${formName}" />
 

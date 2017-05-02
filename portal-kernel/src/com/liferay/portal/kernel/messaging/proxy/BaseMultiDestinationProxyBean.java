@@ -63,9 +63,13 @@ public abstract class BaseMultiDestinationProxyBean {
 	}
 
 	public Object synchronousSend(ProxyRequest proxyRequest) throws Exception {
+		Message message = new Message();
+
+		message.setPayload(proxyRequest);
+
 		ProxyResponse proxyResponse =
 			(ProxyResponse)_synchronousMessageSender.send(
-				getDestinationName(proxyRequest), buildMessage(proxyRequest));
+				getDestinationName(proxyRequest), message);
 
 		if (proxyResponse == null) {
 			return proxyRequest.execute(this);

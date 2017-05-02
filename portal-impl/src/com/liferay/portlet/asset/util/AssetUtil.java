@@ -47,13 +47,14 @@ import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchContextFactory;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.SortFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.comparator.ModelResourceComparator;
+import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
 import com.liferay.portal.kernel.service.PortletLocalServiceUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
@@ -76,10 +77,13 @@ import com.liferay.portlet.asset.service.permission.AssetVocabularyPermission;
 
 import java.io.Serializable;
 
+import java.text.Collator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -215,7 +219,7 @@ public class AssetUtil {
 
 			if ((category != null) &&
 				AssetCategoryPermission.contains(
-					permissionChecker, categoryId, ActionKeys.VIEW)) {
+					permissionChecker, category, ActionKeys.VIEW)) {
 
 				viewableCategoryIds.add(categoryId);
 			}
@@ -411,8 +415,7 @@ public class AssetUtil {
 			(ThemeDisplay)liferayPortletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		Map<String, PortletURL> addPortletURLs = new TreeMap<>(
-			new ModelResourceComparator(themeDisplay.getLocale()));
+		Map<String, PortletURL> addPortletURLs = new HashMap<>();
 
 		for (long classNameId : classNameIds) {
 			String className = PortalUtil.getClassName(classNameId);
@@ -473,7 +476,12 @@ public class AssetUtil {
 			}
 		}
 
-		return addPortletURLs;
+		if (addPortletURLs.size() <= 1) {
+			return addPortletURLs;
+		}
+
+		return _getSortedMapByModelResource(
+			addPortletURLs, themeDisplay.getLocale());
 	}
 
 	/**
@@ -834,7 +842,12 @@ public class AssetUtil {
 		searchContext.setEnd(end);
 		searchContext.setGroupIds(assetEntryQuery.getGroupIds());
 
-		if (Validator.isNotNull(assetEntryQuery.getKeywords())) {
+		if (Validator.isNull(assetEntryQuery.getKeywords())) {
+			QueryConfig queryConfig = searchContext.getQueryConfig();
+
+			queryConfig.setScoreEnabled(false);
+		}
+		else {
 			searchContext.setLike(true);
 		}
 
@@ -951,6 +964,30 @@ public class AssetUtil {
 		}
 
 		return sortType;
+	}
+
+	private static Map<String, PortletURL> _getSortedMapByModelResource(
+		Map<String, PortletURL> addPortletURLs, Locale locale) {
+
+		Map<String, Map.Entry<String, PortletURL>> tempSortedMap =
+			new TreeMap<>(Collator.getInstance(locale));
+
+		for (Map.Entry<String, PortletURL> addPortletURL :
+				addPortletURLs.entrySet()) {
+
+			tempSortedMap.put(
+				ResourceActionsUtil.getModelResource(
+					locale, addPortletURL.getKey()),
+				addPortletURL);
+		}
+
+		Map<String, PortletURL> sortedAddPortletURLs = new LinkedHashMap<>();
+
+		for (Map.Entry<String, PortletURL> entry : tempSortedMap.values()) {
+			sortedAddPortletURLs.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedAddPortletURLs;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(AssetUtil.class);

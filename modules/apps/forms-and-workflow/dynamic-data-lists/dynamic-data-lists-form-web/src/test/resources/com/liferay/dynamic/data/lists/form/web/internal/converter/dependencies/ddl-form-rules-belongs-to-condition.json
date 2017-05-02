@@ -8,15 +8,14 @@
 		],
 		"conditions": [
 			{
-
 				"operands": [
 					{
-						"type": "constant",
-						"value": "Role1"
+						"type": "user",
+						"value": "User"
 					},
 					{
-						"type": "constant",
-						"value": "Role2"
+						"type": "list",
+						"value": "Role1,Role2"
 					}
 				],
 				"operator": "belongs-to"

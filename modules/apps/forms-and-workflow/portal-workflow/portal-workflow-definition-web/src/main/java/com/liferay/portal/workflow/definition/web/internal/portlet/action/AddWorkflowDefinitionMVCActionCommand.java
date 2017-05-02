@@ -22,7 +22,6 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowDefinitionFileException;
-import com.liferay.portal.kernel.workflow.WorkflowDefinitionManagerUtil;
 
 import java.util.Locale;
 import java.util.Map;
@@ -54,19 +53,18 @@ public class AddWorkflowDefinitionMVCActionCommand
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		long companyId = themeDisplay.getCompanyId();
-
-		String content = ParamUtil.getString(actionRequest, "content");
 		Map<Locale, String> titleMap = LocalizationUtil.getLocalizationMap(
 			actionRequest, "title");
+
+		String content = ParamUtil.getString(actionRequest, "content");
 
 		if (Validator.isNull(content)) {
 			throw new WorkflowDefinitionFileException();
 		}
 
-		WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
-			companyId, themeDisplay.getUserId(), getTitle(titleMap),
-			content.getBytes());
+		workflowDefinitionManager.deployWorkflowDefinition(
+			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+			getTitle(titleMap), content.getBytes());
 
 		sendRedirect(actionRequest, actionResponse);
 	}

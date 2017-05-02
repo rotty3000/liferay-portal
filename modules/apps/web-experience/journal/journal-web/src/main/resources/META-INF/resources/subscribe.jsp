@@ -17,6 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
+JournalArticle article = (JournalArticle)request.getAttribute("info_panel.jsp-entry");
 JournalFolder folder = (JournalFolder)request.getAttribute("info_panel.jsp-folder");
 
 long folderId = JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID;
@@ -36,6 +37,9 @@ if (Validator.isNotNull(ddmStructureKey)) {
 		ddmStructureId = ddmStructure.getStructureId();
 	}
 }
+
+String subscribeActionName = StringPool.BLANK;
+String unsubscribeActionName = StringPool.BLANK;
 %>
 
 <div class="subscribe-action">
@@ -45,7 +49,7 @@ if (Validator.isNotNull(ddmStructureKey)) {
 		boolean subscribed = false;
 		boolean unsubscribable = true;
 
-		if (Validator.isNull(ddmStructureKey)) {
+		if (Validator.isNull(ddmStructureKey) && (folder != null)) {
 			subscribed = JournalUtil.isSubscribedToFolder(themeDisplay.getCompanyId(), scopeGroupId, user.getUserId(), folderId);
 
 			if (subscribed) {
@@ -53,9 +57,21 @@ if (Validator.isNotNull(ddmStructureKey)) {
 					unsubscribable = false;
 				}
 			}
+
+			subscribeActionName = "subscribeFolder";
+			unsubscribeActionName = "unsubscribeFolder";
+		}
+		else if (Validator.isNull(ddmStructureKey) && (article != null)) {
+			subscribed = JournalUtil.isSubscribedToArticle(themeDisplay.getCompanyId(), scopeGroupId, user.getUserId(), article.getResourcePrimKey());
+
+			subscribeActionName = "subscribeArticle";
+			unsubscribeActionName = "unsubscribeArticle";
 		}
 		else {
 			subscribed = JournalUtil.isSubscribedToStructure(themeDisplay.getCompanyId(), scopeGroupId, user.getUserId(), ddmStructureId);
+
+			subscribeActionName = "subscribeStructure";
+			unsubscribeActionName = "unsubscribeStructure";
 		}
 		%>
 
@@ -63,12 +79,15 @@ if (Validator.isNotNull(ddmStructureKey)) {
 			<c:when test="<%= subscribed %>">
 				<c:choose>
 					<c:when test="<%= unsubscribable %>">
-						<portlet:actionURL name='<%= Validator.isNull(ddmStructureKey) ? "unsubscribeFolder" : "unsubscribeStructure" %>' var="unsubscribeURL">
+						<portlet:actionURL name="<%= unsubscribeActionName %>" var="unsubscribeURL">
 							<portlet:param name="redirect" value="<%= currentURL %>" />
 
 							<c:choose>
-								<c:when test="<%= Validator.isNull(ddmStructureKey) %>">
+								<c:when test="<%= Validator.isNull(ddmStructureKey) && (folder != null) %>">
 									<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
+								</c:when>
+								<c:when test="<%= Validator.isNull(ddmStructureKey) && (article != null) %>">
+									<portlet:param name="articleId" value="<%= String.valueOf(article.getResourcePrimKey()) %>" />
 								</c:when>
 								<c:otherwise>
 									<portlet:param name="ddmStructureId" value="<%= String.valueOf(ddmStructureId) %>" />
@@ -95,12 +114,15 @@ if (Validator.isNotNull(ddmStructureKey)) {
 				</c:choose>
 			</c:when>
 			<c:otherwise>
-				<portlet:actionURL name='<%= Validator.isNull(ddmStructureKey) ? "subscribeFolder" : "subscribeStructure" %>' var="subscribeURL">
+				<portlet:actionURL name="<%= subscribeActionName %>" var="subscribeURL">
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 
 					<c:choose>
-						<c:when test="<%= Validator.isNull(ddmStructureKey) %>">
+						<c:when test="<%= Validator.isNull(ddmStructureKey) && (folder != null) %>">
 							<portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" />
+						</c:when>
+						<c:when test="<%= Validator.isNull(ddmStructureKey) && (article != null) %>">
+							<portlet:param name="articleId" value="<%= String.valueOf(article.getResourcePrimKey()) %>" />
 						</c:when>
 						<c:otherwise>
 							<portlet:param name="ddmStructureId" value="<%= String.valueOf(ddmStructureId) %>" />

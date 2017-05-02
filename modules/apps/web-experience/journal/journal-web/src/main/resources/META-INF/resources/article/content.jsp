@@ -116,7 +116,17 @@ if (!searchRestriction) {
 		</c:choose>
 	</c:if>
 
-	<aui:input ignoreRequestValue="<%= changeStructure %>" label="summary" localized="<%= true %>" name="descriptionMapAsXML" type="text" wrapperCssClass="article-content-description" />
+	<div class="article-content-description">
+		<liferay-ui:input-localized
+			editorName="alloyeditor"
+			formName="fm"
+			ignoreRequestValue="<%= changeStructure %>"
+			name="descriptionMapAsXML"
+			placeholder="description"
+			type="editor"
+			xml="<%= article != null ? article.getDescriptionMapAsXML() : StringPool.BLANK %>"
+		/>
+	</div>
 
 	<div class="article-content-content">
 		<liferay-ddm:html

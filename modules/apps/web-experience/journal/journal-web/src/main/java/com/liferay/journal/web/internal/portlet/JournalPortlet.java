@@ -568,6 +568,19 @@ public class JournalPortlet extends MVCPortlet {
 		_itemSelector = itemSelector;
 	}
 
+	public void subscribeArticle(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long articleId = ParamUtil.getLong(actionRequest, "articleId");
+
+		_journalArticleService.subscribe(
+			themeDisplay.getScopeGroupId(), articleId);
+	}
+
 	public void subscribeFolder(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
@@ -596,6 +609,19 @@ public class JournalPortlet extends MVCPortlet {
 			ddmStructureId);
 
 		sendEditArticleRedirect(actionRequest, actionResponse);
+	}
+
+	public void unsubscribeArticle(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long articleId = ParamUtil.getLong(actionRequest, "articleId");
+
+		_journalArticleService.unsubscribe(
+			themeDisplay.getScopeGroupId(), articleId);
 	}
 
 	public void unsubscribeFolder(

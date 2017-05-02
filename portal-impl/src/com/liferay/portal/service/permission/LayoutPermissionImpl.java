@@ -238,12 +238,6 @@ public class LayoutPermissionImpl
 			return true;
 		}
 
-		if (GroupPermissionUtil.contains(
-				permissionChecker, group, ActionKeys.MANAGE_LAYOUTS)) {
-
-			return true;
-		}
-
 		if (PropsValues.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE &&
 			!actionId.equals(ActionKeys.VIEW)) {
 
@@ -291,6 +285,12 @@ public class LayoutPermissionImpl
 
 		if (permissionChecker.hasPermission(
 				group, Layout.class.getName(), layout.getPlid(), actionId)) {
+
+			return true;
+		}
+
+		if (GroupPermissionUtil.contains(
+				permissionChecker, group, ActionKeys.MANAGE_LAYOUTS)) {
 
 			return true;
 		}

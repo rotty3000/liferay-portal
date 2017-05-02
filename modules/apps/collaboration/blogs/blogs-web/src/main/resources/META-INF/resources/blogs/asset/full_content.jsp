@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/blogs/init.jsp" %>
+<%@ include file="/init.jsp" %>
 
 <%
 BlogsEntry entry = (BlogsEntry)request.getAttribute(WebKeys.BLOGS_ENTRY);

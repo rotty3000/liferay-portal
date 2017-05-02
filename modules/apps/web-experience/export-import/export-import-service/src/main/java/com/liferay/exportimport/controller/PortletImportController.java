@@ -45,6 +45,7 @@ import com.liferay.exportimport.kernel.lar.MissingReference;
 import com.liferay.exportimport.kernel.lar.MissingReferences;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.PortletDataContextFactoryUtil;
+import com.liferay.exportimport.kernel.lar.PortletDataException;
 import com.liferay.exportimport.kernel.lar.PortletDataHandler;
 import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.exportimport.kernel.lar.PortletDataHandlerStatusMessageSenderUtil;
@@ -294,7 +295,7 @@ public class PortletImportController implements ImportController {
 			if (_log.isDebugEnabled()) {
 				StringBundler sb = new StringBundler(4);
 
-				sb.append("Do not import portlet data for ");
+				sb.append("Do not import portlet data for portlet ");
 				sb.append(portletDataContext.getPortletId());
 				sb.append(" because the portlet does not have a portlet data ");
 				sb.append("handler");
@@ -307,7 +308,8 @@ public class PortletImportController implements ImportController {
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
-				"Importing data for " + portletDataContext.getPortletId());
+				"Importing data for portlet " +
+					portletDataContext.getPortletId());
 		}
 
 		String portletData = portletDataContext.getZipEntryAsString(
@@ -401,7 +403,11 @@ public class PortletImportController implements ImportController {
 					element = preferencesDocument.getRootElement();
 				}
 				catch (DocumentException de) {
-					throw new SystemException(de);
+					throw new SystemException(
+						"Unable to parse XML portlet preferences for portlet " +
+							portletDataContext.getPortletId() +
+								" while importing portlet preferences",
+						de);
 				}
 
 				long ownerId = GetterUtil.getLong(
@@ -695,7 +701,7 @@ public class PortletImportController implements ImportController {
 		if (!group.isStagedPortlet(portletDataContext.getPortletId())) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					"Do not delete portlet data for " +
+					"Do not delete portlet data for portlet " +
 						portletDataContext.getPortletId() +
 							" because the portlet is not staged");
 			}
@@ -712,7 +718,7 @@ public class PortletImportController implements ImportController {
 			if (_log.isDebugEnabled()) {
 				StringBundler sb = new StringBundler(4);
 
-				sb.append("Do not delete portlet data for ");
+				sb.append("Do not delete portlet data for portlet ");
 				sb.append(portletDataContext.getPortletId());
 				sb.append(" because the portlet does not have a ");
 				sb.append("PortletDataHandler");
@@ -725,7 +731,8 @@ public class PortletImportController implements ImportController {
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
-				"Deleting data for " + portletDataContext.getPortletId());
+				"Deleting data for portlet " +
+					portletDataContext.getPortletId());
 		}
 
 		try {
@@ -835,7 +842,10 @@ public class PortletImportController implements ImportController {
 			portletElement = portletDocument.getRootElement();
 		}
 		catch (DocumentException de) {
-			throw new SystemException(de);
+			throw new SystemException(
+				"Unable to parse XML document for portlet " +
+					portletDataContext.getPortletId() + " during import",
+				de);
 		}
 
 		LayoutCache layoutCache = new LayoutCache();
@@ -962,7 +972,16 @@ public class PortletImportController implements ImportController {
 				}
 			}
 			catch (DocumentException de) {
-				throw new SystemException(de);
+				throw new SystemException(
+					"Unable to parse XML service information for portlet " +
+						portletDataContext.getPortletId() + " during import",
+					de);
+			}
+			catch (PortalException pe) {
+				throw new PortletDataException(
+					"Unable to import service preferences for portlet " +
+						portletDataContext.getPortletId(),
+					pe);
 			}
 		}
 

@@ -58,6 +58,31 @@ public class WorkflowTaskManagerImplTest
 			SynchronousDestinationTestRule.INSTANCE);
 
 	@Test
+	public void testApproveJoinXorWorkflow() throws Exception {
+		createJoinXorWorkflow();
+
+		activateWorkflow(BlogsEntry.class.getName(), 0, 0, "Join Xor", 1);
+
+		BlogsEntry blogsEntry = addBlogsEntry();
+
+		assignWorkflowTaskToUser(siteAdminUser, siteAdminUser, "task1");
+
+		completeWorkflowTask(siteAdminUser, "join-xor", "task1");
+
+		WorkflowTask workflowTask2 = getWorkflowTask("task2", true);
+
+		Assert.assertTrue(workflowTask2.isCompleted());
+
+		blogsEntry = BlogsEntryLocalServiceUtil.getBlogsEntry(
+			blogsEntry.getEntryId());
+
+		Assert.assertEquals(
+			WorkflowConstants.STATUS_APPROVED, blogsEntry.getStatus());
+
+		deactivateWorkflow(BlogsEntry.class.getName(), 0, 0);
+	}
+
+	@Test
 	public void testApproveJournalArticleAsAdmin() throws Exception {
 		activateSingleApproverWorkflow(
 			JournalFolder.class.getName(),

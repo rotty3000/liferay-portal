@@ -439,17 +439,7 @@ public class MetaInfoCacheServletResponse extends HttpServletResponseWrapper {
 			return;
 		}
 
-		if (calledGetWriter) {
-			return;
-		}
-
-		if (charsetName == null) {
-			return;
-		}
-
-		_metaData._charsetName = charsetName;
-
-		super.setCharacterEncoding(charsetName);
+		_setCharacterEncoding(charsetName);
 	}
 
 	@Override
@@ -487,7 +477,7 @@ public class MetaInfoCacheServletResponse extends HttpServletResponseWrapper {
 
 				charsetName = charsetName.trim();
 
-				setCharacterEncoding(charsetName);
+				_setCharacterEncoding(charsetName);
 			}
 			else {
 				_metaData._charsetName = null;
@@ -656,6 +646,20 @@ public class MetaInfoCacheServletResponse extends HttpServletResponseWrapper {
 
 	protected boolean calledGetOutputStream;
 	protected boolean calledGetWriter;
+
+	private void _setCharacterEncoding(String charsetName) {
+		if (calledGetWriter) {
+			return;
+		}
+
+		if (charsetName == null) {
+			return;
+		}
+
+		_metaData._charsetName = charsetName;
+
+		super.setCharacterEncoding(charsetName);
+	}
 
 	private boolean _committed;
 	private final MetaData _metaData = new MetaData();

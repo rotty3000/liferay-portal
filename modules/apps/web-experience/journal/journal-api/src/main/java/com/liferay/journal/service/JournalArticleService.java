@@ -1733,6 +1733,9 @@ public interface JournalArticleService extends BaseService {
 	public void restoreArticleFromTrash(long resourcePrimKey)
 		throws PortalException;
 
+	public void subscribe(long groupId, long articleId)
+		throws PortalException;
+
 	/**
 	* Subscribes the user to changes in elements that belong to the web content
 	* article's DDM structure.
@@ -1743,6 +1746,9 @@ public interface JournalArticleService extends BaseService {
 	*/
 	public void subscribeStructure(long groupId, long userId,
 		long ddmStructureId) throws PortalException;
+
+	public void unsubscribe(long groupId, long articleId)
+		throws PortalException;
 
 	/**
 	* Unsubscribes the user from changes in elements that belong to the web

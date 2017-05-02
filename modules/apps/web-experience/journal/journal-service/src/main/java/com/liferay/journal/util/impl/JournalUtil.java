@@ -837,6 +837,13 @@ public class JournalUtil {
 		return false;
 	}
 
+	public static boolean isSubscribedToArticle(
+		long companyId, long groupId, long userId, long articleId) {
+
+		return SubscriptionLocalServiceUtil.isSubscribed(
+			companyId, userId, JournalArticle.class.getName(), articleId);
+	}
+
 	public static boolean isSubscribedToFolder(
 			long companyId, long groupId, long userId, long folderId)
 		throws PortalException {

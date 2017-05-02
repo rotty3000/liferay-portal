@@ -156,16 +156,6 @@ public interface LiferaySelenium {
 
 	public String getConfirmation(String value);
 
-	public String getCurrentDay();
-
-	public String getCurrentDayName();
-
-	public String getCurrentHour();
-
-	public String getCurrentMonth();
-
-	public String getCurrentYear();
-
 	public int getElementHeight(String locator);
 
 	public String getElementValue(String locator) throws Exception;

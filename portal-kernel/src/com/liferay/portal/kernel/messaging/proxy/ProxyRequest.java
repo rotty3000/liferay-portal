@@ -50,10 +50,6 @@ public class ProxyRequest implements Externalizable {
 		_method = method;
 		_arguments = arguments;
 
-		if (method.getReturnType() != Void.TYPE) {
-			_hasReturnValue = true;
-		}
-
 		boolean[] localAndSynchronous = _localAndSynchronousMap.get(method);
 
 		if (localAndSynchronous == null) {
@@ -102,7 +98,11 @@ public class ProxyRequest implements Externalizable {
 	}
 
 	public boolean hasReturnValue() {
-		return _hasReturnValue;
+		if (_method.getReturnType() == Void.TYPE) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public boolean isLocal() {
@@ -118,7 +118,8 @@ public class ProxyRequest implements Externalizable {
 		throws ClassNotFoundException, IOException {
 
 		_arguments = (Object[])objectInput.readObject();
-		_hasReturnValue = objectInput.readBoolean();
+
+		_local = objectInput.readBoolean();
 
 		MethodKey methodKey = (MethodKey)objectInput.readObject();
 
@@ -134,12 +135,12 @@ public class ProxyRequest implements Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(9);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{arguments=");
 		sb.append(Arrays.toString(_arguments));
-		sb.append(", hasReturnValue=");
-		sb.append(_hasReturnValue);
+		sb.append(", local");
+		sb.append(_local);
 		sb.append(", method=");
 		sb.append(_method);
 		sb.append(", synchronous");
@@ -152,7 +153,7 @@ public class ProxyRequest implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeObject(_arguments);
-		objectOutput.writeBoolean(_hasReturnValue);
+		objectOutput.writeBoolean(_local);
 		objectOutput.writeObject(new MethodKey(_method));
 		objectOutput.writeBoolean(_synchronous);
 	}
@@ -161,8 +162,7 @@ public class ProxyRequest implements Externalizable {
 		new ConcurrentHashMap<>();
 
 	private Object[] _arguments;
-	private boolean _hasReturnValue;
-	private final boolean _local;
+	private boolean _local;
 	private Method _method;
 	private boolean _synchronous;
 

@@ -43,6 +43,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,7 @@ import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -317,13 +319,12 @@ public class ProjectTemplatesTest {
 			"src/main/resources/META-INF/resources/foobar_field.js",
 			"var FoobarField");
 
-		String[] gradleTaskPaths = new String[] {
-			_GRADLE_TASK_PATH_CHECK_SOURCE_FORMATTING, _GRADLE_TASK_PATH_BUILD
-		};
+		File mavenProjectDir = _buildTemplateWithMaven(
+			"form-field", "foobar", "-DclassName=Foobar", "-Dpackage=foobar");
 
-		_executeGradle(gradleProjectDir, gradleTaskPaths);
-
-		_testExists(gradleProjectDir, "build/libs/foobar-1.0.0.jar");
+		_buildProjects(
+			gradleProjectDir, mavenProjectDir, "build/libs/foobar-1.0.0.jar",
+			"target/foobar-1.0.0.jar");
 	}
 
 	@Test
@@ -851,6 +852,66 @@ public class ProjectTemplatesTest {
 	}
 
 	@Test
+	public void testBuildTemplateSoyPortlet() throws Exception {
+		Assume.assumeFalse(Validator.isNotNull(System.getenv("JENKINS_HOME")));
+
+		File gradleProjectDir = _buildTemplateWithGradle(
+			"soy-portlet", "foo", "--package-name", "com.liferay.test");
+
+		_testExists(gradleProjectDir, "bnd.bnd");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Footer.soy");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Footer.es.js");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Header.soy");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Header.es.js");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Navigation.soy");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/Navigation.es.js");
+		_testExists(
+			gradleProjectDir, "src/main/resources/META-INF/resources/View.soy");
+		_testExists(
+			gradleProjectDir,
+			"src/main/resources/META-INF/resources/View.es.js");
+
+		_testContains(
+			gradleProjectDir, "build.gradle",
+			"apply plugin: \"com.liferay.plugin\"");
+		_testContains(
+			gradleProjectDir,
+			"src/main/java/com/liferay/test/portlet/FooPortlet.java",
+			"public class FooPortlet extends SoyPortlet {");
+
+		File mavenProjectDir = _buildTemplateWithMaven(
+			"soy-portlet", "foo", "-DclassName=Foo",
+			"-Dpackage=com.liferay.test");
+
+		_buildProjects(
+			gradleProjectDir, mavenProjectDir,
+			"build/libs/com.liferay.test-1.0.0.jar", "target/foo-1.0.0.jar");
+	}
+
+	@Test
+	public void testBuildTemplateSoyPortletCustomClass() throws Exception {
+		File gradleProjectDir = _buildTemplateWithGradle(
+			"soy-portlet", "foo", "--class-name", "MySoyPortlet");
+
+		_testContains(
+			gradleProjectDir,
+			"src/main/java/foo/portlet/MySoyPortletPortlet.java",
+			"public class MySoyPortletPortlet extends SoyPortlet {");
+	}
+
+	@Test
 	public void testBuildTemplateTemplateContextContributor() throws Exception {
 		File gradleProjectDir = _buildTemplateWithGradle(
 			"template-context-contributor", "blade-test");
@@ -1195,11 +1256,27 @@ public class ProjectTemplatesTest {
 		File mavenBundleFile = _testExists(
 			mavenProjectDir, mavenBundleFileName);
 
-		if (gradleBundleFileName.endsWith(".jar")) {
-			_testBundlesDiff(gradleBundleFile, mavenBundleFile);
+		try {
+			if (gradleBundleFileName.endsWith(".jar")) {
+				_testBundlesDiff(gradleBundleFile, mavenBundleFile);
+			}
+			else if (gradleBundleFileName.endsWith(".war")) {
+				_testWarsDiff(gradleBundleFile, mavenBundleFile);
+			}
 		}
-		else if (gradleBundleFileName.endsWith(".war")) {
-			_testWarsDiff(gradleBundleFile, mavenBundleFile);
+		catch (Throwable t) {
+			if (_TEST_DEBUG_BUNDLE_DIFFS) {
+				Path dirPath = Paths.get("build");
+
+				Files.copy(
+					gradleBundleFile.toPath(),
+					dirPath.resolve(gradleBundleFileName));
+				Files.copy(
+					mavenBundleFile.toPath(),
+					dirPath.resolve(mavenBundleFileName));
+			}
+
+			throw t;
 		}
 	}
 
@@ -1794,8 +1871,11 @@ public class ProjectTemplatesTest {
 	}
 
 	private static final String _BUNDLES_DIFF_IGNORES = StringTestUtil.merge(
-		"*pom.properties", "*pom.xml", "Archiver-Version", "Build-Jdk",
-		"Built-By", "Javac-Debug", "Javac-Deprecation", "Javac-Encoding");
+		Arrays.asList(
+			"*.js.map", "*pom.properties", "*pom.xml", "Archiver-Version",
+			"Build-Jdk", "Built-By", "Javac-Debug", "Javac-Deprecation",
+			"Javac-Encoding"),
+		',');
 
 	private static final String _GRADLE_TASK_PATH_BUILD = ":build";
 
@@ -1825,6 +1905,9 @@ public class ProjectTemplatesTest {
 	private static final String _REPOSITORY_CDN_URL =
 		"https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups" +
 			"/public";
+
+	private static final boolean _TEST_DEBUG_BUNDLE_DIFFS = Boolean.getBoolean(
+		"test.debug.bundle.diffs");
 
 	private static URI _gradleDistribution;
 	private static Properties _projectTemplateVersions;

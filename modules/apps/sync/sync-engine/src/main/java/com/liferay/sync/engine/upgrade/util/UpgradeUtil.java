@@ -42,6 +42,7 @@ import com.liferay.sync.engine.upgrade.v3_1_0.UpgradeProcess_3_1_0;
 import com.liferay.sync.engine.upgrade.v3_2_1.UpgradeProcess_3_2_1;
 import com.liferay.sync.engine.upgrade.v3_3_0.UpgradeProcess_3_3_0;
 import com.liferay.sync.engine.upgrade.v3_4_0.UpgradeProcess_3_4_0;
+import com.liferay.sync.engine.upgrade.v3_4_2.UpgradeProcess_3_4_2;
 import com.liferay.sync.engine.util.FileUtil;
 import com.liferay.sync.engine.util.LoggerUtil;
 import com.liferay.sync.engine.util.PropsValues;
@@ -119,6 +120,7 @@ public class UpgradeUtil {
 		upgradeProcesses.add(new UpgradeProcess_3_2_1());
 		upgradeProcesses.add(new UpgradeProcess_3_3_0());
 		upgradeProcesses.add(new UpgradeProcess_3_4_0());
+		upgradeProcesses.add(new UpgradeProcess_3_4_2());
 
 		for (UpgradeProcess upgradeProcess : upgradeProcesses) {
 			if (buildNumber < upgradeProcess.getThreshold()) {

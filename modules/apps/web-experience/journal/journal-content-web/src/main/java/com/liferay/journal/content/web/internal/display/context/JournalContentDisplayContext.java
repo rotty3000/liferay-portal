@@ -55,6 +55,9 @@ import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.servlet.taglib.ui.AssetAddonEntry;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.trash.TrashActionKeys;
+import com.liferay.portal.kernel.trash.TrashHandler;
+import com.liferay.portal.kernel.trash.TrashHandlerRegistryUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -67,6 +70,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.trash.kernel.model.TrashEntry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,6 +80,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
@@ -446,6 +451,19 @@ public class JournalContentDisplayContext {
 		return _portletResource;
 	}
 
+	public JournalArticle getSelectedArticle() throws PortalException {
+		PortletPreferences portletPreferences =
+			_portletRequest.getPreferences();
+
+		String articleId = portletPreferences.getValue(
+			"articleId", StringPool.BLANK);
+		long groupId = GetterUtil.getLong(
+			portletPreferences.getValue("groupId", StringPool.BLANK));
+
+		return JournalArticleLocalServiceUtil.fetchLatestArticle(
+			groupId, articleId, WorkflowConstants.STATUS_ANY);
+	}
+
 	public List<ContentMetadataAssetAddonEntry>
 		getSelectedContentMetadataAssetAddonEntries() {
 
@@ -652,6 +670,26 @@ public class JournalContentDisplayContext {
 
 			return StringPool.BLANK;
 		}
+	}
+
+	public boolean hasRestorePermission() throws PortalException {
+		JournalArticle selectedArticle = getSelectedArticle();
+
+		if ((selectedArticle == null) || !selectedArticle.isInTrash()) {
+			return false;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)_portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
+			JournalArticle.class.getName());
+
+		TrashEntry trashEntry = selectedArticle.getTrashEntry();
+
+		return trashHandler.hasTrashPermission(
+			themeDisplay.getPermissionChecker(), 0, trashEntry.getClassPK(),
+			TrashActionKeys.RESTORE);
 	}
 
 	public boolean hasViewPermission() throws PortalException {
@@ -895,6 +933,27 @@ public class JournalContentDisplayContext {
 		return _showSelectArticleIcon;
 	}
 
+	public boolean isShowSelectArticleLink() throws PortalException {
+		if (_showSelectArticleLink != null) {
+			return _showSelectArticleLink;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)_portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		Group scopeGroup = themeDisplay.getScopeGroup();
+
+		if (!scopeGroup.isStaged() || scopeGroup.isStagingGroup()) {
+			_showSelectArticleLink = true;
+
+			return _showSelectArticleLink;
+		}
+
+		_showSelectArticleLink = false;
+
+		return _showSelectArticleLink;
+	}
+
 	private JournalContentDisplayContext(
 			PortletRequest portletRequest, PortletResponse portletResponse,
 			JournalContentPortletInstanceConfiguration
@@ -990,6 +1049,7 @@ public class JournalContentDisplayContext {
 	private Boolean _showEditArticleIcon;
 	private Boolean _showEditTemplateIcon;
 	private Boolean _showSelectArticleIcon;
+	private Boolean _showSelectArticleLink;
 	private List<UserToolAssetAddonEntry> _userToolAssetAddonEntries;
 
 }

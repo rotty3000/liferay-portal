@@ -1996,6 +1996,12 @@ public class JournalArticleServiceWrapper implements JournalArticleService,
 		_journalArticleService.restoreArticleFromTrash(resourcePrimKey);
 	}
 
+	@Override
+	public void subscribe(long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_journalArticleService.subscribe(groupId, articleId);
+	}
+
 	/**
 	* Subscribes the user to changes in elements that belong to the web content
 	* article's DDM structure.
@@ -2010,6 +2016,12 @@ public class JournalArticleServiceWrapper implements JournalArticleService,
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_journalArticleService.subscribeStructure(groupId, userId,
 			ddmStructureId);
+	}
+
+	@Override
+	public void unsubscribe(long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_journalArticleService.unsubscribe(groupId, articleId);
 	}
 
 	/**

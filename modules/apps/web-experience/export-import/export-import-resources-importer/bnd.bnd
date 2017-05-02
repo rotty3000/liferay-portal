@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Export Import Resources Importer
 Bundle-SymbolicName: com.liferay.exportimport.resources.importer
-Bundle-Version: 1.2.8
+Bundle-Version: 1.2.9
 Export-Package:\
 	com.liferay.exportimport.resources.importer.portlet.preferences,\
 	com.liferay.exportimport.resources.importer.provider

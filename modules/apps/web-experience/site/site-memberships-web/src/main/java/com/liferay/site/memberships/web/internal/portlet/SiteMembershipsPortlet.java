@@ -336,6 +336,30 @@ public class SiteMembershipsPortlet extends MVCPortlet {
 		}
 	}
 
+	public void removeUserGroupSiteRole(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long[] userIds = ParamUtil.getLongValues(actionRequest, "rowIds");
+		Group group = _getGroup(actionRequest, actionResponse);
+		long roleId = ParamUtil.getLong(actionRequest, "roleId");
+
+		_userGroupGroupRoleService.deleteUserGroupGroupRoles(
+			userIds, group.getGroupId(), roleId);
+	}
+
+	public void removeUserSiteRole(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long[] userIds = ParamUtil.getLongValues(actionRequest, "rowIds");
+		Group group = _getGroup(actionRequest, actionResponse);
+		long roleId = ParamUtil.getLong(actionRequest, "roleId");
+
+		_userGroupRoleService.deleteUserGroupRoles(
+			userIds, group.getGroupId(), roleId);
+	}
+
 	public void replyMembershipRequest(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {

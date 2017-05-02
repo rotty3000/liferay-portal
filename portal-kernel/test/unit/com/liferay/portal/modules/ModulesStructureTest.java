@@ -34,8 +34,10 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -75,10 +77,6 @@ public class ModulesStructureTest {
 			classLoader,
 			"com/liferay/portal/modules/dependencies" +
 				"/git_repo_build_gradle.tmpl");
-		final String gitRepoGitAttributesTemplate = StringUtil.read(
-			classLoader,
-			"com/liferay/portal/modules/dependencies" +
-				"/git_repo_gitattributes.tmpl");
 		final String gitRepoSettingsGradleTemplate = StringUtil.read(
 			classLoader,
 			"com/liferay/portal/modules/dependencies" +
@@ -109,7 +107,6 @@ public class ModulesStructureTest {
 					if (Files.exists(dirPath.resolve(_GIT_REPO_FILE_NAME))) {
 						_testGitRepoBuildScripts(
 							dirPath, gitRepoBuildGradleTemplate,
-							gitRepoGitAttributesTemplate,
 							gitRepoSettingsGradleTemplate);
 					}
 					else if (Files.exists(dirPath.resolve("app.bnd"))) {
@@ -466,6 +463,13 @@ public class ModulesStructureTest {
 				_APP_BUILD_GRADLE + StringPool.NEW_LINE + StringPool.NEW_LINE);
 		}
 
+		if (Files.notExists(dirPath.resolve("build-ext.gradle"))) {
+			buildGradleTemplate = StringUtil.removeSubstring(
+				buildGradleTemplate,
+				StringPool.NEW_LINE + StringPool.NEW_LINE +
+					"apply from: \"build-ext.gradle\"");
+		}
+
 		final Set<String> pluginNames = new TreeSet<>();
 
 		pluginNames.add("com.liferay.gradle.plugins.defaults");
@@ -629,7 +633,7 @@ public class ModulesStructureTest {
 
 	private void _testGitRepoBuildScripts(
 			Path dirPath, String buildGradleTemplate,
-			String gitAttributesTemplate, String settingsGradleTemplate)
+			String settingsGradleTemplate)
 		throws IOException {
 
 		boolean privateRepo = _isInPrivateModulesDir(dirPath);
@@ -656,6 +660,16 @@ public class ModulesStructureTest {
 			"Forbidden leading or trailing whitespaces in " +
 				gradlePropertiesPath,
 			gradleProperties.trim(), gradleProperties);
+
+		String gradlePropertiesPrefix = StringUtil.replace(
+			String.valueOf(dirPath.getFileName()), CharPool.DASH,
+			CharPool.PERIOD);
+
+		gradlePropertiesPrefix = "com.liferay." + gradlePropertiesPrefix;
+
+		Pattern gradlePropertiesPattern = Pattern.compile(
+			StringUtil.replace(gradlePropertiesPrefix, CharPool.PERIOD, "\\.") +
+				"(\\.[a-z0-9]+)+");
 
 		String previousKey = null;
 		String projectGroup = null;
@@ -715,10 +729,49 @@ public class ModulesStructureTest {
 				repositoryPrivateUsername = value;
 			}
 			else {
-				Assert.assertTrue(
-					"Incorrect key \"" + key + "\" in " +
-						gradlePropertiesPath,
-					_gitRepoGradlePropertiesKeys.contains(key));
+				Matcher matcher = gradlePropertiesPattern.matcher(key);
+
+				if (!_gitRepoGradlePropertiesKeys.contains(key) &&
+					!matcher.matches()) {
+
+					StringBundler sb = new StringBundler(
+						(_gitRepoGradlePropertiesKeys.size() + 5) * 3 + 8);
+
+					sb.append("Incorrect key \"");
+					sb.append(key);
+					sb.append("\" in ");
+					sb.append(gradlePropertiesPath);
+					sb.append(". Allowed keys are: ");
+
+					List<String> allowedKeys = new ArrayList<>(
+						_gitRepoGradlePropertiesKeys);
+
+					allowedKeys.add(_GIT_REPO_GRADLE_PROJECT_GROUP_KEY);
+					allowedKeys.add(_GIT_REPO_GRADLE_PROJECT_PATH_PREFIX_KEY);
+
+					if (privateRepo) {
+						allowedKeys.add(
+							_GIT_REPO_GRADLE_REPOSITORY_PRIVATE_PASSWORD);
+						allowedKeys.add(
+							_GIT_REPO_GRADLE_REPOSITORY_PRIVATE_URL);
+						allowedKeys.add(
+							_GIT_REPO_GRADLE_REPOSITORY_PRIVATE_USERNAME);
+					}
+
+					Collections.sort(allowedKeys);
+
+					for (String allowedKey : allowedKeys) {
+						sb.append(CharPool.QUOTE);
+						sb.append(allowedKey);
+						sb.append("\", ");
+					}
+
+					sb.append("and keys matching the pattern \"");
+					sb.append(gradlePropertiesPattern.pattern());
+					sb.append("\".");
+
+					Assert.fail(sb.toString());
+				}
 			}
 
 			previousKey = key;
@@ -754,19 +807,6 @@ public class ModulesStructureTest {
 		Assert.assertEquals(
 			"Incorrect " + settingsGradlePath, settingsGradleTemplate,
 			settingsGradle);
-
-		// LPS-67772
-
-		Path gitAttributesPath = dirPath.resolve(".gitattributes");
-
-		Assert.assertTrue(
-			"Missing " + gitAttributesPath, Files.exists(gitAttributesPath));
-
-		String gitAttributes = _read(gitAttributesPath);
-
-		Assert.assertEquals(
-			"Incorrect " + gitAttributesPath, gitAttributesTemplate,
-			gitAttributes);
 	}
 
 	private void _testGitRepoIgnoreFiles(Path dirPath, String gitIgnoreTemplate)

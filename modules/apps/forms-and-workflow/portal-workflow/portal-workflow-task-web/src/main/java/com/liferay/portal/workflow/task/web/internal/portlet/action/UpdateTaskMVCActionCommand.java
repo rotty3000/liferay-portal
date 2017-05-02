@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowTaskDueDateException;
-import com.liferay.portal.kernel.workflow.WorkflowTaskManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowTaskManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -75,10 +75,13 @@ public class UpdateTaskMVCActionCommand
 			dueDateMonth, dueDateDay, dueDateYear, dueDateHour, dueDateMinute,
 			WorkflowTaskDueDateException.class);
 
-		WorkflowTaskManagerUtil.updateDueDate(
+		workflowTaskManager.updateDueDate(
 			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
 			workflowTaskId, comment, dueDate);
 	}
+
+	@Reference
+	protected WorkflowTaskManager workflowTaskManager;
 
 	@Reference
 	private Portal _portal;

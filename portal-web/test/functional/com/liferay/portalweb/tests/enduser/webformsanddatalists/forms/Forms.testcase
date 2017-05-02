@@ -2581,7 +2581,7 @@
 
 	<command name="SubmitFormWithAllFieldTypesAndThreePages" priority="5">
 		<description message="This is a use case for LPS-64798." />
-		<property name="portal.acceptance" value="true" />
+		<property name="portal.acceptance" value="quarantine" />
 
 		<execute macro="Navigator#openURL" />
 
@@ -3436,7 +3436,9 @@
 			<var name="fieldValue" value="Approved" />
 		</execute>
 
-		<execute macro="FormsAdminNavigator#gotoView" />
+		<execute macro="FormsAdminNavigator#gotoView">
+			<var name="rowIndexNumber" value="2" />
+		</execute>
 
 		<execute macro="FormsAdmin#viewParagraphEntry">
 			<var name="fieldName" value="paragraph" />

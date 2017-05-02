@@ -58,8 +58,8 @@ public class ATag extends BaseATag {
 
 				jspWriter.write(StringPool.SPACE);
 				jspWriter.write("<svg class=\"lexicon-icon ");
-				jspWriter.write("lexicon-icon-shortcut\" role=\"img\"><use ");
-				jspWriter.write("data-href=\"");
+				jspWriter.write("lexicon-icon-shortcut\" focusable=\"false\" ");
+				jspWriter.write("role=\"img\"><use data-href=\"");
 				jspWriter.write(themeDisplay.getPathThemeImages());
 				jspWriter.write("/lexicon/icons.svg#shortcut\" /><span ");
 				jspWriter.write("class=\"sr-only\">");
@@ -142,9 +142,7 @@ public class ATag extends BaseATag {
 			jspWriter.write("\" ");
 		}
 
-		if (Validator.isNotNull(title) ||
-			AUIUtil.isOpensNewWindow(getTarget())) {
-
+		if (Validator.isNotNull(title)) {
 			ResourceBundle resourceBundle =
 				TagResourceBundleUtil.getResourceBundle(pageContext);
 
@@ -152,11 +150,6 @@ public class ATag extends BaseATag {
 
 			if (Validator.isNotNull(title)) {
 				jspWriter.write(LanguageUtil.get(resourceBundle, title));
-			}
-
-			if (AUIUtil.isOpensNewWindow(getTarget())) {
-				jspWriter.write(
-					LanguageUtil.get(resourceBundle, "opens-new-window"));
 			}
 
 			jspWriter.write("\" ");

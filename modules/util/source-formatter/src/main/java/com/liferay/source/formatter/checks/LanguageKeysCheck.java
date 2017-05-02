@@ -41,8 +41,14 @@ import java.util.regex.Pattern;
  */
 public class LanguageKeysCheck extends BaseFileCheck {
 
-	public LanguageKeysCheck(Properties portalLanguageProperties) {
-		_portalLanguageProperties = portalLanguageProperties;
+	@Override
+	public void init() throws Exception {
+		_portalLanguageProperties = getPortalLanguageProperties();
+	}
+
+	@Override
+	public boolean isPortalCheck() {
+		return true;
 	}
 
 	@Override
@@ -50,7 +56,9 @@ public class LanguageKeysCheck extends BaseFileCheck {
 			String fileName, String absolutePath, String content)
 		throws Exception {
 
-		if (!fileName.endsWith("JSPLanguageUtilCheck.java")) {
+		if (!isSubrepository() &&
+			!fileName.endsWith("JSPLanguageUtilCheck.java")) {
+
 			_checkLanguageKeys(fileName, absolutePath, content, getPatterns());
 		}
 
@@ -394,6 +402,6 @@ public class LanguageKeysCheck extends BaseFileCheck {
 		new HashMap<>();
 	private final Map<String, Properties> _moduleLanguagePropertiesMap =
 		new HashMap<>();
-	private final Properties _portalLanguageProperties;
+	private Properties _portalLanguageProperties;
 
 }

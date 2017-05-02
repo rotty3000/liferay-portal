@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.service.MembershipRequestLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.security.exportimport.UserExporter;
 import com.liferay.portal.security.ldap.internal.UserImportTransactionThreadLocal;
@@ -37,6 +38,7 @@ import java.io.Serializable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -102,24 +104,34 @@ public class UserModelListener extends BaseModelListener<User> {
 			user.getOriginalEmailAddress());
 	}
 
-	protected void exportToLDAP(User user) throws Exception {
+	protected void exportToLDAP(final User user) throws Exception {
 		if (user.isDefaultUser() ||
 			UserImportTransactionThreadLocal.isOriginatesFromImport()) {
 
 			return;
 		}
 
-		ServiceContext serviceContext =
-			ServiceContextThreadLocal.getServiceContext();
+		Callable<Void> callable = new Callable<Void>() {
 
-		Map<String, Serializable> expandoBridgeAttributes = null;
+			public Void call() throws Exception {
+				ServiceContext serviceContext =
+					ServiceContextThreadLocal.getServiceContext();
 
-		if (serviceContext != null) {
-			expandoBridgeAttributes =
-				serviceContext.getExpandoBridgeAttributes();
-		}
+				Map<String, Serializable> expandoBridgeAttributes = null;
 
-		_userExporter.exportUser(user, expandoBridgeAttributes);
+				if (serviceContext != null) {
+					expandoBridgeAttributes =
+						serviceContext.getExpandoBridgeAttributes();
+				}
+
+				_userExporter.exportUser(user, expandoBridgeAttributes);
+
+				return null;
+			}
+
+		};
+
+		TransactionCommitCallbackUtil.registerCallback(callable);
 	}
 
 	protected void updateMembershipRequestStatus(long userId, long groupId)

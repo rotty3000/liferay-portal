@@ -14,10 +14,6 @@
 
 package com.liferay.source.formatter;
 
-import com.liferay.source.formatter.checks.SourceCheck;
-import com.liferay.source.formatter.checks.WhitespaceCheck;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,18 +31,6 @@ public class SoySourceProcessor extends BaseSourceProcessor {
 		return _INCLUDES;
 	}
 
-	@Override
-	protected List<SourceCheck> getSourceChecks() {
-		return _sourceChecks;
-	}
-
-	@Override
-	protected void populateSourceChecks() {
-		_sourceChecks.add(new WhitespaceCheck());
-	}
-
 	private static final String[] _INCLUDES = new String[] {"**/*.soy"};
-
-	private final List<SourceCheck> _sourceChecks = new ArrayList<>();
 
 }

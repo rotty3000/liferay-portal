@@ -29,6 +29,7 @@ import com.liferay.asset.publisher.web.constants.AssetPublisherWebKeys;
 import com.liferay.asset.publisher.web.internal.configuration.AssetPublisherWebConfiguration;
 import com.liferay.asset.publisher.web.util.AssetPublisherCustomizer;
 import com.liferay.asset.publisher.web.util.AssetPublisherUtil;
+import com.liferay.document.library.kernel.document.conversion.DocumentConversionUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Layout;
@@ -48,7 +49,6 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PredicateFilter;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.RSSUtil;
@@ -929,13 +929,7 @@ public class AssetPublisherDisplayContext {
 	}
 
 	public boolean isOpenOfficeServerEnabled() {
-		if (_openOfficeServerEnabled == null) {
-			_openOfficeServerEnabled = PrefsPropsUtil.getBoolean(
-				PropsKeys.OPENOFFICE_SERVER_ENABLED,
-				PropsValues.OPENOFFICE_SERVER_ENABLED);
-		}
-
-		return _openOfficeServerEnabled;
+		return DocumentConversionUtil.isEnabled();
 	}
 
 	public boolean isOrderingAndGroupingEnabled() {
@@ -1255,7 +1249,6 @@ public class AssetPublisherDisplayContext {
 	private Locale _locale;
 	private Boolean _mergeURLTags;
 	private String[] _metadataFields;
-	private Boolean _openOfficeServerEnabled;
 	private String _orderByColumn1;
 	private String _orderByColumn2;
 	private String _orderByType1;

@@ -23,15 +23,17 @@ import java.util.regex.Pattern;
  */
 public class CompatClassImportsCheck extends BaseFileCheck {
 
-	public CompatClassImportsCheck(Map<String, String> compatClassNamesMap) {
-		_compatClassNamesMap = compatClassNamesMap;
+	@Override
+	public void init() throws Exception {
+		_compatClassNamesMap = getCompatClassNamesMap();
 	}
 
 	@Override
 	protected String doProcess(
 		String fileName, String absolutePath, String content) {
 
-		if (absolutePath.contains("/ext-") ||
+		if (isPortalSource() || isSubrepository() ||
+			absolutePath.contains("/ext-") ||
 			absolutePath.contains("/portal-compat-shared/")) {
 
 			return content;
@@ -65,6 +67,6 @@ public class CompatClassImportsCheck extends BaseFileCheck {
 		return content;
 	}
 
-	private final Map<String, String> _compatClassNamesMap;
+	private Map<String, String> _compatClassNamesMap;
 
 }

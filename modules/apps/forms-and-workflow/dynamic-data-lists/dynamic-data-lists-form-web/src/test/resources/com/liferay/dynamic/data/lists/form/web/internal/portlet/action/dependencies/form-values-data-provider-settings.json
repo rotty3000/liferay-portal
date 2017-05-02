@@ -9,6 +9,11 @@
 			"name": "inputParameters",
 			"nestedFieldValues": [
 				{
+					"instanceId": "hgga",
+					"name": "inputParameterLabel",
+					"value": "aLabel"
+				},
+				{
 					"instanceId": "jqbu",
 					"name": "inputParameterName",
 					"value": "A"
@@ -30,6 +35,11 @@
 			"name": "inputParameters",
 			"nestedFieldValues": [
 				{
+					"instanceId": "hgga",
+					"name": "inputParameterLabel",
+					"value": "bLabel"
+				},
+				{
 					"instanceId": "jqbu",
 					"name": "inputParameterName",
 					"value": "B"
@@ -50,6 +60,11 @@
 			"instanceId": "sdf",
 			"name": "inputParameters",
 			"nestedFieldValues": [
+				{
+					"instanceId": "hgga",
+					"name": "inputParameterLabel",
+					"value": "cLabel"
+				},
 				{
 					"instanceId": "jqbu",
 					"name": "inputParameterName",
@@ -77,6 +92,11 @@
 					"value": "D"
 				},
 				{
+					"instanceId": "weaq",
+					"name": "outputParameterPath",
+					"value": "d"
+				},
+				{
 					"instanceId": "tregh",
 					"name": "outputParameterType",
 					"value": "[\"text\"]"
@@ -91,6 +111,11 @@
 					"instanceId": "jqbu",
 					"name": "outputParameterName",
 					"value": "E"
+				},
+				{
+					"instanceId": "weaq",
+					"name": "outputParameterPath",
+					"value": "e"
 				},
 				{
 					"instanceId": "jjtj",

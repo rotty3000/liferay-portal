@@ -22,10 +22,11 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ResourceBundle;
@@ -58,8 +59,9 @@ public class EditJournalArticlePortletConfigurationIcon
 
 	@Override
 	public String getMessage(PortletRequest portletRequest) {
-		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
-			"content.Language", getLocale(portletRequest), getClass());
+		ResourceBundle resourceBundle =
+			_resourceBundleLoader.loadResourceBundle(
+				LocaleUtil.toLanguageId(getLocale(portletRequest)));
 
 		return LanguageUtil.get(resourceBundle, "edit-web-content");
 	}
@@ -105,10 +107,21 @@ public class EditJournalArticlePortletConfigurationIcon
 		_ddmStructureClassNameId = portal.getClassNameId(DDMStructure.class);
 	}
 
+	@Reference(
+		target = "(bundle.symbolic.name=com.liferay.journal.content.web)",
+		unbind = "-"
+	)
+	protected void setResourceBundleLoader(
+		ResourceBundleLoader resourceBundleLoader) {
+
+		_resourceBundleLoader = resourceBundleLoader;
+	}
+
 	private static final boolean _STAGING_LIVE_GROUP_LOCKING_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.STAGING_LIVE_GROUP_LOCKING_ENABLED));
 
 	private long _ddmStructureClassNameId;
+	private ResourceBundleLoader _resourceBundleLoader;
 
 }

@@ -3884,6 +3884,12 @@ public class JournalArticleLocalServiceWrapper
 		_journalArticleLocalService.setTreePaths(folderId, treePath, reindex);
 	}
 
+	@Override
+	public void subscribe(long userId, long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_journalArticleLocalService.subscribe(userId, groupId, articleId);
+	}
+
 	/**
 	* Subscribes the user to changes in elements that belong to the web content
 	* article's DDM structure.
@@ -3898,6 +3904,12 @@ public class JournalArticleLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_journalArticleLocalService.subscribeStructure(groupId, userId,
 			ddmStructureId);
+	}
+
+	@Override
+	public void unsubscribe(long userId, long groupId, long articleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_journalArticleLocalService.unsubscribe(userId, groupId, articleId);
 	}
 
 	/**

@@ -1963,6 +1963,17 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 			new QueryDefinition<JournalArticle>(status));
 	}
 
+	@Override
+	public void subscribe(long groupId, long articleId) throws PortalException {
+		JournalArticle article = getLatestArticle(articleId);
+
+		JournalArticlePermission.check(
+			getPermissionChecker(), groupId, article.getArticleId(),
+			ActionKeys.SUBSCRIBE);
+
+		journalArticleLocalService.subscribe(getUserId(), groupId, articleId);
+	}
+
 	/**
 	 * Subscribes the user to changes in elements that belong to the web content
 	 * article's DDM structure.
@@ -1981,6 +1992,19 @@ public class JournalArticleServiceImpl extends JournalArticleServiceBaseImpl {
 
 		journalArticleLocalService.subscribeStructure(
 			groupId, userId, ddmStructureId);
+	}
+
+	@Override
+	public void unsubscribe(long groupId, long articleId)
+		throws PortalException {
+
+		JournalArticle article = getLatestArticle(articleId);
+
+		JournalArticlePermission.check(
+			getPermissionChecker(), groupId, article.getArticleId(),
+			ActionKeys.SUBSCRIBE);
+
+		journalArticleLocalService.unsubscribe(getUserId(), groupId, articleId);
 	}
 
 	/**

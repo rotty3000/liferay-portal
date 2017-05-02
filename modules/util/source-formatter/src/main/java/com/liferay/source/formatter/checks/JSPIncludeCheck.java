@@ -15,6 +15,10 @@
 package com.liferay.source.formatter.checks;
 
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.StringUtil;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Hugo Huijser
@@ -60,7 +64,18 @@ public class JSPIncludeCheck extends BaseFileCheck {
 			}
 		}
 
+		Matcher matcher = _includeFilePattern.matcher(content);
+
+		while (matcher.find()) {
+			content = StringUtil.replaceFirst(
+				content, matcher.group(),
+				"@ include file=\"" + matcher.group(1) + "\"", matcher.start());
+		}
+
 		return content;
 	}
+
+	private final Pattern _includeFilePattern = Pattern.compile(
+		"\\s*@\\s*include\\s*file=['\"](.*)['\"]");
 
 }

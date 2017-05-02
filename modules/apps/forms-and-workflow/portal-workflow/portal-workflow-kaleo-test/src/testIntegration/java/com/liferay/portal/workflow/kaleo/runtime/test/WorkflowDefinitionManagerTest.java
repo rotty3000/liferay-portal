@@ -154,6 +154,13 @@ public class WorkflowDefinitionManagerTest {
 	}
 
 	@Test
+	public void testValidateJoinXorDefinition() throws Exception {
+		InputStream inputStream = getResource("join-xor-definition.xml");
+
+		assertValid(inputStream);
+	}
+
+	@Test
 	public void testValidateLegalMarketingDefinition() throws Exception {
 		InputStream inputStream = getResource("legal-marketing-definition.xml");
 
