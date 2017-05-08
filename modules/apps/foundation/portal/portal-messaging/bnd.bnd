@@ -4,3 +4,4 @@ Bundle-Version: 3.0.7
 Export-Package: com.liferay.portal.messaging
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: Runtime
+-conditionalpackage: com.liferay.messaging.internal.convert
