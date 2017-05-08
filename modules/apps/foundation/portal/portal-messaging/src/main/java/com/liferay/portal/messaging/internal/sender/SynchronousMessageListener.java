@@ -19,8 +19,8 @@ import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusException;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.messaging.MessageBusException;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
