@@ -116,7 +116,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		long timeout = Conversions.getLong(properties.get("timeout"), 10000);
+		long timeout = Conversions.getLong(properties.get("timeout"), 10000L);
 
 		DefaultSynchronousMessageSender defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
