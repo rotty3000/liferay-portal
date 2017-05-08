@@ -14,6 +14,7 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
+import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.messaging.MessageBus;
@@ -21,7 +22,6 @@ import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSender
 import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.portal.kernel.messaging.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
-import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,7 +116,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		long timeout = GetterUtil.getLong(properties.get("timeout"), 10000);
+		long timeout = Conversions.getLong(properties.get("timeout"), 10000);
 
 		DefaultSynchronousMessageSender defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
@@ -143,7 +143,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 	protected SynchronousMessageSender.Mode getMode(
 		Map<String, Object> properties) {
 
-		String mode = GetterUtil.getString(properties.get("mode"));
+		String mode = Conversions.getString(properties.get("mode"));
 
 		return SynchronousMessageSender.Mode.valueOf(mode);
 	}
