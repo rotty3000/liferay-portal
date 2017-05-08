@@ -14,14 +14,13 @@
 
 package com.liferay.messaging.proxy;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.MessageBusUtil;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.internal.validator.Validator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Micha Kiener
@@ -47,9 +46,6 @@ public class ProxyMessageListener implements MessageListener {
 						ProxyRequest.class.getName());
 			}
 			else {
-				MessageValuesThreadLocal.populateThreadLocalsFromMessage(
-					message);
-
 				ProxyRequest proxyRequest = (ProxyRequest)payload;
 
 				Object result = proxyRequest.execute(_manager);
@@ -67,8 +63,10 @@ public class ProxyMessageListener implements MessageListener {
 			Exception proxyResponseException = proxyResponse.getException();
 
 			if (Validator.isNotNull(responseDestinationName)) {
-				Message responseMessage = MessageBusUtil.createResponseMessage(
-					message);
+				Message responseMessage = new Message();
+
+				responseMessage.setDestinationName(message.getResponseDestinationName());
+				responseMessage.setResponseId(message.getResponseId());
 
 				responseMessage.setPayload(proxyResponse);
 

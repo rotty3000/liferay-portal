@@ -26,7 +26,7 @@ public class Conversions {
 	public static final short DEFAULT_SHORT = 0;
 	public static final String DEFAULT_STRING = "";
 	public static final String PASSWORD_MASK = "********";
-	
+
 	public static <T> Set<T> setFromArray(T[] array) {
 		return _instance._converter.convert(array).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
 	}

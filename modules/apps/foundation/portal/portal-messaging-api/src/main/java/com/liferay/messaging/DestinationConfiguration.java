@@ -14,10 +14,10 @@
 
 package com.liferay.messaging;
 
+import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
+
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 
 /**
  * @author Michael C. Han

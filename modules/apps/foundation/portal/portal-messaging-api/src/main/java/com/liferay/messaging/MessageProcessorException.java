@@ -15,22 +15,22 @@
 package com.liferay.messaging;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
-public class MessageListenerException extends RuntimeException {
+public class MessageProcessorException extends RuntimeException {
 
-	public MessageListenerException() {
+	public MessageProcessorException() {
 	}
 
-	public MessageListenerException(String msg) {
+	public MessageProcessorException(String msg) {
 		super(msg);
 	}
 
-	public MessageListenerException(String msg, Throwable cause) {
+	public MessageProcessorException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 
-	public MessageListenerException(Throwable cause) {
+	public MessageProcessorException(Throwable cause) {
 		super(cause);
 	}
 

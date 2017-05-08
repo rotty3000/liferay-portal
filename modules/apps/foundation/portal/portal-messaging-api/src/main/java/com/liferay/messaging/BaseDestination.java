@@ -14,18 +14,20 @@
 
 package com.liferay.messaging;
 
-import java.util.Collections;
-import java.util.Set;
-
-import com.liferay.messaging.internal.concurrent.ConcurrentHashSet;
 import com.liferay.messaging.internal.validator.Validator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Michael C. Han
  * @author Shuyang Zhou
  */
 public abstract class BaseDestination implements Destination {
-	
+
 	public static final String BLANK = "";
 
 	@Override
@@ -85,6 +87,22 @@ public abstract class BaseDestination implements Destination {
 		throw new UnsupportedOperationException();
 	}
 
+	public List<MessageInboundProcessor> getMessageInboundProcessors() {
+		final List<MessageInboundProcessorFactory> copy = inboundProcessorFactories;
+
+		if ((copy == null) || copy.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<MessageInboundProcessor> processors = new ArrayList<>();
+
+		for (MessageInboundProcessorFactory factory : copy) {
+			processors.add(factory.create());
+		}
+
+		return Collections.unmodifiableList(processors);
+	}
+
 	@Override
 	public int getMessageListenerCount() {
 		return messageListeners.size();
@@ -98,6 +116,22 @@ public abstract class BaseDestination implements Destination {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	public List<MessageOutboundProcessor> getMessageOutboundProcessors() {
+		final List<MessageOutboundProcessorFactory> copy = outboundProcessorFactories;
+
+		if ((copy == null) || copy.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<MessageOutboundProcessor> processors = new ArrayList<>();
+
+		for (MessageOutboundProcessorFactory factory : copy) {
+			processors.add(factory.create());
+		}
+
+		return Collections.unmodifiableList(processors);
 	}
 
 	@Override
@@ -222,10 +256,12 @@ public abstract class BaseDestination implements Destination {
 		return unregistered;
 	}
 
-	protected Set<MessageListener> messageListeners = new ConcurrentHashSet<>();
+	protected volatile List<MessageInboundProcessorFactory> inboundProcessorFactories;
+	protected Set<MessageListener> messageListeners = ConcurrentHashMap.newKeySet();
+	protected volatile List<MessageOutboundProcessorFactory> outboundProcessorFactories;
 	protected String name = BLANK;
 
 	private final Set<DestinationEventListener> _destinationEventListeners =
-		new ConcurrentHashSet<>();
+		ConcurrentHashMap.newKeySet();
 
 }

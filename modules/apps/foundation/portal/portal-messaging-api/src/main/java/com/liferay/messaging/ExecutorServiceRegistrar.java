@@ -14,24 +14,17 @@
 
 package com.liferay.messaging;
 
+import java.util.concurrent.ExecutorService;
+
 /**
- * @author Brian Wing Shun Chan
+ * Interface used to register executor thread pools with interested
+ * parties.
+ *
+ * @author Raymond Augé
  */
-public class MessageListenerException extends RuntimeException {
+public interface ExecutorServiceRegistrar {
 
-	public MessageListenerException() {
-	}
-
-	public MessageListenerException(String msg) {
-		super(msg);
-	}
-
-	public MessageListenerException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public MessageListenerException(Throwable cause) {
-		super(cause);
-	}
+	<T extends ExecutorService> T registerExecutorService(
+		String name, T executorService);
 
 }

@@ -14,15 +14,15 @@
 
 package com.liferay.messaging;
 
+import com.liferay.messaging.internal.convert.Conversions;
+import com.liferay.portal.kernel.io.Deserializer;
+import com.liferay.portal.kernel.io.Serializer;
+import com.liferay.portal.kernel.util.TransientValue;
+
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.liferay.messaging.internal.convert.Conversions;
-import com.liferay.messaging.internal.util.TransientValue;
-import com.liferay.portal.kernel.io.Deserializer;
-import com.liferay.portal.kernel.io.Serializer;
 
 /**
  * @author Brian Wing Shun Chan

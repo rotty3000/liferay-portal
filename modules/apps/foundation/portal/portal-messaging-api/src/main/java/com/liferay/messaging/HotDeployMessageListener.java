@@ -14,13 +14,10 @@
 
 package com.liferay.messaging;
 
+import com.liferay.messaging.internal.convert.Conversions;
+
 import java.util.Collections;
 import java.util.Set;
-
-import org.osgi.util.converter.Converting;
-import org.osgi.util.converter.StandardConverter;
-
-import com.liferay.messaging.internal.convert.Conversions;
 
 /**
  * @author Brian Wing Shun Chan
@@ -42,9 +39,8 @@ public class HotDeployMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		Converting convertingServletContextName =
-				_converter.convert(message.getString("servletContextName"));
-		String servletContextName = convertingServletContextName.to(String.class);
+		String servletContextName = Conversions.getString(
+			message.getString("servletContextName"));
 
 		if (!_servletContextNames.isEmpty() &&
 			!_servletContextNames.contains(servletContextName)) {
@@ -52,9 +48,8 @@ public class HotDeployMessageListener extends BaseMessageListener {
 			return;
 		}
 
-		Converting convertingCommand =
-				_converter.convert(message.getString("servletContextName"));
-		String command = convertingCommand.to(String.class);
+		String command = Conversions.getString(
+			message.getString("servletContextName"));
 
 		if (command.equals("deploy")) {
 			onDeploy(message);
@@ -71,7 +66,5 @@ public class HotDeployMessageListener extends BaseMessageListener {
 	}
 
 	private final Set<String> _servletContextNames;
-	
-	private StandardConverter _converter;
 
 }

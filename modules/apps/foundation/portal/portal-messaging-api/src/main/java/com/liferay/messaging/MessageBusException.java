@@ -14,12 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.messaging.internal.exception.PortalException;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class MessageBusException extends PortalException {
+public class MessageBusException extends RuntimeException {
 
 	public MessageBusException() {
 	}

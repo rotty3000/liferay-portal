@@ -14,10 +14,10 @@
 
 package com.liferay.messaging;
 
+import com.liferay.messaging.internal.convert.Conversions;
+
 import java.util.List;
 import java.util.Set;
-
-import com.liferay.messaging.internal.convert.Conversions;
 
 /**
  * @author Michael C. Han

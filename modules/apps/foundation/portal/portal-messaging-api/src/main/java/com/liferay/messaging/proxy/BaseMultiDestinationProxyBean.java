@@ -16,8 +16,6 @@ package com.liferay.messaging.proxy;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.MessageBusUtil;
-import com.liferay.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
 import com.liferay.messaging.sender.SynchronousMessageSender;
 
 /**
@@ -27,33 +25,23 @@ import com.liferay.messaging.sender.SynchronousMessageSender;
 public abstract class BaseMultiDestinationProxyBean {
 
 	public void afterPropertiesSet() {
-		_synchronousMessageSender =
-			SingleDestinationMessageSenderFactoryUtil.
-				getSynchronousMessageSender(_mode);
 	}
 
 	public abstract String getDestinationName(ProxyRequest proxyRequest);
 
 	public void send(ProxyRequest proxyRequest) {
-		MessageBusUtil.sendMessage(
+		_messageBus.sendMessage(
 			getDestinationName(proxyRequest), buildMessage(proxyRequest));
 	}
 
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link MessageBusUtil#getMessageBus}
-	 */
-	@Deprecated
 	public void setMessageBus(MessageBus messageBus) {
+		_messageBus = messageBus;
 	}
 
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link
-	 *             #setSynchronousMessageSenderMode(
-	 *             SynchronousMessageSender.Mode)}
-	 */
-	@Deprecated
 	public void setSynchronousMessageSender(
 		SynchronousMessageSender synchronousMessageSender) {
+
+		_synchronousMessageSender = synchronousMessageSender;
 	}
 
 	public void setSynchronousMessageSenderMode(
@@ -83,11 +71,10 @@ public abstract class BaseMultiDestinationProxyBean {
 
 		message.setPayload(proxyRequest);
 
-		MessageValuesThreadLocal.populateMessageFromThreadLocals(message);
-
 		return message;
 	}
 
+	private MessageBus _messageBus;
 	private SynchronousMessageSender.Mode _mode;
 	private SynchronousMessageSender _synchronousMessageSender;
 

@@ -14,6 +14,14 @@
 
 package com.liferay.messaging.config;
 
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationEventListener;
+import com.liferay.messaging.DestinationFactory;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusEventListener;
+import com.liferay.messaging.MessageListener;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,127 +30,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.DestinationEventListener;
-import com.liferay.messaging.DestinationFactory;
-import com.liferay.messaging.DestinationFactoryUtil;
-import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.MessageBusEventListener;
-import com.liferay.messaging.MessageListener;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.nio.intraband.messaging.DestinationConfigurationProcessCallable;
-import com.liferay.portal.kernel.nio.intraband.rpc.IntrabandRPCUtil;
-import com.liferay.portal.kernel.resiliency.spi.SPI;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
-import com.liferay.portal.kernel.security.pacl.permission.PortalMessageBusPermission;
-import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.registry.Filter;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceRegistrar;
-import com.liferay.registry.dependency.ServiceDependencyListener;
-import com.liferay.registry.dependency.ServiceDependencyManager;
-
 /**
  * @author Michael C. Han
  */
 public abstract class AbstractMessagingConfigurator
 	implements MessagingConfigurator {
-	
+
 	public static final String NULL = "null";
 
 	public void afterPropertiesSet() {
-		final ServiceDependencyManager serviceDependencyManager =
-			new ServiceDependencyManager();
-
-		serviceDependencyManager.addServiceDependencyListener(
-			new ServiceDependencyListener() {
-
-				@Override
-				public void dependenciesFulfilled() {
-					Registry registry = RegistryUtil.getRegistry();
-
-					_messageBus = registry.getService(MessageBus.class);
-
-					initialize();
-				}
-
-				@Override
-				public void destroy() {
-				}
-
-			});
-
-		serviceDependencyManager.registerDependencies(
-			DestinationFactory.class, MessageBus.class);
 	}
 
 	@Override
 	public void connect() {
-		if (SPIUtil.isSPI() && _portalMessagingConfigurator) {
-			return;
-		}
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_messageListenerServiceRegistrar = registry.getServiceRegistrar(
-			MessageListener.class);
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		try {
-			ClassLoader operatingClassLoader = getOperatingClassloader();
-
-			currentThread.setContextClassLoader(operatingClassLoader);
-
-			for (Map.Entry<String, List<MessageListener>> messageListeners :
-					_messageListeners.entrySet()) {
-
-				String destinationName = messageListeners.getKey();
-
-				ServiceDependencyManager serviceDependencyManager =
-					new ServiceDependencyManager();
-
-				serviceDependencyManager.addServiceDependencyListener(
-					new DestinationServiceDependencyListener(
-						destinationName, messageListeners.getValue()));
-
-				Filter filter = registry.getFilter(
-					"(&(destination.name=" + destinationName +
-						")(objectClass=" + Destination.class.getName() + "))");
-
-				serviceDependencyManager.registerDependencies(filter);
-			}
-		}
-		finally {
-			currentThread.setContextClassLoader(contextClassLoader);
-		}
 	}
 
 	@Override
 	public void destroy() {
-		if (_messageListenerServiceRegistrar != null) {
-			_messageListenerServiceRegistrar.destroy();
-		}
-
-		if (_destinationEventListenerServiceRegistrar != null) {
-			_destinationEventListenerServiceRegistrar.destroy();
-		}
-
-		if (_destinationServiceRegistrar != null) {
-			_destinationServiceRegistrar.destroy();
-		}
-
-		if (_messageBusEventListenerServiceRegistrar != null) {
-			_messageBusEventListenerServiceRegistrar.destroy();
-		}
-
 		_destinationConfigurations.clear();
 		_destinationEventListeners.clear();
 		_messageListeners.clear();
@@ -154,21 +58,12 @@ public abstract class AbstractMessagingConfigurator
 		_destinations.clear();
 		_messageBusEventListeners.clear();
 
-		ClassLoader operatingClassLoader = getOperatingClassloader();
-
-		String servletContextName = ClassLoaderPool.getContextName(
-			operatingClassLoader);
-
 		MessagingConfiguratorRegistry.unregisterMessagingConfigurator(
-			servletContextName, this);
+			"" /* TODO */, this);
 	}
 
 	@Override
 	public void disconnect() {
-		if (SPIUtil.isSPI() && _portalMessagingConfigurator) {
-			return;
-		}
-
 		for (Map.Entry<String, List<MessageListener>> messageListeners :
 				_messageListeners.entrySet()) {
 
@@ -264,16 +159,6 @@ public abstract class AbstractMessagingConfigurator
 	protected abstract ClassLoader getOperatingClassloader();
 
 	protected void initialize() {
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		ClassLoader operatingClassLoader = getOperatingClassloader();
-
-		if (contextClassLoader == operatingClassLoader) {
-			_portalMessagingConfigurator = true;
-		}
-
 		registerMessageBusEventListeners();
 
 		registerDestinations();
@@ -282,8 +167,7 @@ public abstract class AbstractMessagingConfigurator
 
 		connect();
 
-		String servletContextName = ClassLoaderPool.getContextName(
-			operatingClassLoader);
+		String servletContextName = ""; // TODO
 
 		if ((servletContextName != null) &&
 			!servletContextName.equals(NULL)) {
@@ -297,105 +181,19 @@ public abstract class AbstractMessagingConfigurator
 		if (_destinationEventListeners.isEmpty()) {
 			return;
 		}
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_destinationEventListenerServiceRegistrar =
-			registry.getServiceRegistrar(DestinationEventListener.class);
-
-		for (final Map.Entry<String, List<DestinationEventListener>> entry :
-				_destinationEventListeners.entrySet()) {
-
-			final String destinationName = entry.getKey();
-
-			ServiceDependencyManager serviceDependencyManager =
-				new ServiceDependencyManager();
-
-			serviceDependencyManager.addServiceDependencyListener(
-				new ServiceDependencyListener() {
-
-					@Override
-					public void dependenciesFulfilled() {
-						Map<String, Object> properties = new HashMap<>();
-
-						properties.put("destination.name", destinationName);
-
-						for (DestinationEventListener destinationEventListener :
-								entry.getValue()) {
-
-							_destinationEventListenerServiceRegistrar.
-								registerService(
-									DestinationEventListener.class,
-									destinationEventListener, properties);
-						}
-					}
-
-					@Override
-					public void destroy() {
-					}
-
-				});
-
-			Filter filter = registry.getFilter(
-				"(&(destination.name=" + destinationName + ")(objectClass=" +
-					Destination.class.getName() + "))");
-
-			serviceDependencyManager.registerDependencies(filter);
-		}
 	}
 
 	protected void registerDestinations() {
 		for (DestinationConfiguration destinationConfiguration :
 				_destinationConfigurations) {
 
-			try {
-				PortalMessageBusPermission.checkListen(
-					destinationConfiguration.getDestinationName());
-			}
-			catch (SecurityException se) {
-				if (_logger.isInfoEnabled()) {
-					_logger.info(
-						"Rejecting destination " +
-							destinationConfiguration.getDestinationName());
-				}
-
-				continue;
-			}
-
 			_destinations.add(
-				DestinationFactoryUtil.createDestination(
+				_destinationFactory.createDestination(
 					destinationConfiguration));
 		}
 
 		if (_destinations.isEmpty()) {
 			return;
-		}
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_destinationServiceRegistrar = registry.getServiceRegistrar(
-			Destination.class);
-
-		for (Destination destination : _destinations) {
-			String destinationName = destination.getName();
-
-			try {
-				PortalMessageBusPermission.checkListen(destinationName);
-			}
-			catch (SecurityException se) {
-				if (_logger.isInfoEnabled()) {
-					_logger.info("Rejecting destination " + destinationName);
-				}
-
-				continue;
-			}
-
-			Map<String, Object> properties = new HashMap<>();
-
-			properties.put("destination.name", destinationName);
-
-			_destinationServiceRegistrar.registerService(
-				Destination.class, destination, properties);
 		}
 	}
 
@@ -403,101 +201,18 @@ public abstract class AbstractMessagingConfigurator
 		if (_messageBusEventListeners.isEmpty()) {
 			return;
 		}
-
-		Registry registry = RegistryUtil.getRegistry();
-
-		_messageBusEventListenerServiceRegistrar = registry.getServiceRegistrar(
-			MessageBusEventListener.class);
-
-		for (MessageBusEventListener messageBusEventListener :
-				_messageBusEventListeners) {
-
-			_messageBusEventListenerServiceRegistrar.registerService(
-				MessageBusEventListener.class, messageBusEventListener);
-		}
 	}
-
-	private static final Logger _logger = LoggerFactory.getLogger(
-		AbstractMessagingConfigurator.class);
 
 	private final Set<DestinationConfiguration> _destinationConfigurations =
 		new HashSet<>();
 	private final Map<String, List<DestinationEventListener>>
 		_destinationEventListeners = new HashMap<>();
-	private ServiceRegistrar<DestinationEventListener>
-		_destinationEventListenerServiceRegistrar;
+	private volatile DestinationFactory _destinationFactory;
 	private final List<Destination> _destinations = new ArrayList<>();
-	private ServiceRegistrar<Destination> _destinationServiceRegistrar;
 	private volatile MessageBus _messageBus;
 	private final List<MessageBusEventListener> _messageBusEventListeners =
 		new ArrayList<>();
-	private ServiceRegistrar<MessageBusEventListener>
-		_messageBusEventListenerServiceRegistrar;
 	private final Map<String, List<MessageListener>> _messageListeners =
 		new HashMap<>();
-	private ServiceRegistrar<MessageListener> _messageListenerServiceRegistrar;
-	private boolean _portalMessagingConfigurator;
-
-	private class DestinationServiceDependencyListener
-		implements ServiceDependencyListener {
-
-		public DestinationServiceDependencyListener(
-			String destinationName, List<MessageListener> messageListeners) {
-
-			_destinationName = destinationName;
-			_messageListeners = messageListeners;
-		}
-
-		@Override
-		public void dependenciesFulfilled() {
-			ClassLoader operatingClassLoader = getOperatingClassloader();
-
-			if (SPIUtil.isSPI()) {
-				SPI spi = SPIUtil.getSPI();
-
-				try {
-					RegistrationReference registrationReference =
-						spi.getRegistrationReference();
-
-					IntrabandRPCUtil.execute(
-						registrationReference,
-						new DestinationConfigurationProcessCallable(
-							_destinationName));
-				}
-				catch (Exception e) {
-					StringBuilder sb = new StringBuilder(4);
-
-					sb.append("Unable to install ");
-					sb.append(
-						DestinationConfigurationProcessCallable.class.
-							getName());
-					sb.append(" on MPI for ");
-					sb.append(_destinationName);
-
-					_logger.error(sb.toString(), e);
-				}
-			}
-
-			Map<String, Object> properties = new HashMap<>();
-
-			properties.put("destination.name", _destinationName);
-			properties.put(
-				"message.listener.operating.class.loader",
-				operatingClassLoader);
-
-			for (MessageListener messageListener : _messageListeners) {
-				_messageListenerServiceRegistrar.registerService(
-					MessageListener.class, messageListener, properties);
-			}
-		}
-
-		@Override
-		public void destroy() {
-		}
-
-		private final String _destinationName;
-		private final List<MessageListener> _messageListeners;
-
-	}
 
 }

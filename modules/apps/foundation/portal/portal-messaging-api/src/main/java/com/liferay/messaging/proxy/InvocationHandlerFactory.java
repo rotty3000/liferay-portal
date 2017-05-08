@@ -12,26 +12,15 @@
  * details.
  */
 
-package com.liferay.messaging;
+package com.liferay.messaging.proxy;
+
+import java.lang.reflect.InvocationHandler;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
-public class MessageListenerException extends RuntimeException {
+public interface InvocationHandlerFactory {
 
-	public MessageListenerException() {
-	}
-
-	public MessageListenerException(String msg) {
-		super(msg);
-	}
-
-	public MessageListenerException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public MessageListenerException(Throwable cause) {
-		super(cause);
-	}
+	public InvocationHandler createInvocationHandler(Object obj);
 
 }

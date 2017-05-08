@@ -15,23 +15,14 @@
 package com.liferay.messaging;
 
 /**
- * @author Brian Wing Shun Chan
+ * <p>
+ * Interface providing a factory for MessageOutboundProcessor instances.
+ * </p>
+ *
+ * @author Raymond Augé
  */
-public class MessageListenerException extends RuntimeException {
+public interface MessageOutboundProcessorFactory {
 
-	public MessageListenerException() {
-	}
-
-	public MessageListenerException(String msg) {
-		super(msg);
-	}
-
-	public MessageListenerException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public MessageListenerException(Throwable cause) {
-		super(cause);
-	}
+	MessageOutboundProcessor create();
 
 }

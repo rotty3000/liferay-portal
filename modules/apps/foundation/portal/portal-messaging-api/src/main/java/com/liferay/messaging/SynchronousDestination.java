@@ -14,6 +14,7 @@
 
 package com.liferay.messaging;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -36,12 +37,43 @@ public class SynchronousDestination extends BaseDestination {
 
 	@Override
 	public void send(Message message) {
-		for (MessageListener messageListener : messageListeners) {
-			try {
-				messageListener.receive(message);
+		if (messageListeners.isEmpty()) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug("No message listeners for destination " + getName());
 			}
-			catch (MessageListenerException mle) {
-				_logger.error("Unable to process message " + message, mle);
+
+			return;
+		}
+
+		List<MessageInboundProcessor> messageInboundProcessors = getMessageInboundProcessors();
+
+		try {
+			for (MessageInboundProcessor processor : messageInboundProcessors) {
+				try {
+					message = processor.beforeReceive(message);
+				}
+				catch (MessageProcessorException mpe) {
+					_logger.error("Unable to process message " + message, mpe);
+				}
+			}
+
+			for (MessageListener messageListener : messageListeners) {
+				try {
+					messageListener.receive(message);
+				}
+				catch (MessageListenerException mle) {
+					_logger.error("Unable to process message " + message, mle);
+				}
+			}
+		}
+		finally {
+			for (MessageInboundProcessor processor : messageInboundProcessors) {
+				try {
+					processor.afterReceive(message);
+				}
+				catch (MessageProcessorException mpe) {
+					_logger.error("Unable to process message " + message, mpe);
+				}
 			}
 		}
 

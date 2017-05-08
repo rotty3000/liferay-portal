@@ -14,15 +14,13 @@
 
 package com.liferay.messaging;
 
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.liferay.messaging.internal.util.CentralizedThreadLocal;
-import com.liferay.portal.kernel.cache.thread.local.Lifecycle;
-import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 
 /**
  * <p>
@@ -36,9 +34,11 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 	@Override
 	protected void dispatch(
-		Set<MessageListener> messageListeners, final Message message) {
+		Set<MessageListener> messageListeners,
+		final List<MessageInboundProcessor> messageInboundProcessors,
+		final Message message) {
 
-		final Thread currentThread = Thread.currentThread();
+		final Thread dispatchThread = Thread.currentThread();
 
 		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
@@ -47,20 +47,42 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 				@Override
 				public void run() {
-					try {
-						populateThreadLocalsFromMessage(message);
+					Message processedMessage = message;
 
-						messageListener.receive(message);
+					try {
+						for (MessageInboundProcessor processor :
+								messageInboundProcessors) {
+
+							try {
+								processedMessage = processor.beforeThread(
+									processedMessage, dispatchThread);
+							}
+							catch (MessageProcessorException mpe) {
+								_logger.error(
+									"Unable to process message before " +
+										"thread " + message, mpe);
+							}
+						}
+
+						messageListener.receive(processedMessage);
 					}
 					catch (MessageListenerException mle) {
-						_logger.error("Unable to process message " + message, mle);
+						_logger.error(
+							"Unable to process message " + message, mle);
 					}
 					finally {
-						if (Thread.currentThread() != currentThread) {
-							ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
+						for (MessageInboundProcessor processor :
+								messageInboundProcessors) {
 
-							CentralizedThreadLocal.
-								clearShortLivedThreadLocals();
+							try {
+								processor.afterThread(
+									processedMessage, dispatchThread);
+							}
+							catch (MessageProcessorException mpe) {
+								_logger.error(
+									"Unable to process message after " +
+										"thread " + message, mpe);
+							}
 						}
 					}
 				}

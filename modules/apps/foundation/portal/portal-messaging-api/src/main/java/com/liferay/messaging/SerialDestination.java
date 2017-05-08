@@ -14,15 +14,13 @@
 
 package com.liferay.messaging;
 
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.liferay.messaging.internal.util.CentralizedThreadLocal;
-import com.liferay.portal.kernel.cache.thread.local.Lifecycle;
-import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 
 /**
  * <p>
@@ -41,9 +39,11 @@ public class SerialDestination extends BaseAsyncDestination {
 
 	@Override
 	protected void dispatch(
-		final Set<MessageListener> messageListeners, final Message message) {
+		final Set<MessageListener> messageListeners,
+		final List<MessageInboundProcessor> messageInboundProcessors,
+		final Message message) {
 
-		final Thread currentThread = Thread.currentThread();
+		final Thread dispatchThread = Thread.currentThread();
 
 		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
@@ -51,8 +51,22 @@ public class SerialDestination extends BaseAsyncDestination {
 
 			@Override
 			public void run() {
+				Message processedMessage = message;
+
 				try {
-					populateThreadLocalsFromMessage(message);
+					for (MessageInboundProcessor processor :
+							messageInboundProcessors) {
+
+						try {
+							processedMessage = processor.beforeThread(
+								processedMessage, dispatchThread);
+						}
+						catch (MessageProcessorException mpe) {
+							_logger.error(
+								"Unable to process message before thread " +
+									message, mpe);
+						}
+					}
 
 					for (MessageListener messageListener : messageListeners) {
 						try {
@@ -65,10 +79,18 @@ public class SerialDestination extends BaseAsyncDestination {
 					}
 				}
 				finally {
-					if (Thread.currentThread() != currentThread) {
-						ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
+					for (MessageInboundProcessor processor :
+							messageInboundProcessors) {
 
-						CentralizedThreadLocal.clearShortLivedThreadLocals();
+						try {
+							processor.afterThread(
+								processedMessage, dispatchThread);
+						}
+						catch (MessageProcessorException mpe) {
+							_logger.error(
+								"Unable to process message after thread " +
+									message, mpe);
+						}
 					}
 				}
 			}

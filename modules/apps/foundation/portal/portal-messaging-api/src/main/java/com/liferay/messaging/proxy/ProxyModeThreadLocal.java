@@ -14,8 +14,6 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.messaging.internal.util.AutoResetThreadLocal;
-
 /**
  * @author Shuyang Zhou
  */
@@ -30,7 +28,12 @@ public class ProxyModeThreadLocal {
 	}
 
 	private static final ThreadLocal<Boolean> _forceSync =
-		new AutoResetThreadLocal<>(
-			ProxyModeThreadLocal.class + "_forceSync", () -> Boolean.FALSE);
+		new ThreadLocal<Boolean>() {
+
+			@Override
+			protected Boolean initialValue() {
+				return Boolean.FALSE;
+			}
+		};
 
 }

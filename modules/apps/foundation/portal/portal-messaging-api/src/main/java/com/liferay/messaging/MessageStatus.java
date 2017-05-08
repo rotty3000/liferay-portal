@@ -14,9 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.util.StackTraceUtil;
-
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 /**
  * @author Michael C. Han
@@ -50,7 +51,19 @@ public class MessageStatus implements Serializable {
 
 	public void setException(Exception e) {
 		_exceptionMessage = e.getMessage();
-		_exceptionStackTrace = StackTraceUtil.getStackTrace(e);
+
+		try (StringWriter stringWriter = new StringWriter();
+			PrintWriter printWriter = new PrintWriter(stringWriter)) {
+
+			e.printStackTrace(printWriter);
+
+			_exceptionStackTrace = stringWriter.toString();
+		}
+		catch (IOException ioe) {
+
+			// Ignore this case
+
+		}
 	}
 
 	public void setPayload(Object payload) {
