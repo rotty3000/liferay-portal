@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.scheduler.messaging;
 
-import com.liferay.messaging.Message;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.Trigger;
 

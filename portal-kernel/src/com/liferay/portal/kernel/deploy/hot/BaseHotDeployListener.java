@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.deploy.hot;
 
-import com.liferay.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.ProxyFactory;
 
 import java.lang.reflect.Field;

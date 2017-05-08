@@ -14,10 +14,23 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
+import com.liferay.portal.kernel.util.AutoResetThreadLocal;
+
 /**
  * @author Shuyang Zhou
  */
-@Deprecated
-public class ProxyModeThreadLocal
-	extends com.liferay.messaging.proxy.ProxyModeThreadLocal {
+public class ProxyModeThreadLocal {
+
+	public static boolean isForceSync() {
+		return _forceSync.get();
+	}
+
+	public static void setForceSync(boolean forceSync) {
+		_forceSync.set(forceSync);
+	}
+
+	private static final ThreadLocal<Boolean> _forceSync =
+		new AutoResetThreadLocal<>(
+			ProxyModeThreadLocal.class + "_forceSync", () -> Boolean.FALSE);
+
 }

@@ -14,10 +14,22 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
+import java.io.Closeable;
+
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public class ProxyModeThreadLocalCloseable
-	extends com.liferay.messaging.proxy.ProxyModeThreadLocalCloseable {
+public class ProxyModeThreadLocalCloseable implements Closeable {
+
+	public ProxyModeThreadLocalCloseable() {
+		_forceSync = ProxyModeThreadLocal.isForceSync();
+	}
+
+	@Override
+	public void close() {
+		ProxyModeThreadLocal.setForceSync(_forceSync);
+	}
+
+	private final boolean _forceSync;
+
 }

@@ -17,7 +17,18 @@ package com.liferay.portal.kernel.messaging.sender;
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public interface SingleDestinationMessageSenderFactory
-	extends com.liferay.messaging.sender.SingleDestinationMessageSenderFactory {
+public interface SingleDestinationMessageSenderFactory {
+
+	public SingleDestinationMessageSender createSingleDestinationMessageSender(
+		String destinationName);
+
+	public SingleDestinationSynchronousMessageSender
+		createSingleDestinationSynchronousMessageSender(
+			String destinationName, SynchronousMessageSender.Mode mode);
+
+	public int getModesCount();
+
+	public SynchronousMessageSender getSynchronousMessageSender(
+		SynchronousMessageSender.Mode mode);
+
 }

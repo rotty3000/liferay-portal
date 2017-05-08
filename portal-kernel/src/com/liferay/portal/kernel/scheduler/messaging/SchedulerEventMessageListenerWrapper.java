@@ -14,13 +14,13 @@
 
 package com.liferay.portal.kernel.scheduler.messaging;
 
-import com.liferay.messaging.DestinationNames;
-import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBusUtil;
-import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.MessageListenerException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.scheduler.JobState;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;

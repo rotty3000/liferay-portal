@@ -13,7 +13,6 @@
 	<path id="portal.test.classpath">
 		<pathelement location="${project.dir}/portal-kernel/classes" />
 		<path refid="lib.classpath" />
-		<pathelement location="${project.dir}/modules/apps/foundation/portal/portal-messaging-api/classes" />
 		<pathelement location="${project.dir}/modules/core/registry-api/classes" />
 	</path>
 

@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.search.messaging;
 
-import com.liferay.messaging.proxy.ProxyMessageListener;
+import com.liferay.portal.kernel.messaging.proxy.ProxyMessageListener;
 import com.liferay.portal.kernel.search.SearchEngine;
 
 /**

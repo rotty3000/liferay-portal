@@ -14,11 +14,11 @@
 
 package com.liferay.portal.test.rule.callback;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.DestinationNames;
-import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBusUtil;
-import com.liferay.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.test.rule.callback.BaseTestCallback;
 import com.liferay.portal.kernel.util.ReflectionUtil;
 

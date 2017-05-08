@@ -14,10 +14,16 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import java.util.Collection;
+
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public interface DestinationFactory
-	extends com.liferay.messaging.DestinationFactory {
+public interface DestinationFactory {
+
+	public Destination createDestination(
+		DestinationConfiguration destinationConfiguration);
+
+	public Collection<String> getDestinationTypes();
+
 }

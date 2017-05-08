@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.audit;
 
-import com.liferay.messaging.proxy.MessagingProxy;
-import com.liferay.messaging.proxy.ProxyMode;
+import com.liferay.portal.kernel.messaging.proxy.MessagingProxy;
+import com.liferay.portal.kernel.messaging.proxy.ProxyMode;
 
 /**
  * @author Michael C. Han

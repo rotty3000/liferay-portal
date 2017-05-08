@@ -23,7 +23,6 @@ import java.lang.annotation.Target;
 /**
  * @author Shuyang Zhou
  */
-@Deprecated
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

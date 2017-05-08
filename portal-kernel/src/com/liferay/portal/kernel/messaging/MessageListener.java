@@ -17,6 +17,8 @@ package com.liferay.portal.kernel.messaging;
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public interface MessageListener extends com.liferay.messaging.MessageListener {
+public interface MessageListener {
+
+	public void receive(Message message) throws MessageListenerException;
+
 }

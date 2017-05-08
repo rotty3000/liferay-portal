@@ -14,10 +14,10 @@
 
 package com.liferay.portal.kernel.resiliency.mpi;
 
-import com.liferay.messaging.config.MessagingConfigurator;
-import com.liferay.messaging.config.MessagingConfiguratorRegistry;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.config.MessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.MessagingConfiguratorRegistry;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.IntrabandFactoryUtil;
 import com.liferay.portal.kernel.nio.intraband.SystemDataType;
