@@ -26,9 +26,9 @@ import com.liferay.portal.kernel.messaging.MessageBusEventListener;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeDestination;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration;
+import com.liferay.portal.messaging.internal.util.ListUtil;
+import com.liferay.portal.messaging.internal.util.MapUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
