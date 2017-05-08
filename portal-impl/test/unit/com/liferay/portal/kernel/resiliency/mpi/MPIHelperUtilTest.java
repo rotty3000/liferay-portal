@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.resiliency.mpi;
 
-import com.liferay.messaging.config.AbstractMessagingConfigurator;
-import com.liferay.messaging.config.MessagingConfigurator;
-import com.liferay.messaging.config.MessagingConfiguratorRegistry;
+import com.liferay.portal.kernel.messaging.config.AbstractMessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.MessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.MessagingConfiguratorRegistry;
 import com.liferay.portal.kernel.nio.intraband.DatagramReceiveHandler;
 import com.liferay.portal.kernel.nio.intraband.Intraband;
 import com.liferay.portal.kernel.nio.intraband.SystemDataType;

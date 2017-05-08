@@ -17,7 +17,14 @@ package com.liferay.portal.kernel.messaging.config;
 /**
  * @author Michael C. Han
  */
-@Deprecated
 public class DefaultMessagingConfigurator
-	extends com.liferay.messaging.config.DefaultMessagingConfigurator {
+	extends AbstractMessagingConfigurator {
+
+	@Override
+	protected ClassLoader getOperatingClassloader() {
+		Thread currentThread = Thread.currentThread();
+
+		return currentThread.getContextClassLoader();
+	}
+
 }

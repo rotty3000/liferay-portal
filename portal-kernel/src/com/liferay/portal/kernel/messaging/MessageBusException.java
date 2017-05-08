@@ -14,10 +14,26 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.portal.kernel.exception.PortalException;
+
 /**
  * @author Brian Wing Shun Chan
  */
-@Deprecated
-public class MessageBusException
-	extends com.liferay.messaging.MessageBusException {
+public class MessageBusException extends PortalException {
+
+	public MessageBusException() {
+	}
+
+	public MessageBusException(String msg) {
+		super(msg);
+	}
+
+	public MessageBusException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public MessageBusException(Throwable cause) {
+		super(cause);
+	}
+
 }

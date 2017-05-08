@@ -14,17 +14,19 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import com.liferay.messaging.Message;
-
 /**
  * @author Shuyang Zhou
  */
-@Deprecated
-public abstract class MessageRunnable
-	extends com.liferay.messaging.MessageRunnable {
+public abstract class MessageRunnable implements Runnable {
 
 	public MessageRunnable(Message message) {
-		super(message);
+		_message = message;
 	}
+
+	public Message getMessage() {
+		return _message;
+	}
+
+	private final Message _message;
 
 }

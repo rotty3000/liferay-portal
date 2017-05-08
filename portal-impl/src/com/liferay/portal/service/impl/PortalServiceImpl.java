@@ -14,10 +14,6 @@
 
 package com.liferay.portal.service.impl;
 
-import com.liferay.messaging.DestinationNames;
-import com.liferay.messaging.Message;
-import com.liferay.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
-import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -26,6 +22,10 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.jsonwebservice.JSONWebServiceMode;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.sender.SingleDestinationMessageSenderFactoryUtil;
+import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.service.PortalService;
 import com.liferay.portal.kernel.transaction.Propagation;

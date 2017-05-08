@@ -14,10 +14,15 @@
 
 package com.liferay.portal.kernel.messaging.sender;
 
+import com.liferay.portal.kernel.messaging.Message;
+
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public interface SingleDestinationMessageSender
-	extends com.liferay.messaging.sender.SingleDestinationMessageSender {
+public interface SingleDestinationMessageSender {
+
+	public void send(Message message);
+
+	public void send(Object payload);
+
 }

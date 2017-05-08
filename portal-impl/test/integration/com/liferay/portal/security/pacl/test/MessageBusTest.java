@@ -14,7 +14,7 @@
 
 package com.liferay.portal.security.pacl.test;
 
-import com.liferay.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.test.rule.PACLTestRule;
 import com.liferay.registry.BasicRegistryImpl;
 import com.liferay.registry.RegistryUtil;

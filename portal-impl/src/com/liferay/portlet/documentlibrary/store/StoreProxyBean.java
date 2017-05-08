@@ -15,7 +15,7 @@
 package com.liferay.portlet.documentlibrary.store;
 
 import com.liferay.document.library.kernel.store.Store;
-import com.liferay.messaging.proxy.BaseProxyBean;
+import com.liferay.portal.kernel.messaging.proxy.BaseProxyBean;
 
 import java.io.File;
 import java.io.InputStream;

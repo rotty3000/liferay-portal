@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.scheduler.messaging;
 
-import com.liferay.messaging.MessageListener;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
 
 /**

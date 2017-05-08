@@ -14,10 +14,10 @@
 
 package com.liferay.portal.poller.messaging;
 
-import com.liferay.messaging.BaseMessageListener;
-import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.poller.PollerException;
 import com.liferay.portal.kernel.poller.PollerProcessor;
 import com.liferay.portal.kernel.poller.PollerRequest;

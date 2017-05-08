@@ -14,11 +14,217 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * @author Michael C. Han
  * @author Shuyang Zhou
  */
-@Deprecated
-public abstract class BaseDestination
-	extends com.liferay.messaging.BaseDestination {
+public abstract class BaseDestination implements Destination {
+
+	@Override
+	public boolean addDestinationEventListener(
+		DestinationEventListener destinationEventListener) {
+
+		return _destinationEventListeners.add(destinationEventListener);
+	}
+
+	public void afterPropertiesSet() {
+		if (Validator.isNull(name)) {
+			throw new IllegalArgumentException("Name is null");
+		}
+	}
+
+	@Override
+	public void close() {
+		close(false);
+	}
+
+	@Override
+	public void close(boolean force) {
+	}
+
+	@Override
+	public void copyDestinationEventListeners(Destination destination) {
+		for (DestinationEventListener destinationEventListener :
+				_destinationEventListeners) {
+
+			destination.addDestinationEventListener(destinationEventListener);
+		}
+	}
+
+	@Override
+	public void copyMessageListeners(Destination destination) {
+		for (MessageListener messageListener : messageListeners) {
+			InvokerMessageListener invokerMessageListener =
+				(InvokerMessageListener)messageListener;
+
+			destination.register(
+				invokerMessageListener.getMessageListener(),
+				invokerMessageListener.getClassLoader());
+		}
+	}
+
+	@Override
+	public void destroy() {
+		close(true);
+
+		removeDestinationEventListeners();
+
+		unregisterMessageListeners();
+	}
+
+	@Override
+	public DestinationStatistics getDestinationStatistics() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getMessageListenerCount() {
+		return messageListeners.size();
+	}
+
+	@Override
+	public Set<MessageListener> getMessageListeners() {
+		return Collections.unmodifiableSet(messageListeners);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public boolean isRegistered() {
+		if (getMessageListenerCount() > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	@Override
+	public void open() {
+	}
+
+	@Override
+	public boolean register(MessageListener messageListener) {
+		InvokerMessageListener invokerMessageListener =
+			new InvokerMessageListener(messageListener);
+
+		return registerMessageListener(invokerMessageListener);
+	}
+
+	@Override
+	public boolean register(
+		MessageListener messageListener, ClassLoader classloader) {
+
+		InvokerMessageListener invokerMessageListener =
+			new InvokerMessageListener(messageListener, classloader);
+
+		return registerMessageListener(invokerMessageListener);
+	}
+
+	@Override
+	public boolean removeDestinationEventListener(
+		DestinationEventListener destinationEventListener) {
+
+		return _destinationEventListeners.remove(destinationEventListener);
+	}
+
+	@Override
+	public void removeDestinationEventListeners() {
+		_destinationEventListeners.clear();
+	}
+
+	@Override
+	public void send(Message message) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public boolean unregister(MessageListener messageListener) {
+		InvokerMessageListener invokerMessageListener =
+			new InvokerMessageListener(messageListener);
+
+		return unregisterMessageListener(invokerMessageListener);
+	}
+
+	public boolean unregister(
+		MessageListener messageListener, ClassLoader classloader) {
+
+		InvokerMessageListener invokerMessageListener =
+			new InvokerMessageListener(messageListener, classloader);
+
+		return unregisterMessageListener(invokerMessageListener);
+	}
+
+	@Override
+	public void unregisterMessageListeners() {
+		for (MessageListener messageListener : messageListeners) {
+			unregisterMessageListener((InvokerMessageListener)messageListener);
+		}
+	}
+
+	protected void fireMessageListenerRegisteredEvent(
+		MessageListener messageListener) {
+
+		for (DestinationEventListener destinationEventListener :
+				_destinationEventListeners) {
+
+			destinationEventListener.messageListenerRegistered(
+				getName(), messageListener);
+		}
+	}
+
+	protected void fireMessageListenerUnregisteredEvent(
+		MessageListener messageListener) {
+
+		for (DestinationEventListener listener : _destinationEventListeners) {
+			listener.messageListenerUnregistered(getName(), messageListener);
+		}
+	}
+
+	protected boolean registerMessageListener(
+		InvokerMessageListener invokerMessageListener) {
+
+		boolean registered = messageListeners.add(invokerMessageListener);
+
+		if (registered) {
+			fireMessageListenerRegisteredEvent(
+				invokerMessageListener.getMessageListener());
+		}
+
+		return registered;
+	}
+
+	protected boolean unregisterMessageListener(
+		InvokerMessageListener invokerMessageListener) {
+
+		boolean unregistered = messageListeners.remove(invokerMessageListener);
+
+		if (unregistered) {
+			fireMessageListenerUnregisteredEvent(
+				invokerMessageListener.getMessageListener());
+		}
+
+		return unregistered;
+	}
+
+	protected Set<MessageListener> messageListeners = new ConcurrentHashSet<>();
+	protected String name = StringPool.BLANK;
+
+	private final Set<DestinationEventListener> _destinationEventListeners =
+		new ConcurrentHashSet<>();
+
 }

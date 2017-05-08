@@ -17,7 +17,6 @@ package com.liferay.portal.kernel.messaging.proxy;
 /**
  * @author Michael C. Han
  */
-@Deprecated
 public enum ProxyMode {
 
 	ASYNC, SYNC

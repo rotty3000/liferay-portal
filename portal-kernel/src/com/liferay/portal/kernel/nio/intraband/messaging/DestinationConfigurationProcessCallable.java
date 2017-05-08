@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 

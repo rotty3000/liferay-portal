@@ -14,8 +14,8 @@
 
 package com.liferay.portal.messaging.async;
 
-import com.liferay.messaging.BaseMessageListener;
-import com.liferay.messaging.Message;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.process.ProcessCallable;
 
 /**

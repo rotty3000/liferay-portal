@@ -14,10 +14,10 @@
 
 package com.liferay.portal.messaging.async;
 
-import com.liferay.messaging.MessageBusUtil;
-import com.liferay.messaging.async.Async;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.async.Async;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.spring.aop.AnnotationChainableMethodAdvice;
 
