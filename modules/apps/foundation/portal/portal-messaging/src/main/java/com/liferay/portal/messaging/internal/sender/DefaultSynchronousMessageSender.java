@@ -14,6 +14,7 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
+import com.liferay.messaging.internal.validator.Validator;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.messaging.Destination;
@@ -23,7 +24,6 @@ import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageBusException;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.security.SecureRandomUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.UUID;
 
