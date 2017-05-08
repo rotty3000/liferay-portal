@@ -14,17 +14,52 @@
 
 package com.liferay.portal.kernel.messaging.proxy;
 
-import com.liferay.messaging.proxy.BaseProxyBean;
+import com.liferay.portal.kernel.spring.aop.InvocationHandlerFactory;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 /**
  * @author Shuyang Zhou
  */
-@Deprecated
-public class MessagingProxyInvocationHandler
-	extends com.liferay.messaging.proxy.MessagingProxyInvocationHandler {
+public class MessagingProxyInvocationHandler implements InvocationHandler {
+
+	public static InvocationHandlerFactory getInvocationHandlerFactory() {
+		return _invocationHandlerFactory;
+	}
 
 	public MessagingProxyInvocationHandler(BaseProxyBean baseProxyBean) {
-		super(baseProxyBean);
+		_baseProxyBean = baseProxyBean;
 	}
+
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args)
+		throws Throwable {
+
+		ProxyRequest proxyRequest = new ProxyRequest(method, args);
+
+		if (proxyRequest.isSynchronous() ||
+			ProxyModeThreadLocal.isForceSync()) {
+
+			return _baseProxyBean.synchronousSend(proxyRequest);
+		}
+		else {
+			_baseProxyBean.send(proxyRequest);
+
+			return null;
+		}
+	}
+
+	private static final InvocationHandlerFactory _invocationHandlerFactory =
+		new InvocationHandlerFactory() {
+
+			@Override
+			public InvocationHandler createInvocationHandler(Object obj) {
+				return new MessagingProxyInvocationHandler((BaseProxyBean)obj);
+			}
+
+		};
+
+	private final BaseProxyBean _baseProxyBean;
 
 }

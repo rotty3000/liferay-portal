@@ -14,10 +14,26 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.portal.kernel.exception.PortalException;
+
 /**
  * @author Brian Wing Shun Chan
  */
-@Deprecated
-public class MessageListenerException
-	extends com.liferay.messaging.MessageListenerException {
+public class MessageListenerException extends PortalException {
+
+	public MessageListenerException() {
+	}
+
+	public MessageListenerException(String msg) {
+		super(msg);
+	}
+
+	public MessageListenerException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public MessageListenerException(Throwable cause) {
+		super(cause);
+	}
+
 }

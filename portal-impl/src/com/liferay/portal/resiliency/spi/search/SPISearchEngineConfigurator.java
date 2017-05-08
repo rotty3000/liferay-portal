@@ -14,8 +14,8 @@
 
 package com.liferay.portal.resiliency.spi.search;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeMessageListener;
 import com.liferay.portal.kernel.resiliency.spi.SPI;
 import com.liferay.portal.kernel.resiliency.spi.SPIUtil;

@@ -14,7 +14,7 @@
 
 package com.liferay.portal.test.rule.callback;
 
-import com.liferay.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.test.rule.callback.SynchronousDestinationTestCallback;
 import com.liferay.portal.util.test.MailServiceTestUtil;
 

@@ -14,6 +14,15 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.portal.kernel.cache.thread.local.Lifecycle;
+import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
+import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.CentralizedThreadLocal;
+
+import java.util.Set;
+
 /**
  * <p>
  * Destination that delivers a message to a list of message listeners in
@@ -22,7 +31,46 @@ package com.liferay.portal.kernel.messaging;
  *
  * @author Michael C. Han
  */
-@Deprecated
-public class ParallelDestination
-	extends com.liferay.messaging.ParallelDestination {
+public class ParallelDestination extends BaseAsyncDestination {
+
+	@Override
+	protected void dispatch(
+		Set<MessageListener> messageListeners, final Message message) {
+
+		final Thread currentThread = Thread.currentThread();
+
+		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+
+		for (final MessageListener messageListener : messageListeners) {
+			Runnable runnable = new MessageRunnable(message) {
+
+				@Override
+				public void run() {
+					try {
+						populateThreadLocalsFromMessage(message);
+
+						messageListener.receive(message);
+					}
+					catch (MessageListenerException mle) {
+						_log.error("Unable to process message " + message, mle);
+					}
+					finally {
+						if (Thread.currentThread() != currentThread) {
+							ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
+
+							CentralizedThreadLocal.
+								clearShortLivedThreadLocals();
+						}
+					}
+				}
+
+			};
+
+			threadPoolExecutor.execute(runnable);
+		}
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		ParallelDestination.class);
+
 }

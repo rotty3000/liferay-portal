@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.nio.intraband.messaging;
 
-import com.liferay.messaging.Message;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.nio.intraband.Datagram;
 import com.liferay.portal.kernel.nio.intraband.test.MockIntraband;
 import com.liferay.portal.kernel.nio.intraband.test.MockRegistrationReference;

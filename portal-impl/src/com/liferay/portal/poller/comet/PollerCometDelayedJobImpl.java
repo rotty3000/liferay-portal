@@ -14,10 +14,10 @@
 
 package com.liferay.portal.poller.comet;
 
-import com.liferay.messaging.BaseMessageListener;
-import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.util.PropsValues;
 
 import java.util.LinkedList;

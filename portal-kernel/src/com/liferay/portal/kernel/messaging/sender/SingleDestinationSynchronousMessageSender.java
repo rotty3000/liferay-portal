@@ -14,10 +14,21 @@
 
 package com.liferay.portal.kernel.messaging.sender;
 
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusException;
+
 /**
  * @author Michael C. Han
  */
-@Deprecated
-public interface SingleDestinationSynchronousMessageSender
-	extends com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender {
+public interface SingleDestinationSynchronousMessageSender {
+
+	public Object send(Message message) throws MessageBusException;
+
+	public Object send(Message message, long timeout)
+		throws MessageBusException;
+
+	public Object send(Object payload) throws MessageBusException;
+
+	public Object send(Object payload, long timeout) throws MessageBusException;
+
 }

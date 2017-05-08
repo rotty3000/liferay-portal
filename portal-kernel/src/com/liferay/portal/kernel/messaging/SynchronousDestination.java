@@ -14,10 +14,43 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @author Shuyang Zhou
  */
-@Deprecated
-public class SynchronousDestination
-	extends com.liferay.messaging.SynchronousDestination {
+public class SynchronousDestination extends BaseDestination {
+
+	@Override
+	public DestinationStatistics getDestinationStatistics() {
+		DestinationStatistics destinationStatistics =
+			new DestinationStatistics();
+
+		destinationStatistics.setSentMessageCount(_sentMessageCounter.get());
+
+		return destinationStatistics;
+	}
+
+	@Override
+	public void send(Message message) {
+		for (MessageListener messageListener : messageListeners) {
+			try {
+				messageListener.receive(message);
+			}
+			catch (MessageListenerException mle) {
+				_log.error("Unable to process message " + message, mle);
+			}
+		}
+
+		_sentMessageCounter.incrementAndGet();
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		SynchronousDestination.class);
+
+	private final AtomicLong _sentMessageCounter = new AtomicLong();
+
 }

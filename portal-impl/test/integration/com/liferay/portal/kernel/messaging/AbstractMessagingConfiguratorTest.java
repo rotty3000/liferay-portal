@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.messaging;
 
-import com.liferay.messaging.config.AbstractMessagingConfigurator;
-import com.liferay.messaging.config.DefaultMessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.AbstractMessagingConfigurator;
+import com.liferay.portal.kernel.messaging.config.DefaultMessagingConfigurator;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
@@ -61,24 +61,22 @@ public class AbstractMessagingConfiguratorTest {
 
 			};
 
-		Set<com.liferay.messaging.DestinationConfiguration> destinationConfigurations =
+		Set<DestinationConfiguration> destinationConfigurations =
 			new HashSet<>();
 
 		destinationConfigurations.add(
-			com.liferay.messaging.DestinationConfiguration.createSynchronousDestinationConfiguration(
+			DestinationConfiguration.createSynchronousDestinationConfiguration(
 				"liferay/plugintest1"));
 		destinationConfigurations.add(
-			com.liferay.messaging.DestinationConfiguration.createParallelDestinationConfiguration(
+			DestinationConfiguration.createParallelDestinationConfiguration(
 				"liferay/plugintest2"));
 
 		pluginMessagingConfigurator.setDestinationConfigurations(
 			destinationConfigurations);
 
-		Map<String, List<com.liferay.messaging.MessageListener>> messageListeners =
-			new HashMap<>();
+		Map<String, List<MessageListener>> messageListeners = new HashMap<>();
 
-		List<com.liferay.messaging.MessageListener> messageListenersList =
-			new ArrayList<>();
+		List<MessageListener> messageListenersList = new ArrayList<>();
 
 		messageListeners.put("liferay/plugintest1", messageListenersList);
 
@@ -95,7 +93,7 @@ public class AbstractMessagingConfiguratorTest {
 			"(&(destination.name=*plugintest*)(objectClass=com.liferay." +
 				"portal.kernel.messaging.Destination))");
 
-		ServiceTracker<com.liferay.messaging.Destination, com.liferay.messaging.Destination> serviceTracker =
+		ServiceTracker<Destination, Destination> serviceTracker =
 			registry.trackServices(filter);
 
 		serviceTracker.open();
@@ -110,8 +108,7 @@ public class AbstractMessagingConfiguratorTest {
 			Assert.assertEquals(Arrays.toString(services), 2, services.length);
 
 			for (Object service : services) {
-				com.liferay.messaging.Destination destination =
-					(com.liferay.messaging.Destination)service;
+				Destination destination = (Destination)service;
 
 				String destinationName = destination.getName();
 
@@ -123,8 +120,7 @@ public class AbstractMessagingConfiguratorTest {
 				}
 
 				if (destination.getMessageListenerCount() > 0) {
-					com.liferay.messaging.Message message =
-						new com.liferay.messaging.Message();
+					Message message = new Message();
 
 					message.setDestinationName(destinationName);
 
@@ -142,32 +138,29 @@ public class AbstractMessagingConfiguratorTest {
 		DefaultMessagingConfigurator defaultMessagingConfigurator =
 			new DefaultMessagingConfigurator();
 
-		Set<com.liferay.messaging.DestinationConfiguration> destinationConfigurations =
+		Set<DestinationConfiguration> destinationConfigurations =
 			new HashSet<>();
 
 		destinationConfigurations.add(
-			com.liferay.messaging.DestinationConfiguration.createSynchronousDestinationConfiguration(
+			DestinationConfiguration.createSynchronousDestinationConfiguration(
 				"liferay/portaltest1"));
 		destinationConfigurations.add(
-			com.liferay.messaging.DestinationConfiguration.createParallelDestinationConfiguration(
+			DestinationConfiguration.createParallelDestinationConfiguration(
 				"liferay/portaltest2"));
 
 		defaultMessagingConfigurator.setDestinationConfigurations(
 			destinationConfigurations);
 
-		Map<String, List<com.liferay.messaging.MessageListener>> messageListeners =
-			new HashMap<>();
+		Map<String, List<MessageListener>> messageListeners = new HashMap<>();
 
-		List<com.liferay.messaging.MessageListener> messageListenersList1 =
-			new ArrayList<>();
+		List<MessageListener> messageListenersList1 = new ArrayList<>();
 
 		messageListeners.put("liferay/portaltest1", messageListenersList1);
 
 		messageListenersList1.add(
 			new TestMessageListener("liferay/portaltest1"));
 
-		List<com.liferay.messaging.MessageListener> messageListenersList2 =
-			new ArrayList<>();
+		List<MessageListener> messageListenersList2 = new ArrayList<>();
 
 		messageListeners.put("liferay/portaltest2", messageListenersList2);
 
@@ -184,7 +177,7 @@ public class AbstractMessagingConfiguratorTest {
 			"(&(destination.name=*portaltest*)(objectClass=com.liferay." +
 				"portal.kernel.messaging.Destination))");
 
-		ServiceTracker<com.liferay.messaging.Destination, com.liferay.messaging.Destination> serviceTracker =
+		ServiceTracker<Destination, Destination> serviceTracker =
 			registry.trackServices(filter);
 
 		serviceTracker.open();
@@ -199,8 +192,7 @@ public class AbstractMessagingConfiguratorTest {
 			Assert.assertEquals(Arrays.toString(services), 2, services.length);
 
 			for (Object service : services) {
-				com.liferay.messaging.Destination destination =
-					(com.liferay.messaging.Destination)service;
+				Destination destination = (Destination)service;
 
 				String destinationName = destination.getName();
 
@@ -212,8 +204,7 @@ public class AbstractMessagingConfiguratorTest {
 				}
 
 				if (destination.getMessageListenerCount() > 0) {
-					com.liferay.messaging.Message message =
-						new com.liferay.messaging.Message();
+					Message message = new Message();
 
 					message.setDestinationName(destinationName);
 
@@ -230,14 +221,14 @@ public class AbstractMessagingConfiguratorTest {
 	}
 
 	private static class TestClassLoaderMessageListener
-		implements com.liferay.messaging.MessageListener {
+		implements MessageListener {
 
 		public TestClassLoaderMessageListener(TestClassLoader testClassLoader) {
 			_testClassLoader = testClassLoader;
 		}
 
 		@Override
-		public void receive(com.liferay.messaging.Message message) {
+		public void receive(Message message) {
 			Thread currentThread = Thread.currentThread();
 
 			ClassLoader currentClassLoader =
@@ -250,15 +241,14 @@ public class AbstractMessagingConfiguratorTest {
 
 	}
 
-	private static class TestMessageListener
-		implements com.liferay.messaging.MessageListener {
+	private static class TestMessageListener implements MessageListener {
 
 		public TestMessageListener(String destinationName) {
 			_destinationName = destinationName;
 		}
 
 		@Override
-		public void receive(com.liferay.messaging.Message message) {
+		public void receive(Message message) {
 			Assert.assertEquals(_destinationName, message.getDestinationName());
 		}
 

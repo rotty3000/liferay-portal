@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.license.messaging;
 
-import com.liferay.messaging.Message;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.messaging.Message;
 
 /**
  * @author Igor Beslic
