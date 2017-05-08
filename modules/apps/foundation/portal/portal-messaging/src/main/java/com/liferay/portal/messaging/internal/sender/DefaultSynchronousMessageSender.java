@@ -21,9 +21,9 @@ import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusException;
 import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.security.SecureRandomUtil;
+import com.liferay.portal.messaging.MessageBusException;
 
 import java.util.UUID;
 
