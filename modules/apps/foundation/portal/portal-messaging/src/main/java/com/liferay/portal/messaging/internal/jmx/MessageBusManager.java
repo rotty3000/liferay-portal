@@ -14,12 +14,11 @@
 
 package com.liferay.portal.messaging.internal.jmx;
 
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.MessageBus;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -105,7 +104,7 @@ public class MessageBusManager
 				new DestinationStatisticsManager(destination);
 
 			Dictionary<String, Object> mBeanProperties =
-				new HashMapDictionary<>();
+				new Hashtable<>();
 
 			mBeanProperties.put(
 				"jmx.objectname", destinationStatisticsManager.getObjectName());
@@ -159,6 +158,6 @@ public class MessageBusManager
 		_mbeanServiceRegistrations = new ConcurrentHashMap<>();
 	private MessageBus _messageBus;
 	private final Set<Destination> _queuedDestinations =
-		new ConcurrentHashSet<>();
+		ConcurrentHashMap.newKeySet();
 
 }

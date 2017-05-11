@@ -14,16 +14,16 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.internal.validator.Validator;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.security.SecureRandomUtil;
-import com.liferay.portal.messaging.MessageBusException;
 
 import java.util.UUID;
 

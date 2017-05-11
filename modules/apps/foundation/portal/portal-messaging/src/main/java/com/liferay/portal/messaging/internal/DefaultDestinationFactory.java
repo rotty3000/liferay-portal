@@ -15,9 +15,9 @@
 package com.liferay.portal.messaging.internal;
 
 import com.liferay.portal.kernel.executor.PortalExecutorManager;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.DestinationFactory;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationFactory;
 import com.liferay.portal.messaging.DestinationPrototype;
 import com.liferay.portal.messaging.internal.util.MapUtil;
 

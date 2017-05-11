@@ -14,13 +14,13 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageListener;
 import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.messaging.MessageBusException;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

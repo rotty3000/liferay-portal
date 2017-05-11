@@ -14,15 +14,15 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.MessageListenerException;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.MessageListenerException;
+import com.liferay.messaging.SynchronousDestination;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeDestination;
-import com.liferay.portal.messaging.MessageBusException;
 
 import java.util.Set;
 

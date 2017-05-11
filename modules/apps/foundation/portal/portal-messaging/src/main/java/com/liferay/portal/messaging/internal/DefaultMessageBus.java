@@ -14,18 +14,16 @@
 
 package com.liferay.portal.messaging.internal;
 
+import com.liferay.messaging.BaseAsyncDestination;
+import com.liferay.messaging.BaseDestination;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationEventListener;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusEventListener;
+import com.liferay.messaging.MessageListener;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.messaging.BaseAsyncDestination;
-import com.liferay.portal.kernel.messaging.BaseDestination;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationEventListener;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusEventListener;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeDestination;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
 import com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration;
 import com.liferay.portal.messaging.internal.util.ListUtil;
 import com.liferay.portal.messaging.internal.util.MapUtil;
@@ -300,12 +298,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	protected void doAddDestination(Destination destination) {
 		Class<?> clazz = destination.getClass();
-
-		if (SPIUtil.isSPI() &&
-			!clazz.equals(IntrabandBridgeDestination.class)) {
-
-			destination = new IntrabandBridgeDestination(destination);
-		}
 
 		_destinations.put(destination.getName(), destination);
 

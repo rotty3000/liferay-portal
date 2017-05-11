@@ -14,10 +14,10 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusException;
-import com.liferay.portal.kernel.messaging.sender.SingleDestinationSynchronousMessageSender;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 
 /**
  * @author Michael C. Han
