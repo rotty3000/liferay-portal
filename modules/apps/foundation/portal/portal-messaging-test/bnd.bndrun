@@ -1,0 +1,20 @@
+-runrequires: \
+	osgi.identity;filter:='(osgi.identity=com.liferay.messaging.test)',\
+	osgi.identity;filter:='(osgi.identity=slf4j.log4j12)'
+
+-resolve.effective: resolve, active
+-runee: JavaSE-1.8
+-runsystemcapabilities: ${native_capability}
+-runfw: org.eclipse.osgi
+-runproperties: \
+	osgi.console.enable.builtin=false, \
+	osgi.console=, \
+	org.osgi.service.http.port=8080,\
+	log4j.configuration=file:${.}/log4j.properties
+-runbundles: \
+	com.liferay.messaging.test;version='[1.0.0,1.0.1)',\
+	log4j;version='[1.2.17,1.2.18)',\
+	osgi.enroute.hamcrest.wrapper;version='[1.3.0,1.3.1)',\
+	osgi.enroute.junit.wrapper;version='[4.12.0,4.12.1)',\
+	slf4j.api;version='[1.7.21,1.7.22)',\
+	slf4j.log4j12;version='[1.6.1,1.6.2)'
