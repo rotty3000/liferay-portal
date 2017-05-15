@@ -14,7 +14,7 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.io.unsync.UnsyncBufferedOutputStream;
+import com.liferay.petra.io.unsync.UnsyncBufferedOutputStream;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
