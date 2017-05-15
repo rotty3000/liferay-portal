@@ -14,8 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.util.CharPool;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -107,8 +105,8 @@ public class Base64OutputStream extends OutputStream {
 
 		intValue <<= 4;
 
-		_outputBuffer[3] = (byte)CharPool.EQUAL;
-		_outputBuffer[2] = (byte)CharPool.EQUAL;
+		_outputBuffer[3] = (byte)'=';
+		_outputBuffer[2] = (byte)'=';
 		_outputBuffer[1] = (byte)getChar(intValue & 0x3f);
 
 		intValue >>= 6;
@@ -125,7 +123,7 @@ public class Base64OutputStream extends OutputStream {
 		intValue |= byte2 & 0xff;
 		intValue <<= 2;
 
-		_outputBuffer[3] = (byte)CharPool.EQUAL;
+		_outputBuffer[3] = (byte)'=';
 		_outputBuffer[2] = (byte)getChar(intValue & 0x3f);
 
 		intValue >>= 6;
@@ -180,14 +178,14 @@ public class Base64OutputStream extends OutputStream {
 		}
 
 		if (sixbit == 62) {
-			return CharPool.PLUS;
+			return '+';
 		}
 
 		if (sixbit != 63) {
-			return CharPool.QUESTION;
+			return '?';
 		}
 		else {
-			return CharPool.SLASH;
+			return '/';
 		}
 	}
 

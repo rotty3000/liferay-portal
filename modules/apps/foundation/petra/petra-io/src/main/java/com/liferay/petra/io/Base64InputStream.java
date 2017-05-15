@@ -14,8 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.util.CharPool;
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -216,33 +214,33 @@ public class Base64InputStream extends InputStream {
 	}
 
 	protected int getByte(char character) {
-		if ((character >= CharPool.UPPER_CASE_A) &&
-			(character <= CharPool.UPPER_CASE_Z)) {
+		if ((character >= 'A') &&
+			(character <= 'Z')) {
 
 			return character - 65;
 		}
 
-		if ((character >= CharPool.LOWER_CASE_A) &&
-			(character <= CharPool.LOWER_CASE_Z)) {
+		if ((character >= 'a') &&
+			(character <= 'z')) {
 
 			return (character - 97) + 26;
 		}
 
-		if ((character >= CharPool.NUMBER_0) &&
-			(character <= CharPool.NUMBER_9)) {
+		if ((character >= '0') &&
+			(character <= '9')) {
 
 			return (character - 48) + 52;
 		}
 
-		if (character == CharPool.PLUS) {
+		if (character == '+') {
 			return 62;
 		}
 
-		if (character == CharPool.SLASH) {
+		if (character == '/') {
 			return 63;
 		}
 
-		if (character != CharPool.EQUAL) {
+		if (character != '=') {
 			return -1;
 		}
 		else {
@@ -260,7 +258,7 @@ public class Base64InputStream extends InputStream {
 
 			char character = (char)(returnValue & 0xff);
 
-			if (character == CharPool.EQUAL) {
+			if (character == '=') {
 				return -2;
 			}
 
