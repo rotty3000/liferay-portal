@@ -17,7 +17,6 @@ package com.liferay.petra.io;
 import com.liferay.petra.io.internal.convert.Conversions;
 import com.liferay.portal.kernel.memory.SoftReferenceThreadLocal;
 import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.portal.kernel.util.GetterUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -395,7 +394,7 @@ public class Serializer {
 
 		THREADLOCAL_BUFFER_COUNT_LIMIT = threadLocalBufferCountLimit;
 
-		int threadLocalBufferSizeLimit = GetterUtil.getInteger(
+		int threadLocalBufferSizeLimit = Conversions.getInteger(
 			System.getProperty(
 				Serializer.class.getName() +
 					".thread.local.buffer.size.limit"));
