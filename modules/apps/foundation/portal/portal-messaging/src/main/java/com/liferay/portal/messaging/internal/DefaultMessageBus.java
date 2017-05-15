@@ -23,7 +23,6 @@ import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusEventListener;
 import com.liferay.messaging.MessageListener;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
 import com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration;
 import com.liferay.portal.messaging.internal.util.ListUtil;
 import com.liferay.portal.messaging.internal.util.MapUtil;
@@ -505,7 +504,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	private final Map<String, String> _factoryPidsToDestinationName =
 		new ConcurrentHashMap<>();
 	private final Set<MessageBusEventListener> _messageBusEventListeners =
-		new ConcurrentHashSet<>();
+		ConcurrentHashMap.newKeySet();
 	private final Map<String, List<MessageListener>> _queuedMessageListeners =
 		new HashMap<>();
 

@@ -22,15 +22,14 @@ import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.SerialDestination;
 import com.liferay.messaging.SynchronousDestination;
-import com.liferay.portal.kernel.dao.orm.EntityCache;
-import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.messaging.internal.DefaultMessageBus;
+
+import java.util.Collections;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 /**
  * @author Shuyang Zhou
@@ -52,11 +51,9 @@ public class DefaultSynchronousMessageSenderTest {
 		_defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
 
-		_defaultSynchronousMessageSender.setEntityCache(
-			Mockito.mock(EntityCache.class));
-		_defaultSynchronousMessageSender.setFinderCache(
-			Mockito.mock(FinderCache.class));
 		_defaultSynchronousMessageSender.setMessageBus(_messageBus);
+		_defaultSynchronousMessageSender.setMessageOutboundProcessor(
+			Collections.emptyList());
 		_defaultSynchronousMessageSender.setTimeout(10000);
 
 		synchronousDestination.open();

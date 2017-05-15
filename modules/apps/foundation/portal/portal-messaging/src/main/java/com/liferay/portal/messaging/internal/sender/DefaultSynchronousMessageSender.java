@@ -19,13 +19,13 @@ import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageOutboundProcessor;
 import com.liferay.messaging.internal.validator.Validator;
 import com.liferay.messaging.sender.SynchronousMessageSender;
-import com.liferay.portal.kernel.dao.orm.EntityCache;
-import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.security.SecureRandomUtil;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,21 +94,19 @@ public class DefaultSynchronousMessageSender
 
 		SynchronousMessageListener synchronousMessageListener =
 			new SynchronousMessageListener(
-				_messageBus, message, timeout, _entityCache, _finderCache);
+				_messageBus, message, timeout, _processors);
 
 		return synchronousMessageListener.send();
 	}
 
-	public void setEntityCache(EntityCache entityCache) {
-		_entityCache = entityCache;
-	}
-
-	public void setFinderCache(FinderCache finderCache) {
-		_finderCache = finderCache;
-	}
-
 	public void setMessageBus(MessageBus messageBus) {
 		_messageBus = messageBus;
+	}
+
+	public void setMessageOutboundProcessor(
+		List<MessageOutboundProcessor> processors) {
+
+		_processors = processors;
 	}
 
 	public void setTimeout(long timeout) {
@@ -117,7 +115,8 @@ public class DefaultSynchronousMessageSender
 
 	protected String generateUUID() {
 		UUID uuid = new UUID(
-			SecureRandomUtil.nextLong(), SecureRandomUtil.nextLong());
+			ThreadLocalRandom.current().nextLong(),
+			ThreadLocalRandom.current().nextLong());
 
 		return uuid.toString();
 	}
@@ -125,9 +124,8 @@ public class DefaultSynchronousMessageSender
 	private static final Logger _logger = LoggerFactory.getLogger(
 		DefaultSynchronousMessageSender.class);
 
-	private EntityCache _entityCache;
-	private FinderCache _finderCache;
 	private MessageBus _messageBus;
+	private List<MessageOutboundProcessor> _processors;
 	private long _timeout;
 
 }

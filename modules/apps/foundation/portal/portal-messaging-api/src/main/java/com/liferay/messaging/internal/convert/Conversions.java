@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.Converting;
 import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
 import org.osgi.util.converter.TypeReference;
@@ -27,12 +28,8 @@ public class Conversions {
 	public static final String DEFAULT_STRING = "";
 	public static final String PASSWORD_MASK = "********";
 
-	public static <T> Set<T> setFromArray(T[] array) {
-		return _instance._converter.convert(array).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
-	}
-
-	public static <T> Set<T> setFromList(List<T> list) {
-		return _instance._converter.convert(list).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
+	public static Converting convert(Object object) {
+		return _instance._converter.convert(object);
 	}
 
 	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
@@ -85,6 +82,14 @@ public class Conversions {
 
 	public static String getString(Object object, String defaultValue) {
 		return convert(object, defaultValue, String.class);
+	}
+
+	public static <T> Set<T> setFromArray(T[] array) {
+		return _instance._converter.convert(array).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
+	}
+
+	public static <T> Set<T> setFromList(List<T> list) {
+		return _instance._converter.convert(list).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
 	}
 
 	private Conversions() {

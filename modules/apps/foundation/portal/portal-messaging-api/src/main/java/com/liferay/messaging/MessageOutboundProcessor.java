@@ -31,7 +31,7 @@ public interface MessageOutboundProcessor {
 	 *
 	 * @param the message which was delivered
 	 */
-	void afterReceive(Message message) throws MessageProcessorException;
+	void afterSend(Message message) throws MessageProcessorException;
 
 	/**
 	 * Process an out-bound message before passing it on for delivery. The
