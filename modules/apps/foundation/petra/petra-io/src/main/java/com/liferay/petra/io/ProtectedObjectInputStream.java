@@ -14,15 +14,14 @@
 
 package com.liferay.petra.io;
 
+import com.liferay.petra.io.internal.util.StringUtil;
 import com.liferay.portal.kernel.util.ClassResolverUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
