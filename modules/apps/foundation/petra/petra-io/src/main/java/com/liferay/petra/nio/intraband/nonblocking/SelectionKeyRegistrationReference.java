@@ -14,8 +14,8 @@
 
 package com.liferay.petra.nio.intraband.nonblocking;
 
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 
 import java.nio.channels.SelectionKey;
 

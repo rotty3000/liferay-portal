@@ -14,14 +14,12 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.portal.kernel.nio.intraband.CompletionHandler.CompletionType;
+import com.liferay.petra.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.IOException;
-
 import java.nio.channels.Channel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
-
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;

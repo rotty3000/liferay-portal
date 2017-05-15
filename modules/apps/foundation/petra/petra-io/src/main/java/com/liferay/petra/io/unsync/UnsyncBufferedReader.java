@@ -14,9 +14,6 @@
 
 package com.liferay.petra.io.unsync;
 
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.StringBundler;
-
 import java.io.IOException;
 import java.io.Reader;
 
@@ -164,7 +161,7 @@ public class UnsyncBufferedReader extends Reader {
 			throw new IOException("Reader is null");
 		}
 
-		StringBundler sb = null;
+		StringBuilder sb = null;
 
 		while (true) {
 			if (index >= firstInvalidIndex) {
@@ -172,7 +169,7 @@ public class UnsyncBufferedReader extends Reader {
 			}
 
 			if (index >= firstInvalidIndex) {
-				if ((sb != null) && (sb.index() > 0)) {
+				if ((sb != null) && (sb.length() > 0)) {
 					return sb.toString();
 				}
 				else {
@@ -189,8 +186,8 @@ public class UnsyncBufferedReader extends Reader {
 			while (y < firstInvalidIndex) {
 				lineEndChar = buffer[y];
 
-				if ((lineEndChar == CharPool.NEW_LINE) ||
-					(lineEndChar == CharPool.RETURN)) {
+				if ((lineEndChar == '\n') ||
+					(lineEndChar == '\r')) {
 
 					hasLineBreak = true;
 
@@ -207,9 +204,9 @@ public class UnsyncBufferedReader extends Reader {
 			if (hasLineBreak) {
 				index++;
 
-				if (lineEndChar == CharPool.RETURN) {
+				if (lineEndChar == '\r') {
 					if ((index < buffer.length) &&
-						(buffer[index] == CharPool.NEW_LINE)) {
+						(buffer[index] == '\n')) {
 
 						index++;
 					}
@@ -225,7 +222,7 @@ public class UnsyncBufferedReader extends Reader {
 			}
 
 			if (sb == null) {
-				sb = new StringBundler();
+				sb = new StringBuilder();
 			}
 
 			sb.append(line);

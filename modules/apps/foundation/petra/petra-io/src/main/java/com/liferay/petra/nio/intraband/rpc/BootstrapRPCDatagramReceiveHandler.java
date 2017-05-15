@@ -14,12 +14,12 @@
 
 package com.liferay.petra.nio.intraband.rpc;
 
-import com.liferay.portal.kernel.io.Deserializer;
-import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.nio.intraband.Datagram;
-import com.liferay.portal.kernel.nio.intraband.DatagramReceiveHandler;
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.io.Deserializer;
+import com.liferay.petra.io.Serializer;
+import com.liferay.petra.nio.intraband.Datagram;
+import com.liferay.petra.nio.intraband.DatagramReceiveHandler;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 import com.liferay.portal.kernel.process.ProcessCallable;
 
 import java.io.Serializable;

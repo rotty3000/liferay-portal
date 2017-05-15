@@ -14,9 +14,9 @@
 
 package com.liferay.petra.nio.intraband.blocking;
 
-import com.liferay.portal.kernel.nio.intraband.ChannelContext;
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.ChannelContext;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 
 import java.util.concurrent.Future;
 

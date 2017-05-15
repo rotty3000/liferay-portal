@@ -15,10 +15,11 @@
 package com.liferay.petra.nio.intraband;
 
 import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.util.concurrent.Executor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
@@ -44,7 +45,7 @@ public abstract class BaseAsyncDatagramReceiveHandler
 			RegistrationReference registrationReference, Datagram datagram)
 		throws Exception;
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		BaseAsyncDatagramReceiveHandler.class);
 
 	private final Executor _executor;
@@ -64,7 +65,7 @@ public abstract class BaseAsyncDatagramReceiveHandler
 				doReceive(_registrationReference, _datagram);
 			}
 			catch (Exception e) {
-				_log.error("Unable to dispatch", e);
+				_logger.error("Unable to dispatch", e);
 			}
 		}
 

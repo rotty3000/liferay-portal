@@ -14,16 +14,13 @@
 
 package com.liferay.petra.nio.intraband.nonblocking;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.nio.intraband.BaseIntraband;
-import com.liferay.portal.kernel.nio.intraband.ChannelContext;
-import com.liferay.portal.kernel.nio.intraband.Datagram;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.BaseIntraband;
+import com.liferay.petra.nio.intraband.ChannelContext;
+import com.liferay.petra.nio.intraband.Datagram;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 
 import java.io.IOException;
-
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedSelectorException;
@@ -32,7 +29,6 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
@@ -40,6 +36,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
@@ -361,7 +360,7 @@ public class SelectorIntraband extends BaseIntraband {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		SelectorIntraband.class);
 
 	private class PollingJob implements Runnable {
@@ -414,10 +413,10 @@ public class SelectorIntraband extends BaseIntraband {
 				}
 			}
 			catch (ClosedSelectorException cse) {
-				if (_log.isInfoEnabled()) {
+				if (_logger.isInfoEnabled()) {
 					Thread currentThread = Thread.currentThread();
 
-					_log.info(
+					_logger.info(
 						currentThread.getName() +
 							" exiting gracefully on selector closure");
 				}
@@ -425,7 +424,7 @@ public class SelectorIntraband extends BaseIntraband {
 			catch (Throwable t) {
 				Thread currentThread = Thread.currentThread();
 
-				_log.error(
+				_logger.error(
 					currentThread.getName() + " exiting exceptionally", t);
 			}
 

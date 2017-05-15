@@ -14,17 +14,15 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.portal.kernel.nio.intraband.blocking.ExecutorIntraband;
-import com.liferay.portal.kernel.nio.intraband.nonblocking.SelectorIntraband;
-import com.liferay.portal.kernel.nio.intraband.welder.Welder;
-import com.liferay.portal.kernel.nio.intraband.welder.WelderFactoryUtil;
-import com.liferay.portal.kernel.nio.intraband.welder.socket.SocketWelder;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.internal.util.Validator;
+import com.liferay.petra.nio.intraband.blocking.ExecutorIntraband;
+import com.liferay.petra.nio.intraband.nonblocking.SelectorIntraband;
+import com.liferay.petra.nio.intraband.welder.Welder;
+import com.liferay.petra.nio.intraband.welder.WelderFactoryUtil;
+import com.liferay.petra.nio.intraband.welder.socket.SocketWelder;
 
 import java.io.IOException;
-
 import java.lang.reflect.Constructor;
 
 /**
@@ -61,10 +59,10 @@ public class IntrabandFactoryUtil {
 		}
 	}
 
-	private static final String _INTRABAND_IMPL = GetterUtil.getString(
-		System.getProperty(PropsKeys.INTRABAND_IMPL));
+	private static final String _INTRABAND_IMPL = Conversions.getString(
+		System.getProperty("intraband.impl"));
 
-	private static final long _INTRABAND_TIMEOUT_DEFAULT = GetterUtil.getLong(
-		System.getProperty(PropsKeys.INTRABAND_TIMEOUT_DEFAULT));
+	private static final long _INTRABAND_TIMEOUT_DEFAULT = Conversions.getLong(
+		System.getProperty("intraband.timeout.default"));
 
 }

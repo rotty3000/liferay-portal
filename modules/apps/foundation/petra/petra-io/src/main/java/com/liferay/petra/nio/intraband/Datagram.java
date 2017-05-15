@@ -14,18 +14,14 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.portal.kernel.io.BigEndianCodec;
-import com.liferay.portal.kernel.nio.intraband.CompletionHandler.CompletionType;
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.petra.io.BigEndianCodec;
+import com.liferay.petra.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.EOFException;
 import java.io.IOException;
-
 import java.nio.ByteBuffer;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
-
 import java.util.EnumSet;
 
 /**
@@ -145,14 +141,14 @@ public class Datagram {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBuilder sb = new StringBuilder(11);
 
 		sb.append("{dataChunk=");
 
 		ByteBuffer byteBuffer = _dataByteBuffer;
 
 		if (byteBuffer == null) {
-			sb.append(StringPool.NULL);
+			sb.append("null");
 		}
 		else {
 			sb.append(byteBuffer.toString());

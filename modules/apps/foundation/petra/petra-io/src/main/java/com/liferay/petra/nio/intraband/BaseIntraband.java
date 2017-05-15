@@ -14,15 +14,11 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.nio.intraband.CompletionHandler.CompletionType;
+import com.liferay.petra.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.IOException;
-
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
-
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,6 +31,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
@@ -278,8 +277,8 @@ public abstract class BaseIntraband implements Intraband {
 
 			Datagram datagram = responseWaitingMap.remove(sequenceId);
 
-			if (_log.isWarnEnabled()) {
-				_log.warn(
+			if (_logger.isWarnEnabled()) {
+				_logger.warn(
 					"Removed timeout response waiting datagram " + datagram);
 			}
 
@@ -365,8 +364,8 @@ public abstract class BaseIntraband implements Intraband {
 						datagram);
 
 					if (requestDatagram == null) {
-						if (_log.isWarnEnabled()) {
-							_log.warn(
+						if (_logger.isWarnEnabled()) {
+							_logger.warn(
 								"Dropped ownerless ACK response " + datagram);
 						}
 					}
@@ -382,8 +381,8 @@ public abstract class BaseIntraband implements Intraband {
 						datagram);
 
 					if (requestDatagram == null) {
-						if (_log.isWarnEnabled()) {
-							_log.warn("Dropped ownerless response " + datagram);
+						if (_logger.isWarnEnabled()) {
+							_logger.warn("Dropped ownerless response " + datagram);
 						}
 					}
 					else {
@@ -397,8 +396,8 @@ public abstract class BaseIntraband implements Intraband {
 							completionHandler.replied(
 								requestDatagram.attachment, datagram);
 						}
-						else if (_log.isWarnEnabled()) {
-							_log.warn(
+						else if (_logger.isWarnEnabled()) {
+							_logger.warn(
 								"Dropped unconcerned response " + datagram);
 						}
 					}
@@ -420,8 +419,8 @@ public abstract class BaseIntraband implements Intraband {
 						datagramReceiveHandlersReference.get()[index];
 
 					if (datagramReceiveHandler == null) {
-						if (_log.isWarnEnabled()) {
-							_log.warn("Dropped ownerless request " + datagram);
+						if (_logger.isWarnEnabled()) {
+							_logger.warn("Dropped ownerless request " + datagram);
 						}
 					}
 					else {
@@ -431,7 +430,7 @@ public abstract class BaseIntraband implements Intraband {
 								datagram);
 						}
 						catch (Throwable t) {
-							_log.error("Unable to dispatch", t);
+							_logger.error("Unable to dispatch", t);
 						}
 					}
 				}
@@ -443,13 +442,13 @@ public abstract class BaseIntraband implements Intraband {
 
 			registrationReference.cancelRegistration();
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(
 					"Broken read channel, unregister " + registrationReference,
 					ioe);
 			}
-			else if (_log.isInfoEnabled()) {
-				_log.info(
+			else if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Broken read channel, unregister " + registrationReference);
 			}
 		}
@@ -496,13 +495,13 @@ public abstract class BaseIntraband implements Intraband {
 				completionHandler.failed(datagram.attachment, ioe);
 			}
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(
 					"Broken write channel, unregister " + registrationReference,
 					ioe);
 			}
-			else if (_log.isInfoEnabled()) {
-				_log.info(
+			else if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Broken write channel, unregister " +
 						registrationReference);
 			}
@@ -597,6 +596,6 @@ public abstract class BaseIntraband implements Intraband {
 
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(BaseIntraband.class);
+	private static final Logger _logger = LoggerFactory.getLogger(BaseIntraband.class);
 
 }

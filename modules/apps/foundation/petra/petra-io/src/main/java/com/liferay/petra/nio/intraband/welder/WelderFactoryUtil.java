@@ -14,13 +14,12 @@
 
 package com.liferay.petra.nio.intraband.welder;
 
-import com.liferay.portal.kernel.nio.intraband.welder.fifo.FIFOUtil;
-import com.liferay.portal.kernel.nio.intraband.welder.fifo.FIFOWelder;
-import com.liferay.portal.kernel.nio.intraband.welder.socket.SocketWelder;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.OSDetector;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.internal.util.OSDetector;
+import com.liferay.petra.io.internal.util.Validator;
+import com.liferay.petra.nio.intraband.welder.fifo.FIFOUtil;
+import com.liferay.petra.nio.intraband.welder.fifo.FIFOWelder;
+import com.liferay.petra.nio.intraband.welder.socket.SocketWelder;
 
 /**
  * @author Shuyang Zhou
@@ -61,7 +60,7 @@ public class WelderFactoryUtil {
 		}
 	}
 
-	private static final String _INTRABAND_WELDER_IMPL = GetterUtil.getString(
-		System.getProperty(PropsKeys.INTRABAND_WELDER_IMPL));
+	private static final String _INTRABAND_WELDER_IMPL = Conversions.getString(
+		System.getProperty("intraband.welder.impl"));
 
 }

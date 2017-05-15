@@ -14,18 +14,16 @@
 
 package com.liferay.petra.nio.intraband.welder.fifo;
 
-import com.liferay.portal.kernel.io.AutoDeleteFileInputStream;
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.nio.intraband.welder.BaseWelder;
+import com.liferay.petra.io.AutoDeleteFileInputStream;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.welder.BaseWelder;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.nio.channels.FileChannel;
-
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

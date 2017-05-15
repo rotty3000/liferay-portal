@@ -14,23 +14,20 @@
 
 package com.liferay.petra.nio.intraband.welder.socket;
 
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.nio.intraband.welder.BaseWelder;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.InetAddressUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.internal.util.InetAddressUtil;
+import com.liferay.petra.io.internal.util.SocketUtil;
+import com.liferay.petra.io.internal.util.SocketUtil.ServerSocketConfigurator;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.welder.BaseWelder;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.SocketUtil;
-import com.liferay.portal.kernel.util.SocketUtil.ServerSocketConfigurator;
 
 import java.io.IOException;
-
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
@@ -109,20 +106,20 @@ public class SocketWelder extends BaseWelder {
 
 	protected static class Configuration {
 
-		protected static final int bufferSize = GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_BUFFER_SIZE));
-		protected static final boolean keepAlive = GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_KEEP_ALIVE));
-		protected static final boolean reuseAddress = GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_REUSE_ADDRESS));
-		protected static final int serverStartPort = GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_SERVER_START_PORT));
-		protected static final int soLinger = GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_SO_LINGER));
-		protected static final int soTimeout = GetterUtil.getInteger(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_SO_TIMEOUT));
-		protected static final boolean tcpNoDelay = GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.INTRABAND_WELDER_SOCKET_TCP_NO_DELAY));
+		protected static final int bufferSize = Conversions.getInteger(
+			PropsUtil.get("intraband.welder.socket.buffer.size"));
+		protected static final boolean keepAlive = Conversions.getBoolean(
+			PropsUtil.get("intraband.welder.socket.keep.alive"));
+		protected static final boolean reuseAddress = Conversions.getBoolean(
+			PropsUtil.get("intraband.welder.socket.reuse.address"));
+		protected static final int serverStartPort = Conversions.getInteger(
+			PropsUtil.get("intraband.welder.socket.server.start.port"));
+		protected static final int soLinger = Conversions.getInteger(
+			PropsUtil.get("intraband.welder.socket.so.linger"));
+		protected static final int soTimeout = Conversions.getInteger(
+			PropsUtil.get("intraband.welder.socket.so.timeout"));
+		protected static final boolean tcpNoDelay = Conversions.getBoolean(
+			PropsUtil.get("intraband.welder.socket.tcp.no.delay"));
 
 	}
 

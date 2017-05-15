@@ -14,9 +14,9 @@
 
 package com.liferay.petra.nio.intraband.proxy;
 
-import com.liferay.portal.kernel.io.Deserializer;
-import com.liferay.portal.kernel.nio.intraband.Datagram;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.io.Deserializer;
+import com.liferay.petra.nio.intraband.Datagram;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 
 /**
  * @author Shuyang Zhou

@@ -14,8 +14,8 @@
 
 package com.liferay.petra.nio.intraband.welder;
 
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

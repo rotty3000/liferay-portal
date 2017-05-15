@@ -14,16 +14,14 @@
 
 package com.liferay.petra.nio.intraband.mailbox;
 
-import com.liferay.portal.kernel.nio.intraband.Datagram;
-import com.liferay.portal.kernel.nio.intraband.Intraband;
-import com.liferay.portal.kernel.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.nio.intraband.SystemDataType;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.nio.intraband.Datagram;
+import com.liferay.petra.nio.intraband.Intraband;
+import com.liferay.petra.nio.intraband.RegistrationReference;
+import com.liferay.petra.nio.intraband.SystemDataType;
 import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.nio.ByteBuffer;
-
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,12 +93,12 @@ public class MailboxUtil {
 	}
 
 	private static final boolean _INTRABAND_MAILBOX_REAPER_THREAD_ENABLED =
-		GetterUtil.getBoolean(
-			PropsUtil.get(PropsKeys.INTRABAND_MAILBOX_REAPER_THREAD_ENABLED));
+		Conversions.getBoolean(
+			PropsUtil.get("intraband.mailbox.reaper.thread.enabled"));
 
 	private static final long _INTRABAND_MAILBOX_STORAGE_LIFE =
-		GetterUtil.getLong(
-			PropsUtil.get(PropsKeys.INTRABAND_MAILBOX_STORAGE_LIFE));
+		Conversions.getLong(
+			PropsUtil.get("intraband.mailbox.storage.life"));
 
 	private static final Map<Long, ByteBuffer> _mailMap =
 		new ConcurrentHashMap<>();
