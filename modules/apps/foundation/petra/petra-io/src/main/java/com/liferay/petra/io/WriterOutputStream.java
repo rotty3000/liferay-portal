@@ -14,8 +14,8 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.nio.charset.CharsetDecoderUtil;
-import com.liferay.portal.kernel.nio.charset.CharsetEncoderUtil;
+import com.liferay.petra.nio.charset.CharsetDecoderUtil;
+import com.liferay.petra.nio.charset.CharsetEncoderUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;

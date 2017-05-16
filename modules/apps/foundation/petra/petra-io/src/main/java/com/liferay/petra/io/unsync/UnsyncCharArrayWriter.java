@@ -14,12 +14,11 @@
 
 package com.liferay.petra.io.unsync;
 
-import com.liferay.portal.kernel.nio.charset.CharsetEncoderUtil;
+import com.liferay.petra.nio.charset.CharsetEncoderUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
