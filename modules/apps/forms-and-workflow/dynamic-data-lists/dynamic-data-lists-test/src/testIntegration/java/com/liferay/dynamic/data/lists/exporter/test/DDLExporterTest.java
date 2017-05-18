@@ -356,6 +356,67 @@ public class DDLExporterTest {
 	}
 
 	@Test
+	public void testExportWithSpecialCharacters() throws Exception {
+		DDMForm ddmForm = DDMFormTestUtil.createDDMForm(
+			_availableLocales, _defaultLocale);
+
+		ddmForm.addDDMFormField(
+			DDMFormTestUtil.createTextDDMFormField(
+				"field0", false, false, false));
+
+		DDMFormValues ddmFormValues = DDMFormValuesTestUtil.createDDMFormValues(
+			ddmForm, _availableLocales, _defaultLocale);
+
+		ddmFormValues.addDDMFormFieldValue(
+			DDMFormValuesTestUtil.createDDMFormFieldValue(
+				"field0", new UnlocalizedValue("I'm \"good\"")));
+
+		DDLRecordSetTestHelper recordSetTestHelper = new DDLRecordSetTestHelper(
+			_group);
+
+		DDLRecordSet recordSet = recordSetTestHelper.addRecordSet(ddmForm);
+
+		DDLRecordTestHelper recordTestHelper = new DDLRecordTestHelper(
+			_group, recordSet);
+
+		DDLRecord record0 = recordTestHelper.addRecord(
+			ddmFormValues, WorkflowConstants.ACTION_PUBLISH);
+
+		DDLRecordVersion recordVersion0 = record0.getRecordVersion();
+
+		DDLExporter ddlExporter = _ddlExporterFactory.getDDLExporter("csv");
+
+		byte[] bytes = ddlExporter.export(recordSet.getRecordSetId());
+
+		try (ByteArrayInputStream byteArrayInputStream =
+				new ByteArrayInputStream(bytes);
+			BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(byteArrayInputStream))) {
+
+			String header = bufferedReader.readLine();
+
+			Assert.assertEquals("field0,Status,Modified Date,Author", header);
+
+			String row0 = bufferedReader.readLine();
+
+			StringBundler sb = new StringBundler(10);
+
+			sb.append("\"I'm \"\"good\"\"\"");
+			sb.append(CharPool.COMMA);
+
+			sb.append("Approved");
+			sb.append(CharPool.COMMA);
+
+			sb.append(formatDate(recordVersion0.getStatusDate()));
+			sb.append(CharPool.COMMA);
+
+			sb.append(recordVersion0.getUserName());
+
+			Assert.assertEquals(sb.toString(), row0);
+		}
+	}
+
+	@Test
 	public void testXLSExport() throws Exception {
 		DDMForm ddmForm = DDMFormTestUtil.createDDMForm(
 			_availableLocales, _defaultLocale);

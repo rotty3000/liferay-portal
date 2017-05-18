@@ -5225,6 +5225,12 @@ public class ServiceBuilder {
 			}
 		}
 
+		if (uuid && pkList.isEmpty()) {
+			throw new ServiceBuilderException(
+				"Cannot create entity \"" + ejbName +
+					"\" with a uuid without a primary key.");
+		}
+
 		if (hasLocalizationTable) {
 			int index = columnList.indexOf(
 				new EntityColumn("defaultLanguageId"));
