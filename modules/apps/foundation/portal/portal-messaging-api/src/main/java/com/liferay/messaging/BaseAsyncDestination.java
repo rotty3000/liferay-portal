@@ -14,10 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.messaging.internal.concurrent.NamedThreadFactory;
-import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
-import com.liferay.portal.kernel.concurrent.ThreadPoolHandlerAdapter;
+import com.liferay.petra.concurrent.NamedThreadFactory;
+import com.liferay.petra.concurrent.RejectedExecutionHandler;
+import com.liferay.petra.concurrent.ThreadPoolExecutor;
+import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 
 import java.util.List;
 import java.util.Set;

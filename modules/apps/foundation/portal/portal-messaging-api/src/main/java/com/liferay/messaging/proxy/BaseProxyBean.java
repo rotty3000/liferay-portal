@@ -16,7 +16,6 @@ package com.liferay.messaging.proxy;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.messaging.sender.SynchronousMessageSender;
@@ -29,17 +28,6 @@ import com.liferay.messaging.sender.SynchronousMessageSender;
  */
 public abstract class BaseProxyBean {
 
-	/**
-	 * @deprecated As of 1.0.0, with no direct link
-	 */
-	public void send(ProxyRequest proxyRequest) {
-		SingleDestinationMessageSender singleDestinationMessageSender =
-			_singleDestinationMessageSenderFactory.
-				createSingleDestinationMessageSender(_destinationName);
-
-		singleDestinationMessageSender.send(buildMessage(proxyRequest));
-	}
-
 	public void setDestinationName(String destinationName) {
 		_destinationName = destinationName;
 	}
@@ -48,31 +36,12 @@ public abstract class BaseProxyBean {
 		_messageBus = messageBus;
 	}
 
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link #setDestinationName}
-	 */
-	@Deprecated
-	public void setSingleDestinationMessageSender(
-		SingleDestinationMessageSender singleDestinationMessageSender) {
-	}
-
 	public void setSingleDestinationMessageSenderFactory(
 		SingleDestinationMessageSenderFactory
 			singleDestinationMessageSenderFactory) {
 
 		_singleDestinationMessageSenderFactory =
 			singleDestinationMessageSenderFactory;
-	}
-
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link
-	 *             #setSynchronousMessageSenderMode} and {@link
-	 *             #setSynchronousDestinationName}
-	 */
-	@Deprecated
-	public void setSingleDestinationSynchronousMessageSender(
-		SingleDestinationSynchronousMessageSender
-			singleDestinationSynchronousMessageSender) {
 	}
 
 	public void setSynchronousDestinationName(

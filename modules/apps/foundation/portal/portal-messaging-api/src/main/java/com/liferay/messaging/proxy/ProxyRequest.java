@@ -14,8 +14,8 @@
 
 package com.liferay.messaging.proxy;
 
-import com.liferay.messaging.internal.annotation.AnnotationLocator;
-import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.petra.reflect.AnnotationLocator;
+import com.liferay.petra.reflect.MethodKey;
 
 import java.io.Externalizable;
 import java.io.IOException;

@@ -14,10 +14,10 @@
 
 package com.liferay.messaging;
 
-import com.liferay.messaging.internal.convert.Conversions;
-import com.liferay.portal.kernel.io.Deserializer;
-import com.liferay.portal.kernel.io.Serializer;
-import com.liferay.portal.kernel.util.TransientValue;
+import com.liferay.petra.io.Deserializer;
+import com.liferay.petra.io.Serializer;
+import com.liferay.petra.io.TransientValue;
+import com.liferay.petra.io.convert.Conversions;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -96,6 +96,7 @@ public class Message implements Cloneable, Serializable {
 		Object value = _values.get(key);
 
 		if (value instanceof TransientValue) {
+			@SuppressWarnings("unchecked")
 			TransientValue<Object> transientValue =
 				(TransientValue<Object>)value;
 

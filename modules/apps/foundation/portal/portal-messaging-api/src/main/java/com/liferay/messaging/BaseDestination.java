@@ -14,7 +14,7 @@
 
 package com.liferay.messaging;
 
-import com.liferay.messaging.internal.validator.Validator;
+import com.liferay.petra.io.validate.Validator;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -49,12 +49,4 @@ public interface MessagingConfigurator {
 	public void setMessageListeners(
 		Map<String, List<MessageListener>> messageListeners);
 
-	/**
-	 * @param      replacementDestinations
-	 * @deprecated As of 1.0.0, replaced by {@link #setDestinations(List)}
-	 */
-	@Deprecated
-	public void setReplacementDestinations(
-		List<Destination> replacementDestinations);
-
 }

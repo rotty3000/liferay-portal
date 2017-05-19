@@ -14,7 +14,8 @@
 
 package com.liferay.messaging;
 
-import com.liferay.messaging.internal.convert.Conversions;
+import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.convert.Sets;
 
 import java.util.Collections;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class HotDeployMessageListener extends BaseMessageListener {
 			_servletContextNames = Collections.emptySet();
 		}
 		else {
-			_servletContextNames = Conversions.setFromArray(servletContextNames);
+			_servletContextNames = Sets.from(servletContextNames);
 		}
 	}
 

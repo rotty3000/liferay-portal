@@ -144,18 +144,6 @@ public abstract class AbstractMessagingConfigurator
 		_messageListeners.putAll(messageListeners);
 	}
 
-	/**
-	 * @param      replacementDestinations
-	 * @deprecated As of 1.0.0, replaced by {@link #setDestinations(List)}
-	 */
-	@Deprecated
-	@Override
-	public void setReplacementDestinations(
-		List<Destination> replacementDestinations) {
-
-		_destinations.addAll(replacementDestinations);
-	}
-
 	protected abstract ClassLoader getOperatingClassloader();
 
 	protected void initialize() {

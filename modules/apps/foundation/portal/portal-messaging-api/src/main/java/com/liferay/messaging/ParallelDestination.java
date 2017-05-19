@@ -14,7 +14,7 @@
 
 package com.liferay.messaging;
 
-import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
+import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.List;
 import java.util.Set;
