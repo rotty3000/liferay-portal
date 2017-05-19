@@ -19,11 +19,17 @@ import com.liferay.petra.nio.intraband.BaseAsyncDatagramReceiveHandler;
 import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 
+import java.util.concurrent.Executor;
+
 /**
  * @author Shuyang Zhou
  */
 public class IntrabandProxyDatagramReceiveHandler
 	extends BaseAsyncDatagramReceiveHandler {
+
+	public IntrabandProxyDatagramReceiveHandler(Executor executor) {
+		super(executor);
+	}
 
 	@Override
 	protected void doReceive(

@@ -1,5 +1,25 @@
-package com.liferay.petra.io.internal.util;
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
+package com.liferay.petra.io.validate;
+
+import com.liferay.petra.io.CharPool;
+
+/**
+ * @author Jesse Rao
+ * @author Raymond Augé
+ */
 public class Validator {
 
 	/**
@@ -36,7 +56,7 @@ public class Validator {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 
-			if (c == ' ') {
+			if (c == CharPool.SPACE) {
 				continue;
 			}
 			else if (counter > 3) {
@@ -44,17 +64,17 @@ public class Validator {
 			}
 
 			if (counter == 0) {
-				if (c != 'n') {
+				if (c != CharPool.LOWER_CASE_N) {
 					return false;
 				}
 			}
 			else if (counter == 1) {
-				if (c != 'u') {
+				if (c != CharPool.LOWER_CASE_U) {
 					return false;
 				}
 			}
 			else if ((counter == 2) || (counter == 3)) {
-				if (c != 'l') {
+				if (c != CharPool.LOWER_CASE_L) {
 					return false;
 				}
 			}
@@ -68,4 +88,5 @@ public class Validator {
 
 		return false;
 	}
+
 }

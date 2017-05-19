@@ -14,14 +14,13 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.portal.kernel.util.ClassResolverUtil;
+import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
+import com.liferay.petra.io.internal.loader.ClassResolverUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
@@ -123,7 +122,7 @@ public class Deserializer {
 				String contextName = readString();
 				String className = readString();
 
-				ClassLoader classLoader = ClassLoaderPool.getClassLoader(
+				ClassLoader classLoader = ClassLoaderPoolUtil.getClassLoader(
 					contextName);
 
 				return (T)ClassResolverUtil.resolve(className, classLoader);

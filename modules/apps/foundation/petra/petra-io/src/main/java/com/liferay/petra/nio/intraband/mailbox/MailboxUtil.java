@@ -14,12 +14,11 @@
 
 package com.liferay.petra.nio.intraband.mailbox;
 
-import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.Intraband;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 import com.liferay.petra.nio.intraband.SystemDataType;
-import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
@@ -94,11 +93,11 @@ public class MailboxUtil {
 
 	private static final boolean _INTRABAND_MAILBOX_REAPER_THREAD_ENABLED =
 		Conversions.getBoolean(
-			PropsUtil.get("intraband.mailbox.reaper.thread.enabled"));
+			System.getProperty("intraband.mailbox.reaper.thread.enabled"));
 
 	private static final long _INTRABAND_MAILBOX_STORAGE_LIFE =
 		Conversions.getLong(
-			PropsUtil.get("intraband.mailbox.storage.life"));
+			System.getProperty("intraband.mailbox.storage.life"));
 
 	private static final Map<Long, ByteBuffer> _mailMap =
 		new ConcurrentHashMap<>();

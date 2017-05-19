@@ -14,8 +14,8 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.petra.io.internal.convert.Conversions;
-import com.liferay.petra.io.internal.util.Validator;
+import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.validate.Validator;
 import com.liferay.petra.nio.intraband.blocking.ExecutorIntraband;
 import com.liferay.petra.nio.intraband.nonblocking.SelectorIntraband;
 import com.liferay.petra.nio.intraband.welder.Welder;

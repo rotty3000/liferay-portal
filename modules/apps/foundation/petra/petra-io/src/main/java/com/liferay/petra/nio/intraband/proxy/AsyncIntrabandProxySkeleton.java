@@ -17,7 +17,6 @@ package com.liferay.petra.nio.intraband.proxy;
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
 
 import java.util.concurrent.ExecutorService;
 
@@ -27,10 +26,7 @@ import java.util.concurrent.ExecutorService;
 public class AsyncIntrabandProxySkeleton implements IntrabandProxySkeleton {
 
 	public static IntrabandProxySkeleton createAsyncIntrabandProxySkeleton(
-		String skeletonId, IntrabandProxySkeleton intrabandProxySkeleton) {
-
-		ExecutorService executorService =
-			PortalExecutorManagerUtil.getPortalExecutor(skeletonId, false);
+		ExecutorService executorService, IntrabandProxySkeleton intrabandProxySkeleton) {
 
 		if (executorService == null) {
 			return intrabandProxySkeleton;

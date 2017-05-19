@@ -14,9 +14,9 @@
 
 package com.liferay.petra.nio.intraband.welder;
 
-import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.io.internal.util.OSDetector;
-import com.liferay.petra.io.internal.util.Validator;
+import com.liferay.petra.io.validate.Validator;
 import com.liferay.petra.nio.intraband.welder.fifo.FIFOUtil;
 import com.liferay.petra.nio.intraband.welder.fifo.FIFOWelder;
 import com.liferay.petra.nio.intraband.welder.socket.SocketWelder;

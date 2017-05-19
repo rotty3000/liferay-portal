@@ -14,8 +14,8 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.internal.util.StringUtil;
-import com.liferay.portal.kernel.util.ClassResolverUtil;
+import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.internal.loader.ClassResolverUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,10 +65,10 @@ public class ProtectedObjectInputStream extends ObjectInputStream {
 	private static final Set<String> _restrictedClassNames;
 
 	static {
-		String[] restrictedClassNames = StringUtil.split(
+		String[] restrictedClassNames = Conversions.getString(
 			System.getProperty(
 				ProtectedObjectInputStream.class.getName() +
-					".restricted.class.names"));
+					".restricted.class.names")).trim().split("\\s*,\\s*");
 
 		_restrictedClassNames = new HashSet<>(
 			Arrays.asList(restrictedClassNames));

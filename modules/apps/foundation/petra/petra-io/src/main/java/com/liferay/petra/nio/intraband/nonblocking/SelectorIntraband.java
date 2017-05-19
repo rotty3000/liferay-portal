@@ -14,11 +14,11 @@
 
 package com.liferay.petra.nio.intraband.nonblocking;
 
+import com.liferay.petra.concurrent.NamedThreadFactory;
 import com.liferay.petra.nio.intraband.BaseIntraband;
 import com.liferay.petra.nio.intraband.ChannelContext;
 import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.util.NamedThreadFactory;
 
 import java.io.IOException;
 import java.nio.channels.CancelledKeyException;

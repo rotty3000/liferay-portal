@@ -14,6 +14,8 @@
 
 package com.liferay.petra.nio.intraband.rpc;
 
+import com.liferay.petra.concurrent.DefaultNoticeableFuture;
+import com.liferay.petra.concurrent.NoticeableFuture;
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.io.Serializer;
 import com.liferay.petra.nio.intraband.CompletionHandler;
@@ -22,9 +24,7 @@ import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.Intraband;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 import com.liferay.petra.nio.intraband.SystemDataType;
-import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
-import com.liferay.portal.kernel.concurrent.NoticeableFuture;
-import com.liferay.portal.kernel.process.ProcessCallable;
+import com.liferay.petra.process.ProcessCallable;
 
 import java.io.IOException;
 import java.io.Serializable;

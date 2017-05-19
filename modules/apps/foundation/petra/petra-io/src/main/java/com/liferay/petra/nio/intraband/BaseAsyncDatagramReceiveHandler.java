@@ -14,8 +14,6 @@
 
 package com.liferay.petra.nio.intraband;
 
-import com.liferay.portal.kernel.executor.PortalExecutorManagerUtil;
-
 import java.util.concurrent.Executor;
 
 import org.slf4j.Logger;
@@ -27,11 +25,8 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseAsyncDatagramReceiveHandler
 	implements DatagramReceiveHandler {
 
-	public BaseAsyncDatagramReceiveHandler() {
-		Class<? extends BaseAsyncDatagramReceiveHandler> clazz = getClass();
-
-		_executor = PortalExecutorManagerUtil.getPortalExecutor(
-			clazz.getName());
+	public BaseAsyncDatagramReceiveHandler(Executor executor) {
+		_executor = executor;
 	}
 
 	@Override

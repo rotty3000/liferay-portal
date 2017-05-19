@@ -1,23 +1,37 @@
-package com.liferay.petra.io.internal.convert;
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.petra.io.convert;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.ConverterBuilder;
+import org.osgi.util.converter.Converting;
 import org.osgi.util.converter.Rule;
 import org.osgi.util.converter.StandardConverter;
-import org.osgi.util.converter.TypeReference;
 
+/**
+ * @author Jesse Rao
+ * @author Raymond Augé
+ */
 public class Conversions {
 
-	public static final String BLANK = "";
 	public static final String[] BOOLEANS = {"true", "t", "y", "on", "1"};
 	public static final boolean DEFAULT_BOOLEAN = false;
 	public static final double DEFAULT_DOUBLE = 0.0;
@@ -27,16 +41,18 @@ public class Conversions {
 	public static final String DEFAULT_STRING = "";
 	public static final String PASSWORD_MASK = "********";
 
-	public static <T> Set<T> setFromArray(T[] array) {
-		return _instance._converter.convert(array).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
+	public static Converting convert(Object object) {
+		return _instance._converter.convert(object);
 	}
 
-	public static <T> Set<T> setFromList(List<T> list) {
-		return _instance._converter.convert(list).defaultValue(new LinkedHashSet<T>()).to(new TypeReference<Set<T>>() {});
-	}
+	public static <T> T convert(
+		Object object, T defaultValue, Class<T> clazz) {
 
-	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
-		return _instance._converter.convert(object).defaultValue(defaultValue).to(clazz);
+		Converting converting = _instance._converter.convert(object);
+
+		converting.defaultValue(defaultValue);
+
+		return converting.to(clazz);
 	}
 
 	public static boolean getBoolean(Object object) {
@@ -88,7 +104,8 @@ public class Conversions {
 	}
 
 	private Conversions() {
-		ConverterBuilder builder = new StandardConverter().newConverterBuilder();
+		ConverterBuilder builder =
+			new StandardConverter().newConverterBuilder();
 
 		final Converter rootConverter = builder.
 			rule(
@@ -120,7 +137,9 @@ public class Conversions {
 				new Rule<Map<String, Object>, String>(
 					o -> {
 						Map<String, Object> copy = new LinkedHashMap<>(o);
-						for (Map.Entry<String, Object> entry : copy.entrySet()) {
+						for (Map.Entry<String, Object> entry :
+								copy.entrySet()) {
+
 							Matcher matcher = _passwordPattern.matcher(
 								String.valueOf(entry.getKey()));
 

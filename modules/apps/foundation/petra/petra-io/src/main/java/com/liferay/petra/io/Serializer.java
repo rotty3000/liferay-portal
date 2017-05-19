@@ -14,9 +14,10 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.internal.convert.Conversions;
-import com.liferay.portal.kernel.memory.SoftReferenceThreadLocal;
-import com.liferay.portal.kernel.util.ClassLoaderPool;
+import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
+import com.liferay.petra.io.spi.loader.ClassLoaderPool;
+import com.liferay.petra.memory.SoftReferenceThreadLocal;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -188,7 +189,8 @@ public class Serializer {
 
 			ClassLoader classLoader = clazz.getClassLoader();
 
-			String contextName = ClassLoaderPool.getContextName(classLoader);
+			String contextName = ClassLoaderPoolUtil.getContextName(
+				classLoader);
 
 			writeByte(SerializationConstants.TC_CLASS);
 			writeString(contextName);
@@ -463,8 +465,8 @@ public class Serializer {
 			BufferNode currentBufferNode = headBufferNode;
 
 			while ((currentBufferNode != null) &&
-				   (currentBufferNode.buffer.length >
-					   bufferNode.buffer.length)) {
+				(currentBufferNode.buffer.length >
+					bufferNode.buffer.length)) {
 
 				previousBufferNode = currentBufferNode;
 

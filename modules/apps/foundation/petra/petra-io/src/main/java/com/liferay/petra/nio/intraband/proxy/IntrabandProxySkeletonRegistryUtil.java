@@ -16,6 +16,7 @@ package com.liferay.petra.nio.intraband.proxy;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author Shuyang Zhou
@@ -27,11 +28,12 @@ public class IntrabandProxySkeletonRegistryUtil {
 	}
 
 	public static IntrabandProxySkeleton register(
-		String skeletonId, IntrabandProxySkeleton intrabandProxySkeleton) {
+		String skeletonId, ExecutorService executorService,
+		IntrabandProxySkeleton intrabandProxySkeleton) {
 
 		intrabandProxySkeleton =
 			AsyncIntrabandProxySkeleton.createAsyncIntrabandProxySkeleton(
-				skeletonId, intrabandProxySkeleton);
+				executorService, intrabandProxySkeleton);
 
 		return _intrabandProxySkeletons.put(skeletonId, intrabandProxySkeleton);
 	}

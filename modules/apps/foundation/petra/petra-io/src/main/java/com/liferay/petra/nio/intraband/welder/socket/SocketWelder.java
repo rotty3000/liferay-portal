@@ -14,14 +14,13 @@
 
 package com.liferay.petra.nio.intraband.welder.socket;
 
-import com.liferay.petra.io.internal.convert.Conversions;
+import com.liferay.petra.io.SocketUtil;
+import com.liferay.petra.io.SocketUtil.ServerSocketConfigurator;
+import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.io.internal.util.InetAddressUtil;
-import com.liferay.petra.io.internal.util.SocketUtil;
-import com.liferay.petra.io.internal.util.SocketUtil.ServerSocketConfigurator;
 import com.liferay.petra.nio.intraband.Intraband;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 import com.liferay.petra.nio.intraband.welder.BaseWelder;
-import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -107,23 +106,23 @@ public class SocketWelder extends BaseWelder {
 	protected static class Configuration {
 
 		protected static final int bufferSize = Conversions.getInteger(
-			PropsUtil.get("intraband.welder.socket.buffer.size"));
+			System.getProperty("intraband.welder.socket.buffer.size"));
 		protected static final boolean keepAlive = Conversions.getBoolean(
-			PropsUtil.get("intraband.welder.socket.keep.alive"));
+			System.getProperty("intraband.welder.socket.keep.alive"));
 		protected static final boolean reuseAddress = Conversions.getBoolean(
-			PropsUtil.get("intraband.welder.socket.reuse.address"));
+			System.getProperty("intraband.welder.socket.reuse.address"));
 		protected static final int serverStartPort = Conversions.getInteger(
-			PropsUtil.get("intraband.welder.socket.server.start.port"));
+			System.getProperty("intraband.welder.socket.server.start.port"));
 		protected static final int soLinger = Conversions.getInteger(
-			PropsUtil.get("intraband.welder.socket.so.linger"));
+			System.getProperty("intraband.welder.socket.so.linger"));
 		protected static final int soTimeout = Conversions.getInteger(
-			PropsUtil.get("intraband.welder.socket.so.timeout"));
+			System.getProperty("intraband.welder.socket.so.timeout"));
 		protected static final boolean tcpNoDelay = Conversions.getBoolean(
-			PropsUtil.get("intraband.welder.socket.tcp.no.delay"));
+			System.getProperty("intraband.welder.socket.tcp.no.delay"));
 
 	}
 
-	protected class SocketWelderServerSocketConfigurator
+	class SocketWelderServerSocketConfigurator
 		implements ServerSocketConfigurator {
 
 		@Override

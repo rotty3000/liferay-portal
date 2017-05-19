@@ -15,14 +15,19 @@
 package com.liferay.petra.io;
 
 import com.liferay.petra.io.unsync.UnsyncBufferedOutputStream;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +38,12 @@ import org.slf4j.LoggerFactory;
 public class FileCacheOutputStream extends OutputStream {
 
 	public FileCacheOutputStream() throws IOException {
-		_tempFile = File.createTempFile(
-			PortalUUIDUtil.generate() + "-", _EXTENSION);
+		ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
+
+		UUID uuid = new UUID(
+			threadLocalRandom.nextLong(), threadLocalRandom.nextLong());
+
+		_tempFile = File.createTempFile(uuid.toString() + "-", _EXTENSION);
 
 		_ubos = new UnsyncBufferedOutputStream(
 			new FileOutputStream(_tempFile), _BUFFER);
@@ -49,7 +58,12 @@ public class FileCacheOutputStream extends OutputStream {
 				_fis.close();
 			}
 
-			FileUtil.delete(_tempFile);
+			try (Stream<Path> stream = Files.walk(
+				_tempFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
+
+				stream.sorted(Comparator.reverseOrder()).
+					map(Path::toFile).forEach(File::delete);
+			}
 		}
 		catch (IOException ioe) {
 			if (_logger.isWarnEnabled()) {
@@ -72,7 +86,7 @@ public class FileCacheOutputStream extends OutputStream {
 		flush();
 		close();
 
-		return FileUtil.getBytes(_tempFile);
+		return Files.readAllBytes(_tempFile.toPath());
 	}
 
 	public File getFile() throws IOException {

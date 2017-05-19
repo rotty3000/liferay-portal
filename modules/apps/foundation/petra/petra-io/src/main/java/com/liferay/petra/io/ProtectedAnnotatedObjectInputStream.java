@@ -14,8 +14,8 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.util.ClassLoaderPool;
-import com.liferay.portal.kernel.util.ClassResolverUtil;
+import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
+import com.liferay.petra.io.internal.loader.ClassResolverUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,8 @@ public class ProtectedAnnotatedObjectInputStream
 
 		String contextName = readUTF();
 
-		ClassLoader classLoader = ClassLoaderPool.getClassLoader(contextName);
+		ClassLoader classLoader = ClassLoaderPoolUtil.getClassLoader(
+			contextName);
 
 		String className = objectStreamClass.getName();
 

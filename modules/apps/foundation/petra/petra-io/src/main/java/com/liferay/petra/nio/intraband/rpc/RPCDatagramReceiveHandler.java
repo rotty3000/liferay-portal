@@ -20,14 +20,19 @@ import com.liferay.petra.nio.intraband.BaseAsyncDatagramReceiveHandler;
 import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.Intraband;
 import com.liferay.petra.nio.intraband.RegistrationReference;
-import com.liferay.portal.kernel.process.ProcessCallable;
+import com.liferay.petra.process.ProcessCallable;
 
 import java.io.Serializable;
+import java.util.concurrent.Executor;
 
 /**
  * @author Shuyang Zhou
  */
 public class RPCDatagramReceiveHandler extends BaseAsyncDatagramReceiveHandler {
+
+	public RPCDatagramReceiveHandler(Executor executor) {
+		super(executor);
+	}
 
 	@Override
 	protected void doReceive(

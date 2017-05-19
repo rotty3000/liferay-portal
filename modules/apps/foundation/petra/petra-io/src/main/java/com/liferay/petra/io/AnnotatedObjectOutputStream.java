@@ -14,7 +14,7 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.portal.kernel.util.ClassLoaderPool;
+import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -35,7 +35,7 @@ public class AnnotatedObjectOutputStream extends ObjectOutputStream {
 	protected void annotateClass(Class<?> clazz) throws IOException {
 		ClassLoader classLoader = clazz.getClassLoader();
 
-		String contextName = ClassLoaderPool.getContextName(classLoader);
+		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
 
 		writeUTF(contextName);
 	}
