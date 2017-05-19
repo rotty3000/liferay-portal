@@ -22,10 +22,10 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusEventListener;
 import com.liferay.messaging.MessageListener;
-import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
+import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.convert.Lists;
+import com.liferay.petra.io.convert.Maps;
 import com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration;
-import com.liferay.portal.messaging.internal.util.ListUtil;
-import com.liferay.portal.messaging.internal.util.MapUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -254,7 +254,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		List<MessageListener> queuedMessageListeners =
 			_queuedMessageListeners.get(destinationName);
 
-		if (ListUtil.isEmpty(queuedMessageListeners)) {
+		if (Lists.isEmpty(queuedMessageListeners)) {
 			return false;
 		}
 
@@ -266,8 +266,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		throws ConfigurationException {
 
 		DestinationWorkerConfiguration destinationWorkerConfiguration =
-			ConfigurableUtil.createConfigurable(
-				DestinationWorkerConfiguration.class, dictionary);
+			Conversions.convert(
+				dictionary).to(DestinationWorkerConfiguration.class);
 
 		_factoryPidsToDestinationName.put(
 			factoryPid, destinationWorkerConfiguration.destinationName());
@@ -296,8 +296,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	}
 
 	protected void doAddDestination(Destination destination) {
-		Class<?> clazz = destination.getClass();
-
 		_destinations.put(destination.getName(), destination);
 
 		for (MessageBusEventListener messageBusEventListener :
@@ -309,7 +307,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		List<MessageListener> messageListeners = _queuedMessageListeners.remove(
 			destination.getName());
 
-		if (ListUtil.isEmpty(messageListeners)) {
+		if (Lists.isEmpty(messageListeners)) {
 			return;
 		}
 
@@ -334,7 +332,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected synchronized void registerDestination(
 		Destination destination, Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(
+		String destinationName = Maps.getString(
 			properties, "destination.name");
 
 		if (BaseDestination.class.isInstance(destination)) {
@@ -368,7 +366,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(
+		String destinationName = Maps.getString(
 			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
@@ -419,7 +417,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 				currentThread.setContextClassLoader(operatingClassLoader);
 			}
 
-			String destinationName = MapUtil.getString(
+			String destinationName = Maps.getString(
 				properties, "destination.name");
 
 			registerMessageListener(destinationName, messageListener);
@@ -441,7 +439,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(
+		String destinationName = Maps.getString(
 			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
@@ -468,7 +466,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected synchronized void unregisterMessageListener(
 		MessageListener messageListener, Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(
+		String destinationName = Maps.getString(
 			properties, "destination.name");
 
 		unregisterMessageListener(destinationName, messageListener);

@@ -18,8 +18,8 @@ import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationFactory;
 import com.liferay.messaging.ExecutorServiceRegistrar;
+import com.liferay.petra.io.convert.Maps;
 import com.liferay.portal.messaging.DestinationPrototype;
-import com.liferay.portal.messaging.internal.util.MapUtil;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -88,7 +88,7 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		Map<String, Object> properties) {
 
 		_destinationPrototypes.put(
-			MapUtil.getString(properties, "destination.type"),
+			Maps.getString(properties, "destination.type"),
 			destinationPrototype);
 	}
 
@@ -102,7 +102,7 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		Map<String, Object> properties) {
 
 		_destinationPrototypes.remove(
-			MapUtil.getString(properties, "destination.type"),
+			Maps.getString(properties, "destination.type"),
 			destinationPrototype);
 	}
 

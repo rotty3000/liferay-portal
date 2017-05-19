@@ -16,11 +16,11 @@ package com.liferay.portal.messaging.internal.sender;
 
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageOutboundProcessor;
-import com.liferay.messaging.internal.convert.Conversions;
 import com.liferay.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.petra.io.convert.Conversions;
 
 import java.util.HashMap;
 import java.util.List;

@@ -20,8 +20,8 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageOutboundProcessor;
-import com.liferay.messaging.internal.validator.Validator;
 import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.petra.io.validate.Validator;
 
 import java.util.List;
 import java.util.UUID;
