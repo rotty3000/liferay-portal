@@ -28,6 +28,8 @@ dependencies {
 
 	provided project(":apps:foundation:messaging:messaging-api")
 	provided project(":apps:foundation:messaging:messaging-impl")
+
+	provided group: 'org.osgi', name: 'org.osgi.core', version: '6.0.0'
 }
 
 task export_resolve(type: Resolve) {
