@@ -20,10 +20,10 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.config.AbstractMessagingConfigurator;
 import com.liferay.messaging.config.DefaultMessagingConfigurator;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -53,7 +54,7 @@ public class AbstractMessagingConfiguratorTest {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testCustomClassLoaderDestinationConfiguration() {
+	public void testCustomClassLoaderDestinationConfiguration() throws InvalidSyntaxException {
 		final TestClassLoader testClassLoader = new TestClassLoader();
 
 		AbstractMessagingConfigurator pluginMessagingConfigurator =
@@ -91,7 +92,7 @@ public class AbstractMessagingConfiguratorTest {
 		pluginMessagingConfigurator.setMessageListeners(messageListeners);
 
 		pluginMessagingConfigurator.afterPropertiesSet();
-
+		
 		Bundle bundle = FrameworkUtil.getBundle(getClass());
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -104,7 +105,7 @@ public class AbstractMessagingConfiguratorTest {
 		serviceTracker.open();
 
 		try {
-			while (ArrayUtil.isEmpty(serviceTracker.getServices())) {
+			while (com.liferay.petra.io.convert.Arrays.isEmpty(serviceTracker.getServices())) {
 				Thread.sleep(1000);
 			}
 
@@ -134,12 +135,12 @@ public class AbstractMessagingConfiguratorTest {
 			}
 		}
 		catch (Exception e) {
-			Assert.fail(StackTraceUtil.getStackTrace(e));
+			Assert.fail(getStackTrace(e));
 		}
 	}
 
 	@Test
-	public void testPortalClassLoaderDestinationConfiguration() {
+	public void testPortalClassLoaderDestinationConfiguration() throws InvalidSyntaxException {
 		DefaultMessagingConfigurator defaultMessagingConfigurator =
 			new DefaultMessagingConfigurator();
 
@@ -188,7 +189,7 @@ public class AbstractMessagingConfiguratorTest {
 		serviceTracker.open();
 
 		try {
-			while (ArrayUtil.isEmpty(serviceTracker.getServices())) {
+			while (com.liferay.petra.io.convert.Arrays.isEmpty(serviceTracker.getServices())) {
 				Thread.sleep(1000);
 			}
 
@@ -218,7 +219,7 @@ public class AbstractMessagingConfiguratorTest {
 			}
 		}
 		catch (Exception e) {
-			Assert.fail(StackTraceUtil.getStackTrace(e));
+			Assert.fail(getStackTrace(e));
 		}
 	}
 
@@ -259,6 +260,32 @@ public class AbstractMessagingConfiguratorTest {
 
 		private final String _destinationName;
 
+	}
+
+	private String getStackTrace(Throwable t) {
+		String stackTrace = null;
+
+		PrintWriter printWriter = null;
+
+		try {
+			StringWriter stringWriter = new StringWriter();
+
+			printWriter = new PrintWriter(stringWriter);
+
+			t.printStackTrace(printWriter);
+
+			printWriter.flush();
+
+			stackTrace = stringWriter.toString();
+		}
+		finally {
+			if (printWriter != null) {
+				printWriter.flush();
+				printWriter.close();
+			}
+		}
+
+		return stackTrace;
 	}
 
 }
