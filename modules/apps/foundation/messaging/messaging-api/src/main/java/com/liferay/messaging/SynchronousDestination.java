@@ -17,12 +17,20 @@ package com.liferay.messaging;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
  */
+@Component(
+	configurationPolicy = ConfigurationPolicy.REQUIRE
+)
 public class SynchronousDestination extends BaseDestination {
 
 	@Override
@@ -33,6 +41,11 @@ public class SynchronousDestination extends BaseDestination {
 		destinationStatistics.setSentMessageCount(_sentMessageCounter.get());
 
 		return destinationStatistics;
+	}
+
+	@Override
+	public List<MessageInboundProcessorFactory> getMessageInboundProcessorFactory() {
+		return _messageInboundProcessorFactories;
 	}
 
 	@Override
@@ -84,5 +97,11 @@ public class SynchronousDestination extends BaseDestination {
 		SynchronousDestination.class);
 
 	private final AtomicLong _sentMessageCounter = new AtomicLong();
+
+	@Reference(
+		name = "messageInboundProcessorFactories",
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	private List<MessageInboundProcessorFactory> _messageInboundProcessorFactories;
 
 }

@@ -47,11 +47,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	}
 
 	@Override
-	public void destroy() {
-		super.destroy();
-	}
-
-	@Override
 	public DestinationStatistics getDestinationStatistics() {
 		DestinationStatistics destinationStatistics =
 			new DestinationStatistics();
@@ -94,7 +89,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			return;
 		}
 
-		ClassLoader classLoader = getClass().getClassLoader(); // TODO
+		ClassLoader classLoader = clazz.getClassLoader();
 
 		if (_rejectedExecutionHandler == null) {
 			_rejectedExecutionHandler = createRejectionExecutionHandler();
@@ -109,9 +104,9 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 		ThreadPoolExecutor oldThreadPoolExecutor = null;
 
-		if (executorServiceRegistrar != null) {
+		if (_executorServiceRegistrar != null) {
 			oldThreadPoolExecutor =
-				executorServiceRegistrar.registerExecutorService(
+				_executorServiceRegistrar.registerExecutorService(
 					getName(), threadPoolExecutor);
 		}
 
@@ -187,7 +182,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	public void setPortalExecutorManager(
 		ExecutorServiceRegistrar executorServiceRegistrar) {
 
-		this.executorServiceRegistrar = executorServiceRegistrar;
+		_executorServiceRegistrar = executorServiceRegistrar;
 	}
 
 	public void setRejectedExecutionHandler(
@@ -245,7 +240,10 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		return _threadPoolExecutor;
 	}
 
-	protected volatile ExecutorServiceRegistrar executorServiceRegistrar;
+	private static final Class<BaseAsyncDestination> clazz =
+		BaseAsyncDestination.class;
+
+	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
 
 	private static final int _WORKERS_CORE_SIZE = 2;
 

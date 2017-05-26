@@ -16,6 +16,7 @@ package com.liferay.messaging.proxy;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.messaging.sender.SynchronousMessageSender;
@@ -27,6 +28,14 @@ import com.liferay.messaging.sender.SynchronousMessageSender;
  * @author Shuyang Zhou
  */
 public abstract class BaseProxyBean {
+
+	public void send(ProxyRequest proxyRequest) {
+		SingleDestinationMessageSender singleDestinationMessageSender =
+			_singleDestinationMessageSenderFactory.
+				createSingleDestinationMessageSender(_destinationName);
+
+		singleDestinationMessageSender.send(buildMessage(proxyRequest));
+	}
 
 	public void setDestinationName(String destinationName) {
 		_destinationName = destinationName;

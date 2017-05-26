@@ -65,13 +65,18 @@ public class ProxyMessageListener implements MessageListener {
 			if (Validator.isNotNull(responseDestinationName)) {
 				Message responseMessage = new Message();
 
-				responseMessage.setDestinationName(message.getResponseDestinationName());
+				responseMessage.setDestinationName(
+					message.getResponseDestinationName());
 				responseMessage.setResponseId(message.getResponseId());
 
 				responseMessage.setPayload(proxyResponse);
 
-				if (_logger.isDebugEnabled() && (proxyResponseException != null)) {
-					_logger.debug(proxyResponseException.toString(), proxyResponseException);
+				if (_logger.isDebugEnabled() &&
+					(proxyResponseException != null)) {
+
+					_logger.debug(
+						proxyResponseException.getMessage(),
+						proxyResponseException);
 				}
 
 				_messageBus.sendMessage(
@@ -81,7 +86,8 @@ public class ProxyMessageListener implements MessageListener {
 				if (proxyResponseException != null) {
 					if (_logger.isWarnEnabled()) {
 						_logger.warn(
-							proxyResponseException.toString(), proxyResponseException);
+							proxyResponseException.getMessage(),
+							proxyResponseException);
 					}
 				}
 
@@ -98,10 +104,6 @@ public class ProxyMessageListener implements MessageListener {
 		_messageBus = messageBus;
 	}
 
-	/*
-	private static final Log _log = LogFactoryUtil.getLog(
-		ProxyMessageListener.class);
-	*/
 	private static final Logger _logger = LoggerFactory.getLogger(
 		ProxyMessageListener.class);
 
