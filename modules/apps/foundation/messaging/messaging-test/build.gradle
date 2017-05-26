@@ -1,3 +1,5 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Export
 import aQute.bnd.gradle.Resolve
 import aQute.bnd.gradle.TestOSGi
 
@@ -12,6 +14,9 @@ dependencies {
 	provided group: "log4j", name: "log4j", version: "1.2.17"
 	provided group: "org.apache.aries.spifly", name: "org.apache.aries.spifly.dynamic.bundle", version: "1.0.8"
 	provided group: "org.apache.felix", name: "org.apache.felix.configadmin", version: "1.8.8"
+	provided group: "org.apache.felix", name: "org.apache.felix.gogo.command", version: "1.0.2"
+	provided group: "org.apache.felix", name: "org.apache.felix.gogo.runtime", version: "1.0.6"
+	provided group: "org.apache.felix", name: "org.apache.felix.gogo.shell", version: "1.0.0"
 	provided group: "org.apache.felix", name: "org.apache.felix.scr", version: "2.0.10"
 	provided group: "org.eclipse.platform", name: "org.eclipse.osgi", version: "3.11.3"
 	provided group: "org.osgi", name: "org.osgi.service.metatype", version: "1.3.0"
@@ -22,6 +27,36 @@ dependencies {
 
 	provided project(":apps:foundation:messaging:messaging-api")
 	provided project(":apps:foundation:messaging:messaging-impl")
+}
+
+task export_resolve(type: Resolve) {
+	bndrun 'messaging-executable.bndrun'
+	doFirst {
+		if (logger.infoEnabled) {
+			def message = "Resolving against:\n"
+			bundles.each { f ->
+				message += "    ${f}\n"
+			}
+			logger.info message
+		}
+	}
+}
+
+task export(type: Export) {
+	bndrun 'messaging-executable.bndrun'
+	destinationDir './build/executable'
+	dependsOn export_resolve
+}
+
+task newjar(type: Bundle, overwrite: true) {
+	bndfile = 'bnd.bnd'
+	from sourceSets.main.output
+	exclude('com/liferay/messaging/tb*/*')
+}
+
+jar {
+    deleteAllActions()
+    dependsOn newjar
 }
 
 task resolve(type: Resolve) {
