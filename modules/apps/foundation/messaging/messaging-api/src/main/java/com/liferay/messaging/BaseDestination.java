@@ -14,6 +14,7 @@
 
 package com.liferay.messaging;
 
+import com.liferay.petra.io.StringPool;
 import com.liferay.petra.io.validate.Validator;
 
 import java.util.ArrayList;
@@ -27,8 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Shuyang Zhou
  */
 public abstract class BaseDestination implements Destination {
-
-	public static final String BLANK = "";
 
 	@Override
 	public boolean addDestinationEventListener(
@@ -87,8 +86,15 @@ public abstract class BaseDestination implements Destination {
 		throw new UnsupportedOperationException();
 	}
 
+	public abstract List<MessageInboundProcessorFactory>
+		getMessageInboundProcessorFactory();
+
+//	public abstract List<MessageOutboundProcessorFactory>
+//		getMessageOutboundProcessorFactory();
+
 	public List<MessageInboundProcessor> getMessageInboundProcessors() {
-		final List<MessageInboundProcessorFactory> copy = inboundProcessorFactories;
+		final List<MessageInboundProcessorFactory> copy =
+			getMessageInboundProcessorFactory();
 
 		if ((copy == null) || copy.isEmpty()) {
 			return Collections.emptyList();
@@ -118,21 +124,22 @@ public abstract class BaseDestination implements Destination {
 		return name;
 	}
 
-	public List<MessageOutboundProcessor> getMessageOutboundProcessors() {
-		final List<MessageOutboundProcessorFactory> copy = outboundProcessorFactories;
-
-		if ((copy == null) || copy.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		List<MessageOutboundProcessor> processors = new ArrayList<>();
-
-		for (MessageOutboundProcessorFactory factory : copy) {
-			processors.add(factory.create());
-		}
-
-		return Collections.unmodifiableList(processors);
-	}
+//	public List<MessageOutboundProcessor> getMessageOutboundProcessors() {
+//		final List<MessageOutboundProcessorFactory> copy =
+//			getMessageOutboundProcessorFactory();
+//
+//		if ((copy == null) || copy.isEmpty()) {
+//			return Collections.emptyList();
+//		}
+//
+//		List<MessageOutboundProcessor> processors = new ArrayList<>();
+//
+//		for (MessageOutboundProcessorFactory factory : copy) {
+//			processors.add(factory.create());
+//		}
+//
+//		return Collections.unmodifiableList(processors);
+//	}
 
 	@Override
 	public boolean isRegistered() {
@@ -256,10 +263,8 @@ public abstract class BaseDestination implements Destination {
 		return unregistered;
 	}
 
-	protected volatile List<MessageInboundProcessorFactory> inboundProcessorFactories;
 	protected Set<MessageListener> messageListeners = ConcurrentHashMap.newKeySet();
-	protected volatile List<MessageOutboundProcessorFactory> outboundProcessorFactories;
-	protected String name = BLANK;
+	protected String name = StringPool.BLANK;
 
 	private final Set<DestinationEventListener> _destinationEventListeners =
 		ConcurrentHashMap.newKeySet();

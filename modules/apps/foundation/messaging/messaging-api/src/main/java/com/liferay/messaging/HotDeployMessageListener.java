@@ -49,8 +49,7 @@ public class HotDeployMessageListener extends BaseMessageListener {
 			return;
 		}
 
-		String command = Conversions.getString(
-			message.getString("servletContextName"));
+		String command = Conversions.getString(message.getString("command"));
 
 		if (command.equals("deploy")) {
 			onDeploy(message);

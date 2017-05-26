@@ -19,6 +19,11 @@ import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import java.util.List;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +35,15 @@ import org.slf4j.LoggerFactory;
  *
  * @author Michael C. Han
  */
+@Component(
+	configurationPolicy = ConfigurationPolicy.REQUIRE
+)
 public class ParallelDestination extends BaseAsyncDestination {
+
+	@Override
+	public List<MessageInboundProcessorFactory> getMessageInboundProcessorFactory() {
+		return _messageInboundProcessorFactories;
+	}
 
 	@Override
 	protected void dispatch(
@@ -95,5 +108,11 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 	private static final Logger _logger = LoggerFactory.getLogger(
 		ParallelDestination.class);
+
+	@Reference(
+		name = "messageInboundProcessorFactories",
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	private List<MessageInboundProcessorFactory> _messageInboundProcessorFactories;
 
 }

@@ -44,12 +44,6 @@ public abstract class BaseMultiDestinationProxyBean {
 		_synchronousMessageSender = synchronousMessageSender;
 	}
 
-	public void setSynchronousMessageSenderMode(
-		SynchronousMessageSender.Mode mode) {
-
-		_mode = mode;
-	}
-
 	public Object synchronousSend(ProxyRequest proxyRequest) throws Exception {
 		ProxyResponse proxyResponse =
 			(ProxyResponse)_synchronousMessageSender.send(
@@ -75,7 +69,6 @@ public abstract class BaseMultiDestinationProxyBean {
 	}
 
 	private MessageBus _messageBus;
-	private SynchronousMessageSender.Mode _mode;
 	private SynchronousMessageSender _synchronousMessageSender;
 
 }

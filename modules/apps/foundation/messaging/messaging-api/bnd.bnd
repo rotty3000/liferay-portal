@@ -4,7 +4,6 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.messaging,\
 	com.liferay.messaging.async,\
-	com.liferay.messaging.config,\
 	com.liferay.messaging.proxy,\
 	com.liferay.messaging.sender
 Require-Capability:\

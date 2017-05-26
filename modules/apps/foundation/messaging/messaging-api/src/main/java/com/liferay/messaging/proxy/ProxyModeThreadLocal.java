@@ -34,6 +34,7 @@ public class ProxyModeThreadLocal {
 			protected Boolean initialValue() {
 				return Boolean.FALSE;
 			}
+
 		};
 
 }

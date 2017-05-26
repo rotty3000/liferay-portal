@@ -50,7 +50,7 @@ public class ProxyResponse implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(5);
+		StringBuilder sb = new StringBuilder();
 
 		sb.append("{exception=");
 		sb.append(_exception);
