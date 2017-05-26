@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBDiscussion;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see MBDiscussion
  * @generated
  */
-@ProviderType
 public class MBDiscussionCacheModel implements CacheModel<MBDiscussion>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.wiki.model.WikiNode;
 import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.wiki.service.WikiNodeLocalServiceUtil;
  * @see WikiNode
  * @generated
  */
-@ProviderType
 public abstract class WikiNodeBaseImpl extends WikiNodeModelImpl
 	implements WikiNode {
 	/*

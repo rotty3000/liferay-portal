@@ -32,8 +32,6 @@ import ${apiPackagePath}.model.${entity.name}Soap;
 
 import ${apiPackagePath}.service.${entity.name}LocalServiceUtil;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -102,7 +100,6 @@ import java.util.function.Function;
 	@JSON(strict = true)
 </#if>
 
-@ProviderType
 public class ${entity.name}ModelImpl extends BaseModelImpl<${entity.name}> implements ${entity.name}Model {
 
 	/*

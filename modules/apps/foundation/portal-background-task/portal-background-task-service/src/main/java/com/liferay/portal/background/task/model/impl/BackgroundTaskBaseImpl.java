@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.background.task.model.BackgroundTask;
 import com.liferay.portal.background.task.service.BackgroundTaskLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.background.task.service.BackgroundTaskLocalServiceUtil
  * @see BackgroundTask
  * @generated
  */
-@ProviderType
 public abstract class BackgroundTaskBaseImpl extends BackgroundTaskModelImpl
 	implements BackgroundTask {
 	/*

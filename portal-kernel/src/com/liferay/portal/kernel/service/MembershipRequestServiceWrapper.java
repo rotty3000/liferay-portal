@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link MembershipRequestService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see MembershipRequestService
  * @generated
  */
-@ProviderType
 public class MembershipRequestServiceWrapper implements MembershipRequestService,
 	ServiceWrapper<MembershipRequestService> {
 	public MembershipRequestServiceWrapper(

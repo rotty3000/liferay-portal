@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see BookmarksFolder
  * @generated
  */
-@ProviderType
 public class BookmarksFolderWrapper implements BookmarksFolder,
 	ModelWrapper<BookmarksFolder> {
 	public BookmarksFolderWrapper(BookmarksFolder bookmarksFolder) {

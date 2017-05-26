@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.background.task.model.BackgroundTask;
 import com.liferay.portal.background.task.service.BackgroundTaskLocalService;
 import com.liferay.portal.background.task.service.persistence.BackgroundTaskPersistence;
@@ -61,7 +59,6 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.background.task.service.BackgroundTaskLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class BackgroundTaskLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements BackgroundTaskLocalService,
 		IdentifiableOSGiService {

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.asset.kernel.service.AssetEntryLocalServiceUtil;
  * @see AssetEntry
  * @generated
  */
-@ProviderType
 public abstract class AssetEntryBaseImpl extends AssetEntryModelImpl
 	implements AssetEntry {
 	/*

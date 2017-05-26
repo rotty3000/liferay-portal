@@ -14,8 +14,6 @@
 
 package com.liferay.contacts.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.contacts.service.impl.EntryLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class EntryLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

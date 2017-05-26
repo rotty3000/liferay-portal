@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalServiceUtil;
  * @see DDLRecordSet
  * @generated
  */
-@ProviderType
 public abstract class DDLRecordSetBaseImpl extends DDLRecordSetModelImpl
 	implements DDLRecordSet {
 	/*

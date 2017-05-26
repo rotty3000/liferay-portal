@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.TeamServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see TeamServiceUtil
  * @generated
  */
-@ProviderType
 public class TeamServiceSoap {
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addTeam(long, String,

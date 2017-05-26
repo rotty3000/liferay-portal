@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFolder;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see DLFolder
  * @generated
  */
-@ProviderType
 public class DLFolderCacheModel implements CacheModel<DLFolder>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

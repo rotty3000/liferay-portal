@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLFileVersionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see DLFileVersionServiceUtil
  * @generated
  */
-@ProviderType
 public class DLFileVersionServiceHttp {
 	public static com.liferay.document.library.kernel.model.DLFileVersion getFileVersion(
 		HttpPrincipal httpPrincipal, long fileVersionId)

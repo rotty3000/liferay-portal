@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.service.ExpandoColumnServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see ExpandoColumnServiceUtil
  * @generated
  */
-@ProviderType
 public class ExpandoColumnServiceSoap {
 	public static com.liferay.expando.kernel.model.ExpandoColumnSoap addColumn(
 		long tableId, java.lang.String name, int type)

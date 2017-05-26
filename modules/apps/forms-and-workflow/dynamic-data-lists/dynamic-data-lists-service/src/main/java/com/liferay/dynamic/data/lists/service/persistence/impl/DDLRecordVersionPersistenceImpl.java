@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.exception.NoSuchRecordVersionException;
 import com.liferay.dynamic.data.lists.model.DDLRecordVersion;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordVersionImpl;
@@ -62,7 +60,6 @@ import java.util.Set;
  * @see com.liferay.dynamic.data.lists.service.persistence.DDLRecordVersionUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordVersionPersistenceImpl extends BasePersistenceImpl<DDLRecordVersion>
 	implements DDLRecordVersionPersistence {
 	/*

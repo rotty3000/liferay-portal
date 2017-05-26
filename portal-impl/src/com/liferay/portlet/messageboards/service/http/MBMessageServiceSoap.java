@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.service.MBMessageServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see MBMessageServiceUtil
  * @generated
  */
-@ProviderType
 public class MBMessageServiceSoap {
 	public static com.liferay.message.boards.kernel.model.MBMessageSoap addDiscussionMessage(
 		long groupId, java.lang.String className, long classPK, long threadId,

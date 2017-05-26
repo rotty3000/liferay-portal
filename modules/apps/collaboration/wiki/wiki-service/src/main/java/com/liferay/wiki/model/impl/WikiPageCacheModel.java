@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see WikiPage
  * @generated
  */
-@ProviderType
 public class WikiPageCacheModel implements CacheModel<WikiPage>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

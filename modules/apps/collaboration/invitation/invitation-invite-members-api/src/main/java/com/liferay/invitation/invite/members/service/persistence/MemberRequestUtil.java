@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.invitation.invite.members.model.MemberRequest;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.invitation.invite.members.service.persistence.impl.MemberRequestPersistenceImpl
  * @generated
  */
-@ProviderType
 public class MemberRequestUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

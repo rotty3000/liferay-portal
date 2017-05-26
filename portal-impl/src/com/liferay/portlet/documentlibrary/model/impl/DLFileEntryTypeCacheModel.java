@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileEntryType;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see DLFileEntryType
  * @generated
  */
-@ProviderType
 public class DLFileEntryTypeCacheModel implements CacheModel<DLFileEntryType>,
 	Externalizable {
 	@Override

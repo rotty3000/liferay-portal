@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.AssetVocabularyServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see AssetVocabularyServiceUtil
  * @generated
  */
-@ProviderType
 public class AssetVocabularyServiceHttp {
 	public static com.liferay.asset.kernel.model.AssetVocabulary addVocabulary(
 		HttpPrincipal httpPrincipal, long groupId, java.lang.String title,

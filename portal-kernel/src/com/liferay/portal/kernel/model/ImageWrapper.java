@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see Image
  * @generated
  */
-@ProviderType
 public class ImageWrapper implements Image, ModelWrapper<Image> {
 	public ImageWrapper(Image image) {
 		_image = image;

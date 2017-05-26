@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.service.persistence.ExpandoRowPersistence;
 
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
@@ -77,7 +75,6 @@ import javax.sql.DataSource;
  * @see com.liferay.knowledge.base.service.KBFolderLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class KBFolderLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements KBFolderLocalService, IdentifiableOSGiService {
 	/*

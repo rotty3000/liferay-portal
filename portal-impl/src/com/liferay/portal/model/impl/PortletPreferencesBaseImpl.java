@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.PortletPreferences;
 import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.PortletPreferencesLocalServiceUtil;
  * @see PortletPreferences
  * @generated
  */
-@ProviderType
 public abstract class PortletPreferencesBaseImpl
 	extends PortletPreferencesModelImpl implements PortletPreferences {
 	/*

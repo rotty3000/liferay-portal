@@ -14,8 +14,6 @@
 
 package com.liferay.social.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see SocialRequest
  * @generated
  */
-@ProviderType
 public class SocialRequestWrapper implements SocialRequest,
 	ModelWrapper<SocialRequest> {
 	public SocialRequestWrapper(SocialRequest socialRequest) {

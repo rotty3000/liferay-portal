@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Attachment;
 import com.liferay.mail.reader.service.AttachmentLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.mail.reader.service.AttachmentLocalServiceUtil;
  * @see Attachment
  * @generated
  */
-@ProviderType
 public abstract class AttachmentBaseImpl extends AttachmentModelImpl
 	implements Attachment {
 	/*

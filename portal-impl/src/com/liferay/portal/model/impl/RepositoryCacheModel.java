@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.Repository;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Repository
  * @generated
  */
-@ProviderType
 public class RepositoryCacheModel implements CacheModel<Repository>,
 	Externalizable, MVCCModel {
 	@Override

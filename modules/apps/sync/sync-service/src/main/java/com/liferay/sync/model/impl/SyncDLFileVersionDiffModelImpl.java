@@ -14,8 +14,6 @@
 
 package com.liferay.sync.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -51,7 +49,6 @@ import java.util.Map;
  * @see SyncDLFileVersionDiffModel
  * @generated
  */
-@ProviderType
 public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVersionDiff>
 	implements SyncDLFileVersionDiffModel {
 	/*

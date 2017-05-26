@@ -14,8 +14,6 @@
 
 package com.liferay.counter.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see CounterLocalService
  * @generated
  */
-@ProviderType
 public class CounterLocalServiceWrapper implements CounterLocalService,
 	ServiceWrapper<CounterLocalService> {
 	public CounterLocalServiceWrapper(CounterLocalService counterLocalService) {

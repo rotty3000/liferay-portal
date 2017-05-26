@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.background.task.exception.NoSuchBackgroundTaskException;
 import com.liferay.portal.background.task.model.BackgroundTask;
 import com.liferay.portal.background.task.model.impl.BackgroundTaskImpl;
@@ -67,7 +65,6 @@ import java.util.Set;
  * @see com.liferay.portal.background.task.service.persistence.BackgroundTaskUtil
  * @generated
  */
-@ProviderType
 public class BackgroundTaskPersistenceImpl extends BasePersistenceImpl<BackgroundTask>
 	implements BackgroundTaskPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.List;
  * @see com.liferay.portal.service.http.OrgLaborServiceSoap
  * @generated
  */
-@ProviderType
 public class OrgLaborSoap implements Serializable {
 	public static OrgLaborSoap toSoapModel(OrgLabor model) {
 		OrgLaborSoap soapModel = new OrgLaborSoap();

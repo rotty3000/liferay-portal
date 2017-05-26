@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ShoppingCouponService
  * @generated
  */
-@ProviderType
 public class ShoppingCouponServiceWrapper implements ShoppingCouponService,
 	ServiceWrapper<ShoppingCouponService> {
 	public ShoppingCouponServiceWrapper(

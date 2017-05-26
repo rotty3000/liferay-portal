@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.ratings.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -64,7 +62,6 @@ import java.util.Set;
  * @see com.liferay.ratings.kernel.service.persistence.RatingsStatsUtil
  * @generated
  */
-@ProviderType
 public class RatingsStatsPersistenceImpl extends BasePersistenceImpl<RatingsStats>
 	implements RatingsStatsPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.security.service.access.policy.model.SAPEntry;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalSe
  * @see SAPEntry
  * @generated
  */
-@ProviderType
 public abstract class SAPEntryBaseImpl extends SAPEntryModelImpl
 	implements SAPEntry {
 	/*

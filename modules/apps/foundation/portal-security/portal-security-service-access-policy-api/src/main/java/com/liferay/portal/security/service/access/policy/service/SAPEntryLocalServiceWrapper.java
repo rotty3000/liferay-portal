@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see SAPEntryLocalService
  * @generated
  */
-@ProviderType
 public class SAPEntryLocalServiceWrapper implements SAPEntryLocalService,
 	ServiceWrapper<SAPEntryLocalService> {
 	public SAPEntryLocalServiceWrapper(

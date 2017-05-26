@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -39,7 +37,6 @@ import java.util.List;
  * @see com.liferay.portal.security.service.access.policy.service.persistence.impl.SAPEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class SAPEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

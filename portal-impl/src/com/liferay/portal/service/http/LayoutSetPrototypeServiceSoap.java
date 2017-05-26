@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutSetPrototypeServiceUtil;
@@ -66,7 +64,6 @@ import java.util.Map;
  * @see LayoutSetPrototypeServiceUtil
  * @generated
  */
-@ProviderType
 public class LayoutSetPrototypeServiceSoap {
 	public static com.liferay.portal.kernel.model.LayoutSetPrototypeSoap addLayoutSetPrototype(
 		java.lang.String[] nameMapLanguageIds,

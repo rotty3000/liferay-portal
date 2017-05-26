@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.exception.NoSuchFolderException;
 import com.liferay.knowledge.base.model.KBFolder;
 import com.liferay.knowledge.base.model.impl.KBFolderImpl;
@@ -74,7 +72,6 @@ import java.util.Set;
  * @see com.liferay.knowledge.base.service.persistence.KBFolderUtil
  * @generated
  */
-@ProviderType
 public class KBFolderPersistenceImpl extends BasePersistenceImpl<KBFolder>
 	implements KBFolderPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.service.AnnouncementsFlagServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see AnnouncementsFlagServiceUtil
  * @generated
  */
-@ProviderType
 public class AnnouncementsFlagServiceSoap {
 	public static void addFlag(long entryId, int value)
 		throws RemoteException {

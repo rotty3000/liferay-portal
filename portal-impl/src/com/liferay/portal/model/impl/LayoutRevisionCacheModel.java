@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.LayoutRevision;
 import com.liferay.portal.kernel.model.MVCCModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see LayoutRevision
  * @generated
  */
-@ProviderType
 public class LayoutRevisionCacheModel implements CacheModel<LayoutRevision>,
 	Externalizable, MVCCModel {
 	@Override

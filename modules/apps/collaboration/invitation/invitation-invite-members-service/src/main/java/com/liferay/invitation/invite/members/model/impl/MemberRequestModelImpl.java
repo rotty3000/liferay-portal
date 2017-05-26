@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -56,7 +54,6 @@ import java.util.Map;
  * @see MemberRequestModel
  * @generated
  */
-@ProviderType
 public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	implements MemberRequestModel {
 	/*

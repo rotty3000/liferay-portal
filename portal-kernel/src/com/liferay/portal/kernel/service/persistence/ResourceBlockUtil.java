@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.model.ResourceBlock;
@@ -37,7 +35,6 @@ import java.util.List;
  * @see com.liferay.portal.service.persistence.impl.ResourceBlockPersistenceImpl
  * @generated
  */
-@ProviderType
 public class ResourceBlockUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.wsrp.service.persistence.impl.WSRPConsumerPersistenceImpl
  * @generated
  */
-@ProviderType
 public class WSRPConsumerUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

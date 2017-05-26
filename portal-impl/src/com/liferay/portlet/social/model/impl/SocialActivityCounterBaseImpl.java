@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.social.kernel.model.SocialActivityCounter;
 import com.liferay.social.kernel.service.SocialActivityCounterLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.social.kernel.service.SocialActivityCounterLocalServiceUtil;
  * @see SocialActivityCounter
  * @generated
  */
-@ProviderType
 public abstract class SocialActivityCounterBaseImpl
 	extends SocialActivityCounterModelImpl implements SocialActivityCounter {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.exception.NoSuchOAuthTokenException;
 import com.liferay.opensocial.model.OAuthToken;
 import com.liferay.opensocial.model.impl.OAuthTokenImpl;
@@ -68,7 +66,6 @@ import java.util.Set;
  * @see com.liferay.opensocial.service.persistence.OAuthTokenUtil
  * @generated
  */
-@ProviderType
 public class OAuthTokenPersistenceImpl extends BasePersistenceImpl<OAuthToken>
 	implements OAuthTokenPersistence {
 	/*

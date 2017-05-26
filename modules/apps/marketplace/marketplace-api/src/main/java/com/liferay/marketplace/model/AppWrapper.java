@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see App
  * @generated
  */
-@ProviderType
 public class AppWrapper implements App, ModelWrapper<App> {
 	public AppWrapper(App app) {
 		_app = app;

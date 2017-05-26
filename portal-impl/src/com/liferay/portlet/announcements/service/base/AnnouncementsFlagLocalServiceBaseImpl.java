@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsFlag;
 import com.liferay.announcements.kernel.service.AnnouncementsFlagLocalService;
 import com.liferay.announcements.kernel.service.persistence.AnnouncementsFlagPersistence;
@@ -60,7 +58,6 @@ import javax.sql.DataSource;
  * @see com.liferay.announcements.kernel.service.AnnouncementsFlagLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class AnnouncementsFlagLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AnnouncementsFlagLocalService,
 		IdentifiableOSGiService {

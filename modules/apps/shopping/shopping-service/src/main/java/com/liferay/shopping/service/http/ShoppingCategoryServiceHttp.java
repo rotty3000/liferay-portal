@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -53,7 +51,6 @@ import com.liferay.shopping.service.ShoppingCategoryServiceUtil;
  * @see ShoppingCategoryServiceUtil
  * @generated
  */
-@ProviderType
 public class ShoppingCategoryServiceHttp {
 	public static com.liferay.shopping.model.ShoppingCategory addCategory(
 		HttpPrincipal httpPrincipal, long parentCategoryId,

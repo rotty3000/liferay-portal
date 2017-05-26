@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.service.DDLRecordVersionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see DDLRecordVersionServiceUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordVersionServiceHttp {
 	public static com.liferay.dynamic.data.lists.model.DDLRecordVersion getRecordVersion(
 		HttpPrincipal httpPrincipal, long recordVersionId)

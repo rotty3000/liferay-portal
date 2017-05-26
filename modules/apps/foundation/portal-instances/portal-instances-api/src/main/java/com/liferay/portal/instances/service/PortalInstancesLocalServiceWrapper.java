@@ -14,8 +14,6 @@
 
 package com.liferay.portal.instances.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see PortalInstancesLocalService
  * @generated
  */
-@ProviderType
 public class PortalInstancesLocalServiceWrapper
 	implements PortalInstancesLocalService,
 		ServiceWrapper<PortalInstancesLocalService> {

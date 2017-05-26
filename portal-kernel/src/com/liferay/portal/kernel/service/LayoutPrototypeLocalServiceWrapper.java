@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link LayoutPrototypeLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see LayoutPrototypeLocalService
  * @generated
  */
-@ProviderType
 public class LayoutPrototypeLocalServiceWrapper
 	implements LayoutPrototypeLocalService,
 		ServiceWrapper<LayoutPrototypeLocalService> {

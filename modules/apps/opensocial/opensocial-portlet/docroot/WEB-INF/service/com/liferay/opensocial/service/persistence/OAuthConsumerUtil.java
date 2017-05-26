@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.model.OAuthConsumer;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.opensocial.service.persistence.impl.OAuthConsumerPersistenceImpl
  * @generated
  */
-@ProviderType
 public class OAuthConsumerUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

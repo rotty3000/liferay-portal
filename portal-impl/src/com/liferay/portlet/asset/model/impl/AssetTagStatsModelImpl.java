@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetTagStats;
 import com.liferay.asset.kernel.model.AssetTagStatsModel;
 
@@ -53,7 +51,6 @@ import java.util.Map;
  * @see AssetTagStatsModel
  * @generated
  */
-@ProviderType
 public class AssetTagStatsModelImpl extends BaseModelImpl<AssetTagStats>
 	implements AssetTagStatsModel {
 	/*

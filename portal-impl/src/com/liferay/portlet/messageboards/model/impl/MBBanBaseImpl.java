@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBBan;
 import com.liferay.message.boards.kernel.service.MBBanLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.message.boards.kernel.service.MBBanLocalServiceUtil;
  * @see MBBan
  * @generated
  */
-@ProviderType
 public abstract class MBBanBaseImpl extends MBBanModelImpl implements MBBan {
 	/*
 	 * NOTE FOR DEVELOPERS:

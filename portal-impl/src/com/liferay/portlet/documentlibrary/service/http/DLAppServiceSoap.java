@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import java.rmi.RemoteException;
  * @see DLAppServiceUtil
  * @generated
  */
-@ProviderType
 public class DLAppServiceSoap {
 	/**
 	* Adds a file entry and associated metadata. It is created based on a byte

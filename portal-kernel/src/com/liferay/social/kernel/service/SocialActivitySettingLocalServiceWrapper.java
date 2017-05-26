@@ -14,8 +14,6 @@
 
 package com.liferay.social.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see SocialActivitySettingLocalService
  * @generated
  */
-@ProviderType
 public class SocialActivitySettingLocalServiceWrapper
 	implements SocialActivitySettingLocalService,
 		ServiceWrapper<SocialActivitySettingLocalService> {

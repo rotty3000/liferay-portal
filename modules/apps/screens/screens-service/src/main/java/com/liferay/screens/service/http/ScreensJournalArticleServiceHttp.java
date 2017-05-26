@@ -14,8 +14,6 @@
 
 package com.liferay.screens.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -53,7 +51,6 @@ import com.liferay.screens.service.ScreensJournalArticleServiceUtil;
  * @see ScreensJournalArticleServiceUtil
  * @generated
  */
-@ProviderType
 public class ScreensJournalArticleServiceHttp {
 	public static java.lang.String getJournalArticleContent(
 		HttpPrincipal httpPrincipal, long classPK, java.util.Locale locale)

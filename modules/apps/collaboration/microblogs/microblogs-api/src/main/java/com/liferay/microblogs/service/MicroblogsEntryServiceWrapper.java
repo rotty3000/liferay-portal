@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see MicroblogsEntryService
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryServiceWrapper implements MicroblogsEntryService,
 	ServiceWrapper<MicroblogsEntryService> {
 	public MicroblogsEntryServiceWrapper(

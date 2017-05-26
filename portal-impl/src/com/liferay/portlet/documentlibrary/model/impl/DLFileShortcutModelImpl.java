@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileShortcut;
 import com.liferay.document.library.kernel.model.DLFileShortcutModel;
 import com.liferay.document.library.kernel.model.DLFileShortcutSoap;
@@ -68,7 +66,6 @@ import java.util.Map;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class DLFileShortcutModelImpl extends BaseModelImpl<DLFileShortcut>
 	implements DLFileShortcutModel {
 	/*

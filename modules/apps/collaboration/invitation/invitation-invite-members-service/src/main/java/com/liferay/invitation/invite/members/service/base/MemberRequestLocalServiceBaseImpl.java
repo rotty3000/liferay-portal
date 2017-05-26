@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.invitation.invite.members.model.MemberRequest;
 import com.liferay.invitation.invite.members.service.MemberRequestLocalService;
 import com.liferay.invitation.invite.members.service.persistence.MemberRequestPersistence;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.invitation.invite.members.service.MemberRequestLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class MemberRequestLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MemberRequestLocalService,
 		IdentifiableOSGiService {

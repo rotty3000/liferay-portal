@@ -14,8 +14,6 @@
 
 package com.liferay.twitter.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -66,7 +64,6 @@ import java.util.Set;
  * @see com.liferay.twitter.service.persistence.FeedUtil
  * @generated
  */
-@ProviderType
 public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 	implements FeedPersistence {
 	/*

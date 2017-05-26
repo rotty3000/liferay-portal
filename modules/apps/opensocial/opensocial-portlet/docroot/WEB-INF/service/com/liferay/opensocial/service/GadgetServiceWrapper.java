@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see GadgetService
  * @generated
  */
-@ProviderType
 public class GadgetServiceWrapper implements GadgetService,
 	ServiceWrapper<GadgetService> {
 	public GadgetServiceWrapper(GadgetService gadgetService) {

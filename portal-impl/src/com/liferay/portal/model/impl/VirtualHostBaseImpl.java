@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.VirtualHost;
 import com.liferay.portal.kernel.service.VirtualHostLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.VirtualHostLocalServiceUtil;
  * @see VirtualHost
  * @generated
  */
-@ProviderType
 public abstract class VirtualHostBaseImpl extends VirtualHostModelImpl
 	implements VirtualHost {
 	/*

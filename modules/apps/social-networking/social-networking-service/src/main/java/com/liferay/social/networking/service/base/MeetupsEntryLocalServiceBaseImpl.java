@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -67,7 +65,6 @@ import javax.sql.DataSource;
  * @see com.liferay.social.networking.service.MeetupsEntryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class MeetupsEntryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MeetupsEntryLocalService,
 		IdentifiableOSGiService {

@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.model.MDRRuleGroup;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see MDRRuleGroup
  * @generated
  */
-@ProviderType
 public class MDRRuleGroupCacheModel implements CacheModel<MDRRuleGroup>,
 	Externalizable {
 	@Override

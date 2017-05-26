@@ -14,8 +14,6 @@
 
 package com.liferay.expando.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.service.ServiceContext;
 
@@ -34,7 +32,6 @@ import java.util.Objects;
  * @see ExpandoTable
  * @generated
  */
-@ProviderType
 public class ExpandoTableWrapper implements ExpandoTable,
 	ModelWrapper<ExpandoTable> {
 	public ExpandoTableWrapper(ExpandoTable expandoTable) {

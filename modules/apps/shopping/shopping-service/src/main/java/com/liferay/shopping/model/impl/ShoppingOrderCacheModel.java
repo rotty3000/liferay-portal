@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see ShoppingOrder
  * @generated
  */
-@ProviderType
 public class ShoppingOrderCacheModel implements CacheModel<ShoppingOrder>,
 	Externalizable {
 	@Override

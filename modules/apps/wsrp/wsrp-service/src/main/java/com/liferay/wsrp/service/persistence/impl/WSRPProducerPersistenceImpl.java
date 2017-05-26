@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.wsrp.service.persistence.WSRPProducerUtil
  * @generated
  */
-@ProviderType
 public class WSRPProducerPersistenceImpl extends BasePersistenceImpl<WSRPProducer>
 	implements WSRPProducerPersistence {
 	/*

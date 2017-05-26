@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Folder;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Folder
  * @generated
  */
-@ProviderType
 public class FolderCacheModel implements CacheModel<Folder>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

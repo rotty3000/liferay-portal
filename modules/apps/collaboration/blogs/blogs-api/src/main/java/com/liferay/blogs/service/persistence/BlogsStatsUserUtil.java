@@ -14,8 +14,6 @@
 
 package com.liferay.blogs.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.blogs.model.BlogsStatsUser;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -41,7 +39,6 @@ import java.util.List;
  * @see com.liferay.blogs.service.persistence.impl.BlogsStatsUserPersistenceImpl
  * @generated
  */
-@ProviderType
 public class BlogsStatsUserUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

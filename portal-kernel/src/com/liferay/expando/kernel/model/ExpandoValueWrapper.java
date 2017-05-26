@@ -14,8 +14,6 @@
 
 package com.liferay.expando.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.ModelWrapper;
 import com.liferay.portal.kernel.service.ServiceContext;
 
@@ -35,7 +33,6 @@ import java.util.Objects;
  * @see ExpandoValue
  * @generated
  */
-@ProviderType
 public class ExpandoValueWrapper implements ExpandoValue,
 	ModelWrapper<ExpandoValue> {
 	public ExpandoValueWrapper(ExpandoValue expandoValue) {

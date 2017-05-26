@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetLink;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see AssetLink
  * @generated
  */
-@ProviderType
 public class AssetLinkCacheModel implements CacheModel<AssetLink>,
 	Externalizable {
 	@Override

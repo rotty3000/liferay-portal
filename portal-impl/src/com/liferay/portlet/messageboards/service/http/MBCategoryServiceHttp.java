@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.service.MBCategoryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see MBCategoryServiceUtil
  * @generated
  */
-@ProviderType
 public class MBCategoryServiceHttp {
 	public static com.liferay.message.boards.kernel.model.MBCategory addCategory(
 		HttpPrincipal httpPrincipal, long userId, long parentCategoryId,

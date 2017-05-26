@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetCategoryProperty;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see AssetCategoryProperty
  * @generated
  */
-@ProviderType
 public class AssetCategoryPropertyCacheModel implements CacheModel<AssetCategoryProperty>,
 	Externalizable {
 	@Override

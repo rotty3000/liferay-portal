@@ -14,8 +14,6 @@
 
 package com.liferay.sync.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.sync.service.http.SyncDeviceServiceSoap
  * @generated
  */
-@ProviderType
 public class SyncDeviceSoap implements Serializable {
 	public static SyncDeviceSoap toSoapModel(SyncDevice model) {
 		SyncDeviceSoap soapModel = new SyncDeviceSoap();

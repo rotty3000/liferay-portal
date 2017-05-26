@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.trash.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -67,7 +65,6 @@ import java.util.Set;
  * @see com.liferay.trash.kernel.service.persistence.TrashEntryUtil
  * @generated
  */
-@ProviderType
 public class TrashEntryPersistenceImpl extends BasePersistenceImpl<TrashEntry>
 	implements TrashEntryPersistence {
 	/*

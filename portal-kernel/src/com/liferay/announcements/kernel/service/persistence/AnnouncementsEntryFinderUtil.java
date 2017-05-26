@@ -14,8 +14,6 @@
 
 package com.liferay.announcements.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
@@ -23,7 +21,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class AnnouncementsEntryFinderUtil {
 	public static int countByScope(long userId, long classNameId,
 		long[] classPKs, int displayDateMonth, int displayDateDay,

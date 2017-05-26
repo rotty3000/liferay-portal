@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.shopping.service.persistence.impl.ShoppingCouponPersistenceImpl
  * @generated
  */
-@ProviderType
 public class ShoppingCouponUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

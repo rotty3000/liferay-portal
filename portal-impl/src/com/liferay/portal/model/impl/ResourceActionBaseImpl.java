@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.ResourceActionLocalServiceUtil;
  * @see ResourceAction
  * @generated
  */
-@ProviderType
 public abstract class ResourceActionBaseImpl extends ResourceActionModelImpl
 	implements ResourceAction {
 	/*

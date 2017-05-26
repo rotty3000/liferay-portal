@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.exception.NoSuchAttachmentException;
 import com.liferay.mail.reader.model.Attachment;
 import com.liferay.mail.reader.model.impl.AttachmentImpl;
@@ -65,7 +63,6 @@ import java.util.Set;
  * @see com.liferay.mail.reader.service.persistence.AttachmentUtil
  * @generated
  */
-@ProviderType
 public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	implements AttachmentPersistence {
 	/*

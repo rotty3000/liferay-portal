@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -52,7 +50,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see ResourceBlockServiceUtil
  * @generated
  */
-@ProviderType
 public class ResourceBlockServiceHttp {
 	public static void addCompanyScopePermission(HttpPrincipal httpPrincipal,
 		long scopeGroupId, long companyId, java.lang.String name, long roleId,

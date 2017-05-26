@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.friendly.url.service.FriendlyURLEntryLocalServiceUtil;
  * @see FriendlyURLEntry
  * @generated
  */
-@ProviderType
 public abstract class FriendlyURLEntryBaseImpl extends FriendlyURLEntryModelImpl
 	implements FriendlyURLEntry {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.model.CalendarNotificationTemplate;
 import com.liferay.calendar.model.CalendarNotificationTemplateModel;
 import com.liferay.calendar.model.CalendarNotificationTemplateSoap;
@@ -63,7 +61,6 @@ import java.util.Map;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class CalendarNotificationTemplateModelImpl extends BaseModelImpl<CalendarNotificationTemplate>
 	implements CalendarNotificationTemplateModel {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link ClassNameService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see ClassNameService
  * @generated
  */
-@ProviderType
 public class ClassNameServiceWrapper implements ClassNameService,
 	ServiceWrapper<ClassNameService> {
 	public ClassNameServiceWrapper(ClassNameService classNameService) {

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBBan;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see MBBan
  * @generated
  */
-@ProviderType
 public class MBBanCacheModel implements CacheModel<MBBan>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

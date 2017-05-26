@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.wiki.model.WikiPage;
 import com.liferay.wiki.service.WikiPageLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.wiki.service.WikiPageLocalServiceUtil;
  * @see WikiPage
  * @generated
  */
-@ProviderType
 public abstract class WikiPageBaseImpl extends WikiPageModelImpl
 	implements WikiPage {
 	/*

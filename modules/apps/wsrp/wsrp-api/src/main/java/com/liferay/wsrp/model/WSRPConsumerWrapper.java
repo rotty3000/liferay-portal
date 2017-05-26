@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see WSRPConsumer
  * @generated
  */
-@ProviderType
 public class WSRPConsumerWrapper implements WSRPConsumer,
 	ModelWrapper<WSRPConsumer> {
 	public WSRPConsumerWrapper(WSRPConsumer wsrpConsumer) {

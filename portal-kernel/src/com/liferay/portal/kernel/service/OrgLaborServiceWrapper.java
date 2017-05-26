@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link OrgLaborService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see OrgLaborService
  * @generated
  */
-@ProviderType
 public class OrgLaborServiceWrapper implements OrgLaborService,
 	ServiceWrapper<OrgLaborService> {
 	public OrgLaborServiceWrapper(OrgLaborService orgLaborService) {

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -35,7 +33,6 @@ import java.util.Objects;
  * @see ResourceBlockPermission
  * @generated
  */
-@ProviderType
 public class ResourceBlockPermissionWrapper implements ResourceBlockPermission,
 	ModelWrapper<ResourceBlockPermission> {
 	public ResourceBlockPermissionWrapper(

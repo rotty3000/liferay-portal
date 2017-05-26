@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link WebDAVPropsLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see WebDAVPropsLocalService
  * @generated
  */
-@ProviderType
 public class WebDAVPropsLocalServiceWrapper implements WebDAVPropsLocalService,
 	ServiceWrapper<WebDAVPropsLocalService> {
 	public WebDAVPropsLocalServiceWrapper(

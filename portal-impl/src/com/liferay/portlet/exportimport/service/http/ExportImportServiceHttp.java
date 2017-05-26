@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.service.ExportImportServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see ExportImportServiceUtil
  * @generated
  */
-@ProviderType
 public class ExportImportServiceHttp {
 	public static java.io.File exportLayoutsAsFile(
 		HttpPrincipal httpPrincipal,

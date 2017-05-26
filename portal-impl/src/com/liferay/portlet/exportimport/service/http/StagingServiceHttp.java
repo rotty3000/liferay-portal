@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.service.StagingServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see StagingServiceUtil
  * @generated
  */
-@ProviderType
 public class StagingServiceHttp {
 	public static void cleanUpStagingRequest(HttpPrincipal httpPrincipal,
 		long stagingRequestId)

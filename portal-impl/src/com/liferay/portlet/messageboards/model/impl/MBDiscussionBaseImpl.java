@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBDiscussion;
 import com.liferay.message.boards.kernel.service.MBDiscussionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.message.boards.kernel.service.MBDiscussionLocalServiceUtil;
  * @see MBDiscussion
  * @generated
  */
-@ProviderType
 public abstract class MBDiscussionBaseImpl extends MBDiscussionModelImpl
 	implements MBDiscussion {
 	/*

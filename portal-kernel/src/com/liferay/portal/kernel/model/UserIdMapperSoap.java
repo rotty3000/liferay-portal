@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class UserIdMapperSoap implements Serializable {
 	public static UserIdMapperSoap toSoapModel(UserIdMapper model) {
 		UserIdMapperSoap soapModel = new UserIdMapperSoap();

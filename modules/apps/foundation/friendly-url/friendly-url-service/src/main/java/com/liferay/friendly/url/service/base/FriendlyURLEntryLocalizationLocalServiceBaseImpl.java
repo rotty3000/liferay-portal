@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 import com.liferay.friendly.url.service.FriendlyURLEntryLocalizationLocalService;
 import com.liferay.friendly.url.service.persistence.FriendlyURLEntryLocalizationPersistence;
@@ -64,7 +62,6 @@ import javax.sql.DataSource;
  * @see com.liferay.friendly.url.service.FriendlyURLEntryLocalizationLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class FriendlyURLEntryLocalizationLocalServiceBaseImpl
 	extends BaseLocalServiceImpl
 	implements FriendlyURLEntryLocalizationLocalService,

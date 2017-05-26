@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -73,7 +71,6 @@ import java.util.Set;
  * @see com.liferay.portal.security.service.access.policy.service.persistence.SAPEntryUtil
  * @generated
  */
-@ProviderType
 public class SAPEntryPersistenceImpl extends BasePersistenceImpl<SAPEntry>
 	implements SAPEntryPersistence {
 	/*

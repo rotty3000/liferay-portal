@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.exception.NoSuchAccountException;
 import com.liferay.mail.reader.model.Account;
 import com.liferay.mail.reader.model.impl.AccountImpl;
@@ -70,7 +68,6 @@ import java.util.Set;
  * @see com.liferay.mail.reader.service.persistence.AccountUtil
  * @generated
  */
-@ProviderType
 public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	implements AccountPersistence {
 	/*

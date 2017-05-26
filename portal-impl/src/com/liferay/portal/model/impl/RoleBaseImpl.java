@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
  * @see Role
  * @generated
  */
-@ProviderType
 public abstract class RoleBaseImpl extends RoleModelImpl implements Role {
 	/*
 	 * NOTE FOR DEVELOPERS:

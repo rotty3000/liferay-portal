@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
@@ -33,7 +31,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.messageboards.service.impl.MBMessageServiceImpl
  * @generated
  */
-@ProviderType
 public class MBMessageServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

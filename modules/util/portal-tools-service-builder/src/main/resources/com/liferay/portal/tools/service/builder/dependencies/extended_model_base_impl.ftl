@@ -14,8 +14,6 @@ import ${apiPackagePath}.model.${entity.name};
 	import java.util.List;
 </#if>
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * The extended model base implementation for the ${entity.name} service. Represents a row in the &quot;${entity.table}&quot; database table, with each column mapped to a property of this class.
  *
@@ -36,7 +34,6 @@ import aQute.bnd.annotation.ProviderType;
 	@Deprecated
 </#if>
 
-@ProviderType
 public abstract class ${entity.name}BaseImpl extends ${entity.name}ModelImpl implements ${entity.name} {
 
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.push.notifications.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -53,7 +51,6 @@ import com.liferay.push.notifications.service.PushNotificationsDeviceServiceUtil
  * @see PushNotificationsDeviceServiceUtil
  * @generated
  */
-@ProviderType
 public class PushNotificationsDeviceServiceHttp {
 	public static com.liferay.push.notifications.model.PushNotificationsDevice addPushNotificationsDevice(
 		HttpPrincipal httpPrincipal, java.lang.String token,

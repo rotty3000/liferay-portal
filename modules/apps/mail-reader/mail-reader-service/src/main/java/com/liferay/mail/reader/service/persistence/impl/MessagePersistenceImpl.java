@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.exception.NoSuchMessageException;
 import com.liferay.mail.reader.model.Message;
 import com.liferay.mail.reader.model.impl.MessageImpl;
@@ -69,7 +67,6 @@ import java.util.Set;
  * @see com.liferay.mail.reader.service.persistence.MessageUtil
  * @generated
  */
-@ProviderType
 public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 	implements MessagePersistence {
 	/*

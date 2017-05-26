@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.MembershipRequestServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see MembershipRequestServiceUtil
  * @generated
  */
-@ProviderType
 public class MembershipRequestServiceSoap {
 	public static com.liferay.portal.kernel.model.MembershipRequestSoap addMembershipRequest(
 		long groupId, java.lang.String comments,

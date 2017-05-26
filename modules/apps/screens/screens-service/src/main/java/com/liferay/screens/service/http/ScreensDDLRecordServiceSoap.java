@@ -14,8 +14,6 @@
 
 package com.liferay.screens.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -53,7 +51,6 @@ import java.rmi.RemoteException;
  * @see ScreensDDLRecordServiceUtil
  * @generated
  */
-@ProviderType
 public class ScreensDDLRecordServiceSoap {
 	public static java.lang.String getDDLRecord(long ddlRecordId, String locale)
 		throws RemoteException {

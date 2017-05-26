@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.Ticket;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Ticket
  * @generated
  */
-@ProviderType
 public class TicketCacheModel implements CacheModel<Ticket>, Externalizable,
 	MVCCModel {
 	@Override

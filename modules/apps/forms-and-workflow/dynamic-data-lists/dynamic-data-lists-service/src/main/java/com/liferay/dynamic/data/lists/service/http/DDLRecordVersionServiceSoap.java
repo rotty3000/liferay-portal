@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.service.DDLRecordVersionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see DDLRecordVersionServiceUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordVersionServiceSoap {
 	/**
 	* Returns the record version matching the ID.

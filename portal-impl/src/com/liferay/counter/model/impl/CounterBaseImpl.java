@@ -14,8 +14,6 @@
 
 package com.liferay.counter.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
  * @see Counter
  * @generated
  */
-@ProviderType
 public abstract class CounterBaseImpl extends CounterModelImpl
 	implements Counter {
 	/*

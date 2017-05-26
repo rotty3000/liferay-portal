@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetTagStats;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -34,7 +32,6 @@ import java.io.ObjectOutput;
  * @see AssetTagStats
  * @generated
  */
-@ProviderType
 public class AssetTagStatsCacheModel implements CacheModel<AssetTagStats>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 import com.liferay.asset.kernel.service.persistence.AssetLinkPersistence;
 
@@ -95,7 +93,6 @@ import javax.sql.DataSource;
  * @see com.liferay.bookmarks.service.BookmarksFolderLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class BookmarksFolderLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements BookmarksFolderLocalService,
 		IdentifiableOSGiService {

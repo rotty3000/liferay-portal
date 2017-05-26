@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link WebsiteLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see WebsiteLocalService
  * @generated
  */
-@ProviderType
 public class WebsiteLocalServiceWrapper implements WebsiteLocalService,
 	ServiceWrapper<WebsiteLocalService> {
 	public WebsiteLocalServiceWrapper(WebsiteLocalService websiteLocalService) {

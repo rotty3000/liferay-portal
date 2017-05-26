@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -68,7 +66,6 @@ import java.util.Set;
  * @see com.liferay.portal.kernel.service.persistence.AccountUtil
  * @generated
  */
-@ProviderType
 public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	implements AccountPersistence {
 	/*

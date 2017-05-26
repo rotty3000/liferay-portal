@@ -14,8 +14,6 @@
 
 package com.liferay.sync.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.sync.model.SyncDevice;
 import com.liferay.sync.service.SyncDeviceLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.sync.service.SyncDeviceLocalServiceUtil;
  * @see SyncDevice
  * @generated
  */
-@ProviderType
 public abstract class SyncDeviceBaseImpl extends SyncDeviceModelImpl
 	implements SyncDevice {
 	/*

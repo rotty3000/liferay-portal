@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see KBArticleLocalService
  * @generated
  */
-@ProviderType
 public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 	ServiceWrapper<KBArticleLocalService> {
 	public KBArticleLocalServiceWrapper(

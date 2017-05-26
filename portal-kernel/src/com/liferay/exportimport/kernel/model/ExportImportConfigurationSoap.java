@@ -14,8 +14,6 @@
 
 package com.liferay.exportimport.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.portlet.exportimport.service.http.ExportImportConfigurationServiceSoap
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationSoap implements Serializable {
 	public static ExportImportConfigurationSoap toSoapModel(
 		ExportImportConfiguration model) {

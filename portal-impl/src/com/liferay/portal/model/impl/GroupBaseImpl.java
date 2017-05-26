@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
@@ -37,7 +35,6 @@ import java.util.List;
  * @see Group
  * @generated
  */
-@ProviderType
 public abstract class GroupBaseImpl extends GroupModelImpl implements Group {
 	/*
 	 * NOTE FOR DEVELOPERS:

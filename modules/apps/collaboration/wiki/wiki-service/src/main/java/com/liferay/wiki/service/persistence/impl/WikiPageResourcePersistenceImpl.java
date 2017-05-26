@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -68,7 +66,6 @@ import java.util.Set;
  * @see com.liferay.wiki.service.persistence.WikiPageResourceUtil
  * @generated
  */
-@ProviderType
 public class WikiPageResourcePersistenceImpl extends BasePersistenceImpl<WikiPageResource>
 	implements WikiPageResourcePersistence {
 	/*

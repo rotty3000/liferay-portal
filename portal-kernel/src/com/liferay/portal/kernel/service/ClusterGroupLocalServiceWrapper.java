@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link ClusterGroupLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see ClusterGroupLocalService
  * @generated
  */
-@ProviderType
 public class ClusterGroupLocalServiceWrapper implements ClusterGroupLocalService,
 	ServiceWrapper<ClusterGroupLocalService> {
 	public ClusterGroupLocalServiceWrapper(

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 import com.liferay.document.library.kernel.service.DLSyncEventLocalService;
 import com.liferay.document.library.kernel.service.persistence.DLSyncEventPersistence;
@@ -60,7 +58,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLSyncEventLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLSyncEventLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLSyncEventLocalService,
 		IdentifiableOSGiService {

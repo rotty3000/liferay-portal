@@ -14,8 +14,6 @@
 
 package com.liferay.announcements.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see AnnouncementsDeliveryLocalService
  * @generated
  */
-@ProviderType
 public class AnnouncementsDeliveryLocalServiceWrapper
 	implements AnnouncementsDeliveryLocalService,
 		ServiceWrapper<AnnouncementsDeliveryLocalService> {

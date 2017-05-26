@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
 import com.liferay.microblogs.model.MicroblogsEntry;
@@ -70,7 +68,6 @@ import javax.sql.DataSource;
  * @see com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class MicroblogsEntryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MicroblogsEntryLocalService,
 		IdentifiableOSGiService {

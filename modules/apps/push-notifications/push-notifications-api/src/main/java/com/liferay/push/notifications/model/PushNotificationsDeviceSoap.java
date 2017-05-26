@@ -14,8 +14,6 @@
 
 package com.liferay.push.notifications.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.push.notifications.service.http.PushNotificationsDeviceServiceSoap
  * @generated
  */
-@ProviderType
 public class PushNotificationsDeviceSoap implements Serializable {
 	public static PushNotificationsDeviceSoap toSoapModel(
 		PushNotificationsDevice model) {

@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Status;
 import com.liferay.chat.service.StatusLocalService;
 import com.liferay.chat.service.persistence.EntryFinder;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.chat.service.StatusLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class StatusLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements StatusLocalService, IdentifiableOSGiService {
 	/*

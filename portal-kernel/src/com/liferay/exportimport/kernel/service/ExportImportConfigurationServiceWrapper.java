@@ -14,8 +14,6 @@
 
 package com.liferay.exportimport.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ExportImportConfigurationService
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationServiceWrapper
 	implements ExportImportConfigurationService,
 		ServiceWrapper<ExportImportConfigurationService> {

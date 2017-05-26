@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsFlag;
 import com.liferay.announcements.kernel.model.AnnouncementsFlagModel;
 import com.liferay.announcements.kernel.model.AnnouncementsFlagSoap;
@@ -61,7 +59,6 @@ import java.util.Map;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class AnnouncementsFlagModelImpl extends BaseModelImpl<AnnouncementsFlag>
 	implements AnnouncementsFlagModel {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBBan;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.messageboards.service.persistence.impl.MBBanPersistenceImpl
  * @generated
  */
-@ProviderType
 public class MBBanUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

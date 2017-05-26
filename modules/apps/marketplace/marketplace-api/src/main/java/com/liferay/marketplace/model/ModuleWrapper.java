@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see Module
  * @generated
  */
-@ProviderType
 public class ModuleWrapper implements Module, ModelWrapper<Module> {
 	public ModuleWrapper(Module module) {
 		_module = module;

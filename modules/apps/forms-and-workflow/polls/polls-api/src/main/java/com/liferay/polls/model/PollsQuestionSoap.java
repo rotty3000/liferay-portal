@@ -14,8 +14,6 @@
 
 package com.liferay.polls.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.polls.service.http.PollsQuestionServiceSoap
  * @generated
  */
-@ProviderType
 public class PollsQuestionSoap implements Serializable {
 	public static PollsQuestionSoap toSoapModel(PollsQuestion model) {
 		PollsQuestionSoap soapModel = new PollsQuestionSoap();

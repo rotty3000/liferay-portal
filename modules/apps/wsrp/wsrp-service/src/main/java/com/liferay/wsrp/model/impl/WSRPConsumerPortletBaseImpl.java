@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.wsrp.model.WSRPConsumerPortlet;
 import com.liferay.wsrp.service.WSRPConsumerPortletLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.wsrp.service.WSRPConsumerPortletLocalServiceUtil;
  * @see WSRPConsumerPortlet
  * @generated
  */
-@ProviderType
 public abstract class WSRPConsumerPortletBaseImpl
 	extends WSRPConsumerPortletModelImpl implements WSRPConsumerPortlet {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.screens.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -52,7 +50,6 @@ import java.rmi.RemoteException;
  * @see ScreensCommentServiceUtil
  * @generated
  */
-@ProviderType
 public class ScreensCommentServiceSoap {
 	public static java.lang.String addComment(java.lang.String className,
 		long classPK, java.lang.String body) throws RemoteException {

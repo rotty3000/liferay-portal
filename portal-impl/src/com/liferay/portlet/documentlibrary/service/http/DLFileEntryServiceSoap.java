@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLFileEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -64,7 +62,6 @@ import java.rmi.RemoteException;
  * @see DLFileEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class DLFileEntryServiceSoap {
 	public static com.liferay.document.library.kernel.model.DLFileVersionSoap cancelCheckOut(
 		long fileEntryId) throws RemoteException {

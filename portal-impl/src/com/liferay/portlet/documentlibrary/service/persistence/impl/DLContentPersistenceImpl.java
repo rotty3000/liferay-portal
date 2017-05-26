@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.exception.NoSuchContentException;
 import com.liferay.document.library.kernel.model.DLContent;
 import com.liferay.document.library.kernel.service.persistence.DLContentPersistence;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.document.library.kernel.service.persistence.DLContentUtil
  * @generated
  */
-@ProviderType
 public class DLContentPersistenceImpl extends BasePersistenceImpl<DLContent>
 	implements DLContentPersistence {
 	/*

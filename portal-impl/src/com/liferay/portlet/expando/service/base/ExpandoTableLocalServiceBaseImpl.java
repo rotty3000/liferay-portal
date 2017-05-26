@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoTable;
 import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.expando.kernel.service.persistence.ExpandoColumnPersistence;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.expando.kernel.service.ExpandoTableLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class ExpandoTableLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements ExpandoTableLocalService,
 		IdentifiableOSGiService {

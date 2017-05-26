@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.ContactServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see ContactServiceUtil
  * @generated
  */
-@ProviderType
 public class ContactServiceSoap {
 	public static com.liferay.portal.kernel.model.ContactSoap getContact(
 		long contactId) throws RemoteException {

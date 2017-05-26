@@ -14,8 +14,6 @@
 
 package com.liferay.document.library.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see DLFileEntryTypeService
  * @generated
  */
-@ProviderType
 public class DLFileEntryTypeServiceWrapper implements DLFileEntryTypeService,
 	ServiceWrapper<DLFileEntryTypeService> {
 	public DLFileEntryTypeServiceWrapper(

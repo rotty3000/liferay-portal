@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.service.KBFolderServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see KBFolderServiceUtil
  * @generated
  */
-@ProviderType
 public class KBFolderServiceSoap {
 	public static com.liferay.knowledge.base.model.KBFolderSoap addKBFolder(
 		long groupId, long parentResourceClassNameId,

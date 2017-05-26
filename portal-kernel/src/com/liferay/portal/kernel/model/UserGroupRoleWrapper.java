@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -35,7 +33,6 @@ import java.util.Objects;
  * @see UserGroupRole
  * @generated
  */
-@ProviderType
 public class UserGroupRoleWrapper implements UserGroupRole,
 	ModelWrapper<UserGroupRole> {
 	public UserGroupRoleWrapper(UserGroupRole userGroupRole) {

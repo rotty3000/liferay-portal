@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsDelivery;
 import com.liferay.announcements.kernel.model.AnnouncementsDeliveryModel;
 import com.liferay.announcements.kernel.model.AnnouncementsDeliverySoap;
@@ -59,7 +57,6 @@ import java.util.Map;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class AnnouncementsDeliveryModelImpl extends BaseModelImpl<AnnouncementsDelivery>
 	implements AnnouncementsDeliveryModel {
 	/*

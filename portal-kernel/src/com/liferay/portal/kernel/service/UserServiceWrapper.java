@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link UserService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see UserService
  * @generated
  */
-@ProviderType
 public class UserServiceWrapper implements UserService,
 	ServiceWrapper<UserService> {
 	public UserServiceWrapper(UserService userService) {

@@ -14,8 +14,6 @@
 
 package com.liferay.sync.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -73,7 +71,6 @@ import javax.sql.DataSource;
  * @see com.liferay.sync.service.SyncDeviceLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SyncDeviceLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SyncDeviceLocalService,
 		IdentifiableOSGiService {

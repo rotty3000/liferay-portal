@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see ShoppingOrder
  * @generated
  */
-@ProviderType
 public class ShoppingOrderWrapper implements ShoppingOrder,
 	ModelWrapper<ShoppingOrder> {
 	public ShoppingOrderWrapper(ShoppingOrder shoppingOrder) {

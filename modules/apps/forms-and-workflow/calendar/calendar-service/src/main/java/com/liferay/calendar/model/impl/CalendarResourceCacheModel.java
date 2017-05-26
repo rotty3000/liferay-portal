@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.model.CalendarResource;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see CalendarResource
  * @generated
  */
-@ProviderType
 public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 	Externalizable {
 	@Override

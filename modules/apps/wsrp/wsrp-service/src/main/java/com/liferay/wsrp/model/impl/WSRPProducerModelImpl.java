@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -55,7 +53,6 @@ import java.util.Map;
  * @see WSRPProducerModel
  * @generated
  */
-@ProviderType
 public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	implements WSRPProducerModel {
 	/*

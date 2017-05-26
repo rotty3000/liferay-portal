@@ -14,8 +14,6 @@
 
 package com.liferay.asset.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetEntry;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -39,7 +37,6 @@ import java.util.List;
  * @see com.liferay.portlet.asset.service.persistence.impl.AssetEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class AssetEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

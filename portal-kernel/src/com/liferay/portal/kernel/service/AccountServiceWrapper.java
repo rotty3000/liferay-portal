@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link AccountService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see AccountService
  * @generated
  */
-@ProviderType
 public class AccountServiceWrapper implements AccountService,
 	ServiceWrapper<AccountService> {
 	public AccountServiceWrapper(AccountService accountService) {

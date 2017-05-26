@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBComment;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.knowledge.base.service.persistence.impl.KBCommentPersistenceImpl
  * @generated
  */
-@ProviderType
 public class KBCommentUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

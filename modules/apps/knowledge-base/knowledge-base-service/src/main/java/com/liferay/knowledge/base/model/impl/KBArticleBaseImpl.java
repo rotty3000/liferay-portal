@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBArticle;
 import com.liferay.knowledge.base.service.KBArticleLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.knowledge.base.service.KBArticleLocalServiceUtil;
  * @see KBArticle
  * @generated
  */
-@ProviderType
 public abstract class KBArticleBaseImpl extends KBArticleModelImpl
 	implements KBArticle {
 	/*

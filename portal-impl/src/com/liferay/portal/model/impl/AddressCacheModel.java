@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Address
  * @generated
  */
-@ProviderType
 public class AddressCacheModel implements CacheModel<Address>, Externalizable,
 	MVCCModel {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -35,7 +33,6 @@ import java.util.Objects;
  * @see RecentLayoutBranch
  * @generated
  */
-@ProviderType
 public class RecentLayoutBranchWrapper implements RecentLayoutBranch,
 	ModelWrapper<RecentLayoutBranch> {
 	public RecentLayoutBranchWrapper(RecentLayoutBranch recentLayoutBranch) {

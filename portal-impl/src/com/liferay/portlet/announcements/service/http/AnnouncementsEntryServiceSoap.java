@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.service.AnnouncementsEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see AnnouncementsEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class AnnouncementsEntryServiceSoap {
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link #addEntry(long, long, String,

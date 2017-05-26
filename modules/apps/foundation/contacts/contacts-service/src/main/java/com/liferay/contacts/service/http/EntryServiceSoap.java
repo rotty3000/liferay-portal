@@ -14,8 +14,6 @@
 
 package com.liferay.contacts.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.contacts.service.EntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see EntryServiceUtil
  * @generated
  */
-@ProviderType
 public class EntryServiceSoap {
 	public static java.lang.String searchUsersAndContacts(long companyId,
 		java.lang.String keywords, int start, int end)

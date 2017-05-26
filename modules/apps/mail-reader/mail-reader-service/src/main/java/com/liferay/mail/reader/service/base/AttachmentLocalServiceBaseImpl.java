@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Attachment;
 import com.liferay.mail.reader.service.AttachmentLocalService;
 import com.liferay.mail.reader.service.persistence.AccountPersistence;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.mail.reader.service.AttachmentLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class AttachmentLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AttachmentLocalService,
 		IdentifiableOSGiService {

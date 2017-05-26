@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.bookmarks.model.BookmarksFolder;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.bookmarks.service.persistence.impl.BookmarksFolderPersistenceImpl
  * @generated
  */
-@ProviderType
 public class BookmarksFolderUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

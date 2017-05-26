@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.service.ExpandoColumnServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see ExpandoColumnServiceUtil
  * @generated
  */
-@ProviderType
 public class ExpandoColumnServiceHttp {
 	public static com.liferay.expando.kernel.model.ExpandoColumn addColumn(
 		HttpPrincipal httpPrincipal, long tableId, java.lang.String name,

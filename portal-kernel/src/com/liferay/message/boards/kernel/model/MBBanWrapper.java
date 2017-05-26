@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see MBBan
  * @generated
  */
-@ProviderType
 public class MBBanWrapper implements MBBan, ModelWrapper<MBBan> {
 	public MBBanWrapper(MBBan mbBan) {
 		_mbBan = mbBan;

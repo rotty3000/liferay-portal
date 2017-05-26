@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.service.KBFolderServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see KBFolderServiceUtil
  * @generated
  */
-@ProviderType
 public class KBFolderServiceHttp {
 	public static com.liferay.knowledge.base.model.KBFolder addKBFolder(
 		HttpPrincipal httpPrincipal, long groupId,

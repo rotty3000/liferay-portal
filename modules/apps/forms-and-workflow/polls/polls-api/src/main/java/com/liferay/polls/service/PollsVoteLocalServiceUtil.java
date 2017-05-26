@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.polls.service.impl.PollsVoteLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class PollsVoteLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

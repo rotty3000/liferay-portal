@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see MDRRuleGroupInstance
  * @generated
  */
-@ProviderType
 public class MDRRuleGroupInstanceWrapper implements MDRRuleGroupInstance,
 	ModelWrapper<MDRRuleGroupInstance> {
 	public MDRRuleGroupInstanceWrapper(

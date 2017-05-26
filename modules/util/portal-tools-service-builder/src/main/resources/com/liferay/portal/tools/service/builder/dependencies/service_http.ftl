@@ -4,8 +4,6 @@ package ${packagePath}.service.http;
 	import ${apiPackagePath}.service.${entity.name}ServiceUtil;
 </#if>
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -49,7 +47,6 @@ import com.liferay.portal.kernel.util.MethodKey;
 	@Deprecated
 </#if>
 
-@ProviderType
 public class ${entity.name}ServiceHttp {
 
 	<#assign hasMethods = false />

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link PermissionService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see PermissionService
  * @generated
  */
-@ProviderType
 public class PermissionServiceWrapper implements PermissionService,
 	ServiceWrapper<PermissionService> {
 	public PermissionServiceWrapper(PermissionService permissionService) {

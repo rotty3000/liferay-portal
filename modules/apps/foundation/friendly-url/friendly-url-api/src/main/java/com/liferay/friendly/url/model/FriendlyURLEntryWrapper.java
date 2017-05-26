@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see FriendlyURLEntry
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryWrapper implements FriendlyURLEntry,
 	ModelWrapper<FriendlyURLEntry> {
 	public FriendlyURLEntryWrapper(FriendlyURLEntry friendlyURLEntry) {

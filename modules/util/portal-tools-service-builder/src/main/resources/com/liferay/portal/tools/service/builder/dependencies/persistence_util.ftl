@@ -2,8 +2,6 @@ package ${apiPackagePath}.service.persistence;
 
 import ${apiPackagePath}.model.${entity.name};
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
@@ -39,7 +37,6 @@ import org.osgi.util.tracker.ServiceTracker;
 	@Deprecated
 </#if>
 
-@ProviderType
 public class ${entity.name}Util {
 
 	/*

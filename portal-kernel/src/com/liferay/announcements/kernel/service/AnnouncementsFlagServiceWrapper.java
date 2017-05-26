@@ -14,8 +14,6 @@
 
 package com.liferay.announcements.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see AnnouncementsFlagService
  * @generated
  */
-@ProviderType
 public class AnnouncementsFlagServiceWrapper implements AnnouncementsFlagService,
 	ServiceWrapper<AnnouncementsFlagService> {
 	public AnnouncementsFlagServiceWrapper(

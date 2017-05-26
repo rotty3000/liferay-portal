@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.exception.NoSuchCategoryException;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.persistence.AssetCategoryPersistence;
@@ -87,7 +85,6 @@ import java.util.Set;
  * @see com.liferay.asset.kernel.service.persistence.AssetCategoryUtil
  * @generated
  */
-@ProviderType
 public class AssetCategoryPersistenceImpl extends BasePersistenceImpl<AssetCategory>
 	implements AssetCategoryPersistence {
 	/*

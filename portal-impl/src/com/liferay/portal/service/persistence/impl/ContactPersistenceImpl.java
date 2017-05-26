@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -65,7 +63,6 @@ import java.util.Set;
  * @see com.liferay.portal.kernel.service.persistence.ContactUtil
  * @generated
  */
-@ProviderType
 public class ContactPersistenceImpl extends BasePersistenceImpl<Contact>
 	implements ContactPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.subscription.service.impl.SubscriptionLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class SubscriptionLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

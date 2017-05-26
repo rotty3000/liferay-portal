@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
@@ -33,7 +31,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portal.service.impl.LayoutBranchLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class LayoutBranchLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

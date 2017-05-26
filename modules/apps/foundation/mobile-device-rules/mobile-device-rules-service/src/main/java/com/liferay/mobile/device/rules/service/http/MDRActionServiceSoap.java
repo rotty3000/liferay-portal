@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.service.MDRActionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -67,7 +65,6 @@ import java.util.Map;
  * @see MDRActionServiceUtil
  * @generated
  */
-@ProviderType
 public class MDRActionServiceSoap {
 	public static com.liferay.mobile.device.rules.model.MDRActionSoap addAction(
 		long ruleGroupInstanceId, java.lang.String[] nameMapLanguageIds,

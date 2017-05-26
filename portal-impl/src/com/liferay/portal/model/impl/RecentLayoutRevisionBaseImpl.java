@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.RecentLayoutRevision;
 import com.liferay.portal.kernel.service.RecentLayoutRevisionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.RecentLayoutRevisionLocalServiceUtil;
  * @see RecentLayoutRevision
  * @generated
  */
-@ProviderType
 public abstract class RecentLayoutRevisionBaseImpl
 	extends RecentLayoutRevisionModelImpl implements RecentLayoutRevision {
 	/*

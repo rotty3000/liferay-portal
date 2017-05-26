@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.exception.NoSuchStatusException;
 import com.liferay.chat.model.Status;
 import com.liferay.chat.model.impl.StatusImpl;
@@ -63,7 +61,6 @@ import java.util.Set;
  * @see com.liferay.chat.service.persistence.StatusUtil
  * @generated
  */
-@ProviderType
 public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 	implements StatusPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.service.KBTemplateServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see KBTemplateServiceUtil
  * @generated
  */
-@ProviderType
 public class KBTemplateServiceHttp {
 	public static com.liferay.knowledge.base.model.KBTemplate addKBTemplate(
 		HttpPrincipal httpPrincipal, java.lang.String portletId,

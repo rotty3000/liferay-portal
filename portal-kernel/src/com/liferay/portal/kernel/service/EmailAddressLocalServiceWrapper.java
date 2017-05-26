@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link EmailAddressLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see EmailAddressLocalService
  * @generated
  */
-@ProviderType
 public class EmailAddressLocalServiceWrapper implements EmailAddressLocalService,
 	ServiceWrapper<EmailAddressLocalService> {
 	public EmailAddressLocalServiceWrapper(

@@ -14,8 +14,6 @@
 
 package com.liferay.chat.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Status;
 import com.liferay.chat.model.StatusModel;
 
@@ -54,7 +52,6 @@ import java.util.Map;
  * @see StatusModel
  * @generated
  */
-@ProviderType
 public class StatusModelImpl extends BaseModelImpl<Status>
 	implements StatusModel {
 	/*

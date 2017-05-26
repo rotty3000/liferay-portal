@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
  * @see Company
  * @generated
  */
-@ProviderType
 public abstract class CompanyBaseImpl extends CompanyModelImpl
 	implements Company {
 	/*

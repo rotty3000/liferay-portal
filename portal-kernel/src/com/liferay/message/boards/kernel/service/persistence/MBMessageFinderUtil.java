@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
@@ -23,7 +21,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class MBMessageFinderUtil {
 	public static int countByC_T(java.util.Date createDate, long threadId) {
 		return getFinder().countByC_T(createDate, threadId);

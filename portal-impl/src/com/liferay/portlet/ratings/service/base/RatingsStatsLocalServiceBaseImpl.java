@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.ratings.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.ratings.kernel.service.RatingsStatsLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class RatingsStatsLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements RatingsStatsLocalService,
 		IdentifiableOSGiService {

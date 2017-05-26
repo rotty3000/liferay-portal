@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.service.AppServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see AppServiceUtil
  * @generated
  */
-@ProviderType
 public class AppServiceHttp {
 	public static com.liferay.marketplace.model.App deleteApp(
 		HttpPrincipal httpPrincipal, long appId)

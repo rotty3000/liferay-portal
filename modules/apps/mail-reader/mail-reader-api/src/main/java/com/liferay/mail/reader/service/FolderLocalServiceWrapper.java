@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see FolderLocalService
  * @generated
  */
-@ProviderType
 public class FolderLocalServiceWrapper implements FolderLocalService,
 	ServiceWrapper<FolderLocalService> {
 	public FolderLocalServiceWrapper(FolderLocalService folderLocalService) {

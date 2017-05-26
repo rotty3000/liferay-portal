@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -52,7 +50,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see CountryServiceUtil
  * @generated
  */
-@ProviderType
 public class CountryServiceHttp {
 	public static com.liferay.portal.kernel.model.Country addCountry(
 		HttpPrincipal httpPrincipal, java.lang.String name,

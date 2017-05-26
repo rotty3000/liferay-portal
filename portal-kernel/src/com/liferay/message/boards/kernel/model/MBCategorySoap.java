@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.portlet.messageboards.service.http.MBCategoryServiceSoap
  * @generated
  */
-@ProviderType
 public class MBCategorySoap implements Serializable {
 	public static MBCategorySoap toSoapModel(MBCategory model) {
 		MBCategorySoap soapModel = new MBCategorySoap();

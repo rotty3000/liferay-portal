@@ -14,8 +14,6 @@
 
 package com.liferay.chat.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Status;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see Status
  * @generated
  */
-@ProviderType
 public class StatusCacheModel implements CacheModel<Status>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

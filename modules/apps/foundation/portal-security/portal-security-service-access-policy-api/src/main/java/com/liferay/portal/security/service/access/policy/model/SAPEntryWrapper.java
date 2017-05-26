@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see SAPEntry
  * @generated
  */
-@ProviderType
 public class SAPEntryWrapper implements SAPEntry, ModelWrapper<SAPEntry> {
 	public SAPEntryWrapper(SAPEntry sapEntry) {
 		_sapEntry = sapEntry;

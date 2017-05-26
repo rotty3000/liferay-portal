@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.mobile.device.rules.service.http.MDRRuleGroupInstanceServiceSoap
  * @generated
  */
-@ProviderType
 public class MDRRuleGroupInstanceSoap implements Serializable {
 	public static MDRRuleGroupInstanceSoap toSoapModel(
 		MDRRuleGroupInstance model) {

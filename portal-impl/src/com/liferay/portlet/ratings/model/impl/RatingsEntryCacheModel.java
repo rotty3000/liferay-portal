@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.ratings.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see RatingsEntry
  * @generated
  */
-@ProviderType
 public class RatingsEntryCacheModel implements CacheModel<RatingsEntry>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.bookmarks.service.BookmarksFolderServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see BookmarksFolderServiceUtil
  * @generated
  */
-@ProviderType
 public class BookmarksFolderServiceHttp {
 	public static com.liferay.bookmarks.model.BookmarksFolder addFolder(
 		HttpPrincipal httpPrincipal, long parentFolderId,

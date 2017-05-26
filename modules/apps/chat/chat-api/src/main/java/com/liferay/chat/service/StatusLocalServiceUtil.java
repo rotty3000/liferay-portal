@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.chat.service.impl.StatusLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class StatusLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

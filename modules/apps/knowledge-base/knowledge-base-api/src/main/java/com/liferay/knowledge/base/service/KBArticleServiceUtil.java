@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.knowledge.base.service.impl.KBArticleServiceImpl
  * @generated
  */
-@ProviderType
 public class KBArticleServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

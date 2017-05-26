@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.Account;
 import com.liferay.portal.kernel.service.AccountLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.AccountLocalServiceUtil;
  * @see Account
  * @generated
  */
-@ProviderType
 public abstract class AccountBaseImpl extends AccountModelImpl
 	implements Account {
 	/*

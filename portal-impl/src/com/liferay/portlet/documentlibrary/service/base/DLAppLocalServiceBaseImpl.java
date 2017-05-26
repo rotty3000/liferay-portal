@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLAppLocalService;
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryMetadataFinder;
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryMetadataPersistence;
@@ -53,7 +51,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLAppLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLAppLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements DLAppLocalService, IdentifiableOSGiService {
 	/*

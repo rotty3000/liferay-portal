@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.model.App;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see App
  * @generated
  */
-@ProviderType
 public class AppCacheModel implements CacheModel<App>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

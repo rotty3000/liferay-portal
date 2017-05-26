@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.ResourceBlockServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see ResourceBlockServiceUtil
  * @generated
  */
-@ProviderType
 public class ResourceBlockServiceSoap {
 	public static void addCompanyScopePermission(long scopeGroupId,
 		long companyId, java.lang.String name, long roleId,

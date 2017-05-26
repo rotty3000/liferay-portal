@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.RepositoryServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see RepositoryServiceUtil
  * @generated
  */
-@ProviderType
 public class RepositoryServiceSoap {
 	public static void checkRepository(long repositoryId)
 		throws RemoteException {

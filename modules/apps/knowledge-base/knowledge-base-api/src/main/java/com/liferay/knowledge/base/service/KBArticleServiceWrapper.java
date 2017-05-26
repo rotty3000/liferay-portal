@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see KBArticleService
  * @generated
  */
-@ProviderType
 public class KBArticleServiceWrapper implements KBArticleService,
 	ServiceWrapper<KBArticleService> {
 	public KBArticleServiceWrapper(KBArticleService kbArticleService) {

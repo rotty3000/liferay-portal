@@ -14,8 +14,6 @@
 
 package com.liferay.portal.lock.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.lock.model.Lock;
 import com.liferay.portal.lock.service.LockLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.lock.service.LockLocalServiceUtil;
  * @see Lock
  * @generated
  */
-@ProviderType
 public abstract class LockBaseImpl extends LockModelImpl implements Lock {
 	/*
 	 * NOTE FOR DEVELOPERS:

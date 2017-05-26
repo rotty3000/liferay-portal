@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -63,7 +61,6 @@ import javax.sql.DataSource;
  * @see com.liferay.social.kernel.service.SocialRelationLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SocialRelationLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SocialRelationLocalService,
 		IdentifiableOSGiService {

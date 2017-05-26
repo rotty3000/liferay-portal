@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.social.kernel.model.SocialRequest;
 import com.liferay.social.kernel.service.SocialRequestLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.social.kernel.service.SocialRequestLocalServiceUtil;
  * @see SocialRequest
  * @generated
  */
-@ProviderType
 public abstract class SocialRequestBaseImpl extends SocialRequestModelImpl
 	implements SocialRequest {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
@@ -79,7 +77,6 @@ import javax.sql.DataSource;
  * @see com.liferay.knowledge.base.service.KBTemplateLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class KBTemplateLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements KBTemplateLocalService,
 		IdentifiableOSGiService {

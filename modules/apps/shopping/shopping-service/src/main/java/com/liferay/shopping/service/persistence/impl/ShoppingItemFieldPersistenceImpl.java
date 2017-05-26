@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -65,7 +63,6 @@ import java.util.Set;
  * @see com.liferay.shopping.service.persistence.ShoppingItemFieldUtil
  * @generated
  */
-@ProviderType
 public class ShoppingItemFieldPersistenceImpl extends BasePersistenceImpl<ShoppingItemField>
 	implements ShoppingItemFieldPersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.AssetCategoryPropertyServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see AssetCategoryPropertyServiceUtil
  * @generated
  */
-@ProviderType
 public class AssetCategoryPropertyServiceSoap {
 	public static com.liferay.asset.kernel.model.AssetCategoryPropertySoap addCategoryProperty(
 		long entryId, java.lang.String key, java.lang.String value)

@@ -14,8 +14,6 @@
 
 package com.liferay.ratings.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see RatingsEntryLocalService
  * @generated
  */
-@ProviderType
 public class RatingsEntryLocalServiceWrapper implements RatingsEntryLocalService,
 	ServiceWrapper<RatingsEntryLocalService> {
 	public RatingsEntryLocalServiceWrapper(

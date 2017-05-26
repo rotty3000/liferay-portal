@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.service.CalendarServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see CalendarServiceUtil
  * @generated
  */
-@ProviderType
 public class CalendarServiceHttp {
 	public static com.liferay.calendar.model.Calendar addCalendar(
 		HttpPrincipal httpPrincipal, long groupId, long calendarResourceId,

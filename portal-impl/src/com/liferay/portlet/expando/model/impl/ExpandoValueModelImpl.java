@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.expando.kernel.model.ExpandoValueModel;
 import com.liferay.expando.kernel.model.ExpandoValueSoap;
@@ -54,7 +52,6 @@ import java.util.Map;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class ExpandoValueModelImpl extends BaseModelImpl<ExpandoValue>
 	implements ExpandoValueModel {
 	/*

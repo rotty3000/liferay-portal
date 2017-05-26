@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.model.MDRAction;
 import com.liferay.mobile.device.rules.service.MDRActionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.mobile.device.rules.service.MDRActionLocalServiceUtil;
  * @see MDRAction
  * @generated
  */
-@ProviderType
 public abstract class MDRActionBaseImpl extends MDRActionModelImpl
 	implements MDRAction {
 	/*

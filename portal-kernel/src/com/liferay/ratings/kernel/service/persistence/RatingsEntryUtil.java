@@ -14,8 +14,6 @@
 
 package com.liferay.ratings.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.ratings.service.persistence.impl.RatingsEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class RatingsEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

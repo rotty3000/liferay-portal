@@ -14,15 +14,12 @@
 
 package com.liferay.opensocial.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.InvokableService;
 
 /**
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class GadgetServiceClp implements GadgetService {
 	public GadgetServiceClp(InvokableService invokableService) {
 		_invokableService = invokableService;

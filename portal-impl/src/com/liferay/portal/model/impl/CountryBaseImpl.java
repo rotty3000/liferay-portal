@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.Country;
 
 /**
@@ -30,7 +28,6 @@ import com.liferay.portal.kernel.model.Country;
  * @see Country
  * @generated
  */
-@ProviderType
 public abstract class CountryBaseImpl extends CountryModelImpl
 	implements Country {
 	/*

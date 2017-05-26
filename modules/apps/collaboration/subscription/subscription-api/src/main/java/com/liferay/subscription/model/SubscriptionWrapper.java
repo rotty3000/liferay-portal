@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see Subscription
  * @generated
  */
-@ProviderType
 public class SubscriptionWrapper implements Subscription,
 	ModelWrapper<Subscription> {
 	public SubscriptionWrapper(Subscription subscription) {

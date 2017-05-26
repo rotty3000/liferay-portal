@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.service.KBArticleServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see KBArticleServiceUtil
  * @generated
  */
-@ProviderType
 public class KBArticleServiceSoap {
 	public static com.liferay.knowledge.base.model.KBArticleSoap addKBArticle(
 		java.lang.String portletId, long parentResourceClassNameId,

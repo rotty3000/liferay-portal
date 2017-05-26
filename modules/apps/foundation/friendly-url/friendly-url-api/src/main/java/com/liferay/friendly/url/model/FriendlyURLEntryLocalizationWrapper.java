@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see FriendlyURLEntryLocalization
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryLocalizationWrapper
 	implements FriendlyURLEntryLocalization,
 		ModelWrapper<FriendlyURLEntryLocalization> {

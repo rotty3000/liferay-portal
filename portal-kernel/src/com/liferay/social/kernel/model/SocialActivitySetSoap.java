@@ -14,8 +14,6 @@
 
 package com.liferay.social.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class SocialActivitySetSoap implements Serializable {
 	public static SocialActivitySetSoap toSoapModel(SocialActivitySet model) {
 		SocialActivitySetSoap soapModel = new SocialActivitySetSoap();

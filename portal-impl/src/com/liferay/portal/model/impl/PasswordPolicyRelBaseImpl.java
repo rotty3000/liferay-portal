@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.PasswordPolicyRel;
 import com.liferay.portal.kernel.service.PasswordPolicyRelLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.PasswordPolicyRelLocalServiceUtil;
  * @see PasswordPolicyRel
  * @generated
  */
-@ProviderType
 public abstract class PasswordPolicyRelBaseImpl
 	extends PasswordPolicyRelModelImpl implements PasswordPolicyRel {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 import com.liferay.document.library.kernel.service.DLSyncEventLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.document.library.kernel.service.DLSyncEventLocalServiceUtil;
  * @see DLSyncEvent
  * @generated
  */
-@ProviderType
 public abstract class DLSyncEventBaseImpl extends DLSyncEventModelImpl
 	implements DLSyncEvent {
 	/*

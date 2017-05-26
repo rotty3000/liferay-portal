@@ -14,8 +14,6 @@
 
 package com.liferay.screens.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ScreensCommentService
  * @generated
  */
-@ProviderType
 public class ScreensCommentServiceWrapper implements ScreensCommentService,
 	ServiceWrapper<ScreensCommentService> {
 	public ScreensCommentServiceWrapper(

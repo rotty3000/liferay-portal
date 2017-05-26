@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBStatsUser;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -36,7 +34,6 @@ import java.util.Date;
  * @see MBStatsUser
  * @generated
  */
-@ProviderType
 public class MBStatsUserCacheModel implements CacheModel<MBStatsUser>,
 	Externalizable {
 	@Override

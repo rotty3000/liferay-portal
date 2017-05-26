@@ -14,8 +14,6 @@
 
 package com.liferay.expando.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoRow;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.expando.service.persistence.impl.ExpandoRowPersistenceImpl
  * @generated
  */
-@ProviderType
 public class ExpandoRowUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

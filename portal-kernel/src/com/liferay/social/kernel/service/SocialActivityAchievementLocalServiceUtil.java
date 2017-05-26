@@ -14,8 +14,6 @@
 
 package com.liferay.social.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
@@ -33,7 +31,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.portlet.social.service.impl.SocialActivityAchievementLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class SocialActivityAchievementLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

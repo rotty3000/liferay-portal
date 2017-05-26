@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see MDRRuleGroupService
  * @generated
  */
-@ProviderType
 public class MDRRuleGroupServiceWrapper implements MDRRuleGroupService,
 	ServiceWrapper<MDRRuleGroupService> {
 	public MDRRuleGroupServiceWrapper(MDRRuleGroupService mdrRuleGroupService) {

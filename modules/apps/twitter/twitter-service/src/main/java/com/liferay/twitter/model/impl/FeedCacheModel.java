@@ -14,8 +14,6 @@
 
 package com.liferay.twitter.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Feed
  * @generated
  */
-@ProviderType
 public class FeedCacheModel implements CacheModel<Feed>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

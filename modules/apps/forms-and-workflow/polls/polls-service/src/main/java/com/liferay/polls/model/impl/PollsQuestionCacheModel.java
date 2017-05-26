@@ -14,8 +14,6 @@
 
 package com.liferay.polls.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.polls.model.PollsQuestion;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see PollsQuestion
  * @generated
  */
-@ProviderType
 public class PollsQuestionCacheModel implements CacheModel<PollsQuestion>,
 	Externalizable {
 	@Override

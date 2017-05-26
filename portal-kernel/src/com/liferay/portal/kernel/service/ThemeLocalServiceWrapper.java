@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link ThemeLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see ThemeLocalService
  * @generated
  */
-@ProviderType
 public class ThemeLocalServiceWrapper implements ThemeLocalService,
 	ServiceWrapper<ThemeLocalService> {
 	public ThemeLocalServiceWrapper(ThemeLocalService themeLocalService) {

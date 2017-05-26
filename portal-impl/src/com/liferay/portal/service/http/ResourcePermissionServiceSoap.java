@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.ResourcePermissionServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see ResourcePermissionServiceUtil
  * @generated
  */
-@ProviderType
 public class ResourcePermissionServiceSoap {
 	/**
 	* Grants the role permission at the scope to perform the action on

@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.exception.NoSuchEntryException;
 import com.liferay.chat.model.Entry;
 import com.liferay.chat.model.impl.EntryImpl;
@@ -60,7 +58,6 @@ import java.util.Set;
  * @see com.liferay.chat.service.persistence.EntryUtil
  * @generated
  */
-@ProviderType
 public class EntryPersistenceImpl extends BasePersistenceImpl<Entry>
 	implements EntryPersistence {
 	/*

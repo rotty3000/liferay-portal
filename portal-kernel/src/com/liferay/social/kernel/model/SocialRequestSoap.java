@@ -14,8 +14,6 @@
 
 package com.liferay.social.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.List;
  * @see com.liferay.portlet.social.service.http.SocialRequestServiceSoap
  * @generated
  */
-@ProviderType
 public class SocialRequestSoap implements Serializable {
 	public static SocialRequestSoap toSoapModel(SocialRequest model) {
 		SocialRequestSoap soapModel = new SocialRequestSoap();

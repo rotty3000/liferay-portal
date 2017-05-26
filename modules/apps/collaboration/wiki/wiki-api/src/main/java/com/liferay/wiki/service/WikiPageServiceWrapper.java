@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see WikiPageService
  * @generated
  */
-@ProviderType
 public class WikiPageServiceWrapper implements WikiPageService,
 	ServiceWrapper<WikiPageService> {
 	public WikiPageServiceWrapper(WikiPageService wikiPageService) {

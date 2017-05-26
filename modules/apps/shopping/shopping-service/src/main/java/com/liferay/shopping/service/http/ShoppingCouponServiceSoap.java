@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see ShoppingCouponServiceUtil
  * @generated
  */
-@ProviderType
 public class ShoppingCouponServiceSoap {
 	public static com.liferay.shopping.model.ShoppingCouponSoap addCoupon(
 		java.lang.String code, boolean autoCode, java.lang.String name,

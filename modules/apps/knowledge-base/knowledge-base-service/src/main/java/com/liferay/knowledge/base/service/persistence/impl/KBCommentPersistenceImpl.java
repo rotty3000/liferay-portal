@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.exception.NoSuchCommentException;
 import com.liferay.knowledge.base.model.KBComment;
 import com.liferay.knowledge.base.model.impl.KBCommentImpl;
@@ -74,7 +72,6 @@ import java.util.Set;
  * @see com.liferay.knowledge.base.service.persistence.KBCommentUtil
  * @generated
  */
-@ProviderType
 public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 	implements KBCommentPersistence {
 	/*

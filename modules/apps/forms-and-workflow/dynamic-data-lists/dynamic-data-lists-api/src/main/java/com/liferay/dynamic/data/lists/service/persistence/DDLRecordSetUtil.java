@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.dynamic.data.lists.service.persistence.impl.DDLRecordSetPersistenceImpl
  * @generated
  */
-@ProviderType
 public class DDLRecordSetUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

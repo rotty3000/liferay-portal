@@ -1,7 +1,5 @@
 package ${apiPackagePath}.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 <#if osgiModule>
 import com.liferay.osgi.util.ServiceTrackerFactory;
 </#if>
@@ -57,7 +55,6 @@ import org.osgi.util.tracker.ServiceTracker;
 	@Deprecated
 </#if>
 
-@ProviderType
 public class ${entity.name}${sessionTypeName}ServiceUtil {
 
 	/*

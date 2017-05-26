@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
@@ -88,7 +86,6 @@ import javax.sql.DataSource;
  * @see com.liferay.wiki.service.WikiNodeLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class WikiNodeLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements WikiNodeLocalService, IdentifiableOSGiService {
 	/*

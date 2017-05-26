@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.wiki.service.impl.WikiNodeLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class WikiNodeLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

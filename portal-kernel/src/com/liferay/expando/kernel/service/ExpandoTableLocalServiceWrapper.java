@@ -14,8 +14,6 @@
 
 package com.liferay.expando.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ExpandoTableLocalService
  * @generated
  */
-@ProviderType
 public class ExpandoTableLocalServiceWrapper implements ExpandoTableLocalService,
 	ServiceWrapper<ExpandoTableLocalService> {
 	public ExpandoTableLocalServiceWrapper(

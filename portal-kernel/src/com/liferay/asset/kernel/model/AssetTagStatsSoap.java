@@ -14,8 +14,6 @@
 
 package com.liferay.asset.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class AssetTagStatsSoap implements Serializable {
 	public static AssetTagStatsSoap toSoapModel(AssetTagStats model) {
 		AssetTagStatsSoap soapModel = new AssetTagStatsSoap();

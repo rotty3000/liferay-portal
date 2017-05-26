@@ -14,8 +14,6 @@
 
 package com.liferay.asset.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see AssetVocabularyService
  * @generated
  */
-@ProviderType
 public class AssetVocabularyServiceWrapper implements AssetVocabularyService,
 	ServiceWrapper<AssetVocabularyService> {
 	public AssetVocabularyServiceWrapper(

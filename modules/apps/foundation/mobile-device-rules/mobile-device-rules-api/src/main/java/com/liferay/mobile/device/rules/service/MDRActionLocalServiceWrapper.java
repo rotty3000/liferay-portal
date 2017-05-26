@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see MDRActionLocalService
  * @generated
  */
-@ProviderType
 public class MDRActionLocalServiceWrapper implements MDRActionLocalService,
 	ServiceWrapper<MDRActionLocalService> {
 	public MDRActionLocalServiceWrapper(

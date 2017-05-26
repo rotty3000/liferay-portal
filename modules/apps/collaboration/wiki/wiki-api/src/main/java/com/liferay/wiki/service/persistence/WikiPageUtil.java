@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.wiki.service.persistence.impl.WikiPagePersistenceImpl
  * @generated
  */
-@ProviderType
 public class WikiPageUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

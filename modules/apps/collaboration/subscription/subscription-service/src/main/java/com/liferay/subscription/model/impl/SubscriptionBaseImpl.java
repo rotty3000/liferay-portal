@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.subscription.model.Subscription;
 import com.liferay.subscription.service.SubscriptionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.subscription.service.SubscriptionLocalServiceUtil;
  * @see Subscription
  * @generated
  */
-@ProviderType
 public abstract class SubscriptionBaseImpl extends SubscriptionModelImpl
 	implements Subscription {
 	/*

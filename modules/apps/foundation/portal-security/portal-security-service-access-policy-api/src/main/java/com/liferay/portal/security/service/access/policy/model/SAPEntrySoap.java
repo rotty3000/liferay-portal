@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.portal.security.service.access.policy.service.http.SAPEntryServiceSoap
  * @generated
  */
-@ProviderType
 public class SAPEntrySoap implements Serializable {
 	public static SAPEntrySoap toSoapModel(SAPEntry model) {
 		SAPEntrySoap soapModel = new SAPEntrySoap();

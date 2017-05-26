@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see Message
  * @generated
  */
-@ProviderType
 public class MessageWrapper implements Message, ModelWrapper<Message> {
 	public MessageWrapper(Message message) {
 		_message = message;

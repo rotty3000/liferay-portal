@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.PasswordPolicyServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see PasswordPolicyServiceUtil
  * @generated
  */
-@ProviderType
 public class PasswordPolicyServiceSoap {
 	public static com.liferay.portal.kernel.model.PasswordPolicySoap addPasswordPolicy(
 		java.lang.String name, java.lang.String description,

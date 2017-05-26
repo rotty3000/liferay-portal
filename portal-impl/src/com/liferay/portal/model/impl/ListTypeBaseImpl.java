@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.ListType;
 import com.liferay.portal.kernel.service.ListTypeLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.ListTypeLocalServiceUtil;
  * @see ListType
  * @generated
  */
-@ProviderType
 public abstract class ListTypeBaseImpl extends ListTypeModelImpl
 	implements ListType {
 	/*

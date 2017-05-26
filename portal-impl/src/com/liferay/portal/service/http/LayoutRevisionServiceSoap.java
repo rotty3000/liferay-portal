@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutRevisionServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see LayoutRevisionServiceUtil
  * @generated
  */
-@ProviderType
 public class LayoutRevisionServiceSoap {
 	public static com.liferay.portal.kernel.model.LayoutRevisionSoap addLayoutRevision(
 		long userId, long layoutSetBranchId, long layoutBranchId,

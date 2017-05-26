@@ -14,8 +14,6 @@
 
 package com.liferay.screens.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ScreensAssetEntryService
  * @generated
  */
-@ProviderType
 public class ScreensAssetEntryServiceWrapper implements ScreensAssetEntryService,
 	ServiceWrapper<ScreensAssetEntryService> {
 	public ScreensAssetEntryServiceWrapper(

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.model.AssetVocabularyModel;
 import com.liferay.asset.kernel.model.AssetVocabularySoap;
@@ -70,7 +68,6 @@ import java.util.TreeSet;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class AssetVocabularyModelImpl extends BaseModelImpl<AssetVocabulary>
 	implements AssetVocabularyModel {
 	/*

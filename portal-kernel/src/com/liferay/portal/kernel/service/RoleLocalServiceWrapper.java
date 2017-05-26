@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link RoleLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see RoleLocalService
  * @generated
  */
-@ProviderType
 public class RoleLocalServiceWrapper implements RoleLocalService,
 	ServiceWrapper<RoleLocalService> {
 	public RoleLocalServiceWrapper(RoleLocalService roleLocalService) {

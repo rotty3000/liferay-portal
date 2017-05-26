@@ -2,8 +2,6 @@ package ${apiPackagePath}.service.base;
 
 import ${apiPackagePath}.service.${entity.name}${sessionTypeName}ServiceUtil;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.util.Arrays;
 
 /**
@@ -18,7 +16,6 @@ import java.util.Arrays;
 	@Deprecated
 </#if>
 
-@ProviderType
 public class ${entity.name}${sessionTypeName}ServiceClpInvoker {
 
 	public ${entity.name}${sessionTypeName}ServiceClpInvoker() {

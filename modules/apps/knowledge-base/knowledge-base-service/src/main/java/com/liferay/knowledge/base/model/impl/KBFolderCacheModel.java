@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBFolder;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see KBFolder
  * @generated
  */
-@ProviderType
 public class KBFolderCacheModel implements CacheModel<KBFolder>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

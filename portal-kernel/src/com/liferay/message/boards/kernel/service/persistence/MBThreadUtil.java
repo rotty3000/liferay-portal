@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBThread;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -39,7 +37,6 @@ import java.util.List;
  * @see com.liferay.portlet.messageboards.service.persistence.impl.MBThreadPersistenceImpl
  * @generated
  */
-@ProviderType
 public class MBThreadUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

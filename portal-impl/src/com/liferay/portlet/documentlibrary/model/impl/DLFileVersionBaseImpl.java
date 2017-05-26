@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileVersion;
 import com.liferay.document.library.kernel.service.DLFileVersionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.document.library.kernel.service.DLFileVersionLocalServiceUtil
  * @see DLFileVersion
  * @generated
  */
-@ProviderType
 public abstract class DLFileVersionBaseImpl extends DLFileVersionModelImpl
 	implements DLFileVersion {
 	/*

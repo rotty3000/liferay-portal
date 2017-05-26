@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.PermissionServiceUtil;
@@ -51,7 +49,6 @@ import java.rmi.RemoteException;
  * @see PermissionServiceUtil
  * @generated
  */
-@ProviderType
 public class PermissionServiceSoap {
 	/**
 	* Checks to see if the group has permission to the service.

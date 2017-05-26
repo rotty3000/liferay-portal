@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.model.OAuthToken;
 import com.liferay.opensocial.service.OAuthTokenLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.opensocial.service.OAuthTokenLocalServiceUtil;
  * @see OAuthToken
  * @generated
  */
-@ProviderType
 public abstract class OAuthTokenBaseImpl extends OAuthTokenModelImpl
 	implements OAuthToken {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.ResourcePermission;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see ResourcePermission
  * @generated
  */
-@ProviderType
 public class ResourcePermissionCacheModel implements CacheModel<ResourcePermission>,
 	Externalizable, MVCCModel {
 	@Override

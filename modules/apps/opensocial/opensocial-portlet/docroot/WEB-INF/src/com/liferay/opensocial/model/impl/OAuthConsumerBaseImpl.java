@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.model.OAuthConsumer;
 import com.liferay.opensocial.service.OAuthConsumerLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.opensocial.service.OAuthConsumerLocalServiceUtil;
  * @see OAuthConsumer
  * @generated
  */
-@ProviderType
 public abstract class OAuthConsumerBaseImpl extends OAuthConsumerModelImpl
 	implements OAuthConsumer {
 	/*

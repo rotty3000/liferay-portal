@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -38,7 +36,6 @@ import java.util.Date;
  * @see ExportImportConfiguration
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationCacheModel implements CacheModel<ExportImportConfiguration>,
 	Externalizable, MVCCModel {
 	@Override

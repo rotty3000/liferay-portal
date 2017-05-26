@@ -14,8 +14,6 @@
 
 package com.liferay.exportimport.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see StagingService
  * @generated
  */
-@ProviderType
 public class StagingServiceWrapper implements StagingService,
 	ServiceWrapper<StagingService> {
 	public StagingServiceWrapper(StagingService stagingService) {

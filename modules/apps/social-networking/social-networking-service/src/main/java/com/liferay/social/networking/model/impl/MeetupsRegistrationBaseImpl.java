@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.social.networking.model.MeetupsRegistration;
 import com.liferay.social.networking.service.MeetupsRegistrationLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.social.networking.service.MeetupsRegistrationLocalServiceUtil
  * @see MeetupsRegistration
  * @generated
  */
-@ProviderType
 public abstract class MeetupsRegistrationBaseImpl
 	extends MeetupsRegistrationModelImpl implements MeetupsRegistration {
 	/*

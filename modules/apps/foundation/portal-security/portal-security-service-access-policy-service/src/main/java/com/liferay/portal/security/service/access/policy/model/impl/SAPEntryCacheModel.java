@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -36,7 +34,6 @@ import java.util.Date;
  * @see SAPEntry
  * @generated
  */
-@ProviderType
 public class SAPEntryCacheModel implements CacheModel<SAPEntry>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

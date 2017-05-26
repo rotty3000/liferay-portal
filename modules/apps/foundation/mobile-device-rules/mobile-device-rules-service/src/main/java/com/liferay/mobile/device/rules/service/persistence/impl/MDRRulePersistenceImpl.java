@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.exception.NoSuchRuleException;
 import com.liferay.mobile.device.rules.model.MDRRule;
 import com.liferay.mobile.device.rules.model.impl.MDRRuleImpl;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.mobile.device.rules.service.persistence.MDRRuleUtil
  * @generated
  */
-@ProviderType
 public class MDRRulePersistenceImpl extends BasePersistenceImpl<MDRRule>
 	implements MDRRulePersistence {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLContent;
 import com.liferay.document.library.kernel.service.DLContentLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.document.library.kernel.service.DLContentLocalServiceUtil;
  * @see DLContent
  * @generated
  */
-@ProviderType
 public abstract class DLContentBaseImpl extends DLContentModelImpl
 	implements DLContent {
 	/*

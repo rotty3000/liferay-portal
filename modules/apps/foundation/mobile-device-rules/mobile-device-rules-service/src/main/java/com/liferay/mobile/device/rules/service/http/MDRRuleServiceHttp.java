@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.service.MDRRuleServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see MDRRuleServiceUtil
  * @generated
  */
-@ProviderType
 public class MDRRuleServiceHttp {
 	public static com.liferay.mobile.device.rules.model.MDRRule addRule(
 		HttpPrincipal httpPrincipal, long ruleGroupId,

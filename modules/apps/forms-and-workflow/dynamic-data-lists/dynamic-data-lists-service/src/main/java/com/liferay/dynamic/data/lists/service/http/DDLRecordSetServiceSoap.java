@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.service.DDLRecordSetServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -67,7 +65,6 @@ import java.util.Map;
  * @see DDLRecordSetServiceUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordSetServiceSoap {
 	/**
 	* Adds a record set referencing the DDM structure.

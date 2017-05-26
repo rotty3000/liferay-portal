@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.model.DDLRecord;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see DDLRecord
  * @generated
  */
-@ProviderType
 public class DDLRecordCacheModel implements CacheModel<DDLRecord>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.bookmarks.model.BookmarksFolder;
 import com.liferay.bookmarks.service.BookmarksFolderLocalServiceUtil;
 
@@ -38,7 +36,6 @@ import java.util.List;
  * @see BookmarksFolder
  * @generated
  */
-@ProviderType
 public abstract class BookmarksFolderBaseImpl extends BookmarksFolderModelImpl
 	implements BookmarksFolder {
 	/*

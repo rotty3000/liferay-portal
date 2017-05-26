@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.social.kernel.service.persistence.SocialRelationUtil
  * @generated
  */
-@ProviderType
 public class SocialRelationPersistenceImpl extends BasePersistenceImpl<SocialRelation>
 	implements SocialRelationPersistence {
 	/*

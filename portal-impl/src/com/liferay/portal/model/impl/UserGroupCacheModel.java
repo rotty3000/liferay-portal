@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.UserGroup;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see UserGroup
  * @generated
  */
-@ProviderType
 public class UserGroupCacheModel implements CacheModel<UserGroup>,
 	Externalizable, MVCCModel {
 	@Override

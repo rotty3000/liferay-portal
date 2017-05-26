@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.invitation.invite.members.model.MemberRequest;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see MemberRequest
  * @generated
  */
-@ProviderType
 public class MemberRequestCacheModel implements CacheModel<MemberRequest>,
 	Externalizable {
 	@Override

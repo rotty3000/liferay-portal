@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.service.AnnouncementsDeliveryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see AnnouncementsDeliveryServiceUtil
  * @generated
  */
-@ProviderType
 public class AnnouncementsDeliveryServiceSoap {
 	public static com.liferay.announcements.kernel.model.AnnouncementsDeliverySoap updateDelivery(
 		long userId, java.lang.String type, boolean email, boolean sms,

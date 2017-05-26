@@ -14,8 +14,6 @@
 
 package com.liferay.twitter.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.twitter.model.Feed;
 import com.liferay.twitter.service.FeedLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.twitter.service.FeedLocalServiceUtil;
  * @see Feed
  * @generated
  */
-@ProviderType
 public abstract class FeedBaseImpl extends FeedModelImpl implements Feed {
 	/*
 	 * NOTE FOR DEVELOPERS:

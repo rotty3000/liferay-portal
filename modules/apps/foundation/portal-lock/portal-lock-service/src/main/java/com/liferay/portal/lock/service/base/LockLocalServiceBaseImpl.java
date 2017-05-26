@@ -14,8 +14,6 @@
 
 package com.liferay.portal.lock.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -61,7 +59,6 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.lock.service.LockLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class LockLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements LockLocalService, IdentifiableOSGiService {
 	/*

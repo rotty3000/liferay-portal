@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link VirtualHostLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see VirtualHostLocalService
  * @generated
  */
-@ProviderType
 public class VirtualHostLocalServiceWrapper implements VirtualHostLocalService,
 	ServiceWrapper<VirtualHostLocalService> {
 	public VirtualHostLocalServiceWrapper(

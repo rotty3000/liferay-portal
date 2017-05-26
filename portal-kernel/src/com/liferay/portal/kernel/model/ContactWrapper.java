@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see Contact
  * @generated
  */
-@ProviderType
 public class ContactWrapper implements Contact, ModelWrapper<Contact> {
 	public ContactWrapper(Contact contact) {
 		_contact = contact;

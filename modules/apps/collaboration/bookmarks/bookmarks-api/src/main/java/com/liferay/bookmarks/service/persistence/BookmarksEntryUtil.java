@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.bookmarks.model.BookmarksEntry;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.bookmarks.service.persistence.impl.BookmarksEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class BookmarksEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

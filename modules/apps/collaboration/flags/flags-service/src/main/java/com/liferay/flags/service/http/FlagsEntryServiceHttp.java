@@ -14,8 +14,6 @@
 
 package com.liferay.flags.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.flags.service.FlagsEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see FlagsEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class FlagsEntryServiceHttp {
 	public static void addEntry(HttpPrincipal httpPrincipal,
 		java.lang.String className, long classPK,

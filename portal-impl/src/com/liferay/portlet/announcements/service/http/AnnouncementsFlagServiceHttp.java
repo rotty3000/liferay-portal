@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.service.AnnouncementsFlagServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see AnnouncementsFlagServiceUtil
  * @generated
  */
-@ProviderType
 public class AnnouncementsFlagServiceHttp {
 	public static void addFlag(HttpPrincipal httpPrincipal, long entryId,
 		int value) throws com.liferay.portal.kernel.exception.PortalException {

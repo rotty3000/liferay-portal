@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see MeetupsEntry
  * @generated
  */
-@ProviderType
 public class MeetupsEntryCacheModel implements CacheModel<MeetupsEntry>,
 	Externalizable {
 	@Override

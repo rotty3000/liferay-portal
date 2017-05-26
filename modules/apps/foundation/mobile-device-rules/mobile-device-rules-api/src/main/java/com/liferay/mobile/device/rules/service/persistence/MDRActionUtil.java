@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.model.MDRAction;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.mobile.device.rules.service.persistence.impl.MDRActionPersistenceImpl
  * @generated
  */
-@ProviderType
 public class MDRActionUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

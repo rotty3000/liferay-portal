@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.PluginSetting;
 import com.liferay.portal.kernel.service.PluginSettingLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.PluginSettingLocalServiceUtil;
  * @see PluginSetting
  * @generated
  */
-@ProviderType
 public abstract class PluginSettingBaseImpl extends PluginSettingModelImpl
 	implements PluginSetting {
 	/*

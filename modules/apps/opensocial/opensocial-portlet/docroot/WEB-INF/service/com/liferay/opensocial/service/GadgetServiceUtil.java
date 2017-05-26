@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.service.InvokableService;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
@@ -34,7 +32,6 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @see com.liferay.opensocial.service.impl.GadgetServiceImpl
  * @generated
  */
-@ProviderType
 public class GadgetServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

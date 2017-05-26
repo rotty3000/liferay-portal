@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -52,7 +50,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see PortletPreferencesServiceUtil
  * @generated
  */
-@ProviderType
 public class PortletPreferencesServiceHttp {
 	public static void deleteArchivedPreferences(HttpPrincipal httpPrincipal,
 		long portletItemId)

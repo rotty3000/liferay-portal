@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.portal.service.http.TeamServiceSoap
  * @generated
  */
-@ProviderType
 public class TeamSoap implements Serializable {
 	public static TeamSoap toSoapModel(Team model) {
 		TeamSoap soapModel = new TeamSoap();

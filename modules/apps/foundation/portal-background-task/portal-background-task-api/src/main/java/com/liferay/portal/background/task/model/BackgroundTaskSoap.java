@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import java.util.Map;
  * @see com.liferay.portal.background.task.service.http.BackgroundTaskServiceSoap
  * @generated
  */
-@ProviderType
 public class BackgroundTaskSoap implements Serializable {
 	public static BackgroundTaskSoap toSoapModel(BackgroundTask model) {
 		BackgroundTaskSoap soapModel = new BackgroundTaskSoap();

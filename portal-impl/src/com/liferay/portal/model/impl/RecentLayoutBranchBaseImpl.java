@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.RecentLayoutBranch;
 import com.liferay.portal.kernel.service.RecentLayoutBranchLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.RecentLayoutBranchLocalServiceUtil;
  * @see RecentLayoutBranch
  * @generated
  */
-@ProviderType
 public abstract class RecentLayoutBranchBaseImpl
 	extends RecentLayoutBranchModelImpl implements RecentLayoutBranch {
 	/*

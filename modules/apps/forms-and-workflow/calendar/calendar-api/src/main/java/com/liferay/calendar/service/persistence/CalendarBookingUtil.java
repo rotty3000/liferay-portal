@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.model.CalendarBooking;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.calendar.service.persistence.impl.CalendarBookingPersistenceImpl
  * @generated
  */
-@ProviderType
 public class CalendarBookingUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

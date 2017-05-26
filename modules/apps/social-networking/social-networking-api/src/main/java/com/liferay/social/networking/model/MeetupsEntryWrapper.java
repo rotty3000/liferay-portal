@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see MeetupsEntry
  * @generated
  */
-@ProviderType
 public class MeetupsEntryWrapper implements MeetupsEntry,
 	ModelWrapper<MeetupsEntry> {
 	public MeetupsEntryWrapper(MeetupsEntry meetupsEntry) {

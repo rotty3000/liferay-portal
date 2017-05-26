@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.exception.NoSuchActionException;
 import com.liferay.mobile.device.rules.model.MDRAction;
 import com.liferay.mobile.device.rules.model.impl.MDRActionImpl;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.mobile.device.rules.service.persistence.MDRActionUtil
  * @generated
  */
-@ProviderType
 public class MDRActionPersistenceImpl extends BasePersistenceImpl<MDRAction>
 	implements MDRActionPersistence {
 	/*

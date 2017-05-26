@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.bookmarks.service.http.BookmarksEntryServiceSoap
  * @generated
  */
-@ProviderType
 public class BookmarksEntrySoap implements Serializable {
 	public static BookmarksEntrySoap toSoapModel(BookmarksEntry model) {
 		BookmarksEntrySoap soapModel = new BookmarksEntrySoap();

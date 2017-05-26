@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -51,7 +49,6 @@ import java.util.Map;
  * @see ModuleModel
  * @generated
  */
-@ProviderType
 public class ModuleModelImpl extends BaseModelImpl<Module>
 	implements ModuleModel {
 	/*

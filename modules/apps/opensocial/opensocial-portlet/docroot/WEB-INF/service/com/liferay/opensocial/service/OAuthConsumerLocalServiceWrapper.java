@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see OAuthConsumerLocalService
  * @generated
  */
-@ProviderType
 public class OAuthConsumerLocalServiceWrapper
 	implements OAuthConsumerLocalService,
 		ServiceWrapper<OAuthConsumerLocalService> {

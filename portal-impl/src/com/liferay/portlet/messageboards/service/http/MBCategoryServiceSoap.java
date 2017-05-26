@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.service.MBCategoryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -64,7 +62,6 @@ import java.rmi.RemoteException;
  * @see MBCategoryServiceUtil
  * @generated
  */
-@ProviderType
 public class MBCategoryServiceSoap {
 	public static com.liferay.message.boards.kernel.model.MBCategorySoap addCategory(
 		long userId, long parentCategoryId, java.lang.String name,

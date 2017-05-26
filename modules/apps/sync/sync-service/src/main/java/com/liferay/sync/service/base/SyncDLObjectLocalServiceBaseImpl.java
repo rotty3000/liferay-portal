@@ -14,8 +14,6 @@
 
 package com.liferay.sync.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryPersistence;
 import com.liferay.document.library.kernel.service.persistence.DLFileVersionPersistence;
 import com.liferay.document.library.kernel.service.persistence.DLFolderPersistence;
@@ -75,7 +73,6 @@ import javax.sql.DataSource;
  * @see com.liferay.sync.service.SyncDLObjectLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SyncDLObjectLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SyncDLObjectLocalService,
 		IdentifiableOSGiService {

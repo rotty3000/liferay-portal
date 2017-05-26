@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBFolder;
 import com.liferay.knowledge.base.service.KBFolderLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.knowledge.base.service.KBFolderLocalServiceUtil;
  * @see KBFolder
  * @generated
  */
-@ProviderType
 public abstract class KBFolderBaseImpl extends KBFolderModelImpl
 	implements KBFolder {
 	/*

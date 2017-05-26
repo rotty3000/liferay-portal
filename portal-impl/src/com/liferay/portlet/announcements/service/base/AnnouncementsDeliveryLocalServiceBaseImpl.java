@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsDelivery;
 import com.liferay.announcements.kernel.service.AnnouncementsDeliveryLocalService;
 import com.liferay.announcements.kernel.service.persistence.AnnouncementsDeliveryPersistence;
@@ -62,7 +60,6 @@ import javax.sql.DataSource;
  * @see com.liferay.announcements.kernel.service.AnnouncementsDeliveryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class AnnouncementsDeliveryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements AnnouncementsDeliveryLocalService,
 		IdentifiableOSGiService {

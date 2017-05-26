@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link UserGroupLocalService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see UserGroupLocalService
  * @generated
  */
-@ProviderType
 public class UserGroupLocalServiceWrapper implements UserGroupLocalService,
 	ServiceWrapper<UserGroupLocalService> {
 	public UserGroupLocalServiceWrapper(

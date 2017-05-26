@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -57,7 +55,6 @@ import java.util.Map;
  * @see RepositoryEntryModel
  * @generated
  */
-@ProviderType
 public class RepositoryEntryModelImpl extends BaseModelImpl<RepositoryEntry>
 	implements RepositoryEntryModel {
 	/*

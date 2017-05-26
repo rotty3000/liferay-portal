@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.RecentLayoutSetBranch;
@@ -34,7 +32,6 @@ import java.io.ObjectOutput;
  * @see RecentLayoutSetBranch
  * @generated
  */
-@ProviderType
 public class RecentLayoutSetBranchCacheModel implements CacheModel<RecentLayoutSetBranch>,
 	Externalizable, MVCCModel {
 	@Override

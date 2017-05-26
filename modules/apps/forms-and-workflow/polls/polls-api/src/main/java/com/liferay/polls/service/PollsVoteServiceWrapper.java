@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see PollsVoteService
  * @generated
  */
-@ProviderType
 public class PollsVoteServiceWrapper implements PollsVoteService,
 	ServiceWrapper<PollsVoteService> {
 	public PollsVoteServiceWrapper(PollsVoteService pollsVoteService) {

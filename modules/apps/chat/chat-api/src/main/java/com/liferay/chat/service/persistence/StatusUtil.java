@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Status;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.chat.service.persistence.impl.StatusPersistenceImpl
  * @generated
  */
-@ProviderType
 public class StatusUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

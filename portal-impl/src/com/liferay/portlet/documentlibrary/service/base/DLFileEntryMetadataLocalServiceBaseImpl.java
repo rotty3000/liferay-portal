@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 import com.liferay.document.library.kernel.service.DLFileEntryMetadataLocalService;
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryMetadataFinder;
@@ -64,7 +62,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLFileEntryMetadataLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLFileEntryMetadataLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLFileEntryMetadataLocalService,
 		IdentifiableOSGiService {

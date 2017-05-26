@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.PasswordTracker;
 import com.liferay.portal.kernel.service.PasswordTrackerLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.PasswordTrackerLocalServiceUtil;
  * @see PasswordTracker
  * @generated
  */
-@ProviderType
 public abstract class PasswordTrackerBaseImpl extends PasswordTrackerModelImpl
 	implements PasswordTracker {
 	/*

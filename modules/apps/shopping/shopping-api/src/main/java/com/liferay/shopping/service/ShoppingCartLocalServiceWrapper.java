@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ShoppingCartLocalService
  * @generated
  */
-@ProviderType
 public class ShoppingCartLocalServiceWrapper implements ShoppingCartLocalService,
 	ServiceWrapper<ShoppingCartLocalService> {
 	public ShoppingCartLocalServiceWrapper(

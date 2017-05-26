@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see ModuleLocalService
  * @generated
  */
-@ProviderType
 public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	ServiceWrapper<ModuleLocalService> {
 	public ModuleLocalServiceWrapper(ModuleLocalService moduleLocalService) {

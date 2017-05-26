@@ -14,8 +14,6 @@
 
 package com.liferay.portal.lock.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.portal.lock.service.persistence.impl.LockPersistenceImpl
  * @generated
  */
-@ProviderType
 public class LockUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

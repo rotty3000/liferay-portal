@@ -14,8 +14,6 @@
 
 package com.liferay.message.boards.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see MBCategoryService
  * @generated
  */
-@ProviderType
 public class MBCategoryServiceWrapper implements MBCategoryService,
 	ServiceWrapper<MBCategoryService> {
 	public MBCategoryServiceWrapper(MBCategoryService mbCategoryService) {

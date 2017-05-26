@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryFinder;
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 import com.liferay.asset.kernel.service.persistence.AssetTagFinder;
@@ -100,7 +98,6 @@ import javax.sql.DataSource;
  * @see com.liferay.message.boards.kernel.service.MBCategoryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class MBCategoryLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MBCategoryLocalService,
 		IdentifiableOSGiService {

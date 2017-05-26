@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.service.ExportImportConfigurationServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see ExportImportConfigurationServiceUtil
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationServiceSoap {
 	public static void deleteExportImportConfiguration(
 		long exportImportConfigurationId) throws RemoteException {

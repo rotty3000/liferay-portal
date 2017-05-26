@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBComment;
 import com.liferay.knowledge.base.service.KBCommentLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.knowledge.base.service.KBCommentLocalServiceUtil;
  * @see KBComment
  * @generated
  */
-@ProviderType
 public abstract class KBCommentBaseImpl extends KBCommentModelImpl
 	implements KBComment {
 	/*

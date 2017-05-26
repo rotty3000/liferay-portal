@@ -14,8 +14,6 @@
 
 package com.liferay.chat.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Status;
 import com.liferay.chat.service.StatusLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.chat.service.StatusLocalServiceUtil;
  * @see Status
  * @generated
  */
-@ProviderType
 public abstract class StatusBaseImpl extends StatusModelImpl implements Status {
 	/*
 	 * NOTE FOR DEVELOPERS:

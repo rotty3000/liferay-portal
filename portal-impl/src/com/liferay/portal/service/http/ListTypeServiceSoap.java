@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.ListTypeServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see ListTypeServiceUtil
  * @generated
  */
-@ProviderType
 public class ListTypeServiceSoap {
 	public static com.liferay.portal.kernel.model.ListTypeSoap getListType(
 		long listTypeId) throws RemoteException {

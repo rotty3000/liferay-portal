@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see MemberRequest
  * @generated
  */
-@ProviderType
 public class MemberRequestWrapper implements MemberRequest,
 	ModelWrapper<MemberRequest> {
 	public MemberRequestWrapper(MemberRequest memberRequest) {

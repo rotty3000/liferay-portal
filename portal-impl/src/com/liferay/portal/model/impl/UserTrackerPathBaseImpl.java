@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.UserTrackerPath;
 import com.liferay.portal.kernel.service.UserTrackerPathLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.UserTrackerPathLocalServiceUtil;
  * @see UserTrackerPath
  * @generated
  */
-@ProviderType
 public abstract class UserTrackerPathBaseImpl extends UserTrackerPathModelImpl
 	implements UserTrackerPath {
 	/*

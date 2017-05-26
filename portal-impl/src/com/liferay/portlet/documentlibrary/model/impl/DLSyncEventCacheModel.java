@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see DLSyncEvent
  * @generated
  */
-@ProviderType
 public class DLSyncEventCacheModel implements CacheModel<DLSyncEvent>,
 	Externalizable {
 	@Override

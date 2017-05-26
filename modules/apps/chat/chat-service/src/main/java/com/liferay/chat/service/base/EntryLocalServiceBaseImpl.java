@@ -14,8 +14,6 @@
 
 package com.liferay.chat.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.chat.model.Entry;
 import com.liferay.chat.service.EntryLocalService;
 import com.liferay.chat.service.persistence.EntryFinder;
@@ -66,7 +64,6 @@ import javax.sql.DataSource;
  * @see com.liferay.chat.service.EntryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class EntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements EntryLocalService, IdentifiableOSGiService {
 	/*

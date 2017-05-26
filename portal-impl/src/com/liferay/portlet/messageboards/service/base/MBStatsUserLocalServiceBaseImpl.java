@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.model.MBStatsUser;
 import com.liferay.message.boards.kernel.service.MBStatsUserLocalService;
 import com.liferay.message.boards.kernel.service.persistence.MBMessageFinder;
@@ -68,7 +66,6 @@ import javax.sql.DataSource;
  * @see com.liferay.message.boards.kernel.service.MBStatsUserLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class MBStatsUserLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements MBStatsUserLocalService,
 		IdentifiableOSGiService {

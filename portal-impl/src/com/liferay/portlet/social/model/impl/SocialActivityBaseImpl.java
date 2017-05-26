@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.social.kernel.model.SocialActivity;
 import com.liferay.social.kernel.service.SocialActivityLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.social.kernel.service.SocialActivityLocalServiceUtil;
  * @see SocialActivity
  * @generated
  */
-@ProviderType
 public abstract class SocialActivityBaseImpl extends SocialActivityModelImpl
 	implements SocialActivity {
 	/*

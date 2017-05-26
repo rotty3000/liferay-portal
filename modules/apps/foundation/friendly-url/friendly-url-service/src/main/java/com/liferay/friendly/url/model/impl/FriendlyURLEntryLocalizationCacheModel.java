@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.model.FriendlyURLEntryLocalization;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see FriendlyURLEntryLocalization
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryLocalizationCacheModel implements CacheModel<FriendlyURLEntryLocalization>,
 	Externalizable {
 	@Override

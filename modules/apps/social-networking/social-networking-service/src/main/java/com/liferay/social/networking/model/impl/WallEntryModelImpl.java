@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -56,7 +54,6 @@ import java.util.Map;
  * @see WallEntryModel
  * @generated
  */
-@ProviderType
 public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 	implements WallEntryModel {
 	/*

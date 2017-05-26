@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.trash.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.trash.kernel.model.TrashVersion;
 import com.liferay.trash.kernel.service.TrashVersionLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.trash.kernel.service.TrashVersionLocalServiceUtil;
  * @see TrashVersion
  * @generated
  */
-@ProviderType
 public abstract class TrashVersionBaseImpl extends TrashVersionModelImpl
 	implements TrashVersion {
 	/*

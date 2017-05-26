@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.lar.StagedModelType;
 
 import com.liferay.opensocial.service.ClpSerializer;
@@ -40,7 +38,6 @@ import java.util.Map;
 /**
  * @generated
  */
-@ProviderType
 public class GadgetClp extends BaseModelImpl<Gadget> implements Gadget {
 	public GadgetClp() {
 	}

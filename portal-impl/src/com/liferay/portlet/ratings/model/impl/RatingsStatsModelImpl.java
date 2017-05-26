@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.ratings.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -53,7 +51,6 @@ import java.util.Map;
  * @see RatingsStatsModel
  * @generated
  */
-@ProviderType
 public class RatingsStatsModelImpl extends BaseModelImpl<RatingsStats>
 	implements RatingsStatsModel {
 	/*

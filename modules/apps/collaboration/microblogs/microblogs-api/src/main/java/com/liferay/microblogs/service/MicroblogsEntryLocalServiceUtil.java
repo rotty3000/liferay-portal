@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.microblogs.service.impl.MicroblogsEntryLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

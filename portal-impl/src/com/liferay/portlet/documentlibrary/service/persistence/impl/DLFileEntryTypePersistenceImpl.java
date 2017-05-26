@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryTypeException;
 import com.liferay.document.library.kernel.model.DLFileEntryType;
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryTypePersistence;
@@ -83,7 +81,6 @@ import java.util.Set;
  * @see com.liferay.document.library.kernel.service.persistence.DLFileEntryTypeUtil
  * @generated
  */
-@ProviderType
 public class DLFileEntryTypePersistenceImpl extends BasePersistenceImpl<DLFileEntryType>
 	implements DLFileEntryTypePersistence {
 	/*

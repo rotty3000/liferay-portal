@@ -14,8 +14,6 @@
 
 package com.liferay.social.privatemessaging.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.social.privatemessaging.service.http.UserThreadServiceSoap
  * @generated
  */
-@ProviderType
 public class UserThreadSoap implements Serializable {
 	public static UserThreadSoap toSoapModel(UserThread model) {
 		UserThreadSoap soapModel = new UserThreadSoap();

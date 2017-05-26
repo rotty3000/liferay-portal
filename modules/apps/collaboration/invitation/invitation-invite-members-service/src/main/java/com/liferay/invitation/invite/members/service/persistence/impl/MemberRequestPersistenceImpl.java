@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.invitation.invite.members.exception.NoSuchMemberRequestException;
 import com.liferay.invitation.invite.members.model.MemberRequest;
 import com.liferay.invitation.invite.members.model.impl.MemberRequestImpl;
@@ -70,7 +68,6 @@ import java.util.Set;
  * @see com.liferay.invitation.invite.members.service.persistence.MemberRequestUtil
  * @generated
  */
-@ProviderType
 public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequest>
 	implements MemberRequestPersistence {
 	/*

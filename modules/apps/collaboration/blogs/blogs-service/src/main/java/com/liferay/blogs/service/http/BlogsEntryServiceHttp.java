@@ -14,8 +14,6 @@
 
 package com.liferay.blogs.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.blogs.service.BlogsEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see BlogsEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class BlogsEntryServiceHttp {
 	public static com.liferay.blogs.model.BlogsEntry addEntry(
 		HttpPrincipal httpPrincipal, java.lang.String title,

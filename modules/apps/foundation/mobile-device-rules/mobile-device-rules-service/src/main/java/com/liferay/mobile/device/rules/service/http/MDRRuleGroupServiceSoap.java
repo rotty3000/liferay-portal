@@ -14,8 +14,6 @@
 
 package com.liferay.mobile.device.rules.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mobile.device.rules.service.MDRRuleGroupServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -67,7 +65,6 @@ import java.util.Map;
  * @see MDRRuleGroupServiceUtil
  * @generated
  */
-@ProviderType
 public class MDRRuleGroupServiceSoap {
 	public static com.liferay.mobile.device.rules.model.MDRRuleGroupSoap addRuleGroup(
 		long groupId, java.lang.String[] nameMapLanguageIds,

@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.mail.reader.service.impl.AccountLocalServiceImpl
  * @generated
  */
-@ProviderType
 public class AccountLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

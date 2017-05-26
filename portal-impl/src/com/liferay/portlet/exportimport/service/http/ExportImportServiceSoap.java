@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.service.ExportImportServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -52,7 +50,6 @@ import java.rmi.RemoteException;
  * @see ExportImportServiceUtil
  * @generated
  */
-@ProviderType
 public class ExportImportServiceSoap {
 	public static long exportLayoutsAsFileInBackground(
 		com.liferay.exportimport.kernel.model.ExportImportConfigurationSoap exportImportConfiguration)

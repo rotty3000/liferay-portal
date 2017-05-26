@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.announcements.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsEntry;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see AnnouncementsEntry
  * @generated
  */
-@ProviderType
 public class AnnouncementsEntryCacheModel implements CacheModel<AnnouncementsEntry>,
 	Externalizable {
 	@Override

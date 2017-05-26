@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.polls.service.PollsQuestionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see PollsQuestionServiceUtil
  * @generated
  */
-@ProviderType
 public class PollsQuestionServiceHttp {
 	public static com.liferay.polls.model.PollsQuestion addQuestion(
 		HttpPrincipal httpPrincipal,

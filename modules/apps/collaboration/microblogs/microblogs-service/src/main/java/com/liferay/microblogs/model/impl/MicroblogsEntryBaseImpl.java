@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
  * @see MicroblogsEntry
  * @generated
  */
-@ProviderType
 public abstract class MicroblogsEntryBaseImpl extends MicroblogsEntryModelImpl
 	implements MicroblogsEntry {
 	/*

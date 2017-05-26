@@ -14,8 +14,6 @@
 
 package com.liferay.blogs.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see BlogsStatsUserLocalService
  * @generated
  */
-@ProviderType
 public class BlogsStatsUserLocalServiceWrapper
 	implements BlogsStatsUserLocalService,
 		ServiceWrapper<BlogsStatsUserLocalService> {

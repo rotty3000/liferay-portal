@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.background.task.service.BackgroundTaskServiceUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -52,7 +50,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see BackgroundTaskServiceUtil
  * @generated
  */
-@ProviderType
 public class BackgroundTaskServiceHttp {
 	public static int getBackgroundTasksCount(HttpPrincipal httpPrincipal,
 		long groupId, java.lang.String taskExecutorClassName,

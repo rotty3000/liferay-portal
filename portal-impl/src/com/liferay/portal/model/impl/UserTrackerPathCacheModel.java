@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.UserTrackerPath;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see UserTrackerPath
  * @generated
  */
-@ProviderType
 public class UserTrackerPathCacheModel implements CacheModel<UserTrackerPath>,
 	Externalizable, MVCCModel {
 	@Override

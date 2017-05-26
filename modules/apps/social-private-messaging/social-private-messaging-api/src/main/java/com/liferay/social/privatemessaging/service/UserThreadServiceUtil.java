@@ -14,8 +14,6 @@
 
 package com.liferay.social.privatemessaging.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -34,7 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @see com.liferay.social.privatemessaging.service.impl.UserThreadServiceImpl
  * @generated
  */
-@ProviderType
 public class UserThreadServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

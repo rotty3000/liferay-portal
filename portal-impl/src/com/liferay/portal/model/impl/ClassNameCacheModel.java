@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.model.MVCCModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see ClassName
  * @generated
  */
-@ProviderType
 public class ClassNameCacheModel implements CacheModel<ClassName>,
 	Externalizable, MVCCModel {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.background.task.model.BackgroundTask;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
@@ -39,7 +37,6 @@ import java.util.Map;
  * @see BackgroundTask
  * @generated
  */
-@ProviderType
 public class BackgroundTaskCacheModel implements CacheModel<BackgroundTask>,
 	Externalizable, MVCCModel {
 	@Override

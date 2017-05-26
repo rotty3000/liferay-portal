@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.exception.NoSuchModuleException;
 import com.liferay.marketplace.model.Module;
 import com.liferay.marketplace.model.impl.ModuleImpl;
@@ -69,7 +67,6 @@ import java.util.Set;
  * @see com.liferay.marketplace.service.persistence.ModuleUtil
  * @generated
  */
-@ProviderType
 public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	implements ModulePersistence {
 	/*

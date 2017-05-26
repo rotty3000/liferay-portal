@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see FriendlyURLEntry
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryCacheModel implements CacheModel<FriendlyURLEntry>,
 	Externalizable {
 	@Override

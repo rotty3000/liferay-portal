@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see SocialActivityCounter
  * @generated
  */
-@ProviderType
 public class SocialActivityCounterCacheModel implements CacheModel<SocialActivityCounter>,
 	Externalizable {
 	@Override

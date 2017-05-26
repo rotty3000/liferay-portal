@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBTemplate;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.knowledge.base.service.persistence.impl.KBTemplatePersistenceImpl
  * @generated
  */
-@ProviderType
 public class KBTemplateUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

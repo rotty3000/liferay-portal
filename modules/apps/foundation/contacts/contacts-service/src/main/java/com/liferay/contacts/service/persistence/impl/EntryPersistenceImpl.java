@@ -14,8 +14,6 @@
 
 package com.liferay.contacts.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.contacts.exception.NoSuchEntryException;
 import com.liferay.contacts.model.Entry;
 import com.liferay.contacts.model.impl.EntryImpl;
@@ -66,7 +64,6 @@ import java.util.Set;
  * @see com.liferay.contacts.service.persistence.EntryUtil
  * @generated
  */
-@ProviderType
 public class EntryPersistenceImpl extends BasePersistenceImpl<Entry>
 	implements EntryPersistence {
 	/*

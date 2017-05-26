@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.exception.NoSuchValueException;
 import com.liferay.expando.kernel.model.ExpandoValue;
 import com.liferay.expando.kernel.service.persistence.ExpandoValuePersistence;
@@ -69,7 +67,6 @@ import java.util.Set;
  * @see com.liferay.expando.kernel.service.persistence.ExpandoValueUtil
  * @generated
  */
-@ProviderType
 public class ExpandoValuePersistenceImpl extends BasePersistenceImpl<ExpandoValue>
 	implements ExpandoValuePersistence {
 	/*

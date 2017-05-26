@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetCategoryFinder;
 import com.liferay.asset.kernel.service.persistence.AssetCategoryPersistence;
 import com.liferay.asset.kernel.service.persistence.AssetEntryFinder;
@@ -116,7 +114,6 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.kernel.service.GroupLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class GroupLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements GroupLocalService, IdentifiableOSGiService {
 	/*

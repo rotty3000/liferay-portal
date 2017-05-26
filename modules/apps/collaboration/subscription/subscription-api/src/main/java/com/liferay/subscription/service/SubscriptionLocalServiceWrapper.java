@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see SubscriptionLocalService
  * @generated
  */
-@ProviderType
 public class SubscriptionLocalServiceWrapper implements SubscriptionLocalService,
 	ServiceWrapper<SubscriptionLocalService> {
 	public SubscriptionLocalServiceWrapper(

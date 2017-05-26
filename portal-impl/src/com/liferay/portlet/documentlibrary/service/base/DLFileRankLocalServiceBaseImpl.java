@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileRank;
 import com.liferay.document.library.kernel.service.DLFileRankLocalService;
 import com.liferay.document.library.kernel.service.persistence.DLFileRankFinder;
@@ -65,7 +63,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLFileRankLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLFileRankLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLFileRankLocalService,
 		IdentifiableOSGiService {

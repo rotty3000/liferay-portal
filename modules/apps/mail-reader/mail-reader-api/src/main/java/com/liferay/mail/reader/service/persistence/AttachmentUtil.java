@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Attachment;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.mail.reader.service.persistence.impl.AttachmentPersistenceImpl
  * @generated
  */
-@ProviderType
 public class AttachmentUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

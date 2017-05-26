@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.exception.NoSuchConfigurationException;
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.persistence.ExportImportConfigurationPersistence;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.exportimport.kernel.service.persistence.ExportImportConfigurationUtil
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationPersistenceImpl
 	extends BasePersistenceImpl<ExportImportConfiguration>
 	implements ExportImportConfigurationPersistence {

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 import com.liferay.document.library.kernel.model.DLSyncEventModel;
 
@@ -51,7 +49,6 @@ import java.util.Map;
  * @see DLSyncEventModel
  * @generated
  */
-@ProviderType
 public class DLSyncEventModelImpl extends BaseModelImpl<DLSyncEvent>
 	implements DLSyncEventModel {
 	/*

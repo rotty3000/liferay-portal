@@ -14,8 +14,6 @@
 
 package com.liferay.counter.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.counter.kernel.model.Counter;
 import com.liferay.counter.kernel.model.CounterModel;
 
@@ -47,7 +45,6 @@ import java.util.Map;
  * @see CounterModel
  * @generated
  */
-@ProviderType
 public class CounterModelImpl extends BaseModelImpl<Counter>
 	implements CounterModel {
 	/*

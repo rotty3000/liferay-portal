@@ -14,8 +14,6 @@
 
 package com.liferay.sync.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see SyncDevice
  * @generated
  */
-@ProviderType
 public class SyncDeviceWrapper implements SyncDevice, ModelWrapper<SyncDevice> {
 	public SyncDeviceWrapper(SyncDevice syncDevice) {
 		_syncDevice = syncDevice;

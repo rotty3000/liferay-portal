@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.microblogs.service.MicroblogsEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see MicroblogsEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryServiceHttp {
 	public static com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
 		HttpPrincipal httpPrincipal, long userId, java.lang.String content,

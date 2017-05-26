@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -68,7 +66,6 @@ import javax.sql.DataSource;
  * @see com.liferay.social.networking.service.WallEntryLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements WallEntryLocalService, IdentifiableOSGiService {
 	/*

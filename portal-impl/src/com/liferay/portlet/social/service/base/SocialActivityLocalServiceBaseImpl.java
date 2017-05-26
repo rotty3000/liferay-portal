@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryFinder;
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
@@ -77,7 +75,6 @@ import javax.sql.DataSource;
  * @see com.liferay.social.kernel.service.SocialActivityLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SocialActivityLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SocialActivityLocalService,
 		IdentifiableOSGiService {

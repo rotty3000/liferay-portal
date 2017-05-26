@@ -14,8 +14,6 @@
 
 package com.liferay.asset.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see AssetCategoryService
  * @generated
  */
-@ProviderType
 public class AssetCategoryServiceWrapper implements AssetCategoryService,
 	ServiceWrapper<AssetCategoryService> {
 	public AssetCategoryServiceWrapper(

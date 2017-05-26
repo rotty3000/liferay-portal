@@ -14,8 +14,6 @@
 
 package com.liferay.sync.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see SyncDLObject
  * @generated
  */
-@ProviderType
 public class SyncDLObjectWrapper implements SyncDLObject,
 	ModelWrapper<SyncDLObject> {
 	public SyncDLObjectWrapper(SyncDLObject syncDLObject) {

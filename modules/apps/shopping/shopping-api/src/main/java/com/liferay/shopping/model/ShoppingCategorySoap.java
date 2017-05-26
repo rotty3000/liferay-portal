@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.List;
  * @see com.liferay.shopping.service.http.ShoppingCategoryServiceSoap
  * @generated
  */
-@ProviderType
 public class ShoppingCategorySoap implements Serializable {
 	public static ShoppingCategorySoap toSoapModel(ShoppingCategory model) {
 		ShoppingCategorySoap soapModel = new ShoppingCategorySoap();

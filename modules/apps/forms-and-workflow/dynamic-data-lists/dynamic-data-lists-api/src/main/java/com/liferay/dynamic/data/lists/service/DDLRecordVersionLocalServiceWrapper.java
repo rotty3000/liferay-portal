@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see DDLRecordVersionLocalService
  * @generated
  */
-@ProviderType
 public class DDLRecordVersionLocalServiceWrapper
 	implements DDLRecordVersionLocalService,
 		ServiceWrapper<DDLRecordVersionLocalService> {

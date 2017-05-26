@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.background.task.model.BackgroundTask;
@@ -39,7 +37,6 @@ import java.util.List;
  * @see com.liferay.portal.background.task.service.persistence.impl.BackgroundTaskPersistenceImpl
  * @generated
  */
-@ProviderType
 public class BackgroundTaskUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

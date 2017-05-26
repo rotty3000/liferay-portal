@@ -14,8 +14,6 @@
 
 package com.liferay.trash.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see TrashVersion
  * @generated
  */
-@ProviderType
 public class TrashVersionWrapper implements TrashVersion,
 	ModelWrapper<TrashVersion> {
 	public TrashVersionWrapper(TrashVersion trashVersion) {

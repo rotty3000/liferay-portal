@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.service.ExpandoValueServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see ExpandoValueServiceUtil
  * @generated
  */
-@ProviderType
 public class ExpandoValueServiceSoap {
 	public static com.liferay.expando.kernel.model.ExpandoValueSoap addValue(
 		long companyId, java.lang.String className, java.lang.String tableName,

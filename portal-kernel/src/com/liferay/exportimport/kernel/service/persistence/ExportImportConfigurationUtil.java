@@ -14,8 +14,6 @@
 
 package com.liferay.exportimport.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.exportimport.service.persistence.impl.ExportImportConfigurationPersistenceImpl
  * @generated
  */
-@ProviderType
 public class ExportImportConfigurationUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

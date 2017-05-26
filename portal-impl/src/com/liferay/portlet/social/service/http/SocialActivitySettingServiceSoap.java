@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.social.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see SocialActivitySettingServiceUtil
  * @generated
  */
-@ProviderType
 public class SocialActivitySettingServiceSoap {
 	public static com.liferay.social.kernel.model.SocialActivitySettingSoap[] getActivitySettings(
 		long groupId) throws RemoteException {

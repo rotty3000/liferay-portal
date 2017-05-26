@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -38,7 +36,6 @@ import java.util.Objects;
  * @see Team
  * @generated
  */
-@ProviderType
 public class TeamWrapper implements Team, ModelWrapper<Team> {
 	public TeamWrapper(Team team) {
 		_team = team;

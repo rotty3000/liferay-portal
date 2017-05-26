@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.model.App;
 import com.liferay.marketplace.service.AppLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.marketplace.service.AppLocalServiceUtil;
  * @see App
  * @generated
  */
-@ProviderType
 public abstract class AppBaseImpl extends AppModelImpl implements App {
 	/*
 	 * NOTE FOR DEVELOPERS:

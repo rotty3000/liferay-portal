@@ -14,8 +14,6 @@
 
 package com.liferay.portal.background.task.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see BackgroundTaskService
  * @generated
  */
-@ProviderType
 public class BackgroundTaskServiceWrapper implements BackgroundTaskService,
 	ServiceWrapper<BackgroundTaskService> {
 	public BackgroundTaskServiceWrapper(

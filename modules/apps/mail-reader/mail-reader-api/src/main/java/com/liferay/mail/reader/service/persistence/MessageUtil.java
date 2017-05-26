@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Message;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.mail.reader.service.persistence.impl.MessagePersistenceImpl
  * @generated
  */
-@ProviderType
 public class MessageUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

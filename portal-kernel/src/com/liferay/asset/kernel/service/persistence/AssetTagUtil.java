@@ -14,8 +14,6 @@
 
 package com.liferay.asset.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetTag;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.asset.service.persistence.impl.AssetTagPersistenceImpl
  * @generated
  */
-@ProviderType
 public class AssetTagUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

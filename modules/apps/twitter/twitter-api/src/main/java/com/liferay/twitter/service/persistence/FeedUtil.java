@@ -14,8 +14,6 @@
 
 package com.liferay.twitter.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.twitter.service.persistence.impl.FeedPersistenceImpl
  * @generated
  */
-@ProviderType
 public class FeedUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

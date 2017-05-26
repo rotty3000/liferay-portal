@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.service.MBBanServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see MBBanServiceUtil
  * @generated
  */
-@ProviderType
 public class MBBanServiceSoap {
 	public static com.liferay.message.boards.kernel.model.MBBanSoap addBan(
 		long banUserId,

@@ -14,8 +14,6 @@
 
 package com.liferay.invitation.invite.members.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.invitation.invite.members.model.MemberRequest;
 import com.liferay.invitation.invite.members.service.MemberRequestLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.invitation.invite.members.service.MemberRequestLocalServiceUt
  * @see MemberRequest
  * @generated
  */
-@ProviderType
 public abstract class MemberRequestBaseImpl extends MemberRequestModelImpl
 	implements MemberRequest {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.AssetCategoryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see AssetCategoryServiceUtil
  * @generated
  */
-@ProviderType
 public class AssetCategoryServiceHttp {
 	public static com.liferay.asset.kernel.model.AssetCategory addCategory(
 		HttpPrincipal httpPrincipal, long groupId, long parentCategoryId,

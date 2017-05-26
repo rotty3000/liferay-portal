@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.polls.model.PollsQuestion;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.polls.service.persistence.impl.PollsQuestionPersistenceImpl
  * @generated
  */
-@ProviderType
 public class PollsQuestionUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

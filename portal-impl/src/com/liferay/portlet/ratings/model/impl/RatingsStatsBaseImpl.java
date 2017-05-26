@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.ratings.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.ratings.kernel.model.RatingsStats;
 import com.liferay.ratings.kernel.service.RatingsStatsLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.ratings.kernel.service.RatingsStatsLocalServiceUtil;
  * @see RatingsStats
  * @generated
  */
-@ProviderType
 public abstract class RatingsStatsBaseImpl extends RatingsStatsModelImpl
 	implements RatingsStats {
 	/*

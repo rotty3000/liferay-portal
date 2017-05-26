@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.List;
  * @see com.liferay.portal.service.http.PortletServiceSoap
  * @generated
  */
-@ProviderType
 public class PortletSoap implements Serializable {
 	public static PortletSoap toSoapModel(Portlet model) {
 		PortletSoap soapModel = new PortletSoap();

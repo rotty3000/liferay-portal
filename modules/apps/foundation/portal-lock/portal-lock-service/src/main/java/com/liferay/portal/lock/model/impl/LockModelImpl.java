@@ -14,8 +14,6 @@
 
 package com.liferay.portal.lock.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -54,7 +52,6 @@ import java.util.Map;
  * @see LockModel
  * @generated
  */
-@ProviderType
 public class LockModelImpl extends BaseModelImpl<Lock> implements LockModel {
 	/*
 	 * NOTE FOR DEVELOPERS:

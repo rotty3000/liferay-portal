@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.microblogs.exception.NoSuchEntryException;
 import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.model.impl.MicroblogsEntryImpl;
@@ -74,7 +72,6 @@ import java.util.Set;
  * @see com.liferay.microblogs.service.persistence.MicroblogsEntryUtil
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryPersistenceImpl extends BasePersistenceImpl<MicroblogsEntry>
 	implements MicroblogsEntryPersistence {
 	/*

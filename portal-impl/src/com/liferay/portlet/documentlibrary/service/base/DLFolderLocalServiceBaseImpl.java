@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryFinder;
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
@@ -101,7 +99,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLFolderLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements DLFolderLocalService, IdentifiableOSGiService {
 	/*

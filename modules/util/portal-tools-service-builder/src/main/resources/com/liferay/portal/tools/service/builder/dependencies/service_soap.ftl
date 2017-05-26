@@ -2,8 +2,6 @@ package ${packagePath}.service.http;
 
 import ${apiPackagePath}.service.${entity.name}ServiceUtil;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -67,7 +65,6 @@ import java.util.Map;
 	@Deprecated
 </#if>
 
-@ProviderType
 public class ${entity.name}ServiceSoap {
 
 	<#assign hasMethods = false />

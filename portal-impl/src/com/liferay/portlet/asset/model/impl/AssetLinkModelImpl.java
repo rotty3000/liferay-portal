@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.asset.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.model.AssetLink;
 import com.liferay.asset.kernel.model.AssetLinkModel;
 
@@ -55,7 +53,6 @@ import java.util.Map;
  * @see AssetLinkModel
  * @generated
  */
-@ProviderType
 public class AssetLinkModelImpl extends BaseModelImpl<AssetLink>
 	implements AssetLinkModel {
 	/*

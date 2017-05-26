@@ -1,7 +1,5 @@
 package ${servicePropsUtilPackagePath};
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.configuration.Configuration;
 import com.liferay.portal.kernel.configuration.ConfigurationFactoryUtil;
 import com.liferay.portal.kernel.configuration.Filter;
@@ -13,7 +11,6 @@ import java.util.Properties;
  * @author ${author}
  * @generated
  */
-@ProviderType
 public class ${servicePropsUtilClassName} {
 
 	public static void addProperties(Properties properties) {

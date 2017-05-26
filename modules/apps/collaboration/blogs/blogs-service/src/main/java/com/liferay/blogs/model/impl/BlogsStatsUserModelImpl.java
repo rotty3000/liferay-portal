@@ -14,8 +14,6 @@
 
 package com.liferay.blogs.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.blogs.model.BlogsStatsUser;
 import com.liferay.blogs.model.BlogsStatsUserModel;
 
@@ -55,7 +53,6 @@ import java.util.Map;
  * @see BlogsStatsUserModel
  * @generated
  */
-@ProviderType
 public class BlogsStatsUserModelImpl extends BaseModelImpl<BlogsStatsUser>
 	implements BlogsStatsUserModel {
 	/*

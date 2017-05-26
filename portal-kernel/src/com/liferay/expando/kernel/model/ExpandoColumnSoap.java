@@ -14,8 +14,6 @@
 
 package com.liferay.expando.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -28,7 +26,6 @@ import java.util.List;
  * @see com.liferay.portlet.expando.service.http.ExpandoColumnServiceSoap
  * @generated
  */
-@ProviderType
 public class ExpandoColumnSoap implements Serializable {
 	public static ExpandoColumnSoap toSoapModel(ExpandoColumn model) {
 		ExpandoColumnSoap soapModel = new ExpandoColumnSoap();

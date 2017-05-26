@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -64,7 +62,6 @@ import java.util.Set;
  * @see com.liferay.social.networking.service.persistence.MeetupsEntryUtil
  * @generated
  */
-@ProviderType
 public class MeetupsEntryPersistenceImpl extends BasePersistenceImpl<MeetupsEntry>
 	implements MeetupsEntryPersistence {
 	/*

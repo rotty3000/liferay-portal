@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.exception.NoSuchAppException;
 import com.liferay.marketplace.model.App;
 import com.liferay.marketplace.model.impl.AppImpl;
@@ -72,7 +70,6 @@ import java.util.Set;
  * @see com.liferay.marketplace.service.persistence.AppUtil
  * @generated
  */
-@ProviderType
 public class AppPersistenceImpl extends BasePersistenceImpl<App>
 	implements AppPersistence {
 	/*

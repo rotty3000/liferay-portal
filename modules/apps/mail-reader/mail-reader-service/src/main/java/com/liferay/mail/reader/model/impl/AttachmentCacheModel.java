@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Attachment;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see Attachment
  * @generated
  */
-@ProviderType
 public class AttachmentCacheModel implements CacheModel<Attachment>,
 	Externalizable {
 	@Override

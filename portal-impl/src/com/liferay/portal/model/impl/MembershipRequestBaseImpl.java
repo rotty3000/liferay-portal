@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.MembershipRequest;
 import com.liferay.portal.kernel.service.MembershipRequestLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.MembershipRequestLocalServiceUtil;
  * @see MembershipRequest
  * @generated
  */
-@ProviderType
 public abstract class MembershipRequestBaseImpl
 	extends MembershipRequestModelImpl implements MembershipRequest {
 	/*

@@ -12,12 +12,8 @@ import ${apiPackagePath}.service.ClpSerializer;
 	</#if>
 </#list>
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
-
-@ProviderType
 public class ClpMessageListener extends BaseMessageListener {
 
 	public static String getServletContextName() {

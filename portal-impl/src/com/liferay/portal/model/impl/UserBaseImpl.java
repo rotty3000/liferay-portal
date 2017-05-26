@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
  * @see User
  * @generated
  */
-@ProviderType
 public abstract class UserBaseImpl extends UserModelImpl implements User {
 	/*
 	 * NOTE FOR DEVELOPERS:

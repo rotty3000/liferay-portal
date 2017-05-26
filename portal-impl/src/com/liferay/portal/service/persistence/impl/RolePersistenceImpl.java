@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
@@ -83,7 +81,6 @@ import java.util.Set;
  * @see com.liferay.portal.kernel.service.persistence.RoleUtil
  * @generated
  */
-@ProviderType
 public class RolePersistenceImpl extends BasePersistenceImpl<Role>
 	implements RolePersistence {
 	/*

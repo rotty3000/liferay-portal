@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -35,7 +33,6 @@ import java.util.Objects;
  * @see RecentLayoutRevision
  * @generated
  */
-@ProviderType
 public class RecentLayoutRevisionWrapper implements RecentLayoutRevision,
 	ModelWrapper<RecentLayoutRevision> {
 	public RecentLayoutRevisionWrapper(

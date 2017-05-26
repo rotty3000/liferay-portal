@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.exception.NoSuchTemplateException;
 import com.liferay.knowledge.base.model.KBTemplate;
 import com.liferay.knowledge.base.model.impl.KBTemplateImpl;
@@ -80,7 +78,6 @@ import java.util.Set;
  * @see com.liferay.knowledge.base.service.persistence.KBTemplateUtil
  * @generated
  */
-@ProviderType
 public class KBTemplatePersistenceImpl extends BasePersistenceImpl<KBTemplate>
 	implements KBTemplatePersistence {
 	/*

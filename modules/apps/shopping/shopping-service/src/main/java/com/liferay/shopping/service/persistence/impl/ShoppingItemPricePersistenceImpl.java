@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -61,7 +59,6 @@ import java.util.Set;
  * @see com.liferay.shopping.service.persistence.ShoppingItemPriceUtil
  * @generated
  */
-@ProviderType
 public class ShoppingItemPricePersistenceImpl extends BasePersistenceImpl<ShoppingItemPrice>
 	implements ShoppingItemPricePersistence {
 	/*

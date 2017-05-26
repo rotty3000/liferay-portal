@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see FriendlyURLEntryLocalizationLocalService
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryLocalizationLocalServiceWrapper
 	implements FriendlyURLEntryLocalizationLocalService,
 		ServiceWrapper<FriendlyURLEntryLocalizationLocalService> {

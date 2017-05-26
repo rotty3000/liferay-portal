@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.service.ClpSerializer;
 import com.liferay.opensocial.service.OAuthTokenLocalServiceUtil;
 
@@ -41,7 +39,6 @@ import java.util.Map;
 /**
  * @generated
  */
-@ProviderType
 public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 	implements OAuthToken {
 	public OAuthTokenClp() {

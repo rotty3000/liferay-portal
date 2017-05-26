@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.expando.kernel.util.ExpandoBridgeFactoryUtil;
 
@@ -58,7 +56,6 @@ import java.util.Map;
  * @see MBThreadFlagModel
  * @generated
  */
-@ProviderType
 public class MBThreadFlagModelImpl extends BaseModelImpl<MBThreadFlag>
 	implements MBThreadFlagModel {
 	/*

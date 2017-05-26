@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.polls.service.PollsQuestionServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -67,7 +65,6 @@ import java.util.Map;
  * @see PollsQuestionServiceUtil
  * @generated
  */
-@ProviderType
 public class PollsQuestionServiceSoap {
 	public static com.liferay.polls.model.PollsQuestionSoap addQuestion(
 		java.lang.String[] titleMapLanguageIds,

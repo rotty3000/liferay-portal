@@ -14,8 +14,6 @@
 
 package com.liferay.contacts.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.contacts.model.Entry;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see Entry
  * @generated
  */
-@ProviderType
 public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 	@Override
 	public boolean equals(Object obj) {

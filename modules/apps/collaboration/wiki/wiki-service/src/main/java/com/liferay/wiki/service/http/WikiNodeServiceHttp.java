@@ -14,8 +14,6 @@
 
 package com.liferay.wiki.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -53,7 +51,6 @@ import com.liferay.wiki.service.WikiNodeServiceUtil;
  * @see WikiNodeServiceUtil
  * @generated
  */
-@ProviderType
 public class WikiNodeServiceHttp {
 	public static com.liferay.wiki.model.WikiNode addNode(
 		HttpPrincipal httpPrincipal, java.lang.String name,

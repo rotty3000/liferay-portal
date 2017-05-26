@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 import com.liferay.asset.kernel.service.persistence.AssetLinkPersistence;
 
@@ -100,7 +98,6 @@ import javax.sql.DataSource;
  * @see com.liferay.calendar.service.CalendarBookingLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class CalendarBookingLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements CalendarBookingLocalService,
 		IdentifiableOSGiService {

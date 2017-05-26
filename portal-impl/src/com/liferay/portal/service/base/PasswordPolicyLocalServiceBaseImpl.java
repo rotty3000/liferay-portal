@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -71,7 +69,6 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.kernel.service.PasswordPolicyLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class PasswordPolicyLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements PasswordPolicyLocalService,
 		IdentifiableOSGiService {

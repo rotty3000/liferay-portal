@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -38,7 +36,6 @@ import java.util.Objects;
  * @see Organization
  * @generated
  */
-@ProviderType
 public class OrganizationWrapper implements Organization,
 	ModelWrapper<Organization> {
 	public OrganizationWrapper(Organization organization) {

@@ -14,8 +14,6 @@
 
 package com.liferay.push.notifications.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see PushNotificationsDeviceLocalService
  * @generated
  */
-@ProviderType
 public class PushNotificationsDeviceLocalServiceWrapper
 	implements PushNotificationsDeviceLocalService,
 		ServiceWrapper<PushNotificationsDeviceLocalService> {

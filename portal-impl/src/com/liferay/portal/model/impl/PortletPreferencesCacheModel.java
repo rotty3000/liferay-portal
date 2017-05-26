@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.PortletPreferences;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see PortletPreferences
  * @generated
  */
-@ProviderType
 public class PortletPreferencesCacheModel implements CacheModel<PortletPreferences>,
 	Externalizable, MVCCModel {
 	@Override

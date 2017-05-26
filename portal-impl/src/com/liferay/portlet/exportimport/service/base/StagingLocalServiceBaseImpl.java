@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.service.StagingLocalService;
 import com.liferay.exportimport.kernel.service.persistence.ExportImportConfigurationFinder;
 import com.liferay.exportimport.kernel.service.persistence.ExportImportConfigurationPersistence;
@@ -57,7 +55,6 @@ import javax.sql.DataSource;
  * @see com.liferay.exportimport.kernel.service.StagingLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class StagingLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements StagingLocalService, IdentifiableOSGiService {
 	/*

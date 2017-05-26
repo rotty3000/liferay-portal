@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see BookmarksFolderService
  * @generated
  */
-@ProviderType
 public class BookmarksFolderServiceWrapper implements BookmarksFolderService,
 	ServiceWrapper<BookmarksFolderService> {
 	public BookmarksFolderServiceWrapper(

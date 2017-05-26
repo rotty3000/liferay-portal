@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.friendly.url.service.persistence.impl.FriendlyURLEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

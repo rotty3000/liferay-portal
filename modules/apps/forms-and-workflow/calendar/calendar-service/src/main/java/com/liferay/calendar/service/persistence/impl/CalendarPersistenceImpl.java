@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.exception.NoSuchCalendarException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.impl.CalendarImpl;
@@ -72,7 +70,6 @@ import java.util.Set;
  * @see com.liferay.calendar.service.persistence.CalendarUtil
  * @generated
  */
-@ProviderType
 public class CalendarPersistenceImpl extends BasePersistenceImpl<Calendar>
 	implements CalendarPersistence {
 	/*

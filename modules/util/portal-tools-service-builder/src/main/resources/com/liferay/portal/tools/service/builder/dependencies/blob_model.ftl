@@ -1,7 +1,5 @@
 package ${apiPackagePath}.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.sql.Blob;
 
 /**
@@ -11,7 +9,6 @@ import java.sql.Blob;
  * @see ${entity.name}
  * @generated
  */
-@ProviderType
 public class ${entity.name}${column.methodName}BlobModel {
 
 	public ${entity.name}${column.methodName}BlobModel() {

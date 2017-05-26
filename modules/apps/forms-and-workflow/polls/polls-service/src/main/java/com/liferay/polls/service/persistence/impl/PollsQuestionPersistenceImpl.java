@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.polls.exception.NoSuchQuestionException;
 import com.liferay.polls.model.PollsQuestion;
 import com.liferay.polls.model.impl.PollsQuestionImpl;
@@ -73,7 +71,6 @@ import java.util.Set;
  * @see com.liferay.polls.service.persistence.PollsQuestionUtil
  * @generated
  */
-@ProviderType
 public class PollsQuestionPersistenceImpl extends BasePersistenceImpl<PollsQuestion>
 	implements PollsQuestionPersistence {
 	/*

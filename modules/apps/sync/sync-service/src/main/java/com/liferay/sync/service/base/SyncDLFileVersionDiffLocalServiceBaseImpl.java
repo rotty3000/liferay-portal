@@ -14,8 +14,6 @@
 
 package com.liferay.sync.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -67,7 +65,6 @@ import javax.sql.DataSource;
  * @see com.liferay.sync.service.SyncDLFileVersionDiffLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SyncDLFileVersionDiffLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SyncDLFileVersionDiffLocalService,
 		IdentifiableOSGiService {

@@ -14,8 +14,6 @@
 
 package com.liferay.sync.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -53,7 +51,6 @@ import com.liferay.sync.service.SyncDLObjectServiceUtil;
  * @see SyncDLObjectServiceUtil
  * @generated
  */
-@ProviderType
 public class SyncDLObjectServiceHttp {
 	public static com.liferay.sync.model.SyncDLObject addFileEntry(
 		HttpPrincipal httpPrincipal, long repositoryId, long folderId,

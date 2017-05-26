@@ -14,8 +14,6 @@
 
 package com.liferay.polls.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.polls.model.PollsVote;
 import com.liferay.polls.service.PollsVoteLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.polls.service.PollsVoteLocalServiceUtil;
  * @see PollsVote
  * @generated
  */
-@ProviderType
 public abstract class PollsVoteBaseImpl extends PollsVoteModelImpl
 	implements PollsVote {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBArticle;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see KBArticle
  * @generated
  */
-@ProviderType
 public class KBArticleCacheModel implements CacheModel<KBArticle>,
 	Externalizable {
 	@Override

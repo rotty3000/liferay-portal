@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLFileShortcutServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -53,7 +51,6 @@ import com.liferay.portal.kernel.util.MethodKey;
  * @see DLFileShortcutServiceUtil
  * @generated
  */
-@ProviderType
 public class DLFileShortcutServiceHttp {
 	public static com.liferay.document.library.kernel.model.DLFileShortcut addFileShortcut(
 		HttpPrincipal httpPrincipal, long groupId, long repositoryId,

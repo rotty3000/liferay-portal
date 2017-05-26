@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.UserNotificationEvent;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
  * @see UserNotificationEvent
  * @generated
  */
-@ProviderType
 public abstract class UserNotificationEventBaseImpl
 	extends UserNotificationEventModelImpl implements UserNotificationEvent {
 	/*

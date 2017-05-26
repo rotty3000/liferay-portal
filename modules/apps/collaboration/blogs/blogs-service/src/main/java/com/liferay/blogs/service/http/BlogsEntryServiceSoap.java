@@ -14,8 +14,6 @@
 
 package com.liferay.blogs.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.blogs.service.BlogsEntryServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -63,7 +61,6 @@ import java.rmi.RemoteException;
  * @see BlogsEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class BlogsEntryServiceSoap {
 	public static com.liferay.blogs.model.BlogsEntrySoap addEntry(
 		java.lang.String title, java.lang.String subtitle,

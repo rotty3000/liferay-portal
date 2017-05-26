@@ -14,8 +14,6 @@
 
 package com.liferay.knowledge.base.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.knowledge.base.model.KBFolder;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.knowledge.base.service.persistence.impl.KBFolderPersistenceImpl
  * @generated
  */
-@ProviderType
 public class KBFolderUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

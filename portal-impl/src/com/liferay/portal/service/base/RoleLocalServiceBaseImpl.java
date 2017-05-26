@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.service.persistence.ExpandoRowPersistence;
 
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
@@ -93,7 +91,6 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.kernel.service.RoleLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class RoleLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements RoleLocalService, IdentifiableOSGiService {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link PortletService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see PortletService
  * @generated
  */
-@ProviderType
 public class PortletServiceWrapper implements PortletService,
 	ServiceWrapper<PortletService> {
 	public PortletServiceWrapper(PortletService portletService) {

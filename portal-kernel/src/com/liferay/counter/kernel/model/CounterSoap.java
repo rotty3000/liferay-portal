@@ -14,8 +14,6 @@
 
 package com.liferay.counter.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import java.util.List;
  * @author Brian Wing Shun Chan
  * @generated
  */
-@ProviderType
 public class CounterSoap implements Serializable {
 	public static CounterSoap toSoapModel(Counter model) {
 		CounterSoap soapModel = new CounterSoap();

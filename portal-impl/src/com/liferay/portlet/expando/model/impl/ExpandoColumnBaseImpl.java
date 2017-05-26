@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
  * @see ExpandoColumn
  * @generated
  */
-@ProviderType
 public abstract class ExpandoColumnBaseImpl extends ExpandoColumnModelImpl
 	implements ExpandoColumn {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.microblogs.model.MicroblogsEntry;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -41,7 +39,6 @@ import java.util.List;
  * @see com.liferay.microblogs.service.persistence.impl.MicroblogsEntryPersistenceImpl
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.model.OAuthToken;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see OAuthToken
  * @generated
  */
-@ProviderType
 public class OAuthTokenCacheModel implements CacheModel<OAuthToken>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.friendly.url.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.friendly.url.exception.NoSuchFriendlyURLEntryException;
 import com.liferay.friendly.url.model.FriendlyURLEntry;
 import com.liferay.friendly.url.model.impl.FriendlyURLEntryImpl;
@@ -72,7 +70,6 @@ import java.util.Set;
  * @see com.liferay.friendly.url.service.persistence.FriendlyURLEntryUtil
  * @generated
  */
-@ProviderType
 public class FriendlyURLEntryPersistenceImpl extends BasePersistenceImpl<FriendlyURLEntry>
 	implements FriendlyURLEntryPersistence {
 	/*

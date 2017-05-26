@@ -14,8 +14,6 @@
 
 package com.liferay.mail.reader.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.mail.reader.model.Folder;
 import com.liferay.mail.reader.service.FolderLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.mail.reader.service.FolderLocalServiceUtil;
  * @see Folder
  * @generated
  */
-@ProviderType
 public abstract class FolderBaseImpl extends FolderModelImpl implements Folder {
 	/*
 	 * NOTE FOR DEVELOPERS:

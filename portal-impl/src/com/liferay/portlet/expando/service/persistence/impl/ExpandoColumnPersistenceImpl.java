@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.exception.NoSuchColumnException;
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.service.persistence.ExpandoColumnPersistence;
@@ -75,7 +73,6 @@ import java.util.Set;
  * @see com.liferay.expando.kernel.service.persistence.ExpandoColumnUtil
  * @generated
  */
-@ProviderType
 public class ExpandoColumnPersistenceImpl extends BasePersistenceImpl<ExpandoColumn>
 	implements ExpandoColumnPersistence {
 	/*

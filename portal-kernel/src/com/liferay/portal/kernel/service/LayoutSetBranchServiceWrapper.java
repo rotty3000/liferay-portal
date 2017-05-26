@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides a wrapper for {@link LayoutSetBranchService}.
  *
@@ -23,7 +21,6 @@ import aQute.bnd.annotation.ProviderType;
  * @see LayoutSetBranchService
  * @generated
  */
-@ProviderType
 public class LayoutSetBranchServiceWrapper implements LayoutSetBranchService,
 	ServiceWrapper<LayoutSetBranchService> {
 	public LayoutSetBranchServiceWrapper(

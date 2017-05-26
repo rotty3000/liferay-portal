@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
  * @see ClassName
  * @generated
  */
-@ProviderType
 public abstract class ClassNameBaseImpl extends ClassNameModelImpl
 	implements ClassName {
 	/*

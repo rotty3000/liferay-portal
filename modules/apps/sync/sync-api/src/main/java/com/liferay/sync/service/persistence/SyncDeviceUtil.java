@@ -14,8 +14,6 @@
 
 package com.liferay.sync.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.osgi.util.ServiceTrackerFactory;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.sync.service.persistence.impl.SyncDevicePersistenceImpl
  * @generated
  */
-@ProviderType
 public class SyncDeviceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

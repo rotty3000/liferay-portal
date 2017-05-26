@@ -14,8 +14,6 @@
 
 package com.liferay.marketplace.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.marketplace.model.Module;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
@@ -40,7 +38,6 @@ import java.util.List;
  * @see com.liferay.marketplace.service.persistence.impl.ModulePersistenceImpl
  * @generated
  */
-@ProviderType
 public class ModuleUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

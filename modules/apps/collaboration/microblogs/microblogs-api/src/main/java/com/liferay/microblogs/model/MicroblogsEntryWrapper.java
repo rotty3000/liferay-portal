@@ -14,8 +14,6 @@
 
 package com.liferay.microblogs.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.model.ModelWrapper;
@@ -37,7 +35,6 @@ import java.util.Objects;
  * @see MicroblogsEntry
  * @generated
  */
-@ProviderType
 public class MicroblogsEntryWrapper implements MicroblogsEntry,
 	ModelWrapper<MicroblogsEntry> {
 	public MicroblogsEntryWrapper(MicroblogsEntry microblogsEntry) {

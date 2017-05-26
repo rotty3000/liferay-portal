@@ -14,8 +14,6 @@
 
 package com.liferay.opensocial.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.opensocial.exception.NoSuchOAuthConsumerException;
 import com.liferay.opensocial.model.OAuthConsumer;
 import com.liferay.opensocial.model.impl.OAuthConsumerImpl;
@@ -68,7 +66,6 @@ import java.util.Set;
  * @see com.liferay.opensocial.service.persistence.OAuthConsumerUtil
  * @generated
  */
-@ProviderType
 public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsumer>
 	implements OAuthConsumerPersistence {
 	/*

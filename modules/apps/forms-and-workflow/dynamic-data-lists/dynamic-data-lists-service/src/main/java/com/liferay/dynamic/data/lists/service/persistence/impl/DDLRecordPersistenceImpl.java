@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.exception.NoSuchRecordException;
 import com.liferay.dynamic.data.lists.model.DDLRecord;
 import com.liferay.dynamic.data.lists.model.impl.DDLRecordImpl;
@@ -71,7 +69,6 @@ import java.util.Set;
  * @see com.liferay.dynamic.data.lists.service.persistence.DDLRecordUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordPersistenceImpl extends BasePersistenceImpl<DDLRecord>
 	implements DDLRecordPersistence {
 	/*

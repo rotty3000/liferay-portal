@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see WSRPProducerLocalService
  * @generated
  */
-@ProviderType
 public class WSRPProducerLocalServiceWrapper implements WSRPProducerLocalService,
 	ServiceWrapper<WSRPProducerLocalService> {
 	public WSRPProducerLocalServiceWrapper(

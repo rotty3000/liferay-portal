@@ -14,8 +14,6 @@
 
 package com.liferay.announcements.kernel.service.persistence;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.announcements.kernel.model.AnnouncementsFlag;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -38,7 +36,6 @@ import java.util.List;
  * @see com.liferay.portlet.announcements.service.persistence.impl.AnnouncementsFlagPersistenceImpl
  * @generated
  */
-@ProviderType
 public class AnnouncementsFlagUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:

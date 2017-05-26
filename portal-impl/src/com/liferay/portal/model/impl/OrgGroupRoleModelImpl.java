@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.OrgGroupRole;
@@ -46,7 +44,6 @@ import java.util.Map;
  * @see OrgGroupRoleModel
  * @generated
  */
-@ProviderType
 public class OrgGroupRoleModelImpl extends BaseModelImpl<OrgGroupRole>
 	implements OrgGroupRoleModel {
 	/*

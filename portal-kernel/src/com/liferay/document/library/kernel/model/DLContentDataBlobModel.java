@@ -14,8 +14,6 @@
 
 package com.liferay.document.library.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import java.sql.Blob;
 
 /**
@@ -25,7 +23,6 @@ import java.sql.Blob;
  * @see DLContent
  * @generated
  */
-@ProviderType
 public class DLContentDataBlobModel {
 	public DLContentDataBlobModel() {
 	}

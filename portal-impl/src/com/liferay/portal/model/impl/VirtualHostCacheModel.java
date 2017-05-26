@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.model.MVCCModel;
 import com.liferay.portal.kernel.model.VirtualHost;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see VirtualHost
  * @generated
  */
-@ProviderType
 public class VirtualHostCacheModel implements CacheModel<VirtualHost>,
 	Externalizable, MVCCModel {
 	@Override

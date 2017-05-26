@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 /**
  * Provides the HTTP utility for the
  * {@link com.liferay.portal.kernel.service.AccountServiceUtil} service utility. The
@@ -44,6 +42,5 @@ import aQute.bnd.annotation.ProviderType;
  * @see com.liferay.portal.kernel.service.AccountServiceUtil
  * @generated
  */
-@ProviderType
 public class AccountServiceHttp {
 }

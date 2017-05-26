@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.exportimport.kernel.lar.StagedModelType;
@@ -39,7 +37,6 @@ import java.util.Objects;
  * @see WSRPConsumerPortlet
  * @generated
  */
-@ProviderType
 public class WSRPConsumerPortletWrapper implements WSRPConsumerPortlet,
 	ModelWrapper<WSRPConsumerPortlet> {
 	public WSRPConsumerPortletWrapper(WSRPConsumerPortlet wsrpConsumerPortlet) {

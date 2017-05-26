@@ -14,8 +14,6 @@
 
 package com.liferay.push.notifications.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -63,7 +61,6 @@ import javax.sql.DataSource;
  * @see com.liferay.push.notifications.service.PushNotificationsDeviceLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class PushNotificationsDeviceLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements PushNotificationsDeviceLocalService,
 		IdentifiableOSGiService {

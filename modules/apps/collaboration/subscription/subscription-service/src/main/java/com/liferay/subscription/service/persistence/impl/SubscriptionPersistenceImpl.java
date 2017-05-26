@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -68,7 +66,6 @@ import java.util.Set;
  * @see com.liferay.subscription.service.persistence.SubscriptionUtil
  * @generated
  */
-@ProviderType
 public class SubscriptionPersistenceImpl extends BasePersistenceImpl<Subscription>
 	implements SubscriptionPersistence {
 	/*

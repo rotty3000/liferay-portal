@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.service;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
@@ -25,7 +23,6 @@ import com.liferay.portal.kernel.service.ServiceWrapper;
  * @see MeetupsRegistrationLocalService
  * @generated
  */
-@ProviderType
 public class MeetupsRegistrationLocalServiceWrapper
 	implements MeetupsRegistrationLocalService,
 		ServiceWrapper<MeetupsRegistrationLocalService> {

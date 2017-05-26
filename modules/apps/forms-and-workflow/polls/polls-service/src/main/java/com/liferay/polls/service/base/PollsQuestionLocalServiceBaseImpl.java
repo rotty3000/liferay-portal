@@ -14,8 +14,6 @@
 
 package com.liferay.polls.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -73,7 +71,6 @@ import javax.sql.DataSource;
  * @see com.liferay.polls.service.PollsQuestionLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class PollsQuestionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements PollsQuestionLocalService,
 		IdentifiableOSGiService {

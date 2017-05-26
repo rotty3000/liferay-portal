@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.exportimport.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.exportimport.kernel.model.ExportImportConfiguration;
 import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.exportimport.kernel.service.ExportImportConfigurationLocalSer
  * @see ExportImportConfiguration
  * @generated
  */
-@ProviderType
 public abstract class ExportImportConfigurationBaseImpl
 	extends ExportImportConfigurationModelImpl
 	implements ExportImportConfiguration {

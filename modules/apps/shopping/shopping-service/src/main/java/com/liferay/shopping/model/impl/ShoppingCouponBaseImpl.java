@@ -14,8 +14,6 @@
 
 package com.liferay.shopping.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.shopping.model.ShoppingCoupon;
 import com.liferay.shopping.service.ShoppingCouponLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.shopping.service.ShoppingCouponLocalServiceUtil;
  * @see ShoppingCoupon
  * @generated
  */
-@ProviderType
 public abstract class ShoppingCouponBaseImpl extends ShoppingCouponModelImpl
 	implements ShoppingCoupon {
 	/*

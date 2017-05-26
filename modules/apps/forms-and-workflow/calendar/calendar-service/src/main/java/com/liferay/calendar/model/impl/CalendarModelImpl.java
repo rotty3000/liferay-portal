@@ -14,8 +14,6 @@
 
 package com.liferay.calendar.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarModel;
 import com.liferay.calendar.model.CalendarSoap;
@@ -70,7 +68,6 @@ import java.util.TreeSet;
  * @generated
  */
 @JSON(strict = true)
-@ProviderType
 public class CalendarModelImpl extends BaseModelImpl<Calendar>
 	implements CalendarModel {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.social.networking.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.social.networking.model.WallEntry;
 import com.liferay.social.networking.service.WallEntryLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.social.networking.service.WallEntryLocalServiceUtil;
  * @see WallEntry
  * @generated
  */
-@ProviderType
 public abstract class WallEntryBaseImpl extends WallEntryModelImpl
 	implements WallEntry {
 	/*

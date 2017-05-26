@@ -14,8 +14,6 @@
 
 package com.liferay.portal.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.service.LayoutSetBranchServiceUtil;
@@ -62,7 +60,6 @@ import java.rmi.RemoteException;
  * @see LayoutSetBranchServiceUtil
  * @generated
  */
-@ProviderType
 public class LayoutSetBranchServiceSoap {
 	public static com.liferay.portal.kernel.model.LayoutSetBranchSoap addLayoutSetBranch(
 		long groupId, boolean privateLayout, java.lang.String name,

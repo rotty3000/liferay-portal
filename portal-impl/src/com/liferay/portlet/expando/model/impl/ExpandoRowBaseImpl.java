@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.expando.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoRow;
 import com.liferay.expando.kernel.service.ExpandoRowLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.expando.kernel.service.ExpandoRowLocalServiceUtil;
  * @see ExpandoRow
  * @generated
  */
-@ProviderType
 public abstract class ExpandoRowBaseImpl extends ExpandoRowModelImpl
 	implements ExpandoRow {
 	/*

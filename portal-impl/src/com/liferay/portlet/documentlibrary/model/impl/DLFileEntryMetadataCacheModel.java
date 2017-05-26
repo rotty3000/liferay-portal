@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.model.DLFileEntryMetadata;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -35,7 +33,6 @@ import java.io.ObjectOutput;
  * @see DLFileEntryMetadata
  * @generated
  */
-@ProviderType
 public class DLFileEntryMetadataCacheModel implements CacheModel<DLFileEntryMetadata>,
 	Externalizable {
 	@Override

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.document.library.kernel.service.DLTrashServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -52,7 +50,6 @@ import java.rmi.RemoteException;
  * @see DLTrashServiceUtil
  * @generated
  */
-@ProviderType
 public class DLTrashServiceSoap {
 	/**
 	* Moves the file entry from a trashed folder to the new folder.

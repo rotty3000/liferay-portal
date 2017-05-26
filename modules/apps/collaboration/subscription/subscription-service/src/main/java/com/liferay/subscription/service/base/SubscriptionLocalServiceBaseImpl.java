@@ -14,8 +14,6 @@
 
 package com.liferay.subscription.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 
 import com.liferay.message.boards.kernel.service.persistence.MBThreadPersistence;
@@ -67,7 +65,6 @@ import javax.sql.DataSource;
  * @see com.liferay.subscription.service.SubscriptionLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class SubscriptionLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements SubscriptionLocalService,
 		IdentifiableOSGiService {

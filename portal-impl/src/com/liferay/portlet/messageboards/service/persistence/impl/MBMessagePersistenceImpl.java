@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.messageboards.service.persistence.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.message.boards.kernel.exception.NoSuchMessageException;
 import com.liferay.message.boards.kernel.model.MBMessage;
 import com.liferay.message.boards.kernel.service.persistence.MBMessagePersistence;
@@ -86,7 +84,6 @@ import java.util.Set;
  * @see com.liferay.message.boards.kernel.service.persistence.MBMessageUtil
  * @generated
  */
-@ProviderType
 public class MBMessagePersistenceImpl extends BasePersistenceImpl<MBMessage>
 	implements MBMessagePersistence {
 	/*

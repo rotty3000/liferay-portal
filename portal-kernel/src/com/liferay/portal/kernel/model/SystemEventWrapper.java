@@ -14,8 +14,6 @@
 
 package com.liferay.portal.kernel.model;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.expando.kernel.model.ExpandoBridge;
 
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -36,7 +34,6 @@ import java.util.Objects;
  * @see SystemEvent
  * @generated
  */
-@ProviderType
 public class SystemEventWrapper implements SystemEvent,
 	ModelWrapper<SystemEvent> {
 	public SystemEventWrapper(SystemEvent systemEvent) {

@@ -14,8 +14,6 @@
 
 package com.liferay.bookmarks.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.bookmarks.model.BookmarksEntry;
 
 import com.liferay.portal.kernel.model.CacheModel;
@@ -37,7 +35,6 @@ import java.util.Date;
  * @see BookmarksEntry
  * @generated
  */
-@ProviderType
 public class BookmarksEntryCacheModel implements CacheModel<BookmarksEntry>,
 	Externalizable {
 	@Override

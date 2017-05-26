@@ -14,8 +14,6 @@
 
 package com.liferay.portal.security.service.access.policy.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.HttpPrincipal;
@@ -52,7 +50,6 @@ import com.liferay.portal.security.service.access.policy.service.SAPEntryService
  * @see SAPEntryServiceUtil
  * @generated
  */
-@ProviderType
 public class SAPEntryServiceHttp {
 	public static com.liferay.portal.security.service.access.policy.model.SAPEntry addSAPEntry(
 		HttpPrincipal httpPrincipal, java.lang.String allowedServiceSignatures,

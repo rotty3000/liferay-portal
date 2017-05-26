@@ -14,8 +14,6 @@
 
 package com.liferay.portal.model.impl;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.portal.kernel.model.UserIdMapper;
 import com.liferay.portal.kernel.service.UserIdMapperLocalServiceUtil;
 
@@ -31,7 +29,6 @@ import com.liferay.portal.kernel.service.UserIdMapperLocalServiceUtil;
  * @see UserIdMapper
  * @generated
  */
-@ProviderType
 public abstract class UserIdMapperBaseImpl extends UserIdMapperModelImpl
 	implements UserIdMapper {
 	/*

@@ -14,8 +14,6 @@
 
 package com.liferay.dynamic.data.lists.service.http;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.dynamic.data.lists.service.DDLRecordServiceUtil;
 
 import com.liferay.portal.kernel.log.Log;
@@ -64,7 +62,6 @@ import java.rmi.RemoteException;
  * @see DDLRecordServiceUtil
  * @generated
  */
-@ProviderType
 public class DDLRecordServiceSoap {
 	/**
 	* Adds a record referencing the record set.

@@ -14,8 +14,6 @@
 
 package com.liferay.portlet.documentlibrary.service.base;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.liferay.asset.kernel.service.persistence.AssetEntryFinder;
 import com.liferay.asset.kernel.service.persistence.AssetEntryPersistence;
 import com.liferay.asset.kernel.service.persistence.AssetTagFinder;
@@ -88,7 +86,6 @@ import javax.sql.DataSource;
  * @see com.liferay.document.library.kernel.service.DLFileShortcutLocalServiceUtil
  * @generated
  */
-@ProviderType
 public abstract class DLFileShortcutLocalServiceBaseImpl
 	extends BaseLocalServiceImpl implements DLFileShortcutLocalService,
 		IdentifiableOSGiService {
