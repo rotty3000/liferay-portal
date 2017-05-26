@@ -20,7 +20,6 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.config.AbstractMessagingConfigurator;
 import com.liferay.messaging.config.DefaultMessagingConfigurator;
-import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -33,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -47,11 +44,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author Michael C. Han
  */
 public class AbstractMessagingConfiguratorTest {
-
-	@ClassRule
-	@Rule
-	public static final LiferayIntegrationTestRule liferayIntegrationTestRule =
-		new LiferayIntegrationTestRule();
 
 	@Test
 	public void testCustomClassLoaderDestinationConfiguration() throws InvalidSyntaxException {
