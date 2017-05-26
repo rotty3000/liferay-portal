@@ -14,7 +14,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class BasicMessagingTest extends TestUtil{
+public class BasicMessagingTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
