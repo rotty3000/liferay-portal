@@ -16,13 +16,13 @@ package com.liferay.messaging;
 
 /**
  * <p>
- * Interface providing a factory for MessageOutboundProcessor instances.
+ * Interface providing a factory for InboundMessageProcessor instances.
  * </p>
  *
  * @author Raymond Augé
  */
-public interface MessageOutboundProcessorFactory {
+public interface InboundMessageProcessorFactory {
 
-	MessageOutboundProcessor create();
+	InboundMessageProcessor create();
 
 }

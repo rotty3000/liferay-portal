@@ -71,10 +71,10 @@ public class ProxyMessageListener implements MessageListener {
 
 				responseMessage.setPayload(proxyResponse);
 
-				if (_logger.isDebugEnabled() &&
+				if (_log.isDebugEnabled() &&
 					(proxyResponseException != null)) {
 
-					_logger.debug(
+					_log.debug(
 						proxyResponseException.getMessage(),
 						proxyResponseException);
 				}
@@ -84,8 +84,8 @@ public class ProxyMessageListener implements MessageListener {
 			}
 			else {
 				if (proxyResponseException != null) {
-					if (_logger.isWarnEnabled()) {
-						_logger.warn(
+					if (_log.isWarnEnabled()) {
+						_log.warn(
 							proxyResponseException.getMessage(),
 							proxyResponseException);
 					}
@@ -104,7 +104,7 @@ public class ProxyMessageListener implements MessageListener {
 		_messageBus = messageBus;
 	}
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		ProxyMessageListener.class);
 
 	private Object _manager;

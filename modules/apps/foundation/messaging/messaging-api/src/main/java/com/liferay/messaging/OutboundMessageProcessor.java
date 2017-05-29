@@ -24,7 +24,7 @@ package com.liferay.messaging;
  *
  * @author Raymond Augé
  */
-public interface MessageOutboundProcessor {
+public interface OutboundMessageProcessor {
 
 	/**
 	 * Process an out-bound message after passing it on for delivery.

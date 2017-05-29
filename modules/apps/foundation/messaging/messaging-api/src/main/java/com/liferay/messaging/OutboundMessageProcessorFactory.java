@@ -14,25 +14,15 @@
 
 package com.liferay.messaging;
 
-import java.util.Collection;
-
 /**
- * @author Michael C. Han
+ * <p>
+ * Interface providing a factory for OutboundMessageProcessor instances.
+ * </p>
+ *
+ * @author Raymond Augé
  */
-public interface MessageBus {
+public interface OutboundMessageProcessorFactory {
 
-	public Destination getDestination(String destinationName);
-
-	public int getDestinationCount();
-
-	public Collection<String> getDestinationNames();
-
-	public Collection<Destination> getDestinations();
-
-	public boolean hasDestination(String destinationName);
-
-	public boolean hasMessageListener(String destinationName);
-
-	public void sendMessage(String destinationName, Message message);
+	OutboundMessageProcessor create();
 
 }

@@ -80,7 +80,7 @@ public class MessageStatus implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(11);
+		StringBuilder sb = new StringBuilder();
 
 		sb.append("{startTime=");
 		sb.append(_startTime);

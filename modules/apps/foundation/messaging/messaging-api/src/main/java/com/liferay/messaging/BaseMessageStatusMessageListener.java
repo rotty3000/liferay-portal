@@ -36,7 +36,7 @@ public abstract class BaseMessageStatusMessageListener
 			doReceive(message, messageStatus);
 		}
 		catch (Exception e) {
-			_logger.error(
+			_log.error(
 				"Unable to process request " + message.getDestinationName(), e);
 
 			messageStatus.setException(e);
@@ -56,7 +56,7 @@ public abstract class BaseMessageStatusMessageListener
 			Message message, MessageStatus messageStatus)
 		throws Exception;
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		BaseMessageStatusMessageListener.class);
 
 	private SingleDestinationMessageSender _statusSender;
