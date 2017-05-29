@@ -111,8 +111,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		}
 
 		if (oldThreadPoolExecutor != null) {
-			if (_logger.isWarnEnabled()) {
-				_logger.warn(
+			if (_log.isWarnEnabled()) {
+				_log.warn(
 					"Abort creating a new thread pool for destination " +
 						getName() + " and reuse previous one");
 			}
@@ -128,8 +128,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	@Override
 	public void send(Message message) {
 		if (messageListeners.isEmpty()) {
-			if (_logger.isDebugEnabled()) {
-				_logger.debug("No message listeners for destination " + getName());
+			if (_log.isDebugEnabled()) {
+				_log.debug("No message listeners for destination " + getName());
 			}
 
 			return;
@@ -143,46 +143,47 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 					"receive more messages");
 		}
 
-		if (_logger.isDebugEnabled()) {
-			_logger.debug(
+		if (_log.isDebugEnabled()) {
+			_log.debug(
 				"Sending message " + message + " from destination " +
 					getName() + " to message listeners " + messageListeners);
 		}
 
-		List<MessageInboundProcessor> messageInboundProcessors = getMessageInboundProcessors();
+		List<InboundMessageProcessor> inboundMessageProcessors =
+			getInboundMessageProcessors();
 
 		try {
-			for (MessageInboundProcessor processor : messageInboundProcessors) {
+			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
 					message = processor.beforeReceive(message);
 				}
 				catch (MessageProcessorException mpe) {
-					_logger.error("Unable to process message " + message, mpe);
+					_log.error("Unable to process message " + message, mpe);
 				}
 			}
 
-			dispatch(messageListeners, messageInboundProcessors, message);
+			dispatch(messageListeners, inboundMessageProcessors, message);
 		}
 		finally {
-			for (MessageInboundProcessor processor : messageInboundProcessors) {
+			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
 					processor.afterReceive(message);
 				}
 				catch (MessageProcessorException mpe) {
-					_logger.error("Unable to process message " + message, mpe);
+					_log.error("Unable to process message " + message, mpe);
 				}
 			}
 		}
 	}
 
-	public void setMaximumQueueSize(int maximumQueueSize) {
-		_maximumQueueSize = maximumQueueSize;
-	}
-
-	public void setPortalExecutorManager(
+	public void setExecutorServiceRegistrar(
 		ExecutorServiceRegistrar executorServiceRegistrar) {
 
 		_executorServiceRegistrar = executorServiceRegistrar;
+	}
+
+	public void setMaximumQueueSize(int maximumQueueSize) {
+		_maximumQueueSize = maximumQueueSize;
 	}
 
 	public void setRejectedExecutionHandler(
@@ -216,13 +217,13 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			public void rejectedExecution(
 				Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
 
-				if (!_logger.isWarnEnabled()) {
+				if (!_log.isWarnEnabled()) {
 					return;
 				}
 
 				MessageRunnable messageRunnable = (MessageRunnable)runnable;
 
-				_logger.warn(
+				_log.warn(
 					"Discarding message " + messageRunnable.getMessage() +
 						" because it exceeds the maximum queue size of " +
 							_maximumQueueSize);
@@ -233,7 +234,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	protected abstract void dispatch(
 		Set<MessageListener> messageListeners,
-		List<MessageInboundProcessor> messageInboundProcessors,
+		List<InboundMessageProcessor> messageInboundProcessors,
 		Message message);
 
 	protected ThreadPoolExecutor getThreadPoolExecutor() {
@@ -249,7 +250,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	private static final int _WORKERS_MAX_SIZE = 5;
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		BaseAsyncDestination.class);
 
 	private int _maximumQueueSize = Integer.MAX_VALUE;

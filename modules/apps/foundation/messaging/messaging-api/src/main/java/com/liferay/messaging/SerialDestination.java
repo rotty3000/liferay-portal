@@ -19,11 +19,6 @@ import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import java.util.List;
 import java.util.Set;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +30,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Michael C. Han
  */
-@Component(
-	configurationPolicy = ConfigurationPolicy.REQUIRE
-)
 public class SerialDestination extends BaseAsyncDestination {
 
 	public SerialDestination() {
@@ -46,14 +38,9 @@ public class SerialDestination extends BaseAsyncDestination {
 	}
 
 	@Override
-	public List<MessageInboundProcessorFactory> getMessageInboundProcessorFactory() {
-		return _messageInboundProcessorFactories;
-	}
-
-	@Override
 	protected void dispatch(
 		final Set<MessageListener> messageListeners,
-		final List<MessageInboundProcessor> messageInboundProcessors,
+		final List<InboundMessageProcessor> messageInboundProcessors,
 		final Message message) {
 
 		final Thread dispatchThread = Thread.currentThread();
@@ -67,7 +54,7 @@ public class SerialDestination extends BaseAsyncDestination {
 				Message processedMessage = message;
 
 				try {
-					for (MessageInboundProcessor processor :
+					for (InboundMessageProcessor processor :
 							messageInboundProcessors) {
 
 						try {
@@ -75,7 +62,7 @@ public class SerialDestination extends BaseAsyncDestination {
 								processedMessage, dispatchThread);
 						}
 						catch (MessageProcessorException mpe) {
-							_logger.error(
+							_log.error(
 								"Unable to process message before thread " +
 									message, mpe);
 						}
@@ -86,13 +73,13 @@ public class SerialDestination extends BaseAsyncDestination {
 							messageListener.receive(message);
 						}
 						catch (MessageListenerException mle) {
-							_logger.error(
+							_log.error(
 								"Unable to process message " + message, mle);
 						}
 					}
 				}
 				finally {
-					for (MessageInboundProcessor processor :
+					for (InboundMessageProcessor processor :
 							messageInboundProcessors) {
 
 						try {
@@ -100,7 +87,7 @@ public class SerialDestination extends BaseAsyncDestination {
 								processedMessage, dispatchThread);
 						}
 						catch (MessageProcessorException mpe) {
-							_logger.error(
+							_log.error(
 								"Unable to process message after thread " +
 									message, mpe);
 						}
@@ -117,13 +104,7 @@ public class SerialDestination extends BaseAsyncDestination {
 
 	private static final int _WORKERS_MAX_SIZE = 1;
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		SerialDestination.class);
-
-	@Reference(
-		name = "messageInboundProcessorFactories",
-		policyOption = ReferencePolicyOption.GREEDY
-	)
-	private List<MessageInboundProcessorFactory> _messageInboundProcessorFactories;
 
 }

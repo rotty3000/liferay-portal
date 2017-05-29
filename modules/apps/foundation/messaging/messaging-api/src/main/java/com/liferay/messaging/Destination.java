@@ -21,24 +21,40 @@ import java.util.Set;
  */
 public interface Destination {
 
-	public boolean addDestinationEventListener(
-		DestinationEventListener destinationEventListener);
-
 	public void close();
 
 	public void close(boolean force);
 
 	public void copyDestinationEventListeners(Destination destination);
 
+	public void copyInboundMessageProcessorFactories(
+		Destination destination);
+
 	public void copyMessageListeners(Destination destination);
+
+	public void copyOutboundMessageProcessorFactories(Destination destination);
 
 	public void destroy();
 
 	public DestinationStatistics getDestinationStatistics();
 
+	public int getDestinationEventListenerCount();
+
+	public Set<DestinationEventListener> getDestinationEventListeners();
+
+	public int getInboundMessageProcessorFactoryCount();
+
+	public Set<InboundMessageProcessorFactory>
+		getInboundMessageProcessorFactories();
+
 	public int getMessageListenerCount();
 
 	public Set<MessageListener> getMessageListeners();
+
+	public int getOutboundMessageProcessorFactoryCount();
+
+	public Set<OutboundMessageProcessorFactory>
+		getOutboundMessageProcessorFactories();
 
 	public String getName();
 
@@ -46,20 +62,39 @@ public interface Destination {
 
 	public void open();
 
+	public boolean register(
+		DestinationEventListener destinationEventListener);
+
+	public boolean register(
+		InboundMessageProcessorFactory inboundMessageProcessorFactory);
+
 	public boolean register(MessageListener messageListener);
 
 	public boolean register(
 		MessageListener messageListener, ClassLoader classloader);
 
-	public boolean removeDestinationEventListener(
-		DestinationEventListener destinationEventListener);
-
-	public void removeDestinationEventListeners();
+	public boolean register(
+		OutboundMessageProcessorFactory outboundMessageProcessorFactory);
 
 	public void send(Message message);
 
+	public boolean unregister(
+		DestinationEventListener destinationEventListener);
+
+	public boolean unregister(
+		InboundMessageProcessorFactory inboundMessageProcessorFactory);
+
 	public boolean unregister(MessageListener messageListener);
 
+	public boolean unregister(
+		OutboundMessageProcessorFactory outboundMessageProcessorFactory);
+
+	public void unregisterDestinationEventListeners();
+
+	public void unregisterInboundMessageProcessorFactories();
+
 	public void unregisterMessageListeners();
+
+	public void unregisterOutboundMessageProcessorFactories();
 
 }

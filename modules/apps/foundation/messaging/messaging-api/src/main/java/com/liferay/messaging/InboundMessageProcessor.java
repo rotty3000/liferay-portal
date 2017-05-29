@@ -24,7 +24,7 @@ package com.liferay.messaging;
  *
  * @author Raymond Augé
  */
-public interface MessageInboundProcessor {
+public interface InboundMessageProcessor {
 
 	/**
 	 * Process an in-bound message after passing it to listeners.

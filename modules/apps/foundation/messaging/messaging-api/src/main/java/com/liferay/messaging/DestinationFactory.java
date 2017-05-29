@@ -14,15 +14,16 @@
 
 package com.liferay.messaging;
 
-/**
- * <p>
- * Interface providing a factory for MessageInboundProcessor instances.
- * </p>
- *
- * @author Raymond Augé
- */
-public interface MessageInboundProcessorFactory {
+import java.util.Collection;
 
-	MessageInboundProcessor create();
+/**
+ * @author Michael C. Han
+ */
+public interface DestinationFactory {
+
+	public Destination createDestination(
+		DestinationConfiguration destinationConfiguration);
+
+	public Collection<String> getDestinationTypes();
 
 }

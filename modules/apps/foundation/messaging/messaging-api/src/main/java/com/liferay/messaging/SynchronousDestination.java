@@ -17,20 +17,12 @@ package com.liferay.messaging;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
  */
-@Component(
-	configurationPolicy = ConfigurationPolicy.REQUIRE
-)
 public class SynchronousDestination extends BaseDestination {
 
 	@Override
@@ -44,29 +36,25 @@ public class SynchronousDestination extends BaseDestination {
 	}
 
 	@Override
-	public List<MessageInboundProcessorFactory> getMessageInboundProcessorFactory() {
-		return _messageInboundProcessorFactories;
-	}
-
-	@Override
 	public void send(Message message) {
 		if (messageListeners.isEmpty()) {
-			if (_logger.isDebugEnabled()) {
-				_logger.debug("No message listeners for destination " + getName());
+			if (_log.isDebugEnabled()) {
+				_log.debug("No message listeners for destination " + getName());
 			}
 
 			return;
 		}
 
-		List<MessageInboundProcessor> messageInboundProcessors = getMessageInboundProcessors();
+		List<InboundMessageProcessor> inboundMessageProcessors =
+			getInboundMessageProcessors();
 
 		try {
-			for (MessageInboundProcessor processor : messageInboundProcessors) {
+			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
 					message = processor.beforeReceive(message);
 				}
 				catch (MessageProcessorException mpe) {
-					_logger.error("Unable to process message " + message, mpe);
+					_log.error("Unable to process message " + message, mpe);
 				}
 			}
 
@@ -75,17 +63,17 @@ public class SynchronousDestination extends BaseDestination {
 					messageListener.receive(message);
 				}
 				catch (MessageListenerException mle) {
-					_logger.error("Unable to process message " + message, mle);
+					_log.error("Unable to process message " + message, mle);
 				}
 			}
 		}
 		finally {
-			for (MessageInboundProcessor processor : messageInboundProcessors) {
+			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
 					processor.afterReceive(message);
 				}
 				catch (MessageProcessorException mpe) {
-					_logger.error("Unable to process message " + message, mpe);
+					_log.error("Unable to process message " + message, mpe);
 				}
 			}
 		}
@@ -93,15 +81,9 @@ public class SynchronousDestination extends BaseDestination {
 		_sentMessageCounter.incrementAndGet();
 	}
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		SynchronousDestination.class);
 
 	private final AtomicLong _sentMessageCounter = new AtomicLong();
-
-	@Reference(
-		name = "messageInboundProcessorFactories",
-		policyOption = ReferencePolicyOption.GREEDY
-	)
-	private List<MessageInboundProcessorFactory> _messageInboundProcessorFactories;
 
 }
