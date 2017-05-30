@@ -1,6 +1,7 @@
 package com.liferay.messaging.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.messaging.MessageBus;
 
@@ -9,6 +10,9 @@ import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.junit.After;
 import org.junit.Before;
 
@@ -16,6 +20,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class TestUtil {
@@ -65,6 +70,26 @@ public class TestUtil {
 		catch (BundleException be) {
 			throw new RuntimeException(be);
 		}
+	}
+
+	protected <T> ServiceRegistration<T> registerService(
+		Class<T> clazz, T instance, Dictionary<String, Object> properties) {
+
+		return bundleContext.registerService(clazz, instance, properties);
+	}
+
+	protected <T> ServiceRegistration<T> registerService(
+		Class<T> clazz, T instance, Object ... parts) {
+
+		assertTrue((parts.length % 2) == 0);
+
+		Dictionary<String, Object> properties = new Hashtable<>();
+
+		for (int i = 0; i < parts.length; i += 2) {
+			properties.put(String.valueOf(parts[i]), parts[i + 1]);
+		}
+
+		return registerService(clazz, instance, properties);
 	}
 
 	protected Bundle bundle = FrameworkUtil.getBundle(TestUtil.class);
