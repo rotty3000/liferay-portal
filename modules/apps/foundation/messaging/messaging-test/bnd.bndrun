@@ -20,7 +20,7 @@
 	log4j.configuration=file:${.}/log4j.properties
 -runbundles: \
 	com.liferay.messaging.api;version='[1.0.0,1.0.1)',\
-	com.liferay.messaging.impl;version='[3.0.7,3.0.8)',\
+	com.liferay.messaging.impl;version='[1.0.0,1.0.1)',\
 	com.liferay.messaging.test;version='[1.0.0,1.0.1)',\
 	com.liferay.petra.concurrent;version='[1.0.0,1.0.1)',\
 	com.liferay.petra.io;version='[1.0.0,1.0.1)',\

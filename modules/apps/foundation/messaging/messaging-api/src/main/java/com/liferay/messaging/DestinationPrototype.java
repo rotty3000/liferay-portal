@@ -12,10 +12,7 @@
  * details.
  */
 
-package com.liferay.messaging.impl;
-
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.DestinationConfiguration;
+package com.liferay.messaging;
 
 /**
  * @author Michael C. Han

@@ -17,8 +17,8 @@ package com.liferay.messaging.impl.internal;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationFactory;
+import com.liferay.messaging.DestinationPrototype;
 import com.liferay.messaging.ExecutorServiceRegistrar;
-import com.liferay.messaging.impl.DestinationPrototype;
 import com.liferay.petra.io.convert.Maps;
 
 import java.util.Collection;

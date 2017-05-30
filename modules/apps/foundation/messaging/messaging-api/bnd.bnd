@@ -7,4 +7,4 @@ Export-Package:\
 	com.liferay.messaging.sender
 Require-Capability:\
 	osgi.implementation;\
-		filter:="(&(osgi.implementation=com.liferay.messaging)(version>=3.0.0)(!(version>=4.0.0)))"
+		filter:="(&(osgi.implementation=com.liferay.messaging)(version>=1.0.0)(!(version>=2.0.0)))"

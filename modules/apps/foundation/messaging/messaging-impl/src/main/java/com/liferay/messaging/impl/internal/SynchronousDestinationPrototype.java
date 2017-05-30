@@ -16,8 +16,8 @@ package com.liferay.messaging.impl.internal;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationPrototype;
 import com.liferay.messaging.SynchronousDestination;
-import com.liferay.messaging.impl.DestinationPrototype;
 
 /**
  * @author Michael C. Han
