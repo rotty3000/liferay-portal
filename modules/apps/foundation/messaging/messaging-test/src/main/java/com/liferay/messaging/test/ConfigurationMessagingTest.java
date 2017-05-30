@@ -1,0 +1,66 @@
+package com.liferay.messaging.test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+
+import java.util.concurrent.Callable;
+
+import org.junit.Test;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Filter;
+import org.osgi.util.tracker.ServiceTracker;
+
+public class ConfigurationMessagingTest extends TestUtil {
+
+	@Test
+	public void testParallel() throws Exception {
+		test("tb4.jar", "configuration/tb4");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb5.jar", "configuration/tb5");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb6.jar", "configuration/tb6");
+	}
+
+	public void test(String bundle, String destination) throws Exception {
+		Bundle tbBundle = install(bundle);
+
+		try {
+			tbBundle.start();
+
+			Filter filter = bundleContext.createFilter(
+				String.format("(&(objectClass=java.util.concurrent.Callable)" +
+					"(destination.name=%s))", destination));
+
+			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
+				new ServiceTracker<>(bundleContext, filter, null);
+
+			callableST.open();
+
+			Callable<Message> callable = callableST.waitForService(timeout);
+
+			assertNotNull(callable);
+
+			Message message = new Message();
+
+			MessageBus messageBus = getMessageBus();
+
+			messageBus.sendMessage(destination, message);
+
+			assertEquals(message, callable.call());
+		}
+		finally {
+			tbBundle.uninstall();
+		}
+	}
+
+}

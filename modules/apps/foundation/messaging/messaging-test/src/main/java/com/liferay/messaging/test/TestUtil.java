@@ -1,5 +1,7 @@
 package com.liferay.messaging.test;
 
+import static org.junit.Assert.assertNotNull;
+
 import com.liferay.messaging.MessageBus;
 
 import java.net.URL;
@@ -33,7 +35,11 @@ public class TestUtil {
 
 	public MessageBus getMessageBus() {
 		try {
-			return messageBusTracker.waitForService(timeout);
+			MessageBus messageBus = messageBusTracker.waitForService(timeout);
+
+			assertNotNull(messageBus);
+
+			return messageBus;
 		}
 		catch (InterruptedException ie) {
 			throw new RuntimeException(ie);

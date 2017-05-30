@@ -12,6 +12,7 @@ dependencies {
 	provided group: "com.liferay", name: "com.liferay.petra.io", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "2.0.0"
 	provided group: "log4j", name: "log4j", version: "1.2.17"
+	provided group: "org.apache.aries.async", name: "org.apache.aries.async", version: "1.0.1"
 	provided group: "org.apache.aries.spifly", name: "org.apache.aries.spifly.dynamic.bundle", version: "1.0.8"
 	provided group: "org.apache.felix", name: "org.apache.felix.configadmin", version: "1.8.8"
 	provided group: "org.apache.felix", name: "org.apache.felix.gogo.command", version: "1.0.2"
@@ -55,8 +56,8 @@ task newjar(type: Bundle, overwrite: true) {
 }
 
 jar {
-    deleteAllActions()
-    dependsOn newjar
+	deleteAllActions()
+	dependsOn newjar
 }
 
 task resolve(type: Resolve) {
