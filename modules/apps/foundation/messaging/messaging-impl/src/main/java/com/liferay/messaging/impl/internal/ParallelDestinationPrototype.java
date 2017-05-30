@@ -16,6 +16,7 @@ package com.liferay.messaging.impl.internal;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.ParallelDestination;
 import com.liferay.messaging.impl.DestinationPrototype;
 
@@ -24,12 +25,20 @@ import com.liferay.messaging.impl.DestinationPrototype;
  */
 public class ParallelDestinationPrototype implements DestinationPrototype {
 
+	public ParallelDestinationPrototype(
+		ExecutorServiceRegistrar executorServiceRegistrar) {
+
+		_executorServiceRegistrar = executorServiceRegistrar;
+	}
+
 	@Override
 	public Destination createDestination(
 		DestinationConfiguration destinationConfiguration) {
 
 		ParallelDestination parallelDestination = new ParallelDestination();
 
+		parallelDestination.setExecutorServiceRegistrar(
+			_executorServiceRegistrar);
 		parallelDestination.setName(
 			destinationConfiguration.getDestinationName());
 		parallelDestination.setMaximumQueueSize(
@@ -45,5 +54,7 @@ public class ParallelDestinationPrototype implements DestinationPrototype {
 
 		return parallelDestination;
 	}
+
+	private final ExecutorServiceRegistrar _executorServiceRegistrar;
 
 }

@@ -16,6 +16,7 @@ package com.liferay.messaging.impl.internal;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.SerialDestination;
 import com.liferay.messaging.impl.DestinationPrototype;
 
@@ -24,12 +25,20 @@ import com.liferay.messaging.impl.DestinationPrototype;
  */
 public class SerialDestinationPrototype implements DestinationPrototype {
 
+	public SerialDestinationPrototype(
+		ExecutorServiceRegistrar executorServiceRegistrar) {
+
+		_executorServiceRegistrar = executorServiceRegistrar;
+	}
+
 	@Override
 	public Destination createDestination(
 		DestinationConfiguration destinationConfiguration) {
 
 		SerialDestination serialDestination = new SerialDestination();
 
+		serialDestination.setExecutorServiceRegistrar(
+			_executorServiceRegistrar);
 		serialDestination.setName(
 			destinationConfiguration.getDestinationName());
 		serialDestination.setMaximumQueueSize(
@@ -47,5 +56,7 @@ public class SerialDestinationPrototype implements DestinationPrototype {
 	private static final int _WORKERS_CORE_SIZE = 1;
 
 	private static final int _WORKERS_MAX_SIZE = 1;
+
+	private final ExecutorServiceRegistrar _executorServiceRegistrar;
 
 }

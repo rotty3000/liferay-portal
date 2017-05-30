@@ -17,13 +17,11 @@ package com.liferay.messaging.impl.internal.sender;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
-import com.liferay.messaging.MessageOutboundProcessor;
+import com.liferay.messaging.impl.internal.DefaultMessageBus;
 import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.petra.io.validate.Validator;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -93,20 +91,13 @@ public class DefaultSynchronousMessageSender
 		message.setResponseId(responseId);
 
 		SynchronousMessageListener synchronousMessageListener =
-			new SynchronousMessageListener(
-				_messageBus, message, timeout, _processors);
+			new SynchronousMessageListener(_messageBus, message, timeout);
 
 		return synchronousMessageListener.send();
 	}
 
-	public void setMessageBus(MessageBus messageBus) {
+	public void setMessageBus(DefaultMessageBus messageBus) {
 		_messageBus = messageBus;
-	}
-
-	public void setMessageOutboundProcessor(
-		List<MessageOutboundProcessor> processors) {
-
-		_processors = processors;
 	}
 
 	public void setTimeout(long timeout) {
@@ -124,8 +115,7 @@ public class DefaultSynchronousMessageSender
 	private static final Logger _logger = LoggerFactory.getLogger(
 		DefaultSynchronousMessageSender.class);
 
-	private MessageBus _messageBus;
-	private List<MessageOutboundProcessor> _processors;
+	private DefaultMessageBus _messageBus;
 	private long _timeout;
 
 }
