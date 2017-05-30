@@ -15,13 +15,10 @@
 package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.MessageOutboundProcessor;
-import com.liferay.messaging.MessageProcessorException;
+import com.liferay.messaging.impl.internal.DefaultMessageBus;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -31,13 +28,11 @@ import java.util.concurrent.TimeUnit;
 public class SynchronousMessageListener implements MessageListener {
 
 	public SynchronousMessageListener(
-		MessageBus messageBus, Message message, long timeout,
-		List<MessageOutboundProcessor> processors) {
+		DefaultMessageBus messageBus, Message message, long timeout) {
 
 		_messageBus = messageBus;
 		_message = message;
 		_timeout = timeout;
-		_processors = processors;
 
 		_responseId = _message.getResponseId();
 	}
@@ -66,17 +61,6 @@ public class SynchronousMessageListener implements MessageListener {
 		Message sendingMessage = _message;
 
 		try {
-			for (MessageOutboundProcessor processor : _processors) {
-				try {
-					sendingMessage = processor.beforeSend(sendingMessage);
-				}
-				catch (MessageProcessorException mpe) {
-					throw new MessageBusException(
-						"Unable to process message before sending " +
-							sendingMessage);
-				}
-			}
-
 			_messageBus.sendMessage(destinationName, sendingMessage);
 
 			_countDownLatch.await(_timeout, TimeUnit.MILLISECONDS);
@@ -95,24 +79,12 @@ public class SynchronousMessageListener implements MessageListener {
 		finally {
 			_messageBus.unregisterMessageListener(
 				responseDestinationName, this);
-
-			for (MessageOutboundProcessor processor : _processors) {
-				try {
-					processor.afterSend(sendingMessage);
-				}
-				catch (MessageProcessorException mpe) {
-					throw new MessageBusException(
-						"Unable to process message after sending " +
-							sendingMessage);
-				}
-			}
 		}
 	}
 
 	private final CountDownLatch _countDownLatch = new CountDownLatch(1);
 	private final Message _message;
-	private final MessageBus _messageBus;
-	private final List<MessageOutboundProcessor> _processors;
+	private final DefaultMessageBus _messageBus;
 	private final String _responseId;
 	private Object _results;
 	private final long _timeout;

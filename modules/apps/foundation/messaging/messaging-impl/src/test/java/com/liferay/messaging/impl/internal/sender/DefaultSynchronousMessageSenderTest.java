@@ -17,7 +17,6 @@ package com.liferay.messaging.impl.internal.sender;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.SerialDestination;
@@ -25,6 +24,7 @@ import com.liferay.messaging.SynchronousDestination;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -46,14 +46,13 @@ public class DefaultSynchronousMessageSenderTest {
 		synchronousDestination.setName(
 			DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-		_messageBus.addDestination(synchronousDestination);
+		_messageBus.registerDestination(
+			synchronousDestination, doGetProperties(synchronousDestination));
 
 		_defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
 
 		_defaultSynchronousMessageSender.setMessageBus(_messageBus);
-		_defaultSynchronousMessageSender.setMessageOutboundProcessor(
-			Collections.emptyList());
 		_defaultSynchronousMessageSender.setTimeout(10000);
 
 		synchronousDestination.open();
@@ -98,6 +97,11 @@ public class DefaultSynchronousMessageSenderTest {
 		doTestSend(synchronousDestination);
 	}
 
+	protected Map<String, Object> doGetProperties(Destination destination) {
+		return Collections.singletonMap(
+			"destination.name", destination.getName());
+	}
+
 	protected void doTestSend(Destination destination)
 		throws MessageBusException {
 
@@ -105,7 +109,8 @@ public class DefaultSynchronousMessageSenderTest {
 
 		destination.register(new ReplayMessageListener(response));
 
-		_messageBus.addDestination(destination);
+		_messageBus.registerDestination(
+			destination, doGetProperties(destination));
 
 		try {
 			Assert.assertSame(
@@ -114,14 +119,15 @@ public class DefaultSynchronousMessageSenderTest {
 					destination.getName(), new Message()));
 		}
 		finally {
-			_messageBus.removeDestination(destination.getName());
+			_messageBus.unregisterDestination(
+				destination, doGetProperties(destination));
 
 			destination.close(true);
 		}
 	}
 
 	private DefaultSynchronousMessageSender _defaultSynchronousMessageSender;
-	private MessageBus _messageBus;
+	private DefaultMessageBus _messageBus;
 
 	private class ReplayMessageListener implements MessageListener {
 

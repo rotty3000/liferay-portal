@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Michael C. Han
  */
-@Component(immediate = true, service = DestinationFactory.class)
+@Component(service = DestinationFactory.class)
 public class DefaultDestinationFactory implements DestinationFactory {
 
 	@Override
@@ -68,10 +68,10 @@ public class DefaultDestinationFactory implements DestinationFactory {
 	protected void activate() {
 		_destinationPrototypes.put(
 			DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
-			new ParallelDestinationPrototype());
+			new ParallelDestinationPrototype(_executorServiceRegistrar));
 		_destinationPrototypes.put(
 			DestinationConfiguration.DESTINATION_TYPE_SERIAL,
-			new SerialDestinationPrototype());
+			new SerialDestinationPrototype(_executorServiceRegistrar));
 		_destinationPrototypes.put(
 			DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS,
 			new SynchronousDestinationPrototype());

@@ -14,8 +14,7 @@
 
 package com.liferay.messaging.impl.internal.sender;
 
-import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.MessageOutboundProcessor;
+import com.liferay.messaging.impl.internal.DefaultMessageBus;
 import com.liferay.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
@@ -23,7 +22,6 @@ import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.petra.io.convert.Conversions;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -122,7 +120,6 @@ public class DefaultSingleDestinationMessageSenderFactory
 			new DefaultSynchronousMessageSender();
 
 		defaultSynchronousMessageSender.setMessageBus(_messageBus);
-		defaultSynchronousMessageSender.setMessageOutboundProcessor(_processors);
 		defaultSynchronousMessageSender.setTimeout(timeout);
 
 		_synchronousMessageSenders.put(
@@ -173,9 +170,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 		_defaultSingleDestinationSynchronousMessageSenders =
 			new ConcurrentHashMap<>();
 	@Reference(policyOption = ReferencePolicyOption.GREEDY)
-	private List<MessageOutboundProcessor> _processors;
-	@Reference(policyOption = ReferencePolicyOption.GREEDY)
-	private MessageBus _messageBus;
+	private DefaultMessageBus _messageBus;
 	private final Map<SynchronousMessageSender.Mode, SynchronousMessageSender>
 		_synchronousMessageSenders = new HashMap<>();
 
