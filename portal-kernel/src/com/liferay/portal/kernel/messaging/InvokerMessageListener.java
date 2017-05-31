@@ -14,78 +14,23 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.messaging.MessageListener;
+
 /**
  * @author Michael C. Han
  */
-public class InvokerMessageListener implements MessageListener {
+@Deprecated
+public class InvokerMessageListener
+	extends com.liferay.messaging.InvokerMessageListener {
 
 	public InvokerMessageListener(MessageListener messageListener) {
-		this(messageListener, Thread.currentThread().getContextClassLoader());
+		super(messageListener);
 	}
 
 	public InvokerMessageListener(
 		MessageListener messageListener, ClassLoader classLoader) {
 
-		_messageListener = messageListener;
-		_classLoader = classLoader;
+		super(messageListener, classLoader);
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (!(obj instanceof InvokerMessageListener)) {
-			return false;
-		}
-
-		InvokerMessageListener messageListenerInvoker =
-			(InvokerMessageListener)obj;
-
-		return _messageListener.equals(
-			messageListenerInvoker.getMessageListener());
-	}
-
-	public ClassLoader getClassLoader() {
-		return _classLoader;
-	}
-
-	public MessageListener getMessageListener() {
-		return _messageListener;
-	}
-
-	@Override
-	public int hashCode() {
-		return _messageListener.hashCode();
-	}
-
-	@Override
-	public void receive(Message message) throws MessageListenerException {
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		if (_classLoader != null) {
-			currentThread.setContextClassLoader(_classLoader);
-		}
-
-		try {
-			_messageListener.receive(message);
-		}
-		finally {
-			if (_classLoader != null) {
-				currentThread.setContextClassLoader(contextClassLoader);
-			}
-		}
-	}
-
-	@Override
-	public String toString() {
-		return _messageListener.toString();
-	}
-
-	private final ClassLoader _classLoader;
-	private final MessageListener _messageListener;
 
 }
