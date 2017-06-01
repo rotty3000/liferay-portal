@@ -17,6 +17,7 @@ package com.liferay.messaging;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 
 import java.io.Serializable;
+
 import java.util.Objects;
 
 /**

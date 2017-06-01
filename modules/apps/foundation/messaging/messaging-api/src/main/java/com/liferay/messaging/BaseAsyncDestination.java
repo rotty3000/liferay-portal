@@ -89,7 +89,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			return;
 		}
 
-		ClassLoader classLoader = clazz.getClassLoader();
+		ClassLoader classLoader = _clazz.getClassLoader();
 
 		if (_rejectedExecutionHandler == null) {
 			_rejectedExecutionHandler = createRejectionExecutionHandler();
@@ -241,7 +241,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		return _threadPoolExecutor;
 	}
 
-	private static final Class<BaseAsyncDestination> clazz =
+	private static final Class<BaseAsyncDestination> _clazz =
 		BaseAsyncDestination.class;
 
 	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
