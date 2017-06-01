@@ -87,6 +87,7 @@ public class GetterConversionsTest {
 			Conversions.DEFAULT_DOUBLE);
 
 		/*
+
 		// Locale aware
 
 		Assert.assertEquals(
@@ -102,8 +103,7 @@ public class GetterConversionsTest {
 		Assert.assertEquals(
 			GetterUtil.DEFAULT_DOUBLE,
 			GetterUtil.getDouble("4.7", LocaleUtil.HUNGARY),
-			GetterUtil.DEFAULT_DOUBLE);
-		*/
+			GetterUtil.DEFAULT_DOUBLE);*/
 	}
 
 	@Test
@@ -135,25 +135,29 @@ public class GetterConversionsTest {
 
 		// Maximum int
 
-		result = Conversions.getInteger(Integer.toString(Integer.MAX_VALUE), -1);
+		result = Conversions.getInteger(
+			Integer.toString(Integer.MAX_VALUE), -1);
 
 		Assert.assertEquals(Integer.MAX_VALUE, result);
 
 		// Minimum int
 
-		result = Conversions.getInteger(Integer.toString(Integer.MIN_VALUE), -1);
+		result = Conversions.getInteger(
+			Integer.toString(Integer.MIN_VALUE), -1);
 
 		Assert.assertEquals(Integer.MIN_VALUE, result);
 
 		// Larger than maximum int
 
-		result = Conversions.getInteger(Integer.toString(Integer.MAX_VALUE) + "0", -1);
+		result = Conversions.getInteger(
+			Integer.toString(Integer.MAX_VALUE) + "0", -1);
 
 		Assert.assertEquals(-1, result);
 
 		// Smaller than minimum int
 
-		result = Conversions.getInteger(Integer.toString(Integer.MIN_VALUE) + "0", -1);
+		result = Conversions.getInteger(
+			Integer.toString(Integer.MIN_VALUE) + "0", -1);
 
 		Assert.assertEquals(-1, result);
 	}
@@ -239,13 +243,15 @@ public class GetterConversionsTest {
 
 		// Maximum short
 
-		result = Conversions.getShort(Short.toString(Short.MAX_VALUE), (short)-1);
+		result = Conversions.getShort(
+			Short.toString(Short.MAX_VALUE), (short)-1);
 
 		Assert.assertEquals(Short.MAX_VALUE, result);
 
 		// Minimum short
 
-		result = Conversions.getShort(Short.toString(Short.MIN_VALUE), (short)-1);
+		result = Conversions.getShort(
+			Short.toString(Short.MIN_VALUE), (short)-1);
 
 		Assert.assertEquals(Short.MIN_VALUE, result);
 
@@ -270,8 +276,7 @@ public class GetterConversionsTest {
 			StringPool.BLANK, Conversions.getString(StringPool.BLANK));
 		Assert.assertEquals(
 			Conversions.DEFAULT_STRING, Conversions.getString(null));
-		Assert.assertEquals(
-			"default", Conversions.getString(null, "default"));
+		Assert.assertEquals("default", Conversions.getString(null, "default"));
 		Assert.assertEquals(
 			"default", Conversions.getString(new Object(), "default"));
 		Assert.assertEquals("test", Conversions.getString("test"));
@@ -292,7 +297,8 @@ public class GetterConversionsTest {
 		map = new HashMap<>();
 		map.put("somepASSwordString", "secret");
 
-		Assert.assertEquals("{somepASSwordString=********}", Conversions.getString(map));
+		Assert.assertEquals(
+			"{somepASSwordString=********}", Conversions.getString(map));
 	}
 
 }

@@ -21,10 +21,12 @@ import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 
 import java.io.IOException;
+
 import java.nio.channels.Channel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SelectableChannel;
+
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;

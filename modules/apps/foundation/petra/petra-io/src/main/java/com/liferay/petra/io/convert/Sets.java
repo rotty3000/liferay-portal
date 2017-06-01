@@ -27,16 +27,16 @@ import org.osgi.util.converter.TypeReference;
  */
 public class Sets {
 
-	public static <T> Set<T> from(T[] array) {
-		Converting converting = Conversions.convert(array);
+	public static <T> Set<T> from(List<T> list) {
+		Converting converting = Conversions.convert(list);
 
 		converting.defaultValue(new LinkedHashSet<T>());
 
 		return converting.to(new TypeReference<Set<T>>() {});
 	}
 
-	public static <T> Set<T> from(List<T> list) {
-		Converting converting = Conversions.convert(list);
+	public static <T> Set<T> from(T[] array) {
+		Converting converting = Conversions.convert(array);
 
 		converting.defaultValue(new LinkedHashSet<T>());
 

@@ -25,6 +25,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);
@@ -65,6 +66,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);
@@ -108,6 +110,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertEquals(16, unsyncStringWriter.stringBuilder.capacity());
@@ -140,6 +143,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		unsyncStringWriter.write("test1");
 //
@@ -168,6 +172,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);
@@ -206,6 +211,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);
@@ -246,6 +252,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);
@@ -289,6 +296,7 @@ public class UnsyncStringWriterTest {
 //		// StringBuilder
 //
 //		UnsyncStringWriter unsyncStringWriter = new UnsyncStringWriter(false);
+
 //
 //		Assert.assertNotNull(unsyncStringWriter.stringBuilder);
 //		Assert.assertNull(unsyncStringWriter.stringBundler);

@@ -16,14 +16,15 @@ package com.liferay.petra.io;
 
 import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
-import com.liferay.petra.io.spi.loader.ClassLoaderPool;
 import com.liferay.petra.memory.SoftReferenceThreadLocal;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+
 import java.nio.ByteBuffer;
+
 import java.util.Arrays;
 
 /**
@@ -465,8 +466,8 @@ public class Serializer {
 			BufferNode currentBufferNode = headBufferNode;
 
 			while ((currentBufferNode != null) &&
-				(currentBufferNode.buffer.length >
-					bufferNode.buffer.length)) {
+				   (currentBufferNode.buffer.length >
+					   bufferNode.buffer.length)) {
 
 				previousBufferNode = currentBufferNode;
 

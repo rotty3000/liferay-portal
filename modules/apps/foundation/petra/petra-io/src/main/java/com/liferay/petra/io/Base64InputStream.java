@@ -214,21 +214,15 @@ public class Base64InputStream extends InputStream {
 	}
 
 	protected int getByte(char character) {
-		if ((character >= 'A') &&
-			(character <= 'Z')) {
-
+		if ((character >= 'A') && (character <= 'Z')) {
 			return character - 65;
 		}
 
-		if ((character >= 'a') &&
-			(character <= 'z')) {
-
+		if ((character >= 'a') && (character <= 'z')) {
 			return (character - 97) + 26;
 		}
 
-		if ((character >= '0') &&
-			(character <= '9')) {
-
+		if ((character >= '0') && (character <= '9')) {
 			return (character - 48) + 52;
 		}
 

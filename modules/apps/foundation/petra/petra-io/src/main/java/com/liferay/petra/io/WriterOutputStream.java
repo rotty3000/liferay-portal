@@ -20,6 +20,7 @@ import com.liferay.petra.nio.charset.CharsetEncoderUtil;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -183,7 +184,7 @@ public class WriterOutputStream extends OutputStream {
 			_outputCharBuffer.rewind();
 		}
 	}
-	
+
 	private static final int _DEFAULT_OUTPUT_BUFFER_SIZE = 8192;
 
 	private final boolean _autoFlush;

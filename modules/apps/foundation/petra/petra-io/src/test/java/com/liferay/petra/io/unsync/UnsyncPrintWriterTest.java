@@ -17,13 +17,13 @@ package com.liferay.petra.io.unsync;
 import com.liferay.petra.io.OutputStreamWriter;
 import com.liferay.portal.kernel.exception.LoggedExceptionInInitializerError;
 
-import java.lang.reflect.Field;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+
+import java.lang.reflect.Field;
 
 import org.junit.After;
 import org.junit.Assert;

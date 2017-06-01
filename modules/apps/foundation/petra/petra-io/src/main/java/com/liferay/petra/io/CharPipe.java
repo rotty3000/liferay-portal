@@ -17,7 +17,9 @@ package com.liferay.petra.io;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
 import java.nio.CharBuffer;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

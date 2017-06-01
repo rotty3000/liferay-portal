@@ -15,8 +15,10 @@
 package com.liferay.petra.reflect;
 
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import java.util.Arrays;
 
 /**
@@ -60,7 +62,7 @@ public class MethodHandler implements Serializable {
 	}
 
 	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #invoke}
+	 * @deprecated As of 1.0.0, replaced by {@link #invoke}
 	 */
 	@Deprecated
 	public Object invoke(boolean newInstance) throws Exception {

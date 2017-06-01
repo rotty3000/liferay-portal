@@ -26,7 +26,8 @@ import java.util.concurrent.ExecutorService;
 public class AsyncIntrabandProxySkeleton implements IntrabandProxySkeleton {
 
 	public static IntrabandProxySkeleton createAsyncIntrabandProxySkeleton(
-		ExecutorService executorService, IntrabandProxySkeleton intrabandProxySkeleton) {
+		ExecutorService executorService,
+		IntrabandProxySkeleton intrabandProxySkeleton) {
 
 		if (executorService == null) {
 			return intrabandProxySkeleton;

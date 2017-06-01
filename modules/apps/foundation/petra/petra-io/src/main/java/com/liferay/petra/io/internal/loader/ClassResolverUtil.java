@@ -24,8 +24,6 @@ import java.util.ServiceLoader;
  */
 public class ClassResolverUtil {
 
-	private static ClassResolver _classResolver;
-
 	public static Class<?> resolve(String className, ClassLoader classLoader)
 		throws ClassNotFoundException {
 
@@ -52,6 +50,8 @@ public class ClassResolverUtil {
 		// Prevent Instantiation
 
 	}
+
+	private static final ClassResolver _classResolver;
 
 	static {
 

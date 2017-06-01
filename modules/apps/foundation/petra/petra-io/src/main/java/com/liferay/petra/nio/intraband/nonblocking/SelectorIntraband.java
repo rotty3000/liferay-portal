@@ -21,6 +21,7 @@ import com.liferay.petra.nio.intraband.Datagram;
 import com.liferay.petra.nio.intraband.RegistrationReference;
 
 import java.io.IOException;
+
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.Channel;
 import java.nio.channels.ClosedSelectorException;
@@ -29,6 +30,7 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;

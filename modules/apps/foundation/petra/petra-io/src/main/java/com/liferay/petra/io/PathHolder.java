@@ -81,10 +81,10 @@ public class PathHolder implements Serializable {
 		return _toString;
 	}
 
+	private static final char _separatorChar = File.separatorChar;
 	private static final long serialVersionUID = 1L;
 
 	private final String _pathString;
-	private final char _separatorChar = File.separatorChar;
 	private transient String _toString;
 
 }

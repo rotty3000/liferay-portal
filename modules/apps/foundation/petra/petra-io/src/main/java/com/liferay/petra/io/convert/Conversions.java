@@ -33,21 +33,26 @@ import org.osgi.util.converter.StandardConverter;
 public class Conversions {
 
 	public static final String[] BOOLEANS = {"true", "t", "y", "on", "1"};
+
 	public static final boolean DEFAULT_BOOLEAN = false;
+
 	public static final double DEFAULT_DOUBLE = 0.0;
+
 	public static final int DEFAULT_INTEGER = 0;
+
 	public static final long DEFAULT_LONG = 0;
+
 	public static final short DEFAULT_SHORT = 0;
+
 	public static final String DEFAULT_STRING = "";
+
 	public static final String PASSWORD_MASK = "********";
 
 	public static Converting convert(Object object) {
 		return _instance._converter.convert(object);
 	}
 
-	public static <T> T convert(
-		Object object, T defaultValue, Class<T> clazz) {
-
+	public static <T> T convert(Object object, T defaultValue, Class<T> clazz) {
 		Converting converting = _instance._converter.convert(object);
 
 		converting.defaultValue(defaultValue);
@@ -114,9 +119,10 @@ public class Conversions {
 						if (Arrays.asList(BOOLEANS).contains(o)) {
 							return true;
 						}
+
 						return false;
-					}
-				) {}
+					}) {
+				}
 			).
 			rule(
 				new Rule<Object, String>(
@@ -124,11 +130,11 @@ public class Conversions {
 						if (o.getClass().equals(Object.class)) {
 							throw new RuntimeException();
 						}
+
 						return null;
-					}
-				) {}
-			).
-			build();
+					}) {
+				}
+			).build();
 
 		builder = rootConverter.newConverterBuilder();
 
@@ -137,6 +143,7 @@ public class Conversions {
 				new Rule<Map<String, Object>, String>(
 					o -> {
 						Map<String, Object> copy = new LinkedHashMap<>(o);
+
 						for (Map.Entry<String, Object> entry :
 								copy.entrySet()) {
 
@@ -147,11 +154,11 @@ public class Conversions {
 								entry.setValue(PASSWORD_MASK);
 							}
 						}
+
 						return rootConverter.convert(copy).to(String.class);
-					}
-				) {}
-			).
-			build();
+					}) {
+				}
+			).build();
 	}
 
 	private static final Conversions _instance = new Conversions();
@@ -159,6 +166,6 @@ public class Conversions {
 	private static final Pattern _passwordPattern = Pattern.compile(
 		"(?i).*password.*");
 
-	private Converter _converter;
+	private final Converter _converter;
 
 }

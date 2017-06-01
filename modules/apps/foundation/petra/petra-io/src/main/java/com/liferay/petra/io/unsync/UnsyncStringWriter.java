@@ -117,6 +117,7 @@ public class UnsyncStringWriter extends Writer {
 
 			write(string);
 		}
+
 		stringBuilder.append(string.substring(offset, offset + length));
 	}
 

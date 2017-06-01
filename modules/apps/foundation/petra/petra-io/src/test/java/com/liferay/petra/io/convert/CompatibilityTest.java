@@ -30,12 +30,12 @@ public class CompatibilityTest {
 
 	@Test
 	public void test() {
-		Map<String, Object> values = new HashMap<String, Object>();
+		Map<String, Object> values = new HashMap<>();
 
-		values.put("int", new Integer(42));
-		values.put("double", new Double(42.0));
+		values.put("double", Double.valueOf(42.0));
+		values.put("int", Integer.valueOf(42));
 
-		List<Integer> list = new ArrayList<Integer>();
+		List<Integer> list = new ArrayList<>();
 
 		list.add(1);
 		list.add(2);

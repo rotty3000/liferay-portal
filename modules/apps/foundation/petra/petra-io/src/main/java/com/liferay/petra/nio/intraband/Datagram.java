@@ -19,9 +19,11 @@ import com.liferay.petra.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.EOFException;
 import java.io.IOException;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
+
 import java.util.EnumSet;
 
 /**

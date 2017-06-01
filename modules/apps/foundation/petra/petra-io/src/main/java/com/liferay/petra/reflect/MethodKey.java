@@ -22,8 +22,11 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+
 import java.lang.reflect.Method;
+
 import java.nio.ByteBuffer;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -66,7 +69,7 @@ public class MethodKey implements Externalizable {
 	}
 
 	/**
-	 * @deprecated As of 6.2.0, replaced by {@link #MethodKey(Class, String,
+	 * @deprecated As of 1.0.0, replaced by {@link #MethodKey(Class, String,
 	 *             Class...)}
 	 */
 	@Deprecated

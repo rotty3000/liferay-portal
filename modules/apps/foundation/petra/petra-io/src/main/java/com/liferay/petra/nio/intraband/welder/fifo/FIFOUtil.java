@@ -54,7 +54,8 @@ public class FIFOUtil {
 
 	private static final boolean _FIFO_SUPPORTED;
 
-	private static final Logger _logger = LoggerFactory.getLogger(FIFOUtil.class);
+	private static final Logger _logger = LoggerFactory.getLogger(
+		FIFOUtil.class);
 
 	static {
 		boolean fifoSupport = false;

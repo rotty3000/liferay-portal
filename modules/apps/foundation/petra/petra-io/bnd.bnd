@@ -1,8 +1,7 @@
 Bundle-Name: Liferay Petra IO
 Bundle-SymbolicName: com.liferay.petra.io
 Bundle-Version: 1.0.0
-Export-Package: \
-	com.liferay.petra.io,\
+Export-Package: 	com.liferay.petra.io,\
 	com.liferay.petra.io.convert,\
 	com.liferay.petra.io.spi.loader,\
 	com.liferay.petra.io.unsync,\
@@ -19,7 +18,9 @@ Export-Package: \
 	com.liferay.petra.nio.intraband.welder.fifo,\
 	com.liferay.petra.nio.intraband.welder.socket,\
 	com.liferay.petra.reflect,\
+	\
 	org.apache.felix.converter.dto,\
+	\
 	org.osgi.util.converter,\
 	org.osgi.util.function
 Liferay-Releng-Module-Group-Description:
@@ -35,5 +36,4 @@ Require-Capability:\
 		cardinality:=multiple;\
 		filter:="(osgi.serviceloader=com.liferay.petra.io.spi.loader.ClassResolver)";\
 		resolution:=optional
--conditionalpackage:\
-	org.apache.felix.converter.impl
+-conditionalpackage: org.apache.felix.converter.impl

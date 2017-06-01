@@ -50,7 +50,7 @@ public class ClassLoaderPoolUtil {
 
 	}
 
-	private static ClassLoaderPool _classLoaderPool;
+	private static final ClassLoaderPool _classLoaderPool;
 
 	static {
 

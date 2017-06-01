@@ -39,7 +39,8 @@ public class AnnotatedObjectInputStream extends ObjectInputStream {
 
 		String contextName = readUTF();
 
-		ClassLoader classLoader = ClassLoaderPoolUtil.getClassLoader(contextName);
+		ClassLoader classLoader = ClassLoaderPoolUtil.getClassLoader(
+			contextName);
 
 		String className = objectStreamClass.getName();
 

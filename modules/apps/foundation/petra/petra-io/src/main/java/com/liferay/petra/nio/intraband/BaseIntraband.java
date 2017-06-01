@@ -17,8 +17,10 @@ package com.liferay.petra.nio.intraband;
 import com.liferay.petra.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.IOException;
+
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
+
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -382,7 +384,8 @@ public abstract class BaseIntraband implements Intraband {
 
 					if (requestDatagram == null) {
 						if (_logger.isWarnEnabled()) {
-							_logger.warn("Dropped ownerless response " + datagram);
+							_logger.warn(
+								"Dropped ownerless response " + datagram);
 						}
 					}
 					else {
@@ -420,7 +423,8 @@ public abstract class BaseIntraband implements Intraband {
 
 					if (datagramReceiveHandler == null) {
 						if (_logger.isWarnEnabled()) {
-							_logger.warn("Dropped ownerless request " + datagram);
+							_logger.warn(
+								"Dropped ownerless request " + datagram);
 						}
 					}
 					else {
@@ -596,6 +600,7 @@ public abstract class BaseIntraband implements Intraband {
 
 	}
 
-	private static final Logger _logger = LoggerFactory.getLogger(BaseIntraband.class);
+	private static final Logger _logger = LoggerFactory.getLogger(
+		BaseIntraband.class);
 
 }

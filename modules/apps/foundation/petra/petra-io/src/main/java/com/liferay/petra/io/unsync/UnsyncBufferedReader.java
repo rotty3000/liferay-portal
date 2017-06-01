@@ -186,9 +186,7 @@ public class UnsyncBufferedReader extends Reader {
 			while (y < firstInvalidIndex) {
 				lineEndChar = buffer[y];
 
-				if ((lineEndChar == '\n') ||
-					(lineEndChar == '\r')) {
-
+				if ((lineEndChar == '\n') || (lineEndChar == '\r')) {
 					hasLineBreak = true;
 
 					break;
@@ -205,9 +203,7 @@ public class UnsyncBufferedReader extends Reader {
 				index++;
 
 				if (lineEndChar == '\r') {
-					if ((index < buffer.length) &&
-						(buffer[index] == '\n')) {
-
+					if ((index < buffer.length) && (buffer[index] == '\n')) {
 						index++;
 					}
 				}
