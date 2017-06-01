@@ -61,7 +61,7 @@ public class FileCacheOutputStream extends OutputStream {
 			}
 
 			try (Stream<Path> stream = Files.walk(
-				_tempFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
+					_tempFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
 
 				stream.sorted(
 					Comparator.
