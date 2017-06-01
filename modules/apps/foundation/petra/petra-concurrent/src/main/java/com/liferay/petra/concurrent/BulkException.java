@@ -48,11 +48,11 @@ public class BulkException extends Exception {
 
 		for (Throwable cause : _causes) {
 			sb.append("{");
-			sb.append(getClassName(cause));
+			sb.append(_getClassName(cause));
 			sb.append(":");
 			sb.append(cause.getMessage());
 			sb.append(", ");
-			sb.append(getStackTrace(cause));
+			sb.append(_getStackTrace(cause));
 			sb.append("}\n");
 		}
 
@@ -61,7 +61,7 @@ public class BulkException extends Exception {
 		return sb.toString();
 	}
 
-	private String getClassName(Object object) {
+	private String _getClassName(Object object) {
 		if (object == null) {
 			return null;
 		}
@@ -71,7 +71,7 @@ public class BulkException extends Exception {
 		return clazz.getName();
 	}
 
-	private String getStackTrace(Throwable t) {
+	private String _getStackTrace(Throwable t) {
 		String stackTrace = null;
 
 		PrintWriter printWriter = null;

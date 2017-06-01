@@ -23,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NamedThreadFactory implements ThreadFactory {
 
+	public static final String MINUS = "-";
+
 	public NamedThreadFactory(
 		String name, int priority, ClassLoader contextClassLoader) {
 
@@ -58,8 +60,6 @@ public class NamedThreadFactory implements ThreadFactory {
 
 		return thread;
 	}
-
-	private static final String MINUS = "-";
 
 	private final ClassLoader _contextClassLoader;
 	private final AtomicInteger _counter = new AtomicInteger();

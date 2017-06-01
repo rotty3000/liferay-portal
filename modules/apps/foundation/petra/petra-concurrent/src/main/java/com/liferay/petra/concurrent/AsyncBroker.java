@@ -113,7 +113,7 @@ public class AsyncBroker<K, V> {
 		return true;
 	}
 
-	private static Field getDeclaredField(Class<?> clazz, String name)
+	private static Field _getDeclaredField(Class<?> clazz, String name)
 		throws Exception {
 
 		Field field = clazz.getDeclaredField(name);
@@ -122,14 +122,14 @@ public class AsyncBroker<K, V> {
 			field.setAccessible(true);
 		}
 
-		return unfinalField(field);
+		return _unfinalField(field);
 	}
 
-	private static Field unfinalField(Field field) throws Exception {
+	private static Field _unfinalField(Field field) throws Exception {
 		int modifiers = field.getModifiers();
 
 		if ((modifiers & Modifier.FINAL) == Modifier.FINAL) {
-			Field modifiersField = getDeclaredField(Field.class, "modifiers");
+			Field modifiersField = _getDeclaredField(Field.class, "modifiers");
 
 			modifiersField.setInt(field, modifiers & ~Modifier.FINAL);
 		}
@@ -146,7 +146,7 @@ public class AsyncBroker<K, V> {
 		Field referentField = null;
 
 		try {
-			referentField = getDeclaredField(Reference.class, "referent");
+			referentField = _getDeclaredField(Reference.class, "referent");
 		}
 		catch (Throwable t) {
 			if (_log.isWarnEnabled()) {
