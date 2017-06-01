@@ -112,8 +112,7 @@ public class Conversions {
 		ConverterBuilder builder =
 			new StandardConverter().newConverterBuilder();
 
-		final Converter rootConverter = builder.
-			rule(
+		final Converter rootConverter = builder.rule(
 				new Rule<String, Boolean>(
 					o -> {
 						if (Arrays.asList(BOOLEANS).contains(o)) {
@@ -123,8 +122,7 @@ public class Conversions {
 						return false;
 					}) {
 				}
-			).
-			rule(
+			).rule(
 				new Rule<Object, String>(
 					o -> {
 						if (o.getClass().equals(Object.class)) {
@@ -138,8 +136,7 @@ public class Conversions {
 
 		builder = rootConverter.newConverterBuilder();
 
-		_converter = builder.
-			rule(
+		_converter = builder.rule(
 				new Rule<Map<String, Object>, String>(
 					o -> {
 						Map<String, Object> copy = new LinkedHashMap<>(o);
