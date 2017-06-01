@@ -112,50 +112,53 @@ public class Conversions {
 		ConverterBuilder builder =
 			new StandardConverter().newConverterBuilder();
 
-		final Converter rootConverter = builder.rule(
-				new Rule<String, Boolean>(
-					o -> {
-						if (Arrays.asList(BOOLEANS).contains(o)) {
-							return true;
-						}
+		builder = builder.rule(
+			new Rule<String, Boolean>(
+				o -> {
+					if (Arrays.asList(BOOLEANS).contains(o)) {
+						return true;
+					}
 
-						return false;
-					}) {
-				}
-			).rule(
-				new Rule<Object, String>(
-					o -> {
-						if (o.getClass().equals(Object.class)) {
-							throw new RuntimeException();
-						}
+					return false;
+				}) {
+			}
+		).rule(
+			new Rule<Object, String>(
+				o -> {
+					Class<?> clazz = o.getClass();
 
-						return null;
-					}) {
-				}
-			).build();
+					if (clazz.equals(Object.class)) {
+						throw new RuntimeException();
+					}
+
+					return null;
+				}) {
+			}
+		);
+
+		final Converter rootConverter = builder.build();
 
 		builder = rootConverter.newConverterBuilder();
 
-		_converter = builder.rule(
-				new Rule<Map<String, Object>, String>(
-					o -> {
-						Map<String, Object> copy = new LinkedHashMap<>(o);
+		builder = builder.rule(
+			new Rule<Map<String, Object>, String>(
+				o -> {
+					Map<String, Object> copy = new LinkedHashMap<>(o);
 
-						for (Map.Entry<String, Object> entry :
-								copy.entrySet()) {
+					for (Map.Entry<String, Object> entry : copy.entrySet()) {
+						Matcher matcher = _passwordPattern.matcher(
+							String.valueOf(entry.getKey()));
 
-							Matcher matcher = _passwordPattern.matcher(
-								String.valueOf(entry.getKey()));
-
-							if (matcher.matches()) {
-								entry.setValue(PASSWORD_MASK);
-							}
+						if (matcher.matches()) {
+							entry.setValue(PASSWORD_MASK);
 						}
+					}
 
-						return rootConverter.convert(copy).to(String.class);
-					}) {
-				}
-			).build();
+					return rootConverter.convert(copy).to(String.class);
+				}) {
+			});
+
+		_converter = builder.build();
 	}
 
 	private static final Conversions _instance = new Conversions();
