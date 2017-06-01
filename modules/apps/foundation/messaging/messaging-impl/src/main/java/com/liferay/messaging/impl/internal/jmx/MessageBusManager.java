@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,8 +103,7 @@ public class MessageBusManager
 			DestinationStatisticsManager destinationStatisticsManager =
 				new DestinationStatisticsManager(destination);
 
-			Dictionary<String, Object> mBeanProperties =
-				new Hashtable<>();
+			Dictionary<String, Object> mBeanProperties = new Hashtable<>();
 
 			mBeanProperties.put(
 				"jmx.objectname", destinationStatisticsManager.getObjectName());

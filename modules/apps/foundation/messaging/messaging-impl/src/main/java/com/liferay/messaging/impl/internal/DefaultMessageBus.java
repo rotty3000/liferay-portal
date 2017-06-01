@@ -131,8 +131,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized void registerDestination(
 		Destination destination, Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		if (BaseDestination.class.isInstance(destination)) {
 			BaseDestination baseDestination = (BaseDestination)destination;
@@ -187,8 +186,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -229,8 +227,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		InboundMessageProcessorFactory inboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -346,8 +343,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -499,8 +495,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			singleDestinationMessageSenderFactory.
 				getSynchronousMessageSender(_synchronousMessageSenderMode);
 
-		return synchronousMessageSender.send(
-			destinationName, message, timeout);
+		return synchronousMessageSender.send(destinationName, message, timeout);
 	}
 
 	@Override
@@ -553,25 +548,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	public synchronized boolean unregisterMessageListener(
-		String destinationName, MessageListener messageListener) {
-
-		Destination destination = _destinations.get(destinationName);
-
-		if (destination != null) {
-			return destination.unregister(messageListener);
-		}
-
-		List<MessageListener> queuedMessageListeners =
-			_queuedMessageListeners.get(destinationName);
-
-		if (Lists.isEmpty(queuedMessageListeners)) {
-			return false;
-		}
-
-		return queuedMessageListeners.remove(messageListener);
-	}
-
 	public synchronized void unregisterDestination(
 		Destination destination, Map<String, Object> properties) {
 
@@ -594,8 +570,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -619,8 +594,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		InboundMessageProcessorFactory inboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -637,7 +611,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			return;
 		}
 
-		queuedInboundMessageProcessorFactories.remove(inboundMessageProcessorFactory);
+		queuedInboundMessageProcessorFactories.remove(
+			inboundMessageProcessorFactory);
 	}
 
 	public synchronized void unregisterMessageBusEventListener(
@@ -649,18 +624,35 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized void unregisterMessageListener(
 		MessageListener messageListener, Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		unregisterMessageListener(destinationName, messageListener);
+	}
+
+	public synchronized boolean unregisterMessageListener(
+		String destinationName, MessageListener messageListener) {
+
+		Destination destination = _destinations.get(destinationName);
+
+		if (destination != null) {
+			return destination.unregister(messageListener);
+		}
+
+		List<MessageListener> queuedMessageListeners =
+			_queuedMessageListeners.get(destinationName);
+
+		if (Lists.isEmpty(queuedMessageListeners)) {
+			return false;
+		}
+
+		return queuedMessageListeners.remove(messageListener);
 	}
 
 	public synchronized void unregisterOutboundMessageProcessorFactory(
 		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = Maps.getString(
-			properties, "destination.name");
+		String destinationName = Maps.getString(properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -677,7 +669,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			return;
 		}
 
-		queuedOutboundMessageProcessorFactories.remove(outboundMessageProcessorFactory);
+		queuedOutboundMessageProcessorFactories.remove(
+			outboundMessageProcessorFactory);
 	}
 
 	@Override
@@ -748,14 +741,16 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 
 		List<InboundMessageProcessorFactory> inboundMessageProcessorFactories =
-			_queuedInboundMessageProcessorFactories.remove(destination.getName());
+			_queuedInboundMessageProcessorFactories.remove(
+				destination.getName());
 
 		if (!Lists.isEmpty(inboundMessageProcessorFactories)) {
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(
 					"Registering {} queued inbound processor factories for " +
 						"destination {}",
-					inboundMessageProcessorFactories.size(), destination.getName());
+					inboundMessageProcessorFactories.size(),
+					destination.getName());
 			}
 
 			for (InboundMessageProcessorFactory inboundMessageProcessorFactory :
@@ -884,6 +879,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private DestinationFactory _destinationFactory;
+
 	private final Map<String, Destination> _destinations = new HashMap<>();
 	private final Map<String, DestinationWorkerConfiguration>
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
@@ -899,6 +895,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		new HashMap<>();
 	private final Map<String, List<OutboundMessageProcessorFactory>>
 		_queuedOutboundMessageProcessorFactories = new HashMap<>();
+
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
 		policy = ReferencePolicy.DYNAMIC,
@@ -906,6 +903,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	)
 	private volatile SingleDestinationMessageSenderFactory
 		_singleDestinationMessageSenderFactory;
+
 	private SynchronousMessageSender.Mode _synchronousMessageSenderMode;
 
 }
