@@ -57,14 +57,14 @@ public class TestUtil {
 
 		assertNotNull(messageBus);
 
-		messageBuilderFactory = getMessageBuilderFactory();
-
-		assertNotNull(messageBuilderFactory);
-
 		messageBuilderFactoryTracker = new ServiceTracker<>(
 			bundleContext, MessageBuilderFactory.class, null);
 
 		messageBuilderFactoryTracker.open();
+
+		messageBuilderFactory = getMessageBuilderFactory();
+
+		assertNotNull(messageBuilderFactory);
 	}
 
 	public MessageBus getMessageBus() {
