@@ -18,6 +18,9 @@ import com.liferay.messaging.DestinationConfiguration;
 
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * @author Raymond Augé
+ */
 @Component(
 	service = DestinationConfiguration.class
 )

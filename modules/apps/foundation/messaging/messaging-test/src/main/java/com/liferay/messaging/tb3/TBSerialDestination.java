@@ -22,6 +22,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+/**
+ * @author Raymond Augé
+ */
 @Component(
 	property = {
 		"destination.name=serial/test"

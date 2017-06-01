@@ -14,8 +14,14 @@
 
 package com.liferay.messaging.interfaces;
 
+/**
+ * @author Raymond Augé
+ */
 public @interface Config {
 
 	String destination_name();
+	int maximum_queue_size() default Integer.MAX_VALUE;
+	int workers_core_size() default 2;
+	int workers_max_size() default 5;
 
 }

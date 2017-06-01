@@ -58,23 +58,21 @@ public class SynchronousMessageListener implements MessageListener {
 
 		_messageBus.registerMessageListener(responseDestinationName, this);
 
-		Message sendingMessage = _message;
-
 		try {
-			_messageBus.sendMessage(destinationName, sendingMessage);
+			_messageBus.sendMessage(destinationName, _message);
 
 			_countDownLatch.await(_timeout, TimeUnit.MILLISECONDS);
 
 			if (_results == null) {
 				throw new MessageBusException(
-					"No reply received for message: " + sendingMessage);
+					"No reply received for message: " + _message);
 			}
 
 			return _results;
 		}
 		catch (InterruptedException ie) {
 			throw new MessageBusException(
-				"Message sending interrupted for: " + sendingMessage, ie);
+				"Message sending interrupted for: " + _message, ie);
 		}
 		finally {
 			_messageBus.unregisterMessageListener(

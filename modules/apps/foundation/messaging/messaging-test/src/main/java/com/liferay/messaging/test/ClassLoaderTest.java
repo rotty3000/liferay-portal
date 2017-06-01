@@ -15,7 +15,6 @@
 package com.liferay.messaging.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.messaging.Destination;
@@ -38,6 +37,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Michael C. Han
+ * @author Raymond Augé
  */
 public class ClassLoaderTest extends TestUtil {
 
@@ -70,18 +70,16 @@ public class ClassLoaderTest extends TestUtil {
 				Thread.sleep(1000);
 			}
 
-			MessageBus messageBus = serviceTracker.getService();
-
-			assertNotNull(messageBus);
-
 			Collection<Destination> destinations = messageBus.getDestinations();
 
-			assertEquals(destinations.toString(), 2, destinations.size());
+			assertEquals(destinations.toString(), 4, destinations.size());
 
 			for (Destination destination : destinations) {
 				String destinationName = destination.getName();
 
-				assertTrue(destinationName.contains("plugintest"));
+				assertTrue(
+					destinationName.contains("plugintest") ||
+					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/plugintest1")) {
 					assertEquals(1, destination.getMessageListenerCount());
@@ -136,18 +134,16 @@ public class ClassLoaderTest extends TestUtil {
 				Thread.sleep(1000);
 			}
 
-			MessageBus messageBus = serviceTracker.getService();
-
-			assertNotNull(messageBus);
-
 			Collection<Destination> destinations = messageBus.getDestinations();
 
-			assertEquals(destinations.toString(), 2, destinations.size());
+			assertEquals(destinations.toString(), 4, destinations.size());
 
 			for (Destination destination : destinations) {
 				String destinationName = destination.getName();
 
-				assertTrue(destinationName.contains("portaltest"));
+				assertTrue(
+					destinationName.contains("portaltest") ||
+					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/portaltest1")) {
 					assertEquals(1, destination.getMessageListenerCount());

@@ -30,6 +30,9 @@ import com.liferay.messaging.MessageProcessorException;
 import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
 import com.liferay.messaging.impl.configuration.DestinationWorkerConfiguration;
+import com.liferay.messaging.impl.configuration.MessageBusConfiguration;
+import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.io.convert.Lists;
 import com.liferay.petra.io.convert.Maps;
@@ -46,6 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.osgi.framework.Constants;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
@@ -449,6 +453,96 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
+	@Override
+	public void sendMessage(String destinationName, Object payload) {
+		Message message = new Message();
+
+		message.setPayload(payload);
+
+		sendMessage(destinationName, message);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Message message) {
+
+		final SingleDestinationMessageSenderFactory
+			singleDestinationMessageSenderFactory =
+				_singleDestinationMessageSenderFactory;
+
+		if (singleDestinationMessageSenderFactory == null) {
+			throw new IllegalStateException(
+				"singleDestinationMessageSenderFactory is not available!");
+		}
+
+		SynchronousMessageSender synchronousMessageSender =
+			singleDestinationMessageSenderFactory.
+				getSynchronousMessageSender(_synchronousMessageSenderMode);
+
+		return synchronousMessageSender.send(destinationName, message);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Message message, long timeout) {
+
+		final SingleDestinationMessageSenderFactory
+			singleDestinationMessageSenderFactory =
+				_singleDestinationMessageSenderFactory;
+
+		if (singleDestinationMessageSenderFactory == null) {
+			throw new IllegalStateException(
+				"singleDestinationMessageSenderFactory is not available!");
+		}
+
+		SynchronousMessageSender synchronousMessageSender =
+			singleDestinationMessageSenderFactory.
+				getSynchronousMessageSender(_synchronousMessageSenderMode);
+
+		return synchronousMessageSender.send(
+			destinationName, message, timeout);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload) {
+
+		return sendSynchronousMessage(destinationName, payload, null);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload, long timeout) {
+
+		return sendSynchronousMessage(destinationName, payload, null, timeout);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload,
+		String responseDestinationName) {
+
+		Message message = new Message();
+
+		message.setResponseDestinationName(responseDestinationName);
+		message.setPayload(payload);
+
+		return sendSynchronousMessage(destinationName, message);
+	}
+
+	@Override
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload, String responseDestinationName,
+		long timeout) {
+
+		Message message = new Message();
+
+		message.setResponseDestinationName(responseDestinationName);
+		message.setPayload(payload);
+
+		return sendSynchronousMessage(destinationName, message, timeout);
+	}
+
 	public void shutdown() {
 		shutdown(false);
 	}
@@ -476,27 +570,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 
 		return queuedMessageListeners.remove(messageListener);
-	}
-
-	@Override
-	public void updated(String factoryPid, Dictionary<String, ?> dictionary)
-		throws ConfigurationException {
-
-		DestinationWorkerConfiguration destinationWorkerConfiguration =
-			Conversions.convert(
-				dictionary).to(DestinationWorkerConfiguration.class);
-
-		_factoryPidsToDestinationName.put(
-			factoryPid, destinationWorkerConfiguration.destinationName());
-
-		_destinationWorkerConfigurations.put(
-			destinationWorkerConfiguration.destinationName(),
-			destinationWorkerConfiguration);
-
-		Destination destination = _destinations.get(
-			destinationWorkerConfiguration.destinationName());
-
-		updateDestination(destination, destinationWorkerConfiguration);
 	}
 
 	public synchronized void unregisterDestination(
@@ -605,6 +678,33 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 
 		queuedOutboundMessageProcessorFactories.remove(outboundMessageProcessorFactory);
+	}
+
+	@Override
+	public void updated(String factoryPid, Dictionary<String, ?> dictionary)
+		throws ConfigurationException {
+
+		DestinationWorkerConfiguration destinationWorkerConfiguration =
+			Conversions.convert(
+				dictionary).to(DestinationWorkerConfiguration.class);
+
+		_factoryPidsToDestinationName.put(
+			factoryPid, destinationWorkerConfiguration.destinationName());
+
+		_destinationWorkerConfigurations.put(
+			destinationWorkerConfiguration.destinationName(),
+			destinationWorkerConfiguration);
+
+		Destination destination = _destinations.get(
+			destinationWorkerConfiguration.destinationName());
+
+		updateDestination(destination, destinationWorkerConfiguration);
+	}
+
+	@Activate
+	protected void activate(MessageBusConfiguration messageBusConfiguration) {
+		_synchronousMessageSenderMode =
+			messageBusConfiguration.synchronousMessageSenderMode();
 	}
 
 	@Deactivate
@@ -799,5 +899,13 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		new HashMap<>();
 	private final Map<String, List<OutboundMessageProcessorFactory>>
 		_queuedOutboundMessageProcessorFactories = new HashMap<>();
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	private volatile SingleDestinationMessageSenderFactory
+		_singleDestinationMessageSenderFactory;
+	private SynchronousMessageSender.Mode _synchronousMessageSenderMode;
 
 }

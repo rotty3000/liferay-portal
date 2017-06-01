@@ -36,8 +36,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Michael C. Han
  */
 @Component(
-	immediate = true, property = {"timeout=10000"},
-	service = SingleDestinationMessageSenderFactory.class
+	property = {"timeout=10000"}
 )
 public class DefaultSingleDestinationMessageSenderFactory
 	implements SingleDestinationMessageSenderFactory {

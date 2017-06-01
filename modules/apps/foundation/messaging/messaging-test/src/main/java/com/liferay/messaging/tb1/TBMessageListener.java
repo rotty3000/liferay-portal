@@ -23,6 +23,9 @@ import java.util.concurrent.Callable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+/**
+ * @author Raymond Augé
+ */
 @Component(
 	property = {
 		"destination.name=synchronous/test"

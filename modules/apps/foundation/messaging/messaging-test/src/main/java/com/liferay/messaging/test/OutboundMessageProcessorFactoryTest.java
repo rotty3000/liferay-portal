@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageProcessorException;
 import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
@@ -33,6 +32,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
+/**
+ * @author Raymond Augé
+ */
 public class OutboundMessageProcessorFactoryTest extends TestUtil {
 
 	@Test
@@ -104,8 +106,6 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 			assertFalse(promiseToBeforeSend.isDone());
 
 			Message message = new Message();
-
-			MessageBus messageBus = getMessageBus();
 
 			Promise<Integer> promiseToCalled = called.getPromise();
 

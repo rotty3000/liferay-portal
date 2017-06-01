@@ -17,6 +17,7 @@ package com.liferay.messaging.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.messaging.MessageBuilderFactory;
 import com.liferay.messaging.MessageBus;
 
 import java.net.URL;
@@ -42,14 +43,28 @@ public class TestUtil {
 	@After
 	public void after() {
 		messageBusTracker.close();
+		messageBuilderFactoryTracker.close();
 	}
 
 	@Before
 	public void before() {
 		messageBusTracker = new ServiceTracker<>(
-				bundleContext, MessageBus.class, null);
+			bundleContext, MessageBus.class, null);
 
 		messageBusTracker.open();
+
+		messageBus = getMessageBus();
+
+		assertNotNull(messageBus);
+
+		messageBuilderFactory = getMessageBuilderFactory();
+
+		assertNotNull(messageBuilderFactory);
+
+		messageBuilderFactoryTracker = new ServiceTracker<>(
+			bundleContext, MessageBuilderFactory.class, null);
+
+		messageBuilderFactoryTracker.open();
 	}
 
 	public MessageBus getMessageBus() {
@@ -59,6 +74,19 @@ public class TestUtil {
 			assertNotNull(messageBus);
 
 			return messageBus;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	public MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			MessageBuilderFactory messageBuilderFactory = messageBuilderFactoryTracker.waitForService(timeout);
+
+			assertNotNull(messageBuilderFactory);
+
+			return messageBuilderFactory;
 		}
 		catch (InterruptedException ie) {
 			throw new RuntimeException(ie);
@@ -108,7 +136,11 @@ public class TestUtil {
 
 	protected Bundle bundle = FrameworkUtil.getBundle(TestUtil.class);
 	protected BundleContext bundleContext = bundle.getBundleContext();
+	protected MessageBus messageBus;
 	protected ServiceTracker<MessageBus, MessageBus> messageBusTracker;
+	protected MessageBuilderFactory messageBuilderFactory;
+	protected ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+		messageBuilderFactoryTracker;
 	protected long timeout = 1000;
 
 }

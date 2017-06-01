@@ -7,4 +7,3 @@ Provide-Capability:\
 	osgi.implementation;\
 		osgi.implementation=com.liferay.messaging;\
 		version:Version=${Bundle-Version}
--conditionalpackage: aQute.bnd.annotation.metatype

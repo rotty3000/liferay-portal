@@ -28,4 +28,10 @@ p = com.liferay.messaging
 	tb3.jar,\
 	tb4.jar,\
 	tb5.jar,\
-	tb6.jar
+	tb6.jar,\
+	tb7.jar,\
+	tb8.jar,\
+	tb9.jar,\
+	tb10.jar,\
+	tb11.jar,\
+	tb12.jar

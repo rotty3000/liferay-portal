@@ -24,6 +24,9 @@ import java.util.concurrent.CountDownLatch;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+/**
+ * @author Raymond Augé
+ */
 @Component(
 	property = {
 		"destination.name=configuration/tb4"

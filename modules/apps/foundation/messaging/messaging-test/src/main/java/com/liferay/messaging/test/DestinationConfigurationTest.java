@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 
 import java.util.concurrent.Callable;
 
@@ -28,7 +27,10 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class ConfigurationMessagingTest extends TestUtil {
+/**
+ * @author Raymond Augé
+ */
+public class DestinationConfigurationTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
@@ -65,8 +67,6 @@ public class ConfigurationMessagingTest extends TestUtil {
 			assertNotNull(callable);
 
 			Message message = new Message();
-
-			MessageBus messageBus = getMessageBus();
 
 			messageBus.sendMessage(destination, message);
 

@@ -33,6 +33,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
+/**
+ * @author Raymond Augé
+ */
 public class InboundMessageProcessorFactoryTest extends TestUtil {
 
 	@Test
@@ -112,8 +115,6 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			assertFalse(promiseToBeforeThread.isDone());
 
 			Message message = new Message();
-
-			MessageBus messageBus = getMessageBus();
 
 			Promise<Integer> promiseToCalled = called.getPromise();
 

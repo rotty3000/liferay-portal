@@ -14,35 +14,36 @@
 
 package com.liferay.messaging.impl.configuration;
 
-import aQute.bnd.annotation.metatype.Meta;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 /**
  * @author Michael C. Han
  */
-@Meta.OCD(
-	factory = true,
+@ObjectClassDefinition(
+	factoryPid = "com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration",
 	id = "com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration",
 	localization = "content/Language",
-	name = "destination.workfer.configuration.name"
+	name = "destination-workfer-configuration-name"
 )
-public interface DestinationWorkerConfiguration {
+public @interface DestinationWorkerConfiguration {
 
-	@Meta.AD(deflt = "", required = true)
-	public String destinationName();
+	@AttributeDefinition(required = true)
+	public String destinationName() default "";
 
-	@Meta.AD(
-		deflt = "-1", description = "max-queue-size-help", required = false
+	@AttributeDefinition(
+		description = "max-queue-size-help", required = false
 	)
-	public int maxQueueSize();
+	public int maxQueueSize() default -1;
 
-	@Meta.AD(
-		deflt = "2", description = "worker-core-size-help", required = false
+	@AttributeDefinition(
+		description = "worker-core-size-help", required = false
 	)
-	public int workerCoreSize();
+	public int workerCoreSize() default 2;
 
-	@Meta.AD(
-		deflt = "5", description = "worker-max-size-help", required = false
+	@AttributeDefinition(
+		description = "worker-max-size-help", required = false
 	)
-	public int workerMaxSize();
+	public int workerMaxSize() default 5;
 
 }

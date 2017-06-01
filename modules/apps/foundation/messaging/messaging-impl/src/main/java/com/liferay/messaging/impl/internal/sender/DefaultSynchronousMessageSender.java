@@ -78,8 +78,8 @@ public class DefaultSynchronousMessageSender
 
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(
-					"Response destination " + responseDestinationName +
-						" is not configured");
+					"Response destination {} is not configured",
+					responseDestinationName);
 			}
 
 			message.setResponseDestinationName(

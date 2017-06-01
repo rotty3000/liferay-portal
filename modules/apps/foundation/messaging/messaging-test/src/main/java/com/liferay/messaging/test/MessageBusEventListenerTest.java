@@ -30,6 +30,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
+/**
+ * @author Raymond Augé
+ */
 public class MessageBusEventListenerTest extends TestUtil {
 
 	@Test

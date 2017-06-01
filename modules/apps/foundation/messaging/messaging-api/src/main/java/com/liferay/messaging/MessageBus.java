@@ -35,4 +35,26 @@ public interface MessageBus {
 
 	public void sendMessage(String destinationName, Message message);
 
+	public void sendMessage(String destinationName, Object payload);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Message message);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Message message, long timeout);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload, long timeout);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload,
+		String responseDestinationName);
+
+	public Object sendSynchronousMessage(
+		String destinationName, Object payload,
+		String responseDestinationName, long timeout);
+
 }
