@@ -19,13 +19,12 @@ import com.liferay.petra.io.internal.loader.ClassResolverUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 
 /**
  * @author Shuyang Zhou
  */
-public class AnnotatedObjectInputStream extends ObjectInputStream {
+public class AnnotatedObjectInputStream extends ProtectedObjectInputStream {
 
 	public AnnotatedObjectInputStream(InputStream inputStream)
 		throws IOException {

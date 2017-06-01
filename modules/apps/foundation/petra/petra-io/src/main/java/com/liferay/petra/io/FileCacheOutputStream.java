@@ -63,8 +63,9 @@ public class FileCacheOutputStream extends OutputStream {
 			try (Stream<Path> stream = Files.walk(
 				_tempFile.toPath(), FileVisitOption.FOLLOW_LINKS)) {
 
-				stream.sorted(Comparator.reverseOrder()).
-					map(Path::toFile).forEach(File::delete);
+				stream.sorted(
+					Comparator.
+					reverseOrder()).map(Path::toFile).forEach(File::delete);
 			}
 		}
 		catch (IOException ioe) {
