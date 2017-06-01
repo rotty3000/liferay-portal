@@ -56,7 +56,8 @@ public class ClassLoaderTest extends TestUtil {
 				"liferay/plugintest2"));
 
 		ServiceRegistration<?> listener = registerService(
-			MessageListener.class, new TestClassLoaderMessageListener(testClassLoader),
+			MessageListener.class,
+			new TestClassLoaderMessageListener(testClassLoader),
 			"destination.name", "liferay/plugintest1",
 			"message.listener.operating.class.loader", testClassLoader);
 
@@ -117,12 +118,14 @@ public class ClassLoaderTest extends TestUtil {
 				"liferay/portaltest2"));
 
 		ServiceRegistration<?> listener1 = registerService(
-			MessageListener.class, new TestMessageListener("liferay/portaltest1"),
-			"destination.name", "liferay/portaltest1");
+			MessageListener.class,
+			new TestMessageListener("liferay/portaltest1"), "destination.name",
+			"liferay/portaltest1");
 
 		ServiceRegistration<?> listener2 = registerService(
-			MessageListener.class, new TestMessageListener("liferay/portaltest2"),
-			"destination.name", "liferay/portaltest2");
+			MessageListener.class,
+			new TestMessageListener("liferay/portaltest2"), "destination.name",
+			"liferay/portaltest2");
 
 		ServiceTracker<MessageBus, MessageBus> serviceTracker =
 			new ServiceTracker<>(bundleContext, MessageBus.class, null);
@@ -169,6 +172,32 @@ public class ClassLoaderTest extends TestUtil {
 		}
 	}
 
+	private String getStackTrace(Throwable t) {
+		String stackTrace = null;
+
+		PrintWriter printWriter = null;
+
+		try {
+			StringWriter stringWriter = new StringWriter();
+
+			printWriter = new PrintWriter(stringWriter);
+
+			t.printStackTrace(printWriter);
+
+			printWriter.flush();
+
+			stackTrace = stringWriter.toString();
+		}
+		finally {
+			if (printWriter != null) {
+				printWriter.flush();
+				printWriter.close();
+			}
+		}
+
+		return stackTrace;
+	}
+
 	private static class TestClassLoader extends ClassLoader {
 	}
 
@@ -206,32 +235,6 @@ public class ClassLoaderTest extends TestUtil {
 
 		private final String _destinationName;
 
-	}
-
-	private String getStackTrace(Throwable t) {
-		String stackTrace = null;
-
-		PrintWriter printWriter = null;
-
-		try {
-			StringWriter stringWriter = new StringWriter();
-
-			printWriter = new PrintWriter(stringWriter);
-
-			t.printStackTrace(printWriter);
-
-			printWriter.flush();
-
-			stackTrace = stringWriter.toString();
-		}
-		finally {
-			if (printWriter != null) {
-				printWriter.flush();
-				printWriter.close();
-			}
-		}
-
-		return stackTrace;
 	}
 
 }
