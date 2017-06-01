@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultClassLoaderPool implements ClassLoaderPool {
 
+	public static final String NULL = "null";
+
 	/**
 	 * Returns the class loader associated with the context name.
 	 *
@@ -97,8 +99,6 @@ public class DefaultClassLoaderPool implements ClassLoaderPool {
 			_contextNames.remove(classLoader);
 		}
 	}
-
-	private static final String NULL = "null";
 
 	private final Map<String, ClassLoader> _classLoaders =
 		new ConcurrentHashMap<>();
