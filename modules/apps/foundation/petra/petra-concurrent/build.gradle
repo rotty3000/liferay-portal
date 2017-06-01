@@ -5,7 +5,6 @@ dependencies {
 	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.2"
 
 	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
-	testCompile group: "com.liferay.portal", name: "com.liferay.portal.test", version: "default"
 }
 
 liferay {
