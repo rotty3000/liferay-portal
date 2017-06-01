@@ -20,6 +20,7 @@ import com.liferay.petra.memory.FinalizeManager;
 import java.lang.ref.Reference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -138,14 +139,14 @@ public class AsyncBroker<K, V> {
 
 	private static final Field _REFERENT_FIELD;
 
-	private static final Logger _log = LoggerFactory.getLogger(AsyncBroker.class);
+	private static final Logger _log = LoggerFactory.getLogger(
+		AsyncBroker.class);
 
 	static {
 		Field referentField = null;
 
 		try {
-			referentField = getDeclaredField(
-				Reference.class, "referent");
+			referentField = getDeclaredField(Reference.class, "referent");
 		}
 		catch (Throwable t) {
 			if (_log.isWarnEnabled()) {

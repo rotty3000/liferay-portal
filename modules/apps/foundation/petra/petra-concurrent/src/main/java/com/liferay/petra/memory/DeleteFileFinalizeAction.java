@@ -15,6 +15,7 @@
 package com.liferay.petra.memory;
 
 import java.io.File;
+
 import java.lang.ref.Reference;
 
 /**

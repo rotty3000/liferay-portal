@@ -16,6 +16,7 @@ package com.liferay.petra.concurrent;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
 import java.util.Collection;
 
 /**

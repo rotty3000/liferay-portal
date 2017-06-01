@@ -18,6 +18,7 @@ import com.liferay.petra.concurrent.ConcurrentIdentityHashMap;
 
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
+
 import java.util.Map;
 
 /**
