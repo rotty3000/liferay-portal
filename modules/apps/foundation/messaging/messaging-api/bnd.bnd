@@ -1,0 +1,10 @@
+Bundle-Name: Liferay Messaging API
+Bundle-SymbolicName: com.liferay.messaging.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.messaging,\
+	com.liferay.messaging.proxy,\
+	com.liferay.messaging.sender
+Require-Capability:\
+	osgi.implementation;\
+		filter:="(&(osgi.implementation=com.liferay.messaging)(version>=1.0.0)(!(version>=2.0.0)))"
