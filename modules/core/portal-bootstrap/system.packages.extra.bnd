@@ -344,8 +344,15 @@ Import-Package: !*
 	@../../../lib/portal/xstream.jar,\
 	@../../../portal-impl/portal-impl.jar,\
 	@../../../portal-kernel/portal-kernel.jar,\
+	@lib/com.liferay.messaging.api.jar,\
 	@lib/com.liferay.osgi.felix.util.jar,\
 	@lib/com.liferay.osgi.service.tracker.collections.jar,\
+	@lib/com.liferay.petra.concurrent.jar,\
+	@lib/com.liferay.petra.concurrent.memory.jar,\
+	@lib/com.liferay.petra.io.jar,\
+	@lib/com.liferay.petra.memory.jar,\
+	@lib/com.liferay.petra.process.jar,\
+	@lib/com.liferay.petra.reflect.jar,\
 	@lib/com.liferay.portal.app.license.api.jar,\
 	@lib/com.liferay.portal.impl.blogs.compat.jar,\
 	@lib/com.liferay.portal.kernel.blogs.compat.jar,\
