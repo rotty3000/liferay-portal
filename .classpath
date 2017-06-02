@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="definitions"/>
-	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="modules/core/registry-api/src/main/java"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/src"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/integration"/>
 	<classpathentry excluding="**/.svn/**|.svn/" kind="src" path="portal-impl/test/unit"/>
@@ -289,5 +288,13 @@
 	<classpathentry kind="lib" path="lib/portal/xuggle-xuggler-noarch.jar"/>
 	<classpathentry kind="lib" path="lib/portal/xz.jar"/>
 	<classpathentry kind="lib" path="lib/portal/yui-compressor.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.messaging.api.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.concurrent.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.concurrent.memory.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.io.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.memory.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.process.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.petra.reflect.jar"/>
+	<classpathentry kind="lib" path="tmp/lib-pre/com.liferay.registry.api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
