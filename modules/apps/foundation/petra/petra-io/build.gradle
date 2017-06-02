@@ -1,0 +1,25 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+repositories {
+	maven {
+		url "https://repository.apache.org/content/repositories/snapshots"
+	}
+	maven {
+		url "https://oss.sonatype.org/content/repositories/osgi-snapshots"
+	}
+}
+
+dependencies {
+	provided group: "com.liferay", name: "com.liferay.petra.concurrent", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.memory", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.process", version: "1.0.0"
+	provided group: "org.apache.felix", name: "org.apache.felix.converter", version: "0.1.0-20170504.133715-6"
+	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.2"
+
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+}
+
+liferay {
+	deployDir = appServerLibGlobalDir
+}
