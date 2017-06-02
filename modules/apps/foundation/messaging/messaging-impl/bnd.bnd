@@ -1,0 +1,9 @@
+Bundle-Name: Liferay Messaging Implementation
+Bundle-SymbolicName: com.liferay.messaging.impl
+Bundle-Version: 1.0.0
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title: Runtime
+Provide-Capability:\
+	osgi.implementation;\
+		osgi.implementation=com.liferay.messaging;\
+		version:Version=${Bundle-Version}
