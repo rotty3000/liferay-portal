@@ -61,11 +61,6 @@ public class DestinationWrapper implements Destination {
 	}
 
 	@Override
-	public DestinationStatistics getDestinationStatistics() {
-		return destination.getDestinationStatistics();
-	}
-
-	@Override
 	public int getDestinationEventListenerCount() {
 		return destination.getDestinationEventListenerCount();
 	}
@@ -73,6 +68,11 @@ public class DestinationWrapper implements Destination {
 	@Override
 	public Set<DestinationEventListener> getDestinationEventListeners() {
 		return destination.getDestinationEventListeners();
+	}
+
+	@Override
+	public DestinationStatistics getDestinationStatistics() {
+		return destination.getDestinationStatistics();
 	}
 
 	@Override
@@ -125,9 +125,7 @@ public class DestinationWrapper implements Destination {
 	}
 
 	@Override
-	public boolean register(
-		DestinationEventListener destinationEventListener) {
-
+	public boolean register(DestinationEventListener destinationEventListener) {
 		return destination.register(destinationEventListener);
 	}
 

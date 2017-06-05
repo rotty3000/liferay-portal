@@ -106,9 +106,9 @@ public abstract class BaseProxyBean {
 
 	private String _destinationName;
 	private MessageBus _messageBus;
-	private String _synchronousDestinationName;
-	private SynchronousMessageSender.Mode _synchronousMessageSenderMode;
 	private SingleDestinationMessageSenderFactory
 		_singleDestinationMessageSenderFactory;
+	private String _synchronousDestinationName;
+	private SynchronousMessageSender.Mode _synchronousMessageSenderMode;
 
 }
