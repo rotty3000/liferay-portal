@@ -98,25 +98,6 @@ public abstract class BaseDestination implements Destination {
 		unregisterMessageListeners();
 	}
 
-	protected void fireMessageListenerRegisteredEvent(
-		MessageListener messageListener) {
-
-		for (DestinationEventListener destinationEventListener :
-				destinationEventListeners) {
-
-			destinationEventListener.messageListenerRegistered(
-				getName(), messageListener);
-		}
-	}
-
-	protected void fireMessageListenerUnregisteredEvent(
-		MessageListener messageListener) {
-
-		for (DestinationEventListener listener : destinationEventListeners) {
-			listener.messageListenerUnregistered(getName(), messageListener);
-		}
-	}
-
 	@Override
 	public int getDestinationEventListenerCount() {
 		return destinationEventListeners.size();
@@ -172,16 +153,15 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public int getOutboundMessageProcessorFactoryCount() {
-		return outboundMessageProcessorFactories.size();
-	}
-
-	@Override
 	public Set<OutboundMessageProcessorFactory>
 		getOutboundMessageProcessorFactories() {
 
-		return Collections.unmodifiableSet(
-			outboundMessageProcessorFactories);
+		return Collections.unmodifiableSet(outboundMessageProcessorFactories);
+	}
+
+	@Override
+	public int getOutboundMessageProcessorFactoryCount() {
+		return outboundMessageProcessorFactories.size();
 	}
 
 	@Override
@@ -237,19 +217,6 @@ public abstract class BaseDestination implements Destination {
 			outboundMessageProcessorFactory);
 	}
 
-	protected boolean registerMessageListener(
-		InvokerMessageListener invokerMessageListener) {
-
-		boolean registered = messageListeners.add(invokerMessageListener);
-
-		if (registered) {
-			fireMessageListenerRegisteredEvent(
-				invokerMessageListener.getMessageListener());
-		}
-
-		return registered;
-	}
-
 	public boolean removeDestinationEventListener(
 		DestinationEventListener destinationEventListener) {
 
@@ -270,7 +237,9 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public boolean unregister(DestinationEventListener destinationEventListener) {
+	public boolean unregister(
+		DestinationEventListener destinationEventListener) {
+
 		return removeDestinationEventListener(destinationEventListener);
 	}
 
@@ -317,6 +286,50 @@ public abstract class BaseDestination implements Destination {
 		inboundMessageProcessorFactories.clear();
 	}
 
+	@Override
+	public void unregisterMessageListeners() {
+		for (MessageListener messageListener : messageListeners) {
+			unregisterMessageListener((InvokerMessageListener)messageListener);
+		}
+	}
+
+	@Override
+	public void unregisterOutboundMessageProcessorFactories() {
+		outboundMessageProcessorFactories.clear();
+	}
+
+	protected void fireMessageListenerRegisteredEvent(
+		MessageListener messageListener) {
+
+		for (DestinationEventListener destinationEventListener :
+				destinationEventListeners) {
+
+			destinationEventListener.messageListenerRegistered(
+				getName(), messageListener);
+		}
+	}
+
+	protected void fireMessageListenerUnregisteredEvent(
+		MessageListener messageListener) {
+
+		for (DestinationEventListener listener : destinationEventListeners) {
+			listener.messageListenerUnregistered(getName(), messageListener);
+		}
+	}
+
+	protected boolean registerMessageListener(
+		InvokerMessageListener invokerMessageListener) {
+
+		boolean registered = messageListeners.add(invokerMessageListener);
+
+		if (registered) {
+			fireMessageListenerRegisteredEvent(
+				invokerMessageListener.getMessageListener());
+		}
+
+		return registered;
+	}
+
 	protected boolean unregisterMessageListener(
 		InvokerMessageListener invokerMessageListener) {
 
@@ -330,26 +343,13 @@ public abstract class BaseDestination implements Destination {
 		return unregistered;
 	}
 
-	@Override
-	public void unregisterMessageListeners() {
-		for (MessageListener messageListener : messageListeners) {
-			unregisterMessageListener((InvokerMessageListener)messageListener);
-		}
-	}
-
-	@Override
-	public void unregisterOutboundMessageProcessorFactories() {
-		outboundMessageProcessorFactories.clear();
-	}
-
-	protected String name = StringPool.BLANK;
-
 	protected final Set<DestinationEventListener> destinationEventListeners =
 		ConcurrentHashMap.newKeySet();
 	protected final Set<InboundMessageProcessorFactory>
 		inboundMessageProcessorFactories = ConcurrentHashMap.newKeySet();
 	protected final Set<MessageListener> messageListeners =
 		ConcurrentHashMap.newKeySet();
+	protected String name = StringPool.BLANK;
 	protected final Set<OutboundMessageProcessorFactory>
 		outboundMessageProcessorFactories = ConcurrentHashMap.newKeySet();
 

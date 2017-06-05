@@ -59,16 +59,15 @@ public class ParallelDestination extends BaseAsyncDestination {
 							}
 							catch (MessageProcessorException mpe) {
 								_log.error(
-									"Unable to process message before " +
-										"thread " + message, mpe);
+									"Unable to process message before thread " +
+									message, mpe);
 							}
 						}
 
 						messageListener.receive(processedMessage);
 					}
 					catch (MessageListenerException mle) {
-						_log.error(
-							"Unable to process message " + message, mle);
+						_log.error("Unable to process message " + message, mle);
 					}
 					finally {
 						for (InboundMessageProcessor processor :
@@ -80,8 +79,8 @@ public class ParallelDestination extends BaseAsyncDestination {
 							}
 							catch (MessageProcessorException mpe) {
 								_log.error(
-									"Unable to process message after " +
-										"thread " + message, mpe);
+									"Unable to process message after thread " +
+									message, mpe);
 							}
 						}
 					}

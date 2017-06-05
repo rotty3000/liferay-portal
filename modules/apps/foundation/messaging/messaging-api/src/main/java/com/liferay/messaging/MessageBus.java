@@ -50,11 +50,10 @@ public interface MessageBus {
 		String destinationName, Object payload, long timeout);
 
 	public Object sendSynchronousMessage(
-		String destinationName, Object payload,
-		String responseDestinationName);
+		String destinationName, Object payload, String responseDestinationName);
 
 	public Object sendSynchronousMessage(
-		String destinationName, Object payload,
-		String responseDestinationName, long timeout);
+		String destinationName, Object payload, String responseDestinationName,
+		long timeout);
 
 }
