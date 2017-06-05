@@ -4,9 +4,6 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.petra.io,\
 	com.liferay.petra.io.convert,\
-	com.liferay.petra.io.spi.loader,\
-	com.liferay.petra.io.unsync,\
-	com.liferay.petra.io.validate,\
 	com.liferay.petra.io.nio.charset,\
 	com.liferay.petra.io.nio.intraband,\
 	com.liferay.petra.io.nio.intraband.blocking,\
@@ -18,6 +15,9 @@ Export-Package:\
 	com.liferay.petra.io.nio.intraband.welder,\
 	com.liferay.petra.io.nio.intraband.welder.fifo,\
 	com.liferay.petra.io.nio.intraband.welder.socket,\
+	com.liferay.petra.io.spi.loader,\
+	com.liferay.petra.io.unsync,\
+	com.liferay.petra.io.validate,\
 	\
 	org.apache.felix.converter.dto,\
 	\

@@ -285,16 +285,19 @@ public class GetterConversionsTest {
 	@Test
 	public void testMapPasswordEscaping() {
 		Map<String, Object> map = new HashMap<>();
+
 		map.put("password", "secret");
 
 		Assert.assertEquals("{password=********}", Conversions.getString(map));
 
 		map = new HashMap<>();
+
 		map.put("Password", "secret");
 
 		Assert.assertEquals("{Password=********}", Conversions.getString(map));
 
 		map = new HashMap<>();
+
 		map.put("somepASSwordString", "secret");
 
 		Assert.assertEquals(
