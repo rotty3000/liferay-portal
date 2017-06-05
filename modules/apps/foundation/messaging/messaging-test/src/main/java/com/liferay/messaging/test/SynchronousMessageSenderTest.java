@@ -27,6 +27,24 @@ import org.osgi.framework.Bundle;
  */
 public class SynchronousMessageSenderTest extends TestUtil {
 
+	public void test(String bundle, String destinationName) throws Exception {
+		Bundle tbBundle = install(bundle);
+
+		try {
+			tbBundle.start();
+
+			Message message = new Message();
+
+			Object result = messageBus.sendSynchronousMessage(
+				destinationName, message);
+
+			assertEquals(message, result);
+		}
+		finally {
+			tbBundle.uninstall();
+		}
+	}
+
 	@Test
 	public void testParallel() throws Exception {
 		test("tb7.jar", "synchronous/send/tb7");
@@ -40,23 +58,6 @@ public class SynchronousMessageSenderTest extends TestUtil {
 	@Test
 	public void testSynchronous() throws Exception {
 		test("tb9.jar", "synchronous/send/tb9");
-	}
-
-	public void test(String bundle, String destinationName) throws Exception {
-		Bundle tbBundle = install(bundle);
-
-		try {
-			tbBundle.start();
-
-			Message message = new Message();
-
-			Object result = messageBus.sendSynchronousMessage(destinationName, message);
-
-			assertEquals(message, result);
-		}
-		finally {
-			tbBundle.uninstall();
-		}
 	}
 
 }
