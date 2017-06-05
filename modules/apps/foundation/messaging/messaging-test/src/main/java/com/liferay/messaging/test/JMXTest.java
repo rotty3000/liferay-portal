@@ -35,18 +35,20 @@ import org.junit.Test;
 public class JMXTest extends JMXUtil {
 
 	@Test
-	public void testMessagingBusManagerFromRegistry() throws Exception {
-		testMessageBusManager(mBeanServer);
-	}
-
-	@Test
 	public void testMessagingBusManagerFromPlatform() throws Exception {
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
 		testMessageBusManager(mBeanServer);
 	}
 
-	protected void testMessageBusManager(MBeanServer mBeanServer) throws Exception {
+	@Test
+	public void testMessagingBusManagerFromRegistry() throws Exception {
+		testMessageBusManager(mBeanServer);
+	}
+
+	protected void testMessageBusManager(MBeanServer mBeanServer)
+		throws Exception {
+
 		ObjectName objectName = new ObjectName(
 			"com.liferay.portal.messaging:classification=message_bus," +
 				"name=MessageBusManager");
