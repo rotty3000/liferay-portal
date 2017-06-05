@@ -71,7 +71,8 @@ public class MessageBusEventListenerTest extends TestUtil {
 
 			assertNotNull(promiseToRegister.getValue());
 
-			Promise<Destination> promiseToUnregister = unregisteration.getPromise();
+			Promise<Destination> promiseToUnregister =
+				unregisteration.getPromise();
 
 			assertFalse(promiseToUnregister.isDone());
 
