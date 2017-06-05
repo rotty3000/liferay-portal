@@ -20,10 +20,10 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.messaging.MessageBuilderFactory;
 import com.liferay.messaging.MessageBus;
 
-import java.net.URL;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.net.URL;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -70,6 +70,31 @@ public class TestUtil {
 		assertNotNull(messageBuilderFactory);
 	}
 
+	public InputStream getInputStream(String bundlePath) {
+		try {
+			URL url = bundle.getEntry(bundlePath);
+
+			return url.openStream();
+		}
+		catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+	}
+
+	public MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(timeout);
+
+			assertNotNull(messageBuilderFactory);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
 	public MessageBus getMessageBus() {
 		try {
 			MessageBus messageBus = messageBusTracker.waitForService(timeout);
@@ -83,34 +108,10 @@ public class TestUtil {
 		}
 	}
 
-	public MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			MessageBuilderFactory messageBuilderFactory = messageBuilderFactoryTracker.waitForService(timeout);
-
-			assertNotNull(messageBuilderFactory);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	public InputStream getInputStream(String bundlePath) {
-		try {
-			URL url = bundle.getEntry(bundlePath);
-
-			return url.openStream();
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		}
-	}
-
 	public Bundle install(String bundlePath) {
 		try {
 			return bundleContext.installBundle(
-					bundlePath, getInputStream(bundlePath));
+				bundlePath, getInputStream(bundlePath));
 		}
 		catch (BundleException be) {
 			throw new RuntimeException(be);
@@ -124,7 +125,7 @@ public class TestUtil {
 	}
 
 	protected <T> ServiceRegistration<T> registerService(
-		Class<T> clazz, T instance, Object ... parts) {
+		Class<T> clazz, T instance, Object... parts) {
 
 		assertTrue((parts.length % 2) == 0);
 
@@ -139,11 +140,11 @@ public class TestUtil {
 
 	protected Bundle bundle = FrameworkUtil.getBundle(TestUtil.class);
 	protected BundleContext bundleContext = bundle.getBundleContext();
-	protected MessageBus messageBus;
-	protected ServiceTracker<MessageBus, MessageBus> messageBusTracker;
 	protected MessageBuilderFactory messageBuilderFactory;
 	protected ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
 		messageBuilderFactoryTracker;
+	protected MessageBus messageBus;
+	protected ServiceTracker<MessageBus, MessageBus> messageBusTracker;
 	protected long timeout = 1000;
 
 }
