@@ -21,10 +21,9 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Raymond Augé
  */
-@Component(
-	service = DestinationConfiguration.class
-)
-public class TBSynchronousDestinationConfiguration extends DestinationConfiguration {
+@Component(service = DestinationConfiguration.class)
+public class TBSynchronousDestinationConfiguration
+	extends DestinationConfiguration {
 
 	public TBSynchronousDestinationConfiguration() {
 		super(

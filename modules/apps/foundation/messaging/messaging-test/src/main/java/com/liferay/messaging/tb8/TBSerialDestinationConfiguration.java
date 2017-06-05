@@ -27,9 +27,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Raymond Augé
  */
-@Component(
-	service = DestinationConfiguration.class
-)
+@Component(service = DestinationConfiguration.class)
 public class TBSerialDestinationConfiguration extends DestinationConfiguration {
 
 	public TBSerialDestinationConfiguration() {
@@ -38,20 +36,20 @@ public class TBSerialDestinationConfiguration extends DestinationConfiguration {
 			"synchronous/send/tb8");
 	}
 
-	@Activate
-	protected void activate(Config config) {
-		setMaximumQueueSize(config.maximum_queue_size());
-	}
-
 	@Override
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
 	)
 	public void setRejectedExecutionHandler(
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
 		super.setRejectedExecutionHandler(rejectedExecutionHandler);
+	}
+
+	@Activate
+	protected void activate(Config config) {
+		setMaximumQueueSize(config.maximum_queue_size());
 	}
 
 }

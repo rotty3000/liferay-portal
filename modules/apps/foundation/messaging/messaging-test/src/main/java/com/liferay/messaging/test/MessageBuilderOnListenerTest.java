@@ -27,6 +27,24 @@ import org.osgi.framework.Bundle;
  */
 public class MessageBuilderOnListenerTest extends TestUtil {
 
+	public void test(String bundle, String destinationName) throws Exception {
+		Bundle tbBundle = install(bundle);
+
+		try {
+			tbBundle.start();
+
+			MessageBuilder builder = messageBuilderFactory.create(
+				destinationName);
+
+			Object response = builder.sendSynchronous();
+
+			assertEquals(builder.build(), response);
+		}
+		finally {
+			tbBundle.uninstall();
+		}
+	}
+
 	@Test
 	public void testParallel() throws Exception {
 		test("tb10.jar", "builder/tb10");
@@ -40,23 +58,6 @@ public class MessageBuilderOnListenerTest extends TestUtil {
 	@Test
 	public void testSynchronous() throws Exception {
 		test("tb12.jar", "builder/tb12");
-	}
-
-	public void test(String bundle, String destinationName) throws Exception {
-		Bundle tbBundle = install(bundle);
-
-		try {
-			tbBundle.start();
-
-			MessageBuilder builder = messageBuilderFactory.create(destinationName);
-
-			Object response = builder.sendSynchronous();
-
-			assertEquals(builder.build(), response);
-		}
-		finally {
-			tbBundle.uninstall();
-		}
 	}
 
 }
