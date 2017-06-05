@@ -27,10 +27,9 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Raymond Augé
  */
-@Component(
-	service = DestinationConfiguration.class
-)
-public class TBParallelDestinationConfiguration extends DestinationConfiguration {
+@Component(service = DestinationConfiguration.class)
+public class TBParallelDestinationConfiguration
+	extends DestinationConfiguration {
 
 	public TBParallelDestinationConfiguration() {
 		super(
@@ -38,22 +37,22 @@ public class TBParallelDestinationConfiguration extends DestinationConfiguration
 			"configuration/tb4");
 	}
 
-	@Activate
-	protected void activate(Config config) {
-		setMaximumQueueSize(config.maximum_queue_size());
-		setWorkersCoreSize(config.workers_core_size());
-		setWorkersMaxSize(config.workers_max_size());
-	}
-
 	@Override
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
 	)
 	public void setRejectedExecutionHandler(
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
 		super.setRejectedExecutionHandler(rejectedExecutionHandler);
+	}
+
+	@Activate
+	protected void activate(Config config) {
+		setMaximumQueueSize(config.maximum_queue_size());
+		setWorkersCoreSize(config.workers_core_size());
+		setWorkersMaxSize(config.workers_max_size());
 	}
 
 }

@@ -47,9 +47,13 @@ public class JMXUtil extends TestUtil {
 		mBeanServer = getMBeanServer();
 	}
 
+	protected MBeanServer mBeanServer;
+	protected ServiceTracker<MBeanServer, MBeanServer> mBeanServerTracker;
+
 	private MBeanServer getMBeanServer() {
 		try {
-			MBeanServer mBeanServer = mBeanServerTracker.waitForService(timeout);
+			MBeanServer mBeanServer = mBeanServerTracker.waitForService(
+				timeout);
 
 			assertNotNull(mBeanServer);
 
@@ -59,8 +63,5 @@ public class JMXUtil extends TestUtil {
 			throw new RuntimeException(ie);
 		}
 	}
-
-	protected ServiceTracker<MBeanServer, MBeanServer> mBeanServerTracker;
-	protected MBeanServer mBeanServer;
 
 }
