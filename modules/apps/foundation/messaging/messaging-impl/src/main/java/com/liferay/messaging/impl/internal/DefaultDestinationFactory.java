@@ -106,13 +106,13 @@ public class DefaultDestinationFactory implements DestinationFactory {
 			destinationPrototype);
 	}
 
+	private final ConcurrentMap<String, DestinationPrototype>
+		_destinationPrototypes = new ConcurrentHashMap<>();
+
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
 		policyOption = ReferencePolicyOption.GREEDY
 	)
 	private ExecutorServiceRegistrar _executorServiceRegistrar;
-
-	private final ConcurrentMap<String, DestinationPrototype>
-		_destinationPrototypes = new ConcurrentHashMap<>();
 
 }

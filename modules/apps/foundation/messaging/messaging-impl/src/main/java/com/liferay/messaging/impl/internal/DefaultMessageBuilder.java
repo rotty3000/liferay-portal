@@ -48,6 +48,35 @@ public class DefaultMessageBuilder implements MessageBuilder {
 	}
 
 	@Override
+	public void send() {
+		if (_message.getDestinationName() == null) {
+			throw new IllegalStateException("destinationName is not set");
+		}
+
+		_messageBus.sendMessage(_message.getDestinationName(), _message);
+	}
+
+	@Override
+	public Object sendSynchronous() {
+		if (_message.getDestinationName() == null) {
+			throw new IllegalStateException("destinationName is not set");
+		}
+
+		return _messageBus.sendSynchronousMessage(
+			_message.getDestinationName(), _message);
+	}
+
+	@Override
+	public Object sendSynchronous(long timeout) {
+		if (_message.getDestinationName() == null) {
+			throw new IllegalStateException("destinationName is not set");
+		}
+
+		return _messageBus.sendSynchronousMessage(
+			_message.getDestinationName(), _message, timeout);
+	}
+
+	@Override
 	public MessageBuilder setDestinationName(String destinationName) {
 		_message.setDestinationName(destinationName);
 
@@ -69,7 +98,9 @@ public class DefaultMessageBuilder implements MessageBuilder {
 	}
 
 	@Override
-	public MessageBuilder setResponseDestinationName(String responseDestinationName) {
+	public MessageBuilder setResponseDestinationName(
+		String responseDestinationName) {
+
 		_message.setResponseDestinationName(responseDestinationName);
 
 		return this;
@@ -87,36 +118,6 @@ public class DefaultMessageBuilder implements MessageBuilder {
 		_message.setValues(values);
 
 		return this;
-	}
-
-	@Override
-	public void send() {
-		if (_message.getDestinationName() == null) {
-			throw new IllegalStateException("destinationName is not set");
-		}
-
-		_messageBus.sendMessage(_message.getDestinationName(), _message);
-
-	}
-
-	@Override
-	public Object sendSynchronous() {
-		if (_message.getDestinationName() == null) {
-			throw new IllegalStateException("destinationName is not set");
-		}
-
-		return _messageBus.sendSynchronousMessage(
-			_message.getDestinationName(), _message);
-	}
-
-	@Override
-	public Object sendSynchronous(long timeout) {
-		if (_message.getDestinationName() == null) {
-			throw new IllegalStateException("destinationName is not set");
-		}
-
-		return _messageBus.sendSynchronousMessage(
-			_message.getDestinationName(), _message, timeout);
 	}
 
 	private final Message _message;
