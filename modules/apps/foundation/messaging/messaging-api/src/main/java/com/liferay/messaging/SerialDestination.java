@@ -63,7 +63,7 @@ public class SerialDestination extends BaseAsyncDestination {
 						}
 						catch (MessageProcessorException mpe) {
 							_log.error(
-								"Unable to process message before thread " +
+									"Unable to process message before thread " +
 									message, mpe);
 						}
 					}
@@ -74,7 +74,8 @@ public class SerialDestination extends BaseAsyncDestination {
 						}
 						catch (MessageListenerException mle) {
 							_log.error(
-								"Unable to process message " + message, mle);
+									"Unable to process message " +
+									message, mle);
 						}
 					}
 				}
