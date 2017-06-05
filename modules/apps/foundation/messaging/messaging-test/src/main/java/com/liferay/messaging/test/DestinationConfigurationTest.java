@@ -32,21 +32,6 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class DestinationConfigurationTest extends TestUtil {
 
-	@Test
-	public void testParallel() throws Exception {
-		test("tb4.jar", "configuration/tb4");
-	}
-
-	@Test
-	public void testSerial() throws Exception {
-		test("tb5.jar", "configuration/tb5");
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		test("tb6.jar", "configuration/tb6");
-	}
-
 	public void test(String bundle, String destination) throws Exception {
 		Bundle tbBundle = install(bundle);
 
@@ -75,6 +60,21 @@ public class DestinationConfigurationTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
+	}
+
+	@Test
+	public void testParallel() throws Exception {
+		test("tb4.jar", "configuration/tb4");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb5.jar", "configuration/tb5");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb6.jar", "configuration/tb6");
 	}
 
 }

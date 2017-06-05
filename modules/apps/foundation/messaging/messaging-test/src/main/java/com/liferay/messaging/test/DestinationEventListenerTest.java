@@ -69,7 +69,8 @@ public class DestinationEventListenerTest extends TestUtil {
 				DestinationEventListener.class, listener, properties);
 
 		try {
-			Promise<MessageListener> promiseToRegister = registeration.getPromise();
+			Promise<MessageListener> promiseToRegister =
+				registeration.getPromise();
 
 			assertFalse(promiseToRegister.isDone());
 
@@ -77,7 +78,8 @@ public class DestinationEventListenerTest extends TestUtil {
 
 			assertNotNull(promiseToRegister.getValue());
 
-			Promise<MessageListener> promiseToUnregister = unregisteration.getPromise();
+			Promise<MessageListener> promiseToUnregister =
+				unregisteration.getPromise();
 
 			assertFalse(promiseToUnregister.isDone());
 
