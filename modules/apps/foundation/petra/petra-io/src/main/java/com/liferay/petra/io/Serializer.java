@@ -465,8 +465,8 @@ public class Serializer {
 			BufferNode currentBufferNode = headBufferNode;
 
 			while ((currentBufferNode != null) &&
-				(currentBufferNode.buffer.length >
-					bufferNode.buffer.length)) {
+				   (currentBufferNode.buffer.length >
+					   bufferNode.buffer.length)) {
 
 				previousBufferNode = currentBufferNode;
 
