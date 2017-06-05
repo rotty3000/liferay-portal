@@ -27,31 +27,27 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Raymond Augé
  */
-@Component(
-	service = DestinationConfiguration.class
-)
+@Component(service = DestinationConfiguration.class)
 public class TBSerialDestinationConfiguration extends DestinationConfiguration {
 
 	public TBSerialDestinationConfiguration() {
-		super(
-			DestinationConfiguration.DESTINATION_TYPE_SERIAL,
-			"builder/tb11");
-	}
-
-	@Activate
-	protected void activate(Config config) {
-		setMaximumQueueSize(config.maximum_queue_size());
+		super(DestinationConfiguration.DESTINATION_TYPE_SERIAL, "builder/tb11");
 	}
 
 	@Override
 	@Reference(
 		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
 	)
 	public void setRejectedExecutionHandler(
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
 		super.setRejectedExecutionHandler(rejectedExecutionHandler);
+	}
+
+	@Activate
+	protected void activate(Config config) {
+		setMaximumQueueSize(config.maximum_queue_size());
 	}
 
 }
