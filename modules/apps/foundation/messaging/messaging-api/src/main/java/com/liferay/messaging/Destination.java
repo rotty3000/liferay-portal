@@ -27,8 +27,7 @@ public interface Destination {
 
 	public void copyDestinationEventListeners(Destination destination);
 
-	public void copyInboundMessageProcessorFactories(
-		Destination destination);
+	public void copyInboundMessageProcessorFactories(Destination destination);
 
 	public void copyMessageListeners(Destination destination);
 
@@ -36,34 +35,33 @@ public interface Destination {
 
 	public void destroy();
 
-	public DestinationStatistics getDestinationStatistics();
-
 	public int getDestinationEventListenerCount();
 
 	public Set<DestinationEventListener> getDestinationEventListeners();
 
-	public int getInboundMessageProcessorFactoryCount();
+	public DestinationStatistics getDestinationStatistics();
 
 	public Set<InboundMessageProcessorFactory>
 		getInboundMessageProcessorFactories();
+
+	public int getInboundMessageProcessorFactoryCount();
 
 	public int getMessageListenerCount();
 
 	public Set<MessageListener> getMessageListeners();
 
-	public int getOutboundMessageProcessorFactoryCount();
+	public String getName();
 
 	public Set<OutboundMessageProcessorFactory>
 		getOutboundMessageProcessorFactories();
 
-	public String getName();
+	public int getOutboundMessageProcessorFactoryCount();
 
 	public boolean isRegistered();
 
 	public void open();
 
-	public boolean register(
-		DestinationEventListener destinationEventListener);
+	public boolean register(DestinationEventListener destinationEventListener);
 
 	public boolean register(
 		InboundMessageProcessorFactory inboundMessageProcessorFactory);
