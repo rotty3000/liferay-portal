@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
  */
 public interface ExecutorServiceRegistrar {
 
-	<T extends ExecutorService> T registerExecutorService(
+	public <T extends ExecutorService> T registerExecutorService(
 		String name, T executorService);
 
 }
