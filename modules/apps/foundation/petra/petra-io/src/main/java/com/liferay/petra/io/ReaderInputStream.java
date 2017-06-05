@@ -122,7 +122,7 @@ public class ReaderInputStream extends InputStream {
 			throw new NullPointerException();
 		}
 		else if ((offset < 0) || (length < 0) ||
-				(length > (bytes.length - offset))) {
+				 (length > (bytes.length - offset))) {
 
 			throw new IndexOutOfBoundsException();
 		}
