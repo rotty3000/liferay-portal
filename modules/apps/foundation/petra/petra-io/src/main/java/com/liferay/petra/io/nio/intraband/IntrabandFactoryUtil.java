@@ -15,12 +15,12 @@
 package com.liferay.petra.io.nio.intraband;
 
 import com.liferay.petra.io.convert.Conversions;
-import com.liferay.petra.io.validate.Validator;
 import com.liferay.petra.io.nio.intraband.blocking.ExecutorIntraband;
 import com.liferay.petra.io.nio.intraband.nonblocking.SelectorIntraband;
 import com.liferay.petra.io.nio.intraband.welder.Welder;
 import com.liferay.petra.io.nio.intraband.welder.WelderFactoryUtil;
 import com.liferay.petra.io.nio.intraband.welder.socket.SocketWelder;
+import com.liferay.petra.io.validate.Validator;
 
 import java.io.IOException;
 

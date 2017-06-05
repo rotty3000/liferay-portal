@@ -42,6 +42,7 @@ public class CompatibilityTest {
 		list.add(3);
 
 		values.put("list", list);
+
 		values.put("password", "password");
 
 		String conversionsString = Conversions.getString(values);
