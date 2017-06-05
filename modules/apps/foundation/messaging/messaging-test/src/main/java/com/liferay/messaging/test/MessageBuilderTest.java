@@ -33,21 +33,6 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class MessageBuilderTest extends TestUtil {
 
-	@Test
-	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
-	}
-
-	@Test
-	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
-	}
-
 	public void test(String bundle, String destinationName) throws Exception {
 		Bundle tbBundle = install(bundle);
 
@@ -67,7 +52,8 @@ public class MessageBuilderTest extends TestUtil {
 
 			assertNotNull(callable);
 
-			MessageBuilder builder = messageBuilderFactory.create(destinationName);
+			MessageBuilder builder = messageBuilderFactory.create(
+				destinationName);
 
 			builder.send();
 
@@ -76,6 +62,21 @@ public class MessageBuilderTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
+	}
+
+	@Test
+	public void testParallel() throws Exception {
+		test("tb2.jar", "parallel/test");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb3.jar", "serial/test");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb1.jar", "synchronous/test");
 	}
 
 }

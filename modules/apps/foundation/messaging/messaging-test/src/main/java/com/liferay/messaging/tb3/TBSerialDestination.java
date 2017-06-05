@@ -26,10 +26,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = {
-		"destination.name=serial/test"
-	},
-	scope = ServiceScope.SINGLETON,
+	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
 	service = Destination.class
 )
 public class TBSerialDestination extends SerialDestination {
