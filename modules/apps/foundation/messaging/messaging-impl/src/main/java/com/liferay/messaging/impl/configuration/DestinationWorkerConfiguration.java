@@ -31,9 +31,7 @@ public @interface DestinationWorkerConfiguration {
 	@AttributeDefinition(required = true)
 	public String destinationName() default "";
 
-	@AttributeDefinition(
-		description = "max-queue-size-help", required = false
-	)
+	@AttributeDefinition(description = "max-queue-size-help", required = false)
 	public int maxQueueSize() default -1;
 
 	@AttributeDefinition(
@@ -41,9 +39,7 @@ public @interface DestinationWorkerConfiguration {
 	)
 	public int workerCoreSize() default 2;
 
-	@AttributeDefinition(
-		description = "worker-max-size-help", required = false
-	)
+	@AttributeDefinition(description = "worker-max-size-help", required = false)
 	public int workerMaxSize() default 5;
 
 }
