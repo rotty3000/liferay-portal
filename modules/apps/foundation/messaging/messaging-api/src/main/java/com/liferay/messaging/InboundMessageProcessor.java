@@ -31,14 +31,14 @@ public interface InboundMessageProcessor {
 	 *
 	 * @param message the message which was received
 	 */
-	void afterReceive(Message message) throws MessageProcessorException;
+	public void afterReceive(Message message) throws MessageProcessorException;
 
 	/**
 	 * Process an out-bound message after passing it on async delivery thread.
 	 *
 	 * @param message the message which was delivered
 	 */
-	void afterThread(Message message, Thread dispatchThread)
+	public void afterThread(Message message, Thread dispatchThread)
 		throws MessageProcessorException;
 
 	/**
@@ -48,7 +48,8 @@ public interface InboundMessageProcessor {
 	 * @param  message the message being received
 	 * @return message the message to deliver
 	 */
-	Message beforeReceive(Message message) throws MessageProcessorException;
+	public Message beforeReceive(Message message)
+		throws MessageProcessorException;
 
 	/**
 	 * Process an out-bound message before passing it on async delivery thread.
@@ -57,7 +58,7 @@ public interface InboundMessageProcessor {
 	 * @param  message the message being sent
 	 * @return message the message to deliver
 	 */
-	Message beforeThread(Message message, Thread dispatchThread)
+	public Message beforeThread(Message message, Thread dispatchThread)
 		throws MessageProcessorException;
 
 }

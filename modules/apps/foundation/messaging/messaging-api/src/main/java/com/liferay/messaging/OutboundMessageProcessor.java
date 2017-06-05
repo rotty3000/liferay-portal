@@ -31,7 +31,7 @@ public interface OutboundMessageProcessor {
 	 *
 	 * @param message the message which was delivered
 	 */
-	void afterSend(Message message) throws MessageProcessorException;
+	public void afterSend(Message message) throws MessageProcessorException;
 
 	/**
 	 * Process an out-bound message before passing it on for delivery. The
@@ -40,6 +40,6 @@ public interface OutboundMessageProcessor {
 	 * @param  message the message being sent
 	 * @return message the message to deliver
 	 */
-	Message beforeSend(Message message) throws MessageProcessorException;
+	public Message beforeSend(Message message) throws MessageProcessorException;
 
 }
