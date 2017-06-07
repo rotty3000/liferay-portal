@@ -14,23 +14,18 @@
 
 package com.liferay.portal.messaging.internal;
 
+import com.liferay.messaging.BaseAsyncDestination;
+import com.liferay.messaging.BaseDestination;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationEventListener;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusEventListener;
+import com.liferay.messaging.MessageListener;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseAsyncDestination;
-import com.liferay.portal.kernel.messaging.BaseDestination;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationEventListener;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusEventListener;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeDestination;
-import com.liferay.portal.kernel.resiliency.spi.SPIUtil;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration;
+import com.liferay.portal.messaging.internal.util.ListUtil;
+import com.liferay.portal.messaging.internal.util.MapUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +45,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael C. Han
@@ -145,8 +142,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		queuedMessageListeners.add(messageListener);
 
-		if (_log.isWarnEnabled()) {
-			_log.warn(
+		if (_logger.isWarnEnabled()) {
+			_logger.warn(
 				"Queuing message listener until destination " +
 					destinationName + " is added");
 		}
@@ -219,8 +216,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		Destination destination = _destinations.get(destinationName);
 
 		if (destination == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(
+			if (_logger.isWarnEnabled()) {
+				_logger.warn(
 					"Destination " + destinationName + " is not configured");
 			}
 
@@ -301,12 +298,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected void doAddDestination(Destination destination) {
 		Class<?> clazz = destination.getClass();
 
-		if (SPIUtil.isSPI() &&
-			!clazz.equals(IntrabandBridgeDestination.class)) {
-
-			destination = new IntrabandBridgeDestination(destination);
-		}
-
 		_destinations.put(destination.getName(), destination);
 
 		for (MessageBusEventListener messageBusEventListener :
@@ -322,8 +313,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			return;
 		}
 
-		if (_log.isDebugEnabled()) {
-			_log.debug(
+		if (_logger.isDebugEnabled()) {
+			_logger.debug(
 				"Registering " + messageListeners.size() +
 					" queued message listeners for destination " +
 						destination.getName());
@@ -383,8 +374,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		Destination destination = _destinations.get(destinationName);
 
 		if (destination == null) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Unable to unregister destination event listener for " +
 						destinationName);
 			}
@@ -456,8 +447,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		Destination destination = _destinations.get(destinationName);
 
 		if (destination == null) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Unable to unregister destination event listener for " +
 						destinationName);
 			}
@@ -504,7 +495,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DefaultMessageBus.class);
 
 	private final Map<String, Destination> _destinations = new HashMap<>();
@@ -513,7 +504,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	private final Map<String, String> _factoryPidsToDestinationName =
 		new ConcurrentHashMap<>();
 	private final Set<MessageBusEventListener> _messageBusEventListeners =
-		new ConcurrentHashSet<>();
+		ConcurrentHashMap.newKeySet();
 	private final Map<String, List<MessageListener>> _queuedMessageListeners =
 		new HashMap<>();
 

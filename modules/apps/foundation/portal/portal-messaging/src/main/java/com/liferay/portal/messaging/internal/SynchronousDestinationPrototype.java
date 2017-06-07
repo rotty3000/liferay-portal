@@ -14,9 +14,9 @@
 
 package com.liferay.portal.messaging.internal;
 
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.SynchronousDestination;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.SynchronousDestination;
 import com.liferay.portal.messaging.DestinationPrototype;
 
 /**

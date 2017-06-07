@@ -1,0 +1,35 @@
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+dependencies {
+	provided group: "com.liferay", name: "org.eclipse.osgi", version: "3.10.200-20150904.172142-1-LIFERAY-CACHED"
+	provided group: "log4j", name: "log4j", version: "1.2.17"
+	provided group: "org.osgi", name: "osgi.enroute.junit.wrapper", version: "4.12.0"
+	provided group: "org.osgi", name: "osgi.enroute.hamcrest.wrapper", version: "1.3.0"
+	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.21"
+	provided group: "org.slf4j", name: "slf4j-log4j12", version: "1.6.1"
+
+	provided project(":apps:foundation:portal:portal-messaging-api")
+	provided project(":apps:foundation:portal:portal-messaging")
+}
+
+task resolve(type: Resolve) {
+	bndrun 'bnd.bndrun'
+	doFirst {
+		if (logger.infoEnabled) {
+			def message = "Resolving against:\n"
+			bundles.each { f ->
+				message += "    ${f}\n"
+			}
+			logger.info message
+		}
+	}
+}
+
+task testOSGi(type: TestOSGi) {
+	bndrun 'bnd.bndrun'
+	dependsOn resolve
+}

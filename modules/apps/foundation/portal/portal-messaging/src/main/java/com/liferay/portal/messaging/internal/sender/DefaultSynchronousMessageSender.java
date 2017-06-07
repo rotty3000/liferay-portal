@@ -14,20 +14,21 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
-import com.liferay.portal.kernel.dao.orm.EntityCache;
-import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusException;
-import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
-import com.liferay.portal.kernel.security.SecureRandomUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageOutboundProcessor;
+import com.liferay.messaging.internal.validator.Validator;
+import com.liferay.messaging.sender.SynchronousMessageSender;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael C. Han
@@ -49,8 +50,8 @@ public class DefaultSynchronousMessageSender
 		Destination destination = _messageBus.getDestination(destinationName);
 
 		if (destination == null) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Destination " + destinationName + " is not configured");
 			}
 
@@ -58,8 +59,8 @@ public class DefaultSynchronousMessageSender
 		}
 
 		if (destination.getMessageListenerCount() == 0) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Destination " + destinationName +
 						" does not have any message listeners");
 			}
@@ -77,8 +78,8 @@ public class DefaultSynchronousMessageSender
 		if (Validator.isNull(responseDestinationName) ||
 			!_messageBus.hasDestination(responseDestinationName)) {
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(
 					"Response destination " + responseDestinationName +
 						" is not configured");
 			}
@@ -93,21 +94,19 @@ public class DefaultSynchronousMessageSender
 
 		SynchronousMessageListener synchronousMessageListener =
 			new SynchronousMessageListener(
-				_messageBus, message, timeout, _entityCache, _finderCache);
+				_messageBus, message, timeout, _processors);
 
 		return synchronousMessageListener.send();
 	}
 
-	public void setEntityCache(EntityCache entityCache) {
-		_entityCache = entityCache;
-	}
-
-	public void setFinderCache(FinderCache finderCache) {
-		_finderCache = finderCache;
-	}
-
 	public void setMessageBus(MessageBus messageBus) {
 		_messageBus = messageBus;
+	}
+
+	public void setMessageOutboundProcessor(
+		List<MessageOutboundProcessor> processors) {
+
+		_processors = processors;
 	}
 
 	public void setTimeout(long timeout) {
@@ -116,17 +115,17 @@ public class DefaultSynchronousMessageSender
 
 	protected String generateUUID() {
 		UUID uuid = new UUID(
-			SecureRandomUtil.nextLong(), SecureRandomUtil.nextLong());
+			ThreadLocalRandom.current().nextLong(),
+			ThreadLocalRandom.current().nextLong());
 
 		return uuid.toString();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DefaultSynchronousMessageSender.class);
 
-	private EntityCache _entityCache;
-	private FinderCache _finderCache;
 	private MessageBus _messageBus;
+	private List<MessageOutboundProcessor> _processors;
 	private long _timeout;
 
 }

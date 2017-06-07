@@ -14,14 +14,11 @@
 
 package com.liferay.portal.messaging.internal.jmx;
 
-import com.liferay.portal.kernel.concurrent.ConcurrentHashSet;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.util.HashMapDictionary;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.MessageBus;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +37,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael C. Han
@@ -105,7 +104,7 @@ public class MessageBusManager
 				new DestinationStatisticsManager(destination);
 
 			Dictionary<String, Object> mBeanProperties =
-				new HashMapDictionary<>();
+				new Hashtable<>();
 
 			mBeanProperties.put(
 				"jmx.objectname", destinationStatisticsManager.getObjectName());
@@ -122,8 +121,8 @@ public class MessageBusManager
 				destination.getName(), serviceRegistration);
 		}
 		catch (NotCompliantMBeanException ncmbe) {
-			if (_log.isInfoEnabled()) {
-				_log.info("Unable to register destination mbean", ncmbe);
+			if (_logger.isInfoEnabled()) {
+				_logger.info("Unable to register destination mbean", ncmbe);
 			}
 		}
 	}
@@ -151,7 +150,7 @@ public class MessageBusManager
 		_messageBus = messageBus;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		MessageBusManager.class);
 
 	private BundleContext _bundleContext;
@@ -159,6 +158,6 @@ public class MessageBusManager
 		_mbeanServiceRegistrations = new ConcurrentHashMap<>();
 	private MessageBus _messageBus;
 	private final Set<Destination> _queuedDestinations =
-		new ConcurrentHashSet<>();
+		ConcurrentHashMap.newKeySet();
 
 }
