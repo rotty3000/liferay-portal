@@ -14,14 +14,14 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
-import com.liferay.portal.kernel.cache.thread.local.ThreadLocalCacheManager;
-import com.liferay.portal.kernel.dao.orm.EntityCache;
-import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
-import com.liferay.portal.kernel.messaging.MessageBusException;
-import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.MessageOutboundProcessor;
+import com.liferay.messaging.MessageProcessorException;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -32,13 +32,12 @@ public class SynchronousMessageListener implements MessageListener {
 
 	public SynchronousMessageListener(
 		MessageBus messageBus, Message message, long timeout,
-		EntityCache entityCache, FinderCache finderCache) {
+		List<MessageOutboundProcessor> processors) {
 
 		_messageBus = messageBus;
 		_message = message;
 		_timeout = timeout;
-		_entityCache = entityCache;
-		_finderCache = finderCache;
+		_processors = processors;
 
 		_responseId = _message.getResponseId();
 	}
@@ -64,37 +63,56 @@ public class SynchronousMessageListener implements MessageListener {
 
 		_messageBus.registerMessageListener(responseDestinationName, this);
 
+		Message sendingMessage = _message;
+
 		try {
-			_messageBus.sendMessage(destinationName, _message);
+			for (MessageOutboundProcessor processor : _processors) {
+				try {
+					sendingMessage = processor.beforeSend(sendingMessage);
+				}
+				catch (MessageProcessorException mpe) {
+					throw new MessageBusException(
+						"Unable to process message before sending " +
+							sendingMessage);
+				}
+			}
+
+			_messageBus.sendMessage(destinationName, sendingMessage);
 
 			_countDownLatch.await(_timeout, TimeUnit.MILLISECONDS);
 
 			if (_results == null) {
 				throw new MessageBusException(
-					"No reply received for message: " + _message);
+					"No reply received for message: " + sendingMessage);
 			}
 
 			return _results;
 		}
 		catch (InterruptedException ie) {
 			throw new MessageBusException(
-				"Message sending interrupted for: " + _message, ie);
+				"Message sending interrupted for: " + sendingMessage, ie);
 		}
 		finally {
 			_messageBus.unregisterMessageListener(
 				responseDestinationName, this);
 
-			_entityCache.clearLocalCache();
-			_finderCache.clearLocalCache();
-			ThreadLocalCacheManager.destroy();
+			for (MessageOutboundProcessor processor : _processors) {
+				try {
+					processor.afterSend(sendingMessage);
+				}
+				catch (MessageProcessorException mpe) {
+					throw new MessageBusException(
+						"Unable to process message after sending " +
+							sendingMessage);
+				}
+			}
 		}
 	}
 
 	private final CountDownLatch _countDownLatch = new CountDownLatch(1);
-	private final EntityCache _entityCache;
-	private final FinderCache _finderCache;
 	private final Message _message;
 	private final MessageBus _messageBus;
+	private final List<MessageOutboundProcessor> _processors;
 	private final String _responseId;
 	private Object _results;
 	private final long _timeout;

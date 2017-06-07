@@ -14,11 +14,11 @@
 
 package com.liferay.portal.messaging.internal;
 
-import com.liferay.portal.kernel.executor.PortalExecutorManager;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.DestinationFactory;
-import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationFactory;
+import com.liferay.messaging.ExecutorServiceRegistrar;
+import com.liferay.petra.io.convert.Maps;
 import com.liferay.portal.messaging.DestinationPrototype;
 
 import java.util.Collection;
@@ -88,7 +88,7 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		Map<String, Object> properties) {
 
 		_destinationPrototypes.put(
-			MapUtil.getString(properties, "destination.type"),
+			Maps.getString(properties, "destination.type"),
 			destinationPrototype);
 	}
 
@@ -102,14 +102,15 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		Map<String, Object> properties) {
 
 		_destinationPrototypes.remove(
-			MapUtil.getString(properties, "destination.type"),
+			Maps.getString(properties, "destination.type"),
 			destinationPrototype);
 	}
 
-	@Reference(unbind = "-")
-	protected void setPortalExecutorManager(
-		PortalExecutorManager portalExecutorManager) {
-	}
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	private ExecutorServiceRegistrar _executorServiceRegistrar;
 
 	private final ConcurrentMap<String, DestinationPrototype>
 		_destinationPrototypes = new ConcurrentHashMap<>();

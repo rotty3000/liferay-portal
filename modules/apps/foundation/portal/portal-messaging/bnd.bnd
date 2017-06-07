@@ -4,3 +4,9 @@ Bundle-Version: 3.0.7
 Export-Package: com.liferay.portal.messaging
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: Runtime
+Provide-Capability:\
+	osgi.implementation;\
+		osgi.implementation=com.liferay.messaging;\
+		version:Version=${Bundle-Version}
+-conditionalpackage:\
+	aQute.bnd.annotation.metatype
