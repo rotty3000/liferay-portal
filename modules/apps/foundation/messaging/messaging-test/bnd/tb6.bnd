@@ -1,0 +1,4 @@
+Export-Package: ${p}.tb6.*;-split-package:=first
+Require-Capability:\
+	osgi.implementation;\
+		filter:="(&(osgi.implementation=com.liferay.messaging)(version>=3.0.0)(!(version>=4.0.0)))"
