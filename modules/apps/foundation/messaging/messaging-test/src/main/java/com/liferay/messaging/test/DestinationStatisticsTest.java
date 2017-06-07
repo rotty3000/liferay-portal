@@ -49,7 +49,6 @@ public class DestinationStatisticsTest extends TestUtil {
 			for (int i = 0; i < MAX; i++) {
 				messageBus.sendMessage(destinationName, message);
 				assertEquals(message, callable.call());
-
 			}
 
 			/*
@@ -65,11 +64,13 @@ public class DestinationStatisticsTest extends TestUtil {
 			 * TODO: Devise a way to test these destination statistics against
 			 * expected values.
 			 */
+			/*
 			System.out.println("Sent message count for " + destinationName + ": " + destinationStatistics.getSentMessageCount());
 			System.out.println("Active thread count for " + destinationName + ": " + destinationStatistics.getActiveThreadCount());
 			System.out.println("Current thread count for " + destinationName + ": " + destinationStatistics.getCurrentThreadCount());
 			System.out.println("Largest thread count for " + destinationName + ": " + destinationStatistics.getLargestThreadCount());
 			System.out.println("Pending message count for " + destinationName + ": " + destinationStatistics.getPendingMessageCount());
+			*/
 		}
 		finally {
 			tbBundle.uninstall();
@@ -90,4 +91,5 @@ public class DestinationStatisticsTest extends TestUtil {
 	public void testSynchronous() throws Exception {
 		test("tb1.jar", "synchronous/test");
 	}
+
 }
