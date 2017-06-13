@@ -7,3 +7,4 @@ Provide-Capability:\
 	osgi.implementation;\
 		osgi.implementation=com.liferay.messaging;\
 		version:Version=${Bundle-Version}
+-dsannotations-options: inherit

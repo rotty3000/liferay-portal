@@ -17,10 +17,18 @@ package com.liferay.messaging;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.osgi.service.component.annotations.Activate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>
+ * <strong>Note:</strong> When using this as a parent class to a Declarative
+ * Services {@code @Cmponent} apply the instruction
+ * {@code -dsannotations-options: inherit} in the bnd file.
+ * </p>
+ *
  * @author Shuyang Zhou
  */
 public class SynchronousDestination extends BaseDestination {
@@ -79,6 +87,11 @@ public class SynchronousDestination extends BaseDestination {
 		}
 
 		_sentMessageCounter.incrementAndGet();
+	}
+
+	@Activate
+	protected void activate(DestinationSettings destinationSettings) {
+		setName(destinationSettings.destination_name());
 	}
 
 	private static final Logger _log = LoggerFactory.getLogger(
