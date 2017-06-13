@@ -32,15 +32,34 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class NullMessageDestinationTest extends TestUtil {
 
-	public void test(String bundle, String destinationName) throws Exception {
+	@Test(expected = NullPointerException.class)
+	public void testParallel() throws Exception {
+		test("tb2.jar", "parallel/test");
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testSerial() throws Exception {
+		test("tb3.jar", "serial/test");
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testSynchronous() throws Exception {
+		test("tb1.jar", "synchronous/test");
+	}
+
+	protected void test(String bundle, String destinationName)
+		throws Exception {
+
 		Bundle tbBundle = install(bundle);
 
 		try {
 			tbBundle.start();
 
 			Filter filter = bundleContext.createFilter(
-				String.format("(&(objectClass=java.util.concurrent.Callable)" +
-					"(destination.name=%s))", destinationName));
+				String.format(
+					"(&(objectClass=java.util.concurrent.Callable)" +
+						"(destination.name=%s))",
+					destinationName));
 
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
 				new ServiceTracker<>(bundleContext, filter, null);
@@ -60,21 +79,6 @@ public class NullMessageDestinationTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
-	}
-
-	@Test(expected = NullPointerException.class)
-	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
 	}
 
 }

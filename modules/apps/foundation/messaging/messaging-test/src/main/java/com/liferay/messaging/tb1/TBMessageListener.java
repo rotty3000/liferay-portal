@@ -19,6 +19,7 @@ import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -27,9 +28,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = {
-		"destination.name=synchronous/test"
-	},
+	property = "destination.name=synchronous/test",
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
@@ -37,14 +36,14 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		_message = message;
+		_message.set(message);
 	}
 
 	@Override
 	public Message call() throws Exception {
-		return _message;
+		return _message.get();
 	}
 
-	private volatile Message _message;
+	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
 
 }

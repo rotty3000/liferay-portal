@@ -22,13 +22,12 @@ import org.osgi.service.component.annotations.Component;
  * @author Raymond Augé
  */
 @Component(service = DestinationConfiguration.class)
-public class TBSynchronousDestinationConfiguration
+public class TBParallelDestinationConfiguration
 	extends DestinationConfiguration {
 
-	public TBSynchronousDestinationConfiguration() {
+	public TBParallelDestinationConfiguration() {
 		super(
-			DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS,
-			"builder/tb10");
+			DestinationConfiguration.DESTINATION_TYPE_PARALLEL, "builder/tb10");
 	}
 
 }
