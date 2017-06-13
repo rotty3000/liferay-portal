@@ -19,6 +19,8 @@ import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import java.util.List;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Activate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +29,23 @@ import org.slf4j.LoggerFactory;
  * Destination that delivers a message to a list of message listeners in
  * parallel.
  * </p>
+ * <p>
+ * <strong>Note:</strong> When using this as a parent class to a Declarative
+ * Services {@code @Cmponent} apply the instruction
+ * {@code -dsannotations-options: inherit} in the bnd file.
+ * </p>
  *
  * @author Michael C. Han
  */
 public class ParallelDestination extends BaseAsyncDestination {
+
+	@Activate
+	protected void activate(DestinationSettings destinationSettings) {
+		setMaximumQueueSize(destinationSettings.maximumQueueSize());
+		setName(destinationSettings.destination_name());
+		setWorkersCoreSize(destinationSettings.workersCoreSize());
+		setWorkersMaxSize(destinationSettings.workersMaxSize());
+	}
 
 	@Override
 	protected void dispatch(
