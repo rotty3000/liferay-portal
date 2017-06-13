@@ -1,0 +1,1 @@
+Export-Package: ${p}.tb14.*;-split-package:=first
