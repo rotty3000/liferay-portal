@@ -18,6 +18,8 @@ p = com.liferay.messaging
 # We need to tell bnd's make function what the classpath is for making `sub-bundles`.
 -classpath: ${.}/classes
 
+-dsannotations-options: inherit
+
 # This is the instruction containing the make recipe and the recipe dir pattern for finding the bnd files.
 -includeresource:\
 	tb1.jar,\
