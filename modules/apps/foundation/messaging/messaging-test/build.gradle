@@ -7,13 +7,11 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 dependencies {
-	provided group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
 	provided group: "com.liferay", name: "com.liferay.petra.concurrent", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.petra.io", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.petra.memory", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.petra.process", version: "1.0.0"
 	provided group: "com.liferay", name: "com.liferay.petra.reflect", version: "1.0.0"
-	provided group: "com.liferay", name: "com.liferay.portal.configuration.metatype", version: "2.0.0"
 	provided group: "com.liferay", name: "com.liferay.portal.jmx", version: "3.0.4"
 	provided group: "log4j", name: "log4j", version: "1.2.17"
 	provided group: "org.apache.aries.async", name: "org.apache.aries.async", version: "1.0.1"
@@ -24,7 +22,7 @@ dependencies {
 	provided group: "org.apache.felix", name: "org.apache.felix.gogo.shell", version: "1.0.0"
 	provided group: "org.apache.felix", name: "org.apache.felix.scr", version: "2.0.10"
 	provided group: "org.eclipse.platform", name: "org.eclipse.osgi", version: "3.11.3"
-	provided group: "org.osgi", name: "org.osgi.service.metatype", version: "1.3.0"
+	provided group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.3.0"
 	provided group: "org.osgi", name: "osgi.enroute.hamcrest.wrapper", version: "1.3.0"
 	provided group: "org.osgi", name: "osgi.enroute.junit.wrapper", version: "4.12.0"
 	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.21"
@@ -35,15 +33,6 @@ dependencies {
 
 task export_resolve(type: Resolve) {
 	bndrun 'messaging-executable.bndrun'
-	doFirst {
-		if (logger.infoEnabled) {
-			def message = "Resolving against:\n"
-			bundles.each { f ->
-				message += "    ${f}\n"
-			}
-			logger.info message
-		}
-	}
 }
 
 task export(type: Export) {
@@ -65,15 +54,6 @@ jar {
 
 task resolve(type: Resolve) {
 	bndrun 'bnd.bndrun'
-	doFirst {
-		if (logger.infoEnabled) {
-			def message = "Resolving against:\n"
-			bundles.each { f ->
-				message += "    ${f}\n"
-			}
-			logger.info message
-		}
-	}
 }
 
 task testOSGi(type: TestOSGi) {

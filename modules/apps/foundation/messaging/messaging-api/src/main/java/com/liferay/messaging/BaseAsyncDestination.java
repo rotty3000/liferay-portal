@@ -241,11 +241,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		return _threadPoolExecutor;
 	}
 
-	private static final Class<BaseAsyncDestination> _clazz =
-		BaseAsyncDestination.class;
-
-	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
-
 	private static final int _WORKERS_CORE_SIZE = 2;
 
 	private static final int _WORKERS_MAX_SIZE = 5;
@@ -253,6 +248,10 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private static final Logger _log = LoggerFactory.getLogger(
 		BaseAsyncDestination.class);
 
+	private static final Class<BaseAsyncDestination> _clazz =
+		BaseAsyncDestination.class;
+
+	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
 	private ThreadPoolExecutor _threadPoolExecutor;

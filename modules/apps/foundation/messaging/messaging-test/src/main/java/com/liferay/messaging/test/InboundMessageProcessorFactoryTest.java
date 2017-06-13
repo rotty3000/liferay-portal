@@ -54,18 +54,21 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public void afterReceive(Message message)
 				throws MessageProcessorException {
+
 				afterReceive.resolve(5);
 			}
 
 			@Override
 			public void afterThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				afterThread.resolve(4);
 			}
 
 			@Override
 			public Message beforeReceive(Message message)
 				throws MessageProcessorException {
+
 				beforeReceive.resolve(2);
 
 				return message;
@@ -74,6 +77,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public Message beforeThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				beforeThread.resolve(3);
 
 				return message;
@@ -158,18 +162,21 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public void afterReceive(Message message)
 				throws MessageProcessorException {
+
 				afterReceive.resolve(5);
 			}
 
 			@Override
 			public void afterThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				afterThread.resolve(4);
 			}
 
 			@Override
 			public Message beforeReceive(Message message)
 				throws MessageProcessorException {
+
 				beforeReceive.resolve(2);
 
 				return message;
@@ -178,6 +185,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public Message beforeThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				beforeThread.resolve(3);
 
 				return message;
@@ -264,18 +272,21 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public void afterReceive(Message message)
 				throws MessageProcessorException {
+
 				afterReceive.resolve(5);
 			}
 
 			@Override
 			public void afterThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				afterThread.resolve(4);
 			}
 
 			@Override
 			public Message beforeReceive(Message message)
 				throws MessageProcessorException {
+
 				beforeReceive.resolve(2);
 
 				return message;
@@ -284,6 +295,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public Message beforeThread(Message message, Thread dispatchThread)
 				throws MessageProcessorException {
+
 				beforeThread.resolve(3);
 
 				return message;
