@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,6 +180,10 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		}
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
+	)
 	public void setExecutorServiceRegistrar(
 		ExecutorServiceRegistrar executorServiceRegistrar) {
 
@@ -186,6 +194,10 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		_maximumQueueSize = maximumQueueSize;
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
+	)
 	public void setRejectedExecutionHandler(
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
