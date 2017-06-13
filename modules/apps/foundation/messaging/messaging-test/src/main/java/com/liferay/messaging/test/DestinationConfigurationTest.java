@@ -32,15 +32,32 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class DestinationConfigurationTest extends TestUtil {
 
-	public void test(String bundle, String destination) throws Exception {
+	@Test
+	public void testParallel() throws Exception {
+		test("tb4.jar", "configuration/tb4");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb5.jar", "configuration/tb5");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb6.jar", "configuration/tb6");
+	}
+
+	protected void test(String bundle, String destination) throws Exception {
 		Bundle tbBundle = install(bundle);
 
 		try {
 			tbBundle.start();
 
 			Filter filter = bundleContext.createFilter(
-				String.format("(&(objectClass=java.util.concurrent.Callable)" +
-					"(destination.name=%s))", destination));
+				String.format(
+					"(&(objectClass=java.util.concurrent.Callable)" +
+						"(destination.name=%s))",
+					destination));
 
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
 				new ServiceTracker<>(bundleContext, filter, null);
@@ -60,21 +77,6 @@ public class DestinationConfigurationTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
-	}
-
-	@Test
-	public void testParallel() throws Exception {
-		test("tb4.jar", "configuration/tb4");
-	}
-
-	@Test
-	public void testSerial() throws Exception {
-		test("tb5.jar", "configuration/tb5");
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		test("tb6.jar", "configuration/tb6");
 	}
 
 }
