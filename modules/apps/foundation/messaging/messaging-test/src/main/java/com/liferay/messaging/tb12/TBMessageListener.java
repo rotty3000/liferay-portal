@@ -21,7 +21,7 @@ import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -31,9 +31,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = {
-		"destination.name=builder/tb12"
-	},
+	property = "destination.name=builder/tb12",
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
@@ -41,26 +39,21 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		_message = message;
+		_message.set(message);
 
 		MessageBuilder builder = _messageBuilderFactory.createResponse(message);
 
-		builder.setPayload(_message);
+		builder.setPayload(message);
 
 		builder.send();
-
-		_latch.countDown();
 	}
 
 	@Override
 	public Message call() throws Exception {
-		_latch.await();
-
-		return _message;
+		return _message.get();
 	}
 
-	private final CountDownLatch _latch = new CountDownLatch(1);
-	private volatile Message _message;
+	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
 	@Reference
 	private MessageBuilderFactory _messageBuilderFactory;
 

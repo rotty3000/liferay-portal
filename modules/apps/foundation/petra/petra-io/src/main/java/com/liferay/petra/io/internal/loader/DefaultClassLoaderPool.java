@@ -14,6 +14,7 @@
 
 package com.liferay.petra.io.internal.loader;
 
+import com.liferay.petra.io.StringPool;
 import com.liferay.petra.io.spi.loader.ClassLoaderPool;
 
 import java.util.Map;
@@ -23,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Raymond Augé
  */
 public class DefaultClassLoaderPool implements ClassLoaderPool {
-
-	public static final String NULL = "null";
 
 	/**
 	 * Returns the class loader associated with the context name.
@@ -40,7 +39,7 @@ public class DefaultClassLoaderPool implements ClassLoaderPool {
 	public ClassLoader getClassLoader(String contextName) {
 		ClassLoader classLoader = null;
 
-		if ((contextName != null) && !contextName.equals(NULL)) {
+		if ((contextName != null) && !contextName.equals(StringPool.NULL)) {
 			classLoader = _classLoaders.get(contextName);
 		}
 
@@ -67,13 +66,13 @@ public class DefaultClassLoaderPool implements ClassLoaderPool {
 	 */
 	public String getContextName(ClassLoader classLoader) {
 		if (classLoader == null) {
-			return NULL;
+			return StringPool.NULL;
 		}
 
 		String contextName = _contextNames.get(classLoader);
 
 		if (contextName == null) {
-			contextName = NULL;
+			contextName = StringPool.NULL;
 		}
 
 		return contextName;

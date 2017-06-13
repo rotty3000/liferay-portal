@@ -1,4 +1,4 @@
-Bundle-Name: Liferay Message Bus Test
+Bundle-Name: Liferay Messaging Test
 Bundle-SymbolicName: com.liferay.messaging.test
 Bundle-Version: 1.0.0
 Export-Package:\
@@ -33,7 +33,6 @@ p = com.liferay.messaging
 	tb8.jar,\
 	tb9.jar
 
-# Finally,\
-	include the `-make'd` jars in the test bundle. This also happens to trigger the make function
+# Include the `-make'd` jars in the test bundle. This also happens to trigger the make function
 # so don't forget to list new jars here as new bnd files are added into the recipe dir.
 -make: (*).(jar); type=bnd; recipe="${.}/bnd/$1.bnd"

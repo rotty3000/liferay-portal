@@ -27,7 +27,24 @@ import org.osgi.framework.Bundle;
  */
 public class SynchronousMessageSenderTest extends TestUtil {
 
-	public void test(String bundle, String destinationName) throws Exception {
+	@Test
+	public void testParallel() throws Exception {
+		test("tb7.jar", "synchronous/send/tb7");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb8.jar", "synchronous/send/tb8");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb9.jar", "synchronous/send/tb9");
+	}
+
+	protected void test(String bundle, String destinationName)
+		throws Exception {
+
 		Bundle tbBundle = install(bundle);
 
 		try {
@@ -43,21 +60,6 @@ public class SynchronousMessageSenderTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
-	}
-
-	@Test
-	public void testParallel() throws Exception {
-		test("tb7.jar", "synchronous/send/tb7");
-	}
-
-	@Test
-	public void testSerial() throws Exception {
-		test("tb8.jar", "synchronous/send/tb8");
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		test("tb9.jar", "synchronous/send/tb9");
 	}
 
 }

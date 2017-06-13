@@ -33,15 +33,34 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class MessageBuilderTest extends TestUtil {
 
-	public void test(String bundle, String destinationName) throws Exception {
+	@Test
+	public void testParallel() throws Exception {
+		test("tb2.jar", "parallel/test");
+	}
+
+	@Test
+	public void testSerial() throws Exception {
+		test("tb3.jar", "serial/test");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb1.jar", "synchronous/test");
+	}
+
+	protected void test(String bundle, String destinationName)
+		throws Exception {
+
 		Bundle tbBundle = install(bundle);
 
 		try {
 			tbBundle.start();
 
 			Filter filter = bundleContext.createFilter(
-				String.format("(&(objectClass=java.util.concurrent.Callable)" +
-					"(destination.name=%s))", destinationName));
+				String.format(
+					"(&(objectClass=java.util.concurrent.Callable)" +
+						"(destination.name=%s))",
+					destinationName));
 
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
 				new ServiceTracker<>(bundleContext, filter, null);
@@ -62,21 +81,6 @@ public class MessageBuilderTest extends TestUtil {
 		finally {
 			tbBundle.uninstall();
 		}
-	}
-
-	@Test
-	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
-	}
-
-	@Test
-	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
 	}
 
 }
