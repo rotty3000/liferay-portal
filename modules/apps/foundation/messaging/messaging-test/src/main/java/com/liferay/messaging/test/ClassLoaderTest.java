@@ -16,6 +16,7 @@ package com.liferay.messaging.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
@@ -28,7 +29,6 @@ import java.io.StringWriter;
 
 import java.util.Collection;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.InvalidSyntaxException;
@@ -96,7 +96,7 @@ public class ClassLoaderTest extends TestUtil {
 			}
 		}
 		catch (Exception e) {
-			Assert.fail(getStackTrace(e));
+			fail(getStackTrace(e));
 		}
 		finally {
 			configuration1.unregister();
@@ -162,7 +162,7 @@ public class ClassLoaderTest extends TestUtil {
 			}
 		}
 		catch (Exception e) {
-			Assert.fail(getStackTrace(e));
+			fail(getStackTrace(e));
 		}
 		finally {
 			configuration1.unregister();
@@ -172,7 +172,7 @@ public class ClassLoaderTest extends TestUtil {
 		}
 	}
 
-	private String getStackTrace(Throwable t) {
+	protected String getStackTrace(Throwable t) {
 		String stackTrace = null;
 
 		PrintWriter printWriter = null;
@@ -215,7 +215,7 @@ public class ClassLoaderTest extends TestUtil {
 			ClassLoader currentClassLoader =
 				currentThread.getContextClassLoader();
 
-			Assert.assertEquals(_testClassLoader, currentClassLoader);
+			assertEquals(_testClassLoader, currentClassLoader);
 		}
 
 		private final ClassLoader _testClassLoader;
@@ -230,7 +230,7 @@ public class ClassLoaderTest extends TestUtil {
 
 		@Override
 		public void receive(Message message) {
-			Assert.assertEquals(_destinationName, message.getDestinationName());
+			assertEquals(_destinationName, message.getDestinationName());
 		}
 
 		private final String _destinationName;

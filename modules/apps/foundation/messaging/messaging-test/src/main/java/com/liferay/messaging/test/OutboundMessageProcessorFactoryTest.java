@@ -65,12 +65,14 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 			@Override
 			public void afterSend(Message message)
 				throws MessageProcessorException {
+
 				afterSend.resolve(3);
 			}
 
 			@Override
 			public Message beforeSend(Message message)
 				throws MessageProcessorException {
+
 				beforeSend.resolve(2);
 
 				return message;
@@ -95,9 +97,8 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 		properties.put("destination.name", destination);
 
 		ServiceRegistration<OutboundMessageProcessorFactory>
-			serviceRegistration =
-				bundleContext.registerService(
-					OutboundMessageProcessorFactory.class, factory, properties);
+			serviceRegistration = bundleContext.registerService(
+				OutboundMessageProcessorFactory.class, factory, properties);
 
 		try {
 			tbBundle.start();

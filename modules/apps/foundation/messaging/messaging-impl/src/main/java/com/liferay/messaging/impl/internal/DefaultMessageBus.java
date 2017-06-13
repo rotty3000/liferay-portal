@@ -211,7 +211,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		if (_logger.isWarnEnabled()) {
 			_logger.warn(
 				"Queuing destination event listener until destination {} is " +
-					"added", destinationName);
+					"added",
+				destinationName);
 		}
 	}
 
@@ -253,7 +254,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		if (_logger.isWarnEnabled()) {
 			_logger.warn(
 				"Queuing inbound processor factory until destination {} is " +
-					"added", destinationName);
+					"added",
+				destinationName);
 		}
 	}
 
@@ -371,8 +373,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		if (_logger.isWarnEnabled()) {
 			_logger.warn(
-				"Queuing outbound processor factory until destination {} " +
-					"is added",
+				"Queuing outbound processor factory until destination {} is " +
+					"added",
 				destinationName);
 		}
 	}
@@ -429,7 +431,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 				catch (MessageProcessorException mpe) {
 					throw new MessageBusException(
 						"Unable to process message before sending " +
-							sendingMessage);
+							sendingMessage,
+						mpe);
 				}
 			}
 
@@ -445,7 +448,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 				catch (MessageProcessorException mpe) {
 					throw new MessageBusException(
 						"Unable to process message after sending " +
-							sendingMessage);
+							sendingMessage,
+						mpe);
 				}
 			}
 		}
@@ -775,7 +779,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(
 					"Registering {} queued message listeners for destination " +
-						"{}", messageListeners.size(), destination.getName());
+						"{}",
+					messageListeners.size(), destination.getName());
 			}
 
 			for (MessageListener messageListener : messageListeners) {
@@ -791,8 +796,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		if (!Lists.isEmpty(queuedOutboundMessageProcessorFactories)) {
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(
-					"Registering {} queued outbound processor factories " +
-						"for destination {}",
+					"Registering {} queued outbound processor factories for " +
+						"destination {}",
 					queuedOutboundMessageProcessorFactories.size(),
 					destination.getName());
 			}
