@@ -12,23 +12,19 @@
  * details.
  */
 
-package com.liferay.messaging.tb4;
-
-import com.liferay.messaging.DestinationConfiguration;
-
-import org.osgi.service.component.annotations.Component;
+package com.liferay.messaging;
 
 /**
  * @author Raymond Augé
  */
-@Component(service = DestinationConfiguration.class)
-public class TBParallelDestinationConfiguration
-	extends DestinationConfiguration {
+public @interface DestinationSettings {
 
-	public TBParallelDestinationConfiguration() {
-		super(
-			DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
-			"configuration/tb4");
-	}
+	String destination_name();
+
+	int maximumQueueSize() default Integer.MAX_VALUE;
+
+	int workersCoreSize() default 2;
+
+	int workersMaxSize() default 5;
 
 }

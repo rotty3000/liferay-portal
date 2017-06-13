@@ -15,14 +15,8 @@
 package com.liferay.messaging.tb11;
 
 import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.interfaces.Config;
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Raymond Augé
@@ -32,22 +26,6 @@ public class TBSerialDestinationConfiguration extends DestinationConfiguration {
 
 	public TBSerialDestinationConfiguration() {
 		super(DestinationConfiguration.DESTINATION_TYPE_SERIAL, "builder/tb11");
-	}
-
-	@Override
-	@Reference(
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
-	)
-	public void setRejectedExecutionHandler(
-		RejectedExecutionHandler rejectedExecutionHandler) {
-
-		super.setRejectedExecutionHandler(rejectedExecutionHandler);
-	}
-
-	@Activate
-	protected void activate(Config config) {
-		setMaximumQueueSize(config.maximum_queue_size());
 	}
 
 }

@@ -19,6 +19,8 @@ import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import java.util.List;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Activate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,11 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Destination that delivers a message to a list of message listeners one at a
  * time.
+ * </p>
+ * <p>
+ * <strong>Note:</strong> When using this as a parent class to a Declarative
+ * Services {@code @Cmponent} apply the instruction
+ * {@code -dsannotations-options: inherit} in the bnd file.
  * </p>
  *
  * @author Michael C. Han
@@ -35,6 +42,12 @@ public class SerialDestination extends BaseAsyncDestination {
 	public SerialDestination() {
 		setWorkersCoreSize(_WORKERS_CORE_SIZE);
 		setWorkersMaxSize(_WORKERS_MAX_SIZE);
+	}
+
+	@Activate
+	protected void activate(DestinationSettings destinationSettings) {
+		setMaximumQueueSize(destinationSettings.maximumQueueSize());
+		setName(destinationSettings.destination_name());
 	}
 
 	@Override
