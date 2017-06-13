@@ -20,7 +20,16 @@ import java.io.Serializable;
 
 import java.util.Objects;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 /**
+ * <strong>Note:</strong> When using this as a parent class to a Declarative
+ * Services {@code @Cmponent} apply the instruction
+ * {@code -dsannotations-options: inherit} in the bnd file.
+ *
  * @author Michael C. Han
  */
 public class DestinationConfiguration implements Serializable {
@@ -118,6 +127,10 @@ public class DestinationConfiguration implements Serializable {
 		_maximumQueueSize = maximumQueueSize;
 	}
 
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
+	)
 	public void setRejectedExecutionHandler(
 		RejectedExecutionHandler rejectedExecutionHandler) {
 
@@ -151,6 +164,13 @@ public class DestinationConfiguration implements Serializable {
 		sb.append("}");
 
 		return sb.toString();
+	}
+
+	@Activate
+	protected void activate(DestinationSettings destinationSettings) {
+		setMaximumQueueSize(destinationSettings.maximumQueueSize());
+		setWorkersCoreSize(destinationSettings.workersCoreSize());
+		setWorkersMaxSize(destinationSettings.workersMaxSize());
 	}
 
 	private static final int _WORKERS_CORE_SIZE = 2;
