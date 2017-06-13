@@ -14,7 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.messaging.Destination;
@@ -34,21 +33,21 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class DestinationStatisticsTest extends TestUtil {
 
-	public static final int MAX = 1234;
+	public static final int MAX = 10;
 
 	@Test
 	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
+		test("tb14.jar", "parallel/test");
 	}
 
 	@Test
 	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
+		//test("tb3.jar", "serial/test");
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
+		//test("tb1.jar", "synchronous/test");
 	}
 
 	protected void test(String bundle, String destinationName)
@@ -77,32 +76,59 @@ public class DestinationStatisticsTest extends TestUtil {
 			Destination destination = messageBus.getDestination(
 				destinationName);
 
-			DestinationStatistics destinationStatistics =
-				destination.getDestinationStatistics();
-
-			assertEquals(0, destinationStatistics.getSentMessageCount());
-
-			Message message = new Message();
+			assertStats(
+				"Before Stats %s:%n", destinationName,
+				destination.getDestinationStatistics());
 
 			for (int i = 0; i < MAX; i++) {
+				Message message = new Message();
+
 				messageBus.sendMessage(destinationName, message);
-				assertEquals(message, callable.call());
 			}
 
-			destinationStatistics = destination.getDestinationStatistics();
+			assertStats(
+				"Updated Stats %s:%n", destinationName,
+				destination.getDestinationStatistics());
 
-			assertEquals(
-				MAX,
-				destinationStatistics.getSentMessageCount() +
-					destinationStatistics.getPendingMessageCount());
+			callable.call();
 
-			/*assertEquals(5, destinationStatistics.getActiveThreadCount());
-			assertEquals(5, destinationStatistics.getCurrentThreadCount());
-			assertEquals(5, destinationStatistics.getLargestThreadCount());*/
+			Thread.sleep(1000);
+
+			assertStats(
+				"Final Stats %s:%n", destinationName,
+				destination.getDestinationStatistics());
 		}
 		finally {
 			tbBundle.uninstall();
 		}
+	}
+
+	protected void assertStats(
+		String message, String destinationName,
+		DestinationStatistics destinationStatistics) {
+
+		System.out.printf(message, destinationName);
+		System.out.printf(
+			"  Pending messages: %s%n",
+			destinationStatistics.getPendingMessageCount());
+		System.out.printf(
+			"  Sent messages: %s%n",
+			destinationStatistics.getSentMessageCount());
+		System.out.printf(
+			"  Active threads: %s%n",
+			destinationStatistics.getActiveThreadCount());
+		System.out.printf(
+			"  Current threads: %s%n",
+			destinationStatistics.getCurrentThreadCount());
+		System.out.printf(
+			"  Largest threads: %s%n",
+			destinationStatistics.getLargestThreadCount());
+		System.out.printf(
+			"  Max threads: %s%n",
+			destinationStatistics.getMaxThreadPoolSize());
+		System.out.printf(
+			"  Min threads: %s%n%n",
+			destinationStatistics.getMinThreadPoolSize());
 	}
 
 }
