@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 
 <suppressions>
+	<suppress checks="ConstantName" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/nio/intraband/BaseIntraband\.java" />
+	<suppress checks="Indentation" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/BigEndianCodec\.java" />
+	<suppress checks="JavaDeserializationSecurityCheck" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/AnnotatedObjectInputStream\.java" />
+	<suppress checks="JavaDeserializationSecurityCheck" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/ProtectedObjectInputStream\.java" />
+	<suppress checks="JavaVariableTypeCheck" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/PathHolder\.java" />
 	<suppress checks="JavaXMLSecurityCheck" files="modules/apps/foundation/petra/petra-log4j/src/main/java/com/liferay/petra/log4j/Log4JUtil\.java" />
+	<suppress checks="PlusStatement" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/BigEndianCodec\.java" />
 </suppressions>

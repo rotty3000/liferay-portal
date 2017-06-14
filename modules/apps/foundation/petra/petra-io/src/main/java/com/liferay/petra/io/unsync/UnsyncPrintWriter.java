@@ -15,6 +15,7 @@
 package com.liferay.petra.io.unsync;
 
 import com.liferay.petra.io.OutputStreamWriter;
+import com.liferay.petra.io.StringPool;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,7 +79,7 @@ public class UnsyncPrintWriter extends PrintWriter {
 	@Override
 	public PrintWriter append(CharSequence charSequence) {
 		if (charSequence == null) {
-			write("null");
+			write(StringPool.NULL);
 		}
 		else {
 			write(charSequence.toString());
@@ -90,7 +91,7 @@ public class UnsyncPrintWriter extends PrintWriter {
 	@Override
 	public PrintWriter append(CharSequence charSequence, int start, int end) {
 		if (charSequence == null) {
-			charSequence = "null";
+			charSequence = StringPool.NULL;
 		}
 
 		write(charSequence.subSequence(start, end).toString());
@@ -164,10 +165,10 @@ public class UnsyncPrintWriter extends PrintWriter {
 	@Override
 	public void print(boolean b) {
 		if (b) {
-			write("true");
+			write(StringPool.TRUE);
 		}
 		else {
-			write("false");
+			write(StringPool.FALSE);
 		}
 	}
 
@@ -209,7 +210,7 @@ public class UnsyncPrintWriter extends PrintWriter {
 	@Override
 	public void print(String string) {
 		if (string == null) {
-			string = "null";
+			string = StringPool.NULL;
 		}
 
 		write(string);

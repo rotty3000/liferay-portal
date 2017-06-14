@@ -56,7 +56,6 @@ public class SoftReferenceThreadLocal<T> extends CentralizedThreadLocal<T> {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void set(T value) {
 		if (value == null) {
 			_softReferenceThreadLocal.set((SoftReference<T>)_nullSoftReference);

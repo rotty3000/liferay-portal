@@ -28,13 +28,18 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {
-		"destination.name=parallel/test"
-	},
+	property = {"destination.name=parallel/test"},
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
 public class TBMessageListener implements Callable<Message>, MessageListener {
+
+	@Override
+	public Message call() throws Exception {
+		_latch.countDown();
+
+		return _message;
+	}
 
 	@Override
 	public void receive(Message message) throws MessageListenerException {
@@ -46,13 +51,6 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 		}
 
 		_message = message;
-	}
-
-	@Override
-	public Message call() throws Exception {
-		_latch.countDown();
-
-		return _message;
 	}
 
 	private final CountDownLatch _latch = new CountDownLatch(1);
