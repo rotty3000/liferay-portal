@@ -14,6 +14,7 @@
 
 package com.liferay.messaging.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.messaging.Destination;
@@ -42,15 +43,15 @@ public class DestinationStatisticsTest extends TestUtil {
 
 	@Test
 	public void testSerial() throws Exception {
-		//test("tb3.jar", "serial/test");
+		test("tb15.jar", "serial/test");
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		//test("tb1.jar", "synchronous/test");
+		test("tb13.jar", "synchronous/test");
 	}
 
-	protected void assertStats(
+	protected void assertBeforeStats(
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
@@ -76,6 +77,146 @@ public class DestinationStatisticsTest extends TestUtil {
 		System.out.printf(
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
+		
+		if (destinationName.equals("synchronous/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("parallel/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("serial/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(1, destinationStatistics.getMinThreadPoolSize());
+		}
+	}
+
+	protected void assertUpdatedStats(
+		String message, String destinationName,
+		DestinationStatistics destinationStatistics) {
+
+		System.out.printf(message, destinationName);
+		System.out.printf(
+			"  Pending messages: %s%n",
+			destinationStatistics.getPendingMessageCount());
+		System.out.printf(
+			"  Sent messages: %s%n",
+			destinationStatistics.getSentMessageCount());
+		System.out.printf(
+			"  Active threads: %s%n",
+			destinationStatistics.getActiveThreadCount());
+		System.out.printf(
+			"  Current threads: %s%n",
+			destinationStatistics.getCurrentThreadCount());
+		System.out.printf(
+			"  Largest threads: %s%n",
+			destinationStatistics.getLargestThreadCount());
+		System.out.printf(
+			"  Max threads: %s%n",
+			destinationStatistics.getMaxThreadPoolSize());
+		System.out.printf(
+			"  Min threads: %s%n%n",
+			destinationStatistics.getMinThreadPoolSize());
+
+		if (destinationName.equals("synchronous/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(10, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("parallel/test")) {
+			assertEquals(5, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(5, destinationStatistics.getActiveThreadCount());
+			assertEquals(5, destinationStatistics.getCurrentThreadCount());
+			assertEquals(5, destinationStatistics.getLargestThreadCount());
+			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("serial/test")) {
+			assertEquals(9, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(1, destinationStatistics.getActiveThreadCount());
+			assertEquals(1, destinationStatistics.getCurrentThreadCount());
+			assertEquals(1, destinationStatistics.getLargestThreadCount());
+			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(1, destinationStatistics.getMinThreadPoolSize());
+		}
+	}
+
+	protected void assertFinalStats(
+		String message, String destinationName,
+		DestinationStatistics destinationStatistics) {
+
+		System.out.printf(message, destinationName);
+		System.out.printf(
+			"  Pending messages: %s%n",
+			destinationStatistics.getPendingMessageCount());
+		System.out.printf(
+			"  Sent messages: %s%n",
+			destinationStatistics.getSentMessageCount());
+		System.out.printf(
+			"  Active threads: %s%n",
+			destinationStatistics.getActiveThreadCount());
+		System.out.printf(
+			"  Current threads: %s%n",
+			destinationStatistics.getCurrentThreadCount());
+		System.out.printf(
+			"  Largest threads: %s%n",
+			destinationStatistics.getLargestThreadCount());
+		System.out.printf(
+			"  Max threads: %s%n",
+			destinationStatistics.getMaxThreadPoolSize());
+		System.out.printf(
+			"  Min threads: %s%n%n",
+			destinationStatistics.getMinThreadPoolSize());
+
+		if (destinationName.equals("synchronous/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(10, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("parallel/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(10, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(5, destinationStatistics.getCurrentThreadCount());
+			assertEquals(5, destinationStatistics.getLargestThreadCount());
+			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("serial/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(10, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(1, destinationStatistics.getCurrentThreadCount());
+			assertEquals(1, destinationStatistics.getLargestThreadCount());
+			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(1, destinationStatistics.getMinThreadPoolSize());
+		}
 	}
 
 	protected void test(String bundle, String destinationName)
@@ -104,7 +245,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Destination destination = messageBus.getDestination(
 				destinationName);
 
-			assertStats(
+			assertBeforeStats(
 				"Before Stats %s:%n", destinationName,
 				destination.getDestinationStatistics());
 
@@ -114,7 +255,7 @@ public class DestinationStatisticsTest extends TestUtil {
 				messageBus.sendMessage(destinationName, message);
 			}
 
-			assertStats(
+			assertUpdatedStats(
 				"Updated Stats %s:%n", destinationName,
 				destination.getDestinationStatistics());
 
@@ -122,7 +263,7 @@ public class DestinationStatisticsTest extends TestUtil {
 
 			Thread.sleep(1000);
 
-			assertStats(
+			assertFinalStats(
 				"Final Stats %s:%n", destinationName,
 				destination.getDestinationStatistics());
 		}
