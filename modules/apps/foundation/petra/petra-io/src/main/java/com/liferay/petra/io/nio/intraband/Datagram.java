@@ -15,6 +15,8 @@
 package com.liferay.petra.io.nio.intraband;
 
 import com.liferay.petra.io.BigEndianCodec;
+import com.liferay.petra.io.StringBundler;
+import com.liferay.petra.io.StringPool;
 import com.liferay.petra.io.nio.intraband.CompletionHandler.CompletionType;
 
 import java.io.EOFException;
@@ -143,14 +145,14 @@ public class Datagram {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(11);
+		StringBundler sb = new StringBundler(11);
 
 		sb.append("{dataChunk=");
 
 		ByteBuffer byteBuffer = _dataByteBuffer;
 
 		if (byteBuffer == null) {
-			sb.append("null");
+			sb.append(StringPool.NULL);
 		}
 		else {
 			sb.append(byteBuffer.toString());
