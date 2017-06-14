@@ -42,12 +42,12 @@ public class DestinationStatisticsTest extends TestUtil {
 
 	@Test
 	public void testSerial() throws Exception {
-		//test("tb3.jar", "serial/test");
+		test("tb15.jar", "serial/test");
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		//test("tb1.jar", "synchronous/test");
+		test("tb13.jar", "synchronous/test");
 	}
 
 	protected void assertStats(
