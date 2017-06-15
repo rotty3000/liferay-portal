@@ -14,8 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.convert.Arrays;
-import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.memory.SoftReferenceThreadLocal;
 
 import java.io.IOException;
@@ -128,7 +126,7 @@ public class StringBundler implements Serializable {
 	}
 
 	public StringBundler append(String[] stringArray) {
-		if (Arrays.isEmpty(stringArray)) {
+		if (ArrayUtil.isEmpty(stringArray)) {
 			return this;
 		}
 
@@ -299,7 +297,7 @@ public class StringBundler implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		int threadLocalBufferLimit = Conversions.getInteger(
+		int threadLocalBufferLimit = GetterUtil.getInteger(
 			System.getProperty(
 				StringBundler.class.getName() + ".threadlocal.buffer.limit"),
 			Integer.MAX_VALUE);
