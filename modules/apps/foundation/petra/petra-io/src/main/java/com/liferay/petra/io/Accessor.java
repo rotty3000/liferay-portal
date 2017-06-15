@@ -14,28 +14,15 @@
 
 package com.liferay.petra.io;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-
 /**
  * @author Shuyang Zhou
  */
-public class AnnotatedObjectOutputStream extends ObjectOutputStream {
+public interface Accessor<T, A> {
 
-	public AnnotatedObjectOutputStream(OutputStream outputStream)
-		throws IOException {
+	public A get(T t);
 
-		super(outputStream);
-	}
+	public Class<A> getAttributeClass();
 
-	@Override
-	protected void annotateClass(Class<?> clazz) throws IOException {
-		ClassLoader classLoader = clazz.getClassLoader();
-
-		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
-
-		writeUTF(contextName);
-	}
+	public Class<T> getTypeClass();
 
 }

@@ -301,7 +301,7 @@ public abstract class BaseIntraband implements Intraband {
 
 		datagram.completionHandler = sendSyncDatagramCompletionHandler;
 
-		datagram.completionTypes = repliedEnumSet;
+		datagram.completionTypes = REPLIED_ENUM_SET;
 		datagram.timeout = timeout;
 
 		if (datagram.getSequenceId() == 0) {
@@ -528,7 +528,7 @@ public abstract class BaseIntraband implements Intraband {
 		return requestDatagram;
 	}
 
-	protected static final EnumSet<CompletionType> repliedEnumSet = EnumSet.of(
+	protected static final EnumSet<CompletionType> REPLIED_ENUM_SET = EnumSet.of(
 		CompletionType.REPLIED);
 
 	protected final AtomicReference<DatagramReceiveHandler[]>
