@@ -3,9 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.liferay</groupId>
-  <artifactId>com.liferay.petra.content</artifactId>
-  <version>1.0.3</version>
-  <description>Liferay Petra Content</description>
+  <artifactId>com.liferay.petra.process</artifactId>
+  <version>1.0.0</version>
+  <description>Liferay Petra Process</description>
   <licenses>
     <license>
       <name>LGPL 2.1</name>
@@ -26,9 +26,9 @@
   </scm>
   <dependencies>
     <dependency>
-      <groupId>com.liferay.portal</groupId>
-      <artifactId>com.liferay.portal.kernel</artifactId>
-      <version>2.0.0</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
