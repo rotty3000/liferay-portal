@@ -14,7 +14,7 @@
 
 package com.liferay.messaging;
 
-import com.liferay.petra.io.convert.Sets;
+import com.liferay.petra.io.SetUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class GlobalMessageBusEventListener implements MessageBusEventListener {
 	}
 
 	public void setIgnoredDestinations(List<String> ignoredDestinations) {
-		_ignoredDestinations = Sets.from(ignoredDestinations);
+		_ignoredDestinations = SetUtil.fromCollection(ignoredDestinations);
 	}
 
 	public void setMessageListener(MessageListener messageListener) {

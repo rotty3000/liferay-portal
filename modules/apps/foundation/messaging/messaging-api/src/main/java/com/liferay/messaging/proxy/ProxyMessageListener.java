@@ -17,7 +17,7 @@ package com.liferay.messaging.proxy;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageListener;
-import com.liferay.petra.io.validate.Validator;
+import com.liferay.petra.io.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
