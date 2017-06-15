@@ -14,16 +14,14 @@
 
 package com.liferay.petra.process;
 
+import com.liferay.petra.io.ArrayUtil;
 import com.liferay.petra.io.PathHolder;
-import com.liferay.petra.io.convert.Conversions;
 
 import java.io.File;
 import java.io.Serializable;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.osgi.util.converter.Converting;
 
 /**
  * @author Shuyang Zhou
@@ -40,10 +38,7 @@ public class ProcessConfig implements Serializable {
 	}
 
 	public String[] getBootstrapClassPathElements() {
-		Converting converting = Conversions.convert(
-			_bootstrapClassPathHolders);
-
-		return converting.to(String[].class);
+		return ArrayUtil.toStringArray(_bootstrapClassPathHolders);
 	}
 
 	public String getJavaExecutable() {
@@ -60,10 +55,7 @@ public class ProcessConfig implements Serializable {
 	}
 
 	public String[] getRuntimeClassPathElements() {
-		Converting converting = Conversions.convert(
-			_runtimeClassPathHolders);
-
-		return converting.to(String[].class);
+		return ArrayUtil.toStringArray(_runtimeClassPathHolders);
 	}
 
 	public static class Builder {
