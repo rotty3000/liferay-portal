@@ -14,6 +14,7 @@
 
 package com.liferay.petra.process;
 
+import com.liferay.petra.io.ArrayUtil;
 import com.liferay.petra.io.CharPool;
 import com.liferay.petra.io.ServerDetector;
 import com.liferay.petra.io.StringBundler;
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class ClassPathUtil {
 
 	public static String buildClassPath(Class<?>... classes) {
-		if (com.liferay.petra.io.convert.Arrays.isEmpty(classes)) {
+		if (ArrayUtil.isEmpty(classes)) {
 			return StringPool.BLANK;
 		}
 
