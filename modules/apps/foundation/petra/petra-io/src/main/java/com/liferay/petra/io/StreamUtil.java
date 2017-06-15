@@ -14,7 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.convert.Conversions;
 import com.liferay.petra.io.unsync.UnsyncFilterInputStream;
 import com.liferay.petra.io.unsync.UnsyncFilterOutputStream;
 
@@ -37,10 +36,10 @@ import org.slf4j.LoggerFactory;
  */
 public class StreamUtil {
 
-	public static final int BUFFER_SIZE = Conversions.getInteger(
+	public static final int BUFFER_SIZE = GetterUtil.getInteger(
 		System.getProperty(StreamUtil.class.getName() + ".buffer.size"), 8192);
 
-	public static final boolean FORCE_TIO = Conversions.getBoolean(
+	public static final boolean FORCE_TIO = GetterUtil.getBoolean(
 		System.getProperty(StreamUtil.class.getName() + ".force.tio"));
 
 	public static void cleanUp(boolean quite, Closeable... closeables) {

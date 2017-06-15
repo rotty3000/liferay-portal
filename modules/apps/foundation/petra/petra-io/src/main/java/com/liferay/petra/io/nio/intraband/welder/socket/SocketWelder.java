@@ -14,10 +14,10 @@
 
 package com.liferay.petra.io.nio.intraband.welder.socket;
 
+import com.liferay.petra.io.GetterUtil;
+import com.liferay.petra.io.InetAddressUtil;
 import com.liferay.petra.io.SocketUtil;
 import com.liferay.petra.io.SocketUtil.ServerSocketConfigurator;
-import com.liferay.petra.io.convert.Conversions;
-import com.liferay.petra.io.internal.util.InetAddressUtil;
 import com.liferay.petra.io.nio.intraband.Intraband;
 import com.liferay.petra.io.nio.intraband.RegistrationReference;
 import com.liferay.petra.io.nio.intraband.welder.BaseWelder;
@@ -107,19 +107,19 @@ public class SocketWelder extends BaseWelder {
 
 	protected static class Configuration {
 
-		protected static final int bufferSize = Conversions.getInteger(
+		protected static final int bufferSize = GetterUtil.getInteger(
 			System.getProperty("intraband.welder.socket.buffer.size"));
-		protected static final boolean keepAlive = Conversions.getBoolean(
+		protected static final boolean keepAlive = GetterUtil.getBoolean(
 			System.getProperty("intraband.welder.socket.keep.alive"));
-		protected static final boolean reuseAddress = Conversions.getBoolean(
+		protected static final boolean reuseAddress = GetterUtil.getBoolean(
 			System.getProperty("intraband.welder.socket.reuse.address"));
-		protected static final int serverStartPort = Conversions.getInteger(
+		protected static final int serverStartPort = GetterUtil.getInteger(
 			System.getProperty("intraband.welder.socket.server.start.port"));
-		protected static final int soLinger = Conversions.getInteger(
+		protected static final int soLinger = GetterUtil.getInteger(
 			System.getProperty("intraband.welder.socket.so.linger"));
-		protected static final int soTimeout = Conversions.getInteger(
+		protected static final int soTimeout = GetterUtil.getInteger(
 			System.getProperty("intraband.welder.socket.so.timeout"));
-		protected static final boolean tcpNoDelay = Conversions.getBoolean(
+		protected static final boolean tcpNoDelay = GetterUtil.getBoolean(
 			System.getProperty("intraband.welder.socket.tcp.no.delay"));
 
 	}

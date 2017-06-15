@@ -14,6 +14,7 @@
 
 package com.liferay.petra.io.internal.loader;
 
+import com.liferay.petra.io.ClassLoaderPoolUtil;
 import com.liferay.petra.io.spi.loader.ClassResolver;
 
 import java.util.HashMap;

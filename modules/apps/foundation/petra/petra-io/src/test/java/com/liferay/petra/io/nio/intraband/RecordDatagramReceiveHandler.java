@@ -12,30 +12,37 @@
  * details.
  */
 
-package com.liferay.petra.io;
-
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+package com.liferay.petra.io.nio.intraband;
 
 /**
  * @author Shuyang Zhou
  */
-public class AnnotatedObjectOutputStream extends ObjectOutputStream {
+public class RecordDatagramReceiveHandler implements DatagramReceiveHandler {
 
-	public AnnotatedObjectOutputStream(OutputStream outputStream)
-		throws IOException {
+	public RecordDatagramReceiveHandler() {
+		this(true);
+	}
 
-		super(outputStream);
+	public RecordDatagramReceiveHandler(boolean throwException) {
+		_throwException = throwException;
+	}
+
+	public Datagram getReceiveDatagram() {
+		return _datagram;
 	}
 
 	@Override
-	protected void annotateClass(Class<?> clazz) throws IOException {
-		ClassLoader classLoader = clazz.getClassLoader();
+	public void receive(
+		RegistrationReference registrationReference, Datagram datagram) {
 
-		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
+		_datagram = datagram;
 
-		writeUTF(contextName);
+		if (_throwException) {
+			throw new RuntimeException("RecordDatagramReceiveHandler");
+		}
 	}
+
+	private volatile Datagram _datagram;
+	private final boolean _throwException;
 
 }
