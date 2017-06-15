@@ -14,7 +14,7 @@
 
 package com.liferay.portal.jmx.internal;
 
-import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.GetterUtil;
 import com.liferay.portal.jmx.MBeanRegistry;
 
 import java.lang.management.ManagementFactory;
@@ -68,7 +68,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	public ObjectInstance register(
 			String objectNameCacheKey, Object object, ObjectName objectName)
 		throws InstanceAlreadyExistsException, MBeanRegistrationException,
-			   NotCompliantMBeanException {
+			NotCompliantMBeanException {
 
 		MBeanServer mBeanServer = getMBeanServer();
 
@@ -182,10 +182,10 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		public ObjectInstance addingService(
 			ServiceReference<Object> serviceReference) {
 
-			String objectName = Conversions.getString(
+			String objectName = GetterUtil.getString(
 				serviceReference.getProperty("jmx.objectname"));
 
-			String objectNameCacheKey = Conversions.getString(
+			String objectNameCacheKey = GetterUtil.getString(
 				serviceReference.getProperty("jmx.objectname.cache.key"),
 				objectName);
 
@@ -217,7 +217,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 
 			ObjectName objectName = objectInstance.getObjectName();
 
-			String objectNameCacheKey = Conversions.getString(
+			String objectNameCacheKey = GetterUtil.getString(
 				serviceReference.getProperty("jmx.objectname.cache.key"),
 				objectName.getCanonicalName());
 
