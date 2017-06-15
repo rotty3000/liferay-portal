@@ -12,30 +12,17 @@
  * details.
  */
 
-package com.liferay.petra.io;
-
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+package com.liferay.petra.io.nio.intraband;
 
 /**
  * @author Shuyang Zhou
  */
-public class AnnotatedObjectOutputStream extends ObjectOutputStream {
+public class BaseIntrabandHelper {
 
-	public AnnotatedObjectOutputStream(OutputStream outputStream)
-		throws IOException {
+	public static void addResponseWaitingDatagram(
+		BaseIntraband baseIntraband, Datagram datagram) {
 
-		super(outputStream);
-	}
-
-	@Override
-	protected void annotateClass(Class<?> clazz) throws IOException {
-		ClassLoader classLoader = clazz.getClassLoader();
-
-		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
-
-		writeUTF(contextName);
+		baseIntraband.addResponseWaitingDatagram(datagram);
 	}
 
 }

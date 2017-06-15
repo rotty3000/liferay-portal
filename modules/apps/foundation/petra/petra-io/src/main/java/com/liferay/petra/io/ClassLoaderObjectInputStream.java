@@ -15,27 +15,34 @@
 package com.liferay.petra.io;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamClass;
 
 /**
+ * @author Brian Wing Shun Chan
  * @author Shuyang Zhou
  */
-public class AnnotatedObjectOutputStream extends ObjectOutputStream {
+public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
-	public AnnotatedObjectOutputStream(OutputStream outputStream)
+	public ClassLoaderObjectInputStream(
+			InputStream inputStream, ClassLoader classLoader)
 		throws IOException {
 
-		super(outputStream);
+		super(inputStream);
+
+		_classLoader = classLoader;
 	}
 
 	@Override
-	protected void annotateClass(Class<?> clazz) throws IOException {
-		ClassLoader classLoader = clazz.getClassLoader();
+	protected Class<?> resolveClass(ObjectStreamClass objectStreamClass)
+		throws ClassNotFoundException {
 
-		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
+		String name = objectStreamClass.getName();
 
-		writeUTF(contextName);
+		return ClassResolverUtil.resolve(name, _classLoader);
 	}
+
+	private final ClassLoader _classLoader;
 
 }

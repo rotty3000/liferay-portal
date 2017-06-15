@@ -16,7 +16,6 @@ package com.liferay.petra.io;
 
 import com.liferay.petra.io.Serializer.BufferNode;
 import com.liferay.petra.io.Serializer.BufferQueue;
-import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
 import com.liferay.petra.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
