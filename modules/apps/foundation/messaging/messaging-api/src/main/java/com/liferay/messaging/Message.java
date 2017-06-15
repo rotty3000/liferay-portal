@@ -15,9 +15,10 @@
 package com.liferay.messaging;
 
 import com.liferay.petra.io.Deserializer;
+import com.liferay.petra.io.GetterUtil;
+import com.liferay.petra.io.MapUtil;
 import com.liferay.petra.io.Serializer;
 import com.liferay.petra.io.TransientValue;
-import com.liferay.petra.io.convert.Conversions;
 
 import java.io.Serializable;
 
@@ -117,7 +118,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Boolean)object).booleanValue();
 		}
 		else {
-			value = Conversions.getBoolean(object);
+			value = GetterUtil.getBoolean(object);
 		}
 
 		return value;
@@ -136,7 +137,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).doubleValue();
 		}
 		else {
-			value = Conversions.getDouble(object);
+			value = GetterUtil.getDouble(object);
 		}
 
 		return value;
@@ -151,7 +152,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).intValue();
 		}
 		else {
-			value = Conversions.getInteger(object);
+			value = GetterUtil.getInteger(object);
 		}
 
 		return value;
@@ -166,7 +167,7 @@ public class Message implements Cloneable, Serializable {
 			value = ((Number)object).longValue();
 		}
 		else {
-			value = Conversions.getLong(object);
+			value = GetterUtil.getLong(object);
 		}
 
 		return value;
@@ -189,7 +190,7 @@ public class Message implements Cloneable, Serializable {
 	}
 
 	public String getString(String key) {
-		return Conversions.getString(String.valueOf(get(key)));
+		return GetterUtil.getString(String.valueOf(get(key)));
 	}
 
 	public Map<String, Object> getValues() {
@@ -271,7 +272,7 @@ public class Message implements Cloneable, Serializable {
 		sb.append(", payload=");
 		sb.append(_payload);
 		sb.append(", values=");
-		sb.append(Conversions.getString(_values));
+		sb.append(MapUtil.toString(_values, null, ".*[pP]assword.*"));
 		sb.append("}");
 
 		return sb.toString();
