@@ -15,7 +15,7 @@
 package com.liferay.petra.process.log;
 
 import com.liferay.petra.io.StringPool;
-import com.liferay.petra.io.process.ProcessCallable;
+import com.liferay.petra.process.ProcessCallable;
 
 import java.io.IOException;
 
