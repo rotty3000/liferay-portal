@@ -3,7 +3,6 @@ Bundle-SymbolicName: com.liferay.petra.io
 Bundle-Version: 1.0.0
 Export-Package:\
 	com.liferay.petra.io,\
-	com.liferay.petra.io.convert,\
 	com.liferay.petra.io.nio.charset,\
 	com.liferay.petra.io.nio.intraband,\
 	com.liferay.petra.io.nio.intraband.blocking,\
@@ -11,18 +10,11 @@ Export-Package:\
 	com.liferay.petra.io.nio.intraband.nonblocking,\
 	com.liferay.petra.io.nio.intraband.proxy,\
 	com.liferay.petra.io.nio.intraband.proxy.annotation,\
-	com.liferay.petra.io.nio.intraband.rpc,\
 	com.liferay.petra.io.nio.intraband.welder,\
 	com.liferay.petra.io.nio.intraband.welder.fifo,\
 	com.liferay.petra.io.nio.intraband.welder.socket,\
 	com.liferay.petra.io.spi.loader,\
-	com.liferay.petra.io.unsync,\
-	com.liferay.petra.io.validate,\
-	\
-	org.apache.felix.converter.dto,\
-	\
-	org.osgi.util.converter,\
-	org.osgi.util.function
+	com.liferay.petra.io.unsync
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 Require-Capability:\
@@ -36,4 +28,3 @@ Require-Capability:\
 		cardinality:=multiple;\
 		filter:="(osgi.serviceloader=com.liferay.petra.io.spi.loader.ClassResolver)";\
 		resolution:=optional
--conditionalpackage: org.apache.felix.converter.impl
