@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Petra Intraband RPC
+Bundle-SymbolicName: com.liferay.petra.intraband.rpc
+Bundle-Version: 1.0.0
+Export-Package: com.liferay.petra.intraband.rpc
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title:
