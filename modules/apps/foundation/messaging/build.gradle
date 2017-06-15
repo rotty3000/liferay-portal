@@ -8,7 +8,7 @@ buildscript {
 		mavenLocal()
 
 		maven {
-			url "https://bndtools.ci.cloudbees.com/job/bnd.master/lastSuccessfulBuild/artifact/dist/bundles/"
+			url "https://bndtools.ci.cloudbees.com/job/bnd.next/599/artifact/dist/bundles/"
 		}
 		maven {
 			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
