@@ -14,9 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
-import com.liferay.petra.io.internal.loader.ClassResolverUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;

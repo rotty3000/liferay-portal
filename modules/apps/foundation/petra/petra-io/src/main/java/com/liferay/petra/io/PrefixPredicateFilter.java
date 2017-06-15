@@ -14,28 +14,31 @@
 
 package com.liferay.petra.io;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-
 /**
- * @author Shuyang Zhou
+ * @author Sampsa Sohlman
  */
-public class AnnotatedObjectOutputStream extends ObjectOutputStream {
+public class PrefixPredicateFilter implements PredicateFilter<String> {
 
-	public AnnotatedObjectOutputStream(OutputStream outputStream)
-		throws IOException {
+	public PrefixPredicateFilter(String prefix) {
+		this(prefix, false);
+	}
 
-		super(outputStream);
+	public PrefixPredicateFilter(String prefix, boolean include) {
+		_prefix = prefix;
+		_include = include;
 	}
 
 	@Override
-	protected void annotateClass(Class<?> clazz) throws IOException {
-		ClassLoader classLoader = clazz.getClassLoader();
-
-		String contextName = ClassLoaderPoolUtil.getContextName(classLoader);
-
-		writeUTF(contextName);
+	public boolean filter(String string) {
+		if (_include) {
+			return string.startsWith(_prefix);
+		}
+		else {
+			return !string.startsWith(_prefix);
+		}
 	}
+
+	private final boolean _include;
+	private final String _prefix;
 
 }

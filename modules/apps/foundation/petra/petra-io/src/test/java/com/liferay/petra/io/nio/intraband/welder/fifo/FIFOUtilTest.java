@@ -1,0 +1,253 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+package com.liferay.petra.io.nio.intraband.welder.fifo;
+
+import com.liferay.petra.io.OSDetector;
+import com.liferay.petra.io.ReflectionUtil;
+import com.liferay.portal.kernel.test.CaptureHandler;
+import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
+import com.liferay.portal.kernel.test.SwappableSecurityManager;
+import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
+import com.liferay.portal.kernel.test.rule.NewEnv;
+import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
+
+import java.io.File;
+import java.io.IOException;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
+import org.junit.Assert;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * @author Shuyang Zhou
+ */
+@NewEnv(type = NewEnv.Type.CLASSLOADER)
+public class FIFOUtilTest {
+
+	@ClassRule
+	@Rule
+	public static final AggregateTestRule aggregateTestRule =
+		new AggregateTestRule(
+			new CodeCoverageAssertor() {
+
+				@Override
+				public void appendAssertClasses(List<Class<?>> assertClasses) {
+					if (!_shouldTest()) {
+						assertClasses.clear();
+					}
+				}
+
+			},
+			NewEnvTestRule.INSTANCE);
+
+	@NewEnv(type = NewEnv.Type.NONE)
+	@Test
+	public void testConstructor() {
+		new FIFOUtil();
+	}
+
+	@NewEnv(type = NewEnv.Type.NONE)
+	@Test
+	public void testCreateFIFOWithBrokenFile() throws Exception {
+		if (!_shouldTest()) {
+			return;
+		}
+
+		try {
+			FIFOUtil.createFIFO(
+				new File("") {
+
+					@Override
+					public String getAbsolutePath() {
+						return null;
+					}
+
+				});
+
+			Assert.fail();
+		}
+		catch (NullPointerException npe) {
+		}
+	}
+
+	@Test
+	public void testIsFIFOSupported() {
+		if (!_shouldTest()) {
+			return;
+		}
+
+		Assert.assertTrue(FIFOUtil.isFIFOSupported());
+	}
+
+	@Test
+	public void testPhantomDeleteOnDetecting() {
+		if (!_shouldTest()) {
+			return;
+		}
+
+		final AtomicInteger checkDeleteCount = new AtomicInteger();
+		final AtomicBoolean checkFlag = new AtomicBoolean();
+
+		try (SwappableSecurityManager swappableSecurityManager =
+				new SwappableSecurityManager() {
+
+					@Override
+					public void checkDelete(String fileName) {
+						if (!checkFlag.get() &&
+							fileName.contains("temp-fifo-")) {
+
+							checkFlag.set(true);
+
+							if (checkDeleteCount.getAndIncrement() == 0) {
+								File file = new File(fileName);
+
+								Assert.assertTrue(file.delete());
+							}
+
+							checkFlag.set(false);
+						}
+					}
+
+					@Override
+					public void checkRead(String file) {
+						if (!checkFlag.get() && file.contains("temp-fifo-")) {
+							try {
+								checkFlag.set(true);
+
+								new File(file).createNewFile();
+
+								checkFlag.set(false);
+							}
+							catch (IOException ioe) {
+								ReflectionUtil.throwException(ioe);
+							}
+						}
+					}
+
+				}) {
+
+			swappableSecurityManager.install();
+
+			Assert.assertTrue(FIFOUtil.isFIFOSupported());
+		}
+
+		Assert.assertEquals(2, checkDeleteCount.get());
+	}
+
+	@Test
+	public void testReadOnlyTempFolderWithLog() {
+		if (!_shouldTest()) {
+			return;
+		}
+
+		try (CaptureHandler captureHandler =
+				JDKLoggerTestUtil.configureJDKLogger(
+					FIFOUtil.class.getName(), Level.WARNING)) {
+
+			List<LogRecord> logRecords = captureHandler.getLogRecords();
+
+			File newTmpDir = new File("newTmpDir");
+
+			newTmpDir.delete();
+
+			String oldTmpDirName = System.getProperty("java.io.tmpdir");
+
+			System.setProperty("java.io.tmpdir", newTmpDir.getAbsolutePath());
+
+			try {
+				Assert.assertFalse(FIFOUtil.isFIFOSupported());
+			}
+			finally {
+				System.setProperty("java.io.tmpdir", oldTmpDirName);
+			}
+
+			Assert.assertEquals(logRecords.toString(), 1, logRecords.size());
+
+			LogRecord logRecord = logRecords.get(0);
+
+			Assert.assertEquals(
+				"Unable to detect FIFO support", logRecord.getMessage());
+
+			Throwable throwable = logRecord.getThrown();
+
+			Assert.assertEquals(Exception.class, throwable.getClass());
+
+			String message = throwable.getMessage();
+
+			Assert.assertTrue(
+				message.startsWith(
+					"Unable to create FIFO with command \"mkfifo\", external " +
+						"process returned "));
+		}
+	}
+
+	@Test
+	public void testReadOnlyTempFolderWithoutLog() {
+		if (!_shouldTest()) {
+			return;
+		}
+
+		try (CaptureHandler captureHandler =
+				JDKLoggerTestUtil.configureJDKLogger(
+					FIFOUtil.class.getName(), Level.OFF)) {
+
+			List<LogRecord> logRecords = captureHandler.getLogRecords();
+
+			File newTmpDir = new File("newTmpDir");
+
+			newTmpDir.delete();
+
+			String oldTmpDirName = System.getProperty("java.io.tmpdir");
+
+			System.setProperty("java.io.tmpdir", newTmpDir.getAbsolutePath());
+
+			try {
+				Assert.assertFalse(FIFOUtil.isFIFOSupported());
+			}
+			finally {
+				System.setProperty("java.io.tmpdir", oldTmpDirName);
+			}
+
+			Assert.assertTrue(logRecords.isEmpty());
+		}
+	}
+
+	private static boolean _shouldTest() {
+		if (OSDetector.isWindows()) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("This test only runs on nonwindows OS");
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private static final Logger _log = LoggerFactory.getLogger(
+		FIFOUtilTest.class);
+
+}
