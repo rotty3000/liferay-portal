@@ -16,7 +16,7 @@ package com.liferay.petra.reflect;
 
 import com.liferay.petra.io.CharPool;
 import com.liferay.petra.io.StringPool;
-import com.liferay.petra.io.validate.Validator;
+import com.liferay.petra.io.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
