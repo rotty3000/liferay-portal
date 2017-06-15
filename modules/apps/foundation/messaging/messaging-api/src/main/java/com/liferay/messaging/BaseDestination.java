@@ -15,7 +15,7 @@
 package com.liferay.messaging;
 
 import com.liferay.petra.io.StringPool;
-import com.liferay.petra.io.validate.Validator;
+import com.liferay.petra.io.Validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
