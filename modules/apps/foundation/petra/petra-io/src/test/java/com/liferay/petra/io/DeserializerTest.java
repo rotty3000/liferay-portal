@@ -14,7 +14,6 @@
 
 package com.liferay.petra.io;
 
-import com.liferay.petra.io.internal.loader.ClassLoaderPoolUtil;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
