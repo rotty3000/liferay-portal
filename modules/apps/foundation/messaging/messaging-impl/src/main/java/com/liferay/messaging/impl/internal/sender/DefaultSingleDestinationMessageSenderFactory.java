@@ -19,7 +19,7 @@ import com.liferay.messaging.sender.SingleDestinationMessageSender;
 import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.messaging.sender.SynchronousMessageSender;
-import com.liferay.petra.io.convert.Conversions;
+import com.liferay.petra.io.GetterUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		long timeout = Conversions.getLong(properties.get("timeout"), 10000L);
+		long timeout = GetterUtil.getLong(properties.get("timeout"), 10000L);
 
 		DefaultSynchronousMessageSender defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
@@ -136,7 +136,7 @@ public class DefaultSingleDestinationMessageSenderFactory
 	protected SynchronousMessageSender.Mode getMode(
 		Map<String, Object> properties) {
 
-		String mode = Conversions.getString(properties.get("mode"));
+		String mode = GetterUtil.getString(properties.get("mode"));
 
 		return SynchronousMessageSender.Mode.valueOf(mode);
 	}
