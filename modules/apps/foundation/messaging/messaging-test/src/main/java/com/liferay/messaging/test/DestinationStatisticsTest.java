@@ -19,14 +19,21 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationStatistics;
+import com.liferay.messaging.InboundMessageProcessor;
+import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageProcessorException;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -77,7 +84,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		System.out.printf(
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
-		
+
 		if (destinationName.equals("synchronous/test")) {
 			assertEquals(0, destinationStatistics.getPendingMessageCount());
 			assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -190,28 +197,29 @@ public class DestinationStatisticsTest extends TestUtil {
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
 
+		assertEquals(0, destinationStatistics.getPendingMessageCount());
+
+		// We cannot make assertions on the number of sent messages without
+		// creating a timing issue. The reason is the thread pool cannot
+		// return completely accurate statistics until after shutdown.
+
+		//assertEquals(10, destinationStatistics.getSentMessageCount());
+
+		assertEquals(0, destinationStatistics.getActiveThreadCount());
+
 		if (destinationName.equals("synchronous/test")) {
-			assertEquals(0, destinationStatistics.getPendingMessageCount());
-			assertEquals(10, destinationStatistics.getSentMessageCount());
-			assertEquals(0, destinationStatistics.getActiveThreadCount());
 			assertEquals(0, destinationStatistics.getCurrentThreadCount());
 			assertEquals(0, destinationStatistics.getLargestThreadCount());
 			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
 			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
 		}
 		else if (destinationName.equals("parallel/test")) {
-			assertEquals(0, destinationStatistics.getPendingMessageCount());
-			assertEquals(10, destinationStatistics.getSentMessageCount());
-			assertEquals(0, destinationStatistics.getActiveThreadCount());
 			assertEquals(5, destinationStatistics.getCurrentThreadCount());
 			assertEquals(5, destinationStatistics.getLargestThreadCount());
 			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
 			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
 		}
 		else if (destinationName.equals("serial/test")) {
-			assertEquals(0, destinationStatistics.getPendingMessageCount());
-			assertEquals(10, destinationStatistics.getSentMessageCount());
-			assertEquals(0, destinationStatistics.getActiveThreadCount());
 			assertEquals(1, destinationStatistics.getCurrentThreadCount());
 			assertEquals(1, destinationStatistics.getLargestThreadCount());
 			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
@@ -224,8 +232,63 @@ public class DestinationStatisticsTest extends TestUtil {
 
 		Bundle tbBundle = install(bundle);
 
+		ServiceRegistration<?> factoryRegistration = null;
+
 		try {
 			tbBundle.start();
+
+			Destination destination = messageBus.getDestination(
+				destinationName);
+
+			DestinationStatistics destinationStatistics =
+				destination.getDestinationStatistics();
+
+			final CountDownLatch afterThread = new CountDownLatch(MAX);
+			final CountDownLatch beforeThread = new CountDownLatch(
+				destinationStatistics.getMaxThreadPoolSize());
+
+			InboundMessageProcessor processor =
+				new InboundMessageProcessor() {
+
+					@Override
+					public void afterReceive(Message message) throws MessageProcessorException {
+					}
+
+					@Override
+					public void afterThread(Message message, Thread dispatchThread) throws MessageProcessorException {
+						afterThread.countDown();
+					}
+
+					@Override
+					public Message beforeReceive(Message message) throws MessageProcessorException {
+						return message;
+					}
+
+					@Override
+					public Message beforeThread(Message message, Thread dispatchThread) throws MessageProcessorException {
+						beforeThread.countDown();
+
+						return message;
+					}
+
+				};
+
+			InboundMessageProcessorFactory factory =
+				new InboundMessageProcessorFactory() {
+
+					@Override
+					public InboundMessageProcessor create() {
+						return processor;
+					}
+
+				};
+
+			Dictionary<String, Object> properties = new Hashtable<>();
+
+			properties.put("destination.name", destinationName);
+
+			factoryRegistration = bundleContext.registerService(
+				InboundMessageProcessorFactory.class, factory, properties);
 
 			Filter filter = bundleContext.createFilter(
 				String.format(
@@ -242,9 +305,6 @@ public class DestinationStatisticsTest extends TestUtil {
 
 			assertNotNull(callable);
 
-			Destination destination = messageBus.getDestination(
-				destinationName);
-
 			assertBeforeStats(
 				"Before Stats %s:%n", destinationName,
 				destination.getDestinationStatistics());
@@ -255,13 +315,15 @@ public class DestinationStatisticsTest extends TestUtil {
 				messageBus.sendMessage(destinationName, message);
 			}
 
+			beforeThread.await();
+
 			assertUpdatedStats(
 				"Updated Stats %s:%n", destinationName,
 				destination.getDestinationStatistics());
 
 			callable.call();
 
-			Thread.sleep(1000);
+			afterThread.await();
 
 			assertFinalStats(
 				"Final Stats %s:%n", destinationName,
@@ -269,6 +331,10 @@ public class DestinationStatisticsTest extends TestUtil {
 		}
 		finally {
 			tbBundle.uninstall();
+
+			if (factoryRegistration != null) {
+				factoryRegistration.unregister();
+			}
 		}
 	}
 
