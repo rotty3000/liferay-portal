@@ -36,15 +36,12 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class TBMessageListener implements Callable<Message>, MessageListener {
 
 	@Override
-	public void receive(Message message) throws MessageListenerException {
-		_message = message;
+	public Message call() throws Exception {
+		return null;
 	}
 
 	@Override
-	public Message call() throws Exception {
-		return _message;
+	public void receive(Message message) throws MessageListenerException {
 	}
-
-	private volatile Message _message;
 
 }
