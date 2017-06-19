@@ -62,7 +62,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 				@Override
 				public void run() {
-					Message processedMessage = message;
+					Message processedMessage = getMessage();
 
 					try {
 						for (InboundMessageProcessor processor :
@@ -76,7 +76,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 								_log.error(
 									"Unable to process message {} before " +
 										"thread {}",
-									message, dispatchThread, mpe);
+									processedMessage, dispatchThread, mpe);
 							}
 						}
 
@@ -84,7 +84,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 					}
 					catch (MessageListenerException mle) {
 						_log.error(
-							"Unable to process message {}", message, mle);
+							"Unable to process message {}", processedMessage, mle);
 					}
 					finally {
 						for (InboundMessageProcessor processor :
@@ -98,7 +98,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 								_log.error(
 									"Unable to process message {} after" +
 										"thread {}",
-									message, dispatchThread, mpe);
+									processedMessage, dispatchThread, mpe);
 							}
 						}
 					}
