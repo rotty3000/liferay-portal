@@ -15,15 +15,19 @@
 package com.liferay.messaging.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationStatistics;
 import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.ParallelDestination;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.junit.Test;
@@ -146,15 +150,45 @@ public class ParallelDestinationTest extends TestUtil {
 	}
 
 	@Test
+	public void testMaximumQueueSize()
+		throws Exception {
+		
+		Bundle tb16 = install("tb16.jar");
+		Bundle tb2 = install("tb2.jar");
+
+		try {
+			tb16.start();
+			tb2.start();
+
+			String destinationName = "parallel/test";
+
+			ParallelDestination destination = (ParallelDestination) messageBus.getDestination(destinationName);
+			
+			destination.setMaximumQueueSize(10);
+
+			Message message = new Message();
+			
+			for (int i = 0; i < 11; i++) {
+				destination.send(message);
+			}
+		}
+		finally {
+			tb16.uninstall();
+			tb2.uninstall();
+		}
+	}
+
+	/*
+	@Test
 	public void testExecutorServiceRegistrar()
 		throws Exception {
 		
-		Bundle tbBundle2 = install("tb16.jar");
-		Bundle tbBundle = install("tb2.jar");
+		Bundle tb16 = install("tb16.jar");
+		Bundle tb2 = install("tb2.jar");
 
 		try {
-			tbBundle.start();
-			tbBundle2.start();
+			tb16.start();
+			tb2.start();
 
 			String destinationName = "parallel/test";
 
@@ -183,8 +217,8 @@ public class ParallelDestinationTest extends TestUtil {
 			// assertEquals(executorServiceRegistrar, destination.getExecutorServiceRegistar());
 		}
 		finally {
-			tbBundle.uninstall();
-			tbBundle2.uninstall();
+			tb2.uninstall();
+			tb16.uninstall();
 		}
 	}
 
@@ -192,12 +226,12 @@ public class ParallelDestinationTest extends TestUtil {
 	public void testRejectedExecutionHandler()
 		throws Exception {
 		
-		Bundle tbBundle2 = install("tb16.jar");
-		Bundle tbBundle = install("tb2.jar");
+		Bundle tb16 = install("tb16.jar");
+		Bundle tb2 = install("tb2.jar");
 
 		try {
-			tbBundle.start();
-			tbBundle2.start();
+			tb16.start();
+			tb2.start();
 
 			String destinationName = "parallel/test";
 
@@ -225,9 +259,77 @@ public class ParallelDestinationTest extends TestUtil {
 			// assertEquals(rejectedExecutionHandler, destination.getRejectedExecutionHandler());
 		}
 		finally {
-			tbBundle.uninstall();
-			tbBundle2.uninstall();
+			tb2.uninstall();
+			tb16.uninstall();
 		}
 	}
+	
+	@Test
+	public void testCopyMessageListeners() throws Exception {
+		Bundle tb2 = install("tb2.jar");
+		Bundle tb3 = install("tb3.jar");
+
+		try {
+			tb2.start();
+			tb3.start();
+
+			String parallelDestinationName = "parallel/test";
+
+			Destination parallelDestination = messageBus.getDestination(parallelDestinationName);
+			
+			assertEquals(1, parallelDestination.getMessageListenerCount());
+
+			MessageListener listener = new MessageListener() {
+
+				@Override
+				public void receive(Message message) {
+
+				}
+
+			};
+			
+			parallelDestination.register(listener);
+
+			assertEquals(2, parallelDestination.getMessageListenerCount());
+			
+			String serialDestinationName = "serial/test";
+
+			Destination serialDestination = messageBus.getDestination(serialDestinationName);
+			
+			assertEquals(1, serialDestination.getMessageListenerCount());
+			
+			parallelDestination.copyMessageListeners(serialDestination);
+
+			assertEquals(3, serialDestination.getMessageListenerCount());
+
+			Set<MessageListener> serialDestinationMessageListeners = serialDestination.getMessageListeners();
+			Set<MessageListener> parallelDestinationMessageListeners = parallelDestination.getMessageListeners();
+
+			for (MessageListener parallelMessageListener : parallelDestinationMessageListeners) {
+				assertTrue(serialDestinationMessageListeners.contains(parallelMessageListener));
+			}
+			
+			assertTrue(parallelDestination.isRegistered());
+			
+			for (MessageListener parallelMessageListener : parallelDestinationMessageListeners) {
+				parallelDestination.unregister(parallelMessageListener);
+			}
+			
+			assertEquals(0, parallelDestination.getMessageListenerCount());
+			assertFalse(parallelDestination.isRegistered());
+
+			for (MessageListener serialMessageListener : serialDestinationMessageListeners) {
+				serialDestination.unregister(serialMessageListener);
+			}
+			
+			assertEquals(0, serialDestination.getMessageListenerCount());
+			assertFalse(parallelDestination.isRegistered());
+		}
+		finally {
+			tb2.uninstall();
+			tb3.uninstall();
+		}
+	}
+	*/
 
 }
