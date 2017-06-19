@@ -15,6 +15,12 @@
 package com.liferay.messaging;
 
 /**
+ * DestinationStatistics is meant for informational purposes only. The datum
+ * contained may not add up. They are assembled as a best effort and may
+ * contain slight discrepancies. However, after forced
+ * {@link Destination#close(boolean)} operation, the final results must add
+ * up.
+ *
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
  */

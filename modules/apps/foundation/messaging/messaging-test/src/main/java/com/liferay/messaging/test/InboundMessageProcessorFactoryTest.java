@@ -20,7 +20,6 @@ import static org.junit.Assert.assertFalse;
 import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageProcessorException;
 
 import java.util.Dictionary;
@@ -40,115 +39,21 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
-		Bundle tbBundle = install("tb2.jar");
-
-		final Deferred<Integer> afterReceive = new Deferred<>();
-		final Deferred<Integer> afterThread = new Deferred<>();
-		final Deferred<Integer> beforeReceive = new Deferred<>();
-		final Deferred<Integer> beforeThread = new Deferred<>();
-		final Deferred<Integer> called = new Deferred<>();
-
-		InboundMessageProcessor inboundMessageProcessor =
-		new InboundMessageProcessor() {
-
-			@Override
-			public void afterReceive(Message message)
-				throws MessageProcessorException {
-
-				afterReceive.resolve(5);
-			}
-
-			@Override
-			public void afterThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
-
-				afterThread.resolve(4);
-			}
-
-			@Override
-			public Message beforeReceive(Message message)
-				throws MessageProcessorException {
-
-				beforeReceive.resolve(2);
-
-				return message;
-			}
-
-			@Override
-			public Message beforeThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
-
-				beforeThread.resolve(3);
-
-				return message;
-			}
-
-		};
-
-		InboundMessageProcessorFactory factory =
-		new InboundMessageProcessorFactory() {
-
-			@Override
-			public InboundMessageProcessor create() {
-				called.resolve(1);
-
-				return inboundMessageProcessor;
-			}
-
-		};
-
-		Dictionary<String, Object> properties = new Hashtable<>();
-
-		properties.put("destination.name", "parallel/test");
-
-		ServiceRegistration<InboundMessageProcessorFactory>
-			serviceRegistration = bundleContext.registerService(
-				InboundMessageProcessorFactory.class, factory, properties);
-
-		try {
-			tbBundle.start();
-
-			Promise<Integer> promiseToAfterReceive = afterReceive.getPromise();
-
-			assertFalse(promiseToAfterReceive.isDone());
-
-			Promise<Integer> promiseToAfterThread = afterThread.getPromise();
-
-			assertFalse(promiseToAfterThread.isDone());
-
-			Promise<Integer> promiseToBeforeReceive =
-				beforeReceive.getPromise();
-
-			assertFalse(promiseToBeforeReceive.isDone());
-
-			Promise<Integer> promiseToBeforeThread = beforeThread.getPromise();
-
-			assertFalse(promiseToBeforeThread.isDone());
-
-			Message message = new Message();
-
-			Promise<Integer> promiseToCalled = called.getPromise();
-
-			assertFalse(promiseToCalled.isDone());
-
-			messageBus.sendMessage("parallel/test", message);
-
-			assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
-			assertEquals(Integer.valueOf(2), promiseToBeforeReceive.getValue());
-			assertEquals(Integer.valueOf(3), promiseToBeforeThread.getValue());
-			assertEquals(Integer.valueOf(4), promiseToAfterThread.getValue());
-			assertEquals(Integer.valueOf(5), promiseToAfterReceive.getValue());
-
-			tbBundle.uninstall();
-		}
-		finally {
-			serviceRegistration.unregister();
-		}
+		test("tb2.jar", "parallel/test");
 	}
 
 	@Test
 	public void testSerial() throws Exception {
-		Bundle tbBundle = install("tb3.jar");
+		test("tb3.jar", "serial/test");
+	}
+
+	@Test
+	public void testSynchronous() throws Exception {
+		test("tb1.jar", "synchronous/test");
+	}
+
+	protected void test(String bundle, String destinationName) throws Exception {
+		Bundle tbBundle = install(bundle);
 
 		final Deferred<Integer> afterReceive = new Deferred<>();
 		final Deferred<Integer> afterThread = new Deferred<>();
@@ -157,57 +62,57 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 		final Deferred<Integer> called = new Deferred<>();
 
 		InboundMessageProcessor inboundMessageProcessor =
-		new InboundMessageProcessor() {
+			new InboundMessageProcessor() {
 
-			@Override
-			public void afterReceive(Message message)
-				throws MessageProcessorException {
+				@Override
+				public void afterReceive(Message message)
+					throws MessageProcessorException {
 
-				afterReceive.resolve(5);
-			}
+					afterReceive.resolve(5);
+				}
 
-			@Override
-			public void afterThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
+				@Override
+				public void afterThread(Message message, Thread dispatchThread)
+					throws MessageProcessorException {
 
-				afterThread.resolve(4);
-			}
+					afterThread.resolve(4);
+				}
 
-			@Override
-			public Message beforeReceive(Message message)
-				throws MessageProcessorException {
+				@Override
+				public Message beforeReceive(Message message)
+					throws MessageProcessorException {
 
-				beforeReceive.resolve(2);
+					beforeReceive.resolve(2);
 
-				return message;
-			}
+					return message;
+				}
 
-			@Override
-			public Message beforeThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
+				@Override
+				public Message beforeThread(Message message, Thread dispatchThread)
+					throws MessageProcessorException {
 
-				beforeThread.resolve(3);
+					beforeThread.resolve(3);
 
-				return message;
-			}
+					return message;
+				}
 
-		};
+			};
 
 		InboundMessageProcessorFactory factory =
-		new InboundMessageProcessorFactory() {
+			new InboundMessageProcessorFactory() {
 
-			@Override
-			public InboundMessageProcessor create() {
-				called.resolve(1);
+				@Override
+				public InboundMessageProcessor create() {
+					called.resolve(1);
 
-				return inboundMessageProcessor;
-			}
+					return inboundMessageProcessor;
+				}
 
-		};
+			};
 
 		Dictionary<String, Object> properties = new Hashtable<>();
 
-		properties.put("destination.name", "serial/test");
+		properties.put("destination.name", destinationName);
 
 		ServiceRegistration<InboundMessageProcessorFactory>
 			serviceRegistration = bundleContext.registerService(
@@ -235,133 +140,16 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 
 			Message message = new Message();
 
-			MessageBus messageBus = getMessageBus();
-
 			Promise<Integer> promiseToCalled = called.getPromise();
 
 			assertFalse(promiseToCalled.isDone());
 
-			messageBus.sendMessage("serial/test", message);
+			messageBus.sendMessage(destinationName, message);
 
 			assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
 			assertEquals(Integer.valueOf(2), promiseToBeforeReceive.getValue());
 			assertEquals(Integer.valueOf(3), promiseToBeforeThread.getValue());
 			assertEquals(Integer.valueOf(4), promiseToAfterThread.getValue());
-			assertEquals(Integer.valueOf(5), promiseToAfterReceive.getValue());
-
-			tbBundle.uninstall();
-		}
-		finally {
-			serviceRegistration.unregister();
-		}
-	}
-
-	@Test
-	public void testSynchronous() throws Exception {
-		Bundle tbBundle = install("tb1.jar");
-
-		final Deferred<Integer> afterReceive = new Deferred<>();
-		final Deferred<Integer> afterThread = new Deferred<>();
-		final Deferred<Integer> beforeReceive = new Deferred<>();
-		final Deferred<Integer> beforeThread = new Deferred<>();
-		final Deferred<Integer> called = new Deferred<>();
-
-		InboundMessageProcessor inboundMessageProcessor =
-		new InboundMessageProcessor() {
-
-			@Override
-			public void afterReceive(Message message)
-				throws MessageProcessorException {
-
-				afterReceive.resolve(5);
-			}
-
-			@Override
-			public void afterThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
-
-				afterThread.resolve(4);
-			}
-
-			@Override
-			public Message beforeReceive(Message message)
-				throws MessageProcessorException {
-
-				beforeReceive.resolve(2);
-
-				return message;
-			}
-
-			@Override
-			public Message beforeThread(Message message, Thread dispatchThread)
-				throws MessageProcessorException {
-
-				beforeThread.resolve(3);
-
-				return message;
-			}
-
-		};
-
-		InboundMessageProcessorFactory factory =
-		new InboundMessageProcessorFactory() {
-
-			@Override
-			public InboundMessageProcessor create() {
-				called.resolve(1);
-
-				return inboundMessageProcessor;
-			}
-
-		};
-
-		Dictionary<String, Object> properties = new Hashtable<>();
-
-		properties.put("destination.name", "synchronous/test");
-
-		ServiceRegistration<InboundMessageProcessorFactory>
-			serviceRegistration = bundleContext.registerService(
-				InboundMessageProcessorFactory.class, factory, properties);
-
-		try {
-			tbBundle.start();
-
-			Promise<Integer> promiseToAfterReceive = afterReceive.getPromise();
-
-			assertFalse(promiseToAfterReceive.isDone());
-
-			Promise<Integer> promiseToAfterThread = afterThread.getPromise();
-
-			assertFalse(promiseToAfterThread.isDone());
-
-			Promise<Integer> promiseToBeforeReceive =
-				beforeReceive.getPromise();
-
-			assertFalse(promiseToBeforeReceive.isDone());
-
-			Promise<Integer> promiseToBeforeThread = beforeThread.getPromise();
-
-			assertFalse(promiseToBeforeThread.isDone());
-
-			Message message = new Message();
-
-			MessageBus messageBus = getMessageBus();
-
-			Promise<Integer> promiseToCalled = called.getPromise();
-
-			assertFalse(promiseToCalled.isDone());
-
-			messageBus.sendMessage("synchronous/test", message);
-
-			assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
-			assertEquals(Integer.valueOf(2), promiseToBeforeReceive.getValue());
-
-			// Because it's a synchronous destination there's no thread
-			// dispatching done.
-
-			assertFalse(promiseToBeforeThread.isDone());
-			assertFalse(promiseToAfterThread.isDone());
-
 			assertEquals(Integer.valueOf(5), promiseToAfterReceive.getValue());
 
 			tbBundle.uninstall();

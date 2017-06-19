@@ -60,6 +60,7 @@ public class SynchronousDestination extends BaseDestination {
 			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
 					message = processor.beforeReceive(message);
+					message = processor.beforeThread(message, Thread.currentThread());
 				}
 				catch (MessageProcessorException mpe) {
 					_log.error("Unable to process message " + message, mpe);
@@ -78,6 +79,7 @@ public class SynchronousDestination extends BaseDestination {
 		finally {
 			for (InboundMessageProcessor processor : inboundMessageProcessors) {
 				try {
+					processor.afterThread(message, Thread.currentThread());
 					processor.afterReceive(message);
 				}
 				catch (MessageProcessorException mpe) {

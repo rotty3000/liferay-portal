@@ -20,6 +20,7 @@ import com.liferay.messaging.MessageListenerException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
@@ -38,22 +39,18 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 	public Message call() throws Exception {
 		_latch.countDown();
 
-		return _message;
+		return null;
 	}
 
 	@Override
 	public void receive(Message message) throws MessageListenerException {
 		try {
-			_latch.await();
+			_latch.await(100, TimeUnit.SECONDS);
 		}
 		catch (InterruptedException ie) {
-			ie.printStackTrace();
 		}
-
-		_message = message;
 	}
 
 	private final CountDownLatch _latch = new CountDownLatch(1);
-	private volatile Message _message;
 
 }

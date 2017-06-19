@@ -64,7 +64,7 @@ public class SerialDestination extends BaseAsyncDestination {
 
 			@Override
 			public void run() {
-				Message processedMessage = message;
+				Message processedMessage = getMessage();
 
 				try {
 					for (InboundMessageProcessor processor :
@@ -77,17 +77,17 @@ public class SerialDestination extends BaseAsyncDestination {
 						catch (MessageProcessorException mpe) {
 							_log.error(
 								"Unable to process message before thread {}",
-								message, mpe);
+								processedMessage, mpe);
 						}
 					}
 
 					for (MessageListener messageListener : messageListeners) {
 						try {
-							messageListener.receive(message);
+							messageListener.receive(processedMessage);
 						}
 						catch (MessageListenerException mle) {
 							_log.error(
-								"Unable to process message {}", message, mle);
+								"Unable to process message {}", processedMessage, mle);
 						}
 					}
 				}
@@ -102,7 +102,7 @@ public class SerialDestination extends BaseAsyncDestination {
 						catch (MessageProcessorException mpe) {
 							_log.error(
 								"Unable to process message after thread {}",
-								message, mpe);
+								processedMessage, mpe);
 						}
 					}
 				}
