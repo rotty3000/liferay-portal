@@ -38,6 +38,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class TBMessageListener implements Callable<Message>, MessageListener{
 
 	@Override
+	public Message call() throws Exception {
+		return _message.get();
+	}
+
+	@Override
 	public void receive(Message message) throws MessageListenerException {
 		_message.set(message);
 
@@ -46,11 +51,6 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		builder.setPayload(message);
 
 		builder.send();
-	}
-
-	@Override
-	public Message call() throws Exception {
-		return _message.get();
 	}
 
 	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
