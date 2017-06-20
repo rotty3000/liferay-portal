@@ -14,18 +14,19 @@
 
 package com.liferay.messaging.tb1;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.SynchronousDestination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Raymond Augé
  */
-@Component(
-	property = {"destination.name=synchronous/test"},
-	scope = ServiceScope.SINGLETON, service = Destination.class
-)
-public class TBSynchronousDestination extends SynchronousDestination {
+@Component(service = DestinationConfiguration.class)
+public class TBSynchronousDestination extends DestinationConfiguration {
+
+	public TBSynchronousDestination() {
+		super(DestinationType.SYNCHRONOUS, "synchronous/test");
+	}
+
 }
