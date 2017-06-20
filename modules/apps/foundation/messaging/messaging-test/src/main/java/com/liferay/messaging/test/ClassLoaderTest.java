@@ -89,9 +89,7 @@ public class ClassLoaderTest extends TestUtil {
 				if (destination.getMessageListenerCount() > 0) {
 					Message message = new Message();
 
-					message.setDestinationName(destinationName);
-
-					destination.send(message);
+					messageBus.sendMessage(destinationName, message);
 				}
 			}
 		}
@@ -155,9 +153,7 @@ public class ClassLoaderTest extends TestUtil {
 				if (destination.getMessageListenerCount() > 0) {
 					Message message = new Message();
 
-					message.setDestinationName(destinationName);
-
-					destination.send(message);
+					messageBus.sendMessage(destinationName, message);
 				}
 			}
 		}

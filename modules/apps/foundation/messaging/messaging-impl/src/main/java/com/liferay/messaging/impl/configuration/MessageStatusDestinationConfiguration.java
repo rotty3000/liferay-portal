@@ -16,6 +16,7 @@ package com.liferay.messaging.impl.configuration;
 
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.DestinationType;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -29,7 +30,7 @@ public class MessageStatusDestinationConfiguration
 
 	public MessageStatusDestinationConfiguration() {
 		super(
-			DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
+			DestinationType.PARALLEL,
 			DestinationNames.MESSAGE_BUS_MESSAGE_STATUS);
 	}
 

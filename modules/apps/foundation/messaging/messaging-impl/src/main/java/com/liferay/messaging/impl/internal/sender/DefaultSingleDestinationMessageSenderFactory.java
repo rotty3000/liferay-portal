@@ -15,10 +15,10 @@
 package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
-import com.liferay.messaging.sender.SingleDestinationMessageSender;
-import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
-import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SingleDestinationMessageSender;
+import com.liferay.messaging.spi.sender.SingleDestinationMessageSenderFactory;
+import com.liferay.messaging.spi.sender.SingleDestinationSynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 import com.liferay.petra.io.GetterUtil;
 
 import java.util.HashMap;

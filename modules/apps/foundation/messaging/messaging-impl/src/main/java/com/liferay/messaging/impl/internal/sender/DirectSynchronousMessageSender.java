@@ -20,8 +20,8 @@ import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
-import com.liferay.messaging.SynchronousDestination;
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.SynchronousDestination;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
 import java.util.Set;
 
@@ -50,7 +50,10 @@ public class DirectSynchronousMessageSender
 		}
 
 		if (destination instanceof SynchronousDestination) {
-			destination.send(message);
+			SynchronousDestination synchronousDestination =
+				(SynchronousDestination)destination;
+
+			synchronousDestination.send(message);
 		}
 		else {
 			Set<MessageListener> messageListeners =

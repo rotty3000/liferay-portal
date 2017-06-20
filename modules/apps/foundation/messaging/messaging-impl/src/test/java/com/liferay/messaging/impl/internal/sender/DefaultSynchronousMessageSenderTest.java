@@ -19,9 +19,9 @@ import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.SerialDestination;
-import com.liferay.messaging.SynchronousDestination;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
+import com.liferay.messaging.spi.SerialDestination;
+import com.liferay.messaging.spi.SynchronousDestination;
 
 import java.util.Collections;
 import java.util.Map;
@@ -102,7 +102,8 @@ public class DefaultSynchronousMessageSenderTest {
 			"destination.name", destination.getName());
 	}
 
-	protected void doTestSend(Destination destination)
+	protected void doTestSend(
+			com.liferay.messaging.spi.Destination destination)
 		throws MessageBusException {
 
 		Object response = new Object();

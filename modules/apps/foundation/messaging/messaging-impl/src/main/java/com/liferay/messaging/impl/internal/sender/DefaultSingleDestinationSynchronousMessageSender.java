@@ -16,8 +16,8 @@ package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
-import com.liferay.messaging.sender.SingleDestinationSynchronousMessageSender;
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SingleDestinationSynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
 /**
  * @author Michael C. Han

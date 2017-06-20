@@ -14,18 +14,19 @@
 
 package com.liferay.messaging.tb3;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.SerialDestination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Raymond Augé
  */
-@Component(
-	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
-	service = Destination.class
-)
-public class TBSerialDestination extends SerialDestination {
+@Component(service = DestinationConfiguration.class)
+public class TBSerialDestination extends DestinationConfiguration {
+
+	public TBSerialDestination() {
+		super(DestinationType.SERIAL, "serial/test");
+	}
+
 }

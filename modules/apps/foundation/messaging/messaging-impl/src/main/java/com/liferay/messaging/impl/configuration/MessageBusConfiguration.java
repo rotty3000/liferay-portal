@@ -14,7 +14,7 @@
 
 package com.liferay.messaging.impl.configuration;
 
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;

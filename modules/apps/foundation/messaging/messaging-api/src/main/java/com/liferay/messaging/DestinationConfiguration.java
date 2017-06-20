@@ -34,35 +34,29 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  */
 public class DestinationConfiguration implements Serializable {
 
-	public static final String DESTINATION_TYPE_PARALLEL = "parallel";
-
-	public static final String DESTINATION_TYPE_SERIAL = "serial";
-
-	public static final String DESTINATION_TYPE_SYNCHRONOUS = "synchronous";
-
 	public static DestinationConfiguration
 		createParallelDestinationConfiguration(String destinationName) {
 
 		return new DestinationConfiguration(
-			DESTINATION_TYPE_PARALLEL, destinationName);
+			DestinationType.PARALLEL, destinationName);
 	}
 
 	public static DestinationConfiguration createSerialDestinationConfiguration(
 		String destinationName) {
 
 		return new DestinationConfiguration(
-			DESTINATION_TYPE_SERIAL, destinationName);
+			DestinationType.SERIAL, destinationName);
 	}
 
 	public static DestinationConfiguration
 		createSynchronousDestinationConfiguration(String destinationName) {
 
 		return new DestinationConfiguration(
-			DESTINATION_TYPE_SYNCHRONOUS, destinationName);
+			DestinationType.SYNCHRONOUS, destinationName);
 	}
 
 	public DestinationConfiguration(
-		String destinationType, String destinationName) {
+		DestinationType destinationType, String destinationName) {
 
 		_destinationType = destinationType;
 		_destinationName = destinationName;
@@ -94,7 +88,7 @@ public class DestinationConfiguration implements Serializable {
 		return _destinationName;
 	}
 
-	public String getDestinationType() {
+	public DestinationType getDestinationType() {
 		return _destinationType;
 	}
 
@@ -117,10 +111,6 @@ public class DestinationConfiguration implements Serializable {
 	@Override
 	public int hashCode() {
 		return _destinationName.hashCode();
-	}
-
-	public void setDestinationType(String destinationType) {
-		_destinationType = destinationType;
 	}
 
 	public void setMaximumQueueSize(int maximumQueueSize) {
@@ -178,7 +168,7 @@ public class DestinationConfiguration implements Serializable {
 	private static final int _WORKERS_MAX_SIZE = 5;
 
 	private final String _destinationName;
-	private String _destinationType;
+	private final DestinationType _destinationType;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
