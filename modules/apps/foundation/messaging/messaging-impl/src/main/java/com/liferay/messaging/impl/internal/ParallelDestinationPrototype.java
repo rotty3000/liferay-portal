@@ -14,11 +14,11 @@
 
 package com.liferay.messaging.impl.internal;
 
-import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.DestinationPrototype;
 import com.liferay.messaging.ExecutorServiceRegistrar;
-import com.liferay.messaging.ParallelDestination;
+import com.liferay.messaging.spi.Destination;
+import com.liferay.messaging.spi.DestinationPrototype;
+import com.liferay.messaging.spi.ParallelDestination;
 
 /**
  * @author Michael C. Han

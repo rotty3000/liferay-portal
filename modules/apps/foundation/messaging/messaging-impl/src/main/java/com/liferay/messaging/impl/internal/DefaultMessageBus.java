@@ -14,12 +14,8 @@
 
 package com.liferay.messaging.impl.internal;
 
-import com.liferay.messaging.BaseAsyncDestination;
-import com.liferay.messaging.BaseDestination;
-import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationEventListener;
-import com.liferay.messaging.DestinationFactory;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
@@ -31,13 +27,18 @@ import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
 import com.liferay.messaging.impl.configuration.DestinationWorkerConfiguration;
 import com.liferay.messaging.impl.configuration.MessageBusConfiguration;
-import com.liferay.messaging.sender.SingleDestinationMessageSenderFactory;
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.BaseAsyncDestination;
+import com.liferay.messaging.spi.BaseDestination;
+import com.liferay.messaging.spi.Destination;
+import com.liferay.messaging.spi.DestinationFactory;
+import com.liferay.messaging.spi.sender.SingleDestinationMessageSenderFactory;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 import com.liferay.petra.io.ListUtil;
 import com.liferay.petra.io.MapUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -97,8 +98,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	}
 
 	@Override
-	public Collection<Destination> getDestinations() {
-		return _destinations.values();
+	public Collection<com.liferay.messaging.Destination> getDestinations() {
+		return Collections.unmodifiableCollection(_destinations.values());
 	}
 
 	@Override
@@ -123,12 +124,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		target = "(destination.name=*)", unbind = "unregisterDestination"
-	)
 	public synchronized void registerDestination(
 		Destination destination, Map<String, Object> properties) {
 
@@ -271,7 +266,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		_messageBusEventListeners.add(messageBusEventListener);
 
-		for (Destination destination : getDestinations()) {
+		for (Destination destination : _destinations.values()) {
 			messageBusEventListener.destinationAdded(destination);
 		}
 	}
@@ -628,7 +623,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		_messageBusEventListeners.remove(messageBusEventListener);
 
-		for (Destination destination : getDestinations()) {
+		for (Destination destination : _destinations.values()) {
 			messageBusEventListener.destinationRemoved(destination);
 		}
 	}

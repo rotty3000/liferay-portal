@@ -14,18 +14,19 @@
 
 package com.liferay.messaging.tb14;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.ParallelDestination;
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * @author Raymond Augé
  */
-@Component(
-	property = {"destination.name=parallel/test"},
-	scope = ServiceScope.SINGLETON, service = Destination.class
-)
-public class TBParallelDestination extends ParallelDestination {
+@Component(service = DestinationConfiguration.class)
+public class TBParallelDestination extends DestinationConfiguration {
+
+	public TBParallelDestination() {
+		super(DestinationType.PARALLEL, "parallel/test");
+	}
+
 }
