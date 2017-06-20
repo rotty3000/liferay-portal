@@ -16,7 +16,7 @@ package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
-import com.liferay.messaging.sender.SingleDestinationMessageSender;
+import com.liferay.messaging.spi.sender.SingleDestinationMessageSender;
 
 /**
  * @author Michael C. Han

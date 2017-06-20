@@ -19,7 +19,7 @@ import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
-import com.liferay.messaging.sender.SynchronousMessageSender;
+import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 import com.liferay.petra.io.Validator;
 
 import java.util.UUID;
