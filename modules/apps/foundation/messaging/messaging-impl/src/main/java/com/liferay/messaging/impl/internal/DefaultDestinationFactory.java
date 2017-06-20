@@ -14,11 +14,12 @@
 
 package com.liferay.messaging.impl.internal;
 
-import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.DestinationFactory;
-import com.liferay.messaging.DestinationPrototype;
+import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.ExecutorServiceRegistrar;
+import com.liferay.messaging.spi.Destination;
+import com.liferay.messaging.spi.DestinationFactory;
+import com.liferay.messaging.spi.DestinationPrototype;
 import com.liferay.petra.io.MapUtil;
 
 import java.util.Collection;
@@ -45,21 +46,22 @@ public class DefaultDestinationFactory implements DestinationFactory {
 	public Destination createDestination(
 		DestinationConfiguration destinationConfiguration) {
 
-		String type = destinationConfiguration.getDestinationType();
+		DestinationType destinationType =
+			destinationConfiguration.getDestinationType();
 
 		DestinationPrototype destinationPrototype = _destinationPrototypes.get(
-			type);
+			destinationType);
 
 		if (destinationPrototype == null) {
 			throw new IllegalArgumentException(
-				"No destination prototype configured for " + type);
+				"No destination prototype configured for " + destinationType);
 		}
 
 		return destinationPrototype.createDestination(destinationConfiguration);
 	}
 
 	@Override
-	public Collection<String> getDestinationTypes() {
+	public Collection<DestinationType> getDestinationTypes() {
 		return Collections.unmodifiableCollection(
 			_destinationPrototypes.keySet());
 	}
@@ -67,13 +69,13 @@ public class DefaultDestinationFactory implements DestinationFactory {
 	@Activate
 	protected void activate() {
 		_destinationPrototypes.put(
-			DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
+			DestinationType.PARALLEL,
 			new ParallelDestinationPrototype(_executorServiceRegistrar));
 		_destinationPrototypes.put(
-			DestinationConfiguration.DESTINATION_TYPE_SERIAL,
+			DestinationType.SERIAL,
 			new SerialDestinationPrototype(_executorServiceRegistrar));
 		_destinationPrototypes.put(
-			DestinationConfiguration.DESTINATION_TYPE_SYNCHRONOUS,
+			DestinationType.SYNCHRONOUS,
 			new SynchronousDestinationPrototype());
 	}
 
@@ -88,7 +90,8 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		Map<String, Object> properties) {
 
 		_destinationPrototypes.put(
-			MapUtil.getString(properties, "destination.type"),
+			DestinationType.valueOf(
+				MapUtil.getString(properties, "destination.type")),
 			destinationPrototype);
 	}
 
@@ -106,7 +109,7 @@ public class DefaultDestinationFactory implements DestinationFactory {
 			destinationPrototype);
 	}
 
-	private final ConcurrentMap<String, DestinationPrototype>
+	private final ConcurrentMap<DestinationType, DestinationPrototype>
 		_destinationPrototypes = new ConcurrentHashMap<>();
 
 	@Reference(

@@ -23,71 +23,22 @@ package com.liferay.messaging;
  *
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
+ * @author Raymond Augé
  */
-public class DestinationStatistics {
+public interface DestinationStatistics {
 
-	public int getActiveThreadCount() {
-		return _activeThreadCount;
-	}
+	public int getActiveThreadCount();
 
-	public int getCurrentThreadCount() {
-		return _currentThreadCount;
-	}
+	public int getCurrentThreadCount();
 
-	public int getLargestThreadCount() {
-		return _largestThreadCount;
-	}
+	public int getLargestThreadCount();
 
-	public int getMaxThreadPoolSize() {
-		return _maxThreadPoolSize;
-	}
+	public int getMaxThreadPoolSize();
 
-	public int getMinThreadPoolSize() {
-		return _minThreadPoolSize;
-	}
+	public int getMinThreadPoolSize();
 
-	public long getPendingMessageCount() {
-		return _pendingMessageCount;
-	}
+	public long getPendingMessageCount();
 
-	public long getSentMessageCount() {
-		return _sentMessageCount;
-	}
-
-	public void setActiveThreadCount(int activeThreadCount) {
-		_activeThreadCount = activeThreadCount;
-	}
-
-	public void setCurrentThreadCount(int currentThreadCount) {
-		_currentThreadCount = currentThreadCount;
-	}
-
-	public void setLargestThreadCount(int largestThreadCount) {
-		_largestThreadCount = largestThreadCount;
-	}
-
-	public void setMaxThreadPoolSize(int maxThreadPoolSize) {
-		_maxThreadPoolSize = maxThreadPoolSize;
-	}
-
-	public void setMinThreadPoolSize(int minThreadPoolSize) {
-		_minThreadPoolSize = minThreadPoolSize;
-	}
-
-	public void setPendingMessageCount(long pendingMessageCount) {
-		_pendingMessageCount = pendingMessageCount;
-	}
-
-	public void setSentMessageCount(long sentMessageCount) {
-		_sentMessageCount = sentMessageCount;
-	}
-
-	private int _activeThreadCount;
-	private int _currentThreadCount;
-	private int _largestThreadCount;
-	private int _maxThreadPoolSize;
-	private int _minThreadPoolSize;
-	private long _pendingMessageCount;
-	private long _sentMessageCount;
+	public long getSentMessageCount();
 
 }
