@@ -290,6 +290,12 @@ public class ParallelDestinationTest extends TestUtil {
 			
 			parallelDestination.register(listener);
 
+			parallelDestination.unregister(listener);
+
+			assertEquals(1, parallelDestination.getMessageListenerCount());
+
+			parallelDestination.register(listener);
+
 			assertEquals(2, parallelDestination.getMessageListenerCount());
 			
 			String serialDestinationName = "serial/test";
@@ -311,16 +317,12 @@ public class ParallelDestinationTest extends TestUtil {
 			
 			assertTrue(parallelDestination.isRegistered());
 			
-			for (MessageListener parallelMessageListener : parallelDestinationMessageListeners) {
-				parallelDestination.unregister(parallelMessageListener);
-			}
+			parallelDestination.unregisterMessageListeners();
 			
 			assertEquals(0, parallelDestination.getMessageListenerCount());
 			assertFalse(parallelDestination.isRegistered());
 
-			for (MessageListener serialMessageListener : serialDestinationMessageListeners) {
-				serialDestination.unregister(serialMessageListener);
-			}
+			serialDestination.unregisterMessageListeners();
 			
 			assertEquals(0, serialDestination.getMessageListenerCount());
 			assertFalse(parallelDestination.isRegistered());
