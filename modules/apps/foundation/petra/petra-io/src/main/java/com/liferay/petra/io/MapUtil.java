@@ -398,22 +398,22 @@ public class MapUtil {
 					map.put(kvp[0], Boolean.valueOf(kvp[1]));
 				}
 				else if (StringUtil.equalsIgnoreCase(type, "double") ||
-						type.equals(Double.class.getName())) {
+						 type.equals(Double.class.getName())) {
 
 					map.put(kvp[0], Double.valueOf(kvp[1]));
 				}
 				else if (StringUtil.equalsIgnoreCase(type, "int") ||
-						type.equals(Integer.class.getName())) {
+						 type.equals(Integer.class.getName())) {
 
 					map.put(kvp[0], Integer.valueOf(kvp[1]));
 				}
 				else if (StringUtil.equalsIgnoreCase(type, "long") ||
-						type.equals(Long.class.getName())) {
+						 type.equals(Long.class.getName())) {
 
 					map.put(kvp[0], Long.valueOf(kvp[1]));
 				}
 				else if (StringUtil.equalsIgnoreCase(type, "short") ||
-						type.equals(Short.class.getName())) {
+						 type.equals(Short.class.getName())) {
 
 					map.put(kvp[0], Short.valueOf(kvp[1]));
 				}
@@ -498,7 +498,6 @@ public class MapUtil {
 		return sb.toString();
 	}
 
-	private static final Logger _log = LoggerFactory.getLogger(
-		MapUtil.class);
+	private static final Logger _log = LoggerFactory.getLogger(MapUtil.class);
 
 }

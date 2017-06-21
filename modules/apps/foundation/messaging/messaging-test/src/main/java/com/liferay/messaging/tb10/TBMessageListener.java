@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = "destination.name=builder/tb10",
+	property = {"destination.name=builder/tb10"},
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
@@ -59,9 +59,10 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		return _message.get();
 	}
 
-	private final CountDownLatch _latch = new CountDownLatch(1);
-	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
 	@Reference
-	private MessageBuilderFactory _messageBuilderFactory;
+	private volatile MessageBuilderFactory _messageBuilderFactory;
+
+	private final CountDownLatch _latch = new CountDownLatch(1);
+	private final AtomicReference<Message> _message = new AtomicReference<>(null);
 
 }

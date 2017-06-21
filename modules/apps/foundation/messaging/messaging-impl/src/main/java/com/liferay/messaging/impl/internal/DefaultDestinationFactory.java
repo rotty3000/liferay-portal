@@ -75,8 +75,7 @@ public class DefaultDestinationFactory implements DestinationFactory {
 			DestinationType.SERIAL,
 			new SerialDestinationPrototype(_executorServiceRegistrar));
 		_destinationPrototypes.put(
-			DestinationType.SYNCHRONOUS,
-			new SynchronousDestinationPrototype());
+			DestinationType.SYNCHRONOUS, new SynchronousDestinationPrototype());
 	}
 
 	@Reference(

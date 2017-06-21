@@ -46,7 +46,7 @@ public class ServerDetector {
 	public static final String WILDFLY_ID = "wildfly";
 
 	public static String getServerId() {
-		return _serverType.toString().toLowerCase();
+		return StringUtil.toLowerCase(_serverType.toString());
 	}
 
 	public static boolean isGlassfish() {
@@ -174,7 +174,7 @@ public class ServerDetector {
 			SYSTEM_PROPERTY_KEY_SERVER_DETECTOR_SERVER_ID);
 
 		if (serverId != null) {
-			return ServerType.valueOf(serverId.toUpperCase());
+			return ServerType.valueOf(StringUtil.toUpperCase(serverId));
 		}
 
 		if (_hasSystemProperty("com.sun.aas.instanceRoot")) {
@@ -244,7 +244,8 @@ public class ServerDetector {
 		if (System.getProperty("external-properties") == null) {
 			if (_log.isInfoEnabled()) {
 				_log.info(
-					"Detected server {}", _serverType.toLowerCase());
+					"Detected server {}",
+					StringUtil.toLowerCase(_serverType.toString()));
 			}
 		}
 	}
@@ -253,10 +254,6 @@ public class ServerDetector {
 
 		GLASSFISH, JBOSS, JETTY, JONAS, OC4J, RESIN, TOMCAT, UNKNOWN, WEBLOGIC,
 		WEBSPHERE, WILDFLY;
-
-		public String toLowerCase() {
-			return toString().toLowerCase();
-		}
 
 	}
 

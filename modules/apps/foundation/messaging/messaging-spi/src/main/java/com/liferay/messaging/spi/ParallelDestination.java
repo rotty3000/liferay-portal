@@ -90,7 +90,8 @@ public class ParallelDestination extends BaseAsyncDestination {
 					}
 					catch (MessageListenerException mle) {
 						_log.error(
-							"Unable to process message {}", processedMessage, mle);
+							"Unable to process message {}", processedMessage,
+							mle);
 					}
 					finally {
 						for (InboundMessageProcessor processor :

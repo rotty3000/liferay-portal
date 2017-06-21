@@ -27,7 +27,9 @@ import java.util.Set;
 public class GlobalMessageBusEventListener implements MessageBusEventListener {
 
 	@Override
-	public void destinationAdded(com.liferay.messaging.Destination destination) {
+	public void destinationAdded(
+		com.liferay.messaging.Destination destination) {
+
 		if (!_ignoredDestinations.contains(destination.getName()) &&
 			(destination instanceof Destination)) {
 
@@ -38,7 +40,9 @@ public class GlobalMessageBusEventListener implements MessageBusEventListener {
 	}
 
 	@Override
-	public void destinationRemoved(com.liferay.messaging.Destination destination) {
+	public void destinationRemoved(
+		com.liferay.messaging.Destination destination) {
+
 		if (!_ignoredDestinations.contains(destination.getName()) &&
 			(destination instanceof Destination)) {
 

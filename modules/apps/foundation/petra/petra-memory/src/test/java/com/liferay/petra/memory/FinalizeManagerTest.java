@@ -346,7 +346,7 @@ public class FinalizeManagerTest {
 		long startTime = System.currentTimeMillis();
 
 		while (!markFinalizeAction.isMarked() &&
-			((System.currentTimeMillis() - startTime) < 10000)) {
+			   ((System.currentTimeMillis() - startTime) < 10000)) {
 
 			Thread.sleep(1);
 		}

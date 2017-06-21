@@ -456,7 +456,7 @@ public class ListUtil {
 	}
 
 	public static <T, V extends T> List<T> toList(List<V> vlist) {
-		return new ArrayList<T>(vlist);
+		return new ArrayList<>(vlist);
 	}
 
 	public static List<Long> toList(long[] array) {

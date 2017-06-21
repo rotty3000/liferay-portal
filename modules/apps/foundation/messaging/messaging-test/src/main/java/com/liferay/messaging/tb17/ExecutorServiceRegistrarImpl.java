@@ -1,22 +1,55 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.messaging.tb17;
 
 import com.liferay.messaging.ExecutorServiceRegistrar;
 
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+/**
+ * @author Jesse Rao
+ */
 @Component(
-	property = {"destination.name=serial/test"},
-	scope = ServiceScope.SINGLETON,
-	service = ExecutorServiceRegistrar.class
+	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
+	service = {Callable.class, ExecutorServiceRegistrar.class}
 )
-public class ExecutorServiceRegistrarImpl implements ExecutorServiceRegistrar {
+public class ExecutorServiceRegistrarImpl
+	implements Callable<Map<String, ExecutorService>>,
+			   ExecutorServiceRegistrar {
 
 	@Override
-	public <T extends ExecutorService> T registerExecutorService(String name, T executorService) {
-		return null;
+	public Map<String, ExecutorService> call() throws Exception {
+		return _executorServices;
 	}
+
+	@Override
+	public <T extends ExecutorService> T registerExecutorService(
+		String name, T executorService) {
+
+		_executorServices.put(name, executorService);
+
+		return executorService;
+	}
+
+	private final Map<String, ExecutorService> _executorServices =
+		new ConcurrentHashMap<>();
 
 }

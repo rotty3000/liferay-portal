@@ -18,12 +18,12 @@ import com.liferay.petra.io.SocketUtil;
 import com.liferay.petra.io.SocketUtil.ServerSocketConfigurator;
 import com.liferay.petra.io.nio.intraband.Datagram;
 import com.liferay.petra.io.nio.intraband.DatagramHelper;
+import com.liferay.portal.kernel.util.ProxyUtil;
 
 import java.io.IOException;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -52,7 +52,7 @@ public class IntrabandTestUtil {
 	}
 
 	public static <T> T createProxy(Class<?>... interfaces) {
-		return (T)Proxy.newProxyInstance(
+		return (T)ProxyUtil.newProxyInstance(
 			IntrabandTestUtil.class.getClassLoader(), interfaces,
 			new InvocationHandler() {
 

@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=serial/test"},
-	scope = ServiceScope.SINGLETON,
+	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
 public class TBMessageListener implements Callable<Message>, MessageListener {

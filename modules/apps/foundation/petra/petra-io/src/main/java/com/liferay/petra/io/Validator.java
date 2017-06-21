@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 public class Validator {
 
 	/**
-	 * @deprecated As of 7.0.0
+	 * @deprecated As of 1.0.0
 	 */
 	@Deprecated
 	public static boolean equals(boolean boolean1, boolean boolean2) {

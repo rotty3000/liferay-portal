@@ -4864,7 +4864,7 @@ public class StringUtil {
 			return s.substring(1, s.length() - 1);
 		}
 		else if ((s.charAt(0) == CharPool.QUOTE) &&
-				(s.charAt(s.length() - 1) == CharPool.QUOTE)) {
+				 (s.charAt(s.length() - 1) == CharPool.QUOTE)) {
 
 			return s.substring(1, s.length() - 1);
 		}
@@ -5052,7 +5052,7 @@ public class StringUtil {
 				comparePoint = sIndex + 1;
 			}
 			else if ((c == s.charAt(sIndex)) ||
-					(c == singleWildcardCharacter)) {
+					 (c == singleWildcardCharacter)) {
 
 				sIndex++;
 				wildcardIndex++;

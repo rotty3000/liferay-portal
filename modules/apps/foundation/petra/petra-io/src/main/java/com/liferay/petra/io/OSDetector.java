@@ -41,7 +41,7 @@ public class OSDetector {
 				_bitMode = "64";
 			}
 			else if (arch.equals("i386") || arch.equals("i686") ||
-					arch.equals("x86")) {
+					 arch.equals("x86")) {
 
 				_bitMode = "32";
 			}
