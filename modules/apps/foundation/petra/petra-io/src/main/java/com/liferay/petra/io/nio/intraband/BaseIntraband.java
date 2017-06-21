@@ -528,8 +528,8 @@ public abstract class BaseIntraband implements Intraband {
 		return requestDatagram;
 	}
 
-	protected static final EnumSet<CompletionType> REPLIED_ENUM_SET = EnumSet.of(
-		CompletionType.REPLIED);
+	protected static final EnumSet<CompletionType> REPLIED_ENUM_SET =
+		EnumSet.of(CompletionType.REPLIED);
 
 	protected final AtomicReference<DatagramReceiveHandler[]>
 		datagramReceiveHandlersReference = new AtomicReference<>(

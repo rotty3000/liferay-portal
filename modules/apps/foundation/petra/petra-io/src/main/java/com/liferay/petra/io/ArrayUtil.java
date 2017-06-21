@@ -14,9 +14,9 @@
 
 package com.liferay.petra.io;
 
-import java.text.DateFormat;
-
 import java.lang.reflect.Array;
+
+import java.text.DateFormat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
