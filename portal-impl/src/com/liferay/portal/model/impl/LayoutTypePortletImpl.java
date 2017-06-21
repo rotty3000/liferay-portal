@@ -982,10 +982,10 @@ public class LayoutTypePortletImpl
 		String nestedPortletIds = "";
 
 		for (Map.Entry<String, String> entry :
-			typeSettingsProperties.entrySet()) {
+				typeSettingsProperties.entrySet()) {
 
 			String key = entry.getKey();
-	
+
 			if (key.startsWith(portletNamespace)) {
 				nestedPortletIds += entry.getValue();
 				nestedPortletIds += CharPool.COMMA;
@@ -993,18 +993,15 @@ public class LayoutTypePortletImpl
 		}
 
 		if (Validator.isNotNull(nestedPortletIds)) {
-			for (String nestedPortletId :
-				StringUtil.split(nestedPortletIds)) {
-	
+			for (String nestedPortletId : StringUtil.split(nestedPortletIds)) {
 				String childNestedPortletNamespace =
 					PortalUtil.getPortletNamespace(nestedPortletId);
-	
-				removeNestedColumns(
-					childNestedPortletNamespace, portletIdList);
-	
+
+				removeNestedColumns(childNestedPortletNamespace, portletIdList);
+
 				removeModesPortletId(nestedPortletId);
 				removeStatesPortletId(nestedPortletId);
-	
+
 				portletIdList.add(nestedPortletId);
 			}
 		}
