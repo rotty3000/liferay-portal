@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Brian Wing Shun Chan
@@ -192,6 +193,9 @@ public interface LayoutTypePortlet extends LayoutType {
 	public void removeModesPortletId(String portletId);
 
 	public void removeNestedColumns(String portletNamespace);
+
+	public void removeNestedColumns(
+		String portletNamespace, Set<String> portletIdList);
 
 	public void removePortletId(long userId, String portletId);
 

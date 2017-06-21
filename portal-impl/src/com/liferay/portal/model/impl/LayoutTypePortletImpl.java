@@ -972,6 +972,7 @@ public class LayoutTypePortletImpl
 			StringUtil.merge(nestedColumnIdsArray));
 	}
 
+	@Override
 	public void removeNestedColumns(
 		String portletNamespace, Set<String> portletIdList) {
 
