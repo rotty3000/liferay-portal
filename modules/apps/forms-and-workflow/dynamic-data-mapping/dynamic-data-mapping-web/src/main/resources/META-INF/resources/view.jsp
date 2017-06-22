@@ -169,7 +169,7 @@ structureSearch.setOrderByType(ddmDisplayContext.getOrderByType());
 	</div>
 </aui:form>
 
-<c:if test="<%= ddmDisplay.isShowAddStructureButton() && DDMStructurePermission.containsAddStruturePermission(permissionChecker, groupId, scopeClassNameId) %>">
+<c:if test="<%= ddmDisplay.isShowAddButton(themeDisplay.getScopeGroup()) && DDMStructurePermission.containsAddStruturePermission(permissionChecker, groupId, scopeClassNameId) %>">
 	<liferay-portlet:renderURL var="viewStructuresURL">
 		<portlet:param name="mvcPath" value="/view.jsp" />
 		<portlet:param name="groupId" value="<%= String.valueOf(groupId) %>" />

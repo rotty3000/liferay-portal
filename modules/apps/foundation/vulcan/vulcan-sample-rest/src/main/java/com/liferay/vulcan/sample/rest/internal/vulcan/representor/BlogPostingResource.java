@@ -140,7 +140,6 @@ public class BlogPostingResource
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
 			group.getGroupId(), 0, pagination.getStartPosition(),
 			pagination.getEndPosition());
-
 		int count = _blogsService.getGroupEntriesCount(group.getGroupId(), 0);
 
 		return new PageItems<>(blogsEntries, count);

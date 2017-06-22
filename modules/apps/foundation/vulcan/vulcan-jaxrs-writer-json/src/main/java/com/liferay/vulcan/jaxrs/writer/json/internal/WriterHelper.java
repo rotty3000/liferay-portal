@@ -65,7 +65,7 @@ public class WriterHelper {
 		return uri.toString();
 	}
 
-	public <T> Optional<String> getCollectionURL(
+	public <T> Optional<String> getCollectionURLOptional(
 		Class<T> modelClass, UriInfo uriInfo) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -76,7 +76,7 @@ public class WriterHelper {
 		).map(
 			path -> "/p/" + path
 		).map(
-			_transformURI(
+			_getTransformURIFunction(
 				(uri, transformer) -> transformer.transformPageURI(
 					uri, modelClass))
 		).map(
@@ -84,7 +84,7 @@ public class WriterHelper {
 		);
 	}
 
-	public <T> Optional<String> getSingleURL(
+	public <T> Optional<String> getSingleURLOptional(
 		Class<T> modelClass, T model, UriInfo uriInfo) {
 
 		Optional<Resource<T>> optional = _resourceManager.getResourceOptional(
@@ -97,7 +97,7 @@ public class WriterHelper {
 		).map(
 			path -> "/p/" + path + "/" + identifier
 		).map(
-			_transformURI(
+			_getTransformURIFunction(
 				(uri, transformer) ->
 					transformer.transformCollectionItemSingleResourceURI(
 						uri, modelClass, model))
@@ -191,9 +191,10 @@ public class WriterHelper {
 
 		Class<U> modelClass = relatedModel.getModelClass();
 
-		Optional<String> urlOptional = getSingleURL(modelClass, model, uriInfo);
+		Optional<String> singleURLOptional = getSingleURLOptional(
+			modelClass, model, uriInfo);
 
-		urlOptional.ifPresent(
+		singleURLOptional.ifPresent(
 			url -> {
 				Predicate<String> embeddedPredicate =
 					embedded.getEmbeddedPredicate();
@@ -223,10 +224,13 @@ public class WriterHelper {
 		T model, Class<T> modelClass, UriInfo uriInfo,
 		Consumer<String> consumer) {
 
-		String url = getSingleURL(modelClass, model, uriInfo).orElseThrow(
+		Optional<String> singleURLOptional = getSingleURLOptional(
+			modelClass, model, uriInfo);
+
+		String singleURL = singleURLOptional.orElseThrow(
 			() -> new VulcanDeveloperError.UnresolvableURI(modelClass));
 
-		consumer.accept(url);
+		consumer.accept(singleURL);
 	}
 
 	public <U> void writeTypes(
@@ -245,7 +249,7 @@ public class WriterHelper {
 		return fields.getFieldsPredicate(types);
 	}
 
-	private Function<String, String> _transformURI(
+	private Function<String, String> _getTransformURIFunction(
 		BiFunction<String, CollectionResourceURITransformer, String>
 			biFunction) {
 

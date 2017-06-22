@@ -40,8 +40,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true, property = "ddm.form.field.type.name=text",
 	service = {
-		TextDDMFormFieldTemplateContextContributor.class,
-		DDMFormFieldTemplateContextContributor.class
+		DDMFormFieldTemplateContextContributor.class,
+		TextDDMFormFieldTemplateContextContributor.class
 	}
 )
 public class TextDDMFormFieldTemplateContextContributor

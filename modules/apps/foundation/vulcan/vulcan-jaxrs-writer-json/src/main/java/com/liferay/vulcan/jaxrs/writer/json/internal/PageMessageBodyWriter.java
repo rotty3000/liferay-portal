@@ -105,16 +105,15 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		Stream<PageMessageMapper<T>> stream = _pageMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
-
 		Class<T> modelClass = page.getModelClass();
-
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		PageMessageMapper<T> pageMessageMapper = stream.filter(
 			bodyWriter ->
 				mediaTypeString.equals(bodyWriter.getMediaType()) &&
 				bodyWriter.supports(page, modelClass, requestInfo)
-		).findFirst().orElseThrow(
+		).findFirst(
+		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				mediaTypeString, modelClass)
 		);
@@ -124,16 +123,16 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 		pageMessageMapper.onStart(
 			jsonObjectBuilder, page, modelClass, requestInfo);
 
-		Optional<Fields> optionalFields = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> optionalEmbedded = _providerManager.provide(
-			Embedded.class, _httpServletRequest);
-
-		Fields fields = optionalFields.orElseThrow(
+		Fields fields = fieldsOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Fields.class));
 
-		Embedded embedded = optionalEmbedded.orElseThrow(
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
+
+		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveProvider(Embedded.class));
 
 		_writeItems(
@@ -159,7 +158,7 @@ public class PageMessageBodyWriter<T> implements MessageBodyWriter<Page<T>> {
 	}
 
 	private String _getCollectionURL(Class<T> modelClass) {
-		Optional<String> optional = _writerHelper.getCollectionURL(
+		Optional<String> optional = _writerHelper.getCollectionURLOptional(
 			modelClass, _uriInfo);
 
 		return optional.orElseThrow(

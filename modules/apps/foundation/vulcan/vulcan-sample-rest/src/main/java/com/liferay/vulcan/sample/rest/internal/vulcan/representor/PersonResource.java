@@ -101,7 +101,6 @@ public class PersonResource implements Resource<User> {
 			List<User> users = _userService.getCompanyUsers(
 				company.getCompanyId(), pagination.getStartPosition(),
 				pagination.getEndPosition());
-
 			int count = _userService.getCompanyUsersCount(
 				company.getCompanyId());
 

@@ -20,6 +20,7 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletProvider;
@@ -359,6 +360,24 @@ public abstract class BaseDDMDisplay implements DDMDisplay {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean isShowAddButton(Group scopeGroup) {
+		String portletId = getPortletId();
+
+		String ddmStructurePortletId = PortletProviderUtil.getPortletId(
+			DDMStructure.class.getName(), PortletProvider.Action.VIEW);
+
+		if (portletId.equals(ddmStructurePortletId)) {
+			return false;
+		}
+
+		if (!scopeGroup.hasLocalOrRemoteStagingGroup()) {
+			return true;
+		}
+
+		return scopeGroup.isStagingGroup();
 	}
 
 	@Override

@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.functions;
+package com.liferay.vulcan.function;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -21,16 +21,17 @@ import java.util.function.Function;
  * @author Alejandro Hernández
  */
 @FunctionalInterface
-public interface DecaFunction<A, B, C, D, E, F, G, H, I, J, R> {
+public interface EnneaFunction<A, B, C, D, E, F, G, H, I, R> {
 
-	public default <V> DecaFunction<A, B, C, D, E, F, G, H, I, J, V> andThen(
-		Function<? super R, ? extends V> after) {
+	public default <V> EnneaFunction<A, B, C, D, E, F, G, H, I, V> andThen(
+		Function<? super R, ? extends V> afterFunction) {
 
-		Objects.requireNonNull(after);
-		return (A a, B b, C c, D d, E e, F f, G g, H h, I i, J j) ->
-			after.apply(apply(a, b, c, d, e, f, g, h, i, j));
+		Objects.requireNonNull(afterFunction);
+
+		return (A a, B b, C c, D d, E e, F f, G g, H h, I i) ->
+			afterFunction.apply(apply(a, b, c, d, e, f, g, h, i));
 	}
 
-	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j);
+	public R apply(A a, B b, C c, D d, E e, F f, G g, H h, I i);
 
 }

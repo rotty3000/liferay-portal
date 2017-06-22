@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -40,6 +41,12 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  */
 @Component(immediate = true, service = ProviderManager.class)
 public class ProviderManager {
+
+	public ProviderManager() {
+		Bundle bundle = FrameworkUtil.getBundle(ProviderManager.class);
+
+		_bundleContext = bundle.getBundleContext();
+	}
 
 	public <T> Optional<T> provide(
 		Class<T> clazz, HttpServletRequest httpServletRequest) {
@@ -79,12 +86,12 @@ public class ProviderManager {
 		_providers.computeIfAbsent(
 			modelClass.getName(), name -> new TreeSet<>());
 
-		ServiceReferenceServiceTuple<Provider<T>> serviceReferenceServiceTuple =
-			new ServiceReferenceServiceTuple<>(serviceReference, provider);
-
 		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>
 			serviceReferenceServiceTuples = _providers.get(
 				modelClass.getName());
+
+		ServiceReferenceServiceTuple<Provider<T>> serviceReferenceServiceTuple =
+			new ServiceReferenceServiceTuple<>(serviceReference, provider);
 
 		serviceReferenceServiceTuples.add(
 			(ServiceReferenceServiceTuple)serviceReferenceServiceTuple);
@@ -112,10 +119,9 @@ public class ProviderManager {
 			});
 	}
 
-	private final BundleContext _bundleContext = FrameworkUtil.getBundle(
-		ProviderManager.class).getBundleContext();
-	private final Map<String,
-		TreeSet<ServiceReferenceServiceTuple<Provider<?>>>>
+	private final BundleContext _bundleContext;
+	private final Map
+		<String, TreeSet<ServiceReferenceServiceTuple<Provider<?>>>>
 			_providers = new ConcurrentHashMap<>();
 
 }

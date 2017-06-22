@@ -214,7 +214,8 @@ public class HALPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		pageJSONObjectBuilder.nestedField(
 			"_embedded", types.get(0)
-		).arrayValue().add(
+		).arrayValue(
+		).add(
 			itemJSONObjectBuilder
 		);
 	}

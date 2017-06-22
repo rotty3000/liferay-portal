@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.vulcan.wiring.osgi.internal;
+package com.liferay.vulcan.wiring.osgi.internal.representor.builder;
 
 import com.liferay.vulcan.representor.builder.RepresentorBuilder;
 import com.liferay.vulcan.wiring.osgi.RelatedModel;

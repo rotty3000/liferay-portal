@@ -82,8 +82,11 @@ public class LiferayRootEndpoint implements RootEndpoint {
 
 		Routes<T> routes = _resourceManager.getRoutes(modelClass);
 
-		Function<String, T> modelFunction =
-			routes.getModelFunction().apply(this::provide);
+		Function<Function<Class<?>, Optional<?>>, Function<String, T>>
+			routesModelFunction = routes.getModelFunction();
+
+		Function<String, T> modelFunction = routesModelFunction.apply(
+			this::provide);
 
 		T model = modelFunction.apply(id);
 

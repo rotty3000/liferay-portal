@@ -16,9 +16,9 @@ package com.liferay.vulcan.wiring.osgi;
 
 import com.liferay.vulcan.representor.Resource;
 import com.liferay.vulcan.representor.Routes;
-import com.liferay.vulcan.wiring.osgi.internal.RepresentorBuilderImpl;
-import com.liferay.vulcan.wiring.osgi.internal.RoutesBuilderImpl;
 import com.liferay.vulcan.wiring.osgi.internal.ServiceReferenceServiceTuple;
+import com.liferay.vulcan.wiring.osgi.internal.representor.RoutesBuilderImpl;
+import com.liferay.vulcan.wiring.osgi.internal.representor.builder.RepresentorBuilderImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

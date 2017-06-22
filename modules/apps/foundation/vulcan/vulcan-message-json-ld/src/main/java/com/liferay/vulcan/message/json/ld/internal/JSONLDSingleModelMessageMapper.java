@@ -31,9 +31,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
 	immediate = true,
-	service = {
-		JSONLDSingleModelMessageMapper.class, SingleModelMessageMapper.class
-	}
+	service =
+		{JSONLDSingleModelMessageMapper.class, SingleModelMessageMapper.class}
 )
 public class JSONLDSingleModelMessageMapper<T>
 	implements SingleModelMessageMapper<T> {
@@ -88,7 +87,8 @@ public class JSONLDSingleModelMessageMapper<T>
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
 		).field(
 			"@type"
-		).arrayValue().addAll(
+		).arrayValue(
+		).addAll(
 			types
 		);
 	}
@@ -179,7 +179,8 @@ public class JSONLDSingleModelMessageMapper<T>
 
 		jsonObjectBuilder.field(
 			"@type"
-		).arrayValue().addAll(
+		).arrayValue(
+		).addAll(
 			types
 		);
 	}

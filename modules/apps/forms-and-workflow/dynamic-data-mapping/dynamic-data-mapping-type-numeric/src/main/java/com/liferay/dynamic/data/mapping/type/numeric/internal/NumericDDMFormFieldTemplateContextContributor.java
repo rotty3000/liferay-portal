@@ -33,8 +33,8 @@ import org.osgi.service.component.annotations.Component;
 @Component(
 	immediate = true, property = "ddm.form.field.type.name=numeric",
 	service = {
-		NumericDDMFormFieldTemplateContextContributor.class,
-		DDMFormFieldTemplateContextContributor.class
+		DDMFormFieldTemplateContextContributor.class,
+		NumericDDMFormFieldTemplateContextContributor.class
 	}
 )
 public class NumericDDMFormFieldTemplateContextContributor

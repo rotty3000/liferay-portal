@@ -231,13 +231,15 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		jsonObjectBuilder.field(
 			"@context"
-		).arrayValue().add(
+		).arrayValue(
+		).add(
 			"http://www.w3.org/ns/hydra/pagination.jsonld"
 		);
 
 		jsonObjectBuilder.field(
 			"@context"
-		).arrayValue().add(
+		).arrayValue(
+		).add(
 			nestedJsonObjectBuilder -> nestedJsonObjectBuilder.field(
 				"@vocab"
 			).value(
@@ -254,7 +256,8 @@ public class JSONLDPageMessageMapper<T> implements PageMessageMapper<T> {
 
 		pageJSONObjectBuilder.field(
 			"members"
-		).arrayValue().add(
+		).arrayValue(
+		).add(
 			itemJSONObjectBuilder
 		);
 	}

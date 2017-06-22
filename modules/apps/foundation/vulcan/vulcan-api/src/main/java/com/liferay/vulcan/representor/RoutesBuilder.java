@@ -14,14 +14,14 @@
 
 package com.liferay.vulcan.representor;
 
-import com.liferay.vulcan.functions.DecaFunction;
-import com.liferay.vulcan.functions.EnneaFunction;
-import com.liferay.vulcan.functions.HeptaFunction;
-import com.liferay.vulcan.functions.HexaFunction;
-import com.liferay.vulcan.functions.OctaFunction;
-import com.liferay.vulcan.functions.PentaFunction;
-import com.liferay.vulcan.functions.TetraFunction;
-import com.liferay.vulcan.functions.TriFunction;
+import com.liferay.vulcan.function.DecaFunction;
+import com.liferay.vulcan.function.EnneaFunction;
+import com.liferay.vulcan.function.HeptaFunction;
+import com.liferay.vulcan.function.HexaFunction;
+import com.liferay.vulcan.function.OctaFunction;
+import com.liferay.vulcan.function.PentaFunction;
+import com.liferay.vulcan.function.TetraFunction;
+import com.liferay.vulcan.function.TriFunction;
 import com.liferay.vulcan.pagination.PageItems;
 import com.liferay.vulcan.pagination.Pagination;
 

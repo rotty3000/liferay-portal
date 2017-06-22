@@ -97,38 +97,36 @@ public class SingleModelMessageBodyWriter<T>
 
 		PrintWriter printWriter = new PrintWriter(entityStream, true);
 
-		Class<T> modelClass = singleModel.getModelClass();
-
-		T model = singleModel.getModel();
-
 		Stream<SingleModelMessageMapper<T>> stream =
 			_singleModelMessageMappers.stream();
 
 		String mediaTypeString = mediaType.toString();
-
+		T model = singleModel.getModel();
+		Class<T> modelClass = singleModel.getModelClass();
 		RequestInfo requestInfo = new RequestInfoImpl(mediaType, httpHeaders);
 
 		SingleModelMessageMapper<T> singleModelMessageMapper = stream.filter(
 			messageMapper ->
 				mediaTypeString.equals(messageMapper.getMediaType()) &&
 				messageMapper.supports(model, modelClass, requestInfo)
-		).findFirst().orElseThrow(
+		).findFirst(
+		).orElseThrow(
 			() -> new VulcanDeveloperError.MustHaveMessageMapper(
 				mediaTypeString, modelClass)
 		);
 
 		JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilderImpl();
 
-		Optional<Fields> optionalFields = _providerManager.provide(
+		Optional<Fields> fieldsOptional = _providerManager.provide(
 			Fields.class, _httpServletRequest);
 
-		Optional<Embedded> optionalEmbedded = _providerManager.provide(
-			Embedded.class, _httpServletRequest);
-
-		Fields fields = optionalFields.orElseThrow(
+		Fields fields = fieldsOptional.orElseThrow(
 			() -> new MustHaveProvider(Fields.class));
 
-		Embedded embedded = optionalEmbedded.orElseThrow(
+		Optional<Embedded> embeddedOptional = _providerManager.provide(
+			Embedded.class, _httpServletRequest);
+
+		Embedded embedded = embeddedOptional.orElseThrow(
 			() -> new MustHaveProvider(Embedded.class));
 
 		_writeModel(
