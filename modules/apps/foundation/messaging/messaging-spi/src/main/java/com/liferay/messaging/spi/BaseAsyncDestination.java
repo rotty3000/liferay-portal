@@ -58,8 +58,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	@Override
 	public DestinationStatistics getDestinationStatistics() {
-		com.liferay.messaging.spi.DestinationStatistics destinationStatistics =
-			new com.liferay.messaging.spi.DestinationStatistics();
+		DestinationStatisticsImpl destinationStatistics =
+			new DestinationStatisticsImpl();
 
 		destinationStatistics.setActiveThreadCount(
 			_threadPoolExecutor.getActiveCount());

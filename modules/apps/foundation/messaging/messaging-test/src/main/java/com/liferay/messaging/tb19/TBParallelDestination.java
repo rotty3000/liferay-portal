@@ -12,17 +12,21 @@
  * details.
  */
 
-package com.liferay.messaging;
+package com.liferay.messaging.tb19;
+
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Michael C. Han
+ * @author Raymond Augé
  */
-public interface Destination {
+@Component(service = DestinationConfiguration.class)
+public class TBParallelDestination extends DestinationConfiguration {
 
-	public DestinationStatistics getDestinationStatistics();
-
-	public String getName();
-
-	public boolean isRegistered();
+	public TBParallelDestination() {
+		super(DestinationType.PARALLEL, "parallel/test");
+	}
 
 }
