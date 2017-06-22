@@ -83,14 +83,12 @@ public class ClassLoaderTest extends TestUtil {
 					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/plugintest1")) {
-					assertEquals(1, destination.getMessageListenerCount());
+					assertTrue(destination.isRegistered());
 				}
 
-				if (destination.getMessageListenerCount() > 0) {
-					Message message = new Message();
+				Message message = new Message();
 
-					messageBus.sendMessage(destinationName, message);
-				}
+				messageBus.sendMessage(destinationName, message);
 			}
 		}
 		catch (Exception e) {
@@ -147,14 +145,12 @@ public class ClassLoaderTest extends TestUtil {
 					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/portaltest1")) {
-					assertEquals(1, destination.getMessageListenerCount());
+					assertTrue(destination.isRegistered());
 				}
 
-				if (destination.getMessageListenerCount() > 0) {
-					Message message = new Message();
+				Message message = new Message();
 
-					messageBus.sendMessage(destinationName, message);
-				}
+				messageBus.sendMessage(destinationName, message);
 			}
 		}
 		catch (Exception e) {
