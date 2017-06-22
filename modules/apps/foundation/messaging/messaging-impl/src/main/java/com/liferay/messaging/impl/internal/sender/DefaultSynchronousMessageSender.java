@@ -14,11 +14,11 @@
 
 package com.liferay.messaging.impl.internal.sender;
 
-import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
+import com.liferay.messaging.spi.Destination;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 import com.liferay.petra.io.Validator;
 

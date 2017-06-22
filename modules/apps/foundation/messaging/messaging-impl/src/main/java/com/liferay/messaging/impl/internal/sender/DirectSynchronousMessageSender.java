@@ -14,12 +14,12 @@
 
 package com.liferay.messaging.impl.internal.sender;
 
-import com.liferay.messaging.Destination;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
+import com.liferay.messaging.spi.Destination;
 import com.liferay.messaging.spi.SynchronousDestination;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
@@ -38,7 +38,7 @@ public class DirectSynchronousMessageSender
 	public Object send(String destinationName, Message message)
 		throws MessageBusException {
 
-		Destination destination = _messageBus.getDestination(destinationName);
+		Destination destination = (Destination) _messageBus.getDestination(destinationName);
 
 		if (destination == null) {
 			if (_logger.isInfoEnabled()) {
