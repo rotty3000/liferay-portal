@@ -12,17 +12,21 @@
  * details.
  */
 
-package com.liferay.messaging;
+package com.liferay.messaging.tb20;
+
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Michael C. Han
+ * @author Raymond Augé
  */
-public interface Destination {
+@Component(service = DestinationConfiguration.class)
+public class TBSerialDestination extends DestinationConfiguration {
 
-	public DestinationStatistics getDestinationStatistics();
-
-	public String getName();
-
-	public boolean isRegistered();
+	public TBSerialDestination() {
+		super(DestinationType.SERIAL, "serial/test");
+	}
 
 }

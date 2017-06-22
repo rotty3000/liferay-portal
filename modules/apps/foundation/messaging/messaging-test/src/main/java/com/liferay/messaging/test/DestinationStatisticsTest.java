@@ -62,6 +62,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
+		/*
 		System.out.printf(message, destinationName);
 		System.out.printf(
 			"  Pending messages: %s%n",
@@ -84,6 +85,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		System.out.printf(
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
+		*/
 
 		if (destinationName.equals("synchronous/test")) {
 			assertEquals(0, destinationStatistics.getPendingMessageCount());
@@ -118,6 +120,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
+		/*
 		System.out.printf(message, destinationName);
 		System.out.printf(
 			"  Pending messages: %s%n",
@@ -140,6 +143,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		System.out.printf(
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
+		*/
 
 		assertEquals(0, destinationStatistics.getPendingMessageCount());
 
@@ -175,6 +179,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
+		/*
 		System.out.printf(message, destinationName);
 		System.out.printf(
 			"  Pending messages: %s%n",
@@ -197,6 +202,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		System.out.printf(
 			"  Min threads: %s%n%n",
 			destinationStatistics.getMinThreadPoolSize());
+		*/
 
 		if (destinationName.equals("synchronous/test")) {
 			assertEquals(0, destinationStatistics.getPendingMessageCount());

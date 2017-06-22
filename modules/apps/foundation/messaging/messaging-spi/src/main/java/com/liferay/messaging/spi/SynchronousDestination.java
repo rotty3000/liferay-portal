@@ -15,6 +15,7 @@
 package com.liferay.messaging.spi;
 
 import com.liferay.messaging.DestinationSettings;
+import com.liferay.messaging.DestinationStatistics;
 import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
@@ -42,8 +43,8 @@ public class SynchronousDestination extends BaseDestination {
 
 	@Override
 	public DestinationStatistics getDestinationStatistics() {
-		DestinationStatistics destinationStatistics =
-			new DestinationStatistics();
+		DestinationStatisticsImpl destinationStatistics =
+			new DestinationStatisticsImpl();
 
 		destinationStatistics.setSentMessageCount(_sentMessageCounter.get());
 
