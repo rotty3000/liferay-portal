@@ -12,17 +12,21 @@
  * details.
  */
 
-package com.liferay.messaging;
+package com.liferay.messaging.tb18;
+
+import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
- * @author Michael C. Han
+ * @author Raymond Augé
  */
-public interface Destination {
+@Component(service = DestinationConfiguration.class)
+public class TBSynchronousDestination extends DestinationConfiguration {
 
-	public DestinationStatistics getDestinationStatistics();
-
-	public String getName();
-
-	public boolean isRegistered();
+	public TBSynchronousDestination() {
+		super(DestinationType.SYNCHRONOUS, "synchronous/test");
+	}
 
 }

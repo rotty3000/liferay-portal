@@ -24,7 +24,7 @@ package com.liferay.messaging.spi;
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
  */
-public class DestinationStatistics
+public class DestinationStatisticsImpl
 	implements com.liferay.messaging.DestinationStatistics {
 
 	public int getActiveThreadCount() {
