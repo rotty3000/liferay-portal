@@ -55,7 +55,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		final Deferred<Integer> afterReceive = new Deferred<>();
 		final Deferred<Integer> afterThread = new Deferred<>();
@@ -122,7 +122,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 				InboundMessageProcessorFactory.class, factory, properties);
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			Promise<Integer> promiseToAfterReceive = afterReceive.getPromise();
 
@@ -155,7 +155,7 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 			assertEquals(Integer.valueOf(4), promiseToAfterThread.getValue());
 			assertEquals(Integer.valueOf(5), promiseToAfterReceive.getValue());
 
-			tbBundle.uninstall();
+			tb.uninstall();
 		}
 		finally {
 			serviceRegistration.unregister();
