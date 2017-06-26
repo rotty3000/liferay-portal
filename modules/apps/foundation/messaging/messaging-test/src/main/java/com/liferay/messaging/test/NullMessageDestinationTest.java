@@ -50,10 +50,10 @@ public class NullMessageDestinationTest extends TestUtil {
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			Filter filter = bundleContext.createFilter(
 				String.format(
@@ -77,7 +77,7 @@ public class NullMessageDestinationTest extends TestUtil {
 			assertEquals(message, callable.call());
 		}
 		finally {
-			tbBundle.uninstall();
+			tb.uninstall();
 		}
 	}
 

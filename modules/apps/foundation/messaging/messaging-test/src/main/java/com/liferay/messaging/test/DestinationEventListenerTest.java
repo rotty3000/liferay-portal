@@ -37,7 +37,7 @@ public class DestinationEventListenerTest extends TestUtil {
 
 	@Test
 	public void testBasic() throws Exception {
-		Bundle tb1Bundle = install("tb1.jar");
+		Bundle tb1 = install("tb1.jar");
 
 		final Deferred<MessageListener> registration = new Deferred<>();
 		final Deferred<MessageListener> unregistration = new Deferred<>();
@@ -74,7 +74,7 @@ public class DestinationEventListenerTest extends TestUtil {
 
 			assertFalse(promiseToRegister.isDone());
 
-			tb1Bundle.start();
+			tb1.start();
 
 			assertNotNull(promiseToRegister.getValue());
 
@@ -83,7 +83,7 @@ public class DestinationEventListenerTest extends TestUtil {
 
 			assertFalse(promiseToUnregister.isDone());
 
-			tb1Bundle.uninstall();
+			tb1.uninstall();
 
 			assertNotNull(promiseToUnregister.getValue());
 		}

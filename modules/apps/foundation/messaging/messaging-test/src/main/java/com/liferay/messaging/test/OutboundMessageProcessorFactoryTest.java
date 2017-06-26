@@ -53,7 +53,7 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 	}
 
 	protected void test(String bundle, String destination) throws Exception {
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		final Deferred<Integer> afterSend = new Deferred<>();
 		final Deferred<Integer> beforeSend = new Deferred<>();
@@ -101,7 +101,7 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 				OutboundMessageProcessorFactory.class, factory, properties);
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			Promise<Integer> promiseToAfterSend = afterSend.getPromise();
 
@@ -123,7 +123,7 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 			assertEquals(Integer.valueOf(2), promiseToBeforeSend.getValue());
 			assertEquals(Integer.valueOf(3), promiseToAfterSend.getValue());
 
-			tbBundle.uninstall();
+			tb.uninstall();
 		}
 		finally {
 			serviceRegistration.unregister();
