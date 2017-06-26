@@ -45,10 +45,10 @@ public class SynchronousMessageSenderTest extends TestUtil {
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			Message message = new Message();
 
@@ -58,7 +58,7 @@ public class SynchronousMessageSenderTest extends TestUtil {
 			assertEquals(message, result);
 		}
 		finally {
-			tbBundle.uninstall();
+			tb.uninstall();
 		}
 	}
 
