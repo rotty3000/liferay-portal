@@ -62,31 +62,6 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
-		/*
-		System.out.printf(message, destinationName);
-		System.out.printf(
-			"  Pending messages: %s%n",
-			destinationStatistics.getPendingMessageCount());
-		System.out.printf(
-			"  Sent messages: %s%n",
-			destinationStatistics.getSentMessageCount());
-		System.out.printf(
-			"  Active threads: %s%n",
-			destinationStatistics.getActiveThreadCount());
-		System.out.printf(
-			"  Current threads: %s%n",
-			destinationStatistics.getCurrentThreadCount());
-		System.out.printf(
-			"  Largest threads: %s%n",
-			destinationStatistics.getLargestThreadCount());
-		System.out.printf(
-			"  Max threads: %s%n",
-			destinationStatistics.getMaxThreadPoolSize());
-		System.out.printf(
-			"  Min threads: %s%n%n",
-			destinationStatistics.getMinThreadPoolSize());
-		*/
-
 		if (destinationName.equals("synchronous/test")) {
 			assertEquals(0, destinationStatistics.getPendingMessageCount());
 			assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -119,31 +94,6 @@ public class DestinationStatisticsTest extends TestUtil {
 	protected void assertFinalStats(
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
-
-		/*
-		System.out.printf(message, destinationName);
-		System.out.printf(
-			"  Pending messages: %s%n",
-			destinationStatistics.getPendingMessageCount());
-		System.out.printf(
-			"  Sent messages: %s%n",
-			destinationStatistics.getSentMessageCount());
-		System.out.printf(
-			"  Active threads: %s%n",
-			destinationStatistics.getActiveThreadCount());
-		System.out.printf(
-			"  Current threads: %s%n",
-			destinationStatistics.getCurrentThreadCount());
-		System.out.printf(
-			"  Largest threads: %s%n",
-			destinationStatistics.getLargestThreadCount());
-		System.out.printf(
-			"  Max threads: %s%n",
-			destinationStatistics.getMaxThreadPoolSize());
-		System.out.printf(
-			"  Min threads: %s%n%n",
-			destinationStatistics.getMinThreadPoolSize());
-		*/
 
 		assertEquals(0, destinationStatistics.getPendingMessageCount());
 
@@ -179,31 +129,6 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
-		/*
-		System.out.printf(message, destinationName);
-		System.out.printf(
-			"  Pending messages: %s%n",
-			destinationStatistics.getPendingMessageCount());
-		System.out.printf(
-			"  Sent messages: %s%n",
-			destinationStatistics.getSentMessageCount());
-		System.out.printf(
-			"  Active threads: %s%n",
-			destinationStatistics.getActiveThreadCount());
-		System.out.printf(
-			"  Current threads: %s%n",
-			destinationStatistics.getCurrentThreadCount());
-		System.out.printf(
-			"  Largest threads: %s%n",
-			destinationStatistics.getLargestThreadCount());
-		System.out.printf(
-			"  Max threads: %s%n",
-			destinationStatistics.getMaxThreadPoolSize());
-		System.out.printf(
-			"  Min threads: %s%n%n",
-			destinationStatistics.getMinThreadPoolSize());
-		*/
-
 		if (destinationName.equals("synchronous/test")) {
 			assertEquals(0, destinationStatistics.getPendingMessageCount());
 			assertEquals(10, destinationStatistics.getSentMessageCount());
@@ -236,12 +161,12 @@ public class DestinationStatisticsTest extends TestUtil {
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		ServiceRegistration<?> factoryRegistration = null;
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			Destination destination = messageBus.getDestination(
 				destinationName);
@@ -343,7 +268,7 @@ public class DestinationStatisticsTest extends TestUtil {
 				destination.getDestinationStatistics());
 		}
 		finally {
-			tbBundle.uninstall();
+			tb.uninstall();
 
 			if (factoryRegistration != null) {
 				factoryRegistration.unregister();

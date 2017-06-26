@@ -18,6 +18,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.messaging.DestinationNames;
+
 import java.lang.management.ManagementFactory;
 
 import java.util.Iterator;
@@ -73,8 +75,8 @@ public class JMXTest extends JMXUtil {
 		assertEquals(2, destinationNames.length);
 		assertArrayEquals(
 			new String[] {
-				"liferay/message_bus/default_response",
-				"liferay/message_bus/message_status"
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
+				DestinationNames.MESSAGE_BUS_MESSAGE_STATUS
 			},
 			destinationNames);
 	}
