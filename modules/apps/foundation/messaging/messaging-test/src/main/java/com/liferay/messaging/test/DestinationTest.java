@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.messaging.Destination;
 import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.spi.MessageRunnable;
@@ -61,7 +62,9 @@ public class DestinationTest extends TestUtil {
 		testSend("synchronous/test", "tb1.jar");
 	}
 
-	protected void testExecutorServiceRegistrar(String destinationName, String... bundleNames) throws Exception {
+	protected void testExecutorServiceRegistrar(
+			String destinationName, String... bundleNames) throws Exception {
+
 		List<Bundle> bundles = new ArrayList<Bundle>();
 		
 		for (String bundleName : bundleNames) {
@@ -108,7 +111,9 @@ public class DestinationTest extends TestUtil {
 		}
 	}
 
-	protected void testRejectedExecutionHandler(String destinationName, String... bundleNames) throws Exception {
+	protected void testRejectedExecutionHandler(
+			String destinationName, String... bundleNames) throws Exception {
+
 		List<Bundle> bundles = new ArrayList<Bundle>();
 		
 		for (String bundleName : bundleNames) {
@@ -175,6 +180,13 @@ public class DestinationTest extends TestUtil {
 		try {
 			bundle.start();
 	
+			Destination destination = messageBus.getDestination(
+				destinationName);
+			
+			assertEquals(destinationName, destination.getName());
+			
+			assertTrue(destination.isRegistered());
+
 			Filter filter = bundleContext.createFilter(
 				String.format(
 					"(&(objectClass=java.util.concurrent.Callable)" +

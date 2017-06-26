@@ -45,10 +45,10 @@ public class MessageBuilderOnListenerTest extends TestUtil {
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
-		Bundle tbBundle = install(bundle);
+		Bundle tb = install(bundle);
 
 		try {
-			tbBundle.start();
+			tb.start();
 
 			MessageBuilder builder = messageBuilderFactory.create(
 				destinationName);
@@ -58,7 +58,7 @@ public class MessageBuilderOnListenerTest extends TestUtil {
 			assertEquals(builder.build(), response);
 		}
 		finally {
-			tbBundle.uninstall();
+			tb.uninstall();
 		}
 	}
 

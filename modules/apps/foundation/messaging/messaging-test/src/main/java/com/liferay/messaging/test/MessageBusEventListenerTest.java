@@ -39,19 +39,19 @@ public class MessageBusEventListenerTest extends TestUtil {
 	public void testBasic() throws Exception {
 		Bundle tb1Bundle = install("tb1.jar");
 
-		final Deferred<Destination> registeration = new Deferred<>();
-		final Deferred<Destination> unregisteration = new Deferred<>();
+		final Deferred<Destination> registration = new Deferred<>();
+		final Deferred<Destination> unregistration = new Deferred<>();
 
 		MessageBusEventListener listener = new MessageBusEventListener() {
 
 			@Override
 			public void destinationAdded(Destination destination) {
-				registeration.resolve(destination);
+				registration.resolve(destination);
 			}
 
 			@Override
 			public void destinationRemoved(Destination destination) {
-				unregisteration.resolve(destination);
+				unregistration.resolve(destination);
 			}
 
 		};
@@ -65,14 +65,14 @@ public class MessageBusEventListenerTest extends TestUtil {
 				MessageBusEventListener.class, listener, properties);
 
 		try {
-			Promise<Destination> promiseToRegister = registeration.getPromise();
+			Promise<Destination> promiseToRegister = registration.getPromise();
 
 			tb1Bundle.start();
 
 			assertNotNull(promiseToRegister.getValue());
 
 			Promise<Destination> promiseToUnregister =
-				unregisteration.getPromise();
+				unregistration.getPromise();
 
 			assertFalse(promiseToUnregister.isDone());
 
