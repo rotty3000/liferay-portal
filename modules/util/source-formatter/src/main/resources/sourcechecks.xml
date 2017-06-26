@@ -58,6 +58,7 @@
 		<check name="JavaBooleanStatementCheck" />
 		<check name="JavaBooleanUsageCheck" />
 		<check name="JavaCombineLinesCheck" />
+		<check name="JavaConfigurationAdminCheck" />
 		<check name="JavaConstructorParameterOrder" />
 		<check name="JavaConstructorSuperCallCheck" />
 		<check name="JavaDataAccessConnectionCheck" />
@@ -115,7 +116,7 @@
 		<check name="JavaModuleServiceReferenceCheck" />
 		<check name="JavaModuleTestCheck" />
 		<check name="JavaOSGiReferenceCheck">
-			<property name="serviceReferenceUtilClassNames" value="com.liferay.exportimport.kernel.staging.StagingUtil,com.liferay.portal.kernel.captcha.CaptchaUtil,com.liferay.portal.kernel.comment.CommentManagerUtil,com.liferay.portal.kernel.util.HttpUtil,com.liferay.portal.kernel.util.PortalUtil" />
+			<property name="serviceReferenceUtilClassNames" value="com.liferay.exportimport.kernel.staging.StagingUtil,com.liferay.portal.kernel.backgroundtask.BackgroundTaskManagerUtil,com.liferay.portal.kernel.backgroundtask.display.BackgroundTaskDisplayFactoryUtil,com.liferay.portal.kernel.captcha.CaptchaUtil,com.liferay.portal.kernel.comment.CommentManagerUtil,com.liferay.portal.kernel.util.HttpUtil,com.liferay.portal.kernel.util.PortalUtil" />
 		</check>
 
 		<!-- Plugins checks -->
@@ -160,6 +161,7 @@
 		<check name="JSPIncludeCheck" />
 		<check name="JSPIndentationCheck" />
 		<check name="JSPLanguageUtilCheck" />
+		<check name="JSPLineBreakCheck" />
 		<check name="JSPLogFileNameCheck" />
 		<check name="JSPRedirectBackURLCheck" />
 		<check name="JSPSendRedirectCheck" />

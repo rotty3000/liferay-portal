@@ -12,16 +12,24 @@
  * details.
  */
 
-package com.liferay.wiki.web.configuration;
+package com.liferay.portal.test.mail;
 
-import com.liferay.portal.kernel.settings.Settings;
-import com.liferay.wiki.web.configuration.definition.WikiPortletInstanceConfigurationOverrideImpl;
+import aQute.bnd.annotation.ProviderType;
+
+import java.util.Iterator;
 
 /**
- * @author Iván Zaera
+ * @author Adam Brandizzi
  */
-@Settings.OverrideClass(WikiPortletInstanceConfigurationOverrideImpl.class)
-public interface WikiPortletInstanceOverriddenConfiguration
-	extends WikiPortletInstanceConfiguration,
-			WikiPortletInstanceConfigurationOverride {
+@ProviderType
+public interface MailMessage {
+
+	public String getBody();
+
+	public String getFirstHeaderValue(String headerName);
+
+	public Iterator<String> getHeaderNames();
+
+	public String[] getHeaderValues(String headerName);
+
 }

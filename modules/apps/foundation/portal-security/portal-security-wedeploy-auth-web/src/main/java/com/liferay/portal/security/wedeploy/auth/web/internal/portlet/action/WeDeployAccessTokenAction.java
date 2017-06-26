@@ -54,6 +54,13 @@ public class WeDeployAccessTokenAction extends BaseStrutsAction {
 			HttpServletRequest request, HttpServletResponse response)
 		throws Exception {
 
+		response.setContentType(ContentTypes.APPLICATION_JSON);
+		response.setHeader(
+			HttpHeaders.CACHE_CONTROL,
+			HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
 		String redirectURI = ParamUtil.getString(request, "redirect_uri");
 		String clientId = ParamUtil.getString(request, "client_id");
 		String clientSecret = ParamUtil.getString(request, "client_secret");
@@ -61,8 +68,6 @@ public class WeDeployAccessTokenAction extends BaseStrutsAction {
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			WeDeployAuthToken.class.getName(), request);
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
 			WeDeployAuthToken weDeployAuthToken =
@@ -104,11 +109,6 @@ public class WeDeployAccessTokenAction extends BaseStrutsAction {
 					"an-error-occurred-while-processing-the-requested-" +
 						"resource"));
 		}
-
-		response.setContentType(ContentTypes.APPLICATION_JSON);
-		response.setHeader(
-			HttpHeaders.CACHE_CONTROL,
-			HttpHeaders.CACHE_CONTROL_NO_CACHE_VALUE);
 
 		ServletResponseUtil.write(response, jsonObject.toString());
 

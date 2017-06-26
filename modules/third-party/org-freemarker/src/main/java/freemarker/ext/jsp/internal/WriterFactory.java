@@ -12,21 +12,16 @@
  * details.
  */
 
-package com.liferay.wiki.web.configuration;
+package freemarker.ext.jsp.internal;
 
-import java.io.IOException;
-
-import javax.portlet.ValidatorException;
+import java.io.Writer;
 
 /**
- * @author Iván Zaera
+ * @author Preston Crary
  */
-public interface WikiPortletInstanceConfigurationOverride {
+public interface WriterFactory {
 
-	public void setHiddenNodes(String[] hiddenNodes);
-
-	public void setVisibleNodes(String[] visibleNodes);
-
-	public void store() throws IOException, ValidatorException;
+	public Writer createWriter();
 
 }
+/* @generated */
