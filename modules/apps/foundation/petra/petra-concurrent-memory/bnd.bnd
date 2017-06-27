@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Petra Concurrent Memory
+Bundle-SymbolicName: com.liferay.petra.concurrent.memory
+Bundle-Version: 1.0.0
+Export-Package: com.liferay.petra.concurrent.memory
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title:
