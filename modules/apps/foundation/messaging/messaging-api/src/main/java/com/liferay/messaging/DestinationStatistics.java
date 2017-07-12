@@ -16,10 +16,9 @@ package com.liferay.messaging;
 
 /**
  * DestinationStatistics is meant for informational purposes only. The datum
- * contained may not add up. They are assembled as a best effort and may
- * contain slight discrepancies. However, after forced
- * {@link Destination#close(boolean)} operation, the final results must add
- * up.
+ * contained may not add up. They are assembled as a best effort and may contain
+ * slight discrepancies. However, after forced {@link
+ * Destination#close(boolean)} operation, the final results must add up.
  *
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
@@ -27,18 +26,53 @@ package com.liferay.messaging;
  */
 public interface DestinationStatistics {
 
+	/**
+	 * Returns the approximate number of threads that are currently executing tasks.
+	 * 
+	 * @return the approximate number of threads that are currently executing tasks
+	 */
 	public int getActiveThreadCount();
 
+	/**
+	 * Returns the current number of threads.
+	 * 
+	 * @return the current number of threads
+	 */
 	public int getCurrentThreadCount();
 
+	/**
+	 * Returns the largest number of threads that have ever simultaneously been in the pool.
+	 * 
+	 * @return the largest number of threads that have ever simultaneously been in the pool
+	 */
 	public int getLargestThreadCount();
 
+	/**
+	 * Returns the maximum allowed number of threads.
+	 * 
+	 * @return the maximum allowed number of threads
+	 */
 	public int getMaxThreadPoolSize();
 
+	/**
+	 * Returns the core number of threads.
+	 * 
+	 * @return the core number of threads
+	 */
 	public int getMinThreadPoolSize();
 
+	/**
+	 * Returns the number of messages queued up waiting to be dispatched.
+	 * 
+	 * @return the number of messages queued up waiting to be dispatched
+	 */
 	public long getPendingMessageCount();
 
+	/**
+	 * Returns the approximate number of messages that have been sent.
+	 * 
+	 * @return the approximate number of messages that have been sent
+	 */
 	public long getSentMessageCount();
 
 }

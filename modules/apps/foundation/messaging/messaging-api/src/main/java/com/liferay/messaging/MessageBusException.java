@@ -15,6 +15,9 @@
 package com.liferay.messaging;
 
 /**
+ * Indicates that the message bus encountered an error while trying to send a
+ * message.
+ * 
  * @author Brian Wing Shun Chan
  */
 public class MessageBusException extends RuntimeException {

@@ -17,8 +17,7 @@ package com.liferay.messaging;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Interface used to register executor thread pools with interested
- * parties.
+ * Interface used to register executor thread pools with interested parties.
  *
  * @author Raymond Augé
  */
