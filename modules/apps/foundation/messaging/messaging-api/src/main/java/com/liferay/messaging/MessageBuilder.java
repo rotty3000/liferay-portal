@@ -39,8 +39,6 @@ public interface MessageBuilder {
 
 	/**
 	 * Send the message asynchronously.
-	 *
-	 * @throws IllegalStateException if destination name is not set
 	 */
 	public void send();
 
@@ -48,17 +46,15 @@ public interface MessageBuilder {
 	 * Send the message synchronously.
 	 *
 	 * @return the result
-	 * @throws IllegalStateException if destination name is not set
 	 */
 	public Object sendSynchronous();
 
 	/**
-	 * Send the message synchronously supplying the timeout within which
-	 * a result is expected.
+	 * Send the message synchronously supplying the timeout within which a
+	 * result is expected.
 	 *
-	 * @param timeout
+	 * @param  timeout
 	 * @return the result
-	 * @throws IllegalStateException if destination name is not set
 	 */
 	public Object sendSynchronous(long timeout);
 
@@ -96,7 +92,7 @@ public interface MessageBuilder {
 		String responseDestinationName);
 
 	/**
-	 * Set the response id into the message.
+	 * Set the response ID into the message.
 	 *
 	 * @param  responseId
 	 * @return the builder
@@ -104,8 +100,8 @@ public interface MessageBuilder {
 	public MessageBuilder setResponseId(String responseId);
 
 	/**
-	 * Use a map to add a number of key, value pairs of data into the message
-	 * at once.
+	 * Use a map to add a number of key, value pairs of data into the message at
+	 * once.
 	 *
 	 * @param  values
 	 * @return the builder

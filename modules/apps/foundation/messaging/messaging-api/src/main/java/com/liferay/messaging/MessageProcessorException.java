@@ -15,6 +15,9 @@
 package com.liferay.messaging;
 
 /**
+ * Indicates that an inbound or outbound message processor encountered an error
+ * while trying to process a message.
+ * 
  * @author Raymond Augé
  */
 public class MessageProcessorException extends RuntimeException {

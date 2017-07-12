@@ -16,10 +16,10 @@ package com.liferay.messaging;
 
 /**
  * <p>
- * Interface for processing in-bound messages before and after being received.
- * Each execution creates a new processor instance, so they are thread safe.
- * Both before and after stages are guaranteed to be executed so it's possible
- * to implement "around" behaviour.
+ * Processes in-bound messages before and after being received. Since each
+ * execution creates a new processor instance, processor instances are thread
+ * safe. Both before and after stages are guaranteed to be executed so it's
+ * possible to implement "around" behavior.
  * </p>
  *
  * @author Raymond Augé
@@ -42,8 +42,8 @@ public interface InboundMessageProcessor {
 		throws MessageProcessorException;
 
 	/**
-	 * Process an in-bound message before passing it to listeners. The
-	 * message may be altered or replaced.
+	 * Process an in-bound message before passing it to listeners. The message
+	 * may be altered or replaced.
 	 *
 	 * @param  message the message being received
 	 * @return message the message to deliver

@@ -15,12 +15,33 @@
 package com.liferay.messaging;
 
 /**
+ * <p>
+ * Interface providing a factory for MessageBuilder instances.
+ * </p>
+ * 
  * @author Raymond Augé
  */
 public interface MessageBuilderFactory {
 
+	/**
+	 * Returns a new message builder using the provided destination name.
+	 * 
+	 * @param destinationName the name of the destination with which the new
+	 * message builder is configured
+	 * @return a new message builder configured with the provided destination
+	 * name
+	 */
 	public MessageBuilder create(String destinationName);
 
+	/**
+	 * Returns a new message builder using the response destination name of the
+	 * provided message.
+	 * 
+	 * @param message the message whose response destination name is used to
+	 * configure the new message builder.
+	 * @return a new message builder configured with the destination name of the
+	 * provided message
+	 */
 	public MessageBuilder createResponse(Message message);
 
 }
