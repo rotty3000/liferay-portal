@@ -15,6 +15,8 @@
 package com.liferay.messaging;
 
 /**
+ * Indicates that a message listener could not process a message. 
+ * 
  * @author Brian Wing Shun Chan
  */
 public class MessageListenerException extends RuntimeException {
