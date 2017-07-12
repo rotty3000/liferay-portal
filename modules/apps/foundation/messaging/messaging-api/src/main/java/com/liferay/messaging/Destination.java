@@ -15,14 +15,39 @@
 package com.liferay.messaging;
 
 /**
+ * Represents a messaging endpoint.
+ *
+ * <p>
+ * Messages are sent to a destination. One or more message listeners can be
+ * registered with a destination. When a message is sent to a destination, all
+ * of the destination's registered listeners receive the message.
+ * </p>
+ *
  * @author Michael C. Han
  */
 public interface Destination {
 
+	/**
+	 * Returns the destination's destination statistics.
+	 *
+	 * @return the destination's destination statistics
+	 */
 	public DestinationStatistics getDestinationStatistics();
 
+	/**
+	 * Returns the name of the destination.
+	 *
+	 * @return the name of the destination
+	 */
 	public String getName();
 
+	/**
+	 * Returns <code>true</code> if the destination has at least one message
+	 * listener.
+	 *
+	 * @return <code>true</code> if the destination has at least one message
+	 *         listener; <code>false</code> otherwise
+	 */
 	public boolean isRegistered();
 
 }
