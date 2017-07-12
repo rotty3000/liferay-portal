@@ -23,6 +23,11 @@ package com.liferay.messaging;
  */
 public interface OutboundMessageProcessorFactory {
 
+	/**
+	 * Returns a new outbound message processor
+	 * 
+	 * @return a new outbound message processor
+	 */
 	public OutboundMessageProcessor create();
 
 }

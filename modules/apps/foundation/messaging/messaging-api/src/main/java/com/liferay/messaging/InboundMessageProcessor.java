@@ -42,8 +42,8 @@ public interface InboundMessageProcessor {
 		throws MessageProcessorException;
 
 	/**
-	 * Process an in-bound message before passing it to listeners. The
-	 * message may be altered or replaced.
+	 * Process an in-bound message before passing it to listeners. The message
+	 * may be altered or replaced.
 	 *
 	 * @param  message the message being received
 	 * @return message the message to deliver
