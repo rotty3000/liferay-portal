@@ -16,10 +16,10 @@ package com.liferay.messaging;
 
 /**
  * <p>
- * Interface for processing out-bound messages before and after being sent.
- * Each execution creates a new processor instance, so they are thread safe.
- * Both before and after stages are guaranteed to be executed so it's possible
- * to implement "around" behaviour.
+ * Processes out-bound messages before and after being sent. Since each
+ * execution creates a new processor instance, processor instances are thread
+ * safe. Both before and after stages are guaranteed to be executed so it's
+ * possible to implement "around" behavior.
  * </p>
  *
  * @author Raymond Augé

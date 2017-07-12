@@ -25,6 +25,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
+/**
+ * @author Brian Wing Shun Chan
+ */
 public class MessageTest {
 
 	public static final double DELTA = 1e-100;
