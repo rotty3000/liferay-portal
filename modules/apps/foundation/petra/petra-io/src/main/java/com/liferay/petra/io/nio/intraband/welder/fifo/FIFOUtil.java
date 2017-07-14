@@ -54,8 +54,7 @@ public class FIFOUtil {
 
 	private static final boolean _FIFO_SUPPORTED;
 
-	private static final Logger _logger = LoggerFactory.getLogger(
-		FIFOUtil.class);
+	private static final Logger _log = LoggerFactory.getLogger(FIFOUtil.class);
 
 	static {
 		boolean fifoSupport = false;
@@ -79,8 +78,8 @@ public class FIFOUtil {
 			fifoSupport = true;
 		}
 		catch (Throwable t) {
-			if (_logger.isWarnEnabled()) {
-				_logger.warn("Unable to detect FIFO support", t);
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to detect FIFO support", t);
 			}
 		}
 

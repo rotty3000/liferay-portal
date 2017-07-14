@@ -31,7 +31,7 @@ public class ReaderInputStream extends InputStream {
 
 	public ReaderInputStream(Reader reader) {
 		this(
-			reader, "UTF-8", _DEFAULT_INTPUT_BUFFER_SIZE,
+			reader, StringPool.UTF8, _DEFAULT_INTPUT_BUFFER_SIZE,
 			_DEFAULT_OUTPUT_BUFFER_SIZE);
 	}
 
