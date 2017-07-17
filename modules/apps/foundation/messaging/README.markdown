@@ -4,7 +4,7 @@ Liferay provides an easy-to-use messaging utility called the Message Bus. The
 Message Bus provides a flexible API that allows application components to
 create, send, and receive messages. Liferay makes extensive use of the Message
 Bus for communication within and between Liferay applications. Liferay's
-messaging utility is similiar to Java's JMS but is lighter-weight and provides
+messaging utility is similar to Java's JMS but is lighter-weight and provides
 a smaller and simpler API.
 
 In previous versions of Liferay, the Message Bus was embedded in Liferay's
@@ -19,7 +19,7 @@ The Message Bus consists of four OSGi modules:
   to provide a complete implementation of all the services required to satisfy
 the contracts promised by the `messaging-api` module. 
 - `messaging-spi`: The `messaging-spi` module provides an SPI (service provider
-  interface) that's intended for use by Message Bus implementors (a.k.a.
+  interface) that's intended for use by Message Bus implementers (a.k.a.
 Message Bus providers). 
 - `messaging-test`: The `messaging-test` module contains integration tests that
   launch an OSGi runtime, install the `messaging-api`, `messaging-spi`, and
@@ -36,8 +36,11 @@ The term 'Message Bus' can be used either as (1) a general term for Liferay's
 messaging utility or (2) as a specific software component in Liferay's
 messaging utility. Below, we use the term in the second sense.
 
-- Message Bus: Manages the sending of messages and the destinations to which they are sent
-- Destination: Defines an endpoint to which messages can be sent and message listeners can subscribe. There are three main types of destinations which correspond to their supported messaging types, descibed below.
+- Message Bus: Manages the sending of messages and the destinations to which
+  they are sent
+- Destination: Defines an endpoint to which messages can be sent and message
+  listeners can subscribe. There are three main types of destinations which
+correspond to their supported messaging types, described below.
 	- ParallelDestination
 	- SerialDestination
 	- SynchronousDestination
@@ -47,8 +50,8 @@ messaging utility. Below, we use the term in the second sense.
 Responses can optionally be sent (depending on whether or not the message
 includes response destination information) but are not required. Messages sent
 to a destination are delivered to the destination's registered message
-listeners in seperate worker threads. This frees the sending thread to continue
-processing. There are two kinds of asynchronous messaging:
+listeners in separate worker threads. This frees the sending thread to continue
+processing without delay. There are two kinds of asynchronous messaging:
 	- Parallel messaging: In this form of messaging, one worker thread is
 	  created for each message for each message listener. Thus, messages are
 delivered to the message listeners in parallel.
@@ -57,11 +60,12 @@ delivered to the message listeners in parallel.
 listeners one at a time.
 - Synchronous messaging: In this form of messaging, the sender sends a message
   to a destination and waits for a response. This form of messaging expects a
-response. The sending threads sends each message to each message listener by itself; no worker threads are created.
+response. The sending thread sends each message to each message listener by
+itself; no worker threads are created.
 
 In summary, the Message Bus is responsible for managing a list of destinations.
 Destinations are messaging endpoints which each support a particular kind of
-messaging. Destinations each manage a list of MessageListeners which are
+messaging. Destinations each manage a list of message listeners which are
 responsible for specifying the processing that should take place when a message
 is received.
 
@@ -90,7 +94,7 @@ other messaging modules.
 
 Let's explore the Message Bus API by looking at some typical examples of basic
 usage. Suppose you want to create and send a message from one component of your
-application to another. You can accomplish this in four easy steps:
+application to another. You can accomplish this in three easy steps:
 
 1. Create a destination and register it with the message bus.
 
@@ -112,7 +116,7 @@ This way, users aren't exposed to destination implementation details. The
 - `createSerialDestinationConfiguration(String destinationName)`
 - `createSynchronousDestinationConfiguration(String destinationName)`
 
-Thus, to create a parallel destination with the name "parallelDestination1", do
+Thus, to create a parallel destination with the name "parallelDestination", do
 this:
 
 	DestinationConfiguration parallelDestinationConfiguration =
@@ -155,7 +159,7 @@ DestinationConfiguration:
 The main difference here is that you need to associate your message listener
 with the destination that you created, namely, the "parallelDestination"
 destination. This is done by passing a dictionary containing the association as
-a third parameter when using your applicatoin's bundle context to register your
+a third parameter when using your application's bundle context to register your
 message listener service.
 
 An alternative way to create an register a message listener is to create your
@@ -303,7 +307,7 @@ acknowledgement message to indicate that a message was received.
 
 The message bus's synchronous messaging functionality supports this use case.
 The steps for setting up synchronous messaging are similar to those for setting
-up asynchronous messaging.
+up asynchronous messaging:
 
 1. Create a destination and register it with the message bus.
 
@@ -404,7 +408,7 @@ The message listener defined above uses the message builder factory service to
 create a response message builder. When creating a message or message builder,
 you can supply a response destination name. If omitted, the destination name
 defaults to `DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE` =
-`liferay/message_bus/default_response`. This is the destination to which the
+`"liferay/message_bus/default_response"`. This is the destination to which the
 response constructed by the message listener above is sent.
 
 The response message's payload is set to the received message so that the
