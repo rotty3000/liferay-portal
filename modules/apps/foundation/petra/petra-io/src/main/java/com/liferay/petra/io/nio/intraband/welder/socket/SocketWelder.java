@@ -124,6 +124,20 @@ public class SocketWelder extends BaseWelder {
 
 	}
 
+	protected class SocketWelderServerSocketConfigurator
+		implements ServerSocketConfigurator {
+
+		@Override
+		public void configure(ServerSocket serverSocket)
+			throws SocketException {
+
+			serverSocket.setReceiveBufferSize(bufferSize);
+			serverSocket.setReuseAddress(reuseAddress);
+			serverSocket.setSoTimeout(soTimeout);
+		}
+
+	}
+
 	private void _configureSocket(Socket socket) throws SocketException {
 		socket.setKeepAlive(keepAlive);
 		socket.setReceiveBufferSize(bufferSize);
@@ -139,20 +153,6 @@ public class SocketWelder extends BaseWelder {
 
 		socket.setSoTimeout(soTimeout);
 		socket.setTcpNoDelay(tcpNoDelay);
-	}
-
-	private class SocketWelderServerSocketConfigurator
-		implements ServerSocketConfigurator {
-
-		@Override
-		public void configure(ServerSocket serverSocket)
-			throws SocketException {
-
-			serverSocket.setReceiveBufferSize(bufferSize);
-			serverSocket.setReuseAddress(reuseAddress);
-			serverSocket.setSoTimeout(soTimeout);
-		}
-
 	}
 
 }

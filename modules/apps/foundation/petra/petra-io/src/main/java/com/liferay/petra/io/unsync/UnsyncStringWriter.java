@@ -14,6 +14,9 @@
 
 package com.liferay.petra.io.unsync;
 
+import com.liferay.petra.io.StringBundler;
+import com.liferay.petra.io.StringPool;
+
 import java.io.Writer;
 
 /**
@@ -26,11 +29,29 @@ import java.io.Writer;
 public class UnsyncStringWriter extends Writer {
 
 	public UnsyncStringWriter() {
-		stringBuilder = new StringBuilder();
+		this(true);
+	}
+
+	public UnsyncStringWriter(boolean useStringBundler) {
+		if (useStringBundler) {
+			stringBundler = new StringBundler();
+		}
+		else {
+			stringBuilder = new StringBuilder();
+		}
+	}
+
+	public UnsyncStringWriter(boolean useStringBundler, int initialCapacity) {
+		if (useStringBundler) {
+			stringBundler = new StringBundler(initialCapacity);
+		}
+		else {
+			stringBuilder = new StringBuilder(initialCapacity);
+		}
 	}
 
 	public UnsyncStringWriter(int initialCapacity) {
-		stringBuilder = new StringBuilder(initialCapacity);
+		this(true, initialCapacity);
 	}
 
 	@Override
@@ -43,7 +64,7 @@ public class UnsyncStringWriter extends Writer {
 	@Override
 	public UnsyncStringWriter append(CharSequence charSequence) {
 		if (charSequence == null) {
-			write("null");
+			write(StringPool.NULL);
 		}
 		else {
 			write(charSequence.toString());
@@ -57,7 +78,7 @@ public class UnsyncStringWriter extends Writer {
 		CharSequence charSequence, int start, int end) {
 
 		if (charSequence == null) {
-			charSequence = "null";
+			charSequence = StringPool.NULL;
 		}
 
 		write(charSequence.subSequence(start, end).toString());
@@ -77,13 +98,27 @@ public class UnsyncStringWriter extends Writer {
 		return stringBuilder;
 	}
 
+	public StringBundler getStringBundler() {
+		return stringBundler;
+	}
+
 	public void reset() {
-		stringBuilder.setLength(0);
+		if (stringBundler != null) {
+			stringBundler.setIndex(0);
+		}
+		else {
+			stringBuilder.setLength(0);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return stringBuilder.toString();
+		if (stringBundler != null) {
+			return stringBundler.toString();
+		}
+		else {
+			return stringBuilder.toString();
+		}
 	}
 
 	@Override
@@ -97,17 +132,39 @@ public class UnsyncStringWriter extends Writer {
 			return;
 		}
 
-		stringBuilder.append(chars, offset, length);
+		if (stringBundler != null) {
+			stringBundler.append(new String(chars, offset, length));
+		}
+		else {
+			stringBuilder.append(chars, offset, length);
+		}
 	}
 
 	@Override
 	public void write(int c) {
-		stringBuilder.append((char)c);
+		if (stringBundler != null) {
+			char ch = (char)c;
+
+			if (ch <= 127) {
+				stringBundler.append(StringPool.ASCII_TABLE[ch]);
+			}
+			else {
+				stringBundler.append(String.valueOf(ch));
+			}
+		}
+		else {
+			stringBuilder.append((char)c);
+		}
 	}
 
 	@Override
 	public void write(String string) {
-		stringBuilder.append(string);
+		if (stringBundler != null) {
+			stringBundler.append(string);
+		}
+		else {
+			stringBuilder.append(string);
+		}
 	}
 
 	@Override
@@ -117,10 +174,15 @@ public class UnsyncStringWriter extends Writer {
 
 			write(string);
 		}
-
-		stringBuilder.append(string.substring(offset, offset + length));
+		else if (stringBundler != null) {
+			stringBundler.append(string.substring(offset, offset + length));
+		}
+		else {
+			stringBuilder.append(string.substring(offset, offset + length));
+		}
 	}
 
 	protected StringBuilder stringBuilder;
+	protected StringBundler stringBundler;
 
 }

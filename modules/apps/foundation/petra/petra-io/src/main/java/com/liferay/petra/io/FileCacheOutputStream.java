@@ -45,7 +45,8 @@ public class FileCacheOutputStream extends OutputStream {
 		UUID uuid = new UUID(
 			threadLocalRandom.nextLong(), threadLocalRandom.nextLong());
 
-		_tempFile = File.createTempFile(uuid.toString() + "-", _EXTENSION);
+		_tempFile = File.createTempFile(
+			uuid.toString() + StringPool.DASH, _EXTENSION);
 
 		_ubos = new UnsyncBufferedOutputStream(
 			new FileOutputStream(_tempFile), _BUFFER);
@@ -70,8 +71,8 @@ public class FileCacheOutputStream extends OutputStream {
 			}
 		}
 		catch (IOException ioe) {
-			if (_logger.isWarnEnabled()) {
-				_logger.warn(ioe.getMessage());
+			if (_log.isWarnEnabled()) {
+				_log.warn(ioe.getMessage());
 			}
 		}
 	}
@@ -134,7 +135,7 @@ public class FileCacheOutputStream extends OutputStream {
 
 	private static final String _EXTENSION = ".fcos";
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		FileCacheOutputStream.class);
 
 	private FileInputStream _fis;
