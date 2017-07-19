@@ -362,7 +362,7 @@ public class SelectorIntraband extends BaseIntraband {
 		}
 	}
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		SelectorIntraband.class);
 
 	private class PollingJob implements Runnable {
@@ -415,19 +415,19 @@ public class SelectorIntraband extends BaseIntraband {
 				}
 			}
 			catch (ClosedSelectorException cse) {
-				if (_logger.isInfoEnabled()) {
+				if (_log.isInfoEnabled()) {
 					Thread currentThread = Thread.currentThread();
 
-					_logger.info(
-						currentThread.getName() +
-							" exiting gracefully on selector closure");
+					_log.info(
+						"{} exiting gracefully on selector closure",
+						currentThread.getName());
 				}
 			}
 			catch (Throwable t) {
 				Thread currentThread = Thread.currentThread();
 
-				_logger.error(
-					currentThread.getName() + " exiting exceptionally", t);
+				_log.error(
+					"{} exiting exceptionally", currentThread.getName(), t);
 			}
 
 			// Flush out pending register requests to unblock their invokers,

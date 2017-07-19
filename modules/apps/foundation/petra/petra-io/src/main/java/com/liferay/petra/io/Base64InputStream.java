@@ -214,27 +214,33 @@ public class Base64InputStream extends InputStream {
 	}
 
 	protected int getByte(char character) {
-		if ((character >= 'A') && (character <= 'Z')) {
+		if ((character >= CharPool.UPPER_CASE_A) &&
+			(character <= CharPool.UPPER_CASE_Z)) {
+
 			return character - 65;
 		}
 
-		if ((character >= 'a') && (character <= 'z')) {
+		if ((character >= CharPool.LOWER_CASE_A) &&
+			(character <= CharPool.LOWER_CASE_Z)) {
+
 			return (character - 97) + 26;
 		}
 
-		if ((character >= '0') && (character <= '9')) {
+		if ((character >= CharPool.NUMBER_0) &&
+			(character <= CharPool.NUMBER_9)) {
+
 			return (character - 48) + 52;
 		}
 
-		if (character == '+') {
+		if (character == CharPool.PLUS) {
 			return 62;
 		}
 
-		if (character == '/') {
+		if (character == CharPool.SLASH) {
 			return 63;
 		}
 
-		if (character != '=') {
+		if (character != CharPool.EQUAL) {
 			return -1;
 		}
 		else {
@@ -252,7 +258,7 @@ public class Base64InputStream extends InputStream {
 
 			char character = (char)(returnValue & 0xff);
 
-			if (character == '=') {
+			if (character == CharPool.EQUAL) {
 				return -2;
 			}
 
