@@ -68,9 +68,8 @@ import org.slf4j.LoggerFactory;
 @Component(
 	immediate = true,
 	property = Constants.SERVICE_PID + "=com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration",
-	service = {
-		DefaultMessageBus.class, ManagedServiceFactory.class, MessageBus.class
-	}
+	service =
+		{DefaultMessageBus.class, ManagedServiceFactory.class, MessageBus.class}
 )
 public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
@@ -127,7 +126,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized void registerDestination(
 		Destination destination, Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		if (BaseDestination.class.isInstance(destination)) {
 			BaseDestination baseDestination = (BaseDestination)destination;
@@ -182,7 +182,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -223,7 +224,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		InboundMessageProcessorFactory inboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -343,7 +345,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -572,7 +575,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DestinationEventListener destinationEventListener,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -596,7 +600,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		InboundMessageProcessorFactory inboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -631,7 +636,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized void unregisterMessageListener(
 		MessageListener messageListener, Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		unregisterMessageListener(destinationName, messageListener);
 	}
@@ -659,7 +665,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
 		Map<String, Object> properties) {
 
-		String destinationName = MapUtil.getString(properties, "destination.name");
+		String destinationName = MapUtil.getString(
+			properties, "destination.name");
 
 		Destination destination = _destinations.get(destinationName);
 
@@ -887,6 +894,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DefaultMessageBus.class);
 
 	private final Converter _converter = new StandardConverter();
+
 	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private DestinationFactory _destinationFactory;
 

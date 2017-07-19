@@ -115,7 +115,9 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public com.liferay.messaging.DestinationStatistics getDestinationStatistics() {
+	public com.
+	liferay.messaging.DestinationStatistics getDestinationStatistics() {
+
 		throw new UnsupportedOperationException();
 	}
 
