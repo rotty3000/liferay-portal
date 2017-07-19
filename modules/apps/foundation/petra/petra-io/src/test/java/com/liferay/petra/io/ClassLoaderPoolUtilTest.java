@@ -194,8 +194,8 @@ public class ClassLoaderPoolUtilTest {
 
 	private static final String _CONTEXT_NAME = "contextName";
 
-	private static DefaultClassLoaderPool _defaultClassLoaderPool;
 	private static Map<String, ClassLoader> _classLoaders;
 	private static Map<ClassLoader, String> _contextNames;
+	private static DefaultClassLoaderPool _defaultClassLoaderPool;
 
 }
