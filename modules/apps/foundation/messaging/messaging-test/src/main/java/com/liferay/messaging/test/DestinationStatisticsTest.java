@@ -97,8 +97,8 @@ public class DestinationStatisticsTest extends TestUtil {
 
 		assertEquals(0, destinationStatistics.getPendingMessageCount());
 
-		// We cannot make assertions on the number of sent messages without
-		// creating a timing issue. The reason is the thread pool cannot
+		// TODO: We cannot make assertions on the number of sent messages
+		// without creating a timing issue. The reason is the thread pool cannot
 		// return completely accurate statistics until after shutdown.
 
 		//assertEquals(10, destinationStatistics.getSentMessageCount());
