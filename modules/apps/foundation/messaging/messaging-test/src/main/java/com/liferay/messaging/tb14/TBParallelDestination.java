@@ -26,11 +26,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = {
-		"destination.name=parallel/test"
-	},
-	scope = ServiceScope.SINGLETON,
-	service = Destination.class
+	property = {"destination.name=parallel/test"},
+	scope = ServiceScope.SINGLETON, service = Destination.class
 )
 public class TBParallelDestination extends ParallelDestination {
 
