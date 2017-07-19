@@ -33,8 +33,7 @@ public class ProcessConfig implements Serializable {
 	}
 
 	public String getBootstrapClassPath() {
-		return String.join(
-			File.pathSeparator, getBootstrapClassPathElements());
+		return String.join(File.pathSeparator, getBootstrapClassPathElements());
 	}
 
 	public String[] getBootstrapClassPathElements() {
@@ -50,8 +49,7 @@ public class ProcessConfig implements Serializable {
 	}
 
 	public String getRuntimeClassPath() {
-		return String.join(
-			File.pathSeparator, getRuntimeClassPathElements());
+		return String.join(File.pathSeparator, getRuntimeClassPathElements());
 	}
 
 	public String[] getRuntimeClassPathElements() {
