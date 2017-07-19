@@ -40,7 +40,7 @@ public abstract class BaseAsyncDatagramReceiveHandler
 			RegistrationReference registrationReference, Datagram datagram)
 		throws Exception;
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		BaseAsyncDatagramReceiveHandler.class);
 
 	private final Executor _executor;
@@ -60,7 +60,7 @@ public abstract class BaseAsyncDatagramReceiveHandler
 				doReceive(_registrationReference, _datagram);
 			}
 			catch (Exception e) {
-				_logger.error("Unable to dispatch", e);
+				_log.error("Unable to dispatch", e);
 			}
 		}
 

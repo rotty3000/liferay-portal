@@ -14,6 +14,7 @@
 
 package com.liferay.petra.io.unsync;
 
+import com.liferay.petra.io.StringPool;
 import com.liferay.petra.io.nio.charset.CharsetEncoderUtil;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class UnsyncCharArrayWriter extends Writer {
 		String string = null;
 
 		if (charSequence == null) {
-			string = "null";
+			string = StringPool.NULL;
 		}
 		else {
 			string = charSequence.toString();
@@ -64,7 +65,7 @@ public class UnsyncCharArrayWriter extends Writer {
 		String string = null;
 
 		if (charSequence == null) {
-			string = "null";
+			string = StringPool.NULL;
 		}
 		else {
 			string = charSequence.subSequence(start, end).toString();

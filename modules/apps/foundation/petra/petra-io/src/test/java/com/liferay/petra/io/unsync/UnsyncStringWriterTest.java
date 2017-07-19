@@ -14,12 +14,15 @@
 
 package com.liferay.petra.io.unsync;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 /**
  * @author Shuyang Zhou
  */
 public class UnsyncStringWriterTest {
 
-	/*@Test
+	@Test
 	public void testAppendChar() {
 
 		// StringBuilder
@@ -325,7 +328,5 @@ public class UnsyncStringWriterTest {
 		Assert.assertEquals("ab", unsyncStringWriter.stringBundler.stringAt(0));
 		Assert.assertEquals("cd", unsyncStringWriter.stringBundler.stringAt(1));
 	}
-
-	*/
 
 }

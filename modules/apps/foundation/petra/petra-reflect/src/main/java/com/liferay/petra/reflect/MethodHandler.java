@@ -14,6 +14,8 @@
 
 package com.liferay.petra.reflect;
 
+import com.liferay.petra.io.StringBundler;
+
 import java.io.Serializable;
 
 import java.lang.reflect.Method;
@@ -61,14 +63,6 @@ public class MethodHandler implements Serializable {
 		return method.invoke(targetObject, _arguments);
 	}
 
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link #invoke}
-	 */
-	@Deprecated
-	public Object invoke(boolean newInstance) throws Exception {
-		return invoke();
-	}
-
 	public Object invoke(Object target) throws Exception {
 		Method method = _methodKey.getMethod();
 
@@ -77,7 +71,7 @@ public class MethodHandler implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler(5);
 
 		sb.append("{arguments=");
 		sb.append(Arrays.toString(_arguments));
