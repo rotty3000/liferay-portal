@@ -700,7 +700,7 @@ public class ExecutorIntrabandTest {
 		while (sendingQueue.offer(
 					Datagram.createRequestDatagram(_TYPE, _data), 1,
 					TimeUnit.SECONDS) ||
-			writingThread.isAlive()) {
+			   writingThread.isAlive()) {
 
 			counter++;
 		}

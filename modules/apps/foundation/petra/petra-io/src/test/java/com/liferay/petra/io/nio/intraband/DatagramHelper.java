@@ -14,9 +14,7 @@
 
 package com.liferay.petra.io.nio.intraband;
 
-import com.liferay.petra.io.nio.intraband.CompletionHandler;
 import com.liferay.petra.io.nio.intraband.CompletionHandler.CompletionType;
-import com.liferay.petra.io.nio.intraband.Datagram;
 
 import java.io.IOException;
 
