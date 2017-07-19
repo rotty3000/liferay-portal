@@ -24,7 +24,7 @@ import java.util.Collection;
  */
 public interface DestinationFactory {
 
-	public com.liferay.messaging.spi.Destination createDestination(
+	public Destination createDestination(
 		DestinationConfiguration destinationConfiguration);
 
 	public Collection<DestinationType> getDestinationTypes();

@@ -114,62 +114,6 @@ public class DestinationStatisticsTest extends TestUtil {
 		}
 	}
 
-	protected void assertUpdatedStats(
-		String message, String destinationName,
-		DestinationStatistics destinationStatistics) {
-
-		System.out.printf(message, destinationName);
-		System.out.printf(
-			"  Pending messages: %s%n",
-			destinationStatistics.getPendingMessageCount());
-		System.out.printf(
-			"  Sent messages: %s%n",
-			destinationStatistics.getSentMessageCount());
-		System.out.printf(
-			"  Active threads: %s%n",
-			destinationStatistics.getActiveThreadCount());
-		System.out.printf(
-			"  Current threads: %s%n",
-			destinationStatistics.getCurrentThreadCount());
-		System.out.printf(
-			"  Largest threads: %s%n",
-			destinationStatistics.getLargestThreadCount());
-		System.out.printf(
-			"  Max threads: %s%n",
-			destinationStatistics.getMaxThreadPoolSize());
-		System.out.printf(
-			"  Min threads: %s%n%n",
-			destinationStatistics.getMinThreadPoolSize());
-
-		if (destinationName.equals("synchronous/test")) {
-			assertEquals(0, destinationStatistics.getPendingMessageCount());
-			assertEquals(10, destinationStatistics.getSentMessageCount());
-			assertEquals(0, destinationStatistics.getActiveThreadCount());
-			assertEquals(0, destinationStatistics.getCurrentThreadCount());
-			assertEquals(0, destinationStatistics.getLargestThreadCount());
-			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
-			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
-		}
-		else if (destinationName.equals("parallel/test")) {
-			assertEquals(5, destinationStatistics.getPendingMessageCount());
-			assertEquals(0, destinationStatistics.getSentMessageCount());
-			assertEquals(5, destinationStatistics.getActiveThreadCount());
-			assertEquals(5, destinationStatistics.getCurrentThreadCount());
-			assertEquals(5, destinationStatistics.getLargestThreadCount());
-			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
-			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
-		}
-		else if (destinationName.equals("serial/test")) {
-			assertEquals(9, destinationStatistics.getPendingMessageCount());
-			assertEquals(0, destinationStatistics.getSentMessageCount());
-			assertEquals(1, destinationStatistics.getActiveThreadCount());
-			assertEquals(1, destinationStatistics.getCurrentThreadCount());
-			assertEquals(1, destinationStatistics.getLargestThreadCount());
-			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
-			assertEquals(1, destinationStatistics.getMinThreadPoolSize());
-		}
-	}
-
 	protected void assertFinalStats(
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
@@ -227,6 +171,62 @@ public class DestinationStatisticsTest extends TestUtil {
 		}
 	}
 
+	protected void assertUpdatedStats(
+		String message, String destinationName,
+		DestinationStatistics destinationStatistics) {
+
+		System.out.printf(message, destinationName);
+		System.out.printf(
+			"  Pending messages: %s%n",
+			destinationStatistics.getPendingMessageCount());
+		System.out.printf(
+			"  Sent messages: %s%n",
+			destinationStatistics.getSentMessageCount());
+		System.out.printf(
+			"  Active threads: %s%n",
+			destinationStatistics.getActiveThreadCount());
+		System.out.printf(
+			"  Current threads: %s%n",
+			destinationStatistics.getCurrentThreadCount());
+		System.out.printf(
+			"  Largest threads: %s%n",
+			destinationStatistics.getLargestThreadCount());
+		System.out.printf(
+			"  Max threads: %s%n",
+			destinationStatistics.getMaxThreadPoolSize());
+		System.out.printf(
+			"  Min threads: %s%n%n",
+			destinationStatistics.getMinThreadPoolSize());
+
+		if (destinationName.equals("synchronous/test")) {
+			assertEquals(0, destinationStatistics.getPendingMessageCount());
+			assertEquals(10, destinationStatistics.getSentMessageCount());
+			assertEquals(0, destinationStatistics.getActiveThreadCount());
+			assertEquals(0, destinationStatistics.getCurrentThreadCount());
+			assertEquals(0, destinationStatistics.getLargestThreadCount());
+			assertEquals(0, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(0, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("parallel/test")) {
+			assertEquals(5, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(5, destinationStatistics.getActiveThreadCount());
+			assertEquals(5, destinationStatistics.getCurrentThreadCount());
+			assertEquals(5, destinationStatistics.getLargestThreadCount());
+			assertEquals(5, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(2, destinationStatistics.getMinThreadPoolSize());
+		}
+		else if (destinationName.equals("serial/test")) {
+			assertEquals(9, destinationStatistics.getPendingMessageCount());
+			assertEquals(0, destinationStatistics.getSentMessageCount());
+			assertEquals(1, destinationStatistics.getActiveThreadCount());
+			assertEquals(1, destinationStatistics.getCurrentThreadCount());
+			assertEquals(1, destinationStatistics.getLargestThreadCount());
+			assertEquals(1, destinationStatistics.getMaxThreadPoolSize());
+			assertEquals(1, destinationStatistics.getMinThreadPoolSize());
+		}
+	}
+
 	protected void test(String bundle, String destinationName)
 		throws Exception {
 
@@ -247,31 +247,38 @@ public class DestinationStatisticsTest extends TestUtil {
 			final CountDownLatch beforeThread = new CountDownLatch(
 				destinationStatistics.getMaxThreadPoolSize());
 
-			InboundMessageProcessor processor =
-				new InboundMessageProcessor() {
+			InboundMessageProcessor processor = new InboundMessageProcessor() {
 
-					@Override
-					public void afterReceive(Message message) throws MessageProcessorException {
-					}
+				@Override
+				public void afterReceive(Message message)
+					throws MessageProcessorException {
+				}
 
-					@Override
-					public void afterThread(Message message, Thread dispatchThread) throws MessageProcessorException {
-						afterThread.countDown();
-					}
+				@Override
+				public void afterThread(Message message, Thread dispatchThread)
+					throws MessageProcessorException {
 
-					@Override
-					public Message beforeReceive(Message message) throws MessageProcessorException {
-						return message;
-					}
+					afterThread.countDown();
+				}
 
-					@Override
-					public Message beforeThread(Message message, Thread dispatchThread) throws MessageProcessorException {
-						beforeThread.countDown();
+				@Override
+				public Message beforeReceive(Message message)
+					throws MessageProcessorException {
 
-						return message;
-					}
+					return message;
+				}
 
-				};
+				@Override
+				public Message beforeThread(
+						Message message, Thread dispatchThread)
+					throws MessageProcessorException {
+
+					beforeThread.countDown();
+
+					return message;
+				}
+
+			};
 
 			InboundMessageProcessorFactory factory =
 				new InboundMessageProcessorFactory() {
