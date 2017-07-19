@@ -279,9 +279,9 @@ public abstract class BaseIntraband implements Intraband {
 
 			Datagram datagram = responseWaitingMap.remove(sequenceId);
 
-			if (_logger.isWarnEnabled()) {
-				_logger.warn(
-					"Removed timeout response waiting datagram " + datagram);
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"Removed timeout response waiting datagram {}", datagram);
 			}
 
 			datagram.completionHandler.timedOut(datagram.attachment);
@@ -366,9 +366,9 @@ public abstract class BaseIntraband implements Intraband {
 						datagram);
 
 					if (requestDatagram == null) {
-						if (_logger.isWarnEnabled()) {
-							_logger.warn(
-								"Dropped ownerless ACK response " + datagram);
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Dropped ownerless ACK response {}", datagram);
 						}
 					}
 					else {
@@ -383,9 +383,9 @@ public abstract class BaseIntraband implements Intraband {
 						datagram);
 
 					if (requestDatagram == null) {
-						if (_logger.isWarnEnabled()) {
-							_logger.warn(
-								"Dropped ownerless response " + datagram);
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Dropped ownerless response {}", datagram);
 						}
 					}
 					else {
@@ -399,9 +399,9 @@ public abstract class BaseIntraband implements Intraband {
 							completionHandler.replied(
 								requestDatagram.attachment, datagram);
 						}
-						else if (_logger.isWarnEnabled()) {
-							_logger.warn(
-								"Dropped unconcerned response " + datagram);
+						else if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Dropped unconcerned response {}", datagram);
 						}
 					}
 				}
@@ -422,9 +422,8 @@ public abstract class BaseIntraband implements Intraband {
 						datagramReceiveHandlersReference.get()[index];
 
 					if (datagramReceiveHandler == null) {
-						if (_logger.isWarnEnabled()) {
-							_logger.warn(
-								"Dropped ownerless request " + datagram);
+						if (_log.isWarnEnabled()) {
+							_log.warn("Dropped ownerless request {}", datagram);
 						}
 					}
 					else {
@@ -434,7 +433,7 @@ public abstract class BaseIntraband implements Intraband {
 								datagram);
 						}
 						catch (Throwable t) {
-							_logger.error("Unable to dispatch", t);
+							_log.error("Unable to dispatch", t);
 						}
 					}
 				}
@@ -446,14 +445,15 @@ public abstract class BaseIntraband implements Intraband {
 
 			registrationReference.cancelRegistration();
 
-			if (_logger.isDebugEnabled()) {
-				_logger.debug(
-					"Broken read channel, unregister " + registrationReference,
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Broken read channel, unregister {}", registrationReference,
 					ioe);
 			}
-			else if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"Broken read channel, unregister " + registrationReference);
+			else if (_log.isInfoEnabled()) {
+				_log.info(
+					"Broken read channel, unregister {}",
+					registrationReference);
 			}
 		}
 	}
@@ -499,15 +499,15 @@ public abstract class BaseIntraband implements Intraband {
 				completionHandler.failed(datagram.attachment, ioe);
 			}
 
-			if (_logger.isDebugEnabled()) {
-				_logger.debug(
-					"Broken write channel, unregister " + registrationReference,
-					ioe);
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Broken write channel, unregister {}",
+					registrationReference, ioe);
 			}
-			else if (_logger.isInfoEnabled()) {
-				_logger.info(
-					"Broken write channel, unregister " +
-						registrationReference);
+			else if (_log.isInfoEnabled()) {
+				_log.info(
+					"Broken write channel, unregister {}",
+					registrationReference);
 			}
 
 			return false;
@@ -600,7 +600,7 @@ public abstract class BaseIntraband implements Intraband {
 
 	}
 
-	private static final Logger _logger = LoggerFactory.getLogger(
+	private static final Logger _log = LoggerFactory.getLogger(
 		BaseIntraband.class);
 
 }

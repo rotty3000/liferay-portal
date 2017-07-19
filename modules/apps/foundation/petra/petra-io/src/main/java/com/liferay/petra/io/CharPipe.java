@@ -338,7 +338,7 @@ public class CharPipe {
 			String string = null;
 
 			if (charSequence == null) {
-				string = "null";
+				string = StringPool.NULL;
 			}
 			else {
 				string = charSequence.toString();
@@ -356,7 +356,7 @@ public class CharPipe {
 			String string = null;
 
 			if (charSequence == null) {
-				string = "null";
+				string = StringPool.NULL;
 			}
 			else {
 				string = charSequence.subSequence(start, end).toString();
