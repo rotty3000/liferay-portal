@@ -16,6 +16,7 @@ package com.liferay.petra.reflect;
 
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.io.Serializer;
+import com.liferay.petra.io.StringBundler;
 import com.liferay.petra.io.StringPool;
 
 import java.io.Externalizable;
@@ -66,30 +67,6 @@ public class MethodKey implements Externalizable {
 		this(
 			method.getDeclaringClass(), method.getName(),
 			method.getParameterTypes());
-	}
-
-	/**
-	 * @deprecated As of 1.0.0, replaced by {@link #MethodKey(Class, String,
-	 *             Class...)}
-	 */
-	@Deprecated
-	public MethodKey(
-		String declaringClassName, String methodName,
-		Class<?>... parameterTypes) {
-
-		Thread currentThread = Thread.currentThread();
-
-		ClassLoader classLoader = currentThread.getContextClassLoader();
-
-		try {
-			_declaringClass = classLoader.loadClass(declaringClassName);
-		}
-		catch (ClassNotFoundException cnfe) {
-			throw new RuntimeException(cnfe);
-		}
-
-		_methodName = methodName;
-		_parameterTypes = parameterTypes;
 	}
 
 	@Override
@@ -168,20 +145,19 @@ public class MethodKey implements Externalizable {
 			return _toString;
 		}
 
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler(4 + _parameterTypes.length * 2);
 
 		sb.append(_declaringClass.getName());
 		sb.append(StringPool.PERIOD);
 		sb.append(_methodName);
 		sb.append(StringPool.OPEN_PARENTHESIS);
 
-		String delimiter = StringPool.BLANK;
-
 		for (Class<?> parameterType : _parameterTypes) {
-			sb.append(delimiter);
 			sb.append(parameterType.getName());
-			delimiter = StringPool.COMMA;
+			sb.append(StringPool.COMMA);
 		}
+
+		sb.setIndex(sb.index() - 1);
 
 		sb.append(StringPool.CLOSE_PARENTHESIS);
 
