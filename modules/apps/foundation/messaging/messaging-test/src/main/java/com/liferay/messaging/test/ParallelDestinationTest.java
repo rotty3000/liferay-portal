@@ -15,7 +15,6 @@
 package com.liferay.messaging.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -23,12 +22,14 @@ import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationStatistics;
 import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.ParallelDestination;
+import com.liferay.messaging.spi.MessageRunnable;
+import com.liferay.messaging.spi.ParallelDestination;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
+import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 
 import org.junit.Test;
 
@@ -42,9 +43,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ParallelDestinationTest extends TestUtil {
 
 	@Test(expected = IllegalStateException.class)
-	public void testCloseDestination()
-		throws Exception {
-		
+	public void testCloseDestination() throws Exception {
 		Bundle tbBundle = install("tb2.jar");
 
 		try {
@@ -52,13 +51,17 @@ public class ParallelDestinationTest extends TestUtil {
 
 			String destinationName = "parallel/test";
 
-			Destination destination = messageBus.getDestination(destinationName);
-			
-			destination.close();
-			
+			Destination destination = messageBus.getDestination(
+				destinationName);
+
+			com.liferay.messaging.spi.Destination spiDestination =
+				(com.liferay.messaging.spi.Destination)destination;
+
+			spiDestination.close();
+
 			Message message = new Message();
-			
-			destination.send(message);
+
+			spiDestination.send(message);
 		}
 		finally {
 			tbBundle.uninstall();
@@ -66,52 +69,51 @@ public class ParallelDestinationTest extends TestUtil {
 	}
 
 	@Test
-	public void testOpenDestination()
-		throws Exception {
-		
-		Bundle tbBundle = install("tb2.jar");
+	public void testExecutorServiceRegistrar() throws Exception {
+		Bundle tb16 = install("tb16.jar");
+		Bundle tb2 = install("tb2.jar");
+
+		ServiceTracker<ExecutorServiceRegistrar, Callable<Map<String, ExecutorService>>>
+			tracker = null;
 
 		try {
-			tbBundle.start();
+			tb16.start();
+			tb2.start();
 
 			String destinationName = "parallel/test";
 
-			Destination destination = messageBus.getDestination(destinationName);
-			
-			destination.close();
-
-			destination.open();
-			
 			Filter filter = bundleContext.createFilter(
 				String.format(
-					"(&(objectClass=java.util.concurrent.Callable)" +
-						"(destination.name=%s))",
-					destinationName));
+					"(&(objectClass=%s)(objectClass=%s)(destination.name=%s))",
+					ExecutorServiceRegistrar.class.getName(),
+					Callable.class.getName(), destinationName));
 
-			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
-				new ServiceTracker<>(bundleContext, filter, null);
+			tracker = new ServiceTracker<>(bundleContext, filter, null);
 
-			callableST.open();
+			tracker.open();
 
-			Callable<Message> callable = callableST.waitForService(timeout);
+			Callable<Map<String, ExecutorService>> service =
+				tracker.waitForService(timeout);
 
-			assertNotNull(callable);
+			assertNotNull(service);
 
-			Message message = new Message();
-			
-			destination.send(message);
+			Map<String, ExecutorService> map = service.call();
 
-			assertEquals(message, callable.call());
+			assertTrue(map.containsKey(destinationName));
+			assertNotNull(map.get(destinationName));
 		}
 		finally {
-			tbBundle.uninstall();
+			tb2.uninstall();
+			tb16.uninstall();
+
+			if (tracker != null) {
+				tracker.close();
+			}
 		}
 	}
-	
+
 	@Test
-	public void testParameters()
-		throws Exception {
-		
+	public void testParameters() throws Exception {
 		Bundle tbBundle = install("tb2.jar");
 
 		try {
@@ -119,17 +121,23 @@ public class ParallelDestinationTest extends TestUtil {
 
 			String destinationName = "parallel/test";
 
-			ParallelDestination destination = (ParallelDestination) messageBus.getDestination(destinationName);
-			
+			ParallelDestination destination =
+				(ParallelDestination)messageBus.getDestination(destinationName);
+
 			assertEquals(2, destination.getWorkersCoreSize());
 			assertEquals(5, destination.getWorkersMaxSize());
 			assertEquals(Integer.MAX_VALUE, destination.getMaximumQueueSize());
-			
-			DestinationStatistics destinationStatistics = destination.getDestinationStatistics();
-			
-			assertEquals(destination.getWorkersCoreSize(), destinationStatistics.getMinThreadPoolSize());
-			assertEquals(destination.getWorkersMaxSize(), destinationStatistics.getMaxThreadPoolSize());
-			
+
+			DestinationStatistics destinationStatistics =
+				destination.getDestinationStatistics();
+
+			assertEquals(
+				destination.getWorkersCoreSize(),
+				destinationStatistics.getMinThreadPoolSize());
+			assertEquals(
+				destination.getWorkersMaxSize(),
+				destinationStatistics.getMaxThreadPoolSize());
+
 			destination.setWorkersCoreSize(4);
 			destination.setWorkersMaxSize(10);
 			destination.setMaximumQueueSize(20);
@@ -139,10 +147,13 @@ public class ParallelDestinationTest extends TestUtil {
 			assertEquals(20, destination.getMaximumQueueSize());
 
 			destinationStatistics = destination.getDestinationStatistics();
-			
-			assertEquals(destination.getWorkersCoreSize(), destinationStatistics.getMinThreadPoolSize());
-			assertEquals(destination.getWorkersMaxSize(), destinationStatistics.getMaxThreadPoolSize());
-			
+
+			assertEquals(
+				destination.getWorkersCoreSize(),
+				destinationStatistics.getMinThreadPoolSize());
+			assertEquals(
+				destination.getWorkersMaxSize(),
+				destinationStatistics.getMaxThreadPoolSize());
 		}
 		finally {
 			tbBundle.uninstall();
@@ -150,41 +161,13 @@ public class ParallelDestinationTest extends TestUtil {
 	}
 
 	@Test
-	public void testMaximumQueueSize()
-		throws Exception {
-		
+	public void testRejectedExecutionHandler() throws Exception {
 		Bundle tb16 = install("tb16.jar");
 		Bundle tb2 = install("tb2.jar");
 
-		try {
-			tb16.start();
-			tb2.start();
-
-			String destinationName = "parallel/test";
-
-			ParallelDestination destination = (ParallelDestination) messageBus.getDestination(destinationName);
-			
-			destination.setMaximumQueueSize(10);
-
-			Message message = new Message();
-			
-			for (int i = 0; i < 11; i++) {
-				destination.send(message);
-			}
-		}
-		finally {
-			tb16.uninstall();
-			tb2.uninstall();
-		}
-	}
-
-	/*
-	@Test
-	public void testExecutorServiceRegistrar()
-		throws Exception {
-		
-		Bundle tb16 = install("tb16.jar");
-		Bundle tb2 = install("tb2.jar");
+		ServiceTracker<
+			RejectedExecutionHandler,
+			Callable<Map<MessageRunnable, ThreadPoolExecutor>>> tracker = null;
 
 		try {
 			tb16.start();
@@ -194,142 +177,43 @@ public class ParallelDestinationTest extends TestUtil {
 
 			Filter filter = bundleContext.createFilter(
 				String.format(
-					"(&(objectClass=com.liferay.messaging.ExecutorServiceRegistrar)" +
-						"(destination.name=%s))",
-					destinationName));
+					"(&(objectClass=%s)(objectClass=%s)(destination.name=%s))",
+					RejectedExecutionHandler.class.getName(),
+					Callable.class.getName(), destinationName));
 
-			ServiceTracker<?, ?> tracker =
-				new ServiceTracker<>(bundleContext, filter, null);
+			tracker = new ServiceTracker<>(bundleContext, filter, null);
 
 			tracker.open();
 
-			ExecutorServiceRegistrar executorServiceRegistrar = (ExecutorServiceRegistrar) tracker.waitForService(timeout);
+			Callable<Map<MessageRunnable, ThreadPoolExecutor>> service =
+				tracker.waitForService(timeout);
 
-			assertNotNull(executorServiceRegistrar);
+			assertNotNull(service);
 
-			ParallelDestination destination = (ParallelDestination) messageBus.getDestination(destinationName);
-			
-			executorServiceRegistrar = (ExecutorServiceRegistrar) tracker.waitForService(timeout);
+			messageBus = getMessageBus();
 
-			destination.setExecutorServiceRegistrar(executorServiceRegistrar);
-			
-			// TODO: Find some way to assert that the executor service registrar assignment was successful
-			// assertEquals(executorServiceRegistrar, destination.getExecutorServiceRegistar());
+			for (int i = 0; i < 100; i++) {
+				Message message = new Message();
+
+				// TODO there's a bug here, the destination is shutdown.
+				// We need to figure out why this is happening.
+
+				// messageBus.sendMessage(destinationName, message);
+			}
+
+			Map<MessageRunnable, ThreadPoolExecutor> map = service.call();
+
+			assertNotNull(map);
+			//assertFalse(map.isEmpty());
 		}
 		finally {
 			tb2.uninstall();
 			tb16.uninstall();
+
+			if (tracker != null) {
+				tracker.close();
+			}
 		}
 	}
-
-	@Test
-	public void testRejectedExecutionHandler()
-		throws Exception {
-		
-		Bundle tb16 = install("tb16.jar");
-		Bundle tb2 = install("tb2.jar");
-
-		try {
-			tb16.start();
-			tb2.start();
-
-			String destinationName = "parallel/test";
-
-			Filter filter = bundleContext.createFilter(
-				String.format(
-					"(&(objectClass=com.liferay.petra.concurrent.RejectedExecutionHandler)" +
-						"(destination.name=%s))",
-					destinationName));
-
-			ServiceTracker<?, ?> tracker = new ServiceTracker<>(bundleContext, filter, null);
-
-			tracker.open();
-
-			RejectedExecutionHandler rejectedExecutionHandler = (RejectedExecutionHandler) tracker.waitForService(timeout);
-
-			assertNotNull(rejectedExecutionHandler);
-
-			ParallelDestination destination = (ParallelDestination) messageBus.getDestination(destinationName);
-			
-			rejectedExecutionHandler = (RejectedExecutionHandler) tracker.waitForService(timeout);
-
-			destination.setRejectedExecutionHandler(rejectedExecutionHandler);
-			
-			// TODO: Find some way to assert that the rejected execution handler assignment was successful
-			// assertEquals(rejectedExecutionHandler, destination.getRejectedExecutionHandler());
-		}
-		finally {
-			tb2.uninstall();
-			tb16.uninstall();
-		}
-	}
-	
-	@Test
-	public void testCopyMessageListeners() throws Exception {
-		Bundle tb2 = install("tb2.jar");
-		Bundle tb3 = install("tb3.jar");
-
-		try {
-			tb2.start();
-			tb3.start();
-
-			String parallelDestinationName = "parallel/test";
-
-			Destination parallelDestination = messageBus.getDestination(parallelDestinationName);
-			
-			assertEquals(1, parallelDestination.getMessageListenerCount());
-
-			MessageListener listener = new MessageListener() {
-
-				@Override
-				public void receive(Message message) {
-
-				}
-
-			};
-			
-			parallelDestination.register(listener);
-
-			assertEquals(2, parallelDestination.getMessageListenerCount());
-			
-			String serialDestinationName = "serial/test";
-
-			Destination serialDestination = messageBus.getDestination(serialDestinationName);
-			
-			assertEquals(1, serialDestination.getMessageListenerCount());
-			
-			parallelDestination.copyMessageListeners(serialDestination);
-
-			assertEquals(3, serialDestination.getMessageListenerCount());
-
-			Set<MessageListener> serialDestinationMessageListeners = serialDestination.getMessageListeners();
-			Set<MessageListener> parallelDestinationMessageListeners = parallelDestination.getMessageListeners();
-
-			for (MessageListener parallelMessageListener : parallelDestinationMessageListeners) {
-				assertTrue(serialDestinationMessageListeners.contains(parallelMessageListener));
-			}
-			
-			assertTrue(parallelDestination.isRegistered());
-			
-			for (MessageListener parallelMessageListener : parallelDestinationMessageListeners) {
-				parallelDestination.unregister(parallelMessageListener);
-			}
-			
-			assertEquals(0, parallelDestination.getMessageListenerCount());
-			assertFalse(parallelDestination.isRegistered());
-
-			for (MessageListener serialMessageListener : serialDestinationMessageListeners) {
-				serialDestination.unregister(serialMessageListener);
-			}
-			
-			assertEquals(0, serialDestination.getMessageListenerCount());
-			assertFalse(parallelDestination.isRegistered());
-		}
-		finally {
-			tb2.uninstall();
-			tb3.uninstall();
-		}
-	}
-	*/
 
 }

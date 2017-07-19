@@ -27,9 +27,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {
-		"destination.name=synchronous/test"
-	},
+	property = {"destination.name=synchronous/test"},
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )

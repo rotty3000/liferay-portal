@@ -102,8 +102,7 @@ public class DefaultSynchronousMessageSenderTest {
 			"destination.name", destination.getName());
 	}
 
-	protected void doTestSend(
-			com.liferay.messaging.spi.Destination destination)
+	protected void doTestSend(com.liferay.messaging.spi.Destination destination)
 		throws MessageBusException {
 
 		Object response = new Object();

@@ -52,7 +52,9 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 		test("tb1.jar", "synchronous/test");
 	}
 
-	protected void test(String bundle, String destinationName) throws Exception {
+	protected void test(String bundle, String destinationName)
+		throws Exception {
+
 		Bundle tbBundle = install(bundle);
 
 		final Deferred<Integer> afterReceive = new Deferred<>();
@@ -88,7 +90,8 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 				}
 
 				@Override
-				public Message beforeThread(Message message, Thread dispatchThread)
+				public Message beforeThread(
+						Message message, Thread dispatchThread)
 					throws MessageProcessorException {
 
 					beforeThread.resolve(3);
