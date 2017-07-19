@@ -10,6 +10,7 @@ Provide-Capability:\
 -conditionalpackage:\
 	org.apache.felix.converter.dto,\
 	org.apache.felix.converter.impl,\
+	\
 	org.osgi.util.converter,\
 	org.osgi.util.function
 -dsannotations-options: inherit

@@ -19,16 +19,14 @@ package com.liferay.messaging;
  */
 public enum DestinationType {
 
-	PARALLEL("parallel"),
-	SERIAL("serial"),
-	SYNCHRONOUS("synchronous");
-
-	private DestinationType(String type) {
-		_type = type;
-	}
+	PARALLEL("parallel"), SERIAL("serial"), SYNCHRONOUS("synchronous");
 
 	public String getType() {
 		return _type;
+	}
+
+	private DestinationType(String type) {
+		_type = type;
 	}
 
 	private final String _type;
