@@ -19,14 +19,14 @@ import java.util.Collection;
 /**
  * Provides an API for retrieving destinations and destination information and
  * an API for sending messages.
- * 
+ *
  * @author Michael C. Han
  */
 public interface MessageBus {
 
 	/**
 	 * Returns the destination with the provided destination name
-	 * 
+	 *
 	 * @param destinationName the name of the destination to return
 	 * @return the destination with the provided destination name or
 	 * <code>null</code> if no destination with the provided name could be found
@@ -35,7 +35,7 @@ public interface MessageBus {
 
 	/**
 	 * Returns the number of destinations registered with the message bus.
-	 * 
+	 *
 	 * @return the number of destinations registered with the message bus
 	 */
 	public int getDestinationCount();
@@ -43,7 +43,7 @@ public interface MessageBus {
 	/**
 	 * Returns a collection of the names of all the destinations registered with
 	 * the message bus.
-	 * 
+	 *
 	 * @return a collection of the names of all the destinations registered with
 	 * the message bus
 	 */
@@ -52,7 +52,7 @@ public interface MessageBus {
 	/**
 	 * Returns a collection of all the destinations registered with the message
 	 * bus.
-	 * 
+	 *
 	 * @return a collection of all the destinations registered with the message
 	 * bus
 	 */
@@ -61,9 +61,9 @@ public interface MessageBus {
 	/**
 	 * Returns <code>true</code> if a destination with the specified name is
 	 * registered with the message bus; returns <code>false</code> otherwise.
-	 * 
+	 *
 	 * @param destinationName the destination name for which to check
-	 * @return <code>true</code> if a destination with the specified 
+	 * @return <code>true</code> if a destination with the specified
 	 * name is registered with the message bus; <code>false</code> otherwise
 	 */
 	public boolean hasDestination(String destinationName);
@@ -72,7 +72,7 @@ public interface MessageBus {
 	 * Returns <code>true</code> if a destination with the specified name is
 	 * registered with the message bus and has at least one message listener;
 	 * returns <code>false</code> otherwise.
-	 * 
+	 *
 	 * @param destinationName the destination name for which to check
 	 * @return <code>true</code> if a destination with the specified name is
 	 * registered with the message bus and has at least one message listener;
@@ -82,7 +82,7 @@ public interface MessageBus {
 
 	/**
 	 * Sends the specified message to the specified destination.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the message
 	 * @param message the message to send
 	 */
@@ -91,7 +91,7 @@ public interface MessageBus {
 	/**
 	 * Sends the specified message payload to the specified destination in a new
 	 * message.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the message
 	 * @param payload the payload to send
 	 */
@@ -100,7 +100,7 @@ public interface MessageBus {
 	/**
 	 * Sends the specified message to the specified destination and returns a
 	 * result.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the message
 	 * @param message the message to send
 	 * @return the result or <code>null</code> if no result was received
@@ -112,7 +112,7 @@ public interface MessageBus {
 	/**
 	 * Sends the specified message to the specified destination and returns a
 	 * result.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the message
 	 * @param message the message to send
 	 * @param timeout how long to wait for a response, in milliseconds
@@ -125,7 +125,7 @@ public interface MessageBus {
 	/**
 	 * Sends the specified payload in a new message to the specified destination
 	 * and returns a result.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the payload
 	 * @param payload the payload to send
 	 * @return the result or <code>null</code> if no result was received within
@@ -137,7 +137,7 @@ public interface MessageBus {
 	/**
 	 * Sends the specified payload in a new message to the specified destination
 	 * and returns a result.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the payload
 	 * @param payload the payload to send
 	 * @param timeout how long to wait for a response, in milliseconds
@@ -151,7 +151,7 @@ public interface MessageBus {
 	 * Sends the specified payload in a new message to the specified destination
 	 * and returns a result. The new message is configured with the specified
 	 * response destination name.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the payload
 	 * @param payload the payload to send
 	 * @param responseDestinationName the response destination name with which
@@ -166,7 +166,7 @@ public interface MessageBus {
 	 * Sends the specified payload in a new message to the specified destination
 	 * and returns a result. The new message is configured with the specified
 	 * response destination name.
-	 * 
+	 *
 	 * @param destinationName the name of the destination to which to send the payload
 	 * @param payload the payload to send
 	 * @param responseDestinationName the response destination name with which

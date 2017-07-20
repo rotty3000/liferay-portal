@@ -30,12 +30,12 @@ import java.util.Map;
 /**
  * Represents a general purpose message that can be used for inter-application
  * or intra-application communication.
- * 
+ *
  * <p>
  * Messages can carry an object called a payload. The type of the payload is
  * unrestricted. Messages can also carry any number of name / value pairs.
  * </p>
- * 
+ *
  * @author Brian Wing Shun Chan
  * @author Michael C. Han
  */
@@ -43,7 +43,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns a message deserialized from raw bytes.
-	 * 
+	 *
 	 * @param bytes the bytes to deserialize into a message
 	 * @return a message deserialized from raw bytes
 	 * @throws ClassNotFoundException if the object could not be deserialized
@@ -58,7 +58,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns a clone of the current message.
-	 * 
+	 *
 	 * @return a clone of the current message.
 	 */
 	@Override
@@ -81,7 +81,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns <code>true</code> if the message contains the key in its map of
 	 * key / value pairs; <code>false</code> otherwise.
-	 * 
+	 *
 	 * @param key the key for which to check the message's key / value pair map.
 	 * @return <code>true</code> if the message contains the key in its map of
 	 * key / value pairs; <code>false</code> otherwise
@@ -97,7 +97,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Copies all the fields from the specified message to this message.
-	 * 
+	 *
 	 * @param message the message from which to copy all the fields
 	 */
 	public void copyFrom(Message message) {
@@ -114,7 +114,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Copies all the fields from this message to the specified message.
-	 * 
+	 *
 	 * @param message the message to which to copy all of this message's fields
 	 */
 	public void copyTo(Message message) {
@@ -132,7 +132,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value in this message associated with the key or
 	 * <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value in this message associated with the key or
 	 * <code>null</code> if the key could not be found
@@ -158,7 +158,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value, interpreted as a boolean, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value, interpreted as a boolean, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
@@ -180,7 +180,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns the name of this message's destination.
-	 * 
+	 *
 	 * @return the name of this message's destination
 	 */
 	public String getDestinationName() {
@@ -190,7 +190,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value, interpreted as a double, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value, interpreted as a double, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
@@ -213,7 +213,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value, interpreted as an integer, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value, interpreted as an integer, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
@@ -236,7 +236,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value, interpreted as a long, in this message associated with
 	 * the key or <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value, interpreted as a long, in this message associated with
 	 * the key or <code>null</code> if the key could not be found.
@@ -258,7 +258,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns the message's payload.
-	 * 
+	 *
 	 * @return the message's payload
 	 */
 	public Object getPayload() {
@@ -267,7 +267,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns the message's response.
-	 * 
+	 *
 	 * @return the message's response.
 	 */
 	public Object getResponse() {
@@ -277,7 +277,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the name of the destination to which a response to this message
 	 * should be sent.
-	 * 
+	 *
 	 * @return the name of the destination to which a response to this message
 	 * should be sent.
 	 */
@@ -288,7 +288,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the message's response ID. The response ID associates a message
 	 * response to the original message.
-	 * 
+	 *
 	 * @return the message's response ID
 	 */
 	public String getResponseId() {
@@ -298,7 +298,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Returns the value, interpreted as a string, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
-	 * 
+	 *
 	 * @param key the key for which to return the associated value
 	 * @return the value, interpreted as a string, in this message associated
 	 * with the key or <code>null</code> if the key could not be found.
@@ -309,7 +309,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns the map of key / value pairs associated with this message.
-	 * 
+	 *
 	 * @return the map of key / value pairs associated with this message
 	 */
 	public Map<String, Object> getValues() {
@@ -318,12 +318,12 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Associates the key with the value in this message's key / value map.
-	 * 
+	 *
 	 * <p>
 	 * If a <code>null</code> value is provided, the specified key is removed
 	 * from the map.
 	 * </p>
-	 * 
+	 *
 	 * @param key the key to map to the value
 	 * @param value the value with which to associate the key
 	 */
@@ -349,7 +349,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Removes the key from this message's key / value map.
-	 * 
+	 *
 	 * @param key the key to remove from this message's key / value map
 	 */
 	public void remove(String key) {
@@ -360,7 +360,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Sets the name of this message's destination.
-	 * 
+	 *
 	 * @param destinationName the new name of this message's destination
 	 */
 	public void setDestinationName(String destinationName) {
@@ -369,7 +369,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Sets the message's payload.
-	 * 
+	 *
 	 * @param payload the new payload of the message
 	 */
 	public void setPayload(Object payload) {
@@ -378,7 +378,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Sets the message's response.
-	 * 
+	 *
 	 * @param response the new response of the message
 	 */
 	public void setResponse(Object response) {
@@ -388,7 +388,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Sets the name of the destination to which a response to this message
 	 * should be sent.
-	 * 
+	 *
 	 * @param responseDestinationName the new name of the destination to which a
 	 * response to this message should be sent.
 	 */
@@ -399,7 +399,7 @@ public class Message implements Cloneable, Serializable {
 	/**
 	 * Sets the message's response ID. The response ID associates a message
 	 * response to the original message.
-	 * 
+	 *
 	 * @param responseId the new response ID of the message
 	 */
 	public void setResponseId(String responseId) {
@@ -408,7 +408,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Sets the map of key / value pairs associated with this message.
-	 * 
+	 *
 	 * @param values the new map of key / value pairs associated with this message
 	 */
 	public void setValues(Map<String, Object> values) {
@@ -417,7 +417,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns a serialized representation of a message as raw bytes.
-	 * 
+	 *
 	 * @return a serialized representation of a message as raw bytes
 	 */
 	public byte[] toByteArray() {
@@ -432,7 +432,7 @@ public class Message implements Cloneable, Serializable {
 
 	/**
 	 * Returns a string representation of this message
-	 * 
+	 *
 	 * @return a string representation of this message
 	 */
 	@Override

@@ -25,7 +25,7 @@ public interface InboundMessageProcessorFactory {
 
 	/**
 	 * Returns a new inbound message processor
-	 * 
+	 *
 	 * @return a new inbound message processor
 	 */
 	public InboundMessageProcessor create();
