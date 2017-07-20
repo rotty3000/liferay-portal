@@ -63,10 +63,10 @@ public class DestinationTest extends TestUtil {
 	}
 
 	protected void testExecutorServiceRegistrar(
-			String destinationName, String... bundleNames) throws Exception {
+		String destinationName, String... bundleNames) throws Exception {
 
-		List<Bundle> bundles = new ArrayList<Bundle>();
-		
+		List<Bundle> bundles = new ArrayList<>();
+
 		for (String bundleName : bundleNames) {
 			Bundle bundle = install(bundleName);
 			bundles.add(bundle);
@@ -112,10 +112,10 @@ public class DestinationTest extends TestUtil {
 	}
 
 	protected void testRejectedExecutionHandler(
-			String destinationName, String... bundleNames) throws Exception {
+		String destinationName, String... bundleNames) throws Exception {
 
-		List<Bundle> bundles = new ArrayList<Bundle>();
-		
+		List<Bundle> bundles = new ArrayList<>();
+
 		for (String bundleName : bundleNames) {
 			Bundle bundle = install(bundleName);
 			bundles.add(bundle);
@@ -154,6 +154,7 @@ public class DestinationTest extends TestUtil {
 				// We need to figure out why this is happening.
 
 				// messageBus.sendMessage(destinationName, message);
+
 			}
 
 			Map<MessageRunnable, ThreadPoolExecutor> map = service.call();
@@ -174,17 +175,17 @@ public class DestinationTest extends TestUtil {
 
 	protected void testSend(String destinationName, String bundleName)
 		throws Exception {
-	
-		Bundle bundle = install(bundleName);
-	
+
+	Bundle bundle = install(bundleName);
+
 		try {
 			bundle.start();
-	
+
 			Destination destination = messageBus.getDestination(
 				destinationName);
-			
+
 			assertEquals(destinationName, destination.getName());
-			
+
 			assertTrue(destination.isRegistered());
 
 			Filter filter = bundleContext.createFilter(
@@ -192,20 +193,20 @@ public class DestinationTest extends TestUtil {
 					"(&(objectClass=java.util.concurrent.Callable)" +
 						"(destination.name=%s))",
 					destinationName));
-	
+
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
 				new ServiceTracker<>(bundleContext, filter, null);
-	
+
 			callableST.open();
-	
+
 			Callable<Message> callable = callableST.waitForService(timeout);
-	
+
 			assertNotNull(callable);
-	
+
 			Message message = new Message();
-	
+
 			messageBus.sendMessage(destinationName, message);
-	
+
 			assertEquals(message, callable.call());
 		}
 		finally {

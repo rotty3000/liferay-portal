@@ -17,21 +17,21 @@ package com.liferay.messaging;
 /**
  * Specifies processing to take place when destinations are added to or removed
  * from the message bus.
- * 
+ *
  * @author Shuyang Zhou
  */
 public interface MessageBusEventListener {
 
 	/**
 	 * Performs some processing when a destination is added to the message bus.
-	 * 
+	 *
 	 * @param destination the destination that was added
 	 */
 	public void destinationAdded(Destination destination);
 
 	/**
 	 * Performs some processing when a destination is removed from the message bus.
-	 * 
+	 *
 	 * @param destination the destination that was removed
 	 */
 	public void destinationRemoved(Destination destination);
