@@ -56,7 +56,77 @@ public class DestinationConfigurationTest extends TestUtil {
 		testDestinationConfiguration(DestinationType.SYNCHRONOUS);
 	}
 
-	protected void testSend(String bundle, String destination) throws Exception {
+	protected void testDestinationConfiguration(DestinationType destinationType)
+		throws Exception {
+
+		String destinationName = null;
+		DestinationConfiguration destinationConfiguration = null;
+
+		if (destinationType.equals(DestinationType.SYNCHRONOUS)) {
+			destinationName = "SYNCHRONOUS_DESTINATION";
+			destinationConfiguration =
+				DestinationConfiguration.
+				createSynchronousDestinationConfiguration(destinationName);
+		}
+		else if (destinationType.equals(DestinationType.PARALLEL)) {
+			destinationName = "PARALLEL_DESTINATION";
+			destinationConfiguration =
+				DestinationConfiguration.
+				createParallelDestinationConfiguration(destinationName);
+		}
+		else if (destinationType.equals(DestinationType.SERIAL)) {
+			destinationName = "SERIAL_DESTINATION";
+			destinationConfiguration =
+				DestinationConfiguration.
+				createSerialDestinationConfiguration(destinationName);
+		}
+		else {
+			fail("Invalid destination type");
+		}
+
+		assertEquals(destinationName,
+			destinationConfiguration.getDestinationName());
+
+		assertEquals(destinationType,
+			destinationConfiguration.getDestinationType());
+
+		assertEquals(Integer.MAX_VALUE,
+			destinationConfiguration.getMaximumQueueSize());
+		assertEquals(2, destinationConfiguration.getWorkersCoreSize());
+		assertEquals(5, destinationConfiguration.getWorkersMaxSize());
+		assertEquals(null,
+			destinationConfiguration.getRejectedExecutionHandler());
+
+		destinationConfiguration.setMaximumQueueSize(20);
+		destinationConfiguration.setWorkersCoreSize(3);
+		destinationConfiguration.setWorkersMaxSize(6);
+
+		RejectedExecutionHandler rejectedExecutionHandler =
+				new RejectedExecutionHandler() {
+
+			@Override
+			public void rejectedExecution(Runnable runnable,
+					ThreadPoolExecutor threadPoolExecutor) {
+			}
+
+		};
+
+		destinationConfiguration.setRejectedExecutionHandler(
+			rejectedExecutionHandler);
+
+		assertEquals(20, destinationConfiguration.getMaximumQueueSize());
+		assertEquals(3, destinationConfiguration.getWorkersCoreSize());
+		assertEquals(6, destinationConfiguration.getWorkersMaxSize());
+		assertEquals(rejectedExecutionHandler,
+			destinationConfiguration.getRejectedExecutionHandler());
+
+		assertEquals(
+			destinationName.hashCode(), destinationConfiguration.hashCode());
+	}
+
+	protected void testSend(String bundle, String destination)
+		throws Exception {
+
 		Bundle tb = install(bundle);
 
 		try {
@@ -87,73 +157,5 @@ public class DestinationConfigurationTest extends TestUtil {
 			tb.uninstall();
 		}
 	}
-	
-	protected void testDestinationConfiguration(DestinationType destinationType)
-			throws Exception {
 
-		String destinationName = null;
-		DestinationConfiguration destinationConfiguration = null;
-		
-		if (destinationType.equals(DestinationType.SYNCHRONOUS)) {
-			destinationName = "SYNCHRONOUS_DESTINATION";
-			destinationConfiguration =
-				DestinationConfiguration.
-				createSynchronousDestinationConfiguration(destinationName);
-		}
-		else if (destinationType.equals(DestinationType.PARALLEL)) {
-			destinationName = "PARALLEL_DESTINATION";
-			destinationConfiguration =
-				DestinationConfiguration.
-				createParallelDestinationConfiguration(destinationName);
-		}
-		else if (destinationType.equals(DestinationType.SERIAL)) {
-			destinationName = "SERIAL_DESTINATION";
-			destinationConfiguration =
-				DestinationConfiguration.
-				createSerialDestinationConfiguration(destinationName);
-		}
-		else {
-			fail("Invalid destination type");
-		}
-		
-		assertEquals(destinationName,
-				destinationConfiguration.getDestinationName());
-		
-		assertEquals(destinationType,
-				destinationConfiguration.getDestinationType());
-		
-		assertEquals(Integer.MAX_VALUE,
-				destinationConfiguration.getMaximumQueueSize());
-		assertEquals(2, destinationConfiguration.getWorkersCoreSize());
-		assertEquals(5, destinationConfiguration.getWorkersMaxSize());
-		assertEquals(null,
-				destinationConfiguration.getRejectedExecutionHandler());
-		
-		destinationConfiguration.setMaximumQueueSize(20);
-		destinationConfiguration.setWorkersCoreSize(3);
-		destinationConfiguration.setWorkersMaxSize(6);
-		
-		RejectedExecutionHandler rejectedExecutionHandler =
-				new RejectedExecutionHandler() {
-
-			@Override
-			public void rejectedExecution(Runnable runnable,
-					ThreadPoolExecutor threadPoolExecutor) {
-
-			}
-			
-		};
-		
-		destinationConfiguration.setRejectedExecutionHandler(
-				rejectedExecutionHandler);
-
-		assertEquals(20, destinationConfiguration.getMaximumQueueSize());
-		assertEquals(3, destinationConfiguration.getWorkersCoreSize());
-		assertEquals(6, destinationConfiguration.getWorkersMaxSize());
-		assertEquals(rejectedExecutionHandler,
-				destinationConfiguration.getRejectedExecutionHandler());
-		
-		assertEquals(destinationName.hashCode(), destinationConfiguration.hashCode());
-	}
-	
 }
