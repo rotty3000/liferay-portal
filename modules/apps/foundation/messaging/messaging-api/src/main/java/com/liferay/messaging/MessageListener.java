@@ -16,20 +16,20 @@ package com.liferay.messaging;
 
 /**
  * Specifies the processing to take place when a message is received.
- * 
+ *
  * <p>
  * Message listeners are registered with destinations. When a message is sent to
  * a destination, each of the destination's registered message listeners
  * receives the message.
  * </p>
- * 
+ *
  * @author Michael C. Han
  */
 public interface MessageListener {
 
 	/**
 	 * Specifies the processing to take place when a message is received.
-	 * 
+	 *
 	 * @param message the received message
 	 * @throws MessageListenerException if the message could not be processed
 	 */
