@@ -147,7 +147,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the DestinationConfiguration's destination type.
-	 * 
+	 *
 	 * <p>
 	 * Possible destination types are DestinationType.SYNCHRONOUS,
 	 * DestinationType.PARALLEL, or DestinationType.SERIAL. Both
@@ -163,7 +163,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the DestinationConfiguration's maximum queue size.
-	 * 
+	 *
 	 * <p>
 	 * The maximum queue size limits the number of messages that can be queued
 	 * up at a destination before they're dispatched on worker threads.
@@ -177,7 +177,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the DestinationConfiguration's rejected execution handler.
-	 * 
+	 *
 	 * <p>
 	 * A rejected execution handler determines what happens when the number of
 	 * incoming messages exceeds the maximum queue size.
@@ -191,7 +191,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the DestinationConfiguration's core thread pool size.
-	 * 
+	 *
 	 * <p>
 	 * The differences between thread pool size, core thread pool size, and
 	 * maximum thread pool size are the same as those explained here:
@@ -206,7 +206,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the DestinationConfiguration's maximum thread pool size.
-	 * 
+	 *
 	 * <p>
 	 * The differences between thread pool size, core thread pool size, and
 	 * maximum thread pool size are the same as those explained here:
@@ -221,7 +221,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns the hash code of the DestinationConfiguration's name.
-	 * 
+	 *
 	 * @return the hash code of the DestinationConfiguration's name
 	 */
 	@Override
@@ -231,7 +231,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Sets the DestinationConfiguration's maximum queue size.
-	 * 
+	 *
 	 * <p>
 	 * The maximum queue size limits the number of messages that can be queued
 	 * up at a destination before they're dispatched on worker threads.
@@ -246,7 +246,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Sets the DestinationConfiguration's rejected execution handler.
-	 * 
+	 *
 	 * <p>
 	 * A rejected execution handler determines what happens when the number of
 	 * incoming messages exceeds the maximum queue size.
@@ -267,7 +267,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Sets the DestinationConfiguration's core thread pool size.
-	 * 
+	 *
 	 * <p>
 	 * The differences between thread pool size, core thread pool size, and
 	 * maximum thread pool size are the same as those explained here:
@@ -282,7 +282,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Sets the DestinationConfiguration's maximum thread pool size.
-	 * 
+	 *
 	 * <p>
 	 * The differences between thread pool size, core thread pool size, and
 	 * maximum thread pool size are the same as those explained here:
@@ -297,7 +297,7 @@ public class DestinationConfiguration implements Serializable {
 
 	/**
 	 * Returns a string representation of the DestinationConfiguration
-	 * 
+	 *
 	 * @return a string representation of the DestinationConfiguration
 	 */
 	@Override

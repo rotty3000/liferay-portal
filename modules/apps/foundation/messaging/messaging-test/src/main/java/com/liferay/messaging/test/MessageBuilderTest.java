@@ -21,12 +21,8 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBuilder;
-import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.MessageListenerException;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -34,7 +30,6 @@ import org.junit.Test;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -75,7 +70,7 @@ public class MessageBuilderTest extends TestUtil {
 					destinationName));
 
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
-					new ServiceTracker<>(bundleContext, filter, null);
+				new ServiceTracker<>(bundleContext, filter, null);
 
 			callableST.open();
 
@@ -83,13 +78,13 @@ public class MessageBuilderTest extends TestUtil {
 
 			assertNotNull(callable);
 
-			MessageBuilder builder =
-					messageBuilderFactory.create(destinationName);
-			
-			Boolean boxedBool = new Boolean(true);
-			Integer boxedInt = new Integer(123);
-			Long boxedLong = new Long(1234567890);
-			Double boxedDouble = new Double(123.456);
+			MessageBuilder builder = messageBuilderFactory.create(
+				destinationName);
+
+			Boolean boxedBool = Boolean.valueOf(true);
+			Integer boxedInt = Integer.valueOf(123);
+			Long boxedLong = Long.valueOf(1234567890);
+			Double boxedDouble = Double.valueOf(123.456);
 			String string = new String("string");
 			Object object = new Object();
 
@@ -99,21 +94,22 @@ public class MessageBuilderTest extends TestUtil {
 			builder.put("double", boxedDouble);
 			builder.put("string", string);
 			builder.put("object", object);
-			
+
 			builder.setDestinationName(destinationName);
 			builder.setPayload("payload");
 			builder.setResponse("response");
 			builder.setResponseId("responseId");
 			builder.setResponseDestinationName(
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
-			
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+
 			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+
 			builder.send();
-			
+
 			assertEquals(builder.build(), callable.call());
-			
+
 			// Build and test a second message
-			
+
 			callableST = new ServiceTracker<>(bundleContext, filter, null);
 
 			callableST.open();
@@ -122,17 +118,17 @@ public class MessageBuilderTest extends TestUtil {
 
 			assertNotNull(callable);
 
-			Map<String, Object> values = new HashMap<String, Object>();
-			
+			Map<String, Object> values = new HashMap<>();
+
 			values.put("boolean", boxedBool);
+			values.put("double", boxedDouble);
 			values.put("int", boxedInt);
 			values.put("long", boxedLong);
-			values.put("double", boxedDouble);
-			values.put("string", string);
 			values.put("object", object);
-			
+			values.put("string", string);
+
 			builder = messageBuilderFactory.create(destinationName);
-			
+
 			builder.setValues(values);
 
 			builder.setDestinationName(destinationName);
@@ -140,22 +136,24 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponse("response");
 			builder.setResponseId("responseId");
 			builder.setResponseDestinationName(
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
-			
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+
 			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+
 			builder.send();
 
 			// TODO: Why does this assertion fail? Expected and actual results
 			// differ in their values map but only for the serial test...
+
 			//assertEquals(builder.build(), callable.call());
 		}
 		finally {
 			tb.uninstall();
 		}
 	}
-	
+
 	protected void testResponseMessageBuilder(
-			String bundle, String destinationName) throws Exception {
+		String bundle, String destinationName) throws Exception {
 
 		Bundle tb = install(bundle);
 		Bundle defaultResponseListenerBundle = install("tb21.jar");
@@ -179,15 +177,17 @@ public class MessageBuilderTest extends TestUtil {
 
 			assertNotNull(callable);
 
-			MessageBuilder builder = messageBuilderFactory.create(destinationName);
-			
-			assertTrue(messageBus.hasMessageListener(destinationName));
-			assertTrue(messageBus.getDestination(destinationName).isRegistered());
+			MessageBuilder builder = messageBuilderFactory.create(
+				destinationName);
 
-			Boolean boxedBool = new Boolean(true);
-			Integer boxedInt = new Integer(123);
-			Long boxedLong = new Long(1234567890);
-			Double boxedDouble = new Double(123.456);
+			assertTrue(messageBus.hasMessageListener(destinationName));
+			assertTrue(
+				messageBus.getDestination(destinationName).isRegistered());
+
+			Boolean boxedBool = Boolean.valueOf(true);
+			Integer boxedInt = Integer.valueOf(123);
+			Long boxedLong = Long.valueOf(1234567890);
+			Double boxedDouble = Double.valueOf(123.456);
 			String string = new String("string");
 			Object object = new Object();
 
@@ -197,27 +197,29 @@ public class MessageBuilderTest extends TestUtil {
 			builder.put("double", boxedDouble);
 			builder.put("string", string);
 			builder.put("object", object);
-			
+
 			builder.setDestinationName(destinationName);
 			builder.setPayload("payload");
 			builder.setResponse("response");
 			builder.setResponseId("responseId");
 			builder.setResponseDestinationName(
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
-			
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+
 			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+
 			builder.send();
-			
+
 			Message message = callable.call();
-			
+
 			assertEquals(builder.build(), message);
-			
+
 			// Build and test response message
-			
+
 			destinationName = DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE;
-			
+
 			assertTrue(messageBus.hasMessageListener(destinationName));
-			assertTrue(messageBus.getDestination(destinationName).isRegistered());
+			assertTrue(
+				messageBus.getDestination(destinationName).isRegistered());
 
 			filter = bundleContext.createFilter(
 				String.format(
@@ -234,12 +236,13 @@ public class MessageBuilderTest extends TestUtil {
 			assertNotNull(callable);
 
 			builder = messageBuilderFactory.createResponse(message);
-			
+
 			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+
 			builder.send();
 
 			Message responseMessage = callable.call();
-			
+
 			assertEquals(message.getPayload(), responseMessage.getPayload());
 			assertTrue(responseMessage.contains("boolean"));
 			assertTrue(responseMessage.contains("int"));
@@ -253,5 +256,5 @@ public class MessageBuilderTest extends TestUtil {
 			defaultResponseListenerBundle.uninstall();
 		}
 	}
-	
+
 }
