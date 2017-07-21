@@ -117,7 +117,7 @@ public class MessageBusManager
 	@Override
 	public int getMessageListenerCount(String destinationName) {
 		com.liferay.messaging.spi.Destination destination =
-				(com.liferay.messaging.spi.Destination)
+			(com.liferay.messaging.spi.Destination)
 				_messageBus.getDestination(destinationName);
 
 		if (destination == null) {

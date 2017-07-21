@@ -38,7 +38,7 @@ public class DirectSynchronousMessageSender
 	public Object send(String destinationName, Message message)
 		throws MessageBusException {
 
-		Destination destination = (Destination) _messageBus.getDestination(
+		Destination destination = (Destination)_messageBus.getDestination(
 			destinationName);
 
 		if (destination == null) {

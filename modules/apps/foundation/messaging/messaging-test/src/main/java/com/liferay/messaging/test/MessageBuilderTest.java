@@ -14,10 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBuilder;
@@ -26,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -76,7 +73,7 @@ public class MessageBuilderTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			MessageBuilder builder = messageBuilderFactory.create(
 				destinationName);
@@ -102,11 +99,12 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+			// TODO: Should sendSynchronous be used if destinationName is
+			// "synchronous/test"?
 
 			builder.send();
 
-			assertEquals(builder.build(), callable.call());
+			Assert.assertEquals(builder.build(), callable.call());
 
 			// Build and test a second message
 
@@ -116,7 +114,7 @@ public class MessageBuilderTest extends TestUtil {
 
 			callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Map<String, Object> values = new HashMap<>();
 
@@ -138,14 +136,15 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+			// TODO: Should sendSynchronous be used if destinationName is
+			// "synchronous/test"?
 
 			builder.send();
 
 			// TODO: Why does this assertion fail? Expected and actual results
 			// differ in their values map but only for the serial test...
 
-			//assertEquals(builder.build(), callable.call());
+			//Assert.assertEquals(builder.build(), callable.call());
 		}
 		finally {
 			tb.uninstall();
@@ -153,7 +152,8 @@ public class MessageBuilderTest extends TestUtil {
 	}
 
 	protected void testResponseMessageBuilder(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 		Bundle defaultResponseListenerBundle = install("tb21.jar");
@@ -175,13 +175,13 @@ public class MessageBuilderTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			MessageBuilder builder = messageBuilderFactory.create(
 				destinationName);
 
-			assertTrue(messageBus.hasMessageListener(destinationName));
-			assertTrue(
+			Assert.assertTrue(messageBus.hasMessageListener(destinationName));
+			Assert.assertTrue(
 				messageBus.getDestination(destinationName).isRegistered());
 
 			Boolean boxedBool = Boolean.valueOf(true);
@@ -205,20 +205,21 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+			// TODO: Should sendSynchronous be used if destinationName is
+			// "synchronous/test"?
 
 			builder.send();
 
 			Message message = callable.call();
 
-			assertEquals(builder.build(), message);
+			Assert.assertEquals(builder.build(), message);
 
 			// Build and test response message
 
 			destinationName = DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE;
 
-			assertTrue(messageBus.hasMessageListener(destinationName));
-			assertTrue(
+			Assert.assertTrue(messageBus.hasMessageListener(destinationName));
+			Assert.assertTrue(
 				messageBus.getDestination(destinationName).isRegistered());
 
 			filter = bundleContext.createFilter(
@@ -233,23 +234,25 @@ public class MessageBuilderTest extends TestUtil {
 
 			callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			builder = messageBuilderFactory.createResponse(message);
 
-			// TODO: Should sendSynchronous be used if destinationName is "synchronous/test"?
+			// TODO: Should sendSynchronous be used if destinationName is
+			// "synchronous/test"?
 
 			builder.send();
 
 			Message responseMessage = callable.call();
 
-			assertEquals(message.getPayload(), responseMessage.getPayload());
-			assertTrue(responseMessage.contains("boolean"));
-			assertTrue(responseMessage.contains("int"));
-			assertTrue(responseMessage.contains("long"));
-			assertTrue(responseMessage.contains("double"));
-			assertTrue(responseMessage.contains("string"));
-			assertTrue(responseMessage.contains("object"));
+			Assert.assertEquals(
+				message.getPayload(), responseMessage.getPayload());
+			Assert.assertTrue(responseMessage.contains("boolean"));
+			Assert.assertTrue(responseMessage.contains("int"));
+			Assert.assertTrue(responseMessage.contains("long"));
+			Assert.assertTrue(responseMessage.contains("double"));
+			Assert.assertTrue(responseMessage.contains("string"));
+			Assert.assertTrue(responseMessage.contains("object"));
 		}
 		finally {
 			tb.uninstall();
