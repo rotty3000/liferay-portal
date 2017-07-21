@@ -14,10 +14,9 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-
 import com.liferay.messaging.MessageBuilder;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -55,7 +54,7 @@ public class MessageBuilderOnListenerTest extends TestUtil {
 
 			Object response = builder.sendSynchronous();
 
-			assertEquals(builder.build(), response);
+			Assert.assertEquals(builder.build(), response);
 		}
 		finally {
 			tb.uninstall();

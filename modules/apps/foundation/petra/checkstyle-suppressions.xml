@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC "-//Puppy Crawl//DTD Suppressions 1.1//EN" "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+	<suppress checks="ConstantName" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/nio/intraband/BaseIntraband\.java" />
+	<suppress checks="Indentation" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/BigEndianCodec\.java" />
+	<suppress checks="MethodName" files="modules/apps/foundation/petra/petra-reflect/src/test/java/com/liferay/petra/reflect/AnnotationLocatorTest\.java" />
+	<suppress checks="MissingModifier" files="modules/apps/foundation/petra/petra-reflect/src/test/java/com/liferay/petra/reflect/AnnotationLocatorTest\.java" />
+	<suppress checks="PlusStatement" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/BigEndianCodec\.java" />
+	<suppress checks="Subname" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/ListUtil\.java" />
+	<suppress checks="Subname" files="modules/apps/foundation/petra/petra-io/src/test/java/com/liferay/petra/io/ListUtilTest\.java" />
+</suppressions>

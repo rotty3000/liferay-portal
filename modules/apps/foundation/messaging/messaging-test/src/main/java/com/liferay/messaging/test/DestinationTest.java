@@ -14,10 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.Message;
@@ -31,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -63,12 +60,14 @@ public class DestinationTest extends TestUtil {
 	}
 
 	protected void testExecutorServiceRegistrar(
-		String destinationName, String... bundleNames) throws Exception {
+			String destinationName, String... bundleNames)
+		throws Exception {
 
 		List<Bundle> bundles = new ArrayList<>();
 
 		for (String bundleName : bundleNames) {
 			Bundle bundle = install(bundleName);
+
 			bundles.add(bundle);
 		}
 
@@ -93,12 +92,12 @@ public class DestinationTest extends TestUtil {
 			Callable<Map<String, ExecutorService>> service =
 				tracker.waitForService(timeout);
 
-			assertNotNull(service);
+			Assert.assertNotNull(service);
 
 			Map<String, ExecutorService> map = service.call();
 
-			assertTrue(map.containsKey(destinationName));
-			assertNotNull(map.get(destinationName));
+			Assert.assertTrue(map.containsKey(destinationName));
+			Assert.assertNotNull(map.get(destinationName));
 		}
 		finally {
 			for (Bundle bundle : bundles) {
@@ -112,18 +111,19 @@ public class DestinationTest extends TestUtil {
 	}
 
 	protected void testRejectedExecutionHandler(
-		String destinationName, String... bundleNames) throws Exception {
+			String destinationName, String... bundleNames)
+		throws Exception {
 
 		List<Bundle> bundles = new ArrayList<>();
 
 		for (String bundleName : bundleNames) {
 			Bundle bundle = install(bundleName);
+
 			bundles.add(bundle);
 		}
 
-		ServiceTracker<
-			RejectedExecutionHandler,
-			Callable<Map<MessageRunnable, ThreadPoolExecutor>>> tracker = null;
+		ServiceTracker<RejectedExecutionHandler, Callable<Map<MessageRunnable, ThreadPoolExecutor>>>
+			tracker = null;
 
 		try {
 			for (Bundle bundle : bundles) {
@@ -143,7 +143,7 @@ public class DestinationTest extends TestUtil {
 			Callable<Map<MessageRunnable, ThreadPoolExecutor>> service =
 				tracker.waitForService(timeout);
 
-			assertNotNull(service);
+			Assert.assertNotNull(service);
 
 			messageBus = getMessageBus();
 
@@ -159,7 +159,7 @@ public class DestinationTest extends TestUtil {
 
 			Map<MessageRunnable, ThreadPoolExecutor> map = service.call();
 
-			assertNotNull(map);
+			Assert.assertNotNull(map);
 			//assertFalse(map.isEmpty());
 		}
 		finally {
@@ -176,7 +176,7 @@ public class DestinationTest extends TestUtil {
 	protected void testSend(String destinationName, String bundleName)
 		throws Exception {
 
-	Bundle bundle = install(bundleName);
+		Bundle bundle = install(bundleName);
 
 		try {
 			bundle.start();
@@ -184,9 +184,9 @@ public class DestinationTest extends TestUtil {
 			Destination destination = messageBus.getDestination(
 				destinationName);
 
-			assertEquals(destinationName, destination.getName());
+			Assert.assertEquals(destinationName, destination.getName());
 
-			assertTrue(destination.isRegistered());
+			Assert.assertTrue(destination.isRegistered());
 
 			Filter filter = bundleContext.createFilter(
 				String.format(
@@ -201,13 +201,13 @@ public class DestinationTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Message message = new Message();
 
 			messageBus.sendMessage(destinationName, message);
 
-			assertEquals(message, callable.call());
+			Assert.assertEquals(message, callable.call());
 		}
 		finally {
 			bundle.uninstall();

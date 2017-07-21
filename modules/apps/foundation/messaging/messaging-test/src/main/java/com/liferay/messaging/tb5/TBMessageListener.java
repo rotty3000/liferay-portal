@@ -37,17 +37,17 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class TBMessageListener implements Callable<Message>, MessageListener{
 
 	@Override
-	public void receive(Message message) throws MessageListenerException {
-		_message.set(message);
-
-		_latch.countDown();
-	}
-
-	@Override
 	public Message call() throws Exception {
 		_latch.await(10, TimeUnit.SECONDS);
 
 		return _message.get();
+	}
+
+	@Override
+	public void receive(Message message) throws MessageListenerException {
+		_message.set(message);
+
+		_latch.countDown();
 	}
 
 	private final CountDownLatch _latch = new CountDownLatch(1);

@@ -14,10 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
@@ -26,6 +22,7 @@ import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.concurrent.Callable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -64,63 +61,67 @@ public class DestinationConfigurationTest extends TestUtil {
 
 		if (destinationType.equals(DestinationType.SYNCHRONOUS)) {
 			destinationName = "SYNCHRONOUS_DESTINATION";
+
 			destinationConfiguration =
-				DestinationConfiguration.
-				createSynchronousDestinationConfiguration(destinationName);
+				DestinationConfiguration.createSynchronousDestinationConfiguration(
+					destinationName);
 		}
 		else if (destinationType.equals(DestinationType.PARALLEL)) {
 			destinationName = "PARALLEL_DESTINATION";
+
 			destinationConfiguration =
-				DestinationConfiguration.
-				createParallelDestinationConfiguration(destinationName);
+				DestinationConfiguration.createParallelDestinationConfiguration(
+					destinationName);
 		}
 		else if (destinationType.equals(DestinationType.SERIAL)) {
 			destinationName = "SERIAL_DESTINATION";
+
 			destinationConfiguration =
-				DestinationConfiguration.
-				createSerialDestinationConfiguration(destinationName);
+				DestinationConfiguration.createSerialDestinationConfiguration(
+					destinationName);
 		}
 		else {
-			fail("Invalid destination type");
+			Assert.fail("Invalid destination type");
 		}
 
-		assertEquals(destinationName,
-			destinationConfiguration.getDestinationName());
+		Assert.assertEquals(
+			destinationName, destinationConfiguration.getDestinationName());
 
-		assertEquals(destinationType,
-			destinationConfiguration.getDestinationType());
+		Assert.assertEquals(
+			destinationType, destinationConfiguration.getDestinationType());
 
-		assertEquals(Integer.MAX_VALUE,
-			destinationConfiguration.getMaximumQueueSize());
-		assertEquals(2, destinationConfiguration.getWorkersCoreSize());
-		assertEquals(5, destinationConfiguration.getWorkersMaxSize());
-		assertEquals(null,
-			destinationConfiguration.getRejectedExecutionHandler());
+		Assert.assertEquals(
+			Integer.MAX_VALUE, destinationConfiguration.getMaximumQueueSize());
+		Assert.assertEquals(2, destinationConfiguration.getWorkersCoreSize());
+		Assert.assertEquals(5, destinationConfiguration.getWorkersMaxSize());
+		Assert.assertEquals(
+			null, destinationConfiguration.getRejectedExecutionHandler());
 
 		destinationConfiguration.setMaximumQueueSize(20);
 		destinationConfiguration.setWorkersCoreSize(3);
 		destinationConfiguration.setWorkersMaxSize(6);
 
 		RejectedExecutionHandler rejectedExecutionHandler =
-				new RejectedExecutionHandler() {
+			new RejectedExecutionHandler() {
 
-			@Override
-			public void rejectedExecution(Runnable runnable,
-					ThreadPoolExecutor threadPoolExecutor) {
-			}
+				@Override
+				public void rejectedExecution(
+					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+				}
 
-		};
+			};
 
 		destinationConfiguration.setRejectedExecutionHandler(
 			rejectedExecutionHandler);
 
-		assertEquals(20, destinationConfiguration.getMaximumQueueSize());
-		assertEquals(3, destinationConfiguration.getWorkersCoreSize());
-		assertEquals(6, destinationConfiguration.getWorkersMaxSize());
-		assertEquals(rejectedExecutionHandler,
+		Assert.assertEquals(20, destinationConfiguration.getMaximumQueueSize());
+		Assert.assertEquals(3, destinationConfiguration.getWorkersCoreSize());
+		Assert.assertEquals(6, destinationConfiguration.getWorkersMaxSize());
+		Assert.assertEquals(
+			rejectedExecutionHandler,
 			destinationConfiguration.getRejectedExecutionHandler());
 
-		assertEquals(
+		Assert.assertEquals(
 			destinationName.hashCode(), destinationConfiguration.hashCode());
 	}
 
@@ -145,13 +146,13 @@ public class DestinationConfigurationTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Message message = new Message();
 
 			messageBus.sendMessage(destination, message);
 
-			assertEquals(message, callable.call());
+			Assert.assertEquals(message, callable.call());
 		}
 		finally {
 			tb.uninstall();

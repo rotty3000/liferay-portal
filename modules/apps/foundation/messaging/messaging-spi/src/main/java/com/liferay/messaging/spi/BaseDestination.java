@@ -15,6 +15,7 @@
 package com.liferay.messaging.spi;
 
 import com.liferay.messaging.DestinationEventListener;
+import com.liferay.messaging.DestinationStatistics;
 import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
@@ -115,9 +116,7 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public com.
-	liferay.messaging.DestinationStatistics getDestinationStatistics() {
-
+	public DestinationStatistics getDestinationStatistics() {
 		throw new UnsupportedOperationException();
 	}
 
