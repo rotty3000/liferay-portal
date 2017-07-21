@@ -67,7 +67,11 @@ public class FileCacheOutputStream extends OutputStream {
 				Stream<Path> sortedStream = stream.sorted(
 					Comparator.reverseOrder());
 
-				sortedStream.map(Path::toFile).forEach(File::delete);
+				sortedStream.map(
+					Path::toFile
+				).forEach(
+					File::delete
+				);
 			}
 		}
 		catch (IOException ioe) {

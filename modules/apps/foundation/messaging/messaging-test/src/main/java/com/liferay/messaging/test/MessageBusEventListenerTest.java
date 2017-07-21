@@ -14,15 +14,13 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.MessageBusEventListener;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -69,16 +67,16 @@ public class MessageBusEventListenerTest extends TestUtil {
 
 			tb1Bundle.start();
 
-			assertNotNull(promiseToRegister.getValue());
+			Assert.assertNotNull(promiseToRegister.getValue());
 
 			Promise<Destination> promiseToUnregister =
 				unregistration.getPromise();
 
-			assertFalse(promiseToUnregister.isDone());
+			Assert.assertFalse(promiseToUnregister.isDone());
 
 			tb1Bundle.uninstall();
 
-			assertNotNull(promiseToUnregister.getValue());
+			Assert.assertNotNull(promiseToUnregister.getValue());
 		}
 		finally {
 			serviceRegistration.unregister();

@@ -14,9 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.messaging.MessageBuilderFactory;
 import com.liferay.messaging.MessageBus;
 
@@ -29,6 +26,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import org.osgi.framework.Bundle;
@@ -58,7 +56,7 @@ public class TestUtil {
 
 		messageBus = getMessageBus();
 
-		assertNotNull(messageBus);
+		Assert.assertNotNull(messageBus);
 
 		messageBuilderFactoryTracker = new ServiceTracker<>(
 			bundleContext, MessageBuilderFactory.class, null);
@@ -67,7 +65,7 @@ public class TestUtil {
 
 		messageBuilderFactory = getMessageBuilderFactory();
 
-		assertNotNull(messageBuilderFactory);
+		Assert.assertNotNull(messageBuilderFactory);
 	}
 
 	public InputStream getInputStream(String bundlePath) {
@@ -86,7 +84,7 @@ public class TestUtil {
 			MessageBuilderFactory messageBuilderFactory =
 				messageBuilderFactoryTracker.waitForService(timeout);
 
-			assertNotNull(messageBuilderFactory);
+			Assert.assertNotNull(messageBuilderFactory);
 
 			return messageBuilderFactory;
 		}
@@ -99,7 +97,7 @@ public class TestUtil {
 		try {
 			MessageBus messageBus = messageBusTracker.waitForService(timeout);
 
-			assertNotNull(messageBus);
+			Assert.assertNotNull(messageBus);
 
 			return messageBus;
 		}
@@ -127,7 +125,7 @@ public class TestUtil {
 	protected <T> ServiceRegistration<T> registerService(
 		Class<T> clazz, T instance, Object... parts) {
 
-		assertTrue((parts.length % 2) == 0);
+		Assert.assertTrue((parts.length % 2) == 0);
 
 		Dictionary<String, Object> properties = new Hashtable<>();
 

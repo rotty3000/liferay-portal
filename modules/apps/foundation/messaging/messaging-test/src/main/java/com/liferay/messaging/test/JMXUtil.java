@@ -14,11 +14,10 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertNotNull;
-
 import javax.management.MBeanServer;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import org.osgi.util.tracker.ServiceTracker;
@@ -47,15 +46,12 @@ public class JMXUtil extends TestUtil {
 		mBeanServer = getMBeanServer();
 	}
 
-	protected MBeanServer mBeanServer;
-	protected ServiceTracker<MBeanServer, MBeanServer> mBeanServerTracker;
-
-	private MBeanServer getMBeanServer() {
+	protected MBeanServer getMBeanServer() {
 		try {
 			MBeanServer mBeanServer = mBeanServerTracker.waitForService(
 				timeout);
 
-			assertNotNull(mBeanServer);
+			Assert.assertNotNull(mBeanServer);
 
 			return mBeanServer;
 		}
@@ -63,5 +59,8 @@ public class JMXUtil extends TestUtil {
 			throw new RuntimeException(ie);
 		}
 	}
+
+	protected MBeanServer mBeanServer;
+	protected ServiceTracker<MBeanServer, MBeanServer> mBeanServerTracker;
 
 }

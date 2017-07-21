@@ -53,7 +53,7 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		builder.send();
 	}
 
-	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
+	private AtomicReference<Message> _message = new AtomicReference<Message>();
 	@Reference
 	private MessageBuilderFactory _messageBuilderFactory;
 

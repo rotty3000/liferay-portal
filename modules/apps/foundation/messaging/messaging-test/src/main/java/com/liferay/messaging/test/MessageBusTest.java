@@ -14,9 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
@@ -25,6 +22,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -80,22 +78,28 @@ public class MessageBusTest extends TestUtil {
 		try {
 			tb.start();
 
-			assertEquals(3, messageBus.getDestinationCount());
+			Assert.assertEquals(3, messageBus.getDestinationCount());
 
 			Collection<String> destinationNames = new HashSet<>();
+
 			destinationNames.add(destinationName);
 			destinationNames.add(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 			destinationNames.add(DestinationNames.MESSAGE_BUS_MESSAGE_STATUS);
-			assertEquals(destinationNames, messageBus.getDestinationNames());
 
-			assertEquals(true, messageBus.hasDestination(destinationName));
+			Assert.assertEquals(
+				destinationNames, messageBus.getDestinationNames());
+
+			Assert.assertEquals(
+				true, messageBus.hasDestination(destinationName));
 
 			Destination destination = messageBus.getDestination(
 				destinationName);
 			Collection<Destination> destinations = messageBus.getDestinations();
-			assertEquals(true, destinations.contains(destination));
 
-			assertEquals(true, messageBus.hasMessageListener(destinationName));
+			Assert.assertEquals(true, destinations.contains(destination));
+
+			Assert.assertEquals(
+				true, messageBus.hasMessageListener(destinationName));
 		}
 		finally {
 			tb.uninstall();
@@ -129,11 +133,11 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(message, receivedMessage);
+			Assert.assertEquals(message, receivedMessage);
 
 			// sendMessage(String destinationName, Object payload)
 
@@ -143,11 +147,11 @@ public class MessageBusTest extends TestUtil {
 
 			callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			receivedMessage = callable.call();
 
-			assertEquals("payload", receivedMessage.getPayload());
+			Assert.assertEquals("payload", receivedMessage.getPayload());
 		}
 		finally {
 			tb.uninstall();
@@ -155,7 +159,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -164,6 +169,7 @@ public class MessageBusTest extends TestUtil {
 
 			Message message = new Message();
 			String payload = "payload";
+
 			message.setPayload(payload);
 
 			Filter filter = bundleContext.createFilter(
@@ -179,15 +185,16 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
 				destinationName, message);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(message.getPayload(), receivedMessage.getPayload());
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(
+				message.getPayload(), receivedMessage.getPayload());
 		}
 		finally {
 			tb.uninstall();
@@ -195,7 +202,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage2(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -204,6 +212,7 @@ public class MessageBusTest extends TestUtil {
 
 			Message message = new Message();
 			String payload = "payload";
+
 			message.setPayload(payload);
 
 			Filter filter = bundleContext.createFilter(
@@ -219,15 +228,16 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
 				destinationName, message, 1000);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(message.getPayload(), receivedMessage.getPayload());
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(
+				message.getPayload(), receivedMessage.getPayload());
 		}
 		finally {
 			tb.uninstall();
@@ -235,7 +245,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage3(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -257,15 +268,15 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
 				destinationName, payload);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(payload, receivedMessage.getPayload());
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(payload, receivedMessage.getPayload());
 		}
 		finally {
 			tb.uninstall();
@@ -273,7 +284,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage4(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -295,15 +307,15 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
 				destinationName, payload, 1000);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(payload, receivedMessage.getPayload());
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(payload, receivedMessage.getPayload());
 		}
 		finally {
 			tb.uninstall();
@@ -311,7 +323,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage5(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -333,20 +346,21 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
-					destinationName, payload,
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+				destinationName, payload,
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(payload, receivedMessage.getPayload());
-			assertEquals(destinationName, receivedMessage.getDestinationName());
-			assertEquals(
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
-					receivedMessage.getResponseDestinationName());
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(payload, receivedMessage.getPayload());
+			Assert.assertEquals(
+				destinationName, receivedMessage.getDestinationName());
+			Assert.assertEquals(
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
+				receivedMessage.getResponseDestinationName());
 		}
 		finally {
 			tb.uninstall();
@@ -354,7 +368,8 @@ public class MessageBusTest extends TestUtil {
 	}
 
 	protected void testSendSynchronousMessage6(
-		String bundle, String destinationName) throws Exception {
+			String bundle, String destinationName)
+		throws Exception {
 
 		Bundle tb = install(bundle);
 
@@ -376,18 +391,20 @@ public class MessageBusTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Object response = messageBus.sendSynchronousMessage(
-					destinationName, payload,
-					DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE, 1000);
+				destinationName, payload,
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE, 1000);
 
 			Message receivedMessage = callable.call();
 
-			assertEquals(response, receivedMessage);
-			assertEquals(payload, receivedMessage.getPayload());
-			assertEquals(destinationName, receivedMessage.getDestinationName());
-			assertEquals(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
+			Assert.assertEquals(response, receivedMessage);
+			Assert.assertEquals(payload, receivedMessage.getPayload());
+			Assert.assertEquals(
+				destinationName, receivedMessage.getDestinationName());
+			Assert.assertEquals(
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
 				receivedMessage.getResponseDestinationName());
 		}
 		finally {

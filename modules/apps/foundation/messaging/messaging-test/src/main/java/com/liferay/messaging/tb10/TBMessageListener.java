@@ -40,6 +40,13 @@ import org.osgi.service.component.annotations.ServiceScope;
 public class TBMessageListener implements Callable<Message>, MessageListener{
 
 	@Override
+	public Message call() throws Exception {
+		_latch.await(10, TimeUnit.SECONDS);
+
+		return _message.get();
+	}
+
+	@Override
 	public void receive(Message message) throws MessageListenerException {
 		_message.set(message);
 
@@ -52,17 +59,10 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		_latch.countDown();
 	}
 
-	@Override
-	public Message call() throws Exception {
-		_latch.await(10, TimeUnit.SECONDS);
-
-		return _message.get();
-	}
-
 	@Reference
 	private volatile MessageBuilderFactory _messageBuilderFactory;
 
 	private final CountDownLatch _latch = new CountDownLatch(1);
-	private final AtomicReference<Message> _message = new AtomicReference<>(null);
+	private final AtomicReference<Message> _message = new AtomicReference<>();
 
 }

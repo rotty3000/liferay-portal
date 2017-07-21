@@ -14,9 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageProcessorException;
 import com.liferay.messaging.OutboundMessageProcessor;
@@ -25,6 +22,7 @@ import com.liferay.messaging.OutboundMessageProcessorFactory;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -60,37 +58,37 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 		final Deferred<Integer> called = new Deferred<>();
 
 		OutboundMessageProcessor outboundMessageProcessor =
-		new OutboundMessageProcessor() {
+			new OutboundMessageProcessor() {
 
-			@Override
-			public void afterSend(Message message)
-				throws MessageProcessorException {
+				@Override
+				public void afterSend(Message message)
+					throws MessageProcessorException {
 
-				afterSend.resolve(3);
-			}
+					afterSend.resolve(3);
+				}
 
-			@Override
-			public Message beforeSend(Message message)
-				throws MessageProcessorException {
+				@Override
+				public Message beforeSend(Message message)
+					throws MessageProcessorException {
 
-				beforeSend.resolve(2);
+					beforeSend.resolve(2);
 
-				return message;
-			}
+					return message;
+				}
 
-		};
+			};
 
 		OutboundMessageProcessorFactory factory =
-		new OutboundMessageProcessorFactory() {
+			new OutboundMessageProcessorFactory() {
 
-			@Override
-			public OutboundMessageProcessor create() {
-				called.resolve(1);
+				@Override
+				public OutboundMessageProcessor create() {
+					called.resolve(1);
 
-				return outboundMessageProcessor;
-			}
+					return outboundMessageProcessor;
+				}
 
-		};
+			};
 
 		Dictionary<String, Object> properties = new Hashtable<>();
 
@@ -105,23 +103,25 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 
 			Promise<Integer> promiseToAfterSend = afterSend.getPromise();
 
-			assertFalse(promiseToAfterSend.isDone());
+			Assert.assertFalse(promiseToAfterSend.isDone());
 
 			Promise<Integer> promiseToBeforeSend = beforeSend.getPromise();
 
-			assertFalse(promiseToBeforeSend.isDone());
+			Assert.assertFalse(promiseToBeforeSend.isDone());
 
 			Message message = new Message();
 
 			Promise<Integer> promiseToCalled = called.getPromise();
 
-			assertFalse(promiseToCalled.isDone());
+			Assert.assertFalse(promiseToCalled.isDone());
 
 			messageBus.sendMessage(destination, message);
 
-			assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
-			assertEquals(Integer.valueOf(2), promiseToBeforeSend.getValue());
-			assertEquals(Integer.valueOf(3), promiseToAfterSend.getValue());
+			Assert.assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(2), promiseToBeforeSend.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(3), promiseToAfterSend.getValue());
 
 			tb.uninstall();
 		}

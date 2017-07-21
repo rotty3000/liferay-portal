@@ -14,10 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.Message;
@@ -29,6 +25,7 @@ import java.io.StringWriter;
 
 import java.util.Collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.InvalidSyntaxException;
@@ -73,17 +70,18 @@ public class ClassLoaderTest extends TestUtil {
 
 			Collection<Destination> destinations = messageBus.getDestinations();
 
-			assertEquals(destinations.toString(), 4, destinations.size());
+			Assert.assertEquals(
+				destinations.toString(), 4, destinations.size());
 
 			for (Destination destination : destinations) {
 				String destinationName = destination.getName();
 
-				assertTrue(
+				Assert.assertTrue(
 					destinationName.contains("plugintest") ||
 					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/plugintest1")) {
-					assertTrue(destination.isRegistered());
+					Assert.assertTrue(destination.isRegistered());
 				}
 
 				Message message = new Message();
@@ -92,7 +90,7 @@ public class ClassLoaderTest extends TestUtil {
 			}
 		}
 		catch (Exception e) {
-			fail(getStackTrace(e));
+			Assert.fail(getStackTrace(e));
 		}
 		finally {
 			configuration1.unregister();
@@ -135,17 +133,18 @@ public class ClassLoaderTest extends TestUtil {
 
 			Collection<Destination> destinations = messageBus.getDestinations();
 
-			assertEquals(destinations.toString(), 4, destinations.size());
+			Assert.assertEquals(
+				destinations.toString(), 4, destinations.size());
 
 			for (Destination destination : destinations) {
 				String destinationName = destination.getName();
 
-				assertTrue(
+				Assert.assertTrue(
 					destinationName.contains("portaltest") ||
 					destinationName.startsWith("liferay/message_bus/"));
 
 				if (destinationName.equals("liferay/portaltest1")) {
-					assertTrue(destination.isRegistered());
+					Assert.assertTrue(destination.isRegistered());
 				}
 
 				Message message = new Message();
@@ -154,7 +153,7 @@ public class ClassLoaderTest extends TestUtil {
 			}
 		}
 		catch (Exception e) {
-			fail(getStackTrace(e));
+			Assert.fail(getStackTrace(e));
 		}
 		finally {
 			configuration1.unregister();
@@ -207,7 +206,7 @@ public class ClassLoaderTest extends TestUtil {
 			ClassLoader currentClassLoader =
 				currentThread.getContextClassLoader();
 
-			assertEquals(_testClassLoader, currentClassLoader);
+			Assert.assertEquals(_testClassLoader, currentClassLoader);
 		}
 
 		private final ClassLoader _testClassLoader;
@@ -222,7 +221,7 @@ public class ClassLoaderTest extends TestUtil {
 
 		@Override
 		public void receive(Message message) {
-			assertEquals(_destinationName, message.getDestinationName());
+			Assert.assertEquals(_destinationName, message.getDestinationName());
 		}
 
 		private final String _destinationName;
