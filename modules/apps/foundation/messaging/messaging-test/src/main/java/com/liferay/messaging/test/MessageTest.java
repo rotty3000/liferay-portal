@@ -14,15 +14,12 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import com.liferay.messaging.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -44,15 +41,16 @@ public class MessageTest {
 
 		Message deserializedMessage = Message.fromByteArray(serializedMessage);
 
-		assertEquals(message, deserializedMessage);
-	}
-
-*/
+		Assert.assertEquals(message, deserializedMessage);
+	}*/
 
 	// TODO: Why this error?
+	// java.lang.AssertionError: expected: Message<{destinationName = null,
+	// response=null, responseDestinationName=null, responseId=null,
+	// payload=null, values={abc=123}}> but was: Message<{destinationName=null,
+	// response=null, responseDestinationName=null, responseId=null,
+	// payload=null, values={abc=123}}
 
-	/* * java.lang.AssertionError: expected: Message<{destinationName = null, response=null, responseDestinationName=null, responseId=null, payload=null, values={abc=123}}> but was: Message<{destinationName=null, response=null, responseDestinationName=null, responseId=null, payload=null, values={abc=123}}
-	 */
 	/*@Test
 	public void testMessageClone() {
 		Message message = new Message();
@@ -61,10 +59,8 @@ public class MessageTest {
 
 		Message clonedMessage = message.clone();
 
-		assertEquals(message, clonedMessage);
-	}
-
-*/
+		Assert.assertEquals(message, clonedMessage);
+	}*/
 
 	@Test
 	public void testContains() {
@@ -74,15 +70,15 @@ public class MessageTest {
 
 		boolean containsABC = message.contains("abc");
 
-		assertTrue(containsABC);
+		Assert.assertTrue(containsABC);
 
 		boolean contains123 = message.contains("123");
 
-		assertFalse(contains123);
+		Assert.assertFalse(contains123);
 
 		boolean containsDEF = message.contains("def");
 
-		assertFalse(containsDEF);
+		Assert.assertFalse(containsDEF);
 	}
 
 	@Test
@@ -105,39 +101,42 @@ public class MessageTest {
 
 		Message copiedFromMessage = new Message();
 
-		assertEquals(null, copiedFromMessage.getDestinationName());
-		assertEquals(null, copiedFromMessage.getPayload());
-		assertEquals(null, copiedFromMessage.getResponse());
-		assertEquals(null, copiedFromMessage.getResponseDestinationName());
-		assertEquals(null, copiedFromMessage.getResponseId());
+		Assert.assertEquals(null, copiedFromMessage.getDestinationName());
+		Assert.assertEquals(null, copiedFromMessage.getPayload());
+		Assert.assertEquals(null, copiedFromMessage.getResponse());
+		Assert.assertEquals(
+			null, copiedFromMessage.getResponseDestinationName());
+		Assert.assertEquals(null, copiedFromMessage.getResponseId());
 
 		copiedFromMessage.copyFrom(message);
 
-		assertEquals(destinationName, copiedFromMessage.getDestinationName());
-		assertEquals(payload, copiedFromMessage.getPayload());
-		assertEquals(response, copiedFromMessage.getResponse());
-		assertEquals(
-				responseDestinationName,
-				copiedFromMessage.getResponseDestinationName());
-		assertEquals(responseId, copiedFromMessage.getResponseId());
+		Assert.assertEquals(
+			destinationName, copiedFromMessage.getDestinationName());
+		Assert.assertEquals(payload, copiedFromMessage.getPayload());
+		Assert.assertEquals(response, copiedFromMessage.getResponse());
+		Assert.assertEquals(
+			responseDestinationName,
+			copiedFromMessage.getResponseDestinationName());
+		Assert.assertEquals(responseId, copiedFromMessage.getResponseId());
 
 		Message copiedToMessage = new Message();
 
-		assertEquals(null, copiedToMessage.getDestinationName());
-		assertEquals(null, copiedToMessage.getPayload());
-		assertEquals(null, copiedToMessage.getResponse());
-		assertEquals(null, copiedToMessage.getResponseDestinationName());
-		assertEquals(null, copiedToMessage.getResponseId());
+		Assert.assertEquals(null, copiedToMessage.getDestinationName());
+		Assert.assertEquals(null, copiedToMessage.getPayload());
+		Assert.assertEquals(null, copiedToMessage.getResponse());
+		Assert.assertEquals(null, copiedToMessage.getResponseDestinationName());
+		Assert.assertEquals(null, copiedToMessage.getResponseId());
 
 		message.copyTo(copiedToMessage);
 
-		assertEquals(destinationName, copiedToMessage.getDestinationName());
-		assertEquals(payload, copiedToMessage.getPayload());
-		assertEquals(response, copiedToMessage.getResponse());
-		assertEquals(
-				responseDestinationName,
-				copiedToMessage.getResponseDestinationName());
-		assertEquals(responseId, copiedToMessage.getResponseId());
+		Assert.assertEquals(
+			destinationName, copiedToMessage.getDestinationName());
+		Assert.assertEquals(payload, copiedToMessage.getPayload());
+		Assert.assertEquals(response, copiedToMessage.getResponse());
+		Assert.assertEquals(
+			responseDestinationName,
+			copiedToMessage.getResponseDestinationName());
+		Assert.assertEquals(responseId, copiedToMessage.getResponseId());
 	}
 
 	@Test
@@ -174,23 +173,24 @@ public class MessageTest {
 
 		message.setValues(values);
 
-		assertEquals((boolean)boxedBool, message.getBoolean("boolean"));
-		assertEquals((int)boxedInt, message.getInteger("int"));
-		assertEquals((long)boxedLong, message.getLong("long"));
-		assertEquals((double)boxedDouble, message.getDouble("double"), DELTA);
-		assertEquals((String)string, message.getString("string"));
-		assertEquals((Object)object, message.get("object"));
-		assertEquals(values, message.getValues());
+		Assert.assertEquals((boolean)boxedBool, message.getBoolean("boolean"));
+		Assert.assertEquals((int)boxedInt, message.getInteger("int"));
+		Assert.assertEquals((long)boxedLong, message.getLong("long"));
+		Assert.assertEquals(
+			(double)boxedDouble, message.getDouble("double"), DELTA);
+		Assert.assertEquals((String)string, message.getString("string"));
+		Assert.assertEquals((Object)object, message.get("object"));
+		Assert.assertEquals(values, message.getValues());
 
-		assertFalse(message.contains("extra"));
+		Assert.assertFalse(message.contains("extra"));
 
 		message.put("extra", "extraValue");
 
-		assertTrue(message.contains("extra"));
+		Assert.assertTrue(message.contains("extra"));
 
 		message.remove("extra");
 
-		assertFalse(message.contains("extra"));
+		Assert.assertFalse(message.contains("extra"));
 	}
 
 }

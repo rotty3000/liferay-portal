@@ -14,9 +14,6 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
@@ -25,6 +22,7 @@ import com.liferay.messaging.MessageProcessorException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -126,34 +124,38 @@ public class InboundMessageProcessorFactoryTest extends TestUtil {
 
 			Promise<Integer> promiseToAfterReceive = afterReceive.getPromise();
 
-			assertFalse(promiseToAfterReceive.isDone());
+			Assert.assertFalse(promiseToAfterReceive.isDone());
 
 			Promise<Integer> promiseToAfterThread = afterThread.getPromise();
 
-			assertFalse(promiseToAfterThread.isDone());
+			Assert.assertFalse(promiseToAfterThread.isDone());
 
 			Promise<Integer> promiseToBeforeReceive =
 				beforeReceive.getPromise();
 
-			assertFalse(promiseToBeforeReceive.isDone());
+			Assert.assertFalse(promiseToBeforeReceive.isDone());
 
 			Promise<Integer> promiseToBeforeThread = beforeThread.getPromise();
 
-			assertFalse(promiseToBeforeThread.isDone());
+			Assert.assertFalse(promiseToBeforeThread.isDone());
 
 			Message message = new Message();
 
 			Promise<Integer> promiseToCalled = called.getPromise();
 
-			assertFalse(promiseToCalled.isDone());
+			Assert.assertFalse(promiseToCalled.isDone());
 
 			messageBus.sendMessage(destinationName, message);
 
-			assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
-			assertEquals(Integer.valueOf(2), promiseToBeforeReceive.getValue());
-			assertEquals(Integer.valueOf(3), promiseToBeforeThread.getValue());
-			assertEquals(Integer.valueOf(4), promiseToAfterThread.getValue());
-			assertEquals(Integer.valueOf(5), promiseToAfterReceive.getValue());
+			Assert.assertEquals(Integer.valueOf(1), promiseToCalled.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(2), promiseToBeforeReceive.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(3), promiseToBeforeThread.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(4), promiseToAfterThread.getValue());
+			Assert.assertEquals(
+				Integer.valueOf(5), promiseToAfterReceive.getValue());
 
 			tb.uninstall();
 		}

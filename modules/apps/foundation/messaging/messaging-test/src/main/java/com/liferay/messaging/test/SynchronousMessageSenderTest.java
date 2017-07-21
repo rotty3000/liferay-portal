@@ -14,10 +14,9 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-
 import com.liferay.messaging.Message;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -55,7 +54,7 @@ public class SynchronousMessageSenderTest extends TestUtil {
 			Object result = messageBus.sendSynchronousMessage(
 				destinationName, message);
 
-			assertEquals(message, result);
+			Assert.assertEquals(message, result);
 		}
 		finally {
 			tb.uninstall();

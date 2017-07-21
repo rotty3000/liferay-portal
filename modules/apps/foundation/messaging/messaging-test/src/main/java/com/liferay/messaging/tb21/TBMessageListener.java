@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = "destination.name=" + DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
+	property =
+		"destination.name=" + DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
@@ -45,6 +46,6 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		return _message.get();
 	}
 
-	private AtomicReference<Message> _message = new AtomicReference<Message>(null);
+	private AtomicReference<Message> _message = new AtomicReference<Message>();
 
 }

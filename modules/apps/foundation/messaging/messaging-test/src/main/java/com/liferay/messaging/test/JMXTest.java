@@ -14,14 +14,11 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import com.liferay.messaging.DestinationNames;
 
 import java.lang.management.ManagementFactory;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -29,6 +26,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -57,8 +55,8 @@ public class JMXTest extends JMXUtil {
 
 		Set<ObjectInstance> mBeans = mBeanServer.queryMBeans(objectName, null);
 
-		assertNotNull(mBeans);
-		assertEquals(1, mBeans.size());
+		Assert.assertNotNull(mBeans);
+		Assert.assertEquals(mBeans.toString(), 1, mBeans.size());
 
 		Iterator<ObjectInstance> iterator = mBeans.iterator();
 
@@ -67,13 +65,14 @@ public class JMXTest extends JMXUtil {
 		int destinationCount = (int)mBeanServer.getAttribute(
 			objectInstance.getObjectName(), "DestinationCount");
 
-		assertEquals(2, destinationCount);
+		Assert.assertEquals(2, destinationCount);
 
 		String[] destinationNames = (String[])mBeanServer.getAttribute(
 			objectInstance.getObjectName(), "DestinationNames");
 
-		assertEquals(2, destinationNames.length);
-		assertArrayEquals(
+		Assert.assertEquals(
+			Arrays.toString(destinationNames), 2, destinationNames.length);
+		Assert.assertArrayEquals(
 			new String[] {
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE,
 				DestinationNames.MESSAGE_BUS_MESSAGE_STATUS

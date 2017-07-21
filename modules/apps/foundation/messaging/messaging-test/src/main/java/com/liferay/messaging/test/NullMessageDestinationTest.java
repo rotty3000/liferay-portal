@@ -14,13 +14,11 @@
 
 package com.liferay.messaging.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import com.liferay.messaging.Message;
 
 import java.util.concurrent.Callable;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
@@ -68,13 +66,13 @@ public class NullMessageDestinationTest extends TestUtil {
 
 			Callable<Message> callable = callableST.waitForService(timeout);
 
-			assertNotNull(callable);
+			Assert.assertNotNull(callable);
 
 			Message message = null;
 
 			messageBus.sendMessage(destinationName, message);
 
-			assertEquals(message, callable.call());
+			Assert.assertEquals(message, callable.call());
 		}
 		finally {
 			tb.uninstall();
