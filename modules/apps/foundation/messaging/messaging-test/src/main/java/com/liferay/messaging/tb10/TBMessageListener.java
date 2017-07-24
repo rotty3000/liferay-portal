@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
-public class TBMessageListener implements Callable<Message>, MessageListener{
+public class TBMessageListener implements Callable<Message>, MessageListener {
 
 	@Override
 	public Message call() throws Exception {
@@ -59,10 +59,10 @@ public class TBMessageListener implements Callable<Message>, MessageListener{
 		_latch.countDown();
 	}
 
-	@Reference
-	private volatile MessageBuilderFactory _messageBuilderFactory;
-
 	private final CountDownLatch _latch = new CountDownLatch(1);
 	private final AtomicReference<Message> _message = new AtomicReference<>();
+
+	@Reference
+	private volatile MessageBuilderFactory _messageBuilderFactory;
 
 }
