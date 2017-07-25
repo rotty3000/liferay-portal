@@ -5,4 +5,5 @@
 	<suppress checks="JavaDiamondOperatorCheck" files="petra-json-web-service-client/.*" />
 	<suppress checks="JavaDeserializationSecurityCheck" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/ClassLoaderObjectInputStream\.java" />
 	<suppress checks="JavaDeserializationSecurityCheck" files="modules/apps/foundation/petra/petra-io/src/main/java/com/liferay/petra/io/ProtectedObjectInputStream\.java" />
+	<suppress checks="JavaXMLSecurityCheck" files="modules/apps/foundation/petra/petra-log4j/src/main/java/com/liferay/petra/log4j/Log4JUtil\.java" />
 </suppressions>
