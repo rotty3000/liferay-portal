@@ -1,0 +1,18 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+dependencies {
+	provided group: "com.liferay", name: "com.liferay.petra.concurrent", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.memory", version: "1.0.0"
+	provided group: "org.apache.aries.spifly", name: "org.apache.aries.spifly.dynamic.bundle", version: "1.0.8"
+	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.2"
+
+	testCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+}
+
+deployDependencies {
+	from(configurations.provided) {
+		include "asm-debug-all-*.jar"
+		include "org.apache.aries.spifly.dynamic.bundle-*.jar"
+	}
+}
