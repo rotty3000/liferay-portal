@@ -121,9 +121,11 @@ this:
 ```.java
 @Component(service = DestinationConfiguration.class)
 public class MySynchronousDestination extends DestinationConfiguration {
+
 	public MySynchronousDestination() {
 		super(DestinationType.PARALLEL, "parallelDestination");
 	}
+
 }
 ```
 
@@ -136,11 +138,13 @@ create a message listener that targets the "parallelDestination":
 ```.java
 @Component(property = "destination.name=parallelDestination")
 public class MyMessageListener implements MessageListener {
+
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		// Your message processing instructions go here
+		// Your processing here
 		System.out.println("Received message: " + message);
 	}
+
 }
 ```
 
@@ -312,9 +316,11 @@ This step is the same as for asynchronous messaging.
 ```.java
 @Component(service = DestinationConfiguration.class)
 public class MySynchronousDestination extends DestinationConfiguration {
+
 	public MySynchronousDestination() {
 		super(DestinationType.SYNCHRONOUS, "synchronousDestination");
 	}
+
 }
 ```
 
@@ -324,13 +330,6 @@ Messages sent to synchronous destinations are sent on the sender's thread while
 messages sent to asynchronous destinations are sent on separate worker threads.
 So it's perfectly acceptable to send a synchronous message to a parallel
 (asynchronous) destination.
-
-<!-- TODO: Is there a difference in the meaning of the word 'synchronous'
-between 'synchronousDestination` and `sendSynchronousMessage`? E.g., can either
-synchronous or asynchronous messages be sent to a synchronous destination? In
-addition to the definition of synchronous described above in the Concepts
-section is there another definition of synchronous that means a message that
-expects a response?-->
 
 #### Step 2: Creating and Registering a MessageListener
 
@@ -342,9 +341,10 @@ does this:
 ```.java
 @Component(property = "destination.name=parallelDestination")
 public class ResponseMessageListener implements MessageListener {
+
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		// just bounce the message back to the response destination
+		// Simply bounce the message back to the response destination
 		_messageBuilderFactory.createResponse(
 			message
 		).setPayload(
@@ -371,7 +371,7 @@ message. The response is sent asynchronously (`responseMessageBuilder.send()`)
 since only the original message requires a response. The response does not
 itself require a response.
 
-#### Step 3: Create, Populate, and Send a synchronous Message
+#### Step 3: Creating, Populating, and Sending Synchronous Messages
 
 Creating a synchronous message is done exactly the same way as shown earlier. You
 can either create a new message directly or you can create a message builder instead.
@@ -388,7 +388,7 @@ message.setResponseDestinationName(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE
 To send the message, use the message bus like this:
 
 ```.java
-Object response = messageBus.sendSynchronousMessage(destinationName, message);
+Object response = _messageBus.sendSynchronousMessage(destinationName, message);
 ```
 
 Note that `sendSynchronousMessage` returns a response object. In this example, our
@@ -402,8 +402,8 @@ result of `sendSynchronousMessage`:
 System.out.println("response: " + response);
 ```
 
-Instead of creating a message manually and getting then sending it via the Message
-Bus, use can use a message builder.
+Instead of creating a message manually and then sending it via the Message Bus,
+you can use a message builder:
 
 ```.java
 Object response = _messageBuilderFactory.create(
@@ -433,7 +433,7 @@ take place. In this section, you'll see how to specify processing that should
 take place when destinations are added to or removed from the message bus or
 when message listeners are added to or removed from a destination. In the next
 section, you'll see how to specify processing that should take place
-immediately before and / or after a message is received.
+immediately before or after a message is sent or received.
 
 To specify processing that should take place when destinations are added to or
 removed from the message bus, simply create a message bus event listener and
@@ -442,6 +442,7 @@ register it as an OSGi service:
 ```.java
 @Component
 class MyMessageBusEventListener implements MessageBusEventListener {
+
 	@Override
 	public void destinationAdded(Destination destination) {
 		// Your processing here
@@ -453,6 +454,7 @@ class MyMessageBusEventListener implements MessageBusEventListener {
 		// Your processing here
 		System.out.println("Destination removed!");
 	}
+
 }
 ```
 
@@ -466,6 +468,7 @@ Destination event listeners work nearly the same way:
 ```.java
 @Component(property = "destination.name=some_destination")
 class MyDestinationEventListener implements DestinationEventListener {
+
 	@Override
 	public void messageListenerRegistered(
 		String destinationName, MessageListener messageListener) {
@@ -481,14 +484,15 @@ class MyDestinationEventListener implements DestinationEventListener {
 		System.out.println(
 			"Message listener unregistered with " + destinationName + "!");
 	}
+
 }
 ```
 
-One important difference is that while message bus event listeners listen globally
-(at the Message Bus scope) for any destination that are added or removed,
-destination event listeners only listen for message listeners that are added or
-removed to a particular destination. So you must specify that destination as a
-property of your destination event listener service.
+One important difference is that while message bus event listeners listen
+globally (at the Message Bus scope) for any destinations that are added or
+removed, destination event listeners only listen for message listeners that are
+added to or removed from a particular destination. So you must specify the
+destination as a property of your destination event listener service.
 
 Don't confuse these three types of listeners:
 
@@ -568,6 +572,7 @@ class MyOutboundMessageProcessorFactory
 			}
 		}
 	}
+
 }
 ```
 
@@ -588,7 +593,7 @@ were invoked:
 _messageBuilderFactory.create(
 	destinationName
 ).setPayload(
-	"ompMessagePayload"
+	"messagePayload"
 ).send();
 ```
 
@@ -597,15 +602,133 @@ You can also check that the extra key / value pair added to the message in the
 
 Inbound message processors work similarly to outbound message processors.
 
-<!--
-TODO: Will these topics be useful?
-ANSWER: In order to fully document, we should include these.
+### Message Bus Configuration
 
-### Configuration of Message Bus
+The message bus provides two configuration options:
 
-### Configuration of Destinations
+- `synchronous-message-sender-mode`
+- `synchronous-message-sender-timeout`
+
+`synchronousMessageSenderMode` has two possible values: `DEFAULT` or `DIRECT`.
+When in `DEFAULT` mode, the message bus uses a message sender that invokes the
+destination's `send` method. This means that the destination is responsible for
+determining how the messages are delivered to the destination's message
+listeners. If the destination is a parallel destination, for example, messages
+will be dispatched to the message listeners on parallel worker threads. When in
+`DIRECT` mode, the message bus uses a message sender that directly invokes the
+`receive` method of each of the destination's message listeners. There is not
+even a possibility for separate worker threads to be involved since the
+destination type is ignored.
+
+`synchronous-message-sender-timeout` represents the amount of time, in
+milliseconds, to wait for a response when a synchronous message is sent. If no
+response is received before the time expires, a `MessageBusException` is
+thrown.
+
+Both the `synchronousMessageSenderMode` and the
+`synchronous-message-sender-timeout` properties can be configured via standard
+OSGi Configuration Admin tools. You can configure these properties, for example, using
+the user interface provided by
+[Apache Felix Web Console](http://felix.apache.org/documentation/subprojects/apache-felix-web-console.html).
+Or you could use a configuration properties file with
+[Apache Felix File Install](http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html).
+
+### Destination Configuration
+
+Destinations also provides some configuration options:
+
+- `destination-name`
+- `max-queue-size`
+- `worker-core-size`
+- `worker-max-size`
+
+The `destination-name` indicates the specific destination to which the worker
+configuration specified by the remaining three configuration options applies.
+
+Recall that when messages are sent to an asynchronous (parallel or serial)
+destination, they are added to a queue before they are dispatched on worker
+threads. The `max-queue-size` property determines the maximum size of this
+queue. If there are more messages to be queued up for dispatch than the queue
+can hold, the excess messages are not sent. These cases can optionally be
+handled by a rejected execution handler. See the next section for details.
+
+The `worker-core-size` and `worker-max-size` properties control the size of the
+destination's thread pool. The core and maximum pool sizes work the same way as
+for Java's `ThreadPoolExecutor` class: [http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html).
+
+As with the message bus configuration options, destination configurations can
+be configured via standard OSGi Configuration Admin tools.
 
 ### Rejected Execution Handlers
 
-### Executor Service Registrar
--->
+Rejected execution handlers determine how to handle the failure that occurs
+when the number of messages to be sent exceeds the maximum thread pool size. To
+create a rejected execution handler, implement the `RejectedExecutionHandler`
+interface and publish your class as an OSGi service. As seen earlier, this can
+be easily done by creating your class as a declarative services component.
+Here's an example:
+
+```.java
+	@Component(
+		property = {"destination.name=yourDestinationName"},
+		service = {RejectedExecutionHandler.class}
+	)
+	public class RejectedExecutionHandlerImpl
+		implements RejectedExecutionHandler {
+
+		@Override
+		public void rejectedExecution(
+			Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+
+			_map.put((MessageRunnable)runnable, threadPoolExecutor);
+		}
+
+		private final Map<MessageRunnable, ThreadPoolExecutor> _map =
+			new ConcurrentHashMap<>();
+
+	}
+```
+
+<!-- TODO: Is there a way to make rejected execution handlers apply to all
+destinations? -->
+Rejected execution handlers are applied to specific destinations so remember to
+specify the appropriate destination name in your handler's `@Component`
+annotation.
+
+### Executor Service Registrars
+
+Executor Service Registrars provide a mechanism for tracking thread pools. If
+you need to track the thread pools of your destinations, publish executor
+service registrars for your destinations. To do so, implement the
+`ExecutorServiceRegistrar` interface and create your class as a declarative
+services component. Here's an example:
+
+```.java
+@Component(
+	property = {"destination.name=yourDestinationName"},
+	service = {ExecutorServiceRegistrar.class}
+)
+public class ExecutorServiceRegistrarImpl
+	implements Callable<Map<String, ExecutorService>>,
+			   ExecutorServiceRegistrar {
+
+	@Override
+	public <T extends ExecutorService> T registerExecutorService(
+		String name, T executorService) {
+
+		_executorServices.put(name, executorService);
+
+		return executorService;
+	}
+
+	private final Map<String, ExecutorService> _executorServices =
+		new ConcurrentHashMap<>();
+
+}
+```
+
+<!-- TODO: Is there a way to make rejected execution handlers apply to all
+destinations? -->
+Executor service registrars, like rejected execution handlers, are applied to
+specific destinations so remember to specify the appropriate destination name
+in your handler's `@Component` annotation.
