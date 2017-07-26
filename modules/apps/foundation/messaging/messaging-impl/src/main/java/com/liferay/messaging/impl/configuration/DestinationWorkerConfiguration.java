@@ -24,7 +24,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 	factoryPid = "com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration",
 	id = "com.liferay.portal.messaging.configuration.DestinationWorkerConfiguration",
 	localization = "content/Language",
-	name = "destination-workfer-configuration-name"
+	name = "destination-worker-configuration-name"
 )
 public @interface DestinationWorkerConfiguration {
 
