@@ -17,8 +17,6 @@ package com.liferay.messaging.test;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
-import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.concurrent.Callable;
 
@@ -59,29 +57,23 @@ public class DestinationConfigurationTest extends TestUtil {
 		String destinationName = null;
 		DestinationConfiguration destinationConfiguration = null;
 
-		if (destinationType.equals(DestinationType.SYNCHRONOUS)) {
+		if (destinationType == DestinationType.SYNCHRONOUS) {
 			destinationName = "SYNCHRONOUS_DESTINATION";
 
-			destinationConfiguration =
-				DestinationConfiguration.createSynchronousDestinationConfiguration(
-					destinationName);
+			destinationConfiguration = new DestinationConfiguration(
+				DestinationType.SYNCHRONOUS, destinationName);
 		}
-		else if (destinationType.equals(DestinationType.PARALLEL)) {
+		else if (destinationType == DestinationType.PARALLEL) {
 			destinationName = "PARALLEL_DESTINATION";
 
-			destinationConfiguration =
-				DestinationConfiguration.createParallelDestinationConfiguration(
-					destinationName);
+			destinationConfiguration = new DestinationConfiguration(
+				DestinationType.PARALLEL, destinationName);
 		}
-		else if (destinationType.equals(DestinationType.SERIAL)) {
+		else if (destinationType == DestinationType.SERIAL) {
 			destinationName = "SERIAL_DESTINATION";
 
-			destinationConfiguration =
-				DestinationConfiguration.createSerialDestinationConfiguration(
-					destinationName);
-		}
-		else {
-			Assert.fail("Invalid destination type");
+			destinationConfiguration = new DestinationConfiguration(
+				DestinationType.SERIAL, destinationName);
 		}
 
 		Assert.assertEquals(
@@ -92,34 +84,23 @@ public class DestinationConfigurationTest extends TestUtil {
 
 		Assert.assertEquals(
 			Integer.MAX_VALUE, destinationConfiguration.getMaximumQueueSize());
-		Assert.assertEquals(2, destinationConfiguration.getWorkersCoreSize());
-		Assert.assertEquals(5, destinationConfiguration.getWorkersMaxSize());
-		Assert.assertEquals(
-			null, destinationConfiguration.getRejectedExecutionHandler());
+
+		if (destinationType == DestinationType.SERIAL) {
+			Assert.assertEquals(1, destinationConfiguration.getWorkersCoreSize());
+			Assert.assertEquals(1, destinationConfiguration.getWorkersMaxSize());
+		}
+		else if (destinationType == DestinationType.PARALLEL) {
+			Assert.assertEquals(2, destinationConfiguration.getWorkersCoreSize());
+			Assert.assertEquals(5, destinationConfiguration.getWorkersMaxSize());
+		}
 
 		destinationConfiguration.setMaximumQueueSize(20);
 		destinationConfiguration.setWorkersCoreSize(3);
 		destinationConfiguration.setWorkersMaxSize(6);
 
-		RejectedExecutionHandler rejectedExecutionHandler =
-			new RejectedExecutionHandler() {
-
-				@Override
-				public void rejectedExecution(
-					Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-				}
-
-			};
-
-		destinationConfiguration.setRejectedExecutionHandler(
-			rejectedExecutionHandler);
-
 		Assert.assertEquals(20, destinationConfiguration.getMaximumQueueSize());
 		Assert.assertEquals(3, destinationConfiguration.getWorkersCoreSize());
 		Assert.assertEquals(6, destinationConfiguration.getWorkersMaxSize());
-		Assert.assertEquals(
-			rejectedExecutionHandler,
-			destinationConfiguration.getRejectedExecutionHandler());
 
 		Assert.assertEquals(
 			destinationName.hashCode(), destinationConfiguration.hashCode());

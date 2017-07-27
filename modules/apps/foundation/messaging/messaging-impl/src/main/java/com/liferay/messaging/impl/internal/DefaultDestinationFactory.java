@@ -14,26 +14,20 @@
 
 package com.liferay.messaging.impl.internal;
 
+import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationType;
-import com.liferay.messaging.ExecutorServiceRegistrar;
-import com.liferay.messaging.spi.Destination;
 import com.liferay.messaging.spi.DestinationFactory;
-import com.liferay.messaging.spi.DestinationPrototype;
-import com.liferay.petra.io.MapUtil;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.ComponentFactory;
+import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
@@ -44,77 +38,84 @@ public class DefaultDestinationFactory implements DestinationFactory {
 
 	@Override
 	public Destination createDestination(
-		DestinationConfiguration destinationConfiguration) {
+		DestinationConfiguration destinationConfiguration,
+		Map<String, Object> properties) {
 
+		String destinationName = destinationConfiguration.getDestinationName();
 		DestinationType destinationType =
 			destinationConfiguration.getDestinationType();
 
-		DestinationPrototype destinationPrototype = _destinationPrototypes.get(
-			destinationType);
+		ComponentFactory componentFactory;
 
-		if (destinationPrototype == null) {
-			throw new IllegalArgumentException(
-				"No destination prototype configured for " + destinationType);
+		switch (destinationType) {
+			case PARALLEL:
+				componentFactory = _parallelDestinationFactory;
+				break;
+			case SERIAL:
+				componentFactory = _serialDestinationFactory;
+				break;
+			case SYNCHRONOUS:
+				componentFactory = _synchronousDestinationFactory;
+				break;
+			default:
+				componentFactory = _parallelDestinationFactory;
+				break;
 		}
 
-		return destinationPrototype.createDestination(destinationConfiguration);
+		String targetFilter = String.format(
+			CLMIConstants.FORMAT_DESTINATION_NAME_FILTER, destinationName);
+
+		Dictionary<String, Object> dictionary = new Hashtable<>(properties);
+
+		dictionary.put("destination.name", destinationName);
+		dictionary.put("DestinationEventListener.target", targetFilter);
+		dictionary.put("InboundMessageProcessorFactory.target", targetFilter);
+		dictionary.put("MessageListener.target", targetFilter);
+		dictionary.put("OutboundMessageProcessorFactory.target", targetFilter);
+
+		if (destinationType != DestinationType.SYNCHRONOUS) {
+			dictionary.put("ExecutorServiceRegistrar.target", targetFilter);
+			dictionary.put("RejectedExecutionHandler.target", targetFilter);
+		}
+
+		ComponentInstance componentInstance = componentFactory.newInstance(
+			dictionary);
+
+		Destination destination = (Destination)componentInstance.getInstance();
+
+		_instances.put(destination, componentInstance);
+
+		return destination;
 	}
 
 	@Override
-	public Collection<DestinationType> getDestinationTypes() {
-		return Collections.unmodifiableCollection(
-			_destinationPrototypes.keySet());
+	public void dispose(Destination destination) {
+		ComponentInstance componentInstance = _instances.remove(destination);
+
+		if (componentInstance != null) {
+			componentInstance.dispose();
+		}
 	}
 
-	@Activate
-	protected void activate() {
-		_destinationPrototypes.put(
-			DestinationType.PARALLEL,
-			new ParallelDestinationPrototype(_executorServiceRegistrar));
-		_destinationPrototypes.put(
-			DestinationType.SERIAL,
-			new SerialDestinationPrototype(_executorServiceRegistrar));
-		_destinationPrototypes.put(
-			DestinationType.SYNCHRONOUS, new SynchronousDestinationPrototype());
-	}
+	private final Map<Destination, ComponentInstance> _instances =
+		new ConcurrentHashMap<>();
 
 	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
-		unbind = "removeDestinationPrototype"
+		target = "(component.factory=parallel.destination)"
 	)
-	protected void addDestinationPrototype(
-		DestinationPrototype destinationPrototype,
-		Map<String, Object> properties) {
-
-		_destinationPrototypes.put(
-			DestinationType.valueOf(
-				MapUtil.getString(properties, "destination.type")),
-			destinationPrototype);
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		_destinationPrototypes.clear();
-	}
-
-	protected void removeDestinationPrototype(
-		DestinationPrototype destinationPrototype,
-		Map<String, Object> properties) {
-
-		_destinationPrototypes.remove(
-			MapUtil.getString(properties, "destination.type"),
-			destinationPrototype);
-	}
-
-	private final ConcurrentMap<DestinationType, DestinationPrototype>
-		_destinationPrototypes = new ConcurrentHashMap<>();
+	private ComponentFactory _parallelDestinationFactory;
 
 	@Reference(
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(component.factory=serial.destination)"
 	)
-	private ExecutorServiceRegistrar _executorServiceRegistrar;
+	private ComponentFactory _serialDestinationFactory;
+
+	@Reference(
+		policyOption = ReferencePolicyOption.GREEDY,
+		target = "(component.factory=synchronous.destination)"
+	)
+	private ComponentFactory _synchronousDestinationFactory;
 
 }

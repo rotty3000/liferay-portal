@@ -15,21 +15,28 @@
 package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Destination;
+import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationNames;
+import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
+import com.liferay.messaging.spi.BaseDestination;
+import com.liferay.messaging.spi.DestinationFactory;
+import com.liferay.messaging.spi.ParallelDestination;
 import com.liferay.messaging.spi.SerialDestination;
 import com.liferay.messaging.spi.SynchronousDestination;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.osgi.framework.Constants;
 
 /**
  * @author Shuyang Zhou
@@ -40,77 +47,112 @@ public class DefaultSynchronousMessageSenderTest {
 	public void setUp() {
 		_messageBus = new DefaultMessageBus();
 
-		SynchronousDestination synchronousDestination =
-			new SynchronousDestination();
+		_messageBus.registerDestinationFactory(
+			new DestinationFactory() {
 
-		synchronousDestination.setName(
-			DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+				@Override
+				public Destination createDestination(
+					DestinationConfiguration destinationConfiguration,
+					Map<String, Object> properties) {
 
-		_messageBus.registerDestination(
-			synchronousDestination, doGetProperties(synchronousDestination));
+					BaseDestination destination;
+
+					switch (destinationConfiguration.getDestinationType()) {
+						case PARALLEL:
+							destination = new ParallelDestination();
+							break;
+						case SERIAL:
+							destination = new SerialDestination();
+							break;
+						default:
+							destination = new SynchronousDestination();
+					}
+
+					destination.setName(
+						destinationConfiguration.getDestinationName());
+					destination.afterPropertiesSet();
+					destination.open();
+
+					return destination;
+				}
+
+				@Override
+				public void dispose(Destination destination) {
+					BaseDestination baseDestination =
+						(BaseDestination)destination;
+
+					baseDestination.close();
+				}
+
+			});
+
+		DestinationConfiguration destinationConfiguration =
+			new DestinationConfiguration(
+				DestinationType.SYNCHRONOUS,
+				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+
+		_messageBus.registerDestinationConfiguration(
+			destinationConfiguration,
+			doGetProperties(destinationConfiguration));
 
 		_defaultSynchronousMessageSender =
 			new DefaultSynchronousMessageSender();
 
 		_defaultSynchronousMessageSender.setMessageBus(_messageBus);
 		_defaultSynchronousMessageSender.setTimeout(10000);
-
-		synchronousDestination.open();
-	}
-
-	@After
-	public void tearDown() {
-		_messageBus.shutdown(true);
 	}
 
 	@Test
 	public void testSendToAsyncDestination() throws MessageBusException {
-		SerialDestination serialDestination = new SerialDestination() {
+		DestinationConfiguration destinationConfiguration =
+			new DestinationConfiguration(
+				DestinationType.SERIAL, "testSerialDestination");
 
-			@Override
-			public void open() {
-				super.open();
-			}
-
-		};
-
-		serialDestination.setName("testSerialDestination");
-
-		serialDestination.afterPropertiesSet();
-
-		serialDestination.open();
-
-		doTestSend(serialDestination);
+		doTestSend(destinationConfiguration);
 	}
 
 	@Test
 	public void testSendToSynchronousDestination() throws MessageBusException {
-		SynchronousDestination synchronousDestination =
-			new SynchronousDestination();
+		DestinationConfiguration destinationConfiguration =
+			new DestinationConfiguration(
+				DestinationType.SYNCHRONOUS, "testSynchronousDestination");
 
-		synchronousDestination.setName("testSynchronousDestination");
-
-		synchronousDestination.afterPropertiesSet();
-
-		synchronousDestination.open();
-
-		doTestSend(synchronousDestination);
+		doTestSend(destinationConfiguration);
 	}
 
-	protected Map<String, Object> doGetProperties(Destination destination) {
-		return Collections.singletonMap(
-			"destination.name", destination.getName());
+	protected Map<String, Object> doGetProperties(
+		DestinationConfiguration destinationConfiguration) {
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put(
+			"destination.name", destinationConfiguration.getDestinationName());
+		properties.put(Constants.SERVICE_ID, _serviceId.incrementAndGet());
+		properties.put(Constants.SERVICE_RANKING, Long.valueOf(0));
+
+		return properties;
 	}
 
-	protected void doTestSend(com.liferay.messaging.spi.Destination destination)
+	protected void doTestSend(DestinationConfiguration destinationConfiguration)
 		throws MessageBusException {
+
+		String destinationName = destinationConfiguration.getDestinationName();
+
+		Map<String, Object> properties = doGetProperties(
+			destinationConfiguration);
+
+		_messageBus.registerDestinationConfiguration(
+			destinationConfiguration, properties);
 
 		Object response = new Object();
 
-		destination.register(new ReplayMessageListener(response));
+		Destination destination = _messageBus.getDestination(destinationName);
 
-		_messageBus.registerDestination(
-			destination, doGetProperties(destination));
+		BaseDestination baseDestination = (BaseDestination)destination;
+
+		baseDestination.addMessageListener(
+			new ReplayMessageListener(response),
+			doGetProperties(destinationConfiguration));
 
 		try {
 			Assert.assertSame(
@@ -119,15 +161,14 @@ public class DefaultSynchronousMessageSenderTest {
 					destination.getName(), new Message()));
 		}
 		finally {
-			_messageBus.unregisterDestination(
-				destination, doGetProperties(destination));
-
-			destination.close(true);
+			_messageBus.unregisterDestinationConfiguration(
+				destinationConfiguration, properties);
 		}
 	}
 
 	private DefaultSynchronousMessageSender _defaultSynchronousMessageSender;
 	private DefaultMessageBus _messageBus;
+	private final AtomicLong _serviceId = new AtomicLong();
 
 	private class ReplayMessageListener implements MessageListener {
 

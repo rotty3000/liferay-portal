@@ -21,7 +21,7 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author Michael C. Han
@@ -32,34 +32,24 @@ public interface Destination extends com.liferay.messaging.Destination {
 
 	public void close(boolean force);
 
-	public void copyDestinationEventListeners(Destination destination);
-
-	public void copyInboundMessageProcessorFactories(Destination destination);
-
-	public void copyMessageListeners(Destination destination);
-
-	public void copyOutboundMessageProcessorFactories(Destination destination);
-
-	public void destroy();
-
 	public int getDestinationEventListenerCount();
 
-	public Set<DestinationEventListener> getDestinationEventListeners();
+	public Collection<DestinationEventListener> getDestinationEventListeners();
 
 	public DestinationStatistics getDestinationStatistics();
 
-	public Set<InboundMessageProcessorFactory>
+	public Collection<InboundMessageProcessorFactory>
 		getInboundMessageProcessorFactories();
 
 	public int getInboundMessageProcessorFactoryCount();
 
 	public int getMessageListenerCount();
 
-	public Set<MessageListener> getMessageListeners();
+	public Collection<MessageListener> getMessageListeners();
 
 	public String getName();
 
-	public Set<OutboundMessageProcessorFactory>
+	public Collection<OutboundMessageProcessorFactory>
 		getOutboundMessageProcessorFactories();
 
 	public int getOutboundMessageProcessorFactoryCount();
@@ -68,38 +58,6 @@ public interface Destination extends com.liferay.messaging.Destination {
 
 	public void open();
 
-	public boolean register(DestinationEventListener destinationEventListener);
-
-	public boolean register(
-		InboundMessageProcessorFactory inboundMessageProcessorFactory);
-
-	public boolean register(MessageListener messageListener);
-
-	public boolean register(
-		MessageListener messageListener, ClassLoader classloader);
-
-	public boolean register(
-		OutboundMessageProcessorFactory outboundMessageProcessorFactory);
-
 	public void send(Message message);
-
-	public boolean unregister(
-		DestinationEventListener destinationEventListener);
-
-	public boolean unregister(
-		InboundMessageProcessorFactory inboundMessageProcessorFactory);
-
-	public boolean unregister(MessageListener messageListener);
-
-	public boolean unregister(
-		OutboundMessageProcessorFactory outboundMessageProcessorFactory);
-
-	public void unregisterDestinationEventListeners();
-
-	public void unregisterInboundMessageProcessorFactories();
-
-	public void unregisterMessageListeners();
-
-	public void unregisterOutboundMessageProcessorFactories();
 
 }

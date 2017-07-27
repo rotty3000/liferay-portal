@@ -18,9 +18,14 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
+import com.liferay.messaging.spi.BaseDestination;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import org.osgi.framework.Constants;
 
 /**
  * @author Michael C. Han
@@ -56,7 +61,17 @@ public class SynchronousMessageListener implements MessageListener {
 		String destinationName = _message.getDestinationName();
 		String responseDestinationName = _message.getResponseDestinationName();
 
-		_messageBus.registerMessageListener(responseDestinationName, this);
+		BaseDestination baseDestination =
+			(BaseDestination)_messageBus.getDestination(
+				responseDestinationName);
+
+		Map<String, Object> properties = new HashMap<>();
+
+		properties.put("destination.name", responseDestinationName);
+		properties.put(Constants.SERVICE_ID, Long.MAX_VALUE);
+		properties.put(Constants.SERVICE_RANKING, Long.MIN_VALUE);
+
+		baseDestination.addMessageListener(this, properties);
 
 		try {
 			_messageBus.sendMessage(destinationName, _message);
@@ -75,8 +90,7 @@ public class SynchronousMessageListener implements MessageListener {
 				"Message sending interrupted for: " + _message, ie);
 		}
 		finally {
-			_messageBus.unregisterMessageListener(
-				responseDestinationName, this);
+			baseDestination.removeMessageListener(this, properties);
 		}
 	}
 

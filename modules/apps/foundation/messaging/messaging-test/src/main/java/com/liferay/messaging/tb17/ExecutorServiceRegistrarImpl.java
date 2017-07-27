@@ -44,9 +44,16 @@ public class ExecutorServiceRegistrarImpl
 	public <T extends ExecutorService> T registerExecutorService(
 		String name, T executorService) {
 
-		_executorServices.put(name, executorService);
+		T existingRegistration = null;
 
-		return executorService;
+		if (executorService == null) {
+			existingRegistration = (T)_executorServices.remove(name);
+		}
+		else {
+			existingRegistration = (T)_executorServices.put(name, executorService);
+		}
+
+		return existingRegistration;
 	}
 
 	private final Map<String, ExecutorService> _executorServices =

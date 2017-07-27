@@ -18,8 +18,8 @@ import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.concurrent.Callable;
 
 import org.junit.Assert;
@@ -80,14 +80,15 @@ public class MessageBusTest extends TestUtil {
 
 			Assert.assertEquals(3, messageBus.getDestinationCount());
 
-			Collection<String> destinationNames = new HashSet<>();
+			Collection<String> destinationNames = new ArrayList<>();
 
-			destinationNames.add(destinationName);
 			destinationNames.add(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 			destinationNames.add(DestinationNames.MESSAGE_BUS_MESSAGE_STATUS);
+			destinationNames.add(destinationName);
 
-			Assert.assertEquals(
-				destinationNames, messageBus.getDestinationNames());
+			Assert.assertArrayEquals(
+				destinationNames.toArray(),
+				messageBus.getDestinationNames().toArray());
 
 			Assert.assertEquals(
 				true, messageBus.hasDestination(destinationName));

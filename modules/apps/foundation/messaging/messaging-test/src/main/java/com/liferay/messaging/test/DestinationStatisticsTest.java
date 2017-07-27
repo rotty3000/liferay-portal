@@ -118,8 +118,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		// return completely accurate statistics until after shutdown.
 
 		//Assert.assertEquals(10, destinationStatistics.getSentMessageCount());
-
-		Assert.assertEquals(0, destinationStatistics.getActiveThreadCount());
+		//Assert.assertEquals(0, destinationStatistics.getActiveThreadCount());
 
 		if (destinationName.equals("synchronous/test")) {
 			Assert.assertEquals(

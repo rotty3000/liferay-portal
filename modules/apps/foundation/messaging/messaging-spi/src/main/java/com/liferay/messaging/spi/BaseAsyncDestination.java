@@ -25,8 +25,8 @@ import com.liferay.petra.concurrent.RejectedExecutionHandler;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.annotations.Reference;
@@ -44,6 +44,10 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	@Override
 	public void close(boolean force) {
+		if (_executorServiceRegistrar != null) {
+			_executorServiceRegistrar.registerExecutorService(getName(), null);
+		}
+
 		if ((_threadPoolExecutor == null) || _threadPoolExecutor.isShutdown()) {
 			return;
 		}
@@ -172,7 +176,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 				}
 			}
 
-			dispatch(messageListeners, inboundMessageProcessors, message);
+			dispatch(getMessageListeners(), inboundMessageProcessors, message);
 		}
 		finally {
 			for (InboundMessageProcessor processor : inboundMessageProcessors) {
@@ -251,8 +255,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	}
 
 	protected abstract void dispatch(
-		Set<MessageListener> messageListeners,
-		List<InboundMessageProcessor> messageInboundProcessors,
+		Collection<MessageListener> messageListeners,
+		Collection<InboundMessageProcessor> messageInboundProcessors,
 		Message message);
 
 	protected ThreadPoolExecutor getThreadPoolExecutor() {

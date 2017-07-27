@@ -12,16 +12,14 @@
  * details.
  */
 
-package com.liferay.messaging.spi;
-
-import com.liferay.messaging.DestinationConfiguration;
+package com.liferay.messaging.impl.internal;
 
 /**
- * @author Michael C. Han
+ * @author Raymond Augé
  */
-public interface DestinationPrototype {
+public class CLMIConstants {
 
-	public Destination createDestination(
-		DestinationConfiguration destinationConfiguration);
+	public static final String FORMAT_DESTINATION_NAME_FILTER =
+		"(destination.name=%s)";
 
 }

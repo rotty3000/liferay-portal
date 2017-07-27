@@ -16,6 +16,7 @@ package com.liferay.messaging.test;
 
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationConfiguration;
+import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageListener;
@@ -44,13 +45,13 @@ public class ClassLoaderTest extends TestUtil {
 
 		ServiceRegistration<?> configuration1 = registerService(
 			DestinationConfiguration.class,
-			DestinationConfiguration.createSynchronousDestinationConfiguration(
-				"liferay/plugintest1"));
+			new DestinationConfiguration(
+				DestinationType.SYNCHRONOUS, "liferay/plugintest1"));
 
 		ServiceRegistration<?> configuration2 = registerService(
 			DestinationConfiguration.class,
-			DestinationConfiguration.createParallelDestinationConfiguration(
-				"liferay/plugintest2"));
+			new DestinationConfiguration(
+				DestinationType.PARALLEL, "liferay/plugintest2"));
 
 		ServiceRegistration<?> listener = registerService(
 			MessageListener.class,
@@ -103,13 +104,13 @@ public class ClassLoaderTest extends TestUtil {
 	public void testDefaultClassLoader() throws InvalidSyntaxException {
 		ServiceRegistration<?> configuration1 = registerService(
 			DestinationConfiguration.class,
-			DestinationConfiguration.createSynchronousDestinationConfiguration(
-				"liferay/portaltest1"));
+			new DestinationConfiguration(
+				DestinationType.SYNCHRONOUS, "liferay/portaltest1"));
 
 		ServiceRegistration<?> configuration2 = registerService(
 			DestinationConfiguration.class,
-			DestinationConfiguration.createParallelDestinationConfiguration(
-				"liferay/portaltest2"));
+			new DestinationConfiguration(
+				DestinationType.PARALLEL, "liferay/portaltest2"));
 
 		ServiceRegistration<?> listener1 = registerService(
 			MessageListener.class,

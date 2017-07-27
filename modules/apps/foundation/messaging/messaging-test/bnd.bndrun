@@ -6,6 +6,7 @@
 -runrequires: \
 	osgi.identity;filter:='(osgi.identity=com.liferay.messaging.test)',\
 	osgi.identity;filter:='(osgi.identity=com.liferay.portal.jmx)',\
+	osgi.identity;filter:='(osgi.identity=org.apache.felix.configadmin)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.command)',\
 	osgi.identity;filter:='(osgi.identity=org.apache.felix.gogo.shell)',\
 	osgi.identity;filter:='(osgi.identity=slf4j.log4j12)'

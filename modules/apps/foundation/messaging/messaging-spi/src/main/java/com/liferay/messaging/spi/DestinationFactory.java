@@ -15,18 +15,19 @@
 package com.liferay.messaging.spi;
 
 import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.DestinationType;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Michael C. Han
+ * @author Raymond Augé
  */
 public interface DestinationFactory {
 
-	public Destination createDestination(
-		DestinationConfiguration destinationConfiguration);
+	public com.liferay.messaging.Destination createDestination(
+		DestinationConfiguration destinationConfiguration,
+		Map<String, Object> properties);
 
-	public Collection<DestinationType> getDestinationTypes();
+	public void dispose(com.liferay.messaging.Destination destination);
 
 }

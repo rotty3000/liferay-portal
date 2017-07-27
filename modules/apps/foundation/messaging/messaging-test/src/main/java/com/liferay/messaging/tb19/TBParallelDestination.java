@@ -22,7 +22,10 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Raymond Augé
  */
-@Component(service = DestinationConfiguration.class)
+@Component(
+	property = "maxQueueSize:Integer=1",
+	service = DestinationConfiguration.class
+)
 public class TBParallelDestination extends DestinationConfiguration {
 
 	public TBParallelDestination() {

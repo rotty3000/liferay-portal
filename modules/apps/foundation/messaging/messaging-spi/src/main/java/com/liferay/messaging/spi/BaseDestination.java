@@ -20,15 +20,22 @@ import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
 import com.liferay.petra.io.StringPool;
 import com.liferay.petra.io.Validator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
+
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * @author Michael C. Han
@@ -36,10 +43,66 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class BaseDestination implements Destination {
 
-	public boolean addDestinationEventListener(
-		DestinationEventListener destinationEventListener) {
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	public void addDestinationEventListener(
+		DestinationEventListener destinationEventListener,
+		Map<String, Object> properties) {
 
-		return destinationEventListeners.add(destinationEventListener);
+		destinationEventListeners.put(properties, destinationEventListener);
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	public void addInboundMessageProcessorFactory(
+		InboundMessageProcessorFactory inboundMessageProcessorFactory,
+		Map<String, Object> properties) {
+
+		inboundMessageProcessorFactories.put(
+			properties, inboundMessageProcessorFactory);
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	public void addMessageListener(
+		MessageListener messageListener, Map<String, Object> properties) {
+
+		ClassLoader operatingClassLoader = (ClassLoader)properties.get(
+			"message.listener.operating.class.loader");
+
+		if (operatingClassLoader == null) {
+			Class<?> clazz = messageListener.getClass();
+
+			operatingClassLoader = clazz.getClassLoader();
+		}
+
+		messageListeners.put(
+			properties,
+			new InvokerMessageListener(messageListener, operatingClassLoader));
+
+		fireMessageListenerRegisteredEvent(messageListener);
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	public void addOutboundMessageProcessorFactory(
+		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
+		Map<String, Object> properties) {
+
+		outboundMessageProcessorFactories.put(
+			properties, outboundMessageProcessorFactory);
 	}
 
 	public void afterPropertiesSet() {
@@ -58,61 +121,14 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public void copyDestinationEventListeners(Destination destination) {
-		for (DestinationEventListener destinationEventListener :
-				destinationEventListeners) {
-
-			destination.register(destinationEventListener);
-		}
-	}
-
-	@Override
-	public void copyInboundMessageProcessorFactories(Destination destination) {
-		for (InboundMessageProcessorFactory inboundMessageProcessorFactory :
-				inboundMessageProcessorFactories) {
-
-			destination.register(inboundMessageProcessorFactory);
-		}
-	}
-
-	@Override
-	public void copyMessageListeners(Destination destination) {
-		for (MessageListener messageListener : messageListeners) {
-			InvokerMessageListener invokerMessageListener =
-				(InvokerMessageListener)messageListener;
-
-			destination.register(
-				invokerMessageListener.getMessageListener(),
-				invokerMessageListener.getClassLoader());
-		}
-	}
-
-	@Override
-	public void copyOutboundMessageProcessorFactories(Destination destination) {
-		for (OutboundMessageProcessorFactory outboundMessageProcessorFactory :
-				outboundMessageProcessorFactories) {
-
-			destination.register(outboundMessageProcessorFactory);
-		}
-	}
-
-	@Override
-	public void destroy() {
-		close(true);
-
-		removeDestinationEventListeners();
-
-		unregisterMessageListeners();
-	}
-
-	@Override
 	public int getDestinationEventListenerCount() {
 		return destinationEventListeners.size();
 	}
 
 	@Override
-	public Set<DestinationEventListener> getDestinationEventListeners() {
-		return Collections.unmodifiableSet(destinationEventListeners);
+	public Collection<DestinationEventListener> getDestinationEventListeners() {
+		return Collections.unmodifiableCollection(
+			destinationEventListeners.values());
 	}
 
 	@Override
@@ -121,10 +137,11 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public Set<InboundMessageProcessorFactory>
+	public Collection<InboundMessageProcessorFactory>
 		getInboundMessageProcessorFactories() {
 
-		return Collections.unmodifiableSet(inboundMessageProcessorFactories);
+		return Collections.unmodifiableCollection(
+			inboundMessageProcessorFactories.values());
 	}
 
 	@Override
@@ -150,8 +167,8 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public Set<MessageListener> getMessageListeners() {
-		return Collections.unmodifiableSet(messageListeners);
+	public Collection<MessageListener> getMessageListeners() {
+		return Collections.unmodifiableCollection(messageListeners.values());
 	}
 
 	@Override
@@ -160,15 +177,28 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public Set<OutboundMessageProcessorFactory>
+	public Collection<OutboundMessageProcessorFactory>
 		getOutboundMessageProcessorFactories() {
 
-		return Collections.unmodifiableSet(outboundMessageProcessorFactories);
+		return Collections.unmodifiableCollection(
+			outboundMessageProcessorFactories.values());
 	}
 
 	@Override
 	public int getOutboundMessageProcessorFactoryCount() {
 		return outboundMessageProcessorFactories.size();
+	}
+
+	public Collection<OutboundMessageProcessor> getOutboundMessageProcessors() {
+		List<OutboundMessageProcessor> processors = new ArrayList<>();
+
+		for (OutboundMessageProcessorFactory factory :
+				getOutboundMessageProcessorFactories()) {
+
+			processors.add(factory.create());
+		}
+
+		return Collections.unmodifiableList(processors);
 	}
 
 	@Override
@@ -185,53 +215,35 @@ public abstract class BaseDestination implements Destination {
 	public void open() {
 	}
 
-	@Override
-	public boolean register(DestinationEventListener destinationEventListener) {
-		return addDestinationEventListener(destinationEventListener);
+	public void removeDestinationEventListener(
+		DestinationEventListener destinationEventListener,
+		Map<String, Object> properties) {
+
+		destinationEventListeners.remove(properties, destinationEventListener);
 	}
 
-	@Override
-	public boolean register(
-		InboundMessageProcessorFactory inboundMessageProcessorFactory) {
+	public void removeInboundMessageProcessorFactory(
+		InboundMessageProcessorFactory inboundMessageProcessorFactory,
+		Map<String, Object> properties) {
 
-		return inboundMessageProcessorFactories.add(
-			inboundMessageProcessorFactory);
+		inboundMessageProcessorFactories.remove(
+			properties, inboundMessageProcessorFactory);
 	}
 
-	@Override
-	public boolean register(MessageListener messageListener) {
-		InvokerMessageListener invokerMessageListener =
-			new InvokerMessageListener(messageListener);
+	public void removeMessageListener(
+		MessageListener messageListener, Map<String, Object> properties) {
 
-		return registerMessageListener(invokerMessageListener);
+		messageListeners.remove(properties);
+
+		fireMessageListenerUnregisteredEvent(messageListener);
 	}
 
-	@Override
-	public boolean register(
-		MessageListener messageListener, ClassLoader classloader) {
+	public void removeOutboundMessageProcessorFactory(
+		OutboundMessageProcessorFactory outboundMessageProcessorFactory,
+		Map<String, Object> properties) {
 
-		InvokerMessageListener invokerMessageListener =
-			new InvokerMessageListener(messageListener, classloader);
-
-		return registerMessageListener(invokerMessageListener);
-	}
-
-	@Override
-	public boolean register(
-		OutboundMessageProcessorFactory outboundMessageProcessorFactory) {
-
-		return outboundMessageProcessorFactories.add(
-			outboundMessageProcessorFactory);
-	}
-
-	public boolean removeDestinationEventListener(
-		DestinationEventListener destinationEventListener) {
-
-		return destinationEventListeners.remove(destinationEventListener);
-	}
-
-	public void removeDestinationEventListeners() {
-		destinationEventListeners.clear();
+		outboundMessageProcessorFactories.remove(
+			properties, outboundMessageProcessorFactory);
 	}
 
 	@Override
@@ -243,121 +255,37 @@ public abstract class BaseDestination implements Destination {
 		this.name = name;
 	}
 
-	@Override
-	public boolean unregister(
-		DestinationEventListener destinationEventListener) {
-
-		return removeDestinationEventListener(destinationEventListener);
-	}
-
-	@Override
-	public boolean unregister(
-		InboundMessageProcessorFactory inboundMessageProcessorFactory) {
-
-		return inboundMessageProcessorFactories.remove(
-			inboundMessageProcessorFactory);
-	}
-
-	@Override
-	public boolean unregister(MessageListener messageListener) {
-		InvokerMessageListener invokerMessageListener =
-			new InvokerMessageListener(messageListener);
-
-		return unregisterMessageListener(invokerMessageListener);
-	}
-
-	public boolean unregister(
-		MessageListener messageListener, ClassLoader classloader) {
-
-		InvokerMessageListener invokerMessageListener =
-			new InvokerMessageListener(messageListener, classloader);
-
-		return unregisterMessageListener(invokerMessageListener);
-	}
-
-	@Override
-	public boolean unregister(
-		OutboundMessageProcessorFactory outboundMessageProcessorFactory) {
-
-		return outboundMessageProcessorFactories.remove(
-			outboundMessageProcessorFactory);
-	}
-
-	@Override
-	public void unregisterDestinationEventListeners() {
-		removeDestinationEventListeners();
-	}
-
-	@Override
-	public void unregisterInboundMessageProcessorFactories() {
-		inboundMessageProcessorFactories.clear();
-	}
-
-	@Override
-	public void unregisterMessageListeners() {
-		for (MessageListener messageListener : messageListeners) {
-			unregisterMessageListener((InvokerMessageListener)messageListener);
-		}
-	}
-
-	@Override
-	public void unregisterOutboundMessageProcessorFactories() {
-		outboundMessageProcessorFactories.clear();
-	}
-
 	protected void fireMessageListenerRegisteredEvent(
 		MessageListener messageListener) {
 
-		for (DestinationEventListener destinationEventListener :
-				destinationEventListeners) {
+		for (DestinationEventListener listener :
+				destinationEventListeners.values()) {
 
-			destinationEventListener.messageListenerRegistered(
-				getName(), messageListener);
+			listener.messageListenerRegistered(getName(), messageListener);
 		}
 	}
 
 	protected void fireMessageListenerUnregisteredEvent(
 		MessageListener messageListener) {
 
-		for (DestinationEventListener listener : destinationEventListeners) {
+		for (DestinationEventListener listener :
+				destinationEventListeners.values()) {
+
 			listener.messageListenerUnregistered(getName(), messageListener);
 		}
 	}
 
-	protected boolean registerMessageListener(
-		InvokerMessageListener invokerMessageListener) {
-
-		boolean registered = messageListeners.add(invokerMessageListener);
-
-		if (registered) {
-			fireMessageListenerRegisteredEvent(
-				invokerMessageListener.getMessageListener());
-		}
-
-		return registered;
-	}
-
-	protected boolean unregisterMessageListener(
-		InvokerMessageListener invokerMessageListener) {
-
-		boolean unregistered = messageListeners.remove(invokerMessageListener);
-
-		if (unregistered) {
-			fireMessageListenerUnregisteredEvent(
-				invokerMessageListener.getMessageListener());
-		}
-
-		return unregistered;
-	}
-
-	protected final Set<DestinationEventListener> destinationEventListeners =
-		ConcurrentHashMap.newKeySet();
-	protected final Set<InboundMessageProcessorFactory>
-		inboundMessageProcessorFactories = ConcurrentHashMap.newKeySet();
-	protected final Set<MessageListener> messageListeners =
-		ConcurrentHashMap.newKeySet();
+	protected final Map<Map<String, Object>, DestinationEventListener>
+		destinationEventListeners = new ConcurrentSkipListMap<>(
+			ServiceMaps.comparator().reversed());
+	protected final Map<Map<String, Object>, InboundMessageProcessorFactory>
+		inboundMessageProcessorFactories = new ConcurrentSkipListMap<>(
+			ServiceMaps.comparator().reversed());
+	protected final Map<Map<String, Object>, MessageListener> messageListeners =
+		new ConcurrentSkipListMap<>(ServiceMaps.comparator().reversed());
 	protected String name = StringPool.BLANK;
-	protected final Set<OutboundMessageProcessorFactory>
-		outboundMessageProcessorFactories = ConcurrentHashMap.newKeySet();
+	protected final Map<Map<String, Object>, OutboundMessageProcessorFactory>
+		outboundMessageProcessorFactories = new ConcurrentSkipListMap<>(
+			ServiceMaps.comparator().reversed());
 
 }
