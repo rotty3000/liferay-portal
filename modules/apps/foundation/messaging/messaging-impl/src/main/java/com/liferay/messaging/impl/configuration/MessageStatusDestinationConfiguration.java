@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Jesse Rao
  * @author Raymond Augé
  */
-@Component(service = DestinationConfiguration.class)
+@Component(immediate = true, service = DestinationConfiguration.class)
 public class MessageStatusDestinationConfiguration
 	extends DestinationConfiguration {
 

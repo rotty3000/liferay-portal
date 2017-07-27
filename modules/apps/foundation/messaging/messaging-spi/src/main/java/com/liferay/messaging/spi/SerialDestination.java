@@ -22,10 +22,11 @@ import com.liferay.messaging.MessageListenerException;
 import com.liferay.messaging.MessageProcessorException;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,14 +36,11 @@ import org.slf4j.LoggerFactory;
  * Destination that delivers a message to a list of message listeners one at a
  * time.
  * </p>
- * <p>
- * <strong>Note:</strong> When using this as a parent class to a Declarative
- * Services {@code @Cmponent} apply the instruction
- * {@code -dsannotations-options: inherit} in the bnd file.
- * </p>
  *
  * @author Michael C. Han
+ * @author Raymond Augé
  */
+@Component(factory = "serial.destination")
 public class SerialDestination extends BaseAsyncDestination {
 
 	public SerialDestination() {
@@ -52,14 +50,21 @@ public class SerialDestination extends BaseAsyncDestination {
 
 	@Activate
 	protected void activate(DestinationSettings destinationSettings) {
-		setMaximumQueueSize(destinationSettings.maximumQueueSize());
+		setMaximumQueueSize(destinationSettings.maxQueueSize());
 		setName(destinationSettings.destination_name());
+		afterPropertiesSet();
+		open();
+	}
+
+	@Deactivate
+	protected void deactivate() {
+		close();
 	}
 
 	@Override
 	protected void dispatch(
-		final Set<MessageListener> messageListeners,
-		final List<InboundMessageProcessor> messageInboundProcessors,
+		final Collection<MessageListener> messageListeners,
+		final Collection<InboundMessageProcessor> messageInboundProcessors,
 		final Message message) {
 
 		final Thread dispatchThread = Thread.currentThread();

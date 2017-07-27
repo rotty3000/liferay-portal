@@ -14,17 +14,35 @@
 
 package com.liferay.messaging;
 
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+
 /**
  * @author Raymond Augé
  */
+@ObjectClassDefinition(
+	id = "com.liferay.messaging.Destination",
+	localization = "content/Language",
+	name = "destination-configuration-name"
+)
 public @interface DestinationSettings {
 
+	@AttributeDefinition(required = true)
 	String destination_name();
 
-	int maximumQueueSize() default Integer.MAX_VALUE;
+	@AttributeDefinition(
+		description = "max-queue-size-help", required = false
+	)
+	int maxQueueSize() default Integer.MAX_VALUE;
 
-	int workersCoreSize() default 2;
+	@AttributeDefinition(
+		description = "worker-core-size-help", required = false
+	)
+	int workerCoreSize() default 2;
 
-	int workersMaxSize() default 5;
+	@AttributeDefinition(
+		description = "worker-max-size-help", required = false
+	)
+	int workerMaxSize() default 5;
 
 }

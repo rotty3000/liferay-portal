@@ -14,16 +14,12 @@
 
 package com.liferay.messaging;
 
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
-
 import java.io.Serializable;
 
+import java.util.Map;
 import java.util.Objects;
 
 import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 /**
  * Represents a destination.
@@ -45,49 +41,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 public class DestinationConfiguration implements Serializable {
 
 	/**
-	 * Returns a new DestinationConfiguration of type DestinationType.PARALLEL
-	 * with the specified name.
-	 *
-	 * @param  destinationName the name of the new DestinationConfiguration
-	 * @return a new DestinationConfiguration of type DestinationType.PARALLEL
-	 */
-	public static DestinationConfiguration
-		createParallelDestinationConfiguration(String destinationName) {
-
-		return new DestinationConfiguration(
-			DestinationType.PARALLEL, destinationName);
-	}
-
-	/**
-	 * Returns a new DestinationConfiguration of type DestinationType.SERIAL
-	 * with the specified name.
-	 *
-	 * @param  destinationName the name of the new DestinationConfiguration
-	 * @return a new DestinationConfiguration of type DestinationType.SERIAL
-	 */
-	public static DestinationConfiguration createSerialDestinationConfiguration(
-		String destinationName) {
-
-		return new DestinationConfiguration(
-			DestinationType.SERIAL, destinationName);
-	}
-
-	/**
-	 * Returns a new DestinationConfiguration of type
-	 * DestinationType.SYNCHRONOUS with the specified name.
-	 *
-	 * @param  destinationName the name of the new DestinationConfiguration
-	 * @return a new DestinationConfiguration of type
-	 *         DestinationType.SYNCHRONOUS
-	 */
-	public static DestinationConfiguration
-		createSynchronousDestinationConfiguration(String destinationName) {
-
-		return new DestinationConfiguration(
-			DestinationType.SYNCHRONOUS, destinationName);
-	}
-
-	/**
 	 * Constructs a new DestinationConfiguration of the specified type with the
 	 * specified name.
 	 *
@@ -99,6 +52,11 @@ public class DestinationConfiguration implements Serializable {
 
 		_destinationType = destinationType;
 		_destinationName = destinationName;
+
+		if (_destinationType == DestinationType.SERIAL) {
+			_workersCoreSize = 1;
+			_workersMaxSize = 1;
+		}
 	}
 
 	/**
@@ -176,20 +134,6 @@ public class DestinationConfiguration implements Serializable {
 	}
 
 	/**
-	 * Returns the DestinationConfiguration's rejected execution handler.
-	 *
-	 * <p>
-	 * A rejected execution handler determines what happens when the number of
-	 * incoming messages exceeds the maximum queue size.
-	 * </p>
-	 *
-	 * @return the DestinationConfiguration's rejected execution handler
-	 */
-	public RejectedExecutionHandler getRejectedExecutionHandler() {
-		return _rejectedExecutionHandler;
-	}
-
-	/**
 	 * Returns the DestinationConfiguration's core thread pool size.
 	 *
 	 * <p>
@@ -245,27 +189,6 @@ public class DestinationConfiguration implements Serializable {
 	}
 
 	/**
-	 * Sets the DestinationConfiguration's rejected execution handler.
-	 *
-	 * <p>
-	 * A rejected execution handler determines what happens when the number of
-	 * incoming messages exceeds the maximum queue size.
-	 * </p>
-	 *
-	 * @param rejectedExecutionHandler the new rejected execution handler of the
-	 * DestinationConfiguration
-	 */
-	@Reference(
-		cardinality = ReferenceCardinality.OPTIONAL,
-		policyOption = ReferencePolicyOption.GREEDY, unbind = "-"
-	)
-	public void setRejectedExecutionHandler(
-		RejectedExecutionHandler rejectedExecutionHandler) {
-
-		_rejectedExecutionHandler = rejectedExecutionHandler;
-	}
-
-	/**
 	 * Sets the DestinationConfiguration's core thread pool size.
 	 *
 	 * <p>
@@ -310,8 +233,6 @@ public class DestinationConfiguration implements Serializable {
 		sb.append(_destinationType);
 		sb.append(", _maximumQueueSize=");
 		sb.append(_maximumQueueSize);
-		sb.append(", _rejectedExecutionHandler=");
-		sb.append(_rejectedExecutionHandler);
 		sb.append(", _workersCoreSize=");
 		sb.append(_workersCoreSize);
 		sb.append(", _workersMaxSize=");
@@ -322,10 +243,20 @@ public class DestinationConfiguration implements Serializable {
 	}
 
 	@Activate
-	protected void activate(DestinationSettings destinationSettings) {
-		setMaximumQueueSize(destinationSettings.maximumQueueSize());
-		setWorkersCoreSize(destinationSettings.workersCoreSize());
-		setWorkersMaxSize(destinationSettings.workersMaxSize());
+	protected void activate(Map<String, Object> properties) {
+		setMaximumQueueSize(get(properties, "maxQueueSize", Integer.MAX_VALUE));
+		setWorkersCoreSize(get(properties, "workerCoreSize", _WORKERS_CORE_SIZE));
+		setWorkersMaxSize(get(properties, "workerMaxSize", _WORKERS_MAX_SIZE));
+	}
+
+	private <T> T get(Map<String, Object> properties, String key, T defaultValue) {
+		return properties.entrySet().stream().filter(
+			e -> e.getKey().equals(key)
+		).map(
+			e -> (T)e.getValue()
+		).findFirst().orElse(
+			defaultValue
+		);
 	}
 
 	private static final int _WORKERS_CORE_SIZE = 2;
@@ -335,7 +266,6 @@ public class DestinationConfiguration implements Serializable {
 	private final String _destinationName;
 	private final DestinationType _destinationType;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
-	private RejectedExecutionHandler _rejectedExecutionHandler;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 

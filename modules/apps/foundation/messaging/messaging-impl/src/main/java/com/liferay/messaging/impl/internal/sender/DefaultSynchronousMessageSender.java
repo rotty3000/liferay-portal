@@ -45,7 +45,8 @@ public class DefaultSynchronousMessageSender
 	public Object send(String destinationName, Message message, long timeout)
 		throws MessageBusException {
 
-		Destination destination = _messageBus.getDestination(destinationName);
+		Destination destination = (Destination)_messageBus.getDestination(
+			destinationName);
 
 		if (destination == null) {
 			if (_logger.isInfoEnabled()) {

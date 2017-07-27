@@ -17,22 +17,35 @@ package com.liferay.messaging.test;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.ExecutorServiceRegistrar;
 import com.liferay.messaging.Message;
+import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.MessageListenerException;
+import com.liferay.messaging.spi.BaseAsyncDestination;
 import com.liferay.messaging.spi.MessageRunnable;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Raymond Augé
@@ -43,15 +56,15 @@ public class DestinationTest extends TestUtil {
 	@Test
 	public void testParallel() throws Exception {
 		testSend("parallel/test", "tb2.jar");
-		testExecutorServiceRegistrar("parallel/test", "tb19.jar", "tb16.jar");
-		testRejectedExecutionHandler("parallel/test", "tb19.jar", "tb16.jar");
+		testExecutorServiceRegistrar("parallel/test", "tb16.jar", "tb19.jar");
+		testRejectedExecutionHandler("parallel/test", "tb16.jar", "tb19.jar");
 	}
 
 	@Test
 	public void testSerial() throws Exception {
 		testSend("serial/test", "tb3.jar");
-		testExecutorServiceRegistrar("serial/test", "tb20.jar", "tb17.jar");
-		testRejectedExecutionHandler("serial/test", "tb20.jar", "tb17.jar");
+		testExecutorServiceRegistrar("serial/test", "tb17.jar", "tb20.jar");
+		testRejectedExecutionHandler("serial/test", "tb17.jar", "tb20.jar");
 	}
 
 	@Test
@@ -124,8 +137,31 @@ public class DestinationTest extends TestUtil {
 
 		ServiceTracker<RejectedExecutionHandler, Callable<Map<MessageRunnable, ThreadPoolExecutor>>>
 			tracker = null;
+		ServiceRegistration<MessageListener> _listenerRegistration = null;
 
 		try {
+			final CountDownLatch _latch = new CountDownLatch(1);
+
+			MessageListener messageListener = new MessageListener() {
+
+				@Override
+				public void receive(Message message) throws MessageListenerException {
+					try {
+						_latch.await(200, TimeUnit.MILLISECONDS);
+					}
+					catch (InterruptedException ie) {
+						_logger.error("Interupted!", ie);
+					}
+				}
+
+			};
+
+			Dictionary<String, Object> properties = new Hashtable<>();
+			properties.put("destination.name", destinationName);
+
+			_listenerRegistration = registerService(
+				MessageListener.class, messageListener, properties);
+
 			for (Bundle bundle : bundles) {
 				bundle.start();
 			}
@@ -147,20 +183,38 @@ public class DestinationTest extends TestUtil {
 
 			messageBus = getMessageBus();
 
-			for (int i = 0; i < 100; i++) {
-				Message message = new Message();
+			BaseAsyncDestination destination =
+				(BaseAsyncDestination)messageBus.getDestination(
+					destinationName);
 
-				// TODO there's a bug here, the destination is shutdown.
-				// We need to figure out why this is happening.
+			int concurrency = destination.getWorkersMaxSize() * 2;
 
-				// messageBus.sendMessage(destinationName, message);
+			ExecutorService executorService = Executors.newWorkStealingPool(
+				concurrency);
 
-			}
+			Runnable messanger = () -> {
+				for (int i = 0; i < 1000; i++) {
+					Message message = new Message();
+
+					try {
+						messageBus.sendMessage(destinationName, message);
+					}
+					catch (Throwable e) {
+						_logger.error("{}", e.getMessage());
+					}
+				}
+			};
+
+			IntStream.range(0, concurrency).forEach(
+				i -> executorService.execute(messanger)
+			);
+
+			_latch.await(500, TimeUnit.MILLISECONDS);
 
 			Map<MessageRunnable, ThreadPoolExecutor> map = service.call();
 
 			Assert.assertNotNull(map);
-			//assertFalse(map.isEmpty());
+			Assert.assertFalse(map.isEmpty());
 		}
 		finally {
 			for (Bundle bundle : bundles) {
@@ -169,6 +223,10 @@ public class DestinationTest extends TestUtil {
 
 			if (tracker != null) {
 				tracker.close();
+			}
+
+			if (_listenerRegistration != null) {
+				_listenerRegistration.unregister();
 			}
 		}
 	}
@@ -213,5 +271,8 @@ public class DestinationTest extends TestUtil {
 			bundle.uninstall();
 		}
 	}
+
+	private static final Logger _logger = LoggerFactory.getLogger(
+		DestinationTest.class);
 
 }

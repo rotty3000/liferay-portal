@@ -23,7 +23,7 @@ import com.liferay.messaging.spi.Destination;
 import com.liferay.messaging.spi.SynchronousDestination;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class DirectSynchronousMessageSender
 			synchronousDestination.send(message);
 		}
 		else {
-			Set<MessageListener> messageListeners =
+			Collection<MessageListener> messageListeners =
 				destination.getMessageListeners();
 
 			for (MessageListener messageListener : messageListeners) {
