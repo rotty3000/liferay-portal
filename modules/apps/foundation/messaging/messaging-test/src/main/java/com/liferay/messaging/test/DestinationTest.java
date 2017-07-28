@@ -20,6 +20,7 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
 import com.liferay.messaging.spi.BaseAsyncDestination;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.MessageRunnable;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
@@ -194,7 +195,7 @@ public class DestinationTest extends TestUtil {
 
 			Runnable messanger = () -> {
 				for (int i = 0; i < 1000; i++) {
-					Message message = new Message();
+					Message message = new MessageImpl();
 
 					try {
 						messageBus.sendMessage(destinationName, message);
@@ -261,7 +262,7 @@ public class DestinationTest extends TestUtil {
 
 			Assert.assertNotNull(callable);
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 
 			messageBus.sendMessage(destinationName, message);
 

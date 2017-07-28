@@ -24,6 +24,7 @@ import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.impl.internal.DefaultMessageBus;
 import com.liferay.messaging.spi.BaseDestination;
 import com.liferay.messaging.spi.DestinationFactory;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.ParallelDestination;
 import com.liferay.messaging.spi.SerialDestination;
 import com.liferay.messaging.spi.SynchronousDestination;
@@ -158,7 +159,7 @@ public class DefaultSynchronousMessageSenderTest {
 			Assert.assertSame(
 				response,
 				_defaultSynchronousMessageSender.send(
-					destination.getName(), new Message()));
+					destination.getName(), new MessageImpl()));
 		}
 		finally {
 			_messageBus.unregisterDestinationConfiguration(
@@ -178,7 +179,7 @@ public class DefaultSynchronousMessageSenderTest {
 
 		@Override
 		public void receive(Message message) {
-			Message responseMessage = new Message();
+			Message responseMessage = new MessageImpl();
 
 			responseMessage.setDestinationName(
 				message.getResponseDestinationName());

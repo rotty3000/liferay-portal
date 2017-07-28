@@ -21,6 +21,10 @@ package com.liferay.messaging;
  * safe. Both before and after stages are guaranteed to be executed so it's
  * possible to implement "around" behavior.
  * </p>
+ * <p>
+ * In the case where the Message Bus was used to send a message over a remote
+ * connection this processor will execute on the side having the thread pool.
+ * </p>
  *
  * @author Raymond Augé
  */

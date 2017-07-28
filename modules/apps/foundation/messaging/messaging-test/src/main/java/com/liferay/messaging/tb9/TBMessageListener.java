@@ -19,6 +19,7 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageListener;
 import com.liferay.messaging.MessageListenerException;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,7 +47,7 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 	public void receive(Message message) throws MessageListenerException {
 		_message.set(message);
 
-		Message responseMessage = new Message();
+		Message responseMessage = new MessageImpl();
 
 		responseMessage.setResponseId(message.getResponseId());
 

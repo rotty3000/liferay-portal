@@ -20,6 +20,7 @@ import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
 import com.liferay.messaging.MessageListener;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -85,7 +86,7 @@ public class ClassLoaderTest extends TestUtil {
 					Assert.assertTrue(destination.isRegistered());
 				}
 
-				Message message = new Message();
+				Message message = new MessageImpl();
 
 				messageBus.sendMessage(destinationName, message);
 			}
@@ -148,7 +149,7 @@ public class ClassLoaderTest extends TestUtil {
 					Assert.assertTrue(destination.isRegistered());
 				}
 
-				Message message = new Message();
+				Message message = new MessageImpl();
 
 				messageBus.sendMessage(destinationName, message);
 			}

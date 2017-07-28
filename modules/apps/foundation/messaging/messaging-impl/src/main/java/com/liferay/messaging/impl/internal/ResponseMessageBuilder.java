@@ -17,6 +17,7 @@ package com.liferay.messaging.impl.internal;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBuilder;
 import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class ResponseMessageBuilder implements MessageBuilder {
 	public ResponseMessageBuilder(MessageBus messageBus, Message original) {
 		_messageBus = messageBus;
 
-		_message = new Message();
+		_message = new MessageImpl();
 
 		_message.copyFrom(original);
 

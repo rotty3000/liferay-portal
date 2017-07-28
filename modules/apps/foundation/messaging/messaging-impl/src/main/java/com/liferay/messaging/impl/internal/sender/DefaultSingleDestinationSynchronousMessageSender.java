@@ -16,6 +16,7 @@ package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBusException;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.sender.SingleDestinationSynchronousMessageSender;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
@@ -40,7 +41,7 @@ public class DefaultSingleDestinationSynchronousMessageSender
 
 	@Override
 	public Object send(Object payload) throws MessageBusException {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setPayload(payload);
 
@@ -51,7 +52,7 @@ public class DefaultSingleDestinationSynchronousMessageSender
 	public Object send(Object payload, long timeout)
 		throws MessageBusException {
 
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setPayload(payload);
 
