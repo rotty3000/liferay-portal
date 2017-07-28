@@ -20,6 +20,7 @@ import com.liferay.messaging.InboundMessageProcessor;
 import com.liferay.messaging.InboundMessageProcessorFactory;
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageProcessorException;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -294,7 +295,7 @@ public class DestinationStatisticsTest extends TestUtil {
 				destination.getDestinationStatistics());
 
 			for (int i = 0; i < MAX; i++) {
-				Message message = new Message();
+				Message message = new MessageImpl();
 
 				messageBus.sendMessage(destinationName, message);
 			}

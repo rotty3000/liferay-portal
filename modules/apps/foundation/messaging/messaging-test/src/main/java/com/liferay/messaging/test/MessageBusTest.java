@@ -17,6 +17,7 @@ package com.liferay.messaging.test;
 import com.liferay.messaging.Destination;
 import com.liferay.messaging.DestinationNames;
 import com.liferay.messaging.Message;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -115,7 +116,7 @@ public class MessageBusTest extends TestUtil {
 		try {
 			tb.start();
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 
 			message.setPayload("payload");
 
@@ -168,7 +169,7 @@ public class MessageBusTest extends TestUtil {
 		try {
 			tb.start();
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 			String payload = "payload";
 
 			message.setPayload(payload);
@@ -211,7 +212,7 @@ public class MessageBusTest extends TestUtil {
 		try {
 			tb.start();
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 			String payload = "payload";
 
 			message.setPayload(payload);

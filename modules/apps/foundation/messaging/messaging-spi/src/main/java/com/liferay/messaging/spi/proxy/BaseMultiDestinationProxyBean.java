@@ -16,6 +16,7 @@ package com.liferay.messaging.spi.proxy;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
 
 /**
@@ -61,7 +62,7 @@ public abstract class BaseMultiDestinationProxyBean {
 	}
 
 	protected Message buildMessage(ProxyRequest proxyRequest) {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setPayload(proxyRequest);
 

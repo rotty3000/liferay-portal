@@ -18,6 +18,7 @@ import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageProcessorException;
 import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.OutboundMessageProcessorFactory;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -109,7 +110,7 @@ public class OutboundMessageProcessorFactoryTest extends TestUtil {
 
 			Assert.assertFalse(promiseToBeforeSend.isDone());
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 
 			Promise<Integer> promiseToCalled = called.getPromise();
 

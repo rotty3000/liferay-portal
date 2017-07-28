@@ -15,6 +15,7 @@
 package com.liferay.messaging.test;
 
 import com.liferay.messaging.Message;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class MessageTest {
 
 	@Test
 	public void testContains() {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.put("abc", "123");
 
@@ -83,7 +84,7 @@ public class MessageTest {
 
 	@Test
 	public void testCopy() {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		String destinationName = "destination/test";
 		String payload = "payload";
@@ -99,7 +100,7 @@ public class MessageTest {
 
 		message.put("abc", "123");
 
-		Message copiedFromMessage = new Message();
+		Message copiedFromMessage = new MessageImpl();
 
 		Assert.assertEquals(null, copiedFromMessage.getDestinationName());
 		Assert.assertEquals(null, copiedFromMessage.getPayload());
@@ -119,7 +120,7 @@ public class MessageTest {
 			copiedFromMessage.getResponseDestinationName());
 		Assert.assertEquals(responseId, copiedFromMessage.getResponseId());
 
-		Message copiedToMessage = new Message();
+		Message copiedToMessage = new MessageImpl();
 
 		Assert.assertEquals(null, copiedToMessage.getDestinationName());
 		Assert.assertEquals(null, copiedToMessage.getPayload());
@@ -141,7 +142,7 @@ public class MessageTest {
 
 	@Test
 	public void testGettersSetters() {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		String destinationName = "destination/test";
 		String payload = "payload";

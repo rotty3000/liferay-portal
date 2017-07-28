@@ -16,6 +16,7 @@ package com.liferay.messaging.impl.internal.sender;
 
 import com.liferay.messaging.Message;
 import com.liferay.messaging.MessageBus;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.sender.SingleDestinationMessageSender;
 
 /**
@@ -31,7 +32,7 @@ public class DefaultSingleDestinationMessageSender
 
 	@Override
 	public void send(Object payload) {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setPayload(payload);
 

@@ -15,6 +15,7 @@
 package com.liferay.messaging.test;
 
 import com.liferay.messaging.Message;
+import com.liferay.messaging.spi.MessageImpl;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class SynchronousMessageSenderTest extends TestUtil {
 		try {
 			tb.start();
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 
 			Object result = messageBus.sendSynchronousMessage(
 				destinationName, message);

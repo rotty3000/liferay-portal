@@ -25,6 +25,7 @@ import com.liferay.messaging.OutboundMessageProcessor;
 import com.liferay.messaging.impl.configuration.MessageBusConfiguration;
 import com.liferay.messaging.spi.BaseDestination;
 import com.liferay.messaging.spi.DestinationFactory;
+import com.liferay.messaging.spi.MessageImpl;
 import com.liferay.messaging.spi.ServiceMaps;
 import com.liferay.messaging.spi.sender.SingleDestinationMessageSenderFactory;
 import com.liferay.messaging.spi.sender.SynchronousMessageSender;
@@ -242,7 +243,7 @@ public class DefaultMessageBus implements MessageBus {
 
 	@Override
 	public void sendMessage(String destinationName, Object payload) {
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setPayload(payload);
 
@@ -308,7 +309,7 @@ public class DefaultMessageBus implements MessageBus {
 		String destinationName, Object payload,
 		String responseDestinationName) {
 
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setResponseDestinationName(responseDestinationName);
 		message.setPayload(payload);
@@ -321,7 +322,7 @@ public class DefaultMessageBus implements MessageBus {
 		String destinationName, Object payload, String responseDestinationName,
 		long timeout) {
 
-		Message message = new Message();
+		Message message = new MessageImpl();
 
 		message.setResponseDestinationName(responseDestinationName);
 		message.setPayload(payload);

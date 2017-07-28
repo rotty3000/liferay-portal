@@ -17,6 +17,7 @@ package com.liferay.messaging.test;
 import com.liferay.messaging.DestinationConfiguration;
 import com.liferay.messaging.DestinationType;
 import com.liferay.messaging.Message;
+import com.liferay.messaging.spi.MessageImpl;
 
 import java.util.concurrent.Callable;
 
@@ -129,7 +130,7 @@ public class DestinationConfigurationTest extends TestUtil {
 
 			Assert.assertNotNull(callable);
 
-			Message message = new Message();
+			Message message = new MessageImpl();
 
 			messageBus.sendMessage(destination, message);
 
