@@ -8,35 +8,32 @@ messaging utility is similar to Java's JMS but is lighter-weight and provides
 a smaller and simpler API.
 
 In previous versions of Liferay, the Message Bus was embedded in Liferay's
-core. It has now been completely modularized and decoupled. This means it can now be
-used as a standalone messaging utility.
+core. It has now been completely modularized and decoupled. This means it can
+now be used as a standalone messaging utility.
 
 The Message Bus consists of four OSGi modules:
 
-- `messaging-api`: The `messaging-api` module provides an API that's intended
-for use by Message Bus clients.
-- `messaging-spi`: The `messaging-spi` module provides an SPI (service provider
-interface) that's intended for use by Message Bus implementers (a.k.a.
-Message Bus providers).
-- `messaging-impl`: The `messaging-impl` module uses the `messaging-spi` module
-to provide a complete implementation of all the services required to satisfy
-the contracts promised by the `messaging-api` module.
-- `messaging-test`: The `messaging-test` module contains integration tests that
-launch an OSGi runtime, install the `messaging-api`, `messaging-spi`, and
-`messaging-impl` modules, exercise every method of each class in the
-`messaging-api` module, and compare the expected results to the actual
-results.
-
-Next, let's look at the basic concepts and architecture of the Message Bus
-system.
+- `messaging-api`: provides an API that's intended for use by Message Bus
+clients.
+- `messaging-spi`: provides an SPI (service provider interface) that's intended
+for use by Message Bus implementers (a.k.a. Message Bus providers).
+- `messaging-impl`: uses the `messaging-spi` module to provide a complete
+implementation of all the services required to satisfy the contracts promised by
+the `messaging-api` module.
+- `messaging-test`: contains integration tests that launch an OSGi runtime,
+install the `messaging-api`, `messaging-spi`, and `messaging-impl` modules,
+exercise every method of each class in the `messaging-api` module, and compare
+the expected results to the actual results.
 
 ## Concepts
 
-To use the Message Bus, you should understand these Message Bus concepts.
+Let's look at the basic concepts and architecture of the Message Bus system.
 
-*Note:* The term 'Message Bus' can be used either as (1) a general term for Liferay's
-messaging utility or (2) as a specific software component in Liferay's
-messaging utility. Below, we use the term in the second sense.
+*Note:* The term 'Message Bus' can be used either as *(1)* a general term for
+Liferay's messaging utility or *(2)* as a specific software component in
+Liferay's messaging utility. Below, we use the term in the second sense.
+
+To use the Message Bus, you should understand the following concepts.
 
 - **Message Bus:** Manages the sending of messages and the destinations to which
 they are sent
