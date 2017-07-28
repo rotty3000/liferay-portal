@@ -87,12 +87,16 @@ public class DestinationConfigurationTest extends TestUtil {
 			Integer.MAX_VALUE, destinationConfiguration.getMaximumQueueSize());
 
 		if (destinationType == DestinationType.SERIAL) {
-			Assert.assertEquals(1, destinationConfiguration.getWorkersCoreSize());
-			Assert.assertEquals(1, destinationConfiguration.getWorkersMaxSize());
+			Assert.assertEquals(
+				1, destinationConfiguration.getWorkersCoreSize());
+			Assert.assertEquals(
+				1, destinationConfiguration.getWorkersMaxSize());
 		}
 		else if (destinationType == DestinationType.PARALLEL) {
-			Assert.assertEquals(2, destinationConfiguration.getWorkersCoreSize());
-			Assert.assertEquals(5, destinationConfiguration.getWorkersMaxSize());
+			Assert.assertEquals(
+				2, destinationConfiguration.getWorkersCoreSize());
+			Assert.assertEquals(
+				5, destinationConfiguration.getWorkersMaxSize());
 		}
 
 		destinationConfiguration.setMaximumQueueSize(20);

@@ -50,7 +50,8 @@ public class ExecutorServiceRegistrarImpl
 			existingRegistration = (T)_executorServices.remove(name);
 		}
 		else {
-			existingRegistration = (T)_executorServices.put(name, executorService);
+			existingRegistration = (T)_executorServices.put(
+				name, executorService);
 		}
 
 		return existingRegistration;

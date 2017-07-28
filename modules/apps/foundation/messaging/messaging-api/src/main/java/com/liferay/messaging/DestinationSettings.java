@@ -21,8 +21,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
  * @author Raymond Augé
  */
 @ObjectClassDefinition(
-	id = "com.liferay.messaging.Destination",
-	localization = "content/Language",
+	id = "com.liferay.messaging.Destination", localization = "content/Language",
 	name = "destination-configuration-name"
 )
 public @interface DestinationSettings {
@@ -30,9 +29,7 @@ public @interface DestinationSettings {
 	@AttributeDefinition(required = true)
 	String destination_name();
 
-	@AttributeDefinition(
-		description = "max-queue-size-help", required = false
-	)
+	@AttributeDefinition(description = "max-queue-size-help", required = false)
 	int maxQueueSize() default Integer.MAX_VALUE;
 
 	@AttributeDefinition(
@@ -40,9 +37,7 @@ public @interface DestinationSettings {
 	)
 	int workerCoreSize() default 2;
 
-	@AttributeDefinition(
-		description = "worker-max-size-help", required = false
-	)
+	@AttributeDefinition(description = "worker-max-size-help", required = false)
 	int workerMaxSize() default 5;
 
 }

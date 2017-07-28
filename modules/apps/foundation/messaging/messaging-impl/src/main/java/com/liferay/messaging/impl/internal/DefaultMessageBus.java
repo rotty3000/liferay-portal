@@ -146,7 +146,7 @@ public class DefaultMessageBus implements MessageBus {
 		}
 	}
 
-	/*
+	/**
 	 * Only use this for testing! We really want to use field injection here.
 	 */
 	public void registerDestinationFactory(
@@ -374,6 +374,7 @@ public class DefaultMessageBus implements MessageBus {
 
 	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private DestinationFactory _destinationFactory;
+
 	private final Map<Map<String, Object>, Destination> _destinations =
 		new ConcurrentSkipListMap<>(ServiceMaps.comparator().reversed());
 	private final Map<Map<String, Object>, MessageBusEventListener>
