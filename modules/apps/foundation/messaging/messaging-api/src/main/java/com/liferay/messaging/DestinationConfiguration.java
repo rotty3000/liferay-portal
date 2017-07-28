@@ -17,7 +17,10 @@ package com.liferay.messaging;
 import java.io.Serializable;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Activate;
 
@@ -244,17 +247,26 @@ public class DestinationConfiguration implements Serializable {
 
 	@Activate
 	protected void activate(Map<String, Object> properties) {
-		setMaximumQueueSize(get(properties, "maxQueueSize", Integer.MAX_VALUE));
-		setWorkersCoreSize(get(properties, "workerCoreSize", _WORKERS_CORE_SIZE));
-		setWorkersMaxSize(get(properties, "workerMaxSize", _WORKERS_MAX_SIZE));
+		setMaximumQueueSize(
+			_get(properties, "maxQueueSize", Integer.MAX_VALUE));
+		setWorkersCoreSize(
+			_get(properties, "workerCoreSize", _WORKERS_CORE_SIZE));
+		setWorkersMaxSize(_get(properties, "workerMaxSize", _WORKERS_MAX_SIZE));
 	}
 
-	private <T> T get(Map<String, Object> properties, String key, T defaultValue) {
-		return properties.entrySet().stream().filter(
+	private <T> T _get(
+		Map<String, Object> properties, String key, T defaultValue) {
+
+		Set<Entry<String, Object>> entrySet = properties.entrySet();
+
+		Stream<Entry<String, Object>> stream = entrySet.stream();
+
+		return stream.filter(
 			e -> e.getKey().equals(key)
 		).map(
 			e -> (T)e.getValue()
-		).findFirst().orElse(
+		).findFirst(
+		).orElse(
 			defaultValue
 		);
 	}

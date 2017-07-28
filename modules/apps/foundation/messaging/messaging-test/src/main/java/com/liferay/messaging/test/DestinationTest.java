@@ -138,17 +138,19 @@ public class DestinationTest extends TestUtil {
 
 		ServiceTracker<RejectedExecutionHandler, Callable<Map<MessageRunnable, ThreadPoolExecutor>>>
 			tracker = null;
-		ServiceRegistration<MessageListener> _listenerRegistration = null;
+		ServiceRegistration<MessageListener> listenerRegistration = null;
 
 		try {
-			final CountDownLatch _latch = new CountDownLatch(1);
+			final CountDownLatch latch = new CountDownLatch(1);
 
 			MessageListener messageListener = new MessageListener() {
 
 				@Override
-				public void receive(Message message) throws MessageListenerException {
+				public void receive(Message message)
+					throws MessageListenerException {
+
 					try {
-						_latch.await(200, TimeUnit.MILLISECONDS);
+						latch.await(200, TimeUnit.MILLISECONDS);
 					}
 					catch (InterruptedException ie) {
 						_logger.error("Interupted!", ie);
@@ -158,9 +160,10 @@ public class DestinationTest extends TestUtil {
 			};
 
 			Dictionary<String, Object> properties = new Hashtable<>();
+
 			properties.put("destination.name", destinationName);
 
-			_listenerRegistration = registerService(
+			listenerRegistration = registerService(
 				MessageListener.class, messageListener, properties);
 
 			for (Bundle bundle : bundles) {
@@ -207,10 +210,9 @@ public class DestinationTest extends TestUtil {
 			};
 
 			IntStream.range(0, concurrency).forEach(
-				i -> executorService.execute(messanger)
-			);
+				i -> executorService.execute(messanger));
 
-			_latch.await(500, TimeUnit.MILLISECONDS);
+			latch.await(500, TimeUnit.MILLISECONDS);
 
 			Map<MessageRunnable, ThreadPoolExecutor> map = service.call();
 
@@ -226,8 +228,8 @@ public class DestinationTest extends TestUtil {
 				tracker.close();
 			}
 
-			if (_listenerRegistration != null) {
-				_listenerRegistration.unregister();
+			if (listenerRegistration != null) {
+				listenerRegistration.unregister();
 			}
 		}
 	}
