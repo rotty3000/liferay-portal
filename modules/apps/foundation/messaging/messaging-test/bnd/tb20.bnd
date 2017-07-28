@@ -1,0 +1,1 @@
+Export-Package: ${p}.tb20.*;-split-package:=first
