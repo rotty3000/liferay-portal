@@ -8,32 +8,35 @@ messaging utility is similar to Java's JMS but is lighter-weight and provides
 a smaller and simpler API.
 
 In previous versions of Liferay, the Message Bus was embedded in Liferay's
-core. It has now been completely modularized and decoupled. This means it can
-now be used as a standalone messaging utility.
+core. It has now been completely modularized and decoupled. This means it can now be
+used as a standalone messaging utility.
 
 The Message Bus consists of four OSGi modules:
 
-- `messaging-api`: provides an API that's intended for use by Message Bus
-clients.
-- `messaging-spi`: provides an SPI (service provider interface) that's intended
-for use by Message Bus implementers (a.k.a. Message Bus providers).
-- `messaging-impl`: uses the `messaging-spi` module to provide a complete
-implementation of all the services required to satisfy the contracts promised by
-the `messaging-api` module.
-- `messaging-test`: contains integration tests that launch an OSGi runtime,
-install the `messaging-api`, `messaging-spi`, and `messaging-impl` modules,
-exercise every method of each class in the `messaging-api` module, and compare
-the expected results to the actual results.
+- `messaging-api`: The `messaging-api` module provides an API that's intended
+for use by Message Bus clients.
+- `messaging-spi`: The `messaging-spi` module provides an SPI (service provider
+interface) that's intended for use by Message Bus implementers (a.k.a.
+Message Bus providers).
+- `messaging-impl`: The `messaging-impl` module uses the `messaging-spi` module
+to provide a complete implementation of all the services required to satisfy
+the contracts promised by the `messaging-api` module.
+- `messaging-test`: The `messaging-test` module contains integration tests that
+launch an OSGi runtime, install the `messaging-api`, `messaging-spi`, and
+`messaging-impl` modules, exercise every method of each class in the
+`messaging-api` module, and compare the expected results to the actual
+results.
+
+Next, let's look at the basic concepts and architecture of the Message Bus
+system.
 
 ## Concepts
 
-Let's look at the basic concepts and architecture of the Message Bus system.
+To use the Message Bus, you should understand these Message Bus concepts.
 
-*Note:* The term 'Message Bus' can be used either as *(1)* a general term for
-Liferay's messaging utility or *(2)* as a specific software component in
-Liferay's messaging utility. Below, we use the term in the second sense.
-
-To use the Message Bus, you should understand the following concepts.
+*Note:* The term 'Message Bus' can be used either as (1) a general term for Liferay's
+messaging utility or (2) as a specific software component in Liferay's
+messaging utility. Below, we use the term in the second sense.
 
 - **Message Bus:** Manages the sending of messages and the destinations to which
 they are sent
@@ -118,9 +121,11 @@ this:
 ```.java
 @Component(service = DestinationConfiguration.class)
 public class MySynchronousDestination extends DestinationConfiguration {
+
 	public MySynchronousDestination() {
 		super(DestinationType.PARALLEL, "parallelDestination");
 	}
+
 }
 ```
 
@@ -133,11 +138,13 @@ create a message listener that targets the "parallelDestination":
 ```.java
 @Component(property = "destination.name=parallelDestination")
 public class MyMessageListener implements MessageListener {
+
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		// Your message processing instructions go here
+		// Your processing here
 		System.out.println("Received message: " + message);
 	}
+
 }
 ```
 
@@ -149,61 +156,16 @@ that the destination name is specified as "parallelDestination".
 
 #### Step 3: Creating, Populating, and Sending Messages
 
-To create and populate a message, simply create a new `Message` instance. The
-information contained by a message is called its payload. The payload is a
+The information contained by a message is called its payload. The payload is a
 generic object so you can make the payload anything you want. Messages can also
-contain an arbitrary number of additional name / value pairs. Here's an example:
+contain an arbitrary number of additional name / value pairs. To create and
+populate a message, use a `MessageBuilder`. Using a `MessageBuilder` means that
+you don't have to concern yourself with the implementation details of concrete
+`MessageImpl` objects. 
 
-```.java
-Message message = new Message();
-
-message.setPayload("payload");
-```
-
-If you want to specify some additional name / value pairs, you can do it like
-this:
-
-```.java
-message.put("property1", "value1");
-message.put("property2", "value2");
-```
-
-Instead of assigning individual name / value pairs, you can replace the entire
-map with your own map like this:
-
-```.java
-Map<String, Object> messageMap = new HashMap<>();
-
-message.setValues(messageMap);
-```
-
-Once your message is populated, you can send it via the message bus. The
-`messaging-impl` module publishes a message bus instance as a service. Let's
-create a messaging component again using Declarative Services which depends on
-the MessageBus service:
-
-```.java
-@Component(immediate = true)
-class MessagingComponent {
-
-	@Reference
-	private MessageBus _messageBus;
-
-}
-```
-
-Once you've obtained a reference to the message bus, you can send the message
-like this:
-
-```.java
-_messageBus.sendMessage("parallelDestination", message);
-```
-
-Although creating and sending messages this way is easy enough, it's even
-easier to create and send messages using a message builder. Message builders
-are created from message builder factories. A message builder factory service
-is provided by the `messaging-impl` module. Here's an example of how to obtain
-a message builder:
+Message builders are created from message builder factories. A message builder
+factory service is provided by the `messaging-impl` module. Here's an example
+of how to obtain a message builder factory:
 
 ```.java
 @Component(immediate = true)
@@ -211,6 +173,20 @@ class MessagingBuilderComponent {
 
 	@Reference
 	private MessageBuilderFactory _messageBuilderFactory;
+
+}
+```
+
+Note that a message bus service is also provided by the `messaging-impl`
+module. If desired, you can obtain a reference to the message bus exactly the
+same way as you obtained a reference to the message builder factory:
+
+```.java
+@Component(immediate = true)
+class MessageBusComponent {
+
+	@Reference
+	private MessageBus _messageBus;
 
 }
 ```
@@ -229,15 +205,31 @@ chaining like this:
 
 ```.java
 messageBuilder.setPayload(
-	"payload2"
+	"payload"
 ).put(
-	"property3", "value3"
+	"property1", "value1"
 ).put(
-	"property4", "value4"
+	"property2", "value2"
 );
 ```
 
-If needed, you could use the message builder to obtain an instance of the
+Instead of assigning individual name / value pairs, you can replace the entire
+map with your own map like this:
+
+```.java
+Map<String, Object> messageMap = new HashMap<>();
+
+messageBuilder.setValues(messageMap);
+```
+
+Since message builders are configured with a destination name when they're
+created, using them to send messages is easy:
+
+```.java
+messageBuilder.send();
+```
+
+If needed, you can use the message builder to obtain an instance of the
 configured message like this:
 
 ```.java
@@ -245,18 +237,12 @@ Message message = messageBuilder.build();
 ```
 
 A message obtained like this is already configured with the destination of its
-message builder. However, you can send a message from the message builder
-directly without first obtaining a message instance:
+message builder. The method invocation above has the same effect as invoking
+`_messageBus.sendMessage(...)` with the destination and message configured in
+the message builder. However, it's usually simpler to send a message from the
+message builder directly without first obtaining a message instance.
 
-```.java
-messageBuilder.send();
-```
-
-This method invocation has the same effect as invoking
-`messageBus.sendMessage(...)` with the destination and message configured in
-the message builder.
-
-A complete example looks like this:
+A complete message builder example looks like this:
 
 ```.java
 @Component(immediate = true)
@@ -268,9 +254,9 @@ class MessagingBuilderComponent {
 		).setPayload(
 			payload
 		).put(
-			"property3", foo
+			"property1", foo
 		).put(
-			"property4", bar
+			"property2", bar
 		).send();
 	}
 
@@ -309,9 +295,11 @@ This step is the same as for asynchronous messaging.
 ```.java
 @Component(service = DestinationConfiguration.class)
 public class MySynchronousDestination extends DestinationConfiguration {
+
 	public MySynchronousDestination() {
 		super(DestinationType.SYNCHRONOUS, "synchronousDestination");
 	}
+
 }
 ```
 
@@ -321,13 +309,6 @@ Messages sent to synchronous destinations are sent on the sender's thread while
 messages sent to asynchronous destinations are sent on separate worker threads.
 So it's perfectly acceptable to send a synchronous message to a parallel
 (asynchronous) destination.
-
-<!-- TODO: Is there a difference in the meaning of the word 'synchronous'
-between 'synchronousDestination` and `sendSynchronousMessage`? E.g., can either
-synchronous or asynchronous messages be sent to a synchronous destination? In
-addition to the definition of synchronous described above in the Concepts
-section is there another definition of synchronous that means a message that
-expects a response?-->
 
 #### Step 2: Creating and Registering a MessageListener
 
@@ -339,9 +320,10 @@ does this:
 ```.java
 @Component(property = "destination.name=parallelDestination")
 public class ResponseMessageListener implements MessageListener {
+
 	@Override
 	public void receive(Message message) throws MessageListenerException {
-		// just bounce the message back to the response destination
+		// Simply bounce the message back to the response destination
 		_messageBuilderFactory.createResponse(
 			message
 		).setPayload(
@@ -368,7 +350,7 @@ message. The response is sent asynchronously (`responseMessageBuilder.send()`)
 since only the original message requires a response. The response does not
 itself require a response.
 
-#### Step 3: Create, Populate, and Send a synchronous Message
+#### Step 3: Creating, Populating, and Sending Synchronous Messages
 
 Creating a synchronous message is done exactly the same way as shown earlier. You
 can either create a new message directly or you can create a message builder instead.
@@ -385,7 +367,7 @@ message.setResponseDestinationName(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE
 To send the message, use the message bus like this:
 
 ```.java
-Object response = messageBus.sendSynchronousMessage(destinationName, message);
+Object response = _messageBus.sendSynchronousMessage(destinationName, message);
 ```
 
 Note that `sendSynchronousMessage` returns a response object. In this example, our
@@ -399,8 +381,8 @@ result of `sendSynchronousMessage`:
 System.out.println("response: " + response);
 ```
 
-Instead of creating a message manually and getting then sending it via the Message
-Bus, use can use a message builder.
+Instead of creating a message manually and then sending it via the Message Bus,
+you can use a message builder:
 
 ```.java
 Object response = _messageBuilderFactory.create(
@@ -430,7 +412,7 @@ take place. In this section, you'll see how to specify processing that should
 take place when destinations are added to or removed from the message bus or
 when message listeners are added to or removed from a destination. In the next
 section, you'll see how to specify processing that should take place
-immediately before and / or after a message is received.
+immediately before or after a message is sent or received.
 
 To specify processing that should take place when destinations are added to or
 removed from the message bus, simply create a message bus event listener and
@@ -439,6 +421,7 @@ register it as an OSGi service:
 ```.java
 @Component
 class MyMessageBusEventListener implements MessageBusEventListener {
+
 	@Override
 	public void destinationAdded(Destination destination) {
 		// Your processing here
@@ -450,6 +433,7 @@ class MyMessageBusEventListener implements MessageBusEventListener {
 		// Your processing here
 		System.out.println("Destination removed!");
 	}
+
 }
 ```
 
@@ -463,6 +447,7 @@ Destination event listeners work nearly the same way:
 ```.java
 @Component(property = "destination.name=some_destination")
 class MyDestinationEventListener implements DestinationEventListener {
+
 	@Override
 	public void messageListenerRegistered(
 		String destinationName, MessageListener messageListener) {
@@ -478,14 +463,15 @@ class MyDestinationEventListener implements DestinationEventListener {
 		System.out.println(
 			"Message listener unregistered with " + destinationName + "!");
 	}
+
 }
 ```
 
-One important difference is that while message bus event listeners listen globally
-(at the Message Bus scope) for any destination that are added or removed,
-destination event listeners only listen for message listeners that are added or
-removed to a particular destination. So you must specify that destination as a
-property of your destination event listener service.
+One important difference is that while message bus event listeners listen
+globally (at the Message Bus scope) for any destinations that are added or
+removed, destination event listeners only listen for message listeners that are
+added to or removed from a particular destination. So you must specify the
+destination as a property of your destination event listener service.
 
 Don't confuse these three types of listeners:
 
@@ -565,6 +551,7 @@ class MyOutboundMessageProcessorFactory
 			}
 		}
 	}
+
 }
 ```
 
@@ -585,7 +572,7 @@ were invoked:
 _messageBuilderFactory.create(
 	destinationName
 ).setPayload(
-	"ompMessagePayload"
+	"messagePayload"
 ).send();
 ```
 
@@ -594,15 +581,133 @@ You can also check that the extra key / value pair added to the message in the
 
 Inbound message processors work similarly to outbound message processors.
 
-<!--
-TODO: Will these topics be useful?
-ANSWER: In order to fully document, we should include these.
+### Message Bus Configuration
 
-### Configuration of Message Bus
+The message bus provides two configuration options:
 
-### Configuration of Destinations
+- `synchronous-message-sender-mode`
+- `synchronous-message-sender-timeout`
+
+`synchronousMessageSenderMode` has two possible values: `DEFAULT` or `DIRECT`.
+When in `DEFAULT` mode, the message bus uses a message sender that invokes the
+destination's `send` method. This means that the destination is responsible for
+determining how the messages are delivered to the destination's message
+listeners. If the destination is a parallel destination, for example, messages
+will be dispatched to the message listeners on parallel worker threads. When in
+`DIRECT` mode, the message bus uses a message sender that directly invokes the
+`receive` method of each of the destination's message listeners. There is not
+even a possibility for separate worker threads to be involved since the
+destination type is ignored.
+
+`synchronous-message-sender-timeout` represents the amount of time, in
+milliseconds, to wait for a response when a synchronous message is sent. If no
+response is received before the time expires, a `MessageBusException` is
+thrown.
+
+Both the `synchronousMessageSenderMode` and the
+`synchronous-message-sender-timeout` properties can be configured via standard
+OSGi Configuration Admin tools. You can configure these properties, for example, using
+the user interface provided by
+[Apache Felix Web Console](http://felix.apache.org/documentation/subprojects/apache-felix-web-console.html).
+Or you could use a configuration properties file with
+[Apache Felix File Install](http://felix.apache.org/documentation/subprojects/apache-felix-file-install.html).
+
+### Destination Configuration
+
+Destinations also provides some configuration options:
+
+- `destination-name`
+- `max-queue-size`
+- `worker-core-size`
+- `worker-max-size`
+
+The `destination-name` indicates the specific destination to which the worker
+configuration specified by the remaining three configuration options applies.
+
+Recall that when messages are sent to an asynchronous (parallel or serial)
+destination, they are added to a queue before they are dispatched on worker
+threads. The `max-queue-size` property determines the maximum size of this
+queue. If there are more messages to be queued up for dispatch than the queue
+can hold, the excess messages are not sent. These cases can optionally be
+handled by a rejected execution handler. See the next section for details.
+
+The `worker-core-size` and `worker-max-size` properties control the size of the
+destination's thread pool. The core and maximum pool sizes work the same way as
+for Java's `ThreadPoolExecutor` class: [http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html).
+
+As with the message bus configuration options, destination configurations can
+be configured via standard OSGi Configuration Admin tools.
 
 ### Rejected Execution Handlers
 
-### Executor Service Registrar
--->
+Rejected execution handlers determine how to handle the failure that occurs
+when the number of messages to be sent exceeds the maximum thread pool size. To
+create a rejected execution handler, implement the `RejectedExecutionHandler`
+interface and publish your class as an OSGi service. As seen earlier, this can
+be easily done by creating your class as a declarative services component.
+Here's an example:
+
+```.java
+	@Component(
+		property = {"destination.name=yourDestinationName"},
+		service = {RejectedExecutionHandler.class}
+	)
+	public class RejectedExecutionHandlerImpl
+		implements RejectedExecutionHandler {
+
+		@Override
+		public void rejectedExecution(
+			Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+
+			_map.put((MessageRunnable)runnable, threadPoolExecutor);
+		}
+
+		private final Map<MessageRunnable, ThreadPoolExecutor> _map =
+			new ConcurrentHashMap<>();
+
+	}
+```
+
+<!-- TODO: Is there a way to make rejected execution handlers apply to all
+destinations? -->
+Rejected execution handlers are applied to specific destinations so remember to
+specify the appropriate destination name in your handler's `@Component`
+annotation.
+
+### Executor Service Registrars
+
+Executor Service Registrars provide a mechanism for tracking thread pools. If
+you need to track the thread pools of your destinations, publish executor
+service registrars for your destinations. To do so, implement the
+`ExecutorServiceRegistrar` interface and create your class as a declarative
+services component. Here's an example:
+
+```.java
+@Component(
+	property = {"destination.name=yourDestinationName"},
+	service = {ExecutorServiceRegistrar.class}
+)
+public class ExecutorServiceRegistrarImpl
+	implements Callable<Map<String, ExecutorService>>,
+			   ExecutorServiceRegistrar {
+
+	@Override
+	public <T extends ExecutorService> T registerExecutorService(
+		String name, T executorService) {
+
+		_executorServices.put(name, executorService);
+
+		return executorService;
+	}
+
+	private final Map<String, ExecutorService> _executorServices =
+		new ConcurrentHashMap<>();
+
+}
+```
+
+<!-- TODO: Is there a way to make rejected execution handlers apply to all
+destinations? -->
+Executor service registrars, like rejected execution handlers, are applied to
+specific destinations so remember to specify the appropriate destination name
+in your handler's `@Component` annotation.
