@@ -1,0 +1,16 @@
+Bundle-Name: Liferay Messaging Implementation
+Bundle-SymbolicName: com.liferay.messaging.impl
+Bundle-Version: 1.0.0
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title:
+Provide-Capability:\
+	osgi.implementation;\
+		osgi.implementation=com.liferay.messaging;\
+		version:Version=${Bundle-Version}
+-conditionalpackage:\
+	org.apache.felix.converter.dto,\
+	org.apache.felix.converter.impl,\
+	\
+	org.osgi.util.converter,\
+	org.osgi.util.function
+-dsannotations-options: inherit

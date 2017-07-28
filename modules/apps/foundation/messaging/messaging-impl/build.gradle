@@ -1,0 +1,28 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+repositories {
+	maven {
+		url "https://repository.apache.org/content/repositories/snapshots"
+	}
+	maven {
+		url "https://oss.sonatype.org/content/repositories/osgi-snapshots"
+	}
+}
+
+dependencies {
+	provided group: "com.liferay", name: "com.liferay.petra.concurrent", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.io", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.memory", version: "1.0.0"
+	provided group: "org.apache.felix", name: "org.apache.felix.converter", version: "0.1.0-20170620.155843-7"
+	provided group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
+	provided group: "org.osgi", name: "org.osgi.service.cm", version: "1.5.0"
+	provided group: "org.osgi", name: "org.osgi.service.component", version: "1.3.0"
+	provided group: "org.osgi", name: "org.osgi.service.component.annotations", version: "1.3.0"
+	provided group: "org.osgi", name: "org.osgi.service.metatype.annotations", version: "1.3.0"
+	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.2"
+	provided project(":apps:foundation:messaging:messaging-api")
+	provided project(":apps:foundation:messaging:messaging-spi")
+
+	testCompile group: "com.liferay", name: "com.liferay.registry.api", version: "1.1.0"
+}
