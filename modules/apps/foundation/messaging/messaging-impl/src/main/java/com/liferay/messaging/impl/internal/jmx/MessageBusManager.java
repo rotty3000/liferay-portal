@@ -36,6 +36,7 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ import org.slf4j.LoggerFactory;
 @Component(
 	immediate = true,
 	property = {
-		"jmx.objectname=com.liferay.portal.messaging:classification=message_bus,name=MessageBusManager",
+		"jmx.objectname=com.liferay.messaging:classification=message_bus,name=MessageBusManager",
 		"jmx.objectname.cache.key=MessageBusManager"
 	},
 	service = {DynamicMBean.class, MessageBusEventListener.class}
@@ -137,17 +138,13 @@ public class MessageBusManager
 		_mbeanServiceRegistrations.clear();
 	}
 
-	@Reference(unbind = "-")
-	protected void setMessageBus(MessageBus messageBus) {
-		_messageBus = messageBus;
-	}
-
 	private static final Logger _logger = LoggerFactory.getLogger(
 		MessageBusManager.class);
 
 	private BundleContext _bundleContext;
 	private final Map<String, ServiceRegistration<DynamicMBean>>
 		_mbeanServiceRegistrations = new ConcurrentHashMap<>();
+	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private MessageBus _messageBus;
 
 }
