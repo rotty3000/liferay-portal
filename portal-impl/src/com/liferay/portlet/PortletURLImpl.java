@@ -70,6 +70,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import javax.portlet.MutableRenderParameters;
+import javax.portlet.MutableResourceParameters;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
@@ -78,6 +80,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 import javax.portlet.WindowStateException;
+import javax.portlet.annotations.PortletSerializable;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -171,6 +174,21 @@ public class PortletURLImpl
 		if (key == null) {
 			throw new IllegalArgumentException();
 		}
+	}
+
+	@Override
+	public Appendable append(Appendable appendable) throws IOException {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public Appendable append(Appendable appendable, boolean escapeXml)
+		throws IOException {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override
@@ -298,6 +316,20 @@ public class PortletURLImpl
 		return _removedParameterNames;
 	}
 
+	@Override
+	public MutableRenderParameters getRenderParameters() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public MutableResourceParameters getResourceParameters() {
+
+		// TODO portlet3
+		return null;
+	}
+
 	/**
 	 * @deprecated As of 7.0.0, replaced by {@link
 	 *             #visitReservedParameters(BiConsumer)}
@@ -393,6 +425,11 @@ public class PortletURLImpl
 		_anchor = anchor;
 
 		clearCache();
+	}
+
+	@Override
+	public void setBeanParameter(PortletSerializable portletSerializable) {
+		// TODO portlet3
 	}
 
 	@Override

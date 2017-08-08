@@ -38,6 +38,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.PortletContext;
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
 
 import javax.xml.namespace.QName;
 
@@ -112,6 +114,13 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 	}
 
 	@Override
+	public Enumeration<PortletMode> getPortletModes(String mimeType) {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
 	public String getPortletName() {
 		return _portletName;
 	}
@@ -120,6 +129,13 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 	public Enumeration<QName> getProcessingEventQNames() {
 		return Collections.enumeration(
 			toJavaxQNames(_portlet.getProcessingEvents()));
+	}
+
+	@Override
+	public Map<String, QName> getPublicRenderParameterDefinitions() {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override
@@ -203,6 +219,13 @@ public class PortletConfigImpl implements LiferayPortletConfig {
 		}
 
 		return Collections.enumeration(supportedLocales);
+	}
+
+	@Override
+	public Enumeration<WindowState> getWindowStates(String mimeType) {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override

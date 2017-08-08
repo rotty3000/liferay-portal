@@ -99,6 +99,13 @@ public class ResourceResponseImpl
 	}
 
 	@Override
+	public int getStatus() {
+
+		// TODO portlet3
+		return 0;
+	}
+
+	@Override
 	public void setCharacterEncoding(String charset) {
 		response.setCharacterEncoding(charset);
 	}
@@ -106,6 +113,11 @@ public class ResourceResponseImpl
 	@Override
 	public void setContentLength(int length) {
 		response.setContentLength(length);
+	}
+
+	@Override
+	public void setContentLengthLong(long length) {
+		// TODO portlet3
 	}
 
 	@Override
@@ -133,6 +145,11 @@ public class ResourceResponseImpl
 	@Override
 	public void setLocale(Locale locale) {
 		response.setLocale(locale);
+	}
+
+	@Override
+	public void setStatus(int statusCode) {
+		// TODO portlet3
 	}
 
 }

@@ -53,7 +53,9 @@ public class RenderResponseImpl
 
 	@Override
 	public void setNextPossiblePortletModes(
-		Collection<PortletMode> portletModes) {
+		Collection<? extends PortletMode> portletModes) {
+
+		// TODO portlet3
 	}
 
 	@Override

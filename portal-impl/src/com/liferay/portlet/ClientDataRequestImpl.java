@@ -19,7 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import java.util.Collection;
+
 import javax.portlet.ClientDataRequest;
+import javax.portlet.PortletException;
+
+import javax.servlet.http.Part;
 
 /**
  * @author Brian Wing Shun Chan
@@ -38,6 +43,13 @@ public abstract class ClientDataRequestImpl
 	}
 
 	@Override
+	public long getContentLengthLong() {
+
+		// TODO portlet3
+		return 0;
+	}
+
+	@Override
 	public String getContentType() {
 		return getHttpServletRequest().getContentType();
 	}
@@ -45,6 +57,20 @@ public abstract class ClientDataRequestImpl
 	@Override
 	public String getMethod() {
 		return getHttpServletRequest().getMethod();
+	}
+
+	@Override
+	public Part getPart(String name) throws IOException, PortletException {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public Collection<Part> getParts() throws IOException, PortletException {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override

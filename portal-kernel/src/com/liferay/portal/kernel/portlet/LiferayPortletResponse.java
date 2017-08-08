@@ -18,8 +18,10 @@ import com.liferay.portal.kernel.model.Portlet;
 
 import java.util.Map;
 
+import javax.portlet.ActionURL;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
+import javax.portlet.RenderURL;
 import javax.portlet.ResourceURL;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +37,7 @@ public interface LiferayPortletResponse extends PortletResponse {
 
 	public void addIntHeader(String name, int value);
 
-	public PortletURL createActionURL();
+	public <T extends PortletURL & ActionURL> T createActionURL();
 
 	public LiferayPortletURL createActionURL(String portletName);
 
@@ -51,7 +53,7 @@ public interface LiferayPortletResponse extends PortletResponse {
 	public LiferayPortletURL createLiferayPortletURL(
 		String portletName, String lifecycle);
 
-	public PortletURL createRenderURL();
+	public <T extends PortletURL & RenderURL> T createRenderURL();
 
 	public LiferayPortletURL createRenderURL(String portletName);
 

@@ -23,14 +23,18 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Map;
 
+import javax.portlet.PortletAsyncContext;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.ResourceParameters;
 import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -45,6 +49,13 @@ public class ResourceRequestImpl
 	}
 
 	@Override
+	public DispatcherType getDispatcherType() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
 	public String getETag() {
 		return null;
 	}
@@ -55,6 +66,13 @@ public class ResourceRequestImpl
 	}
 
 	@Override
+	public PortletAsyncContext getPortletAsyncContext() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
 	public Map<String, String[]> getPrivateRenderParameterMap() {
 		return null;
 	}
@@ -62,6 +80,44 @@ public class ResourceRequestImpl
 	@Override
 	public String getResourceID() {
 		return _resourceID;
+	}
+
+	@Override
+	public ResourceParameters getResourceParameters() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public boolean isAsyncStarted() {
+
+		// TODO portlet3
+		return false;
+	}
+
+	@Override
+	public boolean isAsyncSupported() {
+
+		// TODO portlet3
+		return false;
+	}
+
+	@Override
+	public PortletAsyncContext startPortletAsync()
+		throws IllegalStateException {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public PortletAsyncContext startPortletAsync(
+		ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws IllegalStateException {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override

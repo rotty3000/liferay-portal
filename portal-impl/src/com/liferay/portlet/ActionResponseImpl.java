@@ -15,13 +15,23 @@
 package com.liferay.portlet;
 
 import javax.portlet.ActionResponse;
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.RenderURL;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class ActionResponseImpl
 	extends StateAwareResponseImpl implements ActionResponse {
+
+	@Override
+	public RenderURL createRedirectURL(MimeResponse.Copy copy)
+		throws IllegalStateException {
+
+		// TODO portlet3
+		return null;
+	}
 
 	@Override
 	public String getLifecycle() {
