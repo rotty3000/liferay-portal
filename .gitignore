@@ -48,6 +48,7 @@
 /lib/development/annotations.jar
 /lib/development/ant-apache-bsf.jar
 /lib/development/appium.jar
+/lib/development/biz.aQute.bnd.jar
 /lib/development/catalina.jar
 /lib/development/com.liferay.ant.bnd.jar
 /lib/development/com.liferay.util.taglib.compat.jar
