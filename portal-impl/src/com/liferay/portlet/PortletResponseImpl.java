@@ -50,12 +50,14 @@ import java.lang.reflect.Constructor;
 import java.security.PrivilegedAction;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.portlet.ActionURL;
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletModeException;
@@ -64,6 +66,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.PortletURLGenerationListener;
+import javax.portlet.RenderURL;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowStateException;
 import javax.portlet.filter.PortletResponseWrapper;
@@ -223,8 +226,10 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 	}
 
 	@Override
-	public PortletURL createActionURL() {
-		return createActionURL(portletName);
+	public <T extends PortletURL & ActionURL> T createActionURL() {
+
+		// TODO portlet3
+		return (T) createActionURL(portletName);
 	}
 
 	@Override
@@ -284,8 +289,10 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 	}
 
 	@Override
-	public PortletURL createRenderURL() {
-		return createRenderURL(portletName);
+	public <T extends PortletURL & RenderURL> T createRenderURL() {
+
+		// TODO portlet3
+		return (T) createRenderURL(portletName);
 	}
 
 	@Override
@@ -388,6 +395,27 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 
 		return properties;
+	}
+
+	@Override
+	public String getProperty(String key) {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public Collection<String> getPropertyValues(String key) {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public Collection<String> getPropertyNames() {
+
+		// TODO portlet3
+		return null;
 	}
 
 	public URLEncoder getUrlEncoder() {

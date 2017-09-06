@@ -72,6 +72,34 @@ public class PortletContextImpl implements LiferayPortletContext {
 	}
 
 	@Override
+	public ClassLoader getClassLoader() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public String getContextPath() {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public int getEffectiveMajorVersion() {
+
+		// TODO portlet3
+		return 0;
+	}
+
+	@Override
+	public int getEffectiveMinorVersion() {
+
+		// TODO portlet3
+		return 0;
+	}
+
+	@Override
 	public String getInitParameter(String name) {
 		if (name == null) {
 			throw new IllegalArgumentException();

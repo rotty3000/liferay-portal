@@ -23,9 +23,12 @@ import java.io.PrintWriter;
 
 import java.util.Locale;
 
+import javax.portlet.ActionURL;
 import javax.portlet.CacheControl;
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.RenderURL;
 import javax.portlet.WindowState;
 
 /**
@@ -40,6 +43,20 @@ public abstract class MimeResponseImpl
 		response.flushBuffer();
 
 		_calledFlushBuffer = true;
+	}
+
+	@Override
+	public ActionURL createActionURL(Copy copy) {
+
+		// TODO portlet3
+		return null;
+	}
+
+	@Override
+	public RenderURL createRenderURL(Copy copy) {
+
+		// TODO portlet3
+		return null;
 	}
 
 	@Override

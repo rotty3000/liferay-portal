@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -32,17 +33,25 @@ import java.util.Map;
 
 import javax.el.ELContext;
 
+import javax.portlet.ActionParameters;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.ActionURL;
 import javax.portlet.CacheControl;
+import javax.portlet.MimeResponse;
+import javax.portlet.MutableRenderParameters;
 import javax.portlet.PortalContext;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
 import javax.portlet.PortletURL;
+import javax.portlet.RenderParameters;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.RenderURL;
 import javax.portlet.ResourceURL;
 import javax.portlet.WindowState;
 
@@ -80,6 +89,11 @@ public class AlloyMockUtil {
 		extends MockPortletRequest implements ActionRequest {
 
 		@Override
+		public ActionParameters getActionParameters() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public String getCharacterEncoding() {
 			throw new UnsupportedOperationException();
 		}
@@ -90,12 +104,27 @@ public class AlloyMockUtil {
 		}
 
 		@Override
+		public long getContentLengthLong() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public String getContentType() {
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public String getMethod() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Part getPart(String name) throws IOException, PortletException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Collection<Part> getParts() throws IOException, PortletException {
 			throw new UnsupportedOperationException();
 		}
 
@@ -120,12 +149,23 @@ public class AlloyMockUtil {
 		extends MockPortletResponse implements ActionResponse {
 
 		@Override
+		public RenderURL createRedirectURL(MimeResponse.Copy copy)
+			throws IllegalStateException {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public PortletMode getPortletMode() {
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public Map<String, String[]> getRenderParameterMap() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public MutableRenderParameters getRenderParameters() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1063,6 +1103,11 @@ public class AlloyMockUtil {
 		}
 
 		@Override
+		public PortletContext getPortletContext() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public PortletMode getPortletMode() {
 			throw new UnsupportedOperationException();
 		}
@@ -1113,6 +1158,11 @@ public class AlloyMockUtil {
 		}
 
 		@Override
+		public RenderParameters getRenderParameters() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public String getRequestedSessionId() {
 			throw new UnsupportedOperationException();
 		}
@@ -1144,6 +1194,11 @@ public class AlloyMockUtil {
 
 		@Override
 		public java.security.Principal getUserPrincipal() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String getUserAgent() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1317,6 +1372,21 @@ public class AlloyMockUtil {
 		}
 
 		@Override
+		public String getProperty(String key) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Collection<String> getPropertyValues(String key) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public Collection<String> getPropertyNames() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public void setDateHeader(String name, long date) {
 			throw new UnsupportedOperationException();
 		}
@@ -1357,12 +1427,22 @@ public class AlloyMockUtil {
 		extends MockPortletResponse implements RenderResponse {
 
 		@Override
+		public ActionURL createActionURL(Copy copy) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public PortletURL createActionURL() {
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
 		public PortletURL createRenderURL() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public RenderURL createRenderURL(Copy copy) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1438,7 +1518,7 @@ public class AlloyMockUtil {
 
 		@Override
 		public void setNextPossiblePortletModes(
-			Collection<PortletMode> portletModes) {
+			Collection<? extends PortletMode> portletModes) {
 
 			throw new UnsupportedOperationException();
 		}
