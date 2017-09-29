@@ -15,12 +15,28 @@
 package com.liferay.util.servlet;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class NullServletOutputStream extends ServletOutputStream {
 
+	@Override
+	public boolean isReady() {
+		return true;
+	}
+
+	/**
+	* @since Servlet 3.1
+	*/
+	@Override
+	public void setWriteListener(WriteListener listener) {
+	}
+
+	/**
+	* @since Servlet 3.1
+	*/
 	@Override
 	public void write(int b) {
 	}
