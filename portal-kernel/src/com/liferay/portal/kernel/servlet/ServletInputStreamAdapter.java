@@ -17,6 +17,7 @@ package com.liferay.portal.kernel.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 
 /**
@@ -36,6 +37,22 @@ public class ServletInputStreamAdapter extends ServletInputStream {
 	@Override
 	public void close() throws IOException {
 		inputStream.close();
+	}
+
+	/**
+	* @since Servlet 3.1
+	*/
+	@Override
+	public boolean isFinished() {
+		return false;
+	}
+
+	/**
+	* @since Servlet 3.1
+	*/
+	@Override
+	public boolean isReady() {
+		return true;
 	}
 
 	@Override
@@ -66,6 +83,13 @@ public class ServletInputStreamAdapter extends ServletInputStream {
 	@Override
 	public void reset() throws IOException {
 		inputStream.reset();
+	}
+
+	/**
+	* @since Servlet 3.1
+	*/
+	@Override
+	public void setReadListener(ReadListener listener) {
 	}
 
 	@Override
