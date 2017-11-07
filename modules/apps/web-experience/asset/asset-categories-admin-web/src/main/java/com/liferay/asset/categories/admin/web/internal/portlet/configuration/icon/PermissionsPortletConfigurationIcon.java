@@ -37,7 +37,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Eudaldo Alonso
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + com.liferay.asset.categories.admin.web.internal.constants.AssetCategoriesAdminPortletKeys.ASSET_CATEGORIES_ADMIN
 	},
