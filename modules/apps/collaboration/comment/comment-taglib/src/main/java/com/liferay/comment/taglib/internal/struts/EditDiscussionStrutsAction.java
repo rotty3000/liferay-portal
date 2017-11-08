@@ -56,7 +56,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true, property = "path=/portal/comment/discussion/edit",
+	property = "path=/portal/comment/discussion/edit",
 	service = StrutsAction.class
 )
 public class EditDiscussionStrutsAction extends BaseStrutsAction {
