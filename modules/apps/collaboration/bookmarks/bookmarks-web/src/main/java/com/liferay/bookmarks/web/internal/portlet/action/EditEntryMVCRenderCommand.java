@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Levente Hudák
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + BookmarksPortletKeys.BOOKMARKS,
 		"javax.portlet.name=" + BookmarksPortletKeys.BOOKMARKS_ADMIN,
