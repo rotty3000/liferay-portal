@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  * @author Roberto Díaz
  */
-@Component(immediate = true, service = UpgradeStepRegistrator.class)
+@Component(service = UpgradeStepRegistrator.class)
 public class NotificationsWebUpgrade implements UpgradeStepRegistrator {
 
 	@Override
