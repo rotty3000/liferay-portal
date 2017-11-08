@@ -42,7 +42,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  */
 @Component(
-	immediate = true, property = {"form.navigator.entry.order:Integer=90"},
+	property = {"form.navigator.entry.order:Integer=90"},
 	service = FormNavigatorEntry.class
 )
 public class MentionsSitesFormNavigatorEntry
