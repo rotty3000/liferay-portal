@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = ServiceWrapper.class)
+@Component(service = ServiceWrapper.class)
 public class ExternalRepositoryDLAppHelperLocalServiceWrapper
 	extends DLAppHelperLocalServiceWrapper {
 
