@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Pavel Savinov
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class AssetTagIndexer extends BaseIndexer<AssetTag> {
 
 	public static final String CLASS_NAME = AssetTag.class.getName();
