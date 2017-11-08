@@ -119,7 +119,7 @@ import org.xml.sax.XMLReader;
  * @author Julio Camarero
  * @author Mate Thurzo
  */
-@Component(immediate = true)
+@Component
 @ProviderType
 public class ExportImportHelperImpl implements ExportImportHelper {
 

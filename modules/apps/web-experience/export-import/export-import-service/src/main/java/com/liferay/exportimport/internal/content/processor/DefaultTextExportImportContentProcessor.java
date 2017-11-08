@@ -81,7 +81,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.exportimport.configuration.ExportImportServiceConfiguration",
-	immediate = true, property = {"model.class.name=java.lang.String"},
+	property = {"model.class.name=java.lang.String"},
 	service = ExportImportContentProcessor.class
 )
 public class DefaultTextExportImportContentProcessor

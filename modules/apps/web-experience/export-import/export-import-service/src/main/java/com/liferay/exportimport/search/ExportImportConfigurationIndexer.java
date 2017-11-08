@@ -55,7 +55,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Mate Thurzo
  * @author Akos Thurzo
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 @ProviderType
 public class ExportImportConfigurationIndexer
 	extends BaseIndexer<ExportImportConfiguration> {

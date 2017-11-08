@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Mate Thurzo
  */
-@Component(immediate = true)
+@Component
 @ProviderType
 public class PortletDataContextFactoryImpl
 	implements PortletDataContextFactory {
