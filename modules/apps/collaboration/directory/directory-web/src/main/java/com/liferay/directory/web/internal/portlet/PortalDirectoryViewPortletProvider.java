@@ -25,7 +25,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Pei-Jung Lan
  */
 @Component(
-	immediate = true,
 	property = {
 		"model.class.name=" + PortalDirectoryApplicationType.PortalDirectory.CLASS_NAME
 	},
