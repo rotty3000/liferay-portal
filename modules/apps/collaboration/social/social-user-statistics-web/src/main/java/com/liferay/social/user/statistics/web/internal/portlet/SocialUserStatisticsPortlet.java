@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Iván Zaera
  */
 @Component(
-	immediate = true,
 	property = {
 		"com.liferay.portlet.css-class-wrapper=portlet-user-statistics",
 		"com.liferay.portlet.display-category=category.social",

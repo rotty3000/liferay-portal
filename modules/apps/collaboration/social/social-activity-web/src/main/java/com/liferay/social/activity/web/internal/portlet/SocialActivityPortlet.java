@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Roberto Díaz
  */
 @Component(
-	immediate = true,
 	property = {
 		"com.liferay.portlet.css-class-wrapper=portlet-social-activity",
 		"com.liferay.portlet.display-category=category.hidden",

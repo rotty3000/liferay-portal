@@ -44,7 +44,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Roberto Díaz
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + SocialActivityPortletKeys.SOCIAL_ACTIVITY,
 		"mvc.command.name=/social_activity/edit_activity_settings"

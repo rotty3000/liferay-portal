@@ -36,7 +36,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Iván Zaera
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + SocialUserStatisticsPortletKeys.SOCIAL_USER_STATISTICS},
 	service = ConfigurationAction.class
 )
