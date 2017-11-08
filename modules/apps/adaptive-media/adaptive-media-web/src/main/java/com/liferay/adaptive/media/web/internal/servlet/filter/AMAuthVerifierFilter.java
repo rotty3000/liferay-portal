@@ -25,7 +25,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {
 		"filter.init.auth.verifier.OAuthVerifier.urls.includes=/" + AMWebConstants.SERVLET_PATH + "/*",
 		"filter.init.auth.verifier.SyncAuthVerifier.urls.includes=/" + AMWebConstants.SERVLET_PATH + "/*",

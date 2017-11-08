@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Alejandro Tardín
  */
 @Component(
-	immediate = true, service = AMJournalArticleContentHTMLReplacer.class
+	service = AMJournalArticleContentHTMLReplacer.class
 )
 public class AMJournalArticleContentHTMLReplacer {
 

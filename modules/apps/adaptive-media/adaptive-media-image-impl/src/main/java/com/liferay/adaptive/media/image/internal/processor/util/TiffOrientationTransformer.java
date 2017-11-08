@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Sergio González
  */
-@Component(immediate = true, service = TiffOrientationTransformer.class)
+@Component(service = TiffOrientationTransformer.class)
 public class TiffOrientationTransformer {
 
 	public RenderedImage transform(Supplier<InputStream> inputStreamSupplier)
