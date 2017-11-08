@@ -38,7 +38,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + QuickNotePortletKeys.QUICK_NOTE,
 		"mvc.command.name=save"

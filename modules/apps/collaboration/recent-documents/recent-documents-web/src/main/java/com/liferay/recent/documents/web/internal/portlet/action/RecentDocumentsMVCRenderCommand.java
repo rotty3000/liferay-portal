@@ -26,7 +26,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + RecentDocumentsPortletKeys.RECENT_DOCUMENTS,
 		"mvc.command.name=/recent_documents/view"
