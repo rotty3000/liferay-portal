@@ -67,7 +67,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Shin
  * @author Brian Wing Shun Chan
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class KBArticleIndexer extends BaseIndexer<KBArticle> {
 
 	public static final String CLASS_NAME = KBArticle.class.getName();
