@@ -37,7 +37,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Iván Zaera
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + WikiPortletKeys.WIKI,
 		"javax.portlet.name=" + WikiPortletKeys.WIKI_ADMIN,

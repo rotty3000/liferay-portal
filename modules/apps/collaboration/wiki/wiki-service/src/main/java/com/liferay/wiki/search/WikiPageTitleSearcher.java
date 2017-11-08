@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Roberto Díaz
  */
-@Component(immediate = true, service = WikiPageTitleSearcher.class)
+@Component(service = WikiPageTitleSearcher.class)
 public class WikiPageTitleSearcher extends BaseSearcher {
 
 	public static final String[] CLASS_NAMES = {WikiPage.class.getName()};

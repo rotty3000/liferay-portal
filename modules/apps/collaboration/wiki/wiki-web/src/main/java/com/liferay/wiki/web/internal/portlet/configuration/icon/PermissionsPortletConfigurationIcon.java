@@ -42,7 +42,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + WikiPortletKeys.WIKI_ADMIN},
 	service = PortletConfigurationIcon.class
 )
