@@ -71,7 +71,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Zsolt Berentey
  * @author Roberto Díaz
  */
-@Component(immediate = true, service = StagedModelDataHandler.class)
+@Component(service = StagedModelDataHandler.class)
 public class BlogsEntryStagedModelDataHandler
 	extends BaseStagedModelDataHandler<BlogsEntry> {
 

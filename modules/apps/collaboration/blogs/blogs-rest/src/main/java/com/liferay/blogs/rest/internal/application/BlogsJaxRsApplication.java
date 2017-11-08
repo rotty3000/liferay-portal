@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Hernández
  */
 @ApplicationPath("/")
-@Component(immediate = true, service = Application.class)
+@Component(service = Application.class)
 public class BlogsJaxRsApplication extends Application {
 
 	@Override

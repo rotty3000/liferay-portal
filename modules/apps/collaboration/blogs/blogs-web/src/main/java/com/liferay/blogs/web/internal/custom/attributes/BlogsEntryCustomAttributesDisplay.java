@@ -25,7 +25,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Jorge Ferrer
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + BlogsPortletKeys.BLOGS},
 	service = CustomAttributesDisplay.class
 )
