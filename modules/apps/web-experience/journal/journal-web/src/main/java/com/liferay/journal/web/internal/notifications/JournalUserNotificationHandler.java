@@ -40,7 +40,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Iván Zaera
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + JournalPortletKeys.JOURNAL},
 	service = UserNotificationHandler.class
 )

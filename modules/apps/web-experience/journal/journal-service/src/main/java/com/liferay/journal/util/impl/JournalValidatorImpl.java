@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author David Zhang
  */
-@Component(immediate = true, service = JournalValidator.class)
+@Component(service = JournalValidator.class)
 public final class JournalValidatorImpl implements JournalValidator {
 
 	@Override

@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Eduardo Garcia
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class JournalFolderIndexer
 	extends BaseIndexer<JournalFolder> implements FolderIndexer {
 

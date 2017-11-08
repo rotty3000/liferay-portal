@@ -29,7 +29,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eduardo Garcia
  */
 @Component(
-	immediate = true,
 	property = {"model.class.name=com.liferay.journal.model.JournalArticle"},
 	service = TermsOfUseContentProvider.class
 )
