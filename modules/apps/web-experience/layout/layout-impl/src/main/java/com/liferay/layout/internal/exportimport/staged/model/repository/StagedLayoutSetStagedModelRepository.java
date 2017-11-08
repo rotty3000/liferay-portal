@@ -48,7 +48,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	property = {
 		"model.class.name=com.liferay.layout.set.model.adapter.StagedLayoutSet"
 	},

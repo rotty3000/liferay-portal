@@ -39,7 +39,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eudaldo Alonso
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + LayoutAdminPortletKeys.VIEW_LAYOUTS},
 	service = PortletConfigurationIcon.class
 )
