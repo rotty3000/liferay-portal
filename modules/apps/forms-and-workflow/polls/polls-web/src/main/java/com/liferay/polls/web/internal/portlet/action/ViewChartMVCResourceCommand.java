@@ -46,7 +46,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + PollsPortletKeys.POLLS,
 		"javax.portlet.name=" + PollsPortletKeys.POLLS_DISPLAY,

@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Shinn Lok
  * @author Mate Thurzo
  */
-@Component(immediate = true, service = StagedModelDataHandler.class)
+@Component(service = StagedModelDataHandler.class)
 public class PollsQuestionStagedModelDataHandler
 	extends BaseStagedModelDataHandler<PollsQuestion> {
 

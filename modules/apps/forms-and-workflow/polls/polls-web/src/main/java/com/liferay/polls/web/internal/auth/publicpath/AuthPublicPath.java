@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Miguel Pastor
  */
 @Component(
-	immediate = true, property = "auth.public.path=/polls/view_chart",
+	property = "auth.public.path=/polls/view_chart",
 	service = Object.class
 )
 public class AuthPublicPath {
