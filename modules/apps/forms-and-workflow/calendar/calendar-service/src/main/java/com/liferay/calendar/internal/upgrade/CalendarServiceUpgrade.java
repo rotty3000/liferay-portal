@@ -41,7 +41,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Manuel de la Peña
  */
 @Component(
-	immediate = true,
 	service = {CalendarServiceUpgrade.class, UpgradeStepRegistrator.class}
 )
 public class CalendarServiceUpgrade implements UpgradeStepRegistrator {

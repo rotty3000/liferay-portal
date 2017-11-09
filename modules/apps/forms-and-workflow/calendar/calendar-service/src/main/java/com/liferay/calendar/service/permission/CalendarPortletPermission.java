@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Andrea Di Giorgi
  */
 @Component(
-	immediate = true,
 	property = {"resource.name=" + CalendarPortletPermission.RESOURCE_NAME},
 	service = ResourcePermissionChecker.class
 )

@@ -61,7 +61,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adam Victor Brandizzi
  * @author Eduardo Lundgren
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class CalendarBookingIndexer extends BaseIndexer<CalendarBooking> {
 
 	public static final String CLASS_NAME = CalendarBooking.class.getName();
