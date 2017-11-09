@@ -30,7 +30,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true,
 	property = {
 		"com.liferay.frontend.image.editor.capability.category=adjust",
 		"com.liferay.frontend.image.editor.capability.controls=brightness",

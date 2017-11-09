@@ -29,7 +29,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Carlos Sierra Andrés
  */
 @Component(
-	immediate = true,
 	property = "bundle.symbolic.name=com.liferay.frontend.editor.lang"
 )
 public class FrontendEditorLangResourceBundleLoader

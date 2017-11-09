@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Ambrin Chaudhary
  */
-@Component(immediate = true, service = IGDisplayContextFactory.class)
+@Component(service = IGDisplayContextFactory.class)
 public class ImageEditorIGDisplayContextFactory
 	implements IGDisplayContextFactory {
 

@@ -49,7 +49,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + ImageEditorPortletKeys.IMAGE_EDITOR,
 		"mvc.command.name=/", "mvc.command.name=/image_editor/view"
