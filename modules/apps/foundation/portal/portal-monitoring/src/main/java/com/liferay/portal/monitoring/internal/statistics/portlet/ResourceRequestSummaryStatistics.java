@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	enabled = false, immediate = true,
+	enabled = false,
 	service = ResourceRequestSummaryStatistics.class
 )
 public class ResourceRequestSummaryStatistics

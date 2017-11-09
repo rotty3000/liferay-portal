@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(
-	enabled = false, immediate = true,
+	enabled = false,
 	property = {"namespace=com.liferay.monitoring.Service"},
 	service = {DataSampleProcessor.class, ServerStatistics.class}
 )

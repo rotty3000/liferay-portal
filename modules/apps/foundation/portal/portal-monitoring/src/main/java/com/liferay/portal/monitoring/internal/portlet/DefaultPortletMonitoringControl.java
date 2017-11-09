@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Philip Jones
  */
 @Component(
-	enabled = false, immediate = true, service = PortletMonitoringControl.class
+	enabled = false, service = PortletMonitoringControl.class
 )
 public class DefaultPortletMonitoringControl
 	implements PortletMonitoringControl {
