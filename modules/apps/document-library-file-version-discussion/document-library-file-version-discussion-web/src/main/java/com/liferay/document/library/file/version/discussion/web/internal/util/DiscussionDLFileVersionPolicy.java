@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true)
+@Component
 public class DiscussionDLFileVersionPolicy implements DLFileVersionPolicy {
 
 	@Override
