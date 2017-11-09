@@ -68,7 +68,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = SaveRecordSetMVCCommandHelper.class)
+@Component(service = SaveRecordSetMVCCommandHelper.class)
 public class SaveRecordSetMVCCommandHelper {
 
 	public DDLRecordSet saveRecordSet(

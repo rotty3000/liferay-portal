@@ -59,7 +59,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Rafael Praxedes
  */
 @Component(
-	immediate = true, service = RecordSetDDMFormFieldSettingsValidator.class
+	service = RecordSetDDMFormFieldSettingsValidator.class
 )
 public class RecordSetDDMFormFieldSettingsValidator {
 

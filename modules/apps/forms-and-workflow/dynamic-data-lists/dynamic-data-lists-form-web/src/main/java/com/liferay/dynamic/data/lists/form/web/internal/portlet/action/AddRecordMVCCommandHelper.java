@@ -50,7 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Leonardo Barros
  */
-@Component(immediate = true, service = AddRecordMVCCommandHelper.class)
+@Component(service = AddRecordMVCCommandHelper.class)
 public class AddRecordMVCCommandHelper {
 
 	public void updateRequiredFieldsAccordingToVisibility(
