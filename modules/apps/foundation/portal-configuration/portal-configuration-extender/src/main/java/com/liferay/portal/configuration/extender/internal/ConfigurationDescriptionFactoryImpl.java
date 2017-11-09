@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Carlos Sierra Andrés
  */
-@Component(immediate = true)
+@Component
 public class ConfigurationDescriptionFactoryImpl
 	implements ConfigurationDescriptionFactory {
 

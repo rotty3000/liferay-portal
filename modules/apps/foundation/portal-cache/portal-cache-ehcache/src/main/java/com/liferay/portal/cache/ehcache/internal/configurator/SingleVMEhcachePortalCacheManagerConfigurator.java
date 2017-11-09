@@ -23,7 +23,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Dante Wang
  */
 @Component(
-	immediate = true,
 	service = SingleVMEhcachePortalCacheManagerConfigurator.class
 )
 public class SingleVMEhcachePortalCacheManagerConfigurator
