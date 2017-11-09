@@ -62,7 +62,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adam Brandizzi
  */
-@Component(immediate = true, service = WorkflowHelper.class)
+@Component(service = WorkflowHelper.class)
 public class WorkflowHelper {
 
 	public WorkflowTask assignWorkflowTask(

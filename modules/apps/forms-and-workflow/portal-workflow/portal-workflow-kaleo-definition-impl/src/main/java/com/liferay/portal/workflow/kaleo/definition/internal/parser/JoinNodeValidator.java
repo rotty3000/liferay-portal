@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, property = {"node.type=JOIN"},
+	property = {"node.type=JOIN"},
 	service = NodeValidator.class
 )
 public class JoinNodeValidator extends BaseNodeValidator<Join> {

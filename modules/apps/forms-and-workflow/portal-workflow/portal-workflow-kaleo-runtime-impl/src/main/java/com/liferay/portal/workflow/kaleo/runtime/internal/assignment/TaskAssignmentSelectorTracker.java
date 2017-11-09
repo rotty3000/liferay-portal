@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Leonardo Barros
  */
-@Component(immediate = true, service = TaskAssignmentSelectorRegistry.class)
+@Component(service = TaskAssignmentSelectorRegistry.class)
 public class TaskAssignmentSelectorTracker
 	implements TaskAssignmentSelectorRegistry {
 

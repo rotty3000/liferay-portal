@@ -28,7 +28,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * @author Michael C. Han
  */
-@Component(immediate = true, service = ModelListener.class)
+@Component(service = ModelListener.class)
 public class CompanyModelListener extends BaseModelListener<Company> {
 
 	@Override

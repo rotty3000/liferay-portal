@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(
-	immediate = true, property = {"node.type=FORK"},
+	property = {"node.type=FORK"},
 	service = NodeExporter.class
 )
 public class ForkNodeExporter extends BaseNodeExporter implements NodeExporter {

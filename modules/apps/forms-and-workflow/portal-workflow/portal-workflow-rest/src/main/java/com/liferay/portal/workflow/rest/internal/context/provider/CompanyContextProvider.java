@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adam Brandizzi
  */
-@Component(immediate = true, service = CompanyContextProvider.class)
+@Component(service = CompanyContextProvider.class)
 @Provider
 public class CompanyContextProvider implements ContextProvider<Company> {
 

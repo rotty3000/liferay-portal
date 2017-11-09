@@ -31,7 +31,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Inácio Nery
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + WorkflowPortletKeys.CONTROL_PANEL_WORKFLOW,
 		"mvc.command.name=revertWorkflowDefinition"

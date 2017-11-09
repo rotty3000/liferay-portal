@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adam Brandizzi
  */
-@Component(immediate = true, service = WorkflowListedTaskResource.class)
+@Component(service = WorkflowListedTaskResource.class)
 @Path("/tasks")
 public class WorkflowListedTaskResource {
 
