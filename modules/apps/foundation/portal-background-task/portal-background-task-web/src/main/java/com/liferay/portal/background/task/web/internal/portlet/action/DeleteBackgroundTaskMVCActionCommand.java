@@ -34,7 +34,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=*", "mvc.command.name=deleteBackgroundTask"
 	},
