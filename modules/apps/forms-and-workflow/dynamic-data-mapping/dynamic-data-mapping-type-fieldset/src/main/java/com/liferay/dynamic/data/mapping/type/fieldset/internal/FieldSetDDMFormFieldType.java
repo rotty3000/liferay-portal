@@ -23,7 +23,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true,
 	property = {
 		"ddm.form.field.type.js.class.name=Liferay.DDM.Field.FieldSet",
 		"ddm.form.field.type.js.module=liferay-ddm-form-field-fieldset",

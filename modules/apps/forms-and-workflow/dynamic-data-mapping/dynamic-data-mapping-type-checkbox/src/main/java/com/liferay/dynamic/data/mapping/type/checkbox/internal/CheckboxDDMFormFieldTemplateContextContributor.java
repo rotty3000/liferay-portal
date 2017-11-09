@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, property = "ddm.form.field.type.name=checkbox",
+	property = "ddm.form.field.type.name=checkbox",
 	service = {
 		CheckboxDDMFormFieldTemplateContextContributor.class,
 		DDMFormFieldTemplateContextContributor.class

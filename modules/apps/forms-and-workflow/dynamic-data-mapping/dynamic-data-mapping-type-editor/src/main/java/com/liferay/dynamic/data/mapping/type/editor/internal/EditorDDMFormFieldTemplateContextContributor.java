@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, property = "ddm.form.field.type.name=editor",
+	property = "ddm.form.field.type.name=editor",
 	service = {
 		DDMFormFieldTemplateContextContributor.class,
 		EditorDDMFormFieldTemplateContextContributor.class

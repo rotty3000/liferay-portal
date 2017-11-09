@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Rafael Praxedes
  */
 @Component(
-	immediate = true, service = DDMFormBuilderSettingsRetrieverHelper.class
+	service = DDMFormBuilderSettingsRetrieverHelper.class
 )
 public class DDMFormBuilderSettingsRetrieverHelper {
 

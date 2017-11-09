@@ -23,7 +23,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true,
 	property = {
 		"ddm.form.field.type.js.class.name=Liferay.DDM.Field.Validation",
 		"ddm.form.field.type.js.module=liferay-ddm-form-field-validation",

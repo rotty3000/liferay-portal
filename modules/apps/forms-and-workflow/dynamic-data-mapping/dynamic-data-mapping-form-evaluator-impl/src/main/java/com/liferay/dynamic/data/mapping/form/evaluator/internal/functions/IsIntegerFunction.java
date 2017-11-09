@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=isInteger",
+	property = "ddm.form.evaluator.function.name=isInteger",
 	service = DDMExpressionFunction.class
 )
 public class IsIntegerFunction implements DDMExpressionFunction {

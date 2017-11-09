@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true)
+@Component
 public class FieldsToDDMFormValuesConverterImpl
 	implements FieldsToDDMFormValuesConverter {
 

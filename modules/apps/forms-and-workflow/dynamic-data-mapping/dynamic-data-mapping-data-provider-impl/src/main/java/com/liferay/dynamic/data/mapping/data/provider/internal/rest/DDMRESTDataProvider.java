@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, property = "ddm.data.provider.type=rest")
+@Component(property = "ddm.data.provider.type=rest")
 public class DDMRESTDataProvider implements DDMDataProvider {
 
 	@Override

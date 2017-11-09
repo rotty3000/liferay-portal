@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true,
 	property = {
 		"ddm.form.field.type.icon=icon-font",
 		"ddm.form.field.type.js.class.name=Liferay.DDM.Field.KeyValue",

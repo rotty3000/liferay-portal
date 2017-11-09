@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true, property = "ddm.form.field.type.name=captcha",
+	property = "ddm.form.field.type.name=captcha",
 	service = {
 		CaptchaDDMFormFieldTemplateContextContributor.class,
 		DDMFormFieldTemplateContextContributor.class

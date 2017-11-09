@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=max",
+	property = "ddm.form.evaluator.function.name=max",
 	service = DDMExpressionFunction.class
 )
 public class MaxFunction implements DDMExpressionFunction {

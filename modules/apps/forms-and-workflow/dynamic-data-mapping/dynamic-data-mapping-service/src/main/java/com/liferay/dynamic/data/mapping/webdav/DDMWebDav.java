@@ -51,7 +51,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Juan Fernández
  */
-@Component(immediate = true, service = DDMWebDav.class)
+@Component(service = DDMWebDav.class)
 public class DDMWebDav {
 
 	public static final String TYPE_STRUCTURES = "Structures";

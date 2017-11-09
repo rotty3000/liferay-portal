@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Rafael Praxedes
  */
 @Component(
-	immediate = true,
 	property = {
 		"dynamic.data.mapping.form.builder.servlet=true",
 		"filter.init.auth.verifier.PortalSessionAuthVerifier.urls.includes=/dynamic-data-mapping-form-builder-provider-instance-parameter-settings/*",

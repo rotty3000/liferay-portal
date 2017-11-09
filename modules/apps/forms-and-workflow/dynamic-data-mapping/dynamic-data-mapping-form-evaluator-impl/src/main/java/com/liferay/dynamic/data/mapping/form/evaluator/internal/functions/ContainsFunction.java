@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=contains",
+	property = "ddm.form.evaluator.function.name=contains",
 	service = DDMExpressionFunction.class
 )
 public class ContainsFunction implements DDMExpressionFunction {

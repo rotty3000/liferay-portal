@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Eduardo Garcia
  */
-@Component(immediate = true, service = DDMDisplayRegistry.class)
+@Component(service = DDMDisplayRegistry.class)
 @ProviderType
 public class DDMDisplayRegistry {
 

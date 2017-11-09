@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true,
 	property = "ddm.form.evaluator.function.name=isEmailAddress",
 	service = DDMExpressionFunction.class
 )

@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Rafael Praxedes
  */
 @Component(
-	immediate = true,
 	property = {
 		"filter.init.auth.verifier.PortalSessionAuthVerifier.urls.includes=/dynamic-data-mapping-data-provider-paginator/*",
 		"osgi.http.whiteboard.filter.name=com.liferay.dynamic.data.mapping.data.provider.internal.servlet.filter.DDMDataProviderPaginatorAuthVerifierFilter",

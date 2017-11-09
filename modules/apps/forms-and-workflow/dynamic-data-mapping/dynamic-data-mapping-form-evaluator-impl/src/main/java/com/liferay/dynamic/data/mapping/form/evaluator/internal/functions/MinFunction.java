@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=min",
+	property = "ddm.form.evaluator.function.name=min",
 	service = DDMExpressionFunction.class
 )
 public class MinFunction implements DDMExpressionFunction {

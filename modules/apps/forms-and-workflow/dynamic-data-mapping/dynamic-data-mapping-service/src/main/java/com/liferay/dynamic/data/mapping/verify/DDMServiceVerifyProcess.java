@@ -50,7 +50,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Rafael Praxedes
  */
 @Component(
-	immediate = true,
 	property = {"verify.process.name=com.liferay.dynamic.data.mapping.service"},
 	service = VerifyProcess.class
 )

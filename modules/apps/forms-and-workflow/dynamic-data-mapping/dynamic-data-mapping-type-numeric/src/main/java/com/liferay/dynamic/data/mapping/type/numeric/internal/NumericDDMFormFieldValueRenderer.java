@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, property = "ddm.form.field.type.name=numeric")
+@Component(property = "ddm.form.field.type.name=numeric")
 public class NumericDDMFormFieldValueRenderer
 	implements DDMFormFieldValueRenderer {
 
