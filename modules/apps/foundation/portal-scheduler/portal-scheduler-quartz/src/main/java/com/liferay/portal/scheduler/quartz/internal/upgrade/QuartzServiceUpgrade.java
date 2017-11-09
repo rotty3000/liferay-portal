@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Akos Thurzo
  */
 @Component(
-	enabled = false, immediate = true, service = UpgradeStepRegistrator.class
+	enabled = false, service = UpgradeStepRegistrator.class
 )
 public class QuartzServiceUpgrade implements UpgradeStepRegistrator {
 
