@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Edward Han
  */
-@Component(immediate = true, service = ActionHandler.class)
+@Component(service = ActionHandler.class)
 public class SimpleRedirectActionHandler extends BaseRedirectActionHandler {
 
 	public static String getHandlerType() {

@@ -46,7 +46,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + MDRPortletKeys.MOBILE_DEVICE_RULES,
 		"mvc.command.name=/mobile_device_rules/edit_action"
