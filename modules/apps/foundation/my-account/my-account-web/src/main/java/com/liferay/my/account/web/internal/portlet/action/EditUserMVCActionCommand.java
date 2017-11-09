@@ -35,7 +35,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + MyAccountPortletKeys.MY_ACCOUNT,
 		"mvc.command.name=/users_admin/edit_user"
