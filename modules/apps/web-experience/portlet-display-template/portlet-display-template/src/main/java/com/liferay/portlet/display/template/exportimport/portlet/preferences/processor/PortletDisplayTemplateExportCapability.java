@@ -37,7 +37,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	service = {Capability.class, PortletDisplayTemplateExportCapability.class}
 )
 public class PortletDisplayTemplateExportCapability implements Capability {

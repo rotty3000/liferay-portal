@@ -79,7 +79,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  * @author Leonardo Barros
  */
-@Component(immediate = true)
+@Component
 @DoPrivileged
 public class PortletDisplayTemplateImpl implements PortletDisplayTemplate {
 
