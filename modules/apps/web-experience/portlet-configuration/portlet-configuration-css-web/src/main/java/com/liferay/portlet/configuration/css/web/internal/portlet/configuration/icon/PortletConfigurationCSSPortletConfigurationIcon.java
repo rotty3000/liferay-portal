@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Eudaldo Alonso
  */
-@Component(immediate = true, service = PortletConfigurationIcon.class)
+@Component(service = PortletConfigurationIcon.class)
 public class PortletConfigurationCSSPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
