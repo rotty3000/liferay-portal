@@ -31,7 +31,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Pavel Savinov
  */
 @Component(
-	immediate = true,
 	property = {"site.navigation.menu.item.type=" + SiteNavigationMenuItemTypeLayoutConstants.LAYOUT},
 	service = SiteNavigationMenuItemType.class
 )

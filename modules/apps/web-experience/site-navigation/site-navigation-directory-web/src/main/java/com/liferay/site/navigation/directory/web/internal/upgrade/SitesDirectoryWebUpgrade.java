@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Raymond Augé
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = UpgradeStepRegistrator.class)
+@Component(service = UpgradeStepRegistrator.class)
 public class SitesDirectoryWebUpgrade implements UpgradeStepRegistrator {
 
 	@Override
