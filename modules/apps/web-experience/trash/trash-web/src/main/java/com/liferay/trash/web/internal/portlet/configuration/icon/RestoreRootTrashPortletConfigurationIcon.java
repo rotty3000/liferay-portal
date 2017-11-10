@@ -36,7 +36,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eudaldo Alonso
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + TrashPortletKeys.TRASH, "path=/view_content.jsp"
 	},

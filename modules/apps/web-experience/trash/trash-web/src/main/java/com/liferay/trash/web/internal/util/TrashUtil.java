@@ -41,7 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Eudaldo Alonso
  */
-@Component(immediate = true, service = TrashUtil.class)
+@Component(service = TrashUtil.class)
 public class TrashUtil {
 
 	public void addBaseModelBreadcrumbEntries(
