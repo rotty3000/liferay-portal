@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Carlos Lancha
  */
-@Component(immediate = true, service = DynamicInclude.class)
+@Component(service = DynamicInclude.class)
 public class SimulationDeviceDynamicInclude extends BaseDynamicInclude {
 
 	@Override
