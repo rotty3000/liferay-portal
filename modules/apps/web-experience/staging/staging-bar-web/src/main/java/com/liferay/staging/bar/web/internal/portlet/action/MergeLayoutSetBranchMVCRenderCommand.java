@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + StagingBarPortletKeys.STAGING_BAR,
 		"mvc.command.name=mergeLayoutSetBranch"
