@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Tomas Polesovsky
  */
-@Component(immediate = true, service = WSRPURLUtil.class)
+@Component(service = WSRPURLUtil.class)
 public class WSRPURLUtil {
 
 	public String encodeWSRPAuth(long companyId, String wsrpAuth)

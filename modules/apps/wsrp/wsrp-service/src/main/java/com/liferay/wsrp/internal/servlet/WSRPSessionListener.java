@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael Young
  * @author Peter Fellwock
  */
-@Component(immediate = true, service = HttpSessionListener.class)
+@Component(service = HttpSessionListener.class)
 public class WSRPSessionListener implements HttpSessionListener {
 
 	@Override
