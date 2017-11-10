@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Michael C. Han
  */
-@Component(immediate = true, service = PortalInstanceLifecycleManager.class)
+@Component(service = PortalInstanceLifecycleManager.class)
 public class PortalInstanceLifecycleListenerManagerImpl
 	implements PortalInstanceLifecycleManager {
 
