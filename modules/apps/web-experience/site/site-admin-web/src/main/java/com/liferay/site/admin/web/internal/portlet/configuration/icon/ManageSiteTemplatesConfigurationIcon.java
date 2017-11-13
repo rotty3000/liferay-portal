@@ -40,7 +40,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Eudaldo Alonso
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + SiteAdminPortletKeys.SITE_ADMIN},
 	service = PortletConfigurationIcon.class
 )

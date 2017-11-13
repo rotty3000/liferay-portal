@@ -50,7 +50,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Istvan Andras Dezsi
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class AssetVocabularyIndexer extends BaseIndexer<AssetVocabulary> {
 
 	public static final String CLASS_NAME = AssetVocabulary.class.getName();

@@ -22,7 +22,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=between",
+	property = "ddm.form.evaluator.function.name=between",
 	service = DDMExpressionFunction.class
 )
 public class BetweenFunction implements DDMExpressionFunction {

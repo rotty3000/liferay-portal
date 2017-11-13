@@ -32,7 +32,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + BlogsPortletKeys.BLOGS_ADMIN,
 		"mvc.command.name=/", "mvc.command.name=/blogs/view"

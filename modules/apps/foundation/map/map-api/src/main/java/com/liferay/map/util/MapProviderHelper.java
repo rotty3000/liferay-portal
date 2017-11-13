@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Jürgen Kappler
  */
-@Component(immediate = true, service = MapProviderHelper.class)
+@Component(service = MapProviderHelper.class)
 public class MapProviderHelper {
 
 	public String getMapProviderKey(long companyId) {

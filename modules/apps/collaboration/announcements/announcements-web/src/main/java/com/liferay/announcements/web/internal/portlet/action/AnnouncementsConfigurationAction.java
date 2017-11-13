@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + AnnouncementsPortletKeys.ANNOUNCEMENTS},
 	service = ConfigurationAction.class
 )

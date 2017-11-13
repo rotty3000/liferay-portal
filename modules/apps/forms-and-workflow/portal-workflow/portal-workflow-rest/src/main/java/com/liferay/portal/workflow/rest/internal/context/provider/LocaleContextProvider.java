@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adam Brandizzi
  */
-@Component(immediate = true, service = LocaleContextProvider.class)
+@Component(service = LocaleContextProvider.class)
 @Provider
 public class LocaleContextProvider implements ContextProvider<Locale> {
 

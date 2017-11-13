@@ -25,7 +25,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Akos Thurzo
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + DummyFolderPortletKeys.DUMMY_FOLDER_WITH_MISSING_REFERENCE},
 	service = {DummyFolderWithMissingReferencePortlet.class, Portlet.class}
 )

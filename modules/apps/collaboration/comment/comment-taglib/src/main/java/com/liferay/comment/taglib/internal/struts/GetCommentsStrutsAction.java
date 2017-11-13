@@ -31,7 +31,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true, property = "path=/portal/comment/discussion/get_comments",
+	property = "path=/portal/comment/discussion/get_comments",
 	service = StrutsAction.class
 )
 public class GetCommentsStrutsAction extends BaseStrutsAction {

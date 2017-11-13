@@ -36,10 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(
-	immediate = true,
-	service = {DDLServiceUpgrade.class, UpgradeStepRegistrator.class}
-)
+@Component(service = {DDLServiceUpgrade.class, UpgradeStepRegistrator.class})
 public class DDLServiceUpgrade implements UpgradeStepRegistrator {
 
 	@Override

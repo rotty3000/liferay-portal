@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Eudaldo Alonso
  * @author Julio Camarero
  */
-@Component(immediate = true, service = UpgradeStepRegistrator.class)
+@Component(service = UpgradeStepRegistrator.class)
 public class SiteNavigationLanguageWebUpgrade
 	implements UpgradeStepRegistrator {
 

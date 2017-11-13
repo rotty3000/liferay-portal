@@ -41,7 +41,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alexander Chow
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + JournalPortletKeys.JOURNAL},
 	service = AssetRendererFactory.class
 )

@@ -36,7 +36,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + PortletKeys.DIRECTORY,
 		"javax.portlet.name=" + PortletKeys.FRIENDS_DIRECTORY,

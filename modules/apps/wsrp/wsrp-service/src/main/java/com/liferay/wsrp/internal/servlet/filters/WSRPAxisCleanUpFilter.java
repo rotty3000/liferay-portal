@@ -25,7 +25,6 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT + "=(osgi.http.whiteboard.context.name=wsrp-service)",
 		HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_DISPATCHER + "=" + HttpWhiteboardConstants.DISPATCHER_FORWARD,

@@ -44,7 +44,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Ambrin Chaudhary
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + DLPortletKeys.DOCUMENT_LIBRARY_ADMIN,
 		"path=/document_library/view_file_entry"

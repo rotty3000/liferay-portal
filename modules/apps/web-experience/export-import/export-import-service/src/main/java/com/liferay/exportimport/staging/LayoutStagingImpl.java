@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Raymond Augé
  */
-@Component(immediate = true)
+@Component
 @DoPrivileged
 @ProviderType
 public class LayoutStagingImpl implements LayoutStaging {

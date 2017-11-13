@@ -33,7 +33,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Peter Fellwock
  */
 @Component(
-	immediate = true,
 	property = {
 		"com.liferay.portlet.css-class-wrapper=portlet-hello-world",
 		"com.liferay.portlet.display-category=category.sample",

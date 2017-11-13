@@ -32,7 +32,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Chema Balsas
  */
 @Component(
-	immediate = true,
 	property = {
 		"servlet-context-name=", "servlet-filter-name=SPA Filter",
 		"url-pattern=/*",

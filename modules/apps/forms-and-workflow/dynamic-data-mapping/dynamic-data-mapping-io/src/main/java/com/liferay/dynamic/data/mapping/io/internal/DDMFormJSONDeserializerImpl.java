@@ -49,7 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true)
+@Component
 public class DDMFormJSONDeserializerImpl implements DDMFormJSONDeserializer {
 
 	@Override

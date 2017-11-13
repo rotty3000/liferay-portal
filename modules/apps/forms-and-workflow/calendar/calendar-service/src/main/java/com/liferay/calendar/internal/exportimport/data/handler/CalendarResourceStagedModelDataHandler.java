@@ -53,7 +53,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Daniel Kocsis
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + CalendarPortletKeys.CALENDAR},
 	service = StagedModelDataHandler.class
 )

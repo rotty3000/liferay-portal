@@ -32,9 +32,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Rafael Praxedes
  */
-@Component(
-	immediate = true, service = DDMExpressionFunctionMetadataHelper.class
-)
+@Component(service = DDMExpressionFunctionMetadataHelper.class)
 public class DDMExpressionFunctionMetadataHelper {
 
 	public Map<String, List<DDMExpressionFunctionMetadata>>

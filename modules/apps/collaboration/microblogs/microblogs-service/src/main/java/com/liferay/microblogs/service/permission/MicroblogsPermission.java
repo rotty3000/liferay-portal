@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Jonathan Lee
  */
 @Component(
-	immediate = true,
 	property = {"resource.name=" + MicroblogsPermission.RESOURCE_NAME},
 	service = ResourcePermissionChecker.class
 )

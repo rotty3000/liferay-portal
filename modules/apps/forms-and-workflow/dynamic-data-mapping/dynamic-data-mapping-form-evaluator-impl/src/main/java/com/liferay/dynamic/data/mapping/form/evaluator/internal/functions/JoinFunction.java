@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=join",
+	property = "ddm.form.evaluator.function.name=join",
 	service = DDMExpressionFunction.class
 )
 public class JoinFunction implements DDMExpressionFunction {

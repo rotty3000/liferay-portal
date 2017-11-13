@@ -47,7 +47,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, property = "ddm.form.field.type.name=select",
+	property = "ddm.form.field.type.name=select",
 	service = {
 		DDMFormFieldTemplateContextContributor.class,
 		SelectDDMFormFieldTemplateContextContributor.class

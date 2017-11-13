@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Eduardo Garcia
  */
 @Component(
-	immediate = true,
 	property = {
 		"panel.category.key=" + PanelCategoryKeys.HIDDEN,
 		"panel.category.order:Integer=500"

@@ -41,8 +41,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Eduardo Lundgren
  */
 @Component(
-	immediate = true, property = {"proxy.bean=false"},
-	service = WorkflowDefinitionManager.class
+	property = {"proxy.bean=false"}, service = WorkflowDefinitionManager.class
 )
 public class WorkflowDefinitionManagerImpl
 	implements WorkflowDefinitionManager {

@@ -76,7 +76,6 @@ import org.springframework.context.ApplicationContext;
  * @author Alexander Chow
  */
 @Component(
-	immediate = true,
 	property = {"verify.process.name=com.liferay.document.library.service"},
 	service = VerifyProcess.class
 )

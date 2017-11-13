@@ -32,7 +32,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Basto
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=hello_soy_portlet", "mvc.command.name=Form"
 	},

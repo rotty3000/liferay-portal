@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alejandro Tardín
  */
 @Component(
-	immediate = true, property = "adaptive.media.handler.pattern=image",
+	property = "adaptive.media.handler.pattern=image",
 	service = AMRequestHandler.class
 )
 public class AMImageRequestHandler

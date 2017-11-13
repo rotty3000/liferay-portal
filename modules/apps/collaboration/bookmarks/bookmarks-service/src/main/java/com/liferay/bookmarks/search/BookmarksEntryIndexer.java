@@ -58,7 +58,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Bruno Farache
  * @author Raymond Augé
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class BookmarksEntryIndexer extends BaseIndexer<BookmarksEntry> {
 
 	public static final String CLASS_NAME = BookmarksEntry.class.getName();

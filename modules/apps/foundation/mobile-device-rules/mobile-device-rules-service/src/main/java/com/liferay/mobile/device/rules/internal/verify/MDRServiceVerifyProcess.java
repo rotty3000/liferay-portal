@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Tomas Polesovsky
  */
 @Component(
-	immediate = true,
 	property = {"verify.process.name=com.liferay.mobile.device.rules.service"},
 	service = VerifyProcess.class
 )

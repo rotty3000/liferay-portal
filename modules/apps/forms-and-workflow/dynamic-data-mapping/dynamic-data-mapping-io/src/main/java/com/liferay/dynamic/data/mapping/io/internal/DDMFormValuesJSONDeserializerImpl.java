@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true)
+@Component
 public class DDMFormValuesJSONDeserializerImpl
 	implements DDMFormValuesJSONDeserializer {
 

@@ -42,7 +42,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Michael C. Han
  */
-@Component(immediate = true, service = DynamicInclude.class)
+@Component(service = DynamicInclude.class)
 public class OpenIdNavigationPreDynamicInclude extends BaseDynamicInclude {
 
 	@Override

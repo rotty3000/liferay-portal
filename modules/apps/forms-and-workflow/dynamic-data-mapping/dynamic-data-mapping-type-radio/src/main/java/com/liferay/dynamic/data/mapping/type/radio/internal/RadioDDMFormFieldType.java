@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Renato Rego
  */
 @Component(
-	immediate = true,
 	property = {
 		"ddm.form.field.type.data.domain=list",
 		"ddm.form.field.type.description=radio-field-type-description",

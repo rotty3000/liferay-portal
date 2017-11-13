@@ -27,10 +27,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Brian Wing Shun Chan
  */
-@Component(
-	immediate = true, property = "path=/blogs/find_entry",
-	service = StrutsAction.class
-)
+@Component(property = "path=/blogs/find_entry", service = StrutsAction.class)
 public class FindEntryAction extends BaseStrutsAction {
 
 	@Override

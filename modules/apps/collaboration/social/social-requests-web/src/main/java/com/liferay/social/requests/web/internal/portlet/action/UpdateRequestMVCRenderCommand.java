@@ -37,7 +37,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + SocialRequestsPortletKeys.REQUESTS,
 		"mvc.command.name=/requests/update_request"

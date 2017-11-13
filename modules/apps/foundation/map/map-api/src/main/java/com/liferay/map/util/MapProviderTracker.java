@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Jürgen Kappler
  */
-@Component(immediate = true, service = MapProviderTracker.class)
+@Component(service = MapProviderTracker.class)
 public class MapProviderTracker {
 
 	public MapProvider getMapProvider(String mapProviderKey) {

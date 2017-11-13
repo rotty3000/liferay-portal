@@ -43,7 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Pablo Carvalho
  */
-@Component(immediate = true)
+@Component
 public class DDMFormXSDDeserializerImpl implements DDMFormXSDDeserializer {
 
 	@Override

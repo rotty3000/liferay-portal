@@ -54,7 +54,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {
 		"javax.portlet.name=" + SubscriptionPortletKeys.UNSUBSCRIBE,
 		"mvc.command.name=/subscription/unsubscribe"

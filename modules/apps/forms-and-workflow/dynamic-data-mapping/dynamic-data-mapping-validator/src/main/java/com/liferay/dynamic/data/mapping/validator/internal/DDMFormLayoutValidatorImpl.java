@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Pablo Carvalho
  */
-@Component(immediate = true)
+@Component
 public class DDMFormLayoutValidatorImpl implements DDMFormLayoutValidator {
 
 	@Override

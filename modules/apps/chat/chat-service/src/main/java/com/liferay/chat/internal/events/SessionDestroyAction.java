@@ -27,8 +27,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Bruno Farache
  */
 @Component(
-	enabled = false, immediate = true,
-	property = {"key=servlet.session.destroy.events"},
+	enabled = false, property = {"key=servlet.session.destroy.events"},
 	service = LifecycleAction.class
 )
 public class SessionDestroyAction extends SessionAction {

@@ -45,7 +45,6 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	configurationPid = "com.liferay.blogs.configuration.BlogsConfiguration",
-	immediate = true,
 	property = {"javax.portlet.name=" + BlogsPortletKeys.BLOGS},
 	service = TemplateHandler.class
 )

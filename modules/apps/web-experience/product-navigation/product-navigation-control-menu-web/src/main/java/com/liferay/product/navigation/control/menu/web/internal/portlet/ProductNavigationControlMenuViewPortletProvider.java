@@ -29,7 +29,6 @@ import org.osgi.service.component.annotations.Component;
  *             the <code>liferay-product-navigation:control-menu</code> tag.
  */
 @Component(
-	immediate = true,
 	property = {
 		"model.class.name=" + PortalProductNavigationControlMenuApplicationType.ProductNavigationControlMenu.CLASS_NAME
 	},

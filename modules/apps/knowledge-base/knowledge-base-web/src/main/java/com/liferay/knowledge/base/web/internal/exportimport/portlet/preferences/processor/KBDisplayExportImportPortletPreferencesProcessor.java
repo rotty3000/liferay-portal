@@ -49,7 +49,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sorin Pop
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + KBPortletKeys.KNOWLEDGE_BASE_DISPLAY},
 	service = ExportImportPortletPreferencesProcessor.class
 )

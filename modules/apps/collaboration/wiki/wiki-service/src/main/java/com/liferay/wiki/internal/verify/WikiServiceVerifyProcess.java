@@ -43,7 +43,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Iván Zaera
  */
 @Component(
-	immediate = true,
 	property = {"verify.process.name=com.liferay.wiki.service"},
 	service = VerifyProcess.class
 )

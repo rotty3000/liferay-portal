@@ -84,7 +84,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	service = {
 		JournalArticleStagedModelDataHandler.class, StagedModelDataHandler.class
 	}

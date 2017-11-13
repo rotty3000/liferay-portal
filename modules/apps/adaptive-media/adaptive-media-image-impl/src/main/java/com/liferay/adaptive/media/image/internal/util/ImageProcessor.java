@@ -36,7 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = ImageProcessor.class)
+@Component(service = ImageProcessor.class)
 public class ImageProcessor {
 
 	public boolean isMimeTypeSupported(String mimeType) {

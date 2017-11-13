@@ -45,7 +45,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + BookmarksPortletKeys.BOOKMARKS_ADMIN},
 	service = PortletConfigurationIcon.class
 )

@@ -33,7 +33,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  */
 @Component(
-	immediate = true,
 	property = {
 		"com.liferay.portlet.css-class-wrapper=portlet-blogs",
 		"com.liferay.portlet.display-category=category.hidden",

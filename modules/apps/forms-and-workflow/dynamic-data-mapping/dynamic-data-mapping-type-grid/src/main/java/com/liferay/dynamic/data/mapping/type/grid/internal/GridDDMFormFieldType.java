@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Pedro Queiroz
  */
 @Component(
-	immediate = true,
 	property = {
 		"ddm.form.field.type.data.domain=list",
 		"ddm.form.field.type.description=grid-field-type-description",

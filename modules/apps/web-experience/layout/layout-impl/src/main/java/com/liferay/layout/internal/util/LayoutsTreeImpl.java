@@ -70,7 +70,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Zsolt Szabó
  * @author Tibor Lipusz
  */
-@Component(immediate = true)
+@Component
 public class LayoutsTreeImpl implements LayoutsTree {
 
 	@Override

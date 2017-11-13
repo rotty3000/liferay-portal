@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Jorge Ferrer
  */
 @Component(
-	immediate = true,
 	property = {
 		"resource.name=" + BookmarksResourcePermissionChecker.RESOURCE_NAME
 	},

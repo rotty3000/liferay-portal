@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Istvan Andras Dezsi
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class AssetCategoryIndexer extends BaseIndexer<AssetCategory> {
 
 	public static final String CLASS_NAME = AssetCategory.class.getName();

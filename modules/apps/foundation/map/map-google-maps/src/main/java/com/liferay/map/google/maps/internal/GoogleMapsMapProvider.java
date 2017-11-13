@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Jürgen Kappler
  */
-@Component(immediate = true, service = MapProvider.class)
+@Component(service = MapProvider.class)
 public class GoogleMapsMapProvider extends BaseJSPMapProvider {
 
 	@Override

@@ -38,7 +38,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Mate Thurzo
  */
 @Component(
-	immediate = true,
 	property = {"javax.portlet.name=" + StagingProcessesPortletKeys.STAGING_PROCESSES},
 	service = PortletConfigurationIcon.class
 )

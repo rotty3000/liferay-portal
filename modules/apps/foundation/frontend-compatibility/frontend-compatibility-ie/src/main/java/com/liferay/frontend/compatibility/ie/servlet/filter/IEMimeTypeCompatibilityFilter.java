@@ -31,7 +31,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true,
 	property = {
 		"servlet-context-name=",
 		"servlet-filter-name=IE MimeType Compatibility Filter", "url-pattern=/*"

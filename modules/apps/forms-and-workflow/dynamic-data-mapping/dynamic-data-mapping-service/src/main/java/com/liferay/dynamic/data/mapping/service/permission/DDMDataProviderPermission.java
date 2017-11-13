@@ -29,7 +29,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true,
 	property = {"resource.name=" + DDMDataProviderPermission.RESOURCE_NAME},
 	service = ResourcePermissionChecker.class
 )

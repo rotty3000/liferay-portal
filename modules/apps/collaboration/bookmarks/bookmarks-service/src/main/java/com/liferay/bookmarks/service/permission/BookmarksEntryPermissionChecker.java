@@ -36,7 +36,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	immediate = true,
 	property = {"model.class.name=com.liferay.bookmarks.model.BookmarksEntry"}
 )
 public class BookmarksEntryPermissionChecker

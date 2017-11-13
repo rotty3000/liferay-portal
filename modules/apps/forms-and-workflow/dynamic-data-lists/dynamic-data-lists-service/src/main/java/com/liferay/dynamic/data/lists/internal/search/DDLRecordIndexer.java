@@ -69,7 +69,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class DDLRecordIndexer extends BaseIndexer<DDLRecord> {
 
 	public static final String CLASS_NAME = DDLRecord.class.getName();

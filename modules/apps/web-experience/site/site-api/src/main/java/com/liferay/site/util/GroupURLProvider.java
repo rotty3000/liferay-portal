@@ -39,7 +39,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Julio Camarero
  */
-@Component(immediate = true, service = GroupURLProvider.class)
+@Component(service = GroupURLProvider.class)
 public class GroupURLProvider {
 
 	public String getGroupAdministrationURL(

@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Jon Steer
  * @author Raymond Augé
  */
-@Component(immediate = true, service = ModelListener.class)
+@Component(service = ModelListener.class)
 public class JournalArticleModelListener
 	extends BaseModelListener<JournalArticle> {
 

@@ -42,7 +42,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Lino Alves
  */
-@Component(immediate = true, service = Indexer.class)
+@Component(service = Indexer.class)
 public class PollsQuestionIndexer extends BaseIndexer<PollsQuestion> {
 
 	public static final String CLASS_NAME = PollsQuestion.class.getName();

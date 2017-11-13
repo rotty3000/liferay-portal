@@ -107,7 +107,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eduardo Garcia
  * @author Marcellus Tavares
  */
-@Component(immediate = true)
+@Component
 @DoPrivileged
 public class DDMImpl implements DDM {
 

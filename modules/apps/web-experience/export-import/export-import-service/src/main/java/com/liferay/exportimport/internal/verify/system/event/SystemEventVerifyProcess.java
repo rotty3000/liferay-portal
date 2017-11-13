@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Akos Thurzo
  */
 @Component(
-	immediate = true,
 	property = {"verify.process.name=com.liferay.systemevent.internal.verify"},
 	service = VerifyProcess.class
 )

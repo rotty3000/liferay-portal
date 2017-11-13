@@ -23,7 +23,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=isURL",
+	property = "ddm.form.evaluator.function.name=isURL",
 	service = DDMExpressionFunction.class
 )
 public class IsURLFunction implements DDMExpressionFunction {

@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Mate Thurzo
  */
-@Component(immediate = true, service = ModelAdapterBuilder.class)
+@Component(service = ModelAdapterBuilder.class)
 public class StagedLayoutSetModelAdapterBuilder
 	implements ModelAdapterBuilder<LayoutSet, StagedLayoutSet> {
 

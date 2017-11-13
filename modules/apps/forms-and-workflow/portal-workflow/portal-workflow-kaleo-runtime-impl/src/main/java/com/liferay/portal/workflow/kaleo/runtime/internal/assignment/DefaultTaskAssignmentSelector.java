@@ -28,7 +28,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(
-	immediate = true,
 	property = {"assignee.class.name=com.liferay.portal.kernel.model.User"},
 	service = TaskAssignmentSelector.class
 )

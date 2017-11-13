@@ -23,7 +23,6 @@ import org.osgi.service.component.annotations.Component;
  * @author Adolfo Pérez
  */
 @Component(
-	immediate = true,
 	property = {
 		"bundle.symbolic.name=com.liferay.document.library.file.version.discussion.web"
 	},

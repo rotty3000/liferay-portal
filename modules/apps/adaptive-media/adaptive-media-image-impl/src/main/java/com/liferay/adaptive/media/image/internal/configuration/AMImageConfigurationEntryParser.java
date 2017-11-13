@@ -74,7 +74,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Adolfo Pérez
  */
-@Component(immediate = true, service = AMImageConfigurationEntryParser.class)
+@Component(service = AMImageConfigurationEntryParser.class)
 public class AMImageConfigurationEntryParser {
 
 	public AMImageConfigurationEntryParser() {

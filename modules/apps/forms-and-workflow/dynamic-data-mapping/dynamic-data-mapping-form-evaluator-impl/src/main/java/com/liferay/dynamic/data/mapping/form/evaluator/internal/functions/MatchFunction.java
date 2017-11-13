@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Leonardo Barros
  */
 @Component(
-	immediate = true, property = "ddm.form.evaluator.function.name=match",
+	property = "ddm.form.evaluator.function.name=match",
 	service = DDMExpressionFunction.class
 )
 public class MatchFunction implements DDMExpressionFunction {
