@@ -22,9 +22,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Dante Wang
  */
-@Component(
-	service = SingleVMEhcachePortalCacheManagerConfigurator.class
-)
+@Component(service = SingleVMEhcachePortalCacheManagerConfigurator.class)
 public class SingleVMEhcachePortalCacheManagerConfigurator
 	extends BaseEhcachePortalCacheManagerConfigurator {
 

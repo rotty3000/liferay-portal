@@ -36,9 +36,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Peter Fellwock
  */
-@Component(
-	property = {"service.ranking:Integer=" + Integer.MAX_VALUE}
-)
+@Component(property = {"service.ranking:Integer=" + Integer.MAX_VALUE})
 public class TestTrashHandler implements TrashHandler {
 
 	@Override

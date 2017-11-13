@@ -32,9 +32,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Michael C. Han
  */
-@Component(
-	service = NotificationRecipientBuilderRegistry.class
-)
+@Component(service = NotificationRecipientBuilderRegistry.class)
 public class DefaultNotificationRecipientBuilderRegistry
 	implements NotificationRecipientBuilderRegistry {
 

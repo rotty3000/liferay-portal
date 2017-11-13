@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Sergio González
  */
 @Component(
-	property = {"adaptive.media.key=blogs"},
-	service = AMImageCounter.class
+	property = {"adaptive.media.key=blogs"}, service = AMImageCounter.class
 )
 public class BlogsAMImageCounter implements AMImageCounter {
 

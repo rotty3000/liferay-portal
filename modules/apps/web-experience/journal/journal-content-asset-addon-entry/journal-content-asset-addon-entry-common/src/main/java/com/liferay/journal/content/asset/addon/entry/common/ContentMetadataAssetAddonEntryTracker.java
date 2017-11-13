@@ -28,9 +28,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 /**
  * @author Julio Camarero
  */
-@Component(
-	service = ContentMetadataAssetAddonEntryTracker.class
-)
+@Component(service = ContentMetadataAssetAddonEntryTracker.class)
 public class ContentMetadataAssetAddonEntryTracker {
 
 	public static List<ContentMetadataAssetAddonEntry>

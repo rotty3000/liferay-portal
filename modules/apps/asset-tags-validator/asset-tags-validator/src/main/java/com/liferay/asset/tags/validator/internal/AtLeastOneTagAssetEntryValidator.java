@@ -28,8 +28,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Brian Wing Shun Chan
  */
 @Component(
-	property = {"model.class.name=*"},
-	service = AssetEntryValidator.class
+	property = {"model.class.name=*"}, service = AssetEntryValidator.class
 )
 public class AtLeastOneTagAssetEntryValidator implements AssetEntryValidator {
 

@@ -45,9 +45,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Rafael Praxedes
  */
-@Component(
-	service = DDMFormBuilderSettingsRetrieverHelper.class
-)
+@Component(service = DDMFormBuilderSettingsRetrieverHelper.class)
 public class DDMFormBuilderSettingsRetrieverHelper {
 
 	public String getDDMDataProviderInstanceParameterSettingsURL() {

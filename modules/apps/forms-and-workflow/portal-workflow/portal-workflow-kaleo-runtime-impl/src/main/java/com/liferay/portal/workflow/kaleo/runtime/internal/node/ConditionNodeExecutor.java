@@ -36,10 +36,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Michael C. Han
  */
-@Component(
-	property = {"node.type=CONDITION"},
-	service = NodeExecutor.class
-)
+@Component(property = {"node.type=CONDITION"}, service = NodeExecutor.class)
 public class ConditionNodeExecutor extends BaseNodeExecutor {
 
 	@Override

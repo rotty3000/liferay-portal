@@ -24,9 +24,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Michael C. Han
  */
-@Component(
-	service = ClusterMasterTokenTransitionListener.class
-)
+@Component(service = ClusterMasterTokenTransitionListener.class)
 public class BackgroundTaskClusterMasterTokenTransitionListener
 	extends BaseClusterMasterTokenTransitionListener {
 

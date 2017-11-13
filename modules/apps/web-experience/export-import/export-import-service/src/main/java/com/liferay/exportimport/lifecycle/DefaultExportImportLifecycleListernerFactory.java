@@ -26,9 +26,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Daniel Kocsis
  */
-@Component(
-	service = ExportImportLifecycleListenerFactory.class
-)
+@Component(service = ExportImportLifecycleListenerFactory.class)
 @ProviderType
 public class DefaultExportImportLifecycleListernerFactory
 	implements ExportImportLifecycleListenerFactory {

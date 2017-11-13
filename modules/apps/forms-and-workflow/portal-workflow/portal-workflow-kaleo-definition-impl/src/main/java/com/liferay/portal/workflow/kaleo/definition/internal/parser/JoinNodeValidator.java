@@ -25,10 +25,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  * @author Marcellus Tavares
  */
-@Component(
-	property = {"node.type=JOIN"},
-	service = NodeValidator.class
-)
+@Component(property = {"node.type=JOIN"}, service = NodeValidator.class)
 public class JoinNodeValidator extends BaseNodeValidator<Join> {
 
 	@Override

@@ -34,9 +34,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Brian Wing Shun Chan
  */
-@Component(
-	property = {"model.class.name=com.liferay.wiki.model.WikiPage"}
-)
+@Component(property = {"model.class.name=com.liferay.wiki.model.WikiPage"})
 public class WikiPagePermissionChecker implements BaseModelPermissionChecker {
 
 	public static void check(

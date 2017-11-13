@@ -58,9 +58,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Rafael Praxedes
  */
-@Component(
-	service = RecordSetDDMFormFieldSettingsValidator.class
-)
+@Component(service = RecordSetDDMFormFieldSettingsValidator.class)
 public class RecordSetDDMFormFieldSettingsValidator {
 
 	public void validate(PortletRequest portletRequest, DDMForm ddmForm)

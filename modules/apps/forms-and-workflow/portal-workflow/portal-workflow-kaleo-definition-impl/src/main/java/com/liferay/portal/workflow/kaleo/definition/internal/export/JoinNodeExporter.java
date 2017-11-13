@@ -23,10 +23,7 @@ import org.osgi.service.component.annotations.Component;
 /**
  * @author Michael C. Han
  */
-@Component(
-	property = {"node.type=JOIN"},
-	service = NodeExporter.class
-)
+@Component(property = {"node.type=JOIN"}, service = NodeExporter.class)
 public class JoinNodeExporter extends BaseNodeExporter implements NodeExporter {
 
 	@Override

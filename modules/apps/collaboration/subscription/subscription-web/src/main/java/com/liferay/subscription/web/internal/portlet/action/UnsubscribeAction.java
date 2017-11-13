@@ -34,8 +34,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Alejandro Tardín
  */
 @Component(
-	property = {"path=/portal/unsubscribe"},
-	service = StrutsAction.class
+	property = {"path=/portal/unsubscribe"}, service = StrutsAction.class
 )
 public class UnsubscribeAction extends BaseStrutsAction {
 
