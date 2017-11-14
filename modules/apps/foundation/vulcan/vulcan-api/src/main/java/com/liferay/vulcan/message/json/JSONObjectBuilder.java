@@ -14,13 +14,15 @@
 
 package com.liferay.vulcan.message.json;
 
-import aQute.bnd.annotation.ProviderType;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Creates JSON objects. Instances of this interface should be used to write a
@@ -76,16 +78,16 @@ import java.util.function.Function;
  * @author Carlos Sierra Andrés
  * @author Jorge Ferrer
  */
-@ProviderType
-@SuppressWarnings("unused")
-public interface JSONObjectBuilder {
+public class JSONObjectBuilder {
 
 	/**
 	 * Returns the JSON object constructed by the JSON object builder.
 	 *
 	 * @return the JSON object
 	 */
-	public JsonObject build();
+	public JsonObject build() {
+		return _jsonObject;
+	}
 
 	/**
 	 * Begins creating a field inside the JSON object.
@@ -93,7 +95,9 @@ public interface JSONObjectBuilder {
 	 * @param  name the field's name
 	 * @return the builder's next step
 	 */
-	public FieldStep field(String name);
+	public FieldStep field(String name) {
+		return new FieldStep(name, _jsonObject);
+	}
 
 	/**
 	 * Conditionally begins creating a field inside the JSON object. If the
@@ -110,7 +114,15 @@ public interface JSONObjectBuilder {
 	 */
 	public FieldStep ifElseCondition(
 		boolean condition, Function<JSONObjectBuilder, FieldStep> ifFunction,
-		Function<JSONObjectBuilder, FieldStep> elseFunction);
+		Function<JSONObjectBuilder, FieldStep> elseFunction) {
+
+		if (condition) {
+			return ifFunction.apply(this);
+		}
+		else {
+			return elseFunction.apply(this);
+		}
+	}
 
 	/**
 	 * Begins creating a nested field inside the JSON object.
@@ -119,7 +131,15 @@ public interface JSONObjectBuilder {
 	 * @param  nestedNames the nested field's list of names
 	 * @return the builder's field step
 	 */
-	public FieldStep nestedField(String parentName, String... nestedNames);
+	public FieldStep nestedField(String parentName, String... nestedNames) {
+		FieldStep fieldStep = field(parentName);
+
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.field(nestedName);
+		}
+
+		return fieldStep;
+	}
 
 	/**
 	 * Begins creating a nested field inside the JSON object, adding a prefix to
@@ -154,7 +174,16 @@ public interface JSONObjectBuilder {
 	 * @return the builder's field step
 	 */
 	public FieldStep nestedPrefixedField(
-		String prefix, String parentName, String... nestedNames);
+		String prefix, String parentName, String... nestedNames) {
+
+		FieldStep fieldStep = nestedField(prefix, parentName);
+
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.nestedField(prefix, nestedName);
+		}
+
+		return fieldStep;
+	}
 
 	/**
 	 * Begins creating a nested field inside the JSON object, adding a suffix to
@@ -189,12 +218,22 @@ public interface JSONObjectBuilder {
 	 * @return the builder's field step
 	 */
 	public FieldStep nestedSuffixedField(
-		String suffix, String parentName, String... nestedNames);
+		String suffix, String parentName, String... nestedNames) {
 
-	/**
-	 * Defines the step that adds the value of a field as a JSON array.
-	 */
-	public interface ArrayValueStep {
+		FieldStep fieldStep = nestedField(parentName, suffix);
+
+		for (String nestedName : nestedNames) {
+			fieldStep = fieldStep.nestedField(nestedName, suffix);
+		}
+
+		return fieldStep;
+	}
+
+	public static class ArrayValueStep {
+
+		public ArrayValueStep(JsonArray jsonArray) {
+			_jsonArray = jsonArray;
+		}
 
 		/**
 		 * Adds a new JSON object, created by the provided consumer, to the JSON
@@ -202,7 +241,13 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param consumer the consumer that creates the new JSON object
 		 */
-		public void add(Consumer<JSONObjectBuilder> consumer);
+		public void add(Consumer<JSONObjectBuilder> consumer) {
+			JSONObjectBuilder jsonObjectBuilder = new JSONObjectBuilder();
+
+			consumer.accept(jsonObjectBuilder);
+
+			add(jsonObjectBuilder);
+		}
 
 		/**
 		 * Adds the JSON object, created by the provided JSON object builder, to
@@ -211,7 +256,9 @@ public interface JSONObjectBuilder {
 		 * @param jsonObjectBuilder the JSON object builder containing the JSON
 		 *        object to add to the JSON array
 		 */
-		public void add(JSONObjectBuilder jsonObjectBuilder);
+		public void add(JSONObjectBuilder jsonObjectBuilder) {
+			_jsonArray.add(jsonObjectBuilder.build());
+		}
 
 		/**
 		 * Adds all elements of a boolean collection as elements of the JSON
@@ -219,7 +266,11 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param collection the boolean collection to add to the JSON array
 		 */
-		public void addAllBooleans(Collection<Boolean> collection);
+		public void addAllBooleans(Collection<Boolean> collection) {
+			Stream<Boolean> stream = collection.stream();
+
+			stream.forEach(_jsonArray::add);
+		}
 
 		/**
 		 * Adds all elements of a JSON object collection as elements of the JSON
@@ -227,7 +278,9 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param collection the JSON object collection to add to the JSON array
 		 */
-		public void addAllJsonObjects(Collection<JsonObject> collection);
+		public void addAllJsonObjects(Collection<JsonObject> collection) {
+			collection.forEach(_jsonArray::add);
+		}
 
 		/**
 		 * Adds all elements of a number collection as elements of the JSON
@@ -235,7 +288,9 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param collection the number collection to add to the JSON array
 		 */
-		public void addAllNumbers(Collection<Number> collection);
+		public void addAllNumbers(Collection<Number> collection) {
+			collection.forEach(_jsonArray::add);
+		}
 
 		/**
 		 * Adds all elements of a string collection as elements of the JSON
@@ -243,28 +298,40 @@ public interface JSONObjectBuilder {
 		 *
 		 * @param collection the string collection to add to the JSON array
 		 */
-		public void addAllStrings(Collection<String> collection);
+		public void addAllStrings(Collection<String> collection) {
+			Stream<String> stream = collection.stream();
+
+			stream.forEach(_jsonArray::add);
+		}
 
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
 		 * @param value the boolean value to add to the JSON array
 		 */
-		public void addBoolean(Boolean value);
+		public void addBoolean(Boolean value) {
+			_jsonArray.add(value);
+		}
 
 		/**
 		 * Adds a new number to the JSON array.
 		 *
 		 * @param value the number to add to the JSON array
 		 */
-		public void addNumber(Number value);
+		public void addNumber(Number value) {
+			_jsonArray.add(value);
+		}
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
 		 * @param value the string to add to the JSON array
 		 */
-		public void addString(String value);
+		public void addString(String value) {
+			_jsonArray.add(value);
+		}
+
+		private final JsonArray _jsonArray;
 
 	}
 
@@ -274,21 +341,43 @@ public interface JSONObjectBuilder {
 	 * primitive value ({@link #stringValue(String)}, {@link
 	 * #numberValue(Number)}, or {@link #booleanValue(Boolean)}).
 	 */
-	public interface FieldStep {
+	public static class FieldStep {
+
+		public FieldStep(String name, JsonObject jsonObject) {
+			_name = name;
+			_jsonObject = jsonObject;
+		}
 
 		/**
 		 * Begins creating a JSON array inside the field.
 		 *
 		 * @return the builder's array value step
 		 */
-		public ArrayValueStep arrayValue();
+		public ArrayValueStep arrayValue() {
+			Optional<JsonElement> optional = Optional.ofNullable(
+				_jsonObject.get(_name));
+
+			JsonArray jsonArray = optional.filter(
+				JsonElement::isJsonArray
+			).map(
+				JsonArray.class::cast
+			).orElseGet(
+				JsonArray::new
+			);
+
+			_jsonObject.add(_name, jsonArray);
+
+			return new ArrayValueStep(jsonArray);
+		}
 
 		/**
 		 * Adds a new boolean value to the JSON array.
 		 *
 		 * @param value the boolean value to add to the JSON array
 		 */
-		public void booleanValue(Boolean value);
+		public void booleanValue(Boolean value) {
+			_jsonObject.addProperty(_name, value);
+		}
 
 		/**
 		 * Begins creating a new JSON object field.
@@ -296,7 +385,22 @@ public interface JSONObjectBuilder {
 		 * @param  name the new field's name
 		 * @return the builder's field step
 		 */
-		public FieldStep field(String name);
+		public FieldStep field(String name) {
+			Optional<JsonElement> optional = Optional.ofNullable(
+				_jsonObject.get(_name));
+
+			JsonObject jsonObject = optional.filter(
+				JsonElement::isJsonObject
+			).map(
+				JsonObject.class::cast
+			).orElseGet(
+				JsonObject::new
+			);
+
+			_jsonObject.add(_name, jsonObject);
+
+			return new FieldStep(name, jsonObject);
+		}
 
 		/**
 		 * Begins creating a new JSON object field, only if a condition is met.
@@ -309,7 +413,15 @@ public interface JSONObjectBuilder {
 		 * @return the builder's field step
 		 */
 		public FieldStep ifCondition(
-			boolean condition, Function<FieldStep, FieldStep> ifFunction);
+			boolean condition, Function<FieldStep, FieldStep> ifFunction) {
+
+			if (condition) {
+				return ifFunction.apply(this);
+			}
+			else {
+				return this;
+			}
+		}
 
 		/**
 		 * Begins creating a new JSON object field, where the resulting field
@@ -326,7 +438,15 @@ public interface JSONObjectBuilder {
 		 */
 		public FieldStep ifElseCondition(
 			boolean condition, Function<FieldStep, FieldStep> ifFunction,
-			Function<FieldStep, FieldStep> elseFunction);
+			Function<FieldStep, FieldStep> elseFunction) {
+
+			if (condition) {
+				return ifFunction.apply(this);
+			}
+			else {
+				return elseFunction.apply(this);
+			}
+		}
 
 		/**
 		 * Begins creating a new nested JSON object field.
@@ -335,7 +455,15 @@ public interface JSONObjectBuilder {
 		 * @param  nestedNames the list of the nested field names
 		 * @return the builder's field step
 		 */
-		public FieldStep nestedField(String parentName, String... nestedNames);
+		public FieldStep nestedField(String parentName, String... nestedNames) {
+			FieldStep fieldStep = field(parentName);
+
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.field(nestedName);
+			}
+
+			return fieldStep;
+		}
 
 		/**
 		 * Begins creating a new nested JSON object field, adding a prefix to
@@ -348,7 +476,16 @@ public interface JSONObjectBuilder {
 		 * @return the builder's field step
 		 */
 		public FieldStep nestedPrefixedField(
-			String prefix, String parentName, String... nestedNames);
+			String prefix, String parentName, String... nestedNames) {
+
+			FieldStep fieldStep = nestedField(prefix, parentName);
+
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.nestedField(prefix, nestedName);
+			}
+
+			return fieldStep;
+		}
 
 		/**
 		 * Begins creating a new nested JSON object field, adding a suffix to
@@ -361,22 +498,40 @@ public interface JSONObjectBuilder {
 		 * @return the builder's field step
 		 */
 		public FieldStep nestedSuffixedField(
-			String suffix, String parentName, String... nestedNames);
+			String suffix, String parentName, String... nestedNames) {
+
+			FieldStep fieldStep = nestedField(parentName, suffix);
+
+			for (String nestedName : nestedNames) {
+				fieldStep = fieldStep.nestedField(nestedName, suffix);
+			}
+
+			return fieldStep;
+		}
 
 		/**
 		 * Adds a new number to the JSON array.
 		 *
 		 * @param value the number to add to the JSON array
 		 */
-		public void numberValue(Number value);
+		public void numberValue(Number value) {
+			_jsonObject.addProperty(_name, value);
+		}
 
 		/**
 		 * Adds a new string to the JSON array.
 		 *
 		 * @param value the string to add to the JSON array
 		 */
-		public void stringValue(String value);
+		public void stringValue(String value) {
+			_jsonObject.addProperty(_name, value);
+		}
+
+		private final JsonObject _jsonObject;
+		private final String _name;
 
 	}
+
+	private final JsonObject _jsonObject = new JsonObject();
 
 }

@@ -18,9 +18,9 @@ import com.google.gson.JsonObject;
 
 import com.liferay.vulcan.alias.BinaryFunction;
 import com.liferay.vulcan.endpoint.RootEndpoint;
+import com.liferay.vulcan.error.VulcanDeveloperError;
 import com.liferay.vulcan.pagination.Page;
 import com.liferay.vulcan.pagination.SingleModel;
-import com.liferay.vulcan.provider.ServerURLProvider;
 import com.liferay.vulcan.resource.RelatedCollection;
 import com.liferay.vulcan.resource.Representor;
 import com.liferay.vulcan.resource.Routes;
@@ -29,7 +29,9 @@ import com.liferay.vulcan.resource.identifier.RootIdentifier;
 import com.liferay.vulcan.result.ThrowableFunction;
 import com.liferay.vulcan.result.Try;
 import com.liferay.vulcan.uri.Path;
+import com.liferay.vulcan.url.ServerURL;
 import com.liferay.vulcan.wiring.osgi.manager.CollectionResourceManager;
+import com.liferay.vulcan.wiring.osgi.manager.ProviderManager;
 
 import java.io.InputStream;
 
@@ -194,13 +196,17 @@ public class RootEndpointImpl implements RootEndpoint {
 		List<String> rootCollectionResourceNames =
 			_collectionResourceManager.getRootCollectionResourceNames();
 
-		String serverURL = _serverURLProvider.getServerURL(_httpServletRequest);
+		Optional<ServerURL> optional = _providerManager.provide(
+			ServerURL.class, _httpServletRequest);
+
+		ServerURL serverURL = optional.orElseThrow(
+			() -> new VulcanDeveloperError.MustHaveProvider(ServerURL.class));
 
 		JsonObject resourcesJsonObject = new JsonObject();
 
 		rootCollectionResourceNames.forEach(
 			name -> {
-				String url = serverURL + "/p/" + name;
+				String url = serverURL.getServerURL() + "/p/" + name;
 
 				JsonObject jsonObject = new JsonObject();
 
@@ -378,6 +384,6 @@ public class RootEndpointImpl implements RootEndpoint {
 	private HttpServletRequest _httpServletRequest;
 
 	@Reference
-	private ServerURLProvider _serverURLProvider;
+	private ProviderManager _providerManager;
 
 }

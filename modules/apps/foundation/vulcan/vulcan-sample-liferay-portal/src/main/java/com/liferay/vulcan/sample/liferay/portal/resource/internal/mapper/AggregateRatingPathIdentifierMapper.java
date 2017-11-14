@@ -30,9 +30,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * Converts a {@link Path} to a {@link
- * AggregateRatingIdentifier},
- * and vice versa.
+ * Converts a {@link Path} to a {@link AggregateRatingIdentifier}, and vice
+ * versa.
  *
  * <p>
  * The {@code AggregateRatingPathIdentifierMapper} can then be provided as a

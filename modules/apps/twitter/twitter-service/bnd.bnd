@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Twitter Service
 Bundle-SymbolicName: com.liferay.twitter.service
-Bundle-Version: 1.0.16
+Bundle-Version: 1.0.17
 Export-Package:\
 	com.liferay.twitter.configuration,\
 	com.liferay.twitter.util

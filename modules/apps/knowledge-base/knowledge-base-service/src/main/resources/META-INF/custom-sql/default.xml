@@ -9,8 +9,10 @@
 		INNER JOIN
 			KBFolder
 		ON
-			(KBArticle.kbFolderId = KBFolder.kbFolderId AND
-			KBArticle.groupId = KBFolder.groupId)
+			(
+				KBArticle.kbFolderId = KBFolder.kbFolderId AND
+				KBArticle.groupId = KBFolder.groupId
+			)
 		WHERE
 			KBArticle.groupId = ? AND
 			KBArticle.urlTitle = ? AND
@@ -25,8 +27,10 @@
 		INNER JOIN
 			KBFolder
 		ON
-			(KBArticle.kbFolderId = KBFolder.kbFolderId AND
-			KBArticle.groupId = KBFolder.groupId)
+			(
+				KBArticle.kbFolderId = KBFolder.kbFolderId AND
+				KBArticle.groupId = KBFolder.groupId
+			)
 		WHERE
 			KBArticle.groupId = ? AND
 			KBArticle.urlTitle = ? AND

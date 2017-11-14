@@ -23,4 +23,5 @@ Export-Package:\
 	com.liferay.vulcan.resource.identifier.mapper,\
 	com.liferay.vulcan.response.control,\
 	com.liferay.vulcan.result,\
-	com.liferay.vulcan.uri
+	com.liferay.vulcan.uri,\
+	com.liferay.vulcan.url

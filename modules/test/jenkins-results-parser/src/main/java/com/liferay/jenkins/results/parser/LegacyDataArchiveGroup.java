@@ -49,9 +49,8 @@ public class LegacyDataArchiveGroup {
 
 		String status = legacyDataGitWorkingDirectory.status();
 
-		if (!status.contains("nothing to commit, working directory clean") &&
-			!status.contains(
-				"nothing added to commit but untracked files present")) {
+		if (!status.contains("nothing to commit") &&
+			!status.contains("nothing added to commit")) {
 
 			Commit latestManualCommit =
 				_legacyDataArchiveUtil.getLatestManualCommit();

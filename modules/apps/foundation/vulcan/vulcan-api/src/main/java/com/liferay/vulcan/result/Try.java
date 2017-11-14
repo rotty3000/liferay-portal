@@ -146,6 +146,28 @@ public abstract class Try<T> {
 		ThrowableFunction<? super T, Try<U>> function);
 
 	/**
+	 * Returns the value resultant of applying {@code failureFunction} if this
+	 * is a {@code Failure} or {@code successFunction} if this is a {@code
+	 * Success}.
+	 *
+	 * <p>
+	 * If {@code successFunction} is applied and throws an {@code Exception} the
+	 * result of the method is the result of applying {@code successFunction} to
+	 * the new {@code Exception}.
+	 * </p>
+	 *
+	 * @param  failureFunction the function to apply when this {@code Try} is a
+	 *         {@code Failure}
+	 * @param  successFunction the function to apply when this {@code Try} is a
+	 *         {@code Success}
+	 * @return the value resultant of applying the correspondent function.
+	 * @review
+	 */
+	public abstract <U> U fold(
+		Function<Exception, U> failureFunction,
+		ThrowableFunction<T, U> successFunction);
+
+	/**
 	 * Returns a {@code Success} instance's value, or a {@code Failure}
 	 * instance's exception. What this method returns therefore depends on
 	 * whether the current {@code Try} instance is a {@code Success} or {@code
@@ -321,6 +343,16 @@ public abstract class Try<T> {
 		}
 
 		@Override
+		public <U> U fold(
+			Function<Exception, U> failureFunction,
+			ThrowableFunction<T, U> successFunction) {
+
+			Objects.requireNonNull(failureFunction);
+
+			return failureFunction.apply(_exception);
+		}
+
+		@Override
 		public T get() throws Exception {
 			throw _exception;
 		}
@@ -464,6 +496,21 @@ public abstract class Try<T> {
 			}
 			catch (Exception e) {
 				return Try.fail(e);
+			}
+		}
+
+		@Override
+		public <U> U fold(
+			Function<Exception, U> failureFunction,
+			ThrowableFunction<T, U> successFunction) {
+
+			Objects.requireNonNull(successFunction);
+
+			try {
+				return successFunction.apply(_value);
+			}
+			catch (Exception e) {
+				return failureFunction.apply(e);
 			}
 		}
 

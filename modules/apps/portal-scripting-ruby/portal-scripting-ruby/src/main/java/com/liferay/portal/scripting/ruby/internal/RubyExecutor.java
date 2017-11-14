@@ -297,7 +297,7 @@ public class RubyExecutor extends BaseScriptingExecutor {
 	}
 
 	private String _basePath;
-	private boolean _executeInSeparateThread = true;
+	private boolean _executeInSeparateThread = false;
 	private List<String> _loadPaths;
 	private volatile RubyScriptingConfiguration _rubyScriptingConfiguration;
 	private ScriptingContainer<org.jruby.embed.ScriptingContainer>

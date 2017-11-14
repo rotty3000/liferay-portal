@@ -46,6 +46,13 @@ public class ConfigurationCleaner {
 			Dictionary<String, Object> dictionary =
 				configuration.getProperties();
 
+			String ignore = (String)dictionary.get(
+				"configuration.cleaner.ignore");
+
+			if (Boolean.valueOf(ignore)) {
+				continue;
+			}
+
 			String fileName = (String)dictionary.get(
 				"felix.fileinstall.filename");
 

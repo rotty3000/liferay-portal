@@ -1,6 +1,6 @@
 Bundle-Name: ${manifest.bundle.name}
 Bundle-SymbolicName: ${manifest.bundle.symbolic.name}
-Bundle-Version: 2.23.0
+Bundle-Version: 2.24.0
 Export-Package:\
 	com.liferay.portal.bean,\
 	com.liferay.portal.cache.thread.local,\
@@ -81,5 +81,5 @@ Include-Resource:\
 	@../tmp/lib-pre/com.liferay.portal.impl.blogs.compat.jar,\
 	@../tmp/lib-pre/com.liferay.portal.impl.trash.compat.jar
 Private-Package: com.liferay.*.dependencies
--baseline: *;file=${project.dir}/.bnd/ant-baseline-cache/com.liferay.portal.impl-2.22.0.jar
+-baseline: *;file=${project.dir}/.bnd/ant-baseline-cache/com.liferay.portal.impl-2.23.0.jar
 -donotcopy: (log4j\.properties|logging\.properties|portal-.*\.properties|system-.*\.properties|\.touch)

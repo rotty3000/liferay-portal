@@ -11,5 +11,5 @@ dependencies {
 	provided project(":apps:foundation:vulcan:vulcan-liferay-portal")
 	provided project(":apps:foundation:vulcan:vulcan-wiring-osgi")
 
-	testCompile group: "org.mockito", name: "mockito-all", version: "1.8.4"
+	testCompile group: "org.mockito", name: "mockito-core", version: "1.8.4"
 }

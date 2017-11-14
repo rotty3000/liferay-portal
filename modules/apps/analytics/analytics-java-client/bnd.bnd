@@ -1,6 +1,0 @@
-Bundle-Name: Liferay Analytics Java Client
-Bundle-SymbolicName: com.liferay.analytics.java.client
-Bundle-Version: 1.0.0
-Export-Package: com.liferay.analytics.java.client
-Liferay-Releng-Module-Group-Description:
-Liferay-Releng-Module-Group-Title: Analytics

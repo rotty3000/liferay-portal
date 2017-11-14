@@ -14,10 +14,11 @@
 
 package com.liferay.vulcan.result;
 
-import static com.liferay.vulcan.result.TryMatchers.aFailTry;
-import static com.liferay.vulcan.result.TryMatchers.aSuccessTry;
-import static com.liferay.vulcan.result.TryMatchers.aTryWithValue;
+import static com.liferay.vulcan.test.result.TryMatchers.aFailTry;
+import static com.liferay.vulcan.test.result.TryMatchers.aSuccessTry;
+import static com.liferay.vulcan.test.result.TryMatchers.aTryWithValueThat;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -135,7 +136,46 @@ public class TryTest {
 
 		assertThat(
 			stringTry.filter(string -> string.startsWith("Live")),
-			is(aTryWithValue(equalTo("Live long"))));
+			is(aTryWithValueThat(equalTo("Live long"))));
+	}
+
+	@Parameters(method = FAIL)
+	@Test
+	public void testInvokingFoldOnFailureExecutesFailureFunction(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(exception -> 3, string -> 5);
+
+		assertThat(integer, is(equalTo(3)));
+	}
+
+	@Parameters(method = SUCCESS)
+	@Test
+	public void testInvokingFoldOnSuccessExecutesSuccessFunction(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(exception -> 3, string -> 5);
+
+		assertThat(integer, is(equalTo(5)));
+	}
+
+	@Parameters(method = SUCCESS)
+	@Test
+	public void testInvokingFoldOnSuccessWithFailureExecutesBothFunctions(
+		Try<String> stringTry) {
+
+		Integer integer = stringTry.fold(
+			exception -> {
+				assertThat(
+					exception, is(instanceOf(IllegalArgumentException.class)));
+
+				return 3;
+			},
+			string -> {
+				throw new IllegalArgumentException();
+			});
+
+		assertThat(integer, is(equalTo(3)));
 	}
 
 	@Test
@@ -234,7 +274,7 @@ public class TryTest {
 
 		assertThat(
 			stringTry.mapFailMatching(RuntimeException.class, IOException::new),
-			is(aTryWithValue(equalTo("Live long"))));
+			is(aTryWithValueThat(equalTo("Live long"))));
 	}
 
 	@Parameters(method = FAIL)
@@ -255,7 +295,7 @@ public class TryTest {
 
 		assertThat(
 			stringTry.mapFail(__ -> new IOException()),
-			is(aTryWithValue(equalTo("Live long"))));
+			is(aTryWithValueThat(equalTo("Live long"))));
 	}
 
 	@Parameters(method = FAIL)
@@ -359,7 +399,8 @@ public class TryTest {
 		Try<String> newTry = stringTry.flatMap(
 			string -> Try.success(string + " and prosper"));
 
-		assertThat(newTry, is(aTryWithValue(equalTo("Live long and prosper"))));
+		assertThat(
+			newTry, is(aTryWithValueThat(equalTo("Live long and prosper"))));
 	}
 
 	@Parameters(method = FAIL)
@@ -379,7 +420,8 @@ public class TryTest {
 
 		Try<String> newTry = stringTry.map(string -> string + " and prosper");
 
-		assertThat(newTry, is(aTryWithValue(equalTo("Live long and prosper"))));
+		assertThat(
+			newTry, is(aTryWithValueThat(equalTo("Live long and prosper"))));
 	}
 
 	@Parameters(method = SUCCESS)
@@ -442,7 +484,7 @@ public class TryTest {
 
 		assertThat(
 			stringTry.recoverWith(__ -> Try.fail(new Exception())),
-			is(aTryWithValue(equalTo("Live long"))));
+			is(aTryWithValueThat(equalTo("Live long"))));
 	}
 
 	@Parameters(method = FAIL)
@@ -468,7 +510,7 @@ public class TryTest {
 
 		assertThat(
 			stringTry.recoverWith(__ -> Try.fromFallible(() -> "and prosper")),
-			is(aTryWithValue(equalTo("and prosper"))));
+			is(aTryWithValueThat(equalTo("and prosper"))));
 	}
 
 	@Parameters(method = SUCCESS)
@@ -478,7 +520,7 @@ public class TryTest {
 
 		assertThat(
 			stringTry.recoverWith(__ -> Try.fromFallible(() -> "and prosper")),
-			is(aTryWithValue(equalTo("Live long"))));
+			is(aTryWithValueThat(equalTo("Live long"))));
 	}
 
 	@Parameters(method = FAIL)
@@ -510,7 +552,7 @@ public class TryTest {
 	@Parameters(method = SUCCESS)
 	@Test
 	public void testOnSuccessShouldGetValue(Try<String> stringTry) {
-		assertThat(stringTry, is(aTryWithValue(equalTo("Live long"))));
+		assertThat(stringTry, is(aTryWithValueThat(equalTo("Live long"))));
 	}
 
 }

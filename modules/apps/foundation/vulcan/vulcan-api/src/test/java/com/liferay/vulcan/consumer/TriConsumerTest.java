@@ -40,7 +40,6 @@ public class TriConsumerTest {
 			};
 
 		triConsumer.andThen(
-
 			triConsumer
 		).accept(
 			"| Live", " long and", " prosper |"

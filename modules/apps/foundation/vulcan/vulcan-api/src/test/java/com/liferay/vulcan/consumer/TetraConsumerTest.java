@@ -41,7 +41,6 @@ public class TetraConsumerTest {
 			};
 
 		tetraConsumer.andThen(
-
 			tetraConsumer
 		).accept(
 			"| Live", " long", " and", " prosper |"

@@ -16,7 +16,7 @@ package com.liferay.vulcan.message.hal.internal;
 
 import com.google.gson.JsonObject;
 
-import com.liferay.vulcan.jaxrs.json.internal.JSONObjectBuilderImpl;
+import com.liferay.vulcan.message.json.JSONObjectBuilder;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -94,7 +94,7 @@ public class HALPageMessageMapperTest {
 
 	private final HALPageMessageMapper _halPageMessageMapper =
 		new HALPageMessageMapper();
-	private final JSONObjectBuilderImpl _jsonObjectBuilder =
-		new JSONObjectBuilderImpl();
+	private final JSONObjectBuilder _jsonObjectBuilder =
+		new JSONObjectBuilder();
 
 }

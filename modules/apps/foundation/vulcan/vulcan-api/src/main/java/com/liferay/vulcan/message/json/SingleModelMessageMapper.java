@@ -17,19 +17,19 @@ package com.liferay.vulcan.message.json;
 import aQute.bnd.annotation.ConsumerType;
 
 import com.liferay.vulcan.list.FunctionalList;
+import com.liferay.vulcan.pagination.SingleModel;
 
 import java.util.List;
 
 import javax.ws.rs.core.HttpHeaders;
 
 /**
- * Maps {@link com.liferay.vulcan.pagination.SingleModel} data to its
- * representation in a JSON object. Instances of this interface work like
- * events. The {@code javax.ws.rs.ext.MessageBodyWriter} of the {@code
- * SingleModel} calls the {@code SingleModelMessageMapper} methods. In each
- * method, developers should only map the provided part of the resource to its
- * representation in a JSON object. To enable this, each method receives a
- * {@link JSONObjectBuilder}.
+ * Maps {@link SingleModel} data to its representation in a JSON object.
+ * Instances of this interface work like events. The {@code
+ * javax.ws.rs.ext.MessageBodyWriter} of the {@code SingleModel} calls the
+ * {@code SingleModelMessageMapper} methods. In each method, developers should
+ * only map the provided part of the resource to its representation in a JSON
+ * object. To enable this, each method receives a {@link JSONObjectBuilder}.
  *
  * The methods {@link #onStart(JSONObjectBuilder, Object, Class, HttpHeaders)}
  * and {@link #onFinish(JSONObjectBuilder, Object, Class, HttpHeaders)} are
@@ -242,14 +242,13 @@ public interface SingleModelMessageMapper<T> {
 	 * Returns {@code true} if the mapper can map all things related to the
 	 * current request.
 	 *
-	 * @param  model the model
-	 * @param  modelClass the model class
+	 * @param  singleModel the single model
 	 * @param  httpHeaders the HTTP headers of the current request
 	 * @return {@code true} if the mapper can map the request; {@code false}
 	 *         otherwise
 	 */
 	public default boolean supports(
-		T model, Class<T> modelClass, HttpHeaders httpHeaders) {
+		SingleModel<T> singleModel, HttpHeaders httpHeaders) {
 
 		return true;
 	}

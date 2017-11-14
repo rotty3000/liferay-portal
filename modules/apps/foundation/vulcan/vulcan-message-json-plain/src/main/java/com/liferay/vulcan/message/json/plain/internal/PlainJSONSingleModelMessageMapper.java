@@ -64,6 +64,8 @@ public class PlainJSONSingleModelMessageMapper<T>
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).field(
+			fieldName
 		).booleanValue(
 			value
 		);
@@ -96,6 +98,8 @@ public class PlainJSONSingleModelMessageMapper<T>
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).field(
+			fieldName
 		).numberValue(
 			value
 		);
@@ -111,6 +115,8 @@ public class PlainJSONSingleModelMessageMapper<T>
 
 		jsonObjectBuilder.nestedField(
 			embeddedPathElements.head(), tailStream.toArray(String[]::new)
+		).field(
+			fieldName
 		).stringValue(
 			value
 		);

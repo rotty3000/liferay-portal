@@ -14,7 +14,7 @@
 
 package com.liferay.vulcan.result;
 
-import static com.liferay.vulcan.result.TryMatchers.aTryWithValue;
+import static com.liferay.vulcan.test.result.TryMatchers.aTryWithValueThat;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -39,7 +39,7 @@ public class ThrowableFunctionTest {
 
 		assertThat(
 			stringTry.map(firstFunction.andThen(secondFunction)),
-			is(aTryWithValue(equalTo("Live long and prosper"))));
+			is(aTryWithValueThat(equalTo("Live long and prosper"))));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class ThrowableFunctionTest {
 
 		assertThat(
 			stringTry.map(secondFunction.compose(firstFunction)),
-			is(aTryWithValue(equalTo(6))));
+			is(aTryWithValueThat(equalTo(6))));
 	}
 
 }

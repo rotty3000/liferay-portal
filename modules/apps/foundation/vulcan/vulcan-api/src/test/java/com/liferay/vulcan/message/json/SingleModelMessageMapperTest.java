@@ -18,6 +18,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.liferay.vulcan.pagination.SingleModel;
+
 import javax.ws.rs.core.HttpHeaders;
 
 import org.junit.Test;
@@ -36,8 +38,10 @@ public class SingleModelMessageMapperTest {
 
 		HttpHeaders httpHeaders = Mockito.mock(HttpHeaders.class);
 
+		SingleModel<Integer> singleModel = new SingleModel<>(3, Integer.class);
+
 		assertThat(
-			singleModelMessageMapper.supports(3, Integer.class, httpHeaders),
+			singleModelMessageMapper.supports(singleModel, httpHeaders),
 			is(equalTo(true)));
 	}
 

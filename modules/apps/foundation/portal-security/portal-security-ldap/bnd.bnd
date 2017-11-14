@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Portal Security LDAP
 Bundle-SymbolicName: com.liferay.portal.security.ldap
-Bundle-Version: 2.2.11
+Bundle-Version: 2.2.13
 Export-Package:\
 	com.liferay.portal.security.ldap,\
 	com.liferay.portal.security.ldap.authenticator.configuration,\
@@ -19,7 +19,3 @@ Import-Package:\
 	*
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title: LDAP
--includeresource:\
-	@../../../../../lib/portal/antlr2.jar,\
-	@../../../../../lib/portal/antlr3.jar,\
-	@../../../../../lib/portal/stringtemplate.jar

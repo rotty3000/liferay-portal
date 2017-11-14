@@ -42,6 +42,7 @@
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/blogs/blogs-item-selector-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/blogs/blogs-recent-bloggers-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/blogs/blogs-service" />
+			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/blogs/blogs-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/bookmarks/bookmarks-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/comment/comment-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/collaboration/document-library/document-library-document-conversion" />
@@ -119,7 +120,6 @@
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/portal-security-sso/portal-security-sso-opensso" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/portal-security-sso/portal-security-sso-token" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/portal-settings/portal-settings-web" />
-			<property name="allowedExportPackageDirName" value="modules/apps/foundation/portal-template/portal-template-freemarker" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/portal-template/portal-template-soy" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/text-localizer/text-localizer-address" />
 			<property name="allowedExportPackageDirName" value="modules/apps/foundation/users-admin/users-admin-web" />
@@ -139,7 +139,6 @@
 			<property name="allowedExportPackageDirName" value="modules/apps/sync/sync-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/twitter/twitter-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/asset/asset-categories-admin-web" />
-			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/asset/asset-categories-navigation-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/asset/asset-display-template-service" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/asset/asset-publisher-web" />
 			<property name="allowedExportPackageDirName" value="modules/apps/web-experience/asset/asset-service" />
@@ -426,7 +425,8 @@
 	</source-processor>
 	<source-processor name="XMLSourceProcessor">
 		<check name="XMLBuildFileCheck" />
-		<check name="XMLCustomSQLFileCheck" />
+		<check name="XMLCustomSQLOrderCheck" />
+		<check name="XMLCustomSQLStylingCheck" />
 		<check name="XMLDDLStructuresFileCheck" />
 		<check name="XMLFriendlyURLRoutesFileCheck" />
 		<check name="XMLFSBExcludeFileCheck" />

@@ -24,6 +24,7 @@ buildscript {
 	}
 }
 
+apply plugin: AppDockerPlugin
 apply plugin: CoverallsPlugin
 
 allprojects {
@@ -113,8 +114,6 @@ configure(subprojects.findAll {!it.childProjects}) {
 	}
 }
 
-apply plugin: AppDockerPlugin
-
 appDocker {
 	imageName this.getImageName()
 	imageUser this.getUserName()
@@ -184,18 +183,18 @@ task runDocker(type: Exec) {
 	}
 
 	commandLine 'docker', 'run',
-		'-e', "JACOCO_DIR=${rootDir}/build/jacoco",
-		'-e', "JAVA_OPTS=$javaOpts",
-		'-e', "ROOT_DIR=${rootDir}",
-		'-p', '5000:5000',
-		'-p', '8080:8080',
-		'-p', '8099:8099',
-		'-p', '6666:6666',
-		'-v', "${rootDir}/build/jacoco:/jacoco",
-		'-v', "${getClientDeployDir()}:/deploy",
-		'-d',
-		'--name', "vulcan",
-		getImageNameWithUserAndVersion()
+	'-e', "JACOCO_DIR=${rootDir}/build/jacoco",
+	'-e', "JAVA_OPTS=$javaOpts",
+	'-e', "ROOT_DIR=${rootDir}",
+	'-p', '5005:5005',
+	'-p', '8080:8080',
+	'-p', '8099:8099',
+	'-p', '6666:6666',
+	'-v', "${rootDir}/build/jacoco:/jacoco",
+	'-v', "${getClientDeployDir()}:/deploy",
+	'-d',
+	'--name', "vulcan",
+	getImageNameWithUserAndVersion()
 
 	finalizedBy checkDocker
 }

@@ -1,0 +1,19 @@
+{
+	"analyticsKey": "AnalyticsKey",
+	"context": {
+		"k1": "v1",
+		"k2": "v2"
+	},
+	"events": [
+		{
+			"applicationId": "ApplicationId",
+			"eventId": "View",
+			"properties": {
+				"k1": "v1",
+				"k2": "v2"
+			}
+		}
+	],
+	"protocolVersion": "1.0",
+	"userId": "UserId"
+}

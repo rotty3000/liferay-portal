@@ -26,14 +26,15 @@
 			FROM
 				ResourceBlock resourceBlock
 			WHERE
-				resourceBlock.resourceBlockId IN (
-					SELECT
-						resourceBlockPermission.resourceBlockId
-					FROM
-						ResourceBlockPermission resourceBlockPermission
-					WHERE
-						(resourceBlockPermission.roleId IN ([$ROLE_ID$]))
-				) AND
+				resourceBlock.resourceBlockId IN
+					(
+						SELECT
+							resourceBlockPermission.resourceBlockId
+						FROM
+							ResourceBlockPermission resourceBlockPermission
+						WHERE
+							(resourceBlockPermission.roleId IN ([$ROLE_ID$]))
+					) AND
 				(resourceBlock.companyId = [$COMPANY_ID$]) AND
 				(resourceBlock.groupId = [$GROUP_ID$]) AND
 				(resourceBlock.name = '[$RESOURCE_BLOCK_NAME$]')
@@ -169,14 +170,15 @@
 			FROM
 				Group_
 			WHERE
-				Group_.groupId IN (
-					SELECT
-						Group_.liveGroupId
-					FROM
-						Group_
-					WHERE
-						Group_.liveGroupId != 0
-				)
+				Group_.groupId IN
+					(
+						SELECT
+							Group_.liveGroupId
+						FROM
+							Group_
+						WHERE
+							Group_.liveGroupId != 0
+					)
 		]]>
 	</sql>
 	<sql id="com.liferay.portal.kernel.service.persistence.GroupFinder.findByNoLayouts">
@@ -1003,18 +1005,20 @@
 				(
 					(Role_.classNameId = ?) AND
 					(Role_.roleId != ?) AND
-					(Role_.classPK IN (
-						SELECT
-							Team.teamId
-						FROM
-							Team
-						WHERE
-							(groupId = ?) AND
+					(
+						Role_.classPK IN
 							(
-								(lower(Team.name) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
-								(lower(Team.description) LIKE ? [$AND_OR_NULL_CHECK$])
+								SELECT
+									Team.teamId
+								FROM
+									Team
+								WHERE
+									(groupId = ?) AND
+									(
+										(lower(Team.name) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+										(lower(Team.description) LIKE ? [$AND_OR_NULL_CHECK$])
+									)
 							)
-						)
 					)
 				)
 		]]>
@@ -1184,18 +1188,20 @@
 				(
 					(Role_.classNameId = ?) AND
 					(Role_.roleId != ?) AND
-					(Role_.classPK IN (
-						SELECT
-							Team.teamId
-						FROM
-							Team
-						WHERE
-							(groupId = ?) AND
+					(
+						Role_.classPK IN
 							(
-								(lower(Team.name) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
-								(lower(Team.description) LIKE ? [$AND_OR_NULL_CHECK$])
+								SELECT
+									Team.teamId
+								FROM
+									Team
+								WHERE
+									(groupId = ?) AND
+									(
+										(lower(Team.name) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+										(lower(Team.description) LIKE ? [$AND_OR_NULL_CHECK$])
+									)
 							)
-						)
 					)
 				)
 			ORDER BY
@@ -1480,8 +1486,7 @@
 							FROM
 								Users_UserGroups, UserGroups_Teams
 							WHERE
-								Users_UserGroups.userId = ?
-							AND
+								Users_UserGroups.userId = ? AND
 								Users_UserGroups.userGroupId = UserGroups_Teams.userGroupId
 						) OR
 					Team.teamId IN
@@ -1491,8 +1496,7 @@
 							FROM
 								User_, Users_Teams
 							WHERE
-								User_.userId = ?
-							AND
+								User_.userId = ? AND
 								User_.userId = Users_Teams.userId
 						)
 				)
@@ -1988,15 +1992,16 @@
 					UserGroupGroupRole
 				WHERE
 					(UserGroupGroupRole.groupId = ?) AND
-					(UserGroupGroupRole.roleId IN
-						(
-							SELECT
-								Role_.roleId
-							FROM
-								Role_
-							WHERE
-								(Role_.type_ = ?)
-						)
+					(
+						UserGroupGroupRole.roleId IN
+							(
+								SELECT
+									Role_.roleId
+								FROM
+									Role_
+								WHERE
+									(Role_.type_ = ?)
+							)
 					)
 			)
 		]]>
@@ -2026,15 +2031,16 @@
 					UserGroupRole
 				WHERE
 					(UserGroupRole.groupId = ?) AND
-					(UserGroupRole.roleId IN
-						(
-							SELECT
-								Role_.roleId
-							FROM
-								Role_
-							WHERE
-								(Role_.type_ = ?)
-						)
+					(
+						UserGroupRole.roleId IN
+							(
+								SELECT
+									Role_.roleId
+								FROM
+									Role_
+								WHERE
+									(Role_.type_ = ?)
+							)
 					)
 			)
 		]]>
@@ -2093,31 +2099,33 @@
 		<![CDATA[
 			SELECT
 				TEMP_TABLE.companyId AS companyId, TEMP_TABLE.name AS name, TEMP_TABLE.scope AS scope, TEMP_TABLE.primKey AS primKey, Role_.roleId AS roleId
-			FROM (
-				SELECT
-					DISTINCT ResourcePermission.companyId, ResourcePermission.name, ResourcePermission.scope, ResourcePermission.primKey
-				FROM
-					ResourcePermission
-				WHERE
-					(ResourcePermission.name = ?) AND
-					(ResourcePermission.scope = ?)
-			) TEMP_TABLE
+			FROM
+				(
+					SELECT
+						DISTINCT ResourcePermission.companyId, ResourcePermission.name, ResourcePermission.scope, ResourcePermission.primKey
+					FROM
+						ResourcePermission
+					WHERE
+						(ResourcePermission.name = ?) AND
+						(ResourcePermission.scope = ?)
+				) TEMP_TABLE
 			CROSS JOIN
 				Role_
 			WHERE
 				(TEMP_TABLE.companyId = Role_.companyId) AND
-				NOT EXISTS (
-					SELECT
-						*
-					FROM
-						ResourcePermission
-					WHERE
-						(TEMP_TABLE.companyId = ResourcePermission.companyId) AND
-						(TEMP_TABLE.name = ResourcePermission.name) AND
-						(TEMP_TABLE.scope = ResourcePermission.scope) AND
-						(TEMP_TABLE.primKey = ResourcePermission.primKey) AND
-						(Role_.roleId = ResourcePermission.roleId)
-				) AND
+				NOT EXISTS
+					(
+						SELECT
+							*
+						FROM
+							ResourcePermission
+						WHERE
+							(TEMP_TABLE.companyId = ResourcePermission.companyId) AND
+							(TEMP_TABLE.name = ResourcePermission.name) AND
+							(TEMP_TABLE.scope = ResourcePermission.scope) AND
+							(TEMP_TABLE.primKey = ResourcePermission.primKey) AND
+							(Role_.roleId = ResourcePermission.roleId)
+					) AND
 				(Role_.name = ?)
 		]]>
 	</sql>

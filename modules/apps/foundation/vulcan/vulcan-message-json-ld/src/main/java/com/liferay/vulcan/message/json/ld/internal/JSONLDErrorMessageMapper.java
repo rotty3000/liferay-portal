@@ -68,4 +68,13 @@ public class JSONLDErrorMessageMapper implements ErrorMessageMapper {
 		);
 	}
 
+	@Override
+	public void mapType(JSONObjectBuilder jsonObjectBuilder, String type) {
+		jsonObjectBuilder.field(
+			"@type"
+		).stringValue(
+			type
+		);
+	}
+
 }
