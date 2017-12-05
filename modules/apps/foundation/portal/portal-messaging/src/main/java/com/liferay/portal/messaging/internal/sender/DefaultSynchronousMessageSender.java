@@ -16,8 +16,6 @@ package com.liferay.portal.messaging.internal.sender;
 
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
@@ -28,6 +26,9 @@ import com.liferay.portal.kernel.security.SecureRandomUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael C. Han
@@ -49,8 +50,8 @@ public class DefaultSynchronousMessageSender
 		Destination destination = _messageBus.getDestination(destinationName);
 
 		if (destination == null) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Destination " + destinationName + " is not configured");
 			}
 
@@ -58,8 +59,8 @@ public class DefaultSynchronousMessageSender
 		}
 
 		if (destination.getMessageListenerCount() == 0) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Destination " + destinationName +
 						" does not have any message listeners");
 			}
@@ -77,8 +78,8 @@ public class DefaultSynchronousMessageSender
 		if (Validator.isNull(responseDestinationName) ||
 			!_messageBus.hasDestination(responseDestinationName)) {
 
-			if (_log.isDebugEnabled()) {
-				_log.debug(
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(
 					"Response destination " + responseDestinationName +
 						" is not configured");
 			}
@@ -121,7 +122,7 @@ public class DefaultSynchronousMessageSender
 		return uuid.toString();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DefaultSynchronousMessageSender.class);
 
 	private EntityCache _entityCache;

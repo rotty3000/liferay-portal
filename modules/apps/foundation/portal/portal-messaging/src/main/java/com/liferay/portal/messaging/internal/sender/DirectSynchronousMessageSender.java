@@ -14,8 +14,6 @@
 
 package com.liferay.portal.messaging.internal.sender;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Destination;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
@@ -27,6 +25,9 @@ import com.liferay.portal.kernel.messaging.sender.SynchronousMessageSender;
 import com.liferay.portal.kernel.nio.intraband.messaging.IntrabandBridgeDestination;
 
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Shuyang Zhou
@@ -41,8 +42,8 @@ public class DirectSynchronousMessageSender
 		Destination destination = _messageBus.getDestination(destinationName);
 
 		if (destination == null) {
-			if (_log.isInfoEnabled()) {
-				_log.info(
+			if (_logger.isInfoEnabled()) {
+				_logger.info(
 					"Destination " + destinationName + " is not configured");
 			}
 
@@ -75,8 +76,8 @@ public class DirectSynchronousMessageSender
 	public Object send(String destinationName, Message message, long timeout)
 		throws MessageBusException {
 
-		if (_log.isWarnEnabled()) {
-			_log.warn(
+		if (_logger.isWarnEnabled()) {
+			_logger.warn(
 				DirectSynchronousMessageSender.class.getName() +
 					" does not support timeout");
 		}
@@ -88,7 +89,7 @@ public class DirectSynchronousMessageSender
 		_messageBus = messageBus;
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		DirectSynchronousMessageSender.class);
 
 	private MessageBus _messageBus;
