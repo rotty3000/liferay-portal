@@ -441,6 +441,10 @@ public class WabProcessor {
 		PackageRef packageRef = analyzer.getPackageRef(packageName);
 
 		packages.put(packageRef, new Attrs());
+
+		if (!_importPackageParameters.containsKey(packageName)) {
+			_importPackageParameters.add(packageName, _optionalAttrs);
+		}
 	}
 
 	protected void processDeclarativeReferences(Analyzer analyzer)
@@ -448,6 +452,7 @@ public class WabProcessor {
 
 		processDefaultServletPackages();
 		processTLDDependencies(analyzer);
+		processPortalListenerClassesDependencies(analyzer);
 
 		Path pluginPath = _pluginDir.toPath();
 
@@ -621,7 +626,9 @@ public class WabProcessor {
 					}
 				}
 
-				if (containedInClasspath) {
+				if (containedInClasspath ||
+					importPackageName.startsWith("java.")) {
+
 					continue;
 				}
 
@@ -704,6 +711,37 @@ public class WabProcessor {
 			_importPackageParameters.mergeWith(parameters, true);
 
 			pluginPackageProperties.remove(Constants.IMPORT_PACKAGE);
+		}
+	}
+
+	protected void processPortalListenerClassesDependencies(Analyzer analyzer) {
+		File file = new File(_pluginDir, "WEB-INF/web.xml");
+
+		if (!file.exists()) {
+			return;
+		}
+
+		Document document = readDocument(file);
+
+		Element rootElement = document.getRootElement();
+
+		String xPathExpression = StringBundler.concat(
+			"//javaee:context-param[javaee:param-name='portalListenerClasses']",
+			"/javaee:param-value");
+
+		XPath xPath = SAXReaderUtil.createXPath(xPathExpression, _xsds);
+
+		Node node = xPath.selectSingleNode(rootElement);
+
+		if (Validator.isNotNull(node)) {
+			String text = node.getText();
+
+			String[] portalListenerClasses = StringUtil.split(
+				text, StringPool.COMMA);
+
+			for (String portalListenerClass : portalListenerClasses) {
+				processClass(analyzer, portalListenerClass.trim());
+			}
 		}
 	}
 
