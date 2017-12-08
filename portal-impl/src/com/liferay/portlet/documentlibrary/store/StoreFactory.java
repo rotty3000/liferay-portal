@@ -30,6 +30,8 @@ import com.liferay.registry.ServiceTrackerCustomizer;
 import com.liferay.registry.collections.ServiceTrackerCollections;
 import com.liferay.registry.collections.ServiceTrackerMap;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -130,6 +132,26 @@ public class StoreFactory {
 
 	public Store getStore(String key) {
 		Store store = _storeServiceTrackerMap.getService(key);
+
+		if (store == null) {
+			try {
+				Registry registry = RegistryUtil.getRegistry();
+
+				Collection<Store> stores = registry.getServices(
+					Store.class, "(store.type=" + key + ")");
+
+				if (!stores.isEmpty()) {
+					Iterator<Store> storeIterator = stores.iterator();
+
+					store = storeIterator.next();
+				}
+			}
+			catch (Exception e) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(e, e);
+				}
+			}
+		}
 
 		List<StoreWrapper> storeWrappers =
 			_storeWrapperServiceTrackerMap.getService(key);
