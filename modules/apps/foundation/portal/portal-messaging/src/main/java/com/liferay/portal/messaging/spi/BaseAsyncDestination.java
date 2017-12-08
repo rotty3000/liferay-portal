@@ -37,15 +37,17 @@ import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceTracker;
-import com.liferay.registry.ServiceTrackerCustomizer;
 
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Michael C. Han
@@ -57,11 +59,14 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	public void afterPropertiesSet() {
 		super.afterPropertiesSet();
 
-		Registry registry = RegistryUtil.getRegistry();
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-		serviceTracker = registry.trackServices(
-			PortalExecutorManager.class,
-			new PortalExecutorManagerServiceTrackerCustomizer());
+		BundleContext bundleContext = bundle.getBundleContext();
+
+		ServiceTracker<PortalExecutorManager, PortalExecutorManager>
+			serviceTracker = new ServiceTracker<>(
+				bundleContext, PortalExecutorManager.class,
+				new PortalExecutorManagerServiceTrackerCustomizer());
 
 		serviceTracker.open();
 	}
@@ -403,9 +408,11 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		public PortalExecutorManager addingService(
 			ServiceReference<PortalExecutorManager> serviceReference) {
 
-			Registry registry = RegistryUtil.getRegistry();
+			Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-			portalExecutorManager = registry.getService(serviceReference);
+			BundleContext bundleContext = bundle.getBundleContext();
+
+			portalExecutorManager = bundleContext.getService(serviceReference);
 
 			open();
 
