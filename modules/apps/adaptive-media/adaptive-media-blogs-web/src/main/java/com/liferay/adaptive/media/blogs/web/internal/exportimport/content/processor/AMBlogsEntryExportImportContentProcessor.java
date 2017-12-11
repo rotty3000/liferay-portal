@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	property = {
-		"model.class.name=com.liferay.blogs.kernel.model.BlogsEntry",
 		"model.class.name=com.liferay.blogs.model.BlogsEntry",
 		"service.ranking:Integer=100"
 	}
@@ -80,7 +79,7 @@ public class AMBlogsEntryExportImportContentProcessor
 	}
 
 	@Reference(
-		target = "(&(model.class.name=com.liferay.blogs.kernel.model.BlogsEntry)(!(component.name=com.liferay.adaptive.media.blogs.web.internal.exportimport.content.processor.AMBlogsEntryExportImportContentProcessor)))",
+		target = "(&(model.class.name=com.liferay.blogs.model.BlogsEntry)(!(component.name=com.liferay.adaptive.media.blogs.web.internal.exportimport.content.processor.AMBlogsEntryExportImportContentProcessor)))",
 		unbind = "-"
 	)
 	protected void setBlogsEntryExportImportContentProcessor(

@@ -266,7 +266,7 @@ do
 
 	if [[ -z "${COMMANDS}" ]] || [[ "$(echo "${COMMANDS}" | grep '^branches$')" ]]
 	then
-		OUTPUT="$(curl -H "Accept: application/vnd.github.loki-preview+json" -H "Authorization: token ${GITHUB_API_TOKEN}" -L -s "https://api.github.com/repos/liferay/${REPO_NAME}/branches" -X GET 2>&1)"
+		OUTPUT="$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_API_TOKEN}" -L -s "https://api.github.com/repos/liferay/${REPO_NAME}/branches" -X GET 2>&1)"
 
 		if [[ -z "$(echo "${OUTPUT}" | grep '\[')" ]] || [[ -z "$(echo "${OUTPUT}" | grep '\]')" ]]
 		then
@@ -279,6 +279,17 @@ do
 
 		if [[ "$(echo "${OUTPUT}" | grep '"name"')" ]]
 		then
+			PROTECTED_JSON="$(curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_API_TOKEN}" -L -s "https://api.github.com/repos/liferay/${REPO_NAME}/branches?protected=true" -X GET 2>&1)"
+
+			if [[ -z "$(echo "${PROTECTED_JSON}" | grep '\[')" ]] || [[ -z "$(echo "${PROTECTED_JSON}" | grep '\]')" ]]
+			then
+				warn "Failed to get protected branches at liferay/${REPO_NAME}."
+
+				warn "${PROTECTED_JSON}"
+
+				continue
+			fi
+
 			PROTECTED_BRANCHES="
 7.0.x
 7.0.x-private
@@ -290,11 +301,11 @@ master-private
 			do
 				BRANCH="$(echo "${BRANCH_JSON}" | sed 's/.*"name":"//' | sed 's/".*//')"
 
-				if [[ "$(echo "${PROTECTED_BRANCHES}" | grep "^${BRANCH}\$")" ]] && [[ "$(echo "${BRANCH_JSON}" | grep '"protected":false')" ]]
+				if [[ "$(echo "${PROTECTED_BRANCHES}" | grep "^${BRANCH}\$")" ]] && [[ -z "$(echo "${PROTECTED_JSON}" | grep "\"name\":.*\"${BRANCH}\"")" ]]
 				then
 					info "Protecting branch ${BRANCH} at liferay/${REPO_NAME}."
 
-					OUTPUT="$(curl -d "{\"enforce_admins\":false,\"required_status_checks\":null,\"restrictions\":null}" -H "Accept: application/vnd.github.loki-preview+json" -H "Authorization: token ${GITHUB_API_TOKEN}" -L -s "https://api.github.com/repos/liferay/${REPO_NAME}/branches/${BRANCH}/protection" -X PUT 2>&1)"
+					OUTPUT="$(curl -d "{\"enforce_admins\":false,\"required_pull_request_reviews\":null,\"required_status_checks\":null,\"restrictions\":null}" -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GITHUB_API_TOKEN}" -L -s "https://api.github.com/repos/liferay/${REPO_NAME}/branches/${BRANCH}/protection" -X PUT 2>&1)"
 
 					if [[ -z "$(echo "${OUTPUT}" | grep '"url"')" ]]
 					then

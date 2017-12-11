@@ -8,4 +8,6 @@ dependencies {
 	provided project(":apps:adaptive-media:adaptive-media-api");
 	provided project(":apps:adaptive-media:adaptive-media-content-transformer-api");
 	provided project(":apps:adaptive-media:adaptive-media-image-api");
+
+	testCompile group: "com.liferay", name: "com.liferay.petra.lang", version: "1.0.0"
 }

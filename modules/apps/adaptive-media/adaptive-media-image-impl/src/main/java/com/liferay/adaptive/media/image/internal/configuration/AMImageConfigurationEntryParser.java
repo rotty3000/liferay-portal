@@ -42,8 +42,7 @@ import org.osgi.service.component.annotations.Reference;
  * <code>
  * name:uuid:key0=val0;key1=val1;...;keyN=valN[:enable=flag]
  * </code>
- * </pre>
- * </p>
+ * </pre></p>
  *
  * <p>
  * Each part of the string is described below:

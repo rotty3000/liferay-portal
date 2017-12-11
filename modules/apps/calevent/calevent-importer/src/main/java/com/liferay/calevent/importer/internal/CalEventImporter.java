@@ -1075,6 +1075,9 @@ public class CalEventImporter {
 
 		_expandoRowLocalService.updateExpandoRow(expandoRow);
 
+		long calendarBookingClassNameId = _classNameLocalService.getClassNameId(
+			CalendarBooking.class);
+
 		expandoTable.setClassNameId(calendarBookingClassNameId);
 
 		_expandoTableLocalService.updateExpandoTable(expandoTable);
@@ -1083,9 +1086,6 @@ public class CalEventImporter {
 			_expandoValueLocalService.getRowValues(expandoRow.getRowId());
 
 		for (ExpandoValue expandoValue : expandoValues) {
-			long calendarBookingClassNameId =
-				_classNameLocalService.getClassNameId(CalendarBooking.class);
-
 			expandoValue.setClassNameId(calendarBookingClassNameId);
 
 			expandoValue.setClassPK(calendarBookingId);

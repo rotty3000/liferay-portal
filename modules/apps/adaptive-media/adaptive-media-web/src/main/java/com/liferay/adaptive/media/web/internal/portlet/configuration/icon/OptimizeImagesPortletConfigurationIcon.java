@@ -24,10 +24,13 @@ import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.portlet.configuration.icon.BasePortletConfigurationIcon;
 import com.liferay.portal.kernel.portlet.configuration.icon.PortletConfigurationIcon;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.AggregateResourceBundle;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.Collection;
@@ -54,6 +57,20 @@ public class OptimizeImagesPortletConfigurationIcon
 	extends BasePortletConfigurationIcon {
 
 	@Override
+	public String getCssClass() {
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
+
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+		if (_isDisabled(themeDisplay.getCompanyId())) {
+			return "disabled";
+		}
+
+		return StringPool.BLANK;
+	}
+
+	@Override
 	public String getId() {
 		return "optimize-images";
 	}
@@ -76,6 +93,13 @@ public class OptimizeImagesPortletConfigurationIcon
 	@Override
 	public String getURL(
 		PortletRequest portletRequest, PortletResponse portletResponse) {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		if (_isDisabled(themeDisplay.getCompanyId())) {
+			return "javascript:;";
+		}
 
 		PortletURL portletURL = _portal.getControlPanelPortletURL(
 			portletRequest, AMPortletKeys.ADAPTIVE_MEDIA,
@@ -104,6 +128,18 @@ public class OptimizeImagesPortletConfigurationIcon
 			return false;
 		}
 
+		return true;
+	}
+
+	private boolean _isDisabled(long companyId) {
+		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
+			_amImageConfigurationHelper.getAMImageConfigurationEntries(
+				companyId);
+
+		if (amImageConfigurationEntries.isEmpty()) {
+			return true;
+		}
+
 		int backgroundTasksCount =
 			_backgroundTaskManager.getBackgroundTasksCount(
 				CompanyConstants.SYSTEM,
@@ -112,18 +148,10 @@ public class OptimizeImagesPortletConfigurationIcon
 				false);
 
 		if (backgroundTasksCount != 0) {
-			return false;
+			return true;
 		}
 
-		Collection<AMImageConfigurationEntry> amImageConfigurationEntries =
-			_amImageConfigurationHelper.getAMImageConfigurationEntries(
-				themeDisplay.getCompanyId());
-
-		if (amImageConfigurationEntries.isEmpty()) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	@Reference

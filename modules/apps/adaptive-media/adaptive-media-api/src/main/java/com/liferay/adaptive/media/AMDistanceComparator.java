@@ -53,8 +53,7 @@ public interface AMDistanceComparator<T> {
 	 * if amDistanceComparator.compare(a, b) = 0 then
 	 * amDistanceComparator.toComparator().compare(a, b) = 0
 	 * </code>
-	 * </pre>
-	 * </p>
+	 * </pre></p>
 	 *
 	 * @return a {@link Comparator} equivalent to this
 	 *         <code>AMDistanceComparator</code>

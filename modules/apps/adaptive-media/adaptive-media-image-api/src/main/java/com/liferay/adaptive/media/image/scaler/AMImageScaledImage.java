@@ -19,8 +19,6 @@ import java.io.InputStream;
 /**
  * Represents an image scaled by Adaptive Media.
  *
- * @review
- *
  * @author Sergio González
  */
 public interface AMImageScaledImage {
@@ -29,26 +27,20 @@ public interface AMImageScaledImage {
 	 * Returns the image height.
 	 *
 	 * @return the image height
-	 *
-	 * @review
 	 */
 	public int getHeight();
 
 	/**
-	 * Returns an InputStream with the image data.
+	 * Returns an <code>InputStream</code> with the image data.
 	 *
-	 * @return an InputStream with the image data
-	 *
-	 * @review
+	 * @return the <code>InputStream</code> with the image data
 	 */
 	public InputStream getInputStream();
 
 	/**
-	 * Returns the size in bytes of this image.
+	 * Returns this image's size in bytes.
 	 *
-	 * @return the size in bytes of this image
-	 *
-	 * @review
+	 * @return this image's size in bytes
 	 */
 	public long getSize();
 
@@ -56,8 +48,6 @@ public interface AMImageScaledImage {
 	 * Returns the image width.
 	 *
 	 * @return the image width
-	 *
-	 * @review
 	 */
 	public int getWidth();
 

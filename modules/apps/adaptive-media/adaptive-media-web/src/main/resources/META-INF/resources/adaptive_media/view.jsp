@@ -200,7 +200,12 @@ PortletURL portletURL = renderResponse.createRenderURL();
 							);
 
 							<c:if test="<%= ((optimizeImagesAllConfigurationsBackgroundTasksCount > 0) && amImageConfigurationEntry.isEnabled()) || currentBackgroundTaskConfigurationEntryUuids.contains(uuid) %>">
-								setTimeout(() => component.startProgress(), 0);
+								setTimeout(
+									function() {
+										component.startProgress();
+									},
+									0
+								);
 							</c:if>
 						</aui:script>
 					</liferay-ui:search-container-column-text>

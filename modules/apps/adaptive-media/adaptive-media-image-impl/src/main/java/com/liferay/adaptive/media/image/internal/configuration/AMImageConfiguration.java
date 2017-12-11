@@ -40,8 +40,8 @@ public interface AMImageConfiguration {
 	public String[] supportedMimeTypes();
 
 	/**
-	 * Set this to true to enable animated gif image scaling with gifsicle
-	 * library. See https://www.lcdf.org/gifsicle for more information.
+	 * Set this to <code>true</code> to enable animated gif image scaling with
+	 * gifsicle library. See https://www.lcdf.org/gifsicle for more information.
 	 */
 	@Meta.AD(
 		deflt = "false", description = "gifsicle-enabled-key-description",

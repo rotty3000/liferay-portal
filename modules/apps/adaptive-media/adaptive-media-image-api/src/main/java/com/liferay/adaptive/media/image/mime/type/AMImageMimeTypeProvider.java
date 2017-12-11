@@ -15,29 +15,26 @@
 package com.liferay.adaptive.media.image.mime.type;
 
 /**
- * Provides the supported adaptive media image mime types.
+ * Provides the supported Adaptive Media image MIME types.
  *
  * @author Sergio González
  */
 public interface AMImageMimeTypeProvider {
 
 	/**
-	 * Returns the supported mime types that generate adaptive media images.
+	 * Returns the supported MIME types that generate Adaptive Media images.
 	 *
-	 * @return the supported mime types that generate adaptive media images
+	 * @return the supported MIME types that generate Adaptive Media images
 	 */
 	public String[] getSupportedMimeTypes();
 
 	/**
-	 * Returns whether the provided mime type generates adaptive media images.
+	 * Returns <code>true</code> if the provided MIME type generates Adaptive
+	 * Media images.
 	 *
-	 * @param mimeType the mime type to check wheter it generates adaptive media
-	 *                    images.
-	 *
-	 * @return <code>true</code> if the mime type generates adaptive media
-	 * images; <code>false</code> otherwise
-	 *
-	 * @review
+	 * @param  mimeType the MIME type
+	 * @return <code>true</code> if the MIME type generates Adaptive Media
+	 *         images; <code>false</code> otherwise
 	 */
 	public boolean isMimeTypeSupported(String mimeType);
 

@@ -14,9 +14,9 @@
 
 package com.liferay.adaptive.media.journal.web.internal.exportimport.content.processor;
 
+import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.UnsafeFunction;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;

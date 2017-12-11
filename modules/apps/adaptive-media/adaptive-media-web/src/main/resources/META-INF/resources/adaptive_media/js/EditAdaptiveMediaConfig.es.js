@@ -225,6 +225,6 @@ EditAdaptiveMediaConfig.STATE = {
 		validator: core.isString,
 		value: '.error-wrapper'
 	}
-}
+};
 
 export default EditAdaptiveMediaConfig;

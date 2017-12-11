@@ -14,4 +14,6 @@ dependencies {
 	provided project(":apps:adaptive-media:adaptive-media-content-transformer-api")
 	provided project(":apps:adaptive-media:adaptive-media-image-api")
 	provided project(":apps:adaptive-media:adaptive-media-web")
+
+	testCompile group: "com.liferay", name: "com.liferay.petra.lang", version: "1.0.0"
 }

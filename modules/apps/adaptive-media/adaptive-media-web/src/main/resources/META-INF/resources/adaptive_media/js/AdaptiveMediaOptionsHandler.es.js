@@ -135,6 +135,6 @@ AdaptiveMediaOptionsHandler.STATE = {
 	uuid: {
 		validator: core.isString
 	}
-}
+};
 
 export default AdaptiveMediaOptionsHandler;

@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 
 import java.util.HashMap;
@@ -54,21 +55,18 @@ public class AMImageUpdateConfigurationTest
 
 	@Test
 	public void testSendsAMessageToTheMessageBus() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
 		List<Message> messages = collectConfigurationMessages(
-			() -> amImageConfigurationHelper.updateAMImageConfigurationEntry(
+			() -> _amImageConfigurationHelper.updateAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1", "two", "twodesc", "2",
 				properties));
 
@@ -110,16 +108,13 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankDescription()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -127,12 +122,12 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", StringPool.BLANK, "1",
 			amImageConfigurationEntry1.getProperties());
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -148,15 +143,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -164,12 +156,12 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -190,22 +182,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxHeightOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -214,15 +203,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxWidth()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -230,12 +216,12 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -256,15 +242,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxWidthAndBlankMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -272,7 +255,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "");
 		properties.put("max-width", "");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -283,15 +266,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxWidthAndZeroMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -299,7 +279,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "");
 		properties.put("max-width", "0");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -310,38 +290,32 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithBlankMaxWidthOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
 
 	@Test(expected = AMImageConfigurationException.InvalidNameException.class)
 	public void testUpdateConfigurationEntryWithBlankName() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -349,23 +323,20 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", StringPool.BLANK, "desc", "1",
 			amImageConfigurationEntry1.getProperties());
 	}
 
 	@Test(expected = AMImageConfigurationException.InvalidUuidException.class)
 	public void testUpdateConfigurationEntryWithBlankUuid() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -373,7 +344,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "two", "desc",
 			StringPool.BLANK, amImageConfigurationEntry1.getProperties());
 	}
@@ -382,23 +353,20 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithColonSemicolonDescription()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc:;desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -414,23 +382,20 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithColonSemicolonName()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one:;one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -445,27 +410,24 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithMaxHeightOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -484,27 +446,24 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithMaxWidthOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -523,22 +482,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithNegativeNumberMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "-10");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -547,22 +503,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithNegativeNumberMaxWidth()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "-10");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -571,22 +524,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithNotNumberMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "Invalid");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -595,22 +545,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithNotNumberMaxWidth()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "Invalid");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -621,20 +568,17 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithoutMaxHeightNorMaxWidth()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -643,15 +587,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -659,12 +600,12 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "0");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -685,22 +626,19 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxHeightOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-height", "0");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -709,15 +647,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxWidth()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -725,12 +660,12 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "0");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -751,15 +686,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxWidthAndBlankMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -767,7 +699,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "0");
 		properties.put("max-width", "");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -778,15 +710,12 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxWidthAndZeroMaxHeight()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
@@ -794,7 +723,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "0");
 		properties.put("max-width", "0");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
@@ -805,56 +734,50 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateConfigurationEntryWithZeroMaxWidthOnly()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
 		properties = new HashMap<>();
 
 		properties.put("max-width", "0");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one", "desc", "1",
 			properties);
 	}
 
 	@Test
 	public void testUpdateDisabledConfigurationEntry() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "desc", "1", properties);
 
-		amImageConfigurationHelper.disableAMImageConfigurationEntry(
+		_amImageConfigurationHelper.disableAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(),
 			amImageConfigurationEntry.getUUID());
 
 		Optional<AMImageConfigurationEntry> amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1");
 
 		assertDisabled(amImageConfigurationEntryOptional);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one-bis", "desc-bis", "1-bis",
 			amImageConfigurationEntry.getProperties());
 
 		amImageConfigurationEntryOptional =
-			amImageConfigurationHelper.getAMImageConfigurationEntry(
+			_amImageConfigurationHelper.getAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "1-bis");
 
 		Assert.assertTrue(amImageConfigurationEntryOptional.isPresent());
@@ -884,16 +807,13 @@ public class AMImageUpdateConfigurationTest
 		expected = AMImageConfigurationException.DuplicateAMImageConfigurationNameException.class
 	)
 	public void testUpdateDuplicateConfigurationEntryName() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -902,10 +822,10 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "two", "twodesc", "2", properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "two", "twodesc", "1",
 			amImageConfigurationEntry1.getProperties());
 	}
@@ -914,16 +834,13 @@ public class AMImageUpdateConfigurationTest
 		expected = AMImageConfigurationException.DuplicateAMImageConfigurationUuidException.class
 	)
 	public void testUpdateDuplicateConfigurationEntryUuid() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -932,26 +849,23 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "200");
 		properties.put("max-width", "200");
 
-		amImageConfigurationHelper.addAMImageConfigurationEntry(
+		_amImageConfigurationHelper.addAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "two", "twodesc", "2", properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "two-bis", "twodesc", "2",
 			amImageConfigurationEntry1.getProperties());
 	}
 
 	@Test
 	public void testUpdateFirstConfigurationEntryName() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -961,17 +875,17 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1", "one-bis", "onedesc-bis", "1",
 			amImageConfigurationEntry1.getProperties());
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -996,7 +910,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1024,16 +938,13 @@ public class AMImageUpdateConfigurationTest
 
 	@Test
 	public void testUpdateFirstConfigurationEntryProperties() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -1043,7 +954,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
@@ -1052,7 +963,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "500");
 		properties.put("max-width", "800");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(),
 			amImageConfigurationEntry1.getUUID(),
 			amImageConfigurationEntry1.getName(),
@@ -1061,7 +972,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -1088,7 +999,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1116,16 +1027,13 @@ public class AMImageUpdateConfigurationTest
 
 	@Test
 	public void testUpdateFirstConfigurationEntryUuid() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -1135,11 +1043,11 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "1",
 			amImageConfigurationEntry1.getName(),
 			amImageConfigurationEntry1.getDescription(), "1-bis",
@@ -1147,7 +1055,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			nonExistantAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		Assert.assertFalse(
@@ -1155,7 +1063,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1-bis");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -1182,7 +1090,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1212,36 +1120,30 @@ public class AMImageUpdateConfigurationTest
 		expected = AMImageConfigurationException.NoSuchAMImageConfigurationException.class
 	)
 	public void testUpdateNonExistingConfiguration() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "2", "two", "twodesc", "2",
 			amImageConfigurationEntry1.getProperties());
 	}
 
 	@Test
 	public void testUpdateSecondConfigurationEntryName() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -1251,17 +1153,17 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "2", "two-bis", "twodesc-bis", "2",
 			amImageConfigurationEntry2.getProperties());
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1286,7 +1188,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -1316,16 +1218,13 @@ public class AMImageUpdateConfigurationTest
 	public void testUpdateSecondConfigurationEntryProperties()
 		throws Exception {
 
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -1335,7 +1234,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
@@ -1344,7 +1243,7 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-height", "500");
 		properties.put("max-width", "800");
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(),
 			amImageConfigurationEntry2.getUUID(),
 			amImageConfigurationEntry2.getName(),
@@ -1353,7 +1252,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1380,7 +1279,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -1408,16 +1307,13 @@ public class AMImageUpdateConfigurationTest
 
 	@Test
 	public void testUpdateSecondConfigurationEntryUuid() throws Exception {
-		AMImageConfigurationHelper amImageConfigurationHelper =
-			serviceTracker.getService();
-
 		Map<String, String> properties = new HashMap<>();
 
 		properties.put("max-height", "100");
 		properties.put("max-width", "100");
 
 		AMImageConfigurationEntry amImageConfigurationEntry1 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "one", "onedesc", "1",
 				properties);
 
@@ -1427,11 +1323,11 @@ public class AMImageUpdateConfigurationTest
 		properties.put("max-width", "200");
 
 		AMImageConfigurationEntry amImageConfigurationEntry2 =
-			amImageConfigurationHelper.addAMImageConfigurationEntry(
+			_amImageConfigurationHelper.addAMImageConfigurationEntry(
 				TestPropsValues.getCompanyId(), "two", "twodesc", "2",
 				properties);
 
-		amImageConfigurationHelper.updateAMImageConfigurationEntry(
+		_amImageConfigurationHelper.updateAMImageConfigurationEntry(
 			TestPropsValues.getCompanyId(), "2",
 			amImageConfigurationEntry2.getName(),
 			amImageConfigurationEntry2.getDescription(), "2-bis",
@@ -1439,7 +1335,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			nonExistantAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2");
 
 		Assert.assertFalse(
@@ -1447,7 +1343,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry2Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "2-bis");
 
 		assertEnabled(actualAMImageConfigurationEntry2Optional);
@@ -1474,7 +1370,7 @@ public class AMImageUpdateConfigurationTest
 
 		Optional<AMImageConfigurationEntry>
 			actualAMImageConfigurationEntry1Optional =
-				amImageConfigurationHelper.getAMImageConfigurationEntry(
+				_amImageConfigurationHelper.getAMImageConfigurationEntry(
 					TestPropsValues.getCompanyId(), "1");
 
 		assertEnabled(actualAMImageConfigurationEntry1Optional);
@@ -1499,5 +1395,13 @@ public class AMImageUpdateConfigurationTest
 		Assert.assertEquals(
 			"100", actualConfigurationEntry1Properties.get("max-width"));
 	}
+
+	@Override
+	protected AMImageConfigurationHelper getAMImageConfigurationHelper() {
+		return _amImageConfigurationHelper;
+	}
+
+	@Inject
+	private AMImageConfigurationHelper _amImageConfigurationHelper;
 
 }

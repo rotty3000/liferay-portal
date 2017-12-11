@@ -76,15 +76,6 @@ public class AggregateResourceBundleLoader implements ResourceBundleLoader {
 				new ResourceBundle[resourceBundles.size()]));
 	}
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #loadResourceBundle(Locale)}
-	 */
-	@Deprecated
-	@Override
-	public ResourceBundle loadResourceBundle(String languageId) {
-		return loadResourceBundle(LocaleUtil.fromLanguageId(languageId));
-	}
-
 	private final ResourceBundleLoader[] _resourceBundleLoaders;
 
 }

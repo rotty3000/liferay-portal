@@ -64,15 +64,6 @@ public class CacheResourceBundleLoader implements ResourceBundleLoader {
 		return resourceBundle;
 	}
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #loadResourceBundle(Locale)}
-	 */
-	@Deprecated
-	@Override
-	public ResourceBundle loadResourceBundle(String languageId) {
-		return loadResourceBundle(LocaleUtil.fromLanguageId(languageId));
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		CacheResourceBundleLoader.class);
 

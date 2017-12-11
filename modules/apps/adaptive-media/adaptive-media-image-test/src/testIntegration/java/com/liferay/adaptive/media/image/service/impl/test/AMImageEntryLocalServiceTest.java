@@ -16,6 +16,7 @@ package com.liferay.adaptive.media.image.service.impl.test;
 
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationEntry;
 import com.liferay.adaptive.media.image.configuration.AMImageConfigurationHelper;
+import com.liferay.adaptive.media.image.counter.AMImageCounter;
 import com.liferay.adaptive.media.image.exception.DuplicateAMImageEntryException;
 import com.liferay.adaptive.media.image.model.AMImageEntry;
 import com.liferay.adaptive.media.image.service.AMImageEntryLocalServiceUtil;
@@ -26,31 +27,38 @@ import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.GroupConstants;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
+import com.liferay.portal.kernel.test.util.CompanyTestUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
 
 import java.io.IOException;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.junit.After;
@@ -61,12 +69,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceRegistration;
+
 /**
  * @author Sergio González
  */
 @RunWith(Arquillian.class)
 @Sync
-public class AMImageEntryLocalServiceImplTest {
+public class AMImageEntryLocalServiceTest {
 
 	@ClassRule
 	@Rule
@@ -77,14 +90,14 @@ public class AMImageEntryLocalServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Registry registry = RegistryUtil.getRegistry();
-
-		_amImageConfigurationHelper = registry.getService(
-			AMImageConfigurationHelper.class);
-
 		_group = GroupTestUtil.addGroup();
 
 		deleteAllAMImageConfigurationEntries();
+
+		Bundle bundle = FrameworkUtil.getBundle(
+			AMImageEntryLocalServiceTest.class);
+
+		_bundleContext = bundle.getBundleContext();
 	}
 
 	@After
@@ -401,6 +414,178 @@ public class AMImageEntryLocalServiceImplTest {
 				amImageConfigurationEntry2.getUUID()));
 	}
 
+	@Test
+	public void testGetExpectedAMImageEntriesCount() throws Exception {
+		Company company = CompanyTestUtil.addCompany();
+
+		ServiceRegistration<AMImageCounter> amImageCounterServiceRegistration =
+			null;
+
+		try {
+			amImageCounterServiceRegistration = _registerAMImageCounter(
+				"test", 100);
+
+			Assert.assertEquals(
+				100,
+				AMImageEntryLocalServiceUtil.getExpectedAMImageEntriesCount(
+					company.getCompanyId()));
+		}
+		finally {
+			_unregisterAMImageCounter(amImageCounterServiceRegistration);
+
+			_companyLocalService.deleteCompany(company);
+		}
+	}
+
+	@Test
+	public void testGetExpectedAMImageEntriesCountSumsAllAMImageCounters()
+		throws Exception {
+
+		Company company = CompanyTestUtil.addCompany();
+
+		ServiceRegistration<AMImageCounter> amImageCounterServiceRegistration1 =
+			null;
+		ServiceRegistration<AMImageCounter> amImageCounterServiceRegistration2 =
+			null;
+
+		try {
+			amImageCounterServiceRegistration1 = _registerAMImageCounter(
+				"test1", 100);
+			amImageCounterServiceRegistration2 = _registerAMImageCounter(
+				"test2", 50);
+
+			Assert.assertEquals(
+				150,
+				AMImageEntryLocalServiceUtil.getExpectedAMImageEntriesCount(
+					company.getCompanyId()));
+		}
+		finally {
+			_unregisterAMImageCounter(amImageCounterServiceRegistration1);
+			_unregisterAMImageCounter(amImageCounterServiceRegistration2);
+
+			_companyLocalService.deleteCompany(company);
+		}
+	}
+
+	@Test
+	public void testGetPercentage() throws Exception {
+		Company company = CompanyTestUtil.addCompany();
+
+		User user = UserTestUtil.getAdminUser(company.getCompanyId());
+
+		Group group = GroupTestUtil.addGroup(
+			company.getCompanyId(), user.getUserId(),
+			GroupConstants.DEFAULT_PARENT_GROUP_ID);
+
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			_addAMImageConfigurationEntry(
+				company.getCompanyId(), "uuid1", 100, 200);
+
+		ServiceRegistration<AMImageCounter> amImageCounterServiceRegistration =
+			null;
+
+		try {
+			amImageCounterServiceRegistration = _registerAMImageCounter(
+				"test", 4);
+
+			ServiceContext serviceContext =
+				ServiceContextTestUtil.getServiceContext(group.getGroupId());
+
+			byte[] bytes = _getImageBytes();
+
+			FileEntry fileEntry = _addFileEntry(
+				user.getUserId(), group.getGroupId(), bytes, serviceContext);
+
+			AMImageEntryLocalServiceUtil.addAMImageEntry(
+				amImageConfigurationEntry, fileEntry.getFileVersion(), 100, 200,
+				new UnsyncByteArrayInputStream(bytes), 12345);
+
+			Assert.assertEquals(
+				20,
+				AMImageEntryLocalServiceUtil.getPercentage(
+					company.getCompanyId(),
+					amImageConfigurationEntry.getUUID()));
+		}
+		finally {
+			_unregisterAMImageCounter(amImageCounterServiceRegistration);
+
+			_companyLocalService.deleteCompany(company);
+		}
+	}
+
+	@Test
+	public void testGetPercentageMax100() throws Exception {
+		Company company = CompanyTestUtil.addCompany();
+
+		User user = UserTestUtil.getAdminUser(company.getCompanyId());
+
+		Group group = GroupTestUtil.addGroup(
+			company.getCompanyId(), user.getUserId(),
+			GroupConstants.DEFAULT_PARENT_GROUP_ID);
+
+		AMImageConfigurationEntry amImageConfigurationEntry =
+			_addAMImageConfigurationEntry(
+				company.getCompanyId(), "uuid1", 100, 200);
+
+		ServiceRegistration<AMImageCounter> amImageCounterServiceRegistration =
+			null;
+
+		try {
+			amImageCounterServiceRegistration = _registerAMImageCounter(
+				"test", -1);
+
+			ServiceContext serviceContext =
+				ServiceContextTestUtil.getServiceContext(group.getGroupId());
+
+			byte[] bytes = _getImageBytes();
+
+			FileEntry fileEntry1 = _addFileEntry(
+				user.getUserId(), group.getGroupId(), bytes, serviceContext);
+
+			AMImageEntryLocalServiceUtil.addAMImageEntry(
+				amImageConfigurationEntry, fileEntry1.getFileVersion(), 100,
+				200, new UnsyncByteArrayInputStream(bytes), 12345);
+
+			FileEntry fileEntry2 = _addFileEntry(
+				user.getUserId(), group.getGroupId(), bytes, serviceContext);
+
+			AMImageEntryLocalServiceUtil.addAMImageEntry(
+				amImageConfigurationEntry, fileEntry2.getFileVersion(), 100,
+				200, new UnsyncByteArrayInputStream(bytes), 12345);
+
+			Assert.assertEquals(
+				100,
+				AMImageEntryLocalServiceUtil.getPercentage(
+					company.getCompanyId(),
+					amImageConfigurationEntry.getUUID()));
+		}
+		finally {
+			_unregisterAMImageCounter(amImageCounterServiceRegistration);
+
+			_companyLocalService.deleteCompany(company);
+		}
+	}
+
+	@Test
+	public void testGetPercentageWhenNoImages() throws Exception {
+		Company company = CompanyTestUtil.addCompany();
+
+		AMImageConfigurationEntry amImageConfigurationEntry1 =
+			_addAMImageConfigurationEntry(
+				company.getCompanyId(), "uuid1", 100, 200);
+
+		try {
+			Assert.assertEquals(
+				0,
+				AMImageEntryLocalServiceUtil.getPercentage(
+					company.getCompanyId(),
+					amImageConfigurationEntry1.getUUID()));
+		}
+		finally {
+			_companyLocalService.deleteCompany(company);
+		}
+	}
+
 	protected void deleteAllAMImageConfigurationEntries()
 		throws IOException, PortalException {
 
@@ -419,7 +604,7 @@ public class AMImageEntryLocalServiceImplTest {
 	}
 
 	private AMImageConfigurationEntry _addAMImageConfigurationEntry(
-			String uuid, int maxHeight, int maxWidth)
+			long companyId, String uuid, int maxHeight, int maxWidth)
 		throws IOException, PortalException {
 
 		Map<String, String> properties = new HashMap<>();
@@ -428,16 +613,34 @@ public class AMImageEntryLocalServiceImplTest {
 		properties.put("max-width", String.valueOf(maxWidth));
 
 		return _amImageConfigurationHelper.addAMImageConfigurationEntry(
-			TestPropsValues.getCompanyId(), RandomTestUtil.randomString(),
+			companyId, RandomTestUtil.randomString(),
 			RandomTestUtil.randomString(), uuid, properties);
+	}
+
+	private AMImageConfigurationEntry _addAMImageConfigurationEntry(
+			String uuid, int maxHeight, int maxWidth)
+		throws IOException, PortalException {
+
+		return _addAMImageConfigurationEntry(
+			TestPropsValues.getCompanyId(), uuid, maxHeight, maxWidth);
 	}
 
 	private FileEntry _addFileEntry(byte[] bytes, ServiceContext serviceContext)
 		throws PortalException {
 
+		return _addFileEntry(
+			TestPropsValues.getUserId(), _group.getGroupId(), bytes,
+			serviceContext);
+	}
+
+	private FileEntry _addFileEntry(
+			long userId, long groupId, byte[] bytes,
+			ServiceContext serviceContext)
+		throws PortalException {
+
 		DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.addFileEntry(
-			TestPropsValues.getUserId(), _group.getGroupId(),
-			_group.getGroupId(), DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			userId, groupId, groupId,
+			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
 			RandomTestUtil.randomString(), ContentTypes.IMAGE_JPEG,
 			RandomTestUtil.randomString(), StringPool.BLANK, StringPool.BLANK,
 			DLFileEntryTypeConstants.COMPANY_ID_BASIC_DOCUMENT,
@@ -449,13 +652,53 @@ public class AMImageEntryLocalServiceImplTest {
 
 	private byte[] _getImageBytes() throws Exception {
 		return FileUtil.getBytes(
-			AMImageEntryLocalServiceImplTest.class,
+			AMImageEntryLocalServiceTest.class,
 			"/com/liferay/adaptive/media/image/dependencies/image.jpg");
 	}
 
+	private ServiceRegistration<AMImageCounter> _registerAMImageCounter(
+		String key, int counter) {
+
+		Dictionary<String, Object> properties = new Hashtable<>();
+
+		properties.put("adaptive.media.key", key);
+
+		return _bundleContext.registerService(
+			AMImageCounter.class, new TestAMImageCounter(counter), properties);
+	}
+
+	private void _unregisterAMImageCounter(
+		ServiceRegistration<AMImageCounter> serviceRegistration) {
+
+		if (serviceRegistration != null) {
+			serviceRegistration.unregister();
+		}
+	}
+
+	@Inject
 	private AMImageConfigurationHelper _amImageConfigurationHelper;
+
+	private BundleContext _bundleContext;
+
+	@Inject
+	private CompanyLocalService _companyLocalService;
 
 	@DeleteAfterTestRun
 	private Group _group;
+
+	private class TestAMImageCounter implements AMImageCounter {
+
+		public TestAMImageCounter(int count) {
+			_count = count;
+		}
+
+		@Override
+		public int countExpectedAMImageEntries(long companyId) {
+			return _count;
+		}
+
+		private final int _count;
+
+	}
 
 }

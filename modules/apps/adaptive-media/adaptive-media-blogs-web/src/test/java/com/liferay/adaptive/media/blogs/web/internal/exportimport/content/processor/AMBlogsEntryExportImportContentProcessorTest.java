@@ -14,7 +14,7 @@
 
 package com.liferay.adaptive.media.blogs.web.internal.exportimport.content.processor;
 
-import com.liferay.blogs.kernel.model.BlogsEntry;
+import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.exception.PortalException;
