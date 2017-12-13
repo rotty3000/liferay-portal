@@ -18,7 +18,7 @@ import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.spi.MessageImpl;
-import com.liferay.petra.io.Validator;
+import com.liferay.petra.io.util.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

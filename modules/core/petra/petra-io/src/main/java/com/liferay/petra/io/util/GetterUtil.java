@@ -14,6 +14,8 @@
 
 package com.liferay.petra.io.util;
 
+import com.liferay.petra.string.StringPool;
+
 /**
  * Provides utility methods for reading values as various types.
  *
@@ -22,6 +24,84 @@ package com.liferay.petra.io.util;
 public class GetterUtil {
 	
 	public static final boolean DEFAULT_BOOLEAN = false;
+	public static final double DEFAULT_DOUBLE = 0.0;
+	public static final int DEFAULT_INTEGER = 0;
+	public static final long DEFAULT_LONG = 0;
+	public static final String DEFAULT_STRING = StringPool.BLANK;
+	
+	public static boolean get(Object value, boolean defaultValue) {
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		if (value instanceof Boolean) {
+			return (Boolean)value;
+		}
+
+		return defaultValue;
+	}
+	
+	public static double get(Object value, double defaultValue) {
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		if (value instanceof Double) {
+			return (Double)value;
+		}
+
+		if (value instanceof Number) {
+			Number number = (Number)value;
+
+			return number.doubleValue();
+		}
+
+		return defaultValue;
+	}
+	
+	public static int get(Object value, int defaultValue) {
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		if (value instanceof Integer) {
+			return (Integer)value;
+		}
+
+		if (value instanceof Number) {
+			Number number = (Number)value;
+
+			return number.intValue();
+		}
+
+		return defaultValue;
+	}
+	
+	public static long get(Object value, long defaultValue) {
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		if (value instanceof Long) {
+			return (Long)value;
+		}
+
+		if (value instanceof Number) {
+			Number number = (Number)value;
+
+			return number.longValue();
+		}
+
+		return defaultValue;
+	}
+	
+	public static String get(Object value, String defaultValue) {
+		if (value instanceof String) {
+			return get((String)value, defaultValue);
+		}
+
+		return defaultValue;
+	}
 	
 	public static boolean get(String value, boolean defaultValue) {
 		if (value == null) {
@@ -90,12 +170,52 @@ public class GetterUtil {
 
 		return false;
 	}
+	
+	public static boolean getBoolean(Object value) {
+		return getBoolean(value, DEFAULT_BOOLEAN);
+	}
+
+	public static boolean getBoolean(Object value, boolean defaultValue) {
+		return get(value, defaultValue);
+	}
 
 	public static boolean getBoolean(String value) {
 		return getBoolean(value, DEFAULT_BOOLEAN);
 	}
 
 	public static boolean getBoolean(String value, boolean defaultValue) {
+		return get(value, defaultValue);
+	}
+	
+	public static double getDouble(Object value) {
+		return getDouble(value, DEFAULT_DOUBLE);
+	}
+
+	public static double getDouble(Object value, double defaultValue) {
+		return get(value, defaultValue);
+	}
+	
+	public static int getInteger(Object value) {
+		return getInteger(value, DEFAULT_INTEGER);
+	}
+
+	public static int getInteger(Object value, int defaultValue) {
+		return get(value, defaultValue);
+	}
+	
+	public static long getLong(Object value) {
+		return getLong(value, DEFAULT_LONG);
+	}
+
+	public static long getLong(Object value, long defaultValue) {
+		return get(value, defaultValue);
+	}
+	
+	public static String getString(String value) {
+		return getString(value, DEFAULT_STRING);
+	}
+
+	public static String getString(String value, String defaultValue) {
 		return get(value, defaultValue);
 	}
 
