@@ -18,16 +18,92 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * The String utility class.
- *
- * @author Brian Wing Shun Chan
- * @author Sandeep Soni
- * @author Ganesh Ram
- * @author Shuyang Zhou
- * @author Hugo Huijser
- */
 public class StringUtil {
+	
+	public static String extractDigits(String s) {
+		if (s == null) {
+			return StringPool.BLANK;
+		}
+
+		StringBundler sb = new StringBundler();
+
+		char[] chars = s.toCharArray();
+
+		for (char c : chars) {
+			if (isDigit(c)) {
+				sb.append(c);
+			}
+		}
+
+		return sb.toString();
+	}
+	
+	public static boolean isDigit(char c) {
+		int x = c;
+
+		if ((x >= _DIGIT_BEGIN) && (x <= _DIGIT_END)) {
+			return true;
+		}
+
+		return false;
+	}
+	
+	public static String merge(Object[] array, String delimiter) {
+		if (array == null) {
+			return null;
+		}
+
+		if (array.length == 0) {
+			return StringPool.BLANK;
+		}
+
+		if (array.length == 1) {
+			return String.valueOf(array[0]);
+		}
+
+		StringBundler sb = new StringBundler(2 * array.length - 1);
+
+		for (int i = 0; i < array.length; i++) {
+			if (i != 0) {
+				sb.append(delimiter);
+			}
+
+			sb.append(String.valueOf(array[i]).trim());
+		}
+
+		return sb.toString();
+	}
+	
+	public static String removeChars(String s, char... oldSubs) {
+		if (s == null) {
+			return null;
+		}
+
+		if (oldSubs == null) {
+			return s;
+		}
+
+		StringBuilder sb = new StringBuilder(s.length());
+
+		iterate:
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+
+			for (int j = 0; j < oldSubs.length; j++) {
+				if (c == oldSubs[j]) {
+					continue iterate;
+				}
+			}
+
+			sb.append(c);
+		}
+
+		if (s.length() == sb.length()) {
+			return s;
+		}
+
+		return sb.toString();
+	}
 
 	public static List<String> split(String s) {
 		return split(s, CharPool.COMMA);
@@ -67,5 +143,9 @@ public class StringUtil {
 			values.add(s.substring(offset));
 		}
 	}
+	
+	private static final int _DIGIT_BEGIN = 48;
+
+	private static final int _DIGIT_END = 57;
 
 }
