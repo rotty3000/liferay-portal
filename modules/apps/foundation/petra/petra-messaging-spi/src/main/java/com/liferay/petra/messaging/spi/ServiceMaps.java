@@ -14,7 +14,7 @@
 
 package com.liferay.petra.messaging.spi;
 
-import com.liferay.petra.io.ReflectionUtil;
+import com.liferay.petra.reflect.ReflectionUtil;
 
 import java.util.Comparator;
 import java.util.Map;
