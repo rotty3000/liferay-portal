@@ -2,8 +2,8 @@ Bundle-Name: Liferay Messaging SPI
 Bundle-SymbolicName: com.liferay.petra.messaging.spi
 Bundle-Version: 1.0.0
 Export-Package:\
-	com.liferay.messaging.petra.spi,\
-	com.liferay.messaging.petra.spi.proxy,\
-	com.liferay.messaging.petra.spi.sender
+	com.liferay.petra.messaging.spi,\
+	com.liferay.petra.messaging.spi.proxy,\
+	com.liferay.petra.messaging.spi.sender
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
