@@ -12,9 +12,10 @@
  * details.
  */
 
-package com.liferay.messaging.impl.internal.jmx;
+package com.liferay.portal.messaging.impl.internal.jmx;
 
-import com.liferay.messaging.Destination;
+import com.liferay.petra.messaging.api.Destination;
+import com.liferay.petra.messaging.impl.internal.jmx.DestinationStatisticsManager;
 
 import java.lang.management.ManagementFactory;
 

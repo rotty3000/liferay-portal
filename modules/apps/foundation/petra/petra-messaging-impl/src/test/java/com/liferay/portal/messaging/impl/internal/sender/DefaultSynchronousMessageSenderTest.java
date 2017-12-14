@@ -12,22 +12,23 @@
  * details.
  */
 
-package com.liferay.messaging.impl.internal.sender;
+package com.liferay.portal.messaging.impl.internal.sender;
 
-import com.liferay.messaging.Destination;
-import com.liferay.messaging.DestinationConfiguration;
-import com.liferay.messaging.DestinationNames;
-import com.liferay.messaging.DestinationType;
-import com.liferay.messaging.Message;
-import com.liferay.messaging.MessageBusException;
-import com.liferay.messaging.MessageListener;
-import com.liferay.messaging.impl.internal.DefaultMessageBus;
-import com.liferay.messaging.spi.BaseDestination;
-import com.liferay.messaging.spi.DestinationFactory;
-import com.liferay.messaging.spi.MessageImpl;
-import com.liferay.messaging.spi.ParallelDestination;
-import com.liferay.messaging.spi.SerialDestination;
-import com.liferay.messaging.spi.SynchronousDestination;
+import com.liferay.petra.messaging.api.Destination;
+import com.liferay.petra.messaging.api.DestinationConfiguration;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.DestinationType;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBusException;
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.impl.internal.DefaultMessageBus;
+import com.liferay.petra.messaging.impl.internal.sender.DefaultSynchronousMessageSender;
+import com.liferay.petra.messaging.spi.BaseDestination;
+import com.liferay.petra.messaging.spi.DestinationFactory;
+import com.liferay.petra.messaging.spi.MessageImpl;
+import com.liferay.petra.messaging.spi.ParallelDestination;
+import com.liferay.petra.messaging.spi.SerialDestination;
+import com.liferay.petra.messaging.spi.SynchronousDestination;
 
 import java.util.HashMap;
 import java.util.Map;

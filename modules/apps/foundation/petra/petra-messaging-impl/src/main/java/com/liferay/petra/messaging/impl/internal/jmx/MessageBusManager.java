@@ -127,6 +127,11 @@ public class MessageBusManager
 		return destination.getMessageListenerCount();
 	}
 
+	@Reference(unbind = "-")
+	public void setMessageBus(MessageBus messageBus) {
+		_messageBus = messageBus;
+	}
+
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
@@ -135,11 +140,6 @@ public class MessageBusManager
 	@Deactivate
 	protected void deactivate() {
 		_mbeanServiceRegistrations.clear();
-	}
-
-	@Reference(unbind = "-")
-	protected void setMessageBus(MessageBus messageBus) {
-		_messageBus = messageBus;
 	}
 
 	private static final Logger _logger = LoggerFactory.getLogger(

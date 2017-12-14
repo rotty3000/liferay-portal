@@ -211,6 +211,14 @@ public class GetterUtil {
 		return get(value, defaultValue);
 	}
 	
+	public static String getString(Object value) {
+		return getString(value, DEFAULT_STRING);
+	}
+
+	public static String getString(Object value, String defaultValue) {
+		return get(value, defaultValue);
+	}
+	
 	public static String getString(String value) {
 		return getString(value, DEFAULT_STRING);
 	}
