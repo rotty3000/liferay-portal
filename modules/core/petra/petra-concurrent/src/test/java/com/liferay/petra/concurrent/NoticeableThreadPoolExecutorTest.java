@@ -610,6 +610,16 @@ public class NoticeableThreadPoolExecutorTest {
 						executionPaths.add("terminated");
 					}
 
+					@Override
+					public void beforeThreadEnd(Thread thread) {
+						executionPaths.add("beforeThreadEnd");
+					}
+
+					@Override
+					public void beforeThreadStart(Thread thread) {
+						executionPaths.add("beforeThreadStart");
+					}
+
 				});
 
 		NoticeableFuture<Void> terminationNoticeableFuture =

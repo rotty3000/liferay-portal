@@ -28,6 +28,14 @@ public class ThreadPoolHandlerAdapter implements ThreadPoolHandler {
 	}
 
 	@Override
+	public void beforeThreadEnd(Thread thread) {
+	}
+
+	@Override
+	public void beforeThreadStart(Thread thread) {
+	}
+	
+	@Override
 	public void terminated() {
 	}
 

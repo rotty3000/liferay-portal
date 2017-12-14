@@ -14,19 +14,26 @@
 
 package com.liferay.petra.concurrent;
 
+import java.util.concurrent.RejectedExecutionException;
+
 /**
+ * Implements the same behavior as {@link
+ * java.util.concurrent.ThreadPoolExecutor.AbortPolicy}.
+ *
  * @author Shuyang Zhou
+ * @see    java.util.concurrent.ThreadPoolExecutor.AbortPolicy
  */
-public interface ThreadPoolHandler {
+public class AbortPolicy implements RejectedExecutionHandler {
 
-	public void afterExecute(Runnable runnable, Throwable throwable);
+	/**
+	 * @see java.util.concurrent.ThreadPoolExecutor.AbortPolicy#rejectedExecution(
+	 *      Runnable, java.util.concurrent.ThreadPoolExecutor)
+	 */
+	@Override
+	public void rejectedExecution(
+		Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
 
-	public void beforeExecute(Thread thread, Runnable runnable);
-	
-	public void beforeThreadEnd(Thread thread);
-
-	public void beforeThreadStart(Thread thread);
-
-	public void terminated();
+		throw new RejectedExecutionException();
+	}
 
 }

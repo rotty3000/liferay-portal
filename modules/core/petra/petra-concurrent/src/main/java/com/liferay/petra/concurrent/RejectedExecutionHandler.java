@@ -15,18 +15,19 @@
 package com.liferay.petra.concurrent;
 
 /**
+ * Provides the same interface as {@link
+ * java.util.concurrent.RejectedExecutionHandler}.
+ *
  * @author Shuyang Zhou
+ * @see    java.util.concurrent.RejectedExecutionHandler
  */
-public interface ThreadPoolHandler {
+public interface RejectedExecutionHandler {
 
-	public void afterExecute(Runnable runnable, Throwable throwable);
-
-	public void beforeExecute(Thread thread, Runnable runnable);
-	
-	public void beforeThreadEnd(Thread thread);
-
-	public void beforeThreadStart(Thread thread);
-
-	public void terminated();
+	/**
+	 * @see java.util.concurrent.RejectedExecutionHandler#rejectedExecution(
+	 *      Runnable, java.util.concurrent.ThreadPoolExecutor)
+	 */
+	public void rejectedExecution(
+		Runnable runnable, ThreadPoolExecutor threadPoolExecutor);
 
 }
