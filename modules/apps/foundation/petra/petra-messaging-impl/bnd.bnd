@@ -7,4 +7,6 @@ Liferay-Releng-Module-Group-Title:
 Provide-Capability:\
     osgi.implementation;\
         osgi.implementation="liferay.messaging";\
-        version:Version="${Bundle-SymbolicName}"
+        version:Version="${Bundle-Version}",\
+    osgi.service;\
+        objectClass:List<String>="org.osgi.service.component.ComponentFactory"
