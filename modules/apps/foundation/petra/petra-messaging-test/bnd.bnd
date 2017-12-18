@@ -4,7 +4,7 @@ Bundle-Version: 1.0.0
 Export-Package:\
 	${p}.interfaces.*;-split-package:=first,\
 	\
-	${p}.test.*;-split-package:=first
+	${p}.test;-split-package:=first
 
 Test-Cases: ${classes;CONCRETE;ANNOTATED;org.junit.Test}
 
