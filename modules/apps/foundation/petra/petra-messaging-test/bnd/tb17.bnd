@@ -1,1 +1,1 @@
-Export-Package: ${p}.tb17.*;-split-package:=first
+Export-Package: ${p}.tb17.test.*;-split-package:=first
