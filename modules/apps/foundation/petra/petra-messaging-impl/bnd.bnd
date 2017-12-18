@@ -3,3 +3,8 @@ Bundle-SymbolicName: com.liferay.petra.messaging.impl
 Bundle-Version: 1.0.0
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
+
+Provide-Capability:\
+    osgi.implementation;\
+        osgi.implementation="liferay.messaging";\
+        version:Version="${Bundle-SymbolicName}"
