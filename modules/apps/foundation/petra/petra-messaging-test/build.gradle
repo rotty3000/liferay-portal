@@ -1,3 +1,8 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Export
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -26,3 +31,35 @@ dependencies {
 	provided project(":apps:foundation:petra:petra-messaging-spi")
 	provided project(":apps:foundation:petra:petra-messaging-impl")
 }
+
+task export_resolve(type: Resolve) {
+    bndrun 'messaging-executable.bndrun'
+}
+
+task export(type: Export) {
+    bndrun 'messaging-executable.bndrun'
+    destinationDir './build/executable'
+    dependsOn export_resolve
+}
+
+task newjar(type: Bundle, overwrite: true) {
+    bndfile = 'bnd.bnd'
+    from sourceSets.main.output
+    exclude('com/liferay/petra/messaging/tb*/*')
+}
+
+jar {
+    deleteAllActions()
+    dependsOn newjar
+}
+
+task resolve(type: Resolve) {
+    bndrun 'bnd.bndrun'
+}
+
+task testOSGi(type: TestOSGi) {
+    bndrun 'bnd.bndrun'
+    dependsOn resolve
+}
+
+testIntegration.finalizedBy testOSGi
