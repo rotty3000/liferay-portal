@@ -14,6 +14,7 @@
 
 package com.liferay.petra.io.util;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 
 /**
@@ -107,68 +108,83 @@ public class GetterUtil {
 		if (value == null) {
 			return defaultValue;
 		}
-
+	
 		value = value.trim();
-
+	
 		if (value.length() > 4) {
 			return false;
 		}
-
+	
 		if (value.length() == 4) {
 			char c = value.charAt(0);
-
+	
 			if ((c != 't') && (c != 'T')) {
 				return false;
 			}
-
+	
 			c = value.charAt(1);
-
+	
 			if ((c != 'r') && (c != 'R')) {
 				return false;
 			}
-
+	
 			c = value.charAt(2);
-
+	
 			if ((c != 'u') && (c != 'U')) {
 				return false;
 			}
-
+	
 			c = value.charAt(3);
-
+	
 			if ((c != 'e') && (c != 'E')) {
 				return false;
 			}
-
+	
 			return true;
 		}
-
+	
 		if (value.length() == 2) {
 			char c = value.charAt(0);
-
+	
 			if ((c != 'o') && (c != 'O')) {
 				return false;
 			}
-
+	
 			c = value.charAt(1);
-
+	
 			if ((c != 'n') && (c != 'N')) {
 				return false;
 			}
-
+	
 			return true;
 		}
-
+	
 		if (value.length() == 1) {
 			char c = value.charAt(0);
-
+	
 			if ((c == '1') || (c == 't') || (c == 'T') || (c == 'y') ||
 				(c == 'Y')) {
-
+	
 				return true;
 			}
 		}
-
+	
 		return false;
+	}
+
+	public static String get(String value, String defaultValue) {
+		if (value == null) {
+			return defaultValue;
+		}
+
+		value = value.trim();
+
+		if (value.indexOf(CharPool.RETURN) != -1) {
+			value = value.replaceAll(
+				StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE);
+		}
+
+		return value;
 	}
 	
 	public static boolean getBoolean(Object value) {
