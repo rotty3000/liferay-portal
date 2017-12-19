@@ -8,6 +8,10 @@ Export-Package:\
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 
+Provide-Capability:\
+    osgi.service;\
+        objectClass:List<String>="org.osgi.service.component.ComponentFactory"
+
 Require-Capability:\
     osgi.implementation;\
         filter:="(&(osgi.implementation=liferay.messaging)(version>=1.0)(!(version>=2.0)))"
