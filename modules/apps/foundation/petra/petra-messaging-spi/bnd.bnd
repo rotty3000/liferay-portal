@@ -8,6 +8,8 @@ Export-Package:\
 Liferay-Releng-Module-Group-Description:
 Liferay-Releng-Module-Group-Title:
 
+-dsannotations-options: inherit
+
 Provide-Capability:\
     osgi.service;\
         objectClass:List<String>="org.osgi.service.component.ComponentFactory"
