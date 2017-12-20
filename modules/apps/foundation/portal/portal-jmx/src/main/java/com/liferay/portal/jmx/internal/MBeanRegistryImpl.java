@@ -15,11 +15,9 @@
 package com.liferay.portal.jmx.internal;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
+import com.liferay.petra.io.util.GetterUtil;
+import com.liferay.petra.io.util.Validator;
 import com.liferay.portal.jmx.MBeanRegistry;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.lang.management.ManagementFactory;
 
@@ -47,6 +45,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael C. Han
@@ -113,8 +113,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 				}
 			}
 			catch (InstanceNotFoundException infe) {
-				if (_log.isInfoEnabled()) {
-					_log.info(
+				if (_logger.isInfoEnabled()) {
+					_logger.info(
 						"Unable to unregister " + defaultObjectName, infe);
 				}
 			}
@@ -158,8 +158,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 				objectNameCacheKey, dynamicMBean, new ObjectName(objectName));
 		}
 		catch (Exception e) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to register mbean", e);
+			if (_logger.isWarnEnabled()) {
+				_logger.warn("Unable to register mbean", e);
 			}
 		}
 	}
@@ -174,8 +174,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 					_mBeanServer.unregisterMBean(objectName);
 				}
 				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
+					if (_logger.isWarnEnabled()) {
+						_logger.warn(
 							"Unable to unregister mbean" +
 								objectName.getCanonicalName(),
 							e);
@@ -204,13 +204,13 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 			unregister(objectNameCacheKey, new ObjectName(objectName));
 		}
 		catch (Exception e) {
-			if (_log.isWarnEnabled()) {
-				_log.warn("Unable to register mbean", e);
+			if (_logger.isWarnEnabled()) {
+				_logger.warn("Unable to register mbean", e);
 			}
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _logger = LoggerFactory.getLogger(
 		MBeanRegistryImpl.class);
 
 	private BundleContext _bundleContext;
@@ -241,8 +241,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 					objectNameCacheKey, service, new ObjectName(objectName));
 			}
 			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Unable to register mbean", e);
+				if (_logger.isWarnEnabled()) {
+					_logger.warn("Unable to register mbean", e);
 				}
 			}
 
@@ -274,8 +274,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 				unregister(objectNameCacheKey, new ObjectName(objectName));
 			}
 			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Unable to register mbean", e);
+				if (_logger.isWarnEnabled()) {
+					_logger.warn("Unable to register mbean", e);
 				}
 			}
 		}
