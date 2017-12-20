@@ -34,16 +34,6 @@ dependencies {
 	provided project(":apps:foundation:petra:petra-messaging-impl")
 }
 
-task export_resolve(type: Resolve) {
-    bndrun 'messaging-executable.bndrun'
-}
-
-task export(type: Export) {
-    bndrun 'messaging-executable.bndrun'
-    destinationDir './build/executable'
-    dependsOn export_resolve
-}
-
 task newjar(type: Bundle, overwrite: true) {
     bndfile = 'bnd.bnd'
     from sourceSets.main.output
