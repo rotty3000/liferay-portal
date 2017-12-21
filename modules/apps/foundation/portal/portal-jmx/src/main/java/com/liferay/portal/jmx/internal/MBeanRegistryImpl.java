@@ -33,10 +33,10 @@ import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
@@ -45,6 +45,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,21 @@ import org.slf4j.LoggerFactory;
 public class MBeanRegistryImpl implements MBeanRegistry {
 
 	@Override
-	public MBeanServer getMBeanServer() {
+	public synchronized MBeanServer getMBeanServer() {
+		if (_mBeanServer == null) {
+			Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+			_bundleContext = bundle.getBundleContext();
+
+			_mBeanServer = ManagementFactory.getPlatformMBeanServer();
+
+			_serviceTracker = ServiceTrackerFactory.open(
+				_bundleContext,
+				"(&(jmx.objectname=*)(objectClass=*MBean)" +
+					"(!(objectClass=javax.management.DynamicMBean)))",
+				new MBeanServiceTrackerCustomizer());
+		}
+
 		return _mBeanServer;
 	}
 
@@ -68,9 +83,11 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	public ObjectInstance register(
 			String objectNameCacheKey, Object object, ObjectName objectName)
 		throws InstanceAlreadyExistsException, MBeanRegistrationException,
-			   NotCompliantMBeanException {
+			NotCompliantMBeanException {
 
-		ObjectInstance objectInstance = _mBeanServer.registerMBean(
+		MBeanServer mBeanServer = getMBeanServer();
+
+		ObjectInstance objectInstance = mBeanServer.registerMBean(
 			object, objectName);
 
 		synchronized (_objectNameCache) {
@@ -105,11 +122,13 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 			ObjectName objectName = _objectNameCache.remove(objectNameCacheKey);
 
 			try {
+				MBeanServer mBeanServer = getMBeanServer();
+
 				if (objectName == null) {
-					_mBeanServer.unregisterMBean(defaultObjectName);
+					mBeanServer.unregisterMBean(defaultObjectName);
 				}
 				else {
-					_mBeanServer.unregisterMBean(objectName);
+					mBeanServer.unregisterMBean(objectName);
 				}
 			}
 			catch (InstanceNotFoundException infe) {
@@ -119,19 +138,6 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 				}
 			}
 		}
-	}
-
-	@Activate
-	protected void activate(ComponentContext componentContext) {
-		_bundleContext = componentContext.getBundleContext();
-
-		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
-
-		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext,
-			"(&(jmx.objectname=*)(objectClass=*MBean)" +
-				"(!(objectClass=javax.management.DynamicMBean)))",
-			new MBeanServiceTrackerCustomizer());
 	}
 
 	@Reference(
@@ -171,7 +177,9 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		synchronized (_objectNameCache) {
 			for (ObjectName objectName : _objectNameCache.values()) {
 				try {
-					_mBeanServer.unregisterMBean(objectName);
+					MBeanServer mBeanServer = getMBeanServer();
+
+					mBeanServer.unregisterMBean(objectName);
 				}
 				catch (Exception e) {
 					if (_logger.isWarnEnabled()) {
@@ -184,6 +192,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 			}
 
 			_objectNameCache.clear();
+			_mBeanServer = null;
 		}
 	}
 
@@ -214,7 +223,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		MBeanRegistryImpl.class);
 
 	private BundleContext _bundleContext;
-	private MBeanServer _mBeanServer;
+	private volatile MBeanServer _mBeanServer;
 	private final Map<String, ObjectName> _objectNameCache =
 		new ConcurrentHashMap<>();
 	private ServiceTracker<Object, Object> _serviceTracker;
