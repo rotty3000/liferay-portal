@@ -145,9 +145,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			BundleContext bundleContext, InputStream inputStream)
 		throws PortalException {
 
-		try {
-			JarInputStream jarInputStream = new JarInputStream(inputStream);
-
+		try (JarInputStream jarInputStream = new JarInputStream(inputStream)) {
 			Manifest manifest = jarInputStream.getManifest();
 
 			Attributes attributes = manifest.getMainAttributes();
@@ -727,6 +725,20 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		Properties extraProperties = PropsUtil.getProperties(
 			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
 
+		String extraCapabilitiesKey =
+			PropsKeys.MODULE_FRAMEWORK_PROPERTIES +
+				Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA;
+
+		Parameters extraCapabilities = OSGiHeader.parseHeader(
+			extraProperties.getProperty(extraCapabilitiesKey));
+
+		Parameters provideCapability = _getProvideCapability();
+
+		extraCapabilities.mergeWith(provideCapability, false);
+
+		extraProperties.setProperty(
+			extraCapabilitiesKey, extraCapabilities.toString());
+
 		for (Map.Entry<Object, Object> entry : extraProperties.entrySet()) {
 			String key = (String)entry.getKey();
 			String value = (String)entry.getValue();
@@ -799,14 +811,32 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		return properties;
 	}
 
+	private Parameters _getProvideCapability() {
+		Manifest provideCapabilityManifest = null;
+
+		Class<?> clazz = getClass();
+
+		InputStream inputStream = clazz.getResourceAsStream(
+			"/META-INF/system.packages.extra.mf");
+
+		try {
+			provideCapabilityManifest = new Manifest(inputStream);
+		}
+		catch (IOException ioe) {
+			ReflectionUtil.throwException(ioe);
+		}
+
+		Attributes attributes = provideCapabilityManifest.getMainAttributes();
+
+		return new Parameters(attributes.getValue("Provide-Capability"));
+	}
+
 	private Bundle _getStaticBundle(
 			BundleContext bundleContext, InputStream inputStream,
 			String location)
 		throws PortalException {
 
-		try {
-			JarInputStream jarInputStream = new JarInputStream(inputStream);
-
+		try (JarInputStream jarInputStream = new JarInputStream(inputStream)) {
 			Manifest manifest = jarInputStream.getManifest();
 
 			if (manifest == null) {
@@ -901,31 +931,6 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return sb.toString();
-	}
-
-	private boolean _hasLazyActivationPolicy(Bundle bundle) {
-		Dictionary<String, String> headers = bundle.getHeaders();
-
-		String fragmentHost = headers.get(Constants.FRAGMENT_HOST);
-
-		if (fragmentHost != null) {
-			return false;
-		}
-
-		String activationPolicy = headers.get(
-			Constants.BUNDLE_ACTIVATIONPOLICY);
-
-		if (activationPolicy == null) {
-			return false;
-		}
-
-		Parameters parameters = OSGiHeader.parseHeader(activationPolicy);
-
-		if (parameters.containsKey(Constants.ACTIVATION_LAZY)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private void _initRequiredStartupDirs() {
