@@ -23,7 +23,30 @@ import aQute.bnd.osgi.Resource;
 import aQute.bnd.service.AnalyzerPlugin;
 import aQute.bnd.version.Version;
 
+import java.io.File;
+import java.io.IOException;
+
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Andrea Di Giorgi
@@ -32,6 +55,8 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 
 	@Override
 	public boolean analyzeJar(Analyzer analyzer) throws Exception {
+		_processProvideCapability(analyzer);
+
 		boolean liferayService = Boolean.parseBoolean(
 			analyzer.getProperty("Liferay-Service"));
 
@@ -123,6 +148,130 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 		merge(
 			analyzer, "-liferay-spring-dependency",
 			"com.liferay.portal.spring.extender.service.ServiceReference");
+	}
+
+	private List<String> _buildServiceClasses(Path serviceXml) {
+		List<String> serviceClasses = new ArrayList<>();
+
+		try {
+			DocumentBuilderFactory factory =
+				DocumentBuilderFactory.newInstance();
+
+			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+
+			Document document = documentBuilder.parse(serviceXml.toFile());
+
+			XPathFactory xPathfactory = XPathFactory.newInstance();
+
+			XPath xpath = xPathfactory.newXPath();
+
+			XPathExpression apiPackagePathExpression = xpath.compile(
+				"/service-builder/@api-package-path");
+
+			String packagePath = apiPackagePathExpression.evaluate(document);
+
+			if ((packagePath == null) || packagePath.isEmpty()) {
+				XPathExpression packagePathExpression = xpath.compile(
+					"/service-builder/@package-path");
+
+				packagePath = packagePathExpression.evaluate(document);
+			}
+
+			if (_isValidPackagePath(packagePath)) {
+				XPathExpression entityExpression = xpath.compile("//entity");
+
+				NodeList entities = (NodeList)entityExpression.evaluate(
+					document, XPathConstants.NODESET);
+
+				for (int i = 0; i < entities.getLength(); i++) {
+					Node entity = entities.item(i);
+
+					String name = _getAttrValue(entity, "name");
+					String localService = _getAttrValue(
+						entity, "local-service");
+					String remoteService = _getAttrValue(
+						entity, "remote-service");
+
+					if ((localService == null) || "true".equals(localService)) {
+						serviceClasses.add(
+							packagePath + ".service." + name + "LocalService");
+					}
+
+					if ("true".equals(remoteService)) {
+						serviceClasses.add(
+							packagePath + ".service." + name + "Service");
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return serviceClasses;
+	}
+
+	private Set<Path> _findAllServiceXmlFiles(Path dir) throws IOException {
+		try (Stream<Path> fileTree =
+				Files.walk(dir, FileVisitOption.FOLLOW_LINKS)) {
+
+			return fileTree.filter(
+				path -> {
+					File file = path.toFile();
+
+					String fileName = file.getName();
+
+					return fileName.equals("service.xml");
+				}
+			).collect(
+				Collectors.toSet()
+			);
+		}
+	}
+
+	private String _getAttrValue(Node node, String attrName) {
+		Node item = node.getAttributes().getNamedItem(attrName);
+
+		if (item != null) {
+			return item.getNodeValue();
+		}
+
+		return null;
+	}
+
+	private boolean _isValidPackagePath(String packagePath) {
+		if ((packagePath != null) && !packagePath.contains("@")) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private void _processProvideCapability(Analyzer analyzer) throws Exception {
+		File base = analyzer.getBase();
+
+		Stream<Path> serviceXmls = _findAllServiceXmlFiles(
+			base.toPath()).stream();
+
+		Set<String> serviceClasses = serviceXmls.flatMap(
+			serviceXml -> _buildServiceClasses(serviceXml).stream()
+		).distinct(
+		).collect(
+			Collectors.toSet()
+		);
+
+		if (!serviceClasses.isEmpty()) {
+			Parameters provideCapabilityHeaders = new Parameters(
+				analyzer.getProperty(Constants.PROVIDE_CAPABILITY));
+
+			for (String serviceClass : serviceClasses) {
+				provideCapabilityHeaders.add(
+					"osgi.service", Attrs.create("objectClass", serviceClass));
+			}
+
+			analyzer.setProperty(
+				Constants.PROVIDE_CAPABILITY,
+				provideCapabilityHeaders.toString());
+		}
 	}
 
 	private static final String _LIFERAY_EXTENDER = "liferay.extender";
