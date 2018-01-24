@@ -15,22 +15,21 @@
 package com.liferay.ant.bnd.service;
 
 import aQute.bnd.header.Attrs;
+import aQute.bnd.header.OSGiHeader;
 import aQute.bnd.header.Parameters;
 import aQute.bnd.osgi.Analyzer;
 import aQute.bnd.osgi.Constants;
+import aQute.bnd.osgi.FileResource;
+import aQute.bnd.osgi.Instruction;
+import aQute.bnd.osgi.Instructions;
 import aQute.bnd.osgi.Jar;
 import aQute.bnd.osgi.Resource;
 import aQute.bnd.service.AnalyzerPlugin;
 import aQute.bnd.version.Version;
 
 import java.io.File;
-import java.io.IOException;
-
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -151,7 +150,7 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 			"com.liferay.portal.spring.extender.service.ServiceReference");
 	}
 
-	private List<String> _buildServiceClasses(Path serviceXml) {
+	private List<String> _buildServiceClasses(File serviceXmlFile) {
 		List<String> serviceClasses = new ArrayList<>();
 
 		try {
@@ -160,7 +159,7 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 
 			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
 
-			Document document = documentBuilder.parse(serviceXml.toFile());
+			Document document = documentBuilder.parse(serviceXmlFile);
 
 			XPathFactory xPathfactory = XPathFactory.newInstance();
 
@@ -211,23 +210,6 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 		return serviceClasses;
 	}
 
-	private Set<Path> _findAllServiceXmlFiles(Path dir) throws IOException {
-		try (Stream<Path> fileTree =
-				Files.walk(dir, FileVisitOption.FOLLOW_LINKS)) {
-
-			Stream<Path> filter = fileTree.filter(
-				path -> {
-					File file = path.toFile();
-
-					String fileName = file.getName();
-
-					return fileName.equals("service.xml");
-				});
-
-			return filter.collect(Collectors.toSet());
-		}
-	}
-
 	private String _getAttrValue(Node node, String attrName) {
 		NamedNodeMap attributes = node.getAttributes();
 
@@ -249,10 +231,41 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 	}
 
 	private void _processProvideCapability(Analyzer analyzer) throws Exception {
-		File base = analyzer.getBase();
+		Parameters parameters = OSGiHeader.parseHeader(
+			analyzer.getProperty("-servicexml"));
 
-		Stream<Path> serviceXmls = _findAllServiceXmlFiles(
-			base.toPath()).stream();
+		if (parameters.isEmpty()) {
+			return;
+		}
+
+		Instructions instructions = new Instructions(parameters);
+
+		Jar jar = analyzer.getJar();
+
+		Map<String, Resource> resources = jar.getResources();
+
+		Set<String> keys = new HashSet<String>(resources.keySet());
+
+		Set<File> serviceXmlFiles = new HashSet<>();
+
+		for (String key : keys) {
+			for (Instruction instruction : instructions.keySet()) {
+				if (instruction.matches(key)) {
+					Resource resource = resources.get(key);
+
+					if (resource instanceof FileResource) {
+						@SuppressWarnings("resource")
+						FileResource fileResource = (FileResource)resource;
+
+						File serviceXmlFile = fileResource.getFile();
+
+						serviceXmlFiles.add(serviceXmlFile);
+					}
+				}
+			}
+		}
+
+		Stream<File> serviceXmls = serviceXmlFiles.stream();
 
 		Set<String> serviceClasses = serviceXmls.flatMap(
 			serviceXml -> _buildServiceClasses(serviceXml).stream()

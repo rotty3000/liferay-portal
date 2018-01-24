@@ -64,7 +64,6 @@ public class ServiceAnalyzerPluginTest {
 
 	@Test
 	public void testExistingProvideCapabilityParameters() throws Exception {
-		//liferay.resource.bundle=bundle.symbolic.name="com.liferay.portal.impl";resource.bundle.base.name="content.Language"
 		InputStream inputStream =
 			ServiceAnalyzerPluginTest.class.getResourceAsStream(
 				"dependencies/service-test.xml");
@@ -82,7 +81,7 @@ public class ServiceAnalyzerPluginTest {
 
 		analyzer.setBase(tempFolder.getRoot());
 
-		analyzer.setProperty(Constants.PROVIDE_CAPABILITY, new Parameters("liferay.resource.bundle=bundle.symbolic.name=\"com.liferay.portal.impl\";resource.bundle.base.name=\"content.Language\"").toString());
+		analyzer.setProperty(Constants.PROVIDE_CAPABILITY, new Parameters("existing.parameter;dontdeleteme=true").toString());
 
 		serviceAnalyzerPlugin.analyzeJar(analyzer);
 
