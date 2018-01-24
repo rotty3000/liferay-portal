@@ -37,7 +37,6 @@ if (!System.getenv("JENKINS_HOME") || !systemPackagesExtraManifestFile.exists())
 			File portalImplJarFile = configurations.provided.find {
 				it.name.startsWith "com.liferay.portal.impl-"
 			}
-println portalImplJarFile
 
 			Domain portalImplJar = Domain.domain(portalImplJarFile)
 			Parameters provideCapability = portalImplJar.provideCapability
