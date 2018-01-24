@@ -19,7 +19,6 @@ import aQute.bnd.osgi.Analyzer;
 
 import java.io.File;
 import java.io.InputStream;
-
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -27,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.osgi.framework.Constants;
 
 /**
  * @author Gregory Amerson
@@ -60,6 +60,38 @@ public class ServiceAnalyzerPluginTest {
 
 		Assert.assertEquals(
 			provideCapability.toString(), 104, provideCapability.size());
+	}
+
+	@Test
+	public void testExistingProvideCapabilityParameters() throws Exception {
+		//liferay.resource.bundle=bundle.symbolic.name="com.liferay.portal.impl";resource.bundle.base.name="content.Language"
+		InputStream inputStream =
+			ServiceAnalyzerPluginTest.class.getResourceAsStream(
+				"dependencies/service-test.xml");
+
+		File serviceXml = tempFolder.newFile("service.xml");
+
+		Files.copy(
+			inputStream, serviceXml.toPath(),
+			StandardCopyOption.REPLACE_EXISTING);
+
+		ServiceAnalyzerPlugin serviceAnalyzerPlugin =
+			new ServiceAnalyzerPlugin();
+
+		Analyzer analyzer = new Analyzer();
+
+		analyzer.setBase(tempFolder.getRoot());
+
+		analyzer.setProperty(Constants.PROVIDE_CAPABILITY, new Parameters("liferay.resource.bundle=bundle.symbolic.name=\"com.liferay.portal.impl\";resource.bundle.base.name=\"content.Language\"").toString());
+
+		serviceAnalyzerPlugin.analyzeJar(analyzer);
+
+		Parameters provideCapability = analyzer.getProvideCapability();
+
+		Assert.assertNotNull(provideCapability);
+
+		Assert.assertEquals(
+			provideCapability.toString(), 105, provideCapability.size());
 	}
 
 	@Rule

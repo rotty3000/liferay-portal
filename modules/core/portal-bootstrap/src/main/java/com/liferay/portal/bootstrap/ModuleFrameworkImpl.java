@@ -728,19 +728,20 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		Properties extraProperties = PropsUtil.getProperties(
 			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
 
-		String extraCapabilitiesKey =
-			PropsKeys.MODULE_FRAMEWORK_PROPERTIES +
-				Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA;
-
 		Parameters extraCapabilities = OSGiHeader.parseHeader(
-			extraProperties.getProperty(extraCapabilitiesKey));
+			extraProperties.getProperty(Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA));
 
 		Parameters provideCapability = _getProvideCapability();
 
-		extraCapabilities.mergeWith(provideCapability, false);
+		if (extraCapabilities.size() > 0) {
+			extraCapabilities.putAll(provideCapability);
+		}
+		else {
+			extraCapabilities = provideCapability;
+		}
 
 		extraProperties.setProperty(
-			extraCapabilitiesKey, extraCapabilities.toString());
+			Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA, extraCapabilities.toString());
 
 		for (Map.Entry<Object, Object> entry : extraProperties.entrySet()) {
 			String key = (String)entry.getKey();
