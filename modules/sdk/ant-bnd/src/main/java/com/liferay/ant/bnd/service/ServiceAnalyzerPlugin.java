@@ -45,6 +45,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -214,22 +215,23 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 		try (Stream<Path> fileTree =
 				Files.walk(dir, FileVisitOption.FOLLOW_LINKS)) {
 
-			return fileTree.filter(
+			Stream<Path> filter = fileTree.filter(
 				path -> {
 					File file = path.toFile();
 
 					String fileName = file.getName();
 
 					return fileName.equals("service.xml");
-				}
-			).collect(
-				Collectors.toSet()
-			);
+				});
+
+			return filter.collect(Collectors.toSet());
 		}
 	}
 
 	private String _getAttrValue(Node node, String attrName) {
-		Node item = node.getAttributes().getNamedItem(attrName);
+		NamedNodeMap attributes = node.getAttributes();
+
+		Node item = attributes.getNamedItem(attrName);
 
 		if (item != null) {
 			return item.getNodeValue();
@@ -265,7 +267,8 @@ public class ServiceAnalyzerPlugin implements AnalyzerPlugin {
 
 			for (String serviceClass : serviceClasses) {
 				provideCapabilityHeaders.add(
-					"osgi.service", Attrs.create("objectClass", serviceClass));
+					"osgi.service",
+					Attrs.create("objectClass:List<String>", serviceClass));
 			}
 
 			analyzer.setProperty(
