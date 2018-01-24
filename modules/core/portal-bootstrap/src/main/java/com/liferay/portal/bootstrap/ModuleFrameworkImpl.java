@@ -145,7 +145,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			BundleContext bundleContext, InputStream inputStream)
 		throws PortalException {
 
-		try (JarInputStream jarInputStream = new JarInputStream(inputStream)) {
+		try {
+			@SuppressWarnings("resource")
+			JarInputStream jarInputStream = new JarInputStream(inputStream);
+
 			Manifest manifest = jarInputStream.getManifest();
 
 			Attributes attributes = manifest.getMainAttributes();
@@ -836,7 +839,10 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			String location)
 		throws PortalException {
 
-		try (JarInputStream jarInputStream = new JarInputStream(inputStream)) {
+		try {
+			@SuppressWarnings("resource")
+			JarInputStream jarInputStream = new JarInputStream(inputStream);
+
 			Manifest manifest = jarInputStream.getManifest();
 
 			if (manifest == null) {
