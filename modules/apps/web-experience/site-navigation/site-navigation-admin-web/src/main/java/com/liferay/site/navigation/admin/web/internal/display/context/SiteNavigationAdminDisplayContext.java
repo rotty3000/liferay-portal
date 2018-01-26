@@ -15,6 +15,7 @@
 package com.liferay.site.navigation.admin.web.internal.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -31,7 +32,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -384,6 +384,18 @@ public class SiteNavigationAdminDisplayContext {
 		return _siteNavigationMenuItemTypeRegistry;
 	}
 
+	public String getSiteNavigationMenuName() throws PortalException {
+		if (_siteNavigationMenuName != null) {
+			return _siteNavigationMenuName;
+		}
+
+		SiteNavigationMenu siteNavigationMenu = getSiteNavigationMenu();
+
+		_siteNavigationMenuName = siteNavigationMenu.getName();
+
+		return _siteNavigationMenuName;
+	}
+
 	public boolean isNotPrimarySiteNavigationMenu() {
 		SiteNavigationMenu primarySiteNavigationMenu =
 			getPrimarySiteNavigationMenu();
@@ -439,5 +451,6 @@ public class SiteNavigationAdminDisplayContext {
 	private Long _siteNavigationMenuId;
 	private final SiteNavigationMenuItemTypeRegistry
 		_siteNavigationMenuItemTypeRegistry;
+	private String _siteNavigationMenuName;
 
 }

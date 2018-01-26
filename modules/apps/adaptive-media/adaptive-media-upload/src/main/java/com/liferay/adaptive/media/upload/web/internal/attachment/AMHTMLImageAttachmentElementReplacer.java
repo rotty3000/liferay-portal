@@ -41,14 +41,14 @@ public class AMHTMLImageAttachmentElementReplacer
 
 	@Override
 	public String replace(String originalElement, FileEntry fileEntry) {
-		Element image = _parseImgTag(
+		Element imageElement = _parseImgTag(
 			_defaultAttachmentElementReplacer.replace(
 				originalElement, fileEntry));
 
-		image.attr(
+		imageElement.attr(
 			"data-fileEntryId", String.valueOf(fileEntry.getFileEntryId()));
 
-		return image.toString();
+		return imageElement.toString();
 	}
 
 	protected AMHTMLImageAttachmentElementReplacer(
@@ -58,12 +58,12 @@ public class AMHTMLImageAttachmentElementReplacer
 	}
 
 	private Element _parseImgTag(String originalImgTag) {
+		Document document = Jsoup.parseBodyFragment(originalImgTag);
+
 		Document.OutputSettings outputSettings = new Document.OutputSettings();
 
 		outputSettings.prettyPrint(false);
 		outputSettings.syntax(Document.OutputSettings.Syntax.xml);
-
-		Document document = Jsoup.parseBodyFragment(originalImgTag);
 
 		document.outputSettings(outputSettings);
 

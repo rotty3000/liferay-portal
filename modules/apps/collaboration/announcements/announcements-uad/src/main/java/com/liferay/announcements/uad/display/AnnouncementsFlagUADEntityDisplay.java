@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_FLAG,
+	property = "model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_FLAG,
 	service = UADEntityDisplay.class
 )
 public class AnnouncementsFlagUADEntityDisplay extends BaseUADEntityDisplay {
@@ -49,7 +49,7 @@ public class AnnouncementsFlagUADEntityDisplay extends BaseUADEntityDisplay {
 
 	@Override
 	public String getEntityTypeDescription() {
-		return "Announcements flag";
+		return "A flag indicating the status of an announcements entry";
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class AnnouncementsFlagUADEntityDisplay extends BaseUADEntityDisplay {
 	protected Portal portal;
 
 	@Reference(
-		target = "(model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_FLAG + ")"
+		target = "(model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_FLAG + ")"
 	)
 	private UADEntityAnonymizer _uadEntityAnonymizer;
 

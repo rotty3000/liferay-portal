@@ -18,6 +18,7 @@ import aQute.bnd.header.OSGiHeader;
 import aQute.bnd.header.Parameters;
 import aQute.bnd.version.Version;
 
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -35,7 +36,6 @@ import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.ServiceLoader;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -146,6 +146,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		throws PortalException {
 
 		try {
+			@SuppressWarnings("resource")
 			JarInputStream jarInputStream = new JarInputStream(inputStream);
 
 			Manifest manifest = jarInputStream.getManifest();
@@ -727,6 +728,21 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		Properties extraProperties = PropsUtil.getProperties(
 			PropsKeys.MODULE_FRAMEWORK_PROPERTIES, true);
 
+		Parameters extraCapabilities = OSGiHeader.parseHeader(
+			extraProperties.getProperty(Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA));
+
+		Parameters provideCapability = _getProvideCapability();
+
+		if (extraCapabilities.size() > 0) {
+			extraCapabilities.putAll(provideCapability);
+		}
+		else {
+			extraCapabilities = provideCapability;
+		}
+
+		extraProperties.setProperty(
+			Constants.FRAMEWORK_SYSTEMCAPABILITIES_EXTRA, extraCapabilities.toString());
+
 		for (Map.Entry<Object, Object> entry : extraProperties.entrySet()) {
 			String key = (String)entry.getKey();
 			String value = (String)entry.getValue();
@@ -799,12 +815,33 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		return properties;
 	}
 
+	private Parameters _getProvideCapability() {
+		Manifest provideCapabilityManifest = null;
+
+		Class<?> clazz = getClass();
+
+		InputStream inputStream = clazz.getResourceAsStream(
+			"/META-INF/system.packages.extra.mf");
+
+		try {
+			provideCapabilityManifest = new Manifest(inputStream);
+		}
+		catch (IOException ioe) {
+			ReflectionUtil.throwException(ioe);
+		}
+
+		Attributes attributes = provideCapabilityManifest.getMainAttributes();
+
+		return new Parameters(attributes.getValue("Provide-Capability"));
+	}
+
 	private Bundle _getStaticBundle(
 			BundleContext bundleContext, InputStream inputStream,
 			String location)
 		throws PortalException {
 
 		try {
+			@SuppressWarnings("resource")
 			JarInputStream jarInputStream = new JarInputStream(inputStream);
 
 			Manifest manifest = jarInputStream.getManifest();
@@ -901,31 +938,6 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return sb.toString();
-	}
-
-	private boolean _hasLazyActivationPolicy(Bundle bundle) {
-		Dictionary<String, String> headers = bundle.getHeaders();
-
-		String fragmentHost = headers.get(Constants.FRAGMENT_HOST);
-
-		if (fragmentHost != null) {
-			return false;
-		}
-
-		String activationPolicy = headers.get(
-			Constants.BUNDLE_ACTIVATIONPOLICY);
-
-		if (activationPolicy == null) {
-			return false;
-		}
-
-		Parameters parameters = OSGiHeader.parseHeader(activationPolicy);
-
-		if (parameters.containsKey(Constants.ACTIVATION_LAZY)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private void _initRequiredStartupDirs() {

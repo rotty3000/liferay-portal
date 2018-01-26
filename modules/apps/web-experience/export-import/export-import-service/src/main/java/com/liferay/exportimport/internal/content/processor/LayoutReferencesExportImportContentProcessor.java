@@ -18,6 +18,7 @@ import com.liferay.exportimport.configuration.ExportImportServiceConfiguration;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -41,7 +42,6 @@ import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
@@ -417,18 +417,18 @@ public class LayoutReferencesExportImportContentProcessor
 
 				urlSB.append(StringPool.AT);
 
-				if (urlGroup.isStaged()) {
-					Group liveGroup = urlGroup.getLiveGroup();
-
-					urlSB.append(liveGroup.getUuid());
-				}
-				else if (urlGroup.isStagedRemotely()) {
+				if (urlGroup.isStagedRemotely()) {
 					String remoteGroupUuid = urlGroup.getTypeSettingsProperty(
 						"remoteGroupUUID");
 
 					if (Validator.isNotNull(remoteGroupUuid)) {
 						urlSB.append(remoteGroupUuid);
 					}
+				}
+				else if (urlGroup.isStaged()) {
+					Group liveGroup = urlGroup.getLiveGroup();
+
+					urlSB.append(liveGroup.getUuid());
 				}
 				else if (group.getGroupId() == urlGroup.getGroupId()) {
 					urlSB.append(urlGroup.getFriendlyURL());
@@ -848,13 +848,15 @@ public class LayoutReferencesExportImportContentProcessor
 
 			url = url.substring(pos);
 
-			layout = _layoutLocalService.fetchLayoutByFriendlyURL(
-				urlGroup.getGroupId(), privateLayout, url);
-
-			if (layout == null) {
+			try {
+				layout = _layoutLocalService.getFriendlyURLLayout(
+					urlGroup.getGroupId(), privateLayout, url);
+			}
+			catch (NoSuchLayoutException nsle) {
 				throw new NoSuchLayoutException(
 					"Unable to validate referenced page because the page " +
-						"group cannot be found: " + groupId);
+						"group cannot be found: " + groupId,
+					nsle);
 			}
 		}
 	}

@@ -743,7 +743,7 @@
 
 			currentTarget = $(currentTarget);
 
-			config = A.mix(currentTarget.data(), config);
+			config = A.mix(A.merge({}, currentTarget.data()), config);
 
 			if (!config.uri) {
 				config.uri = currentTarget.data('href') || currentTarget.attr('href');
@@ -1146,7 +1146,7 @@
 
 				var singleSubmit = event.singleSubmit;
 
-				var inputs = form.all('input[type=button], input[type=image], input[type=reset], input[type=submit]');
+				var inputs = form.all('button[type=submit], input[type=button], input[type=image], input[type=reset], input[type=submit]');
 
 				Util.disableFormButtons(inputs, form);
 

@@ -40,7 +40,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = "model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_ENTRY,
+	property = "model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_ENTRY,
 	service = UADEntityDisplay.class
 )
 public class AnnouncementsEntryUADEntityDisplay extends BaseUADEntityDisplay {
@@ -63,11 +63,12 @@ public class AnnouncementsEntryUADEntityDisplay extends BaseUADEntityDisplay {
 
 		portletURL.setParameter(
 			"mvcRenderCommandName", "/announcements/edit_entry");
+
+		AnnouncementsEntry announcementsEntry =
+			announcementsEntryUADEntity.getAnnouncementsEntry();
+
 		portletURL.setParameter(
-			"entryId",
-			String.valueOf(
-				announcementsEntryUADEntity.getAnnouncementsEntry().
-					getEntryId()));
+			"entryId", String.valueOf(announcementsEntry.getEntryId()));
 
 		return portletURL.toString();
 	}
@@ -91,7 +92,7 @@ public class AnnouncementsEntryUADEntityDisplay extends BaseUADEntityDisplay {
 	protected Portal portal;
 
 	@Reference(
-		target = "(model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_ENTRY + ")"
+		target = "(model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_ENTRY + ")"
 	)
 	private UADEntityAnonymizer _uadEntityAnonymizer;
 

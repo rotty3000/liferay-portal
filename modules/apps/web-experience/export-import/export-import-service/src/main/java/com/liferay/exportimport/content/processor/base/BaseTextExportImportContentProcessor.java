@@ -26,6 +26,7 @@ import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.petra.string.CharPool;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -60,7 +61,6 @@ import com.liferay.portal.kernel.util.PredicateFilter;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
@@ -764,18 +764,18 @@ public class BaseTextExportImportContentProcessor
 
 				urlSB.append(StringPool.AT);
 
-				if (urlGroup.isStaged()) {
-					Group liveGroup = urlGroup.getLiveGroup();
-
-					urlSB.append(liveGroup.getUuid());
-				}
-				else if (urlGroup.isStagedRemotely()) {
+				if (urlGroup.isStagedRemotely()) {
 					String remoteGroupUuid = urlGroup.getTypeSettingsProperty(
 						"remoteGroupUUID");
 
 					if (Validator.isNotNull(remoteGroupUuid)) {
 						urlSB.append(remoteGroupUuid);
 					}
+				}
+				else if (urlGroup.isStaged()) {
+					Group liveGroup = urlGroup.getLiveGroup();
+
+					urlSB.append(liveGroup.getUuid());
 				}
 				else if (group.getGroupId() == urlGroup.getGroupId()) {
 					urlSB.append(urlGroup.getFriendlyURL());
@@ -1535,12 +1535,8 @@ public class BaseTextExportImportContentProcessor
 
 			url = url.substring(pos);
 
-			layout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
+			layout = LayoutLocalServiceUtil.getFriendlyURLLayout(
 				urlGroup.getGroupId(), privateLayout, url);
-
-			if (layout == null) {
-				throw new NoSuchLayoutException();
-			}
 		}
 	}
 

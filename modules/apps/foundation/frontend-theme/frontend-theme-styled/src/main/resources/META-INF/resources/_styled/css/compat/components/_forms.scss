@@ -55,6 +55,7 @@
 	}
 
 	@if (variable-exists(atlas-theme)) {
+
 		// Checkbox and Radio Styles
 
 		.checkbox,
@@ -148,7 +149,7 @@
 		width: 100%;
 	}
 
-	// Input group
+	/* ---------- Input group ---------- */
 
 	.input-group-addon {
 		align-items: center;

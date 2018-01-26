@@ -14,12 +14,14 @@
 
 package com.liferay.user.associated.data.test.util;
 
+import com.liferay.portal.kernel.model.BaseModel;
+
 /**
  * @author Noah Sherrill
  */
 public interface WhenHasStatusByUserIdField {
 
-	public void addDataObjectWithStatusByUserId(
+	public BaseModel<?> addBaseModelWithStatusByUserId(
 			long userId, long statusByUserId)
 		throws Exception;
 

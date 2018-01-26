@@ -18,6 +18,7 @@ import com.liferay.announcements.kernel.model.AnnouncementsFlag;
 import com.liferay.announcements.kernel.service.AnnouncementsFlagLocalService;
 import com.liferay.announcements.uad.constants.AnnouncementsUADConstants;
 import com.liferay.announcements.uad.entity.AnnouncementsFlagUADEntity;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.user.associated.data.aggregator.UADEntityAggregator;
 import com.liferay.user.associated.data.anonymizer.BaseUADEntityAnonymizer;
@@ -25,6 +26,7 @@ import com.liferay.user.associated.data.anonymizer.UADEntityAnonymizer;
 import com.liferay.user.associated.data.entity.UADEntity;
 import com.liferay.user.associated.data.exception.UADEntityException;
 import com.liferay.user.associated.data.util.UADAnonymizerHelper;
+import com.liferay.user.associated.data.util.UADDynamicQueryHelper;
 
 import java.util.List;
 
@@ -36,7 +38,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
 	immediate = true,
-	property = {"model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_FLAG},
+	property = {"model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_FLAG},
 	service = UADEntityAnonymizer.class
 )
 public class AnnouncementsFlagUADEntityAnonymizer
@@ -46,10 +48,19 @@ public class AnnouncementsFlagUADEntityAnonymizer
 	public void autoAnonymize(UADEntity uadEntity) throws PortalException {
 		AnnouncementsFlag announcementsFlag = _getAnnouncementsFlag(uadEntity);
 
-		announcementsFlag.setUserId(_uadAnonymizerHelper.getAnonymousUserId());
+		_autoAnonymize(announcementsFlag);
+	}
 
-		_announcementsFlagLocalService.updateAnnouncementsFlag(
-			announcementsFlag);
+	@Override
+	public void autoAnonymizeAll(long userId) throws PortalException {
+		ActionableDynamicQuery actionableDynamicQuery =
+			_getActionableDynamicQuery(userId);
+
+		actionableDynamicQuery.setPerformActionMethod(
+			(AnnouncementsFlag announcementsFlag) -> _autoAnonymize(
+				announcementsFlag));
+
+		actionableDynamicQuery.performActions();
 	}
 
 	@Override
@@ -60,6 +71,18 @@ public class AnnouncementsFlagUADEntityAnonymizer
 	}
 
 	@Override
+	public void deleteAll(long userId) throws PortalException {
+		ActionableDynamicQuery actionableDynamicQuery =
+			_getActionableDynamicQuery(userId);
+
+		actionableDynamicQuery.setPerformActionMethod(
+			(AnnouncementsFlag announcementsFlag) ->
+				_announcementsFlagLocalService.deleteFlag(announcementsFlag));
+
+		actionableDynamicQuery.performActions();
+	}
+
+	@Override
 	public List<String> getEntityNonAnonymizableFieldNames() {
 		return null;
 	}
@@ -67,6 +90,22 @@ public class AnnouncementsFlagUADEntityAnonymizer
 	@Override
 	protected List<UADEntity> getUADEntities(long userId) {
 		return _uadEntityAggregator.getUADEntities(userId);
+	}
+
+	private void _autoAnonymize(AnnouncementsFlag announcementsFlag)
+		throws PortalException {
+
+		announcementsFlag.setUserId(_uadAnonymizerHelper.getAnonymousUserId());
+
+		_announcementsFlagLocalService.updateAnnouncementsFlag(
+			announcementsFlag);
+	}
+
+	private ActionableDynamicQuery _getActionableDynamicQuery(long userId) {
+		return _uadDynamicQueryHelper.getActionableDynamicQuery(
+			_announcementsFlagLocalService::getActionableDynamicQuery,
+			AnnouncementsUADConstants.USER_ID_FIELD_NAMES_ANNOUNCEMENTS_FLAG,
+			userId);
 	}
 
 	private AnnouncementsFlag _getAnnouncementsFlag(UADEntity uadEntity)
@@ -92,8 +131,11 @@ public class AnnouncementsFlagUADEntityAnonymizer
 	@Reference
 	private UADAnonymizerHelper _uadAnonymizerHelper;
 
+	@Reference
+	private UADDynamicQueryHelper _uadDynamicQueryHelper;
+
 	@Reference(
-		target = "(model.class.name=" + AnnouncementsUADConstants.ANNOUNCEMENTS_FLAG + ")"
+		target = "(model.class.name=" + AnnouncementsUADConstants.CLASS_NAME_ANNOUNCEMENTS_FLAG + ")"
 	)
 	private UADEntityAggregator _uadEntityAggregator;
 
