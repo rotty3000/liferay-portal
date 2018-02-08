@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.messaging;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
@@ -32,7 +33,6 @@ import com.liferay.portal.kernel.util.GroupThreadLocal;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.NamedThreadFactory;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
