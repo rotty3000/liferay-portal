@@ -16,6 +16,7 @@ package com.liferay.petra.messaging.test;
 
 import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.MessageBusEventListener;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -56,7 +57,7 @@ public class MessageBusEventListenerTest extends TestUtil {
 
 		Dictionary<String, Object> properties = new Hashtable<>();
 
-		properties.put("destination.name", "synchronous/test");
+		properties.put("destination.name", TBSynchronousDestination.DESTINATION_NAME);
 
 		ServiceRegistration<MessageBusEventListener> serviceRegistration =
 			bundleContext.registerService(

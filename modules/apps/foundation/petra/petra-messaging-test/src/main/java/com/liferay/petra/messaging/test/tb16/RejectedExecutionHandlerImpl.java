@@ -15,6 +15,7 @@
 package com.liferay.petra.messaging.test.tb16;
 
 import com.liferay.petra.messaging.spi.MessageRunnable;
+import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
@@ -29,7 +30,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=parallel/test"},
+	property = {"destination.name=" + TBParallelDestination.DESTINATION_NAME},
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, RejectedExecutionHandler.class}
 )

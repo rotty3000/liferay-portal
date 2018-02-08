@@ -30,8 +30,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = "destination.name=parallel/test", scope = ServiceScope.SINGLETON,
-	service = {Callable.class, MessageListener.class}
+	property = "destination.name=" + TBParallelDestination.DESTINATION_NAME,
+	scope = ServiceScope.SINGLETON, service = {Callable.class, MessageListener.class}
 )
 public class TBMessageListener implements Callable<Message>, MessageListener {
 

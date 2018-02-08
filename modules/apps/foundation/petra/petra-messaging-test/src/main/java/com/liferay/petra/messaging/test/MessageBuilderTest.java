@@ -17,6 +17,9 @@ package com.liferay.petra.messaging.test;
 import com.liferay.petra.messaging.api.DestinationNames;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
+import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,20 +39,20 @@ public class MessageBuilderTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
-		testResponseMessageBuilder("tb2.jar", "parallel/test");
+		test("tb2.jar", TBParallelDestination.DESTINATION_NAME);
+		testResponseMessageBuilder("tb2.jar", TBParallelDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
-		testResponseMessageBuilder("tb3.jar", "serial/test");
+		test("tb3.jar", TBSerialDestination.DESTINATION_NAME);
+		testResponseMessageBuilder("tb3.jar", TBSerialDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
-		testResponseMessageBuilder("tb1.jar", "synchronous/test");
+		test("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
+		testResponseMessageBuilder("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
 	}
 
 	protected void test(String bundle, String destinationName)
@@ -99,15 +102,11 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-			// TODO: Should sendSynchronous be used if destinationName is
-			// "synchronous/test"?
-
 			builder.send();
 
 			Assert.assertEquals(builder.build(), callable.call());
 
 			// Build and test a second message
-
 			callableST = new ServiceTracker<>(bundleContext, filter, null);
 
 			callableST.open();
@@ -135,16 +134,17 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseId("responseId");
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
-
-			// TODO: Should sendSynchronous be used if destinationName is
-			// "synchronous/test"?
-
+			
+			Message message = builder.build();
+			
 			builder.send();
+			
+			// Allow some time for messages to be received
+			Thread.sleep(100);
 
-			// TODO: Why does this assertion fail? Expected and actual results
-			// differ in their values map but only for the serial test...
+			Message receivedMessage = callable.call();
 
-			//Assert.assertEquals(builder.build(), callable.call());
+			Assert.assertEquals(message, receivedMessage);
 		}
 		finally {
 			tb.uninstall();
@@ -205,9 +205,6 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-			// TODO: Should sendSynchronous be used if destinationName is
-			// "synchronous/test"?
-
 			builder.send();
 
 			Message message = callable.call();
@@ -215,7 +212,6 @@ public class MessageBuilderTest extends TestUtil {
 			Assert.assertEquals(builder.build(), message);
 
 			// Build and test response message
-
 			destinationName = DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE;
 
 			Assert.assertTrue(messageBus.hasMessageListener(destinationName));
@@ -237,9 +233,6 @@ public class MessageBuilderTest extends TestUtil {
 			Assert.assertNotNull(callable);
 
 			builder = messageBuilderFactory.createResponse(message);
-
-			// TODO: Should sendSynchronous be used if destinationName is
-			// "synchronous/test"?
 
 			builder.send();
 

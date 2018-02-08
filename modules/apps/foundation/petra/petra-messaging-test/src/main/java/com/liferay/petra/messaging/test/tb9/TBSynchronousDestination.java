@@ -24,9 +24,11 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = DestinationConfiguration.class)
 public class TBSynchronousDestination extends DestinationConfiguration {
+	
+	public static final String DESTINATION_NAME = "synchronous/send/tb9";
 
 	public TBSynchronousDestination() {
-		super(DestinationType.SYNCHRONOUS, "synchronous/send/tb9");
+		super(DestinationType.SYNCHRONOUS, DESTINATION_NAME);
 	}
 
 }

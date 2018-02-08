@@ -15,6 +15,9 @@
 package com.liferay.petra.messaging.test;
 
 import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 
 import java.util.concurrent.Callable;
 
@@ -32,17 +35,17 @@ public class NullMessageDestinationTest extends TestUtil {
 
 	@Test(expected = NullPointerException.class)
 	public void testParallel() throws Exception {
-		test("tb2.jar", "parallel/test");
+		test("tb2.jar", TBParallelDestination.DESTINATION_NAME);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSerial() throws Exception {
-		test("tb3.jar", "serial/test");
+		test("tb3.jar", TBSerialDestination.DESTINATION_NAME);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testSynchronous() throws Exception {
-		test("tb1.jar", "synchronous/test");
+		test("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
 	}
 
 	protected void test(String bundle, String destinationName)

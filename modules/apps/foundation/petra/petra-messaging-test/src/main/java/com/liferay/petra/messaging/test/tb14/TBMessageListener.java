@@ -14,10 +14,6 @@
 
 package com.liferay.petra.messaging.test.tb14;
 
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageListener;
-import com.liferay.petra.messaging.api.MessageListenerException;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -25,11 +21,15 @@ import java.util.concurrent.TimeUnit;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.api.MessageListenerException;
+
 /**
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=parallel/test"},
+	property = {"destination.name=" + TBParallelDestination.DESTINATION_NAME},
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )

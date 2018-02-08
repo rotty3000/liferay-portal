@@ -14,54 +14,50 @@
 
 package com.liferay.petra.messaging.test;
 
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.spi.MessageImpl;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.spi.MessageImpl;
+
 /**
  * @author Brian Wing Shun Chan
  */
-public class MessageTest {
+public class MessageTest extends TestUtil {
 
 	public static final double DELTA = 1e-100;
 
-	// TODO: Why does this throw class not found exception?
-
-	/*@Test
+	@Test
 	public void testMessageSerialization() throws ClassNotFoundException {
-		Message message = new Message();
+		MessageBuilder messageBuilder = messageBuilderFactory.create("destinationName");
+		
+		messageBuilder.setPayload("payload");
 
-		message.put("abc", "123");
-
+		messageBuilder.put("abc", "123");
+		
+		Message message = messageBuilder.build();
+		
 		byte[] serializedMessage = message.toByteArray();
 
-		Message deserializedMessage = Message.fromByteArray(serializedMessage);
+		MessageImpl deserializedMessage = MessageImpl.fromByteArray(serializedMessage);
 
 		Assert.assertEquals(message, deserializedMessage);
-	}*/
-
-	// TODO: Why this error?
-	// java.lang.AssertionError: expected: Message<{destinationName = null,
-	// response=null, responseDestinationName=null, responseId=null,
-	// payload=null, values={abc=123}}> but was: Message<{destinationName=null,
-	// response=null, responseDestinationName=null, responseId=null,
-	// payload=null, values={abc=123}}
-
-	/*@Test
+	}
+	
+	@Test
 	public void testMessageClone() {
-		Message message = new Message();
+		MessageImpl message = new MessageImpl();
 
 		message.put("abc", "123");
 
-		Message clonedMessage = message.clone();
+		MessageImpl clonedMessage = (MessageImpl) message.clone();
 
 		Assert.assertEquals(message, clonedMessage);
-	}*/
+	}
 
 	@Test
 	public void testContains() {
@@ -84,7 +80,7 @@ public class MessageTest {
 
 	@Test
 	public void testCopy() {
-		Message message = new MessageImpl();
+		MessageImpl message = new MessageImpl();
 
 		String destinationName = "destination/test";
 		String payload = "payload";
@@ -100,7 +96,7 @@ public class MessageTest {
 
 		message.put("abc", "123");
 
-		Message copiedFromMessage = new MessageImpl();
+		MessageImpl copiedFromMessage = new MessageImpl();
 
 		Assert.assertEquals(null, copiedFromMessage.getDestinationName());
 		Assert.assertEquals(null, copiedFromMessage.getPayload());
@@ -111,16 +107,9 @@ public class MessageTest {
 
 		copiedFromMessage.copyFrom(message);
 
-		Assert.assertEquals(
-			destinationName, copiedFromMessage.getDestinationName());
-		Assert.assertEquals(payload, copiedFromMessage.getPayload());
-		Assert.assertEquals(response, copiedFromMessage.getResponse());
-		Assert.assertEquals(
-			responseDestinationName,
-			copiedFromMessage.getResponseDestinationName());
-		Assert.assertEquals(responseId, copiedFromMessage.getResponseId());
+		Assert.assertEquals(message, copiedFromMessage);
 
-		Message copiedToMessage = new MessageImpl();
+		MessageImpl copiedToMessage = new MessageImpl();
 
 		Assert.assertEquals(null, copiedToMessage.getDestinationName());
 		Assert.assertEquals(null, copiedToMessage.getPayload());
@@ -130,14 +119,7 @@ public class MessageTest {
 
 		message.copyTo(copiedToMessage);
 
-		Assert.assertEquals(
-			destinationName, copiedToMessage.getDestinationName());
-		Assert.assertEquals(payload, copiedToMessage.getPayload());
-		Assert.assertEquals(response, copiedToMessage.getResponse());
-		Assert.assertEquals(
-			responseDestinationName,
-			copiedToMessage.getResponseDestinationName());
-		Assert.assertEquals(responseId, copiedToMessage.getResponseId());
+		Assert.assertEquals(message, copiedToMessage);
 	}
 
 	@Test

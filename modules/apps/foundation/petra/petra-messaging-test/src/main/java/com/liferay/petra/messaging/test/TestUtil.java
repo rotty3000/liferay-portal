@@ -14,21 +14,16 @@
 
 package com.liferay.petra.messaging.test;
 
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
-import com.liferay.petra.messaging.api.MessageBus;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URL;
-
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-
+import org.junit.Ignore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -36,9 +31,13 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
+import com.liferay.petra.messaging.api.MessageBus;
+
 /**
  * @author Raymond Augé
  */
+@Ignore
 public class TestUtil {
 
 	@After

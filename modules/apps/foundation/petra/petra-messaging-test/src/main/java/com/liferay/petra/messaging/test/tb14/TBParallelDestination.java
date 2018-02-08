@@ -14,16 +14,18 @@
 
 package com.liferay.petra.messaging.test.tb14;
 
+import org.osgi.service.component.annotations.Component;
+
 import com.liferay.petra.messaging.api.DestinationConfiguration;
 import com.liferay.petra.messaging.api.DestinationType;
-
-import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Raymond Augé
  */
 @Component(service = DestinationConfiguration.class)
 public class TBParallelDestination extends DestinationConfiguration {
+	
+	public static final String DESTINATION_NAME = "parallel/test";
 
 	public TBParallelDestination() {
 		super(DestinationType.PARALLEL, "parallel/test");
