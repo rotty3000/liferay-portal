@@ -71,7 +71,7 @@ public class ClassLoaderTest extends TestUtil {
 			}
 
 			Collection<Destination> destinations = messageBus.getDestinations();
-
+			
 			Assert.assertEquals(
 				destinations.toString(), 4, destinations.size());
 

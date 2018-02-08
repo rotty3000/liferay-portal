@@ -24,9 +24,11 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = DestinationConfiguration.class)
 public class TBParallelDestination extends DestinationConfiguration {
+	
+	public static final String DESTINATION_NAME = "configuration/tb4";
 
 	public TBParallelDestination() {
-		super(DestinationType.PARALLEL, "configuration/tb4");
+		super(DestinationType.PARALLEL, DESTINATION_NAME);
 	}
 
 }

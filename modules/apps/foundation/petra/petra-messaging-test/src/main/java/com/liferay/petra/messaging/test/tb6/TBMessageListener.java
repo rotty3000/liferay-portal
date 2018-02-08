@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = "destination.name=configuration/tb6",
+	property = "destination.name=" + TBSynchronousDestination.DESTINATION_NAME,
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )

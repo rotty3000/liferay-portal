@@ -16,10 +16,11 @@ package com.liferay.petra.messaging.test.tb7;
 
 import com.liferay.petra.messaging.api.DestinationNames;
 import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageListenerException;
-import com.liferay.petra.messaging.spi.MessageImpl;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -34,7 +35,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Raymond Augé
  */
 @Component(
-	property = "destination.name=synchronous/send/tb7",
+	property = "destination.name=" + TBParallelDestination.DESTINATION_NAME,
 	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, MessageListener.class}
 )
@@ -50,21 +51,23 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 	@Override
 	public void receive(Message message) throws MessageListenerException {
 		_message.set(message);
+		
+		MessageBuilder messageBuilder = _messageBuilderFactory.create(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
-		Message responseMessage = new MessageImpl();
+		messageBuilder.setResponseId(message.getResponseId());
 
-		responseMessage.setResponseId(message.getResponseId());
+		messageBuilder.setPayload(message);
 
-		responseMessage.setPayload(message);
-
-		_messageBus.sendMessage(
-			DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE, responseMessage);
+		messageBuilder.send();
 
 		_latch.countDown();
 	}
 
 	private final CountDownLatch _latch = new CountDownLatch(1);
 	private final AtomicReference<Message> _message = new AtomicReference<>();
+	
+	@Reference
+	private MessageBuilderFactory _messageBuilderFactory;
 
 	@Reference
 	private MessageBus _messageBus;

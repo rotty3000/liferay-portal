@@ -14,14 +14,6 @@
 
 package com.liferay.petra.messaging.test;
 
-import com.liferay.petra.messaging.api.Destination;
-import com.liferay.petra.messaging.api.DestinationStatistics;
-import com.liferay.petra.messaging.api.InboundMessageProcessor;
-import com.liferay.petra.messaging.api.InboundMessageProcessorFactory;
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageProcessorException;
-import com.liferay.petra.messaging.spi.MessageImpl;
-
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.concurrent.Callable;
@@ -29,11 +21,21 @@ import java.util.concurrent.CountDownLatch;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
+
+import com.liferay.petra.messaging.api.Destination;
+import com.liferay.petra.messaging.api.DestinationStatistics;
+import com.liferay.petra.messaging.api.InboundMessageProcessor;
+import com.liferay.petra.messaging.api.InboundMessageProcessorFactory;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageProcessorException;
+import com.liferay.petra.messaging.test.tb13.TBSynchronousDestination;
+import com.liferay.petra.messaging.test.tb14.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb15.TBSerialDestination;
 
 /**
  * @author Jesse Rao
@@ -44,24 +46,24 @@ public class DestinationStatisticsTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
-		test("tb14.jar", "parallel/test");
+		test("tb14.jar", TBParallelDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSerial() throws Exception {
-		test("tb15.jar", "serial/test");
+		test("tb15.jar", TBSerialDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		test("tb13.jar", "synchronous/test");
+		test("tb13.jar", TBSynchronousDestination.DESTINATION_NAME);
 	}
 
 	protected void assertBeforeStats(
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
-		if (destinationName.equals("synchronous/test")) {
+		if (destinationName.equals(TBSynchronousDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				0, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -76,7 +78,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("parallel/test")) {
+		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				0, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -91,7 +93,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				2, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("serial/test")) {
+		else if (destinationName.equals(TBSerialDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				0, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -121,7 +123,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		//Assert.assertEquals(10, destinationStatistics.getSentMessageCount());
 		//Assert.assertEquals(0, destinationStatistics.getActiveThreadCount());
 
-		if (destinationName.equals("synchronous/test")) {
+		if (destinationName.equals(TBSynchronousDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				0, destinationStatistics.getCurrentThreadCount());
 			Assert.assertEquals(
@@ -131,7 +133,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("parallel/test")) {
+		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				5, destinationStatistics.getCurrentThreadCount());
 			Assert.assertEquals(
@@ -141,7 +143,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				2, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("serial/test")) {
+		else if (destinationName.equals(TBSerialDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				1, destinationStatistics.getCurrentThreadCount());
 			Assert.assertEquals(
@@ -157,7 +159,7 @@ public class DestinationStatisticsTest extends TestUtil {
 		String message, String destinationName,
 		DestinationStatistics destinationStatistics) {
 
-		if (destinationName.equals("synchronous/test")) {
+		if (destinationName.equals(TBSynchronousDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				0, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(
@@ -173,7 +175,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("parallel/test")) {
+		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				5, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -188,7 +190,7 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				2, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals("serial/test")) {
+		else if (destinationName.equals(TBSerialDestination.DESTINATION_NAME)) {
 			Assert.assertEquals(
 				9, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -295,9 +297,9 @@ public class DestinationStatisticsTest extends TestUtil {
 				destination.getDestinationStatistics());
 
 			for (int i = 0; i < MAX; i++) {
-				Message message = new MessageImpl();
-
-				messageBus.sendMessage(destinationName, message);
+				MessageBuilder messageBuilder = messageBuilderFactory.create(destinationName);
+				
+				messageBuilder.send();
 			}
 
 			beforeThread.await();

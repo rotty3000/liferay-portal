@@ -24,6 +24,8 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(service = DestinationConfiguration.class)
 public class TBSerialDestination extends DestinationConfiguration {
+	
+	public static final String DESTINATION_NAME = "serial/test";
 
 	public TBSerialDestination() {
 		super(DestinationType.SERIAL, "serial/test");

@@ -19,12 +19,13 @@ import javax.management.MBeanServer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-
+import org.junit.Ignore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Raymond Augé
  */
+@Ignore
 public class JMXUtil extends TestUtil {
 
 	@After

@@ -16,6 +16,9 @@ package com.liferay.petra.messaging.test;
 
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.spi.MessageImpl;
+import com.liferay.petra.messaging.test.tb7.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb8.TBSerialDestination;
+import com.liferay.petra.messaging.test.tb9.TBSynchronousDestination;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,17 +32,17 @@ public class SynchronousMessageSenderTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
-		test("tb7.jar", "synchronous/send/tb7");
+		test("tb7.jar", TBParallelDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSerial() throws Exception {
-		test("tb8.jar", "synchronous/send/tb8");
+		test("tb8.jar", TBSerialDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
-		test("tb9.jar", "synchronous/send/tb9");
+		test("tb9.jar", TBSynchronousDestination.DESTINATION_NAME);
 	}
 
 	protected void test(String bundle, String destinationName)

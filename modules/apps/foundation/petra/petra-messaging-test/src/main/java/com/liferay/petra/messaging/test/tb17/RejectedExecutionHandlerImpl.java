@@ -15,6 +15,7 @@
 package com.liferay.petra.messaging.test.tb17;
 
 import com.liferay.petra.messaging.spi.MessageRunnable;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 import com.liferay.petra.concurrent.RejectedExecutionHandler;
 import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
@@ -29,7 +30,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
+	property = {"destination.name=" + TBSerialDestination.DESTINATION_NAME}, scope = ServiceScope.SINGLETON,
 	service = {Callable.class, RejectedExecutionHandler.class}
 )
 public class RejectedExecutionHandlerImpl

@@ -18,6 +18,9 @@ import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.DestinationNames;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.spi.MessageImpl;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
+import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,8 +40,8 @@ public class MessageBusTest extends TestUtil {
 
 	@Test
 	public void testParallel() throws Exception {
-		testDestinations("tb2.jar", "parallel/test");
-		testSendMessage("tb2.jar", "parallel/test");
+		testDestinations("tb2.jar", TBParallelDestination.DESTINATION_NAME);
+		testSendMessage("tb2.jar", TBParallelDestination.DESTINATION_NAME);
 		testSendSynchronousMessage("tb10.jar", "builder/tb10");
 		testSendSynchronousMessage2("tb10.jar", "builder/tb10");
 		testSendSynchronousMessage3("tb10.jar", "builder/tb10");
@@ -49,8 +52,8 @@ public class MessageBusTest extends TestUtil {
 
 	@Test
 	public void testSerial() throws Exception {
-		testDestinations("tb3.jar", "serial/test");
-		testSendMessage("tb3.jar", "serial/test");
+		testDestinations("tb3.jar", TBSerialDestination.DESTINATION_NAME);
+		testSendMessage("tb3.jar", TBSerialDestination.DESTINATION_NAME);
 		testSendSynchronousMessage("tb11.jar", "builder/tb11");
 		testSendSynchronousMessage2("tb11.jar", "builder/tb11");
 		testSendSynchronousMessage3("tb11.jar", "builder/tb11");
@@ -61,8 +64,8 @@ public class MessageBusTest extends TestUtil {
 
 	@Test
 	public void testSynchronous() throws Exception {
-		testDestinations("tb1.jar", "synchronous/test");
-		testSendMessage("tb1.jar", "synchronous/test");
+		testDestinations("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
+		testSendMessage("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
 		testSendSynchronousMessage("tb12.jar", "builder/tb12");
 		testSendSynchronousMessage2("tb12.jar", "builder/tb12");
 		testSendSynchronousMessage3("tb12.jar", "builder/tb12");
@@ -140,8 +143,6 @@ public class MessageBusTest extends TestUtil {
 			Message receivedMessage = callable.call();
 
 			Assert.assertEquals(message, receivedMessage);
-
-			// sendMessage(String destinationName, Object payload)
 
 			messageBus.sendMessage(destinationName, "payload");
 

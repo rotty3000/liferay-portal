@@ -14,19 +14,19 @@
 
 package com.liferay.petra.messaging.test;
 
-import com.liferay.petra.messaging.api.DestinationConfiguration;
-import com.liferay.petra.messaging.api.DestinationType;
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.spi.MessageImpl;
-
 import java.util.concurrent.Callable;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
+
+import com.liferay.petra.messaging.api.DestinationConfiguration;
+import com.liferay.petra.messaging.api.DestinationType;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.spi.MessageImpl;
 
 /**
  * @author Raymond Augé
@@ -111,7 +111,7 @@ public class DestinationConfigurationTest extends TestUtil {
 			destinationName.hashCode(), destinationConfiguration.hashCode());
 	}
 
-	protected void testSend(String bundle, String destination)
+	protected void testSend(String bundle, String destinationName)
 		throws Exception {
 
 		Bundle tb = install(bundle);
@@ -123,7 +123,7 @@ public class DestinationConfigurationTest extends TestUtil {
 				String.format(
 					"(&(objectClass=java.util.concurrent.Callable)" +
 						"(destination.name=%s))",
-					destination));
+					destinationName));
 
 			ServiceTracker<Callable<Message>, Callable<Message>> callableST =
 				new ServiceTracker<>(bundleContext, filter, null);
@@ -133,10 +133,10 @@ public class DestinationConfigurationTest extends TestUtil {
 			Callable<Message> callable = callableST.waitForService(timeout);
 
 			Assert.assertNotNull(callable);
-
+			
 			Message message = new MessageImpl();
 
-			messageBus.sendMessage(destination, message);
+			messageBus.sendMessage(destinationName, message);
 
 			Assert.assertEquals(message, callable.call());
 		}

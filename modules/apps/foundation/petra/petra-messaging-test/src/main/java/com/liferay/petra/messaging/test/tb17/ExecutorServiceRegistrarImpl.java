@@ -15,6 +15,7 @@
 package com.liferay.petra.messaging.test.tb17;
 
 import com.liferay.petra.messaging.api.ExecutorServiceRegistrar;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -28,7 +29,7 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=serial/test"}, scope = ServiceScope.SINGLETON,
+	property = {"destination.name=" + TBSerialDestination.DESTINATION_NAME}, scope = ServiceScope.SINGLETON,
 	service = {Callable.class, ExecutorServiceRegistrar.class}
 )
 public class ExecutorServiceRegistrarImpl
