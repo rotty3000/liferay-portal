@@ -18,6 +18,7 @@ import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.io.Deserializer;
 import com.liferay.petra.io.util.GetterUtil;
 import com.liferay.petra.io.util.MapUtil;
+import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.io.Serializer;
 import com.liferay.petra.io.TransientValue;
 
@@ -27,6 +28,7 @@ import java.nio.ByteBuffer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a general purpose message that can be used for inter-application
@@ -41,6 +43,10 @@ import java.util.Map;
  * @author Michael C. Han
  */
 public class MessageImpl implements Message {
+	
+	static {
+		ClassLoaderPool.register(MessageImpl.class.getName(), MessageImpl.class.getClassLoader());
+	}
 
 	/**
 	 * Returns a message deserialized from raw bytes.
@@ -77,6 +83,49 @@ public class MessageImpl implements Message {
 		}
 
 		return message;
+	}
+	
+	/**
+	 * Returns <code>true</code> if the argument message equals this message.
+	 * 
+	 * Two arguments are equal if their destination names, payloads, responses,
+	 * response destination names, response IDs, and values maps are equal.
+	 * 
+	 * @return <code>true</code> if the argument message equals this message;
+	 *         <code>false</code> otherwise
+	 */
+	public boolean equals(Object message) {
+		if (!(message instanceof MessageImpl)) {
+			return false;
+		}
+		
+		MessageImpl messageImpl = (MessageImpl) message;
+
+		if (!Objects.equals(messageImpl._destinationName, this._destinationName)) {
+			return false;
+		}
+
+		if (!Objects.equals(messageImpl._payload, this._payload)) {
+			return false;
+		}
+		
+		if (!Objects.equals(messageImpl._response, this._response)) {
+			return false;
+		}
+		
+		if (!Objects.equals(messageImpl._responseDestinationName, this._responseDestinationName)) {
+			return false;
+		}
+		
+		if (!Objects.equals(messageImpl._responseId, this._responseId)) {
+			return false;
+		}
+		
+		if (!Objects.equals(messageImpl._values, this._values)) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
