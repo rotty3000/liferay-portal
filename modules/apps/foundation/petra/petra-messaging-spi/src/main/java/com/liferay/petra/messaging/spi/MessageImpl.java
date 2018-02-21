@@ -15,11 +15,11 @@
 package com.liferay.petra.messaging.spi;
 
 import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.petra.io.Deserializer;
-import com.liferay.petra.io.util.MapUtil;
 import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.io.Serializer;
-import com.liferay.petra.io.TransientValue;
 
 import java.io.Serializable;
 
@@ -487,8 +487,89 @@ public class MessageImpl implements Message {
 		sb.append(", payload=");
 		sb.append(_payload);
 		sb.append(", values=");
-		sb.append(MapUtil.toString(_values, null, ".*[pP]assword.*"));
+		sb.append(mapToString(_values, null, ".*[pP]assword.*"));
 		sb.append("}");
+
+		return sb.toString();
+	}
+	
+	private static String mapToString(
+		Map<?, ?> map, String hideIncludesRegex, String hideExcludesRegex) {
+
+		if (map == null || map.isEmpty()) {
+			return StringPool.OPEN_CURLY_BRACE + StringPool.CLOSE_CURLY_BRACE;
+		}
+
+		StringBundler sb = new StringBundler(map.size() * 4 + 1);
+
+		sb.append(StringPool.OPEN_CURLY_BRACE);
+
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			Object key = entry.getKey();
+			Object value = entry.getValue();
+
+			String keyString = String.valueOf(key);
+
+			if (hideIncludesRegex != null) {
+				if (!keyString.matches(hideIncludesRegex)) {
+					value = "********";
+				}
+			}
+
+			if (hideExcludesRegex != null) {
+				if (keyString.matches(hideExcludesRegex)) {
+					value = "********";
+				}
+			}
+
+			sb.append(keyString);
+			sb.append(StringPool.EQUAL);
+
+			if (value instanceof Map<?, ?>) {
+				sb.append(mapToString((Map<?, ?>)value, null, null));
+			}
+			else if (value instanceof String[]) {
+				String valueString = merge(
+					(String[])value, StringPool.COMMA_AND_SPACE);
+
+				sb.append(
+					StringPool.OPEN_BRACKET.concat(valueString).concat(
+						StringPool.CLOSE_BRACKET));
+			}
+			else {
+				sb.append(value);
+			}
+
+			sb.append(StringPool.COMMA_AND_SPACE);
+		}
+
+		sb.setStringAt(StringPool.CLOSE_CURLY_BRACE, sb.index() - 1);
+
+		return sb.toString();
+	}
+	
+	private static String merge(Object[] array, String delimiter) {
+		if (array == null) {
+			return null;
+		}
+
+		if (array.length == 0) {
+			return StringPool.BLANK;
+		}
+
+		if (array.length == 1) {
+			return String.valueOf(array[0]);
+		}
+
+		StringBundler sb = new StringBundler(2 * array.length - 1);
+
+		for (int i = 0; i < array.length; i++) {
+			if (i != 0) {
+				sb.append(delimiter);
+			}
+
+			sb.append(String.valueOf(array[i]).trim());
+		}
 
 		return sb.toString();
 	}
