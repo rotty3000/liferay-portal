@@ -23,6 +23,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
@@ -35,8 +37,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
-import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.ExecutorServiceRegistrar;
 import com.liferay.petra.messaging.api.Message;

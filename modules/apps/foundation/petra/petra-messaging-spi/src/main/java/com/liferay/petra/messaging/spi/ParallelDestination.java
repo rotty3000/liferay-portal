@@ -20,9 +20,9 @@ import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageListenerException;
 import com.liferay.petra.messaging.api.MessageProcessorException;
-import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.Collection;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;

@@ -20,13 +20,13 @@ import com.liferay.petra.messaging.api.InboundMessageProcessor;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageProcessorException;
-import com.liferay.petra.concurrent.NamedThreadFactory;
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
-import com.liferay.petra.concurrent.ThreadPoolExecutor;
 import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.osgi.service.component.annotations.Reference;
@@ -72,11 +72,11 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		destinationStatistics.setLargestThreadCount(
 			_threadPoolExecutor.getLargestPoolSize());
 		destinationStatistics.setMaxThreadPoolSize(
-			_threadPoolExecutor.getMaxPoolSize());
+			_threadPoolExecutor.getMaximumPoolSize());
 		destinationStatistics.setMinThreadPoolSize(
 			_threadPoolExecutor.getCorePoolSize());
 		destinationStatistics.setPendingMessageCount(
-			_threadPoolExecutor.getPendingTaskCount());
+			_threadPoolExecutor.getQueue().size());
 		destinationStatistics.setSentMessageCount(
 			_threadPoolExecutor.getCompletedTaskCount());
 
@@ -110,11 +110,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		}
 
 		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
-			_workersCoreSize, _workersMaxSize, 60L, TimeUnit.SECONDS, false,
-			_maximumQueueSize, _rejectedExecutionHandler,
-			new NamedThreadFactory(
-				getName(), Thread.NORM_PRIORITY, classLoader),
-			new ThreadPoolHandlerAdapter());
+			_workersCoreSize, _workersMaxSize, 60L, TimeUnit.SECONDS,
+			new ArrayBlockingQueue<Runnable>(_maximumQueueSize), _rejectedExecutionHandler);
 
 		ThreadPoolExecutor oldThreadPoolExecutor = null;
 
@@ -218,8 +215,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		_workersCoreSize = workersCoreSize;
 
 		if (_threadPoolExecutor != null) {
-			_threadPoolExecutor.adjustPoolSize(
-				workersCoreSize, _workersMaxSize);
+			_threadPoolExecutor.setCorePoolSize(workersCoreSize);
 		}
 	}
 
@@ -227,8 +223,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		_workersMaxSize = workersMaxSize;
 
 		if (_threadPoolExecutor != null) {
-			_threadPoolExecutor.adjustPoolSize(
-				_workersCoreSize, workersMaxSize);
+			_threadPoolExecutor.setMaximumPoolSize(workersMaxSize);
 		}
 	}
 
