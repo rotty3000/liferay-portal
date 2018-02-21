@@ -23,7 +23,6 @@ import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.OutboundMessageProcessor;
 import com.liferay.petra.messaging.api.OutboundMessageProcessorFactory;
 import com.liferay.petra.string.StringPool;
-import com.liferay.petra.io.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,7 +105,7 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	public void afterPropertiesSet() {
-		if (Validator.isNull(name)) {
+		if (name == null || name.isEmpty()) {
 			throw new IllegalArgumentException("Name is null");
 		}
 	}

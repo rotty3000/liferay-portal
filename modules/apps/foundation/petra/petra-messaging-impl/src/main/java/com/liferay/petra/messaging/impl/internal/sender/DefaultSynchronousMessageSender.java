@@ -20,7 +20,6 @@ import com.liferay.petra.messaging.api.MessageBusException;
 import com.liferay.petra.messaging.impl.internal.DefaultMessageBus;
 import com.liferay.petra.messaging.spi.Destination;
 import com.liferay.petra.messaging.spi.sender.SynchronousMessageSender;
-import com.liferay.petra.io.util.Validator;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -74,7 +73,8 @@ public class DefaultSynchronousMessageSender
 		// Create a temporary destination if no response destination is
 		// configured
 
-		if (Validator.isNull(responseDestinationName) ||
+		if (responseDestinationName == null ||
+			responseDestinationName.isEmpty() ||
 			!_messageBus.hasDestination(responseDestinationName)) {
 
 			if (_logger.isDebugEnabled()) {
