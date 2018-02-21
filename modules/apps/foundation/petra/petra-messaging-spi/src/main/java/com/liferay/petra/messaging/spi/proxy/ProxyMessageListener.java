@@ -18,7 +18,6 @@ import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.spi.MessageImpl;
-import com.liferay.petra.io.util.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,7 @@ public class ProxyMessageListener implements MessageListener {
 
 			Exception proxyResponseException = proxyResponse.getException();
 
-			if (Validator.isNotNull(responseDestinationName)) {
+			if (responseDestinationName != null && !responseDestinationName.isEmpty()) {
 				Message responseMessage = new MessageImpl();
 
 				responseMessage.setDestinationName(
