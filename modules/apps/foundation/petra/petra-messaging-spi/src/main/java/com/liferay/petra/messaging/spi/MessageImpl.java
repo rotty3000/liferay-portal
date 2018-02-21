@@ -16,7 +16,6 @@ package com.liferay.petra.messaging.spi;
 
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.io.Deserializer;
-import com.liferay.petra.io.util.GetterUtil;
 import com.liferay.petra.io.util.MapUtil;
 import com.liferay.petra.lang.ClassLoaderPool;
 import com.liferay.petra.io.Serializer;
@@ -221,9 +220,6 @@ public class MessageImpl implements Message {
 		if (object instanceof Boolean) {
 			value = ((Boolean)object).booleanValue();
 		}
-		else {
-			value = GetterUtil.getBoolean(object);
-		}
 
 		return value;
 	}
@@ -253,9 +249,6 @@ public class MessageImpl implements Message {
 		if (object instanceof Number) {
 			value = ((Number)object).doubleValue();
 		}
-		else {
-			value = GetterUtil.getDouble(object);
-		}
 
 		return value;
 	}
@@ -276,9 +269,6 @@ public class MessageImpl implements Message {
 		if (object instanceof Number) {
 			value = ((Number)object).intValue();
 		}
-		else {
-			value = GetterUtil.getInteger(object);
-		}
 
 		return value;
 	}
@@ -298,9 +288,6 @@ public class MessageImpl implements Message {
 
 		if (object instanceof Number) {
 			value = ((Number)object).longValue();
-		}
-		else {
-			value = GetterUtil.getLong(object);
 		}
 
 		return value;
@@ -354,7 +341,7 @@ public class MessageImpl implements Message {
 	 * with the key or <code>null</code> if the key could not be found.
 	 */
 	public String getString(String key) {
-		return GetterUtil.getString(String.valueOf(get(key)));
+		return String.valueOf(get(key));
 	}
 
 	/**
