@@ -15,7 +15,6 @@
 package com.liferay.petra.messaging.spi.proxy;
 
 import com.liferay.petra.reflect.AnnotationLocator;
-import com.liferay.petra.reflect.MethodKey;
 
 import java.io.Externalizable;
 import java.io.IOException;

@@ -16,12 +16,12 @@ package com.liferay.petra.messaging.test.tb16;
 
 import com.liferay.petra.messaging.spi.MessageRunnable;
 import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
-import com.liferay.petra.concurrent.RejectedExecutionHandler;
-import com.liferay.petra.concurrent.ThreadPoolExecutor;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
