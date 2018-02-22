@@ -24,10 +24,6 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import java.util.Collection;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,25 +36,11 @@ import org.slf4j.LoggerFactory;
  * @author Michael C. Han
  * @author Raymond Augé
  */
-@Component(factory = "serial.destination")
 public class SerialDestination extends BaseAsyncDestination {
 
 	public SerialDestination() {
 		setWorkersCoreSize(_WORKERS_CORE_SIZE);
 		setWorkersMaxSize(_WORKERS_MAX_SIZE);
-	}
-
-	@Activate
-	protected void activate(DestinationSettings destinationSettings) {
-		setMaximumQueueSize(destinationSettings.maxQueueSize());
-		setName(destinationSettings.destination_name());
-		afterPropertiesSet();
-		open();
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		close();
 	}
 
 	@Override
