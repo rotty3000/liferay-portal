@@ -25,10 +25,6 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +32,6 @@ import org.slf4j.LoggerFactory;
  * @author Shuyang Zhou
  * @author Raymond Augé
  */
-@Component(factory = "synchronous.destination")
 public class SynchronousDestination extends BaseDestination {
 
 	@Override
@@ -96,18 +91,6 @@ public class SynchronousDestination extends BaseDestination {
 		}
 
 		_sentMessageCounter.incrementAndGet();
-	}
-
-	@Activate
-	protected void activate(DestinationSettings destinationSettings) {
-		setName(destinationSettings.destination_name());
-		afterPropertiesSet();
-		open();
-	}
-
-	@Deactivate
-	protected void deactivate() {
-		close();
 	}
 
 	private static final Logger _log = LoggerFactory.getLogger(
