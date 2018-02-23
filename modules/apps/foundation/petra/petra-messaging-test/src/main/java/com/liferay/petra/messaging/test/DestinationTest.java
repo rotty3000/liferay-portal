@@ -197,7 +197,7 @@ public class DestinationTest extends TestUtil {
 			ExecutorService executorService = Executors.newWorkStealingPool(
 				concurrency);
 
-			Runnable messanger = () -> {
+			Runnable messenger = () -> {
 				for (int i = 0; i < 1000; i++) {
 					Message message = new MessageImpl();
 
@@ -211,7 +211,7 @@ public class DestinationTest extends TestUtil {
 			};
 
 			IntStream.range(0, concurrency).forEach(
-				i -> executorService.execute(messanger));
+				i -> executorService.execute(messenger));
 
 			latch.await(500, TimeUnit.MILLISECONDS);
 
