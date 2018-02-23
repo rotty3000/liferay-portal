@@ -60,16 +60,7 @@ public class ClassLoaderTest extends TestUtil {
 			"destination.name", "liferay/plugintest1",
 			"message.listener.operating.class.loader", testClassLoader);
 
-		ServiceTracker<MessageBus, MessageBus> serviceTracker =
-			new ServiceTracker<>(bundleContext, MessageBus.class, null);
-
-		serviceTracker.open();
-
 		try {
-			while (serviceTracker.isEmpty()) {
-				Thread.sleep(1000);
-			}
-
 			Collection<Destination> destinations = messageBus.getDestinations();
 			
 			Assert.assertEquals(
@@ -123,16 +114,7 @@ public class ClassLoaderTest extends TestUtil {
 			new TestMessageListener("liferay/portaltest2"), "destination.name",
 			"liferay/portaltest2");
 
-		ServiceTracker<MessageBus, MessageBus> serviceTracker =
-			new ServiceTracker<>(bundleContext, MessageBus.class, null);
-
-		serviceTracker.open();
-
 		try {
-			while (serviceTracker.isEmpty()) {
-				Thread.sleep(1000);
-			}
-
 			Collection<Destination> destinations = messageBus.getDestinations();
 
 			Assert.assertEquals(
