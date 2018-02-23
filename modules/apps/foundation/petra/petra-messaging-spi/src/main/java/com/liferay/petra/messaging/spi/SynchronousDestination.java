@@ -14,7 +14,6 @@
 
 package com.liferay.petra.messaging.spi;
 
-import com.liferay.petra.messaging.api.DestinationSettings;
 import com.liferay.petra.messaging.api.DestinationStatistics;
 import com.liferay.petra.messaging.api.InboundMessageProcessor;
 import com.liferay.petra.messaging.api.Message;

@@ -14,7 +14,7 @@
 
 package com.liferay.petra.messaging.spi;
 
-import com.liferay.petra.messaging.api.DestinationSettings;
+import com.liferay.petra.concurrent.NoticeableThreadPoolExecutor;
 import com.liferay.petra.messaging.api.InboundMessageProcessor;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
@@ -22,7 +22,6 @@ import com.liferay.petra.messaging.api.MessageListenerException;
 import com.liferay.petra.messaging.api.MessageProcessorException;
 
 import java.util.Collection;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 		final Thread dispatchThread = Thread.currentThread();
 
-		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+		NoticeableThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
 		for (final MessageListener messageListener : messageListeners) {
 			Runnable runnable = new MessageRunnable(message) {

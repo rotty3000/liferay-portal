@@ -14,17 +14,19 @@
 
 package com.liferay.petra.messaging.spi;
 
+import com.liferay.petra.concurrent.NoticeableThreadPoolExecutor;
+import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 import com.liferay.petra.messaging.api.DestinationStatistics;
 import com.liferay.petra.messaging.api.ExecutorServiceRegistrar;
 import com.liferay.petra.messaging.api.InboundMessageProcessor;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageProcessorException;
-import com.liferay.petra.concurrent.ThreadPoolHandlerAdapter;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +78,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		destinationStatistics.setMinThreadPoolSize(
 			_threadPoolExecutor.getCorePoolSize());
 		destinationStatistics.setPendingMessageCount(
-			_threadPoolExecutor.getQueue().size());
+			_threadPoolExecutor.getPendingTaskCount());
 		destinationStatistics.setSentMessageCount(
 			_threadPoolExecutor.getCompletedTaskCount());
 
@@ -109,11 +111,13 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			_rejectedExecutionHandler = createRejectionExecutionHandler();
 		}
 
-		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+		NoticeableThreadPoolExecutor threadPoolExecutor = new NoticeableThreadPoolExecutor(
 			_workersCoreSize, _workersMaxSize, 60L, TimeUnit.SECONDS,
-			new ArrayBlockingQueue<Runnable>(_maximumQueueSize), _rejectedExecutionHandler);
+			new LinkedBlockingQueue<Runnable>(_maximumQueueSize),
+			Executors.defaultThreadFactory(), _rejectedExecutionHandler,
+			new ThreadPoolHandlerAdapter());
 
-		ThreadPoolExecutor oldThreadPoolExecutor = null;
+		NoticeableThreadPoolExecutor oldThreadPoolExecutor = null;
 
 		if (_executorServiceRegistrar != null) {
 			oldThreadPoolExecutor =
@@ -146,7 +150,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			return;
 		}
 
-		ThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+		NoticeableThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
 
 		if (threadPoolExecutor.isShutdown()) {
 			throw new IllegalStateException(
@@ -254,7 +258,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		Collection<InboundMessageProcessor> messageInboundProcessors,
 		Message message);
 
-	protected ThreadPoolExecutor getThreadPoolExecutor() {
+	protected NoticeableThreadPoolExecutor getThreadPoolExecutor() {
 		return _threadPoolExecutor;
 	}
 
@@ -271,7 +275,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
 	private RejectedExecutionHandler _rejectedExecutionHandler;
-	private ThreadPoolExecutor _threadPoolExecutor;
+	private NoticeableThreadPoolExecutor _threadPoolExecutor;
 	private int _workersCoreSize = _WORKERS_CORE_SIZE;
 	private int _workersMaxSize = _WORKERS_MAX_SIZE;
 
