@@ -14,7 +14,6 @@
 
 package com.liferay.petra.messaging.test.tb17;
 
-import com.liferay.petra.messaging.spi.MessageRunnable;
 import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 
 import java.util.Map;
@@ -34,11 +33,11 @@ import org.osgi.service.component.annotations.ServiceScope;
 	service = {Callable.class, RejectedExecutionHandler.class}
 )
 public class RejectedExecutionHandlerImpl
-	implements Callable<Map<MessageRunnable, ThreadPoolExecutor>>,
+	implements Callable<Map<Runnable, ThreadPoolExecutor>>,
 			   RejectedExecutionHandler {
 
 	@Override
-	public Map<MessageRunnable, ThreadPoolExecutor> call() throws Exception {
+	public Map<Runnable, ThreadPoolExecutor> call() throws Exception {
 		return _map;
 	}
 
@@ -46,10 +45,10 @@ public class RejectedExecutionHandlerImpl
 	public void rejectedExecution(
 		Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
 
-		_map.put((MessageRunnable)runnable, threadPoolExecutor);
+		_map.put(runnable, threadPoolExecutor);
 	}
 
-	private final Map<MessageRunnable, ThreadPoolExecutor> _map =
+	private final Map<Runnable, ThreadPoolExecutor> _map =
 		new ConcurrentHashMap<>();
 
 }
