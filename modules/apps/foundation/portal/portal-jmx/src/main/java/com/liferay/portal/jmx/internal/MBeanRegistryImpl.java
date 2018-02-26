@@ -55,6 +55,10 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true, service = MBeanRegistry.class)
 public class MBeanRegistryImpl implements MBeanRegistry {
 
+	public MBeanRegistryImpl() {
+		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
+	}
+
 	@Override
 	public MBeanServer getMBeanServer() {
 		return _mBeanServer;
@@ -125,8 +129,6 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	@Activate
 	protected void activate(ComponentContext componentContext) {
 		_bundleContext = componentContext.getBundleContext();
-
-		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
 		try {
 			Filter filter = FrameworkUtil.createFilter(
@@ -228,7 +230,7 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		MBeanRegistryImpl.class);
 
 	private BundleContext _bundleContext;
-	private MBeanServer _mBeanServer;
+	private final MBeanServer _mBeanServer;
 	private final Map<String, ObjectName> _objectNameCache =
 		new ConcurrentHashMap<>();
 	private ServiceTracker<Object, Object> _serviceTracker;
