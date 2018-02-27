@@ -1,0 +1,14 @@
+Bundle-Name: Liferay Messaging Impl
+Bundle-SymbolicName: com.liferay.petra.messaging.impl
+Bundle-Version: 1.0.0
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title:
+
+-dsannotations-options: inherit
+
+Provide-Capability:\
+    osgi.implementation;\
+        osgi.implementation="liferay.messaging";\
+        version:Version="${Bundle-Version}",\
+    osgi.service;\
+        objectClass:List<String>="org.osgi.service.component.ComponentFactory"
