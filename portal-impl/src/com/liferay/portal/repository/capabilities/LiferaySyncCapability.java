@@ -17,11 +17,11 @@ package com.liferay.portal.repository.capabilities;
 import com.liferay.document.library.kernel.model.DLSyncConstants;
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 import com.liferay.document.library.kernel.service.DLSyncEventLocalService;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.repository.capabilities.SyncCapability;
 import com.liferay.portal.kernel.repository.event.RepositoryEventAware;
@@ -37,6 +37,9 @@ import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.repository.capabilities.util.GroupServiceAdapter;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFileEntry;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFolder;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -163,7 +166,11 @@ public class LiferaySyncCapability
 
 				@Override
 				public Void call() throws Exception {
-					Message message = new Message();
+					MessageBuilderFactory messageBuilderFactory =
+						getMessageBuilderFactory();
+
+					MessageBuilder messageBuilder =
+						messageBuilderFactory.create(DestinationNames.DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR);
 
 					Map<String, Object> values = new HashMap<>(4);
 
@@ -172,11 +179,9 @@ public class LiferaySyncCapability
 					values.put("type", type);
 					values.put("typePK", typePK);
 
-					message.setValues(values);
+					messageBuilder.setValues(values);
 
-					MessageBusUtil.sendMessage(
-						DestinationNames.DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR,
-						message);
+					messageBuilder.send();
 
 					return null;
 				}
@@ -184,8 +189,37 @@ public class LiferaySyncCapability
 			});
 	}
 
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		LiferaySyncCapability.class);
+
+	private static final int _timeout = 1000;
 
 	private final RepositoryEventListener
 		<RepositoryEventType.Add, Folder> _addFolderEventListener =
