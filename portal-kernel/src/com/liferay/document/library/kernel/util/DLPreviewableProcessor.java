@@ -17,13 +17,14 @@ package com.liferay.document.library.kernel.util;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.image.ImageBag;
 import com.liferay.portal.kernel.image.ImageToolUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
@@ -38,6 +39,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Element;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.awt.image.RenderedImage;
 
@@ -1189,7 +1193,15 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 
 		Object[] payload = {sourceFileVersion, destinationFileVersion};
 
-		MessageBusUtil.sendMessage(destinationName, payload);
+		MessageBuilderFactory messageBuilderFactory =
+			getMessageBuilderFactory();
+
+		MessageBuilder messageBuilder =
+			messageBuilderFactory.create(destinationName);
+
+		messageBuilder.setPayload(payload);
+
+		messageBuilder.send();
 	}
 
 	protected void storeThumbnailImage(
@@ -1264,5 +1276,34 @@ public abstract class DLPreviewableProcessor implements DLProcessor {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DLPreviewableProcessor.class);
+
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
+
+	private static final int _timeout = 1000;
 
 }
