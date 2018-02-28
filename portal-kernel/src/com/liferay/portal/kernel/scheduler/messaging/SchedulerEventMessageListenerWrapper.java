@@ -14,13 +14,12 @@
 
 package com.liferay.portal.kernel.scheduler.messaging;
 
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.api.MessageListenerException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.scheduler.JobState;
 import com.liferay.portal.kernel.scheduler.SchedulerEngine;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
@@ -76,38 +75,7 @@ public class SchedulerEventMessageListenerWrapper
 			}
 		}
 		finally {
-			TriggerState triggerState = null;
-
-			if (message.getBoolean(SchedulerEngine.DISABLE)) {
-				triggerState = TriggerState.COMPLETE;
-
-				if (destinationName.equals(
-						DestinationNames.SCHEDULER_DISPATCH)) {
-
-					MessageBusUtil.unregisterMessageListener(
-						destinationName, this);
-				}
-
-				StorageType storageType = (StorageType)message.get(
-					SchedulerEngine.STORAGE_TYPE);
-
-				try {
-					SchedulerEngineHelperUtil.delete(
-						jobName, groupName, storageType);
-				}
-				catch (SchedulerException se) {
-					if (_log.isInfoEnabled()) {
-						_log.info(
-							StringBundler.concat(
-								"Unable to delete job ", jobName, " in group ",
-								groupName),
-							se);
-					}
-				}
-			}
-			else {
-				triggerState = TriggerState.NORMAL;
-			}
+			TriggerState triggerState = TriggerState.NORMAL;
 
 			try {
 				SchedulerEngineHelperUtil.auditSchedulerJobs(
