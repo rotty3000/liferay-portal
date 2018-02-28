@@ -14,9 +14,15 @@
 
 package com.liferay.portal.kernel.cluster;
 
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.security.pacl.permission.PortalRuntimePermission;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 /**
  * @author Shuyang Zhou
@@ -43,9 +49,15 @@ public class ClusterLinkUtil {
 	}
 
 	public static void sendMulticastMessage(Object payload, Priority priority) {
-		Message message = new Message();
+		MessageBuilderFactory messageBuilderFactory =
+			getMessageBuilderFactory();
 
-		message.setPayload(payload);
+		MessageBuilder messageBuilder =
+			messageBuilderFactory.create(StringPool.BLANK);
+
+		messageBuilder.setPayload(payload);
+
+		Message message = messageBuilder.build();
 
 		sendMulticastMessage(message, priority);
 	}
@@ -68,7 +80,35 @@ public class ClusterLinkUtil {
 		return _clusterLink;
 	}
 
+	private static MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private static ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
 	private static final String _ADDRESS = "CLUSTER_ADDRESS";
+
+	private static final int _timeout = 1000;
 
 	private static volatile ClusterLink _clusterLink =
 		ServiceProxyFactory.newServiceTrackedInstance(

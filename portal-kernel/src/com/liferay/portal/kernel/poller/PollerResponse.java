@@ -14,9 +14,9 @@
 
 package com.liferay.portal.kernel.poller;
 
+import com.liferay.petra.messaging.api.Message;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.messaging.Message;
 
 import java.io.Serializable;
 
