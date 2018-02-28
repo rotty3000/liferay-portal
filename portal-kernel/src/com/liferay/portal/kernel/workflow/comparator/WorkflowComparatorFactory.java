@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.workflow.comparator;
 
-import com.liferay.portal.kernel.messaging.proxy.MessagingProxy;
-import com.liferay.portal.kernel.messaging.proxy.ProxyMode;
+import com.liferay.petra.messaging.spi.proxy.MessagingProxy;
+import com.liferay.petra.messaging.spi.proxy.ProxyMode;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowDefinition;
 import com.liferay.portal.kernel.workflow.WorkflowInstance;
