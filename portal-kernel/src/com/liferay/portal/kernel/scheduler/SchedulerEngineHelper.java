@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.scheduler;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 

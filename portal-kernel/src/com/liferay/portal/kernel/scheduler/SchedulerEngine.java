@@ -16,9 +16,9 @@ package com.liferay.portal.kernel.scheduler;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.proxy.MessagingProxy;
-import com.liferay.portal.kernel.messaging.proxy.ProxyMode;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.spi.proxy.MessagingProxy;
+import com.liferay.petra.messaging.spi.proxy.ProxyMode;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerResponse;
 
 import java.util.List;
@@ -132,8 +132,8 @@ public interface SchedulerEngine {
 		throws SchedulerException;
 
 	public void schedule(
-			Trigger trigger, String description, String destinationName,
-			Message message, StorageType storageType)
+		Trigger trigger, String description, String destinationName,
+		Message message, StorageType storageType)
 		throws SchedulerException;
 
 	@MessagingProxy(local = true, mode = ProxyMode.SYNC)
