@@ -23,14 +23,15 @@ import com.liferay.mail.kernel.template.MailTemplateContext;
 import com.liferay.mail.kernel.template.MailTemplateContextBuilder;
 import com.liferay.mail.kernel.template.MailTemplateFactoryUtil;
 import com.liferay.petra.lang.ClassLoaderPool;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.ResourceAction;
@@ -51,6 +52,9 @@ import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.File;
 import java.io.IOException;
@@ -226,9 +230,16 @@ public class SubscriptionSender implements Serializable {
 
 				_classLoader = currentThread.getContextClassLoader();
 
-				MessageBusUtil.sendMessage(
-					DestinationNames.SUBSCRIPTION_SENDER,
-					SubscriptionSender.this);
+				MessageBuilderFactory messageBuilderFactory =
+					getMessageBuilderFactory();
+
+				MessageBuilder messageBuilder =
+					messageBuilderFactory.create(
+						DestinationNames.SUBSCRIPTION_SENDER);
+
+				messageBuilder.setPayload(SubscriptionSender.this);
+
+				messageBuilder.send();
 
 				return null;
 			});
@@ -1030,6 +1041,35 @@ public class SubscriptionSender implements Serializable {
 
 		objectOutputStream.writeUTF(servletContextName);
 	}
+
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
+
+	private static final int _timeout = 1000;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		SubscriptionSender.class);
