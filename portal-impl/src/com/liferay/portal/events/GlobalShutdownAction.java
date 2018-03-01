@@ -126,10 +126,6 @@ public class GlobalShutdownAction extends SimpleAction {
 
 	protected void shutdownLevel3() {
 
-		// Messaging
-
-		MessageBusUtil.shutdown(true);
-
 		// Portal fabric
 
 		if (PropsValues.PORTAL_FABRIC_ENABLED) {
