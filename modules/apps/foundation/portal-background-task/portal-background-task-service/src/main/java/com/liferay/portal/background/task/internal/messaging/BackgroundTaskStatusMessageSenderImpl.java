@@ -14,11 +14,11 @@
 
 package com.liferay.portal.background.task.internal.messaging;
 
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageSender;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.util.Validator;
 
 import org.osgi.service.component.annotations.Component;
