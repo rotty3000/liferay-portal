@@ -16,9 +16,9 @@ package com.liferay.calendar.web.internal.messaging;
 
 import com.liferay.calendar.service.CalendarBookingLocalService;
 import com.liferay.calendar.service.configuration.CalendarServiceConfigurationValues;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.spi.BaseMessageListener;
 import com.liferay.portal.kernel.module.framework.ModuleServiceLifecycle;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelper;
 import com.liferay.portal.kernel.scheduler.SchedulerEntry;
