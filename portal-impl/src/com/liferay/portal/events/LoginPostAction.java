@@ -14,6 +14,9 @@
 
 package com.liferay.portal.events;
 
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.events.Action;
@@ -23,8 +26,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.PasswordPolicy;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
@@ -42,6 +43,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 import org.apache.struts.Globals;
 
 /**
@@ -94,8 +98,15 @@ public class LoginPostAction extends Action {
 
 				jsonObject.put("userId", userId);
 
-				MessageBusUtil.sendMessage(
-					DestinationNames.LIVE_USERS, jsonObject.toString());
+				MessageBuilderFactory messageBuilderFactory =
+					getMessageBuilderFactory();
+
+				MessageBuilder messageBuilder =
+					messageBuilderFactory.create(DestinationNames.LIVE_USERS);
+
+				messageBuilder.setPayload(jsonObject.toString());
+
+				messageBuilder.send();
 			}
 
 			if (PrefsPropsUtil.getBoolean(
@@ -125,6 +136,32 @@ public class LoginPostAction extends Action {
 		}
 	}
 
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
 	private void _setPasswordExpirationMessage(
 			HttpServletRequest request, PasswordPolicy passwordPolicy,
 			User user)
@@ -167,5 +204,6 @@ public class LoginPostAction extends Action {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		LoginPostAction.class);
+	private static final int _timeout = 1000;
 
 }

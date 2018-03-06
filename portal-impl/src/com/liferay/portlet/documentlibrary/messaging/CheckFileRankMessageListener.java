@@ -15,8 +15,8 @@
 package com.liferay.portlet.documentlibrary.messaging;
 
 import com.liferay.document.library.kernel.service.DLFileRankLocalServiceUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.spi.BaseMessageListener;
 
 /**
  * @author Alexander Chow

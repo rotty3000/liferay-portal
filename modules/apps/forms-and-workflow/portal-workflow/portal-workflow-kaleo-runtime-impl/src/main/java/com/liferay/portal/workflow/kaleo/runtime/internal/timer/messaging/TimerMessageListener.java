@@ -14,11 +14,11 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.internal.timer.messaging;
 
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.spi.BaseMessageListener;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.service.ServiceContext;

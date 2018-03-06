@@ -15,6 +15,9 @@
 package com.liferay.portal.security.auth.session;
 
 import com.liferay.petra.encryptor.Encryptor;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.events.EventsProcessorUtil;
@@ -25,8 +28,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
@@ -50,6 +51,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.liveusers.LiveUsers;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -411,8 +415,15 @@ public class AuthenticatedSessionManagerImpl
 			jsonObject.put("sessionId", userTracker.getSessionId());
 			jsonObject.put("userId", userId);
 
-			MessageBusUtil.sendMessage(
-				DestinationNames.LIVE_USERS, jsonObject.toString());
+			MessageBuilderFactory messageBuilderFactory =
+				getMessageBuilderFactory();
+
+			MessageBuilder messageBuilder = messageBuilderFactory.create(
+				DestinationNames.LIVE_USERS);
+
+			messageBuilder.setPayload(jsonObject.toString());
+
+			messageBuilder.send();
 		}
 	}
 
@@ -497,7 +508,35 @@ public class AuthenticatedSessionManagerImpl
 		}
 	}
 
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
 	private static final Log _log = LogFactoryUtil.getLog(
 		AuthenticatedSessionManagerImpl.class);
+
+	private static final int _timeout = 1000;
 
 }

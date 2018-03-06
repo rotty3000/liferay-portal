@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.portal.kernel.messaging.proxy.MessagingProxy;
-import com.liferay.portal.kernel.messaging.proxy.ProxyMode;
+import com.liferay.petra.messaging.spi.proxy.MessagingProxy;
+import com.liferay.petra.messaging.spi.proxy.ProxyMode;
 import com.liferay.portal.kernel.search.suggest.QuerySuggester;
 
 /**

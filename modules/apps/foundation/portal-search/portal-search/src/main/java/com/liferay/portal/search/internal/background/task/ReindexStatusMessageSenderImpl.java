@@ -14,12 +14,15 @@
 
 package com.liferay.portal.search.internal.background.task;
 
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskStatusMessageSender;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.search.background.task.ReindexBackgroundTaskConstants;
 import com.liferay.portal.kernel.search.background.task.ReindexStatusMessageSender;
 
@@ -35,15 +38,18 @@ public class ReindexStatusMessageSenderImpl
 
 	@Override
 	public void sendStatusMessage(String className, long count, long total) {
-		Message message = new Message();
+		MessageBuilder messageBuilder = _messageBuilderFactory.create(
+			DestinationNames.BACKGROUND_TASK_STATUS);
 
-		message.put(
+		messageBuilder.put(
 			BackgroundTaskConstants.BACKGROUND_TASK_ID,
 			BackgroundTaskThreadLocal.getBackgroundTaskId());
-		message.put(ReindexBackgroundTaskConstants.CLASS_NAME, className);
-		message.put(ReindexBackgroundTaskConstants.COUNT, count);
-		message.put(ReindexBackgroundTaskConstants.TOTAL, total);
-		message.put("status", BackgroundTaskConstants.STATUS_IN_PROGRESS);
+		messageBuilder.put(ReindexBackgroundTaskConstants.CLASS_NAME, className);
+		messageBuilder.put(ReindexBackgroundTaskConstants.COUNT, count);
+		messageBuilder.put(ReindexBackgroundTaskConstants.TOTAL, total);
+		messageBuilder.put("status", BackgroundTaskConstants.STATUS_IN_PROGRESS);
+
+		Message message = messageBuilder.build();
 
 		sendBackgroundTaskStatusMessage(message);
 	}
@@ -52,15 +58,18 @@ public class ReindexStatusMessageSenderImpl
 	public void sendStatusMessage(
 		String phase, long companyId, long[] companyIds) {
 
-		Message message = new Message();
+		MessageBuilder messageBuilder = _messageBuilderFactory.create(
+			DestinationNames.BACKGROUND_TASK_STATUS);
 
-		message.put(
+		messageBuilder.put(
 			BackgroundTaskConstants.BACKGROUND_TASK_ID,
 			BackgroundTaskThreadLocal.getBackgroundTaskId());
-		message.put(ReindexBackgroundTaskConstants.COMPANY_ID, companyId);
-		message.put(ReindexBackgroundTaskConstants.COMPANY_IDS, companyIds);
-		message.put(ReindexBackgroundTaskConstants.PHASE, phase);
-		message.put("status", BackgroundTaskConstants.STATUS_IN_PROGRESS);
+		messageBuilder.put(ReindexBackgroundTaskConstants.COMPANY_ID, companyId);
+		messageBuilder.put(ReindexBackgroundTaskConstants.COMPANY_IDS, companyIds);
+		messageBuilder.put(ReindexBackgroundTaskConstants.PHASE, phase);
+		messageBuilder.put("status", BackgroundTaskConstants.STATUS_IN_PROGRESS);
+
+		Message message = messageBuilder.build();
 
 		sendBackgroundTaskStatusMessage(message);
 	}
@@ -77,6 +86,11 @@ public class ReindexStatusMessageSenderImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ReindexStatusMessageSenderImpl.class);
+
+	private static final int _timeout = 1000;
+
+	@Reference
+	private MessageBuilderFactory _messageBuilderFactory;
 
 	@Reference
 	private BackgroundTaskStatusMessageSender

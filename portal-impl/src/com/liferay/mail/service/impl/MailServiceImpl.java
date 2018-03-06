@@ -19,11 +19,12 @@ import com.liferay.mail.kernel.model.Filter;
 import com.liferay.mail.kernel.model.MailMessage;
 import com.liferay.mail.kernel.service.MailService;
 import com.liferay.mail.kernel.util.Hook;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.cluster.Clusterable;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
@@ -34,6 +35,9 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsValues;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceTracker;
 
 import java.io.IOException;
 
@@ -58,11 +62,18 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 			_log.debug("addForward");
 		}
 
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(
+			DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_addForwardMethodKey, companyId, userId, filters, emailAddresses,
-			leaveCopy);
+				_addForwardMethodKey, companyId, userId, filters, emailAddresses,
+				leaveCopy);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -73,12 +84,18 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("addUser");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_addUserMethodKey, companyId, userId, password, firstName,
-			middleName, lastName, emailAddress);
+				_addUserMethodKey, companyId, userId, password, firstName,
+				middleName, lastName, emailAddress);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -89,12 +106,18 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("addVacationMessage");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_addVacationMessageMethodKey, companyId, userId, emailAddress,
-			vacationMessage);
+				_addVacationMessageMethodKey, companyId, userId, emailAddress,
+				vacationMessage);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Clusterable
@@ -108,11 +131,17 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("deleteEmailAddress");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_deleteEmailAddressMethodKey, companyId, userId);
+				_deleteEmailAddressMethodKey, companyId, userId);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -120,13 +149,19 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("deleteUser");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_deleteUserMethodKey, companyId, userId);
+				_deleteUserMethodKey, companyId, userId);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
-
+	
 	@Override
 	public String getOSGiServiceIdentifier() {
 		return MailService.class.getName();
@@ -258,8 +293,14 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("sendEmail");
 		}
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
+		messageBuilder.setPayload(mailMessage);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, mailMessage);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -269,11 +310,17 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("updateBlocked");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_updateBlockedMethodKey, companyId, userId, blocked);
+				_updateBlockedMethodKey, companyId, userId, blocked);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -283,11 +330,17 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("updateEmailAddress");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_updateEmailAddressMethodKey, companyId, userId, emailAddress);
+				_updateEmailAddressMethodKey, companyId, userId, emailAddress);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
 	}
 
 	@Override
@@ -295,15 +348,49 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		if (_log.isDebugEnabled()) {
 			_log.debug("updatePassword");
 		}
-
+		
+		MessageBuilderFactory messageBuilderFactory = getMessageBuilderFactory();
+		
+		MessageBuilder messageBuilder = messageBuilderFactory.create(DestinationNames.MAIL);
+		
 		MethodHandler methodHandler = new MethodHandler(
-			_updatePasswordMethodKey, companyId, userId, password);
+				_updatePasswordMethodKey, companyId, userId, password);
+		
+		messageBuilder.setPayload(methodHandler);
 
-		MessageBusUtil.sendMessage(DestinationNames.MAIL, methodHandler);
+		messageBuilder.send();
+	}
+
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		MailServiceImpl.class);
+	private static final int _timeout = 1000;
 
 	private static final MethodKey _addForwardMethodKey = new MethodKey(
 		Hook.class, "addForward", long.class, long.class, List.class,
@@ -324,7 +411,7 @@ public class MailServiceImpl implements MailService, IdentifiableOSGiService {
 		Hook.class, "updateEmailAddress", long.class, long.class, String.class);
 	private static final MethodKey _updatePasswordMethodKey = new MethodKey(
 		Hook.class, "updatePassword", long.class, long.class, String.class);
-
+	
 	private Session _session;
 
 }

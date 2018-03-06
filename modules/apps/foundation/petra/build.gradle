@@ -1,0 +1,16 @@
+buildscript {
+	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "latest.release"
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.5.0'
+	}
+
+	repositories {
+		mavenLocal()
+
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+apply plugin: "com.liferay.root.defaults.plugin"

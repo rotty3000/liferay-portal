@@ -16,10 +16,10 @@ package com.liferay.exportimport.internal.messaging;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.spi.BaseMessageStatusMessageListener;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.messaging.BaseMessageStatusMessageListener;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.scheduler.messaging.SchedulerEventMessageListenerWrapper;

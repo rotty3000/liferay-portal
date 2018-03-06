@@ -14,8 +14,8 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.portal.kernel.messaging.proxy.BaseMultiDestinationProxyBean;
-import com.liferay.portal.kernel.messaging.proxy.ProxyRequest;
+import com.liferay.petra.messaging.spi.proxy.BaseMultiDestinationProxyBean;
+import com.liferay.petra.messaging.spi.proxy.ProxyRequest;
 
 import java.util.Collection;
 

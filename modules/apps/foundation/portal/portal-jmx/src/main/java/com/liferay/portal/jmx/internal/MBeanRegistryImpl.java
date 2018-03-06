@@ -14,16 +14,12 @@
 
 package com.liferay.portal.jmx.internal;
 
-import com.liferay.osgi.util.ServiceTrackerFactory;
 import com.liferay.portal.jmx.MBeanRegistry;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.lang.management.ManagementFactory;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.DynamicMBean;
@@ -36,6 +32,8 @@ import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -48,11 +46,18 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Michael C. Han
  */
 @Component(immediate = true, service = MBeanRegistry.class)
 public class MBeanRegistryImpl implements MBeanRegistry {
+
+	public MBeanRegistryImpl() {
+		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
+	}
 
 	@Override
 	public MBeanServer getMBeanServer() {
@@ -125,13 +130,20 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	protected void activate(ComponentContext componentContext) {
 		_bundleContext = componentContext.getBundleContext();
 
-		_mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		try {
+			Filter filter = FrameworkUtil.createFilter(
+				"(&(jmx.objectname=*)(objectClass=*MBean)" +
+					"(!(objectClass=javax.management.DynamicMBean)))");
 
-		_serviceTracker = ServiceTrackerFactory.open(
-			_bundleContext,
-			"(&(jmx.objectname=*)(objectClass=*MBean)" +
-				"(!(objectClass=javax.management.DynamicMBean)))",
-			new MBeanServiceTrackerCustomizer());
+			_serviceTracker = new ServiceTracker<Object, Object>(
+				_bundleContext, filter,
+				new MBeanServiceTrackerCustomizer());
+
+			_serviceTracker.open();
+		}
+		catch (Exception e) {
+			_log.error(e.getMessage(), e);
+		}
 	}
 
 	@Reference(
@@ -143,13 +155,15 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	protected void addDynamicMBean(
 		DynamicMBean dynamicMBean, Map<String, Object> properties) {
 
-		String objectName = GetterUtil.getString(
-			properties.get("jmx.objectname"));
+		String objectName = Optional.ofNullable(
+			properties.get("jmx.objectname")
+		).map(v -> String.valueOf(v)).orElse("");
 
-		String objectNameCacheKey = GetterUtil.getString(
-			properties.get("jmx.objectname.cache.key"));
+		String objectNameCacheKey = Optional.ofNullable(
+			properties.get("jmx.objectname.cache.key")
+		).map(v -> String.valueOf(v)).orElse("");
 
-		if (Validator.isNull(objectNameCacheKey)) {
+		if ("".equals(objectNameCacheKey)) {
 			objectNameCacheKey = objectName;
 		}
 
@@ -190,13 +204,15 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 	protected void removeDynamicMBean(
 		DynamicMBean dynamicMBean, Map<String, Object> properties) {
 
-		String objectName = GetterUtil.getString(
-			properties.get("jmx.objectname"));
+		String objectName = Optional.ofNullable(
+			properties.get("jmx.objectname")
+		).map(v -> String.valueOf(v)).orElse("");
 
-		String objectNameCacheKey = GetterUtil.getString(
-			properties.get("jmx.objectname.cache.key"));
+		String objectNameCacheKey = Optional.ofNullable(
+			properties.get("jmx.objectname.cache.key")
+		).map(v -> String.valueOf(v)).orElse("");
 
-		if (Validator.isNull(objectNameCacheKey)) {
+		if ("".equals(objectNameCacheKey)) {
 			objectNameCacheKey = objectName;
 		}
 
@@ -210,11 +226,11 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		}
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
+	private static final Logger _log = LoggerFactory.getLogger(
 		MBeanRegistryImpl.class);
 
 	private BundleContext _bundleContext;
-	private MBeanServer _mBeanServer;
+	private final MBeanServer _mBeanServer;
 	private final Map<String, ObjectName> _objectNameCache =
 		new ConcurrentHashMap<>();
 	private ServiceTracker<Object, Object> _serviceTracker;
@@ -224,13 +240,15 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 
 		@Override
 		public Object addingService(ServiceReference<Object> serviceReference) {
-			String objectName = GetterUtil.getString(
-				serviceReference.getProperty("jmx.objectname"));
+			String objectName = Optional.ofNullable(
+				serviceReference.getProperty("jmx.objectname")
+			).map(v -> String.valueOf(v)).orElse("");
 
-			String objectNameCacheKey = GetterUtil.getString(
-				serviceReference.getProperty("jmx.objectname.cache.key"));
+			String objectNameCacheKey = Optional.ofNullable(
+				serviceReference.getProperty("jmx.objectname.cache.key")
+			).map(v -> String.valueOf(v)).orElse("");
 
-			if (Validator.isNull(objectNameCacheKey)) {
+			if ("".equals(objectNameCacheKey)) {
 				objectNameCacheKey = objectName;
 			}
 
@@ -258,13 +276,15 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 		public void removedService(
 			ServiceReference<Object> serviceReference, Object service) {
 
-			String objectName = GetterUtil.getString(
-				serviceReference.getProperty("jmx.objectname"));
+			String objectName = Optional.ofNullable(
+				serviceReference.getProperty("jmx.objectname")
+			).map(v -> String.valueOf(v)).orElse("");
 
-			String objectNameCacheKey = GetterUtil.getString(
-				serviceReference.getProperty("jmx.objectname.cache.key"));
+			String objectNameCacheKey = Optional.ofNullable(
+				serviceReference.getProperty("jmx.objectname.cache.key")
+			).map(v -> String.valueOf(v)).orElse("");
 
-			if (Validator.isNull(objectNameCacheKey)) {
+			if ("".equals(objectNameCacheKey)) {
 				objectNameCacheKey = objectName;
 			}
 

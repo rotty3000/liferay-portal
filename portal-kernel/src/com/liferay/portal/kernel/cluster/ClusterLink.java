@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.cluster;
 
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.petra.messaging.api.Message;
 
 /**
  * @author Shuyang Zhou

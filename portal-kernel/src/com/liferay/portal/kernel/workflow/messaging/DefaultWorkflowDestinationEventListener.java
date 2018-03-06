@@ -14,12 +14,17 @@
 
 package com.liferay.portal.kernel.workflow.messaging;
 
+import com.liferay.petra.messaging.api.DestinationEventListener;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationEventListener;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michael C. Han
@@ -40,26 +45,17 @@ public class DefaultWorkflowDestinationEventListener
 			return;
 		}
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_COMPARATOR,
-			_workflowComparatorFactoryListener);
+		unregisterMessageListener("workflowComparatorFactoryListener");
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_DEFINITION,
-			_workflowDefinitionManagerListener);
+		unregisterMessageListener("workflowDefinitionManagerListener");
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_ENGINE, _workflowEngineManagerListener);
+		unregisterMessageListener("workflowEngineManagerListener");
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_INSTANCE,
-			_workflowInstanceManagerListener);
+		unregisterMessageListener("workflowInstanceManagerListener");
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_LOG, _workflowLogManagerListener);
+		unregisterMessageListener("workflowLogManagerListener");
 
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.WORKFLOW_TASK, _workflowTaskManagerListener);
+		unregisterMessageListener("workflowTaskManagerListener");
 	}
 
 	@Override
@@ -75,26 +71,23 @@ public class DefaultWorkflowDestinationEventListener
 				"Registering default workflow engine " + _workflowEngineName);
 		}
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_COMPARATOR,
-			_workflowComparatorFactoryListener);
+		registerMessageListener(DestinationNames.WORKFLOW_COMPARATOR,
+			"workflowComparatorFactoryListener", _workflowComparatorFactoryListener);
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_DEFINITION,
-			_workflowDefinitionManagerListener);
+		registerMessageListener(DestinationNames.WORKFLOW_DEFINITION,
+			"workflowDefinitionManagerListener", _workflowDefinitionManagerListener);
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_ENGINE, _workflowEngineManagerListener);
+		registerMessageListener(DestinationNames.WORKFLOW_ENGINE,
+			"workflowEngineManagerListener", _workflowEngineManagerListener);
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_INSTANCE,
-			_workflowInstanceManagerListener);
+		registerMessageListener(DestinationNames.WORKFLOW_INSTANCE,
+			"workflowInstanceManagerListener", _workflowInstanceManagerListener);
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_LOG, _workflowLogManagerListener);
+		registerMessageListener(DestinationNames.WORKFLOW_LOG,
+			"workflowLogManagerListener", _workflowLogManagerListener);
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.WORKFLOW_TASK, _workflowTaskManagerListener);
+		registerMessageListener(DestinationNames.WORKFLOW_TASK,
+			"workflowTaskManagerListener", _workflowTaskManagerListener);
 	}
 
 	public void setWorkflowComparatorFactoryListener(
@@ -148,8 +141,39 @@ public class DefaultWorkflowDestinationEventListener
 		}
 	}
 
+	private void registerMessageListener(
+		String destinationName, String messageListenerName,
+		MessageListener messageListener) {
+
+		Registry registry = RegistryUtil.getRegistry();
+
+		Map<String, Object> properties =
+			new HashMap<>();
+
+		properties.put("destination.name", destinationName);
+		properties.put("message.listener.name", messageListenerName);
+
+		ServiceRegistration<MessageListener> serviceRegistration =
+			registry.registerService(MessageListener.class,
+				messageListener, properties);
+
+		_messageListenerServiceRegistrations.put(
+			messageListenerName, serviceRegistration);
+	}
+
+	private void unregisterMessageListener(String messageListenerName) {
+
+		ServiceRegistration<MessageListener> serviceRegistration =
+			_messageListenerServiceRegistrations.get(messageListenerName);
+
+		serviceRegistration.unregister();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultWorkflowDestinationEventListener.class);
+
+	private Map<String, ServiceRegistration<MessageListener>>
+		_messageListenerServiceRegistrations = new HashMap<>();
 
 	private MessageListener _workflowComparatorFactoryListener;
 	private MessageListener _workflowDefinitionManagerListener;
