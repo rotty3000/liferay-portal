@@ -45,7 +45,7 @@ public interface Destination extends com.liferay.petra.messaging.api.Destination
 
 	public int getMessageListenerCount();
 
-	public Collection<MessageListener> getMessageListeners();
+	public Collection<? extends MessageListener> getMessageListeners();
 
 	public String getName();
 

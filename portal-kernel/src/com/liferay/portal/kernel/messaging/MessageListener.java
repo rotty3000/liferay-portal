@@ -17,8 +17,19 @@ package com.liferay.portal.kernel.messaging;
 /**
  * @author Michael C. Han
  */
-public interface MessageListener {
+public interface MessageListener extends com.liferay.petra.messaging.api.MessageListener {
 
 	public void receive(Message message) throws MessageListenerException;
+
+	@Override
+	public default void receive(com.liferay.petra.messaging.api.Message message)
+			throws com.liferay.petra.messaging.api.MessageListenerException {
+
+		try {
+			receive((Message)message);
+		} catch (MessageListenerException mle) {
+			throw new com.liferay.petra.messaging.api.MessageListenerException(mle);
+		}
+	}
 
 }
