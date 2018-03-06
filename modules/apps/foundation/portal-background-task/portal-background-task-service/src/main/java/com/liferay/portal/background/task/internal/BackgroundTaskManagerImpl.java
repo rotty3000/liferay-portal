@@ -17,6 +17,11 @@ package com.liferay.portal.background.task.internal;
 import com.liferay.background.task.kernel.util.comparator.BackgroundTaskCompletionDateComparator;
 import com.liferay.background.task.kernel.util.comparator.BackgroundTaskCreateDateComparator;
 import com.liferay.background.task.kernel.util.comparator.BackgroundTaskNameComparator;
+import com.liferay.petra.messaging.api.DestinationConfiguration;
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.DestinationType;
+import com.liferay.petra.messaging.api.MessageBus;
+import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskMessageListener;
 import com.liferay.portal.background.task.internal.messaging.BackgroundTaskQueuingMessageListener;
 import com.liferay.portal.background.task.internal.messaging.RemoveOnCompletionBackgroundTaskStatusMessageListener;
@@ -29,11 +34,6 @@ import com.liferay.portal.kernel.backgroundtask.BackgroundTaskThreadLocalManager
 import com.liferay.portal.kernel.cluster.ClusterMasterExecutor;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.lock.LockManager;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.DestinationFactory;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -573,8 +574,8 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 	protected void activate(BundleContext bundleContext) {
 		_bundleContext = bundleContext;
 
-		Destination backgroundTaskDestination = registerDestination(
-			bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
+		registerDestinationConfiguration(bundleContext,
+			DestinationType.PARALLEL,
 			DestinationNames.BACKGROUND_TASK, 5, 10);
 
 		BackgroundTaskMessageListener backgroundTaskMessageListener =
@@ -583,25 +584,48 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 				_backgroundTaskStatusRegistry,
 				_backgroundTaskThreadLocalManager, _messageBus);
 
-		backgroundTaskDestination.register(backgroundTaskMessageListener);
+		Dictionary<String, Object> btmlProperties = new HashMapDictionary<>();
 
-		Destination backgroundTaskStatusDestination = registerDestination(
-			bundleContext, DestinationConfiguration.DESTINATION_TYPE_SERIAL,
+		btmlProperties.put("destination.name", DestinationNames.BACKGROUND_TASK);
+
+		ServiceRegistration<MessageListener> btmlServiceRegistration =
+			_bundleContext.registerService(MessageListener.class,
+			backgroundTaskMessageListener, btmlProperties);
+
+		_mlServiceRegistrations.add(btmlServiceRegistration);
+
+		registerDestinationConfiguration(bundleContext, DestinationType.SERIAL,
 			DestinationNames.BACKGROUND_TASK_STATUS, 1, 1);
 
 		BackgroundTaskQueuingMessageListener
 			backgroundTaskQueuingMessageListener =
 				new BackgroundTaskQueuingMessageListener(this);
 
-		backgroundTaskStatusDestination.register(
-			backgroundTaskQueuingMessageListener);
+		Dictionary<String, Object> btqmlProperties = new HashMapDictionary<>();
+
+		btqmlProperties.put("destination.name",
+			DestinationNames.BACKGROUND_TASK_STATUS);
+
+		ServiceRegistration<MessageListener> btqmlServiceRegistration =
+			_bundleContext.registerService(MessageListener.class,
+			backgroundTaskQueuingMessageListener, btqmlProperties);
+
+		_mlServiceRegistrations.add(btqmlServiceRegistration);
 
 		RemoveOnCompletionBackgroundTaskStatusMessageListener
 			removeOnCompletionBackgroundTaskStatusMessageListener =
 				new RemoveOnCompletionBackgroundTaskStatusMessageListener(this);
 
-		backgroundTaskStatusDestination.register(
-			removeOnCompletionBackgroundTaskStatusMessageListener);
+		Dictionary<String, Object> rocbtsmlProperties = new HashMapDictionary<>();
+
+		rocbtsmlProperties.put("destination.name",
+			DestinationNames.BACKGROUND_TASK_STATUS);
+
+		ServiceRegistration<MessageListener> rocbtsmlServiceRegistration =
+		_bundleContext.registerService(MessageListener.class,
+			removeOnCompletionBackgroundTaskStatusMessageListener, rocbtsmlProperties);
+
+		_mlServiceRegistrations.add(rocbtsmlServiceRegistration);
 
 		if (!_clusterMasterExecutor.isEnabled()) {
 			cleanUpBackgroundTasks();
@@ -610,22 +634,22 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 
 	@Deactivate
 	protected void deactivate() {
-		for (ServiceRegistration<Destination> serviceRegistration :
-				_serviceRegistrations) {
-
-			Destination destination = _bundleContext.getService(
-				serviceRegistration.getReference());
+		for (ServiceRegistration<DestinationConfiguration> serviceRegistration :
+			_dcServiceRegistrations) {
 
 			serviceRegistration.unregister();
-
-			destination.destroy();
 		}
+
+		for (ServiceRegistration<MessageListener> serviceRegistration :
+			_mlServiceRegistrations)
+
+			serviceRegistration.unregister();
 
 		_bundleContext = null;
 	}
 
-	protected Destination registerDestination(
-		BundleContext bundleContext, String destinationType,
+	protected void registerDestinationConfiguration(
+		BundleContext bundleContext, DestinationType destinationType,
 		String destinationName, int workersCoreSize, int workersMaxSize) {
 
 		DestinationConfiguration destinationConfiguration =
@@ -634,20 +658,15 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 		destinationConfiguration.setWorkersCoreSize(workersCoreSize);
 		destinationConfiguration.setWorkersMaxSize(workersMaxSize);
 
-		Destination destination = _destinationFactory.createDestination(
-			destinationConfiguration);
+		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
-		Dictionary<String, Object> dictionary = new HashMapDictionary<>();
+		properties.put("destination.name", destinationName);
 
-		dictionary.put("destination.name", destination.getName());
-
-		ServiceRegistration<Destination> serviceRegistration =
+		ServiceRegistration<DestinationConfiguration> serviceRegistration =
 			bundleContext.registerService(
-				Destination.class, destination, dictionary);
+				DestinationConfiguration.class, destinationConfiguration, properties);
 
-		_serviceRegistrations.add(serviceRegistration);
-
-		return destination;
+		_dcServiceRegistrations.add(serviceRegistration);
 	}
 
 	@Reference(unbind = "-")
@@ -720,12 +739,12 @@ public class BackgroundTaskManagerImpl implements BackgroundTaskManager {
 	private ClusterMasterExecutor _clusterMasterExecutor;
 
 	@Reference
-	private DestinationFactory _destinationFactory;
-
-	@Reference
 	private MessageBus _messageBus;
 
-	private final Set<ServiceRegistration<Destination>> _serviceRegistrations =
-		new HashSet<>();
+	private final Set<ServiceRegistration<DestinationConfiguration>>
+		_dcServiceRegistrations = new HashSet<>();
+
+	private final Set<ServiceRegistration<MessageListener>>
+		_mlServiceRegistrations = new HashSet<>();
 
 }

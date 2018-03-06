@@ -14,6 +14,13 @@
 
 package com.liferay.portal.background.task.internal.messaging;
 
+import com.liferay.petra.messaging.api.DestinationNames;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
+import com.liferay.petra.messaging.api.MessageBus;
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.spi.BaseMessageListener;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTask;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskConstants;
 import com.liferay.portal.kernel.backgroundtask.BackgroundTaskExecutor;
@@ -31,10 +38,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lock.DuplicateLockException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.BaseMessageListener;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ClassLoaderUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
@@ -42,6 +45,13 @@ import com.liferay.portal.kernel.util.StackTraceUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.registry.Registry;
+import com.liferay.registry.RegistryUtil;
+import com.liferay.registry.ServiceRegistration;
+import com.liferay.registry.ServiceTracker;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Michael C. Han
@@ -113,9 +123,18 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 						backgroundTaskId, backgroundTaskStatusMessageTranslator,
 						_backgroundTaskStatusRegistry);
 
-				_messageBus.registerMessageListener(
-					DestinationNames.BACKGROUND_TASK_STATUS,
-					backgroundTaskStatusMessageListener);
+				Registry registry = RegistryUtil.getRegistry();
+
+				Map<String, Object> properties = new HashMap<>();
+
+				properties.put("destination.name",
+					DestinationNames.BACKGROUND_TASK_STATUS);
+
+				ServiceRegistration<?> serviceRegistration =
+					registry.registerService(MessageListener.class.getName(),
+						backgroundTaskStatusMessageListener, null);
+
+				_backgroundTaskStatusMessageListenerSR = serviceRegistration;
 			}
 
 			backgroundTask = _backgroundTaskManager.fetchBackgroundTask(
@@ -181,24 +200,26 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 				backgroundTaskId);
 
 			if (backgroundTaskStatusMessageListener != null) {
-				_messageBus.unregisterMessageListener(
-					DestinationNames.BACKGROUND_TASK_STATUS,
-					backgroundTaskStatusMessageListener);
+				_backgroundTaskStatusMessageListenerSR.unregister();
 			}
 
-			Message responseMessage = new Message();
+			MessageBuilderFactory messageBuilderFactory =
+				getMessageBuilderFactory();
 
-			responseMessage.put(
+			MessageBuilder responseMessageBuilder =
+				messageBuilderFactory.create(
+					DestinationNames.BACKGROUND_TASK_STATUS);
+
+			responseMessageBuilder.put(
 				BackgroundTaskConstants.BACKGROUND_TASK_ID,
 				backgroundTask.getBackgroundTaskId());
-			responseMessage.put("name", backgroundTask.getName());
-			responseMessage.put("status", status);
-			responseMessage.put(
+			responseMessageBuilder.put("name", backgroundTask.getName());
+			responseMessageBuilder.put("status", status);
+			responseMessageBuilder.put(
 				"taskExecutorClassName",
 				backgroundTask.getTaskExecutorClassName());
 
-			_messageBus.sendMessage(
-				DestinationNames.BACKGROUND_TASK_STATUS, responseMessage);
+			responseMessageBuilder.send();
 		}
 	}
 
@@ -287,8 +308,40 @@ public class BackgroundTaskMessageListener extends BaseMessageListener {
 		return backgroundTaskExecutor;
 	}
 
+	private MessageBuilderFactory getMessageBuilderFactory() {
+		try {
+			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
+
+			MessageBuilderFactory messageBuilderFactory =
+				messageBuilderFactoryTracker.waitForService(_timeout);
+
+			return messageBuilderFactory;
+		}
+		catch (InterruptedException ie) {
+			throw new RuntimeException(ie);
+		}
+	}
+
+	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
+		Registry registry = RegistryUtil.getRegistry();
+
+		com.liferay.registry.Filter filter = registry.getFilter(
+			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
+
+		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
+			messageBuilderFactoryTracker =
+			registry.trackServices(filter);
+
+		return messageBuilderFactoryTracker;
+	}
+
+	private static final int _timeout = 1000;
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		BackgroundTaskMessageListener.class);
+
+	private ServiceRegistration<?> _backgroundTaskStatusMessageListenerSR;
 
 	private final BackgroundTaskExecutorRegistry
 		_backgroundTaskExecutorRegistry;
