@@ -18,7 +18,7 @@ package com.liferay.portal.kernel.messaging;
  * @author Michael C. Han
  * @author Brian Wing Shun Chan
  */
-public class DestinationStatistics {
+public class DestinationStatistics implements com.liferay.petra.messaging.api.DestinationStatistics {
 
 	public int getActiveThreadCount() {
 		return _activeThreadCount;
