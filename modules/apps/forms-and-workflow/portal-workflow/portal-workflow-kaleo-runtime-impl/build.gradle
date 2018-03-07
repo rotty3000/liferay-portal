@@ -2,6 +2,8 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 dependencies {
+	provided group: "com.liferay", name: "com.liferay.petra.messaging.api", version: "1.0.0"
+	provided group: "com.liferay", name: "com.liferay.petra.messaging.spi", version: "1.0.0"
 	provided group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	provided group: "javax.mail", name: "mail", version: "1.4"
 	provided group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
