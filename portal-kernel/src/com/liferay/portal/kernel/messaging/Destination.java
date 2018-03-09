@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * @author Michael C. Han
  */
-public interface Destination {
+public interface Destination extends com.liferay.petra.messaging.spi.Destination {
 
 	public boolean addDestinationEventListener(
 		DestinationEventListener destinationEventListener);

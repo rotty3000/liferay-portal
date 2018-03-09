@@ -65,6 +65,40 @@ public abstract class BaseDestination implements Destination, com.liferay.petra.
 	}
 
 	@Override
+	public int getDestinationEventListenerCount() {
+		return 0;
+	}
+
+	@Override
+	public Collection<com.liferay.petra.messaging.api.DestinationEventListener> getDestinationEventListeners() {
+		return null;
+	}
+
+	@Override
+	public Collection<InboundMessageProcessorFactory> getInboundMessageProcessorFactories() {
+		return null;
+	}
+
+	@Override
+	public int getInboundMessageProcessorFactoryCount() {
+		return 0;
+	}
+
+	@Override
+	public Collection<OutboundMessageProcessorFactory> getOutboundMessageProcessorFactories() {
+		return null;
+	}
+
+	@Override
+	public int getOutboundMessageProcessorFactoryCount() {
+		return 0;
+	}
+
+	@Override
+	public void send(com.liferay.petra.messaging.api.Message message) {
+	}
+
+	@Override
 	public boolean addDestinationEventListener(
 		DestinationEventListener destinationEventListener) {
 
