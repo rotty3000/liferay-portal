@@ -25,6 +25,7 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -104,8 +105,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 			return;
 		}
-
-		ClassLoader classLoader = _clazz.getClassLoader();
 
 		if (_rejectedExecutionHandler == null) {
 			_rejectedExecutionHandler = createRejectionExecutionHandler();
@@ -254,7 +253,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 	}
 
 	protected abstract void dispatch(
-		Collection<MessageListener> messageListeners,
+		Set<? extends MessageListener> messageListeners,
 		Collection<InboundMessageProcessor> messageInboundProcessors,
 		Message message);
 
@@ -268,9 +267,6 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 
 	private static final Logger _log = LoggerFactory.getLogger(
 		BaseAsyncDestination.class);
-
-	private static final Class<BaseAsyncDestination> _clazz =
-		BaseAsyncDestination.class;
 
 	private volatile ExecutorServiceRegistrar _executorServiceRegistrar;
 	private int _maximumQueueSize = Integer.MAX_VALUE;
