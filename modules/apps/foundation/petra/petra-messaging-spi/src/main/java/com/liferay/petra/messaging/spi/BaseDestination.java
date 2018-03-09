@@ -27,8 +27,10 @@ import com.liferay.petra.string.StringPool;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.osgi.service.component.annotations.Reference;
@@ -166,8 +168,8 @@ public abstract class BaseDestination implements Destination {
 	}
 
 	@Override
-	public Collection<MessageListener> getMessageListeners() {
-		return Collections.unmodifiableCollection(messageListeners.values());
+	public Set<? extends MessageListener> getMessageListeners() {
+		return Collections.unmodifiableSet(new HashSet<>(messageListeners.values()));
 	}
 
 	@Override

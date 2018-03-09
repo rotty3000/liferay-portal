@@ -22,6 +22,7 @@ import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.OutboundMessageProcessorFactory;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author Michael C. Han
@@ -45,7 +46,7 @@ public interface Destination extends com.liferay.petra.messaging.api.Destination
 
 	public int getMessageListenerCount();
 
-	public Collection<MessageListener> getMessageListeners();
+	public Set<? extends MessageListener> getMessageListeners();
 
 	public String getName();
 
