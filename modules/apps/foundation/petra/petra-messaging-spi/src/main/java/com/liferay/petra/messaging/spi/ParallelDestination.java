@@ -22,6 +22,7 @@ import com.liferay.petra.messaging.api.MessageListenerException;
 import com.liferay.petra.messaging.api.MessageProcessorException;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 	@Override
 	protected void dispatch(
-		final Collection<MessageListener> messageListeners,
+		final Set<? extends MessageListener> messageListeners,
 		final Collection<InboundMessageProcessor> inboundMessageProcessors,
 		final Message message) {
 
