@@ -57,7 +57,7 @@ public class DirectSynchronousMessageSender
 			synchronousDestination.send(message);
 		}
 		else {
-			Collection<MessageListener> messageListeners =
+			Collection<? extends MessageListener> messageListeners =
 				destination.getMessageListeners();
 
 			for (MessageListener messageListener : messageListeners) {

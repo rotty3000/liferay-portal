@@ -128,6 +128,25 @@ public class DefaultMessageBus implements MessageBus {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
+		unbind = "unregisterDestination"
+	)
+	public void registerDestination(
+		Destination destination,
+		Map<String, Object> properties) {
+
+		_destinations.put(properties, destination);
+
+		for (MessageBusEventListener messageBusEventListener :
+				_messageBusEventListeners.values()) {
+
+			messageBusEventListener.destinationAdded(destination);
+		}
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
 		unbind = "unregisterDestinationConfiguration"
 	)
 	public void registerDestinationConfiguration(
