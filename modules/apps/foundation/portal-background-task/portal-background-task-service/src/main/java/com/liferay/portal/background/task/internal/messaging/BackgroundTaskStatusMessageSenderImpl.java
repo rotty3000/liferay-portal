@@ -31,6 +31,7 @@ import org.osgi.service.component.annotations.Reference;
 public class BackgroundTaskStatusMessageSenderImpl
 	implements BackgroundTaskStatusMessageSender {
 
+	@Override
 	public void sendBackgroundTaskStatusMessage(Message message) {
 		if (!BackgroundTaskThreadLocal.hasBackgroundTask()) {
 			return;

@@ -14,15 +14,12 @@
 
 package com.liferay.portal.deploy.hot;
 
-import com.liferay.petra.messaging.api.DestinationNames;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.deploy.hot.BaseHotDeployListener;
 import com.liferay.portal.kernel.deploy.hot.HotDeployEvent;
 import com.liferay.portal.kernel.deploy.hot.HotDeployException;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 
 import javax.servlet.ServletContext;
 
@@ -64,16 +61,12 @@ public class MessagingHotDeployListener extends BaseHotDeployListener {
 
 		String servletContextName = servletContext.getServletContextName();
 
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		Message message = new Message();
 
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create(DestinationNames.HOT_DEPLOY);
+		message.put("command", "deploy");
+		message.put("servletContextName", servletContextName);
 
-		messageBuilder.put("command", "deploy");
-		messageBuilder.put("servletContextName", servletContextName);
-
-		messageBuilder.send();
+		MessageBusUtil.sendMessage(DestinationNames.HOT_DEPLOY, message);
 	}
 
 	protected void doInvokeUndeploy(HotDeployEvent hotDeployEvent)
@@ -83,45 +76,12 @@ public class MessagingHotDeployListener extends BaseHotDeployListener {
 
 		String servletContextName = servletContext.getServletContextName();
 
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		Message message = new Message();
 
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create(DestinationNames.HOT_DEPLOY);
+		message.put("command", "undeploy");
+		message.put("servletContextName", servletContextName);
 
-		messageBuilder.put("command", "undeploy");
-		messageBuilder.put("servletContextName", servletContextName);
-
-		messageBuilder.send();
+		MessageBusUtil.sendMessage(DestinationNames.HOT_DEPLOY, message);
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
-	private static final int _timeout = 1000;
 
 }

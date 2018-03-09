@@ -15,16 +15,15 @@
 package com.liferay.portal.poller;
 
 import com.liferay.petra.encryptor.Encryptor;
-import com.liferay.petra.messaging.api.DestinationNames;
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
-import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.BrowserTracker;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.poller.PollerHeader;
@@ -38,9 +37,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -296,22 +292,18 @@ public class PollerRequestHandlerImpl
 				}
 			}
 
-			MessageBuilderFactory messageBuilderFactory =
-				getMessageBuilderFactory();
+			Message message = new Message();
 
-			MessageBuilder messageBuilder =
-				messageBuilderFactory.create(DestinationNames.POLLER);
-
-			messageBuilder.setPayload(pollerRequest);
+			message.setPayload(pollerRequest);
 
 			if (pollerRequest.isReceiveRequest()) {
-				messageBuilder.setResponseId(responseId);
+				message.setResponseId(responseId);
 
-				messageBuilder.setResponseDestinationName(
+				message.setResponseDestinationName(
 					DestinationNames.POLLER_RESPONSE);
 			}
 
-			messageBuilder.send();
+			MessageBusUtil.sendMessage(DestinationNames.POLLER, message);
 		}
 	}
 
@@ -439,32 +431,6 @@ public class PollerRequestHandlerImpl
 			fixedPollerRequestString);
 	}
 
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
 	private static final String _ESCAPED_CLOSE_CURLY_BRACE =
 		"[$CLOSE_CURLY_BRACE$]";
 
@@ -478,8 +444,6 @@ public class PollerRequestHandlerImpl
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		PollerRequestHandlerImpl.class);
-
-	private static final int _timeout = 1000;
 
 	private final Map<String, PollerSession> _pollerSessions = new HashMap<>();
 

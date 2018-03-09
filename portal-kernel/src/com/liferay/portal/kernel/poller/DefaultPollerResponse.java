@@ -14,16 +14,12 @@
 
 package com.liferay.portal.kernel.poller;
 
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,15 +46,11 @@ public class DefaultPollerResponse implements PollerResponse {
 			return;
 		}
 
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		Message responseMessage = MessageBusUtil.createResponseMessage(message);
 
-		MessageBuilder responseMessageBuilder =
-			messageBuilderFactory.create(message.getResponseDestinationName());
+		responseMessage.setPayload(this);
 
-		responseMessageBuilder.setPayload(this);
-
-		responseMessageBuilder.send();
+		MessageBusUtil.sendMessage(responseDestinationName, responseMessage);
 	}
 
 	@Override
@@ -141,35 +133,6 @@ public class DefaultPollerResponse implements PollerResponse {
 
 		return pollerResponseJSONObject;
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
-	private static final int _timeout = 1000;
 
 	private String _chunkId;
 	private volatile boolean _closed;

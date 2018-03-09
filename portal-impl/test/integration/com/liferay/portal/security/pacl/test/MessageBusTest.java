@@ -14,14 +14,11 @@
 
 package com.liferay.portal.security.pacl.test;
 
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.test.rule.PACLTestRule;
 import com.liferay.registry.BasicRegistryImpl;
-import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 
-import com.liferay.registry.ServiceTracker;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -44,30 +41,16 @@ public class MessageBusTest {
 
 	@Test
 	public void testListen1() throws Exception {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
-
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create("liferay/test_pacl_listen_failure");
-
-		messageBuilder.setPayload("Listen Failure");
-
-		Object value = messageBuilder.sendSynchronous();
+		Object value = MessageBusUtil.sendSynchronousMessage(
+			"liferay/test_pacl_listen_failure", "Listen Failure");
 
 		Assert.assertNull(value);
 	}
 
 	@Test
 	public void testListen2() throws Exception {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
-
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create("liferay/test_pacl_listen_success");
-
-		messageBuilder.setPayload("Listen Success");
-
-		Object value = messageBuilder.sendSynchronous();
+		Object value = MessageBusUtil.sendSynchronousMessage(
+			"liferay/test_pacl_listen_success", "Listen Success");
 
 		Assert.assertEquals("Listen Success", value);
 	}
@@ -75,15 +58,8 @@ public class MessageBusTest {
 	@Test
 	public void testSend1() throws Exception {
 		try {
-			MessageBuilderFactory messageBuilderFactory =
-				getMessageBuilderFactory();
-
-			MessageBuilder messageBuilder =
-				messageBuilderFactory.create("liferay/test_pacl_send_failure");
-
-			messageBuilder.setPayload("Send Failure");
-
-			messageBuilder.send();
+			MessageBusUtil.sendMessage(
+				"liferay/test_pacl_send_failure", "Send Failure");
 
 			Assert.fail();
 		}
@@ -93,44 +69,8 @@ public class MessageBusTest {
 
 	@Test
 	public void testSend2() throws Exception {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
-
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create("liferay/test_pacl_send_success");
-
-		messageBuilder.setPayload("Send Success");
-
-		messageBuilder.send();
+		MessageBusUtil.sendMessage(
+			"liferay/test_pacl_send_success", "Send Success");
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
-	private static final int _timeout = 1000;
 
 }

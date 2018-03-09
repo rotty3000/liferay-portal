@@ -14,9 +14,6 @@
 
 package com.liferay.portal.internal.cluster;
 
-import com.liferay.petra.messaging.api.DestinationNames;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.cluster.ClusterEvent;
 import com.liferay.portal.kernel.cluster.ClusterEventListener;
 import com.liferay.portal.kernel.cluster.ClusterEventType;
@@ -24,9 +21,9 @@ import com.liferay.portal.kernel.cluster.ClusterInvokeThreadLocal;
 import com.liferay.portal.kernel.cluster.ClusterNode;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 
 import java.util.List;
 
@@ -59,57 +56,25 @@ public class LiveUsersClusterEventListenerImpl implements ClusterEventListener {
 		}
 
 		for (ClusterNode clusterNode : clusterNodes) {
-			MessageBuilderFactory messageBuilderFactory =
-				getMessageBuilderFactory();
-
-			MessageBuilder messageBuilder = messageBuilderFactory.create(
-				DestinationNames.LIVE_USERS);
+			Message message = new Message();
 
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			jsonObject.put("clusterNodeId", clusterNode.getClusterNodeId());
 			jsonObject.put("command", command);
 
-			messageBuilder.setPayload(jsonObject.toString());
+			message.setPayload(jsonObject.toString());
 
 			ClusterInvokeThreadLocal.setEnabled(false);
 
 			try {
-				messageBuilder.send();
+				MessageBusUtil.sendMessage(
+					DestinationNames.LIVE_USERS, message);
 			}
 			finally {
 				ClusterInvokeThreadLocal.setEnabled(true);
 			}
 		}
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
-	private static final int _timeout = 1000;
 
 }

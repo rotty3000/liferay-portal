@@ -14,17 +14,13 @@
 
 package com.liferay.portal.security.pacl.test.messaging;
 
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
-import com.liferay.petra.messaging.spi.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.PortalServiceUtil;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,15 +32,10 @@ public class TestPACLMessageListener extends BaseMessageListener {
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		message.setPayload(getResults(message));
 
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create(message.getResponseDestinationName());
-
-		messageBuilder.setPayload(getResults(message));
-
-		messageBuilder.send();
+		MessageBusUtil.sendMessage(
+			message.getResponseDestinationName(), message);
 	}
 
 	protected Map<String, Object> getResults(Message message) throws Exception {
@@ -69,34 +60,5 @@ public class TestPACLMessageListener extends BaseMessageListener {
 
 		return results;
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
-	private static final int _timeout = 1000;
 
 }

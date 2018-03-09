@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.javadoc.JavadocManagerUtil;
 import com.liferay.portal.kernel.log.Jdk14LogFactoryImpl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.resiliency.mpi.MPIHelperUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -125,6 +126,10 @@ public class GlobalShutdownAction extends SimpleAction {
 	}
 
 	protected void shutdownLevel3() {
+
+		// Messaging
+
+		MessageBusUtil.shutdown(true);
 
 		// Portal fabric
 

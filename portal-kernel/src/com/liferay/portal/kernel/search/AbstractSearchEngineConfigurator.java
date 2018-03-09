@@ -14,18 +14,18 @@
 
 package com.liferay.portal.kernel.search;
 
-import com.liferay.petra.messaging.api.Destination;
-import com.liferay.petra.messaging.api.DestinationConfiguration;
-import com.liferay.petra.messaging.api.DestinationType;
-import com.liferay.petra.messaging.api.MessageBus;
-import com.liferay.petra.messaging.api.MessageListener;
-import com.liferay.petra.messaging.spi.DestinationFactory;
-import com.liferay.petra.messaging.spi.InvokerMessageListener;
 import com.liferay.portal.kernel.concurrent.CallerRunsPolicy;
 import com.liferay.portal.kernel.concurrent.RejectedExecutionHandler;
 import com.liferay.portal.kernel.concurrent.ThreadPoolExecutor;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.Destination;
+import com.liferay.portal.kernel.messaging.DestinationConfiguration;
+import com.liferay.portal.kernel.messaging.DestinationFactory;
+import com.liferay.portal.kernel.messaging.DestinationFactoryUtil;
+import com.liferay.portal.kernel.messaging.InvokerMessageListener;
+import com.liferay.portal.kernel.messaging.MessageBus;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.search.messaging.BaseSearchEngineMessageListener;
 import com.liferay.portal.kernel.search.messaging.SearchReaderMessageListener;
@@ -39,18 +39,14 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.registry.Registry;
 import com.liferay.registry.RegistryUtil;
 import com.liferay.registry.ServiceReference;
-import com.liferay.registry.ServiceRegistration;
 import com.liferay.registry.dependency.ServiceDependencyListener;
 import com.liferay.registry.dependency.ServiceDependencyManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Michael C. Han
@@ -134,19 +130,78 @@ public abstract class AbstractSearchEngineConfigurator
 			new SearchWriterMessageListener(), searchEngine.getIndexWriter());
 	}
 
+	protected Destination createSearchReaderDestination(
+		String searchReaderDestinationName) {
+
+		DestinationConfiguration destinationConfiguration =
+			DestinationConfiguration.createSynchronousDestinationConfiguration(
+				searchReaderDestinationName);
+
+		return DestinationFactoryUtil.createDestination(
+			destinationConfiguration);
+	}
+
+	protected Destination createSearchWriterDestination(
+		String searchWriterDestinationName) {
+
+		DestinationConfiguration destinationConfiguration = null;
+
+		if (PortalRunMode.isTestMode()) {
+			destinationConfiguration =
+				DestinationConfiguration.
+					createSynchronousDestinationConfiguration(
+						searchWriterDestinationName);
+		}
+		else {
+			destinationConfiguration =
+				DestinationConfiguration.createParallelDestinationConfiguration(
+					searchWriterDestinationName);
+		}
+
+		if (_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE > 0) {
+			destinationConfiguration.setMaximumQueueSize(
+				_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE);
+
+			RejectedExecutionHandler rejectedExecutionHandler =
+				new CallerRunsPolicy() {
+
+					@Override
+					public void rejectedExecution(
+						Runnable runnable,
+						ThreadPoolExecutor threadPoolExecutor) {
+
+						if (_log.isWarnEnabled()) {
+							StringBundler sb = new StringBundler(4);
+
+							sb.append("The search index writer's task queue ");
+							sb.append("is at its maximum capacity. The ");
+							sb.append("current thread will handle the ");
+							sb.append("request.");
+
+							_log.warn(sb.toString());
+						}
+
+						super.rejectedExecution(runnable, threadPoolExecutor);
+					}
+
+				};
+
+			destinationConfiguration.setRejectedExecutionHandler(
+				rejectedExecutionHandler);
+		}
+
+		return DestinationFactoryUtil.createDestination(
+			destinationConfiguration);
+	}
+
 	protected void destroySearchEngine(
 		SearchEngineRegistration searchEngineRegistration) {
 
-		ServiceRegistration<?> serviceRegistration =
-			_serviceRegistrations.get(
-				searchEngineRegistration.getSearchReaderDestinationName());
-
-		serviceRegistration.unregister();
-
-		serviceRegistration = _serviceRegistrations.get(
+		_messageBus.removeDestination(
 			searchEngineRegistration.getSearchReaderDestinationName());
 
-		serviceRegistration.unregister();
+		_messageBus.removeDestination(
+			searchEngineRegistration.getSearchWriterDestinationName());
 
 		SearchEngineHelper searchEngineHelper = getSearchEngineHelper();
 
@@ -201,22 +256,11 @@ public abstract class AbstractSearchEngineConfigurator
 			searchReaderDestinationName);
 
 		if (searchReaderDestination == null) {
-			DestinationConfiguration destinationConfiguration =
-				new DestinationConfiguration(
-					DestinationType.SYNCHRONOUS, searchReaderDestinationName);
+			searchReaderDestination = createSearchReaderDestination(
+				searchReaderDestinationName);
 
-			Registry registry = RegistryUtil.getRegistry();
-
-			String className = DestinationConfiguration.class.getName();
-
-			ServiceRegistration<?> serviceRegistration =
-				registry.registerService(className, destinationConfiguration);
-
-			_serviceRegistrations.put(className, serviceRegistration);
+			messageBus.addDestination(searchReaderDestination);
 		}
-
-		searchReaderDestination = messageBus.getDestination(
-			searchReaderDestinationName);
 
 		return searchReaderDestination;
 	}
@@ -233,70 +277,11 @@ public abstract class AbstractSearchEngineConfigurator
 			searchWriterDestinationName);
 
 		if (searchWriterDestination == null) {
-			DestinationConfiguration destinationConfiguration = null;
+			searchWriterDestination = createSearchWriterDestination(
+				searchWriterDestinationName);
 
-			if (PortalRunMode.isTestMode()) {
-				destinationConfiguration = new DestinationConfiguration(
-					DestinationType.SYNCHRONOUS, searchWriterDestinationName);
-			}
-			else {
-				destinationConfiguration = new DestinationConfiguration(
-					DestinationType.PARALLEL, searchWriterDestinationName);
-			}
-
-			if (_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE > 0) {
-				destinationConfiguration.setMaximumQueueSize(
-					_INDEX_SEARCH_WRITER_MAX_QUEUE_SIZE);
-
-				RejectedExecutionHandler rejectedExecutionHandler =
-					new CallerRunsPolicy() {
-
-						@Override
-						public void rejectedExecution(
-							Runnable runnable,
-							ThreadPoolExecutor threadPoolExecutor) {
-
-							if (_log.isWarnEnabled()) {
-								StringBundler sb = new StringBundler(4);
-
-								sb.append("The search index writer's task queue ");
-								sb.append("is at its maximum capacity. The ");
-								sb.append("current thread will handle the ");
-								sb.append("request.");
-
-								_log.warn(sb.toString());
-							}
-
-							super.rejectedExecution(runnable, threadPoolExecutor);
-						}
-
-					};
-
-				Registry registry = RegistryUtil.getRegistry();
-
-				String className = DestinationConfiguration.class.getName();
-
-				ServiceRegistration<?> serviceRegistration =
-					registry.registerService(className, destinationConfiguration);
-
-				_serviceRegistrations.put(className, serviceRegistration);
-
-				className = RejectedExecutionHandler.class.getName();
-
-				Map<String, Object> properties = new HashMap<String, Object>();
-
-				properties.put("destination.name", searchWriterDestinationName);
-
-				ServiceRegistration<?> rehServiceRegistration =
-					registry.registerService(
-						className, rejectedExecutionHandler, properties);
-
-				_serviceRegistrations.put(className, rehServiceRegistration);
-			}
+			messageBus.addDestination(searchWriterDestination);
 		}
-
-		searchWriterDestination = messageBus.getDestination(
-			searchWriterDestinationName);
 
 		return searchWriterDestination;
 	}
@@ -357,15 +342,14 @@ public abstract class AbstractSearchEngineConfigurator
 				searchReaderDestination, searchWriterDestination,
 				searchEngineRegistration);
 
-			ServiceRegistration<?> serviceRegistration =
-				_serviceRegistrations.get((searchReaderDestination.getName()));
+			_messageBus.removeDestination(
+				searchReaderDestination.getName(), false);
 
-			serviceRegistration.unregister();
+			searchReaderDestination = getSearchReaderDestination(
+				_messageBus, searchEngineId);
 
-			serviceRegistration = _serviceRegistrations.get(
-				(searchWriterDestination.getName()));
-
-			serviceRegistration.unregister();
+			_messageBus.removeDestination(
+				searchWriterDestination.getName(), false);
 
 			searchWriterDestination = getSearchWriterDestination(
 				_messageBus, searchEngineId);
@@ -389,15 +373,9 @@ public abstract class AbstractSearchEngineConfigurator
 		for (InvokerMessageListener invokerMessageListener :
 				invokerMessageListeners) {
 
-			Registry registry = RegistryUtil.getRegistry();
-
-			Map<String, Object> properties = new HashMap<String, Object>();
-
-			properties.put("destination.name", destination.getName());
-
-			registry.registerService(
-				MessageListener.class.getName(),
-				invokerMessageListener.getMessageListener(), properties);
+			destination.register(
+				invokerMessageListener.getMessageListener(),
+				invokerMessageListener.getClassLoader());
 		}
 	}
 
@@ -412,15 +390,8 @@ public abstract class AbstractSearchEngineConfigurator
 		baseSearchEngineMessageListener.setSearchEngine(searchEngine);
 		baseSearchEngineMessageListener.setSearchEngineId(searchEngineId);
 
-		Registry registry = RegistryUtil.getRegistry();
-
-		Map<String, Object> properties = new HashMap<String, Object>();
-
-		properties.put("destination.name", destination.getName());
-
-		registry.registerService(
-			MessageListener.class.getName(), baseSearchEngineMessageListener,
-			properties);
+		destination.register(
+			baseSearchEngineMessageListener, getOperatingClassloader());
 	}
 
 	protected void savePreviousSearchEngineListeners(
@@ -428,12 +399,8 @@ public abstract class AbstractSearchEngineConfigurator
 		Destination searchWriterDestination,
 		SearchEngineRegistration searchEngineRegistration) {
 
-		com.liferay.petra.messaging.spi.Destination spiSearchReaderDestination =
-			(com.liferay.petra.messaging.spi.Destination)
-				searchReaderDestination;
-
-		Collection<MessageListener> searchReaderMessageListeners =
-			spiSearchReaderDestination.getMessageListeners();
+		Set<MessageListener> searchReaderMessageListeners =
+			searchReaderDestination.getMessageListeners();
 
 		for (MessageListener searchReaderMessageListener :
 				searchReaderMessageListeners) {
@@ -445,12 +412,8 @@ public abstract class AbstractSearchEngineConfigurator
 				invokerMessageListener);
 		}
 
-		com.liferay.petra.messaging.spi.Destination spiSearchWriterDestination =
-			(com.liferay.petra.messaging.spi.Destination)
-				searchWriterDestination;
-
-		Collection<MessageListener> searchWriterMessageListeners =
-			spiSearchWriterDestination.getMessageListeners();
+		Set<MessageListener> searchWriterMessageListeners =
+			searchWriterDestination.getMessageListeners();
 
 		for (MessageListener searchWriterMessageListener :
 				searchWriterMessageListeners) {
@@ -486,8 +449,6 @@ public abstract class AbstractSearchEngineConfigurator
 	private final List<SearchEngineRegistration> _searchEngineRegistrations =
 		new ArrayList<>();
 	private Map<String, SearchEngine> _searchEngines;
-	private final Map<String, ServiceRegistration<?>>
-		_serviceRegistrations = new ConcurrentHashMap<>();
 
 	private static class SearchEngineRegistration {
 

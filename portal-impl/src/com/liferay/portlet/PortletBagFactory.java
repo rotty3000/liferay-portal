@@ -672,9 +672,9 @@ public class PortletBagFactory {
 				schedulerEventMessageListenerWrapper =
 					new SchedulerEventMessageListenerWrapper();
 
-			com.liferay.petra.messaging.api.MessageListener
+			com.liferay.portal.kernel.messaging.MessageListener
 				messageListener =
-					(com.liferay.petra.messaging.api.MessageListener)
+					(com.liferay.portal.kernel.messaging.MessageListener)
 						InstanceFactory.newInstance(
 							_classLoader,
 							schedulerEntry.getEventListenerClass());

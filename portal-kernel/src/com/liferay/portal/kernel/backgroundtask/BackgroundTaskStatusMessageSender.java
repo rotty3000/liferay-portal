@@ -14,7 +14,7 @@
 
 package com.liferay.portal.kernel.backgroundtask;
 
-import com.liferay.petra.messaging.api.Message;
+import com.liferay.portal.kernel.messaging.Message;
 
 /**
  * @author Andrew Betts

@@ -14,14 +14,9 @@
 
 package com.liferay.portal.kernel.license.messaging;
 
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
+import com.liferay.portal.kernel.messaging.Message;
 
 /**
  * @author Igor Beslic
@@ -67,38 +62,30 @@ public enum LicenseManagerMessageType {
 	}
 
 	public Message createMessage() {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		Message message = new Message();
 
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create(getDestinationName());
+		message.setDestinationName(getDestinationName());
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put("type", name());
 
-		messageBuilder.setPayload(jsonObject.toString());
-
-		Message message = messageBuilder.build();
+		message.setPayload(jsonObject.toString());
 
 		return message;
 	}
 
 	public Message createMessage(LCSPortletState lcsPortletState) {
-		MessageBuilderFactory messageBuilderFactory =
-			getMessageBuilderFactory();
+		Message message = new Message();
 
-		MessageBuilder messageBuilder =
-			messageBuilderFactory.create(getDestinationName());
+		message.setDestinationName(getDestinationName());
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put("state", lcsPortletState.intValue());
 		jsonObject.put("type", name());
 
-		messageBuilder.setPayload(jsonObject.toString());
-
-		Message message = messageBuilder.build();
+		message.setPayload(jsonObject.toString());
 
 		return message;
 	}
@@ -113,33 +100,5 @@ public enum LicenseManagerMessageType {
 
 		return null;
 	}
-
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-	private static final int _timeout = 1000;
 
 }

@@ -14,9 +14,6 @@
 
 package com.liferay.portal.servlet;
 
-import com.liferay.petra.messaging.api.DestinationNames;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.portal.events.EventsProcessorUtil;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterNode;
@@ -25,6 +22,8 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.security.auth.AuthenticatedUserUUIDStoreUtil;
 import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.PortalSessionContext;
@@ -33,9 +32,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.registry.Registry;
-import com.liferay.registry.RegistryUtil;
-import com.liferay.registry.ServiceTracker;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -110,15 +106,8 @@ public class PortalSessionDestroyer extends BasePortalLifecycle {
 				jsonObject.put("sessionId", _httpSession.getId());
 				jsonObject.put("userId", userId);
 
-				MessageBuilderFactory messageBuilderFactory =
-					getMessageBuilderFactory();
-
-				MessageBuilder messageBuilder =
-					messageBuilderFactory.create(DestinationNames.LIVE_USERS);
-
-				messageBuilder.setPayload(jsonObject.toString());
-
-				messageBuilder.send();
+				MessageBusUtil.sendMessage(
+					DestinationNames.LIVE_USERS, jsonObject.toString());
 			}
 
 			if (PropsValues.AUTH_USER_UUID_STORE_ENABLED) {
@@ -152,37 +141,8 @@ public class PortalSessionDestroyer extends BasePortalLifecycle {
 		}
 	}
 
-	private MessageBuilderFactory getMessageBuilderFactory() {
-		try {
-			ServiceTracker<MessageBuilderFactory, MessageBuilderFactory>
-				messageBuilderFactoryTracker = getMessageBuilderFactoryTracker();
-
-			MessageBuilderFactory messageBuilderFactory =
-				messageBuilderFactoryTracker.waitForService(_timeout);
-
-			return messageBuilderFactory;
-		}
-		catch (InterruptedException ie) {
-			throw new RuntimeException(ie);
-		}
-	}
-
-	private ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> getMessageBuilderFactoryTracker() {
-		Registry registry = RegistryUtil.getRegistry();
-
-		com.liferay.registry.Filter filter = registry.getFilter(
-			"(objectClass=com.liferay.petra.messaging.api.MessageBuilderFactory)");
-
-		ServiceTracker<MessageBuilderFactory, MessageBuilderFactory> messageBuilderFactoryTracker =
-			registry.trackServices(filter);
-
-		return messageBuilderFactoryTracker;
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(
 		PortalSessionDestroyer.class);
-
-	private static final int _timeout = 1000;
 
 	private final HttpSession _httpSession;
 
