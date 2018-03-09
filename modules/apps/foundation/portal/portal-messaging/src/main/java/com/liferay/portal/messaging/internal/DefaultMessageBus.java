@@ -68,7 +68,6 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 )
 public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
-	private BundleContext _bundleContext;
 	@Override
 	public synchronized void addDestination(Destination destination) {
 		doAddDestination(destination);
@@ -310,6 +309,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Deactivate
 	protected void deactivate() {
+		_bundleContext = null;
+
 		shutdown(true);
 
 		for (Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry : _destinations.values()) {
@@ -533,6 +534,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultMessageBus.class);
+
+	private BundleContext _bundleContext;
 
 	private final Map<String, Map.Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>>>
 		_destinations = new HashMap<>();
