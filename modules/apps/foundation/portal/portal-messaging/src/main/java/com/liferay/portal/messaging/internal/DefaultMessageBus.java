@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -178,7 +177,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized Destination removeDestination(
 		String destinationName, boolean closeOnRemove) {
 
-		Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry = _destinations.remove(destinationName);
+		Map.Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry = _destinations.remove(destinationName);
 
 		if (entry == null) {
 			return null;
@@ -313,7 +312,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		shutdown(true);
 
-		for (Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry : _destinations.values()) {
+		for (Map.Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry : _destinations.values()) {
 			entry.getValue().unregister();
 			entry.getKey().destroy();
 		}
