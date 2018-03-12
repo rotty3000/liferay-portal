@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBus;
 import com.liferay.portal.kernel.messaging.MessageBusEventListener;
 import com.liferay.portal.kernel.messaging.MessageListener;
+import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -77,7 +78,18 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public boolean addMessageBusEventListener(
 		MessageBusEventListener messageBusEventListener) {
 
-		return _messageBusEventListeners.add(messageBusEventListener);
+		BundleContext bundleContext = getBundleContext();
+
+		Dictionary<String, Object> properties = new HashMapDictionary<>();
+
+		ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>
+			serviceRegistration = bundleContext.registerService(
+			com.liferay.petra.messaging.api.MessageBusEventListener.class,
+			messageBusEventListener, properties);
+
+		return _messageBusEventListeners.add(
+			new AbstractMap.SimpleImmutableEntry<>(messageBusEventListener,
+				serviceRegistration));
 	}
 
 	@Override
@@ -194,10 +206,19 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		destination.unregisterMessageListeners();
 
-		for (MessageBusEventListener messageBusEventListener :
+		for (Map.Entry<MessageBusEventListener,
+			ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>> mapEntry :
 				_messageBusEventListeners) {
 
+			MessageBusEventListener messageBusEventListener =
+				mapEntry.getKey();
+
 			messageBusEventListener.destinationRemoved(destination);
+
+			ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>
+				serviceRegistration = mapEntry.getValue();
+
+			serviceRegistration.unregister();
 		}
 
 		entry.getValue().unregister();
@@ -208,6 +229,14 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	@Override
 	public boolean removeMessageBusEventListener(
 		MessageBusEventListener messageBusEventListener) {
+
+		for (Map.Entry<MessageBusEventListener, ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>> mapEntry
+			: _messageBusEventListeners) {
+
+			if (mapEntry.getKey().equals(messageBusEventListener)) {
+				_messageBusEventListeners.remove(mapEntry);
+			}
+		}
 
 		return _messageBusEventListeners.remove(messageBusEventListener);
 	}
@@ -334,8 +363,11 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		_destinations.put(destination.getName(), new AbstractMap.SimpleImmutableEntry<>(destination, serviceRegistration));
 
-		for (MessageBusEventListener messageBusEventListener :
-				_messageBusEventListeners) {
+		for (Map.Entry<MessageBusEventListener,
+			ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>> mapEntry :
+			_messageBusEventListeners) {
+
+			MessageBusEventListener messageBusEventListener = mapEntry.getKey();
 
 			messageBusEventListener.destinationAdded(destination);
 		}
@@ -547,8 +579,9 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
 	private final Map<String, String> _factoryPidsToDestinationName =
 		new ConcurrentHashMap<>();
-	private final Set<MessageBusEventListener> _messageBusEventListeners =
-		Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final Set<Map.Entry<MessageBusEventListener,
+		ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>>>
+		_messageBusEventListeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private final Map<String, List<MessageListener>> _queuedMessageListeners =
 		new HashMap<>();
 
