@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
@@ -303,13 +304,11 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Activate
 	protected void activate(BundleContext bundleContext) {
-		_bundleContext = bundleContext;
+
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		_bundleContext = null;
-
 		shutdown(true);
 
 		for (Map.Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry : _destinations.values()) {
@@ -326,11 +325,11 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		Dictionary<String, Object> properties = new Hashtable<>();
 		properties.put("destination.name", destination.getName());
 
-		// TODO remove cast
+		BundleContext bundleContext = getBundleContext();
+
 		ServiceRegistration<com.liferay.petra.messaging.api.Destination> serviceRegistration =
-			_bundleContext.registerService(
-				com.liferay.petra.messaging.api.Destination.class,
-				(com.liferay.petra.messaging.api.Destination)destination,
+			bundleContext.registerService(
+				com.liferay.petra.messaging.api.Destination.class, destination,
 				properties);
 
 		_destinations.put(destination.getName(), new AbstractMap.SimpleImmutableEntry<>(destination, serviceRegistration));
@@ -531,12 +530,18 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
+	private BundleContext getBundleContext() {
+		BundleContext bundleContext =
+			FrameworkUtil.getBundle(getClass()).getBundleContext();
+
+		return bundleContext;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		DefaultMessageBus.class);
 
-	private BundleContext _bundleContext;
-
-	private final Map<String, Map.Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>>>
+	private final Map<String, Map.Entry<Destination,
+		ServiceRegistration<com.liferay.petra.messaging.api.Destination>>>
 		_destinations = new HashMap<>();
 	private final Map<String, DestinationWorkerConfiguration>
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
