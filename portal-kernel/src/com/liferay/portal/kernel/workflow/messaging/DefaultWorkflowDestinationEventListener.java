@@ -29,7 +29,8 @@ public class DefaultWorkflowDestinationEventListener
 
 	@Override
 	public void messageListenerRegistered(
-		String destinationName, MessageListener messageListener) {
+		String destinationName,
+		com.liferay.petra.messaging.api.MessageListener messageListener) {
 
 		if (_log.isInfoEnabled()) {
 			_log.info(
@@ -64,7 +65,8 @@ public class DefaultWorkflowDestinationEventListener
 
 	@Override
 	public void messageListenerUnregistered(
-		String destinationName, MessageListener messageListener) {
+		String destinationName,
+		com.liferay.petra.messaging.api.MessageListener messageListener) {
 
 		if (!isProceed(destinationName, messageListener)) {
 			return;
@@ -95,6 +97,22 @@ public class DefaultWorkflowDestinationEventListener
 
 		MessageBusUtil.registerMessageListener(
 			DestinationNames.WORKFLOW_TASK, _workflowTaskManagerListener);
+	}
+
+	@Override
+	public void messageListenerRegistered(
+		String destinationName, MessageListener messageListener) {
+
+		messageListenerRegistered(destinationName,
+			(com.liferay.petra.messaging.api.MessageListener) messageListener);
+	}
+
+	@Override
+	public void messageListenerUnregistered(
+		String destinationName, MessageListener messageListener) {
+
+		messageListenerUnregistered(destinationName,
+			(com.liferay.petra.messaging.api.MessageListener) messageListener);
 	}
 
 	public void setWorkflowComparatorFactoryListener(
@@ -139,6 +157,14 @@ public class DefaultWorkflowDestinationEventListener
 
 	protected boolean isProceed(
 		String destinationName, MessageListener messageListener) {
+
+		return isProceed(destinationName,
+			(com.liferay.petra.messaging.api.MessageListener) messageListener);
+	}
+
+	protected boolean isProceed(
+		String destinationName,
+		com.liferay.petra.messaging.api.MessageListener messageListener) {
 
 		if (messageListener.equals(_workflowEngineManagerListener)) {
 			return false;
