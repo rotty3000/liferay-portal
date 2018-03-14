@@ -17,7 +17,8 @@ package com.liferay.portal.kernel.messaging;
 /**
  * @author Michael C. Han
  */
-public interface DestinationEventListener {
+public interface DestinationEventListener extends
+	com.liferay.petra.messaging.api.DestinationEventListener {
 
 	public void messageListenerRegistered(
 		String destinationName, MessageListener messageListener);
