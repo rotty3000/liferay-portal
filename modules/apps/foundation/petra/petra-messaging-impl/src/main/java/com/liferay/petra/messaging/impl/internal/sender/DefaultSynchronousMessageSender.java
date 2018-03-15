@@ -73,7 +73,7 @@ public class DefaultSynchronousMessageSender
 		// Create a temporary destination if no response destination is
 		// configured
 
-		if (responseDestinationName == null ||
+		if ((responseDestinationName == null) ||
 			responseDestinationName.isEmpty() ||
 			!_messageBus.hasDestination(responseDestinationName)) {
 
