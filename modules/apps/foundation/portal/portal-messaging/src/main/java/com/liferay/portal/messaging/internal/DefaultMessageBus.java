@@ -70,12 +70,13 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	@Override
 	public synchronized void addDestination(Destination destination) {
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
+
 		properties.put("destination.name", destination.getName());
 
-		BundleContext bundleContext = getBundleContext();
+		BundleContext bundleContext = _getBundleContext();
 
-		ServiceRegistration<com.liferay.petra.messaging.api.Destination> serviceRegistration =
-			bundleContext.registerService(
+		ServiceRegistration<com.liferay.petra.messaging.api.Destination>
+			serviceRegistration = bundleContext.registerService(
 				com.liferay.petra.messaging.api.Destination.class, destination,
 				properties);
 
@@ -96,16 +97,18 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public boolean addMessageBusEventListener(
 		MessageBusEventListener messageBusEventListener) {
 
-		BundleContext bundleContext = getBundleContext();
+		BundleContext bundleContext = _getBundleContext();
 
-		ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>
-			serviceRegistration = bundleContext.registerService(
-			com.liferay.petra.messaging.api.MessageBusEventListener.class,
-			messageBusEventListener, null);
+		ServiceRegistration<com.liferay.petra.messaging.api.
+			MessageBusEventListener>
+				serviceRegistration = bundleContext.registerService(
+					com.liferay.petra.messaging.api.MessageBusEventListener.
+						class,
+					messageBusEventListener, null);
 
 		boolean registration = _messageBusEventListeners.add(
-			new AbstractMap.SimpleImmutableEntry<>(messageBusEventListener,
-				serviceRegistration));
+			new AbstractMap.SimpleImmutableEntry<>(
+				messageBusEventListener, serviceRegistration));
 
 		return registration;
 	}
@@ -143,7 +146,9 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public Collection<Destination> getDestinations() {
 		return _destinations.values().stream().map(
 			entry -> entry.getKey()
-		).collect(Collectors.toList());
+		).collect(
+			Collectors.toList()
+		);
 	}
 
 	@Override
@@ -159,8 +164,10 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	@Override
 	public boolean hasMessageListener(String destinationName) {
 		return _messageListeners.stream().filter(
-			entry -> destinationName.equals(entry.getValue().getReference().getProperty("destination.name"))
-		).findFirst().isPresent();
+			entry -> destinationName.equals(
+				entry.getValue().getReference().getProperty("destination.name"))
+		).findFirst(
+		).isPresent();
 	}
 
 	@Override
@@ -171,10 +178,10 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 		properties.put("destination.name", destinationName);
 
-		ServiceRegistration<com.liferay.petra.messaging.api.MessageListener> serviceRegistration =
-			getBundleContext().registerService(
+		ServiceRegistration<com.liferay.petra.messaging.api.MessageListener>
+			serviceRegistration = _getBundleContext().registerService(
 				com.liferay.petra.messaging.api.MessageListener.class,
-			messageListener, properties);
+				messageListener, properties);
 
 		_messageListeners.add(
 			new AbstractMap.SimpleEntry<>(
@@ -192,8 +199,9 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	public synchronized Destination removeDestination(
 		String destinationName, boolean closeOnRemove) {
 
-		Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry =
-			_destinations.remove(destinationName);
+		Entry<Destination,
+			ServiceRegistration<com.liferay.petra.messaging.api.Destination>>
+				entry = _destinations.remove(destinationName);
 
 		if (entry == null) {
 			return null;
@@ -261,7 +269,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Override
 	public synchronized void shutdown(boolean force) {
-		_destinations.values().stream().forEach(entry -> entry.getKey().close(force));
+		_destinations.values().stream().forEach(
+			entry -> entry.getKey().close(force));
 	}
 
 	@Override
@@ -305,11 +314,19 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	protected void deactivate() {
 		shutdown(true);
 
-		for (Entry<Destination, ServiceRegistration<com.liferay.petra.messaging.api.Destination>> entry :
-				_destinations.values()) {
+		for (Entry<Destination,
+				ServiceRegistration
+					<com.liferay.petra.messaging.api.Destination>>
+					entry : _destinations.values()) {
 
-			entry.getValue().unregister();
-			entry.getKey().destroy();
+			ServiceRegistration<com.liferay.petra.messaging.api.Destination>
+				serviceRegistration = entry.getValue();
+
+			serviceRegistration.unregister();
+
+			Destination destination = entry.getKey();
+
+			destination.destroy();
 		}
 
 		_messageBusEventListeners.clear();
@@ -375,19 +392,22 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 			return;
 		}
 
-		BundleContext bundleContext = getBundleContext();
+		BundleContext bundleContext = _getBundleContext();
 
 		Dictionary<String, Object> dictionaryProperties = new Hashtable<>();
 
 		dictionaryProperties.put("destination.name", destinationName);
 
-		ServiceRegistration<com.liferay.petra.messaging.api.DestinationEventListener>
-			serviceRegistration = bundleContext.registerService(
-			com.liferay.petra.messaging.api.DestinationEventListener.class,
-			destinationEventListener, dictionaryProperties);
+		ServiceRegistration<com.liferay.petra.messaging.api.
+			DestinationEventListener>
+				serviceRegistration = bundleContext.registerService(
+					com.liferay.petra.messaging.api.DestinationEventListener.
+						class,
+					destinationEventListener, dictionaryProperties);
 
-		_destinationEventListeners.add(new AbstractMap.SimpleImmutableEntry<>(
-			destinationEventListener, serviceRegistration));
+		_destinationEventListeners.add(
+			new AbstractMap.SimpleImmutableEntry<>(
+				destinationEventListener, serviceRegistration));
 	}
 
 	@Reference(
@@ -474,7 +494,7 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		}
 	}
 
-	private BundleContext getBundleContext() {
+	private BundleContext _getBundleContext() {
 		BundleContext bundleContext = FrameworkUtil.getBundle(
 			getClass()).getBundleContext();
 
@@ -485,12 +505,13 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		DefaultMessageBus.class);
 
 	private final Set<Entry<DestinationEventListener,
-		ServiceRegistration<com.liferay.petra.messaging.api.DestinationEventListener>>>
-		_destinationEventListeners = Collections.newSetFromMap(
-			new ConcurrentHashMap<>());
+		ServiceRegistration<com.liferay.petra.messaging.api.
+			DestinationEventListener>>>
+				_destinationEventListeners = Collections.newSetFromMap(
+					new ConcurrentHashMap<>());
 	private final Map<String, Entry<Destination,
 		ServiceRegistration<com.liferay.petra.messaging.api.Destination>>>
-		_destinations = new HashMap<>();
+			_destinations = new HashMap<>();
 	private final Map<String, DestinationWorkerConfiguration>
 		_destinationWorkerConfigurations = new ConcurrentHashMap<>();
 	private final Map<String, String> _factoryPidsToDestinationName =
@@ -500,10 +521,12 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 	private com.liferay.petra.messaging.api.MessageBus _messageBus;
 
 	private final Set<Entry<MessageBusEventListener,
-		ServiceRegistration<com.liferay.petra.messaging.api.MessageBusEventListener>>>
-		_messageBusEventListeners = Collections.newSetFromMap(
-			new ConcurrentHashMap<>());
-	private final List<Entry<MessageListener, ServiceRegistration<com.liferay.petra.messaging.api.MessageListener>>>
-		_messageListeners = new CopyOnWriteArrayList<>();
+		ServiceRegistration<com.liferay.petra.messaging.api.
+			MessageBusEventListener>>>
+				_messageBusEventListeners = Collections.newSetFromMap(
+					new ConcurrentHashMap<>());
+	private final List<Entry<MessageListener,
+		ServiceRegistration<com.liferay.petra.messaging.api.MessageListener>>>
+			_messageListeners = new CopyOnWriteArrayList<>();
 
 }
