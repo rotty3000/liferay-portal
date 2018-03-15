@@ -88,12 +88,6 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		destination.open();
 	}
 
-	@Reference(
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC,
-		policyOption = ReferencePolicyOption.GREEDY,
-		unbind = "removeMessageBusEventListener"
-	)
 	public boolean addMessageBusEventListener(
 		MessageBusEventListener messageBusEventListener) {
 
@@ -414,6 +408,18 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC,
 		policyOption = ReferencePolicyOption.GREEDY,
+		unbind = "unregisterMessageBusEventListener"
+	)
+	protected void registerMessageBusEventListener(
+		MessageBusEventListener messageBusEventListener) {
+
+		addMessageBusEventListener(messageBusEventListener);
+	}
+
+	@Reference(
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY,
 		target = "(destination.name=*)", unbind = "unregisterMessageListener"
 	)
 	protected synchronized void registerMessageListener(
@@ -462,6 +468,12 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 				return false;
 			});
+	}
+
+	protected void unregisterMessageBusEventListener(
+		MessageBusEventListener messageBusEventListener) {
+
+		removeMessageBusEventListener(messageBusEventListener);
 	}
 
 	protected synchronized void unregisterMessageListener(
