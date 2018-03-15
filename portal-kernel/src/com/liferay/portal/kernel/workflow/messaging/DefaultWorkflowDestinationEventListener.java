@@ -64,6 +64,14 @@ public class DefaultWorkflowDestinationEventListener
 	}
 
 	@Override
+	public void messageListenerRegistered(
+		String destinationName, MessageListener messageListener) {
+
+		messageListenerRegistered(destinationName,
+			(com.liferay.petra.messaging.api.MessageListener)messageListener);
+	}
+
+	@Override
 	public void messageListenerUnregistered(
 		String destinationName,
 		com.liferay.petra.messaging.api.MessageListener messageListener) {
@@ -100,19 +108,11 @@ public class DefaultWorkflowDestinationEventListener
 	}
 
 	@Override
-	public void messageListenerRegistered(
-		String destinationName, MessageListener messageListener) {
-
-		messageListenerRegistered(destinationName,
-			(com.liferay.petra.messaging.api.MessageListener) messageListener);
-	}
-
-	@Override
 	public void messageListenerUnregistered(
 		String destinationName, MessageListener messageListener) {
 
 		messageListenerUnregistered(destinationName,
-			(com.liferay.petra.messaging.api.MessageListener) messageListener);
+			(com.liferay.petra.messaging.api.MessageListener)messageListener);
 	}
 
 	public void setWorkflowComparatorFactoryListener(
@@ -156,13 +156,6 @@ public class DefaultWorkflowDestinationEventListener
 	}
 
 	protected boolean isProceed(
-		String destinationName, MessageListener messageListener) {
-
-		return isProceed(destinationName,
-			(com.liferay.petra.messaging.api.MessageListener) messageListener);
-	}
-
-	protected boolean isProceed(
 		String destinationName,
 		com.liferay.petra.messaging.api.MessageListener messageListener) {
 
@@ -172,6 +165,13 @@ public class DefaultWorkflowDestinationEventListener
 		else {
 			return true;
 		}
+	}
+
+	protected boolean isProceed(
+		String destinationName, MessageListener messageListener) {
+
+		return isProceed(destinationName,
+			(com.liferay.petra.messaging.api.MessageListener)messageListener);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(

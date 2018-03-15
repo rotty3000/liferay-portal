@@ -15,9 +15,9 @@
 package com.liferay.petra.messaging.test;
 
 import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
-import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 
 import java.util.concurrent.Callable;
 

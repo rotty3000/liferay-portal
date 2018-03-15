@@ -48,7 +48,8 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 	public void receive(Message message) throws MessageListenerException {
 		_message.set(message);
 
-		MessageBuilder messageBuilder = _messageBuilderFactory.create(DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
+		MessageBuilder messageBuilder = _messageBuilderFactory.create(
+			DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
 
 		messageBuilder.setResponseId(message.getResponseId());
 
@@ -58,7 +59,7 @@ public class TBMessageListener implements Callable<Message>, MessageListener {
 	}
 
 	private final AtomicReference<Message> _message = new AtomicReference<>();
-	
+
 	@Reference
 	private MessageBuilderFactory _messageBuilderFactory;
 

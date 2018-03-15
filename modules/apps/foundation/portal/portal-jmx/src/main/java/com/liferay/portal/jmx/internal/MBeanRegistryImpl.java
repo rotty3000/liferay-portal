@@ -135,9 +135,8 @@ public class MBeanRegistryImpl implements MBeanRegistry {
 				"(&(jmx.objectname=*)(objectClass=*MBean)" +
 					"(!(objectClass=javax.management.DynamicMBean)))");
 
-			_serviceTracker = new ServiceTracker<Object, Object>(
-				_bundleContext, filter,
-				new MBeanServiceTrackerCustomizer());
+			_serviceTracker = new ServiceTracker<>(
+				_bundleContext, filter, new MBeanServiceTrackerCustomizer());
 
 			_serviceTracker.open();
 		}

@@ -29,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 public class TBSerialDestination extends DestinationConfiguration {
 
 	public static final String DESTINATION_NAME = "serial/test";
-	
+
 	public TBSerialDestination() {
 		super(DestinationType.SERIAL, DESTINATION_NAME);
 	}

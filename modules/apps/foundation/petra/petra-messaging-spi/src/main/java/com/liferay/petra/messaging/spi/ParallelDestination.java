@@ -46,7 +46,8 @@ public class ParallelDestination extends BaseAsyncDestination {
 
 		final Thread dispatchThread = Thread.currentThread();
 
-		NoticeableThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+		NoticeableThreadPoolExecutor threadPoolExecutor =
+			getThreadPoolExecutor();
 
 		for (final MessageListener messageListener : messageListeners) {
 			Runnable runnable = new MessageRunnable(message) {

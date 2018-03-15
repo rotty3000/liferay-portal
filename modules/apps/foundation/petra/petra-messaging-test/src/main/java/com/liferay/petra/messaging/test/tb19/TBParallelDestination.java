@@ -27,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 	service = DestinationConfiguration.class
 )
 public class TBParallelDestination extends DestinationConfiguration {
-	
+
 	public static final String DESTINATION_NAME = "parallel/test";
 
 	public TBParallelDestination() {

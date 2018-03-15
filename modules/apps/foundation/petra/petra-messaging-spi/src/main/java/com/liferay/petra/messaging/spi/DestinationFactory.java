@@ -28,6 +28,7 @@ public interface DestinationFactory {
 		DestinationConfiguration destinationConfiguration,
 		Map<String, Object> properties);
 
-	public void dispose(com.liferay.petra.messaging.api.Destination destination);
+	public void dispose(
+		com.liferay.petra.messaging.api.Destination destination);
 
 }

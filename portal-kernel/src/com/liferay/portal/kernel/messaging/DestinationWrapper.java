@@ -62,9 +62,55 @@ public class DestinationWrapper implements Destination {
 		this.destination.destroy();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getDestinationEventListenerCount()
+	 */
+	@Override
+	public int getDestinationEventListenerCount() {
+
+		// TODO Auto-generated method stub
+
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getDestinationEventListeners()
+	 */
+	@Override
+	public Collection<com.liferay.petra.messaging.api.DestinationEventListener>
+	getDestinationEventListeners() {
+
+		// TODO Auto-generated method stub
+
+		return null;
+	}
+
 	@Override
 	public DestinationStatistics getDestinationStatistics() {
 		return destination.getDestinationStatistics();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getInboundMessageProcessorFactories()
+	 */
+	@Override
+	public Collection<InboundMessageProcessorFactory>
+	getInboundMessageProcessorFactories() {
+
+		// TODO Auto-generated method stub
+
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getInboundMessageProcessorFactoryCount()
+	 */
+	@Override
+	public int getInboundMessageProcessorFactoryCount() {
+
+		// TODO Auto-generated method stub
+
+		return 0;
 	}
 
 	@Override
@@ -80,6 +126,29 @@ public class DestinationWrapper implements Destination {
 	@Override
 	public String getName() {
 		return destination.getName();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getOutboundMessageProcessorFactories()
+	 */
+	@Override
+	public Collection<OutboundMessageProcessorFactory>
+	getOutboundMessageProcessorFactories() {
+
+		// TODO Auto-generated method stub
+
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#getOutboundMessageProcessorFactoryCount()
+	 */
+	@Override
+	public int getOutboundMessageProcessorFactoryCount() {
+
+		// TODO Auto-generated method stub
+
+		return 0;
 	}
 
 	@Override
@@ -117,6 +186,16 @@ public class DestinationWrapper implements Destination {
 		destination.removeDestinationEventListeners();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.liferay.petra.messaging.spi.Destination#send(com.liferay.petra.messaging.api.Message)
+	 */
+	@Override
+	public void send(com.liferay.petra.messaging.api.Message message) {
+
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	public void send(Message message) {
 		destination.send(message);
@@ -133,68 +212,5 @@ public class DestinationWrapper implements Destination {
 	}
 
 	protected Destination destination;
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getDestinationEventListenerCount()
-	 */
-	@Override
-	public int getDestinationEventListenerCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getDestinationEventListeners()
-	 */
-	@Override
-	public Collection<com.liferay.petra.messaging.api.DestinationEventListener> getDestinationEventListeners() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getInboundMessageProcessorFactories()
-	 */
-	@Override
-	public Collection<InboundMessageProcessorFactory> getInboundMessageProcessorFactories() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getInboundMessageProcessorFactoryCount()
-	 */
-	@Override
-	public int getInboundMessageProcessorFactoryCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getOutboundMessageProcessorFactories()
-	 */
-	@Override
-	public Collection<OutboundMessageProcessorFactory> getOutboundMessageProcessorFactories() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#getOutboundMessageProcessorFactoryCount()
-	 */
-	@Override
-	public int getOutboundMessageProcessorFactoryCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.liferay.petra.messaging.spi.Destination#send(com.liferay.petra.messaging.api.Message)
-	 */
-	@Override
-	public void send(com.liferay.petra.messaging.api.Message message) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

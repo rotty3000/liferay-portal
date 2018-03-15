@@ -110,8 +110,9 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			_rejectedExecutionHandler = createRejectionExecutionHandler();
 		}
 
-		NoticeableThreadPoolExecutor threadPoolExecutor = new NoticeableThreadPoolExecutor(
-			_workersCoreSize, _workersMaxSize, 60L, TimeUnit.SECONDS,
+		NoticeableThreadPoolExecutor threadPoolExecutor =
+			new NoticeableThreadPoolExecutor(
+				_workersCoreSize, _workersMaxSize, 60L, TimeUnit.SECONDS,
 			new LinkedBlockingQueue<Runnable>(_maximumQueueSize),
 			Executors.defaultThreadFactory(), _rejectedExecutionHandler,
 			new ThreadPoolHandlerAdapter());
@@ -149,7 +150,8 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 			return;
 		}
 
-		NoticeableThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+		NoticeableThreadPoolExecutor threadPoolExecutor =
+			getThreadPoolExecutor();
 
 		if (threadPoolExecutor.isShutdown()) {
 			throw new IllegalStateException(

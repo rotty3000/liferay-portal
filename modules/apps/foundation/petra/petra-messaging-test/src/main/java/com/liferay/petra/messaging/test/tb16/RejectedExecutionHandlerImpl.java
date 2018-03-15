@@ -14,7 +14,6 @@
 
 package com.liferay.petra.messaging.test.tb16;
 
-import com.liferay.petra.messaging.spi.MessageRunnable;
 import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 
 import java.util.Map;

@@ -14,18 +14,6 @@
 
 package com.liferay.petra.messaging.test;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Filter;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.util.tracker.ServiceTracker;
-
 import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.DestinationStatistics;
 import com.liferay.petra.messaging.api.InboundMessageProcessor;
@@ -36,6 +24,19 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import com.liferay.petra.messaging.test.tb13.TBSynchronousDestination;
 import com.liferay.petra.messaging.test.tb14.TBParallelDestination;
 import com.liferay.petra.messaging.test.tb15.TBSerialDestination;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Jesse Rao
@@ -78,7 +79,9 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
+		else if (destinationName.equals(
+					TBParallelDestination.DESTINATION_NAME)) {
+
 			Assert.assertEquals(
 				0, destinationStatistics.getPendingMessageCount());
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
@@ -133,7 +136,9 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
+		else if (destinationName.equals(
+					TBParallelDestination.DESTINATION_NAME)) {
+
 			Assert.assertEquals(
 				5, destinationStatistics.getCurrentThreadCount());
 			Assert.assertEquals(
@@ -175,7 +180,9 @@ public class DestinationStatisticsTest extends TestUtil {
 			Assert.assertEquals(
 				0, destinationStatistics.getMinThreadPoolSize());
 		}
-		else if (destinationName.equals(TBParallelDestination.DESTINATION_NAME)) {
+		else if (destinationName.equals(
+					TBParallelDestination.DESTINATION_NAME)) {
+
 			Assert.assertEquals(0, destinationStatistics.getSentMessageCount());
 			Assert.assertEquals(
 				5, destinationStatistics.getActiveThreadCount());
@@ -293,8 +300,9 @@ public class DestinationStatisticsTest extends TestUtil {
 				destination.getDestinationStatistics());
 
 			for (int i = 0; i < MAX; i++) {
-				MessageBuilder messageBuilder = messageBuilderFactory.create(destinationName);
-				
+				MessageBuilder messageBuilder = messageBuilderFactory.create(
+					destinationName);
+
 				messageBuilder.send();
 			}
 

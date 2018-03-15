@@ -27,7 +27,8 @@ import java.util.Set;
 /**
  * @author Michael C. Han
  */
-public interface Destination extends com.liferay.petra.messaging.api.Destination {
+public interface Destination
+	extends com.liferay.petra.messaging.api.Destination {
 
 	public void close();
 

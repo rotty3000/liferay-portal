@@ -30,8 +30,7 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Raymond Augé
  */
 @Component(
-	factory = "parallel.destination",
-	service = ParallelDestination.class
+	factory = "parallel.destination", service = ParallelDestination.class
 )
 public class ParallelDestinationFactory extends ParallelDestination {
 

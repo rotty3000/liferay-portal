@@ -169,7 +169,8 @@ public abstract class BaseDestination implements Destination {
 
 	@Override
 	public Set<? extends MessageListener> getMessageListeners() {
-		return Collections.unmodifiableSet(new HashSet<>(messageListeners.values()));
+		return Collections.unmodifiableSet(
+			new HashSet<>(messageListeners.values()));
 	}
 
 	@Override

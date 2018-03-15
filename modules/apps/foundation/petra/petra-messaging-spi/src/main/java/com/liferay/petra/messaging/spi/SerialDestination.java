@@ -51,7 +51,8 @@ public class SerialDestination extends BaseAsyncDestination {
 
 		final Thread dispatchThread = Thread.currentThread();
 
-		NoticeableThreadPoolExecutor threadPoolExecutor = getThreadPoolExecutor();
+		NoticeableThreadPoolExecutor threadPoolExecutor =
+			getThreadPoolExecutor();
 
 		Runnable runnable = new MessageRunnable(message) {
 

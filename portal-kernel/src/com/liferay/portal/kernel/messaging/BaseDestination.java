@@ -28,41 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Michael C. Han
  * @author Shuyang Zhou
  */
-public abstract class BaseDestination implements Destination, com.liferay.petra.messaging.spi.Destination {
-
-	@Override
-	public int getDestinationEventListenerCount() {
-		return 0;
-	}
-
-	@Override
-	public Collection<com.liferay.petra.messaging.api.DestinationEventListener> getDestinationEventListeners() {
-		return null;
-	}
-
-	@Override
-	public Collection<InboundMessageProcessorFactory> getInboundMessageProcessorFactories() {
-		return null;
-	}
-
-	@Override
-	public int getInboundMessageProcessorFactoryCount() {
-		return 0;
-	}
-
-	@Override
-	public Collection<OutboundMessageProcessorFactory> getOutboundMessageProcessorFactories() {
-		return null;
-	}
-
-	@Override
-	public int getOutboundMessageProcessorFactoryCount() {
-		return 0;
-	}
-
-	@Override
-	public void send(com.liferay.petra.messaging.api.Message message) {
-	}
+public abstract class BaseDestination
+	implements Destination, com.liferay.petra.messaging.spi.Destination {
 
 	@Override
 	public boolean addDestinationEventListener(
@@ -117,8 +84,32 @@ public abstract class BaseDestination implements Destination, com.liferay.petra.
 	}
 
 	@Override
+	public int getDestinationEventListenerCount() {
+		return 0;
+	}
+
+	@Override
+	public Collection<com.liferay.petra.messaging.api.DestinationEventListener>
+	getDestinationEventListeners() {
+
+		return null;
+	}
+
+	@Override
 	public DestinationStatistics getDestinationStatistics() {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Collection<InboundMessageProcessorFactory>
+	getInboundMessageProcessorFactories() {
+
+		return null;
+	}
+
+	@Override
+	public int getInboundMessageProcessorFactoryCount() {
+		return 0;
 	}
 
 	@Override
@@ -134,6 +125,18 @@ public abstract class BaseDestination implements Destination, com.liferay.petra.
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Collection<OutboundMessageProcessorFactory>
+	getOutboundMessageProcessorFactories() {
+
+		return null;
+	}
+
+	@Override
+	public int getOutboundMessageProcessorFactoryCount() {
+		return 0;
 	}
 
 	@Override
@@ -178,6 +181,10 @@ public abstract class BaseDestination implements Destination, com.liferay.petra.
 	@Override
 	public void removeDestinationEventListeners() {
 		_destinationEventListeners.clear();
+	}
+
+	@Override
+	public void send(com.liferay.petra.messaging.api.Message message) {
 	}
 
 	@Override
