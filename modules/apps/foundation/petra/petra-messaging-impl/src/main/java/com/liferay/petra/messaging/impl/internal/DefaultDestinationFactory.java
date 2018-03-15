@@ -47,23 +47,14 @@ public class DefaultDestinationFactory implements DestinationFactory {
 
 		ComponentFactory componentFactory;
 
-		switch (destinationType) {
-			case PARALLEL:
-				componentFactory = _parallelDestinationFactory;
-
-				break;
-			case SERIAL:
-				componentFactory = _serialDestinationFactory;
-
-				break;
-			case SYNCHRONOUS:
-				componentFactory = _synchronousDestinationFactory;
-
-				break;
-			default:
-				componentFactory = _parallelDestinationFactory;
-
-				break;
+		if (destinationType.equals(DestinationType.SERIAL)) {
+			componentFactory = _serialDestinationFactory;
+		}
+		else if (destinationType.equals(DestinationType.SYNCHRONOUS)) {
+			componentFactory = _synchronousDestinationFactory;
+		}
+		else {
+			componentFactory = _parallelDestinationFactory;
 		}
 
 		String targetFilter = String.format(
