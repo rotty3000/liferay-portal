@@ -14,17 +14,17 @@
 
 package com.liferay.petra.messaging.test.tb13;
 
-import org.osgi.service.component.annotations.Component;
-
 import com.liferay.petra.messaging.api.DestinationConfiguration;
 import com.liferay.petra.messaging.api.DestinationType;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Raymond Augé
  */
 @Component(service = DestinationConfiguration.class)
 public class TBSynchronousDestination extends DestinationConfiguration {
-	
+
 	public static final String DESTINATION_NAME = "synchronous/test";
 
 	public TBSynchronousDestination() {

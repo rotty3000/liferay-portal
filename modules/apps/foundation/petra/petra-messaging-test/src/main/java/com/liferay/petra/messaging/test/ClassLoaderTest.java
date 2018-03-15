@@ -18,7 +18,6 @@ import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.DestinationConfiguration;
 import com.liferay.petra.messaging.api.DestinationType;
 import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.spi.MessageImpl;
 
@@ -32,7 +31,6 @@ import org.junit.Test;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Michael C. Han
@@ -62,7 +60,7 @@ public class ClassLoaderTest extends TestUtil {
 
 		try {
 			Collection<Destination> destinations = messageBus.getDestinations();
-			
+
 			Assert.assertEquals(
 				destinations.toString(), 4, destinations.size());
 

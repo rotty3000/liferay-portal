@@ -29,7 +29,8 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @author Jesse Rao
  */
 @Component(
-	property = {"destination.name=" + TBSerialDestination.DESTINATION_NAME}, scope = ServiceScope.SINGLETON,
+	property = {"destination.name=" + TBSerialDestination.DESTINATION_NAME},
+	scope = ServiceScope.SINGLETON,
 	service = {Callable.class, ExecutorServiceRegistrar.class}
 )
 public class ExecutorServiceRegistrarImpl

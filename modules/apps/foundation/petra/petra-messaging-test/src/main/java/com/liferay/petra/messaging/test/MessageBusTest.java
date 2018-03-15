@@ -18,9 +18,9 @@ import com.liferay.petra.messaging.api.Destination;
 import com.liferay.petra.messaging.api.DestinationNames;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.spi.MessageImpl;
-import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 
 import java.util.ArrayList;
 import java.util.Collection;

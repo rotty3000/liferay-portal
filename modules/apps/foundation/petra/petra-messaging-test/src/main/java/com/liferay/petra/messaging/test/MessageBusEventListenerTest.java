@@ -57,7 +57,8 @@ public class MessageBusEventListenerTest extends TestUtil {
 
 		Dictionary<String, Object> properties = new Hashtable<>();
 
-		properties.put("destination.name", TBSynchronousDestination.DESTINATION_NAME);
+		properties.put(
+			"destination.name", TBSynchronousDestination.DESTINATION_NAME);
 
 		ServiceRegistration<MessageBusEventListener> serviceRegistration =
 			bundleContext.registerService(

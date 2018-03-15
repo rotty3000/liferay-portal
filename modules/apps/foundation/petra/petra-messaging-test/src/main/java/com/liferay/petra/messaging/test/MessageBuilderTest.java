@@ -17,9 +17,9 @@ package com.liferay.petra.messaging.test;
 import com.liferay.petra.messaging.api.DestinationNames;
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
 import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,19 +40,22 @@ public class MessageBuilderTest extends TestUtil {
 	@Test
 	public void testParallel() throws Exception {
 		test("tb2.jar", TBParallelDestination.DESTINATION_NAME);
-		testResponseMessageBuilder("tb2.jar", TBParallelDestination.DESTINATION_NAME);
+		testResponseMessageBuilder(
+			"tb2.jar", TBParallelDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSerial() throws Exception {
 		test("tb3.jar", TBSerialDestination.DESTINATION_NAME);
-		testResponseMessageBuilder("tb3.jar", TBSerialDestination.DESTINATION_NAME);
+		testResponseMessageBuilder(
+			"tb3.jar", TBSerialDestination.DESTINATION_NAME);
 	}
 
 	@Test
 	public void testSynchronous() throws Exception {
 		test("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
-		testResponseMessageBuilder("tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
+		testResponseMessageBuilder(
+			"tb1.jar", TBSynchronousDestination.DESTINATION_NAME);
 	}
 
 	protected void test(String bundle, String destinationName)
@@ -107,6 +110,7 @@ public class MessageBuilderTest extends TestUtil {
 			Assert.assertEquals(builder.build(), callable.call());
 
 			// Build and test a second message
+
 			callableST = new ServiceTracker<>(bundleContext, filter, null);
 
 			callableST.open();
@@ -134,12 +138,13 @@ public class MessageBuilderTest extends TestUtil {
 			builder.setResponseId("responseId");
 			builder.setResponseDestinationName(
 				DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE);
-			
+
 			Message message = builder.build();
-			
+
 			builder.send();
-			
+
 			// Allow some time for messages to be received
+
 			Thread.sleep(100);
 
 			Message receivedMessage = callable.call();
@@ -212,6 +217,7 @@ public class MessageBuilderTest extends TestUtil {
 			Assert.assertEquals(builder.build(), message);
 
 			// Build and test response message
+
 			destinationName = DestinationNames.MESSAGE_BUS_DEFAULT_RESPONSE;
 
 			Assert.assertTrue(messageBus.hasMessageListener(destinationName));

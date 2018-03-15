@@ -131,8 +131,7 @@ public class DefaultMessageBus implements MessageBus {
 		unbind = "unregisterDestination"
 	)
 	public void registerDestination(
-		Destination destination,
-		Map<String, Object> properties) {
+		Destination destination, Map<String, Object> properties) {
 
 		_destinations.put(properties, destination);
 

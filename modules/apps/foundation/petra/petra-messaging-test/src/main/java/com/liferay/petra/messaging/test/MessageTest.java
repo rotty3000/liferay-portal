@@ -14,15 +14,15 @@
 
 package com.liferay.petra.messaging.test;
 
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.spi.MessageImpl;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.spi.MessageImpl;
 
 /**
  * @author Brian Wing Shun Chan
@@ -30,34 +30,6 @@ import com.liferay.petra.messaging.spi.MessageImpl;
 public class MessageTest extends TestUtil {
 
 	public static final double DELTA = 1e-100;
-
-	@Test
-	public void testMessageSerialization() throws ClassNotFoundException {
-		MessageBuilder messageBuilder = messageBuilderFactory.create("destinationName");
-		
-		messageBuilder.setPayload("payload");
-
-		messageBuilder.put("abc", "123");
-		
-		Message message = messageBuilder.build();
-		
-		byte[] serializedMessage = message.toByteArray();
-
-		MessageImpl deserializedMessage = MessageImpl.fromByteArray(serializedMessage);
-
-		Assert.assertEquals(message, deserializedMessage);
-	}
-	
-	@Test
-	public void testMessageClone() {
-		MessageImpl message = new MessageImpl();
-
-		message.put("abc", "123");
-
-		MessageImpl clonedMessage = (MessageImpl) message.clone();
-
-		Assert.assertEquals(message, clonedMessage);
-	}
 
 	@Test
 	public void testContains() {
@@ -174,6 +146,36 @@ public class MessageTest extends TestUtil {
 		message.remove("extra");
 
 		Assert.assertFalse(message.contains("extra"));
+	}
+
+	@Test
+	public void testMessageClone() {
+		MessageImpl message = new MessageImpl();
+
+		message.put("abc", "123");
+
+		MessageImpl clonedMessage = (MessageImpl)message.clone();
+
+		Assert.assertEquals(message, clonedMessage);
+	}
+
+	@Test
+	public void testMessageSerialization() throws ClassNotFoundException {
+		MessageBuilder messageBuilder = messageBuilderFactory.create(
+			"destinationName");
+
+		messageBuilder.setPayload("payload");
+
+		messageBuilder.put("abc", "123");
+
+		Message message = messageBuilder.build();
+
+		byte[] serializedMessage = message.toByteArray();
+
+		MessageImpl deserializedMessage = MessageImpl.fromByteArray(
+			serializedMessage);
+
+		Assert.assertEquals(message, deserializedMessage);
 	}
 
 }

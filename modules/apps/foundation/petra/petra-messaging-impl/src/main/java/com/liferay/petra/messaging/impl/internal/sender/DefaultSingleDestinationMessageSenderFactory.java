@@ -141,13 +141,13 @@ public class DefaultSingleDestinationMessageSenderFactory
 
 	protected SynchronousMessageSender.Mode getMode(
 		Map<String, Object> properties) {
-		
+
 		String mode = StringPool.BLANK;
 
 		Object value = properties.get("mode");
-		
+
 		if (value instanceof String) {
-			mode = (String) value;
+			mode = (String)value;
 		}
 
 		return SynchronousMessageSender.Mode.valueOf(mode);

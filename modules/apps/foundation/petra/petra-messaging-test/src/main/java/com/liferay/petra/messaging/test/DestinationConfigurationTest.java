@@ -14,19 +14,19 @@
 
 package com.liferay.petra.messaging.test;
 
+import com.liferay.petra.messaging.api.DestinationConfiguration;
+import com.liferay.petra.messaging.api.DestinationType;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.spi.MessageImpl;
+
 import java.util.concurrent.Callable;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
-
-import com.liferay.petra.messaging.api.DestinationConfiguration;
-import com.liferay.petra.messaging.api.DestinationType;
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageBuilder;
-import com.liferay.petra.messaging.spi.MessageImpl;
 
 /**
  * @author Raymond Augé
@@ -133,7 +133,7 @@ public class DestinationConfigurationTest extends TestUtil {
 			Callable<Message> callable = callableST.waitForService(timeout);
 
 			Assert.assertNotNull(callable);
-			
+
 			Message message = new MessageImpl();
 
 			messageBus.sendMessage(destinationName, message);

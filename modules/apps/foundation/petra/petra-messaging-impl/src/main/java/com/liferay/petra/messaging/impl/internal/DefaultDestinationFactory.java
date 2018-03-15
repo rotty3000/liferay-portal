@@ -50,15 +50,19 @@ public class DefaultDestinationFactory implements DestinationFactory {
 		switch (destinationType) {
 			case PARALLEL:
 				componentFactory = _parallelDestinationFactory;
+
 				break;
 			case SERIAL:
 				componentFactory = _serialDestinationFactory;
+
 				break;
 			case SYNCHRONOUS:
 				componentFactory = _synchronousDestinationFactory;
+
 				break;
 			default:
 				componentFactory = _parallelDestinationFactory;
+
 				break;
 		}
 

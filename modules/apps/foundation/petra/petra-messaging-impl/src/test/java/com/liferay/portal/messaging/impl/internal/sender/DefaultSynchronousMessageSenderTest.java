@@ -62,9 +62,11 @@ public class DefaultSynchronousMessageSenderTest {
 					switch (destinationConfiguration.getDestinationType()) {
 						case PARALLEL:
 							destination = new ParallelDestination();
+
 							break;
 						case SERIAL:
 							destination = new SerialDestination();
+
 							break;
 						default:
 							destination = new SynchronousDestination();

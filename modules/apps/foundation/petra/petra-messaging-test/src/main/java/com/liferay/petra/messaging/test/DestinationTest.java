@@ -14,6 +14,18 @@
 
 package com.liferay.petra.messaging.test;
 
+import com.liferay.petra.messaging.api.Destination;
+import com.liferay.petra.messaging.api.ExecutorServiceRegistrar;
+import com.liferay.petra.messaging.api.Message;
+import com.liferay.petra.messaging.api.MessageListener;
+import com.liferay.petra.messaging.api.MessageListenerException;
+import com.liferay.petra.messaging.spi.BaseAsyncDestination;
+import com.liferay.petra.messaging.spi.MessageImpl;
+import com.liferay.petra.messaging.spi.MessageRunnable;
+import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
+import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
+import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -30,24 +42,14 @@ import java.util.stream.IntStream;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.liferay.petra.messaging.api.Destination;
-import com.liferay.petra.messaging.api.ExecutorServiceRegistrar;
-import com.liferay.petra.messaging.api.Message;
-import com.liferay.petra.messaging.api.MessageListener;
-import com.liferay.petra.messaging.api.MessageListenerException;
-import com.liferay.petra.messaging.spi.BaseAsyncDestination;
-import com.liferay.petra.messaging.spi.MessageImpl;
-import com.liferay.petra.messaging.spi.MessageRunnable;
-import com.liferay.petra.messaging.test.tb1.TBSynchronousDestination;
-import com.liferay.petra.messaging.test.tb3.TBSerialDestination;
-import com.liferay.petra.messaging.test.tb2.TBParallelDestination;
 
 /**
  * @author Raymond Augé
@@ -58,15 +60,19 @@ public class DestinationTest extends TestUtil {
 	@Test
 	public void testParallel() throws Exception {
 		testSend(TBParallelDestination.DESTINATION_NAME, "tb2.jar");
-		testExecutorServiceRegistrar(TBParallelDestination.DESTINATION_NAME, "tb16.jar", "tb19.jar");
-		testRejectedExecutionHandler(TBParallelDestination.DESTINATION_NAME, "tb16.jar", "tb19.jar");
+		testExecutorServiceRegistrar(
+			TBParallelDestination.DESTINATION_NAME, "tb16.jar", "tb19.jar");
+		testRejectedExecutionHandler(
+			TBParallelDestination.DESTINATION_NAME, "tb16.jar", "tb19.jar");
 	}
 
 	@Test
 	public void testSerial() throws Exception {
 		testSend(TBSerialDestination.DESTINATION_NAME, "tb3.jar");
-		testExecutorServiceRegistrar(TBSerialDestination.DESTINATION_NAME, "tb17.jar", "tb20.jar");
-		testRejectedExecutionHandler(TBSerialDestination.DESTINATION_NAME, "tb17.jar", "tb20.jar");
+		testExecutorServiceRegistrar(
+			TBSerialDestination.DESTINATION_NAME, "tb17.jar", "tb20.jar");
+		testRejectedExecutionHandler(
+			TBSerialDestination.DESTINATION_NAME, "tb17.jar", "tb20.jar");
 	}
 
 	@Test

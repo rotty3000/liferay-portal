@@ -1,13 +1,14 @@
 package com.liferay.petra.messaging.test;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageListenerException;
 
-public class CallableMessageListener implements Callable<Message>, MessageListener {
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class CallableMessageListener
+	implements Callable<Message>, MessageListener {
 
 	@Override
 	public Message call() throws Exception {

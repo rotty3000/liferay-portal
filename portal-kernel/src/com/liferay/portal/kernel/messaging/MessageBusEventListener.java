@@ -17,18 +17,23 @@ package com.liferay.portal.kernel.messaging;
 /**
  * @author Shuyang Zhou
  */
-public interface MessageBusEventListener extends com.liferay.petra.messaging.api.MessageBusEventListener {
+public interface MessageBusEventListener
+	extends com.liferay.petra.messaging.api.MessageBusEventListener {
 
-	public void destinationAdded(Destination destination);
+	public default void destinationAdded(
+		com.liferay.petra.messaging.api.Destination destination) {
 
-	public default void destinationAdded(com.liferay.petra.messaging.api.Destination destination) {
 		destinationAdded((Destination)destination);
 	}
 
-	public void destinationRemoved(Destination destination);
+	public void destinationAdded(Destination destination);
 
-	public default void destinationRemoved(com.liferay.petra.messaging.api.Destination destination) {
+	public default void destinationRemoved(
+		com.liferay.petra.messaging.api.Destination destination) {
+
 		destinationRemoved((Destination)destination);
 	}
+
+	public void destinationRemoved(Destination destination);
 
 }

@@ -29,10 +29,7 @@ import org.osgi.service.component.annotations.Deactivate;
  *
  * @author Raymond Augé
  */
-@Component(
-	factory = "serial.destination",
-	service = SerialDestination.class
-)
+@Component(factory = "serial.destination", service = SerialDestination.class)
 public class SerialDestinationFactory extends SerialDestination {
 
 	@Activate
