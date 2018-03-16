@@ -31,9 +31,9 @@ dependencies {
 	provided group: "org.osgi", name: "osgi.enroute.junit.wrapper", version: "4.12.0"
 	provided group: "org.slf4j", name: "slf4j-api", version: "1.7.21"
 	provided group: "org.slf4j", name: "slf4j-log4j12", version: "1.6.1"
-	provided project(":apps:foundation:petra:petra-messaging-api")
-	provided project(":apps:foundation:petra:petra-messaging-spi")
-	provided project(":apps:foundation:petra:petra-messaging-impl")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
+	provided project(":core:petra:petra-messaging-impl")
 }
 
 task newjar(type: Bundle, overwrite: true) {
