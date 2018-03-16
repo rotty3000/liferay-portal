@@ -1,3 +1,6 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 buildService {
 	apiDir = "../portal-background-task-api/src/main/java"
 	testDir = "../portal-background-task-test/src/testIntegration/java"
@@ -13,5 +16,7 @@ dependencies {
 	provided project(":apps:foundation:portal:portal-spring-extender-api")
 	provided project(":apps:foundation:portal:portal-upgrade-api")
 	provided project(":core:petra:petra-lang")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 }

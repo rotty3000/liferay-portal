@@ -12,6 +12,8 @@ dependencies {
 	provided project(":apps:adaptive-media:adaptive-media-image-api")
 	provided project(":apps:collaboration:blogs:blogs-api")
 	provided project(":apps:web-experience:export-import:export-import-api")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 
 	testCompile project(":core:petra:petra-lang")

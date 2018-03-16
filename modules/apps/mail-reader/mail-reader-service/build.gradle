@@ -1,3 +1,6 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 buildService {
 	apiDir = "../mail-reader-api/src/main/java"
 	testDir = "../mail-reader-test/src/testIntegration/java"
@@ -21,6 +24,8 @@ dependencies {
 	provided project(":apps:mail-reader:mail-reader-api")
 	provided project(":apps:static:portal-configuration:portal-configuration-metatype-api")
 	provided project(":core:osgi-service-tracker-collections")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 	provided project(":core:registry-api")
 }

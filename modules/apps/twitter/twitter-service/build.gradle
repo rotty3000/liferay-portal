@@ -1,3 +1,6 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 buildService {
 	apiDir = "../twitter-api/src/main/java"
 	testDir = "../twitter-test/src/testIntegration/java"
@@ -15,5 +18,7 @@ dependencies {
 	provided project(":apps:foundation:portal:portal-upgrade-api")
 	provided project(":apps:static:portal-configuration:portal-configuration-metatype-api")
 	provided project(":apps:twitter:twitter-api")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 }

@@ -1,3 +1,6 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 dependencies {
 	provided group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	provided group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
@@ -18,6 +21,8 @@ dependencies {
 	provided project(":apps:web-experience:application-list:application-list-api")
 	provided project(":core:osgi-service-tracker-collections")
 	provided project(":core:petra:petra-lang")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 	provided project(":core:registry-api")
 }

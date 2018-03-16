@@ -14,6 +14,8 @@ dependencies {
 	provided project(":core:petra:petra-executor")
 	provided project(":core:petra:petra-lang")
 	provided project(":core:petra:petra-memory")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-reflect")
 	provided project(":core:petra:petra-string")
 

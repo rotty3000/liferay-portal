@@ -1,3 +1,6 @@
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 buildService {
 	apiDir = "../sync-api/src/main/java"
 	testDir = "../sync-test/src/testIntegration/java"
@@ -30,6 +33,8 @@ dependencies {
 	provided project(":apps:sync:sync-api")
 	provided project(":core:osgi-service-tracker-collections")
 	provided project(":core:petra:petra-lang")
+	provided project(":core:petra:petra-messaging-api")
+	provided project(":core:petra:petra-messaging-spi")
 	provided project(":core:petra:petra-string")
 	provided project(":core:registry-api")
 }
