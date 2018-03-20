@@ -44,5 +44,4 @@
 	slf4j.api;version='[1.7.21,1.7.22)',\
 	slf4j.log4j12;version='[1.6.1,1.6.2)',\
 	com.liferay.petra.concurrent;version='[1.2.3,1.2.4)',\
-	com.liferay.petra.memory;version='[1.0.2,1.0.3)',\
-	org.apache.aries.async.promise.api;version='[1.0.1,1.0.2)'
+	com.liferay.petra.memory;version='[1.0.2,1.0.3)'
