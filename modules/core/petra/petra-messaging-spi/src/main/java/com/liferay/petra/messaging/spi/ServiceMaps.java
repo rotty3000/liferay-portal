@@ -14,6 +14,7 @@
 
 package com.liferay.petra.messaging.spi;
 
+import aQute.lib.filter.Filter;
 import com.liferay.petra.reflect.ReflectionUtil;
 
 import java.util.Comparator;
@@ -21,11 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * @author Raymond Augé
@@ -37,24 +33,32 @@ public class ServiceMaps {
 	}
 
 	public static final <T> Map.Entry<Map<String, Object>, T> findMatch(
-		String finterString, Map<Map<String, Object>, T> map) {
+		String filterString, Map<Map<String, Object>, T> map) {
 
 		try {
-			Filter filter = FrameworkUtil.createFilter(finterString);
+			Filter filter = new Filter(filterString);
 
 			Set<Entry<Map<String, Object>, T>> entrySet = map.entrySet();
 
 			Stream<Entry<Map<String, Object>, T>> stream = entrySet.stream();
 
 			return stream.filter(
-				entry -> filter.matches(entry.getKey())
+				entry -> {
+					try {
+						return filter.matchMap(entry.getKey());
+					}
+					catch (Exception e) {
+						ReflectionUtil.throwException(e);
+						return false;
+					}
+				}
 			).findFirst(
 			).orElse(
 				null
 			);
 		}
-		catch (InvalidSyntaxException ise) {
-			return ReflectionUtil.throwException(ise);
+		catch (Exception e) {
+			return ReflectionUtil.throwException(e);
 		}
 	}
 
@@ -62,17 +66,17 @@ public class ServiceMaps {
 		String format, String... arguments) {
 
 		try {
-			return FrameworkUtil.createFilter(String.format(format, arguments));
+			return new Filter(String.format(format, arguments));
 		}
-		catch (InvalidSyntaxException ise) {
-			return ReflectionUtil.throwException(ise);
+		catch (IllegalArgumentException iae) {
+			return ReflectionUtil.throwException(iae);
 		}
 	}
 
 	public static final <T> T remove(
-		String finterString, Map<Map<String, Object>, T> map) {
+		String filterString, Map<Map<String, Object>, T> map) {
 
-		Entry<Map<String, Object>, T> match = findMatch(finterString, map);
+		Entry<Map<String, Object>, T> match = findMatch(filterString, map);
 
 		return map.remove(match.getKey());
 	}
@@ -82,8 +86,8 @@ public class ServiceMaps {
 
 		@Override
 		public int compare(Map<String, Object> map, Map<String, Object> other) {
-			Long id = (Long)map.get(Constants.SERVICE_ID);
-			Long otherId = (Long)other.get(Constants.SERVICE_ID);
+			Long id = (Long)map.get("service.id");
+			Long otherId = (Long)other.get("service.id");
 
 			if (id.equals(otherId)) {
 
@@ -92,8 +96,8 @@ public class ServiceMaps {
 				return 0;
 			}
 
-			Object rankingObj = map.get(Constants.SERVICE_RANKING);
-			Object otherRankingObj = other.get(Constants.SERVICE_RANKING);
+			Object rankingObj = map.get("service.ranking");
+			Object otherRankingObj = other.get("service.ranking");
 
 			// If no rank, then spec says it defaults to zero.
 
