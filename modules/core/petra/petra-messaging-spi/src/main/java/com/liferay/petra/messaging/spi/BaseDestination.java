@@ -150,7 +150,7 @@ public abstract class BaseDestination implements Destination {
 		return inboundMessageProcessorFactories.size();
 	}
 
-	public List<InboundMessageProcessor> getInboundMessageProcessors() {
+	public Collection<InboundMessageProcessor> getInboundMessageProcessors() {
 		List<InboundMessageProcessor> processors = new ArrayList<>();
 
 		for (InboundMessageProcessorFactory factory :
