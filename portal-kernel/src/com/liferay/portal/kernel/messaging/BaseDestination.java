@@ -29,7 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Shuyang Zhou
  */
 public abstract class BaseDestination
-	implements Destination, com.liferay.petra.messaging.spi.Destination {
+	extends com.liferay.petra.messaging.spi.BaseDestination
+	implements Destination {
 
 	@Override
 	public boolean addDestinationEventListener(
