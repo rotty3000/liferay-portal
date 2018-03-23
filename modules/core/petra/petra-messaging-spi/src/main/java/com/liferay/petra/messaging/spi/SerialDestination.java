@@ -24,8 +24,10 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import java.util.Collection;
 import java.util.Set;
 
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+*/
 
 /**
  * <p>
@@ -69,9 +71,11 @@ public class SerialDestination extends BaseAsyncDestination {
 								processedMessage, dispatchThread);
 						}
 						catch (MessageProcessorException mpe) {
+							/*
 							_log.error(
 								"Unable to process message before thread {}",
 								processedMessage, mpe);
+							*/
 						}
 					}
 
@@ -80,9 +84,11 @@ public class SerialDestination extends BaseAsyncDestination {
 							messageListener.receive(processedMessage);
 						}
 						catch (MessageListenerException mle) {
+							/*
 							_log.error(
 								"Unable to process message {}",
 								processedMessage, mle);
+							*/
 						}
 					}
 				}
@@ -95,9 +101,11 @@ public class SerialDestination extends BaseAsyncDestination {
 								processedMessage, dispatchThread);
 						}
 						catch (MessageProcessorException mpe) {
+							/*
 							_log.error(
 								"Unable to process message after thread {}",
 								processedMessage, mpe);
+							*/
 						}
 					}
 				}
@@ -112,7 +120,9 @@ public class SerialDestination extends BaseAsyncDestination {
 
 	private static final int _WORKERS_MAX_SIZE = 1;
 
+	/*
 	private static final Logger _log = LoggerFactory.getLogger(
 		SerialDestination.class);
+	*/
 
 }

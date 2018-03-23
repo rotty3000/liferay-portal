@@ -18,8 +18,10 @@ import com.liferay.petra.messaging.api.Message;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.spi.sender.SingleDestinationMessageSender;
 
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+*/
 
 /**
  * @author Michael C. Han
@@ -38,8 +40,10 @@ public abstract class BaseMessageStatusMessageListener
 			doReceive(message, messageStatus);
 		}
 		catch (Exception e) {
+			/*
 			_log.error(
 				"Unable to process request " + message.getDestinationName(), e);
+			*/
 
 			messageStatus.setException(e);
 		}
@@ -58,8 +62,10 @@ public abstract class BaseMessageStatusMessageListener
 			Message message, MessageStatus messageStatus)
 		throws Exception;
 
+	/*
 	private static final Logger _log = LoggerFactory.getLogger(
 		BaseMessageStatusMessageListener.class);
+	*/
 
 	private SingleDestinationMessageSender _statusSender;
 

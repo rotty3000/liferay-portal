@@ -24,8 +24,10 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import java.util.Collection;
 import java.util.Set;
 
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+*/
 
 /**
  * <p>
@@ -65,19 +67,23 @@ public class ParallelDestination extends BaseAsyncDestination {
 									processedMessage, dispatchThread);
 							}
 							catch (MessageProcessorException mpe) {
+								/*
 								_log.error(
 									"Unable to process message {} before " +
 										"thread {}",
 									processedMessage, dispatchThread, mpe);
+								*/
 							}
 						}
 
 						messageListener.receive(processedMessage);
 					}
 					catch (MessageListenerException mle) {
+						/*
 						_log.error(
 							"Unable to process message {}", processedMessage,
 							mle);
+						*/
 					}
 					finally {
 						for (InboundMessageProcessor processor :
@@ -88,10 +94,12 @@ public class ParallelDestination extends BaseAsyncDestination {
 									processedMessage, dispatchThread);
 							}
 							catch (MessageProcessorException mpe) {
+								/*j
 								_log.error(
 									"Unable to process message {} after" +
 										"thread {}",
 									processedMessage, dispatchThread, mpe);
+								*/
 							}
 						}
 					}
@@ -103,7 +111,9 @@ public class ParallelDestination extends BaseAsyncDestination {
 		}
 	}
 
+	/*
 	private static final Logger _log = LoggerFactory.getLogger(
 		ParallelDestination.class);
+	*/
 
 }

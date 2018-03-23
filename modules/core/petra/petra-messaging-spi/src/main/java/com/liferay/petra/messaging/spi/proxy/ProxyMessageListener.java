@@ -19,8 +19,10 @@ import com.liferay.petra.messaging.api.MessageBus;
 import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.spi.MessageImpl;
 
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+*/
 
 /**
  * @author Micha Kiener
@@ -73,22 +75,26 @@ public class ProxyMessageListener implements MessageListener {
 
 				responseMessage.setPayload(proxyResponse);
 
+				/*
 				if (_log.isDebugEnabled() && (proxyResponseException != null)) {
 					_log.debug(
 						proxyResponseException.getMessage(),
 						proxyResponseException);
 				}
+				*/
 
 				_messageBus.sendMessage(
 					responseDestinationName, responseMessage);
 			}
 			else {
 				if (proxyResponseException != null) {
+					/*
 					if (_log.isWarnEnabled()) {
 						_log.warn(
 							proxyResponseException.getMessage(),
 							proxyResponseException);
 					}
+					*/
 				}
 
 				message.setResponse(proxyResponse);
@@ -104,8 +110,10 @@ public class ProxyMessageListener implements MessageListener {
 		_messageBus = messageBus;
 	}
 
+	/*
 	private static final Logger _log = LoggerFactory.getLogger(
 		ProxyMessageListener.class);
+	*/
 
 	private Object _manager;
 	private MessageBus _messageBus;

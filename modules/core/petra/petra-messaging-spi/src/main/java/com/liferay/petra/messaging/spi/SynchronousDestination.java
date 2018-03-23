@@ -24,8 +24,10 @@ import com.liferay.petra.messaging.api.MessageProcessorException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+*/
 
 /**
  * @author Shuyang Zhou
@@ -46,9 +48,11 @@ public class SynchronousDestination extends BaseDestination {
 	@Override
 	public void send(Message message) {
 		if (messageListeners.isEmpty()) {
+			/*
 			if (_log.isDebugEnabled()) {
 				_log.debug("No message listeners for destination " + getName());
 			}
+			*/
 
 			return;
 		}
@@ -64,7 +68,9 @@ public class SynchronousDestination extends BaseDestination {
 						message, Thread.currentThread());
 				}
 				catch (MessageProcessorException mpe) {
+					/*
 					_log.error("Unable to process message " + message, mpe);
+					*/
 				}
 			}
 
@@ -73,7 +79,9 @@ public class SynchronousDestination extends BaseDestination {
 					messageListener.receive(message);
 				}
 				catch (MessageListenerException mle) {
+					/*
 					_log.error("Unable to process message " + message, mle);
+					*/
 				}
 			}
 		}
@@ -84,7 +92,9 @@ public class SynchronousDestination extends BaseDestination {
 					processor.afterReceive(message);
 				}
 				catch (MessageProcessorException mpe) {
+					/*
 					_log.error("Unable to process message " + message, mpe);
+					*/
 				}
 			}
 		}
@@ -92,8 +102,10 @@ public class SynchronousDestination extends BaseDestination {
 		_sentMessageCounter.incrementAndGet();
 	}
 
+	/*
 	private static final Logger _log = LoggerFactory.getLogger(
 		SynchronousDestination.class);
+	*/
 
 	private final AtomicLong _sentMessageCounter = new AtomicLong();
 
