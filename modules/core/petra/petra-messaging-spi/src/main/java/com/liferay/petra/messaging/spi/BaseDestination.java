@@ -156,6 +156,10 @@ public abstract class BaseDestination implements Destination {
 		for (InboundMessageProcessorFactory factory :
 				getInboundMessageProcessorFactories()) {
 
+			if (factory == null) {
+				break;
+			}
+
 			processors.add(factory.create());
 		}
 
@@ -196,6 +200,10 @@ public abstract class BaseDestination implements Destination {
 
 		for (OutboundMessageProcessorFactory factory :
 				getOutboundMessageProcessorFactories()) {
+
+			if (factory == null) {
+				break;
+			}
 
 			processors.add(factory.create());
 		}
