@@ -21,7 +21,7 @@ import com.liferay.petra.messaging.api.MessageListener;
 import com.liferay.petra.messaging.api.MessageListenerException;
 import com.liferay.petra.messaging.api.MessageProcessorException;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
 
 /*
@@ -57,7 +57,7 @@ public class SynchronousDestination extends BaseDestination {
 			return;
 		}
 
-		List<InboundMessageProcessor> inboundMessageProcessors =
+		Collection<InboundMessageProcessor> inboundMessageProcessors =
 			getInboundMessageProcessors();
 
 		try {

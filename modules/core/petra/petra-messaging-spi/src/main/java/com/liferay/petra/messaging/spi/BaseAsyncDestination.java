@@ -173,7 +173,7 @@ public abstract class BaseAsyncDestination extends BaseDestination {
 		}
 		*/
 
-		List<InboundMessageProcessor> inboundMessageProcessors =
+		Collection<InboundMessageProcessor> inboundMessageProcessors =
 			getInboundMessageProcessors();
 
 		try {
