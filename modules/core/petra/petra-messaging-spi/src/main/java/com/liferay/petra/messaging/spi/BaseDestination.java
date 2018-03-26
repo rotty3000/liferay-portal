@@ -198,15 +198,21 @@ public abstract class BaseDestination implements Destination {
 	public Collection<OutboundMessageProcessor> getOutboundMessageProcessors() {
 		List<OutboundMessageProcessor> processors = new ArrayList<>();
 
-		for (OutboundMessageProcessorFactory factory :
+		try {
+			for (OutboundMessageProcessorFactory factory :
 				getOutboundMessageProcessorFactories()) {
 
-			if (factory == null) {
-				break;
-			}
+				if (factory == null) {
+					break;
+				}
 
-			processors.add(factory.create());
+				processors.add(factory.create());
+			}
 		}
+		catch (Throwable t) {
+			t.printStackTrace();
+		}
+
 
 		return Collections.unmodifiableList(processors);
 	}
