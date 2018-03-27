@@ -15,6 +15,10 @@
 package com.liferay.portal.scheduler.internal;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
+import com.liferay.petra.messaging.api.DestinationConfiguration;
+import com.liferay.petra.messaging.api.DestinationType;
+import com.liferay.petra.messaging.api.MessageBuilder;
+import com.liferay.petra.messaging.api.MessageBuilderFactory;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.audit.AuditMessage;
@@ -27,9 +31,6 @@ import com.liferay.portal.kernel.cluster.ClusterableContextThreadLocal;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.Destination;
-import com.liferay.portal.kernel.messaging.DestinationConfiguration;
-import com.liferay.portal.kernel.messaging.DestinationFactory;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
@@ -100,14 +101,16 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			String language, String script, int exceptionsMaxSize)
 		throws SchedulerException {
 
-		Message message = new Message();
+		MessageBuilder builder = _messageBuilderFactory.create(
+			DestinationNames.SCHEDULER_SCRIPTING);
 
-		message.put(SchedulerEngine.LANGUAGE, language);
-		message.put(SchedulerEngine.SCRIPT, script);
+		builder.put(SchedulerEngine.LANGUAGE, language);
+		builder.put(SchedulerEngine.SCRIPT, script);
 
 		schedule(
 			trigger, storageType, description,
-			DestinationNames.SCHEDULER_SCRIPTING, message, exceptionsMaxSize);
+			DestinationNames.SCHEDULER_SCRIPTING, builder.build(),
+			exceptionsMaxSize);
 	}
 
 	@Override
@@ -767,11 +770,11 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		_bundleContext = componentContext.getBundleContext();
 
 		registerDestination(
-			_bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
+			_bundleContext, DestinationType.PARALLEL,
 			DestinationNames.SCHEDULER_DISPATCH);
 
-		Destination scriptingDestination = registerDestination(
-			_bundleContext, DestinationConfiguration.DESTINATION_TYPE_PARALLEL,
+		registerDestination(
+			_bundleContext, DestinationType.PARALLEL,
 			DestinationNames.SCHEDULER_SCRIPTING);
 
 		SchedulerEventMessageListenerWrapper
@@ -781,7 +784,9 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 		schedulerEventMessageListenerWrapper.setMessageListener(
 			new ScriptingMessageListener());
 
-		scriptingDestination.register(schedulerEventMessageListenerWrapper);
+		registerScriptingMessageListener(
+			_bundleContext, schedulerEventMessageListenerWrapper,
+			DestinationNames.SCHEDULER_SCRIPTING);
 
 		_serviceTracker = ServiceTrackerFactory.open(
 			_bundleContext,
@@ -817,15 +822,16 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 			}
 		}
 
-		for (ServiceRegistration<Destination> serviceRegistration :
-				_destinationServiceRegistrations) {
+		if (_scriptingMessageListener != null) {
+			_scriptingMessageListener.unregister();
+		}
 
-			Destination destination = _bundleContext.getService(
-				serviceRegistration.getReference());
+		for (ServiceRegistration
+				<DestinationConfiguration>
+					serviceRegistration :
+						_destinationServiceRegistrations) {
 
 			serviceRegistration.unregister();
-
-			destination.destroy();
 		}
 
 		for (ServiceRegistration<SchedulerEventMessageListener>
@@ -848,27 +854,36 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				SchedulerEngineHelperConfiguration.class, properties);
 	}
 
-	protected Destination registerDestination(
-		BundleContext bundleContext, String destinationType,
+	protected void registerDestination(
+		BundleContext bundleContext, DestinationType destinationType,
 		String destinationName) {
 
 		DestinationConfiguration destinationConfiguration =
-			new DestinationConfiguration(destinationType, destinationName);
-
-		Destination destination = _destinationFactory.createDestination(
-			destinationConfiguration);
+			new DestinationConfiguration(
+				destinationType, destinationName);
 
 		Dictionary<String, Object> dictionary = new HashMapDictionary<>();
 
-		dictionary.put("destination.name", destination.getName());
+		dictionary.put("destination.name", destinationName);
 
-		ServiceRegistration<Destination> serviceRegistration =
+		ServiceRegistration<DestinationConfiguration> serviceRegistration =
 			bundleContext.registerService(
-				Destination.class, destination, dictionary);
+				DestinationConfiguration.class, destinationConfiguration, dictionary);
 
 		_destinationServiceRegistrations.add(serviceRegistration);
+	}
 
-		return destination;
+	protected void registerScriptingMessageListener(
+		BundleContext bundleContext, MessageListener messageListener,
+		String destinationName) {
+
+		Dictionary<String, Object> dictionary = new HashMapDictionary<>();
+
+		dictionary.put("destination.name", destinationName);
+
+		_scriptingMessageListener = bundleContext.registerService(
+			com.liferay.petra.messaging.api.MessageListener.class,
+			messageListener, dictionary);
 	}
 
 	@Reference(
@@ -878,13 +893,6 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 	)
 	protected void setAuditRouter(AuditRouter auditRouter) {
 		_auditRouter = auditRouter;
-	}
-
-	@Reference(unbind = "-")
-	protected void setDestinationFactory(
-		DestinationFactory destinationFactory) {
-
-		_destinationFactory = destinationFactory;
 	}
 
 	@Reference(unbind = "-")
@@ -912,19 +920,24 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 	private AuditRouter _auditRouter;
 	private volatile BundleContext _bundleContext;
-	private DestinationFactory _destinationFactory;
-	private final Set<ServiceRegistration<Destination>>
+	private final Set<ServiceRegistration<DestinationConfiguration>>
 		_destinationServiceRegistrations = new HashSet<>();
 	private JSONFactory _jsonFactory;
-	private final Map<String, ServiceRegistration<MessageListener>>
-		_messageListenerServiceRegistrations = new ConcurrentHashMap<>();
+	private final Map<String, ServiceRegistration
+		<com.liferay.petra.messaging.api.MessageListener>>
+			_messageListenerServiceRegistrations = new ConcurrentHashMap<>();
 
+	@Reference
+	private MessageBuilderFactory _messageBuilderFactory;
 	@Reference
 	private Portal _portal;
 
 	private SchedulerEngine _schedulerEngine;
 	private volatile SchedulerEngineHelperConfiguration
 		_schedulerEngineHelperConfiguration;
+	private volatile ServiceRegistration
+		<com.liferay.petra.messaging.api.MessageListener>
+			_scriptingMessageListener;
 	private final Map
 		<String, ServiceRegistration<SchedulerEventMessageListener>>
 			_serviceRegistrations = new ConcurrentHashMap<>();
@@ -980,16 +993,21 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 					schedulerEntry.getTrigger(), storageType,
 					schedulerEntry.getDescription(), destinationName, null, 0);
 
-				ServiceRegistration<MessageListener> serviceRegistration =
-					_messageListenerServiceRegistrations.get(
-						schedulerEntry.getEventListenerClass());
+				ServiceRegistration
+					<com.liferay.petra.messaging.api.MessageListener>
+						serviceRegistration =
+							_messageListenerServiceRegistrations.get(
+								schedulerEntry.getEventListenerClass());
 
 				if (serviceRegistration != null) {
-					ServiceReference<MessageListener> oldServiceReference =
-						serviceRegistration.getReference();
+					ServiceReference
+						<com.liferay.petra.messaging.api.MessageListener>
+							oldServiceReference =
+								serviceRegistration.getReference();
 
-					MessageListener messageListener = bundleContext.getService(
-						oldServiceReference);
+					com.liferay.petra.messaging.api.MessageListener
+						messageListener = bundleContext.getService(
+							oldServiceReference);
 
 					SchedulerEventMessageListenerWrapper
 						schedulerEventMessageListenerWrapper =
@@ -1008,8 +1026,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 				properties.put("destination.name", destinationName);
 
 				serviceRegistration = bundleContext.registerService(
-					MessageListener.class, schedulerEventMessageListener,
-					properties);
+					com.liferay.petra.messaging.api.MessageListener.class,
+					schedulerEventMessageListener, properties);
 
 				_messageListenerServiceRegistrations.put(
 					schedulerEntry.getEventListenerClass(),
@@ -1107,10 +1125,11 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 					SchedulerEngine.SCHEDULER_CLUSTER_INVOKING, true);
 			}
 
-			ServiceRegistration<MessageListener>
-				messageListenerServiceRegistration =
-					_messageListenerServiceRegistrations.remove(
-						schedulerEntry.getEventListenerClass());
+			ServiceRegistration
+				<com.liferay.petra.messaging.api.MessageListener>
+					messageListenerServiceRegistration =
+						_messageListenerServiceRegistrations.remove(
+							schedulerEntry.getEventListenerClass());
 
 			messageListenerServiceRegistration.unregister();
 		}
