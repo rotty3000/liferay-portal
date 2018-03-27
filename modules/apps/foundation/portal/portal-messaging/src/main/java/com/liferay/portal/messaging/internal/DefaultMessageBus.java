@@ -128,12 +128,12 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Override
 	public int getDestinationCount() {
-		return _destinations.size();
+		return _messageBus.getDestinationCount();
 	}
 
 	@Override
 	public Collection<String> getDestinationNames() {
-		return _destinations.keySet();
+		return _messageBus.getDestinationNames();
 	}
 
 	@Override
@@ -152,16 +152,12 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 
 	@Override
 	public boolean hasDestination(String destinationName) {
-		return _destinations.containsKey(destinationName);
+		return _messageBus.hasDestination(destinationName);
 	}
 
 	@Override
 	public boolean hasMessageListener(String destinationName) {
-		return _messageListeners.stream().filter(
-			entry -> destinationName.equals(
-				entry.getValue().getReference().getProperty("destination.name"))
-		).findFirst(
-		).isPresent();
+		return _messageBus.hasMessageListener(destinationName);
 	}
 
 	@Override
