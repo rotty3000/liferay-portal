@@ -1018,6 +1018,8 @@ public interface PropsKeys {
 
 	public static final String INDEX_DUMP_COMPRESSION_ENABLED = "index.dump.compression.enabled";
 
+	public static final String INDEX_INTERVAL = "index.interval";
+
 	public static final String INDEX_ON_STARTUP = "index.on.startup";
 
 	public static final String INDEX_ON_STARTUP_DELAY = "index.on.startup.delay";
