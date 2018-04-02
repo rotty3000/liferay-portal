@@ -23,6 +23,9 @@ import com.liferay.portal.kernel.service.BaseLocalService;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionConfig;
 import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 
 import java.lang.reflect.InvocationTargetException;
@@ -262,10 +265,10 @@ public class DefaultActionableDynamicQuery implements ActionableDynamicQuery {
 
 			dynamicQuery.add(property.gt(previousPrimaryKey));
 
-			dynamicQuery.setLimit(0, _interval);
+			dynamicQuery.setLimit(0, getInterval());
 		}
 		else {
-			dynamicQuery.setLimit(_offset, _interval + _offset);
+			dynamicQuery.setLimit(_offset, getInterval() + _offset);
 		}
 
 		addDefaultCriteria(dynamicQuery);
@@ -316,7 +319,7 @@ public class DefaultActionableDynamicQuery implements ActionableDynamicQuery {
 					}
 				}
 
-				if (objects.size() < _interval) {
+				if (objects.size() < getInterval()) {
 					return -1L;
 				}
 
@@ -385,6 +388,14 @@ public class DefaultActionableDynamicQuery implements ActionableDynamicQuery {
 	}
 
 	protected int getInterval() {
+		if (_interval == 0) {
+			return GetterUtil.getInteger(
+				PropsUtil.get(
+					PropsKeys.INDEX_INTERVAL,
+					new com.liferay.portal.kernel.configuration.Filter(
+						getModelClass().getName())), Indexer.DEFAULT_INTERVAL);
+		}
+
 		return _interval;
 	}
 
@@ -423,7 +434,7 @@ public class DefaultActionableDynamicQuery implements ActionableDynamicQuery {
 			DefaultActionableDynamicQuery.class.getName());
 	private long _groupId;
 	private String _groupIdPropertyName = "groupId";
-	private int _interval = Indexer.DEFAULT_INTERVAL;
+	private int _interval;
 	private Class<?> _modelClass;
 	private int _offset;
 	private boolean _parallel;
