@@ -970,6 +970,8 @@ public interface PropsKeys {
 
 	public static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
 
+	public static final String HIBERNATE_LOCK_ACQUISITION_TIMEOUT = "hibernate.lock.acquisition.timeout";
+
 	public static final String HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP = "hibernate.session.factory.imported.class.name.regexp";
 
 	public static final String HOT_DEPLOY_DEPENDENCY_MANAGEMENT_ENABLED = "hot.deploy.dependency.management.enabled";

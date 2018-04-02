@@ -24,10 +24,13 @@ import com.liferay.portal.kernel.security.pacl.DoPrivileged;
 import com.liferay.portal.kernel.security.pacl.NotPrivileged;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.security.lang.DoPrivilegedUtil;
+import com.liferay.portal.util.PropsValues;
 
 import java.io.Serializable;
 
 import java.sql.Connection;
+
+import org.hibernate.LockOptions;
 
 /**
  * @author Brian Wing Shun Chan
@@ -197,9 +200,13 @@ public class SessionImpl implements Session {
 	public Object get(Class<?> clazz, Serializable id, LockMode lockMode)
 		throws ORMException {
 
+		LockOptions lockOptions = new LockOptions(
+			LockModeTranslator.translate(lockMode));
+
+		lockOptions.setTimeOut(PropsValues.HIBERNATE_LOCK_ACQUISITION_TIMEOUT);
+
 		try {
-			return _session.get(
-				clazz, id, LockModeTranslator.translate(lockMode));
+			return _session.get(clazz, id, lockOptions);
 		}
 		catch (Exception e) {
 			throw ExceptionTranslator.translate(e);

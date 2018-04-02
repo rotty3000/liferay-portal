@@ -740,6 +740,8 @@ public class PropsValues {
 
 	public static final int HIBERNATE_JDBC_BATCH_SIZE = GetterUtil.getInteger(PropsUtil.get(PropsKeys.HIBERNATE_JDBC_BATCH_SIZE));
 
+	public static final int HIBERNATE_LOCK_ACQUISITION_TIMEOUT = GetterUtil.getInteger(PropsUtil.get(PropsKeys.HIBERNATE_LOCK_ACQUISITION_TIMEOUT));
+
 	public static final String HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP = PropsUtil.get(PropsKeys.HIBERNATE_SESSION_FACTORY_IMPORTED_CLASS_NAME_REGEXP);
 
 	public static final boolean HOT_UNDEPLOY_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.HOT_UNDEPLOY_ENABLED));
