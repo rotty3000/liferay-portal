@@ -15,6 +15,8 @@
 package com.liferay.portal.osgi.web.wab.extender.internal.event;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.osgi.web.wab.extender.internal.WabUtil;
@@ -99,9 +101,9 @@ public class EventUtil
 			WabUtil.getWebContextPath(bundle));
 
 		if (collision) {
-			properties.put("collision", contextPath);
-
 			List<Long> collidedBundleIds = new ArrayList<>();
+
+			List<String> collidedBundleNames = new ArrayList<>();
 
 			BundleContext bundleContext = bundle.getBundleContext();
 
@@ -118,10 +120,28 @@ public class EventUtil
 					curContextPath.equals(contextPath)) {
 
 					collidedBundleIds.add(curBundle.getBundleId());
+
+					collidedBundleNames.add(curBundle.getSymbolicName());
 				}
 			}
 
-			properties.put("collision.bundles", collidedBundleIds);
+			if (!collidedBundleIds.isEmpty()) {
+				properties.put("collision", contextPath);
+
+				properties.put("collision.bundles", collidedBundleIds);
+
+				StringBuilder sb = new StringBuilder(7);
+
+				sb.append("Newly added bundle: \"");
+				sb.append(bundle.getSymbolicName());
+				sb.append("\" has the same Web-ContextPath as the following ");
+				sb.append("bundles: ");
+				sb.append(collidedBundleNames);
+				sb.append(". This can lead to unexpected behavior when the ");
+				sb.append("bundles are deployed to the same layout");
+
+				_log.error(sb.toString());
+			}
 		}
 
 		properties.put("context.path", contextPath);
@@ -154,6 +174,8 @@ public class EventUtil
 
 		_eventAdmin.sendEvent(event);
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(EventUtil.class);
 
 	private final BundleContext _bundleContext;
 	private EventAdmin _eventAdmin;
