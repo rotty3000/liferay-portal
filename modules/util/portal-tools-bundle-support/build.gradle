@@ -21,10 +21,10 @@ dependencies {
 	compileInclude group: "commons-codec", name: "commons-codec", version: "1.10"
 	compileInclude group: "commons-logging", name: "commons-logging", version: "1.2"
 	compileInclude group: "org.apache.commons", name: "commons-compress", version: "1.12"
-	compileInclude group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.2"
-	compileInclude group: "org.apache.httpcomponents", name: "httpcore", version: "4.4.4"
 
 	compileOnly group: "org.apache.ant", name: "ant", transitive: false, version: "1.9.7"
+	compileOnly group: "org.apache.httpcomponents", name: "httpclient-osgi", version: "4.5.5"
+	compileOnly group: "org.apache.httpcomponents", name: "httpcore-osgi", version: "4.4.9"
 	compileOnly group: "org.apache.maven", name: "maven-core", transitive: false, version: "3.2.5"
 	compileOnly group: "org.apache.maven", name: "maven-model", transitive: false, version: "3.2.5"
 	compileOnly group: "org.apache.maven", name: "maven-plugin-api", transitive: false, version: "3.2.5"
