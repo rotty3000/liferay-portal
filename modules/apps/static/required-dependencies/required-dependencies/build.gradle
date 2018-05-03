@@ -2,12 +2,6 @@ import com.liferay.gradle.util.copy.RenameDependencyClosure
 
 task deployTestLibs(type: Copy)
 
-repositories {
-	maven {
-		url "https://repository.apache.org/content/repositories/snapshots"
-	}
-}
-
 configurations {
 	compileOnly {
 		transitive = false
@@ -74,4 +68,10 @@ deployTestLibs {
 	}
 
 	rename new RenameDependencyClosure(project, configurations.testLibs.name)
+}
+
+repositories {
+	maven {
+		url "https://repository.apache.org/content/repositories/snapshots"
+	}
 }
