@@ -1,8 +1,7 @@
-package ${packagePath}.uad.exporter.test;
+package ${entity.UADPackagePath}.uad.exporter.test;
 
 import ${apiPackagePath}.model.${entity.name};
-import ${packagePath}.uad.constants.${portletShortName}UADConstants;
-import ${packagePath}.uad.test.${entity.name}UADTestHelper;
+import ${entity.UADPackagePath}.uad.test.${entity.name}UADTestHelper;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -76,9 +75,7 @@ public class ${entity.name}UADExporterTest extends BaseUADExporterTestCase<${ent
 	@Inject
 	private ${entity.name}UADTestHelper _${entity.varName}UADTestHelper;
 
-	@Inject(
-		filter = "model.class.name=" + ${portletShortName}UADConstants.CLASS_NAME_${entity.constantName}
-	)
+	@Inject(filter = "component.name=*.${entity.name}UADExporter")
 	private UADExporter _uadExporter;
 
 }

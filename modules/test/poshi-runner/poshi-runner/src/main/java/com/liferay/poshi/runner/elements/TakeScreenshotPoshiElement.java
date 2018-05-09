@@ -14,7 +14,11 @@
 
 package com.liferay.poshi.runner.elements;
 
+import java.util.List;
+
+import org.dom4j.Attribute;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 /**
  * @author Kenji Heigel
@@ -57,6 +61,12 @@ public class TakeScreenshotPoshiElement extends PoshiElement {
 
 	protected TakeScreenshotPoshiElement(Element element) {
 		super(_ELEMENT_NAME, element);
+	}
+
+	protected TakeScreenshotPoshiElement(
+		List<Attribute> attributes, List<Node> nodes) {
+
+		super(_ELEMENT_NAME, attributes, nodes);
 	}
 
 	protected TakeScreenshotPoshiElement(String readableSyntax) {

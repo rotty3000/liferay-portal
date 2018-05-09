@@ -17,7 +17,6 @@ package com.liferay.blog.apio.internal.resource;
 import static com.liferay.portal.apio.idempotent.Idempotent.idempotent;
 
 import com.liferay.aggregate.rating.apio.identifier.AggregateRatingIdentifier;
-import com.liferay.apio.architect.functional.Try;
 import com.liferay.apio.architect.pagination.PageItems;
 import com.liferay.apio.architect.pagination.Pagination;
 import com.liferay.apio.architect.representor.Representor;
@@ -28,11 +27,13 @@ import com.liferay.blog.apio.identifier.BlogPostingIdentifier;
 import com.liferay.blog.apio.internal.form.BlogPostingForm;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.service.BlogsEntryService;
+import com.liferay.media.object.apio.identifier.FileEntryIdentifier;
 import com.liferay.person.apio.identifier.PersonIdentifier;
 import com.liferay.portal.apio.identifier.ClassNameClassPK;
 import com.liferay.portal.apio.permission.HasPermission;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.site.apio.identifier.WebSiteIdentifier;
 
 import java.util.List;
@@ -97,17 +98,16 @@ public class BlogPostingNestedCollectionResource
 		).identifier(
 			BlogsEntry::getEntryId
 		).addBidirectionalModel(
-			"webSite", "blogs", WebSiteIdentifier.class, BlogsEntry::getGroupId
+			"interactionService", "blogPosts", WebSiteIdentifier.class,
+			BlogsEntry::getGroupId
 		).addDate(
-			"createDate", BlogsEntry::getCreateDate
+			"dateCreated", BlogsEntry::getCreateDate
 		).addDate(
-			"displayDate", BlogsEntry::getDisplayDate
+			"dateDisplayed", BlogsEntry::getDisplayDate
 		).addDate(
-			"modifiedDate", BlogsEntry::getModifiedDate
+			"dateModified", BlogsEntry::getModifiedDate
 		).addDate(
-			"publishedDate", BlogsEntry::getLastPublishDate
-		).addLink(
-			"license", "https://creativecommons.org/licenses/by/4.0"
+			"datePublished", BlogsEntry::getLastPublishDate
 		).addLinkedModel(
 			"aggregateRating", AggregateRatingIdentifier.class,
 			ClassNameClassPK::create
@@ -115,6 +115,9 @@ public class BlogPostingNestedCollectionResource
 			"author", PersonIdentifier.class, BlogsEntry::getUserId
 		).addLinkedModel(
 			"creator", PersonIdentifier.class, BlogsEntry::getUserId
+		).addLinkedModel(
+			"image", FileEntryIdentifier.class,
+			BlogsEntry::getCoverImageFileEntryId
 		).addString(
 			"alternativeHeadline", BlogsEntry::getSubtitle
 		).addString(
@@ -129,7 +132,8 @@ public class BlogPostingNestedCollectionResource
 	}
 
 	private BlogsEntry _addBlogsEntry(
-		Long groupId, BlogPostingForm blogPostingForm) {
+			Long groupId, BlogPostingForm blogPostingForm)
+		throws PortalException {
 
 		ServiceContext serviceContext = new ServiceContext();
 
@@ -137,28 +141,26 @@ public class BlogPostingNestedCollectionResource
 		serviceContext.setAddGuestPermissions(true);
 		serviceContext.setScopeGroupId(groupId);
 
-		return Try.fromFallible(
-			() -> _blogsService.addEntry(
-				blogPostingForm.getHeadline(),
-				blogPostingForm.getAlternativeHeadline(),
-				blogPostingForm.getDescription(),
-				blogPostingForm.getArticleBody(),
-				blogPostingForm.getDisplayDateMonth(),
-				blogPostingForm.getDisplayDateDay(),
-				blogPostingForm.getDisplayDateYear(),
-				blogPostingForm.getDisplayDateHour(),
-				blogPostingForm.getDisplayDateMinute(), false, false, null,
-				null, null, null, serviceContext)
-		).getUnchecked();
+		return _blogsService.addEntry(
+			blogPostingForm.getHeadline(),
+			blogPostingForm.getAlternativeHeadline(),
+			blogPostingForm.getDescription(), blogPostingForm.getArticleBody(),
+			blogPostingForm.getDisplayDateMonth(),
+			blogPostingForm.getDisplayDateDay(),
+			blogPostingForm.getDisplayDateYear(),
+			blogPostingForm.getDisplayDateHour(),
+			blogPostingForm.getDisplayDateMinute(), false, false, null, null,
+			null, null, serviceContext);
 	}
 
 	private PageItems<BlogsEntry> _getPageItems(
 		Pagination pagination, Long groupId) {
 
 		List<BlogsEntry> blogsEntries = _blogsService.getGroupEntries(
-			groupId, 0, pagination.getStartPosition(),
-			pagination.getEndPosition());
-		int count = _blogsService.getGroupEntriesCount(groupId, 0);
+			groupId, WorkflowConstants.STATUS_APPROVED,
+			pagination.getStartPosition(), pagination.getEndPosition());
+		int count = _blogsService.getGroupEntriesCount(
+			groupId, WorkflowConstants.STATUS_APPROVED);
 
 		return new PageItems<>(blogsEntries, count);
 	}

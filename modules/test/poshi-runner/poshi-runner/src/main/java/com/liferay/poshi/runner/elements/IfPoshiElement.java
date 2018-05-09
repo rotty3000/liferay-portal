@@ -17,7 +17,9 @@ package com.liferay.poshi.runner.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 /**
  * @author Kenji Heigel
@@ -91,12 +93,22 @@ public class IfPoshiElement extends PoshiElement {
 		super("if", element);
 	}
 
+	protected IfPoshiElement(List<Attribute> attributes, List<Node> nodes) {
+		this(_ELEMENT_NAME, attributes, nodes);
+	}
+
 	protected IfPoshiElement(String readableSyntax) {
 		super("if", readableSyntax);
 	}
 
 	protected IfPoshiElement(String name, Element element) {
 		super(name, element);
+	}
+
+	protected IfPoshiElement(
+		String elementName, List<Attribute> attributes, List<Node> nodes) {
+
+		super(elementName, attributes, nodes);
 	}
 
 	protected IfPoshiElement(String name, String readableSyntax) {

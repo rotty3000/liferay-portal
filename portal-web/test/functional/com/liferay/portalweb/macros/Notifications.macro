@@ -20,11 +20,11 @@
 	</command>
 
 	<command name="goToFilterValues">
-		<var name="key_filterValue" value="${filterValue}" />
+		<execute function="Click" locator1="Dropdown#FILTER_AND_ORDER" />
 
-		<execute function="Click" locator1="Dropdown#FILTER" />
-
-		<execute function="AssertClick" locator1="Dropdown#FILTER_VALUES" value1="${filterValue}" />
+		<execute function="Click" locator1="MenuItem#ANY_MENU_ITEM" value1="${filterValues}">
+			<var name="key_menuItem" value="${filterValues}" />
+		</execute>
 	</command>
 
 	<command name="gotoNotifications">

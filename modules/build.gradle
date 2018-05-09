@@ -18,7 +18,7 @@ ext {
 		"com.liferay.gradle.plugins.version": "3.11.26",
 		"com.liferay.gradle.plugins.workspace.version": "1.9.2",
 		"com.liferay.portal.tools.bundle.support.version": "3.2.1",
-		"com.liferay.portal.tools.service.builder.version": "1.0.210",
+		"com.liferay.portal.tools.service.builder.version": "1.0.212",
 		"com.liferay.portal.tools.soy.builder.version": "3.0.1",
 		"com.liferay.portal.tools.theme.builder.version": "1.1.3"
 	]

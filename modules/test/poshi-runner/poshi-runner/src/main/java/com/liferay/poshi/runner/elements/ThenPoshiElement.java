@@ -17,7 +17,9 @@ package com.liferay.poshi.runner.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 /**
  * @author Kenji Heigel
@@ -64,12 +66,22 @@ public class ThenPoshiElement extends PoshiElement {
 		super(_ELEMENT_NAME, element);
 	}
 
+	protected ThenPoshiElement(List<Attribute> attributes, List<Node> nodes) {
+		this(_ELEMENT_NAME, attributes, nodes);
+	}
+
 	protected ThenPoshiElement(String readableSyntax) {
 		super(_ELEMENT_NAME, readableSyntax);
 	}
 
 	protected ThenPoshiElement(String name, Element element) {
 		super(name, element);
+	}
+
+	protected ThenPoshiElement(
+		String elementName, List<Attribute> attributes, List<Node> nodes) {
+
+		super(elementName, attributes, nodes);
 	}
 
 	protected ThenPoshiElement(String name, String readableSyntax) {

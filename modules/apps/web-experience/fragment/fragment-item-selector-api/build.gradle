@@ -1,3 +1,0 @@
-dependencies {
-	compileOnly project(":apps:collaboration:item-selector:item-selector-api")
-}

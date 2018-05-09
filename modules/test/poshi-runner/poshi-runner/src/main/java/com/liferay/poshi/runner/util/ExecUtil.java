@@ -74,11 +74,31 @@ public class ExecUtil {
 		Process process = processBuilder.start();
 
 		long duration = 0;
+		int returnCode = -1;
 		long start = System.currentTimeMillis();
 
 		while (true) {
 			try {
-				process.exitValue();
+				returnCode = process.exitValue();
+
+				if (returnCode == 0) {
+					String standardOut = readInputStream(
+						process.getInputStream(), true);
+
+					duration = System.currentTimeMillis() - start;
+
+					while (!standardOut.contains(
+								"Finished executing commands.") &&
+						   (duration < timeout)) {
+
+						sleep(10);
+
+						standardOut = readInputStream(
+							process.getInputStream(), true);
+
+						duration = System.currentTimeMillis() - start;
+					}
+				}
 
 				break;
 			}
@@ -87,7 +107,7 @@ public class ExecUtil {
 
 				if (duration >= timeout) {
 					System.out.print(
-						"Timeout occurred while executing Bash commands: " +
+						"Timeout occurred while executing commands: " +
 							Arrays.toString(commands));
 
 					throw itse;
@@ -119,6 +139,25 @@ public class ExecUtil {
 	public static String readInputStream(InputStream inputStream)
 		throws IOException {
 
+		return readInputStream(inputStream, false);
+	}
+
+	public static String readInputStream(
+			InputStream inputStream, boolean resetAfterReading)
+		throws IOException {
+
+		if (resetAfterReading && !inputStream.markSupported()) {
+			Class<?> inputStreamClass = inputStream.getClass();
+
+			System.out.println(
+				"Unable to reset after reading input stream " +
+					inputStreamClass.getName());
+		}
+
+		if (resetAfterReading && inputStream.markSupported()) {
+			inputStream.mark(Integer.MAX_VALUE);
+		}
+
 		StringBuffer sb = new StringBuffer();
 
 		byte[] bytes = new byte[1024];
@@ -129,6 +168,10 @@ public class ExecUtil {
 			sb.append(new String(Arrays.copyOf(bytes, size)));
 
 			size = inputStream.read(bytes);
+		}
+
+		if (resetAfterReading && inputStream.markSupported()) {
+			inputStream.reset();
 		}
 
 		return sb.toString();

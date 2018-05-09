@@ -95,8 +95,8 @@ public class Entity implements Comparable<Entity> {
 		this(
 			null, null, null, name, null, null, null, false, false, false, true,
 			null, null, null, null, null, true, false, false, false, false,
-			false, null, null, null, null, null, null, null, null, null, null,
-			false);
+			null, null, null, false, null, null, null, null, null, null, null,
+			null, null, null, false);
 	}
 
 	public Entity(
@@ -106,7 +106,8 @@ public class Entity implements Comparable<Entity> {
 		String persistenceClass, String finderClassName, String dataSource,
 		String sessionFactory, String txManager, boolean cacheEnabled,
 		boolean dynamicUpdateEnabled, boolean jsonEnabled, boolean mvccEnabled,
-		boolean trashEnabled, boolean deprecated,
+		boolean trashEnabled, String uadApplicationName, String uadOutputPath,
+		String uadPackagePath, boolean deprecated,
 		List<EntityColumn> pkEntityColumns,
 		List<EntityColumn> regularEntityColumns,
 		List<EntityColumn> blobEntityColumns,
@@ -132,6 +133,9 @@ public class Entity implements Comparable<Entity> {
 		_jsonEnabled = jsonEnabled;
 		_mvccEnabled = mvccEnabled;
 		_trashEnabled = trashEnabled;
+		_uadApplicationName = uadApplicationName;
+		_uadOutputPath = uadOutputPath;
+		_uadPackagePath = uadPackagePath;
 		_deprecated = deprecated;
 		_pkEntityColumns = pkEntityColumns;
 		_regularEntityColumns = regularEntityColumns;
@@ -617,6 +621,10 @@ public class Entity implements Comparable<Entity> {
 		return uadAnonymizableEntityColumnsMap;
 	}
 
+	public String getUADApplicationName() {
+		return _uadApplicationName;
+	}
+
 	public List<EntityColumn> getUADEntityColumns() {
 		List<EntityColumn> uadEntityColumns = new ArrayList<>();
 
@@ -646,6 +654,20 @@ public class Entity implements Comparable<Entity> {
 		}
 
 		return uadNonanonymizableEntityColumns;
+	}
+
+	public String getUADOutputPath() {
+		return _uadOutputPath;
+	}
+
+	public String getUADPackagePath() {
+		return _uadPackagePath;
+	}
+
+	public String getUADTestIntegrationOutputPath() {
+		return StringUtil.replace(
+			getUADOutputPath(), new String[] {"-uad/", "/main/"},
+			new String[] {"-uad-test/", "/testIntegration/"});
 	}
 
 	public List<String> getUADUserIdColumnNames() {
@@ -1190,6 +1212,9 @@ public class Entity implements Comparable<Entity> {
 	private final boolean _trashEnabled;
 	private final String _txManager;
 	private final List<String> _txRequiredMethodNames;
+	private final String _uadApplicationName;
+	private final String _uadOutputPath;
+	private final String _uadPackagePath;
 	private List<String> _unresolvedReferenceEntityNames;
 	private final boolean _uuid;
 	private final boolean _uuidAccessor;

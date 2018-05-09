@@ -273,6 +273,10 @@ public class PortletTracker
 			BundlePortletApp bundlePortletApp = createBundlePortletApp(
 				bundle, bundleClassLoader, serviceRegistrations);
 
+			bundlePortletApp.setDefaultNamespace(
+				(String)serviceReference.getProperty(
+					"javax.portlet.default-namespace"));
+
 			String jxPortletVersion = (String)serviceReference.getProperty(
 				"javax.portlet.version");
 
@@ -572,10 +576,6 @@ public class PortletTracker
 			GetterUtil.getBoolean(
 				get(serviceReference, "private-session-attributes"),
 				portletModel.isPrivateSessionAttributes()));
-		portletModel.setRemoteable(
-			GetterUtil.getBoolean(
-				get(serviceReference, "remoteable"),
-				portletModel.isRemoteable()));
 		portletModel.setRenderTimeout(
 			GetterUtil.getInteger(
 				get(serviceReference, "render-timeout"),

@@ -19,6 +19,9 @@ import com.liferay.poshi.runner.util.Validator;
 
 import java.io.IOException;
 
+import java.util.List;
+
+import org.dom4j.Attribute;
 import org.dom4j.CDATA;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -157,6 +160,10 @@ public class VarPoshiElement extends PoshiElement {
 		this(_ELEMENT_NAME, element);
 	}
 
+	protected VarPoshiElement(List<Attribute> attributes, List<Node> nodes) {
+		this(_ELEMENT_NAME, attributes, nodes);
+	}
+
 	protected VarPoshiElement(String readableSyntax) {
 		this(_ELEMENT_NAME, readableSyntax);
 	}
@@ -167,6 +174,12 @@ public class VarPoshiElement extends PoshiElement {
 		if (isElementType(name, element)) {
 			initValueAttributeName(element);
 		}
+	}
+
+	protected VarPoshiElement(
+		String elementName, List<Attribute> attributes, List<Node> nodes) {
+
+		super(elementName, attributes, nodes);
 	}
 
 	protected VarPoshiElement(String name, String readableSyntax) {

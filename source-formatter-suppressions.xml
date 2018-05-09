@@ -38,7 +38,7 @@
 		<suppress checks="MissingModifierCheck" files="portal-kernel/src/com/liferay/portal/kernel/process/local/ResultProcessCallable\.java" />
 		<suppress checks="MissingModifierCheck" files="portal-kernel/test/unit/com/liferay/portal/kernel/annotation/AnnotationLocatorTest\.java" />
 		<suppress checks="MissingModifierCheck" files="portal-kernel/test/unit/com/liferay/portal/kernel/resiliency/spi/agent/annotation/DistributedRegistryTest\.java" />
-		<suppress checks="PersistenceCallCheck" files="modules/apps/foundation/portal/portal-upgrade-test/src/testIntegration/java/com/liferay/portal/upgrade/test/BaseBuildAutoUpgradeTestCase\.java" />
+		<suppress checks="PersistenceCallCheck" files="modules/apps/portal/portal-upgrade-test/src/testIntegration/java/com/liferay/portal/upgrade/test/BaseBuildAutoUpgradeTestCase\.java" />
 		<suppress checks="PlusStatementCheck" files="portal-kernel/src/com/liferay/portal/kernel/io/BigEndianCodec\.java" />
 		<suppress checks="StaticVariableNameCheck" files="portal-impl/src/com/liferay/portal/language/LanguageResources\.java" />
 		<suppress checks="StaticVariableNameCheck" files="portal-impl/src/com/liferay/portal/util/PropsValues\.java" />
@@ -59,6 +59,7 @@
 
 		<!-- Temporary suppressions for private repos and subrepos -->
 
+		<suppress checks="ReferenceAnnotationCheck" files="modules/private/.*" />
 		<suppress checks="VariableNameCheck" files="modules/private/.*" />
 	</checkstyle>
 	<source-check>
@@ -108,11 +109,15 @@
 		<suppress checks="XMLIndentationCheck" files="portal-web/test/functional/com/liferay/portalweb/dependencies/.*" />
 		<suppress checks="XMLIndentationCheck" files="portal-web/test/functional/com/liferay/portalweb/macros/Calendar\.macro" />
 		<suppress checks="XMLIndentationCheck" files="tools/jalopy\.xml" />
+		<suppress checks="XMLServiceEntityNameCheck" files="portal-impl/src/com/liferay/counter/service\.xml" />
+		<suppress checks="XMLServiceEntityNameCheck" files="portal-impl/src/com/liferay/mail/service\.xml" />
+		<suppress checks="XMLServiceEntityNameCheck" files="portal-impl/src/com/liferay/portal/service\.xml" />
+		<suppress checks="XMLServiceEntityNameCheck" files="portal-impl/src/com/liferay/portlet/exportimport/service\.xml" />
 		<suppress checks="XMLTagAttributesCheck" files="portal-web/test/functional/com/liferay/portalweb/dependencies/Technology\.xml" />
 
 		<!-- Temporary suppressions for private repos and subrepos -->
 
-		<suppress checks="JavaAPISignatureCheck" files="modules/apps/foundation/apio-architect/.*" />
+		<suppress checks="JavaAPISignatureCheck" files="modules/apps/apio-architect/.*" />
 		<suppress checks="JavaAPISignatureCheck" files="modules/private/apps/commerce/.*" />
 		<suppress checks="JavaDeprecatedKernelClassesCheck" files="modules/private/.*" />
 	</source-check>

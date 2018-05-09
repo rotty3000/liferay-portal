@@ -1,0 +1,206 @@
+import com.liferay.gradle.plugins.node.tasks.PublishNodeModuleTask
+import com.liferay.gradle.util.copy.StripPathSegmentsAction
+
+configurations {
+	alloyUI
+	fontAwesome
+}
+
+task buildAlloyUITheme(type: Copy)
+task buildClay(type: Copy)
+task buildClayFonts(type: Copy)
+task buildClayIcons(type: Copy)
+task buildFontAwesome(type: Copy)
+task buildLexiconIcons(type: Copy)
+task buildTheme
+task publishNodeModule(type: PublishNodeModuleTask)
+
+String alloyUIVersion = "3.1.0-deprecated.42"
+String fontAwesomeVersion = "3.2.1"
+
+File themeDestinationDir = file("src/main/resources/META-INF/resources/_unstyled");
+
+buildAlloyUITheme {
+	File alloyThemeDestinationDir = new File(themeDestinationDir, "images/aui")
+
+	doFirst {
+		delete alloyThemeDestinationDir
+	}
+
+	eachFile new StripPathSegmentsAction(5)
+
+	filesMatching "**/build/aui-*/assets/skins/sam/", new StripPathSegmentsAction(5)
+	filesMatching "**/build/aui-skin-deprecated/images/", new StripPathSegmentsAction(3)
+
+	from {
+		zipTree(configurations.alloyUI.singleFile)
+	}
+
+	include "META-INF/resources/webjars/alloy-ui/${alloyUIVersion}/build/aui-*/assets/skins/sam/**.gif"
+	include "META-INF/resources/webjars/alloy-ui/${alloyUIVersion}/build/aui-*/assets/skins/sam/**.jpg"
+	include "META-INF/resources/webjars/alloy-ui/${alloyUIVersion}/build/aui-*/assets/skins/sam/**.png"
+	include "META-INF/resources/webjars/alloy-ui/${alloyUIVersion}/build/aui-skin-deprecated/images/"
+
+	includeEmptyDirs = false
+	into alloyThemeDestinationDir
+}
+
+buildCSS {
+	dependsOn buildTheme
+}
+
+buildClay {
+	File clayDestinationDir = new File(themeDestinationDir, "css/clay")
+
+	dependsOn npmInstall
+
+	doFirst {
+		delete clayDestinationDir
+	}
+
+	eachFile {
+		if (name in ["atlas.scss", "bootstrap.scss", "base.scss"]) {
+			filter {
+				String line ->
+
+				if (line == "// INSERT CUSTOM EXTENSIONS") {
+					line = '''\
+@import "variables";
+
+@import "../liferay_variables_custom";
+@import "../liferay_variables";
+@import "bourbon";
+@import "../clay_custom";
+@import "../liferay_custom";'''
+				}
+				else if (line == "// INSERT CUSTOM VARS") {
+					line = '''\
+@import url(font_awesome.css);
+@import "../clay_variables";'''
+				}
+
+				return line
+			}
+		}
+		else if (name in ["atlas-variables.scss", "base-variables.scss"]) {
+			filter {
+				String line ->
+
+				if (line == "// INSERT CUSTOM BASE VARS") {
+					line = '''\
+@import "../clay_variables";'''
+				}
+				else if (line == "// INSERT CUSTOM VARS") {
+					line = '''\
+
+@import "../liferay_variables_custom";
+@import "../liferay_variables";'''
+				}
+
+				return line
+			}
+		}
+	}
+
+	eachFile new StripPathSegmentsAction(3)
+	from npmInstall.nodeModulesDir
+	include "clay-css/src/scss/"
+	includeEmptyDirs = false
+	into clayDestinationDir
+}
+
+buildClayFonts {
+	File clayFontsDestinationDir = new File(themeDestinationDir, "css/clay/fonts")
+
+	dependsOn buildClay
+
+	doFirst {
+		delete clayFontsDestinationDir
+	}
+
+	eachFile new StripPathSegmentsAction(3)
+	from npmInstall.nodeModulesDir
+	include "clay/release/fonts/"
+	includeEmptyDirs = false
+	into clayFontsDestinationDir
+}
+
+buildClayIcons {
+	File clayIconsDestinationDir = new File(themeDestinationDir, "images/clay")
+
+	dependsOn npmInstall
+
+	doFirst {
+		delete clayIconsDestinationDir
+	}
+
+	eachFile new StripPathSegmentsAction(4)
+	from npmInstall.nodeModulesDir
+	include "clay-css/lib/images/icons/"
+	includeEmptyDirs = false
+	into clayIconsDestinationDir
+}
+
+buildFontAwesome {
+	File fontAwesomeDestinationDir = new File(themeDestinationDir, "css/font-awesome")
+
+	doFirst {
+		delete fontAwesomeDestinationDir
+	}
+
+	eachFile new StripPathSegmentsAction(5)
+
+	from {
+		zipTree(configurations.fontAwesome.singleFile)
+	}
+
+	include "META-INF/resources/webjars/font-awesome/${fontAwesomeVersion}/scss/**.scss"
+	include "META-INF/resources/webjars/font-awesome/${fontAwesomeVersion}/font/**"
+
+	includeEmptyDirs = false
+	into fontAwesomeDestinationDir
+}
+
+buildLexiconIcons {
+	File lexiconIconsDestinationDir = new File(themeDestinationDir, "images/lexicon")
+
+	dependsOn npmInstall
+
+	doFirst {
+		delete lexiconIconsDestinationDir
+	}
+
+	eachFile new StripPathSegmentsAction(4)
+	from npmInstall.nodeModulesDir
+	include "clay-css/lib/images/icons/"
+	includeEmptyDirs = false
+	into lexiconIconsDestinationDir
+}
+
+buildTheme {
+	dependsOn buildAlloyUITheme
+	dependsOn buildClayFonts
+	dependsOn buildClayIcons
+	dependsOn buildFontAwesome
+	dependsOn buildLexiconIcons
+}
+
+classes {
+	dependsOn buildTheme
+}
+
+configJSModules {
+	dependsOn = []
+	enabled = false
+}
+
+dependencies {
+	alloyUI group: "com.liferay.webjars", name: "com.liferay.webjars.alloy-ui", transitive: false, version: alloyUIVersion
+
+	fontAwesome group: "org.webjars", name: "font-awesome", transitive: false, version: fontAwesomeVersion
+}
+
+publishNodeModule {
+	dependsOn jar
+	workingDir = "src/main/resources/META-INF/resources/_unstyled"
+}

@@ -1,8 +1,8 @@
-package ${packagePath}.uad.display.test;
+package ${entity.UADPackagePath}.uad.display.test;
 
 import ${apiPackagePath}.model.${entity.name};
-import ${packagePath}.uad.constants.${portletShortName}UADConstants;
-import ${packagePath}.uad.test.${entity.name}UADTestHelper;
+import ${entity.UADPackagePath}.uad.constants.${entity.UADApplicationName}UADConstants;
+import ${entity.UADPackagePath}.uad.test.${entity.name}UADTestHelper;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -42,7 +42,7 @@ public class ${entity.name}UADDisplayTest extends BaseUADDisplayTestCase<${entit
 
 	@Override
 	protected String getApplicationName() {
-		return ${portletShortName}UADConstants.APPLICATION_NAME;
+		return ${entity.UADApplicationName}UADConstants.APPLICATION_NAME;
 	}
 
 	@Override
@@ -61,9 +61,7 @@ public class ${entity.name}UADDisplayTest extends BaseUADDisplayTestCase<${entit
 	@Inject
 	private ${entity.name}UADTestHelper _${entity.varName}UADTestHelper;
 
-	@Inject(
-		filter = "model.class.name=" + ${portletShortName}UADConstants.CLASS_NAME_${entity.constantName}
-	)
+	@Inject(filter = "component.name=*.${entity.name}UADDisplay")
 	private UADDisplay _uadDisplay;
 
 }

@@ -76,6 +76,10 @@ public class DateUtil {
 		return String.valueOf(System.nanoTime());
 	}
 
+	public static String getTimeInMilliseconds() {
+		return String.valueOf(System.currentTimeMillis());
+	}
+
 	public static String getYear(String offsetDays) {
 		return getFormattedDate(offsetDays, "yyyy");
 	}

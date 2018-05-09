@@ -19,6 +19,7 @@ import com.liferay.poshi.runner.util.Dom4JUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
@@ -129,6 +130,12 @@ public class DefinitionPoshiElement extends PoshiElement {
 
 	protected DefinitionPoshiElement(Element element) {
 		super(_ELEMENT_NAME, element);
+	}
+
+	protected DefinitionPoshiElement(
+		List<Attribute> attributes, List<Node> nodes) {
+
+		super(_ELEMENT_NAME, attributes, nodes);
 	}
 
 	protected DefinitionPoshiElement(String readableSyntax) {
