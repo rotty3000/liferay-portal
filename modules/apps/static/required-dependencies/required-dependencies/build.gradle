@@ -18,7 +18,6 @@ dependencies {
 	compileOnly group: "com.liferay", name: "org.apache.felix.configadmin", version: "1.8.8.LIFERAY-PATCHED-1"
 	compileOnly group: "com.liferay", name: "org.apache.felix.fileinstall", version: "3.5.4.LIFERAY-PATCHED-2"
 	compileOnly group: "com.liferay", name: "org.eclipse.equinox.console", version: "1.1.100-20150308.220103-2-LIFERAY-CACHED"
-	compileOnly group: "com.liferay", name: "org.eclipse.equinox.metatype", version: "1.4.200-20150831.175616-1-LIFERAY-CACHED"
 	compileOnly group: "com.liferay", name: "org.osgi.service.http", version: "3.5.0-20150611.165350-3.LIFERAY-PATCHED-2"
 	compileOnly group: "javax.servlet.jsp", name: "javax.servlet.jsp-api", version: "2.3.2-b01"
 	compileOnly group: "javax.servlet.jsp.jstl", name: "javax.servlet.jsp.jstl-api", version: "1.2.1"
@@ -29,6 +28,10 @@ dependencies {
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.gogo.runtime", version: "0.10.0"
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.gogo.shell", version: "0.10.0"
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.scr", version: "2.0.6"
+	compileOnly group: "org.apache.httpcomponents", name: "httpasyncclient-osgi", version: "4.1.4-20180328.002134-10"
+	compileOnly group: "org.apache.httpcomponents", name: "httpclient-osgi", version: "4.5.5"
+	compileOnly group: "org.apache.httpcomponents", name: "httpcore-osgi", version: "4.4.9"
+	compileOnly group: "org.eclipse.equinox", name: "org.eclipse.equinox.metatype", version: "1.4.400-20180501204908"
 	compileOnly group: "org.glassfish", name: "javax.el", version: "3.0.1-b05"
 	compileOnly group: "org.osgi", name: "org.osgi.service.metatype", version: "1.3.0"
 
@@ -65,4 +68,10 @@ deployTestLibs {
 	}
 
 	rename new RenameDependencyClosure(project, configurations.testLibs.name)
+}
+
+repositories {
+	maven {
+		url "https://repository.apache.org/content/repositories/snapshots"
+	}
 }

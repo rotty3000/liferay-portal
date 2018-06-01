@@ -3,9 +3,6 @@ targetCompatibility = "1.8"
 
 dependencies {
 	compileInclude group: "commons-io", name: "commons-io", version: "2.4"
-	compileInclude group: "org.apache.httpcomponents", name: "httpclient", version: "4.5.1"
-	compileInclude group: "org.apache.httpcomponents", name: "httpcore", version: "4.4.3"
-	compileInclude group: "org.apache.httpcomponents", name: "httpmime", version: "4.5.1"
 	compileInclude group: "org.apache.lucene", name: "lucene-analyzers-common", version: "5.2.1"
 	compileInclude group: "org.apache.lucene", name: "lucene-core", version: "5.2.1"
 	compileInclude group: "org.apache.lucene", name: "lucene-queries", version: "5.2.1"
@@ -21,6 +18,8 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "commons-lang", name: "commons-lang", version: "2.6"
+	compileOnly group: "org.apache.httpcomponents", name: "httpclient-osgi", version: "4.5.5"
+	compileOnly group: "org.apache.httpcomponents", name: "httpcore-osgi", version: "4.4.9"
 	compileOnly group: "org.apache.lucene", name: "lucene-misc", version: "5.2.1"
 	compileOnly group: "org.apache.lucene", name: "lucene-sandbox", version: "5.2.1"
 	compileOnly group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
