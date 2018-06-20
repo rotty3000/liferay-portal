@@ -25,7 +25,7 @@
 	<command name="Smoke" priority="5">
 		<description message="This is a test case for LPS-56769." />
 
-		<property name="portal.acceptance" value="true" />
+		<property name="portal.acceptance" value="false" />
 
 		<execute macro="Navigator#gotoPage">
 			<var name="pageName" value="Test Runtime Page" />

@@ -694,6 +694,8 @@ public class AssetPublisherUtil {
 		Map<String, Serializable> attributes =
 			assetPublisherDisplayContext.getAttributes();
 
+		attributes.put("filterExpired", Boolean.TRUE);
+
 		return getAssetEntryResults(
 			searchContainer, assetEntryQuery, layout, portletPreferences,
 			portletName, locale, timeZone, companyId, scopeGroupId, userId,
@@ -1801,7 +1803,7 @@ public class AssetPublisherUtil {
 		}
 		catch (IOException ioe) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(ioe);
+				_log.warn(ioe, ioe);
 			}
 		}
 

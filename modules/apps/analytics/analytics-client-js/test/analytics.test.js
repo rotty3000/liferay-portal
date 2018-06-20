@@ -45,6 +45,8 @@ describe('Analytics Client', () => {
 
 	beforeEach(
 		() => {
+			fetchMock.mock(/asahlfr/ig, () => Promise.resolve(200));
+
 			Analytics = AnalyticsClient.create();
 
 			localStorage.removeItem(STORAGE_KEY_EVENTS);
@@ -76,10 +78,12 @@ describe('Analytics Client', () => {
 		});
 
 		it('should prevent overlapping requests', (done) => {
+			fetchMock.mock(/identity/ig, () => Promise.resolve(200));
+
 			let fetchCalled = 0;
 
 			fetchMock.mock(
-				'*',
+				/send-analytics-events$/,
 				function() {
 					fetchCalled += 1;
 
@@ -123,6 +127,8 @@ describe('Analytics Client', () => {
 		});
 
 		it('should regenerate the stored identity if the identity changed' , () => {
+			fetchMock.mock(/identity/ig, () => Promise.resolve(200));
+
 			Analytics.reset();
 			Analytics.dispose();
 
@@ -136,17 +142,19 @@ describe('Analytics Client', () => {
 
 			const previousIdentityHash = localStorage.getItem(STORAGE_KEY_IDENTITY);
 
-			Analytics.setIdentity({
+			return Analytics.setIdentity({
 				email: 'john@liferay.com',
 				name: 'John'
+			}).then(() => {
+				const currentIdentityHash = localStorage.getItem(STORAGE_KEY_IDENTITY);
+
+				expect(currentIdentityHash).not.to.equal(previousIdentityHash);
 			});
-
-			const currentIdentityHash = localStorage.getItem(STORAGE_KEY_IDENTITY);
-
-			expect(currentIdentityHash).not.to.equal(previousIdentityHash);
 		});
 
 		it('should report identity changes to the Identity Service', () => {
+			fetchMock.mock('*', () => Promise.resolve(200));
+
 			Analytics.reset();
 			Analytics.dispose();
 
@@ -158,21 +166,25 @@ describe('Analytics Client', () => {
 
 			let identityCalled = 0;
 
-			Analytics.setIdentity(ANALYTICS_IDENTITY)
+			return Analytics.setIdentity(ANALYTICS_IDENTITY)
 			.then(() => {
+				fetchMock.restore();
+				fetchMock.mock(/asahlfr/ig, () => Promise.resolve(200));
 				fetchMock.mock(
-					/send-identity-context/,
+					/identity/ig,
 					function(url) {
 						identityCalled += 1;
 						return '';
 					}
-				)
+				);
 			})
 			.then(() => Analytics.setIdentity({email: 'john@liferay.com'}))
-			.then(() => expect(identityCalled).to.equal(1))
+			.then(() => expect(identityCalled).to.equal(1));
 		});
 
 		it('should not request the Identity Service when identity hasn\'t changed', () => {
+			fetchMock.mock(/identity/ig, () => Promise.resolve(200));
+
 			Analytics.reset();
 			Analytics.dispose();
 
@@ -184,8 +196,10 @@ describe('Analytics Client', () => {
 
 			let identityCalled = 0;
 
-			Analytics.setIdentity(ANALYTICS_IDENTITY)
+			return Analytics.setIdentity(ANALYTICS_IDENTITY)
 			.then(() => {
+				fetchMock.restore();
+				fetchMock.mock(/asahlfr/ig, () => Promise.resolve(200));
 				fetchMock.mock(
 					/send-identity-context/,
 					function(url) {
@@ -195,7 +209,7 @@ describe('Analytics Client', () => {
 				)
 			})
 			.then(() => Analytics.setIdentity(ANALYTICS_IDENTITY))
-			.then(() => expect(identityCalled).to.equal(1))
+			.then(() => expect(identityCalled).to.equal(0));
 		});
 
 		it('should only clear the persisted events when done', () => {
@@ -211,7 +225,7 @@ describe('Analytics Client', () => {
 			fetchMock.mock(/send-identity-context$/, () => Promise.resolve({}));
 
 			fetchMock.mock(
-				/send\-analytics\-events$/,
+				/send-analytics-events$/,
 				function() {
 					// Send events while flush is in progress
 					sendDummyEvents(Analytics, 7);
@@ -229,7 +243,7 @@ describe('Analytics Client', () => {
 			return Analytics.flush().then(() => {
 				const events = Analytics.events;
 
-				events.should.have.lengthOf(5); // 7 for each gateway
+				events.should.have.lengthOf(7);
 			});
 		});
 	});

@@ -28,9 +28,24 @@ long fragmentCollectionId = ParamUtil.getLong(request, "fragmentCollectionId");
 
 <liferay-frontend:edit-form
 	action="<%= importURL %>"
+	enctype="multipart/form-data"
 	name="fm"
 >
 	<liferay-frontend:edit-form-body>
+
+		<%
+		List<String> invalidFragmentEntriesNames = (List<String>)SessionMessages.get(renderRequest, "invalidFragmentEntriesNames");
+		%>
+
+		<c:if test="<%= ListUtil.isNotEmpty(invalidFragmentEntriesNames) %>">
+			<clay:alert
+				closeable="true"
+				destroyOnHide="true"
+				message='<%= LanguageUtil.format(request, "the-following-fragments-have-validation-issues.-they-have-been-left-in-draft-status-x", "<strong>" + StringUtil.merge(invalidFragmentEntriesNames, StringPool.COMMA_AND_SPACE) + "</strong>", false) %>'
+				title='<%= LanguageUtil.get(request, "info") %>'
+			/>
+		</c:if>
+
 		<liferay-ui:error exception="<%= DuplicateFragmentCollectionKeyException.class %>">
 
 			<%

@@ -277,6 +277,14 @@
 			</execute>
 		</for>
 
+		<execute macro="SearchPortlet#configureScope">
+			<var name="searchScope" value="Let the User Choose" />
+		</execute>
+
+		<execute macro="SearchPortlet#selectScopeInput">
+			<var name="searchScope" value="Everything" />
+		</execute>
+
 		<execute macro="SearchBarPortlet#configureScope">
 			<var name="searchScope" value="Let the User Choose" />
 		</execute>
@@ -302,6 +310,10 @@
 			<var name="searchAssetTitle" value="Potato Document" />
 			<var name="searchAssetType" value="Document" />
 			<var name="searchTerm" value="Potato" />
+		</execute>
+
+		<execute macro="SearchPortlet#selectScopeInput">
+			<var name="searchScope" value="This Site" />
 		</execute>
 
 		<execute macro="SearchBarPortlet#selectScopeInput">
@@ -786,6 +798,10 @@
 
 		<execute macro="Navigator#openSpecificURL">
 			<var name="url" value="${portalURL}/web/guest/search" />
+		</execute>
+
+		<execute macro="SearchPortlet#configureScope">
+			<var name="searchScope" value="Everything" />
 		</execute>
 
 		<execute macro="SearchBarPortlet#configureScope">
@@ -1317,7 +1333,7 @@
 			<var name="pageName" value="${searchPage}" />
 		</execute>
 
-		<for list="Category Facet,Folder Facet,Site Facet,Tag Facet,Type Facet,User Facet,Search Results,Search Bar" param="portletName">
+		<for list="Search Options,Category Facet,Folder Facet,Site Facet,Tag Facet,Type Facet,User Facet,Search Results,Search Bar" param="portletName">
 			<execute macro="Navigator#gotoPage">
 				<var name="pageName" value="${searchPage}" />
 			</execute>
@@ -1327,8 +1343,17 @@
 			</execute>
 		</for>
 
+		<execute macro="SearchPortlet#configureScope">
+			<var name="searchScope" value="Everything" />
+		</execute>
+
 		<execute macro="SearchBarPortlet#configureScope">
 			<var name="searchScope" value="Everything" />
+		</execute>
+
+		<execute macro="SearchFacetPortlet#configureSearchOptions">
+			<var name="allowEmptySearches" value="true" />
+			<var name="basicFacetSelection" value="true" />
 		</execute>
 
 		<execute macro="SearchBarPortlet#searchPG">

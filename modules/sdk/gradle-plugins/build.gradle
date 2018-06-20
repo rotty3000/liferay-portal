@@ -34,7 +34,7 @@ copyGradleTestDependencies {
 }
 
 dependencies {
-	compile group: "com.liferay", name: "com.liferay.ant.bnd", version: "2.0.50"
+	compile group: "com.liferay", name: "com.liferay.ant.bnd", version: "2.0.51"
 	compile group: "com.liferay", name: "com.liferay.gogo.shell.client", version: "1.0.0"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.alloy.taglib", version: "2.0.0"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.css.builder", version: "2.2.0"
@@ -46,7 +46,7 @@ dependencies {
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.js.transpiler", version: "2.4.11"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.lang.builder", version: "2.2.2"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.service.builder", version: "2.1.45"
-	compile group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.188"
+	compile group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.193"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.soy", version: "3.1.6"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.test.integration", version: "2.2.1"
 	compile group: "com.liferay", name: "com.liferay.gradle.plugins.tld.formatter", version: "1.0.7"

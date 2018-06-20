@@ -15,6 +15,7 @@
 package com.liferay.portal.osgi.web.wab.extender.internal.event;
 
 import com.liferay.osgi.util.ServiceTrackerFactory;
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.osgi.web.wab.extender.internal.WabUtil;
@@ -51,14 +52,29 @@ public class EventUtil
 	public static final String UNDEPLOYING = "org/osgi/service/web/UNDEPLOYING";
 
 	public EventUtil(BundleContext bundleContext) {
-		_bundleContext = bundleContext;
 
-		_logger = new Logger(bundleContext);
+		// See LPS-82529 for more information on the property
+		// "wab.event.enabled"
 
-		_webExtenderBundle = _bundleContext.getBundle();
+		_enabled = GetterUtil.getBoolean(
+			bundleContext.getProperty("wab.event.enabled"));
 
-		_eventAdminServiceTracker = ServiceTrackerFactory.open(
-			_bundleContext, EventAdmin.class, this);
+		if (_enabled) {
+			_bundleContext = bundleContext;
+
+			_logger = new Logger(bundleContext);
+
+			_webExtenderBundle = _bundleContext.getBundle();
+
+			_eventAdminServiceTracker = ServiceTrackerFactory.open(
+				_bundleContext, EventAdmin.class, this);
+		}
+		else {
+			_bundleContext = null;
+			_eventAdminServiceTracker = null;
+			_logger = null;
+			_webExtenderBundle = null;
+		}
 	}
 
 	@Override
@@ -71,6 +87,10 @@ public class EventUtil
 	}
 
 	public void close() {
+		if (!_enabled) {
+			return;
+		}
+
 		_eventAdminServiceTracker.close();
 	}
 
@@ -91,6 +111,10 @@ public class EventUtil
 	public void sendEvent(
 		Bundle bundle, String eventTopic, Exception exception,
 		boolean collision) {
+
+		if (!_enabled) {
+			return;
+		}
 
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
@@ -166,8 +190,7 @@ public class EventUtil
 		String symbolicName = bundle.getSymbolicName();
 
 		properties.put(
-			"servlet.context.name",
-			symbolicName.replaceAll("[^a-zA-Z0-9]", ""));
+			"servlet.context.name", _sanitizeSymbolicName(symbolicName));
 
 		properties.put("timestamp", System.currentTimeMillis());
 
@@ -180,7 +203,42 @@ public class EventUtil
 		_eventAdmin.sendEvent(event);
 	}
 
+	private static String _sanitizeSymbolicName(String symbolicName) {
+		StringBuilder sb = new StringBuilder(symbolicName.length());
+
+		for (int i = 0; i < symbolicName.length(); i++) {
+			char c = symbolicName.charAt(i);
+
+			if ((c < 128) && _VALID_CHARS[c]) {
+				sb.append(c);
+			}
+		}
+
+		if (sb.length() == symbolicName.length()) {
+			return symbolicName;
+		}
+
+		return sb.toString();
+	}
+
+	private static final boolean[] _VALID_CHARS = new boolean[128];
+
+	static {
+		for (int i = CharPool.NUMBER_0; i <= CharPool.NUMBER_9; i++) {
+			_VALID_CHARS[i] = true;
+		}
+
+		for (int i = CharPool.UPPER_CASE_A; i <= CharPool.UPPER_CASE_Z; i++) {
+			_VALID_CHARS[i] = true;
+		}
+
+		for (int i = CharPool.LOWER_CASE_A; i <= CharPool.LOWER_CASE_Z; i++) {
+			_VALID_CHARS[i] = true;
+		}
+	}
+
 	private final BundleContext _bundleContext;
+	private final boolean _enabled;
 	private EventAdmin _eventAdmin;
 	private final ServiceTracker<EventAdmin, EventAdmin>
 		_eventAdminServiceTracker;

@@ -2990,7 +2990,7 @@ app.server.type=@{app.server.type}]]></echo>
 		<run-functional-test app.server.type="weblogic" database.type="mysql" test.portal.log.assert="true" />
 	</target>
 
-	<target name="functional-smoke-weblogic121-mysql57-jdk8">
+	<target name="functional-smoke-weblogic122-mysql57-jdk8">
 		<run-functional-test app.server.type="weblogic" database.type="mysql" database.version="5.7" test.portal.log.assert="true" />
 	</target>
 
@@ -3146,7 +3146,7 @@ app.server.type=@{app.server.type}]]></echo>
 		<run-functional-test app.server.type="weblogic" database.type="mysql" />
 	</target>
 
-	<target name="functional-upgrade-weblogic121-mysql57-jdk8">
+	<target name="functional-upgrade-weblogic122-mysql57-jdk8">
 		<run-functional-test app.server.type="weblogic" database.type="mysql" database.version="5.7" />
 	</target>
 
@@ -3158,7 +3158,7 @@ app.server.type=@{app.server.type}]]></echo>
 		<run-functional-test app.server.type="wildfly" database.type="mariadb" />
 	</target>
 
-	<target name="functional-weblogic121-oracle121-jdk8">
+	<target name="functional-weblogic122-oracle121-jdk8">
 		<run-functional-test app.server.type="weblogic" database.type="oracle" />
 	</target>
 
@@ -3371,28 +3371,52 @@ app.server.type=@{app.server.type}]]></echo>
 			</test-action>
 
 			<test-set-up>
-				<propertycopy from="app.server.${app.server.type}.bin.dir" name="test.app.server.bin.dir" />
+				<if>
+					<and>
+						<or>
+							<matches pattern="https?://" string="${test.portal.bundle.war.url}" />
+							<matches pattern="https?://" string="${test.portal.bundle.zip.url}" />
+						</or>
+						<matches pattern="https?://" string="${test.sql.zip.url}" />
+					</and>
+					<then>
+						<propertycopy from="app.server.${app.server.type}.bin.dir" name="test.app.server.bin.dir" />
 
-				<antcall inheritAll="false" target="prepare-test-bundle">
-					<param name="app.server.type" value="${app.server.type}" />
-					<param name="test.app.server.bin.dir" value="${test.app.server.bin.dir}" />
-					<param name="test.build.bundle.zip.url" value="${test.portal.bundle.zip.url}" />
-					<param name="test.build.fix.pack.zip.url" value="${test.build.fix.pack.zip.url}" />
-					<param name="test.build.portal.dependencies.zip.url" value="${test.portal.bundle.dependencies.zip.url}" />
-					<param name="test.build.portal.osgi.zip.url" value="${test.portal.bundle.osgi.zip.url}" />
-					<param name="test.build.portal.war.url" value="${test.portal.bundle.war.url}" />
-					<param name="test.fix.pack.base.url" value="${test.fix.pack.base.url}" />
-				</antcall>
+						<antcall inheritAll="false" target="prepare-test-bundle">
+							<param name="app.server.type" value="${app.server.type}" />
+							<param name="test.app.server.bin.dir" value="${test.app.server.bin.dir}" />
+							<param name="test.build.bundle.zip.url" value="${test.portal.bundle.zip.url}" />
+							<param name="test.build.fix.pack.zip.url" value="${test.build.fix.pack.zip.url}" />
+							<param name="test.build.portal.dependencies.zip.url" value="${test.portal.bundle.dependencies.zip.url}" />
+							<param name="test.build.portal.osgi.zip.url" value="${test.portal.bundle.osgi.zip.url}" />
+							<param name="test.build.portal.war.url" value="${test.portal.bundle.war.url}" />
+							<param name="test.fix.pack.base.url" value="${test.fix.pack.base.url}" />
+						</antcall>
 
-				<antcall target="deploy-license-xml">
-					<param name="test.build.license.xml.zip.url" value="${test.license.xml.url}" />
-				</antcall>
+						<antcall target="deploy-license-xml">
+							<param name="test.build.license.xml.zip.url" value="${test.license.xml.url}" />
+						</antcall>
 
-				<antcall target="deploy-sql-zip">
-					<param name="test.sql.zip.url" value="${test.sql.zip.url}" />
-				</antcall>
+						<antcall target="deploy-sql-zip">
+							<param name="test.sql.zip.url" value="${test.sql.zip.url}" />
+						</antcall>
 
-				<antcall inheritAll="false" target="setup-sdk" />
+						<antcall inheritAll="false" target="setup-sdk" />
+
+						<setup-testable-tomcat />
+
+						<setup-test-batch-testable-tomcat />
+					</then>
+					<elseif>
+						<and>
+							<available file="liferay-portal-bundle-${app.server.type}.zip" />
+							<available file="liferay-portal-source.zip" />
+						</and>
+						<then>
+							<prepare-test-environment app.server.type="${app.server.type}" />
+						</then>
+					</elseif>
+				</if>
 			</test-set-up>
 		</run-batch-test>
 	</target>

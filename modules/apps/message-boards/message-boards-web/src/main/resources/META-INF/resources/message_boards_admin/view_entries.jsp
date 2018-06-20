@@ -21,6 +21,8 @@ MBCategory category = (MBCategory)request.getAttribute(WebKeys.MESSAGE_BOARDS_CA
 
 long categoryId = GetterUtil.getLong(request.getAttribute("view.jsp-categoryId"));
 
+MBCategoryDisplay categoryDisplay = new MBCategoryDisplay(scopeGroupId, categoryId);
+
 SearchContainer entriesSearchContainer = (SearchContainer)request.getAttribute("view.jsp-entriesSearchContainer");
 %>
 
@@ -114,8 +116,8 @@ SearchContainer entriesSearchContainer = (SearchContainer)request.getAttribute("
 							</h5>
 
 							<%
-							int subcategoriesCount = MBCategoryServiceUtil.getCategoriesCount(scopeGroupId, curCategory.getCategoryId(), WorkflowConstants.STATUS_APPROVED);
-							int threadsCount = MBThreadServiceUtil.getThreadsCount(scopeGroupId, curCategory.getCategoryId(), WorkflowConstants.STATUS_APPROVED);
+							int subcategoriesCount = categoryDisplay.getSubcategoriesCount(curCategory);
+							int threadsCount = categoryDisplay.getSubcategoriesThreadsCount(curCategory);
 							%>
 
 							<span class="h6 text-default">

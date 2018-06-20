@@ -109,26 +109,7 @@ public class LiferayWriter
 		}
 		catch (IOException ioe) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to delete the resource: ", ioe);
-			}
-
-			throw ioe;
-		}
-	}
-
-	public void doInsert(IndexedRecord indexedRecord) throws IOException {
-		ObjectNode apioForm = _createApioExpectedForm(indexedRecord, true);
-
-		String resourceURL =
-			_tLiferayOutputProperties.resource.resource.getValue();
-
-		try {
-			_liferaySink.doApioPostRequest(
-				_runtimeContainer, resourceURL, apioForm);
-		}
-		catch (IOException ioe) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to insert the resource: ", ioe);
+				_log.debug("Unable to delete the resource", ioe);
 			}
 
 			throw ioe;
@@ -136,7 +117,7 @@ public class LiferayWriter
 	}
 
 	public void doUpdate(IndexedRecord indexedRecord) throws IOException {
-		ObjectNode apioForm = _createApioExpectedForm(indexedRecord, true);
+		ObjectNode objectNode = _createApioExpectedForm(indexedRecord, true);
 		String resourceId = getIndexedRecordId(indexedRecord);
 
 		String resourceURL =
@@ -152,11 +133,31 @@ public class LiferayWriter
 
 		try {
 			_liferaySink.doApioPutRequest(
-				_runtimeContainer, singleResourceUri.toASCIIString(), apioForm);
+				_runtimeContainer, singleResourceUri.toASCIIString(),
+				objectNode);
 		}
 		catch (IOException ioe) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("Unable to update the resource: ", ioe);
+			}
+
+			throw ioe;
+		}
+	}
+
+	public void doUpsert(IndexedRecord indexedRecord) throws IOException {
+		ObjectNode objectNode = _createApioExpectedForm(indexedRecord, true);
+
+		String resourceURL =
+			_tLiferayOutputProperties.resource.resource.getValue();
+
+		try {
+			_liferaySink.doApioPostRequest(
+				_runtimeContainer, resourceURL, objectNode);
+		}
+		catch (IOException ioe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to insert the resource: ", ioe);
 			}
 
 			throw ioe;
@@ -215,7 +216,7 @@ public class LiferayWriter
 				doUpdate(indexedRecord);
 			}
 			else if (Action.Upsert == action) {
-				doInsert(indexedRecord);
+				doUpsert(indexedRecord);
 			}
 
 			_handleSuccessRecord(indexedRecord);
@@ -279,7 +280,7 @@ public class LiferayWriter
 
 		List<Schema.Field> indexRecordFields = indexRecordSchema.getFields();
 
-		ObjectNode apioForm = _mapper.createObjectNode();
+		ObjectNode objectNode = _mapper.createObjectNode();
 
 		for (Schema.Field field : indexRecordFields) {
 			String fieldName = field.name();
@@ -295,10 +296,11 @@ public class LiferayWriter
 			Type fieldType = unwrappedSchema.getType();
 
 			if (fieldType == Schema.Type.STRING) {
-				apioForm.put(fieldName, (String)indexedRecord.get(field.pos()));
+				objectNode.put(
+					fieldName, (String)indexedRecord.get(field.pos()));
 			}
 			else if (fieldType == Schema.Type.NULL) {
-				apioForm.put(fieldName, "");
+				objectNode.put(fieldName, "");
 			}
 			else {
 				throw new IOException(
@@ -308,7 +310,7 @@ public class LiferayWriter
 			}
 		}
 
-		return apioForm;
+		return objectNode;
 	}
 
 	private void _handleRejectRecord(

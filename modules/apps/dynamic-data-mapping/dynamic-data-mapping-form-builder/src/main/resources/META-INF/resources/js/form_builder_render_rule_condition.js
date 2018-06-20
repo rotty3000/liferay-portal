@@ -75,7 +75,7 @@ AUI.add(
 
 				var visible = false;
 
-				if (instance._isDate(secondOperandTypeValue) && !instance._isFieldList(firstOperand)) {
+				if (instance._isDate(secondOperandTypeValue) && instance._isBinaryCondition(index) && !instance._isFieldList(firstOperand)) {
 					visible = true;
 				}
 
@@ -103,7 +103,7 @@ AUI.add(
 
 				var visible = false;
 
-				if (instance._isNumeric(secondOperandTypeValue) && (secondOperandTypeValue === 'double') && !instance._isFieldList(firstOperand)) {
+				if (instance._isNumeric(secondOperandTypeValue) && instance._isBinaryCondition(index) && (secondOperandTypeValue === 'double') && !instance._isFieldList(firstOperand)) {
 					visible = true;
 				}
 
@@ -130,7 +130,7 @@ AUI.add(
 
 				var visible = false;
 
-				if (instance._isNumeric(secondOperandTypeValue) && secondOperandTypeValue == 'integer' && !instance._isFieldList(firstOperand)) {
+				if (instance._isNumeric(secondOperandTypeValue) && instance._isBinaryCondition(index) && secondOperandTypeValue == 'integer' && !instance._isFieldList(firstOperand)) {
 					visible = true;
 				}
 
@@ -157,7 +157,7 @@ AUI.add(
 
 				var visible = false;
 
-				if (instance._isText(type) && !instance._isFieldList(firstOperand)) {
+				if (instance._isText(type) && instance._isBinaryCondition(index) && !instance._isFieldList(firstOperand)) {
 					visible = true;
 				}
 

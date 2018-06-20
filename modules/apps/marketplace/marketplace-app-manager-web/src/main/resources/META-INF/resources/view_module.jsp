@@ -42,7 +42,7 @@ SearchContainer searchContainer = viewModuleManagementToolbarDisplayContext.getS
 portletDisplay.setShowBackIcon(true);
 portletDisplay.setURLBack(backURL.toString());
 
-Dictionary<String, String> headers = bundle.getHeaders();
+Dictionary<String, String> headers = bundle.getHeaders(StringPool.BLANK);
 
 String bundleName = GetterUtil.getString(headers.get(BundleConstants.BUNDLE_NAME));
 
@@ -77,7 +77,7 @@ else {
 	sortingURL="<%= viewModuleManagementToolbarDisplayContext.getSortingURL() %>"
 />
 
-<div class="container-fluid-1280">
+<div class="container-fluid container-fluid-max-xl">
 	<liferay-ui:breadcrumb
 		showCurrentGroup="<%= false %>"
 		showGuestGroup="<%= false %>"
@@ -135,13 +135,13 @@ else {
 				}
 				%>
 
-				<h5>
+				<h2 class="list-group-title">
 					<%= name %>
-				</h5>
+				</h2>
 
-				<h6 class="text-default">
-					<%= description %>
-				</h6>
+				<c:if test="Validator.isNotNull(description)">
+					<p class="list-group-text"><%= description %></p>
+				</c:if>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
 

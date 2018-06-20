@@ -36,6 +36,7 @@ import com.liferay.portal.security.permission.PermissionCacheUtil;
 import com.liferay.portal.service.base.ResourceActionLocalServiceBaseImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,9 +103,14 @@ public class ResourceActionLocalServiceImpl
 		}
 
 		long availableBits = -2;
+		Map<String, ResourceAction> resourceActionMap = new HashMap<>();
 
-		for (ResourceAction resourceAction : getResourceActions(name)) {
+		List<ResourceAction> resourceActions = getResourceActions(name);
+
+		for (ResourceAction resourceAction : resourceActions) {
 			availableBits &= ~resourceAction.getBitwiseValue();
+
+			resourceActionMap.put(resourceAction.getActionId(), resourceAction);
 		}
 
 		List<ResourceAction> newResourceActions = null;
@@ -118,8 +124,7 @@ public class ResourceActionLocalServiceImpl
 				continue;
 			}
 
-			resourceAction = resourceActionPersistence.fetchByN_A(
-				name, actionId);
+			resourceAction = resourceActionMap.get(actionId);
 
 			if (resourceAction == null) {
 				long bitwiseValue = 1;
