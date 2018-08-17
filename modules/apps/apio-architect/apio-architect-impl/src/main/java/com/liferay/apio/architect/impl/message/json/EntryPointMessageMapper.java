@@ -31,7 +31,6 @@ import com.liferay.apio.architect.impl.entrypoint.EntryPoint;
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 public interface EntryPointMessageMapper extends MessageMapper<EntryPoint> {
 

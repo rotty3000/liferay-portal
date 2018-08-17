@@ -30,6 +30,7 @@ import org.osgi.service.component.annotations.Component;
  * discovered by a hypermedia consumer.
  *
  * @author Víctor Galán
+ * @review
  */
 @Component(
 	property = {
@@ -51,8 +52,8 @@ public class ApiDocumentationFilter implements ContainerResponseFilter {
 			StringBuilder linkValueStringBuilder = new StringBuilder();
 
 			linkValueStringBuilder.append("Link: <");
-			linkValueStringBuilder.append(_getApiDocumentationString(uriInfo));
-			linkValueStringBuilder.append(">; rel=");
+			linkValueStringBuilder.append(uriInfo.getBaseUri());
+			linkValueStringBuilder.append("doc>; rel=");
 			linkValueStringBuilder.append(_HYDRA_DOCUMENTATION_REF);
 
 			MultivaluedMap<String, Object> headers =
@@ -60,10 +61,6 @@ public class ApiDocumentationFilter implements ContainerResponseFilter {
 
 			headers.add("Link", linkValueStringBuilder);
 		}
-	}
-
-	private String _getApiDocumentationString(UriInfo uriInfo) {
-		return uriInfo.getBaseUri() + "doc";
 	}
 
 	private static final String _HYDRA_DOCUMENTATION_REF =

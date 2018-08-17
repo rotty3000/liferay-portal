@@ -33,7 +33,6 @@ public class URLProviderUtil {
 	 *
 	 * @param  httpServletRequest the current HTTP request
 	 * @return the server's URL
-	 * @review
 	 */
 	public static String getServerURL(HttpServletRequest httpServletRequest) {
 		StringBuilder sb = new StringBuilder();

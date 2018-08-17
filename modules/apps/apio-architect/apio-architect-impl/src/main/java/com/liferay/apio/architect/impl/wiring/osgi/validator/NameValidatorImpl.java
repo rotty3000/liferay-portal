@@ -26,7 +26,7 @@ public class NameValidatorImpl implements NameValidator {
 
 	@Override
 	public String getValidationError() {
-		return "Name can not be null and can only contains alphabetic " +
+		return "Name cannot be null and can only contains alphabetic " +
 			"characters and hyphens";
 	}
 

@@ -28,11 +28,10 @@ import org.osgi.service.component.annotations.Component;
  *
  * <p>
  * For more information, see <a href="https://json-ld.org/">JSON-LD </a> and <a
- * href="https://www.hydra-cg.com/">Hydra </a> .
+ * href="https://www.hydra-cg.com/">Hydra </a>.
  * </p>
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component
 public class JSONLDBatchResultMessageMapper<T>

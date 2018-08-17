@@ -67,7 +67,7 @@ public class ServiceTrackerListTest {
 
 	@Test
 	public void testGetServiceWithCustomComparator() throws Exception {
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(
 				_bundleContext, Object.class,
 				new Comparator<ServiceReference<Object>>() {
@@ -95,7 +95,7 @@ public class ServiceTrackerListTest {
 
 	@Test
 	public void testGetServiceWithServiceTrackerCustomizer() throws Exception {
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(
 				_bundleContext, Object.class, null,
 				new ServiceTrackerCustomizer<Object, Object>() {
@@ -131,7 +131,7 @@ public class ServiceTrackerListTest {
 
 	@Test
 	public void testServiceInsertion() throws Exception {
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(_bundleContext, Object.class);
 
 		Assert.assertEquals(
@@ -150,7 +150,7 @@ public class ServiceTrackerListTest {
 	public void testServiceIterationOrderWithCustomComparator()
 		throws Exception {
 
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(
 				_bundleContext, Object.class,
 				new Comparator<ServiceReference<Object>>() {
@@ -192,7 +192,7 @@ public class ServiceTrackerListTest {
 	public void testServiceIterationOrderWithDefaultComparator()
 		throws Exception {
 
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(_bundleContext, Object.class);
 
 		Object[] services = {new Object(), new Object()};
@@ -213,7 +213,7 @@ public class ServiceTrackerListTest {
 
 	@Test
 	public void testServiceRemoval() throws Exception {
-		ServiceTrackerList<Object, Object> serviceTrackerList =
+		ServiceTrackerList<Object> serviceTrackerList =
 			ServiceTrackerListFactory.open(_bundleContext, Object.class);
 
 		Assert.assertEquals(
@@ -285,6 +285,6 @@ public class ServiceTrackerListTest {
 	}
 
 	private BundleContext _bundleContext;
-	private ServiceTrackerList<Object, Object> _serviceTrackerList;
+	private ServiceTrackerList<Object> _serviceTrackerList;
 
 }

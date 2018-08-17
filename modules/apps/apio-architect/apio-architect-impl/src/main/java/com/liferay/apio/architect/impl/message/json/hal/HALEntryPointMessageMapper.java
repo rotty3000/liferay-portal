@@ -24,7 +24,6 @@ import org.osgi.service.component.annotations.Component;
  * href="http://stateless.co/hal_specification.html">HAL </a> format.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component
 public class HALEntryPointMessageMapper implements EntryPointMessageMapper {

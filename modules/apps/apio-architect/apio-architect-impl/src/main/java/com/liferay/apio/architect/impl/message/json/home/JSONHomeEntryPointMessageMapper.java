@@ -21,10 +21,9 @@ import org.osgi.service.component.annotations.Component;
 
 /**
  * Represents the entry point in <a
- * href="https://mnot.github.io/I-D/json-home/">JSON Home</a> format.
+ * href="https://mnot.github.io/I-D/json-home/">JSON Home </a> format.
  *
  * @author Alejandro Hernández
- * @review
  */
 @Component
 public class JSONHomeEntryPointMessageMapper

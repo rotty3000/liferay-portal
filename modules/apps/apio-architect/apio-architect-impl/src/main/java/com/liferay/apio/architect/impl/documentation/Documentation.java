@@ -53,12 +53,11 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns the API's description, if present. Returns {@code
-	 * Optional#empty()} otherwise.
+	 * Returns the API's description, if present; otherwise returns {@code
+	 * Optional#empty()}.
 	 *
 	 * @return the API's description, if present; {@code Optional#empty()}
 	 *         otherwise
-	 * @review
 	 */
 	public Optional<String> getAPIDescriptionOptional() {
 		Optional<APIDescription> optional = _apiDescriptionSupplier.get();
@@ -67,11 +66,10 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns the API's title, if present. Returns {@code Optional#empty()}
+	 * Returns the API's title, if present; returns {@code Optional#empty()}
 	 * otherwise.
 	 *
 	 * @return the API's title, if present; {@code Optional#empty()} otherwise
-	 * @review
 	 */
 	public Optional<String> getAPITitleOptional() {
 		Optional<APITitle> optional = _apiTitleSupplier.get();
@@ -80,11 +78,10 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns a map containing the resources names as keys, and their {@link
-	 * CollectionRoutes} as values.
+	 * Returns a map that contains each resource's name and {@link
+	 * CollectionRoutes} as key-value pairs.
 	 *
-	 * @return a map with the item routes
-	 * @review
+	 * @return the map
 	 */
 	public Map<String, CollectionRoutes> getCollectionRoutes() {
 		return _routesMapSupplier.get();
@@ -97,33 +94,30 @@ public class Documentation {
 	}
 
 	/**
-	 * Returns a map containing the resources names as keys, and their {@link
-	 * ItemRoutes} as values.
+	 * Returns a map that contains each resource's name and {@link ItemRoutes}
+	 * as key-value pairs.
 	 *
-	 * @return a map with the item routes
-	 * @review
+	 * @return the map
 	 */
 	public Map<String, ItemRoutes> getItemRoutes() {
 		return _itemRoutesMapSupplier.get();
 	}
 
 	/**
-	 * Returns a map containing the resources names as keys, and their {@link
-	 * NestedCollectionRoutes} as values.
+	 * Returns a map that contains each resource's name and {@link
+	 * NestedCollectionRoutes} as key-value pairs.
 	 *
-	 * @return a map with the item routes
-	 * @review
+	 * @return the map
 	 */
 	public Map<String, NestedCollectionRoutes> getNestedCollectionRoutes() {
 		return _nestedCollectionRoutesMapSupplier.get();
 	}
 
 	/**
-	 * Returns a map containing the resources names as keys, and their {@link
-	 * Representor} as values.
+	 * Returns a map that contains each resource's name and {@link Representor}
+	 * as key-value pairs.
 	 *
-	 * @return a map with the item routes
-	 * @review
+	 * @return the map
 	 */
 	public Map<String, Representor> getRepresentors() {
 		return _representorMapSupplier.get();

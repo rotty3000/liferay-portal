@@ -35,15 +35,14 @@ public class RepresentorTestUtil {
 	/**
 	 * Tests that a {@code List<FieldFunction<T, S>>} has a key list equal to
 	 * the provided key list, and a value list (obtained by applying {@code t}
-	 * to each function and then applying the provided function) equal to the
+	 * to each function, and then applying the provided function) equal to the
 	 * provided value list.
 	 *
-	 * @param  t the {@code t} instance
-	 * @param  list the list to test
-	 * @param  function the function to transform each value
-	 * @param  keys the expected key list
-	 * @param  values the expected value list
-	 * @review
+	 * @param t the {@code t} instance
+	 * @param list the {@code List<FieldFunction<T, S>>} to test
+	 * @param function the function to transform each value
+	 * @param keys the expected key list
+	 * @param values the expected value list
 	 */
 	public static <T, S, U> void testFields(
 		T t, List<FieldFunction<T, S>> list, Function<S, U> function,
@@ -51,7 +50,7 @@ public class RepresentorTestUtil {
 
 		if (keys.size() != values.size()) {
 			throw new AssertionError(
-				"The keys and values lists should have equal size");
+				"The key and value lists should be equal size");
 		}
 
 		assertThat(list.size(), is(keys.size()));
@@ -76,11 +75,10 @@ public class RepresentorTestUtil {
 	 * the provided key list, and a value list (obtained by applying {@code t}
 	 * to each function) equal to the provided value list.
 	 *
-	 * @param  t the {@code t} instance
-	 * @param  list the list to test
-	 * @param  keys the expected key list
-	 * @param  values the expected value list
-	 * @review
+	 * @param t the {@code t} instance
+	 * @param list the {@code List<FieldFunction<T, S>>} to test
+	 * @param keys the expected key list
+	 * @param values the expected value list
 	 */
 	public static <T, S> void testFields(
 		T t, List<FieldFunction<T, S>> list, List<String> keys,

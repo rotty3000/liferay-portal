@@ -37,11 +37,10 @@ import java.util.List;
 public class JSONLDMessageMapperUtil {
 
 	/**
-	 * Return the list of types of an {@link Operation}.
+	 * Return the list of {@link Operation} types.
 	 *
 	 * @param  operation the operation
-	 * @return the list of types of the {@link Operation}
-	 * @review
+	 * @return the list
 	 */
 	public static List<String> getOperationTypes(Operation operation) {
 		if (operation instanceof BatchCreateOperation) {

@@ -32,7 +32,7 @@ import java.util.Optional;
 import javax.ws.rs.core.UriBuilder;
 
 /**
- * Manages the creation of URLs, and has all their necessary information.
+ * Manages the creation of URLs and has all their necessary information.
  *
  * <p>
  * This class shouldn't be instantiated.
@@ -43,12 +43,11 @@ import javax.ws.rs.core.UriBuilder;
 public final class URLCreator {
 
 	/**
-	 * Returns the absolute version of an application relative URL
+	 * Returns the absolute version of an application's relative URL.
 	 *
 	 * @param  applicationURL the application URL
 	 * @param  relativeURL the relative URL
 	 * @return the absolute URL
-	 * @review
 	 */
 	public static String createAbsoluteURL(
 		ApplicationURL applicationURL, String relativeURL) {
@@ -57,12 +56,11 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the absolute version of a relative URL
+	 * Returns the absolute version of a relative URL.
 	 *
 	 * @param  serverURL the server URL
 	 * @param  relativeURL the relative URL
 	 * @return the absolute URL
-	 * @review
 	 */
 	public static String createAbsoluteURL(
 		ServerURL serverURL, String relativeURL) {
@@ -147,12 +145,11 @@ public final class URLCreator {
 	}
 
 	/**
-	 * Returns the URL for an operation
+	 * Returns an operation's URL.
 	 *
 	 * @param  applicationURL the application URL
-	 * @param  operation the operation to represent
-	 * @return the operation URL
-	 * @review
+	 * @param  operation the operation
+	 * @return the operation's URL
 	 */
 	public static Optional<String> createOperationURL(
 		ApplicationURL applicationURL, Operation operation) {

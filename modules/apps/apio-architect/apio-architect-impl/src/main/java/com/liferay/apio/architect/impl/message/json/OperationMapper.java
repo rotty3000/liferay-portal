@@ -20,19 +20,18 @@ import com.liferay.apio.architect.operation.Operation;
 /**
  * Maps {@link Operation} data to its representation in a JSON object. Instances
  * of this interface work like events. The different {@code
- * javax.ws.rs.ext.MessageBodyWriter} call the {@code OperationMapper} methods.
- * In each method, developers should only map the provided part of the resource
- * to its representation in a JSON object. To enable this, each method receives
- * a {@link JSONObjectBuilder}.
+ * javax.ws.rs.ext.MessageBodyWriter} instances call the {@code OperationMapper}
+ * methods. In each method, developers should only map the provided part of the
+ * resource to its representation in a JSON object. To enable this, each method
+ * receives a {@link JSONObjectBuilder}.
  *
  * <p>
  * The method {@link #onFinish} is called when the writer finishes writing the
- * operation. Otherwise, the operation message mapper's methods aren't called in
- * a particular order.
+ * operation. Otherwise, the operation mapper's methods aren't called in a
+ * particular order.
  * </p>
  *
  * @author Javier Gamarra
- * @review
  */
 public interface OperationMapper {
 

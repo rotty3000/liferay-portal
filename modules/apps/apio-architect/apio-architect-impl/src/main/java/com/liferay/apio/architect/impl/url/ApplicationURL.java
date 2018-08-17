@@ -21,7 +21,6 @@ import java.util.function.Supplier;
  * implementation depends on any proxy configuration, SSO, and so on.
  *
  * @author Javier Gamarra
- * @review
  */
 @FunctionalInterface
 public interface ApplicationURL extends Supplier<String> {

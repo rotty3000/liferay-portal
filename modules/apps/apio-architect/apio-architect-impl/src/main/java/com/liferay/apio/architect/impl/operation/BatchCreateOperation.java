@@ -23,10 +23,9 @@ import com.liferay.apio.architect.operation.Operation;
 import java.util.Optional;
 
 /**
- * Represents a resource create operation.
+ * Represents a batch resource create operation.
  *
  * @author Alejandro Hernández
- * @review
  */
 public class BatchCreateOperation implements Operation {
 

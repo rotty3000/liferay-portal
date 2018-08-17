@@ -69,10 +69,8 @@ public class DocumentationTest {
 			() -> Collections.singletonMap("n", null));
 
 		Optional<String> optionalTitle = documentation.getAPITitleOptional();
-
 		Optional<String> optionalDescription =
 			documentation.getAPIDescriptionOptional();
-
 		Optional<String> optionalApplicationURL =
 			documentation.getEntryPointOptional();
 

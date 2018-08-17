@@ -89,11 +89,10 @@ public class JSONObjectBuilder {
 	}
 
 	/**
-	 * Returns the JSON object constructed by the JSON object builder as a
-	 * {@code String}.
+	 * Returns the JSON object constructed as a {@code String} by the JSON
+	 * object builder.
 	 *
 	 * @return the JSON object
-	 * @review
 	 */
 	public String build() {
 		try {
@@ -265,12 +264,11 @@ public class JSONObjectBuilder {
 		}
 
 		/**
-		 * Adds several JSON object, created by the provided consumers, to the
+		 * Adds several JSON objects, created by the provided consumers, to the
 		 * JSON array.
 		 *
-		 * @param  consumer the consumer that creates the new JSON object
-		 * @param  consumers the list of consumers that creates new JSON objects
-		 * @review
+		 * @param consumer the consumer that creates the new JSON object
+		 * @param consumers the list of consumers that create new JSON objects
 		 */
 		@SafeVarargs
 		public final void add(
@@ -582,11 +580,9 @@ public class JSONObjectBuilder {
 		}
 
 		/**
-		 * Adds the JSON object created by another {@link JSONObjectBuilder}.
+		 * Adds the JSON object created by another {@code JSONObjectBuilder}.
 		 *
-		 * @param  jsonObjectBuilder the {@link JSONObjectBuilder} whose JSON
-		 *         object is going to be added
-		 * @review
+		 * @param jsonObjectBuilder the {@link JSONObjectBuilder}
 		 */
 		public void objectValue(JSONObjectBuilder jsonObjectBuilder) {
 			ObjectNode objectNode = jsonObjectBuilder._objectNode;
