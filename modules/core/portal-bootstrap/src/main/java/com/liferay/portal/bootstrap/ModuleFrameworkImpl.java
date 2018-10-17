@@ -1647,6 +1647,11 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			fileInstallBundle.stop(Bundle.STOP_TRANSIENT);
 		}
 
+		FrameworkWiring frameworkWiring = _framework.adapt(
+			FrameworkWiring.class);
+
+		frameworkWiring.resolveBundles(installedBundles);
+
 		FrameworkStartLevel frameworkStartLevel = _framework.adapt(
 			FrameworkStartLevel.class);
 

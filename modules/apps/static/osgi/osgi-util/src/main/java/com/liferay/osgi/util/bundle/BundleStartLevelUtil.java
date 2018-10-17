@@ -16,12 +16,16 @@ package com.liferay.osgi.util.bundle;
 
 import com.liferay.petra.concurrent.DefaultNoticeableFuture;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
@@ -33,6 +37,28 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * @author Matthew Tambara
  */
 public class BundleStartLevelUtil {
+
+	public static void safeSetStartLevelAndStart(
+		Map<Bundle, Integer> installedBundles, BundleContext bundleContext) {
+
+		for (Map.Entry<Bundle, Integer> entry : installedBundles.entrySet()) {
+			Bundle bundle = entry.getKey();
+
+			try {
+				setStartLevelAndStart(bundle, entry.getValue(), bundleContext);
+			}
+			catch (Exception e) {
+				_log.error("Rollback bundle installation for " + bundle, e);
+
+				try {
+					bundle.uninstall();
+				}
+				catch (BundleException be) {
+					_log.error("Unable to uninstall bundle " + bundle, be);
+				}
+			}
+		}
+	}
 
 	public static void setStartLevelAndStart(
 			Bundle bundle, int startLevel, BundleContext bundleContext)
@@ -102,5 +128,8 @@ public class BundleStartLevelUtil {
 			}
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		BundleStartLevelUtil.class);
 
 }
