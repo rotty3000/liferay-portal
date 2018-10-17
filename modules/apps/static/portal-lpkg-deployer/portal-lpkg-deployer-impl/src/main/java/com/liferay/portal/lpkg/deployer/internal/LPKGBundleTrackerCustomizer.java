@@ -15,6 +15,7 @@
 package com.liferay.portal.lpkg.deployer.internal;
 
 import com.liferay.osgi.util.bundle.BundleStartLevelUtil;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.concurrent.DefaultNoticeableFuture;
@@ -50,11 +51,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -160,7 +163,7 @@ public class LPKGBundleTrackerCustomizer
 		File file = new File(bundle.getLocation());
 
 		try (ZipFile zipFile = new ZipFile(file)) {
-			List<Bundle> installedBundles = new ArrayList<>();
+			Map<Bundle, Integer> installedBundles = new HashMap<>();
 
 			Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
 
@@ -277,15 +280,34 @@ public class LPKGBundleTrackerCustomizer
 
 				bundles.add(newBundle);
 
-				installedBundles.add(newBundle);
+				installedBundles.put(
+					newBundle,
+					PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL);
 			}
 
-			for (Bundle installedBundle : installedBundles) {
-				BundleStartLevelUtil.setStartLevelAndStart(
-					installedBundle,
-					PropsValues.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL,
-					_bundleContext);
-			}
+			Bundle systemBundle = _bundleContext.getBundle(0);
+
+			FrameworkWiring frameworkWiring = systemBundle.adapt(
+				FrameworkWiring.class);
+
+			// We need to perform this asynchronously because we might already
+			// be in the refresher thread
+
+			CompletableFuture.supplyAsync(
+				() -> {
+					try {
+						frameworkWiring.resolveBundles(
+							installedBundles.keySet());
+
+						BundleStartLevelUtil.safeSetStartLevelAndStart(
+							installedBundles, _bundleContext);
+					}
+					catch (Exception e) {
+						ReflectionUtil.throwException(e);
+					}
+
+					return null;
+				});
 		}
 		catch (Throwable t) {
 			_log.error("Rollback bundle installation for " + bundles, t);
@@ -736,8 +758,8 @@ public class LPKGBundleTrackerCustomizer
 			Constants.IMPORT_PACKAGE,
 			_buildImportPackageString(
 				BundleActivator.class, BundleStartLevel.class,
-				ServiceTrackerCustomizer.class, StringBundler.class,
-				URLConstants.class));
+				LogFactoryUtil.class, ServiceTrackerCustomizer.class,
+				StringBundler.class, URLConstants.class));
 		attributes.putValue("Liferay-WAB-Context-Name", contextName);
 		attributes.putValue("Liferay-WAB-LPKG-URL", lpkgURL);
 		attributes.putValue(
