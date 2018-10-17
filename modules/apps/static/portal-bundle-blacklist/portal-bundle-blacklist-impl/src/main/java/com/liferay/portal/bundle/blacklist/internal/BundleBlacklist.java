@@ -14,6 +14,8 @@
 
 package com.liferay.portal.bundle.blacklist.internal;
 
+import com.liferay.osgi.util.bundle.BundleStartLevelUtil;
+import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -28,12 +30,14 @@ import java.io.OutputStream;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,6 +108,8 @@ public class BundleBlacklist {
 
 		_scanBundles(bundleContext, frameworkWiring);
 
+		Map<Bundle, Integer> installedBundles = new HashMap<>();
+
 		Set<Map.Entry<String, UninstalledBundleData>> entrySet =
 			_uninstalledBundles.entrySet();
 
@@ -120,15 +126,40 @@ public class BundleBlacklist {
 					_log.info("Reinstalling bundle " + symbolicName);
 				}
 
-				BundleUtil.reinstallBundle(
-					frameworkWiring, entry.getValue(), bundleContext,
+				UninstalledBundleData uninstalledBundleData = entry.getValue();
+
+				Bundle installedBundle = BundleUtil.reinstallBundle(
+					frameworkWiring, uninstalledBundleData, bundleContext,
 					_lpkgDeployer);
+
+				if (installedBundle != null) {
+					installedBundles.put(
+						installedBundle, uninstalledBundleData.getStartLevel());
+				}
 
 				iterator.remove();
 
 				_removeFromBlacklistFile(symbolicName);
 			}
 		}
+
+		// We need to perform this asynchronously because we might already
+		// be in the refresher thread
+
+		CompletableFuture.supplyAsync(
+			() -> {
+				try {
+					frameworkWiring.resolveBundles(installedBundles.keySet());
+
+					BundleStartLevelUtil.safeSetStartLevelAndStart(
+						installedBundles, bundleContext);
+				}
+				catch (Exception e) {
+					return ReflectionUtil.throwException(e);
+				}
+
+				return null;
+			});
 	}
 
 	private void _addToBlacklistFile(
