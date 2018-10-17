@@ -2,12 +2,9 @@ Bundle-Name: Liferay Portal Target Platform Indexer Implementation
 Bundle-SymbolicName: com.liferay.portal.target.platform.indexer.impl
 Bundle-Version: 2.0.0
 Import-Package:\
+	!aQute.configurable,\
+	\
 	!com.liferay.portal.bootstrap,\
-	\
-	!org.apache.tools.ant.*,\
-	\
-	!org.osgi.service.component.annotations,\
-	!org.osgi.service.metatype.annotations,\
 	\
 	*
 -conditionalpackage:\
@@ -37,4 +34,4 @@ Import-Package:\
 	org.slf4j.*,\
 	\
 	org.xmlpull.v1.*
--includeresource: @biz.aQute.bnd-*.jar!/aQute/bnd/build/model/osgi-core/*
+-includeresource: @biz.aQute.bndlib-*.jar!/aQute/bnd/build/model/osgi-core/*
