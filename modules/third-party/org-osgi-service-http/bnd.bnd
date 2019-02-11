@@ -1,9 +1,22 @@
 Bundle-SymbolicName: org.osgi.service.http
-Bundle-Version: 3.5.0-20150611.165350-3.LIFERAY-PATCHED-2
+Bundle-Version: 3.6.0-LIFERAY-PATCHED-1
 Export-Package:\
 	org.osgi.service.http;version=1.2.1,\
-	org.osgi.service.http.context;version=1.0,\
-	org.osgi.service.http.runtime;version=1.0,\
-	org.osgi.service.http.runtime.dto;version=1.0,\
-	org.osgi.service.http.whiteboard;version=1.0
--includeresource: @lib/org.eclipse.osgi.services.jar!/org/osgi/service/http/**
+	org.osgi.service.http.context;version=1.1,\
+	org.osgi.service.http.runtime;version=1.1,\
+	org.osgi.service.http.runtime.dto;version=1.1,\
+	org.osgi.service.http.whiteboard;version=1.1,\
+	org.osgi.service.http.whiteboard.annotations;version=1.1,\
+	org.osgi.service.http.whiteboard.propertytypes;version=1.1
+Import-Package:\
+	javax.servlet;-remove-attribute:=version,\
+	javax.servlet.http;-remove-attribute:=version,\
+	\
+	*
+Require-Capability:\
+	osgi.contract;\
+		filter:="(&(osgi.contract=JavaServlet)(version=3.1.0))";\
+		osgi.contract=JavaServlet
+-includeresource:\
+	@org.osgi.service.http-*.jar!/org/osgi/service/http/**,\
+	@org.osgi.service.http.whiteboard-*.jar!/org/osgi/service/http/**
