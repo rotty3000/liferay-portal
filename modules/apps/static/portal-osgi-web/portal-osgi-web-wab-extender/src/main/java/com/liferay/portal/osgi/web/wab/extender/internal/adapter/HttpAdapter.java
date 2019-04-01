@@ -36,7 +36,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import org.eclipse.equinox.http.servlet.HttpServiceServlet;
-import org.eclipse.equinox.http.servlet.HttpSessionTrackerUtil;
+import org.eclipse.equinox.http.servlet.session.HttpSessionInvalidator;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -45,6 +45,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 import org.osgi.service.http.runtime.HttpServiceRuntimeConstants;
 
 /**
@@ -124,14 +127,16 @@ public class HttpAdapter {
 			},
 			_httpServiceServlet, properties);
 
+		_sessionInvalidatorAdaptor = new SessionInvalidatorAdaptor();
+
 		PortletSessionListenerManager.addHttpSessionListener(
-			_INVALIDATEHTTPSESSION_LISTENER);
+			_sessionInvalidatorAdaptor);
 	}
 
 	@Deactivate
 	protected void deactivate() {
 		PortletSessionListenerManager.removeHttpSessionListener(
-			_INVALIDATEHTTPSESSION_LISTENER);
+			_sessionInvalidatorAdaptor);
 
 		_serviceRegistration.unregister();
 
@@ -155,25 +160,18 @@ public class HttpAdapter {
 		ServletContext.class
 	};
 
-	private static final HttpSessionListener _INVALIDATEHTTPSESSION_LISTENER =
-		new HttpSessionListener() {
-
-			@Override
-			public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-			}
-
-			@Override
-			public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-				HttpSession httpSession = httpSessionEvent.getSession();
-
-				HttpSessionTrackerUtil.invalidate(httpSession.getId());
-			}
-
-		};
-
 	private HttpServiceServlet _httpServiceServlet;
+
+	@Reference(
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.DYNAMIC,
+		policyOption = ReferencePolicyOption.GREEDY
+	)
+	private volatile HttpSessionInvalidator _httpSessionInvalidator;
+
 	private ServiceRegistration<?> _serviceRegistration;
 	private ServletContext _servletContext;
+	private SessionInvalidatorAdaptor _sessionInvalidatorAdaptor;
 
 	private static class ServletContextAdaptor implements InvocationHandler {
 
@@ -218,6 +216,23 @@ public class HttpAdapter {
 		}
 
 		private final ServletContext _servletContext;
+
+	}
+
+	private class SessionInvalidatorAdaptor implements HttpSessionListener {
+
+		@Override
+		public void sessionCreated(HttpSessionEvent httpSessionEvent) {
+		}
+
+		@Override
+		public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
+			HttpSession httpSession = httpSessionEvent.getSession();
+
+			if (_httpSessionInvalidator != null) {
+				_httpSessionInvalidator.invalidate(httpSession.getId(), false);
+			}
+		}
 
 	}
 

@@ -691,9 +691,15 @@ public class WabBundleProcessor {
 			properties.put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED,
 				servletDefinition.isAsyncSupported());
-			properties.put(
-				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
-				servletDefinition.getErrorPages());
+
+			List<String> errorPages = servletDefinition.getErrorPages();
+
+			if (!errorPages.isEmpty()) {
+				properties.put(
+					HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE,
+					errorPages);
+			}
+
 			properties.put(
 				HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME,
 				servletDefinition.getName());
