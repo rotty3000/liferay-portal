@@ -1,3 +1,5 @@
+import aQute.bnd.osgi.Jar
+
 import com.liferay.gradle.plugins.node.tasks.ExecuteNpmTask
 import com.liferay.gradle.plugins.node.tasks.NpmRunTask
 import com.liferay.gradle.util.FileUtil
@@ -5,6 +7,8 @@ import com.liferay.gradle.util.GradleUtil
 import com.liferay.gradle.util.copy.StripPathSegmentsAction
 
 import java.util.concurrent.ConcurrentSkipListSet
+import java.util.jar.Attributes
+import java.util.jar.Manifest
 
 import org.apache.tools.ant.DirectoryScanner
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -297,6 +301,55 @@ gradle.beforeProject {
 
 				startTestableTomcat {
 					deleteLiferayHome = false
+				}
+			}
+		}
+
+		pluginManager.withPlugin("com.liferay.patcher") {
+			task jarManifest
+
+			jar {
+				finalizedBy jarManifest
+
+				bndfile = "bnd.bnd"
+			}
+
+			jarManifest {
+				doLast {
+					File manifestMFFile = project.file("classes/META-INF/MANIFEST.MF")
+
+					if (!manifestMFFile.exists()) {
+						return
+					}
+
+					Attributes oldAttributes = null
+
+					Jar bndJar = new Jar(jar.archivePath)
+
+					bndJar.withCloseable {
+						Manifest manifest = new Manifest(bndJar.getResource("META-INF/MANIFEST.MF").openInputStream())
+
+						oldAttributes = manifest.getMainAttributes()
+					}
+
+					ant.jar(destfile: jar.archivePath, update: true) {
+						delegate.manifest {
+							manifestMFFile.withInputStream {
+								Manifest manifest = new Manifest(it)
+
+								manifest.getMainAttributes().each {
+									Object key, Object value ->
+
+									if ("Created-By".equals(key.toString())) {
+										attribute(name: "Originally-Created-By", value: value.toString())
+									}
+									else if (!oldAttributes.containsKey(key)) {
+										attribute(name: key.toString(), value: value.toString())
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
