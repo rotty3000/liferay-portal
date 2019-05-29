@@ -79,6 +79,9 @@ import com.liferay.gradle.util.Validator;
 import groovy.lang.Closure;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.nio.charset.StandardCharsets;
 
@@ -91,6 +94,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -100,6 +105,7 @@ import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.UncheckedIOException;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.FileCollection;
@@ -1069,6 +1075,8 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 						}
 					}
 
+					instructions.putAll(_getManifestInstructions(project));
+
 					Convention convention = jar.getConvention();
 
 					BundleTaskConvention bundleTaskConvention =
@@ -1078,6 +1086,53 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 						new File("$$$DOESNOTEXIST$$$"));
 
 					bundleTaskConvention.setBnd(instructions);
+				}
+
+				private Map<String, Object> _getManifestInstructions(
+					Project project) {
+
+					JavaCompile javaCompile = (JavaCompile)GradleUtil.getTask(
+						project, JavaPlugin.COMPILE_JAVA_TASK_NAME);
+
+					File dir = javaCompile.getDestinationDir();
+
+					File manifestFile = new File(dir, "META-INF/MANIFEST.MF");
+
+					if (!manifestFile.exists()) {
+						return Collections.emptyMap();
+					}
+
+					Map<String, Object> instructions = new HashMap<>();
+
+					try (InputStream inputStream = new FileInputStream(
+							manifestFile)) {
+
+						Manifest manifest = new Manifest(inputStream);
+
+						Attributes attributes = manifest.getMainAttributes();
+
+						attributes.forEach(
+							(k, v) -> {
+								String name = k.toString();
+
+								if (name.equals("Bundle-Vendor") ||
+									name.equals("Bundle-Version")) {
+
+									return;
+								}
+
+								if (name.equals("Created-By")) {
+									name = "Originally-Created-By";
+								}
+
+								instructions.put(name, v);
+							});
+
+						return instructions;
+					}
+					catch (IOException ioe) {
+						throw new UncheckedIOException(ioe);
+					}
 				}
 
 			});
