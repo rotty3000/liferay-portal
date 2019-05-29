@@ -306,51 +306,8 @@ gradle.beforeProject {
 		}
 
 		pluginManager.withPlugin("com.liferay.patcher") {
-			task jarManifest
-
-			jar {
-				finalizedBy jarManifest
-
-				bndfile = "bnd.bnd"
-			}
-
-			jarManifest {
-				doLast {
-					File manifestMFFile = project.file("classes/META-INF/MANIFEST.MF")
-
-					if (!manifestMFFile.exists()) {
-						return
-					}
-
-					Attributes oldAttributes = null
-
-					Jar bndJar = new Jar(jar.archivePath)
-
-					bndJar.withCloseable {
-						Manifest manifest = new Manifest(bndJar.getResource("META-INF/MANIFEST.MF").openInputStream())
-
-						oldAttributes = manifest.getMainAttributes()
-					}
-
-					ant.jar(destfile: jar.archivePath, update: true) {
-						delegate.manifest {
-							manifestMFFile.withInputStream {
-								Manifest manifest = new Manifest(it)
-
-								manifest.getMainAttributes().each {
-									Object key, Object value ->
-
-									if ("Created-By".equals(key.toString())) {
-										attribute(name: "Originally-Created-By", value: value.toString())
-									}
-									else if (!oldAttributes.containsKey(key)) {
-										attribute(name: key.toString(), value: value.toString())
-									}
-								}
-							}
-						}
-					}
-				}
+			bundle {
+				instruction "-include", "classes/META-INF/MANIFEST.MF"
 			}
 		}
 
