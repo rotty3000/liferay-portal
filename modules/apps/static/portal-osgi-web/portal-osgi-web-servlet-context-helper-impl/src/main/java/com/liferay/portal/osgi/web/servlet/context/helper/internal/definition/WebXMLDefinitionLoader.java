@@ -14,6 +14,14 @@
 
 package com.liferay.portal.osgi.web.servlet.context.helper.internal.definition;
 
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Annotation;
+import aQute.bnd.osgi.Clazz;
+import aQute.bnd.osgi.Descriptors;
+import aQute.bnd.osgi.Resource;
+
+import aQute.lib.exceptions.FunctionWithException;
+
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -47,6 +55,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -75,8 +84,8 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 
 	public WebXMLDefinitionLoader(
 		Bundle bundle, JSPServletFactory jspServletFactory,
-		SAXParserFactory saxParserFactory, Set<Class<?>> classes,
-		Set<Class<?>> annotatedClasses) {
+		SAXParserFactory saxParserFactory, Set<String> classes,
+		Set<String> annotatedClasses) {
 
 		_bundle = bundle;
 		_jspServletFactory = jspServletFactory;
@@ -922,130 +931,163 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 	}
 
 	private void _collectAnnotatedClasses(WebXMLDefinition webXMLDefinition) {
-		for (Class<?> clazz : _classes) {
-			_collectAnnotatedClasses(webXMLDefinition, clazz);
+		for (String className : _classes) {
+			_collectAnnotatedClasses(webXMLDefinition, className);
 		}
 	}
 
 	private void _collectAnnotatedClasses(
-		WebXMLDefinition webXMLDefinition, Class<?> clazz) {
-
-		WebServlet webServlet = null;
+		WebXMLDefinition webXMLDefinition, String className) {
 
 		try {
-			webServlet = clazz.getAnnotation(WebServlet.class);
-		}
-		catch (Exception e) {
+			URL resource = _bundle.getResource(
+				Descriptors.fqnToBinary(className) + ".class");
 
-			// See http://bugs.java.com/view_bug.do?bug_id=7183985 and LPS-69679
+			Clazz bndClazz = new Clazz(
+				_analyzer, "", Resource.fromURL(resource));
 
-			if (_log.isDebugEnabled()) {
+			bndClazz.parseClassFile();
+
+			WebServlet webServlet = null;
+
+			try {
+				Stream<Annotation> annotations = bndClazz.annotations(
+					"javax/servlet/annotation/WebServlet");
+
+				webServlet = annotations.findFirst(
+				).map(
+					FunctionWithException.asFunction(
+						annotation -> annotation.getAnnotation(
+							WebServlet.class))
+				).orElse(
+					null
+				);
+			}
+			catch (Exception e) {
+
+				// See http://bugs.java.com/view_bug.do?bug_id=7183985 and
+				// LPS-69679
+
 				StringBundler sb = new StringBundler(6);
 
 				sb.append("Unexpected error retrieving the annotation ");
 				sb.append(WebServlet.class);
 				sb.append("from class ");
-				sb.append(clazz);
+				sb.append(className);
 				sb.append(" because a some dependency may not be present in ");
 				sb.append("the classpath");
 
 				_log.debug(sb.toString(), e);
+
+				return;
 			}
 
-			return;
-		}
+			if (webServlet != null) {
+				ServletDefinition servletDefinition = new ServletDefinition();
 
-		boolean annotated = false;
+				servletDefinition.setAsyncSupported(
+					webServlet.asyncSupported());
 
-		if (webServlet != null) {
-			annotated = true;
+				_setInitParameters(
+					webServlet.initParams(),
+					servletDefinition.getInitParameters());
 
-			ServletDefinition servletDefinition = new ServletDefinition();
+				String name = webServlet.name();
 
-			servletDefinition.setAsyncSupported(webServlet.asyncSupported());
-
-			_setInitParameters(
-				webServlet.initParams(), servletDefinition.getInitParameters());
-
-			String name = webServlet.name();
-
-			if (Validator.isNotNull(name)) {
-				servletDefinition.setName(name);
-			}
-			else {
-				servletDefinition.setName(clazz.getCanonicalName());
-			}
-
-			_addURLPatterns(
-				servletDefinition, webServlet.value(),
-				webServlet.urlPatterns());
-
-			_setServlet(servletDefinition, clazz.getCanonicalName());
-
-			webXMLDefinition.setServletDefinition(
-				servletDefinition.getName(), servletDefinition);
-		}
-
-		WebFilter webFilter = clazz.getAnnotation(WebFilter.class);
-
-		if (webFilter != null) {
-			annotated = true;
-
-			FilterDefinition filterDefinition = new FilterDefinition();
-
-			filterDefinition.setAsyncSupported(webFilter.asyncSupported());
-
-			DispatcherType[] dispatcherTypes = webFilter.dispatcherTypes();
-
-			if (!ArrayUtil.isEmpty(dispatcherTypes)) {
-				for (DispatcherType dispatcherType : dispatcherTypes) {
-					filterDefinition.addDispatcher(dispatcherType.name());
+				if (Validator.isNotNull(name)) {
+					servletDefinition.setName(name);
 				}
-			}
-
-			_setFilter(filterDefinition, clazz.getCanonicalName());
-
-			_setInitParameters(
-				webFilter.initParams(), filterDefinition.getInitParameters());
-
-			String filterName = webFilter.filterName();
-
-			if (Validator.isNotNull(filterName)) {
-				filterDefinition.setName(filterName);
-			}
-			else {
-				filterDefinition.setName(clazz.getCanonicalName());
-			}
-
-			String[] servletNames = webFilter.servletNames();
-
-			if (!ArrayUtil.isEmpty(servletNames)) {
-				for (String servletName : servletNames) {
-					filterDefinition.addServletName(servletName);
+				else {
+					servletDefinition.setName(className);
 				}
+
+				_addURLPatterns(
+					servletDefinition, webServlet.value(),
+					webServlet.urlPatterns());
+
+				_setServlet(servletDefinition, className);
+
+				webXMLDefinition.setServletDefinition(
+					servletDefinition.getName(), servletDefinition);
 			}
 
-			_addURLPatterns(
-				filterDefinition, webFilter.value(), webFilter.urlPatterns());
+			Stream<Annotation> annotations = bndClazz.annotations(
+				"javax/servlet/annotation/WebFilter");
 
-			webXMLDefinition.setFilterDefinition(
-				filterDefinition.getName(), filterDefinition);
+			WebFilter webFilter = annotations.findFirst(
+			).map(
+				FunctionWithException.asFunction(
+					annotation -> annotation.getAnnotation(WebFilter.class))
+			).orElse(
+				null
+			);
+
+			if (webFilter != null) {
+				FilterDefinition filterDefinition = new FilterDefinition();
+
+				filterDefinition.setAsyncSupported(webFilter.asyncSupported());
+
+				DispatcherType[] dispatcherTypes = webFilter.dispatcherTypes();
+
+				if (!ArrayUtil.isEmpty(dispatcherTypes)) {
+					for (DispatcherType dispatcherType : dispatcherTypes) {
+						filterDefinition.addDispatcher(dispatcherType.name());
+					}
+				}
+
+				_setFilter(filterDefinition, className);
+
+				_setInitParameters(
+					webFilter.initParams(),
+					filterDefinition.getInitParameters());
+
+				String filterName = webFilter.filterName();
+
+				if (Validator.isNotNull(filterName)) {
+					filterDefinition.setName(filterName);
+				}
+				else {
+					filterDefinition.setName(className);
+				}
+
+				String[] servletNames = webFilter.servletNames();
+
+				if (!ArrayUtil.isEmpty(servletNames)) {
+					for (String servletName : servletNames) {
+						filterDefinition.addServletName(servletName);
+					}
+				}
+
+				_addURLPatterns(
+					filterDefinition, webFilter.value(),
+					webFilter.urlPatterns());
+
+				webXMLDefinition.setFilterDefinition(
+					filterDefinition.getName(), filterDefinition);
+			}
+
+			annotations = bndClazz.annotations(
+				"javax/servlet/annotation/WebListener");
+
+			WebListener webListener = annotations.findFirst(
+			).map(
+				FunctionWithException.asFunction(
+					annotation -> annotation.getAnnotation(WebListener.class))
+			).orElse(
+				null
+			);
+
+			if (webListener != null) {
+				ListenerDefinition listenerDefinition =
+					new ListenerDefinition();
+
+				_setEventListener(listenerDefinition, className);
+
+				webXMLDefinition.addListenerDefinition(listenerDefinition);
+			}
 		}
-
-		WebListener webListener = clazz.getAnnotation(WebListener.class);
-
-		if (webListener != null) {
-			annotated = true;
-
-			ListenerDefinition listenerDefinition = new ListenerDefinition();
-
-			_setEventListener(listenerDefinition, clazz.getCanonicalName());
-
-			webXMLDefinition.addListenerDefinition(listenerDefinition);
-		}
-
-		if (annotated) {
-			_annotatedClasses.add(clazz);
+		catch (Exception e) {
+			_log.error(e, e);
 		}
 	}
 
@@ -1148,11 +1190,12 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 	private List<String> _absoluteOrderingNames;
 	private boolean _after;
 	private String _afterName;
-	private final Set<Class<?>> _annotatedClasses;
+	private Analyzer _analyzer = new Analyzer();
+	private final Set<String> _annotatedClasses;
 	private boolean _before;
 	private String _beforeName;
 	private final Bundle _bundle;
-	private final Set<Class<?>> _classes;
+	private final Set<String> _classes;
 	private FilterDefinition _filterDefinition;
 	private FilterMapping _filterMapping;
 	private JSPConfig _jspConfig;

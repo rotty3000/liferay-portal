@@ -14,6 +14,13 @@
 
 package com.liferay.portal.osgi.web.wab.extender.internal;
 
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Annotation;
+import aQute.bnd.osgi.Clazz;
+import aQute.bnd.osgi.Descriptors;
+import aQute.bnd.osgi.Instruction;
+import aQute.bnd.osgi.Resource;
+
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
@@ -44,12 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
@@ -161,10 +163,10 @@ public class WabBundleProcessor {
 					servletContextHelperRegistration.getServletContext(),
 					_jspServletFactory, webXMLDefinition);
 
-			Set<Class<?>> allClasses =
+			Set<String> allClasses =
 				servletContextHelperRegistration.getClasses();
 
-			Set<Class<?>> annotatedClasses =
+			Set<String> annotatedClasses =
 				servletContextHelperRegistration.getAnnotatedClasses();
 
 			initServletContainerInitializers(
@@ -256,119 +258,125 @@ public class WabBundleProcessor {
 	}
 
 	protected void collectAnnotatedClasses(
-		Class<?> annotatedClass, Class<?>[] handlesTypesClasses,
+		String className, Class<?>[] handlesTypesClasses,
 		Set<Class<?>> annotationHandlesTypesClasses,
-		Set<Class<?>> annotatedClasses) {
+		Set<Class<?>> annotatedClasses, Bundle bundle) {
 
 		// Class extends/implements
 
-		for (Class<?> handlesTypesClass : handlesTypesClasses) {
-			if (handlesTypesClass.isAssignableFrom(annotatedClass) &&
-				!Modifier.isAbstract(annotatedClass.getModifiers())) {
-
-				annotatedClasses.add(annotatedClass);
-
-				return;
-			}
-		}
-
-		if (annotationHandlesTypesClasses == null) {
-			return;
-		}
-
-		// Class annotation
-
-		Annotation[] classAnnotations = new Annotation[0];
-
 		try {
-			classAnnotations = annotatedClass.getAnnotations();
-		}
-		catch (Throwable t) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(t.getMessage());
-			}
-		}
+			URL resource = bundle.getResource(
+				Descriptors.fqnToBinary(className) + ".class");
 
-		for (Annotation classAnnotation : classAnnotations) {
-			if (annotationHandlesTypesClasses.contains(
-					classAnnotation.annotationType())) {
+			Clazz bndClazz = new Clazz(
+				_analyzer, "", Resource.fromURL(resource));
 
-				annotatedClasses.add(annotatedClass);
+			bndClazz.parseClassFile();
 
-				return;
-			}
-		}
+			for (Class<?> handlesTypesClass : handlesTypesClasses) {
+				Instruction instruction = new Instruction(
+					handlesTypesClass.getName());
 
-		// Method annotation
+				if (bndClazz.is(Clazz.QUERY.EXTENDS, instruction, _analyzer) &&
+					!bndClazz.isAbstract()) {
 
-		Method[] classMethods = new Method[0];
+					try {
+						Class<?> clazz = bundle.loadClass(className);
 
-		try {
-			classMethods = annotatedClass.getDeclaredMethods();
-		}
-		catch (Throwable t) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(t.getMessage());
-			}
-		}
-
-		for (Method method : classMethods) {
-			Annotation[] methodAnnotations = new Annotation[0];
-
-			try {
-				methodAnnotations = method.getDeclaredAnnotations();
-			}
-			catch (Throwable t) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(t.getMessage());
-				}
-			}
-
-			for (Annotation methodAnnotation : methodAnnotations) {
-				if (annotationHandlesTypesClasses.contains(
-						methodAnnotation.annotationType())) {
-
-					annotatedClasses.add(annotatedClass);
+						annotatedClasses.add(clazz);
+					}
+					catch (Exception e) {
+						_log.error(
+							"Could not load class " + className, e);
+					}
 
 					return;
 				}
 			}
-		}
 
-		// Field annotation
-
-		Field[] declaredFields = new Field[0];
-
-		try {
-			declaredFields = annotatedClass.getDeclaredFields();
-		}
-		catch (Throwable t) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(t.getMessage());
-			}
-		}
-
-		for (Field field : declaredFields) {
-			Annotation[] fieldAnnotations = new Annotation[0];
-
-			try {
-				fieldAnnotations = field.getDeclaredAnnotations();
-			}
-			catch (Throwable t) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(t.getMessage());
-				}
+			if (annotationHandlesTypesClasses == null) {
+				return;
 			}
 
-			for (Annotation fieldAnnotation : fieldAnnotations) {
-				if (annotationHandlesTypesClasses.contains(
-						fieldAnnotation.annotationType())) {
+			// Class annotation
 
-					annotatedClasses.add(annotatedClass);
+			for (Class<?> annotationHandlesTypesClass :
+					annotationHandlesTypesClasses) {
+
+				Stream<Annotation> annotations = bndClazz.annotations(
+					annotationHandlesTypesClass.getName());
+
+				if (annotations.findAny().isPresent()) {
+					try {
+						Class<?> clazz = bundle.loadClass(className);
+
+						annotatedClasses.add(clazz);
+					}
+					catch (Exception e) {
+						_log.error(
+							"Could not load class " + className, e);
+					}
 
 					return;
 				}
 			}
+
+			// Method annotation
+
+			Stream<Clazz.MethodDef> methods = bndClazz.methods();
+
+			methods.forEach(
+				methodDef -> {
+					for (Class<?> annotationHandlesTypesClass :
+							annotationHandlesTypesClasses) {
+
+						Stream<Annotation> annotations = methodDef.annotations(
+							annotationHandlesTypesClass.getName());
+
+						if (annotations.findAny().isPresent()) {
+							try {
+								Class<?> clazz = bundle.loadClass(className);
+
+								annotatedClasses.add(clazz);
+							}
+							catch (Exception e) {
+								_log.error(
+									"Could not load class " + className, e);
+							}
+
+							return;
+						}
+					}
+				});
+
+			Stream<Clazz.FieldDef> fields = bndClazz.fields();
+
+			fields.forEach(
+				fieldDef -> {
+					for (Class<?> annotationHandlesTypesClass :
+							annotationHandlesTypesClasses) {
+
+						if (fieldDef.annotations(
+								annotationHandlesTypesClass.getName()).
+									findAny().isPresent()) {
+
+							try {
+								Class<?> clazz = bundle.loadClass(className);
+
+								annotatedClasses.add(clazz);
+							}
+							catch (Exception e) {
+								_log.error(
+									"Could not load class " + className, e);
+							}
+
+							return;
+						}
+					}
+				});
+		}
+		catch (Exception e) {
+			_log.error(e, e);
 		}
 	}
 
@@ -596,7 +604,7 @@ public class WabBundleProcessor {
 					portletContextLoaderListener.getServiceRegistrations();
 
 				if (exception != null) {
-					for (ServiceRegistration contextServiceRegistration :
+					for (ServiceRegistration<?> contextServiceRegistration :
 							contextServiceRegistrations) {
 
 						contextServiceRegistration.unregister();
@@ -641,8 +649,8 @@ public class WabBundleProcessor {
 	}
 
 	protected void initServletContainerInitializers(
-			Bundle bundle, ServletContext servletContext, Set<Class<?>> classes,
-			Set<Class<?>> annotatedClasses)
+			Bundle bundle, ServletContext servletContext, Set<String> classes,
+			Set<String> annotatedClasses)
 		throws IOException {
 
 		Enumeration<URL> initializerResources = bundle.getResources(
@@ -763,8 +771,8 @@ public class WabBundleProcessor {
 
 	protected void processServletContainerInitializerClass(
 		String fqcn, Bundle bundle, BundleWiring bundleWiring,
-		ServletContext servletContext, Set<Class<?>> classes,
-		Set<Class<?>> annotatedClasses) {
+		ServletContext servletContext, Set<String> classes,
+		Set<String> annotatedClasses) {
 
 		Class<? extends ServletContainerInitializer> initializerClass = null;
 
@@ -807,17 +815,20 @@ public class WabBundleProcessor {
 
 				localAnnotatedClasses = new HashSet<>();
 
-				for (Class<?> clazz : classes) {
+				for (String className : classes) {
 					collectAnnotatedClasses(
-						clazz, handlesTypesClasses,
-						annotationHandlesTypesClasses, localAnnotatedClasses);
+						className, handlesTypesClasses,
+						annotationHandlesTypesClasses, localAnnotatedClasses,
+						bundle);
 				}
 
 				if (localAnnotatedClasses.isEmpty()) {
 					localAnnotatedClasses = null;
 				}
 				else {
-					annotatedClasses.addAll(localAnnotatedClasses);
+					for (Class<?> clazz : localAnnotatedClasses) {
+						annotatedClasses.add(clazz.getName());
+					}
 				}
 			}
 		}
@@ -865,7 +876,7 @@ public class WabBundleProcessor {
 		}
 	}
 
-	private void _saveScannedAnnotatedClasses(Set<Class<?>> annotatedClasses) {
+	private void _saveScannedAnnotatedClasses(Set<String> annotatedClasses) {
 		File annotatedClassesFile = _bundle.getDataFile("annotated.classes");
 
 		try (OutputStream outputStream = new FileOutputStream(
@@ -883,8 +894,8 @@ public class WabBundleProcessor {
 
 				sb.append("annotated.classes=");
 
-				for (Class<?> clazz : annotatedClasses) {
-					sb.append(clazz.getName());
+				for (String className : annotatedClasses) {
+					sb.append(className);
 					sb.append(StringPool.COMMA);
 				}
 
@@ -902,6 +913,7 @@ public class WabBundleProcessor {
 	private static final Log _log = LogFactoryUtil.getLog(
 		WabBundleProcessor.class);
 
+	private final Analyzer _analyzer = new Analyzer();
 	private final Bundle _bundle;
 	private final ClassLoader _bundleClassLoader;
 	private final BundleContext _bundleContext;

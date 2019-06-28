@@ -31,9 +31,9 @@ public interface ServletContextHelperRegistration {
 
 	public void close();
 
-	public Set<Class<?>> getAnnotatedClasses();
+	public Set<String> getAnnotatedClasses();
 
-	public Set<Class<?>> getClasses();
+	public Set<String> getClasses();
 
 	public ServletContext getServletContext();
 

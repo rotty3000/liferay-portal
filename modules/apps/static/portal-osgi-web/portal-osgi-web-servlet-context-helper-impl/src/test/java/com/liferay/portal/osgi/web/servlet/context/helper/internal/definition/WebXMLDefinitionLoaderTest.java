@@ -25,7 +25,15 @@ import com.liferay.portal.osgi.web.servlet.context.helper.internal.order.OrderCi
 import com.liferay.portal.osgi.web.servlet.context.helper.internal.order.OrderUtil;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.Order;
 
+import aQute.bnd.osgi.Descriptors;
+
+import java.io.File;
+
+import java.net.URI;
 import java.net.URL;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +42,8 @@ import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContextListener;
@@ -42,18 +52,14 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import org.mockito.Mock;
 
 import org.osgi.framework.Bundle;
 
-import org.powermock.modules.junit4.PowerMockRunner;
-
 /**
  * @author Miguel Pastor
  */
-@RunWith(PowerMockRunner.class)
 public class WebXMLDefinitionLoaderTest {
 
 	@Test
@@ -139,7 +145,7 @@ public class WebXMLDefinitionLoaderTest {
 	@Test
 	public void testLoadWebXML() throws Exception {
 		Bundle bundle = new MockBundle();
-		Set<Class<?>> classes = Collections.emptySet();
+		Set<String> classes = Collections.emptySet();
 
 		WebXMLDefinitionLoader webXMLDefinitionLoader =
 			new WebXMLDefinitionLoader(
@@ -150,6 +156,34 @@ public class WebXMLDefinitionLoaderTest {
 				bundle.getEntry("WEB-INF/web.xml"));
 
 		testWebXMLDefinition(webXMLDefinition, 0, 0, 0);
+	}
+
+	@Test
+	public void testLoadWebXMLReadAnnotations() throws Exception {
+		Class<?> clazz = getClass();
+
+		ClassLoader classLoader = clazz.getClassLoader();
+
+		Bundle bundle = new MockBundle() {
+
+			@Override
+			public URL getResource(String name) {
+				return classLoader.getResource(name);
+			}
+
+		};
+
+		Set<String> resources = getPackageResources("a");
+
+		Set<String> classes = Collections.emptySet();
+
+		WebXMLDefinitionLoader webXMLDefinitionLoader =
+			new WebXMLDefinitionLoader(
+				bundle, null, SAXParserFactory.newInstance(), resources, classes);
+
+		WebXMLDefinition webXMLDefinition = webXMLDefinitionLoader.loadWebXML();
+
+		testWebXMLDefinition(webXMLDefinition, 1, 1, 1);
 	}
 
 	@Test
@@ -397,11 +431,66 @@ public class WebXMLDefinitionLoaderTest {
 			"fragment3", secondWebXMLDefinition.getFragmentName());
 	}
 
+	protected Set<String> getPackageResources(String subpackage)
+		throws Exception {
+
+		Class<?> clazz = getClass();
+
+		Package packaze = clazz.getPackage();
+
+		String packageName = packaze.getName();
+
+		String packagePath = Descriptors.fqnToBinary(packageName);
+
+		packagePath = packagePath + "/" + subpackage;
+
+		URL url = clazz.getResource(subpackage);
+
+		String protocol = url.getProtocol();
+
+		if (!protocol.equals("file")) {
+			throw new IllegalStateException(
+				"Test classes are not on the file system");
+		}
+
+		String basePath = url.getPath();
+
+		File baseDir = new File(basePath);
+
+		String rootPath = basePath.substring(
+			0, basePath.length() - packagePath.length());
+
+		try (Stream<Path> stream = Files.find(
+				baseDir.toPath(), 10,
+				(path, basicFileAttributes) -> {
+					File file = path.toFile();
+
+					String fileName = file.getName();
+
+					return !file.isDirectory() && fileName.endsWith(".class");
+				})) {
+
+			return stream.map(
+				Path::toUri
+			).map(
+				URI::getPath
+			).map(
+				p -> p.substring(rootPath.length())
+			).map(
+				p -> p.substring(0, p.length() - 6)
+			).map(
+				Descriptors::binaryToFQN
+			).collect(
+				Collectors.toSet()
+			);
+		}
+	}
+
 	protected WebXMLDefinition loadWebXMLDefinition(String path)
 		throws Exception {
 
 		TestBundle testBundle = new TestBundle(path);
-		Set<Class<?>> classes = Collections.emptySet();
+		Set<String> classes = Collections.emptySet();
 
 		WebXMLDefinitionLoader webXMLDefinitionLoader =
 			new WebXMLDefinitionLoader(

@@ -21,7 +21,6 @@ import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextHelperFa
 import com.liferay.portal.osgi.web.servlet.context.helper.ServletContextHelperRegistration;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -67,22 +66,16 @@ public class ServletContextHelperFactoryImpl
 			ReflectionUtil.throwException(e);
 		}
 
-		_executorService = _portalExecutorManager.getPortalExecutor(
-			ServletContextHelperFactoryImpl.class.getName());
-
 		_serviceRegistration = bundleContext.registerService(
 			ServletContextHelperRegistration.class.getName(),
 			new ServletContextHelperRegistrationServiceFactory(
-				_jspServletFactory, _saxParserFactory, properties,
-				_executorService),
+				_jspServletFactory, _saxParserFactory, properties),
 			null);
 	}
 
 	@Deactivate
 	protected void deactivate(BundleContext bundleContext) throws Exception {
 		_serviceRegistration.unregister();
-
-		_executorService.shutdownNow();
 	}
 
 	private static final String _FEATURES_DISALLOW_DOCTYPE_DECL =
@@ -96,8 +89,6 @@ public class ServletContextHelperFactoryImpl
 
 	private static final String _FEATURES_LOAD_EXTERNAL_DTD =
 		"http://apache.org/xml/features/nonvalidating/load-external-dtd";
-
-	private ExecutorService _executorService;
 
 	@Reference
 	private HttpServiceRuntime _httpServiceRuntime;
