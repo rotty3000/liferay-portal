@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.odata.entity.BooleanEntityField;
 import com.liferay.portal.odata.entity.DateTimeEntityField;
@@ -52,7 +53,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -135,6 +138,9 @@ public class RequestContextMapper {
 			Context.REFERRER_URL,
 			GetterUtil.getString(
 				httpServletRequest.getHeader(HttpHeaders.REFERER)));
+		context.put(
+			Context.REQUEST_PARAMETER,
+			_getRequestParameters(httpServletRequest));
 		context.put(Context.SIGNED_IN, themeDisplay.isSignedIn());
 		context.put(
 			Context.URL, _portal.getCurrentCompleteURL(httpServletRequest));
@@ -187,6 +193,25 @@ public class RequestContextMapper {
 			cookies
 		).map(
 			c -> c.getName() + "=" + c.getValue()
+		).toArray(
+			String[]::new
+		);
+	}
+
+	private String[] _getRequestParameters(
+		HttpServletRequest httpServletRequest) {
+
+		Map<String, String[]> parameterMap =
+			httpServletRequest.getParameterMap();
+
+		if (parameterMap.isEmpty()) {
+			return new String[0];
+		}
+
+		Set<Entry<String,String[]>> entrySet = parameterMap.entrySet();
+
+		return entrySet.stream().map(
+			e -> e.getKey() + "=" + StringUtil.merge(e.getValue())
 		).toArray(
 			String[]::new
 		);
