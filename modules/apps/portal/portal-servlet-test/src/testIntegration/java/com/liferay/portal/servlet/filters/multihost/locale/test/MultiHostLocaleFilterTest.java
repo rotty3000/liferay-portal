@@ -61,10 +61,11 @@ public class MultiHostLocaleFilterTest {
 		new LiferayIntegrationTestRule();
 
 	@Before
-	public void setUp() throws PortalException{
+	public void setUp() throws PortalException {
 		_groupId = TestPropsValues.getGroupId();
 		_availableLocales = LanguageUtil.getAvailableLocales(_groupId);
-		_layoutSetId = _layoutSetLocalService.getLayoutSet(_groupId, false).getLayoutSetId();
+		_layoutSetId = _layoutSetLocalService.getLayoutSet(
+			_groupId, false).getLayoutSetId();
 	}
 
 	@After
@@ -82,7 +83,8 @@ public class MultiHostLocaleFilterTest {
 		_virtualHost = "testhost.fr;fr_FR,testhost.jp;ja_JP";
 
 		_treeMap = toTreeMap(_virtualHost);
-		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
+		_layoutSetLocalService.updateVirtualHosts(
+			_groupId, false, _treeMap);
 
 		for (String host : _treeMap.keySet()) {
 			_setupRequest(host, _treeMap.get(host));
@@ -93,7 +95,9 @@ public class MultiHostLocaleFilterTest {
 				_mockHttpServletRequest.getAttribute(_I18N_LANGUAGE_ID),
 				_virtualHostLocalService.getVirtualHost(host).getLanguageId());
 
-			Assert.assertEquals(((LayoutSet) _mockHttpServletRequest.getAttribute(_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
+			Assert.assertEquals(((LayoutSet)
+				_mockHttpServletRequest.getAttribute(
+				_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
 
 			_cleanUpRequest();
 		}
@@ -105,7 +109,8 @@ public class MultiHostLocaleFilterTest {
 		_virtualHost = "testhost.de;de_DE";
 
 		_treeMap = toTreeMap(_virtualHost);
-		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
+		_layoutSetLocalService.updateVirtualHosts(
+			_groupId, false, _treeMap);
 
 		String hostname = _treeMap.firstKey();
 		_setupRequest(hostname, _treeMap.get(hostname));
@@ -116,7 +121,9 @@ public class MultiHostLocaleFilterTest {
 			_mockHttpServletRequest.getAttribute(_I18N_LANGUAGE_ID),
 			_virtualHostLocalService.getVirtualHost(hostname).getLanguageId());
 
-		Assert.assertEquals(((LayoutSet) _mockHttpServletRequest.getAttribute(_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
+		Assert.assertEquals(((LayoutSet)
+			_mockHttpServletRequest.getAttribute(
+			_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
 	}
 
 	@Test
@@ -125,14 +132,17 @@ public class MultiHostLocaleFilterTest {
 		_virtualHost = "testhost.fr,testhost.jp";
 
 		_treeMap = toTreeMap(_virtualHost);
-		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
+		_layoutSetLocalService.updateVirtualHosts(
+			_groupId, false, _treeMap);
 
 		for (String host : _treeMap.keySet()) {
 			_setupRequest(host, _treeMap.get(host));
 
 			_invokeRequestFilter();
 
-			Assert.assertEquals(((LayoutSet) _mockHttpServletRequest.getAttribute(_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
+			Assert.assertEquals(((LayoutSet)
+				_mockHttpServletRequest.getAttribute(
+				_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
 
 			_cleanUpRequest();
 		}
@@ -144,21 +154,26 @@ public class MultiHostLocaleFilterTest {
 		_virtualHost = "testhost.de";
 
 		_treeMap = toTreeMap(_virtualHost);
-		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
+		_layoutSetLocalService.updateVirtualHosts(
+			_groupId, false, _treeMap);
 
 		String hostname = _treeMap.firstKey();
 		_setupRequest(hostname, _treeMap.get(hostname));
 
 		_invokeRequestFilter();
 
-		Assert.assertEquals(((LayoutSet) _mockHttpServletRequest.getAttribute(_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
+		Assert.assertEquals(((LayoutSet)
+			_mockHttpServletRequest.getAttribute(
+			_VIRTUAL_HOST_LAYOUT_SET)).getLayoutSetId(), _layoutSetId);
 	}
 
-	private void _invokeRequestFilter() throws Exception{
-		_absoluteRedirectsFilter.doFilterTry(_mockHttpServletRequest, _mockHttpServletResponse);
+	private void _invokeRequestFilter() throws Exception {
+		_absoluteRedirectsFilter.doFilterTry(
+			_mockHttpServletRequest, _mockHttpServletResponse);
 	}
 
-	private void _setupRequest(String hostname, String languageId) throws AvailableLocaleException{
+	private void _setupRequest(String hostname, String languageId)
+		throws AvailableLocaleException {
 
 		if (Validator.isNotNull(languageId)) {
 			List<Locale> locales = new ArrayList<>();
@@ -176,7 +191,7 @@ public class MultiHostLocaleFilterTest {
 
 		_mockHttpServletRequest.setRemoteHost(hostname);
 		_mockHttpServletRequest.setServerName(hostname);
-		_mockHttpServletRequest.setServerPort(8080);
+		_mockHttpServletRequest.setServerPort(_SERVER_PORT);
 		_mockHttpServletRequest.setRequestURI(_WEB_GUEST);
 		_mockHttpServletRequest.addHeader(_HOST, hostname);
 	}
@@ -186,7 +201,8 @@ public class MultiHostLocaleFilterTest {
 		_mockHttpServletRequest = new MockHttpServletRequest();
 	}
 
-	private TreeMap<String, String> toTreeMap(String virtualHost) throws AvailableLocaleException {
+	private TreeMap<String, String> toTreeMap(String virtualHost)
+		throws AvailableLocaleException {
 
 		TreeMap<String, String> treeMap = new TreeMap<>();
 
@@ -219,6 +235,8 @@ public class MultiHostLocaleFilterTest {
 	private static final String _I18N_LANGUAGE_ID = "I18N_LANGUAGE_ID";
 
 	private static final String _VIRTUAL_HOST_LAYOUT_SET = "VIRTUAL_HOST_LAYOUT_SET";
+
+	private static final int _SERVER_PORT = 8080;
 
 	private static long _groupId;
 
