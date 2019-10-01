@@ -10,6 +10,7 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.exportimport.api", version: "4.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.layout.api", version: "2.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.osgi.service.tracker.collections", version: "4.0.0"
+	compileOnly group: "com.liferay", name: "com.liferay.osgi.util", version: "5.0.3"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.function", version: "3.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.lang", version: "3.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.string", version: "3.0.0"
