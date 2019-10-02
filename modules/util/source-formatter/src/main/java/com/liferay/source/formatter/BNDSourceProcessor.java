@@ -16,6 +16,7 @@ package com.liferay.source.formatter;
 
 import com.liferay.source.formatter.util.FileUtil;
 import com.liferay.source.formatter.util.ModulesPropertiesUtil;
+import com.liferay.source.formatter.util.PortalBootstrapBNDUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,10 +40,23 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 
 	@Override
 	protected void postFormat() throws IOException {
-		if (!_checkModulesPropertiesFile()) {
+		if (!isPortalSource()) {
 			return;
 		}
 
+		SourceFormatterArgs sourceFormatterArgs = getSourceFormatterArgs();
+
+		List<String> fileExtensions = sourceFormatterArgs.getFileExtensions();
+
+		if (!fileExtensions.contains("bnd")) {
+			return;
+		}
+
+		_updateModulesProperties();
+		_updateSystemPackagesExtraBND();
+	}
+
+	private void _updateModulesProperties() throws IOException {
 		File modulesPropertiesFile = new File(
 			getPortalDir(), "modules/modules.properties");
 
@@ -56,20 +70,23 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 		}
 	}
 
-	private boolean _checkModulesPropertiesFile() {
-		if (!isPortalSource()) {
-			return false;
+	private void _updateSystemPackagesExtraBND() throws IOException {
+		File systemPackagesExtraBNDFile = new File(
+			getPortalDir(),
+			"modules/core/portal-bootstrap/system.packages.extra.bnd");
+
+		String oldContent = FileUtil.read(systemPackagesExtraBNDFile);
+
+		String newContent = PortalBootstrapBNDUtil.updateExportPackages(
+			getPortalDir(), oldContent);
+
+		if (!oldContent.equals(newContent)) {
+			FileUtil.write(systemPackagesExtraBNDFile, newContent);
+
+			System.out.println(
+				"Updated 'modules/core/portal-bootstrap" +
+					"/system.packages.extra.bnd'");
 		}
-
-		SourceFormatterArgs sourceFormatterArgs = getSourceFormatterArgs();
-
-		List<String> fileExtensions = sourceFormatterArgs.getFileExtensions();
-
-		if (!fileExtensions.contains("bnd")) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private static final String[] _INCLUDES = {"**/*.bnd"};
