@@ -81,27 +81,47 @@ class CollectionInput extends React.Component {
 
 		return (
 			<>
-				<input
-					className="criterion-input form-control"
-					data-testid="collection-key-input"
-					disabled={disabled}
-					onChange={this._handleKeyChange}
-					onKeyDown={this._handleKeyDown}
-					placeholder={Liferay.Language.get('key')}
-					type="text"
-					value={key}
-				/>
+				<div className="criterion-input input-group">
+					<input
+						className="form-control"
+						data-testid="collection-key-input"
+						disabled={disabled}
+						onChange={this._handleKeyChange}
+						onKeyDown={this._handleKeyDown}
+						placeholder={Liferay.Language.get('key')}
+						type="text"
+						value={key}
+					/>
+					<div class="input-group-append">
+						<button
+							class="btn btn-secondary"
+							type="button"
+							id="button-addon1"
+							>Select
+						</button>
+					</div>
+				</div>
 
-				<input
-					className="criterion-input form-control"
-					data-testid="collection-value-input"
-					disabled={disabled}
-					onChange={this._handleValueChange}
-					onKeyDown={this._handleKeyDown}
-					placeholder={Liferay.Language.get('value')}
-					type="text"
-					value={value}
-				/>
+				<div className="criterion-input input-group">
+					<input
+						className="form-control"
+						data-testid="collection-value-input"
+						disabled={disabled}
+						onChange={this._handleValueChange}
+						onKeyDown={this._handleKeyDown}
+						placeholder={Liferay.Language.get('value')}
+						type="text"
+						value={value}
+					/>
+					<div class="input-group-append">
+						<button
+							class="btn btn-secondary"
+							type="button"
+							id="button-addon2"
+						>Select
+						</button>
+					</div>
+				</div>
 			</>
 		);
 	}

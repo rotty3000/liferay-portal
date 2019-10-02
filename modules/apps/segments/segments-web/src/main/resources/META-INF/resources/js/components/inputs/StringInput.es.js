@@ -36,14 +36,24 @@ class StringInput extends React.Component {
 		const {disabled, options, value} = this.props;
 
 		return options.length === 0 ? (
-			<input
-				className="criterion-input form-control"
-				data-testid="simple-string"
-				disabled={disabled}
-				onChange={this._handleChange}
-				type="text"
-				value={value}
-			/>
+			<div className="criterion-input input-group">
+				<input
+					className="form-control"
+					data-testid="simple-string"
+					disabled={disabled}
+					onChange={this._handleChange}
+					type="text"
+					value={value}
+				/>
+				<div class="input-group-append">
+					<button
+						class="btn btn-secondary"
+						type="button"
+						id="button-addon1"
+						>Select
+					</button>
+				</div>
+			</div>
 		) : (
 			<ClaySelectWithOption
 				className="criterion-input form-control"
