@@ -46,6 +46,10 @@ public class PortalBootstrapBNDUtil {
 		while (matcher.find()) {
 			String packageName = matcher.group(1);
 
+			if (packageName.equals("org.hibernate.*")) {
+				continue;
+			}
+
 			String version = packageVersionsMap.get(packageName);
 
 			if ((version == null) && packageName.endsWith(".*")) {
