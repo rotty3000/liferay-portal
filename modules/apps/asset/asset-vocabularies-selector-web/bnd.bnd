@@ -1,0 +1,11 @@
+Bundle-Name: Liferay Asset Vocabularies Selector Web
+Bundle-SymbolicName: com.liferay.asset.vocabularies.selector.web
+Bundle-Version: 3.0.0
+Provide-Capability:\
+	soy;\
+		type="asset-vocabularies-selector-web";\
+		version:Version="${Bundle-Version}"
+Require-Capability:\
+	osgi.extender;\
+		filter:="(&(osgi.extender=jsp.taglib)(uri=http://liferay.com/tld/soy))"
+Web-ContextPath: /asset-vocabularies-selector-web
