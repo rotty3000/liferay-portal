@@ -205,10 +205,10 @@ public class AssetListAssetEntryProviderImpl
 
 		properties.fastLoad(assetListEntry.getTypeSettings(segmentsEntryId));
 
-		_setCategoriesAndKeywordsAndTags(
+		_setCategoriesAndTagsAndKeywords(
 			assetListEntry, assetEntryQuery, properties,
-			_getAssetCategoryIds(properties), _getKeywords(properties),
-			_getAssetTagNames(properties));
+			_getAssetCategoryIds(properties), _getAssetTagNames(properties),
+			_getKeywords(properties));
 
 		long[] groupIds = GetterUtil.getLongValues(
 			StringUtil.split(
@@ -623,25 +623,25 @@ public class AssetListAssetEntryProviderImpl
 		return Collections.emptyList();
 	}
 
-	private void _setCategoriesAndKeywordsAndTags(
+	private void _setCategoriesAndTagsAndKeywords(
 		AssetListEntry assetListEntry, AssetEntryQuery assetEntryQuery,
 		UnicodeProperties properties, long[] overrideAllAssetCategoryIds,
-		String[] overrideAllKeywords, String[] overrideAllAssetTagNames) {
+		String[] overrideAllAssetTagNames, String[] overrideAllKeywords) {
 
 		long[] allAssetCategoryIds = new long[0];
 		long[] anyAssetCategoryIds = new long[0];
 		long[] notAllAssetCategoryIds = new long[0];
 		long[] notAnyAssetCategoryIds = new long[0];
 
-		String[] allKeywords = new String[0];
-		String[] anyKeywords = new String[0];
-		String[] notAllKeywords = new String[0];
-		String[] notAnyKeywords = new String[0];
-
 		String[] allAssetTagNames = new String[0];
 		String[] anyAssetTagNames = new String[0];
 		String[] notAllAssetTagNames = new String[0];
 		String[] notAnyAssetTagNames = new String[0];
+
+		String[] allKeywords = new String[0];
+		String[] anyKeywords = new String[0];
+		String[] notAllKeywords = new String[0];
+		String[] notAnyKeywords = new String[0];
 
 		for (int i = 0; true; i++) {
 			String[] queryValues = StringUtil.split(
@@ -733,7 +733,6 @@ public class AssetListAssetEntryProviderImpl
 		}
 
 		assetEntryQuery.setAnyCategoryIds(anyAssetCategoryIds);
-
 		assetEntryQuery.setAnyKeywords(anyKeywords);
 
 		long[] anyAssetTagIds = _assetTagLocalService.getTagIds(
@@ -742,7 +741,6 @@ public class AssetListAssetEntryProviderImpl
 		assetEntryQuery.setAnyTagIds(anyAssetTagIds);
 
 		assetEntryQuery.setNotAllCategoryIds(notAllAssetCategoryIds);
-
 		assetEntryQuery.setNotAllKeywords(notAllKeywords);
 
 		for (String assetTagName : notAllAssetTagNames) {
@@ -753,7 +751,6 @@ public class AssetListAssetEntryProviderImpl
 		}
 
 		assetEntryQuery.setNotAnyCategoryIds(notAnyAssetCategoryIds);
-
 		assetEntryQuery.setNotAnyKeywords(notAnyKeywords);
 
 		long[] notAnyAssetTagIds = _assetTagLocalService.getTagIds(
