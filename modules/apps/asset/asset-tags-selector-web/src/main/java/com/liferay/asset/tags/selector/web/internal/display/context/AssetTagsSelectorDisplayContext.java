@@ -82,9 +82,9 @@ public class AssetTagsSelectorDisplayContext {
 	public PortletURL getPortletURL() {
 		PortletURL portletURL = _renderResponse.createRenderURL();
 
-		portletURL.setParameter("eventName", getEventName());
-		portletURL.setParameter("groupIds", StringUtil.merge(_getGroupIds()));
 		portletURL.setParameter("mvcPath", _getMvcPath());
+		portletURL.setParameter("groupIds", StringUtil.merge(_getGroupIds()));
+		portletURL.setParameter("eventName", getEventName());
 		portletURL.setParameter(
 			"selectedTagNames", StringUtil.merge(getSelectedTagNames()));
 
