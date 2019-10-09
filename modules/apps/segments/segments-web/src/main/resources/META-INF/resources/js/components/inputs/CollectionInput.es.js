@@ -26,6 +26,12 @@ class CollectionInput extends React.Component {
 	static propTypes = {
 		disabled: propTypes.bool,
 		onChange: propTypes.func.isRequired,
+		selectEntity: propTypes.shape({
+			id: propTypes.string,
+			multiple: propTypes.bool,
+			title: propTypes.string,
+			uri: propTypes.string
+		}),
 		value: propTypes.string
 	};
 
@@ -75,22 +81,97 @@ class CollectionInput extends React.Component {
 		};
 	};
 
+	/**
+	 * Opens a modal for selecting entities. Uses different methods for
+	 * selecting multiple entities versus single because of the way the event
+	 * and data is submitted.
+	 */
+	_handleSelectEntity = () => {
+		const {
+			onChange,
+			selectEntity: {id, multiple, title, uri}
+		} = this.props;
+
+		if (multiple) {
+			AUI().use('liferay-item-selector-dialog', A => {
+				const itemSelectorDialog = new A.LiferayItemSelectorDialog({
+					eventName: id,
+					on: {
+						selectedItemChange: event => {
+							const newVal = event.newVal;
+
+							if (newVal) {
+								const selectedValues = event.newVal.map(
+									item => ({
+										displayValue: item.name,
+										value: item.id
+									})
+								);
+
+								onChange(selectedValues);
+							}
+						}
+					},
+					strings: {
+						add: Liferay.Language.get('select'),
+						cancel: Liferay.Language.get('cancel')
+					},
+					title,
+					url: uri
+				});
+
+				itemSelectorDialog.open();
+			});
+		} else {
+			Liferay.Util.selectEntity(
+				{
+					dialog: {
+						constrain: true,
+						destroyOnHide: true,
+						modal: true
+					},
+					id,
+					title,
+					uri
+				},
+				event => {
+					onChange({
+						displayValue: event.entityname,
+						value: event.entityid
+					});
+				}
+			);
+		}
+	};
+
 	render() {
 		const {disabled} = this.props;
 		const {key, value} = this._stringToKeyValueObject(this.props.value);
 
 		return (
 			<>
-				<input
-					className="criterion-input form-control"
-					data-testid="collection-key-input"
-					disabled={disabled}
-					onChange={this._handleKeyChange}
-					onKeyDown={this._handleKeyDown}
-					placeholder={Liferay.Language.get('key')}
-					type="text"
-					value={key}
-				/>
+				<div className="criterion-input input-group">
+					<input
+						className="form-control"
+						data-testid="collection-key-input"
+						disabled={disabled}
+						onChange={this._handleKeyChange}
+						onKeyDown={this._handleKeyDown}
+						placeholder={Liferay.Language.get('key')}
+						type="text"
+						value={key}
+					/>
+					<div className="input-group-append">
+						<button
+							className="btn btn-secondary"
+							id="button-addon1"
+							onClick={this._handleSelectEntity}
+							type="button"
+						>
+							{Liferay.Language.get('select')}
+						</button>
+					</div>
+				</div>
 
 				<input
 					className="criterion-input form-control"
