@@ -20,7 +20,7 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.trash.api", version: "2.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.xstream.configurator.api", version: "4.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "4.0.0"
-	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "4.28.0"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.util.java", version: "4.0.0"
 	compileOnly group: "com.thoughtworks.xstream", name: "xstream", version: "1.4.11.1"
 	compileOnly group: "commons-lang", name: "commons-lang", version: "2.6"
