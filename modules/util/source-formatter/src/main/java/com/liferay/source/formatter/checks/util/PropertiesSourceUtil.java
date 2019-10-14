@@ -12,14 +12,13 @@
  * details.
  */
 
-package com.liferay.source.formatter.util;
+package com.liferay.source.formatter.checks.util;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.source.formatter.checks.util.BNDSourceUtil;
-import com.liferay.source.formatter.checks.util.SourceUtil;
+import com.liferay.source.formatter.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +40,7 @@ import org.json.JSONObject;
 /**
  * @author Peter Shin
  */
-public class ModulesPropertiesUtil {
+public class PropertiesSourceUtil {
 
 	public static String getContent(File portalDir) throws IOException {
 		StringBundler sb = new StringBundler();

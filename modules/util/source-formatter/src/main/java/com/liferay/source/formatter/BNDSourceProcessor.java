@@ -14,8 +14,8 @@
 
 package com.liferay.source.formatter;
 
+import com.liferay.source.formatter.checks.util.PropertiesSourceUtil;
 import com.liferay.source.formatter.util.FileUtil;
-import com.liferay.source.formatter.util.ModulesPropertiesUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 		File modulesPropertiesFile = new File(
 			getPortalDir(), "modules/modules.properties");
 
-		String newContent = ModulesPropertiesUtil.getContent(getPortalDir());
+		String newContent = PropertiesSourceUtil.getContent(getPortalDir());
 		String oldContent = FileUtil.read(modulesPropertiesFile);
 
 		if (!oldContent.equals(newContent)) {
