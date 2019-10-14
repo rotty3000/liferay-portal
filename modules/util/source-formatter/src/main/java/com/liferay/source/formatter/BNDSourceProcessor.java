@@ -15,9 +15,7 @@
 package com.liferay.source.formatter;
 
 import com.liferay.source.formatter.checks.util.PropertiesSourceUtil;
-import com.liferay.source.formatter.util.FileUtil;
 
-import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
@@ -39,26 +37,8 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 
 	@Override
 	protected void postFormat() throws IOException {
-		if (!_checkModulesPropertiesFile()) {
-			return;
-		}
-
-		File modulesPropertiesFile = new File(
-			getPortalDir(), "modules/modules.properties");
-
-		String newContent = PropertiesSourceUtil.getContent(getPortalDir());
-		String oldContent = FileUtil.read(modulesPropertiesFile);
-
-		if (!oldContent.equals(newContent)) {
-			FileUtil.write(modulesPropertiesFile, newContent);
-
-			System.out.println("Updated 'modules.properties'");
-		}
-	}
-
-	private boolean _checkModulesPropertiesFile() {
 		if (!isPortalSource()) {
-			return false;
+			return;
 		}
 
 		SourceFormatterArgs sourceFormatterArgs = getSourceFormatterArgs();
@@ -66,10 +46,10 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 		List<String> fileExtensions = sourceFormatterArgs.getFileExtensions();
 
 		if (!fileExtensions.contains("bnd")) {
-			return false;
+			return;
 		}
 
-		return true;
+		PropertiesSourceUtil.updateModulesProperties(getPortalDir());
 	}
 
 	private static final String[] _INCLUDES = {"**/*.bnd"};

@@ -42,26 +42,21 @@ import org.json.JSONObject;
  */
 public class PropertiesSourceUtil {
 
-	public static String getContent(File portalDir) throws IOException {
-		StringBundler sb = new StringBundler();
+	public static void updateModulesProperties(File portalDir)
+		throws IOException {
 
-		Map<String, String> bundleInformationMap = getBundleInformationMap(
-			portalDir);
+		File modulesPropertiesFile = new File(
+			portalDir, "modules/modules.properties");
 
-		for (Map.Entry<String, String> entry :
-				bundleInformationMap.entrySet()) {
+		String oldContent = FileUtil.read(modulesPropertiesFile);
 
-			sb.append(entry.getKey());
-			sb.append(StringPool.EQUAL);
-			sb.append(entry.getValue());
-			sb.append(StringPool.NEW_LINE);
+		String newContent = _getModulesPropertiesContent(portalDir);
+
+		if (!oldContent.equals(newContent)) {
+			FileUtil.write(modulesPropertiesFile, newContent);
+
+			System.out.println("Updated 'modules.properties'");
 		}
-
-		if (!bundleInformationMap.isEmpty()) {
-			sb.setIndex(sb.index() - 1);
-		}
-
-		return sb.toString();
 	}
 
 	protected static Map<String, String> getBundleInformationMap(File portalDir)
@@ -191,6 +186,30 @@ public class PropertiesSourceUtil {
 		}
 
 		return null;
+	}
+
+	private static String _getModulesPropertiesContent(File portalDir)
+		throws IOException {
+
+		StringBundler sb = new StringBundler();
+
+		Map<String, String> bundleInformationMap = getBundleInformationMap(
+			portalDir);
+
+		for (Map.Entry<String, String> entry :
+				bundleInformationMap.entrySet()) {
+
+			sb.append(entry.getKey());
+			sb.append(StringPool.EQUAL);
+			sb.append(entry.getValue());
+			sb.append(StringPool.NEW_LINE);
+		}
+
+		if (!bundleInformationMap.isEmpty()) {
+			sb.setIndex(sb.index() - 1);
+		}
+
+		return sb.toString();
 	}
 
 	private static final String[] _SKIP_DIR_NAMES = {
