@@ -14,8 +14,10 @@
 
 package com.liferay.source.formatter;
 
+import com.liferay.source.formatter.checks.util.BNDSourceUtil;
 import com.liferay.source.formatter.checks.util.PropertiesSourceUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
@@ -49,7 +51,10 @@ public class BNDSourceProcessor extends BaseSourceProcessor {
 			return;
 		}
 
-		PropertiesSourceUtil.updateModulesProperties(getPortalDir());
+		File portalDir = getPortalDir();
+
+		BNDSourceUtil.updateSystemPackagesExtraBND(portalDir);
+		PropertiesSourceUtil.updateModulesProperties(portalDir);
 	}
 
 	private static final String[] _INCLUDES = {"**/*.bnd"};
