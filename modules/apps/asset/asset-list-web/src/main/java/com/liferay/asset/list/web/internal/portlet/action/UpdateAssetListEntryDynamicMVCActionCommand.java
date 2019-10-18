@@ -120,14 +120,14 @@ public class UpdateAssetListEntryDynamicMVCActionCommand
 				actionRequest, "queryTagNames" + index);
 		}
 		else if (name.equals("keywords")) {
-			StrTokenizer tokenizer = new StrTokenizer(
+			StrTokenizer strTokenizer = new StrTokenizer(
 				ParamUtil.getString(actionRequest, "keywords" + index));
 
-			tokenizer.setQuoteMatcher(StrMatcher.quoteMatcher());
+			strTokenizer.setQuoteMatcher(StrMatcher.quoteMatcher());
 
-			List<String> tokenList = (List<String>)tokenizer.getTokenList();
+			List<String> valuesList = (List<String>)strTokenizer.getTokenList();
 
-			values = tokenList.toArray(new String[0]);
+			values = valuesList.toArray(new String[0]);
 		}
 		else {
 			values = ParamUtil.getStringValues(
