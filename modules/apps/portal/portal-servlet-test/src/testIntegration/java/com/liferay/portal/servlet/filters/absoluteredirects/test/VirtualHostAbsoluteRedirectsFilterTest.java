@@ -111,7 +111,7 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 			Assert.assertEquals(_layoutSetId, layoutSet.getLayoutSetId());
 
-			_cleanUpRequest();
+			_mockHttpServletRequest.invalidate();
 		}
 	}
 
@@ -136,7 +136,7 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 			Assert.assertEquals(_layoutSetId, layoutSet.getLayoutSetId());
 
-			_cleanUpRequest();
+			_mockHttpServletRequest.invalidate();
 		}
 	}
 
@@ -181,10 +181,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 			WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 		Assert.assertEquals(_layoutSetId, layoutSet.getLayoutSetId());
-	}
-
-	private void _cleanUpRequest() {
-		_mockHttpServletRequest.invalidate();
 	}
 
 	private void _invokeFilter() throws Exception {
