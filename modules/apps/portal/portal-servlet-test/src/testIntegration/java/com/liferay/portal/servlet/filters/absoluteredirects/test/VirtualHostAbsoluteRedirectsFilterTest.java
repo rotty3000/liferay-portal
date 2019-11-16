@@ -225,11 +225,11 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	private static final int _SERVER_PORT = 8080;
 
-	private static final String _HOSTNAME_DE = "testhost.de";
+	private static final String _HOSTNAME_DE = "test.de";
 
-	private static final String _HOSTNAME_ES = "testhost.es";
+	private static final String _HOSTNAME_ES = "test.es";
 
-	private static final String _HOSTNAME_FR = "testhost.fr";
+	private static final String _HOSTNAME_FR = "test.fr";
 
 	private static final String _WEB_GUEST = "/web/guest";
 
