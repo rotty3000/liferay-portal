@@ -211,7 +211,7 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 		_mockHttpServletRequest.setRemoteHost(hostname);
 		_mockHttpServletRequest.setServerName(hostname);
 		_mockHttpServletRequest.setServerPort(_SERVER_PORT);
-		_mockHttpServletRequest.setRequestURI(_WEB_GUEST);
+		_mockHttpServletRequest.setRequestURI("/web/guest");
 		_mockHttpServletRequest.addHeader(_HOST, hostname);
 	}
 
@@ -230,8 +230,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 	private static final String _HOSTNAME_ES = "test.es";
 
 	private static final String _HOSTNAME_FR = "test.fr";
-
-	private static final String _WEB_GUEST = "/web/guest";
 
 	private static Set<Locale> _availableLocales;
 	private static long _groupId;
