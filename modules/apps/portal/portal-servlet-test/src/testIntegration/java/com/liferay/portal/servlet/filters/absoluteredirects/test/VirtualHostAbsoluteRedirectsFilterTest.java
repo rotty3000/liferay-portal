@@ -96,7 +96,9 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 			_setupRequest(hostname, languageId);
 
-			_invokeFilter();
+			_absoluteRedirectsFilter.doFilterTry(
+				_mockHttpServletRequest, new MockHttpServletResponse());
+
 
 			VirtualHost virtualHost = _virtualHostLocalService.getVirtualHost(
 				hostname);
@@ -128,7 +130,9 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 			_setupRequest(hostname, languageId);
 
-			_invokeFilter();
+			_absoluteRedirectsFilter.doFilterTry(
+				_mockHttpServletRequest, new MockHttpServletResponse());
+
 
 			LayoutSet layoutSet =
 				(LayoutSet)_mockHttpServletRequest.getAttribute(
@@ -150,7 +154,8 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 		_setupRequest(hostname, _treeMap.get(hostname));
 
-		_invokeFilter();
+		_absoluteRedirectsFilter.doFilterTry(
+			_mockHttpServletRequest, new MockHttpServletResponse());
 
 		VirtualHost virtualHost = _virtualHostLocalService.getVirtualHost(
 			hostname);
@@ -175,17 +180,13 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 		_setupRequest(hostname, _treeMap.get(hostname));
 
-		_invokeFilter();
+		_absoluteRedirectsFilter.doFilterTry(
+			_mockHttpServletRequest, new MockHttpServletResponse());
 
 		LayoutSet layoutSet = (LayoutSet)_mockHttpServletRequest.getAttribute(
 			WebKeys.VIRTUAL_HOST_LAYOUT_SET);
 
 		Assert.assertEquals(_layoutSetId, layoutSet.getLayoutSetId());
-	}
-
-	private void _invokeFilter() throws Exception {
-		_absoluteRedirectsFilter.doFilterTry(
-			_mockHttpServletRequest, new MockHttpServletResponse());
 	}
 
 	private void _setupRequest(String hostname, String languageId)
