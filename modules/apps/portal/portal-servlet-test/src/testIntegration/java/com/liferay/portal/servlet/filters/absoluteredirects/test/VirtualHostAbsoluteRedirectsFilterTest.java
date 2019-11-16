@@ -85,8 +85,8 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	@Test
 	public void testMultipleVirtualHostsWithLocale() throws Exception {
-		_treeMap.put(_TESTHOST_ES, _LANGUAGE_ID_ES);
-		_treeMap.put(_TESTHOST_FR, _LANGUAGE_ID_FR);
+		_treeMap.put(_HOSTNAME_ES, _LANGUAGE_ID_ES);
+		_treeMap.put(_HOSTNAME_FR, _LANGUAGE_ID_FR);
 
 		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
 
@@ -119,8 +119,8 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	@Test
 	public void testMultipleVirtualHostsWithoutLocale() throws Exception {
-		_treeMap.put(_TESTHOST_ES, StringPool.BLANK);
-		_treeMap.put(_TESTHOST_FR, StringPool.BLANK);
+		_treeMap.put(_HOSTNAME_ES, StringPool.BLANK);
+		_treeMap.put(_HOSTNAME_FR, StringPool.BLANK);
 
 		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
 
@@ -146,7 +146,7 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	@Test
 	public void testSingleVirtualHostWithLocale() throws Exception {
-		_treeMap.put(_TESTHOST_DE, _LANGUAGE_ID_DE);
+		_treeMap.put(_HOSTNAME_DE, _LANGUAGE_ID_DE);
 
 		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
 
@@ -172,7 +172,7 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	@Test
 	public void testSingleVirtualHostWithoutLocale() throws Exception {
-		_treeMap.put(_TESTHOST_DE, StringPool.BLANK);
+		_treeMap.put(_HOSTNAME_DE, StringPool.BLANK);
 
 		_layoutSetLocalService.updateVirtualHosts(_groupId, false, _treeMap);
 
@@ -225,11 +225,11 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 	private static final int _SERVER_PORT = 8080;
 
-	private static final String _TESTHOST_DE = "testhost.de";
+	private static final String _HOSTNAME_DE = "testhost.de";
 
-	private static final String _TESTHOST_ES = "testhost.es";
+	private static final String _HOSTNAME_ES = "testhost.es";
 
-	private static final String _TESTHOST_FR = "testhost.fr";
+	private static final String _HOSTNAME_FR = "testhost.fr";
 
 	private static final String _WEB_GUEST = "/web/guest";
 
