@@ -71,8 +71,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 			_groupId, false);
 
 		_layoutSetId = layoutSet.getLayoutSetId();
-
-		_treeMap = new TreeMap<>();
 	}
 
 	@After
@@ -251,6 +249,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 	private final AbsoluteRedirectsFilter _absoluteRedirectsFilter =
 		new AbsoluteRedirectsFilter();
 	private MockHttpServletRequest _mockHttpServletRequest;
-	private TreeMap<String, String> _treeMap;
+	private TreeMap<String, String> _treeMap = new TreeMap<>();
 
 }
