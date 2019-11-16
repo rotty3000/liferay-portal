@@ -99,7 +99,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 			_absoluteRedirectsFilter.doFilterTry(
 				_mockHttpServletRequest, new MockHttpServletResponse());
 
-
 			VirtualHost virtualHost = _virtualHostLocalService.getVirtualHost(
 				hostname);
 
@@ -132,7 +131,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 			_absoluteRedirectsFilter.doFilterTry(
 				_mockHttpServletRequest, new MockHttpServletResponse());
-
 
 			LayoutSet layoutSet =
 				(LayoutSet)_mockHttpServletRequest.getAttribute(
@@ -216,17 +214,17 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 		_mockHttpServletRequest.setRequestURI("/web/guest");
 	}
 
-	private static final String _LANGUAGE_ID_DE = "de_DE";
-
-	private static final String _LANGUAGE_ID_ES = "es_ES";
-
-	private static final String _LANGUAGE_ID_FR = "fr_FR";
-
 	private static final String _HOSTNAME_DE = "test.de";
 
 	private static final String _HOSTNAME_ES = "test.es";
 
 	private static final String _HOSTNAME_FR = "test.fr";
+
+	private static final String _LANGUAGE_ID_DE = "de_DE";
+
+	private static final String _LANGUAGE_ID_ES = "es_ES";
+
+	private static final String _LANGUAGE_ID_FR = "fr_FR";
 
 	private static Set<Locale> _availableLocales;
 	private static long _groupId;
@@ -241,6 +239,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 	private final AbsoluteRedirectsFilter _absoluteRedirectsFilter =
 		new AbsoluteRedirectsFilter();
 	private MockHttpServletRequest _mockHttpServletRequest;
-	private TreeMap<String, String> _treeMap = new TreeMap<>();
+	private final TreeMap<String, String> _treeMap = new TreeMap<>();
 
 }
