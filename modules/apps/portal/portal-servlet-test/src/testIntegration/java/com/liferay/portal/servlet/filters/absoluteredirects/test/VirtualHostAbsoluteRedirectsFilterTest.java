@@ -194,6 +194,8 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 
 		_mockHttpServletRequest = new MockHttpServletRequest();
 
+		_mockHttpServletRequest.addHeader("Host", hostname);
+
 		if (Validator.isNotNull(languageId)) {
 			List<Locale> locales = new ArrayList<>();
 
@@ -212,7 +214,6 @@ public class VirtualHostAbsoluteRedirectsFilterTest {
 		_mockHttpServletRequest.setServerName(hostname);
 		_mockHttpServletRequest.setServerPort(8080);
 		_mockHttpServletRequest.setRequestURI("/web/guest");
-		_mockHttpServletRequest.addHeader("Host", hostname);
 	}
 
 	private static final String _LANGUAGE_ID_DE = "de_DE";
