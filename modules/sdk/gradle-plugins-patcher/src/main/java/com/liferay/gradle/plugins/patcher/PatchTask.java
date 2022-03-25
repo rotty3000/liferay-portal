@@ -550,7 +550,19 @@ public class PatchTask extends DefaultTask {
 
 		sb.append(getOriginalLibModuleName());
 		sb.append('/');
-		sb.append(getOriginalLibModuleVersion());
+
+		String originalLibModuleVersion = getOriginalLibModuleVersion();
+
+		if (originalLibModuleVersion.contains("-")) {
+			sb.append(
+				originalLibModuleVersion.substring(
+					0, originalLibModuleVersion.indexOf("-")));
+			sb.append("-SNAPSHOT");
+		}
+		else {
+			sb.append(originalLibModuleVersion);
+		}
+
 		sb.append('/');
 		sb.append(getOriginalLibModuleName());
 		sb.append('-');
