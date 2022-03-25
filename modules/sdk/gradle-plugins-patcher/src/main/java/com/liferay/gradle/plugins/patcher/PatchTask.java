@@ -594,7 +594,7 @@ public class PatchTask extends DefaultTask {
 	}
 
 	private static final String _BASE_URL =
-		"https://repo.maven.apache.org/maven2/";
+		"https://repository.apache.org/content/repositories/snapshots/";
 
 	private static final Map<String, Object> _fixCrLfArgs =
 		new HashMap<String, Object>() {
