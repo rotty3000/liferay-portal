@@ -1,11 +1,11 @@
 FROM caddy:2.4.6
 
-COPY dist/designpackfire.zip /static/designpackfire.zip
+COPY build/libs/designpackfire-1.0.0.jar /static/designpackfire.jar
 COPY Caddyfile /etc/caddy/Caddyfile
 
 RUN \
-  unzip /static/designpackfire.zip -d /static && \
-  rm /static/designpackfire.zip
+  unzip /static/designpackfire.jar -d /static && \
+  rm /static/designpackfire.jar
 
 RUN \
 	caddy fmt --overwrite /etc/caddy/Caddyfile && \
