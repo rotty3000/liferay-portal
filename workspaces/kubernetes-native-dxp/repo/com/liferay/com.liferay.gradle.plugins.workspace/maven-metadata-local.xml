@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.liferay</groupId>
+  <artifactId>com.liferay.gradle.plugins.workspace</artifactId>
+  <versioning>
+    <release>3.5.0</release>
+    <versions>
+      <version>3.4.40</version>
+      <version>3.5.0</version>
+    </versions>
+    <lastUpdated>20220503041344</lastUpdated>
+  </versioning>
+</metadata>

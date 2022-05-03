@@ -1,0 +1,7 @@
+{
+  "com.liferay.design.pack.factory.configuration.v1.DesignPackConfiguration-designpackfire": {
+    "charset": "UTF-8",
+    "clayCss": "$[conf:dxp.address]/clay.css",
+    "mainCss": "$[conf:dxp.address]/main.css"
+  }
+}

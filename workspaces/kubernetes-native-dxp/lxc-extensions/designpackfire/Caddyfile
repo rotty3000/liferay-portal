@@ -14,7 +14,7 @@
 }
 
 :80 {
-    root * /static
+    root * /static/META-INF/resources
     file_server
 
     @options {
