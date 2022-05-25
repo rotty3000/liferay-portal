@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.remote.app.factory.configuration.v1;
+package com.liferay.client.extension.factory.configuration.v1;
 
 import aQute.bnd.annotation.metatype.Meta;
 
@@ -26,21 +26,15 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 )
 @Meta.OCD(
 	factory = true,
-	id = "com.liferay.remote.app.factory.configuration.v1.RemoteAppFactoryConfiguration",
-	localization = "content/Language", name = "remote-app-configuration-name"
+	id = "com.liferay.client.extension.factory.configuration.v1.ClientExtensionFactoryConfiguration",
+	localization = "content/Language", name = "client-extension-configuration-name"
 )
-public interface RemoteAppFactoryConfiguration {
+public interface ClientExtensionFactoryConfiguration {
 
 	@Meta.AD(
 		description = "name-description", name = "name", type = Meta.Type.String
 	)
 	public String name();
-
-	@Meta.AD(
-		description = "company-id-description", name = "company-id",
-		type = Meta.Type.Long
-	)
-	public long companyId();
 
 	@Meta.AD(
 		description = "description-description", name = "description",

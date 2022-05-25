@@ -12,8 +12,10 @@
  * details.
  */
 
-package com.liferay.remote.app.factory;
+package com.liferay.client.extension.factory;
 
+import com.liferay.client.extension.model.ClientExtensionEntry;
+import com.liferay.client.extension.service.ClientExtensionEntryLocalService;
 import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -25,9 +27,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.util.PropsValues;
-import com.liferay.remote.app.factory.configuration.v1.RemoteAppFactoryConfiguration;
-import com.liferay.remote.app.model.RemoteAppEntry;
-import com.liferay.remote.app.service.RemoteAppEntryLocalService;
+import com.liferay.client.extension.factory.configuration.v1.ClientExtensionFactoryConfiguration;
 
 import java.util.Collections;
 import java.util.Locale;
@@ -45,59 +45,67 @@ import org.osgi.service.component.annotations.Reference;
  * @author Raymond Augé
  */
 @Component(
-	configurationPid = "com.liferay.remote.app.factory.configuration.v1.RemoteAppFactoryConfiguration",
+	configurationPid = "com.liferay.client.extension.factory.configuration.v1.ClientExtensionFactoryConfiguration",
 	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true
 )
-public class RemoteAppFactory {
+public class ClientExtensionFactory {
 
 	@Activate
-	public RemoteAppFactory(
+	public ClientExtensionFactory(
 			@Reference CompanyLocalService companyLocalService,
-			@Reference RemoteAppEntryLocalService remoteAppEntryLocalService,
+			@Reference ClientExtensionEntryLocalService
+				clientExtensionEntryLocalService,
 			@Reference UserLocalService userLocalService,
 			Map<String, Object> properties)
 		throws PortalException {
 
-		_remoteAppEntryLocalService = remoteAppEntryLocalService;
+		_clientExtensionEntryLocalService = clientExtensionEntryLocalService;
 
-		RemoteAppFactoryConfiguration remoteAppFactoryConfiguration =
-			ConfigurableUtil.createConfigurable(
-				RemoteAppFactoryConfiguration.class, properties);
+		ClientExtensionFactoryConfiguration
+			clientExtensionFactoryConfiguration =
+				ConfigurableUtil.createConfigurable(
+					ClientExtensionFactoryConfiguration.class, properties);
 
 		String externalReferenceCode = _getExternalReferenceCode(properties);
 
-		Company company = companyLocalService.getCompanyById(
-			remoteAppFactoryConfiguration.companyId());
+		long companyId = GetterUtil.getLong(properties.get("companyId"));
+
+		Company company = companyLocalService.getCompanyById(companyId);
 
 		User defaultAdminUser = userLocalService.getUserByScreenName(
 			company.getCompanyId(), PropsValues.DEFAULT_ADMIN_SCREEN_NAME);
 
 		Map<Locale, String> nameMap = Collections.singletonMap(
 			LocaleUtil.getMostRelevantLocale(),
-			remoteAppFactoryConfiguration.name());
+			clientExtensionFactoryConfiguration.name());
 
-		RemoteAppEntry remoteAppEntry =
-			_remoteAppEntryLocalService.addOrUpdateCustomElementRemoteAppEntry(
-				externalReferenceCode, defaultAdminUser.getUserId(),
-				StringUtil.merge(
-					remoteAppFactoryConfiguration.webComponentCssUrl(), "\n"),
-				remoteAppFactoryConfiguration.elementName(),
-				StringUtil.merge(
-					remoteAppFactoryConfiguration.webComponentUrl(), "\n"),
-				false, remoteAppFactoryConfiguration.description(),
-				remoteAppFactoryConfiguration.friendlyURLMapping(),
-				remoteAppFactoryConfiguration.instanceable(), nameMap,
-				remoteAppFactoryConfiguration.portletDisplayCategory(),
-				remoteAppFactoryConfiguration.portletServiceProperties(), null);
+		ClientExtensionEntry clientExtensionEntry =
+			_clientExtensionEntryLocalService.
+				addOrUpdateCustomElementClientExtensionEntry(
+					externalReferenceCode, defaultAdminUser.getUserId(),
+					StringUtil.merge(
+						clientExtensionFactoryConfiguration.
+							webComponentCssUrl(), "\n"),
+					clientExtensionFactoryConfiguration.elementName(),
+					StringUtil.merge(
+						clientExtensionFactoryConfiguration.
+							webComponentUrl(), "\n"),
+					false, clientExtensionFactoryConfiguration.description(),
+					clientExtensionFactoryConfiguration.friendlyURLMapping(),
+					clientExtensionFactoryConfiguration.instanceable(), nameMap,
+					clientExtensionFactoryConfiguration.
+						portletDisplayCategory(),
+					clientExtensionFactoryConfiguration.
+						portletServiceProperties(), null);
 
-		if (remoteAppEntry.isNew()) {
-			_remoteAppEntryLocalService.updateStatus(
+		if (clientExtensionEntry.isNew()) {
+			_clientExtensionEntryLocalService.updateStatus(
 				defaultAdminUser.getUserId(),
-				remoteAppEntry.getRemoteAppEntryId(),
+				clientExtensionEntry.getClientExtensionEntryId(),
 				WorkflowConstants.STATUS_APPROVED);
 		}
 
-		_remoteAppEntry = remoteAppEntry;
+		_clientExtensionEntry = clientExtensionEntry;
 	}
 
 	@Deactivate
@@ -105,7 +113,7 @@ public class RemoteAppFactory {
 		if (reason ==
 				ComponentConstants.DEACTIVATION_REASON_CONFIGURATION_DELETED) {
 
-			_remoteAppEntryLocalService.deleteRemoteAppEntry(_remoteAppEntry);
+			_clientExtensionEntryLocalService.deleteClientExtensionEntry(_clientExtensionEntry);
 		}
 	}
 
@@ -122,7 +130,7 @@ public class RemoteAppFactory {
 		return externalReferenceCode;
 	}
 
-	private final RemoteAppEntry _remoteAppEntry;
-	private final RemoteAppEntryLocalService _remoteAppEntryLocalService;
+	private final ClientExtensionEntry _clientExtensionEntry;
+	private final ClientExtensionEntryLocalService _clientExtensionEntryLocalService;
 
 }
