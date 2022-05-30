@@ -1,0 +1,19 @@
+buildscript {
+	dependencies {
+		classpath (group: "com.liferay", name: "com.liferay.gradle.plugins.workspace", version: "9.9.9") {
+			exclude group: "biz.aQute.bnd", module: "biz.aQute.bnd"
+		}
+		classpath group: "biz.aQute.bnd", name: "biz.aQute.bnd", version: "5.2.0"
+	}
+
+	repositories {
+		maven {
+			url "${rootDir}/../repo"
+		}
+		maven {
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+apply plugin: "com.liferay.workspace"

@@ -1,0 +1,19 @@
+favicon:
+  v1:
+    name: jamon
+    description: "Jamon for Life"
+    url: favicon.ico
+themeCss:
+  v1:
+    name: tortilla
+    description: "Tortillas everyday"
+    mainCss: main.css
+    clayCss: clay.css
+themeJs:
+  v1:
+    name: marmitako
+    description: "What is a marmitako?"
+    js:
+    - main.js
+    - foobar.js
+     

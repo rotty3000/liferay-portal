@@ -1,0 +1,39 @@
+{
+  "com.liferay.client.extensions.factory.configuration.v1.CustomElementConfiguration~cachopoapp": {
+      "name": "cachopoapp",
+      "customElementName": "cachopoapp-element",
+      "description": "Cachopo App",
+      "useEsModules": true,
+      "sourceCodeUrl": "https://github.com/liferay/cachopo-app",
+      "urls": [
+        "$[conf:host.service.address]/main.js",
+        "$[conf:host.service.address]/foobar.js"
+      ],
+      "cssUrls": [
+        "$[conf:host.service.address]/main.css",
+        "$[conf:host.service.address]/foobar.css"
+      ],
+      "instanceable": true,
+      "portletCategoryName": "sample",
+      "friendlyUrlMapping": "/abc",
+      "properties": [
+          "foo=bar",
+          "fizz=buzz"
+      ],
+      "timestamp": "${tstamp}"
+  },
+  "com.liferay.client.extensions.factory.configuration.v1.IframeConfiguration~sepia": {
+    "name": "sepia",
+    "description": "Cachopo App",
+    "sourceCodeUrl": "https://github.com/liferay/sepia-app",
+    "url": "https://raw.githubusercontent.com/liferay/seipia-app/app.html",
+    "instanceable": true,
+    "portletCategoryName": "sample",
+    "friendlyUrlMapping": "/abc",
+    "properties": [
+        "foo=bar",
+        "fizz=buzz"
+    ],
+    "timestamp": "${tstamp}"
+  }
+}

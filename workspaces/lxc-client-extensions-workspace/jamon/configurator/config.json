@@ -1,0 +1,21 @@
+{
+  "com.liferay.client.extensions.factory.configuration.v1.FaviconConfiguration~jamon": {
+      "description": "Jamon Icon",
+      "url": "$[conf:host.service.address]/favicon.ico",
+      "timestamp": "${tstamp}"
+  },
+  "com.liferay.client.extensions.factory.configuration.v1.ThemeCssConfiguration~tortilla": {
+    "description": "Tortilla Theme CSS",
+    "mainCss": "$[conf:host.service.address]/main.css",
+    "clayCss": "$[conf:host.service.address]/clay.css",
+    "timestamp": "${tstamp}"
+  },
+  "com.liferay.client.extensions.factory.configuration.v1.ThemeJsConfiguration~marmitako": {
+    "description": "Marmitako Theme JS",
+    "js": [
+      "$[conf:host.service.address]/main.js",
+      "$[conf:host.service.address]/foobar.js"
+    ],
+    "timestamp": "${tstamp}"
+  }
+}
