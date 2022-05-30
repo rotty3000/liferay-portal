@@ -2,8 +2,8 @@
 **/.gradle
 **/.settings
 **/.sonar
-**/bin
 **/TEST-frontend-js.xml
+**/bin
 **/liferay/logs/*.log
 **/liferay/logs/*.xml
 **/pmd-reports
