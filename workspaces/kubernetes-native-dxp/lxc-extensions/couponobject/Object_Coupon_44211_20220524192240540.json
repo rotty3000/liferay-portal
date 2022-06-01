@@ -1,0 +1,100 @@
+{
+	"active": true,
+	"objectActions": [],
+	"label": {
+		"en_US": "Coupon"
+	},
+	"panelCategoryKey": "applications_menu.applications.content",
+	"pluralLabel": {
+		"en_US": "Coupons"
+	},
+	"objectLayouts": [],
+	"system": false,
+	"objectViews": [],
+	"objectFields": [
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "expirationDate",
+			"DBType": "Date",
+			"label": {
+				"en_US": "Expiration Date"
+			},
+			"businessType": "Date",
+			"type": "Date",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "issued",
+			"DBType": "Boolean",
+			"label": {
+				"en_US": "Issued"
+			},
+			"businessType": "Boolean",
+			"type": "Boolean",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "en_US",
+			"name": "item",
+			"DBType": "String",
+			"label": {
+				"en_US": "Item"
+			},
+			"businessType": "Text",
+			"type": "String",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "redeemed",
+			"DBType": "Date",
+			"label": {
+				"en_US": "Redeemed"
+			},
+			"businessType": "Date",
+			"type": "Date",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "en_US",
+			"name": "serialNumber",
+			"DBType": "String",
+			"label": {
+				"en_US": "Serial Number"
+			},
+			"businessType": "Text",
+			"type": "String",
+			"required": true
+		}
+	],
+	"scope": "company",
+	"name": "Coupon",
+	"portlet": false,
+	"actions": {
+		"permissions": {
+			
+		},
+		"get": {
+			
+		},
+		"update": {
+			
+		}
+	},
+	"status": {
+		"label_i18n": "Approved",
+		"code": 0,
+		"label": "approved"
+	}
+}

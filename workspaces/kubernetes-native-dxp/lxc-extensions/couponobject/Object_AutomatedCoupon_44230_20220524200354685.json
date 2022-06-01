@@ -1,0 +1,157 @@
+{
+	"active": true,
+	"objectActions": [
+		{
+			"objectActionExecutorKey": "webhook",
+			"objectActionTriggerKey": "onAfterAdd",
+			"name": "Generate Serial Number",
+			"active": true,
+			"parameters": {
+				"secret": "thesecret-changeit",
+				"url": "https://serial.localdev.me/generate"
+			}
+		}
+	],
+	"label": {
+		"en_US": "Automated Coupon"
+	},
+	"panelCategoryKey": "commerce.product_management",
+	"pluralLabel": {
+		"en_US": "Automated Coupons"
+	},
+	"objectLayouts": [
+		{
+			"objectLayoutTabs": [
+				{
+					"name": {
+						"en_US": "Inputs"
+					},
+					"objectLayoutBoxes": [
+						{
+							"objectLayoutRows": [
+								{
+									"objectLayoutColumns": [
+										{
+											"objectFieldName": "itemName",
+											"size": 12,
+											"priority": 0
+										}
+									],
+									"priority": 0
+								},
+								{
+									"objectLayoutColumns": [
+										{
+											"objectFieldName": "expiryDate",
+											"size": 12,
+											"priority": 0
+										}
+									],
+									"priority": 0
+								}
+							],
+							"collapsable": false,
+							"name": {
+								"en_US": "Inputs"
+							},
+							"priority": 0
+						}
+					],
+					"priority": 0
+				}
+			],
+			"name": {
+				"en_US": "Add Coupon"
+			},
+			"defaultObjectLayout": true
+		}
+	],
+	"system": false,
+	"objectViews": [],
+	"objectFields": [
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "expiryDate",
+			"DBType": "Date",
+			"label": {
+				"en_US": "Expiry Date"
+			},
+			"businessType": "Date",
+			"type": "Date",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "issued",
+			"DBType": "Boolean",
+			"label": {
+				"en_US": "Issued"
+			},
+			"businessType": "Boolean",
+			"type": "Boolean",
+			"required": false
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "en_US",
+			"name": "itemName",
+			"DBType": "String",
+			"label": {
+				"en_US": "Item Name"
+			},
+			"businessType": "Text",
+			"type": "String",
+			"required": true
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "",
+			"name": "redeemed",
+			"DBType": "Date",
+			"label": {
+				"en_US": "Redeemed"
+			},
+			"businessType": "Date",
+			"type": "Date",
+			"required": false
+		},
+		{
+			"indexedAsKeyword": false,
+			"indexed": true,
+			"indexedLanguageId": "en_US",
+			"name": "serialNumber",
+			"DBType": "String",
+			"label": {
+				"en_US": "Serial Number"
+			},
+			"businessType": "Text",
+			"type": "String",
+			"required": false
+		}
+	],
+	"scope": "company",
+	"name": "AutomatedCoupon",
+	"portlet": false,
+	"actions": {
+		"permissions": {
+			
+		},
+		"get": {
+			
+		},
+		"update": {
+			
+		}
+	},
+	"status": {
+		"label_i18n": "Approved",
+		"code": 0,
+		"label": "approved"
+	}
+}
