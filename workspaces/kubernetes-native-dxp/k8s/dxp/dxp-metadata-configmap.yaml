@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lxc-dxp-metadata
+  labels:
+    extension.lxc.liferay.com/metadataType: "dxp"
+    dxp.extension.lxc.liferay.com/projectId: "foo"
+data:
+  com.liferay.lxc.dxp.mainDomain: dxp.localdev.me
+  com.liferay.lxc.dxp.domains: |
+    dxp.localdev.me

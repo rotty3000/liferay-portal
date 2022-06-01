@@ -18,40 +18,17 @@ spec:
               limits:
                 memory: "100Mi"
                 cpu: "10m"
-            env:
-              - name: LIFERAY_OAUTH2_HEADLESS_SERVER_CLIENT_ID
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_headless_server_client_id
-                    name: cronjob.extension.liferay.com
-              - name: LIFERAY_OAUTH2_HEADLESS_SERVER_CLIENT_SECRET
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_headless_server_client_secret
-                    name: cronjob.extension.liferay.com
-              - name: LIFERAY_OAUTH2_AUTHORIZATION_URI
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_authorization_uri
-                    name: cronjob.extension.liferay.com
-              - name: LIFERAY_OAUTH2_INTROSPECTION_URI
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_introspection_uri
-                    name: cronjob.extension.liferay.com
-              - name: LIFERAY_OAUTH2_REDIRECT_URIS
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_redirect_uris
-                    name: cronjob.extension.liferay.com
-              - name: LIFERAY_OAUTH2_TOKEN_URI
-                valueFrom:
-                  configMapKeyRef:
-                    key: liferay_oauth2_token_uri
-                    name: cronjob.extension.liferay.com
-              - name: LCP_SERVICE_DOMAIN
-                value: localdev.me
-              - name: LCP_PROJECT_ID
-                value: dxp
-              - name: WEBSERVER_SERVICE_HOST
-                value: ""
+            volumeMounts:
+            - mountPath: /etc/liferay/lxc/dxp-metadata
+              name: lxc-dxp-metadata
+              readOnly: true
+            - mountPath: /etc/liferay/lxc/ext-init-metadata
+              name: lxc-ext-init-metadata
+              readOnly: true
+          volumes:
+            - name: lxc-dxp-metadata
+              configMap:
+                name: lxc-dxp-metadata
+            - name: lxc-ext-init-metadata
+              configMap:
+                name: cronjob-lxc-ext-init-metadata

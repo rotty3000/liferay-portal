@@ -16,18 +16,39 @@ package com.liferay.k8s.agent.configuration.v1;
 
 import aQute.bnd.annotation.metatype.Meta;
 
-import org.osgi.service.component.annotations.ComponentPropertyType;
-
 /**
  * @author Raymond Augé
  */
-@ComponentPropertyType
 @Meta.OCD(
 	factory = true,
 	id = "com.liferay.k8s.agent.configuration.v1.K8sAgentConfiguration",
 	localization = "content/Language", name = "k8s-agent-configuration-name"
 )
-public @interface K8sAgentConfiguration {
+public interface K8sAgentConfiguration {
+
+	@Meta.AD(
+		description = "api-server-host-description", name = "api-server-host",
+		type = Meta.Type.String
+	)
+	public String apiServerHost();
+
+	@Meta.AD(
+		description = "api-server-port-description", name = "api-server-port",
+		type = Meta.Type.String
+	)
+	public int apiServerPort();
+
+	@Meta.AD(
+		deflt = "true", description = "api-server-ssl-description",
+		name = "api-server-ssl", required = false, type = Meta.Type.String
+	)
+	public boolean apiServerSSL();
+
+	@Meta.AD(
+		description = "ca-cert-data-description", name = "ca-cert-data",
+		type = Meta.Type.String
+	)
+	public String caCertData();
 
 	@Meta.AD(
 		deflt = "dxp.liferay.com/configs=true",
@@ -41,5 +62,11 @@ public @interface K8sAgentConfiguration {
 		type = Meta.Type.String
 	)
 	public String namespace();
+
+	@Meta.AD(
+		description = "sa-token-description", name = "sa-token",
+		type = Meta.Type.String
+	)
+	public String saToken();
 
 }

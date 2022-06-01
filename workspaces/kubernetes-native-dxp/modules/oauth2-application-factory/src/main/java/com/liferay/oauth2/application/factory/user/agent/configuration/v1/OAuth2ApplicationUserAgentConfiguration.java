@@ -44,12 +44,6 @@ public interface OAuth2ApplicationUserAgentConfiguration {
 	public String description();
 
 	@Meta.AD(
-		description = "company-id-description", name = "company-id",
-		type = Meta.Type.Long
-	)
-	public long companyId();
-
-	@Meta.AD(
 		description = "home-page-url-description", name = "home-page-url",
 		type = Meta.Type.String
 	)

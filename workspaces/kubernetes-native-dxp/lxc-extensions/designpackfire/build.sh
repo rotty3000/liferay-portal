@@ -2,13 +2,17 @@
 
 cd "$(dirname "$0")"
 
-eval $(minikube docker-env)
+ID="${PWD##*/}"
 
-if [[ ! -z "${EXPECTED_REF}" ]]; then
+if [ ! -z "${EXPECTED_REF}" ]; then
   IMAGE=${EXPECTED_REF}
 fi
 
-ID=designpackfire
+if [ ! -n "${IMAGE}" ]; then
+  IMAGE="${ID}"
+fi
+
+eval $(minikube docker-env)
 
 echo "[run_local] Build the $ID PoC"
 

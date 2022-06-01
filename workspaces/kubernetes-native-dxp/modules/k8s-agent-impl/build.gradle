@@ -8,3 +8,6 @@ dependencies {
 		exclude group: "org.slf4j", module: "slf4j-api"
 	}
 }
+
+deploy.enabled = false
+dockerDeploy.enabled = false

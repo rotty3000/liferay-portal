@@ -1,3 +1,6 @@
 dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 }
+
+deploy.enabled = false
+dockerDeploy.enabled = false

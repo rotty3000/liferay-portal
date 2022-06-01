@@ -14,7 +14,7 @@
 
 package com.liferay.k8s.agent.internal;
 
-import com.liferay.k8s.agent.K8sAgent;
+import com.liferay.k8s.agent.ExtensionConfigMapModifier;
 import com.liferay.k8s.agent.configuration.v1.K8sAgentConfiguration;
 import com.liferay.k8s.agent.constants.K8sAgentConstants;
 import com.liferay.k8s.agent.mutator.K8sConfigurationPropertiesMutator;
@@ -26,6 +26,7 @@ import com.liferay.portal.file.install.properties.ConfigurationProperties;
 import com.liferay.portal.file.install.properties.ConfigurationPropertiesFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.util.PropsValues;
 
 import io.fabric8.kubernetes.api.model.ConfigMap;
@@ -51,7 +52,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 
 import org.apache.felix.configurator.impl.json.BinUtil;
 import org.apache.felix.configurator.impl.json.BinaryManager;
@@ -75,10 +77,10 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 @Component(
 	configurationPid = "com.liferay.k8s.agent.configuration.v1.K8sAgentConfiguration",
 	configurationPolicy = ConfigurationPolicy.REQUIRE, immediate = true,
-	property = {"k8sConfiguratPropertiesMutators.cardinality.minimum:Integer=3"},
-	service = K8sAgent.class
+	property = "k8sConfiguratPropertiesMutators.cardinality.minimum:Integer=3",
+	service = ExtensionConfigMapModifier.class
 )
-public class K8sAgentImpl implements K8sAgent {
+public class K8sAgentImpl implements ExtensionConfigMapModifier {
 
 	@Activate
 	public K8sAgentImpl(
@@ -86,7 +88,9 @@ public class K8sAgentImpl implements K8sAgent {
 			@Reference ConfigurationAdmin configurationAdmin,
 			@Reference(
 				name = "k8sConfiguratPropertiesMutators",
-				policyOption = ReferencePolicyOption.GREEDY) List
+				policyOption = ReferencePolicyOption.GREEDY
+			)
+			List
 				<K8sConfigurationPropertiesMutator>
 					k8sConfiguratPropertiesMutators,
 			Map<String, Object> properties)
@@ -103,12 +107,40 @@ public class K8sAgentImpl implements K8sAgent {
 		if (_log.isInfoEnabled()) {
 			_log.info(
 				StringBundler.concat(
-					"Initializing ", K8sAgentConstants.AGENT_NAME, ": ",
-					_k8sAgentConfiguration.namespace(), " ",
-					_k8sAgentConfiguration.labelSelector()));
+					"Initializing ", K8sAgentConstants.AGENT_NAME, " with: ",
+					properties));
 		}
 
-		Config config = Config.autoConfigure(null);
+		Config config = Config.empty();
+
+		String protocol = Http.HTTP;
+
+		if (_k8sAgentConfiguration.apiServerSSL()) {
+			protocol = Http.HTTPS;
+		}
+
+		String apiServerHost = _k8sAgentConfiguration.apiServerHost();
+		int apiServerPort = _k8sAgentConfiguration.apiServerPort();
+
+		String apiServerAddress = StringBundler.concat(
+			protocol, Http.PROTOCOL_DELIMITER, apiServerHost, StringPool.COLON,
+			apiServerPort, StringPool.SLASH);
+
+		String caCertData = _k8sAgentConfiguration.caCertData();
+		String namespace = _k8sAgentConfiguration.namespace();
+		String saToken = _k8sAgentConfiguration.saToken();
+
+		config.setCaCertData(caCertData);
+		config.setMasterUrl(apiServerAddress);
+		config.setNamespace(namespace);
+		config.setOauthToken(saToken);
+
+		Map<Integer, String> errorMessages = config.getErrorMessages();
+
+		errorMessages.put(401, "Unauthorized! ".concat(_ERROR_MESSAGE));
+		errorMessages.put(403, "Forbidden!".concat(_ERROR_MESSAGE));
+
+		Config.configFromSysPropsOrEnvVars(config);
 
 		_kubernetesClient = new DefaultKubernetesClient(config);
 
@@ -156,29 +188,73 @@ public class K8sAgentImpl implements K8sAgent {
 		);
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Initialized " + K8sAgentConstants.AGENT_NAME);
+			_log.debug("Initialized ".concat(K8sAgentConstants.AGENT_NAME));
 		}
 	}
 
 	@Override
-	public void createOrUpdateConfigMap(
-		Map<String, String> data, Map<String, String> labels, String name) {
+	public Result modifyExtensionConfigMap(
+		Consumer<Map<String, String>> configMapDataConsumer,
+		String serviceId) {
+
+		Objects.requireNonNull(configMapDataConsumer, "must not be null");
+		Objects.requireNonNull(serviceId, "must not be null");
+
+		String configMapName = serviceId.concat(_EXTENSION_CONFIG_MAP_SUFFIX);
 
 		ConfigMap configMap = _kubernetesClient.configMaps(
 		).inNamespace(
 			_k8sAgentConfiguration.namespace()
 		).withName(
-			name
+			configMapName
 		).get();
 
-		if (configMap == null) {
+		if (configMap != null) {
+			Map<String, String> data = configMap.getData();
+			Map<String, String> originalCopy = new TreeMap<>(data);
+
+			configMapDataConsumer.accept(data);
+
+			if (data.isEmpty()) {
+				_kubernetesClient.configMaps(
+				).delete(
+					configMap
+				);
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Deleted ".concat(configMap.toString()));
+				}
+
+				return Result.DELETED;
+			}
+			else if (!Objects.equals(data, originalCopy)) {
+				configMap = _kubernetesClient.configMaps(
+				).withName(
+					configMapName
+				).createOrReplace(
+					configMap
+				);
+
+				if (_log.isDebugEnabled()) {
+					_log.debug("Updated ".concat(configMap.toString()));
+				}
+
+				return Result.UPDATED;
+			}
+			else {
+				return Result.UNCHANGED;
+			}
+		}
+		else {
+			Map<String, String> data = new TreeMap<>();
+
+			configMapDataConsumer.accept(data);
+
 			configMap = new ConfigMapBuilder().withNewMetadata(
 			).withNamespace(
 				_k8sAgentConfiguration.namespace()
 			).withName(
-				name
-			).withLabels(
-				labels
+				configMapName
 			).endMetadata(
 			).addToData(
 				data
@@ -186,87 +262,16 @@ public class K8sAgentImpl implements K8sAgent {
 
 			configMap = _kubernetesClient.configMaps(
 			).withName(
-				name
+				configMapName
 			).createOrReplace(
 				configMap
 			);
 
 			if (_log.isDebugEnabled()) {
-				_log.debug(StringBundler.concat("Created ", configMap));
+				_log.debug("Created ".concat(configMap.toString()));
 			}
-		}
-		else {
-			Map<String, String> currentData = configMap.getData();
 
-			ObjectMeta metadata = configMap.getMetadata();
-
-			Map<String, String> currentLabels = metadata.getLabels();
-
-			if (!Objects.equals(currentData, data) ||
-				!Objects.equals(currentLabels, labels)) {
-
-				currentData.putAll(data);
-				currentLabels.putAll(labels);
-
-				configMap = _kubernetesClient.configMaps(
-				).withName(
-					name
-				).createOrReplace(
-					configMap
-				);
-
-				if (_log.isDebugEnabled()) {
-					_log.debug(StringBundler.concat("Updated ", configMap));
-				}
-			}
-		}
-	}
-
-	@Override
-	public void deleteConfigMap(String name) {
-		ConfigMap configMap = _kubernetesClient.configMaps(
-		).inNamespace(
-			_k8sAgentConfiguration.namespace()
-		).withName(
-			name
-		).get();
-
-		if (configMap != null) {
-			_kubernetesClient.configMaps(
-			).delete(
-				configMap
-			);
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(StringBundler.concat("Deleted ", name));
-			}
-		}
-	}
-
-	@Override
-	public void deleteConfigMapByLabels(
-		String name, Predicate<Map<String, String>> predicate) {
-
-		ConfigMap configMap = _kubernetesClient.configMaps(
-		).inNamespace(
-			_k8sAgentConfiguration.namespace()
-		).withName(
-			name
-		).get();
-
-		if (configMap != null) {
-			ObjectMeta objectMeta = configMap.getMetadata();
-
-			if (predicate.test(objectMeta.getLabels())) {
-				_kubernetesClient.configMaps(
-				).delete(
-					configMap
-				);
-
-				if (_log.isDebugEnabled()) {
-					_log.debug(StringBundler.concat("Delted ", name));
-				}
-			}
+			return Result.CREATED;
 		}
 	}
 
@@ -286,7 +291,7 @@ public class K8sAgentImpl implements K8sAgent {
 
 	private void _add(ConfigMap configMap) {
 		if (_log.isDebugEnabled()) {
-			_log.debug(StringBundler.concat("Adding: ", configMap));
+			_log.debug("Adding: ".concat(configMap.toString()));
 		}
 
 		Map<String, String> data = configMap.getData();
@@ -294,8 +299,7 @@ public class K8sAgentImpl implements K8sAgent {
 		if (data == null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					StringBundler.concat(
-						"Data is null, skipping: ", configMap));
+					"Data is null, skipping: ".concat(configMap.toString()));
 			}
 
 			return;
@@ -326,7 +330,7 @@ public class K8sAgentImpl implements K8sAgent {
 
 	private void _delete(ConfigMap configMap) {
 		if (_log.isDebugEnabled()) {
-			_log.debug(StringBundler.concat("Deleting: ", configMap));
+			_log.debug("Deleting: ".concat(configMap.toString()));
 		}
 
 		Map<String, String> data = configMap.getData();
@@ -334,8 +338,7 @@ public class K8sAgentImpl implements K8sAgent {
 		if (data == null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					StringBundler.concat(
-						"Data is null, skipping: ", configMap));
+					"Data is null, skipping: ".concat(configMap.toString()));
 			}
 
 			return;
@@ -519,15 +522,15 @@ public class K8sAgentImpl implements K8sAgent {
 		throws Exception {
 
 		URL url = new URL("file", null, configName);
+
 		final JSONUtil.Report report = new JSONUtil.Report();
+
 		BinaryManager binaryManager = new BinaryManager(
 			new BinUtil.ResourceProvider() {
 
 				@Override
 				public Enumeration<URL> findEntries(
 					String path, String filePattern) {
-
-					// TODO figure this out...
 
 					return Collections.emptyEnumeration();
 				}
@@ -539,9 +542,6 @@ public class K8sAgentImpl implements K8sAgent {
 
 				@Override
 				public URL getEntry(String path) {
-
-					// TODO figure this out...
-
 					return null;
 				}
 
@@ -651,6 +651,13 @@ public class K8sAgentImpl implements K8sAgent {
 			_log.error(exception);
 		}
 	}
+
+	private static final String _EXTENSION_CONFIG_MAP_SUFFIX =
+		"-ext-init-metadata";
+
+	private static final String _ERROR_MESSAGE =
+		"Configured service account does not have access. Service account " +
+			"may have been revoked.";
 
 	private static final Log _log = LogFactoryUtil.getLog(K8sAgentImpl.class);
 

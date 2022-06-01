@@ -1,5 +1,5 @@
 {
-  "com.liferay.remote.app.factory.configuration.v1.RemoteAppFactoryConfiguration~liferayhelloworld": {
+  "com.liferay.client.extension.factory.configuration.v1.ClientExtensionFactoryConfiguration~liferayhelloworld": {
     ":configurator:policy": "force",
     "name": "Liferay Hello World",
     "type": "customElement",
@@ -14,5 +14,13 @@
     "portletDisplayCategory": "remote-app",
     "host.service.address": "/o${Web-ContextPath}",
     "timestamp": "${tstamp}"
+  },
+  "com.liferay.remote.app.factory.configuration.v1.RemoteAppFactoryConfiguration~liferayhelloworld": {
+    "webComponentUrl": [
+      "$[conf:host.service.address]/static/js/main.8729948a.js"
+    ],
+    "webComponentCssUrl": [
+      "$[conf:host.service.address]/static/css/main.9877909d.css"
+    ]
   }
 }

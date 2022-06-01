@@ -18,21 +18,28 @@ spec:
         app: liferayhelloworld
     spec:
       containers:
-        - name: liferayhelloworld
-          image: liferayhelloworld
-          imagePullPolicy: Never
-          ports:
-          - containerPort: 80
-          resources:
-            limits:
-              cpu: "200m"
-              memory: "50Mi"
-          env:
-            - name: CORS_ALLOWED_ORIGIN
-              value: dxp.localdev.me
-            - name: LCP_SERVICE_DOMAIN
-              value: localdev.me
-            - name: LCP_PROJECT_ID
-              value: dxp
-            - name: WEBSERVER_SERVICE_HOST
-              value: ""
+      - name: liferayhelloworld
+        image: liferayhelloworld
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "50Mi"
+        volumeMounts:
+        - mountPath: /etc/liferay/lxc/dxp-metadata
+          name: lxc-dxp-metadata
+          readOnly: true
+        - mountPath: /etc/liferay/lxc/ext-init-metadata
+          name: lxc-ext-init-metadata
+          readOnly: true
+      volumes:
+        - name: lxc-dxp-metadata
+          configMap:
+            name: lxc-dxp-metadata
+        - name: lxc-ext-init-metadata
+          configMap:
+            name: liferayhelloworld-lxc-ext-init-metadata
+            optional: true
+

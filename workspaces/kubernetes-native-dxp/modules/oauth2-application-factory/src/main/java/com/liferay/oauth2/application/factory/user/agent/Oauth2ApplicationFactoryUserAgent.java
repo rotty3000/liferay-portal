@@ -14,7 +14,8 @@
 
 package com.liferay.oauth2.application.factory.user.agent;
 
-import com.liferay.k8s.agent.K8sAgent;
+import com.liferay.k8s.agent.ExtensionConfigMapModifier;
+import com.liferay.k8s.agent.constants.K8sAgentConstants;
 import com.liferay.oauth2.application.factory.CompanyDomainProvider;
 import com.liferay.oauth2.application.factory.OAuth2ApplicationFactoryConstants;
 import com.liferay.oauth2.application.factory.user.agent.configuration.v1.OAuth2ApplicationUserAgentConfiguration;
@@ -42,16 +43,19 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PropsValues;
 
 import java.io.InputStream;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -72,7 +76,7 @@ public class Oauth2ApplicationFactoryUserAgent {
 	public Oauth2ApplicationFactoryUserAgent(
 			@Reference CompanyDomainProvider companyDomainProvider,
 			@Reference CompanyLocalService companyLocalService,
-			@Reference K8sAgent k8sAgent,
+			@Reference ExtensionConfigMapModifier extensionConfigMapModifier,
 			@Reference OAuth2ApplicationLocalService
 				oAuth2ApplicationLocalService,
 			@Reference UserLocalService userLocalService,
@@ -87,7 +91,7 @@ public class Oauth2ApplicationFactoryUserAgent {
 		}
 
 		_companyLocalService = companyLocalService;
-		_k8sAgent = k8sAgent;
+		_extensionConfigMapModifier = extensionConfigMapModifier;
 		_oAuth2ApplicationLocalService = oAuth2ApplicationLocalService;
 		_userLocalService = userLocalService;
 
@@ -95,8 +99,21 @@ public class Oauth2ApplicationFactoryUserAgent {
 			ConfigurableUtil.createConfigurable(
 				OAuth2ApplicationUserAgentConfiguration.class, properties);
 
-		Company company = _companyLocalService.getCompanyById(
-			_oAuth2ApplicationUserAgentConfiguration.companyId());
+		_serviceId = GetterUtil.getString(
+			properties.get(K8sAgentConstants.K8S_SERVICE_ID));
+
+		if (Validator.isNull(_serviceId)) {
+			throw new IllegalArgumentException(
+				StringBundler.concat(
+					"property ", K8sAgentConstants.K8S_SERVICE_ID,
+					" must be set"));
+		}
+
+		String externalReferenceCode = _getExternalReferenceCode(properties);
+
+		long companyId = GetterUtil.getLong(properties.get("companyId"));
+
+		Company company = _companyLocalService.getCompanyById(companyId);
 
 		List<String> companyDomains =
 			companyDomainProvider.getCompanyDomains(company.getCompanyId());
@@ -115,8 +132,6 @@ public class Oauth2ApplicationFactoryUserAgent {
 		OAuth2Application oAuth2Application = _getOrAddOAuth2Application(
 			company, redirectURIsList);
 
-		boolean update = false;
-
 		if (!Objects.equals(
 				oAuth2Application.getDescription(),
 				_oAuth2ApplicationUserAgentConfiguration.description()) ||
@@ -129,10 +144,6 @@ public class Oauth2ApplicationFactoryUserAgent {
 			!Objects.equals(
 				oAuth2Application.getRedirectURIsList(), redirectURIsList)) {
 
-			update = true;
-		}
-
-		if (update) {
 			oAuth2Application =
 				_oAuth2ApplicationLocalService.updateOAuth2Application(
 					oAuth2Application.getOAuth2ApplicationId(),
@@ -160,45 +171,36 @@ public class Oauth2ApplicationFactoryUserAgent {
 			oAuth2Application.getUserId(), oAuth2Application.getUserName(),
 			oAuth2Application.getOAuth2ApplicationId(), scopeAliasesList);
 
-		_k8sAgent.createOrUpdateConfigMap(
-			HashMapBuilder.put(
-				"liferay_oauth2_authorization_uri",
-				serviceAddress.concat("/o/oauth2/authorize")
-			).put(
-				"liferay_oauth2_introspection_uri",
-				serviceAddress.concat("/o/oauth2/introspect")
-			).put(
-				"liferay_oauth2_redirect_uris",
-				StringUtil.merge(redirectURIsList, StringPool.COMMA)
-			).put(
-				"liferay_oauth2_token_uri",
-				serviceAddress.concat("/o/oauth2/token")
-			).put(
-				"liferay_oauth2_user_agent_client_id",
-				oAuth2Application.getClientId()
-			).put(
-				"liferay_oauth2_user_agent_scopes",
-				StringUtil.merge(scopeAliasesList, StringPool.COMMA)
-			).put(
-				"liferay_service_domains",
-				StringUtil.merge(companyDomains, StringPool.COMMA)
-			).build(),
-			HashMapBuilder.put(
-				"extension", _oAuth2ApplicationUserAgentConfiguration.name()
-			).put(
-				OAuth2ApplicationFactoryConstants.
-					USER_AGENT_SUBDOMAIN.substring(1),
-				"true"
-			).build(),
-			_getConfigMapName());
+		_extensionProperties = HashMapBuilder.put(
+			externalReferenceCode.concat(".oauth2.authorization.uri"),
+			serviceAddress.concat("/o/oauth2/authorize")
+		).put(
+			externalReferenceCode.concat(".oauth2.introspection.uri"),
+			serviceAddress.concat("/o/oauth2/introspect")
+		).put(
+			externalReferenceCode.concat(".oauth2.redirect.uris"),
+			StringUtil.merge(redirectURIsList, StringPool.COMMA)
+		).put(
+			externalReferenceCode.concat(".oauth2.token.uri"),
+			serviceAddress.concat("/o/oauth2/token")
+		).put(
+			externalReferenceCode.concat(".oauth2.user.agent.client.id"),
+			oAuth2Application.getClientId()
+		).put(
+			externalReferenceCode.concat(".oauth2.user.agent.scopes"),
+			StringUtil.merge(scopeAliasesList, StringPool.COMMA)
+		).build();
+
+		_extensionConfigMapModifier.modifyExtensionConfigMap(
+			data -> _extensionProperties.forEach(data::put),
+			_serviceId);
 
 		_oAuth2Application = oAuth2Application;
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
-				StringBundler.concat(
-					"Completed User Agent profile request: ",
-					_oAuth2Application));
+				"Created User Agent application: ".concat(
+					_oAuth2Application.toString()));
 		}
 	}
 
@@ -209,27 +211,30 @@ public class Oauth2ApplicationFactoryUserAgent {
 
 			if (_log.isDebugEnabled()) {
 				_log.debug(
-					StringBundler.concat(
-						"Deleting User Agent Request: ", _oAuth2Application));
+					"Deleting User Agent application: ".concat(
+						_oAuth2Application.toString()));
 			}
+
+			_extensionConfigMapModifier.modifyExtensionConfigMap(
+				data -> _extensionProperties.forEach(data::remove),
+				_serviceId);
 
 			_oAuth2ApplicationLocalService.deleteOAuth2Application(
 				_oAuth2Application);
-
-			_k8sAgent.deleteConfigMapByLabels(
-				_getConfigMapName(),
-				labels -> !labels.containsKey(
-					OAuth2ApplicationFactoryConstants.
-						HEADLESS_SERVER_SUBDOMAIN.substring(1)
-				)
-			);
 		}
 	}
 
-	private String _getConfigMapName() {
-		return StringBundler.concat(
-			_oAuth2ApplicationUserAgentConfiguration.name(),
-			OAuth2ApplicationFactoryConstants.EXTENSION_SUBDOMAIN);
+	private String _getExternalReferenceCode(Map<String, Object> properties) {
+		String externalReferenceCode = GetterUtil.getString(
+			properties.get(Constants.SERVICE_PID));
+
+		int pos = externalReferenceCode.indexOf('~');
+
+		if (pos > 0) {
+			externalReferenceCode = externalReferenceCode.substring(pos + 1);
+		}
+
+		return externalReferenceCode;
 	}
 
 	private String _getName() {
@@ -291,11 +296,13 @@ public class Oauth2ApplicationFactoryUserAgent {
 		Oauth2ApplicationFactoryUserAgent.class);
 
 	private final CompanyLocalService _companyLocalService;
-	private final K8sAgent _k8sAgent;
+	private final ExtensionConfigMapModifier _extensionConfigMapModifier;
+	private final HashMap<String, String> _extensionProperties;
 	private final OAuth2Application _oAuth2Application;
 	private final OAuth2ApplicationLocalService _oAuth2ApplicationLocalService;
 	private final OAuth2ApplicationUserAgentConfiguration
 		_oAuth2ApplicationUserAgentConfiguration;
+	private final String _serviceId;
 	private final UserLocalService _userLocalService;
 
 }

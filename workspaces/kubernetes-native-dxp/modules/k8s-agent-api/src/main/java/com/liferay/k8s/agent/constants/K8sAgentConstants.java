@@ -28,13 +28,16 @@ public class K8sAgentConstants {
 
 	public static final String FILE_JSON_EXT = ".config.json";
 
-	public static final String K8S_CONFIG_KEY = ".kubernetes.config.key";
+	public static final String K8S_CONFIG_KEY = ".k8s.config.key";
 
 	public static final String K8S_CONFIG_RESOURCE_VERSION =
-		".kubernetes.config.resource.version";
+		".k8s.config.resource.version";
 
-	public static final String K8S_CONFIG_UID = ".kubernetes.config.uid";
+	public static final String K8S_CONFIG_UID = ".k8s.config.uid";
 
 	public static final String K8S_PROPERTY_KEY = "k8s.";
+
+	public static final String K8S_SERVICE_ID =
+		"k8s.cloud.liferay.com.serviceId";
 
 }
