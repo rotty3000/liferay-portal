@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<suppressions>
-	<source-check>
-		<suppress checks="BNDDefinitionKeysCheck" files="modules/k8s-agent-impl/bnd.bnd" />
-		<suppress checks="JavaIllegalImportsCheck" files="modules/k8s-agent-impl/src/main/java/com/liferay/k8s/agent/internal/.*\.java"></suppress>
-	</source-check>
-</suppressions>
