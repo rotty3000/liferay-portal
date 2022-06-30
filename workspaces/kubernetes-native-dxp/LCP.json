@@ -35,8 +35,7 @@
   },
   "publishNotReadyAddressesForCluster": false,
   "env": {
-    "GCP_OIDC_CLIENT_ID": "@gcp-oidc-client-id",
-    "GCP_OIDC_CLIENT_SECRET": "@gcp-oidc-client-secret",
+    "LIFERAY_FEATURE_PERIOD_FLAG_PERIOD__UPPERCASEL__UPPERCASEP__UPPERCASES__MINUS__NUMBER1__NUMBER5__NUMBER3__NUMBER4__NUMBER5__NUMBER7_": "true",
     "LCP_PROJECT_LIFERAY_CLUSTER_ENABLED": "true",
     "LIFERAY_JPDA_ENABLED": "true",
     "LIFERAY_JVM_OPTS": "-Xms2048m -Xmx6144m -XX:MaxMetaspaceSize=1g -XX:+UnlockDiagnosticVMOptions -XX:NativeMemoryTracking=detail -XX:+PrintNMTStatistics",
@@ -53,14 +52,6 @@
   "environments": {
     "infra": {
       "deploy": false
-    },
-    "prd": {
-      "cpu": 12,
-      "memory": 16384,
-      "scale": 1,
-      "env": {
-        "LIFERAY_JVM_OPTS": "-Xms4096m -Xmx12288m"
-      }
     }
   }
 }

@@ -2,7 +2,7 @@ v1alpha1.extension_repo(name='default', url='https://github.com/gamerson/tilt-ex
 
 custom_build(
   'k8s-native-dxp',
-  command='./gradlew resolve buildDockerImage -Pdocker.image.id=$EXPECTED_REF',
+  command='./gradlew clean buildDockerImage -Pdocker.image.id=$EXPECTED_REF',
   deps=['./modules'],
   ignore=['**/build']
 )

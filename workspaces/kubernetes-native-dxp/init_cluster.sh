@@ -49,8 +49,3 @@ else
     echo "Please install minikube. See https://minikube.sigs.k8s.io/docs/start/"
     exit 1
 fi
-
-(cd lxc-extensions/customrestservice/ && rm -rf build && IMAGE=customrestservice ./build.sh)
-(cd lxc-extensions/liferayhelloworld/ && rm -rf build && IMAGE=liferayhelloworld ./build.sh)
-(cd lxc-extensions/dynamicjscss/ && rm -rf build && IMAGE=dynamicjscss ./build.sh)
-(cd lxc-extensions/designpackfire/ && rm -rf build && IMAGE=designpackfire ./build.sh)
