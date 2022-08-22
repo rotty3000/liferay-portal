@@ -21,7 +21,6 @@ import com.liferay.petra.concurrent.ConcurrentReferenceValueHashMap;
 import com.liferay.petra.memory.FinalizeManager;
 import com.liferay.petra.string.CharPool;
 
-import java.lang.ref.Reference;
 import java.lang.reflect.Field;
 
 import java.math.BigDecimal;
@@ -56,7 +55,25 @@ public class ItemClassIndexUtil {
 							name = name.substring(1);
 						}
 
+						if (field.isSynthetic()) {
+							continue;
+						}
+
 						fieldMap.put(name, field);
+
+						Class<?> fieldClass = field.getType();
+
+						if (!isSingleColumnAdoptableValue(fieldClass) &&
+							!isSingleColumnAdoptableArray(fieldClass)) {
+
+							index(fieldClass);
+						}
+					}
+
+					if (clazz.isAnonymousClass() || clazz.isLocalClass() ||
+						clazz.isMemberClass()) {
+
+						break;
 					}
 
 					clazz = clazz.getSuperclass();
@@ -109,9 +126,8 @@ public class ItemClassIndexUtil {
 
 	private static final Map<Class<?>, Map<String, Field>> _fieldsMap =
 		new ConcurrentReferenceKeyHashMap<>(
-			new ConcurrentReferenceValueHashMap
-				<Reference<Class<?>>, Map<String, Field>>(
-					FinalizeManager.WEAK_REFERENCE_FACTORY),
+			new ConcurrentReferenceValueHashMap<>(
+				FinalizeManager.WEAK_REFERENCE_FACTORY),
 			FinalizeManager.WEAK_REFERENCE_FACTORY);
 	private static final List<Class<?>> _objectTypes = Arrays.asList(
 		Boolean.class, BigDecimal.class, BigInteger.class, Byte.class,
