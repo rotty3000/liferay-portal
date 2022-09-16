@@ -118,6 +118,15 @@ renderResponse.setTitle(editable ? LanguageUtil.get(request, "edit-template") : 
 
 							<div class="mt-2">
 								<clay:checkbox
+									checked="<%= false %>"
+									id='<%= liferayPortletResponse.getNamespace() + "applyWorkflowStatus" %>'
+									label='<%= LanguageUtil.get(request, "apply-workflow-status-from-source") %>'
+									name='<%= liferayPortletResponse.getNamespace() + "applyWorkflowStatus" %>'
+								/>
+							</div>
+
+							<div class="mt-2">
+								<clay:checkbox
 									checked="<%= true %>"
 									disabled="<%= true %>"
 									id='<%= liferayPortletResponse.getNamespace() + "onUpdateDoPatch" %>'
