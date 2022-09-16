@@ -29,6 +29,8 @@ public class BatchPlannerPolicyConstants {
 			HashMapBuilder.put(
 				"allowUpdate", "checkbox"
 			).put(
+				"applyWorkflowStatus", "checkbox"
+			).put(
 				"containsHeaders", "checkbox"
 			).put(
 				"delimiter", "text"
