@@ -72,6 +72,7 @@ import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.SearchUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -220,6 +221,16 @@ public class ObjectDefinitionResourceImpl
 			objectDefinition.getObjectLayouts(),
 			objectDefinition.getObjectRelationships(),
 			objectDefinition.getObjectViews());
+
+		Status status = objectDefinition.getStatus();
+
+		if (_isApplyWorkflowStatus() &&
+			(status.getCode() == WorkflowConstants.STATUS_APPROVED)) {
+
+			serviceBuilderObjectDefinition =
+				_objectDefinitionService.publishCustomObjectDefinition(
+					serviceBuilderObjectDefinition.getObjectDefinitionId());
+		}
 
 		return _toObjectDefinition(serviceBuilderObjectDefinition);
 	}
@@ -456,6 +467,16 @@ public class ObjectDefinitionResourceImpl
 					objectDefinitionId, objectView);
 			}
 		}
+	}
+
+	private Boolean _isApplyWorkflowStatus() {
+		MultivaluedMap<String, String> queryParameters =
+			contextUriInfo.getQueryParameters();
+
+		List<String> values = queryParameters.getOrDefault(
+			"applyWorkflowStatus", Arrays.asList("false"));
+
+		return GetterUtil.getBoolean(values.get(0));
 	}
 
 	private ObjectDefinition _toObjectDefinition(
