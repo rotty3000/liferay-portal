@@ -128,6 +128,8 @@ public class UserTable extends BaseTable<UserTable> {
 		Column.FLAG_DEFAULT);
 	public final Column<UserTable, Integer> status = createColumn(
 		"status", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
+	public final Column<UserTable, Integer> type = createColumn(
+		"type_", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 
 	private UserTable() {
 		super("User_", UserTable::new);

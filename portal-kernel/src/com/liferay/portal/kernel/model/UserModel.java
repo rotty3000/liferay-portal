@@ -763,6 +763,20 @@ public interface UserModel
 	 */
 	public void setStatus(int status);
 
+	/**
+	 * Returns the type of this user.
+	 *
+	 * @return the type of this user
+	 */
+	public int getType();
+
+	/**
+	 * Sets the type of this user.
+	 *
+	 * @param type the type of this user
+	 */
+	public void setType(int type);
+
 	@Override
 	public User cloneWithOriginalValues();
 

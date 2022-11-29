@@ -94,7 +94,8 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		{"lastFailedLoginDate", Types.TIMESTAMP},
 		{"failedLoginAttempts", Types.INTEGER}, {"lockout", Types.BOOLEAN},
 		{"lockoutDate", Types.TIMESTAMP}, {"agreedToTermsOfUse", Types.BOOLEAN},
-		{"emailAddressVerified", Types.BOOLEAN}, {"status", Types.INTEGER}
+		{"emailAddressVerified", Types.BOOLEAN}, {"status", Types.INTEGER},
+		{"type_", Types.INTEGER}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -145,10 +146,11 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		TABLE_COLUMNS_MAP.put("agreedToTermsOfUse", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("emailAddressVerified", Types.BOOLEAN);
 		TABLE_COLUMNS_MAP.put("status", Types.INTEGER);
+		TABLE_COLUMNS_MAP.put("type_", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table User_ (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,userId LONG not null,companyId LONG,createDate DATE null,modifiedDate DATE null,defaultUser BOOLEAN,contactId LONG,password_ VARCHAR(75) null,passwordEncrypted BOOLEAN,passwordReset BOOLEAN,passwordModifiedDate DATE null,digest VARCHAR(255) null,reminderQueryQuestion VARCHAR(75) null,reminderQueryAnswer VARCHAR(75) null,graceLoginCount INTEGER,screenName VARCHAR(75) null,emailAddress VARCHAR(254) null,facebookId LONG,googleUserId VARCHAR(75) null,ldapServerId LONG,openId VARCHAR(1024) null,portraitId LONG,languageId VARCHAR(75) null,timeZoneId VARCHAR(75) null,greeting VARCHAR(255) null,comments STRING null,firstName VARCHAR(75) null,middleName VARCHAR(75) null,lastName VARCHAR(75) null,jobTitle VARCHAR(100) null,loginDate DATE null,loginIP VARCHAR(75) null,lastLoginDate DATE null,lastLoginIP VARCHAR(75) null,lastFailedLoginDate DATE null,failedLoginAttempts INTEGER,lockout BOOLEAN,lockoutDate DATE null,agreedToTermsOfUse BOOLEAN,emailAddressVerified BOOLEAN,status INTEGER,primary key (userId, ctCollectionId))";
+		"create table User_ (mvccVersion LONG default 0 not null,ctCollectionId LONG default 0 not null,uuid_ VARCHAR(75) null,externalReferenceCode VARCHAR(75) null,userId LONG not null,companyId LONG,createDate DATE null,modifiedDate DATE null,defaultUser BOOLEAN,contactId LONG,password_ VARCHAR(75) null,passwordEncrypted BOOLEAN,passwordReset BOOLEAN,passwordModifiedDate DATE null,digest VARCHAR(255) null,reminderQueryQuestion VARCHAR(75) null,reminderQueryAnswer VARCHAR(75) null,graceLoginCount INTEGER,screenName VARCHAR(75) null,emailAddress VARCHAR(254) null,facebookId LONG,googleUserId VARCHAR(75) null,ldapServerId LONG,openId VARCHAR(1024) null,portraitId LONG,languageId VARCHAR(75) null,timeZoneId VARCHAR(75) null,greeting VARCHAR(255) null,comments STRING null,firstName VARCHAR(75) null,middleName VARCHAR(75) null,lastName VARCHAR(75) null,jobTitle VARCHAR(100) null,loginDate DATE null,loginIP VARCHAR(75) null,lastLoginDate DATE null,lastLoginIP VARCHAR(75) null,lastFailedLoginDate DATE null,failedLoginAttempts INTEGER,lockout BOOLEAN,lockoutDate DATE null,agreedToTermsOfUse BOOLEAN,emailAddressVerified BOOLEAN,status INTEGER,type_ INTEGER,primary key (userId, ctCollectionId))";
 
 	public static final String TABLE_SQL_DROP = "drop table User_";
 
@@ -598,6 +600,9 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		attributeGetterFunctions.put("status", User::getStatus);
 		attributeSetterBiConsumers.put(
 			"status", (BiConsumer<User, Integer>)User::setStatus);
+		attributeGetterFunctions.put("type", User::getType);
+		attributeSetterBiConsumers.put(
+			"type", (BiConsumer<User, Integer>)User::setType);
 
 		_attributeGetterFunctions = Collections.unmodifiableMap(
 			attributeGetterFunctions);
@@ -1562,6 +1567,21 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 			this.<Integer>getColumnOriginalValue("status"));
 	}
 
+	@JSON
+	@Override
+	public int getType() {
+		return _type;
+	}
+
+	@Override
+	public void setType(int type) {
+		if (_columnOriginalValues == Collections.EMPTY_MAP) {
+			_setColumnOriginalValues();
+		}
+
+		_type = type;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(
@@ -1668,6 +1688,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		userImpl.setAgreedToTermsOfUse(isAgreedToTermsOfUse());
 		userImpl.setEmailAddressVerified(isEmailAddressVerified());
 		userImpl.setStatus(getStatus());
+		userImpl.setType(getType());
 
 		userImpl.resetOriginalValues();
 
@@ -1747,6 +1768,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		userImpl.setEmailAddressVerified(
 			this.<Boolean>getColumnOriginalValue("emailAddressVerified"));
 		userImpl.setStatus(this.<Integer>getColumnOriginalValue("status"));
+		userImpl.setType(this.<Integer>getColumnOriginalValue("type_"));
 
 		return userImpl;
 	}
@@ -2088,6 +2110,8 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 		userCacheModel.status = getStatus();
 
+		userCacheModel.type = getType();
+
 		return userCacheModel;
 	}
 
@@ -2193,6 +2217,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	private boolean _agreedToTermsOfUse;
 	private boolean _emailAddressVerified;
 	private int _status;
+	private int _type;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -2271,6 +2296,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		_columnOriginalValues.put(
 			"emailAddressVerified", _emailAddressVerified);
 		_columnOriginalValues.put("status", _status);
+		_columnOriginalValues.put("type_", _type);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -2280,6 +2306,7 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 
 		attributeNames.put("uuid_", "uuid");
 		attributeNames.put("password_", "password");
+		attributeNames.put("type_", "type");
 		attributeNames.put("groups_", "groups");
 
 		_attributeNames = Collections.unmodifiableMap(attributeNames);
@@ -2383,6 +2410,8 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		columnBitmasks.put("emailAddressVerified", 4398046511104L);
 
 		columnBitmasks.put("status", 8796093022208L);
+
+		columnBitmasks.put("type_", 17592186044416L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}

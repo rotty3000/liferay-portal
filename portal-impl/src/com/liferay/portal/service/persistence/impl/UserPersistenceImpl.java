@@ -8198,6 +8198,7 @@ public class UserPersistenceImpl
 
 		dbColumnNames.put("uuid", "uuid_");
 		dbColumnNames.put("password", "password_");
+		dbColumnNames.put("type", "type_");
 		dbColumnNames.put("groups", "groups_");
 
 		setDBColumnNames(dbColumnNames);
@@ -10690,6 +10691,7 @@ public class UserPersistenceImpl
 		ctStrictColumnNames.add("agreedToTermsOfUse");
 		ctStrictColumnNames.add("emailAddressVerified");
 		ctStrictColumnNames.add("status");
+		ctStrictColumnNames.add("type_");
 		ctStrictColumnNames.add("groups_");
 		ctStrictColumnNames.add("orgs");
 		ctStrictColumnNames.add("roles");
@@ -11143,7 +11145,7 @@ public class UserPersistenceImpl
 		UserPersistenceImpl.class);
 
 	private static final Set<String> _badColumnNames = SetUtil.fromArray(
-		new String[] {"uuid", "password", "groups"});
+		new String[] {"uuid", "password", "type", "groups"});
 
 	@Override
 	protected FinderCache getFinderCache() {

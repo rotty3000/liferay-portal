@@ -1460,6 +1460,7 @@ create table User_ (
 	agreedToTermsOfUse BOOLEAN,
 	emailAddressVerified BOOLEAN,
 	status INTEGER,
+	type_ INTEGER,
 	primary key (userId, ctCollectionId)
 );
 
