@@ -23,6 +23,7 @@ import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
 
@@ -70,7 +71,11 @@ public class RoleUsersProvider
 			for (long userId :
 					_userLocalService.getRoleUserIds(role.getRoleId())) {
 
-				userIds.add(userId);
+				User user = _userLocalService.getUser(userId);
+
+				if (user.getType() == UserConstants.TYPE_USER) {
+					userIds.add(userId);
+				}
 			}
 		}
 
