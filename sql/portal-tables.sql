@@ -1459,8 +1459,8 @@ create table User_ (
 	lockoutDate DATE null,
 	agreedToTermsOfUse BOOLEAN,
 	emailAddressVerified BOOLEAN,
-	status INTEGER,
 	type_ INTEGER,
+	status INTEGER,
 	primary key (userId, ctCollectionId)
 );
 

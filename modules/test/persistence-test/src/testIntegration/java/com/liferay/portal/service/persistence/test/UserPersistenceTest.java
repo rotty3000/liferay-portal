@@ -208,9 +208,9 @@ public class UserPersistenceTest {
 
 		newUser.setEmailAddressVerified(RandomTestUtil.randomBoolean());
 
-		newUser.setStatus(RandomTestUtil.nextInt());
-
 		newUser.setType(RandomTestUtil.nextInt());
+
+		newUser.setStatus(RandomTestUtil.nextInt());
 
 		_users.add(_persistence.update(newUser));
 
@@ -305,8 +305,8 @@ public class UserPersistenceTest {
 		Assert.assertEquals(
 			existingUser.isEmailAddressVerified(),
 			newUser.isEmailAddressVerified());
-		Assert.assertEquals(existingUser.getStatus(), newUser.getStatus());
 		Assert.assertEquals(existingUser.getType(), newUser.getType());
+		Assert.assertEquals(existingUser.getStatus(), newUser.getStatus());
 	}
 
 	@Test(expected = DuplicateUserExternalReferenceCodeException.class)
@@ -479,6 +479,15 @@ public class UserPersistenceTest {
 	}
 
 	@Test
+	public void testCountByC_DU_T() throws Exception {
+		_persistence.countByC_DU_T(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean(),
+			RandomTestUtil.nextInt());
+
+		_persistence.countByC_DU_T(0L, RandomTestUtil.randomBoolean(), 0);
+	}
+
+	@Test
 	public void testCountByC_DU_S() throws Exception {
 		_persistence.countByC_DU_S(
 			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean(),
@@ -535,8 +544,8 @@ public class UserPersistenceTest {
 			"loginDate", true, "loginIP", true, "lastLoginDate", true,
 			"lastLoginIP", true, "lastFailedLoginDate", true,
 			"failedLoginAttempts", true, "lockout", true, "lockoutDate", true,
-			"agreedToTermsOfUse", true, "emailAddressVerified", true, "status",
-			true, "type", true);
+			"agreedToTermsOfUse", true, "emailAddressVerified", true, "type",
+			true, "status", true);
 	}
 
 	@Test
@@ -815,17 +824,6 @@ public class UserPersistenceTest {
 				user, "getColumnOriginalValue", new Class<?>[] {String.class},
 				"companyId"));
 		Assert.assertEquals(
-			Boolean.valueOf(user.getDefaultUser()),
-			ReflectionTestUtil.<Boolean>invoke(
-				user, "getColumnOriginalValue", new Class<?>[] {String.class},
-				"defaultUser"));
-
-		Assert.assertEquals(
-			Long.valueOf(user.getCompanyId()),
-			ReflectionTestUtil.<Long>invoke(
-				user, "getColumnOriginalValue", new Class<?>[] {String.class},
-				"companyId"));
-		Assert.assertEquals(
 			user.getScreenName(),
 			ReflectionTestUtil.invoke(
 				user, "getColumnOriginalValue", new Class<?>[] {String.class},
@@ -874,6 +872,22 @@ public class UserPersistenceTest {
 			ReflectionTestUtil.invoke(
 				user, "getColumnOriginalValue", new Class<?>[] {String.class},
 				"openId"));
+
+		Assert.assertEquals(
+			Long.valueOf(user.getCompanyId()),
+			ReflectionTestUtil.<Long>invoke(
+				user, "getColumnOriginalValue", new Class<?>[] {String.class},
+				"companyId"));
+		Assert.assertEquals(
+			Boolean.valueOf(user.getDefaultUser()),
+			ReflectionTestUtil.<Boolean>invoke(
+				user, "getColumnOriginalValue", new Class<?>[] {String.class},
+				"defaultUser"));
+		Assert.assertEquals(
+			Integer.valueOf(user.getType()),
+			ReflectionTestUtil.<Integer>invoke(
+				user, "getColumnOriginalValue", new Class<?>[] {String.class},
+				"type_"));
 
 		Assert.assertEquals(
 			user.getExternalReferenceCode(),
@@ -976,9 +990,9 @@ public class UserPersistenceTest {
 
 		user.setEmailAddressVerified(RandomTestUtil.randomBoolean());
 
-		user.setStatus(RandomTestUtil.nextInt());
-
 		user.setType(RandomTestUtil.nextInt());
+
+		user.setStatus(RandomTestUtil.nextInt());
 
 		_users.add(_persistence.update(user));
 

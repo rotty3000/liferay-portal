@@ -86,8 +86,8 @@ public class UserWrapper
 		attributes.put("lockoutDate", getLockoutDate());
 		attributes.put("agreedToTermsOfUse", isAgreedToTermsOfUse());
 		attributes.put("emailAddressVerified", isEmailAddressVerified());
-		attributes.put("status", getStatus());
 		attributes.put("type", getType());
+		attributes.put("status", getStatus());
 
 		return attributes;
 	}
@@ -360,16 +360,16 @@ public class UserWrapper
 			setEmailAddressVerified(emailAddressVerified);
 		}
 
-		Integer status = (Integer)attributes.get("status");
-
-		if (status != null) {
-			setStatus(status);
-		}
-
 		Integer type = (Integer)attributes.get("type");
 
 		if (type != null) {
 			setType(type);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
 		}
 	}
 

@@ -750,20 +750,6 @@ public interface UserModel
 	public void setEmailAddressVerified(boolean emailAddressVerified);
 
 	/**
-	 * Returns the status of this user.
-	 *
-	 * @return the status of this user
-	 */
-	public int getStatus();
-
-	/**
-	 * Sets the status of this user.
-	 *
-	 * @param status the status of this user
-	 */
-	public void setStatus(int status);
-
-	/**
 	 * Returns the type of this user.
 	 *
 	 * @return the type of this user
@@ -776,6 +762,20 @@ public interface UserModel
 	 * @param type the type of this user
 	 */
 	public void setType(int type);
+
+	/**
+	 * Returns the status of this user.
+	 *
+	 * @return the status of this user
+	 */
+	public int getStatus();
+
+	/**
+	 * Sets the status of this user.
+	 *
+	 * @param status the status of this user
+	 */
+	public void setStatus(int status);
 
 	@Override
 	public User cloneWithOriginalValues();

@@ -164,10 +164,10 @@ public class UserCacheModel
 		sb.append(agreedToTermsOfUse);
 		sb.append(", emailAddressVerified=");
 		sb.append(emailAddressVerified);
-		sb.append(", status=");
-		sb.append(status);
 		sb.append(", type=");
 		sb.append(type);
+		sb.append(", status=");
+		sb.append(status);
 		sb.append("}");
 
 		return sb.toString();
@@ -391,8 +391,8 @@ public class UserCacheModel
 
 		userImpl.setAgreedToTermsOfUse(agreedToTermsOfUse);
 		userImpl.setEmailAddressVerified(emailAddressVerified);
-		userImpl.setStatus(status);
 		userImpl.setType(type);
+		userImpl.setStatus(status);
 
 		userImpl.resetOriginalValues();
 
@@ -460,9 +460,9 @@ public class UserCacheModel
 
 		emailAddressVerified = objectInput.readBoolean();
 
-		status = objectInput.readInt();
-
 		type = objectInput.readInt();
+
+		status = objectInput.readInt();
 	}
 
 	@Override
@@ -649,9 +649,9 @@ public class UserCacheModel
 
 		objectOutput.writeBoolean(emailAddressVerified);
 
-		objectOutput.writeInt(status);
-
 		objectOutput.writeInt(type);
+
+		objectOutput.writeInt(status);
 	}
 
 	public long mvccVersion;
@@ -697,7 +697,7 @@ public class UserCacheModel
 	public long lockoutDate;
 	public boolean agreedToTermsOfUse;
 	public boolean emailAddressVerified;
-	public int status;
 	public int type;
+	public int status;
 
 }
