@@ -16,6 +16,7 @@ package com.liferay.users.admin.web.internal.frontend.taglib.servlet.taglib;
 
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.users.admin.constants.UserScreenNavigationEntryConstants;
 
 import org.osgi.service.component.annotations.Component;
@@ -52,7 +53,9 @@ public class UserPasswordScreenNavigationEntry
 
 	@Override
 	public boolean isVisible(User user, User selUser) {
-		if (selUser == null) {
+		if ((selUser == null) ||
+			(selUser.getType() == UserConstants.TYPE_SERVICE_ACCOUNT)) {
+
 			return false;
 		}
 
