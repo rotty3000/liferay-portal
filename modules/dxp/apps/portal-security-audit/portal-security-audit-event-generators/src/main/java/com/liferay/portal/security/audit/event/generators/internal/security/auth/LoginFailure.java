@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.auth.AuthFailure;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.security.audit.event.generators.constants.EventTypes;
+import com.liferay.portal.security.audit.event.generators.util.AuditMessageBuilder;
 
 import java.util.Map;
 
@@ -124,19 +125,17 @@ public class LoginFailure implements AuthFailure {
 		User user, String userLogin, Map<String, String[]> headerMap,
 		String reason) {
 
-		JSONObject additionalInfoJSONObject = _jsonFactory.createJSONObject();
+		AuditMessage auditMessage = AuditMessageBuilder.buildAuditMessage(
+			EventTypes.LOGIN_FAILURE, User.class.getName(), user.getUserId(),
+			null);
+
+		JSONObject additionalInfoJSONObject = auditMessage.getAdditionalInfo();
 
 		additionalInfoJSONObject.put(
 			"headers", _jsonFactory.serialize(headerMap)
 		).put(
 			"reason", reason
 		);
-
-		AuditMessage auditMessage = new AuditMessage(
-			EventTypes.LOGIN_FAILURE, user.getCompanyId(), user.getUserId(),
-			user.getFullName(), User.class.getName(),
-			String.valueOf(user.getPrimaryKey()), null,
-			additionalInfoJSONObject);
 
 		auditMessage.setUserLogin(userLogin);
 
