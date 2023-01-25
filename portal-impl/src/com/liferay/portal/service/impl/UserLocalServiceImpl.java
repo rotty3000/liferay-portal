@@ -2086,7 +2086,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		User user = _defaultUsers.get(companyId);
 
 		if (user == null) {
-			user = userPersistence.fetchByC_DU(companyId, true);
+			user = userPersistence.fetchByC_DU_T(
+				companyId, true, UserConstants.TYPE_USER);
 
 			if (user != null) {
 				_defaultUsers.put(companyId, user);
@@ -3007,7 +3008,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 	 */
 	@Override
 	public User loadGetDefaultUser(long companyId) throws PortalException {
-		return userPersistence.findByC_DU(companyId, true);
+		return userPersistence.findByC_DU_T(
+			companyId, true, UserConstants.TYPE_USER);
 	}
 
 	/**
