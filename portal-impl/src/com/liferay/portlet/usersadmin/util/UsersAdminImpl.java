@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Phone;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.UserGroupRole;
 import com.liferay.portal.kernel.model.Website;
@@ -174,8 +175,13 @@ public class UsersAdminImpl implements UsersAdmin {
 		Role administratorRole = RoleLocalServiceUtil.getRole(
 			user.getCompanyId(), RoleConstants.ADMINISTRATOR);
 
-		long[] administratorUserIds = UserLocalServiceUtil.getRoleUserIds(
-			administratorRole.getRoleId());
+		List<User> administratorUsers = ListUtil.filter(
+			UserLocalServiceUtil.getRoleUsers(administratorRole.getRoleId()),
+			administratorUser ->
+				administratorUser.getType() == UserConstants.TYPE_USER);
+
+		long[] administratorUserIds = ListUtil.toLongArray(
+			administratorUsers, User.USER_ID_ACCESSOR);
 
 		if (ArrayUtil.contains(administratorUserIds, user.getUserId()) &&
 			!ArrayUtil.contains(roleIds, administratorRole.getRoleId()) &&
