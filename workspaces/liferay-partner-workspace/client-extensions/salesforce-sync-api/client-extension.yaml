@@ -5,5 +5,5 @@ salesforce-sync-api-user-agent:
 runtime:
   type: service
   template: service-springboot
-  cpu: 500m
-  memory: 256Mi
+  cpu: 1000m
+  memory: 512Mi
