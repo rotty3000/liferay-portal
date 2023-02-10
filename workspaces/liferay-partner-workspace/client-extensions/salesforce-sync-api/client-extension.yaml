@@ -1,5 +1,4 @@
 salesforce-sync-api-user-agent:
-  homePageURL: https://$[conf:ext.lxc.liferay.com.mainDomain]
   name: Salesforce Sync API OAuth Application User Agent
   type: oAuthApplicationUserAgent
 
