@@ -12,6 +12,7 @@
  */
 
 import ClayAlert from '@clayui/alert';
+import classNames from 'classnames';
 import React, {useEffect, useState} from 'react';
 
 const findRequestIdUrl = (paramsUrl) => {
@@ -50,18 +51,20 @@ const ClaimStatus = {
 };
 
 const statusClassName = {
-	[ClaimStatus.DRAFT]: 'label label-tonal-dark ml-2',
-	[ClaimStatus.PENDING]: 'label label-tonal-warning ml-2',
-	[ClaimStatus.APPROVED]: 'label label-tonal-success ml-2',
-	[ClaimStatus.MORE_INFO_REQUEST]: 'label label-tonal-warning ml-2',
-	[ClaimStatus.REJECT]: 'label label-tonal-danger ml-2',
-	[ClaimStatus.EXPIRED]: 'label label-tonal-danger ml-2',
-	[ClaimStatus.CLAIM_PAID]: 'label label-tonal-info ml-2',
-	[ClaimStatus.IN_FINANCE_REVIEW]: 'label label-tonal-light ml-2',
+	[ClaimStatus.DRAFT]: 'dark',
+	[ClaimStatus.PENDING]: 'warning',
+	[ClaimStatus.APPROVED]: 'success',
+	[ClaimStatus.MORE_INFO_REQUEST]: 'warning',
+	[ClaimStatus.REJECT]: 'danger',
+	[ClaimStatus.EXPIRED]: 'danger',
+	[ClaimStatus.CLAIM_PAID]: 'info',
+	[ClaimStatus.IN_FINANCE_REVIEW]: 'light',
 };
 
 const Panel = ({mdfClaims}) => {
 	const [, SITE_URL] = getSiteVariables();
+
+	const mdfClaimClassName = statusClassName[mdfClaims.mdfClaimStatus.key];
 
 	return (
 		<div>
@@ -81,9 +84,9 @@ const Panel = ({mdfClaims}) => {
 					</p>
 
 					<div
-						className={
-							statusClassName[mdfClaims.mdfClaimStatus.key]
-						}
+						className={classNames('label ml-2', {
+							[`label-tonal-${mdfClaimClassName}`]: mdfClaimClassName,
+						})}
 					>
 						{mdfClaims.mdfClaimStatus.name}
 					</div>
