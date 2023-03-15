@@ -18,6 +18,7 @@ import com.liferay.batch.engine.unit.BatchEngineUnit;
 import com.liferay.batch.engine.unit.BatchEngineUnitProcessor;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -141,21 +143,25 @@ public class BatchEngineBundleTracker {
 	}
 
 	private boolean _isAlreadyProcessed(Bundle bundle) {
-		File batchMarkerFile = bundle.getDataFile(
-			".liferay-client-extension-batch");
-
-		if ((batchMarkerFile != null) && batchMarkerFile.exists() &&
-			(batchMarkerFile.lastModified() == bundle.getLastModified())) {
-
-			return true;
-		}
-
 		try {
-			if (!batchMarkerFile.exists()) {
-				batchMarkerFile.createNewFile();
+			File batchMarkerFile = bundle.getDataFile(
+				".liferay-client-extension-batch");
+
+			String bundleLastModified = String.valueOf(
+				bundle.getLastModified());
+
+			if ((batchMarkerFile != null) && batchMarkerFile.exists() &&
+				Objects.equals(
+					FileUtil.read(batchMarkerFile), bundleLastModified)) {
+
+				return true;
 			}
 
-			batchMarkerFile.setLastModified(bundle.getLastModified());
+			if (!batchMarkerFile.exists()) {
+				batchMarkerFile.createNewFile();
+
+				FileUtil.write(batchMarkerFile, bundleLastModified);
+			}
 		}
 		catch (IOException ioException) {
 			ReflectionUtil.throwException(ioException);
