@@ -30,28 +30,28 @@ public class SiteInitializerItem {
 	public SiteInitializerItem(
 		LayoutSetPrototype layoutSetPrototype, Locale locale) {
 
-		_siteInitializerKey = StringPool.BLANK;
 		_icon = StringPool.BLANK;
 		_layoutSetPrototypeId = layoutSetPrototype.getLayoutSetPrototypeId();
 		_name = layoutSetPrototype.getName(locale);
+		_siteInitializerKey = StringPool.BLANK;
 		_type = SiteAdminConstants.CREATION_TYPE_SITE_TEMPLATE;
 	}
 
 	public SiteInitializerItem(SiteInitializer siteInitializer, Locale locale) {
-		_siteInitializerKey = siteInitializer.getKey();
 		_icon = siteInitializer.getThumbnailSrc();
 		_layoutSetPrototypeId = 0;
 		_name = siteInitializer.getName(locale);
+		_siteInitializerKey = siteInitializer.getKey();
 		_type = SiteAdminConstants.CREATION_TYPE_INITIALIZER;
 	}
 
 	public SiteInitializerItem(
 		SiteInitializerCET siteInitializerCET, Locale locale) {
 
-		_siteInitializerKey = siteInitializerCET.getURL();
 		_icon = StringPool.BLANK;
 		_layoutSetPrototypeId = 0;
 		_name = siteInitializerCET.getName(locale);
+		_siteInitializerKey = siteInitializerCET.getURL();
 		_type = SiteAdminConstants.CREATION_TYPE_CLIENT_EXTENSION;
 	}
 
@@ -84,8 +84,8 @@ public class SiteInitializerItem {
 	}
 
 	public boolean isCreationTypeInitializer() {
-		if (_type.equals(SiteAdminConstants.CREATION_TYPE_INITIALIZER) ||
-			_type.equals(SiteAdminConstants.CREATION_TYPE_CLIENT_EXTENSION)) {
+		if (_type.equals(SiteAdminConstants.CREATION_TYPE_CLIENT_EXTENSION) ||
+			_type.equals(SiteAdminConstants.CREATION_TYPE_INITIALIZER)) {
 
 			return true;
 		}
