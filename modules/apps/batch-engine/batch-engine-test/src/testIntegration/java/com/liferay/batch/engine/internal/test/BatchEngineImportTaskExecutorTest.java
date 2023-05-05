@@ -19,6 +19,7 @@ import com.liferay.batch.engine.BatchEngineImportTaskExecutor;
 import com.liferay.batch.engine.BatchEngineTaskExecuteStatus;
 import com.liferay.batch.engine.BatchEngineTaskOperation;
 import com.liferay.batch.engine.constants.BatchEngineImportTaskConstants;
+import com.liferay.batch.engine.exception.BatchEngineImportTaskParametersException;
 import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.model.BatchEngineImportTaskError;
 import com.liferay.batch.engine.service.BatchEngineImportTaskErrorLocalService;
@@ -420,67 +421,65 @@ public class BatchEngineImportTaskExecutorTest
 	}
 
 	@Test
-	public void testImportTaskInvalidCreateAndUpdateStrategies()
-		throws Exception {
-
+	public void testImportTaskInvalidCreateAndUpdateStrategies() {
+		BatchEngineTaskOperation batchEngineTaskOperation =
+			BatchEngineTaskOperation.CREATE;
 		Map<String, Serializable> parameters =
 			HashMapBuilder.<String, Serializable>put(
 				"createStrategy", "INVALID CREATE STRATEGY"
 			).build();
 
-		_batchEngineImportTask =
-			_batchEngineImportTaskLocalService.addBatchEngineImportTask(
-				null, group.getCompanyId(), user.getUserId(), _BATCH_SIZE, null,
-				"com.liferay.headless.delivery.dto.v1_0.BlogPosting",
-				_getBlogPostingsCSVCreateContent(
-					group.getGroupId(), FIELD_NAMES),
-				"CSV", BatchEngineTaskExecuteStatus.INITIAL.name(),
-				Collections.emptyMap(),
-				BatchEngineImportTaskConstants.IMPORT_STRATEGY_ON_ERROR_FAIL,
-				BatchEngineTaskOperation.CREATE.name(), parameters, null);
+		try {
+			_batchEngineImportTask =
+				_batchEngineImportTaskLocalService.addBatchEngineImportTask(
+					null, group.getCompanyId(), user.getUserId(), _BATCH_SIZE,
+					null, BlogPosting.class.getName(), null, "CSV",
+					BatchEngineTaskExecuteStatus.INITIAL.name(),
+					Collections.emptyMap(),
+					BatchEngineImportTaskConstants.
+						IMPORT_STRATEGY_ON_ERROR_FAIL,
+					batchEngineTaskOperation.name(), parameters, null);
 
-		_batchEngineImportTaskExecutor.execute(_batchEngineImportTask);
+			Assert.fail();
+		}
+		catch (Exception exception) {
+			Assert.assertEquals(
+				exception.getClass(),
+				BatchEngineImportTaskParametersException.class);
 
-		_batchEngineImportTask =
-			_batchEngineImportTaskLocalService.getBatchEngineImportTask(
-				_batchEngineImportTask.getBatchEngineImportTaskId());
+			String exceptionMessage = exception.getMessage();
 
-		Assert.assertEquals(
-			BatchEngineTaskExecuteStatus.FAILED.toString(),
-			_batchEngineImportTask.getExecuteStatus());
-
-		String errorMessage = _batchEngineImportTask.getErrorMessage();
-
-		Assert.assertTrue(errorMessage.contains("INVALID CREATE STRATEGY"));
+			Assert.assertTrue(
+				exceptionMessage.contains("INVALID CREATE STRATEGY"));
+		}
 
 		parameters = HashMapBuilder.<String, Serializable>put(
 			"updateStrategy", "INVALID UPDATE STRATEGY"
 		).build();
 
-		_batchEngineImportTask =
-			_batchEngineImportTaskLocalService.addBatchEngineImportTask(
-				null, group.getCompanyId(), user.getUserId(), _BATCH_SIZE, null,
-				"com.liferay.headless.delivery.dto.v1_0.BlogPosting",
-				_getBlogPostingsCSVCreateContent(
-					group.getGroupId(), FIELD_NAMES),
-				"CSV", BatchEngineTaskExecuteStatus.INITIAL.name(),
-				Collections.emptyMap(),
-				BatchEngineImportTaskConstants.IMPORT_STRATEGY_ON_ERROR_FAIL,
-				BatchEngineTaskOperation.UPDATE.name(), parameters, null);
+		try {
+			_batchEngineImportTask =
+				_batchEngineImportTaskLocalService.addBatchEngineImportTask(
+					null, group.getCompanyId(), user.getUserId(), _BATCH_SIZE,
+					null, BlogPosting.class.getName(), null, "CSV",
+					BatchEngineTaskExecuteStatus.INITIAL.name(),
+					Collections.emptyMap(),
+					BatchEngineImportTaskConstants.
+						IMPORT_STRATEGY_ON_ERROR_FAIL,
+					batchEngineTaskOperation.name(), parameters, null);
 
-		_batchEngineImportTaskExecutor.execute(_batchEngineImportTask);
+			Assert.fail();
+		}
+		catch (Exception exception) {
+			Assert.assertEquals(
+				exception.getClass(),
+				BatchEngineImportTaskParametersException.class);
 
-		_batchEngineImportTask =
-			_batchEngineImportTaskLocalService.getBatchEngineImportTask(
-				_batchEngineImportTask.getBatchEngineImportTaskId());
+			String exceptionMessage = exception.getMessage();
 
-		Assert.assertEquals(
-			BatchEngineTaskExecuteStatus.FAILED.toString(),
-			_batchEngineImportTask.getExecuteStatus());
-
-		errorMessage = _batchEngineImportTask.getErrorMessage();
-
-		Assert.assertTrue(errorMessage.contains("INVALID UPDATE STRATEGY"));
+			Assert.assertTrue(
+				exceptionMessage.contains("INVALID UPDATE STRATEGY"));
+		}
 	}
 
 	@Test
