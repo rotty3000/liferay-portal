@@ -14,7 +14,9 @@
 
 package com.liferay.batch.engine.internal.installer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.liferay.batch.engine.internal.json.AdvancedJSONReader;
+import com.liferay.batch.engine.unit.BatchEngineUnit;
+import com.liferay.batch.engine.unit.BatchEngineUnitConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +28,7 @@ import java.util.zip.ZipFile;
 /**
  * @author Igor Beslic
  */
-public class ClassicBatchEngineZipUnitImpl<T> implements BatchEngineZipUnit<T> {
+public class ClassicBatchEngineZipUnitImpl implements BatchEngineUnit {
 
 	public ClassicBatchEngineZipUnitImpl(
 		ZipFile zipFile, ZipEntry... zipEntries) {
@@ -49,13 +51,15 @@ public class ClassicBatchEngineZipUnitImpl<T> implements BatchEngineZipUnit<T> {
 	}
 
 	@Override
-	public T getBatchEngineConfiguration(Class<T> clazz) throws IOException {
-		try (InputStream inputStream = _zipFile.getInputStream(
-				_configurationZipEntry)) {
+	public BatchEngineUnitConfiguration getBatchEngineUnitConfiguration()
+		throws IOException {
 
-			ObjectMapper objectMapper = new ObjectMapper();
+		try (InputStream inputStream = _zipFile.getInputStream(_dataZipEntry)) {
+			AdvancedJSONReader<BatchEngineUnitConfiguration>
+				advancedJSONReader = new AdvancedJSONReader<>(inputStream);
 
-			return objectMapper.readValue(inputStream, clazz);
+			return advancedJSONReader.getObject(
+				"configuration", BatchEngineUnitConfiguration.class);
 		}
 	}
 
@@ -75,7 +79,7 @@ public class ClassicBatchEngineZipUnitImpl<T> implements BatchEngineZipUnit<T> {
 	}
 
 	@Override
-	public String getZipFileName() {
+	public String getFileName() {
 		return _zipFile.getName();
 	}
 
