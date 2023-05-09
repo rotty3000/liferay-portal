@@ -21,6 +21,7 @@ import com.liferay.petra.executor.PortalExecutorManager;
 import com.liferay.petra.io.StreamUtil;
 import com.liferay.petra.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -66,6 +67,22 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 				}
 			}
 		}
+	}
+
+	private String _getFullEntityClassName(
+		BatchEngineUnitConfiguration batchEngineUnitConfiguration) {
+
+		String className = batchEngineUnitConfiguration.getClassName();
+
+		String taskItemDelegateName =
+			batchEngineUnitConfiguration.getTaskItemDelegateName();
+
+		if (Validator.isNotNull(taskItemDelegateName)) {
+			className = StringBundler.concat(
+				className, StringPool.POUND, taskItemDelegateName);
+		}
+
+		return className;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -123,7 +140,7 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 				"_vulcanBatchEngineTaskItemDelegate.target",
 				StringBundler.concat(
 					"(batch.engine.entity.class.name=",
-					batchEngineUnitConfiguration.getClassName(), ")")
+					_getFullEntityClassName(batchEngineUnitConfiguration), ")")
 			).put(
 				"batchEngineUnit", batchEngineUnit
 			).put(
