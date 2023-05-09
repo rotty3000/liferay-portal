@@ -15,11 +15,14 @@
 package com.liferay.batch.engine.internal.installer;
 
 import com.liferay.batch.engine.BatchEngineImportTaskExecutor;
+import com.liferay.batch.engine.BatchEngineTaskItemDelegate;
+import com.liferay.batch.engine.BatchEngineTaskItemDelegateRegistry;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
 import com.liferay.batch.engine.unit.BatchEngineUnit;
 import com.liferay.batch.engine.unit.BatchEngineUnitConfiguration;
 import com.liferay.batch.engine.unit.BatchEngineUnitProcessor;
 import com.liferay.petra.executor.PortalExecutorManager;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.file.install.FileInstaller;
 import com.liferay.portal.kernel.deploy.auto.AutoDeployException;
@@ -38,13 +41,6 @@ import java.io.File;
 import java.io.IOException;
 
 import java.net.URL;
-
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 import java.util.Collection;
 import java.util.Enumeration;
@@ -80,31 +76,50 @@ public class BatchEngineFileInstaller implements FileInstaller {
 					_getBatchEngineUnits(zipFile)) {
 
 				if (!batchEngineUnit.isValid()) {
-					continue;
+					return false;
 				}
 
 				BatchEngineUnitConfiguration batchEngineUnitConfiguration =
 					_getBatchEngineUnitConfiguration(batchEngineUnit);
 
-				if ((batchEngineUnitConfiguration != null) &&
-					(batchEngineUnitConfiguration.getCompanyId() > 0) &&
-					(batchEngineUnitConfiguration.getUserId() > 0) &&
-					Validator.isNotNull(
-						batchEngineUnitConfiguration.getClassName()) &&
-					Validator.isNotNull(
+				if ((batchEngineUnitConfiguration == null) ||
+					(batchEngineUnitConfiguration.getCompanyId() <= 0) ||
+					(batchEngineUnitConfiguration.getUserId() <= 0) ||
+					Validator.isNull(
+						batchEngineUnitConfiguration.getClassName()) ||
+					Validator.isNull(
 						batchEngineUnitConfiguration.getVersion())) {
 
-					return true;
+					return false;
+				}
+
+				BatchEngineTaskItemDelegate<?> batchEngineTaskItemDelegate =
+					_batchEngineTaskItemDelegateRegistry.
+						getBatchEngineTaskItemDelegate(
+							batchEngineUnitConfiguration.getClassName(),
+							batchEngineUnitConfiguration.
+								getTaskItemDelegateName());
+
+				if (batchEngineTaskItemDelegate == null) {
+					if (_log.isWarnEnabled()) {
+						_log.warn(
+							StringBundler.concat(
+								"No batch engine delegate available for class ",
+								"name ",
+								batchEngineUnitConfiguration.getClassName()));
+
+						return false;
+					}
 				}
 			}
 		}
 		catch (Exception exception) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(new AutoDeployException(exception));
-			}
+			_log.error(new AutoDeployException(exception));
+
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public boolean isBatchEngineTechnical(String zipEntryName) {
@@ -285,6 +300,10 @@ public class BatchEngineFileInstaller implements FileInstaller {
 	@Reference
 	private BatchEngineImportTaskLocalService
 		_batchEngineImportTaskLocalService;
+
+	@Reference
+	private BatchEngineTaskItemDelegateRegistry
+		_batchEngineTaskItemDelegateRegistry;
 
 	@Reference(policyOption = ReferencePolicyOption.GREEDY)
 	private BatchEngineUnitProcessor _batchEngineUnitProcessor;
