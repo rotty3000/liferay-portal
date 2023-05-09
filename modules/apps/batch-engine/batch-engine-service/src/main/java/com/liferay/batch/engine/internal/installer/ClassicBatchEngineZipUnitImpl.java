@@ -14,7 +14,8 @@
 
 package com.liferay.batch.engine.internal.installer;
 
-import com.liferay.batch.engine.internal.json.AdvancedJSONReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.liferay.batch.engine.unit.BatchEngineUnit;
 import com.liferay.batch.engine.unit.BatchEngineUnitConfiguration;
 
@@ -54,12 +55,13 @@ public class ClassicBatchEngineZipUnitImpl implements BatchEngineUnit {
 	public BatchEngineUnitConfiguration getBatchEngineUnitConfiguration()
 		throws IOException {
 
-		try (InputStream inputStream = _zipFile.getInputStream(_dataZipEntry)) {
-			AdvancedJSONReader<BatchEngineUnitConfiguration>
-				advancedJSONReader = new AdvancedJSONReader<>(inputStream);
+		try (InputStream inputStream = _zipFile.getInputStream(
+				_configurationZipEntry)) {
 
-			return advancedJSONReader.getObject(
-				"configuration", BatchEngineUnitConfiguration.class);
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			return objectMapper.readValue(
+				inputStream, BatchEngineUnitConfiguration.class);
 		}
 	}
 
