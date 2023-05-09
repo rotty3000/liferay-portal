@@ -77,6 +77,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.filter.ExpressionConvert;
 import com.liferay.portal.odata.filter.FilterParserProvider;
 import com.liferay.portal.odata.sort.SortParserProvider;
+import com.liferay.portal.vulcan.batch.engine.VulcanBatchEngineTaskItemDelegate;
 import com.liferay.portal.vulcan.dto.converter.DTOConverterRegistry;
 import com.liferay.portal.vulcan.graphql.dto.GraphQLDTOContributor;
 import com.liferay.portal.vulcan.resource.OpenAPIResource;
@@ -547,7 +548,10 @@ public class ObjectDefinitionDeployerImpl implements ObjectDefinitionDeployer {
 							objectDefinition.getShortName()
 					).build()),
 				_bundleContext.registerService(
-					ObjectEntryResource.class,
+					new String[] {
+						ObjectEntryResource.class.getName(),
+						VulcanBatchEngineTaskItemDelegate.class.getName()
+					},
 					new PrototypeServiceFactory<ObjectEntryResource>() {
 
 						@Override
