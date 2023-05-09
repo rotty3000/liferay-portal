@@ -59,14 +59,6 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 		for (BatchEngineUnit batchEngineUnit : batchEngineUnits) {
 			try {
 				_processBatchEngineUnit(batchEngineUnit);
-
-				if (_log.isInfoEnabled()) {
-					_log.info(
-						StringBundler.concat(
-							"Successfully enqueued batch file ",
-							batchEngineUnit.getFileName(), " ",
-							batchEngineUnit.getDataFileName()));
-				}
 			}
 			catch (Exception exception) {
 				if (_log.isWarnEnabled()) {
@@ -141,6 +133,14 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 			).put(
 				"contentType", contentType
 			).build());
+
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				StringBundler.concat(
+					"Successfully enqueued batch file ",
+					batchEngineUnit.getFileName(), " ",
+					batchEngineUnit.getDataFileName()));
+		}
 	}
 
 	private BatchEngineUnitConfiguration _updateBatchEngineUnitConfiguration(
