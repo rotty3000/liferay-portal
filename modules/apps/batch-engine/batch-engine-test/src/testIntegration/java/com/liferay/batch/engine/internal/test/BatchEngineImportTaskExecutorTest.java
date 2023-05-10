@@ -303,17 +303,24 @@ public class BatchEngineImportTaskExecutorTest
 
 		String content = sb.toString();
 
-		_importBlogPostings(
-			BatchEngineTaskOperation.CREATE,
-			_compressContent(content.getBytes(StandardCharsets.UTF_8), "CSV"),
-			"CSV", null,
-			BatchEngineImportTaskConstants.IMPORT_STRATEGY_ON_ERROR_CONTINUE);
+		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
+				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				LoggerTestUtil.ERROR)) {
 
-		_assertInvalidFileImportWithOnErrorContinueStrategy(
-			Arrays.asList(
-				blogPostingItemWithUnknownColumnRowNumber,
-				blogPostingItemWithInvalidValueRowNumber),
-			3);
+			_importBlogPostings(
+				BatchEngineTaskOperation.CREATE,
+				_compressContent(
+					content.getBytes(StandardCharsets.UTF_8), "CSV"),
+				"CSV", null,
+				BatchEngineImportTaskConstants.
+					IMPORT_STRATEGY_ON_ERROR_CONTINUE);
+
+			_assertInvalidFileImportWithOnErrorContinueStrategy(
+				Arrays.asList(
+					blogPostingItemWithUnknownColumnRowNumber,
+					blogPostingItemWithInvalidValueRowNumber),
+				3);
+		}
 	}
 
 	@Test
@@ -438,7 +445,8 @@ public class BatchEngineImportTaskExecutorTest
 					Collections.emptyMap(),
 					BatchEngineImportTaskConstants.
 						IMPORT_STRATEGY_ON_ERROR_FAIL,
-					batchEngineTaskOperation.name(), parameters, null);
+					batchEngineTaskOperation.name(), parameters, null,
+					testBlogPostingBatchEngineTaskItemDelegate);
 
 			Assert.fail();
 		}
@@ -466,7 +474,8 @@ public class BatchEngineImportTaskExecutorTest
 					Collections.emptyMap(),
 					BatchEngineImportTaskConstants.
 						IMPORT_STRATEGY_ON_ERROR_FAIL,
-					batchEngineTaskOperation.name(), parameters, null);
+					batchEngineTaskOperation.name(), parameters, null,
+					testBlogPostingBatchEngineTaskItemDelegate);
 
 			Assert.fail();
 		}
@@ -1051,7 +1060,8 @@ public class BatchEngineImportTaskExecutorTest
 				BlogPosting.class.getName(), content, contentType,
 				BatchEngineTaskExecuteStatus.INITIAL.name(),
 				fieldNameMappingMap, importStrategy,
-				batchEngineTaskOperation.name(), parameters, null);
+				batchEngineTaskOperation.name(), parameters, null,
+				testBlogPostingBatchEngineTaskItemDelegate);
 
 		_batchEngineImportTaskExecutor.execute(_batchEngineImportTask);
 	}
