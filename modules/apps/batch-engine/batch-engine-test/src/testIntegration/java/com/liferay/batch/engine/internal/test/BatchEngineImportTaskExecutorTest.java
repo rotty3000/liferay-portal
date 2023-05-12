@@ -128,8 +128,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
-				LoggerTestUtil.ERROR)) {
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL, LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
 				BatchEngineTaskOperation.CREATE,
@@ -156,8 +155,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
-				LoggerTestUtil.ERROR)) {
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL, LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
 				BatchEngineTaskOperation.CREATE,
@@ -185,8 +183,7 @@ public class BatchEngineImportTaskExecutorTest
 			group.getGroupId(), "unknownValue");
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
-				LoggerTestUtil.ERROR)) {
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL, LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
 				BatchEngineTaskOperation.CREATE, _toContent(xssfWorkbook),
@@ -304,8 +301,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
-				LoggerTestUtil.ERROR)) {
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL, LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
 				BatchEngineTaskOperation.CREATE,
@@ -360,8 +356,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
-				LoggerTestUtil.ERROR)) {
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL, LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
 				BatchEngineTaskOperation.CREATE,
