@@ -76,6 +76,7 @@ public class BatchEngineBundleTrackerTest {
 		_testProcessBatchEngineBundle("batch6", 2);
 		_testProcessBatchEngineBundle("batch7", 1);
 		_testProcessBatchEngineBundle("batch8", 3);
+		_testProcessBatchEngineBundle("batch9", 2);
 	}
 
 	private void _testProcessBatchEngineBundle(
