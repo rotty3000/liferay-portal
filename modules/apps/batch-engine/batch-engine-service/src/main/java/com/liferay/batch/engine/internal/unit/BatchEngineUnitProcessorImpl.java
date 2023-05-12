@@ -148,7 +148,7 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 		Promise<ComponentInstance<?>> promise = deferred.getPromise();
 
 		promise.delay(
-			TimeUnit.MINUTE.toMillis(2)
+			TimeUnit.SECOND.toMillis(30)
 		).thenAccept(
 			componentInstance -> {
 				if (!disposed.get()) {
