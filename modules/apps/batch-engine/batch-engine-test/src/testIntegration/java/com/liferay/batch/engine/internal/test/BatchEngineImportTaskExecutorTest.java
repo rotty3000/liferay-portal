@@ -128,7 +128,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
 				LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
@@ -156,7 +156,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
 				LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
@@ -185,7 +185,7 @@ public class BatchEngineImportTaskExecutorTest
 			group.getGroupId(), "unknownValue");
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
 				LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
@@ -304,7 +304,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
 				LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
@@ -360,7 +360,7 @@ public class BatchEngineImportTaskExecutorTest
 		String content = sb.toString();
 
 		try (LogCapture logCapture = LoggerTestUtil.configureLog4JLogger(
-				_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL,
+				_LOG_CATEGORY_BATCH_ENGINE_INTERNAL,
 				LoggerTestUtil.ERROR)) {
 
 			_importBlogPostings(
@@ -1102,10 +1102,8 @@ public class BatchEngineImportTaskExecutorTest
 
 	private static final int _BATCH_SIZE = 10;
 
-	private static final String
-		_CLASS_NAME_BATCH_ENGINE_IMPORT_TASK_EXECUTOR_IMPL =
-			"com.liferay.batch.engine.internal." +
-				"BatchEngineImportTaskExecutorImpl";
+	private static final String _LOG_CATEGORY_BATCH_ENGINE_INTERNAL =
+		"com.liferay.batch.engine.internal";
 
 	private static Map<String, String> _fieldNamesMappingMap;
 
