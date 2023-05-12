@@ -120,7 +120,8 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 			contentType = _file.getExtension(batchEngineUnit.getDataFileName());
 		}
 
-		if ((batchEngineUnitConfiguration == null) || (content == null) ||
+		if (!batchEngineUnit.isValid() ||
+			(batchEngineUnitConfiguration == null) || (content == null) ||
 			Validator.isNull(contentType)) {
 
 			throw new IllegalStateException(
