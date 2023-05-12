@@ -75,7 +75,10 @@ public class BatchEngineImportTaskComponent {
 
 		BatchEngineImportTask batchEngineImportTask =
 			_batchEngineImportTaskLocalService.addBatchEngineImportTask(
-				null, batchEngineUnitConfiguration.getCompanyId(),
+				StringBundler.concat(
+					batchEngineUnit.getFileName(), ":",
+					batchEngineUnit.getDataFileName()),
+				batchEngineUnitConfiguration.getCompanyId(),
 				batchEngineUnitConfiguration.getUserId(), 100,
 				batchEngineUnitConfiguration.getCallbackURL(),
 				batchEngineUnitConfiguration.getClassName(), content,
