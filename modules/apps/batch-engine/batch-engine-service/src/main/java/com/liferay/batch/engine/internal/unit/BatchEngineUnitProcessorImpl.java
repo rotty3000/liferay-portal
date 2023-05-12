@@ -59,10 +59,11 @@ import org.osgi.util.promise.Promise;
 /**
  * @author Matija Petanjek
  */
-@Component(configurationPid = "com.liferay.batch.engine.configuration.BatchEngineTaskConfiguration", service = BatchEngineUnitProcessor.class)
+@Component(
+	configurationPid = "com.liferay.batch.engine.configuration.BatchEngineTaskConfiguration",
+	service = BatchEngineUnitProcessor.class
+)
 public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
-
-	private BatchEngineTaskConfiguration _batchEngineTaskConfiguration;
 
 	@Override
 	public void processBatchEngineUnits(
@@ -250,6 +251,8 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BatchEngineUnitProcessorImpl.class);
+
+	private BatchEngineTaskConfiguration _batchEngineTaskConfiguration;
 
 	@Reference
 	private CompanyLocalService _companyLocalService;
