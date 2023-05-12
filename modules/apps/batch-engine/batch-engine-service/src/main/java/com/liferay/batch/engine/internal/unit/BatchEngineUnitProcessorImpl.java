@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.Validator;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipEntry;
@@ -132,6 +133,10 @@ public class BatchEngineUnitProcessorImpl implements BatchEngineUnitProcessor {
 
 		Map<String, Serializable> parameters =
 			batchEngineUnitConfiguration.getParameters();
+
+		if (parameters == null) {
+			parameters = Collections.emptyMap();
+		}
 
 		String featureFlag = (String)parameters.get("featureFlag");
 
