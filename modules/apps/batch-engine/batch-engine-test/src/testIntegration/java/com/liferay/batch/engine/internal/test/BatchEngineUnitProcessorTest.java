@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.batch.engine.BatchEngineTaskContentType;
+import com.liferay.batch.engine.model.BatchEngineImportTask;
 import com.liferay.batch.engine.service.BatchEngineImportTaskLocalService;
 import com.liferay.batch.engine.unit.BatchEngineUnit;
 import com.liferay.batch.engine.unit.BatchEngineUnitConfiguration;
@@ -181,6 +182,24 @@ public class BatchEngineUnitProcessorTest {
 				"com.liferay.batch.engine.internal", LoggerTestUtil.ALL)) {
 
 			_batchEngineUnitProcessor.processBatchEngineUnits(batchEngineUnits);
+
+			// TODO Replace the sleep by checking the progress of each import
+			// task in a loop until they have all arrived at completion (or
+			// failure.)
+
+//			for (BatchEngineUnit batchEngineUnit : batchEngineUnits) {
+//				String erc = StringBundler.concat(
+//					batchEngineUnit.getFileName(), ":",
+//					batchEngineUnit.getDataFileName());
+//
+//				BatchEngineUnitConfiguration batchEngineUnitConfiguration =
+//					batchEngineUnit.getBatchEngineUnitConfiguration();
+//
+//				BatchEngineImportTask batchEngineImportTask =
+//					_batchEngineImportTaskLocalService.
+//						getBatchEngineImportTaskByExternalReferenceCode(
+//							erc, batchEngineUnitConfiguration.getCompanyId());
+//			}
 
 			Thread.sleep(3000);
 
