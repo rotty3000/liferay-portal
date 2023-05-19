@@ -35,12 +35,10 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.liveusers.LiveUsers;
 import com.liferay.portal.security.permission.PermissionCacheUtil;
-import com.liferay.portal.vulcan.multipart.BinaryFile;
 import com.liferay.portal.vulcan.multipart.MultipartBody;
 import com.liferay.site.initializer.SiteInitializer;
 import com.liferay.site.initializer.SiteInitializerFactory;
@@ -93,11 +91,8 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 		Group group = null;
 
 		if (groupId == 0) {
-			BinaryFile jsonFile = multipartBody.getBinaryFile("jsonFile");
-
-			Site site = Site.toDTO(StringUtil.read(jsonFile.getInputStream()));
-
-			group = _addGroup(site);
+			group = _addGroup(
+				multipartBody.getValueAsInstance("site", Site.class));
 		}
 		else {
 			group = _groupService.getGroup(groupId);
@@ -108,7 +103,7 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 		}
 
 		File tempFile = FileUtil.createTempFile(
-			multipartBody.getBinaryFileAsBytes("zipFile"));
+			multipartBody.getBinaryFileAsBytes("file"));
 
 		File tempDir = FileUtil.createTempFolder();
 
