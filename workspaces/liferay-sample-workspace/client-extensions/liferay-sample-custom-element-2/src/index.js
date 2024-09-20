@@ -5,9 +5,8 @@
 
 import React from 'react';
 import {createRoot} from 'react-dom/client';
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 
-import Comic from './common/components/Comic.js';
-import DadJoke from './common/components/DadJoke.js';
 import api from './common/services/liferay/api.js';
 import {Liferay} from './common/services/liferay/liferay.js';
 import HelloBar from './routes/hello-bar/pages/HelloBar.js';
@@ -16,26 +15,14 @@ import HelloWorld from './routes/hello-world/pages/HelloWorld.js';
 
 import './common/styles/index.scss';
 
-const App = ({route}) => {
-	if (route === 'hello-bar') {
-		return <HelloBar />;
-	}
-
-	if (route === 'hello-foo') {
-		return <HelloFoo />;
-	}
-
+const App = () => {
 	return (
 		<div>
 			<HelloWorld />
 
 			{Liferay.ThemeDisplay.isSignedIn() && (
 				<div>
-					<Comic />
-
-					<hr />
-
-					<DadJoke />
+					<h2>Logged In!</h2>
 				</div>
 			)}
 		</div>
@@ -46,7 +33,33 @@ class WebComponent extends HTMLElement {
 	connectedCallback() {
 		this.root = createRoot(this);
 
-		this.root.render(<App route={this.getAttribute('route')} />, this);
+		const basename = window.location.pathname == '/' ? window.location.pathname : Liferay.ThemeDisplay.getLayoutRelativeURL();
+		const layoutRelativeURL = Liferay.ThemeDisplay.getLayoutRelativeURL();
+
+		this.root.render(
+			<BrowserRouter basename={basename}>
+				<nav>
+					<ul>
+						<li>
+							<Link to={`${layoutRelativeURL}`}>Main</Link>
+						</li>
+						<li>
+							<Link to={`${layoutRelativeURL}/-/${ELEMENT_ID}/bar`}>Bar</Link>
+						</li>
+						<li>
+							<Link to={`${layoutRelativeURL}/-/${ELEMENT_ID}/foo`}>Foo</Link>
+						</li>
+					</ul>
+				</nav>
+
+				<Routes>
+					<Route path={`${layoutRelativeURL}/-/${ELEMENT_ID}/bar`} element={<HelloBar />} />
+					<Route path={`${layoutRelativeURL}/-/${ELEMENT_ID}/foo`} element={<HelloFoo />} />
+					<Route path={`${layoutRelativeURL}`} element={<App />} />
+					<Route path='/' element={<App />} />
+				</Routes>
+			</BrowserRouter>
+			, this);
 
 		if (Liferay.ThemeDisplay.isSignedIn()) {
 			api('o/headless-admin-user/v1.0/my-user-account')
