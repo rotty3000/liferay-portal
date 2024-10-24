@@ -31,10 +31,11 @@ public class PortalPreferencesLocalServiceWrapper
 	@Override
 	public com.liferay.portal.kernel.model.PortalPreferences
 		addPortalPreferences(
-			long ownerId, int ownerType, String defaultPreferences) {
+			long companyId, long ownerId, int ownerType,
+			String defaultPreferences) {
 
 		return _portalPreferencesLocalService.addPortalPreferences(
-			ownerId, ownerType, defaultPreferences);
+			companyId, ownerId, ownerType, defaultPreferences);
 	}
 
 	/**
@@ -248,10 +249,10 @@ public class PortalPreferencesLocalServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.PortalPreferences
-		fetchPortalPreferences(long ownerId, int ownerType) {
+		fetchPortalPreferences(long companyId, long ownerId, int ownerType) {
 
 		return _portalPreferencesLocalService.fetchPortalPreferences(
-			ownerId, ownerType);
+			companyId, ownerId, ownerType);
 	}
 
 	@Override
@@ -337,18 +338,19 @@ public class PortalPreferencesLocalServiceWrapper
 
 	@Override
 	public javax.portlet.PortletPreferences getPreferences(
-		long ownerId, int ownerType) {
+		long companyId, long ownerId, int ownerType) {
 
 		return _portalPreferencesLocalService.getPreferences(
-			ownerId, ownerType);
+			companyId, ownerId, ownerType);
 	}
 
 	@Override
 	public javax.portlet.PortletPreferences getPreferences(
-		long ownerId, int ownerType, String defaultPreferences) {
+		long companyId, long ownerId, int ownerType,
+		String defaultPreferences) {
 
 		return _portalPreferencesLocalService.getPreferences(
-			ownerId, ownerType, defaultPreferences);
+			companyId, ownerId, ownerType, defaultPreferences);
 	}
 
 	/**
@@ -373,19 +375,19 @@ public class PortalPreferencesLocalServiceWrapper
 
 	@Override
 	public com.liferay.portal.kernel.model.PortalPreferences updatePreferences(
-		long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType,
 		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences) {
 
 		return _portalPreferencesLocalService.updatePreferences(
-			ownerId, ownerType, portalPreferences);
+			companyId, ownerId, ownerType, portalPreferences);
 	}
 
 	@Override
 	public com.liferay.portal.kernel.model.PortalPreferences updatePreferences(
-		long ownerId, int ownerType, String xml) {
+		long companyId, long ownerId, int ownerType, String xml) {
 
 		return _portalPreferencesLocalService.updatePreferences(
-			ownerId, ownerType, xml);
+			companyId, ownerId, ownerType, xml);
 	}
 
 	@Override

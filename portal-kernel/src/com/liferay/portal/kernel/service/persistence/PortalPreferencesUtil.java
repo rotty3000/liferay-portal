@@ -284,66 +284,78 @@ public class PortalPreferencesUtil {
 	}
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or throws a <code>NoSuchPreferencesException</code> if it could not be found.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or throws a <code>NoSuchPreferencesException</code> if it could not be found.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the matching portal preferences
 	 * @throws NoSuchPreferencesException if a matching portal preferences could not be found
 	 */
-	public static PortalPreferences findByO_O(long ownerId, int ownerType)
+	public static PortalPreferences findByC_O_O(
+			long companyId, long ownerId, int ownerType)
 		throws com.liferay.portal.kernel.exception.NoSuchPreferencesException {
 
-		return getPersistence().findByO_O(ownerId, ownerType);
+		return getPersistence().findByC_O_O(companyId, ownerId, ownerType);
 	}
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
 	 */
-	public static PortalPreferences fetchByO_O(long ownerId, int ownerType) {
-		return getPersistence().fetchByO_O(ownerId, ownerType);
+	public static PortalPreferences fetchByC_O_O(
+		long companyId, long ownerId, int ownerType) {
+
+		return getPersistence().fetchByC_O_O(companyId, ownerId, ownerType);
 	}
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
 	 */
-	public static PortalPreferences fetchByO_O(
-		long ownerId, int ownerType, boolean useFinderCache) {
+	public static PortalPreferences fetchByC_O_O(
+		long companyId, long ownerId, int ownerType, boolean useFinderCache) {
 
-		return getPersistence().fetchByO_O(ownerId, ownerType, useFinderCache);
+		return getPersistence().fetchByC_O_O(
+			companyId, ownerId, ownerType, useFinderCache);
 	}
 
 	/**
-	 * Removes the portal preferences where ownerId = &#63; and ownerType = &#63; from the database.
+	 * Removes the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; from the database.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the portal preferences that was removed
 	 */
-	public static PortalPreferences removeByO_O(long ownerId, int ownerType)
+	public static PortalPreferences removeByC_O_O(
+			long companyId, long ownerId, int ownerType)
 		throws com.liferay.portal.kernel.exception.NoSuchPreferencesException {
 
-		return getPersistence().removeByO_O(ownerId, ownerType);
+		return getPersistence().removeByC_O_O(companyId, ownerId, ownerType);
 	}
 
 	/**
-	 * Returns the number of portal preferenceses where ownerId = &#63; and ownerType = &#63;.
+	 * Returns the number of portal preferenceses where companyId = &#63; and ownerId = &#63; and ownerType = &#63;.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the number of matching portal preferenceses
 	 */
-	public static int countByO_O(long ownerId, int ownerType) {
-		return getPersistence().countByO_O(ownerId, ownerType);
+	public static int countByC_O_O(
+		long companyId, long ownerId, int ownerType) {
+
+		return getPersistence().countByC_O_O(companyId, ownerId, ownerType);
 	}
 
 	/**

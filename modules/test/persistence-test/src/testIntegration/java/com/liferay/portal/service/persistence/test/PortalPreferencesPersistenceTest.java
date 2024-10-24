@@ -152,11 +152,12 @@ public class PortalPreferencesPersistenceTest {
 	}
 
 	@Test
-	public void testCountByO_O() throws Exception {
-		_persistence.countByO_O(
-			RandomTestUtil.nextLong(), RandomTestUtil.nextInt());
+	public void testCountByC_O_O() throws Exception {
+		_persistence.countByC_O_O(
+			RandomTestUtil.nextLong(), RandomTestUtil.nextLong(),
+			RandomTestUtil.nextInt());
 
-		_persistence.countByO_O(0L, 0);
+		_persistence.countByC_O_O(0L, 0L, 0);
 	}
 
 	@Test
@@ -461,6 +462,11 @@ public class PortalPreferencesPersistenceTest {
 	}
 
 	private void _assertOriginalValues(PortalPreferences portalPreferences) {
+		Assert.assertEquals(
+			Long.valueOf(portalPreferences.getCompanyId()),
+			ReflectionTestUtil.<Long>invoke(
+				portalPreferences, "getColumnOriginalValue",
+				new Class<?>[] {String.class}, "companyId"));
 		Assert.assertEquals(
 			Long.valueOf(portalPreferences.getOwnerId()),
 			ReflectionTestUtil.<Long>invoke(

@@ -175,54 +175,62 @@ public interface PortalPreferencesPersistence
 	public int countByOwnerType(int ownerType);
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or throws a <code>NoSuchPreferencesException</code> if it could not be found.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or throws a <code>NoSuchPreferencesException</code> if it could not be found.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the matching portal preferences
 	 * @throws NoSuchPreferencesException if a matching portal preferences could not be found
 	 */
-	public PortalPreferences findByO_O(long ownerId, int ownerType)
+	public PortalPreferences findByC_O_O(
+			long companyId, long ownerId, int ownerType)
 		throws NoSuchPreferencesException;
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
 	 */
-	public PortalPreferences fetchByO_O(long ownerId, int ownerType);
+	public PortalPreferences fetchByC_O_O(
+		long companyId, long ownerId, int ownerType);
 
 	/**
-	 * Returns the portal preferences where ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @param useFinderCache whether to use the finder cache
 	 * @return the matching portal preferences, or <code>null</code> if a matching portal preferences could not be found
 	 */
-	public PortalPreferences fetchByO_O(
-		long ownerId, int ownerType, boolean useFinderCache);
+	public PortalPreferences fetchByC_O_O(
+		long companyId, long ownerId, int ownerType, boolean useFinderCache);
 
 	/**
-	 * Removes the portal preferences where ownerId = &#63; and ownerType = &#63; from the database.
+	 * Removes the portal preferences where companyId = &#63; and ownerId = &#63; and ownerType = &#63; from the database.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the portal preferences that was removed
 	 */
-	public PortalPreferences removeByO_O(long ownerId, int ownerType)
+	public PortalPreferences removeByC_O_O(
+			long companyId, long ownerId, int ownerType)
 		throws NoSuchPreferencesException;
 
 	/**
-	 * Returns the number of portal preferenceses where ownerId = &#63; and ownerType = &#63;.
+	 * Returns the number of portal preferenceses where companyId = &#63; and ownerId = &#63; and ownerType = &#63;.
 	 *
+	 * @param companyId the company ID
 	 * @param ownerId the owner ID
 	 * @param ownerType the owner type
 	 * @return the number of matching portal preferenceses
 	 */
-	public int countByO_O(long ownerId, int ownerType);
+	public int countByC_O_O(long companyId, long ownerId, int ownerType);
 
 	/**
 	 * Caches the portal preferences in the entity cache if it is enabled.
