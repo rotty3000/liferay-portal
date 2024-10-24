@@ -36,10 +36,11 @@ public class PortalPreferencesLocalServiceUtil {
 	 * Never modify this class directly. Add custom service methods to <code>com.liferay.portal.service.impl.PortalPreferencesLocalServiceImpl</code> and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static PortalPreferences addPortalPreferences(
-		long ownerId, int ownerType, String defaultPreferences) {
+		long companyId, long ownerId, int ownerType,
+		String defaultPreferences) {
 
 		return getService().addPortalPreferences(
-			ownerId, ownerType, defaultPreferences);
+			companyId, ownerId, ownerType, defaultPreferences);
 	}
 
 	/**
@@ -216,9 +217,10 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static PortalPreferences fetchPortalPreferences(
-		long ownerId, int ownerType) {
+		long companyId, long ownerId, int ownerType) {
 
-		return getService().fetchPortalPreferences(ownerId, ownerType);
+		return getService().fetchPortalPreferences(
+			companyId, ownerId, ownerType);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery
@@ -293,16 +295,17 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static javax.portlet.PortletPreferences getPreferences(
-		long ownerId, int ownerType) {
+		long companyId, long ownerId, int ownerType) {
 
-		return getService().getPreferences(ownerId, ownerType);
+		return getService().getPreferences(companyId, ownerId, ownerType);
 	}
 
 	public static javax.portlet.PortletPreferences getPreferences(
-		long ownerId, int ownerType, String defaultPreferences) {
+		long companyId, long ownerId, int ownerType,
+		String defaultPreferences) {
 
 		return getService().getPreferences(
-			ownerId, ownerType, defaultPreferences);
+			companyId, ownerId, ownerType, defaultPreferences);
 	}
 
 	/**
@@ -322,17 +325,18 @@ public class PortalPreferencesLocalServiceUtil {
 	}
 
 	public static PortalPreferences updatePreferences(
-		long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType,
 		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences) {
 
 		return getService().updatePreferences(
-			ownerId, ownerType, portalPreferences);
+			companyId, ownerId, ownerType, portalPreferences);
 	}
 
 	public static PortalPreferences updatePreferences(
-		long ownerId, int ownerType, String xml) {
+		long companyId, long ownerId, int ownerType, String xml) {
 
-		return getService().updatePreferences(ownerId, ownerType, xml);
+		return getService().updatePreferences(
+			companyId, ownerId, ownerType, xml);
 	}
 
 	public static PortalPreferencesLocalService getService() {

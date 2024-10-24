@@ -59,7 +59,7 @@ public interface PortalPreferencesLocalService
 	 * Never modify this interface directly. Add custom service methods to <code>com.liferay.portal.service.impl.PortalPreferencesLocalServiceImpl</code> and rerun ServiceBuilder to automatically copy the method declarations to this interface. Consume the portal preferences local service via injection or a <code>org.osgi.util.tracker.ServiceTracker</code>. Use {@link PortalPreferencesLocalServiceUtil} if injection and service tracking are not available.
 	 */
 	public PortalPreferences addPortalPreferences(
-		long ownerId, int ownerType, String defaultPreferences);
+		long companyId, long ownerId, int ownerType, String defaultPreferences);
 
 	/**
 	 * Adds the portal preferences to the database. Also notifies the appropriate model listeners.
@@ -203,7 +203,7 @@ public interface PortalPreferencesLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PortalPreferences fetchPortalPreferences(
-		long ownerId, int ownerType);
+		long companyId, long ownerId, int ownerType);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
@@ -260,11 +260,12 @@ public interface PortalPreferencesLocalService
 	public int getPortalPreferencesesCount();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public PortletPreferences getPreferences(long ownerId, int ownerType);
+	public PortletPreferences getPreferences(
+		long companyId, long ownerId, int ownerType);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PortletPreferences getPreferences(
-		long ownerId, int ownerType, String defaultPreferences);
+		long companyId, long ownerId, int ownerType, String defaultPreferences);
 
 	/**
 	 * Updates the portal preferences in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
@@ -281,10 +282,10 @@ public interface PortalPreferencesLocalService
 		PortalPreferences portalPreferences);
 
 	public PortalPreferences updatePreferences(
-		long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType,
 		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences);
 
 	public PortalPreferences updatePreferences(
-		long ownerId, int ownerType, String xml);
+		long companyId, long ownerId, int ownerType, String xml);
 
 }
