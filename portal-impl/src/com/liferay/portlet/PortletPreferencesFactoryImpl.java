@@ -33,6 +33,7 @@ import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
 import com.liferay.portal.kernel.portlet.constants.PortletPreferencesFactoryConstants;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -344,7 +345,8 @@ public class PortletPreferencesFactoryImpl
 		PortalPreferencesWrapper portalPreferencesWrapper =
 			(PortalPreferencesWrapper)
 				PortalPreferencesLocalServiceUtil.getPreferences(
-					userId, PortletKeys.PREFS_OWNER_TYPE_USER);
+					_getCompanyId(userId), userId,
+					PortletKeys.PREFS_OWNER_TYPE_USER);
 
 		if (signedIn) {
 			portalPreferences =
@@ -885,6 +887,16 @@ public class PortletPreferencesFactoryImpl
 		}
 
 		return String.valueOf(cacheKeyGenerator.getCacheKey(xml));
+	}
+
+	private long _getCompanyId(long userId) {
+		User user = UserLocalServiceUtil.fetchUserById(userId);
+
+		if (user != null) {
+			return user.getCompanyId();
+		}
+
+		return CompanyThreadLocal.getCompanyId();
 	}
 
 	private PortletPreferencesIds _getPortletPreferencesIds(

@@ -274,12 +274,12 @@ public class FragmentCollectionContributorRegistryImpl
 		_companyLocalService.forEachCompany(
 			company -> {
 				try {
-					if (!_isPropagateContributedFragmentChanges(
-							company.getCompanyId())) {
+					long companyId = company.getCompanyId();
 
+					if (!_isPropagateContributedFragmentChanges(companyId)) {
 						PortletPreferences portletPreferences =
 							_portalPreferencesLocalService.getPreferences(
-								company.getCompanyId(),
+								companyId, companyId,
 								PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 						portletPreferences.setValue(

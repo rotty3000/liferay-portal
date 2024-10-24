@@ -27,7 +27,7 @@ public class PrefsPropsTestUtil {
 
 		PortletPreferences portletPreferences1 =
 			PortalPreferencesLocalServiceUtil.getPreferences(
-				companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		Map<String, String> oldValues = new HashMap<>();
 
@@ -48,7 +48,8 @@ public class PrefsPropsTestUtil {
 			try {
 				PortletPreferences portletPreferences2 =
 					PortalPreferencesLocalServiceUtil.getPreferences(
-						companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+						companyId, companyId,
+						PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 				for (Map.Entry<String, String> entry : oldValues.entrySet()) {
 					portletPreferences2.setValue(

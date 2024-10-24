@@ -251,7 +251,8 @@ public class PrefsPropsImpl implements PrefsProps {
 			portletPreferences = new LazyPortletPreferences(
 				_emptyPortletPreferences,
 				() -> _portalPreferencesLocalService.getPreferences(
-					companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY));
+					companyId, companyId,
+					PortletKeys.PREFS_OWNER_TYPE_COMPANY));
 		}
 
 		return portletPreferences;
@@ -496,7 +497,8 @@ public class PrefsPropsImpl implements PrefsProps {
 			keyCompanyId -> {
 				PortalPreferences portalPreferences =
 					_portalPreferencesLocalService.fetchPortalPreferences(
-						keyCompanyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+						keyCompanyId, keyCompanyId,
+						PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 				if (portalPreferences == null) {
 					return _emptyPortletPreferences;

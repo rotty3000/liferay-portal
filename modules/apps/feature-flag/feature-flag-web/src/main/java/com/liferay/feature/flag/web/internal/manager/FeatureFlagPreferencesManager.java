@@ -25,7 +25,8 @@ public class FeatureFlagPreferencesManager {
 	public Boolean isEnabled(long companyId, String key) {
 		if (Validator.isNull(
 				_portalPreferencesLocalService.fetchPortalPreferences(
-					companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY))) {
+					companyId, companyId,
+					PortletKeys.PREFS_OWNER_TYPE_COMPANY))) {
 
 			return null;
 		}
@@ -47,14 +48,15 @@ public class FeatureFlagPreferencesManager {
 		portalPreferences.setValue(_NAMESPACE, key, String.valueOf(enabled));
 
 		_portalPreferencesLocalService.updatePreferences(
-			companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, portalPreferences);
+			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+			portalPreferences);
 	}
 
 	private PortalPreferences _getPortalPreferences(long companyId) {
 		PortalPreferencesWrapper portalPreferencesWrapper =
 			(PortalPreferencesWrapper)
 				_portalPreferencesLocalService.getPreferences(
-					companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+					companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		return portalPreferencesWrapper.getPortalPreferencesImpl();
 	}
