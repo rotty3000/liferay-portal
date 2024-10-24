@@ -1659,8 +1659,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 		// Portal preferences
 
 		PortalPreferences portalPreferences =
-			_portalPreferencesPersistence.findByO_O(
-				companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+			_portalPreferencesPersistence.findByC_O_O(
+				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		_portalPreferencesLocalService.deletePortalPreferences(
 			portalPreferences);
@@ -2336,7 +2336,8 @@ public class CompanyLocalServiceImpl extends CompanyLocalServiceBaseImpl {
 			// Preferences
 
 			_portalPreferencesLocalService.getPreferences(
-				company.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+				company.getCompanyId(), company.getCompanyId(),
+				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 		}
 		finally {
 			LocaleThreadLocal.setDefaultLocale(localeThreadLocalDefaultLocale);

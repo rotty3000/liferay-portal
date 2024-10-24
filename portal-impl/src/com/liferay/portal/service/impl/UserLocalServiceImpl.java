@@ -2076,7 +2076,8 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 
 		PortalPreferences portalPreferences =
 			_portalPreferencesLocalService.fetchPortalPreferences(
-				user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER);
+				user.getCompanyId(), user.getUserId(),
+				PortletKeys.PREFS_OWNER_TYPE_USER);
 
 		if (portalPreferences != null) {
 			_portalPreferencesLocalService.deletePortalPreferences(

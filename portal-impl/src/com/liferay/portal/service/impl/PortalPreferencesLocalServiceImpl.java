@@ -44,10 +44,11 @@ public class PortalPreferencesLocalServiceImpl
 
 	@Override
 	public PortalPreferences addPortalPreferences(
-		long ownerId, int ownerType, String defaultPreferences) {
+		long companyId, long ownerId, int ownerType,
+		String defaultPreferences) {
 
 		PortalPreferences previousPortalPreferences = fetchPortalPreferences(
-			ownerId, ownerType);
+			companyId, ownerId, ownerType);
 
 		if (previousPortalPreferences != null) {
 			throw new IllegalArgumentException(
@@ -60,6 +61,7 @@ public class PortalPreferencesLocalServiceImpl
 		PortalPreferences portalPreferences =
 			portalPreferencesPersistence.create(portalPreferencesId);
 
+		portalPreferences.setCompanyId(companyId);
 		portalPreferences.setOwnerId(ownerId);
 		portalPreferences.setOwnerType(ownerType);
 
@@ -91,12 +93,12 @@ public class PortalPreferencesLocalServiceImpl
 			if (_log.isWarnEnabled()) {
 				_log.warn(
 					StringBundler.concat(
-						"Add failed, fetch {ownerId=", ownerId, ", ownerType=",
-						ownerType, "}"));
+						"Add failed, fetch {companyId=", companyId,
+						", ownerId=", ownerId, ", ownerType=", ownerType, "}"));
 			}
 
-			portalPreferences = portalPreferencesPersistence.fetchByO_O(
-				ownerId, ownerType, false);
+			portalPreferences = portalPreferencesPersistence.fetchByC_O_O(
+				companyId, ownerId, ownerType, false);
 
 			if (portalPreferences == null) {
 				throw systemException;
@@ -130,7 +132,7 @@ public class PortalPreferencesLocalServiceImpl
 
 	@Override
 	public PortalPreferences fetchPortalPreferences(
-		long ownerId, int ownerType) {
+		long companyId, long ownerId, int ownerType) {
 
 		if (ownerType == PortletKeys.PREFS_OWNER_TYPE_COMPANY) {
 
@@ -150,25 +152,29 @@ public class PortalPreferencesLocalServiceImpl
 			return null;
 		}
 
-		return portalPreferencesPersistence.fetchByO_O(ownerId, ownerType);
-	}
-
-	@Override
-	public PortletPreferences getPreferences(long ownerId, int ownerType) {
-		return getPreferences(ownerId, ownerType, null);
+		return portalPreferencesPersistence.fetchByC_O_O(
+			companyId, ownerId, ownerType);
 	}
 
 	@Override
 	public PortletPreferences getPreferences(
-		long ownerId, int ownerType, String defaultPreferences) {
+		long companyId, long ownerId, int ownerType) {
+
+		return getPreferences(companyId, ownerId, ownerType, null);
+	}
+
+	@Override
+	public PortletPreferences getPreferences(
+		long companyId, long ownerId, int ownerType,
+		String defaultPreferences) {
 
 		PortalPreferences portalPreferences = fetchPortalPreferences(
-			ownerId, ownerType);
+			companyId, ownerId, ownerType);
 
 		if (portalPreferences == null) {
 			portalPreferences =
 				portalPreferencesLocalService.addPortalPreferences(
-					ownerId, ownerType, defaultPreferences);
+					companyId, ownerId, ownerType, defaultPreferences);
 		}
 
 		PortalPreferencesImpl portalPreferencesImpl =
@@ -181,34 +187,36 @@ public class PortalPreferencesLocalServiceImpl
 
 	@Override
 	public PortalPreferences updatePreferences(
-		long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType,
 		com.liferay.portal.kernel.portlet.PortalPreferences portalPreferences) {
 
 		PortalPreferencesImpl portalPreferencesImpl =
 			(PortalPreferencesImpl)portalPreferences;
 
 		return _updatePortalPreferences(
-			ownerId, ownerType, portalPreferencesImpl.getPreferences());
+			companyId, ownerId, ownerType,
+			portalPreferencesImpl.getPreferences());
 	}
 
 	@Override
 	public PortalPreferences updatePreferences(
-		long ownerId, int ownerType, String xml) {
+		long companyId, long ownerId, int ownerType, String xml) {
 
 		PortalPreferencesImpl portalPreferencesImpl =
 			(PortalPreferencesImpl)PortletPreferencesFactoryUtil.fromXML(
 				ownerId, ownerType, xml);
 
 		return _updatePortalPreferences(
-			ownerId, ownerType, portalPreferencesImpl.getPreferences());
+			companyId, ownerId, ownerType,
+			portalPreferencesImpl.getPreferences());
 	}
 
 	private PortalPreferences _updatePortalPreferences(
-		long ownerId, int ownerType,
+		long companyId, long ownerId, int ownerType,
 		Map<PortalPreferenceKey, String[]> preferencesMap) {
 
 		PortalPreferences portalPreferencesModel = fetchPortalPreferences(
-			ownerId, ownerType);
+			companyId, ownerId, ownerType);
 
 		Map<PortalPreferenceKey, List<PortalPreferenceValue>>
 			portalPreferenceValuesMap = Collections.emptyMap();
@@ -219,6 +227,7 @@ public class PortalPreferencesLocalServiceImpl
 			portalPreferencesModel = portalPreferencesPersistence.create(
 				portalPreferencesId);
 
+			portalPreferencesModel.setCompanyId(companyId);
 			portalPreferencesModel.setOwnerId(ownerId);
 			portalPreferencesModel.setOwnerType(ownerType);
 

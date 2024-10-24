@@ -248,7 +248,7 @@ public class OrganizationImpl extends OrganizationBaseImpl {
 		int ownerType = PortletKeys.PREFS_OWNER_TYPE_ORGANIZATION;
 
 		return PortalPreferencesLocalServiceUtil.getPreferences(
-			ownerId, ownerType);
+			getCompanyId(), ownerId, ownerType);
 	}
 
 	@Override

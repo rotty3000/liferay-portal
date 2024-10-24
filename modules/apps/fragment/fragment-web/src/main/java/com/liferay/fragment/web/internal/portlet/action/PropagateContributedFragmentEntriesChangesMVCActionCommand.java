@@ -157,10 +157,11 @@ public class PropagateContributedFragmentEntriesChangesMVCActionCommand
 			ActionRequest actionRequest)
 		throws Exception {
 
+		long companyId = _portal.getCompanyId(actionRequest);
+
 		PortletPreferences portletPreferences =
 			_portalPreferencesLocalService.getPreferences(
-				_portal.getCompanyId(actionRequest),
-				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		portletPreferences.setValue(
 			"alreadyPropagateContributedFragmentChanges",

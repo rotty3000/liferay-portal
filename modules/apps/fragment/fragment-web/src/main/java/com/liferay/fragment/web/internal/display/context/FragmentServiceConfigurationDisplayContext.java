@@ -86,7 +86,7 @@ public class FragmentServiceConfigurationDisplayContext {
 
 		PortletPreferences portletPreferences =
 			PortalPreferencesLocalServiceUtil.getPreferences(
-				themeDisplay.getCompanyId(),
+				themeDisplay.getCompanyId(), themeDisplay.getCompanyId(),
 				PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 
 		return GetterUtil.getBoolean(

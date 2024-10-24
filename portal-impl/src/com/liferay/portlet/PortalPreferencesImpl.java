@@ -11,8 +11,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.PortletConstants;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.service.persistence.PortalPreferenceValueUtil;
 import com.liferay.portal.kernel.service.persistence.PortalPreferencesUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
@@ -385,7 +388,7 @@ public class PortalPreferencesImpl
 	public void store() throws IOException {
 		try {
 			PortalPreferencesLocalServiceUtil.updatePreferences(
-				getOwnerId(), getOwnerType(), this);
+				_getCompanyId(getUserId()), getOwnerId(), getOwnerType(), this);
 		}
 		catch (Throwable throwable) {
 			throw new IOException(throwable);
@@ -419,6 +422,16 @@ public class PortalPreferencesImpl
 		}
 
 		return portletPreferencesElement.toXMLString();
+	}
+
+	private long _getCompanyId(long userId) {
+		User user = UserLocalServiceUtil.fetchUserById(userId);
+
+		if (user != null) {
+			return user.getCompanyId();
+		}
+
+		return CompanyThreadLocal.getCompanyId();
 	}
 
 	private Map<PortalPreferenceKey, String[]> _getModifiedPreferences() {
@@ -468,8 +481,9 @@ public class PortalPreferencesImpl
 
 	private Map<PortalPreferenceKey, String[]> _reloadPreferenceMap() {
 		com.liferay.portal.kernel.model.PortalPreferences portalPreferences =
-			PortalPreferencesUtil.fetchByO_O(
-				getOwnerId(), getOwnerType(), false);
+			PortalPreferencesUtil.fetchByC_O_O(
+				_getCompanyId(getUserId()), getOwnerId(), getOwnerType(),
+				false);
 
 		if (portalPreferences == null) {
 			return null;

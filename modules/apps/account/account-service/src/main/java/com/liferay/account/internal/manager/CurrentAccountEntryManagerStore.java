@@ -12,10 +12,13 @@ import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PortalPreferenceValueLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.servlet.PortalSessionThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -51,7 +54,8 @@ public class CurrentAccountEntryManagerStore {
 		com.liferay.portal.kernel.model.PortalPreferences
 			modelPortalPreferences =
 				_portalPreferencesLocalService.fetchPortalPreferences(
-					userId, PortletKeys.PREFS_OWNER_TYPE_USER);
+					_getCompanyId(userId), userId,
+					PortletKeys.PREFS_OWNER_TYPE_USER);
 
 		if (modelPortalPreferences == null) {
 			return null;
@@ -115,7 +119,8 @@ public class CurrentAccountEntryManagerStore {
 			AccountEntry.class.getName(), key, String.valueOf(accountEntryId));
 
 		_portalPreferencesLocalService.updatePreferences(
-			userId, PortletKeys.PREFS_OWNER_TYPE_USER, portalPreferences);
+			_getCompanyId(userId), userId, PortletKeys.PREFS_OWNER_TYPE_USER,
+			portalPreferences);
 	}
 
 	public void setCurrentAccountEntry(
@@ -123,6 +128,16 @@ public class CurrentAccountEntryManagerStore {
 
 		saveInHttpSession(accountEntryId, groupId);
 		saveInPortalPreferences(accountEntryId, groupId, userId);
+	}
+
+	private long _getCompanyId(long userId) {
+		User user = _userLocalService.fetchUserById(userId);
+
+		if (user != null) {
+			return user.getCompanyId();
+		}
+
+		return CompanyThreadLocal.getCompanyId();
 	}
 
 	private String _getKey(long groupId) {
@@ -161,5 +176,8 @@ public class CurrentAccountEntryManagerStore {
 
 	@Reference
 	private PortletPreferencesFactory _portletPreferencesFactory;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }
