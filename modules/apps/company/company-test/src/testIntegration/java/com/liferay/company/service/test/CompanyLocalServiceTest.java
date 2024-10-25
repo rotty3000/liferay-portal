@@ -673,7 +673,7 @@ public class CompanyLocalServiceTest {
 			() -> {
 				Assert.assertNull(
 					_portalPreferencesLocalService.fetchPortalPreferences(
-						company.getCompanyId(),
+						company.getCompanyId(), company.getCompanyId(),
 						PortletKeys.PREFS_OWNER_TYPE_COMPANY));
 
 				return null;
