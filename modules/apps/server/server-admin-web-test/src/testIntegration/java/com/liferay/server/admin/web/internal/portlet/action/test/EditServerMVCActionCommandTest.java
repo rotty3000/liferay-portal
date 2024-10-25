@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.model.PortletPreferences;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactory;
 import com.liferay.portal.kernel.security.permission.wrapper.PermissionCheckerWrapper;
@@ -431,6 +432,7 @@ public class EditServerMVCActionCommandTest {
 
 			_portalPreferencesLocalService.deletePortalPreferences(
 				_portalPreferencesLocalService.fetchPortalPreferences(
+					CompanyThreadLocal.getCompanyId(),
 					portalPreferencesImpl.getOwnerId(),
 					portalPreferencesImpl.getOwnerType()));
 		}

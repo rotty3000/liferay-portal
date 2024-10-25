@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.portlet.PortalPreferences;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactory;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.service.PortalPreferencesLocalServiceUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
@@ -115,7 +116,8 @@ public class PortalPreferencesImplTest {
 				com.liferay.portal.kernel.model.PortalPreferences
 					portalPreferences =
 						_portalPreferencesLocalService.fetchPortalPreferences(
-							_testOwnerId, PortletKeys.PREFS_OWNER_TYPE_USER);
+							CompanyThreadLocal.getCompanyId(), _testOwnerId,
+							PortletKeys.PREFS_OWNER_TYPE_USER);
 
 				if (portalPreferences != null) {
 					_portalPreferencesLocalService.deletePortalPreferences(

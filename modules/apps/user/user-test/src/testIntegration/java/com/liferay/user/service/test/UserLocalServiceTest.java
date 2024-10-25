@@ -228,7 +228,8 @@ public class UserLocalServiceTest {
 		User user = UserTestUtil.addUser();
 
 		_portalPreferencesLocalService.addPortalPreferences(
-			user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER, null);
+			user.getCompanyId(), user.getUserId(),
+			PortletKeys.PREFS_OWNER_TYPE_USER, null);
 		_portletPreferencesLocalService.addPortletPreferences(
 			user.getCompanyId(), user.getUserId(),
 			PortletKeys.PREFS_OWNER_TYPE_USER, 0, null, null, null);
@@ -237,7 +238,8 @@ public class UserLocalServiceTest {
 
 		Assert.assertNull(
 			_portalPreferencesLocalService.fetchPortalPreferences(
-				user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER));
+				user.getCompanyId(), user.getUserId(),
+				PortletKeys.PREFS_OWNER_TYPE_USER));
 		Assert.assertNull(
 			_portletPreferencesLocalService.fetchPortletPreferences(
 				user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER, 0, null));
