@@ -49,7 +49,8 @@ public class UpgradePortalPreferencesTest {
 
 		_portalPreferences =
 			_portalPreferencesLocalService.addPortalPreferences(
-				_user.getUserId(), PortletKeys.PREFS_OWNER_TYPE_USER, "");
+				_user.getCompanyId(), _user.getUserId(),
+				PortletKeys.PREFS_OWNER_TYPE_USER, "");
 
 		setUpUpgradePortalPreferences();
 
