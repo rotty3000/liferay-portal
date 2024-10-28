@@ -121,6 +121,7 @@ public class JournalArticleServiceTest {
 
 		_portalPreferencesLocalService.updatePreferences(
 			TestPropsValues.getCompanyId(),
+			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			_portletPreferencesFactory.toXML(portalPreferences));
 	}
@@ -134,6 +135,7 @@ public class JournalArticleServiceTest {
 		}
 
 		_portalPreferencesLocalService.updatePreferences(
+			TestPropsValues.getCompanyId(),
 			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			_originalPortalPreferencesXML);

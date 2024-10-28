@@ -79,6 +79,7 @@ public class JournalArticleIndexVersionsTest {
 
 		_portalPreferencesLocalService.updatePreferences(
 			TestPropsValues.getCompanyId(),
+			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			PortletPreferencesFactoryUtil.toXML(portalPreferences));
 	}
@@ -86,6 +87,7 @@ public class JournalArticleIndexVersionsTest {
 	@After
 	public void tearDown() throws Exception {
 		_portalPreferencesLocalService.updatePreferences(
+			TestPropsValues.getCompanyId(),
 			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			_originalPortalPreferencesXML);
