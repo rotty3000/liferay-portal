@@ -106,6 +106,7 @@ public class JournalFeedStagedModelDataHandlerTest
 
 		PortalPreferencesLocalServiceUtil.updatePreferences(
 			TestPropsValues.getCompanyId(),
+			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			PortletPreferencesFactoryUtil.toXML(portalPreferences));
 	}
@@ -116,6 +117,7 @@ public class JournalFeedStagedModelDataHandlerTest
 		super.tearDown();
 
 		PortalPreferencesLocalServiceUtil.updatePreferences(
+			TestPropsValues.getCompanyId(),
 			TestPropsValues.getCompanyId(),
 			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			_originalPortalPreferencesXML);

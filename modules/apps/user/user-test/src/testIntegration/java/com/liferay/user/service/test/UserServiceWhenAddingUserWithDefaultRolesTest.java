@@ -58,7 +58,8 @@ public class UserServiceWhenAddingUserWithDefaultRolesTest {
 			"", PropsKeys.ADMIN_DEFAULT_ROLE_NAMES, StringPool.BLANK);
 
 		PortalPreferencesLocalServiceUtil.updatePreferences(
-			company.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+			company.getCompanyId(), company.getCompanyId(),
+			PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			PortletPreferencesFactoryUtil.toXML(portalPreferences));
 
 		String[] roleNames = _prefsProps.getStringArray(

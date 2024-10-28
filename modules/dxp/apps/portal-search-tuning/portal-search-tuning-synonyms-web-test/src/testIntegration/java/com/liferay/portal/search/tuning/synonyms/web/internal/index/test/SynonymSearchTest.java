@@ -92,7 +92,7 @@ public class SynonymSearchTest {
 				"it_IT,ja_JP,pt_BR,es_ES,sv_SE");
 
 		PortalPreferencesLocalServiceUtil.updatePreferences(
-			_companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+			_companyId, _companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			PortletPreferencesFactoryUtil.toXML(portalPreferences));
 
 		LanguageUtil.init();
@@ -109,7 +109,7 @@ public class SynonymSearchTest {
 		PrincipalThreadLocal.setName(_originalName);
 
 		PortalPreferencesLocalServiceUtil.updatePreferences(
-			_companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
+			_companyId, _companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY,
 			_originalPortalPreferencesXML);
 	}
 
