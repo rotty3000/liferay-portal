@@ -5,10 +5,10 @@
 
 package com.liferay.frontend.taglib.clay.servlet.taglib.util;
 
-import javax.portlet.RenderResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.PageContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
+import javax.portlet.RenderResponse;
 
 /**
  * @author Brian Wing Shun Chan

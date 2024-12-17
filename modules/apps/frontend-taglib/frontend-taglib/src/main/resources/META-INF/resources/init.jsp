@@ -34,6 +34,8 @@ page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.taglib.aui.AUIUtil" %><%@
 page import="com.liferay.taglib.util.TagResourceBundleUtil" %>
 
+<%@ page import="jakarta.servlet.ServletContext" %>
+
 <%@ page import="java.util.HashMap" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Map" %><%@
@@ -42,8 +44,6 @@ page import="java.util.ResourceBundle" %>
 <%@ page import="javax.portlet.PortletRequest" %><%@
 page import="javax.portlet.PortletResponse" %><%@
 page import="javax.portlet.PortletURL" %>
-
-<%@ page import="javax.servlet.ServletContext" %>
 
 <liferay-theme:defineObjects />
 
