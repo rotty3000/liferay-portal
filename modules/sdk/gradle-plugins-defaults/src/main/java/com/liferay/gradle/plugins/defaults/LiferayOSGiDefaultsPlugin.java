@@ -445,7 +445,7 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 		_configureBasePlugin(basePluginExtension, portalRootDir);
 		_configureBundleDefaultInstructions(project, publishing);
 		_configureConfigurations(
-			project, appBndFile, liferayExtension, publishing);
+			project, appBndFile, liferayExtension, publishing, portalRootDir);
 		_configureDependencyChecker(project);
 		_configureDeployDir(
 			project, liferayExtension, deployToAppServerLibs, deployToTools);
@@ -2120,7 +2120,8 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 	}
 
 	private void _configureConfigurationJspC(
-		final Project project, LiferayExtension liferayExtension) {
+		final Project project, LiferayExtension liferayExtension,
+		File portalRootDir) {
 
 		final Logger logger = project.getLogger();
 
@@ -2143,6 +2144,18 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 		final Configuration configuration = GradleUtil.getConfiguration(
 			project, JspCPlugin.CONFIGURATION_NAME);
+
+		JavaVersion javaVersion = JavaVersion.current();
+
+		if (Boolean.getBoolean("build.jakarta.transformer.enabled") &&
+			(javaVersion.compareTo(JavaVersion.VERSION_17) >= 0) &&
+			_containsProject(
+				project,
+				System.getProperty("build.jakarta.transformer.include.dirs"),
+				portalRootDir)) {
+
+			return;
+		}
 
 		DependencySet dependencySet = configuration.getAllDependencies();
 
@@ -2297,10 +2310,10 @@ public class LiferayOSGiDefaultsPlugin implements Plugin<Project> {
 
 	private void _configureConfigurations(
 		Project project, File appBndFile, LiferayExtension liferayExtension,
-		boolean publishing) {
+		boolean publishing, File portalRootDir) {
 
 		_configureConfigurationDefault(project);
-		_configureConfigurationJspC(project, liferayExtension);
+		_configureConfigurationJspC(project, liferayExtension, portalRootDir);
 
 		String projectPath = project.getPath();
 
