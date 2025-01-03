@@ -6,7 +6,7 @@ dependencies {
 		classpath group: "org.eclipse.transformer", name: "org.eclipse.transformer.cli", version: "1.0.0"
 	}
 
-	classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "10.1.223"
+	classpath group: "com.liferay", name: "com.liferay.gradle.plugins.defaults", version: "10.1.224"
 	classpath group: "com.liferay", name: "com.liferay.gradle.plugins.maven.plugin.builder", version: "2.0.2"
 	classpath group: "de.undercouch", name: "gradle-download-task", version: "5.4.0"
 
