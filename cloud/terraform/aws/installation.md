@@ -1,8 +1,8 @@
-# Liferay Cloud Native AWS Installation Guide
+# Preparing the Infrastructure to Install the AWS Marketplace Chart
 
-This installation guide is intended for use with the specialized Liferay AWS Helm chart located at:
+This installation guide is intended for use with the specialized Liferay AWS Marketplace Helm chart located at:
 
-`oci://us-central1-docker.pkg.dev/liferay-artifact-registry/liferay-helm-chart/liferay-aws`.
+`oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/liferay/charts`.
 
 ## Prerequisites
 
@@ -15,6 +15,8 @@ This installation guide is intended for use with the specialized Liferay AWS Hel
 1. Install [Helm CLI](https://helm.sh/docs/intro/install/).
 
 1. Install [kubectl CLI](https://kubernetes.io/docs/tasks/tools/).
+
+1. Install [EKS CLI](https://eksctl.io/installation/).
 
 ## AWS
 
@@ -90,7 +92,7 @@ Once the repository has been cloned, you have two choices:
 
    You are prompted to apply the changes.
 
-## Helm Setup
+## Helm Launch Instructions
 
 To use Helm you must use the `aws` CLI to set up `kubectl`.
 
@@ -106,39 +108,29 @@ To use Helm you must use the `aws` CLI to set up `kubectl`.
 
 1. Test that `kubectl cluster-info` works.
 
-## Helm Chart Deployment
 
-The chart expects a Kubernetes secret called `managed-service-details` in the deployment namespace containing the following data:
+1. Create the service account by executing the following command:
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-    name: managed-service-details
-data:
-    DATABASE_ENDPOINT: ""
-    DATABASE_PASSWORD: ""
-    DATABASE_PORT: ""
-    DATABASE_USERNAME: ""
-    OPENSEARCH_ENDPOINT: ""
-    OPENSEARCH_PASSWORD: ""
-    OPENSEARCH_USERNAME: ""
-    S3_BUCKET_ID: ""
-    S3_BUCKET_REGION: ""
-```
+   ```shell
+   eksctl create iamserviceaccount \
+      --cluster $(terraform output -raw cluster_name) \
+      --name liferay-default \
+      --namespace liferay-system \
+      --region $(terraform output -raw region) \
+      --attach-role-arn $(terraform output -raw liferay_sa_role) \
+      --approve \
+      --override-existing-serviceaccounts
+   ```
 
-This secret is created automatically when you run the Terraform auto-configuration. If you have your own configuration, you must provide it manually.
-
-1. Navigate to the `dependencies` directory.
-
-1. Run the following command:
+1. On the AWS "Launch instructions" page skip "Step 1" (since we executed it above) and execute "Step 2" with the following modification. In the `helm install` command add the following `--set` arguments:
 
    ```bash
-   helm upgrade liferay oci://us-central1-docker.pkg.dev/liferay-artifact-registry/liferay-helm-chart/liferay-aws \
-       --create-namespace \
-       --install \
-       --namespace $(terraform output -raw deployment_namespace) \
-       --set "liferay-default.serviceAccount.annotations.eks\.amazonaws\.com/role-arn=$(terraform output -raw liferay_sa_role)" \
-       --values ../helm/values.yaml \
-       --version ${LIFERAY_AWS_HELM_CHART_VERSION}
+    --set "liferay-aws.liferay-default.serviceAccount.create=false" \
+    --set "liferay-aws.liferay-default.serviceAccount.name=liferay-default" \
+   ```
+
+1. Once "Step 2" has been executed successfully execute the following command to watch for the application to become ready:
+
+   ```bash
+   kubectl -n liferay-system get statefulset liferay-default --watch
    ```
