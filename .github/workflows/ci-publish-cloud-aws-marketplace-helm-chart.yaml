@@ -1,0 +1,79 @@
+defaults:
+    run:
+        shell: bash
+env:
+    CHART_VERSION: 0.0.0
+    ECR_REPOSITORY: 709825985650.dkr.ecr.us-east-1.amazonaws.com
+jobs:
+    publish-cloud-helm-chart:
+        # if: (github.repository == 'liferay/liferay-portal')
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Configure AWS Credentials
+                uses: aws-actions/configure-aws-credentials@v5.1.0
+                with:
+                    aws-region: us-east-1
+                    role-session-name: GitHubActions
+                    role-to-assume: arn:aws:iam::831926597587:role/GitHubActionsRole
+            # -   name: Log in to ECR
+            #     run: |
+            #         aws \
+            #             ecr \
+            #             get-login-password \
+            #             --region us-east-1 \
+            #             | helm \
+            #                 registry \
+            #                 login "${ECR_REPOSITORY}" \
+            #                 --password-stdin \
+            #                 --username AWS
+            # -   name: Checkout code
+            #     uses: actions/checkout@v4
+            -   name: Check AWS Creds
+                run: |
+                    aws sts get-caller-identity
+            # -   env:
+            #         GITHUB_TOKEN: ${{ github.token }}
+            #     name: Verify Helm chart version
+            #     run: |
+            #         CHART_VERSION=$(cat ./Chart.yaml | yq .version)
+
+            #         echo "Verifying Helm chart version ${CHART_VERSION}."
+
+            #         if helm show readme "oci://${ECR_REPOSITORY}/liferay-default:${CHART_VERSION}" >/dev/null 2>&1
+            #         then
+            #             echo "Skipping Helm Chart version ${CHART_VERSION}."
+
+            #             gh run cancel ${{ github.run_id }}
+
+            #             gh run watch ${{ github.run_id }} >/dev/null
+
+            #             exit 1
+            #         else
+            #             echo "Verified Helm Chart version ${CHART_VERSION}."
+            #         fi
+
+            #         echo "CHART_VERSION=${CHART_VERSION}" >> ${GITHUB_ENV}
+            #     working-directory: ./cloud/helm/aws-marketplace
+            # -   name: Package and Push Helm charts
+            #     run: |
+            #         mkdir "${{ runner.temp }}/dist"
+
+            #         helm dependency update
+
+            #         helm package --destination "${{ runner.temp }}/dist" --version ${CHART_VERSION} default
+
+            #         for file_name in ${{ runner.temp }}/dist/*.tgz
+            #         do
+            #             echo "Pushing ${file_name}."
+
+            #             helm push "${file_name}" "oci://${ECR_REPOSITORY}"
+            #         done
+            #     working-directory: ./cloud/helm/aws-marketplace
+on:
+    push:
+        branches:
+            -   master
+        paths:
+            -   cloud/helm/aws-marketplace/**
+permissions:
+    id-token: write
