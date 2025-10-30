@@ -17,15 +17,8 @@ jobs:
                     role-to-assume: arn:aws:iam::831926597587:role/GitHubActionsRole
             -   name: Log in to ECR
                 run: |
-                    aws \
-                        ecr \
-                        get-login-password \
-                        --region us-east-1 \
-                        | helm \
-                            registry \
-                            login "${ECR_REPOSITORY}" \
-                            --password-stdin \
-                            --username AWS
+                    aws ecr get-login-password --region us-east-1 \
+                        | helm registry login "${ECR_REPOSITORY}" --password-stdin --username AWS
             -   name: Checkout code
                 uses: actions/checkout@v4
             # -   env:
