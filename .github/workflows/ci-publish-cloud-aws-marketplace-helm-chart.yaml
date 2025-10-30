@@ -48,7 +48,7 @@ jobs:
 
                     helm dependency update
 
-                    helm package --destination "${{ runner.temp }}/dist" --version ${CHART_VERSION} default
+                    helm package --destination "${{ runner.temp }}/dist" --version ${CHART_VERSION} .
 
                     for file_name in ${{ runner.temp }}/dist/*.tgz
                     do
