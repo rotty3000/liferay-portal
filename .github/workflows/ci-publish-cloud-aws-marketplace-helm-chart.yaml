@@ -27,7 +27,7 @@ jobs:
 
                     echo "Verifying Helm chart version ${CHART_VERSION}."
 
-                    if helm show readme "oci://${ECR_REPOSITORY}/liferay-default:${CHART_VERSION}" >/dev/null 2>&1
+                    if helm show readme "oci://${ECR_REPOSITORY}/liferay/liferay-aws-marketplace:${CHART_VERSION}" >/dev/null 2>&1
                     then
                         echo "Skipping Helm Chart version ${CHART_VERSION}."
 
@@ -54,7 +54,7 @@ jobs:
                     do
                         echo "Pushing ${file_name}."
 
-                        helm push "${file_name}" "oci://${ECR_REPOSITORY}"
+                        helm push "${file_name}" "oci://${ECR_REPOSITORY}/liferay"
                     done
                 working-directory: ./cloud/helm/aws-marketplace
 on:
