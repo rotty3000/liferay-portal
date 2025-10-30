@@ -1,5 +1,5 @@
 defaults:
-    run:
+    run :
         shell: bash
 env:
     CHART_VERSION: 0.0.0
@@ -21,44 +21,42 @@ jobs:
                         | helm registry login "${ECR_REPOSITORY}" --password-stdin --username AWS
             -   name: Checkout code
                 uses: actions/checkout@v4
-            # -   env:
-            #         GITHUB_TOKEN: ${{ github.token }}
-            #     name: Verify Helm chart version
-            #     run: |
-            #         CHART_VERSION=$(cat ./Chart.yaml | yq .version)
+            -   name: Verify Helm chart version
+                run: |
+                    CHART_VERSION=$(cat ./Chart.yaml | yq .version)
 
-            #         echo "Verifying Helm chart version ${CHART_VERSION}."
+                    echo "Verifying Helm chart version ${CHART_VERSION}."
 
-            #         if helm show readme "oci://${ECR_REPOSITORY}/liferay-default:${CHART_VERSION}" >/dev/null 2>&1
-            #         then
-            #             echo "Skipping Helm Chart version ${CHART_VERSION}."
+                    if helm show readme "oci://${ECR_REPOSITORY}/liferay-default:${CHART_VERSION}" >/dev/null 2>&1
+                    then
+                        echo "Skipping Helm Chart version ${CHART_VERSION}."
 
-            #             gh run cancel ${{ github.run_id }}
+                        gh run cancel ${{ github.run_id }}
 
-            #             gh run watch ${{ github.run_id }} >/dev/null
+                        gh run watch ${{ github.run_id }} >/dev/null
 
-            #             exit 1
-            #         else
-            #             echo "Verified Helm Chart version ${CHART_VERSION}."
-            #         fi
+                        exit 1
+                    else
+                        echo "Verified Helm Chart version ${CHART_VERSION}."
+                    fi
 
-            #         echo "CHART_VERSION=${CHART_VERSION}" >> ${GITHUB_ENV}
-            #     working-directory: ./cloud/helm/aws-marketplace
-            # -   name: Package and Push Helm charts
-            #     run: |
-            #         mkdir "${{ runner.temp }}/dist"
+                    echo "CHART_VERSION=${CHART_VERSION}" >> ${GITHUB_ENV}
+                working-directory: ./cloud/helm/aws-marketplace
+            -   name: Package and Push Helm chart
+                run: |
+                    mkdir "${{ runner.temp }}/dist"
 
-            #         helm dependency update
+                    helm dependency update
 
-            #         helm package --destination "${{ runner.temp }}/dist" --version ${CHART_VERSION} default
+                    helm package --destination "${{ runner.temp }}/dist" --version ${CHART_VERSION} default
 
-            #         for file_name in ${{ runner.temp }}/dist/*.tgz
-            #         do
-            #             echo "Pushing ${file_name}."
+                    for file_name in ${{ runner.temp }}/dist/*.tgz
+                    do
+                        echo "Pushing ${file_name}."
 
-            #             helm push "${file_name}" "oci://${ECR_REPOSITORY}"
-            #         done
-            #     working-directory: ./cloud/helm/aws-marketplace
+                        helm push "${file_name}" "oci://${ECR_REPOSITORY}"
+                    done
+                working-directory: ./cloud/helm/aws-marketplace
 on:
     push:
         branches:
